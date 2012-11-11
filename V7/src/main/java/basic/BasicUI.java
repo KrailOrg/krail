@@ -17,7 +17,7 @@ public class BasicUI extends UI {
 
 	@Inject(optional = true)
 	@Named("version")
-	private final String version = "Vaadin <i>version unknown</i>";
+	private final String version = "Vaadin <i>7.0.0 beta8</i>";
 
 	@Inject
 	private MessageSource msgSource;
@@ -26,16 +26,13 @@ public class BasicUI extends UI {
 	protected void init(VaadinRequest request) {
 		getPage().setTitle(title);
 
-		Label label = new Label(version, ContentMode.HTML);
+		Label label = new Label(version + ", " + msgSource.msg(), ContentMode.HTML);
 		label.setSizeUndefined();
 
 		VerticalLayout layout = new VerticalLayout(label);
 		layout.setSizeFull();
 		layout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
 
-		Label label2 = new Label(msgSource.msg(), ContentMode.HTML);
-		layout.addComponent(label2);
-		layout.setComponentAlignment(label2, Alignment.MIDDLE_CENTER);
 		setContent(layout);
 	}
 
