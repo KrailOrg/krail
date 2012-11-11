@@ -1,0 +1,122 @@
+apply plugin: 'war'
+apply plugin: 'eclipse'
+
+defaultTasks  'clean', 'build', 'eclipse'
+
+sourceCompatibility = 1.6
+
+eclipseClasspath.variables = [USER_HOME:file(System.properties.'user.home')]
+//eclipseWtpComponent.variables = [USER_HOME:file(System.properties.'user.home')]
+System.properties.'line.separator' = "\n";
+
+version = '0.0.1'
+vaadinVersion='7.0.0.beta8'
+
+shiroVersion = '1.2.0'
+
+
+jar {
+	manifest {
+		attributes 'Implementation-Title': 'Example - Address Book', 'Implementation-Version': version
+	}
+}
+
+
+war {
+	version= ''
+	extension = 'war'
+	baseName='v7'
+}
+
+
+repositories {
+
+	//central repo for most open source
+	mavenCentral()
+
+	//for eclipselink
+	mavenRepo urls: "http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/rt/eclipselink/maven.repo"
+	mavenRepo urls: "http://maven.vaadin.com/vaadin-addons"
+	mavenRepo urls: "http://download.java.net/maven/2/"
+	mavenRepo urls: "http://download.java.net/maven/glassfish/"
+	mavenRepo urls: "https://repository.apache.org/content/groups/snapshots/"
+	mavenRepo urls: "http://maven.alfresco.com/nexus/content/repositories/activiti/"
+	mavenRepo urls: "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/"
+	
+//rep for Vaadin snapshots
+	
+	mavenRepo urls: "https://oss.sonatype.org/content/repositories/vaadin-snapshots/"
+	
+	}
+
+
+dependencies {
+
+	//our own (but now part of this source)
+//	compile  name: 'global', version: '0.1.+'
+//	compile  name: 'toolsUtils', version: '0.1.+'
+	
+//Vaadin 7 (beta)	
+//The core server part of Vaadin
+	compile group:'com.vaadin', name: 'vaadin-server', version: vaadinVersion
+	
+// Vaadin themes 
+	compile group:'com.vaadin', name: 'vaadin-themes', version: vaadinVersion
+
+//Precompiled DefaultWidgetSet
+	compile group:'com.vaadin', name: 'vaadin-client-compiled', version: vaadinVersion
+
+//Vaadin client side, needed for widget set compilation
+	compile group:'com.vaadin', name: 'vaadin-client', version: vaadinVersion
+
+//Compiler for custom widget sets. Should not be deployed
+	compile group:'com.vaadin', name: 'vaadin-client-compiler', version: vaadinVersion
+	
+
+
+	//util
+	//the easiest way to get all the jung modules
+	compile group: 'net.sf.jung', name: 'jung-samples', version: '2.0.1'
+	compile 'org.codehaus.jackson:jackson-core-asl:1.9.2'
+	compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.2'
+	compile 'org.apache.poi:poi-ooxml:3.7'
+	compile 'org.jsefa:jsefa:0.9.3.RELEASE'
+	
+		
+	//common
+	compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+	compile 'org.apache.commons:commons-math3:3.0'
+	
+	//logging
+	compile group: 'org.slf4j', name: 'slf4j-api', version:'1.6.1'
+	compile group: 'org.slf4j', name: 'slf4j-log4j12', version:'1.6.1'
+	compile group: 'commons-logging', name: 'commons-logging', version:'1.1.1'
+
+	
+	//guice
+	compile group: 'com.google.inject', name: 'guice', version: '3.0'
+	compile group: 'com.google.inject.extensions', name: 'guice-servlet', version: '3.0'
+	compile group: 'com.google.inject.extensions', name: 'guice-persist', version: '3.0'
+	compile group: 'com.google.inject.extensions', name: 'guice-assistedinject', version: '3.0'
+	
+	
+	
+	compile group: 'com.mycila', name: 'mycila-guice', version: '2.0.ga'
+	
+	
+	compile group: 'joda-time', name: 'joda-time', version: '2.0'
+	
+
+	//testing
+	testCompile group: 'junit', name: 'junit', version: '4.+'
+	testCompile group: 'org.mockito', name: 'mockito-core', version: '1.8.5'
+	testCompile group: 'org.easytesting', name: 'fest-assert', version: '1.4'
+	
+	testCompile group: 'com.mycila.testing.plugins', name: 'mycila-testing-mockito', version: '2.8'
+	testCompile group: 'com.mycila.testing.plugins', name: 'mycila-testing-guice2', version: '2.8'
+	
+}
+
+
+
+
