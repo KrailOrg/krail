@@ -31,6 +31,12 @@
 		<!-- Compiler for custom widget sets. Should not be deployed -->
 		<dependency org="com.vaadin" name="vaadin-client-compiler"
 			rev="&vaadin.version;" conf="widgetset-compile->default" />
+		
+		<!-- Guice -->
+		<dependency org="com.google.inject" name="guice" rev="3.0"/>
+		<dependency org="com.google.inject.extensions" name="guice-servlet" rev="3.0"/>
+            
+		
 	</dependencies>
 </ivy-module>
     
