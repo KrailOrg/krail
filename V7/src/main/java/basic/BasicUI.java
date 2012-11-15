@@ -17,7 +17,7 @@ public class BasicUI extends UI {
 
 	@Inject(optional = true)
 	@Named("version")
-	private final String version = "Vaadin <i>7.0.0 beta8</i>";
+	private final String version = "Vaadin <i>7.0.0 beta9</i>";
 
 	@Inject
 	private MessageSource msgSource;
