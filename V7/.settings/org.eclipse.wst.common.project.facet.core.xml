@@ -5,8 +5,8 @@
   <fixed facet="jst.web"/>
   <fixed facet="java"/>
   <fixed facet="com.vaadin.integration.eclipse.core"/>
-  <installed facet="java" version="1.6"/>
   <installed facet="jst.web" version="2.4"/>
   <installed facet="wst.jsdt.web" version="1.0"/>
   <installed facet="com.vaadin.integration.eclipse.core" version="7.0"/>
+  <installed facet="java" version="1.7"/>
 </faceted-project>
