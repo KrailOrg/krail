@@ -1,9 +1,18 @@
 package basic;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewProvider;
 
 public class GuiceViewProvider implements ViewProvider {
+	static final Map<String, Class<? extends View>> viewMap = new HashMap<>();
+
+	static {
+		viewMap.put("view1", View1.class);
+		viewMap.put("view2", View2.class);
+	}
 
 	@Override
 	public String getViewName(String viewAndParameters) {
@@ -21,14 +30,10 @@ public class GuiceViewProvider implements ViewProvider {
 
 	@Override
 	public View getView(String viewName) {
-		switch (viewName) {
-		case "view1":
-			return new View1();
-		case "view2":
-			return new View2();
-
-		}
-		return null;
+		System.out.println("instantiating " + viewName + " with Guice");
+		Class<? extends View> clazz = viewMap.get(viewName);
+		View instance = BasicFilter.getInjector().getInstance(clazz);
+		return instance;
 	}
 
 }
