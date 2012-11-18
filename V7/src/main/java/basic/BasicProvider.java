@@ -8,17 +8,22 @@ import com.vaadin.ui.UI;
 
 public class BasicProvider extends UIProvider {
 
-  @Inject
-  private Class<? extends UI> uiClass;
+	private final Class<? extends UI> uiClass;
 
-  @Override
-  public UI createInstance(UICreateEvent event) {
-    return BasicFilter.getInjector().getProvider(uiClass).get();
-  }
+	@Inject
+	protected BasicProvider(Class<? extends UI> uiClass) {
+		super();
+		this.uiClass = uiClass;
+	}
 
-  @Override
-  public Class<? extends UI> getUIClass(UIClassSelectionEvent event) {
-    return uiClass;
-  }
+	@Override
+	public UI createInstance(UICreateEvent event) {
+		return BasicFilter.getInjector().getProvider(uiClass).get();
+	}
+
+	@Override
+	public Class<? extends UI> getUIClass(UIClassSelectionEvent event) {
+		return uiClass;
+	}
 
 }

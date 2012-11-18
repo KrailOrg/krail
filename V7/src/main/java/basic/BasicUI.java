@@ -1,6 +1,7 @@
 package basic;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
+
 import com.google.inject.name.Named;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
@@ -13,50 +14,51 @@ import com.vaadin.ui.VerticalLayout;
 
 public class BasicUI extends UI implements UriFragmentChangedListener {
 
-	@Inject
-	@Named("title")
-	private String title;
+	private final String title;
 
-	@Inject
-	@Named("version")
-	private String version;
+	private final String version;
 
-	@Inject
-	private MessageSource msgSource;
+	private final MessageSource msgSource;
 
 	private Navigator navigator;
+
+	@Inject
+	protected BasicUI(@Named("title") String title, @Named("version") String version, MessageSource msgSource) {
+		super();
+		this.title = title;
+		this.version = version;
+		this.msgSource = msgSource;
+
+	}
 
 	@Override
 	protected void init(VaadinRequest request) {
 		getPage().setTitle(title);
 		getPage().addUriFragmentChangedListener(this);
 
-		Panel topBar = new Panel("top bar " + title + "  " + version);
+		Panel headerBar = new Panel("header bar " + title + "  " + version);
 		VerticalLayout topBarLayout = new VerticalLayout();
 		topBarLayout.addComponent(new Label(msgSource.msg()));
-		topBar.setContent(topBarLayout);
-		topBar.setHeight("100px");
-		topBar.setWidth("100%");
+		headerBar.setContent(topBarLayout);
+		headerBar.setHeight("100px");
+		headerBar.setWidth("100%");
 
-		Panel bottomBar = new Panel("bottom bar");
-		bottomBar.setHeight("100px");
-		bottomBar.setWidth("100%");
+		Panel footerBar = new Panel("footer bar");
+		footerBar.setHeight("100px");
+		footerBar.setWidth("100%");
 
 		VerticalLayout coreLayout = new VerticalLayout();
 		coreLayout.addComponent(new View1());
 		coreLayout.setSizeUndefined();
 		coreLayout.setWidth("100%");
 
-		VerticalLayout screenLayout = new VerticalLayout(topBar, coreLayout, bottomBar);
+		VerticalLayout screenLayout = new VerticalLayout(headerBar, coreLayout, footerBar);
 		screenLayout.setSizeFull();
 		screenLayout.setExpandRatio(coreLayout, 1);
 
 		navigator = new Navigator(this, coreLayout);
-		//
-		// Navigator.ComponentContainerViewDisplay viewDisplay = new
-		// Navigator.ComponentContainerViewDisplay(coreLayout);
 
-		// Create and register the views
+		// Only one provider needed as it does the work to select the View class from the view name
 		navigator.addProvider(new GuiceViewProvider());
 
 		// Navigate to the start view
