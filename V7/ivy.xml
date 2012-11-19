@@ -41,7 +41,8 @@
         <dependency org="org.easytesting" name="fest-assert" rev="1.4"/>
         <dependency org="com.mycila" name="mycila-guice" rev="2.0.ga"/>
 		<dependency org="com.mycila.testing.plugins" name="mycila-testing-guice2" rev="2.8"/>
-		<dependency org="junit" name="junit" rev="4.+" />           
+		<dependency org="org.mockito" name="mockito-all" rev="1.9.0"/>
+ 		<dependency org="junit" name="junit" rev="4.+" />           
 		
 	</dependencies>
 </ivy-module>

@@ -3,6 +3,7 @@ package basic;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.google.inject.servlet.ServletModule;
+import com.vaadin.navigator.ViewProvider;
 import com.vaadin.ui.UI;
 
 public class BasicModule extends ServletModule {
@@ -13,8 +14,19 @@ public class BasicModule extends ServletModule {
 
 		bind(String.class).annotatedWith(Names.named("title")).toInstance("Basic Guice Vaadin Application");
 		bind(String.class).annotatedWith(Names.named("version")).toInstance("<b>Sample app Vaadin 7 Beta 9</b>");
+		bind(ViewProvider.class).to(GuiceViewProvider.class);
+
+		// this is needed for testing, even though not required otherwise. Don't know why.
+		// If you change this, change the provides method as well
+		bind(UI.class).to(BasicUI.class);
 	}
 
+	/**
+	 * Needed for the application but not for testing. If you change the class this returns, change the binding as well.
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unused")
 	@Provides
 	private Class<? extends UI> provideUIClass() {
 		return BasicUI.class;

@@ -3,6 +3,9 @@ package basic;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import com.google.inject.Injector;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewProvider;
 
@@ -12,6 +15,14 @@ public class GuiceViewProvider implements ViewProvider {
 	static {
 		viewMap.put("view1", View1.class);
 		viewMap.put("view2", View2.class);
+	}
+
+	private final Injector injector;
+
+	@Inject
+	protected GuiceViewProvider(Injector injector) {
+		super();
+		this.injector = injector;
 	}
 
 	@Override
@@ -32,7 +43,8 @@ public class GuiceViewProvider implements ViewProvider {
 	public View getView(String viewName) {
 		System.out.println("instantiating " + viewName + " with Guice");
 		Class<? extends View> clazz = viewMap.get(viewName);
-		View instance = BasicFilter.getInjector().getInstance(clazz);
+		assert (BasicFilter.getInjector().equals(injector));
+		View instance = injector.getInstance(clazz);
 		return instance;
 	}
 

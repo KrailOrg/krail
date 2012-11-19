@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import com.google.inject.name.Named;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
 import com.vaadin.server.Page.UriFragmentChangedListener;
 import com.vaadin.server.VaadinRequest;
@@ -20,14 +21,18 @@ public class BasicUI extends UI implements UriFragmentChangedListener {
 
 	private final MessageSource msgSource;
 
+	private final ViewProvider viewProvider;
+
 	private Navigator navigator;
 
 	@Inject
-	protected BasicUI(@Named("title") String title, @Named("version") String version, MessageSource msgSource) {
+	protected BasicUI(@Named("title") String title, @Named("version") String version, MessageSource msgSource,
+			ViewProvider viewProvider) {
 		super();
 		this.title = title;
 		this.version = version;
 		this.msgSource = msgSource;
+		this.viewProvider = viewProvider;
 
 	}
 
@@ -58,18 +63,22 @@ public class BasicUI extends UI implements UriFragmentChangedListener {
 
 		navigator = new Navigator(this, coreLayout);
 
-		// Only one provider needed as it does the work to select the View class from the view name
-		navigator.addProvider(new GuiceViewProvider());
+		// Only one provider needed because GuiceViewProvider does the work to select the View class from the view name
+		navigator.addProvider(viewProvider);
 
 		// Navigate to the start view
 		navigator.navigateTo("view1");
-		;
 		setContent(screenLayout);
 	}
 
 	@Override
 	public void uriFragmentChanged(UriFragmentChangedEvent event) {
 
+	}
+
+	@Override
+	public Navigator getNavigator() {
+		return navigator;
 	}
 
 }
