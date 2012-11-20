@@ -5,11 +5,18 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Injector;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewProvider;
 
 public class GuiceViewProvider implements ViewProvider {
+	private static Logger log = LoggerFactory.getLogger(GuiceViewProvider.class);
+	/**
+	 * Maps uri to view class
+	 */
 	static final Map<String, Class<? extends View>> viewMap = new HashMap<>();
 
 	static {
@@ -41,7 +48,7 @@ public class GuiceViewProvider implements ViewProvider {
 
 	@Override
 	public View getView(String viewName) {
-		System.out.println("instantiating " + viewName + " with Guice");
+		log.debug("instantiating " + viewName + " with Guice");
 		Class<? extends View> clazz = viewMap.get(viewName);
 		assert (BasicFilter.getInjector().equals(injector));
 		View instance = injector.getInstance(clazz);

@@ -1,5 +1,8 @@
 package basic;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
@@ -11,6 +14,7 @@ import com.vaadin.ui.VerticalLayout;
 public class View2 extends VerticalLayout implements View, ClickListener {
 
 	private static final long serialVersionUID = 9052414530874756754L;
+	private static Logger log = LoggerFactory.getLogger(View2.class);
 	private final Button switchViewBtn;
 
 	protected View2() {
@@ -23,7 +27,7 @@ public class View2 extends VerticalLayout implements View, ClickListener {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		System.out.println("entered view 2");
+		log.debug("entered view 1 with " + event.getNavigator().getState());
 	}
 
 	@Override
