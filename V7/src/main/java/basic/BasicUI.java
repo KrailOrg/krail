@@ -8,7 +8,6 @@ import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
 import com.vaadin.server.Page.UriFragmentChangedListener;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -24,14 +23,17 @@ public class BasicUI extends UI implements UriFragmentChangedListener {
 
 	private final HeaderBar headerBar;
 
+	private final FooterBar footerBar;
+
 	@Inject
-	protected BasicUI(HeaderBar headerBar, @Named("title") String title, MessageSource msgSource,
+	protected BasicUI(HeaderBar headerBar, FooterBar footerBar, @Named(A.title) String title, MessageSource msgSource,
 			ViewProvider viewProvider) {
 		super();
 		this.title = title;
 		this.msgSource = msgSource;
 		this.viewProvider = viewProvider;
 		this.headerBar = headerBar;
+		this.footerBar = footerBar;
 
 	}
 
@@ -39,10 +41,6 @@ public class BasicUI extends UI implements UriFragmentChangedListener {
 	protected void init(VaadinRequest request) {
 		getPage().setTitle(title);
 		getPage().addUriFragmentChangedListener(this);
-
-		Panel footerBar = new Panel("footer bar");
-		footerBar.setHeight("100px");
-		footerBar.setWidth("100%");
 
 		// viewArea is the layout where Views will be placed
 		VerticalLayout viewArea = new VerticalLayout();
@@ -76,6 +74,10 @@ public class BasicUI extends UI implements UriFragmentChangedListener {
 
 	public HeaderBar getHeaderBar() {
 		return headerBar;
+	}
+
+	public FooterBar getFooterBar() {
+		return footerBar;
 	}
 
 }

@@ -20,7 +20,19 @@ public class BasicUITest extends UITestBase {
 		// when
 
 		// then
-		assertThat(basicUI()).isNotNull();
+		assertThat(basicUI().getHeaderBar()).isNotNull();
+
+	}
+
+	@Test
+	public void footerBar() {
+
+		// given
+
+		// when
+
+		// then
+		assertThat(basicUI().getFooterBar()).isNotNull();
 
 	}
 
