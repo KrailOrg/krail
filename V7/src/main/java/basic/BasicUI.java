@@ -8,16 +8,11 @@ import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
 import com.vaadin.server.Page.UriFragmentChangedListener;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class BasicUI extends UI implements UriFragmentChangedListener {
-
-	private final String title;
-
-	private final String version;
 
 	private final MessageSource msgSource;
 
@@ -25,14 +20,18 @@ public class BasicUI extends UI implements UriFragmentChangedListener {
 
 	private Navigator navigator;
 
+	private final String title;
+
+	private final HeaderBar headerBar;
+
 	@Inject
-	protected BasicUI(@Named("title") String title, @Named("version") String version, MessageSource msgSource,
+	protected BasicUI(HeaderBar headerBar, @Named("title") String title, MessageSource msgSource,
 			ViewProvider viewProvider) {
 		super();
 		this.title = title;
-		this.version = version;
 		this.msgSource = msgSource;
 		this.viewProvider = viewProvider;
+		this.headerBar = headerBar;
 
 	}
 
@@ -41,27 +40,21 @@ public class BasicUI extends UI implements UriFragmentChangedListener {
 		getPage().setTitle(title);
 		getPage().addUriFragmentChangedListener(this);
 
-		Panel headerBar = new Panel("header bar " + title + "  " + version);
-		VerticalLayout topBarLayout = new VerticalLayout();
-		topBarLayout.addComponent(new Label(msgSource.msg()));
-		headerBar.setContent(topBarLayout);
-		headerBar.setHeight("100px");
-		headerBar.setWidth("100%");
-
 		Panel footerBar = new Panel("footer bar");
 		footerBar.setHeight("100px");
 		footerBar.setWidth("100%");
 
-		VerticalLayout coreLayout = new VerticalLayout();
-		coreLayout.addComponent(new View1());
-		coreLayout.setSizeUndefined();
-		coreLayout.setWidth("100%");
+		// viewArea is the layout where Views will be placed
+		VerticalLayout viewArea = new VerticalLayout();
+		viewArea.addComponent(new View1());
+		viewArea.setSizeUndefined();
+		viewArea.setWidth("100%");
 
-		VerticalLayout screenLayout = new VerticalLayout(headerBar, coreLayout, footerBar);
+		VerticalLayout screenLayout = new VerticalLayout(headerBar, viewArea, footerBar);
 		screenLayout.setSizeFull();
-		screenLayout.setExpandRatio(coreLayout, 1);
+		screenLayout.setExpandRatio(viewArea, 1);
 
-		navigator = new Navigator(this, coreLayout);
+		navigator = new Navigator(this, viewArea);
 
 		// Only one provider needed because GuiceViewProvider does the work to select the View class from the view name
 		navigator.addProvider(viewProvider);
@@ -79,6 +72,10 @@ public class BasicUI extends UI implements UriFragmentChangedListener {
 	@Override
 	public Navigator getNavigator() {
 		return navigator;
+	}
+
+	public HeaderBar getHeaderBar() {
+		return headerBar;
 	}
 
 }
