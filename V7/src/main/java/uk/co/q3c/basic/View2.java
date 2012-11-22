@@ -1,4 +1,6 @@
-package basic;
+package uk.co.q3c.basic;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -13,32 +15,44 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-public class View1 extends VerticalLayout implements View, ClickListener {
+public class View2 extends VerticalLayout implements View, ClickListener {
 
-	private static final long serialVersionUID = -7319085242848063460L;
-	private static Logger log = LoggerFactory.getLogger(View1.class);
+	private static final long serialVersionUID = 9052414530874756754L;
+	private static Logger log = LoggerFactory.getLogger(View2.class);
 	private final Button switchViewBtn;
 	private final Button homeBtn;
 	private final URIDecoder uriDecoder;
+	private final Label paramLabel;
 
 	@Inject
-	protected View1(URIDecoder uriDecoder) {
+	protected View2(URIDecoder uriDecoder) {
 		super();
 		this.uriDecoder = uriDecoder;
-		this.addComponent(new Label("view 1"));
-		switchViewBtn = new Button("Switch to view 2 with parameters");
-		switchViewBtn.setData("view2/a=b");
+		this.addComponent(new Label("view 2"));
+		switchViewBtn = new Button("Switch to view 1");
+		switchViewBtn.setData("view1");
 		homeBtn = new Button("home");
 		homeBtn.setData("");
+
+		paramLabel = new Label();
+
 		this.addComponent(switchViewBtn);
 		this.addComponent(homeBtn);
+		this.addComponent(paramLabel);
+
 		switchViewBtn.addClickListener(this);
 		homeBtn.addClickListener(this);
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		log.debug("entered view 1 with " + event.getNavigator().getState());
+		log.debug("entered view 2 with " + event.getNavigator().getState());
+		List<String> params = uriDecoder.setNavigationState(event.getNavigator().getState()).parameters();
+		if (params.isEmpty()) {
+			paramLabel.setCaption(" no parameters ");
+		} else {
+			paramLabel.setCaption("parameters: " + params.toString());
+		}
 	}
 
 	@Override
@@ -46,5 +60,4 @@ public class View1 extends VerticalLayout implements View, ClickListener {
 		Button btn = event.getButton();
 		this.getUI().getNavigator().navigateTo(btn.getData().toString());
 	}
-
 }

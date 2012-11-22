@@ -1,4 +1,4 @@
-package basic;
+package uk.co.q3c.basic;
 
 import java.util.List;
 

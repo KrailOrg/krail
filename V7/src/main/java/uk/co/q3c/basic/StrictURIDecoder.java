@@ -1,4 +1,4 @@
-package basic;
+package uk.co.q3c.basic;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -46,7 +46,7 @@ public class StrictURIDecoder implements URIDecoder {
 	 * <code>navigationState</code> is null or empty. If <code>navigationState</code> contains only paired parameters,
 	 * an empty String is returned.
 	 * 
-	 * @see basic.URIDecoder#virtualPage(java.lang.String)
+	 * @see uk.co.q3c.basic.URIDecoder#virtualPage(java.lang.String)
 	 */
 	public void decode() {
 		navigationState = stripTrailingSlash(navigationState);

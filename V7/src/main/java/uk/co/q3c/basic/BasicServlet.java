@@ -1,4 +1,4 @@
-package basic;
+package uk.co.q3c.basic;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

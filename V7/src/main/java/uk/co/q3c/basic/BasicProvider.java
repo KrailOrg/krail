@@ -1,4 +1,4 @@
-package basic;
+package uk.co.q3c.basic;
 
 import com.google.inject.Inject;
 import com.vaadin.server.UIClassSelectionEvent;

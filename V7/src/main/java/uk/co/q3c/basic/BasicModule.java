@@ -1,4 +1,4 @@
-package basic;
+package uk.co.q3c.basic;
 
 import com.google.inject.Provides;
 import com.google.inject.name.Names;

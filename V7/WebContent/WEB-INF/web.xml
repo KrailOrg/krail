@@ -9,7 +9,7 @@
 	</context-param>
 	<filter>
            <filter-name>basic</filter-name>
-           <filter-class>basic.BasicFilter</filter-class>
+           <filter-class>uk.co.q3c.basic.BasicFilter</filter-class>
     </filter>
     <filter-mapping>
             <filter-name>basic</filter-name>
@@ -17,7 +17,7 @@
     </filter-mapping>
 	<servlet>
 		<servlet-name>V7 Application</servlet-name>
-		<servlet-class>basic.BasicServlet</servlet-class>
+		<servlet-class>uk.co.q3c.basic.BasicServlet</servlet-class>
 		<init-param>
 			<description>
 			Vaadin UI class to use</description>

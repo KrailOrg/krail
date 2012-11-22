@@ -1,4 +1,4 @@
-package basic;
+package uk.co.q3c.basic;
 
 import static org.fest.assertions.Assertions.*;
 
@@ -6,6 +6,9 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import uk.co.q3c.basic.BasicModule;
+import uk.co.q3c.basic.StrictURIDecoder;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;

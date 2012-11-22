@@ -1,4 +1,4 @@
-package basic;
+package uk.co.q3c.basic;
 
 import static org.mockito.Mockito.*;
 
@@ -7,6 +7,9 @@ import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+
+import uk.co.q3c.basic.A;
+import uk.co.q3c.basic.BasicModule;
 
 import com.google.inject.name.Named;
 import com.mycila.testing.junit.MycilaJunitRunner;

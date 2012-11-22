@@ -1,4 +1,4 @@
-package basic;
+package uk.co.q3c.basic;
 
 import static java.util.Arrays.*;
 import static java.util.regex.Pattern.*;
