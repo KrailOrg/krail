@@ -1,0 +1,31 @@
+package basic;
+
+import static org.fest.assertions.Assertions.*;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({ BasicModule.class })
+public class ViewTest extends UITestBase {
+
+	@Test
+	public void captureParams() {
+
+		// given
+
+		// when
+		ui.getNavigator().navigateTo("view2/id=1");
+		// then
+		assertThat(currentView).isInstanceOf(View2.class);
+
+		// String fragment = Page.getCurrent().getUriFragment();
+		// System.out.println("fragement=" + fragment);
+		// then
+
+	}
+
+}

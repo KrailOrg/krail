@@ -12,37 +12,41 @@ import com.google.inject.Injector;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewProvider;
 
+/**
+ * Provides a map of uri to View class - almost a site map. The way in which the URI is interpreted to represent a
+ * virtual page (a View) and its parameters is determined by the {@link URIDecoder} which is injected
+ */
 public class GuiceViewProvider implements ViewProvider {
+	private static final long serialVersionUID = -2197223852036965786L;
 	private static Logger log = LoggerFactory.getLogger(GuiceViewProvider.class);
-	/**
-	 * Maps uri to view class
-	 */
+
 	static final Map<String, Class<? extends View>> viewMap = new HashMap<>();
 
 	static {
 		viewMap.put("view1", View1.class);
 		viewMap.put("view2", View2.class);
+		viewMap.put("", HomeView.class);
 	}
 
 	private final Injector injector;
+	private final URIDecoder uriDecoder;
 
 	@Inject
-	protected GuiceViewProvider(Injector injector) {
+	protected GuiceViewProvider(Injector injector, URIDecoder uriDecoder) {
 		super();
 		this.injector = injector;
+		this.uriDecoder = uriDecoder;
 	}
 
+	/**
+	 * This uses a more strict interpretation of the URI than Vaadin does by default. Returns just the view name after
+	 * stripping out the parameters.
+	 * 
+	 * @see com.vaadin.navigator.ViewProvider#getViewName(java.lang.String)
+	 */
 	@Override
 	public String getViewName(String viewAndParameters) {
-
-		if (viewAndParameters.startsWith("view1")) {
-			return "view1";
-		}
-
-		if (viewAndParameters.startsWith("view2")) {
-			return "view2";
-		}
-		return null;
+		return uriDecoder.setNavigationState(viewAndParameters).virtualPage();
 
 	}
 

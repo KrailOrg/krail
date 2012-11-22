@@ -17,6 +17,7 @@ public class BasicModule extends ServletModule {
 		bind(String.class).annotatedWith(Names.named(A.baseUri)).toInstance("http://example.com");
 
 		bind(ViewProvider.class).to(GuiceViewProvider.class);
+		bind(URIDecoder.class).to(StrictURIDecoder.class);
 
 		// this is needed for testing, even though not required otherwise. Don't know why.
 		// If you change this, change the provides method as well

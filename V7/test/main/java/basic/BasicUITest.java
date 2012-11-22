@@ -57,7 +57,27 @@ public class BasicUITest extends UITestBase {
 		// when
 		ui.getNavigator().navigateTo("view2");
 		// then
-		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri("view2"));
+		assertThat(currentView).isInstanceOf(View2.class);
+		// when
+		ui.getNavigator().navigateTo("");
+		// then
+		assertThat(currentView).isInstanceOf(HomeView.class);
+		// when
+		ui.getNavigator().navigateTo("view1");
+		// then
+		assertThat(currentView).isInstanceOf(View1.class);
+
+	}
+
+	@Test
+	public void changePageWithParams() {
+
+		// given
+
+		// when
+		ui.getNavigator().navigateTo("view2/a=b");
+		// then
+		assertThat(currentView).isInstanceOf(View2.class);
 
 	}
 

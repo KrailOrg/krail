@@ -44,7 +44,7 @@ public class BasicUI extends UI implements UriFragmentChangedListener {
 
 		// viewArea is the layout where Views will be placed
 		VerticalLayout viewArea = new VerticalLayout();
-		viewArea.addComponent(new View1());
+		// viewArea.addComponent(new View1());
 		viewArea.setSizeUndefined();
 		viewArea.setWidth("100%");
 
