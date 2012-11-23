@@ -7,27 +7,22 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
 
-public class View2 extends VerticalLayout implements View, ClickListener {
+public class View2 extends ViewBase implements ClickListener {
 
 	private static final long serialVersionUID = 9052414530874756754L;
 	private static Logger log = LoggerFactory.getLogger(View2.class);
 	private final Button switchViewBtn;
 	private final Button homeBtn;
-	private final URIDecoder uriDecoder;
 	private final Label paramLabel;
 
 	@Inject
 	protected View2(URIDecoder uriDecoder) {
-		super();
-		this.uriDecoder = uriDecoder;
+		super(uriDecoder);
 		this.addComponent(new Label("view 2"));
 		switchViewBtn = new Button("Switch to view 1");
 		switchViewBtn.setData("view1");
@@ -45,9 +40,7 @@ public class View2 extends VerticalLayout implements View, ClickListener {
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event) {
-		log.debug("entered view 2 with " + event.getNavigator().getState());
-		List<String> params = uriDecoder.setNavigationState(event.getNavigator().getState()).parameters();
+	public void processParams(List<String> params) {
 		if (params.isEmpty()) {
 			paramLabel.setCaption(" no parameters ");
 		} else {

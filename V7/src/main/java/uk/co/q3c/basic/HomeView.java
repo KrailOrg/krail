@@ -1,25 +1,26 @@
 package uk.co.q3c.basic;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
 
-public class HomeView extends VerticalLayout implements View, ClickListener {
+public class HomeView extends ViewBase implements ClickListener {
 
 	private static final long serialVersionUID = -7319085242848063460L;
 	private static Logger log = LoggerFactory.getLogger(HomeView.class);
 	private final Button switchToView2Btn;
 	private final Button switchToView1Btn;
 
-	protected HomeView() {
-		super();
+	@Inject
+	protected HomeView(URIDecoder uriDecoder) {
+		super(uriDecoder);
 		this.addComponent(new Label("Home View"));
 		switchToView2Btn = new Button("Switch to view 2");
 		switchToView2Btn.setData("view2");
