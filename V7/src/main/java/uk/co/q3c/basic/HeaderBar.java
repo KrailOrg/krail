@@ -14,12 +14,13 @@ public class HeaderBar extends Panel {
 	protected HeaderBar(@Named(A.title) String title, @Named(A.version) String version, MessageSource msgSource) {
 		super();
 
-		setCaption("header bar " + title + "  " + version);
-		VerticalLayout topBarLayout = new VerticalLayout();
-		topBarLayout.addComponent(new Label(msgSource.msg()));
-		setContent(topBarLayout);
-		setHeight("100px");
+		setCaption("header bar");
+		VerticalLayout layout = new VerticalLayout();
+		Label explain = new Label(title + "  " + version);
+		explain.setPrimaryStyleName("h2");
+		layout.addComponent(explain);
 		setWidth("100%");
+		setContent(layout);
 	}
 
 }

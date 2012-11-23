@@ -1,8 +1,5 @@
 package uk.co.q3c.basic;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -20,22 +17,16 @@ public class GuiceViewProvider implements ViewProvider {
 	private static final long serialVersionUID = -2197223852036965786L;
 	private static Logger log = LoggerFactory.getLogger(GuiceViewProvider.class);
 
-	static final Map<String, Class<? extends View>> viewMap = new HashMap<>();
-
-	static {
-		viewMap.put("view1", View1.class);
-		viewMap.put("view2", View2.class);
-		viewMap.put("", HomeView.class);
-	}
-
 	private final Injector injector;
 	private final URIDecoder uriDecoder;
+	private final SiteMap sitemap;
 
 	@Inject
-	protected GuiceViewProvider(Injector injector, URIDecoder uriDecoder) {
+	protected GuiceViewProvider(SiteMap sitemap, Injector injector, URIDecoder uriDecoder) {
 		super();
 		this.injector = injector;
 		this.uriDecoder = uriDecoder;
+		this.sitemap = sitemap;
 	}
 
 	/**
@@ -53,7 +44,7 @@ public class GuiceViewProvider implements ViewProvider {
 	@Override
 	public View getView(String viewName) {
 		log.debug("instantiating " + viewName + " with Guice");
-		Class<? extends View> clazz = viewMap.get(viewName);
+		Class<? extends View> clazz = sitemap.viewClassForName(viewName);
 		assert (BasicFilter.getInjector().equals(injector));
 		View instance = injector.getInstance(clazz);
 		return instance;

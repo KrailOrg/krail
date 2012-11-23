@@ -3,6 +3,7 @@ package uk.co.q3c.basic;
 import javax.inject.Inject;
 
 import com.google.inject.name.Named;
+import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
@@ -11,6 +12,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+@Theme("reindeer")
 public class BasicUI extends UI implements UriFragmentChangedListener {
 
 	private final MessageSource msgSource;
