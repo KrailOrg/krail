@@ -28,8 +28,10 @@ public class View1 extends VerticalLayout implements View, ClickListener {
 		this.addComponent(new Label("view 1"));
 		switchViewBtn = new Button("Switch to view 2 with parameters");
 		switchViewBtn.setData("view2/a=b");
+		switchViewBtn.addStyleName("big");
 		homeBtn = new Button("home");
 		homeBtn.setData("");
+		homeBtn.addStyleName("default");
 		this.addComponent(switchViewBtn);
 		this.addComponent(homeBtn);
 		switchViewBtn.addClickListener(this);

@@ -30,8 +30,8 @@ public class GuiceViewProvider implements ViewProvider {
 	}
 
 	/**
-	 * This uses a more strict interpretation of the URI than Vaadin does by default. Returns just the view name after
-	 * stripping out the parameters.
+	 * Uses uriDecoder to provide interpretation of the URI. Returns just the view name after stripping out the
+	 * parameters.
 	 * 
 	 * @see com.vaadin.navigator.ViewProvider#getViewName(java.lang.String)
 	 */

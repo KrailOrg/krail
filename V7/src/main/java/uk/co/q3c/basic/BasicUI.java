@@ -12,7 +12,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-@Theme("reindeer")
+@Theme("chameleon")
 public class BasicUI extends UI implements UriFragmentChangedListener {
 
 	private final MessageSource msgSource;
