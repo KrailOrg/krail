@@ -11,9 +11,8 @@ import com.vaadin.server.VaadinServlet;
 @Singleton
 public class BasicServlet extends VaadinServlet implements SessionInitListener {
 
-	private static final long serialVersionUID = -3701290344778297217L;
 	/**
-	 * Cannot use constructor inject. Container expects servlet to have no-arg public constructor
+	 * Cannot use constructor injection. Container expects servlet to have no-arg public constructor
 	 */
 	@Inject
 	private BasicProvider basicProvider;

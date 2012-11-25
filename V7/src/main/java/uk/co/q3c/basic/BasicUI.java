@@ -2,6 +2,8 @@ package uk.co.q3c.basic;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.basic.guice.uiscope.UIKey;
+
 import com.google.inject.name.Named;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
@@ -15,8 +17,6 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("chameleon")
 public class BasicUI extends UI implements UriFragmentChangedListener {
 
-	private final MessageSource msgSource;
-
 	private final ViewProvider viewProvider;
 
 	private Navigator navigator;
@@ -27,15 +27,15 @@ public class BasicUI extends UI implements UriFragmentChangedListener {
 
 	private final FooterBar footerBar;
 
+	private UIKey instanceKey;
+
 	@Inject
-	protected BasicUI(HeaderBar headerBar, FooterBar footerBar, @Named(A.title) String title, MessageSource msgSource,
-			ViewProvider viewProvider) {
+	protected BasicUI(HeaderBar headerBar, FooterBar footerBar, @Named(A.title) String title, ViewProvider viewProvider) {
 		super();
 		this.title = title;
-		this.msgSource = msgSource;
 		this.viewProvider = viewProvider;
-		this.headerBar = headerBar;
 		this.footerBar = footerBar;
+		this.headerBar = headerBar;
 
 	}
 
@@ -80,6 +80,14 @@ public class BasicUI extends UI implements UriFragmentChangedListener {
 
 	public FooterBar getFooterBar() {
 		return footerBar;
+	}
+
+	public void setInstanceKey(UIKey instanceKey) {
+		this.instanceKey = instanceKey;
+	}
+
+	public UIKey getInstanceKey() {
+		return instanceKey;
 	}
 
 }

@@ -14,7 +14,6 @@ import com.vaadin.navigator.ViewProvider;
  * virtual page (a View) and its parameters is determined by the {@link URIDecoder} which is injected
  */
 public class GuiceViewProvider implements ViewProvider {
-	private static final long serialVersionUID = -2197223852036965786L;
 	private static Logger log = LoggerFactory.getLogger(GuiceViewProvider.class);
 
 	private final Injector injector;

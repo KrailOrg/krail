@@ -8,7 +8,6 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
 public class HeaderBar extends Panel {
-	private static final long serialVersionUID = -6497285338281303606L;
 
 	@Inject
 	protected HeaderBar(@Named(A.title) String title, @Named(A.version) String version, MessageSource msgSource) {

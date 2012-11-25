@@ -1,27 +1,30 @@
-package uk.co.q3c.basic;
+package uk.co.q3c.basic.guice.uiscope;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.basic.BasicUI;
+
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
+import com.vaadin.ui.UI;
+import com.vaadin.util.CurrentInstance;
 
-public class MainWindowScope implements Scope {
-	private static Logger log = LoggerFactory.getLogger(MainWindowScope.class);
+public class UIScope implements Scope {
+	private static Logger log = LoggerFactory.getLogger(UIScope.class);
 
-	private final Map<MainWindowKey, Map<Key<?>, Object>> values = new HashMap<MainWindowKey, Map<Key<?>, Object>>();
+	private final Map<UIKey, Map<Key<?>, Object>> values = new HashMap<UIKey, Map<Key<?>, Object>>();
 
 	@Override
 	public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
 		return new Provider<T>() {
 			@Override
 			public T get() {
-				// get the scope cache for the current main window
+				// get the scope cache for the current UI
 				Map<Key<?>, Object> scopedObjects = getScopedObjectMap();
 
 				// retrieve an existing instance if possible
@@ -37,34 +40,26 @@ public class MainWindowScope implements Scope {
 				current = unscoped.get();
 				scopedObjects.put(key, current);
 				log.debug("new instance of {0} created for main window key: {1}", current.getClass().getSimpleName(),
-						new Serializable() {
-							@Override
-							public String toString() {
-								MainWindow mw = (MainWindow) CampusApplication.getCurrentNavigableAppLevelWindow();
-								return mw == null ? "" + CampusApplication.getMainWindowKey() : ""
-										+ mw.getInstanceKey();
-							}
-						});
+						key);
 				return current;
 			}
 		};
 	}
 
 	private <T> Map<Key<?>, Object> getScopedObjectMap() {
-		MainWindowKey instanceKey = null;
-
-		MainWindow mw = (MainWindow) CampusApplication.getCurrentNavigableAppLevelWindow();
-		// if main window is null, it is because we have arrived here to construct something for injection
-		// into the MainWindow constructor - in other words, MainWindow is not yet constructed. The instanceKey is
-		// transferred from CampusApplication to MainWindow once MainWindow has finished construction, so that it can be
-		// identified later
-		if (mw == null) {
-			instanceKey = CampusApplication.getMainWindowKey();
+		UI ui = UI.getCurrent();
+		UIKey instanceKey;
+		// if ui is null, it is because we have arrived here to construct something for injection
+		// into the UI constructor - in other words, UI is not yet constructed. That means there is no key to reference.
+		// Currently this is not allowed, and the solution is to only use field or method injection for anything which
+		// has UI scope.
+		if (ui == null) {
+			instanceKey = CurrentInstance.get(UIKey.class);
 		} else {
-			instanceKey = mw.getInstanceKey();
+			instanceKey = ((BasicUI) ui).getInstanceKey();
 		}
 
-		// return an existing one
+		// return an existing cache instance
 		if (values.containsKey(instanceKey)) {
 			Map<Key<?>, Object> scopedObjects = values.get(instanceKey);
 			log.debug("scope cache retrieved for key: {0}", instanceKey);

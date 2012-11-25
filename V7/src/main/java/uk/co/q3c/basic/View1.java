@@ -14,7 +14,6 @@ import com.vaadin.ui.Label;
 
 public class View1 extends ViewBase implements ClickListener {
 
-	private static final long serialVersionUID = -7319085242848063460L;
 	private static Logger log = LoggerFactory.getLogger(View1.class);
 	private final Button switchViewBtn;
 	private final Button homeBtn;
