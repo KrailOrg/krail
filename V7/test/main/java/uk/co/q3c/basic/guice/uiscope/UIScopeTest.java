@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.basic.BasicModule;
+import uk.co.q3c.basic.BasicProvider;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -16,22 +17,32 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 public class UIScopeTest {
 
 	@Inject
+	BasicProvider provider;
+
 	TestUI uib;
 
-	@Inject
 	TestUI uia;
 
 	@Test
 	public void uiScope() {
 
 		// given
-
+		uib = (TestUI) provider.createInstance(TestUI.class);
+		uia = (TestUI) provider.createInstance(TestUI.class);
 		// when
 
 		// then
-		Assert.assertNotEquals("Different ui instances", uia, uib);
-		Assert.assertNotEquals(uia.getFooterBar(), uib.getFooterBar());
-		Assert.assertNotEquals(uia.getHeaderBar(), uia.getExtraHeaderBar());
-		Assert.assertNotEquals(uib.getHeaderBar(), uib.getExtraHeaderBar());
+		// Just to make sure we are not looking at the same instance
+		Assert.assertNotEquals(uia, uib);
+
+		// ui instances should have different header bars
+		Assert.assertNotEquals(uia.getHeaderBar(), uib.getHeaderBar());
+		Assert.assertNotEquals(uia.getHeaderBar(), uib.getExtraHeaderBar());
+		Assert.assertNotEquals(uia.getExtraHeaderBar(), uib.getHeaderBar());
+		Assert.assertNotEquals(uia.getExtraHeaderBar(), uib.getExtraHeaderBar());
+
+		// but both header bars should be the same within a ui instance
+		Assert.assertEquals(uia.getHeaderBar(), uia.getExtraHeaderBar());
+		Assert.assertEquals(uib.getHeaderBar(), uib.getExtraHeaderBar());
 	}
 }

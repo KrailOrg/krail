@@ -7,12 +7,14 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.basic.BasicModule;
 import uk.co.q3c.basic.View2;
+import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BasicModule.class })
+@GuiceContext({ BasicModule.class ,UIScopeModule.class,TestModule.class})
+
 public class ViewTest extends UITestBase {
 
 	@Test

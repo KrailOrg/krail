@@ -6,7 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.basic.BasicUI;
+import uk.co.q3c.basic.ScopedUI;
 
 import com.google.inject.Key;
 import com.google.inject.Provider;
@@ -56,7 +56,7 @@ public class UIScope implements Scope {
 		if (ui == null) {
 			instanceKey = CurrentInstance.get(UIKey.class);
 		} else {
-			instanceKey = ((BasicUI) ui).getInstanceKey();
+			instanceKey = ((ScopedUI) ui).getInstanceKey();
 		}
 
 		// return an existing cache instance
