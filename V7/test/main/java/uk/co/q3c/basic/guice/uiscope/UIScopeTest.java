@@ -1,5 +1,7 @@
 package uk.co.q3c.basic.guice.uiscope;
 
+import static org.fest.assertions.Assertions.*;
+
 import javax.inject.Inject;
 
 import org.junit.Assert;
@@ -11,9 +13,10 @@ import uk.co.q3c.basic.BasicProvider;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BasicModule.class, UIScopeModule.class })
+@GuiceContext({ BasicModule.class })
 public class UIScopeTest {
 
 	@Inject
@@ -23,9 +26,10 @@ public class UIScopeTest {
 
 	TestUI uia;
 
+	private UIScope scope;
+
 	@Test
 	public void uiScope() {
-
 		// given
 		uib = (TestUI) provider.createInstance(TestUI.class);
 		uia = (TestUI) provider.createInstance(TestUI.class);
@@ -44,5 +48,19 @@ public class UIScopeTest {
 		// but both header bars should be the same within a ui instance
 		Assert.assertEquals(uia.getHeaderBar(), uia.getExtraHeaderBar());
 		Assert.assertEquals(uib.getHeaderBar(), uib.getExtraHeaderBar());
+
+		// when ui is closed
+		uia.detach();
+
+		// then scope cache should have been cleared
+		assertThat(scope.cacheHasEntryFor(uia)).isFalse();
+		assertThat(scope.cacheHasEntryFor(uib)).isTrue();
+	}
+
+	@ModuleProvider
+	protected UIScopeModule uiModuleProvider() {
+		UIScopeModule module = new UIScopeModule();
+		scope = module.getUiScope();
+		return module;
 	}
 }

@@ -74,4 +74,16 @@ public class UIScope implements Scope {
 
 	}
 
+	public boolean cacheHasEntryFor(UIKey uiKey) {
+		return values.containsKey(uiKey);
+	}
+
+	public boolean cacheHasEntryFor(ScopedUI ui) {
+		return cacheHasEntryFor(ui.getInstanceKey());
+	}
+
+	public void release(ScopedUI scopedUI) {
+		values.remove(scopedUI);
+	}
+
 }
