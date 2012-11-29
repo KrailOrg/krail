@@ -1,9 +1,11 @@
-package uk.co.q3c.basic;
+package uk.co.q3c.basic.view;
 
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import uk.co.q3c.basic.URIDecoder;
 
 import com.google.inject.Injector;
 import com.vaadin.navigator.View;
@@ -44,9 +46,13 @@ public class GuiceViewProvider implements ViewProvider {
 	public View getView(String viewName) {
 		log.debug("instantiating " + viewName + " with Guice");
 		Class<? extends View> clazz = sitemap.viewClassForName(viewName);
-		assert (BasicFilter.getInjector().equals(injector));
-		View instance = injector.getInstance(clazz);
-		return instance;
+		if (clazz == null) {
+			return injector.getInstance(sitemap.errorView());
+		} else {
+			View instance = injector.getInstance(clazz);
+			return instance;
+		}
+
 	}
 
 }

@@ -1,9 +1,11 @@
-package uk.co.q3c.basic;
+package uk.co.q3c.basic.view;
 
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import uk.co.q3c.basic.URIDecoder;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;

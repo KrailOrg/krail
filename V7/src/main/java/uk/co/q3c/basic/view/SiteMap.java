@@ -1,4 +1,4 @@
-package uk.co.q3c.basic;
+package uk.co.q3c.basic.view;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +20,10 @@ public class SiteMap {
 
 	public Class<? extends View> viewClassForName(String name) {
 		return viewMap.get(name);
+	}
+
+	public Class<? extends View> errorView() {
+		return ErrorView.class;
 	}
 
 }

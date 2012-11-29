@@ -1,5 +1,7 @@
 package uk.co.q3c.basic;
 
+import uk.co.q3c.basic.view.GuiceViewProvider;
+
 import com.google.inject.name.Names;
 import com.google.inject.servlet.ServletModule;
 import com.vaadin.navigator.ViewProvider;

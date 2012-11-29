@@ -6,6 +6,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
+import uk.co.q3c.basic.view.ErrorView;
+import uk.co.q3c.basic.view.HomeView;
+import uk.co.q3c.basic.view.View1;
+import uk.co.q3c.basic.view.View2;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -68,6 +72,18 @@ public class BasicUITest extends UITestBase {
 		ui.getNavigator().navigateTo("view1");
 		// then
 		assertThat(currentView).isInstanceOf(View1.class);
+
+	}
+
+	@Test
+	public void errorView() {
+
+		// given
+
+		// when
+		ui.getNavigator().navigateTo("viewx2");
+		// then
+		assertThat(currentView).isInstanceOf(ErrorView.class);
 
 	}
 

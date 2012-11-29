@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.basic.BasicModule;
-import uk.co.q3c.basic.View2;
 import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
+import uk.co.q3c.basic.view.View2;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
