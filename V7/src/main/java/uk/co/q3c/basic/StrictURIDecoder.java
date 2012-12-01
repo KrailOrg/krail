@@ -1,5 +1,6 @@
 package uk.co.q3c.basic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +28,7 @@ import com.google.gwt.thirdparty.guava.common.base.Strings;
  * this class is to split the parameters from the virtual page path, and the split occurs at the first path segment
  * containing "="
  */
-public class StrictURIDecoder implements URIDecoder {
+public class StrictURIDecoder implements URIDecoder, Serializable {
 
 	private String navigationState;
 	private String virtualPagePath;
