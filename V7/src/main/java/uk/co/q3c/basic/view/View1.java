@@ -2,13 +2,14 @@ package uk.co.q3c.basic.view;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.basic.FooterBar;
 import uk.co.q3c.basic.URIDecoder;
 
 public class View1 extends DemoViewBase {
 
 	@Inject
-	protected View1(URIDecoder uriDecoder) {
-		super(uriDecoder);
+	protected View1(URIDecoder uriDecoder, FooterBar footerBar) {
+		super(uriDecoder, footerBar);
 		addNavButton("view 2", "view2");
 		addNavButton("view 2 with parameters", "view2/id=22");
 		addNavButton("home", "");

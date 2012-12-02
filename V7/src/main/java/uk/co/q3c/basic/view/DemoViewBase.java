@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.basic.FooterBar;
 import uk.co.q3c.basic.URIDecoder;
 
 import com.vaadin.ui.Button;
@@ -13,6 +14,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ChameleonTheme;
 
@@ -20,11 +22,16 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 
 	private VerticalLayout panelLayout;
 	private Label viewLabel;
+	private final FooterBar footerBar;
+	private final GridLayout grid;
+	private Button sendMsgButton;
+	private TextField textField;
 
 	@Inject
-	protected DemoViewBase(URIDecoder uriDecoder) {
+	protected DemoViewBase(URIDecoder uriDecoder, FooterBar footerBar) {
 		super(uriDecoder);
-		GridLayout grid = new GridLayout(3, 3);
+		this.footerBar = footerBar;
+		grid = new GridLayout(3, 3);
 		grid.addComponent(centrePanel(), 1, 1);
 		grid.addComponent(viewLabel(), 1, 0);
 
@@ -38,13 +45,9 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 		grid.setRowExpandRatio(1, 1);
 		grid.setRowExpandRatio(2, 1);
 
-		this.addComponent(grid);
-	}
+		getGrid().addComponent(msgPanel(), 1, 2);
 
-	@Override
-	public void buttonClick(ClickEvent event) {
-		Button btn = event.getButton();
-		this.getUI().getNavigator().navigateTo(btn.getData().toString());
+		this.addComponent(grid);
 	}
 
 	protected Button addNavButton(String caption, String uri) {
@@ -93,4 +96,47 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 	public Label getViewLabel() {
 		return viewLabel;
 	}
+
+	public GridLayout getGrid() {
+		return grid;
+	}
+
+	public FooterBar getFooterBar() {
+		return footerBar;
+	}
+
+	protected Panel msgPanel() {
+		Panel panel = new Panel("Use the footer bar for messages");
+		panel.addStyleName(ChameleonTheme.PANEL_BORDERLESS);
+		VerticalLayout vl = new VerticalLayout();
+		panel.setContent(vl);
+
+		panel.setSizeFull();
+		vl.setSizeFull();
+		vl.addComponent(new Label(
+				"This section uses a @UIScoped FooterBar, injected into the View, to display a message"));
+		vl.addComponent(new Label("Enter some text, and click 'fire message', and the text will appear in footer"));
+		textField = new TextField();
+		vl.addComponent(textField);
+
+		sendMsgButton = new Button("Fire message");
+		sendMsgButton.setImmediate(true);
+		sendMsgButton.addClickListener(this);
+		vl.addComponent(sendMsgButton);
+		return panel;
+	}
+
+	@Override
+	public void buttonClick(ClickEvent event) {
+		Button btn = event.getButton();
+		if (btn == sendMsgButton) {
+			getFooterBar().setUserMessage(textField.getValue());
+		} else {
+			String uri = (btn.getData() == null) ? null : btn.getData().toString();
+			if (uri != null) {
+				this.getUI().getNavigator().navigateTo(uri);
+			}
+		}
+	}
+
 }
