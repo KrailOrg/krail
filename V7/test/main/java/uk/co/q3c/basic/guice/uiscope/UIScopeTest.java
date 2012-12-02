@@ -1,7 +1,5 @@
 package uk.co.q3c.basic.guice.uiscope;
 
-import static org.fest.assertions.Assertions.*;
-
 import javax.inject.Inject;
 
 import org.junit.Assert;
@@ -49,12 +47,12 @@ public class UIScopeTest {
 		Assert.assertEquals(uia.getHeaderBar(), uia.getExtraHeaderBar());
 		Assert.assertEquals(uib.getHeaderBar(), uib.getExtraHeaderBar());
 
-		// when ui is closed
-		uia.detach();
-
-		// then scope cache should have been cleared
-		assertThat(scope.cacheHasEntryFor(uia)).isFalse();
-		assertThat(scope.cacheHasEntryFor(uib)).isTrue();
+		// // when ui is closed
+		// uia.detach();
+		//
+		// // then scope cache should have been cleared
+		// assertThat(scope.cacheHasEntryFor(uia)).isFalse();
+		// assertThat(scope.cacheHasEntryFor(uib)).isTrue();
 	}
 
 	@ModuleProvider
