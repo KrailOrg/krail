@@ -25,7 +25,7 @@ public class ViewBase extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		log.debug("entered view " + this.getClass().getSimpleName() + event.getNavigator().getState());
+		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri: " + event.getNavigator().getState());
 		List<String> params = uriDecoder.setNavigationState(event.getNavigator().getState()).parameters();
 		processParams(params);
 	}
