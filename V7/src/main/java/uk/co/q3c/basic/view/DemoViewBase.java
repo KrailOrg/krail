@@ -7,12 +7,14 @@ import javax.inject.Inject;
 import uk.co.q3c.basic.FooterBar;
 import uk.co.q3c.basic.URIDecoder;
 
+import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Link;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -138,6 +140,15 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 				this.getUI().getNavigator().navigateTo(uri);
 			}
 		}
+	}
+
+	private Panel linkPanel() {
+		// Hyperlink to a given URL
+		Link link = new Link("Take me a away to a faraway land", new ExternalResource("http://vaadin.com/"));
+
+		// Open the URL in a new window/tab
+		link.setTargetName("_blank");
+		return null;
 	}
 
 }

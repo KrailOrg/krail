@@ -41,6 +41,17 @@ public class BasicUI extends ScopedUI implements UriFragmentChangedListener {
 		getPage().setTitle(title);
 		getPage().addUriFragmentChangedListener(this);
 
+		VerticalLayout viewArea = doLayout();
+		navigator = new Navigator(this, viewArea);
+
+		// Only one provider needed because GuiceViewProvider does the work to select the View class from the view name
+		navigator.addProvider(viewProvider);
+
+		// Navigate to the start view
+		navigator.navigateTo("view1");
+	}
+
+	protected VerticalLayout doLayout() {
 		// viewArea is the layout where Views will be placed
 		VerticalLayout viewArea = new VerticalLayout();
 		// viewArea.addComponent(new View1());
@@ -50,15 +61,9 @@ public class BasicUI extends ScopedUI implements UriFragmentChangedListener {
 		VerticalLayout screenLayout = new VerticalLayout(headerBar, viewArea, footerBar);
 		screenLayout.setSizeFull();
 		screenLayout.setExpandRatio(viewArea, 1);
-
-		navigator = new Navigator(this, viewArea);
-
-		// Only one provider needed because GuiceViewProvider does the work to select the View class from the view name
-		navigator.addProvider(viewProvider);
-
-		// Navigate to the start view
-		navigator.navigateTo("view1");
 		setContent(screenLayout);
+		return viewArea;
+
 	}
 
 	@Override
