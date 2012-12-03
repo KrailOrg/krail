@@ -48,6 +48,7 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 		getGrid().addComponent(msgPanel(), 1, 2);
 
 		this.addComponent(grid);
+
 	}
 
 	protected Button addNavButton(String caption, String uri) {
