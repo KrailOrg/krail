@@ -17,8 +17,9 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ChameleonTheme;
+import com.vaadin.util.CurrentInstance;
 
 public class DemoViewBase extends ViewBase implements ClickListener {
 
@@ -48,6 +49,7 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 		grid.setRowExpandRatio(2, 1);
 
 		getGrid().addComponent(msgPanel(), 1, 2);
+		getGrid().addComponent(linkPanel(), 0, 2);
 
 		this.addComponent(grid);
 
@@ -65,7 +67,6 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 
 	private Panel centrePanel() {
 		Panel centrePanel = new Panel();
-		centrePanel.addStyleName(ChameleonTheme.PANEL_BORDERLESS);
 		centrePanel.setCaption("switch to other views");
 		panelLayout = new VerticalLayout();
 		centrePanel.setContent(panelLayout);
@@ -110,7 +111,6 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 
 	protected Panel msgPanel() {
 		Panel panel = new Panel("Use the footer bar for messages");
-		panel.addStyleName(ChameleonTheme.PANEL_BORDERLESS);
 		VerticalLayout vl = new VerticalLayout();
 		panel.setContent(vl);
 
@@ -143,12 +143,23 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 	}
 
 	private Panel linkPanel() {
-		// Hyperlink to a given URL
-		Link link = new Link("Take me a away to a faraway land", new ExternalResource("http://vaadin.com/"));
+		Panel panel = new Panel("Use alternate UIs");
+		VerticalLayout vl = new VerticalLayout();
+		panel.setContent(vl);
+		vl.addComponent(new Label(
+				"This demo uses a simple counter to alternate between using different UIs. Open another tab to see the alternate.  (One has a sidebar, the other does not)"));
+
+		// this.getUI() is null at this stage, so use CurrentInstance
+		UI ui = CurrentInstance.get(UI.class);
+
+		Link link = new Link("Alternate UI, opened in another tab", new ExternalResource(ui.getPage().getLocation()
+				.toString()));
 
 		// Open the URL in a new window/tab
 		link.setTargetName("_blank");
-		return null;
-	}
 
+		vl.addComponent(link);
+		vl.addComponent(new Label("See also the BasicProvider javadoc"));
+		return panel;
+	}
 }

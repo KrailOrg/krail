@@ -10,15 +10,24 @@ import com.vaadin.ui.UI;
 
 public class BasicProvider extends ScopedUIProvider {
 
-	private int uiSelect = 0;
+	private final UISelectCounter selectCounter;
 
 	@Inject
-	protected BasicProvider(Injector injector, UIKeyProvider mainwindowKeyProvider) {
+	protected BasicProvider(Injector injector, UIKeyProvider mainwindowKeyProvider, UISelectCounter selectCounter) {
 		super(injector, mainwindowKeyProvider);
+		this.selectCounter = selectCounter;
 	}
 
+	/**
+	 * The logic here is to select a UI to display. In this simple case we are using a singleton {@link UISelectCounter}
+	 * to alternate between {@link BasicUI} and {@link SideBarUI}
+	 * 
+	 * @see com.vaadin.server.UIProvider#getUIClass(com.vaadin.server.UIClassSelectionEvent)
+	 */
 	@Override
 	public Class<? extends UI> getUIClass(UIClassSelectionEvent event) {
+		int uiSelect = selectCounter.getCounter() % 2;
+
 		switch (uiSelect) {
 		case 0:
 			return BasicUI.class;
@@ -27,15 +36,20 @@ public class BasicProvider extends ScopedUIProvider {
 		default:
 			return BasicUI.class;
 		}
-
 	}
 
-	public int getUiSelect() {
-		return uiSelect;
-	}
+	/**
+	 * Used by the demo just to increment the UI Counter, after invoking super. See
+	 * {@link #getUIClass(UIClassSelectionEvent)}
+	 * 
+	 * @see uk.co.q3c.basic.ScopedUIProvider#createInstance(java.lang.Class)
+	 */
 
-	public void setUiSelect(int uiSelect) {
-		this.uiSelect = uiSelect;
+	@Override
+	public UI createInstance(Class<? extends UI> uiClass) {
+		UI ui = super.createInstance(uiClass);
+		selectCounter.inc();
+		return ui;
 	}
 
 }

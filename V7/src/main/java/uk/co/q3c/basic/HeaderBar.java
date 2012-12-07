@@ -6,7 +6,6 @@ import uk.co.q3c.basic.guice.uiscope.UIScoped;
 
 import com.google.inject.name.Named;
 import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -31,7 +30,6 @@ public class HeaderBar extends HorizontalLayout {
 
 		setWidth("100%");
 		this.setExpandRatio(header, 1);
-		this.setComponentAlignment(header, Alignment.MIDDLE_CENTER);
 	}
 
 }
