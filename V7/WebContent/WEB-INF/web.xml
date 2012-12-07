@@ -28,7 +28,7 @@
 			<description>
 			Application widgetset</description>
 			<param-name>widgetset</param-name>
-			<param-value>com.example.v7.widgetset.V7Widgetset</param-value>
+			<param-value>uk.co.q3c.basic.widgetset.V7Widgetset</param-value>
 		</init-param>
 	</servlet>
 	<servlet-mapping>
