@@ -5,12 +5,10 @@ import java.util.Map;
 
 import javax.inject.Singleton;
 
-import com.vaadin.navigator.View;
-
 @Singleton
 public class SiteMap {
 
-	private static final Map<String, Class<? extends View>> viewMap = new HashMap<>();
+	private static final Map<String, Class<? extends GuiceView>> viewMap = new HashMap<>();
 
 	static {
 		viewMap.put("view1", View1.class);
@@ -18,12 +16,12 @@ public class SiteMap {
 		viewMap.put("", HomeView.class);
 	}
 
-	public Class<? extends View> viewClassForName(String name) {
+	public Class<? extends GuiceView> viewClassForName(String name) {
 		return viewMap.get(name);
 	}
 
-	public Class<? extends View> errorView() {
-		return ErrorView.class;
+	public Class<? extends GuiceView> errorView() {
+		return DemoErrorView.class;
 	}
 
 }
