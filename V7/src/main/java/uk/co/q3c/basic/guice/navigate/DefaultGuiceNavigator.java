@@ -1,4 +1,4 @@
-package uk.co.q3c.basic;
+package uk.co.q3c.basic.guice.navigate;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,19 +6,19 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import uk.co.q3c.basic.ScopedUI;
+import uk.co.q3c.basic.URIDecoder;
 import uk.co.q3c.basic.view.ErrorView;
-import uk.co.q3c.basic.view.GuiceView;
-import uk.co.q3c.basic.view.GuiceViewDisplay;
-import uk.co.q3c.basic.view.GuiceViewProvider;
 
 import com.vaadin.navigator.NavigationStateManager;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.UI;
+import com.vaadin.util.CurrentInstance;
 
 public class DefaultGuiceNavigator implements GuiceNavigator {
 
 	private final GuiceNavigationStateManager stateManager;
-	private final GuiceViewDisplay display;
 	private GuiceView currentView = null;
 	private final List<GuiceViewChangeListener> listeners = new LinkedList<GuiceViewChangeListener>();
 	private final GuiceViewProvider viewProvider;
@@ -26,11 +26,10 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 	private final URIDecoder uriDecoder;
 
 	@Inject
-	protected DefaultGuiceNavigator(GuiceNavigationStateManager stateManager, GuiceViewDisplay viewDisplay,
-			Provider<ErrorView> errorViewPro, GuiceViewProvider viewProvider, URIDecoder uriDecoder) {
+	protected DefaultGuiceNavigator(GuiceNavigationStateManager stateManager, Provider<ErrorView> errorViewPro,
+			GuiceViewProvider viewProvider, URIDecoder uriDecoder) {
 		super();
 		this.stateManager = stateManager;
-		this.display = viewDisplay;
 		this.errorViewPro = errorViewPro;
 		this.viewProvider = viewProvider;
 		this.uriDecoder = uriDecoder;
@@ -82,6 +81,9 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 			return;
 		}
 
+		UI ui = CurrentInstance.get(UI.class);
+		ScopedUI scopedUi = (ScopedUI) ui;
+		GuiceViewDisplay display = scopedUi.getDisplay();
 		if (display != null) {
 			display.showView(view);
 		}

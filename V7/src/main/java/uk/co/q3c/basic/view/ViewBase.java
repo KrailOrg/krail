@@ -7,8 +7,9 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.basic.GuiceViewChangeEvent;
 import uk.co.q3c.basic.URIDecoder;
+import uk.co.q3c.basic.guice.navigate.GuiceView;
+import uk.co.q3c.basic.guice.navigate.GuiceViewChangeEvent;
 
 import com.vaadin.ui.VerticalLayout;
 

@@ -1,6 +1,5 @@
-package uk.co.q3c.basic.view;
+package uk.co.q3c.basic.guice.navigate;
 
-import uk.co.q3c.basic.GuiceViewChangeEvent;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 

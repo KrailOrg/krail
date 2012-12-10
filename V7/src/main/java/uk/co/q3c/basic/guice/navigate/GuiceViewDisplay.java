@@ -1,4 +1,4 @@
-package uk.co.q3c.basic.view;
+package uk.co.q3c.basic.guice.navigate;
 
 
 /**

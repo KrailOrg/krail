@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.inject.Singleton;
 
+import uk.co.q3c.basic.guice.navigate.GuiceView;
+
 @Singleton
 public class SiteMap {
 

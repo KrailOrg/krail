@@ -2,11 +2,14 @@ package uk.co.q3c.basic;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.basic.guice.navigate.ComponentContainerViewDisplay;
+import uk.co.q3c.basic.guice.navigate.GuiceNavigator;
+import uk.co.q3c.basic.guice.navigate.GuiceViewProvider;
+
 import com.google.inject.name.Named;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
 import com.vaadin.server.Page.UriFragmentChangedListener;
 import com.vaadin.server.VaadinRequest;
@@ -16,9 +19,9 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("chameleon")
 public class BasicUI extends ScopedUI implements UriFragmentChangedListener {
 
-	private final ViewProvider viewProvider;
+	private final GuiceViewProvider viewProvider;
 
-	private Navigator navigator;
+	private final GuiceNavigator navigator;
 
 	private final String title;
 
@@ -27,12 +30,14 @@ public class BasicUI extends ScopedUI implements UriFragmentChangedListener {
 	private final FooterBar footerBar;
 
 	@Inject
-	protected BasicUI(HeaderBar headerBar, FooterBar footerBar, @Named(A.title) String title, ViewProvider viewProvider) {
-		super();
+	protected BasicUI(HeaderBar headerBar, FooterBar footerBar, @Named(A.title) String title,
+			GuiceViewProvider viewProvider, GuiceNavigator navigator, ComponentContainerViewDisplay display) {
+		super(display);
 		this.title = title;
 		this.viewProvider = viewProvider;
 		this.footerBar = footerBar;
 		this.headerBar = headerBar;
+		this.navigator = navigator;
 
 	}
 
@@ -40,12 +45,8 @@ public class BasicUI extends ScopedUI implements UriFragmentChangedListener {
 	protected void init(VaadinRequest request) {
 		getPage().setTitle(title);
 		getPage().addUriFragmentChangedListener(this);
-
+		Navigator nav;
 		VerticalLayout viewArea = doLayout();
-		navigator = new Navigator(this, viewArea);
-
-		// Only one provider needed because GuiceViewProvider does the work to select the View class from the view name
-		navigator.addProvider(viewProvider);
 
 		// Navigate to the start view
 		navigator.navigateTo("view1");
@@ -69,11 +70,6 @@ public class BasicUI extends ScopedUI implements UriFragmentChangedListener {
 	@Override
 	public void uriFragmentChanged(UriFragmentChangedEvent event) {
 
-	}
-
-	@Override
-	public Navigator getNavigator() {
-		return navigator;
 	}
 
 	public HeaderBar getHeaderBar() {

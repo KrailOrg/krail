@@ -1,4 +1,5 @@
-package uk.co.q3c.basic;
+package uk.co.q3c.basic.guice.navigate;
+
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
@@ -13,7 +14,7 @@ import com.vaadin.ui.ComponentContainer;
  * This display only supports views that are {@link Component}s themselves. Attempting to display a view that is not a
  * component causes an exception to be thrown.
  */
-public class ComponentContainerViewDisplay implements ViewDisplay {
+public class ComponentContainerViewDisplay implements GuiceViewDisplay {
 
 	private final ComponentContainer container;
 
@@ -25,7 +26,7 @@ public class ComponentContainerViewDisplay implements ViewDisplay {
 	}
 
 	@Override
-	public void showView(View view) {
+	public void showView(GuiceView view) {
 		if (view instanceof Component) {
 			container.removeAllComponents();
 			container.addComponent((Component) view);

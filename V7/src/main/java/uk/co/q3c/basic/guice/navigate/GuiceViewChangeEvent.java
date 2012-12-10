@@ -1,6 +1,5 @@
-package uk.co.q3c.basic;
+package uk.co.q3c.basic.guice.navigate;
 
-import uk.co.q3c.basic.view.GuiceView;
 
 public class GuiceViewChangeEvent {
 	private final GuiceView oldView;

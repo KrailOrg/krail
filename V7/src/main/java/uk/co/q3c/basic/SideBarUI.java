@@ -2,7 +2,10 @@ package uk.co.q3c.basic;
 
 import javax.inject.Inject;
 
-import com.vaadin.navigator.ViewProvider;
+import uk.co.q3c.basic.guice.navigate.ComponentContainerViewDisplay;
+import uk.co.q3c.basic.guice.navigate.GuiceNavigator;
+import uk.co.q3c.basic.guice.navigate.GuiceViewProvider;
+
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
@@ -12,8 +15,9 @@ import com.vaadin.ui.themes.ChameleonTheme;
 public class SideBarUI extends BasicUI {
 
 	@Inject
-	protected SideBarUI(HeaderBar headerBar, FooterBar footerBar, String title, ViewProvider viewProvider) {
-		super(headerBar, footerBar, title, viewProvider);
+	protected SideBarUI(HeaderBar headerBar, FooterBar footerBar, String title, GuiceViewProvider viewProvider,
+			GuiceNavigator navigator, ComponentContainerViewDisplay display) {
+		super(headerBar, footerBar, title, viewProvider, navigator, display);
 	}
 
 	@Override

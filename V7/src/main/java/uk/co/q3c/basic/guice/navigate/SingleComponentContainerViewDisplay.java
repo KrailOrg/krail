@@ -1,4 +1,4 @@
-package uk.co.q3c.basic;
+package uk.co.q3c.basic.guice.navigate;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;

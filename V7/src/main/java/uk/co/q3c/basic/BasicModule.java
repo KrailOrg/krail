@@ -1,13 +1,16 @@
 package uk.co.q3c.basic;
 
-import uk.co.q3c.basic.view.DefaultGuiceViewProvider;
+import uk.co.q3c.basic.guice.navigate.DefaultGuiceNavigator;
+import uk.co.q3c.basic.guice.navigate.DefaultGuiceViewProvider;
+import uk.co.q3c.basic.guice.navigate.DefaultNavigationStateManager;
+import uk.co.q3c.basic.guice.navigate.GuiceNavigationStateManager;
+import uk.co.q3c.basic.guice.navigate.GuiceNavigator;
+import uk.co.q3c.basic.guice.navigate.GuiceViewProvider;
 import uk.co.q3c.basic.view.DemoErrorView;
 import uk.co.q3c.basic.view.ErrorView;
-import uk.co.q3c.basic.view.GuiceViewProvider;
 
 import com.google.inject.name.Names;
 import com.google.inject.servlet.ServletModule;
-import com.vaadin.navigator.NavigationStateManager;
 
 public class BasicModule extends ServletModule {
 
@@ -19,12 +22,12 @@ public class BasicModule extends ServletModule {
 		bind(String.class).annotatedWith(Names.named(A.version)).toInstance("Sample app Vaadin 7 Beta 10");
 		bind(String.class).annotatedWith(Names.named(A.baseUri)).toInstance("http://example.com");
 
-		bind(GuiceViewProvider.class).to(DefaultGuiceViewProvider.class);
-		bind(DefaultGuiceNavigator.class);
 		bind(URIDecoder.class).to(StrictURIDecoder.class);
-		bind(NavigationStateManager.class).to(DefaultNavigationStateManager.class);
 		bind(ErrorView.class).to(DemoErrorView.class);
 
+		bind(GuiceViewProvider.class).to(DefaultGuiceViewProvider.class);
+		bind(GuiceNavigationStateManager.class).to(DefaultNavigationStateManager.class);
+		bind(GuiceNavigator.class).to(DefaultGuiceNavigator.class);
 	}
 
 }
