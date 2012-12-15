@@ -50,7 +50,7 @@ public class BasicUITest extends UITestBase {
 
 		// then
 		assertThat(ui).isNotNull();
-		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri("view1"));
+		assertThat(ui.getPage().getLocation().toString()).isEqualTo(baseUri);
 		// cannot do this, there is no way that I can see to get the title back
 		// assertThat(basicUI().getPage().getTitle()).isEqualTo();
 
@@ -61,15 +61,15 @@ public class BasicUITest extends UITestBase {
 
 		// given
 		// when
-		ui.getNavigator().navigateTo("view2");
+		ui.getGuiceNavigator().navigateTo("view2");
 		// then
 		assertThat(currentView).isInstanceOf(View2.class);
 		// when
-		ui.getNavigator().navigateTo("");
+		ui.getGuiceNavigator().navigateTo("");
 		// then
 		assertThat(currentView).isInstanceOf(HomeView.class);
 		// when
-		ui.getNavigator().navigateTo("view1");
+		ui.getGuiceNavigator().navigateTo("view1");
 		// then
 		assertThat(currentView).isInstanceOf(View1.class);
 
@@ -81,7 +81,7 @@ public class BasicUITest extends UITestBase {
 		// given
 
 		// when
-		ui.getNavigator().navigateTo("viewx2");
+		ui.getGuiceNavigator().navigateTo("viewx2");
 		// then
 		assertThat(currentView).isInstanceOf(DemoErrorView.class);
 
@@ -93,14 +93,14 @@ public class BasicUITest extends UITestBase {
 		// given
 
 		// when
-		ui.getNavigator().navigateTo("view2/a=b");
+		ui.getGuiceNavigator().navigateTo("view2/a=b");
 		// then
 		assertThat(currentView).isInstanceOf(View2.class);
 
 	}
 
 	private BasicUI basicUI() {
-		return (BasicUI) ui;
+		return ui;
 	}
 
 	private String uri(String pageName) {

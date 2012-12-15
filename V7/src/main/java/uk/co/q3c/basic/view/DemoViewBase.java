@@ -1,11 +1,13 @@
 package uk.co.q3c.basic.view;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import uk.co.q3c.basic.FooterBar;
 
+import com.google.common.collect.Lists;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -28,6 +30,7 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 	private final GridLayout grid;
 	private Button sendMsgButton;
 	private TextField textField;
+	private ArrayList<String> params;
 
 	@Inject
 	protected DemoViewBase(FooterBar footerBar) {
@@ -88,6 +91,7 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 
 	@Override
 	public void processParams(List<String> params) {
+		this.params = Lists.newArrayList(params);
 		String s = "Using an instance of " + this.getClass().getSimpleName() + ".\n\nWe arrived at this page with ";
 		if (params.isEmpty()) {
 			s = s + " no parameters ";
@@ -166,5 +170,9 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 	@Override
 	public Component getUiComponent() {
 		return this;
+	}
+
+	public ArrayList<String> getParams() {
+		return params;
 	}
 }

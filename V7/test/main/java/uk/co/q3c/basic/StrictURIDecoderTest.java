@@ -7,14 +7,13 @@ import javax.inject.Inject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.basic.BasicModule;
-import uk.co.q3c.basic.StrictURIHandler;
+import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BasicModule.class })
+@GuiceContext({ BasicModule.class, UIScopeModule.class })
 public class StrictURIDecoderTest {
 
 	final String view = "view1";

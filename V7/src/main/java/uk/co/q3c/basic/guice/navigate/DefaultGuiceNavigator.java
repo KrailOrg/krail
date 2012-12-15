@@ -51,9 +51,8 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 	 */
 	@Override
 	public void navigateTo(String navigationState) {
-
-		GuiceView view = viewProvider.getView(navigationState);
 		String viewName = viewProvider.getViewName(navigationState);
+		GuiceView view = viewProvider.getView(viewName);
 		if (view == null) {
 			view = errorViewPro.get();
 		}
@@ -136,6 +135,7 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 	 * @param listener
 	 *            Listener to invoke during a view change.
 	 */
+	@Override
 	public void addViewChangeListener(GuiceViewChangeListener listener) {
 		listeners.add(listener);
 	}
@@ -146,6 +146,7 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 	 * @param listener
 	 *            Listener to remove.
 	 */
+	@Override
 	public void removeViewChangeListener(GuiceViewChangeListener listener) {
 		listeners.remove(listener);
 	}

@@ -8,18 +8,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.basic.guice.navigate.GuiceView;
+import uk.co.q3c.basic.guice.navigate.GuiceViewChangeEvent;
+import uk.co.q3c.basic.guice.navigate.GuiceViewChangeListener;
+
 import com.google.inject.name.Named;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BasicModule.class })
-public abstract class UITestBase implements ViewChangeListener {
+public abstract class UITestBase implements GuiceViewChangeListener {
 
 	@Inject
 	@Named(A.baseUri)
@@ -27,10 +29,10 @@ public abstract class UITestBase implements ViewChangeListener {
 
 	VaadinRequest mockedRequest = mock(VaadinRequest.class);
 
-	View currentView;
+	GuiceView currentView;
 
 	@Inject
-	protected UI ui;
+	protected BasicUI ui;
 
 	@Before
 	public void uiSetup() {
@@ -39,7 +41,7 @@ public abstract class UITestBase implements ViewChangeListener {
 		CurrentInstance.set(UI.class, ui);
 		when(mockedRequest.getParameter("loc")).thenReturn(baseUri);
 		ui.doInit(mockedRequest, 1);
-		ui.getNavigator().addViewChangeListener(this);
+		ui.getGuiceNavigator().addViewChangeListener(this);
 
 	}
 
@@ -49,12 +51,12 @@ public abstract class UITestBase implements ViewChangeListener {
 	}
 
 	@Override
-	public boolean beforeViewChange(ViewChangeEvent event) {
+	public boolean beforeViewChange(GuiceViewChangeEvent event) {
 		return true;
 	}
 
 	@Override
-	public void afterViewChange(ViewChangeEvent event) {
+	public void afterViewChange(GuiceViewChangeEvent event) {
 		currentView = event.getNewView();
 	}
 

@@ -12,4 +12,8 @@ public interface GuiceNavigator extends UriFragmentChangedListener {
 
 	List<String> geNavigationParams();
 
+	void addViewChangeListener(GuiceViewChangeListener listener);
+
+	void removeViewChangeListener(GuiceViewChangeListener listener);
+
 }
