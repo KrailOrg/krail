@@ -2,9 +2,7 @@ package uk.co.q3c.basic;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.basic.guice.navigate.ComponentContainerViewDisplay;
 import uk.co.q3c.basic.guice.navigate.GuiceNavigator;
-import uk.co.q3c.basic.guice.navigate.GuiceViewProvider;
 
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
@@ -15,13 +13,12 @@ import com.vaadin.ui.themes.ChameleonTheme;
 public class SideBarUI extends BasicUI {
 
 	@Inject
-	protected SideBarUI(HeaderBar headerBar, FooterBar footerBar, String title, GuiceViewProvider viewProvider,
-			GuiceNavigator navigator, ComponentContainerViewDisplay display) {
-		super(headerBar, footerBar, title, viewProvider, navigator, display);
+	protected SideBarUI(HeaderBar headerBar, FooterBar footerBar, String title, GuiceNavigator navigator) {
+		super(headerBar, footerBar, title, navigator);
 	}
 
 	@Override
-	protected VerticalLayout doLayout() {
+	protected void doLayout() {
 		// viewArea is the layout where Views will be placed
 
 		HorizontalLayout centreSection = new HorizontalLayout();
@@ -38,18 +35,14 @@ public class SideBarUI extends BasicUI {
 		sideBarPanel.setSizeUndefined();
 		sideBarPanel.setHeight("100%");
 
-		VerticalLayout viewArea = new VerticalLayout();
-		viewArea.setSizeFull();
-
 		centreSection.addComponent(sideBarPanel);
-		centreSection.addComponent(viewArea);
+		centreSection.addComponent(getViewDisplayPanel());
 
 		VerticalLayout screenLayout = new VerticalLayout(getHeaderBar(), centreSection, getFooterBar());
 		screenLayout.setSizeFull();
 		screenLayout.setExpandRatio(centreSection, 1);
-		centreSection.setExpandRatio(viewArea, 1);
+		centreSection.setExpandRatio(getViewDisplayPanel(), 1);
 		setContent(screenLayout);
-		return viewArea;
 	}
 
 }

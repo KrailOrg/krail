@@ -1,7 +1,7 @@
 package uk.co.q3c.basic.guice.navigate;
 
-
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.Component;
 
 public interface GuiceView {
 	/**
@@ -16,4 +16,12 @@ public interface GuiceView {
 	 * 
 	 */
 	public void enter(GuiceViewChangeEvent event);
+
+	/**
+	 * To enable implementations to be able to implement this interface without descending from Component. If the
+	 * implementation does descend from Component, just return 'this'
+	 * 
+	 * @return
+	 */
+	public Component getUiComponent();
 }

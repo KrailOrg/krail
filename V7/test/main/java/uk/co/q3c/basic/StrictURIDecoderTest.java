@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.basic.BasicModule;
-import uk.co.q3c.basic.StrictURIDecoder;
+import uk.co.q3c.basic.StrictURIHandler;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -38,7 +38,7 @@ public class StrictURIDecoderTest {
 	final String home_p2 = "a=b/year=1970";
 
 	@Inject
-	StrictURIDecoder decoder;
+	StrictURIHandler decoder;
 
 	@Test
 	public void virtualPageAndParameters() {

@@ -6,30 +6,27 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import uk.co.q3c.basic.ScopedUI;
-import uk.co.q3c.basic.URIDecoder;
+import uk.co.q3c.basic.URIHandler;
 import uk.co.q3c.basic.view.ErrorView;
 
-import com.vaadin.navigator.NavigationStateManager;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Page.UriFragmentChangedEvent;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 public class DefaultGuiceNavigator implements GuiceNavigator {
 
-	private final GuiceNavigationStateManager stateManager;
 	private GuiceView currentView = null;
 	private final List<GuiceViewChangeListener> listeners = new LinkedList<GuiceViewChangeListener>();
 	private final GuiceViewProvider viewProvider;
 	private final Provider<ErrorView> errorViewPro;
-	private final URIDecoder uriDecoder;
+	private final URIHandler uriDecoder;
 
 	@Inject
-	protected DefaultGuiceNavigator(GuiceNavigationStateManager stateManager, Provider<ErrorView> errorViewPro,
-			GuiceViewProvider viewProvider, URIDecoder uriDecoder) {
+	protected DefaultGuiceNavigator(Provider<ErrorView> errorViewPro, GuiceViewProvider viewProvider,
+			URIHandler uriDecoder) {
 		super();
-		this.stateManager = stateManager;
 		this.errorViewPro = errorViewPro;
 		this.viewProvider = viewProvider;
 		this.uriDecoder = uriDecoder;
@@ -81,13 +78,12 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 			return;
 		}
 
+		/**
+		 * This should be injected, with a UIScoped UI!
+		 */
 		UI ui = CurrentInstance.get(UI.class);
 		ScopedUI scopedUi = (ScopedUI) ui;
-		GuiceViewDisplay display = scopedUi.getDisplay();
-		if (display != null) {
-			display.showView(view);
-		}
-
+		scopedUi.changeView(currentView, view);
 		view.enter(event);
 		currentView = view;
 
@@ -114,16 +110,6 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * Returns the current navigation state reported by this Navigator's {@link NavigationStateManager}.
-	 * 
-	 * @return The navigation state.
-	 */
-	@Override
-	public String getState() {
-		return getStateManager().getState();
 	}
 
 	/**
@@ -164,7 +150,18 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 		listeners.remove(listener);
 	}
 
-	public GuiceNavigationStateManager getStateManager() {
-		return stateManager;
+	@Override
+	public void uriFragmentChanged(UriFragmentChangedEvent event) {
+		navigateTo(event.getPage().getUriFragment());
+	}
+
+	@Override
+	public String getNavigationState() {
+		return uriDecoder.getNavigationState();
+	}
+
+	@Override
+	public List<String> geNavigationParams() {
+		return uriDecoder.getNavigationParams();
 	}
 }

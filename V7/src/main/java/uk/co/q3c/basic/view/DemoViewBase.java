@@ -5,7 +5,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import uk.co.q3c.basic.FooterBar;
-import uk.co.q3c.basic.URIDecoder;
 
 import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.Button;
@@ -31,9 +30,10 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 	private TextField textField;
 
 	@Inject
-	protected DemoViewBase(URIDecoder uriDecoder, FooterBar footerBar) {
-		super(uriDecoder);
+	protected DemoViewBase(FooterBar footerBar) {
+		super();
 		this.footerBar = footerBar;
+
 		grid = new GridLayout(3, 3);
 		grid.addComponent(centrePanel(), 1, 1);
 		grid.addComponent(viewLabel(), 1, 0);
@@ -137,7 +137,7 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 		} else {
 			String uri = (btn.getData() == null) ? null : btn.getData().toString();
 			if (uri != null) {
-				this.getUI().getNavigator().navigateTo(uri);
+				this.getScopedUI().getGuiceNavigator().navigateTo(uri);
 			}
 		}
 	}
@@ -161,5 +161,10 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 		vl.addComponent(link);
 		vl.addComponent(new Label("See also the BasicProvider javadoc"));
 		return panel;
+	}
+
+	@Override
+	public Component getUiComponent() {
+		return this;
 	}
 }

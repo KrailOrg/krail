@@ -8,12 +8,16 @@ import java.util.List;
  * @author david
  * 
  */
-public interface URIDecoder {
+public interface URIHandler {
 
 	public String virtualPage();
 
 	public List<String> parameters();
 
-	public URIDecoder setNavigationState(String navigationState);
+	public URIHandler setNavigationState(String navigationState);
+
+	public String getNavigationState();
+
+	public List<String> getNavigationParams();
 
 }

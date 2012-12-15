@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.basic.guice.uiscope.UIScoped;
+
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.gwt.thirdparty.guava.common.base.Joiner;
@@ -26,9 +28,13 @@ import com.google.gwt.thirdparty.guava.common.base.Strings;
  * <br>
  * and everything after it is paired parameters. Parameter pairs are not verified and may be malformed, the purpose of
  * this class is to split the parameters from the virtual page path, and the split occurs at the first path segment
- * containing "="
+ * containing "=" <br>
+ * <br>
+ * Holds the current navigation state for the UI, so it is UIScoped
+ * 
  */
-public class StrictURIDecoder implements URIDecoder, Serializable {
+@UIScoped
+public class StrictURIHandler implements URIHandler, Serializable {
 
 	private String navigationState;
 	private String virtualPagePath;
@@ -36,7 +42,7 @@ public class StrictURIDecoder implements URIDecoder, Serializable {
 	private final List<String> pathSegments = new ArrayList<>();
 
 	@Inject
-	protected StrictURIDecoder() {
+	protected StrictURIHandler() {
 		super();
 	}
 
@@ -47,9 +53,9 @@ public class StrictURIDecoder implements URIDecoder, Serializable {
 	 * <code>navigationState</code> is null or empty. If <code>navigationState</code> contains only paired parameters,
 	 * an empty String is returned.
 	 * 
-	 * @see uk.co.q3c.basic.URIDecoder#virtualPage(java.lang.String)
+	 * @see uk.co.q3c.basic.URIHandler#virtualPage(java.lang.String)
 	 */
-	public void decode() {
+	private void decode() {
 		navigationState = stripTrailingSlash(navigationState);
 		parameters.clear();
 		pathSegments.clear();
@@ -114,15 +120,21 @@ public class StrictURIDecoder implements URIDecoder, Serializable {
 		return virtualPagePath;
 	}
 
+	@Override
 	public String getNavigationState() {
 		return navigationState;
 	}
 
 	@Override
-	public URIDecoder setNavigationState(String navigationState) {
+	public URIHandler setNavigationState(String navigationState) {
 		this.navigationState = navigationState;
 		decode();
 		return this;
+	}
+
+	@Override
+	public List<String> getNavigationParams() {
+		return Lists.newArrayList(parameters);
 	}
 
 }

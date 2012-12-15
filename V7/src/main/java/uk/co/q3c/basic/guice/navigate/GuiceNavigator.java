@@ -1,10 +1,15 @@
 package uk.co.q3c.basic.guice.navigate;
 
+import java.util.List;
 
-public interface GuiceNavigator {
+import com.vaadin.server.Page.UriFragmentChangedListener;
+
+public interface GuiceNavigator extends UriFragmentChangedListener {
 
 	void navigateTo(String navigationState);
 
-	String getState();
+	String getNavigationState();
+
+	List<String> geNavigationParams();
 
 }
