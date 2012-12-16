@@ -20,7 +20,7 @@ public class BasicModule extends ServletModule {
 		bind(String.class).annotatedWith(Names.named(A.version)).toInstance("Sample app Vaadin 7 Beta 10");
 		bind(String.class).annotatedWith(Names.named(A.baseUri)).toInstance("http://example.com");
 
-		bind(URIHandler.class).to(StrictURIHandler.class);
+		bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 		bind(ErrorView.class).to(DemoErrorView.class);
 
 		bind(GuiceViewProvider.class).to(DefaultGuiceViewProvider.class);

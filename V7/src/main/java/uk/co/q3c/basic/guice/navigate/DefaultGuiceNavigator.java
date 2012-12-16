@@ -6,7 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import uk.co.q3c.basic.URIHandler;
+import uk.co.q3c.basic.URIFragmentHandler;
 import uk.co.q3c.basic.view.ErrorView;
 
 import com.vaadin.navigator.ViewChangeListener;
@@ -21,42 +21,25 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 	private final List<GuiceViewChangeListener> listeners = new LinkedList<GuiceViewChangeListener>();
 	private final GuiceViewProvider viewProvider;
 	private final Provider<ErrorView> errorViewPro;
-	private final URIHandler uriDecoder;
+	private final URIFragmentHandler uriDecoder;
 
 	@Inject
 	protected DefaultGuiceNavigator(Provider<ErrorView> errorViewPro, GuiceViewProvider viewProvider,
-			URIHandler uriDecoder) {
+			URIFragmentHandler uriDecoder) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProvider = viewProvider;
 		this.uriDecoder = uriDecoder;
 	}
 
-	/**
-	 * Navigates to a view and initialize the view with given parameters.
-	 * <p>
-	 * The view string consists of a view name optionally followed by a slash and a parameters part that is passed as-is
-	 * to the view. ViewProviders are used to find and create the correct type of view.
-	 * <p>
-	 * If the view being deactivated indicates it wants a confirmation for the navigation operation, the user is asked
-	 * for the confirmation.
-	 * <p>
-	 * Registered {@link ViewChangeListener}s are called upon successful view change.
-	 * 
-	 * @param navigationState
-	 *            view name and parameters
-	 * 
-	 * @throws IllegalArgumentException
-	 *             if <code>navigationState</code> does not map to a known view and no error view is registered
-	 */
 	@Override
 	public void navigateTo(String navigationState) {
 		String viewName = viewProvider.getViewName(navigationState);
 		GuiceView view = viewProvider.getView(viewName);
-		if (view == null) {
-			view = errorViewPro.get();
-		}
+
 		navigateTo(view, viewName, navigationState);
+		getUI().getPage().setUriFragment(navigationState, false);
+
 	}
 
 	/**
@@ -77,15 +60,10 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 			return;
 		}
 
-		/**
-		 * This should be injected, with a UIScoped UI!
-		 */
-		UI ui = CurrentInstance.get(UI.class);
-		ScopedUI scopedUi = (ScopedUI) ui;
-		scopedUi.changeView(currentView, view);
+		getUI().changeView(currentView, view);
 		view.enter(event);
 		currentView = view;
-
+		// ui.getPage().setUriFragment(newUriFragment, false);
 		fireAfterViewChange(event);
 	}
 
@@ -158,11 +136,20 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 
 	@Override
 	public String getNavigationState() {
-		return uriDecoder.getNavigationState();
+		return uriDecoder.fragment();
 	}
 
 	@Override
 	public List<String> geNavigationParams() {
-		return uriDecoder.getNavigationParams();
+		return uriDecoder.parameterList();
+	}
+
+	public ScopedUI getUI() {
+		/**
+		 * This should be injected, with a UIScoped UI!
+		 */
+		UI ui = CurrentInstance.get(UI.class);
+		ScopedUI scopedUi = (ScopedUI) ui;
+		return scopedUi;
 	}
 }

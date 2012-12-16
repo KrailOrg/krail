@@ -38,7 +38,7 @@ public class BasicUI extends ScopedUI {
 		doLayout();
 
 		// Navigate to the start view
-		getGuiceNavigator().navigateTo("view1");
+		getGuiceNavigator().navigateTo("");
 	}
 
 	protected void doLayout() {

@@ -39,7 +39,7 @@ public abstract class UITestBase implements GuiceViewChangeListener {
 		// VaadinRequest vr = new VaadinServletRequest(null, null);
 		System.out.println("initialising test");
 		CurrentInstance.set(UI.class, ui);
-		when(mockedRequest.getParameter("loc")).thenReturn(baseUri);
+		when(mockedRequest.getParameter("loc")).thenReturn(baseUri + "/");
 		ui.doInit(mockedRequest, 1);
 		ui.getGuiceNavigator().addViewChangeListener(this);
 

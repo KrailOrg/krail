@@ -5,24 +5,24 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.basic.URIHandler;
+import uk.co.q3c.basic.URIFragmentHandler;
 import uk.co.q3c.basic.view.SiteMap;
 
 import com.google.inject.Injector;
 
 /**
  * Provides a map of uri to View class - almost a site map. The way in which the URI is interpreted to represent a
- * virtual page (a View) and its parameters is determined by the {@link URIHandler} which is injected
+ * virtual page (a View) and its parameters is determined by the {@link URIFragmentHandler} which is injected
  */
 public class DefaultGuiceViewProvider implements GuiceViewProvider {
 	private static Logger log = LoggerFactory.getLogger(DefaultGuiceViewProvider.class);
 
 	private final Injector injector;
-	private final URIHandler uriDecoder;
+	private final URIFragmentHandler uriDecoder;
 	private final SiteMap sitemap;
 
 	@Inject
-	protected DefaultGuiceViewProvider(SiteMap sitemap, Injector injector, URIHandler uriDecoder) {
+	protected DefaultGuiceViewProvider(SiteMap sitemap, Injector injector, URIFragmentHandler uriDecoder) {
 		super();
 		this.injector = injector;
 		this.uriDecoder = uriDecoder;
@@ -37,7 +37,7 @@ public class DefaultGuiceViewProvider implements GuiceViewProvider {
 	 */
 	@Override
 	public String getViewName(String viewAndParameters) {
-		return uriDecoder.setNavigationState(viewAndParameters).virtualPage();
+		return uriDecoder.setFragment(viewAndParameters).virtualPage();
 
 	}
 
