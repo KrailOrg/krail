@@ -6,6 +6,9 @@ import uk.co.q3c.basic.guice.uiscope.UIScoped;
 
 import com.google.inject.name.Named;
 import com.vaadin.server.ThemeResource;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -13,6 +16,12 @@ import com.vaadin.ui.themes.ChameleonTheme;
 
 @UIScoped
 public class HeaderBar extends HorizontalLayout {
+	private Label viewTag;
+
+	private int colourIndex;
+	private CssLayout hl;
+
+	private static final String[] colours = new String[] { "#aeec31", "#34a782", "#ed7024", "#c8dd7d" };
 
 	@Inject
 	protected HeaderBar(@Named(A.title) String title, @Named(A.version) String version, MessageSource msgSource) {
@@ -26,10 +35,43 @@ public class HeaderBar extends HorizontalLayout {
 		header.addStyleName(ChameleonTheme.LABEL_H2);
 
 		this.addComponent(logo);
-		this.addComponent(header);
+		viewTag = new Label("Now showing", ContentMode.HTML);
 
+		hl = new CssLayout() {
+			@Override
+			protected String getCss(Component c) {
+				if (c == viewTag) {
+					// String s = );
+					// Color the boxes with random colors
+					// int rgb = (int) (Math.random() * (1 << 24));
+					// String s = "background: #" + Integer.toHexString(rgb);
+					String s = "background: " + colours[colourIndex];
+					System.out.println("CSS: with hex=" + s);
+					return s;
+				}
+				return null;
+			}
+		};
+		hl.addComponent(header);
+		hl.addComponent(viewTag);
+
+		// hl.setExpandRatio(header, 1);
+		// hl.setExpandRatio(viewTag, 1);
+		// hl.setExpandRatio(blank, 1);
+		this.addComponent(hl);
+		this.setExpandRatio(hl, 1);
 		setWidth("100%");
-		this.setExpandRatio(header, 1);
+	}
+
+	public void setViewTag(int colourIndex, String tag) {
+
+		this.colourIndex = colourIndex;
+		viewTag.setValue("Now showing view: " + tag);
+		hl.markAsDirtyRecursive();
+	}
+
+	public String getViewTag() {
+		return viewTag.getValue();
 	}
 
 }

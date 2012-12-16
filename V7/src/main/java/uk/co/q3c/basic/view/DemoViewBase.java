@@ -6,6 +6,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import uk.co.q3c.basic.FooterBar;
+import uk.co.q3c.basic.HeaderBar;
+import uk.co.q3c.basic.guice.navigate.GuiceViewChangeEvent;
 
 import com.google.common.collect.Lists;
 import com.vaadin.server.ExternalResource;
@@ -22,7 +24,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.util.CurrentInstance;
 
-public class DemoViewBase extends ViewBase implements ClickListener {
+public abstract class DemoViewBase extends ViewBase implements ClickListener {
 
 	private VerticalLayout panelLayout;
 	private Label viewLabel;
@@ -31,11 +33,13 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 	private Button sendMsgButton;
 	private TextField textField;
 	private ArrayList<String> params;
+	private final HeaderBar headerBar;
 
 	@Inject
-	protected DemoViewBase(FooterBar footerBar) {
+	protected DemoViewBase(FooterBar footerBar, HeaderBar headerBar) {
 		super();
 		this.footerBar = footerBar;
+		this.headerBar = headerBar;
 
 		grid = new GridLayout(3, 3);
 		grid.addComponent(centrePanel(), 1, 1);
@@ -175,4 +179,13 @@ public class DemoViewBase extends ViewBase implements ClickListener {
 	public ArrayList<String> getParams() {
 		return params;
 	}
+
+	@Override
+	public void enter(GuiceViewChangeEvent event) {
+		super.enter(event);
+		headerBar.setViewTag(getColourIndex(), this.getClass().getSimpleName());
+
+	}
+
+	public abstract int getColourIndex();
 }
