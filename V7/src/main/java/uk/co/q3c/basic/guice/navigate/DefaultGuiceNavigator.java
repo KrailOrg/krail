@@ -22,11 +22,11 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 	private final List<GuiceViewChangeListener> listeners = new LinkedList<GuiceViewChangeListener>();
 	private final Provider<ErrorView> errorViewPro;
 	private final URIFragmentHandler uriHandler;
-	private final Map<String, GuiceView> viewProMap;
+	private final Map<String, Provider<GuiceView>> viewProMap;
 
 	@Inject
 	protected DefaultGuiceNavigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler,
-			Map<String, GuiceView> viewProMap) {
+			Map<String, Provider<GuiceView>> viewProMap) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
@@ -36,15 +36,13 @@ public class DefaultGuiceNavigator implements GuiceNavigator {
 	@Override
 	public void navigateTo(String fragment) {
 		String viewName = uriHandler.setFragment(fragment).virtualPage();
-		// Provider<GuiceView> provider = viewProMap.get(viewName);
-		GuiceView view = viewProMap.get(viewName);
-		;
-		if (view == null) {
+		Provider<GuiceView> provider = viewProMap.get(viewName);
+		GuiceView view = null;
+		if (provider == null) {
 			view = errorViewPro.get();
+		} else {
+			view = provider.get();
 		}
-		// else {
-		// view = provider.get();
-		// }
 
 		navigateTo(view, viewName, fragment);
 		getUI().getPage().setUriFragment(fragment, false);

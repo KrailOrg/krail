@@ -1,10 +1,13 @@
 package uk.co.q3c.basic;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import uk.co.q3c.basic.guice.uiscope.UIKeyProvider;
 
 import com.google.inject.Injector;
+import com.google.inject.Provider;
 import com.vaadin.server.UIClassSelectionEvent;
 import com.vaadin.ui.UI;
 
@@ -13,8 +16,9 @@ public class BasicProvider extends ScopedUIProvider {
 	private final UISelectCounter selectCounter;
 
 	@Inject
-	protected BasicProvider(Injector injector, UIKeyProvider mainwindowKeyProvider, UISelectCounter selectCounter) {
-		super(injector, mainwindowKeyProvider);
+	protected BasicProvider(Injector injector, Map<String, Provider<UI>> uiProMap, UIKeyProvider mainwindowKeyProvider,
+			UISelectCounter selectCounter) {
+		super(injector, uiProMap, mainwindowKeyProvider);
 		this.selectCounter = selectCounter;
 	}
 

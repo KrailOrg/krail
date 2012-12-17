@@ -41,12 +41,7 @@ public class HeaderBar extends HorizontalLayout {
 			@Override
 			protected String getCss(Component c) {
 				if (c == viewTag) {
-					// String s = );
-					// Color the boxes with random colors
-					// int rgb = (int) (Math.random() * (1 << 24));
-					// String s = "background: #" + Integer.toHexString(rgb);
 					String s = "background: " + colours[colourIndex];
-					System.out.println("CSS: with hex=" + s);
 					return s;
 				}
 				return null;

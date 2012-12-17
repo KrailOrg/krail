@@ -10,9 +10,12 @@ import uk.co.q3c.basic.BasicModule;
 import uk.co.q3c.basic.BasicProvider;
 import uk.co.q3c.basic.view.ViewModule;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.multibindings.MapBinder;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.ui.UI;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BasicModule.class, ViewModule.class })
@@ -61,5 +64,18 @@ public class UIScopeTest {
 		UIScopeModule module = new UIScopeModule();
 		scope = module.getUiScope();
 		return module;
+	}
+
+	@ModuleProvider
+	protected AbstractModule uiTestModule() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				MapBinder<String, UI> mapbinder = MapBinder.newMapBinder(binder(), String.class, UI.class);
+				mapbinder.addBinding(TestUI.class.getName()).to(TestUI.class);
+			}
+
+		};
 	}
 }
