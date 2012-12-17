@@ -55,7 +55,7 @@ public abstract class DemoViewBase extends ViewBase implements ClickListener {
 		grid.setRowExpandRatio(2, 1);
 
 		getGrid().addComponent(msgPanel(), 1, 2);
-		// getGrid().addComponent(linkPanel(), 0, 2);
+		getGrid().addComponent(linkPanel(), 0, 2);
 
 		this.addComponent(grid);
 
