@@ -2,8 +2,9 @@ package uk.co.q3c.basic.view;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.basic.FooterBar;
-import uk.co.q3c.basic.HeaderBar;
+import uk.co.q3c.basic.demo.DemoViewBase;
+import uk.co.q3c.basic.demo.FooterBar;
+import uk.co.q3c.basic.demo.HeaderBar;
 
 public class View2 extends DemoViewBase {
 

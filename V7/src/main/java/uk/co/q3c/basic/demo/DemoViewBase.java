@@ -1,13 +1,12 @@
-package uk.co.q3c.basic.view;
+package uk.co.q3c.basic.demo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.basic.FooterBar;
-import uk.co.q3c.basic.HeaderBar;
 import uk.co.q3c.basic.guice.navigate.GuiceViewChangeEvent;
+import uk.co.q3c.basic.view.ViewBase;
 
 import com.google.common.collect.Lists;
 import com.vaadin.server.ExternalResource;

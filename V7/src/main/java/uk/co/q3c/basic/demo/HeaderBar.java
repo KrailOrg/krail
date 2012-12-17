@@ -1,7 +1,8 @@
-package uk.co.q3c.basic;
+package uk.co.q3c.basic.demo;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.basic.A;
 import uk.co.q3c.basic.guice.uiscope.UIScoped;
 
 import com.google.inject.name.Named;

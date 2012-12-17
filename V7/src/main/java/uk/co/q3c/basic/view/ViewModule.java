@@ -1,6 +1,7 @@
 package uk.co.q3c.basic.view;
 
 import uk.co.q3c.basic.URIFragmentHandler;
+import uk.co.q3c.basic.demo.DemoErrorView;
 import uk.co.q3c.basic.guice.navigate.GuiceView;
 
 import com.google.inject.AbstractModule;

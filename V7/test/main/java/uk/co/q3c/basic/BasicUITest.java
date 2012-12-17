@@ -5,8 +5,8 @@ import static org.fest.assertions.Assertions.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.basic.demo.DemoErrorView;
 import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
-import uk.co.q3c.basic.view.DemoErrorView;
 import uk.co.q3c.basic.view.HomeView;
 import uk.co.q3c.basic.view.View1;
 import uk.co.q3c.basic.view.View2;

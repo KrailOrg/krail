@@ -2,6 +2,8 @@ package uk.co.q3c.basic;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.basic.demo.FooterBar;
+import uk.co.q3c.basic.demo.HeaderBar;
 import uk.co.q3c.basic.guice.navigate.GuiceNavigator;
 import uk.co.q3c.basic.guice.navigate.ScopedUI;
 

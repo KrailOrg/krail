@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.basic.MessageSource;
+import uk.co.q3c.basic.demo.MessageSource;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;

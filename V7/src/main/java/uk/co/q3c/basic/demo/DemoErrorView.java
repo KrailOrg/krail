@@ -1,11 +1,10 @@
-package uk.co.q3c.basic.view;
+package uk.co.q3c.basic.demo;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.basic.FooterBar;
-import uk.co.q3c.basic.HeaderBar;
+import uk.co.q3c.basic.view.ErrorView;
 
 import com.vaadin.ui.Button;
 
