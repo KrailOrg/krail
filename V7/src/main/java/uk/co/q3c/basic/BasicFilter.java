@@ -16,6 +16,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
+import uk.co.q3c.basic.view.ViewModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -51,7 +52,7 @@ public class BasicFilter extends GuiceFilter {
 		if (INJECTOR != null) {
 			throw new ServletException("Injector already created?!");
 		}
-		INJECTOR = Guice.createInjector(new BasicModule(), new UIScopeModule());
+		INJECTOR = Guice.createInjector(new BasicModule(), new UIScopeModule(), new ViewModule());
 		filterConfig.getServletContext()
 				.log("Created injector with " + INJECTOR.getAllBindings().size() + " bindings.");
 		super.init(filterConfig);

@@ -41,6 +41,8 @@
 		<dependency org="com.google.inject" name="guice" rev="3.0"/>
 		<dependency org="com.google.inject.extensions" name="guice-servlet" rev="3.0"/>
 		<dependency org="com.google.inject.extensions" name="guice-assistedinject" rev="3.0" />
+		<dependency org="com.google.inject.extensions" name="guice-multibindings" rev="3.0"/>
+            
 		
 		<!-- Logging -->
 		<dependency org="org.slf4j" name="slf4j-api" rev="1.6.6"/>

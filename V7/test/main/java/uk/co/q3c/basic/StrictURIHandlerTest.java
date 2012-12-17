@@ -8,12 +8,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
+import uk.co.q3c.basic.view.ViewModule;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BasicModule.class, UIScopeModule.class })
+@GuiceContext({ BasicModule.class, UIScopeModule.class, ViewModule.class })
 public class StrictURIHandlerTest {
 
 	final String view = "view1";

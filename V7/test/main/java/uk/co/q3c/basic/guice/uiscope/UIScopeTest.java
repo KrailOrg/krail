@@ -8,13 +8,14 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.basic.BasicModule;
 import uk.co.q3c.basic.BasicProvider;
+import uk.co.q3c.basic.view.ViewModule;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BasicModule.class })
+@GuiceContext({ BasicModule.class, ViewModule.class })
 public class UIScopeTest {
 
 	@Inject
