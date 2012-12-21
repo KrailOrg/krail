@@ -13,6 +13,7 @@ import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.themes.ChameleonTheme;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
@@ -64,7 +65,7 @@ public abstract class DemoViewBase extends ViewBase implements ClickListener {
 	protected Button addNavButton(String caption, String uri) {
 		Button button = new Button(caption);
 		button.setData(uri);
-		button.addStyleName("big");
+		button.addStyleName(ChameleonTheme.BUTTON_TALL);
 		button.setWidth("100%");
 		button.addClickListener(this);
 		addToCentrePanel(button);
