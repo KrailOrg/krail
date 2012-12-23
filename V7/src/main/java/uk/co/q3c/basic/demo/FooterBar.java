@@ -6,7 +6,6 @@ import uk.co.q3c.basic.guice.uiscope.UIScoped;
 
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.themes.ChameleonTheme;
 
 @UIScoped
 public class FooterBar extends HorizontalLayout {
@@ -21,7 +20,8 @@ public class FooterBar extends HorizontalLayout {
 		infoLabel
 				.setValue("The footer bar is @UIScoped, and can be injected to show user messages from any other component.  Last user message:   ");
 		msgLabel = new Label();
-		msgLabel.addStyleName(ChameleonTheme.LABEL_H4);
+		// msgLabel.addStyleName(ChameleonTheme.LABEL_H4); chameleon styles
+		// broken in beta 11
 		Label padLabel = new Label();
 		padLabel.setWidth("20px");
 		addComponent(infoLabel);
