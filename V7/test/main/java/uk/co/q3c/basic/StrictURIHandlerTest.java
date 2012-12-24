@@ -111,6 +111,7 @@ public class StrictURIHandlerTest {
 	public void setVirtualPage() {
 
 		// given
+		handler.setUseBang(false);
 		handler.setFragment(home_p2);
 		// when
 		handler.setVirtualPage("view2");
@@ -124,6 +125,7 @@ public class StrictURIHandlerTest {
 	public void setParameter() {
 
 		// given
+		handler.setUseBang(false);
 		handler.setFragment(view_p2);
 		// when
 		handler.setParameterValue("a", "23"); // update
