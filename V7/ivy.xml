@@ -43,10 +43,23 @@
 		<dependency org="com.google.inject.extensions" name="guice-assistedinject" rev="3.0" />
 		<dependency org="com.google.inject.extensions" name="guice-multibindings" rev="3.0"/>
             
+		<!-- User access control -->
+		
+		<dependency org="org.apache.shiro" name="shiro-core" rev="1.2.1"/>
+        <dependency org="org.apache.shiro" name="shiro-web" rev="1.2.1"/>
+        <dependency org="org.apache.shiro" name="shiro-guice" rev="1.2.1"/>
+        
+        <!-- add quartz if needed later 
+        <dependency org="org.apache.shiro" name="shiro-quartz" rev="1.2.1"/> -->
+            
+            
 		
 		<!-- Logging -->
 		<dependency org="org.slf4j" name="slf4j-api" rev="1.6.6"/>
 		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.6"/>
+        
+		<!-- Persistence -->
+		<dependency org="com.orientechnologies" name="orientdb-core" rev="1.2.0"/>
             
         
         <!-- Testing -->
