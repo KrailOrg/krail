@@ -15,7 +15,8 @@ public class UIScopeModule extends AbstractModule {
 
 	public UIScopeModule() {
 		super();
-		uiScope = new UIScope();
+		uiScope = UIScope.getCurrent();
+
 	}
 
 	@Override

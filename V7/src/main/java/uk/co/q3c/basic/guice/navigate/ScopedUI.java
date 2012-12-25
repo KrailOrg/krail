@@ -38,7 +38,7 @@ public abstract class ScopedUI extends UI implements GuiceViewHolder {
 	@Override
 	public void detach() {
 		if (uiScope != null) {
-			uiScope.release(this);
+			uiScope.releaseScope(this.getInstanceKey());
 		}
 		super.detach();
 	}

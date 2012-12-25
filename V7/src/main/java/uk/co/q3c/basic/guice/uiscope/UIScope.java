@@ -15,9 +15,17 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 public class UIScope implements Scope {
+
 	private static Logger log = LoggerFactory.getLogger(UIScope.class);
 
+	private static UIScope current;
+
 	private final Map<UIKey, Map<Key<?>, Object>> values = new HashMap<UIKey, Map<Key<?>, Object>>();
+
+	public UIScope() {
+		super();
+		log.debug("creating UIScope " + this);
+	}
 
 	@Override
 	public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
@@ -25,52 +33,48 @@ public class UIScope implements Scope {
 			@Override
 			public T get() {
 				// get the scope cache for the current UI
-				Map<Key<?>, Object> scopedObjects = getScopedObjectMap();
+				UIKey uiKey = null;
+				ScopedUI currentUI = (ScopedUI) CurrentInstance.get(UI.class);
+				if (currentUI == null) {
+					uiKey = CurrentInstance.get(UIKey.class);
+				} else {
+					uiKey = currentUI.getInstanceKey();
+				}
+				log.debug("looking for cache for key: " + uiKey);
+				Map<Key<?>, Object> scopedObjects = getScopedObjectMap(uiKey);
+				// this line should fail tests but having trouble setting up a decent test. TestBench needed?
+				// Map<Key<?>, Object> scopedObjects = getScopedObjectMap(CurrentInstance.get(UIKey.class));
 
 				// retrieve an existing instance if possible
+
 				@SuppressWarnings("unchecked")
 				T current = (T) scopedObjects.get(key);
 
 				if (current != null) {
-					log.debug("returning existing instance of {0}", current.getClass().getSimpleName());
+					log.debug("returning existing instance of " + current.getClass().getSimpleName());
 					return current;
 				}
 
 				// or create the first instance and cache it
 				current = unscoped.get();
 				scopedObjects.put(key, current);
-				log.debug("new instance of {0} created for main window key: {1}", current.getClass().getSimpleName(),
-						key);
+				log.debug("new instance of " + current.getClass().getSimpleName() + " created, as none in cache");
 				return current;
 			}
 		};
 	}
 
-	private <T> Map<Key<?>, Object> getScopedObjectMap() {
-		UI ui = UI.getCurrent();
-		UIKey instanceKey;
-		// if ui is null, it is because we have arrived here to construct something for injection
-		// into the UI constructor - in other words, UI is not yet constructed. That means there is no key to reference.
-		// Currently this is not allowed, and the solution is to only use field or method injection for anything which
-		// has UI scope.
-		if (ui == null) {
-			instanceKey = CurrentInstance.get(UIKey.class);
-		} else {
-			instanceKey = ((ScopedUI) ui).getInstanceKey();
-		}
+	private <T> Map<Key<?>, Object> getScopedObjectMap(UIKey uiKey) {
 
 		// return an existing cache instance
-		if (values.containsKey(instanceKey)) {
-			Map<Key<?>, Object> scopedObjects = values.get(instanceKey);
-			log.debug("scope cache retrieved for key: {0}", instanceKey);
+		if (values.containsKey(uiKey)) {
+			Map<Key<?>, Object> scopedObjects = values.get(uiKey);
+			log.debug("scope cache retrieved for UI key: " + uiKey);
 			return scopedObjects;
-		}
+		} else {
 
-		// or create one if it does not exist
-		log.debug("creating a scope cache for MainWindow with key: {0}", instanceKey);
-		HashMap<Key<?>, Object> mwEntry = new HashMap<Key<?>, Object>();
-		values.put(instanceKey, mwEntry);
-		return mwEntry;
+			return createCacheEntry(uiKey);
+		}
 
 	}
 
@@ -82,8 +86,27 @@ public class UIScope implements Scope {
 		return cacheHasEntryFor(ui.getInstanceKey());
 	}
 
-	public void release(ScopedUI scopedUI) {
-		values.remove(scopedUI);
+	public void startScope(UIKey uiKey) {
+		if (!cacheHasEntryFor(uiKey)) {
+			createCacheEntry(uiKey);
+		}
 	}
 
+	private HashMap<Key<?>, Object> createCacheEntry(UIKey uiKey) {
+		HashMap<Key<?>, Object> uiEntry = new HashMap<Key<?>, Object>();
+		values.put(uiKey, uiEntry);
+		log.debug("created a scope cache for UIScope with key: " + uiKey);
+		return uiEntry;
+	}
+
+	public void releaseScope(UIKey uiKey) {
+		values.remove(uiKey);
+	}
+
+	public static UIScope getCurrent() {
+		if (current == null) {
+			current = new UIScope();
+		}
+		return current;
+	}
 }

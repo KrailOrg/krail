@@ -1,6 +1,5 @@
 package uk.co.q3c.basic;
 
-import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import uk.co.q3c.basic.guice.uiscope.UIScoped;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
-import com.google.inject.Scope;
 import com.vaadin.server.UICreateEvent;
 import com.vaadin.server.UIProvider;
 import com.vaadin.ui.UI;
@@ -51,20 +49,17 @@ public abstract class ScopedUIProvider extends UIProvider {
 	}
 
 	public UI createInstance(Class<? extends UI> uiClass) {
-		UIKey instanceKey = uiKeyProvider.get();
+		UIKey uiKey = uiKeyProvider.get();
 		// hold the key while UI is created
-		CurrentInstance.set(UIKey.class, instanceKey);
+		CurrentInstance.set(UIKey.class, uiKey);
+		// and set up the scope
+		UIScope.getCurrent().startScope(uiKey);
 
 		// create the UI
 		Provider<UI> uiProvider = uiProMap.get(uiClass.getName());
 		ScopedUI ui = (ScopedUI) uiProvider.get();
-
-		// set up the scope for this new ui
-		Map<Class<? extends Annotation>, Scope> scopeMap = injector.getScopeBindings();
-		UIScope uiScope = (UIScope) scopeMap.get(UIScoped.class);
-		ui.setScope(uiScope);
-		ui.setInstanceKey(instanceKey);
-		log.debug("returning instance of " + ui.getClass().getName() + " with key " + instanceKey);
+		ui.setInstanceKey(uiKey);
+		log.debug("returning instance of " + ui.getClass().getName() + " with key " + uiKey);
 		return ui;
 	}
 

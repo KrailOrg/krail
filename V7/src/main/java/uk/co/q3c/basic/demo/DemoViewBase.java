@@ -13,7 +13,6 @@ import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.ChameleonTheme;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
@@ -22,6 +21,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ChameleonTheme;
 import com.vaadin.util.CurrentInstance;
 
 public abstract class DemoViewBase extends ViewBase implements ClickListener {
@@ -160,8 +160,10 @@ public abstract class DemoViewBase extends ViewBase implements ClickListener {
 		// this.getUI() is null at this stage, so use CurrentInstance
 		UI ui = CurrentInstance.get(UI.class);
 
-		Link link = new Link("Alternate UI, opened in another tab", new ExternalResource(ui.getPage().getLocation()
-				.toString()));
+		String linkMsg = (ui.getPage() == null) ? "no link available" : "Alternate UI, opened in another tab";
+		String linkTarget = (ui.getPage() == null) ? "" : ui.getPage().getLocation().toString();
+
+		Link link = new Link(linkMsg, new ExternalResource(linkTarget));
 
 		// Open the URL in a new window/tab
 		link.setTargetName("_blank");

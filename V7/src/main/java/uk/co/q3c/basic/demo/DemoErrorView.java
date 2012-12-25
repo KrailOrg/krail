@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import uk.co.q3c.basic.view.ErrorView;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.themes.ChameleonTheme;
 
 public class DemoErrorView extends DemoViewBase implements ErrorView {
 
@@ -14,7 +15,7 @@ public class DemoErrorView extends DemoViewBase implements ErrorView {
 	protected DemoErrorView(FooterBar footerBar, HeaderBar headerBar) {
 		super(footerBar, headerBar);
 		Button button = addNavButton("take me home", "");
-		button.addStyleName("big default");
+		button.addStyleName(ChameleonTheme.BUTTON_TALL);
 		getViewLabel().addStyleName("warning");
 
 	}
