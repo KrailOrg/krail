@@ -6,6 +6,7 @@ import javax.servlet.ServletContextEvent;
 import uk.co.q3c.basic.BasicModule;
 import uk.co.q3c.basic.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
+import uk.co.q3c.basic.shiro.Q3ShiroWebModule;
 import uk.co.q3c.basic.view.ViewModule;
 
 import com.google.inject.Guice;
@@ -20,8 +21,8 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 	@Override
 	protected Injector getInjector() {
 
-		injector = Guice.createInjector(new BasicModule(), new ViewModule(), new ThreadScopeModule(),
-				new UIScopeModule());
+		injector = Guice.createInjector(new Q3ShiroWebModule(ctx.get()), new BasicModule(), new ViewModule(),
+				new ThreadScopeModule(), new UIScopeModule());
 
 		// injector = Guice.createInjector(new MyShiroWebModule(ctx.get()), new ShiroAopModule(), new BasicModule(),
 		// new ViewModule(), new ThreadScopeModule(), new UIScopeModule());
@@ -46,7 +47,7 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
-		// may need for Quartz
+		// may need later for Quartz
 		// try {
 		// if (injector != null)
 		// injector.getInstance(Scheduler.class).shutdown();
