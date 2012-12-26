@@ -15,8 +15,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import uk.co.q3c.basic.demo.ViewModule;
 import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
-import uk.co.q3c.basic.view.ViewModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

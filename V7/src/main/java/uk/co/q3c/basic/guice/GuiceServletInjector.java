@@ -3,13 +3,14 @@ package uk.co.q3c.basic.guice;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.guice.aop.ShiroAopModule;
 
 import uk.co.q3c.basic.BasicModule;
+import uk.co.q3c.basic.demo.ViewModule;
 import uk.co.q3c.basic.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
 import uk.co.q3c.basic.shiro.Q3ShiroWebModule;
-import uk.co.q3c.basic.view.ViewModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -29,9 +30,9 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 		// injector = Guice.createInjector(new MyShiroWebModule(ctx.get()), new ShiroAopModule(), new BasicModule(),
 		// new ViewModule(), new ThreadScopeModule(), new UIScopeModule());
 
-		// org.apache.shiro.mgt.SecurityManager securityManager = injector
-		// .getInstance(org.apache.shiro.mgt.SecurityManager.class);
-		// SecurityUtils.setSecurityManager(securityManager);
+		org.apache.shiro.mgt.SecurityManager securityManager = injector
+				.getInstance(org.apache.shiro.mgt.SecurityManager.class);
+		SecurityUtils.setSecurityManager(securityManager);
 
 		return injector;
 	}

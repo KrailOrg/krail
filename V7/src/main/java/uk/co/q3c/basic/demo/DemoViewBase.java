@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+
 import uk.co.q3c.basic.guice.navigate.GuiceViewChangeEvent;
 import uk.co.q3c.basic.view.ViewBase;
 
@@ -185,6 +188,8 @@ public abstract class DemoViewBase extends ViewBase implements ClickListener {
 	@Override
 	public void enter(GuiceViewChangeEvent event) {
 		super.enter(event);
+		Subject user = SecurityUtils.getSubject();
+		System.out.println(user);
 		headerBar.setViewTag(getColourIndex(), this.getClass().getSimpleName());
 
 	}

@@ -1,8 +1,8 @@
-package uk.co.q3c.basic.view;
+package uk.co.q3c.basic.demo;
 
 import uk.co.q3c.basic.URIFragmentHandler;
-import uk.co.q3c.basic.demo.DemoErrorView;
 import uk.co.q3c.basic.guice.navigate.GuiceView;
+import uk.co.q3c.basic.view.ErrorView;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;

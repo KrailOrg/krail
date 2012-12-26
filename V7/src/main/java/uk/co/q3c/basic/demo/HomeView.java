@@ -1,10 +1,7 @@
-package uk.co.q3c.basic.view;
+package uk.co.q3c.basic.demo;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.basic.demo.DemoViewBase;
-import uk.co.q3c.basic.demo.FooterBar;
-import uk.co.q3c.basic.demo.HeaderBar;
 
 public class HomeView extends DemoViewBase {
 

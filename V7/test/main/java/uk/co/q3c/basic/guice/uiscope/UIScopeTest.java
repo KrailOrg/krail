@@ -12,7 +12,7 @@ import uk.co.q3c.basic.A;
 import uk.co.q3c.basic.BasicModule;
 import uk.co.q3c.basic.BasicProvider;
 import uk.co.q3c.basic.demo.HeaderBar;
-import uk.co.q3c.basic.view.ViewModule;
+import uk.co.q3c.basic.demo.ViewModule;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
