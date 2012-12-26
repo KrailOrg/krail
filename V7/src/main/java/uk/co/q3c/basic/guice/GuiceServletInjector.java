@@ -3,6 +3,8 @@ package uk.co.q3c.basic.guice;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
+import org.apache.shiro.guice.aop.ShiroAopModule;
+
 import uk.co.q3c.basic.BasicModule;
 import uk.co.q3c.basic.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
@@ -21,8 +23,8 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 	@Override
 	protected Injector getInjector() {
 
-		injector = Guice.createInjector(new Q3ShiroWebModule(ctx.get()), new BasicModule(), new ViewModule(),
-				new ThreadScopeModule(), new UIScopeModule());
+		injector = Guice.createInjector(new Q3ShiroWebModule(ctx.get()), new ShiroAopModule(), new BasicModule(),
+				new ViewModule(), new ThreadScopeModule(), new UIScopeModule());
 
 		// injector = Guice.createInjector(new MyShiroWebModule(ctx.get()), new ShiroAopModule(), new BasicModule(),
 		// new ViewModule(), new ThreadScopeModule(), new UIScopeModule());
