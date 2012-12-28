@@ -1,10 +1,24 @@
 package uk.co.q3c.basic.guice.navigate;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.ThreadContext;
+import org.apache.shiro.web.subject.WebSubject;
+
 import uk.co.q3c.basic.guice.uiscope.UIKey;
 import uk.co.q3c.basic.guice.uiscope.UIScope;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinResponse;
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinServletRequest;
+import com.vaadin.server.VaadinServletResponse;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
@@ -75,6 +89,22 @@ public abstract class ScopedUI extends UI implements GuiceViewHolder {
 	protected void init(VaadinRequest request) {
 		// page isn't available during injected construction
 		getPage().addUriFragmentChangedListener(navigator);
+		VaadinServletRequest vsr = (VaadinServletRequest) request;
+		HttpServletRequest httpRequest = vsr.getHttpServletRequest();
+
+		VaadinResponse response = VaadinService.getCurrentResponse();
+		VaadinServletResponse vsresp = (VaadinServletResponse) response;
+		HttpServletResponse httpResponse = vsresp.getHttpServletResponse();
+
+		Subject subject = new WebSubject.Builder(httpRequest, httpResponse)
+				.principals(new SimplePrincipalCollection("user", "debug")).host("debug").buildSubject();
+		ThreadContext.put(ThreadContext.SUBJECT_KEY, subject);
+
+		// FIXME replace with login https://github.com/davidsowerby/v7/issues/46
+		UsernamePasswordToken token = new UsernamePasswordToken("user", "password");
+		token.setRememberMe(false);
+		SecurityUtils.getSubject().login(token);
+
 	}
 
 }

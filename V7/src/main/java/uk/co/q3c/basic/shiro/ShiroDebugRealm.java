@@ -8,24 +8,22 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import com.google.common.collect.ImmutableSet;
 
-public class ShiroBaseRealm extends AuthorizingRealm {
+public class ShiroDebugRealm extends AuthorizingRealm {
 
-	HashedCredentialsMatcher matcher;
+	CredentialsMatcher matcher;
 
-	public ShiroBaseRealm() {
-		matcher = new HashedCredentialsMatcher();
-		matcher.setHashAlgorithmName(Md5Hash.ALGORITHM_NAME);
+	public ShiroDebugRealm() {
+		matcher = new AllowAllCredentialsMatcher();
 	}
 
 	@Override
@@ -64,4 +62,8 @@ public class ShiroBaseRealm extends AuthorizingRealm {
 		return new SimpleAuthorizationInfo(roleNames);
 	}
 
+	@Override
+	public String getName() {
+		return "debug";
+	}
 }

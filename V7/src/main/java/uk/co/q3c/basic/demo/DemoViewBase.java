@@ -188,6 +188,7 @@ public abstract class DemoViewBase extends ViewBase implements ClickListener {
 	@Override
 	public void enter(GuiceViewChangeEvent event) {
 		super.enter(event);
+
 		Subject user = SecurityUtils.getSubject();
 		System.out.println(user);
 		headerBar.setViewTag(getColourIndex(), this.getClass().getSimpleName());

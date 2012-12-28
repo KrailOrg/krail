@@ -2,6 +2,8 @@ package uk.co.q3c.basic;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.SecurityUtils;
+
 import uk.co.q3c.basic.demo.FooterBar;
 import uk.co.q3c.basic.demo.HeaderBar;
 import uk.co.q3c.basic.guice.navigate.GuiceNavigator;
@@ -38,6 +40,7 @@ public class BasicUI extends ScopedUI {
 		getPage().setTitle(title);
 
 		doLayout();
+		footerBar.setUserName(SecurityUtils.getSubject().getPrincipal().toString());
 
 		// Navigate to the start view
 		getGuiceNavigator().navigateTo("");
