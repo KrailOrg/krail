@@ -19,12 +19,12 @@
 	</filter-mapping>
 
 	<listener>
-		<listener-class>uk.co.q3c.basic.guice.GuiceServletInjector</listener-class>
+		<listener-class>uk.co.q3c.v7.base.guice.GuiceServletInjector</listener-class>
 	</listener>
 	
 	<servlet>
 		<servlet-name>V7 Application</servlet-name>
-		<servlet-class>uk.co.q3c.basic.BasicServlet</servlet-class>
+		<servlet-class>uk.co.q3c.v7.base.guice.BaseServlet</servlet-class>
 		<init-param>
 			<description>
 			Vaadin UI class to use</description>
@@ -35,7 +35,7 @@
 			<description>
 			Application widgetset</description>
 			<param-name>widgetset</param-name>
-			<param-value>uk.co.q3c.basic.widgetset.V7Widgetset</param-value>
+			<param-value>uk.co.q3c.v7.widgetset.V7Widgetset</param-value>
 		</init-param>
 	</servlet>
 	<servlet-mapping>

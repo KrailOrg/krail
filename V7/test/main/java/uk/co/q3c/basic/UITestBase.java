@@ -8,9 +8,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.basic.guice.navigate.GuiceView;
-import uk.co.q3c.basic.guice.navigate.GuiceViewChangeEvent;
-import uk.co.q3c.basic.guice.navigate.GuiceViewChangeListener;
+import uk.co.q3c.v7.A;
+import uk.co.q3c.v7.base.guice.BaseModule;
+import uk.co.q3c.v7.base.navigate.V7View;
+import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
+import uk.co.q3c.v7.base.navigate.V7ViewChangeListener;
+import uk.co.q3c.v7.demo.ui.BasicUI;
 
 import com.google.inject.name.Named;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -20,8 +23,8 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BasicModule.class })
-public abstract class UITestBase implements GuiceViewChangeListener {
+@GuiceContext({ BaseModule.class })
+public abstract class UITestBase implements V7ViewChangeListener {
 
 	@Inject
 	@Named(A.baseUri)
@@ -29,7 +32,7 @@ public abstract class UITestBase implements GuiceViewChangeListener {
 
 	VaadinRequest mockedRequest = mock(VaadinRequest.class);
 
-	GuiceView currentView;
+	V7View currentView;
 
 	@Inject
 	protected BasicUI ui;
@@ -51,12 +54,12 @@ public abstract class UITestBase implements GuiceViewChangeListener {
 	}
 
 	@Override
-	public boolean beforeViewChange(GuiceViewChangeEvent event) {
+	public boolean beforeViewChange(V7ViewChangeEvent event) {
 		return true;
 	}
 
 	@Override
-	public void afterViewChange(GuiceViewChangeEvent event) {
+	public void afterViewChange(V7ViewChangeEvent event) {
 		currentView = event.getNewView();
 	}
 

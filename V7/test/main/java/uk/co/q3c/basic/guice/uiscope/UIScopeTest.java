@@ -8,11 +8,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.basic.A;
-import uk.co.q3c.basic.BasicModule;
-import uk.co.q3c.basic.BasicProvider;
-import uk.co.q3c.basic.demo.HeaderBar;
-import uk.co.q3c.basic.demo.ViewModule;
+import uk.co.q3c.v7.A;
+import uk.co.q3c.v7.base.guice.BaseModule;
+import uk.co.q3c.v7.base.guice.uiscope.UIKey;
+import uk.co.q3c.v7.base.guice.uiscope.UIScope;
+import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.demo.ui.HeaderBar;
+import uk.co.q3c.v7.demo.ui.UIProvider;
+import uk.co.q3c.v7.demo.view.ViewModule;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
@@ -25,13 +28,13 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BasicModule.class, ViewModule.class })
+@GuiceContext({ BaseModule.class, ViewModule.class })
 public class UIScopeTest {
 	@Inject
 	@Named(A.baseUri)
 	String baseUri;
 	@Inject
-	BasicProvider provider;
+	UIProvider provider;
 
 	TestUI uib;
 

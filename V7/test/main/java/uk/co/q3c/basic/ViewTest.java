@@ -5,16 +5,17 @@ import static org.fest.assertions.Assertions.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.basic.demo.DemoViewBase;
-import uk.co.q3c.basic.demo.View2;
-import uk.co.q3c.basic.demo.ViewModule;
-import uk.co.q3c.basic.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.guice.BaseModule;
+import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.demo.view.DemoViewBase;
+import uk.co.q3c.v7.demo.view.View2;
+import uk.co.q3c.v7.demo.view.ViewModule;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BasicModule.class, UIScopeModule.class, TestModule.class, ViewModule.class })
+@GuiceContext({ BaseModule.class, UIScopeModule.class, TestModule.class, ViewModule.class })
 public class ViewTest extends UITestBase {
 
 	@Test

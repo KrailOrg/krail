@@ -13,6 +13,9 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.guice.threadscope.ThreadCache;
+import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
+
 import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
