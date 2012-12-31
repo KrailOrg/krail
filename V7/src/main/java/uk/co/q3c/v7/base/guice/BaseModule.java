@@ -2,11 +2,11 @@ package uk.co.q3c.v7.base.guice;
 
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
+import uk.co.q3c.v7.base.navigate.ErrorView;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.V7View;
-import uk.co.q3c.v7.demo.view.ErrorView;
 
 import com.google.inject.name.Names;
 import com.google.inject.servlet.ServletModule;

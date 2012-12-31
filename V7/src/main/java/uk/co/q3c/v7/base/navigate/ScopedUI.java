@@ -23,7 +23,7 @@ import com.vaadin.server.VaadinServletResponse;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
-public abstract class ScopedUI extends UI implements ViewHolder {
+public abstract class ScopedUI extends UI implements V7ViewHolder {
 
 	private UIKey instanceKey;
 	private UIScope uiScope;

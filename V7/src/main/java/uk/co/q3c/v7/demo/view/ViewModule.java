@@ -1,5 +1,6 @@
 package uk.co.q3c.v7.demo.view;
 
+import uk.co.q3c.v7.base.navigate.ErrorView;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;

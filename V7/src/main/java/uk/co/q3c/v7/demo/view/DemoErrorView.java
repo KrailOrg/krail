@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.v7.base.navigate.ErrorView;
 import uk.co.q3c.v7.demo.view.components.FooterBar;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 

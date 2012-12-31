@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.demo.view;
+package uk.co.q3c.v7.base.navigate;
 
 import java.util.List;
 
@@ -7,17 +7,14 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.navigate.ScopedUI;
-import uk.co.q3c.v7.base.navigate.V7View;
-import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
 
 import com.vaadin.ui.VerticalLayout;
 
-public abstract class ViewBase extends VerticalLayout implements V7View {
-	private static Logger log = LoggerFactory.getLogger(ViewBase.class);
+public abstract class V7ViewBase extends VerticalLayout implements V7View {
+	private static Logger log = LoggerFactory.getLogger(V7ViewBase.class);
 
 	@Inject
-	protected ViewBase() {
+	protected V7ViewBase() {
 		super();
 	}
 

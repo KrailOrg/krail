@@ -1,13 +1,10 @@
 package uk.co.q3c.v7.base.navigate;
 
-
 /**
  * Interface for displaying a view in an appropriate location.
  * 
  * The view display can be a component/layout itself or can modify a separate layout.
  * 
- * @author Vaadin Ltd
- * @since 7.0
  */
 
 public interface V7ViewDisplay {

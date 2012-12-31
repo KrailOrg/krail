@@ -9,6 +9,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
+import uk.co.q3c.v7.base.navigate.V7ViewBase;
 import uk.co.q3c.v7.demo.view.components.FooterBar;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
@@ -28,7 +29,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ChameleonTheme;
 import com.vaadin.util.CurrentInstance;
 
-public abstract class DemoViewBase extends ViewBase implements ClickListener {
+public abstract class DemoViewBase extends V7ViewBase implements ClickListener {
 
 	private VerticalLayout panelLayout;
 	private Label viewLabel;

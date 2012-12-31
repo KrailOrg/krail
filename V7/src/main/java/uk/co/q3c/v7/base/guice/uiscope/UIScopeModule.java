@@ -1,9 +1,9 @@
 package uk.co.q3c.v7.base.guice.uiscope;
 
+import uk.co.q3c.v7.base.navigate.ErrorView;
 import uk.co.q3c.v7.demo.ui.BasicUI;
 import uk.co.q3c.v7.demo.ui.SideBarUI;
 import uk.co.q3c.v7.demo.view.DemoErrorView;
-import uk.co.q3c.v7.demo.view.ErrorView;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;

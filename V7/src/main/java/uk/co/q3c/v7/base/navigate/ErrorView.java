@@ -1,6 +1,5 @@
-package uk.co.q3c.v7.demo.view;
+package uk.co.q3c.v7.base.navigate;
 
-import uk.co.q3c.v7.base.navigate.V7View;
 
 
 /**
