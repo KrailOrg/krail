@@ -6,6 +6,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.v7.base.ui.ScopedUI;
+import uk.co.q3c.v7.base.view.ErrorView;
+
 
 import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;

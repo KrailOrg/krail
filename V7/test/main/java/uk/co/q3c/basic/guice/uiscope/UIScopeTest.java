@@ -14,7 +14,7 @@ import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
-import uk.co.q3c.v7.demo.view.ViewModule;
+import uk.co.q3c.v7.demo.view.DemoViewModule;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.google.inject.AbstractModule;
@@ -28,7 +28,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, ViewModule.class })
+@GuiceContext({ BaseModule.class, DemoViewModule.class })
 public class UIScopeTest {
 	@Inject
 	@Named(A.baseUri)

@@ -7,14 +7,16 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.ui.ScopedUI;
+
 
 import com.vaadin.ui.VerticalLayout;
 
-public abstract class V7ViewBase extends VerticalLayout implements V7View {
-	private static Logger log = LoggerFactory.getLogger(V7ViewBase.class);
+public abstract class VerticalViewBase extends VerticalLayout implements V7View {
+	private static Logger log = LoggerFactory.getLogger(VerticalViewBase.class);
 
 	@Inject
-	protected V7ViewBase() {
+	protected VerticalViewBase() {
 		super();
 	}
 

@@ -9,13 +9,13 @@ import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.demo.view.DemoViewBase;
 import uk.co.q3c.v7.demo.view.View2;
-import uk.co.q3c.v7.demo.view.ViewModule;
+import uk.co.q3c.v7.demo.view.DemoViewModule;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, UIScopeModule.class, TestModule.class, ViewModule.class })
+@GuiceContext({ BaseModule.class, UIScopeModule.class, TestModule.class, DemoViewModule.class })
 public class ViewTest extends UITestBase {
 
 	@Test

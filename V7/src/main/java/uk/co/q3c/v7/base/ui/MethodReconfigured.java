@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.base;
+package uk.co.q3c.v7.base.ui;
 
 public class MethodReconfigured extends RuntimeException {
 

@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIKeyProvider;
-import uk.co.q3c.v7.base.navigate.ScopedUIProvider;
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 
 import com.google.inject.Injector;
 import com.google.inject.Provider;
@@ -47,7 +47,7 @@ public class DemoUIProvider extends ScopedUIProvider {
 	 * Used by the demo just to increment the UI Counter, after invoking super. See
 	 * {@link #getUIClass(UIClassSelectionEvent)}
 	 * 
-	 * @see uk.co.q3c.v7.base.navigate.ScopedUIProvider#createInstance(java.lang.Class)
+	 * @see uk.co.q3c.v7.base.ui.ScopedUIProvider#createInstance(java.lang.Class)
 	 */
 
 	@Override

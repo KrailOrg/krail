@@ -9,7 +9,7 @@ import org.apache.shiro.guice.aop.ShiroAopModule;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroWebModule;
-import uk.co.q3c.v7.demo.view.ViewModule;
+import uk.co.q3c.v7.demo.view.DemoViewModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -24,7 +24,7 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 	protected Injector getInjector() {
 
 		injector = Guice.createInjector(new V7ShiroWebModule(ctx.get()), new ShiroAopModule(), new BaseModule(),
-				new ViewModule(), new ThreadScopeModule(), new UIScopeModule());
+				new DemoViewModule(), new ThreadScopeModule(), new UIScopeModule());
 
 		// injector = Guice.createInjector(new MyShiroWebModule(ctx.get()), new ShiroAopModule(), new BasicModule(),
 		// new ViewModule(), new ThreadScopeModule(), new UIScopeModule());

@@ -6,7 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.navigate.ScopedUI;
+import uk.co.q3c.v7.base.ui.ScopedUI;
 
 import com.google.inject.Key;
 import com.google.inject.Provider;

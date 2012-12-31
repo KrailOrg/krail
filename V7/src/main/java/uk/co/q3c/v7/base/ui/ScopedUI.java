@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.ui;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,9 +10,11 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.subject.WebSubject;
 
-import uk.co.q3c.v7.base.MethodReconfigured;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.navigate.V7View;
+import uk.co.q3c.v7.base.navigate.V7ViewHolder;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
