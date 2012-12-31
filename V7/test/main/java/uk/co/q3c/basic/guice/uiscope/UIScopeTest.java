@@ -13,9 +13,9 @@ import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
-import uk.co.q3c.v7.demo.ui.HeaderBar;
-import uk.co.q3c.v7.demo.ui.UIProvider;
+import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 import uk.co.q3c.v7.demo.view.ViewModule;
+import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
@@ -34,7 +34,7 @@ public class UIScopeTest {
 	@Named(A.baseUri)
 	String baseUri;
 	@Inject
-	UIProvider provider;
+	DemoUIProvider provider;
 
 	TestUI uib;
 

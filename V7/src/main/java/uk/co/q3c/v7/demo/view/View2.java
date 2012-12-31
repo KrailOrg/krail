@@ -2,8 +2,8 @@ package uk.co.q3c.v7.demo.view;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.v7.demo.ui.FooterBar;
-import uk.co.q3c.v7.demo.ui.HeaderBar;
+import uk.co.q3c.v7.demo.view.components.FooterBar;
+import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 
 public class View2 extends DemoViewBase {

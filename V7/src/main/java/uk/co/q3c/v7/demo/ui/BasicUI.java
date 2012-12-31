@@ -7,6 +7,8 @@ import org.apache.shiro.SecurityUtils;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.navigate.ScopedUI;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.demo.view.components.FooterBar;
+import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.google.inject.name.Named;
 import com.vaadin.annotations.PreserveOnRefresh;

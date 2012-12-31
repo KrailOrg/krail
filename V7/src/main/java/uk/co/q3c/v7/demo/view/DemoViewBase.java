@@ -9,8 +9,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
-import uk.co.q3c.v7.demo.ui.FooterBar;
-import uk.co.q3c.v7.demo.ui.HeaderBar;
+import uk.co.q3c.v7.demo.view.components.FooterBar;
+import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.google.common.collect.Lists;
 import com.vaadin.server.ExternalResource;

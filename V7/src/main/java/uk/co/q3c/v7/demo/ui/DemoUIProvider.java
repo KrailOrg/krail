@@ -12,12 +12,12 @@ import com.google.inject.Provider;
 import com.vaadin.server.UIClassSelectionEvent;
 import com.vaadin.ui.UI;
 
-public class UIProvider extends ScopedUIProvider {
+public class DemoUIProvider extends ScopedUIProvider {
 
 	private final UISelectCounter selectCounter;
 
 	@Inject
-	protected UIProvider(Injector injector, Map<String, Provider<UI>> uiProMap, UIKeyProvider mainwindowKeyProvider,
+	protected DemoUIProvider(Injector injector, Map<String, Provider<UI>> uiProMap, UIKeyProvider mainwindowKeyProvider,
 			UISelectCounter selectCounter) {
 		super(injector, uiProMap, mainwindowKeyProvider);
 		this.selectCounter = selectCounter;
