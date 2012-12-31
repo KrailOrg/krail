@@ -90,7 +90,9 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	private Label viewLabel() {
 		viewLabel = new Label();
 		viewLabel.setWidth("100%");
-		viewLabel.addStyleName("h3");
+		// style broken in beta11
+		// viewLabel.addStyleName("h3");
+		// vaadin ticket http://dev.vaadin.com/ticket/10606
 		return viewLabel;
 	}
 
