@@ -58,7 +58,7 @@
 
 		<!-- Testing -->
 		<dependency org="org.easytesting" name="fest-assert" rev="1.4" />
-		<dependency org="com.mycila" name="mycila-guice" rev="2.0.ga" />
+		<dependency org="com.mycila" name="mycila-guice" rev="2.10.ga"/>
 		<dependency org="com.mycila.testing.plugins" name="mycila-testing-guice" rev="2.8" />
 		<dependency org="com.mycila.testing.plugins" name="mycila-testing-mockito" rev="2.8" />
 		<dependency org="org.mockito" name="mockito-all" rev="1.9.0" />

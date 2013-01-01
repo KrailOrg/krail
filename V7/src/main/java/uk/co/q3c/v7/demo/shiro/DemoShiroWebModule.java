@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.base.shiro;
+package uk.co.q3c.v7.demo.shiro;
 
 import javax.servlet.ServletContext;
 
@@ -6,15 +6,14 @@ import org.apache.shiro.guice.web.ShiroWebModule;
 import org.apache.shiro.io.ResourceUtils;
 
 import uk.co.q3c.v7.A;
-import uk.co.q3c.v7.demo.shiro.ShiroDebugRealm;
 
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
-public class V7ShiroWebModule extends ShiroWebModule {
+public class DemoShiroWebModule extends ShiroWebModule {
 
-	public V7ShiroWebModule(ServletContext sc) {
+	public DemoShiroWebModule(ServletContext sc) {
 		super(sc);
 	}
 
