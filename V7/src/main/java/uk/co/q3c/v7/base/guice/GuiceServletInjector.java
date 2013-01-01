@@ -5,6 +5,7 @@ import javax.servlet.ServletContextEvent;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.guice.aop.ShiroAopModule;
+import org.apache.shiro.mgt.SecurityManager;
 
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
@@ -26,11 +27,8 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 		injector = Guice.createInjector(new DemoShiroWebModule(ctx.get()), new ShiroAopModule(), new BaseModule(),
 				new DemoViewModule(), new ThreadScopeModule(), new UIScopeModule());
 
-		// injector = Guice.createInjector(new MyShiroWebModule(ctx.get()), new ShiroAopModule(), new BasicModule(),
-		// new ViewModule(), new ThreadScopeModule(), new UIScopeModule());
-
-		org.apache.shiro.mgt.SecurityManager securityManager = injector
-				.getInstance(org.apache.shiro.mgt.SecurityManager.class);
+		// The SecurityManager binding is in ShiroWebModule, by default it is DefaultWebSecurityManager
+		SecurityManager securityManager = injector.getInstance(SecurityManager.class);
 		SecurityUtils.setSecurityManager(securityManager);
 
 		return injector;
