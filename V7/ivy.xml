@@ -2,83 +2,78 @@
 <!DOCTYPE ivy-module [
 	<!ENTITY vaadin.version "7.0.0.beta11">
 ]>
-<ivy-module version="2.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
 	<info organisation="com.example" module="v7proj" />
 	<configurations>
 		<!-- The default configuration, which should be deployed to the server -->
 		<conf name="default" />
-		<!-- A configuration only needed when compiling the widget set. Should 
-			not be deployed to the server -->
+		<!-- A configuration only needed when compiling the widget set. Should not be deployed to the server -->
 		<conf name="widgetset-compile" />
 	</configurations>
 	<dependencies>
 		<!-- The core server part of Vaadin -->
-		<dependency org="com.vaadin" name="vaadin-server" rev="&vaadin.version;"
-			conf="default->default" />
+		<dependency org="com.vaadin" name="vaadin-server" rev="&vaadin.version;" conf="default->default" />
 
 		<!-- Vaadin themes -->
 		<dependency org="com.vaadin" name="vaadin-themes" rev="&vaadin.version;" />
 
 		<!-- Precompiled DefaultWidgetSet -->
-		<dependency org="com.vaadin" name="vaadin-client-compiled"
-			rev="&vaadin.version;" />
+		<dependency org="com.vaadin" name="vaadin-client-compiled" rev="&vaadin.version;" />
 
 		<!-- Vaadin client side, needed for widget set compilation -->
 		<dependency org="com.vaadin" name="vaadin-client" rev="&vaadin.version;" />
 
 		<!-- Compiler for custom widget sets. Should not be deployed -->
-		<dependency org="com.vaadin" name="vaadin-client-compiler"
-			rev="&vaadin.version;" conf="widgetset-compile->default" />
-		
-		
-		<!--                           LIBRARIES                         -->
-		
-		
-		
+		<dependency org="com.vaadin" name="vaadin-client-compiler" rev="&vaadin.version;" conf="widgetset-compile->default" />
+
+
+		<!-- LIBRARIES -->
+
+
+
 		<!-- Dependency Injection -->
-		<dependency org="com.google.inject" name="guice" rev="3.0"/>
-		<dependency org="com.google.inject.extensions" name="guice-servlet" rev="3.0"/>
+		<dependency org="com.google.inject" name="guice" rev="3.0" />
+		<dependency org="com.google.inject.extensions" name="guice-servlet" rev="3.0" />
 		<dependency org="com.google.inject.extensions" name="guice-assistedinject" rev="3.0" />
-		<dependency org="com.google.inject.extensions" name="guice-multibindings" rev="3.0"/>
-            
+		<dependency org="com.google.inject.extensions" name="guice-multibindings" rev="3.0" />
+
 		<!-- User access control -->
-		
-		<dependency org="org.apache.shiro" name="shiro-core" rev="1.2.1"/>
-        <dependency org="org.apache.shiro" name="shiro-web" rev="1.2.1"/>
-        <dependency org="org.apache.shiro" name="shiro-guice" rev="1.2.1"/>
-        
-        <!-- add quartz if needed later 
-        <dependency org="org.apache.shiro" name="shiro-quartz" rev="1.2.1"/> -->
-            
-            
-		
+
+		<dependency org="org.apache.shiro" name="shiro-core" rev="1.2.1" />
+		<dependency org="org.apache.shiro" name="shiro-web" rev="1.2.1" />
+		<dependency org="org.apache.shiro" name="shiro-guice" rev="1.2.1" />
+
+		<!-- add quartz if needed later <dependency org="org.apache.shiro" name="shiro-quartz" rev="1.2.1"/> -->
+
+
+
 		<!-- Logging -->
-		<dependency org="org.slf4j" name="slf4j-api" rev="1.6.6"/>
-		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.6"/>
-        
+		<dependency org="org.slf4j" name="slf4j-api" rev="1.6.6" />
+		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.6" />
+
 		<!-- Persistence -->
-		<dependency org="com.orientechnologies" name="orientdb-core" rev="1.2.0"/>
-            
-        
-        <!-- Testing -->
-        <dependency org="org.easytesting" name="fest-assert" rev="1.4"/>
-        <dependency org="com.mycila" name="mycila-guice" rev="2.0.ga"/>
-		<dependency org="com.mycila.testing.plugins" name="mycila-testing-guice2" rev="2.8"/>
-		<dependency org="org.mockito" name="mockito-all" rev="1.9.0"/>
- 		<dependency org="junit" name="junit" rev="4.+" />         
- 		
- 		<!-- Date Time -->
- 		<dependency org="joda-time" name="joda-time" rev="2.1"/>
- 		
- 		
- 		<!-- Utility -->
- 		<dependency org="com.google.guava" name="guava" rev="13.0.1"/>
-            
-            
-            
-		
+		<dependency org="com.orientechnologies" name="orientdb-core" rev="1.2.0" />
+
+
+		<!-- Testing -->
+		<dependency org="org.easytesting" name="fest-assert" rev="1.4" />
+		<dependency org="com.mycila" name="mycila-guice" rev="2.0.ga" />
+		<dependency org="com.mycila.testing.plugins" name="mycila-testing-guice" rev="2.8" />
+		<dependency org="com.mycila.testing.plugins" name="mycila-testing-mockito" rev="2.8" />
+		<dependency org="org.mockito" name="mockito-all" rev="1.9.0" />
+		<dependency org="junit" name="junit" rev="4.+" />
+
+		<!-- Date Time -->
+		<dependency org="joda-time" name="joda-time" rev="2.1" />
+
+
+		<!-- Utility -->
+		<dependency org="com.google.guava" name="guava" rev="13.0.1" />
+
+
+
+
 	</dependencies>
 </ivy-module>
     
