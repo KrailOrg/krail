@@ -5,6 +5,7 @@ import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.view.ErrorView;
+import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 
 import com.google.inject.AbstractModule;
@@ -27,11 +28,15 @@ public class DemoViewModule extends AbstractModule {
 
 		MapBinder<String, V7View> mapbinder = MapBinder.newMapBinder(binder(), String.class, V7View.class);
 		mapbinder.addBinding("").to(HomeView.class);
-		mapbinder.addBinding("view1").to(View1.class);
-		mapbinder.addBinding("view2").to(View2.class);
+		mapbinder.addBinding("secure/view1").to(View1.class);
+		mapbinder.addBinding("public/view2").to(View2.class);
+		mapbinder.addBinding("login").to(LoginView.class);
 
 		// will be used if a mapping is not found
 		bind(ErrorView.class).to(DemoErrorView.class);
+
+		// you will usually need a login view
+		bind(LoginView.class).to(DemoLoginView.class);
 
 		// bind your choice of URI handler
 		bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);

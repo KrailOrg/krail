@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
@@ -39,6 +40,8 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	private TextField textField;
 	private ArrayList<String> params;
 	private final HeaderBar headerBar;
+	private final Button secureButton;
+	private final Button securityCheckedButton;
 
 	@Inject
 	protected DemoViewBase(FooterBar footerBar, HeaderBar headerBar) {
@@ -63,6 +66,23 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		getGrid().addComponent(msgPanel(), 1, 2);
 		getGrid().addComponent(linkPanel(), 0, 2);
 
+		secureButton = new Button("secure button");
+		secureButton.setImmediate(true);
+		secureButton.addClickListener(this);
+		secureButton.setDescription("This button should throw an authorisation exception");
+		secureButton.setWidth("100%");
+		addToCentrePanel(secureButton);
+
+		securityCheckedButton = new Button("security checked button");
+		securityCheckedButton.setImmediate(true);
+		securityCheckedButton.addClickListener(this);
+		securityCheckedButton.setWidth("100%");
+		securityCheckedButton
+				.setDescription("This button should be disabled, because the current user does not have permission to use it");
+		Subject user = SecurityUtils.getSubject();
+		securityCheckedButton.setEnabled(user.isPermitted("button:click"));
+		addToCentrePanel(securityCheckedButton);
+
 		this.addComponent(grid);
 
 	}
@@ -70,6 +90,7 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	protected Button addNavButton(String caption, String uri) {
 		Button button = new Button(caption);
 		button.setData(uri);
+		button.setDescription(uri);
 		button.addStyleName(ChameleonTheme.BUTTON_TALL);
 		button.setWidth("100%");
 		button.addClickListener(this);
@@ -141,20 +162,32 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		sendMsgButton.setImmediate(true);
 		sendMsgButton.addClickListener(this);
 		vl.addComponent(sendMsgButton);
+
 		return panel;
 	}
 
+	// @RequiresPermissions("button:secure")
 	@Override
 	public void buttonClick(ClickEvent event) {
 		Button btn = event.getButton();
 		if (btn == sendMsgButton) {
 			getFooterBar().setUserMessage(textField.getValue());
+		} else if (btn == secureButton) {
+			doSecureThing();
 		} else {
 			String uri = (btn.getData() == null) ? null : btn.getData().toString();
 			if (uri != null) {
 				this.getScopedUI().getGuiceNavigator().navigateTo(uri);
 			}
 		}
+	}
+
+	/**
+	 * This should cause a failure, because the user cannot have these permissions
+	 */
+	@RequiresPermissions("button:secure")
+	protected void doSecureThing() {
+		System.out.println("Secure button pressed");
 	}
 
 	private Panel linkPanel() {
@@ -178,11 +211,6 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		vl.addComponent(link);
 		vl.addComponent(new Label("See also the BasicProvider javadoc"));
 		return panel;
-	}
-
-	@Override
-	public Component getUiComponent() {
-		return this;
 	}
 
 	public ArrayList<String> getParams() {

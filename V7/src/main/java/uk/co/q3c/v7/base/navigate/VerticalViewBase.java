@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.ui.ScopedUI;
 
-
+import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
 public abstract class VerticalViewBase extends VerticalLayout implements V7View {
@@ -34,4 +34,10 @@ public abstract class VerticalViewBase extends VerticalLayout implements V7View 
 
 	protected void processParams(List<String> params) {
 	}
+
+	@Override
+	public Component getUiComponent() {
+		return this;
+	}
+
 }
