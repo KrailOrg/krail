@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 
@@ -40,8 +41,9 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	private TextField textField;
 	private ArrayList<String> params;
 	private final HeaderBar headerBar;
-	private final Button secureButton;
-	private final Button securityCheckedButton;
+	private final Button authorisationButton;
+	private final Button disableIfNotAuthorisedButton;
+	private final Button authenticationButton;
 
 	@Inject
 	protected DemoViewBase(FooterBar footerBar, HeaderBar headerBar) {
@@ -66,22 +68,29 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		getGrid().addComponent(msgPanel(), 1, 2);
 		getGrid().addComponent(linkPanel(), 0, 2);
 
-		secureButton = new Button("secure button");
-		secureButton.setImmediate(true);
-		secureButton.addClickListener(this);
-		secureButton.setDescription("This button should throw an authorisation exception");
-		secureButton.setWidth("100%");
-		addToCentrePanel(secureButton);
+		authorisationButton = new Button("authorisation button");
+		authorisationButton.setImmediate(true);
+		authorisationButton.addClickListener(this);
+		authorisationButton.setDescription("This button should throw an authorisation exception");
+		authorisationButton.setWidth("100%");
+		addToCentrePanel(authorisationButton);
 
-		securityCheckedButton = new Button("security checked button");
-		securityCheckedButton.setImmediate(true);
-		securityCheckedButton.addClickListener(this);
-		securityCheckedButton.setWidth("100%");
-		securityCheckedButton
+		authenticationButton = new Button("trigger a method which requires authentication");
+		authenticationButton.setImmediate(true);
+		authenticationButton.addClickListener(this);
+		authenticationButton.setDescription("This button should throw an authentication exception");
+		authenticationButton.setWidth("100%");
+		addToCentrePanel(authenticationButton);
+
+		disableIfNotAuthorisedButton = new Button("disabled button, it requires authorisation ");
+		disableIfNotAuthorisedButton.setImmediate(true);
+		disableIfNotAuthorisedButton.addClickListener(this);
+		disableIfNotAuthorisedButton.setWidth("100%");
+		disableIfNotAuthorisedButton
 				.setDescription("This button should be disabled, because the current user does not have permission to use it");
 		Subject user = SecurityUtils.getSubject();
-		securityCheckedButton.setEnabled(user.isPermitted("button:click"));
-		addToCentrePanel(securityCheckedButton);
+		disableIfNotAuthorisedButton.setEnabled(user.isPermitted("button:click"));
+		addToCentrePanel(disableIfNotAuthorisedButton);
 
 		this.addComponent(grid);
 
@@ -166,24 +175,34 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		return panel;
 	}
 
-	// @RequiresPermissions("button:secure")
 	@Override
 	public void buttonClick(ClickEvent event) {
 		Button btn = event.getButton();
 		if (btn == sendMsgButton) {
 			getFooterBar().setUserMessage(textField.getValue());
-		} else if (btn == secureButton) {
-			// try {
-			doSecureThing();
-			// } catch (Exception e) {
-			// System.out.println(e.getMessage());
-			// }
-		} else {
-			String uri = (btn.getData() == null) ? null : btn.getData().toString();
-			if (uri != null) {
-				this.getScopedUI().getGuiceNavigator().navigateTo(uri);
-			}
+			return;
 		}
+
+		if (btn == authorisationButton) {
+			doSecureThing();
+			return;
+		}
+
+		if (btn == authenticationButton) {
+			doAuthenticationThing();
+			return;
+		}
+
+		String uri = (btn.getData() == null) ? null : btn.getData().toString();
+		if (uri != null) {
+			this.getScopedUI().getGuiceNavigator().navigateTo(uri);
+		}
+	}
+
+	@RequiresAuthentication
+	protected void doAuthenticationThing() {
+		System.out.println("doing authenticated task");
+		throw new RuntimeException("Should not be here");
 	}
 
 	/**
@@ -192,6 +211,8 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	@RequiresPermissions("button:secure")
 	protected void doSecureThing() {
 		System.out.println("Secure button pressed");
+		throw new RuntimeException("Should not be here");
+
 	}
 
 	private Panel linkPanel() {

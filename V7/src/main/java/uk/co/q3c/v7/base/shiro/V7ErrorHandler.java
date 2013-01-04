@@ -12,31 +12,30 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import java.lang.reflect.InvocationTargetException;
-
 import javax.inject.Inject;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authz.AuthorizationException;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
 
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorEvent;
 
 /**
- * Extends the {@link DefaultErrorHandler} to intercept Shiro related exceptions - {@link AuthorizationException} and
- * {@link AuthenticationException}. Uses pluggable handlers for both.
+ * Extends the {@link DefaultErrorHandler} to intercept Shiro related exceptions - {@link UnauthorizedException} and
+ * {@link UnauthenticatedException}. Uses pluggable handlers for both.
  * 
  * @author David Sowerby 4 Jan 2013
  * 
  */
 public class V7ErrorHandler extends DefaultErrorHandler {
 
-	private final AuthenticationExceptionHandler authenticationHandler;
-	private final AuthorizationExceptionHandler authorisationHandler;
+	private final UnauthenticatedExceptionHandler authenticationHandler;
+	private final UnauthorizedExceptionHandler authorisationHandler;
 
 	@Inject
-	protected V7ErrorHandler(AuthenticationExceptionHandler authenticationHandler,
-			AuthorizationExceptionHandler authorisationHandler) {
+	protected V7ErrorHandler(UnauthenticatedExceptionHandler authenticationHandler,
+			UnauthorizedExceptionHandler authorisationHandler) {
 		super();
 		this.authenticationHandler = authenticationHandler;
 		this.authorisationHandler = authorisationHandler;
@@ -45,44 +44,23 @@ public class V7ErrorHandler extends DefaultErrorHandler {
 	@Override
 	public void error(ErrorEvent event) {
 		Throwable originalError = event.getThrowable();
-		if (!interceptShiroExceptions(originalError)) {
-			doDefault(event);
-		}
-	}
 
-	private boolean interceptShiroExceptions(Throwable throwable) {
-		Throwable t = null;
-		if (throwable instanceof InvocationTargetException) {
-			t = ((InvocationTargetException) throwable).getTargetException();
-		} else {
-			t = throwable.getCause();
+		// handle an unauthorised access attempt
+		int unauthorised = ExceptionUtils.indexOfThrowable(originalError, UnauthorizedException.class);
+		if (unauthorised >= 0) {
+			authorisationHandler.invoke();
+			return;
 		}
 
-		// handle the exception if possible
-		if (t != null) {
-			if (exceptionHandled(t)) {
-				return true;
-			} else {
-				// drill down further
-				return interceptShiroExceptions(t);
-			}
-		} else {
-			return false;
+		// handle an unauthenticated access attempt
+		int unauthenticated = ExceptionUtils.indexOfThrowable(originalError, UnauthenticatedException.class);
+		if (unauthenticated >= 0) {
+			authenticationHandler.invoke();
+			return;
 		}
-	}
 
-	private void defaultExceptionHandler(Throwable throwable) {
-		System.out.println("do something with this exception " + throwable.getMessage());
-	}
-
-	private boolean exceptionHandled(Throwable t) {
-		if (t instanceof AuthorizationException) {
-			return authorisationHandler.invoke((AuthorizationException) t);
-		}
-		if (t instanceof AuthenticationException) {
-			return authenticationHandler.invoke((AuthenticationException) t);
-		}
-		return false;
+		// some other exception
+		doDefault(event);
 
 	}
 
