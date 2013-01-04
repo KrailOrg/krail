@@ -1,11 +1,13 @@
 package uk.co.q3c.v7.base.shiro;
 
+import java.io.Serializable;
+
 import org.apache.shiro.authz.AuthorizationException;
 
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 
-public class DefaultAuthorizationExceptionHandler implements AuthorizationExceptionHandler {
+public class DefaultAuthorizationExceptionHandler implements AuthorizationExceptionHandler, Serializable {
 	// TODO i18N
 	@Override
 	public boolean invoke(AuthorizationException exception) {

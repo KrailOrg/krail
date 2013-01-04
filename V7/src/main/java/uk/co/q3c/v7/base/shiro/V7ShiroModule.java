@@ -12,7 +12,7 @@ public class V7ShiroModule extends AbstractModule {
 		// error handler for the VaadinSession, needed to handle Shiro exceptions
 		bind(ErrorHandler.class).to(V7ErrorHandler.class);
 
-		// should this be in the applicaiton module?
+		// should this be in the application module?
 		bindConstant().annotatedWith(Names.named("shiro.globalSessionTimeout")).to(30000L);
 	}
 

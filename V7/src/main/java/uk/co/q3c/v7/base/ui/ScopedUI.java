@@ -3,8 +3,6 @@ package uk.co.q3c.v7.base.ui;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadContext;
@@ -108,10 +106,10 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 
 		setErrorHandler(errorHandler);
 
-		// FIXME replace with login https://github.com/davidsowerby/v7/issues/46
-		UsernamePasswordToken token = new UsernamePasswordToken("user", "password");
-		token.setRememberMe(false);
-		SecurityUtils.getSubject().login(token);
+		// // FIXME replace with login https://github.com/davidsowerby/v7/issues/46
+		// UsernamePasswordToken token = new UsernamePasswordToken("user", "password");
+		// token.setRememberMe(false);
+		// SecurityUtils.getSubject().login(token);
 
 	}
 
