@@ -6,10 +6,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.shiro.config.Ini;
-import org.apache.shiro.config.Ini.Section;
-import org.apache.shiro.guice.web.GuiceShiroFilter;
-
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 
@@ -28,18 +24,14 @@ public class DefaultV7Navigator implements V7Navigator {
 	private final URIFragmentHandler uriHandler;
 	private final Map<String, Provider<V7View>> viewProMap;
 
-	private final Ini ini;
-	private final GuiceShiroFilter gsf;
-
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler,
-			Map<String, Provider<V7View>> viewProMap, GuiceShiroFilter gsf) {
+			Map<String, Provider<V7View>> viewProMap) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
 		this.uriHandler = uriHandler;
-		this.gsf = gsf;
-		this.ini = Ini.fromResourcePath("classpath:shiro.ini");
+		// this.ini = Ini.fromResourcePath("classpath:shiro.ini");
 	}
 
 	@Override
@@ -73,8 +65,8 @@ public class DefaultV7Navigator implements V7Navigator {
 	protected void navigateTo(V7View view, String viewName, String fragment) {
 		V7ViewChangeEvent event = new V7ViewChangeEvent(this, currentView, view, viewName, fragment);
 		// gsf.doFilter(request, response, filterChain)
-		Section urlSection = ini.getSection("urls");
-		System.out.println(urlSection);
+		// Section urlSection = ini.getSection("urls");
+		// System.out.println(urlSection);
 		if (!fireBeforeViewChange(event)) {
 			return;
 		}

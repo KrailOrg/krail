@@ -1,5 +1,7 @@
 package uk.co.q3c.v7.demo.view;
 
+import java.util.List;
+
 import uk.co.q3c.v7.base.navigate.VerticalViewBase;
 import uk.co.q3c.v7.base.view.LoginView;
 
@@ -12,6 +14,11 @@ public class DemoLoginView extends VerticalViewBase implements LoginView {
 		super();
 		label = new Label("this would be the login");
 		this.addComponent(label);
+	}
+
+	@Override
+	protected void processParams(List<String> params) {
+
 	}
 
 }

@@ -17,6 +17,7 @@ import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.navigate.V7ViewHolder;
 
 import com.vaadin.navigator.Navigator;
+import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinResponse;
 import com.vaadin.server.VaadinService;
@@ -31,9 +32,11 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	private UIScope uiScope;
 	private final Panel viewDisplayPanel;
 	private final V7Navigator navigator;
+	private final ErrorHandler errorHandler;
 
-	protected ScopedUI(V7Navigator navigator) {
+	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler) {
 		super();
+		this.errorHandler = errorHandler;
 		this.navigator = navigator;
 		viewDisplayPanel = new Panel();
 		viewDisplayPanel.setSizeUndefined();
@@ -102,6 +105,8 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 		Subject subject = new WebSubject.Builder(httpRequest, httpResponse)
 				.principals(new SimplePrincipalCollection("user", "debug")).host("debug").buildSubject();
 		ThreadContext.put(ThreadContext.SUBJECT_KEY, subject);
+
+		setErrorHandler(errorHandler);
 
 		// FIXME replace with login https://github.com/davidsowerby/v7/issues/46
 		UsernamePasswordToken token = new UsernamePasswordToken("user", "password");

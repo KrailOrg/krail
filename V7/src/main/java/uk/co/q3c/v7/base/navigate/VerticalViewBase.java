@@ -28,12 +28,17 @@ public abstract class VerticalViewBase extends VerticalLayout implements V7View 
 		processParams(params);
 	}
 
+	/**
+	 * typecasts and returns getUI()
+	 * 
+	 * @return
+	 */
+
 	public ScopedUI getScopedUI() {
 		return (ScopedUI) getUI();
 	}
 
-	protected void processParams(List<String> params) {
-	}
+	protected abstract void processParams(List<String> params);
 
 	@Override
 	public Component getUiComponent() {

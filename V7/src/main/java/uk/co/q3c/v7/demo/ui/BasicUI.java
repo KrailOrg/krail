@@ -13,6 +13,7 @@ import uk.co.q3c.v7.demo.view.components.HeaderBar;
 import com.google.inject.name.Named;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
+import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.VerticalLayout;
 
@@ -27,8 +28,9 @@ public class BasicUI extends ScopedUI {
 	private final FooterBar footerBar;
 
 	@Inject
-	protected BasicUI(HeaderBar headerBar, FooterBar footerBar, @Named(A.title) String title, V7Navigator navigator) {
-		super(navigator);
+	protected BasicUI(HeaderBar headerBar, FooterBar footerBar, @Named(A.title) String title, V7Navigator navigator,
+			ErrorHandler errorHandler) {
+		super(navigator, errorHandler);
 		this.title = title;
 		this.footerBar = footerBar;
 		this.headerBar = headerBar;

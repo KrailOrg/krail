@@ -6,6 +6,7 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.demo.view.components.FooterBar;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
+import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
@@ -15,8 +16,9 @@ import com.vaadin.ui.themes.ChameleonTheme;
 public class SideBarUI extends BasicUI {
 
 	@Inject
-	protected SideBarUI(HeaderBar headerBar, FooterBar footerBar, String title, V7Navigator navigator) {
-		super(headerBar, footerBar, title, navigator);
+	protected SideBarUI(HeaderBar headerBar, FooterBar footerBar, String title, V7Navigator navigator,
+			ErrorHandler errorHandler) {
+		super(headerBar, footerBar, title, navigator, errorHandler);
 	}
 
 	@Override

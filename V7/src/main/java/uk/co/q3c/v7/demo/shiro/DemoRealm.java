@@ -18,12 +18,13 @@ import org.apache.shiro.subject.PrincipalCollection;
 
 import com.google.common.collect.ImmutableSet;
 
-public class ShiroDebugRealm extends AuthorizingRealm {
+public class DemoRealm extends AuthorizingRealm {
 
 	CredentialsMatcher matcher;
 
-	public ShiroDebugRealm() {
+	public DemoRealm() {
 		matcher = new AllowAllCredentialsMatcher();
+		setCachingEnabled(false);
 	}
 
 	@Override

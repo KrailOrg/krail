@@ -173,7 +173,11 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		if (btn == sendMsgButton) {
 			getFooterBar().setUserMessage(textField.getValue());
 		} else if (btn == secureButton) {
+			// try {
 			doSecureThing();
+			// } catch (Exception e) {
+			// System.out.println(e.getMessage());
+			// }
 		} else {
 			String uri = (btn.getData() == null) ? null : btn.getData().toString();
 			if (uri != null) {
