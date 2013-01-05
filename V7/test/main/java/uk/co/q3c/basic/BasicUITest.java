@@ -7,18 +7,21 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.shiro.V7ShiroModule;
+import uk.co.q3c.v7.demo.shiro.DemoShiroModule;
 import uk.co.q3c.v7.demo.ui.BasicUI;
 import uk.co.q3c.v7.demo.view.DemoErrorView;
+import uk.co.q3c.v7.demo.view.DemoViewModule;
 import uk.co.q3c.v7.demo.view.HomeView;
 import uk.co.q3c.v7.demo.view.View1;
 import uk.co.q3c.v7.demo.view.View2;
-import uk.co.q3c.v7.demo.view.DemoViewModule;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, UIScopeModule.class, TestModule.class, DemoViewModule.class })
+@GuiceContext({ BaseModule.class, UIScopeModule.class, TestModule.class, DemoViewModule.class, V7ShiroModule.class,
+		DemoShiroModule.class })
 public class BasicUITest extends UITestBase {
 
 	@Test

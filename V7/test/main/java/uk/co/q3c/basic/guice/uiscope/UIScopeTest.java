@@ -13,6 +13,8 @@ import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.shiro.V7ShiroModule;
+import uk.co.q3c.v7.demo.shiro.DemoShiroModule;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
@@ -23,12 +25,12 @@ import com.google.inject.name.Named;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, DemoViewModule.class })
+@GuiceContext({ BaseModule.class, DemoViewModule.class, V7ShiroModule.class, DemoShiroModule.class })
 public class UIScopeTest {
 	@Inject
 	@Named(A.baseUri)
@@ -64,7 +66,7 @@ public class UIScopeTest {
 		Assert.assertEquals(uib.getHeaderBar(), uib.getExtraHeaderBar());
 
 		// given
-		VaadinRequest mockedRequest = mock(VaadinRequest.class);
+		VaadinServletRequest mockedRequest = mock(VaadinServletRequest.class);
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
 		CurrentInstance.set(UI.class, uia);
 		uia.doInit(mockedRequest, 1);
