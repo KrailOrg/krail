@@ -16,4 +16,8 @@ public interface V7Navigator extends UriFragmentChangedListener {
 
 	void removeViewChangeListener(V7ViewChangeListener listener);
 
+	void login();
+
+	void returnAfterLogin();
+
 }

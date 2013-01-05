@@ -2,15 +2,12 @@ package uk.co.q3c.v7.demo.ui;
 
 import javax.inject.Inject;
 
-import org.apache.shiro.SecurityUtils;
-
-import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.demo.view.components.FooterBar;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
+import uk.co.q3c.v7.demo.view.components.InfoBar;
 
-import com.google.inject.name.Named;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.ErrorHandler;
@@ -21,29 +18,28 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("chameleon")
 public class BasicUI extends ScopedUI {
 
-	private final String title;
-
 	private final HeaderBar headerBar;
 
 	private final FooterBar footerBar;
 
+	private final InfoBar infoBar;
+
 	@Inject
-	protected BasicUI(HeaderBar headerBar, FooterBar footerBar, @Named(A.title) String title, V7Navigator navigator,
+	protected BasicUI(HeaderBar headerBar, FooterBar footerBar, InfoBar infoBar, V7Navigator navigator,
 			ErrorHandler errorHandler) {
 		super(navigator, errorHandler);
-		this.title = title;
 		this.footerBar = footerBar;
 		this.headerBar = headerBar;
+		this.infoBar = infoBar;
 
 	}
 
 	@Override
 	protected void init(VaadinRequest request) {
 		super.init(request);
-		getPage().setTitle(title);
+		getPage().setTitle("V7");
 
 		doLayout();
-		footerBar.setUserName(SecurityUtils.getSubject().getPrincipal().toString());
 
 		// Navigate to the start view
 		getGuiceNavigator().navigateTo("");
@@ -51,7 +47,7 @@ public class BasicUI extends ScopedUI {
 
 	protected void doLayout() {
 
-		VerticalLayout screenLayout = new VerticalLayout(headerBar, getViewDisplayPanel(), footerBar);
+		VerticalLayout screenLayout = new VerticalLayout(headerBar, infoBar, getViewDisplayPanel(), footerBar);
 		screenLayout.setSizeFull();
 		screenLayout.setExpandRatio(getViewDisplayPanel(), 1);
 		setContent(screenLayout);

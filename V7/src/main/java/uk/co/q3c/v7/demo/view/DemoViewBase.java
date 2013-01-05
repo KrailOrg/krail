@@ -245,11 +245,6 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	@Override
 	public void enter(V7ViewChangeEvent event) {
 		super.enter(event);
-
-		Subject user = SecurityUtils.getSubject();
-		System.out.println(user);
-		headerBar.setViewTag(getColourIndex(), this.getClass().getSimpleName());
-
 	}
 
 	public abstract int getColourIndex();

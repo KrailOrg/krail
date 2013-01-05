@@ -42,8 +42,9 @@ public class DemoViewModule extends AbstractModule {
 		bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 
 		// some Strings for the demo
-		bind(String.class).annotatedWith(Names.named(A.title)).toInstance("Basic Guice Vaadin Application");
-		bind(String.class).annotatedWith(Names.named(A.version)).toInstance("Sample app Vaadin 7 Beta 11");
+		bind(String.class).annotatedWith(Names.named(A.title)).toInstance(
+				"Guice Vaadin and Shiro demonstration application");
+		bind(String.class).annotatedWith(Names.named(A.version)).toInstance("Vaadin 7 Beta 11");
 		bind(String.class).annotatedWith(Names.named(A.baseUri)).toInstance("http://example.com");
 
 	}

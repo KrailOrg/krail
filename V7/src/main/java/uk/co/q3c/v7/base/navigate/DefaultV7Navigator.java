@@ -6,8 +6,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
+import uk.co.q3c.v7.base.view.LoginView;
 
 import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;
@@ -16,21 +18,24 @@ import com.vaadin.server.Page.UriFragmentChangedEvent;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
+@UIScoped
 public class DefaultV7Navigator implements V7Navigator {
 
 	private V7View currentView = null;
 	private final List<V7ViewChangeListener> listeners = new LinkedList<V7ViewChangeListener>();
 	private final Provider<ErrorView> errorViewPro;
+	private final Provider<LoginView> loginViewPro;
 	private final URIFragmentHandler uriHandler;
 	private final Map<String, Provider<V7View>> viewProMap;
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler,
-			Map<String, Provider<V7View>> viewProMap) {
+			Map<String, Provider<V7View>> viewProMap, Provider<LoginView> loginViewPro) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
 		this.uriHandler = uriHandler;
+		this.loginViewPro = loginViewPro;
 		// this.ini = Ini.fromResourcePath("classpath:shiro.ini");
 	}
 
@@ -52,8 +57,6 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	/**
 	 * Internal method activating a view, setting its parameters and calling listeners.
-	 * <p>
-	 * This method also verifies that the user is allowed to perform the navigation operation.
 	 * 
 	 * @param view
 	 *            view to activate
@@ -165,5 +168,15 @@ public class DefaultV7Navigator implements V7Navigator {
 		UI ui = CurrentInstance.get(UI.class);
 		ScopedUI scopedUi = (ScopedUI) ui;
 		return scopedUi;
+	}
+
+	@Override
+	public void login() {
+		getUI().changeView(currentView, loginViewPro.get());
+	}
+
+	@Override
+	public void returnAfterLogin() {
+		getUI().changeView(loginViewPro.get(), currentView);
 	}
 }
