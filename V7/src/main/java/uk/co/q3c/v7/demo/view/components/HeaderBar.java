@@ -164,7 +164,7 @@ public class HeaderBar extends CustomComponent implements ClickListener {
 		appLabel.setImmediate(false);
 		appLabel.setWidth("-1px");
 		appLabel.setHeight("-1px");
-		appLabel.setValue("<h1>V7</h1>");
+		appLabel.setValue("<font size=7><b>V7</b></font>");
 		mainLayout.addComponent(appLabel, 1, 0);
 
 		// userLabel
