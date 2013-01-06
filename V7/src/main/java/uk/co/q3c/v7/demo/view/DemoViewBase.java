@@ -202,7 +202,6 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	@RequiresAuthentication
 	protected void doAuthenticationThing() {
 		System.out.println("doing authenticated task");
-		throw new RuntimeException("Should not be here");
 	}
 
 	/**
