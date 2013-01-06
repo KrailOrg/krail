@@ -20,9 +20,12 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, UIScopeModule.class, TestModule.class, DemoViewModule.class, V7ShiroModule.class,
-		DemoShiroModule.class })
+@GuiceContext({ BaseModule.class, UIScopeModule.class, TestModule.class, TestShiroModule.class, DemoViewModule.class,
+		V7ShiroModule.class, DemoShiroModule.class })
 public class BasicUITest extends UITestBase {
+
+	private static final String view1 = "secure/view1";
+	private static final String view2 = "public/view2";
 
 	@Test
 	public void headerBar() {
@@ -67,20 +70,20 @@ public class BasicUITest extends UITestBase {
 
 		// given
 		// when
-		ui.getGuiceNavigator().navigateTo("view2");
+		ui.getGuiceNavigator().navigateTo(view2);
 		// then
 		assertThat(currentView).isInstanceOf(View2.class);
-		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri("view2"));
+		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri(view2));
 		// when
 		ui.getGuiceNavigator().navigateTo("");
 		// then
 		assertThat(currentView).isInstanceOf(HomeView.class);
 		assertThat(ui.getPage().getLocation().toString()).isEqualTo(baseUri + "/#");
 		// when
-		ui.getGuiceNavigator().navigateTo("view1");
+		ui.getGuiceNavigator().navigateTo(view1);
 		// then
 		assertThat(currentView).isInstanceOf(View1.class);
-		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri("view1"));
+		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri(view1));
 
 	}
 
@@ -88,7 +91,7 @@ public class BasicUITest extends UITestBase {
 	public void errorView() {
 
 		// given
-		ui.getGuiceNavigator().navigateTo("view1");
+		ui.getGuiceNavigator().navigateTo(view1);
 		// when
 		ui.getGuiceNavigator().navigateTo("viewx2");
 		// then
@@ -104,10 +107,10 @@ public class BasicUITest extends UITestBase {
 		// given
 
 		// when
-		ui.getGuiceNavigator().navigateTo("view2/a=b");
+		ui.getGuiceNavigator().navigateTo(view2 + "/a=b");
 		// then
 		assertThat(currentView).isInstanceOf(View2.class);
-		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri("view2/a=b"));
+		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri(view2 + "/a=b"));
 
 	}
 

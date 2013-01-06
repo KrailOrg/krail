@@ -42,7 +42,8 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 				new V7ShiroModule(), new DemoViewModule(), new DemoShiroModule(), new ThreadScopeModule(),
 				new UIScopeModule());
 
-		// The SecurityManager binding is in ShiroWebModule, by default it is DefaultWebSecurityManager
+		// The SecurityManager binding is in ShiroWebModule, and therefore DemoWebShiroModule. By default the binding is
+		// to DefaultWebSecurityManager
 		SecurityManager securityManager = injector.getInstance(SecurityManager.class);
 		SecurityUtils.setSecurityManager(securityManager);
 

@@ -18,8 +18,10 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class, UIScopeModule.class, TestModule.class, DemoViewModule.class, V7ShiroModule.class,
-		DemoShiroModule.class })
+		DemoShiroModule.class, TestShiroModule.class })
 public class ViewTest extends UITestBase {
+
+	private static final String view2 = "public/view2";
 
 	@Test
 	public void captureParams() {
@@ -27,7 +29,7 @@ public class ViewTest extends UITestBase {
 		// given
 
 		// when
-		ui.getGuiceNavigator().navigateTo("view2/id=1");
+		ui.getGuiceNavigator().navigateTo(view2 + "/id=1");
 		// then
 		assertThat(currentView).isInstanceOf(View2.class);
 		assertThat(((DemoViewBase) currentView).getParams()).contains("id=1");

@@ -4,10 +4,15 @@ import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.mgt.SecurityManager;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.basic.TestModule;
+import uk.co.q3c.basic.TestShiroModule;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
@@ -30,7 +35,8 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, DemoViewModule.class, V7ShiroModule.class, DemoShiroModule.class })
+@GuiceContext({ TestShiroModule.class, BaseModule.class, TestModule.class, DemoViewModule.class, V7ShiroModule.class,
+		DemoShiroModule.class })
 public class UIScopeTest {
 	@Inject
 	@Named(A.baseUri)
@@ -43,6 +49,14 @@ public class UIScopeTest {
 	TestUI uia;
 
 	UIScope scope;
+
+	@Inject
+	private SecurityManager securityManager;
+
+	@Before
+	public void setup() {
+		SecurityUtils.setSecurityManager(securityManager);
+	}
 
 	@Test
 	public void uiScope() {

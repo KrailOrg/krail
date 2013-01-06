@@ -39,7 +39,8 @@ public class UIScopeModule extends AbstractModule {
 
 		// make our scope instance injectable
 		bind(UIScope.class).annotatedWith(Names.named("UIScope")).toInstance(uiScope);
-
+		// TODO move to application module
+		// see https://github.com/davidsowerby/v7/issues/55
 		MapBinder<String, UI> mapbinder = MapBinder.newMapBinder(binder(), String.class, UI.class);
 		mapbinder.addBinding(BasicUI.class.getName()).to(BasicUI.class);
 		mapbinder.addBinding(SideBarUI.class.getName()).to(SideBarUI.class);

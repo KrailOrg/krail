@@ -4,6 +4,8 @@ import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.mgt.SecurityManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -35,6 +37,9 @@ public abstract class UITestBase implements V7ViewChangeListener {
 	V7View currentView;
 
 	@Inject
+	private SecurityManager securityManager;
+
+	@Inject
 	protected BasicUI ui;
 
 	@Before
@@ -43,8 +48,11 @@ public abstract class UITestBase implements V7ViewChangeListener {
 		System.out.println("initialising test");
 		CurrentInstance.set(UI.class, ui);
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
-		ui.doInit(mockedRequest, 1);
 		ui.getGuiceNavigator().addViewChangeListener(this);
+
+		SecurityUtils.setSecurityManager(securityManager);
+
+		ui.doInit(mockedRequest, 1);
 
 	}
 
