@@ -56,6 +56,7 @@ public class UIScopeTest {
 	@Before
 	public void setup() {
 		SecurityUtils.setSecurityManager(securityManager);
+		scope.flush();
 	}
 
 	@Test

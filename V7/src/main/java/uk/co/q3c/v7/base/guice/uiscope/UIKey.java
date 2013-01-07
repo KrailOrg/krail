@@ -22,10 +22,9 @@ package uk.co.q3c.v7.base.guice.uiscope;
  * by a {@link UIKey}, which is available from the start of UI construction. The UI itself, and any UIScoped injections
  * are then linked by that {@link UIKey} instance.<br>
  * <br>
- * The counter is only for debugging
- * 
+ * The counter value is set by the {@link UIKeyProvider}
  */
-public class UIKey {
+public class UIKey implements Comparable<UIKey> {
 	private final int counter;
 
 	public UIKey(int counter) {
@@ -40,6 +39,11 @@ public class UIKey {
 	@Override
 	public String toString() {
 		return "UIKey:" + counter;
+	}
+
+	@Override
+	public int compareTo(UIKey other) {
+		return this.getCounter() - other.getCounter();
 	}
 
 }

@@ -14,6 +14,7 @@ package uk.co.q3c.v7.base.guice.uiscope;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class UIScope implements Scope {
 
 	private static UIScope current;
 
-	private final Map<UIKey, Map<Key<?>, Object>> values = new HashMap<UIKey, Map<Key<?>, Object>>();
+	private final Map<UIKey, Map<Key<?>, Object>> cache = new TreeMap<UIKey, Map<Key<?>, Object>>();
 
 	public UIScope() {
 		super();
@@ -79,8 +80,8 @@ public class UIScope implements Scope {
 	private <T> Map<Key<?>, Object> getScopedObjectMap(UIKey uiKey) {
 
 		// return an existing cache instance
-		if (values.containsKey(uiKey)) {
-			Map<Key<?>, Object> scopedObjects = values.get(uiKey);
+		if (cache.containsKey(uiKey)) {
+			Map<Key<?>, Object> scopedObjects = cache.get(uiKey);
 			log.debug("scope cache retrieved for UI key: " + uiKey);
 			return scopedObjects;
 		} else {
@@ -91,7 +92,7 @@ public class UIScope implements Scope {
 	}
 
 	public boolean cacheHasEntryFor(UIKey uiKey) {
-		return values.containsKey(uiKey);
+		return cache.containsKey(uiKey);
 	}
 
 	public boolean cacheHasEntryFor(ScopedUI ui) {
@@ -106,13 +107,13 @@ public class UIScope implements Scope {
 
 	private HashMap<Key<?>, Object> createCacheEntry(UIKey uiKey) {
 		HashMap<Key<?>, Object> uiEntry = new HashMap<Key<?>, Object>();
-		values.put(uiKey, uiEntry);
+		cache.put(uiKey, uiEntry);
 		log.debug("created a scope cache for UIScope with key: " + uiKey);
 		return uiEntry;
 	}
 
 	public void releaseScope(UIKey uiKey) {
-		values.remove(uiKey);
+		cache.remove(uiKey);
 	}
 
 	public static UIScope getCurrent() {
@@ -120,5 +121,12 @@ public class UIScope implements Scope {
 			current = new UIScope();
 		}
 		return current;
+	}
+
+	/**
+	 * Removes all entries in the cache
+	 */
+	public void flush() {
+		cache.clear();
 	}
 }
