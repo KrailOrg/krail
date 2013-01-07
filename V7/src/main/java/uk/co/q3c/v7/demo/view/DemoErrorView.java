@@ -16,7 +16,7 @@ public class DemoErrorView extends DemoViewBase implements ErrorView {
 	@Inject
 	protected DemoErrorView(FooterBar footerBar, HeaderBar headerBar) {
 		super(footerBar, headerBar);
-		Button button = addNavButton("take me home", "");
+		Button button = addNavButton("take me home", home);
 		button.addStyleName(ChameleonTheme.BUTTON_TALL);
 		getViewLabel().addStyleName("warning");
 

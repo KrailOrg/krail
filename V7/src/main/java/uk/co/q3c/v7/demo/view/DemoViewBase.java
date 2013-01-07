@@ -45,6 +45,10 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	private final Button disableIfNotAuthorisedButton;
 	private final Button authenticationButton;
 
+	protected static final String home = "";
+	protected static final String view1 = "secure/view1";
+	protected static final String view2 = "public/view2";
+
 	@Inject
 	protected DemoViewBase(FooterBar footerBar, HeaderBar headerBar) {
 		super();
