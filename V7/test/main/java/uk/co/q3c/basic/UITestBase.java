@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeListener;
@@ -28,6 +29,9 @@ import com.vaadin.util.CurrentInstance;
 @GuiceContext({ BaseModule.class })
 public abstract class UITestBase implements V7ViewChangeListener {
 
+	protected static final String view1 = "secure/view1";
+	protected static final String view2 = "public/view2";
+
 	@Inject
 	@Named(A.baseUri)
 	String baseUri;
@@ -41,6 +45,9 @@ public abstract class UITestBase implements V7ViewChangeListener {
 
 	@Inject
 	protected BasicUI ui;
+
+	@Inject
+	protected V7Navigator navigator;
 
 	@Before
 	public void uiSetup() {
@@ -70,5 +77,11 @@ public abstract class UITestBase implements V7ViewChangeListener {
 	public void afterViewChange(V7ViewChangeEvent event) {
 		currentView = event.getNewView();
 	}
+
+	// protected void clickButton(Button button) {
+	// Map<String, Object> variables = new HashMap<String, Object>();
+	// variables.put("state", true);
+	// button.changeVariables(null, variables);
+	// }
 
 }

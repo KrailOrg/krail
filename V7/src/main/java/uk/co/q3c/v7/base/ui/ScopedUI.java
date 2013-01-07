@@ -86,4 +86,8 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 
 	}
 
+	public V7View getView() {
+		return (V7View) viewDisplayPanel.getContent();
+	}
+
 }

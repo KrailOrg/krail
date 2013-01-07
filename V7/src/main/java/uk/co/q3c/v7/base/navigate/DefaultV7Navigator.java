@@ -6,10 +6,14 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.SecurityUtils;
+
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
+import uk.co.q3c.v7.base.view.DemoLogoutView;
+import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;
@@ -27,15 +31,20 @@ public class DefaultV7Navigator implements V7Navigator {
 	private final Provider<LoginView> loginViewPro;
 	private final URIFragmentHandler uriHandler;
 	private final Map<String, Provider<V7View>> viewProMap;
+	private final HeaderBar headerBar;
+	private final Provider<DemoLogoutView> logoutViewPro;
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler,
-			Map<String, Provider<V7View>> viewProMap, Provider<LoginView> loginViewPro) {
+			Map<String, Provider<V7View>> viewProMap, Provider<LoginView> loginViewPro,
+			Provider<DemoLogoutView> logoutViewPro, HeaderBar headerBar) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
 		this.uriHandler = uriHandler;
 		this.loginViewPro = loginViewPro;
+		this.headerBar = headerBar;
+		this.logoutViewPro = logoutViewPro;
 		// this.ini = Ini.fromResourcePath("classpath:shiro.ini");
 	}
 
@@ -170,13 +179,37 @@ public class DefaultV7Navigator implements V7Navigator {
 		return scopedUi;
 	}
 
+	/**
+	 * If logged in, log out and vice versa
+	 * 
+	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#loginOut()
+	 */
 	@Override
-	public void login() {
+	public void loginOut() {
+		boolean loggedIn = SecurityUtils.getSubject().isAuthenticated();
+		if (loggedIn) {
+			logout();
+		} else {
+			login();
+		}
+
+	}
+
+	private void login() {
 		getUI().changeView(currentView, loginViewPro.get());
+	}
+
+	private void logout() {
+		getUI().changeView(currentView, logoutViewPro.get());
+		headerBar.getLoginBtn().setCaption("log in");
+		headerBar.getUserLabel().setValue("guest");
 	}
 
 	@Override
 	public void returnAfterLogin() {
 		getUI().changeView(loginViewPro.get(), currentView);
+		// TODO this is too closely coupled https://github.com/davidsowerby/v7/issues/63
+		headerBar.getUserLabel().setValue(SecurityUtils.getSubject().getPrincipal().toString());
+		headerBar.getLoginBtn().setCaption("log out");
 	}
 }

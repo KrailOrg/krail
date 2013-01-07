@@ -69,4 +69,19 @@ public class DemoLoginView extends VerticalViewBase implements LoginView, ClickL
 		navigator.returnAfterLogin();
 	}
 
+	@Override
+	public void setUsername(String username) {
+		usernameBox.setValue(username);
+	}
+
+	@Override
+	public void setPassword(String password) {
+		passwordBox.setValue(password);
+	}
+
+	@Override
+	public Button getSubmitButton() {
+		return submitButton;
+	}
+
 }

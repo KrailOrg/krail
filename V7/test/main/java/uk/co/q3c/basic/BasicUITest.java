@@ -24,9 +24,6 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 		V7ShiroModule.class, DemoShiroModule.class })
 public class BasicUITest extends UITestBase {
 
-	private static final String view1 = "secure/view1";
-	private static final String view2 = "public/view2";
-
 	@Test
 	public void headerBar() {
 

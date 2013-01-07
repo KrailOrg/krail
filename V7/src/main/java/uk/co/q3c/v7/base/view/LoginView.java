@@ -14,6 +14,8 @@ package uk.co.q3c.v7.base.view;
 
 import uk.co.q3c.v7.base.navigate.V7View;
 
+import com.vaadin.ui.Button;
+
 /**
  * Bind this to your implementation in your ViewModule
  * 
@@ -21,5 +23,11 @@ import uk.co.q3c.v7.base.navigate.V7View;
  * 
  */
 public interface LoginView extends V7View {
+
+	void setUsername(String username);
+
+	void setPassword(String password);
+
+	Button getSubmitButton();
 
 }

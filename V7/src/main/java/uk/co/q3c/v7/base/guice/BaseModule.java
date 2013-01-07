@@ -18,6 +18,8 @@ import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.view.ErrorView;
+import uk.co.q3c.v7.demo.view.components.DefaultHeaderBar;
+import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.google.inject.servlet.ServletModule;
 
@@ -31,6 +33,9 @@ public class BaseModule extends ServletModule {
 		bind(V7View.class).to(ErrorView.class);
 
 		bind(V7Navigator.class).to(DefaultV7Navigator.class);
+
+		// these will need to be moved
+		bind(HeaderBar.class).to(DefaultHeaderBar.class);
 
 	}
 }

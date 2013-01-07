@@ -233,7 +233,7 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		link.setTargetName("_blank");
 
 		vl.addComponent(link);
-		vl.addComponent(new Label("See also the BasicProvider javadoc"));
+		vl.addComponent(new Label("See also the DemoUIProvider javadoc"));
 		return panel;
 	}
 
