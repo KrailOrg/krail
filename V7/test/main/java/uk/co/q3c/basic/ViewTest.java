@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroModule;
-import uk.co.q3c.v7.demo.shiro.DemoShiroModule;
 import uk.co.q3c.v7.demo.view.DemoViewBase;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 import uk.co.q3c.v7.demo.view.View2;
@@ -18,7 +17,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class, UIScopeModule.class, TestModule.class, DemoViewModule.class, V7ShiroModule.class,
-		DemoShiroModule.class, TestShiroModule.class })
+		TestShiroModule.class })
 public class ViewTest extends UITestBase {
 
 	private static final String view2 = "public/view2";
