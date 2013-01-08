@@ -16,7 +16,6 @@ import uk.co.q3c.basic.TestShiroModule;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
-import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroModule;
 import uk.co.q3c.v7.demo.shiro.DemoShiroModule;
@@ -35,8 +34,8 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ TestShiroModule.class, BaseModule.class, TestModule.class, DemoViewModule.class, V7ShiroModule.class,
-		DemoShiroModule.class })
+@GuiceContext({ UIScopeModule.class, TestShiroModule.class, BaseModule.class, TestModule.class, DemoViewModule.class,
+		V7ShiroModule.class, DemoShiroModule.class })
 public class UIScopeTest {
 	@Inject
 	@Named(A.baseUri)
@@ -48,7 +47,7 @@ public class UIScopeTest {
 
 	TestUI uia;
 
-	UIScope scope;
+	// UIScope scope;
 
 	@Inject
 	private SecurityManager securityManager;
@@ -56,14 +55,13 @@ public class UIScopeTest {
 	@Before
 	public void setup() {
 		SecurityUtils.setSecurityManager(securityManager);
-		scope.flush();
 	}
 
 	@Test
 	public void uiScope() {
 		// given
-		uib = (TestUI) provider.createInstance(TestUI.class);
 		uia = (TestUI) provider.createInstance(TestUI.class);
+		uib = (TestUI) provider.createInstance(TestUI.class);
 		// when
 
 		// then
@@ -105,12 +103,12 @@ public class UIScopeTest {
 		// assertThat(scope.cacheHasEntryFor(uib)).isTrue();
 	}
 
-	@ModuleProvider
-	protected UIScopeModule uiModuleProvider() {
-		UIScopeModule module = new UIScopeModule();
-		scope = module.getUiScope();
-		return module;
-	}
+	// @ModuleProvider
+	// protected UIScopeModule uiModuleProvider() {
+	// UIScopeModule module = new UIScopeModule();
+	// scope = module.getUiScope();
+	// return module;
+	// }
 
 	@ModuleProvider
 	protected AbstractModule uiTestModule() {

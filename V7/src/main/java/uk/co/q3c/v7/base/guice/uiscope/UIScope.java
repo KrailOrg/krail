@@ -46,6 +46,7 @@ public class UIScope implements Scope {
 			@Override
 			public T get() {
 				// get the scope cache for the current UI
+				log.debug("looking for a UIScoped instance of {}", key.getClass().getName());
 				UIKey uiKey = null;
 				ScopedUI currentUI = (ScopedUI) CurrentInstance.get(UI.class);
 				if (currentUI == null) {

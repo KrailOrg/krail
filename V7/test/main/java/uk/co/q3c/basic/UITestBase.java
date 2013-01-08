@@ -17,7 +17,10 @@ import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeListener;
 import uk.co.q3c.v7.demo.ui.BasicUI;
+import uk.co.q3c.v7.demo.ui.DemoUIProvider;
+import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
+import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -44,13 +47,22 @@ public abstract class UITestBase implements V7ViewChangeListener {
 	private SecurityManager securityManager;
 
 	@Inject
-	protected BasicUI ui;
+	DemoUIProvider provider;
 
 	@Inject
+	Injector injector;
+
+	protected HeaderBar headerBar;
+
+	protected BasicUI ui;
+
 	protected V7Navigator navigator;
 
 	@Before
 	public void uiSetup() {
+		ui = (BasicUI) provider.createInstance(BasicUI.class);
+		navigator = injector.getInstance(V7Navigator.class);
+		headerBar = injector.getInstance(HeaderBar.class);
 		// VaadinRequest vr = new VaadinServletRequest(null, null);
 		System.out.println("initialising test");
 		CurrentInstance.set(UI.class, ui);

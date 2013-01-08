@@ -4,6 +4,7 @@ import static org.fest.assertions.Assertions.*;
 
 import javax.inject.Inject;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -12,8 +13,11 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.shiro.V7ShiroModule;
 import uk.co.q3c.v7.demo.shiro.DemoShiroModule;
+import uk.co.q3c.v7.demo.ui.BasicUI;
+import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 
+import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
@@ -44,7 +48,19 @@ public class StrictURIHandlerTest {
 	final String subView_p2_bang = "!view1/subView/a=b/year=1970";
 
 	@Inject
+	DemoUIProvider provider;
+
+	@Inject
+	Injector injector;
+
 	StrictURIFragmentHandler handler;
+
+	@Before
+	public void setup() {
+		provider.createInstance(BasicUI.class);
+		handler = injector.getInstance(StrictURIFragmentHandler.class);
+
+	}
 
 	@Test
 	public void readVirtualPageAndparameterList() {
