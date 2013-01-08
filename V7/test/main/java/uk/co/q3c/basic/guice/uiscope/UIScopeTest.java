@@ -13,13 +13,13 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.basic.TestModule;
 import uk.co.q3c.basic.TestShiroModule;
+import uk.co.q3c.basic.UITestBase;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroModule;
 import uk.co.q3c.v7.demo.shiro.DemoShiroModule;
-import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
@@ -36,12 +36,10 @@ import com.vaadin.util.CurrentInstance;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ UIScopeModule.class, TestShiroModule.class, BaseModule.class, TestModule.class, DemoViewModule.class,
 		V7ShiroModule.class, DemoShiroModule.class })
-public class UIScopeTest {
+public class UIScopeTest extends UITestBase {
 	@Inject
 	@Named(A.baseUri)
 	String baseUri;
-	@Inject
-	DemoUIProvider provider;
 
 	TestUI uib;
 
@@ -60,7 +58,11 @@ public class UIScopeTest {
 	@Test
 	public void uiScope() {
 		// given
+		CurrentInstance.set(UI.class, null);
+		CurrentInstance.set(UIKey.class, null);
 		uia = (TestUI) provider.createInstance(TestUI.class);
+		CurrentInstance.set(UIKey.class, null);
+		CurrentInstance.set(UI.class, null);
 		uib = (TestUI) provider.createInstance(TestUI.class);
 		// when
 
@@ -81,6 +83,9 @@ public class UIScopeTest {
 		// given
 		VaadinServletRequest mockedRequest = mock(VaadinServletRequest.class);
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
+
+		CurrentInstance.set(UI.class, null);
+		CurrentInstance.set(UIKey.class, null);
 		CurrentInstance.set(UI.class, uia);
 		uia.doInit(mockedRequest, 1);
 

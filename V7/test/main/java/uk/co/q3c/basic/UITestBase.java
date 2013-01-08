@@ -10,8 +10,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.basic.guice.uiscope.TestUI;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
+import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
@@ -47,7 +49,7 @@ public abstract class UITestBase implements V7ViewChangeListener {
 	private SecurityManager securityManager;
 
 	@Inject
-	DemoUIProvider provider;
+	protected DemoUIProvider provider;
 
 	@Inject
 	Injector injector;
@@ -60,7 +62,8 @@ public abstract class UITestBase implements V7ViewChangeListener {
 
 	@Before
 	public void uiSetup() {
-		ui = (BasicUI) provider.createInstance(BasicUI.class);
+
+		ui = createBasicUI();
 		navigator = injector.getInstance(V7Navigator.class);
 		headerBar = injector.getInstance(HeaderBar.class);
 		// VaadinRequest vr = new VaadinServletRequest(null, null);
@@ -88,6 +91,20 @@ public abstract class UITestBase implements V7ViewChangeListener {
 	@Override
 	public void afterViewChange(V7ViewChangeEvent event) {
 		currentView = event.getNewView();
+	}
+
+	protected TestUI createTestUI() {
+		// simulates the creation of a new current instance (happens for each request)
+		CurrentInstance.set(UI.class, null);
+		CurrentInstance.set(UIKey.class, null);
+		return (TestUI) provider.createInstance(TestUI.class);
+	}
+
+	protected BasicUI createBasicUI() {
+		// simulates the creation of a new current instance (happens for each request)
+		CurrentInstance.set(UI.class, null);
+		CurrentInstance.set(UIKey.class, null);
+		return (BasicUI) provider.createInstance(BasicUI.class);
 	}
 
 	// protected void clickButton(Button button) {

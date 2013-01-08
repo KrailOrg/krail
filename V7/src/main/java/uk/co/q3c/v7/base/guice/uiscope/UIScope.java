@@ -47,13 +47,33 @@ public class UIScope implements Scope {
 			public T get() {
 				// get the scope cache for the current UI
 				log.debug("looking for a UIScoped instance of {}", key.getClass().getName());
-				UIKey uiKey = null;
-				ScopedUI currentUI = (ScopedUI) CurrentInstance.get(UI.class);
-				if (currentUI == null) {
-					uiKey = CurrentInstance.get(UIKey.class);
-				} else {
-					uiKey = currentUI.getInstanceKey();
+
+				// get the current UIKey. It should always be there, as it is created before the UI
+				UIKey uiKey = CurrentInstance.get(UIKey.class);
+				// this may be null if we are in the process of constructing the UI
+				ScopedUI currentUI = (ScopedUI) UI.getCurrent();
+				final String msg = "This should not be possible, unless perhaps you are testing and have not set up the test fixture correctly.  Try sub-classing UITestBase and calling createTestUI() or createBasicUI() to prepare the UIScope correctly.  If you are not testing please report a bug";
+				if (uiKey == null) {
+					if (currentUI == null) {
+						throw new UIScopeException("UI and uiKey are null. " + msg);
+					} else {
+						// this can happen when the framework switches UIs
+						uiKey = currentUI.getInstanceKey();
+						if (uiKey == null) {
+							throw new UIScopeException("uiKey is null and cannot be obtained from the UI. " + msg);
+						}
+					}
 				}
+
+				// currentUI may be null if we are in the process of constructing the UI
+				// if not null just check that it hasn't got out of sync with its uikey
+				if (currentUI != null) {
+					if (!uiKey.equals(currentUI.getInstanceKey())) {
+						throw new UIScopeException(
+								"The UI and its UIKey have got out of sync.  Results are unpredictable. " + msg);
+					}
+				}
+
 				log.debug("looking for cache for key: " + uiKey);
 				Map<Key<?>, Object> scopedObjects = getScopedObjectMap(uiKey);
 				// this line should fail tests but having trouble setting up a decent test. TestBench needed?
