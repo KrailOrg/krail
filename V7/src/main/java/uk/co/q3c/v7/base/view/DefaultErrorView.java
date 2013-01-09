@@ -1,20 +1,20 @@
-package uk.co.q3c.v7.demo.view;
+package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.v7.base.view.ErrorView;
+import uk.co.q3c.v7.demo.view.DemoViewBase;
 import uk.co.q3c.v7.demo.view.components.FooterBar;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ChameleonTheme;
 
-public class DemoErrorView extends DemoViewBase implements ErrorView {
+public class DefaultErrorView extends DemoViewBase implements ErrorView {
 
 	@Inject
-	protected DemoErrorView(FooterBar footerBar, HeaderBar headerBar) {
+	protected DefaultErrorView(FooterBar footerBar, HeaderBar headerBar) {
 		super(footerBar, headerBar);
 		Button button = addNavButton("take me home", home);
 		button.addStyleName(ChameleonTheme.BUTTON_TALL);

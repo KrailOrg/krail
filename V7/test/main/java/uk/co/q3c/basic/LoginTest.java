@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroModule;
-import uk.co.q3c.v7.base.ui.UIModule;
-import uk.co.q3c.v7.base.view.DemoLogoutView;
+import uk.co.q3c.v7.base.ui.V7UIModule;
+import uk.co.q3c.v7.base.view.DefaultLogoutView;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 import uk.co.q3c.v7.demo.view.View2;
@@ -19,7 +19,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, UIScopeModule.class, UIModule.class, TestModule.class, TestShiroModule.class,
+@GuiceContext({ BaseModule.class, UIScopeModule.class, V7UIModule.class, TestModule.class, TestShiroModule.class,
 		DemoViewModule.class, V7ShiroModule.class })
 public class LoginTest extends UITestBase {
 
@@ -61,7 +61,7 @@ public class LoginTest extends UITestBase {
 		headerBar.getLoginBtn().click();
 		// then
 		// view goes to logout view
-		assertThat(ui.getView()).isInstanceOf(DemoLogoutView.class);
+		assertThat(ui.getView()).isInstanceOf(DefaultLogoutView.class);
 		// username goes to guest
 		assertThat(headerBar.getUserLabel().getValue()).isEqualTo("guest");
 		// button caption to login

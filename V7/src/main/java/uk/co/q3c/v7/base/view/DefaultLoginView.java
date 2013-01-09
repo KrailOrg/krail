@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.demo.view;
+package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
@@ -9,7 +9,6 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.VerticalViewBase;
-import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.vaadin.ui.Button;
@@ -19,7 +18,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
 // TODO i18N
-public class DemoLoginView extends VerticalViewBase implements LoginView, ClickListener {
+public class DefaultLoginView extends VerticalViewBase implements LoginView, ClickListener {
 	private final Label label;
 	private final TextField usernameBox;
 	private final TextField passwordBox;
@@ -30,7 +29,7 @@ public class DemoLoginView extends VerticalViewBase implements LoginView, ClickL
 	private final HeaderBar headerBar;
 
 	@Inject
-	protected DemoLoginView(V7Navigator navigator, HeaderBar headerBar) {
+	protected DefaultLoginView(V7Navigator navigator, HeaderBar headerBar) {
 		super();
 		this.navigator = navigator;
 		this.headerBar = headerBar;

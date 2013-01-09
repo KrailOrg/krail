@@ -18,7 +18,7 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeListener;
-import uk.co.q3c.v7.demo.ui.BasicUI;
+import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 

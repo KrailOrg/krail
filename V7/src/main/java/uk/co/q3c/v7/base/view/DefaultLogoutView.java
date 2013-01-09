@@ -10,7 +10,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 
-public class DemoLogoutView extends VerticalViewBase implements View {
+public class DefaultLogoutView extends VerticalViewBase implements View {
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {

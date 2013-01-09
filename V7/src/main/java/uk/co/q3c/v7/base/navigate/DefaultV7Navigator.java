@@ -12,7 +12,7 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
-import uk.co.q3c.v7.base.view.DemoLogoutView;
+import uk.co.q3c.v7.base.view.DefaultLogoutView;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.google.inject.Provider;
@@ -32,12 +32,12 @@ public class DefaultV7Navigator implements V7Navigator {
 	private final URIFragmentHandler uriHandler;
 	private final Map<String, Provider<V7View>> viewProMap;
 	private final HeaderBar headerBar;
-	private final Provider<DemoLogoutView> logoutViewPro;
+	private final Provider<DefaultLogoutView> logoutViewPro;
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler,
 			Map<String, Provider<V7View>> viewProMap, Provider<LoginView> loginViewPro,
-			Provider<DemoLogoutView> logoutViewPro, HeaderBar headerBar) {
+			Provider<DefaultLogoutView> logoutViewPro, HeaderBar headerBar) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;

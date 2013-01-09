@@ -19,7 +19,7 @@ import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroModule;
-import uk.co.q3c.v7.base.ui.UIModule;
+import uk.co.q3c.v7.base.ui.V7UIModule;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
@@ -34,7 +34,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ UIScopeModule.class, TestShiroModule.class, UIModule.class, BaseModule.class, TestModule.class,
+@GuiceContext({ UIScopeModule.class, TestShiroModule.class, V7UIModule.class, BaseModule.class, TestModule.class,
 		DemoViewModule.class, V7ShiroModule.class })
 public class UIScopeTest extends UITestBase {
 	@Inject

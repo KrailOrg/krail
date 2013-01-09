@@ -14,11 +14,6 @@ package uk.co.q3c.v7.base.guice;
 
 import org.apache.shiro.guice.web.ShiroWebModule;
 
-import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.demo.view.components.DefaultHeaderBar;
-import uk.co.q3c.v7.demo.view.components.HeaderBar;
-
 import com.google.inject.servlet.ServletModule;
 
 public class BaseModule extends ServletModule {
@@ -27,11 +22,6 @@ public class BaseModule extends ServletModule {
 	protected void configureServlets() {
 		serve("/*").with(BaseServlet.class);
 		ShiroWebModule.bindGuiceFilter(binder());
-
-		bind(V7Navigator.class).to(DefaultV7Navigator.class);
-
-		// these will need to be moved
-		bind(HeaderBar.class).to(DefaultHeaderBar.class);
 
 	}
 }
