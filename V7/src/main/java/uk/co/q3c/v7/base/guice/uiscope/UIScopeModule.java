@@ -12,9 +12,6 @@
  */
 package uk.co.q3c.v7.base.guice.uiscope;
 
-import uk.co.q3c.v7.base.view.ErrorView;
-import uk.co.q3c.v7.demo.view.DemoErrorView;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
@@ -36,8 +33,6 @@ public class UIScopeModule extends AbstractModule {
 		// make our scope instance injectable
 		bind(UIScope.class).annotatedWith(Names.named("UIScope")).toInstance(uiScope);
 
-		// will be used if a view mapping is not found
-		bind(ErrorView.class).to(DemoErrorView.class);
 	}
 
 	public UIScope getUiScope() {

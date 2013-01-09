@@ -10,6 +10,7 @@ public class V7ViewModule extends AbstractModule {
 	protected void configure() {
 		// the fallback in case a View is not defined
 		bind(V7View.class).to(ErrorView.class);
+
 	}
 
 }
