@@ -32,6 +32,7 @@ public class V7ViewModule extends AbstractModule {
 		bind(V7View.class).to(ErrorView.class);
 		bindErrorView();
 		bindLoginView();
+		bindLogoutView();
 
 		MapBinder<String, V7View> mapbinder = MapBinder.newMapBinder(binder(), String.class, V7View.class);
 		bindViews(mapbinder);
@@ -41,8 +42,14 @@ public class V7ViewModule extends AbstractModule {
 	 * Override this to provide your own login {@link V7View}
 	 */
 	protected void bindLoginView() {
-
 		bind(LoginView.class).to(DefaultLoginView.class);
+	}
+
+	/**
+	 * Override this to provide your own logout {@link V7View}
+	 */
+	protected void bindLogoutView() {
+		bind(LogoutView.class).to(DefaultLogoutView.class);
 	}
 
 	/**
