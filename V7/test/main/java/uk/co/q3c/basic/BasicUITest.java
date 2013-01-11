@@ -19,8 +19,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, UIScopeModule.class, V7UIModule.class, TestModule.class, TestShiroModule.class,
-		DemoViewModule.class })
+@GuiceContext({ BaseModule.class, UIScopeModule.class, V7UIModule.class, TestModule.class, DemoViewModule.class })
 public class BasicUITest extends UITestBase {
 
 	@Test

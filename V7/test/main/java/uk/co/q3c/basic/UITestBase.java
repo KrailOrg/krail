@@ -3,8 +3,10 @@ package uk.co.q3c.basic;
 import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.guice.web.ShiroWebModule;
 import org.apache.shiro.mgt.SecurityManager;
 import org.junit.After;
 import org.junit.Before;
@@ -19,6 +21,7 @@ import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeListener;
 import uk.co.q3c.v7.base.ui.BasicUI;
+import uk.co.q3c.v7.demo.shiro.DemoShiroWebModule;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
@@ -26,6 +29,7 @@ import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
@@ -59,6 +63,7 @@ public abstract class UITestBase implements V7ViewChangeListener {
 	protected BasicUI ui;
 
 	protected V7Navigator navigator;
+	protected final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
 
 	@Before
 	public void uiSetup() {
@@ -112,5 +117,10 @@ public abstract class UITestBase implements V7ViewChangeListener {
 	// variables.put("state", true);
 	// button.changeVariables(null, variables);
 	// }
-
+	@ModuleProvider
+	protected ShiroWebModule shiroWebModule() {
+		ServletContext mockedContext = mock(ServletContext.class);
+		ctx.set(mockedContext);
+		return new DemoShiroWebModule(ctx.get());
+	}
 }

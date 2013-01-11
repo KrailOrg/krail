@@ -18,8 +18,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, UIScopeModule.class, V7UIModule.class, TestModule.class, TestShiroModule.class,
-		DemoViewModule.class })
+@GuiceContext({ BaseModule.class, UIScopeModule.class, V7UIModule.class, TestModule.class, DemoViewModule.class })
 public class LoginTest extends UITestBase {
 
 	String username = "wiggly";
@@ -66,4 +65,5 @@ public class LoginTest extends UITestBase {
 		// button caption to login
 		assertThat(headerBar.getLoginBtn().getCaption()).isEqualTo("log in");
 	}
+
 }

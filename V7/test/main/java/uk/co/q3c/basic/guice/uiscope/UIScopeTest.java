@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.basic.TestModule;
-import uk.co.q3c.basic.TestShiroModule;
 import uk.co.q3c.basic.UITestBase;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
@@ -33,8 +32,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ UIScopeModule.class, TestShiroModule.class, V7UIModule.class, BaseModule.class, TestModule.class,
-		DemoViewModule.class })
+@GuiceContext({ UIScopeModule.class, V7UIModule.class, BaseModule.class, TestModule.class, DemoViewModule.class })
 public class UIScopeTest extends UITestBase {
 	@Inject
 	@Named(A.baseUri)
