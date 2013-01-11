@@ -1,9 +1,12 @@
 package uk.co.q3c.basic;
 
 import static org.fest.assertions.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 
+import org.apache.shiro.guice.web.ShiroWebModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,19 +14,22 @@ import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
-import uk.co.q3c.v7.base.shiro.V7ShiroModule;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.V7UIModule;
+import uk.co.q3c.v7.demo.shiro.DemoShiroWebModule;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 
 import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, UIScopeModule.class, DemoViewModule.class, V7ShiroModule.class, V7UIModule.class })
+@GuiceContext({ BaseModule.class, UIScopeModule.class, DemoViewModule.class, V7UIModule.class })
 public class StrictURIHandlerTest {
+
+	private final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
 
 	final String view = "view1";
 	final String view_ = "view1/";
@@ -198,4 +204,12 @@ public class StrictURIHandlerTest {
 		assertThat(handler.fragment()).isEqualTo(subView_p2);
 
 	}
+
+	@ModuleProvider
+	protected ShiroWebModule shiroWebModule() {
+		ServletContext mockedContext = mock(ServletContext.class);
+		ctx.set(mockedContext);
+		return new DemoShiroWebModule(ctx.get());
+	}
+
 }
