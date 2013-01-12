@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.demo.view.components;
+package uk.co.q3c.v7.base.view.components;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;

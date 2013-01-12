@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.demo.view.components;
+package uk.co.q3c.v7.base.view.components;
 
 import javax.inject.Inject;
 
@@ -127,7 +127,7 @@ public class DefaultHeaderBar extends CustomComponent implements ClickListener, 
 	}
 
 	/** 
-	 * @see uk.co.q3c.v7.demo.view.components.HeaderBar#userChanged()
+	 * @see uk.co.q3c.v7.base.view.components.HeaderBar#userChanged()
 	 */
 	@Override
 	public void userChanged() {
@@ -191,7 +191,7 @@ public class DefaultHeaderBar extends CustomComponent implements ClickListener, 
 	}
 
 	/** 
-	 * @see uk.co.q3c.v7.demo.view.components.HeaderBar#getLoginBtn()
+	 * @see uk.co.q3c.v7.base.view.components.HeaderBar#getLoginBtn()
 	 */
 	@Override
 	public Button getLoginBtn() {
@@ -199,7 +199,7 @@ public class DefaultHeaderBar extends CustomComponent implements ClickListener, 
 	}
 
 	/** 
-	 * @see uk.co.q3c.v7.demo.view.components.HeaderBar#getUserLabel()
+	 * @see uk.co.q3c.v7.base.view.components.HeaderBar#getUserLabel()
 	 */
 	@Override
 	public Label getUserLabel() {

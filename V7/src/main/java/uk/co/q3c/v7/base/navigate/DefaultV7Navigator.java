@@ -13,7 +13,7 @@ import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.DefaultLogoutView;
-import uk.co.q3c.v7.demo.view.components.HeaderBar;
+import uk.co.q3c.v7.base.view.components.HeaderBar;
 
 import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;

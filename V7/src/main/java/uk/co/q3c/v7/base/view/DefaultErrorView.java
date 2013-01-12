@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.v7.base.view.components.FooterBar;
+import uk.co.q3c.v7.base.view.components.HeaderBar;
 import uk.co.q3c.v7.demo.view.DemoViewBase;
-import uk.co.q3c.v7.demo.view.components.FooterBar;
-import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ChameleonTheme;

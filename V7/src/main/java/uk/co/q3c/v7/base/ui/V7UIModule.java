@@ -4,10 +4,10 @@ import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.view.components.DefaultHeaderBar;
+import uk.co.q3c.v7.base.view.components.HeaderBar;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 import uk.co.q3c.v7.demo.ui.SideBarUI;
-import uk.co.q3c.v7.demo.view.components.DefaultHeaderBar;
-import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
