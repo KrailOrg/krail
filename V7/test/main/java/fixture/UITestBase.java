@@ -1,4 +1,4 @@
-package uk.co.q3c.basic;
+package fixture;
 
 import static org.mockito.Mockito.*;
 
@@ -11,8 +11,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.basic.guice.uiscope.TestUI;
-import uk.co.q3c.basic.shiro.ShiroIntegrationTestBase;
+import uk.co.q3c.base.guice.uiscope.TestUI;
+import uk.co.q3c.base.shiro.ShiroIntegrationTestBase;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
@@ -42,11 +42,11 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 
 	@Inject
 	@Named(A.baseUri)
-	String baseUri;
+	protected String baseUri;
 
 	VaadinRequest mockedRequest = mock(VaadinRequest.class);
 
-	V7View currentView;
+	protected V7View currentView;
 
 	@Inject
 	protected DemoUIProvider provider;

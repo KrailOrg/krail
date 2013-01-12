@@ -1,4 +1,4 @@
-package uk.co.q3c.basic.guice.threadscope;
+package uk.co.q3c.base.guice.threadscope;
 
 import javax.inject.Inject;
 

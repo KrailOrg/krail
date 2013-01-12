@@ -1,4 +1,4 @@
-package uk.co.q3c.basic.guice.uiscope;
+package uk.co.q3c.base.guice.uiscope;
 
 import static org.mockito.Mockito.*;
 
@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.basic.UITestBase;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
@@ -25,6 +24,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 import fixture.TestUIModule;
+import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ UIScopeModule.class, BaseModule.class, TestUIModule.class, DemoViewModule.class,

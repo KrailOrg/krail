@@ -1,4 +1,4 @@
-package uk.co.q3c.basic;
+package uk.co.q3c.base.view;
 
 import static org.fest.assertions.Assertions.*;
 
@@ -15,6 +15,8 @@ import uk.co.q3c.v7.demo.view.View2;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+
+import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class, UIScopeModule.class, V7UIModule.class, DemoViewModule.class,

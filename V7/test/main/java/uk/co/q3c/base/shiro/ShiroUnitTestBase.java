@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.basic.shiro;
+package uk.co.q3c.base.shiro;
 
 import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;

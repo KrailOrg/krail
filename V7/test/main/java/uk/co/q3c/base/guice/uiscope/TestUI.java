@@ -1,4 +1,4 @@
-package uk.co.q3c.basic.guice.uiscope;
+package uk.co.q3c.base.guice.uiscope;
 
 import javax.inject.Inject;
 
