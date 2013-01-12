@@ -3,16 +3,16 @@ package uk.co.q3c.basic;
 import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.guice.web.ShiroWebModule;
-import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.mgt.RealmSecurityManager;
+import org.apache.shiro.realm.Realm;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.basic.guice.uiscope.TestUI;
+import uk.co.q3c.basic.shiro.ShiroIntegrationTestBase;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
@@ -21,7 +21,7 @@ import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeListener;
 import uk.co.q3c.v7.base.ui.BasicUI;
-import uk.co.q3c.v7.demo.shiro.DemoShiroWebModule;
+import uk.co.q3c.v7.demo.shiro.DemoRealm;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
@@ -29,14 +29,13 @@ import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class })
-public abstract class UITestBase implements V7ViewChangeListener {
+public abstract class UITestBase extends ShiroIntegrationTestBase implements V7ViewChangeListener {
 
 	protected static final String view1 = "secure/view1";
 	protected static final String view2 = "public/view2";
@@ -50,9 +49,6 @@ public abstract class UITestBase implements V7ViewChangeListener {
 	V7View currentView;
 
 	@Inject
-	private SecurityManager securityManager;
-
-	@Inject
 	protected DemoUIProvider provider;
 
 	@Inject
@@ -63,11 +59,11 @@ public abstract class UITestBase implements V7ViewChangeListener {
 	protected BasicUI ui;
 
 	protected V7Navigator navigator;
-	protected final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
 
 	@Before
 	public void uiSetup() {
-
+		RealmSecurityManager rsm = (RealmSecurityManager) SecurityUtils.getSecurityManager();
+		rsm.setRealm(getRealm());
 		ui = createBasicUI();
 		navigator = injector.getInstance(V7Navigator.class);
 		headerBar = injector.getInstance(HeaderBar.class);
@@ -76,11 +72,12 @@ public abstract class UITestBase implements V7ViewChangeListener {
 		CurrentInstance.set(UI.class, ui);
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
 		ui.getGuiceNavigator().addViewChangeListener(this);
-
-		SecurityUtils.setSecurityManager(securityManager);
-
 		ui.doInit(mockedRequest, 1);
 
+	}
+
+	protected Realm getRealm() {
+		return new DemoRealm();
 	}
 
 	@After
@@ -98,29 +95,28 @@ public abstract class UITestBase implements V7ViewChangeListener {
 		currentView = event.getNewView();
 	}
 
+	/**
+	 * Use this method to create TestUI instances, rather than the UIProvider It simulates the creation of a new
+	 * CurrentInstance (which happens for each request)
+	 * 
+	 * @return
+	 */
 	protected TestUI createTestUI() {
-		// simulates the creation of a new current instance (happens for each request)
 		CurrentInstance.set(UI.class, null);
 		CurrentInstance.set(UIKey.class, null);
 		return (TestUI) provider.createInstance(TestUI.class);
 	}
 
+	/**
+	 * Use this method to create BasicUI instances, rather than the UIProvider It simulates the creation of a new
+	 * CurrentInstance (which happens for each request)
+	 * 
+	 * @return
+	 */
 	protected BasicUI createBasicUI() {
-		// simulates the creation of a new current instance (happens for each request)
 		CurrentInstance.set(UI.class, null);
 		CurrentInstance.set(UIKey.class, null);
 		return (BasicUI) provider.createInstance(BasicUI.class);
 	}
 
-	// protected void clickButton(Button button) {
-	// Map<String, Object> variables = new HashMap<String, Object>();
-	// variables.put("state", true);
-	// button.changeVariables(null, variables);
-	// }
-	@ModuleProvider
-	protected ShiroWebModule shiroWebModule() {
-		ServletContext mockedContext = mock(ServletContext.class);
-		ctx.set(mockedContext);
-		return new DemoShiroWebModule(ctx.get());
-	}
 }

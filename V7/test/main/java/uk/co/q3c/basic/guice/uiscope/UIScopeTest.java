@@ -4,35 +4,31 @@ import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.mgt.SecurityManager;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.basic.TestModule;
 import uk.co.q3c.basic.UITestBase;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
-import uk.co.q3c.v7.base.ui.V7UIModule;
+import uk.co.q3c.v7.demo.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.multibindings.MapBinder;
 import com.google.inject.name.Named;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
+import fixture.TestUIModule;
+
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ UIScopeModule.class, V7UIModule.class, BaseModule.class, TestModule.class, DemoViewModule.class })
+@GuiceContext({ UIScopeModule.class, BaseModule.class, TestUIModule.class, DemoViewModule.class,
+		V7ShiroVaadinModule.class })
 public class UIScopeTest extends UITestBase {
 	@Inject
 	@Named(A.baseUri)
@@ -42,25 +38,12 @@ public class UIScopeTest extends UITestBase {
 
 	TestUI uia;
 
-	// UIScope scope;
-
-	@Inject
-	private SecurityManager securityManager;
-
-	@Before
-	public void setup() {
-		SecurityUtils.setSecurityManager(securityManager);
-	}
-
 	@Test
 	public void uiScope() {
 		// given
-		CurrentInstance.set(UI.class, null);
-		CurrentInstance.set(UIKey.class, null);
-		uia = (TestUI) provider.createInstance(TestUI.class);
-		CurrentInstance.set(UIKey.class, null);
-		CurrentInstance.set(UI.class, null);
-		uib = (TestUI) provider.createInstance(TestUI.class);
+
+		uia = createTestUI();
+		uib = createTestUI();
 		// when
 
 		// then
@@ -105,23 +88,4 @@ public class UIScopeTest extends UITestBase {
 		// assertThat(scope.cacheHasEntryFor(uib)).isTrue();
 	}
 
-	// @ModuleProvider
-	// protected UIScopeModule uiModuleProvider() {
-	// UIScopeModule module = new UIScopeModule();
-	// scope = module.getUiScope();
-	// return module;
-	// }
-
-	@ModuleProvider
-	protected AbstractModule uiTestModule() {
-		return new AbstractModule() {
-
-			@Override
-			protected void configure() {
-				MapBinder<String, UI> mapbinder = MapBinder.newMapBinder(binder(), String.class, UI.class);
-				mapbinder.addBinding(TestUI.class.getName()).to(TestUI.class);
-			}
-
-		};
-	}
 }

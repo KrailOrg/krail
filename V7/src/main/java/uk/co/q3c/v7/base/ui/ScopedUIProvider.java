@@ -56,6 +56,9 @@ public abstract class ScopedUIProvider extends UIProvider {
 
 		// create the UI
 		Provider<UI> uiProvider = uiProMap.get(uiClass.getName());
+		if (uiProvider == null) {
+			throw new UIProviderException("No provider has been specified for " + uiClass.getName());
+		}
 		ScopedUI ui = (ScopedUI) uiProvider.get();
 		ui.setInstanceKey(uiKey);
 		log.debug("returning instance of " + ui.getClass().getName() + " with key " + uiKey);

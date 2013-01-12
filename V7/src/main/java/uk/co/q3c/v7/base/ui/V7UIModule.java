@@ -28,6 +28,9 @@ public class V7UIModule extends AbstractModule {
 		bindURIHandler();
 	}
 
+	/**
+	 * Override to bind your ScopedUIProvider implementation
+	 */
 	protected void bindUIProvider() {
 		bind(UIProvider.class).to(DemoUIProvider.class);
 	}
