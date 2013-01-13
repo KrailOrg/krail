@@ -20,9 +20,9 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeListener;
+import uk.co.q3c.v7.base.shiro.DefaultRealm;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.view.components.HeaderBar;
-import uk.co.q3c.v7.demo.shiro.DemoRealm;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 
 import com.google.inject.Injector;
@@ -77,7 +77,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	}
 
 	protected Realm getRealm() {
-		return new DemoRealm();
+		return new DefaultRealm();
 	}
 
 	@After

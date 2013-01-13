@@ -7,8 +7,8 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.ui.V7UIModule;
-import uk.co.q3c.v7.demo.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.demo.view.DemoViewBase;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 import uk.co.q3c.v7.demo.view.View2;

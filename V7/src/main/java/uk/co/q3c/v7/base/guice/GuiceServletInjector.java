@@ -21,8 +21,9 @@ import org.apache.shiro.mgt.SecurityManager;
 
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
+import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.ui.V7UIModule;
-import uk.co.q3c.v7.demo.shiro.DemoShiroWebModule;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 
 import com.google.inject.Guice;
@@ -37,8 +38,9 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 	@Override
 	protected Injector getInjector() {
 
-		injector = Guice.createInjector(new DemoShiroWebModule(ctx.get()), new ShiroAopModule(), new BaseModule(),
-				new DemoViewModule(), new ThreadScopeModule(), new UIScopeModule(), new V7UIModule());
+		injector = Guice.createInjector(new DefaultShiroWebModule(ctx.get()), new V7ShiroVaadinModule(),
+				new ShiroAopModule(), new BaseModule(), new DemoViewModule(), new ThreadScopeModule(),
+				new UIScopeModule(), new V7UIModule());
 
 		// The SecurityManager binding is in ShiroWebModule, and therefore DemoWebShiroModule. By default the binding is
 		// to DefaultWebSecurityManager

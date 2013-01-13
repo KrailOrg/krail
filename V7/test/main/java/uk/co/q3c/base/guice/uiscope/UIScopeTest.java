@@ -12,8 +12,8 @@ import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.view.components.HeaderBar;
-import uk.co.q3c.v7.demo.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 
 import com.google.inject.name.Named;

@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.demo.shiro;
+package uk.co.q3c.v7.base.shiro;
 
 import java.util.Set;
 
@@ -18,11 +18,11 @@ import org.apache.shiro.subject.PrincipalCollection;
 
 import com.google.common.collect.ImmutableSet;
 
-public class DemoRealm extends AuthorizingRealm {
+public class DefaultRealm extends AuthorizingRealm {
 
 	CredentialsMatcher matcher;
 
-	public DemoRealm() {
+	public DefaultRealm() {
 		matcher = new AllowAllCredentialsMatcher();
 		setCachingEnabled(false);
 	}
@@ -44,8 +44,9 @@ public class DemoRealm extends AuthorizingRealm {
 		String username = upToken.getUsername();
 
 		if (username == null) {
-			throw new AccountException("Null usernames are not allowed by this realm.");
+			throw new AccountException("user name cannot be null");
 		}
+
 		String password = "password";
 		return new SimpleAuthenticationInfo(username, password, this.getName());
 	}

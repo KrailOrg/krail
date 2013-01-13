@@ -1,29 +1,18 @@
-package uk.co.q3c.v7.demo.shiro;
+package uk.co.q3c.v7.base.shiro;
 
-import javax.servlet.ServletContext;
 
-import org.apache.shiro.guice.web.ShiroWebModule;
-
-import uk.co.q3c.v7.base.shiro.DefaultUnauthenticatedExceptionHandler;
-import uk.co.q3c.v7.base.shiro.DefaultUnauthorizedExceptionHandler;
-import uk.co.q3c.v7.base.shiro.UnauthenticatedExceptionHandler;
-import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
-import uk.co.q3c.v7.base.shiro.V7ErrorHandler;
-
-import com.google.inject.name.Names;
+import com.google.inject.AbstractModule;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorHandler;
 
-public class DemoShiroWebModule extends ShiroWebModule {
+public class V7ShiroVaadinModule extends AbstractModule {
 
-	public DemoShiroWebModule(ServletContext sc) {
-		super(sc);
+	public V7ShiroVaadinModule() {
+		super();
 	}
 
 	@Override
-	protected void configureShiroWeb() {
-		// bind the authentication realm
-		bindRealm().to(DemoRealm.class);
+	protected void configure() {
 		bindErrorHandler();
 		bindUnathenticatedHandler();
 		bindUnauthorisedHandler();
@@ -34,7 +23,6 @@ public class DemoShiroWebModule extends ShiroWebModule {
 	 */
 	protected void bindErrorHandler() {
 		bind(ErrorHandler.class).to(V7ErrorHandler.class);
-		expose(ErrorHandler.class);
 	}
 
 	/**
@@ -43,7 +31,6 @@ public class DemoShiroWebModule extends ShiroWebModule {
 	 */
 	protected void bindUnauthorisedHandler() {
 		bind(UnauthorizedExceptionHandler.class).to(DefaultUnauthorizedExceptionHandler.class);
-		expose(UnauthorizedExceptionHandler.class);
 	}
 
 	/**
@@ -52,14 +39,6 @@ public class DemoShiroWebModule extends ShiroWebModule {
 	 */
 	protected void bindUnathenticatedHandler() {
 		bind(UnauthenticatedExceptionHandler.class).to(DefaultUnauthenticatedExceptionHandler.class);
-		expose(UnauthenticatedExceptionHandler.class);
-	}
-
-	/**
-	 * Sets the Shiro globalSessionTimeout property
-	 */
-	protected void bindTimeout() {
-		bindConstant().annotatedWith(Names.named("shiro.globalSessionTimeout")).to(30000L);
 	}
 
 }
