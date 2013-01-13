@@ -27,6 +27,7 @@ public class LoginTest extends UITestBase {
 
 	String username = "wiggly";
 	String password = "password";
+	String badpassword = "passwrd";
 
 	@Test
 	public void loginLogout() {

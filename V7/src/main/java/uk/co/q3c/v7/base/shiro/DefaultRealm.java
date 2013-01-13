@@ -2,13 +2,14 @@ package uk.co.q3c.v7.base.shiro;
 
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -20,35 +21,39 @@ import com.google.common.collect.ImmutableSet;
 
 public class DefaultRealm extends AuthorizingRealm {
 
-	CredentialsMatcher matcher;
+	private final LoginAttemptLog loginAttemptLog;
 
-	public DefaultRealm() {
-		matcher = new AllowAllCredentialsMatcher();
+	@Inject
+	protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher) {
+		super(matcher);
+		this.loginAttemptLog = loginAttemptLog;
 		setCachingEnabled(false);
 	}
 
 	@Override
-	public CredentialsMatcher getCredentialsMatcher() {
-		return matcher;
-	}
-
-	@Override
 	public boolean supports(AuthenticationToken token) {
-		return true; // super.supports(token);
+		return token instanceof UsernamePasswordToken;
 	}
 
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		UsernamePasswordToken upToken = (UsernamePasswordToken) token;
-
 		String username = upToken.getUsername();
 
 		if (username == null) {
 			throw new AccountException("user name cannot be null");
 		}
 
-		String password = "password";
-		return new SimpleAuthenticationInfo(username, password, this.getName());
+		String password = String.copyValueOf(upToken.getPassword());
+
+		if (password.equals("password")) {
+			loginAttemptLog.recordSuccessfulAttempt(upToken);
+			return new SimpleAuthenticationInfo(username, password, this.getName());
+		} else {
+			loginAttemptLog.recordFailedAttempt(upToken);
+			return null;
+		}
+
 	}
 
 	@Override
@@ -66,6 +71,6 @@ public class DefaultRealm extends AuthorizingRealm {
 
 	@Override
 	public String getName() {
-		return "debug";
+		return "V7 Default Realm";
 	}
 }

@@ -4,9 +4,6 @@ import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.mgt.RealmSecurityManager;
-import org.apache.shiro.realm.Realm;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -20,7 +17,6 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeListener;
-import uk.co.q3c.v7.base.shiro.DefaultRealm;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.view.components.HeaderBar;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
@@ -62,8 +58,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 
 	@Before
 	public void uiSetup() {
-		RealmSecurityManager rsm = (RealmSecurityManager) SecurityUtils.getSecurityManager();
-		rsm.setRealm(getRealm());
+
 		ui = createBasicUI();
 		navigator = injector.getInstance(V7Navigator.class);
 		headerBar = injector.getInstance(HeaderBar.class);
@@ -74,10 +69,6 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 		ui.getGuiceNavigator().addViewChangeListener(this);
 		ui.doInit(mockedRequest, 1);
 
-	}
-
-	protected Realm getRealm() {
-		return new DefaultRealm();
 	}
 
 	@After
