@@ -1,6 +1,5 @@
 package uk.co.q3c.v7.base.shiro;
 
-
 import com.google.inject.AbstractModule;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorHandler;
@@ -16,6 +15,7 @@ public class V7ShiroVaadinModule extends AbstractModule {
 		bindErrorHandler();
 		bindUnathenticatedHandler();
 		bindUnauthorisedHandler();
+		bindLoginsExceededHandler();
 	}
 
 	/**
@@ -39,6 +39,14 @@ public class V7ShiroVaadinModule extends AbstractModule {
 	 */
 	protected void bindUnathenticatedHandler() {
 		bind(UnauthenticatedExceptionHandler.class).to(DefaultUnauthenticatedExceptionHandler.class);
+	}
+
+	/**
+	 * The {@link DefaultErrorHandler} calls this handler in response to repeated login failures exceeding the limit set
+	 * in {@link LoginAttemptLog}. If you have defined your own ErrorHandler you may of course do something different
+	 */
+	protected void bindLoginsExceededHandler() {
+		bind(LoginsExceededHandler.class).to(DefaultLoginsExceededHandler.class);
 	}
 
 }

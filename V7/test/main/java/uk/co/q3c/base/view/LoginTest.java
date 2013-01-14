@@ -47,9 +47,15 @@ public class LoginTest extends UITestBase {
 
 		// given
 		LoginView loginView = (LoginView) ui.getView();
+
+		// when
+
+		// then
+		assertThat(loginView.getStatusMessage()).isEqualTo("Please enter your username and password");
+
+		// when user logs in
 		loginView.setUsername(username);
 		loginView.setPassword(password);
-		// when user logs in
 		loginView.getSubmitButton().click();
 		// then
 		assertThat(SecurityUtils.getSubject().isAuthenticated()).isTrue();
@@ -69,6 +75,40 @@ public class LoginTest extends UITestBase {
 		assertThat(headerBar.getUserLabel().getValue()).isEqualTo("guest");
 		// button caption to login
 		assertThat(headerBar.getLoginBtn().getCaption()).isEqualTo("log in");
+	}
+
+	@Test
+	public void loginFailed() {
+
+		// given
+		headerBar.getLoginBtn().click();
+		LoginView loginView = (LoginView) ui.getView();
+		loginView.setUsername(username);
+		loginView.setPassword(badpassword);
+		// when
+		loginView.getSubmitButton().click();
+
+		// then
+		assertThat(loginView.getStatusMessage()).isEqualTo("Invalid username or password");
+
+	}
+
+	@Test
+	public void exceedLogins() {
+
+		// given
+		headerBar.getLoginBtn().click();
+		LoginView loginView = (LoginView) ui.getView();
+		loginView.setUsername(username);
+		loginView.setPassword(badpassword);
+		// when
+		loginView.getSubmitButton().click();
+		loginView.getSubmitButton().click();
+		loginView.getSubmitButton().click();
+
+		// then
+		assertThat(false).isEqualTo(true);
+
 	}
 
 }

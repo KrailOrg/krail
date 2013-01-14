@@ -15,6 +15,7 @@ package uk.co.q3c.v7.base.shiro;
 import javax.inject.Inject;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 
@@ -32,13 +33,15 @@ public class V7ErrorHandler extends DefaultErrorHandler {
 
 	private final UnauthenticatedExceptionHandler authenticationHandler;
 	private final UnauthorizedExceptionHandler authorisationHandler;
+	private final LoginsExceededHandler loginsExceededHandler;
 
 	@Inject
 	protected V7ErrorHandler(UnauthenticatedExceptionHandler authenticationHandler,
-			UnauthorizedExceptionHandler authorisationHandler) {
+			UnauthorizedExceptionHandler authorisationHandler, LoginsExceededHandler loginsExceededHandler) {
 		super();
 		this.authenticationHandler = authenticationHandler;
 		this.authorisationHandler = authorisationHandler;
+		this.loginsExceededHandler = loginsExceededHandler;
 	}
 
 	@Override
@@ -56,6 +59,12 @@ public class V7ErrorHandler extends DefaultErrorHandler {
 		int unauthenticated = ExceptionUtils.indexOfThrowable(originalError, UnauthenticatedException.class);
 		if (unauthenticated >= 0) {
 			authenticationHandler.invoke();
+			return;
+		}
+
+		int unknownAccount = ExceptionUtils.indexOfThrowable(originalError, UnknownAccountException.class);
+		if (unknownAccount >= 0) {
+			loginsExceededHandler.invoke();
 			return;
 		}
 
