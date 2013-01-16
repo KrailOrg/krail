@@ -20,9 +20,10 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
 
 public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
-
+	// TODO i18N
 	private final V7Navigator navigator;
-	private final String invalidLogin = "That username or password was not recognised";
+	public static final String invalidLogin = "That username or password was not recognised";
+	public static final String concurrent = "This account is already in use.  You must log out of that session before you can log in again.";
 
 	@Inject
 	protected DefaultLoginExceptionHandler(V7Navigator navigator) {
@@ -41,32 +42,27 @@ public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
 
 	@Override
 	public void expiredCredentials(LoginView loginView, UsernamePasswordToken token) {
-		//
-		throw new RuntimeException("not yet implemented");
+		navigator.requestAccountRefresh(token);
 	}
 
 	@Override
 	public void accountLocked(LoginView loginView, UsernamePasswordToken token) {
-		//
-		throw new RuntimeException("not yet implemented");
+		navigator.requestAccountUnlock(token);
 	}
 
 	@Override
 	public void excessiveAttempts(LoginView loginView, UsernamePasswordToken token) {
-		//
-		throw new RuntimeException("not yet implemented");
+		navigator.requestAccountReset(token);
 	}
 
 	@Override
 	public void concurrentAccess(LoginView loginView, UsernamePasswordToken token) {
-		//
-		throw new RuntimeException("not yet implemented");
+		loginView.setStatusMessage(concurrent);
 	}
 
 	@Override
 	public void disabledAccount(LoginView loginView, UsernamePasswordToken token) {
-		//
-		throw new RuntimeException("not yet implemented");
+		navigator.requestAccountEnable(token);
 	}
 
 }

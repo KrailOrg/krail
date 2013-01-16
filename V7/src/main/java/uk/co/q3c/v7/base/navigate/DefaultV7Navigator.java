@@ -7,12 +7,13 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
-import uk.co.q3c.v7.base.view.DefaultLogoutView;
+import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.components.HeaderBar;
 
 import com.google.inject.Provider;
@@ -32,12 +33,12 @@ public class DefaultV7Navigator implements V7Navigator {
 	private final URIFragmentHandler uriHandler;
 	private final Map<String, Provider<V7View>> viewProMap;
 	private final HeaderBar headerBar;
-	private final Provider<DefaultLogoutView> logoutViewPro;
+	private final Provider<LogoutView> logoutViewPro;
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler,
 			Map<String, Provider<V7View>> viewProMap, Provider<LoginView> loginViewPro,
-			Provider<DefaultLogoutView> logoutViewPro, HeaderBar headerBar) {
+			Provider<LogoutView> logoutViewPro, HeaderBar headerBar) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
@@ -45,7 +46,6 @@ public class DefaultV7Navigator implements V7Navigator {
 		this.loginViewPro = loginViewPro;
 		this.headerBar = headerBar;
 		this.logoutViewPro = logoutViewPro;
-		// this.ini = Ini.fromResourcePath("classpath:shiro.ini");
 	}
 
 	@Override
@@ -65,46 +65,44 @@ public class DefaultV7Navigator implements V7Navigator {
 	}
 
 	/**
-	 * Internal method activating a view, setting its parameters and calling listeners.
+	 * Internal method activating a view, setting its parameters and calling
+	 * listeners.
 	 * 
 	 * @param view
 	 *            view to activate
 	 * @param viewName
-	 *            (optional) name of the view or null not to change the navigation state
+	 *            (optional) name of the view or null not to change the
+	 *            navigation state
 	 * @param parameters
 	 *            parameters passed in the navigation state to the view
 	 */
 	protected void navigateTo(V7View view, String viewName, String fragment) {
 		V7ViewChangeEvent event = new V7ViewChangeEvent(this, currentView, view, viewName, fragment);
-		// gsf.doFilter(request, response, filterChain)
-		// Section urlSection = ini.getSection("urls");
-		// System.out.println(urlSection);
 		if (!fireBeforeViewChange(event)) {
 			return;
 		}
-		try {
-			getUI().changeView(currentView, view);
-			view.enter(event);
-			currentView = view;
-			// ui.getPage().setUriFragment(newUriFragment, false);
-			fireAfterViewChange(event);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+		getUI().changeView(currentView, view);
+		view.enter(event);
+		currentView = view;
+		// ui.getPage().setUriFragment(newUriFragment, false);
+		fireAfterViewChange(event);
 	}
 
 	/**
 	 * Fires an event before an imminent view change.
 	 * <p>
-	 * Listeners are called in registration order. If any listener returns <code>false</code>, the rest of the listeners
-	 * are not called and the view change is blocked.
+	 * Listeners are called in registration order. If any listener returns
+	 * <code>false</code>, the rest of the listeners are not called and the view
+	 * change is blocked.
 	 * <p>
-	 * The view change listeners may also e.g. open a warning or question dialog and save the parameters to re-initiate
-	 * the navigation operation upon user action.
+	 * The view change listeners may also e.g. open a warning or question dialog
+	 * and save the parameters to re-initiate the navigation operation upon user
+	 * action.
 	 * 
 	 * @param event
 	 *            view change event (not null, view change not yet performed)
-	 * @return true if the view change should be allowed, false to silently block the navigation operation
+	 * @return true if the view change should be allowed, false to silently
+	 *         block the navigation operation
 	 */
 	protected boolean fireBeforeViewChange(V7ViewChangeEvent event) {
 		for (V7ViewChangeListener l : listeners) {
@@ -133,8 +131,10 @@ public class DefaultV7Navigator implements V7Navigator {
 	 * Listen to changes of the active view.
 	 * <p>
 	 * Registered listeners are invoked in registration order before (
-	 * {@link ViewChangeListener#beforeViewChange(ViewChangeEvent) beforeViewChange()}) and after (
-	 * {@link ViewChangeListener#afterViewChange(ViewChangeEvent) afterViewChange()}) a view change occurs.
+	 * {@link ViewChangeListener#beforeViewChange(ViewChangeEvent)
+	 * beforeViewChange()}) and after (
+	 * {@link ViewChangeListener#afterViewChange(ViewChangeEvent)
+	 * afterViewChange()}) a view change occurs.
 	 * 
 	 * @param listener
 	 *            Listener to invoke during a view change.
@@ -172,7 +172,7 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	public ScopedUI getUI() {
 		/**
-		 * This should be injected, with a UIScoped UI!
+		 * TODO This should be injected, with a UIScoped UI!
 		 */
 		UI ui = CurrentInstance.get(UI.class);
 		ScopedUI scopedUi = (ScopedUI) ui;
@@ -182,25 +182,28 @@ public class DefaultV7Navigator implements V7Navigator {
 	/**
 	 * If logged in, log out and vice versa
 	 * 
-	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#loginOut()
+	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#navigateToLoginOut()
 	 */
 	@Override
-	public void loginOut() {
+	public void navigateToLoginOut() {
 		boolean loggedIn = SecurityUtils.getSubject().isAuthenticated();
 		if (loggedIn) {
-			logout();
+			navigateToLogout();
 		} else {
-			login();
+			navigateToLogin();
 		}
 
 	}
 
-	private void login() {
+	@Override
+	public void navigateToLogin() {
 		getUI().changeView(currentView, loginViewPro.get());
 	}
 
-	private void logout() {
-		getUI().changeView(currentView, logoutViewPro.get());
+	@Override
+	public void navigateToLogout() {
+		// TODO why is cast needed?
+		getUI().changeView(currentView, (V7View) logoutViewPro.get());
 		headerBar.getLoginBtn().setCaption("log in");
 		headerBar.getUserLabel().setValue("guest");
 	}
@@ -208,8 +211,37 @@ public class DefaultV7Navigator implements V7Navigator {
 	@Override
 	public void returnAfterLogin() {
 		getUI().changeView(loginViewPro.get(), currentView);
-		// TODO this is too closely coupled https://github.com/davidsowerby/v7/issues/63
+		// TODO this is too closely coupled
+		// https://github.com/davidsowerby/v7/issues/63
 		headerBar.getUserLabel().setValue(SecurityUtils.getSubject().getPrincipal().toString());
 		headerBar.getLoginBtn().setCaption("log out");
+	}
+
+	@Override
+	public void requestAccountReset(UsernamePasswordToken token) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void requestAccountRefresh(UsernamePasswordToken token) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void requestAccountUnlock(UsernamePasswordToken token) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void requestAccountEnable(UsernamePasswordToken token) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public V7View getCurrentView() {
+		return currentView;
 	}
 }

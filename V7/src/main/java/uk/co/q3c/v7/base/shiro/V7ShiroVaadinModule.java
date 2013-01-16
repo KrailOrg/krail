@@ -1,5 +1,7 @@
 package uk.co.q3c.v7.base.shiro;
 
+import org.apache.shiro.ShiroException;
+
 import com.google.inject.AbstractModule;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorHandler;
@@ -15,7 +17,7 @@ public class V7ShiroVaadinModule extends AbstractModule {
 		bindErrorHandler();
 		bindUnathenticatedHandler();
 		bindUnauthorisedHandler();
-		bindLoginsExceededHandler();
+		bindLoginExceptionsHandler();
 	}
 
 	/**
@@ -26,27 +28,29 @@ public class V7ShiroVaadinModule extends AbstractModule {
 	}
 
 	/**
-	 * the {@link DefaultErrorHandler} calls this handler in response to an attempted unauthorised action. If you have
-	 * defined your own ErrorHandler you may of course do something different
+	 * the {@link DefaultErrorHandler} calls this handler in response to an
+	 * attempted unauthorised action. If you have defined your own ErrorHandler
+	 * you may of course do something different
 	 */
 	protected void bindUnauthorisedHandler() {
 		bind(UnauthorizedExceptionHandler.class).to(DefaultUnauthorizedExceptionHandler.class);
 	}
 
 	/**
-	 * the {@link DefaultErrorHandler} calls this handler in response to an attempted unauthenticated action. If you
-	 * have defined your own ErrorHandler you may of course do something different
+	 * the {@link DefaultErrorHandler} calls this handler in response to an
+	 * attempted unauthenticated action. If you have defined your own
+	 * ErrorHandler you may of course do something different
 	 */
 	protected void bindUnathenticatedHandler() {
 		bind(UnauthenticatedExceptionHandler.class).to(DefaultUnauthenticatedExceptionHandler.class);
 	}
 
 	/**
-	 * The {@link DefaultErrorHandler} calls this handler in response to repeated login failures exceeding the limit set
-	 * in {@link LoginAttemptLog}. If you have defined your own ErrorHandler you may of course do something different
+	 * The login process may raise a number of {@link ShiroException}s. This
+	 * handler is called to manage those exceptions gracefully.
 	 */
-	protected void bindLoginsExceededHandler() {
-		bind(LoginsExceededHandler.class).to(DefaultLoginsExceededHandler.class);
+	protected void bindLoginExceptionsHandler() {
+		bind(LoginExceptionHandler.class).to(DefaultLoginExceptionHandler.class);
 	}
 
 }
