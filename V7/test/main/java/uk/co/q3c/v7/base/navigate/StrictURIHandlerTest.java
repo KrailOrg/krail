@@ -1,15 +1,13 @@
-package uk.co.q3c.base.navigate;
+package uk.co.q3c.v7.base.navigate;
 
 import static org.fest.assertions.Assertions.*;
 
-import javax.inject.Inject;
-
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.base.shiro.ShiroIntegrationTestBase;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
-import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -42,8 +40,13 @@ public class StrictURIHandlerTest extends ShiroIntegrationTestBase {
 
 	final String subView_p2_bang = "!view1/subView/a=b/year=1970";
 
-	@Inject
 	StrictURIFragmentHandler handler;
+
+	@Override
+	@Before
+	public void setup() {
+		handler = new StrictURIFragmentHandler();
+	}
 
 	@Test
 	public void readVirtualPageAndparameterList() {

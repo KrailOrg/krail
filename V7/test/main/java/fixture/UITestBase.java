@@ -3,6 +3,7 @@ package fixture;
 import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,11 +14,13 @@ import uk.co.q3c.base.shiro.ShiroIntegrationTestBase;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
+import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.navigate.V7ViewChangeListener;
 import uk.co.q3c.v7.base.ui.BasicUI;
+import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.components.HeaderBar;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 
@@ -29,6 +32,16 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
+/**
+ * Extend this class to test anything related to a Vaadin UI (or in the case of V7, as {@link ScopedUI}. Note that the
+ * {@link UIScope} is not prepared until the {@link #uiSetup()} method is called, so subclasses must use providers if
+ * they want to inject UIScoped objects - otherwise the injection happens before the UIScope context is ready.
+ * <p>
+ * A number of providers are made available by the class
+ * 
+ * @author David Sowerby 18 Jan 2013
+ * 
+ */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class })
 public abstract class UITestBase extends ShiroIntegrationTestBase implements V7ViewChangeListener {
@@ -54,13 +67,13 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 
 	protected BasicUI ui;
 
-	protected V7Navigator navigator;
+	@Inject
+	protected Provider<V7Navigator> navigatorPro;
 
 	@Before
 	public void uiSetup() {
 
 		ui = createBasicUI();
-		navigator = injector.getInstance(V7Navigator.class);
 		headerBar = injector.getInstance(HeaderBar.class);
 		// VaadinRequest vr = new VaadinServletRequest(null, null);
 		System.out.println("initialising test");

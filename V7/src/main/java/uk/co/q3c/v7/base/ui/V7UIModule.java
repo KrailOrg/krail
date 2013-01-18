@@ -6,8 +6,10 @@ import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.components.DefaultHeaderBar;
 import uk.co.q3c.v7.base.view.components.HeaderBar;
+import uk.co.q3c.v7.base.view.components.LoginStatusPanel;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 import uk.co.q3c.v7.demo.ui.SideBarUI;
+import uk.co.q3c.v7.user.LoginStatusMonitor;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
@@ -26,6 +28,14 @@ public class V7UIModule extends AbstractModule {
 		bindHeader();
 		bindFooter();
 		bindURIHandler();
+		bindLoginStatusMonitor();
+	}
+
+	/**
+	 * Override to bind your choice of LoginStatusMonitor
+	 */
+	protected void bindLoginStatusMonitor() {
+		bind(LoginStatusMonitor.class).to(LoginStatusPanel.class);
 	}
 
 	/**
