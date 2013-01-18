@@ -3,8 +3,8 @@ package uk.co.q3c.v7.base.ui;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.navigate.V7View;
-import uk.co.q3c.v7.base.navigate.V7ViewHolder;
+import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.base.view.V7ViewHolder;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ErrorHandler;

@@ -12,7 +12,6 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import uk.co.q3c.v7.base.navigate.V7View;
 
 import com.vaadin.ui.Button;
 

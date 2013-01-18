@@ -10,6 +10,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
 import uk.co.q3c.v7.base.view.LoginView;
+import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 
 import com.vaadin.server.Page.UriFragmentChangedListener;
 

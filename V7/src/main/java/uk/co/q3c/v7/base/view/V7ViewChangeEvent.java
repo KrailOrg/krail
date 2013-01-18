@@ -1,5 +1,6 @@
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.view;
 
+import uk.co.q3c.v7.base.navigate.V7Navigator;
 
 public class V7ViewChangeEvent {
 	private final V7View oldView;
@@ -8,8 +9,7 @@ public class V7ViewChangeEvent {
 	private final String parameters;
 	private final V7Navigator navigator;
 
-	protected V7ViewChangeEvent(V7Navigator navigator, V7View oldView, V7View newView, String viewName,
-			String parameters) {
+	public V7ViewChangeEvent(V7Navigator navigator, V7View oldView, V7View newView, String viewName, String parameters) {
 		super();
 		this.oldView = oldView;
 		this.newView = newView;

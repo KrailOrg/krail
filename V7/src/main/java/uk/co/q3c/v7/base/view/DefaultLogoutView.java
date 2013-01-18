@@ -16,8 +16,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
-import uk.co.q3c.v7.base.navigate.VerticalViewBase;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;

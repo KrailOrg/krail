@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 

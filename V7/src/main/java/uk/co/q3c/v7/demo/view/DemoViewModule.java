@@ -2,8 +2,8 @@ package uk.co.q3c.v7.demo.view;
 
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
-import uk.co.q3c.v7.base.navigate.V7View;
 import uk.co.q3c.v7.base.view.LoginView;
+import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewModule;
 
 import com.google.inject.multibindings.MapBinder;

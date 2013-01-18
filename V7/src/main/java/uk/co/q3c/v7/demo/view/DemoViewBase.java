@@ -10,8 +10,8 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 
-import uk.co.q3c.v7.base.navigate.V7ViewChangeEvent;
-import uk.co.q3c.v7.base.navigate.VerticalViewBase;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
+import uk.co.q3c.v7.base.view.VerticalViewBase;
 import uk.co.q3c.v7.base.view.components.FooterBar;
 import uk.co.q3c.v7.base.view.components.HeaderBar;
 

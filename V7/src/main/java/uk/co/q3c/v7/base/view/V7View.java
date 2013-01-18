@@ -1,4 +1,5 @@
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.view;
+
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Component;
