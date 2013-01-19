@@ -52,7 +52,9 @@ public class V7SecurityManager extends DefaultWebSecurityManager {
 	}
 
 	private void fireListeners(Subject subject) {
-
+		for (LoginStatusMonitor listener : listeners) {
+			listener.updateStatus(subject);
+		}
 	}
 
 }

@@ -12,11 +12,12 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.fest.assertions.Assertions.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,18 +45,6 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 	}
 
 	@Test
-	public void construction() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
-	}
-
-	@Test
 	public void listeners() {
 
 		// given
@@ -66,7 +55,16 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 		// when
 		getSubject().login(token);
 		// then
-		verify(monitor1).updateStatus(subject);
+		// subject may get re-created, so cannot rely on the instance
+		// 2 events, 1 for creation of new Subject
+		verify(monitor1, times(2)).updateStatus(any(Subject.class));
+		verify(monitor2, times(2)).updateStatus(any(Subject.class));
+
+		// when
+		getSubject().logout();
+		// 2 already recorded, plus 1 for logout
+		verify(monitor1, times(3)).updateStatus(any(Subject.class));
+		verify(monitor2, times(3)).updateStatus(any(Subject.class));
 	}
 
 }
