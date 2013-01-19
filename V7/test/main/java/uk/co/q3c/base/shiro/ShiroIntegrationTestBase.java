@@ -40,6 +40,9 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 @GuiceContext({})
 public abstract class ShiroIntegrationTestBase extends AbstractShiroTest {
 
+	protected static final String view1 = "secure/view1";
+	protected static final String view2 = "public/view2";
+
 	Subject subject;
 
 	@Inject

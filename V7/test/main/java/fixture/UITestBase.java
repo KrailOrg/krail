@@ -46,9 +46,6 @@ import com.vaadin.util.CurrentInstance;
 @GuiceContext({ BaseModule.class })
 public abstract class UITestBase extends ShiroIntegrationTestBase implements V7ViewChangeListener {
 
-	protected static final String view1 = "secure/view1";
-	protected static final String view2 = "public/view2";
-
 	@Inject
 	@Named(A.baseUri)
 	protected String baseUri;

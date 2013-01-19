@@ -29,6 +29,7 @@ import com.vaadin.util.CurrentInstance;
 @UIScoped
 public class DefaultV7Navigator implements V7Navigator {
 
+	private V7View previousView = null;
 	private V7View currentView = null;
 	private final List<V7ViewChangeListener> listeners = new LinkedList<V7ViewChangeListener>();
 	private final Provider<ErrorView> errorViewPro;
@@ -86,7 +87,7 @@ public class DefaultV7Navigator implements V7Navigator {
 		}
 		getUI().changeView(currentView, view);
 		view.enter(event);
-		currentView = view;
+		setCurrentView(view);
 		// ui.getPage().setUriFragment(newUriFragment, false);
 		fireAfterViewChange(event);
 	}
@@ -181,22 +182,21 @@ public class DefaultV7Navigator implements V7Navigator {
 	public void login() {
 		V7View newView = loginViewPro.get();
 		getUI().changeView(currentView, newView);
-		currentView = newView;
+		setCurrentView(newView);
 	}
 
 	@Override
 	public void logout() {
-		// TODO why is cast needed? Weirdly, it isn't needed for LoginView
 		SecurityUtils.getSubject().logout();
 		V7View newView = logoutViewPro.get();
 		getUI().changeView(currentView, newView);
-		currentView = newView;
+		setCurrentView(newView);
 		loginMonitor.updateStatus(SecurityUtils.getSubject());
 	}
 
 	@Override
 	public void returnAfterLogin() {
-		getUI().changeView(loginViewPro.get(), currentView);
+		getUI().changeView(loginViewPro.get(), previousView);
 		loginMonitor.updateStatus(SecurityUtils.getSubject());
 	}
 
@@ -226,5 +226,18 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	public V7View getCurrentView() {
 		return currentView;
+	}
+
+	public V7View getPreviousView() {
+		return previousView;
+	}
+
+	protected void setCurrentView(V7View newView) {
+		previousView = currentView;
+		currentView = newView;
+	}
+
+	protected void setPreviousView(V7View previousView) {
+		this.previousView = previousView;
 	}
 }
