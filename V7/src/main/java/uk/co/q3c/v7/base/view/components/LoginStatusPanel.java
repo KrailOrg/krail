@@ -18,8 +18,8 @@ import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.ui.ScopedUI;
-import uk.co.q3c.v7.user.LoginStatusMonitor;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -98,7 +98,7 @@ public class LoginStatusPanel extends Panel implements LoginStatusMonitor, Click
 		if (loggedIn) {
 			navigator.logout();
 		} else {
-			navigator.login();
+			navigator.navigateTo("login");
 		}
 
 	}

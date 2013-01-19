@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.user.LoginStatusMonitor;
+import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -65,7 +65,7 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).login();
+		verify(navigator).navigateTo("login");
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).login();
+		verify(navigator).navigateTo("login");
 	}
 
 	@Test

@@ -13,23 +13,24 @@
 package uk.co.q3c.base.shiro;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 
 import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.guice.web.ShiroWebModule;
 import org.apache.shiro.mgt.RealmSecurityManager;
-import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.Factory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.shiro.AlwaysPasswordCredentialsMatcher;
 import uk.co.q3c.v7.base.shiro.DefaultLoginAttemptLog;
 import uk.co.q3c.v7.base.shiro.DefaultRealm;
 import uk.co.q3c.v7.base.shiro.LoginAttemptLog;
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -43,7 +44,10 @@ public abstract class ShiroIntegrationTestBase extends AbstractShiroTest {
 	protected static final String view1 = "secure/view1";
 	protected static final String view2 = "public/view2";
 
-	Subject subject;
+	protected Subject subject;
+
+	@Mock
+	ServletContext servletContext;
 
 	@Inject
 	Realm realm;
@@ -64,8 +68,9 @@ public abstract class ShiroIntegrationTestBase extends AbstractShiroTest {
 		// 0. Build and set the SecurityManager used to build Subject instances used in your tests
 		// This typically only needs to be done once per class if your shiro.ini doesn't change,
 		// otherwise, you'll need to do this logic in each test that is different
-		Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:test.shiro.ini");
-		setSecurityManager(factory.getInstance());
+		// Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:test.shiro.ini");
+		// setSecurityManager(factory.getInstance());
+		setSecurityManager(new V7SecurityManager());
 	}
 
 	@After
@@ -84,9 +89,23 @@ public abstract class ShiroIntegrationTestBase extends AbstractShiroTest {
 
 			@Override
 			protected void configure() {
-				bind(Realm.class).to(DefaultRealm.class);
 				bind(LoginAttemptLog.class).to(DefaultLoginAttemptLog.class);
 				bind(CredentialsMatcher.class).to(AlwaysPasswordCredentialsMatcher.class);
+			}
+
+		};
+	}
+
+	@ModuleProvider
+	protected ShiroWebModule webModule() {
+		return new ShiroWebModule(servletContext) {
+
+			@Override
+			protected void configureShiroWeb() {
+				bind(Realm.class).to(DefaultRealm.class);
+				expose(Realm.class);
+				bindRealm().to(Realm.class);
+
 			}
 
 		};

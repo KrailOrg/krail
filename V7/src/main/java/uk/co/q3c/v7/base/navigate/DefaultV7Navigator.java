@@ -10,14 +10,12 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
-import uk.co.q3c.v7.base.view.LoginView;
-import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
-import uk.co.q3c.v7.user.LoginStatusMonitor;
 
 import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;
@@ -33,22 +31,17 @@ public class DefaultV7Navigator implements V7Navigator {
 	private V7View currentView = null;
 	private final List<V7ViewChangeListener> listeners = new LinkedList<V7ViewChangeListener>();
 	private final Provider<ErrorView> errorViewPro;
-	private final Provider<LoginView> loginViewPro;
 	private final URIFragmentHandler uriHandler;
 	private final Map<String, Provider<V7View>> viewProMap;
-	private final Provider<LogoutView> logoutViewPro;
 	private final LoginStatusMonitor loginMonitor;
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler,
-			Map<String, Provider<V7View>> viewProMap, Provider<LoginView> loginViewPro,
-			Provider<LogoutView> logoutViewPro, LoginStatusMonitor loginMonitor) {
+			Map<String, Provider<V7View>> viewProMap, LoginStatusMonitor loginMonitor) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
 		this.uriHandler = uriHandler;
-		this.loginViewPro = loginViewPro;
-		this.logoutViewPro = logoutViewPro;
 		this.loginMonitor = loginMonitor;
 		// to set the initial status
 		loginMonitor.updateStatus(SecurityUtils.getSubject());
@@ -178,25 +171,20 @@ public class DefaultV7Navigator implements V7Navigator {
 		return scopedUi;
 	}
 
-	@Override
-	public void login() {
-		V7View newView = loginViewPro.get();
-		getUI().changeView(currentView, newView);
-		setCurrentView(newView);
-	}
+	// @Override
+	// public void login() {
+	// getUI().changeView(currentView, newView);
+	// setCurrentView(newView);
+	// }
 
 	@Override
 	public void logout() {
 		SecurityUtils.getSubject().logout();
-		V7View newView = logoutViewPro.get();
-		getUI().changeView(currentView, newView);
-		setCurrentView(newView);
 		loginMonitor.updateStatus(SecurityUtils.getSubject());
 	}
 
 	@Override
 	public void returnAfterLogin() {
-		getUI().changeView(loginViewPro.get(), previousView);
 		loginMonitor.updateStatus(SecurityUtils.getSubject());
 	}
 

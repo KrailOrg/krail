@@ -57,7 +57,7 @@ public class LoginTest extends UITestBase {
 	public void exceedLogins() {
 
 		// given
-		navigatorPro.get().login();
+		navigatorPro.get().navigateTo("login");
 		LoginView loginView = (LoginView) ui.getView();
 		loginView.setUsername(username);
 		loginView.setPassword(badpassword);

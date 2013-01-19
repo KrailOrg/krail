@@ -10,18 +10,19 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import uk.co.q3c.base.shiro.ShiroIntegrationTestBase;
+import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.user.LoginStatusMonitor;
 
 import com.google.inject.Injector;
 import com.google.inject.Provider;
@@ -46,10 +47,10 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	Map<String, Provider<V7View>> viewProMap;
 
 	@Mock
-	Provider<LoginView> loginViewPro;
+	Provider<V7View> loginViewPro;
 
 	@Mock
-	Provider<LogoutView> logoutViewPro;
+	Provider<V7View> logoutViewPro;
 
 	@Mock
 	LoginStatusMonitor loginMonitor;
@@ -67,10 +68,10 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	V7View previousView;
 
 	@Mock
-	Provider<V7View> view1Provider;
+	Provider<V7View> view1Pro;
 
 	@Mock
-	Provider<V7View> view2Provider;
+	Provider<V7View> view2Pro;
 
 	@Mock
 	V7View view1;
@@ -90,17 +91,22 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Override
 	@Before
 	public void setup() {
+		super.setup();
 		when(loginViewPro.get()).thenReturn(loginView);
 		when(logoutViewPro.get()).thenReturn(logoutView);
-		when(viewProMap.get("view1")).thenReturn(view1Provider);
-		when(viewProMap.get("view2")).thenReturn(view2Provider);
-		when(view1Provider.get()).thenReturn(view1);
-		when(view2Provider.get()).thenReturn(view2);
+		when(viewProMap.get("view1")).thenReturn(view1Pro);
+		when(viewProMap.get("view2")).thenReturn(view2Pro);
+		when(viewProMap.get("login")).thenReturn(loginViewPro);
+		when(viewProMap.get("logout")).thenReturn(logoutViewPro);
+		when(view1Pro.get()).thenReturn(view1);
+		when(view2Pro.get()).thenReturn(view2);
+		when(loginViewPro.get()).thenReturn(loginView);
+		when(logoutViewPro.get()).thenReturn(logoutView);
+
 		when(scopedUI.getPage()).thenReturn(page);
 		when(errorViewPro.get()).thenReturn(errorView);
 
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, viewProMap, loginViewPro, logoutViewPro,
-				loginMonitor);
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, viewProMap, loginMonitor);
 		CurrentInstance.set(UI.class, scopedUI);
 	}
 
@@ -120,18 +126,25 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	}
 
 	/**
-	 * A call to update login status is made as the UI is constructed, so 2 calls to the monitor in total
+	 * A call to update login status is made as the UI is constructed. Logout event should be called (by the
+	 * V7SecurityManager), so there is still only one
+	 * {@link LoginStatusMonitor#updateStatus(org.apache.shiro.subject.Subject)} call.
 	 */
 	@Test
 	public void logout() {
 		// given
-
+		when(uriHandler.setFragment("logout")).thenReturn(uriHandler);
+		when(uriHandler.virtualPage()).thenReturn("logout");
+		UsernamePasswordToken upt = new UsernamePasswordToken("xxx", "password");
+		SecurityUtils.getSubject().login(upt);
+		assertThat(SecurityUtils.getSubject().isAuthenticated()).isTrue();
 		// when
-		navigator.logout();
+		navigator.navigateTo("logout");
 		// then
 		assertThat(navigator.getCurrentView()).isInstanceOf(LogoutView.class);
 		verify(scopedUI).changeView(null, logoutView);
-		verify(loginMonitor, times(2)).updateStatus(SecurityUtils.getSubject());
+		verify(loginMonitor, times(1)).updateStatus(SecurityUtils.getSubject());
+		assertThat(SecurityUtils.getSubject().isAuthenticated()).isFalse();
 	}
 
 	/**
@@ -141,9 +154,10 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Test
 	public void login() {
 		// given
-
+		when(uriHandler.setFragment("login")).thenReturn(uriHandler);
+		when(uriHandler.virtualPage()).thenReturn("login");
 		// when
-		navigator.login();
+		navigator.navigateTo("login");
 		// then
 
 		assertThat(navigator.getCurrentView()).isInstanceOf(LoginView.class);

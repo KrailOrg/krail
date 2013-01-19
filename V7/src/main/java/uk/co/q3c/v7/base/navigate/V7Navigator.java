@@ -70,7 +70,7 @@ public interface V7Navigator extends UriFragmentChangedListener {
 	 * Presents a login view to the user. If the login is successful, the {@link LoginView} must call
 	 * {@link #returnAfterLogin()} to complete the process
 	 */
-	void login();
+	// void login();
 
 	/**
 	 * A signal to the navigator that a login has been successful. The implementation defines which view should be
