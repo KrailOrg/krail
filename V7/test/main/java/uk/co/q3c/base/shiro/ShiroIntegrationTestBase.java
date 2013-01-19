@@ -12,14 +12,20 @@
  */
 package uk.co.q3c.base.shiro;
 
+import static org.mockito.Mockito.*;
+
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.guice.web.ShiroWebModule;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.subject.WebSubject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -47,17 +53,28 @@ public abstract class ShiroIntegrationTestBase extends AbstractShiroTest {
 	protected Subject subject;
 
 	@Mock
+	HttpSession httpSession;
+
+	@Mock
 	ServletContext servletContext;
+
+	@Mock
+	HttpServletRequest servletRequest;
+
+	@Mock
+	HttpServletResponse servletResponse;
 
 	@Inject
 	Realm realm;
 
 	@Before
 	public void setup() {
+		// trick the SubjectBuilder into using a WebSubject
+		when(servletRequest.getSession(false)).thenReturn(httpSession);
 		RealmSecurityManager rsm = (RealmSecurityManager) getSecurityManager();
 		rsm.setRealm(getRealm());
 		// 1. Build the Subject instance for the test to run:
-		subject = new Subject.Builder(getSecurityManager()).buildSubject();
+		subject = new WebSubject.Builder(getSecurityManager(), servletRequest, servletResponse).buildSubject();
 		// 2. Bind the subject to the current thread:
 		setSubject(subject);
 

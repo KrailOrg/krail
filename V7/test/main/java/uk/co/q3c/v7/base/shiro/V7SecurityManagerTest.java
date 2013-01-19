@@ -64,7 +64,7 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 		securityManager.addListener(monitor2);
 		UsernamePasswordToken token = new UsernamePasswordToken("xxx", "password");
 		// when
-		subject.login(token);
+		getSubject().login(token);
 		// then
 		verify(monitor1).updateStatus(subject);
 	}
