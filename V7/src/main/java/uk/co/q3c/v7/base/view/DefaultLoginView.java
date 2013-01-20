@@ -78,7 +78,7 @@ public class DefaultLoginView extends VerticalViewBase implements LoginView, Cli
 		UsernamePasswordToken token = new UsernamePasswordToken(usernameBox.getValue(), passwordBox.getValue());
 		try {
 			SecurityUtils.getSubject().login(token);
-			navigator.returnAfterLogin();
+			navigator.loginSuccessFul();
 		} catch (UnknownAccountException uae) {
 			loginExceptionHandler.unknownAccount(this, token);
 		} catch (IncorrectCredentialsException ice) {

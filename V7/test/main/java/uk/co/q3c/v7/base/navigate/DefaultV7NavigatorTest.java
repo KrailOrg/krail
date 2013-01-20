@@ -1,6 +1,7 @@
 package uk.co.q3c.v7.base.navigate;
 
 import static org.fest.assertions.Assertions.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
+import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 
 import com.google.inject.Injector;
 import com.google.inject.Provider;
@@ -51,9 +54,6 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 	@Mock
 	Provider<V7View> logoutViewPro;
-
-	@Mock
-	LoginStatusMonitor loginMonitor;
 
 	@Mock
 	ScopedUI scopedUI;
@@ -88,6 +88,15 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Mock
 	ErrorView errorView;
 
+	@Mock
+	V7ViewChangeListener listener1;
+
+	@Mock
+	V7ViewChangeListener listener2;
+
+	@Mock
+	V7ViewChangeListener listener3;
+
 	@Override
 	@Before
 	public void setup() {
@@ -106,23 +115,8 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		when(scopedUI.getPage()).thenReturn(page);
 		when(errorViewPro.get()).thenReturn(errorView);
 
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, viewProMap, loginMonitor);
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, viewProMap);
 		CurrentInstance.set(UI.class, scopedUI);
-	}
-
-	/**
-	 * A call to update login status is made as the UI is constructed
-	 */
-	@Test
-	public void construction() {
-
-		// given
-
-		// when
-
-		// then
-		verify(loginMonitor).updateStatus(SecurityUtils.getSubject());
-
 	}
 
 	/**
@@ -143,8 +137,6 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		// then
 		assertThat(navigator.getCurrentView()).isInstanceOf(LogoutView.class);
 		verify(scopedUI).changeView(null, logoutView);
-		verify(loginMonitor, times(1)).updateStatus(SecurityUtils.getSubject());
-		assertThat(SecurityUtils.getSubject().isAuthenticated()).isFalse();
 	}
 
 	/**
@@ -162,21 +154,19 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 		assertThat(navigator.getCurrentView()).isInstanceOf(LoginView.class);
 		verify(scopedUI).changeView(null, loginView);
-		verify(loginMonitor, times(1)).updateStatus(SecurityUtils.getSubject());
 
 	}
 
 	@Test
-	public void returnAfterLogin() {
+	public void loginSuccessFul() {
 
 		// given
 		navigator.setCurrentView(loginView);
 		navigator.setPreviousView(previousView);
 		// when
-		navigator.returnAfterLogin();
+		navigator.loginSuccessFul();
 		// then
 		verify(scopedUI).changeView(loginView, previousView);
-		verify(loginMonitor, times(2)).updateStatus(SecurityUtils.getSubject());
 
 	}
 
@@ -234,65 +224,46 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 	}
 
+	/**
+	 * Checks add and remove listeners
+	 */
 	@Test
-	public void listeners() {
+	public void listeners_allRespond() {
 
 		// given
-
+		when(uriHandler.setFragment("view2")).thenReturn(uriHandler);
+		when(uriHandler.virtualPage()).thenReturn("view2");
+		// need to return true, or first listener will block the second
+		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(true);
+		navigator.addViewChangeListener(listener1);
+		navigator.addViewChangeListener(listener2);
+		navigator.addViewChangeListener(listener3);
 		// when
-		// add
-		// remove
+		navigator.removeViewChangeListener(listener3);
+		navigator.navigateTo("view2");
 		// then
-		assertThat(false).isEqualTo(true);
-
+		verify(listener1, times(1)).beforeViewChange(any(V7ViewChangeEvent.class));
+		verify(listener2, times(1)).beforeViewChange(any(V7ViewChangeEvent.class));
+		verify(listener3, never()).beforeViewChange(any(V7ViewChangeEvent.class));
 	}
 
 	@Test
-	public void requestAccountReset() {
+	public void listener_blocked() {
 
 		// given
-
+		when(uriHandler.setFragment("view2")).thenReturn(uriHandler);
+		when(uriHandler.virtualPage()).thenReturn("view2");
+		// to block second and subsequent
+		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(false);
+		navigator.addViewChangeListener(listener1);
+		navigator.addViewChangeListener(listener2);
+		navigator.addViewChangeListener(listener3);
 		// when
-
+		navigator.navigateTo("view2");
 		// then
-		assertThat(false).isEqualTo(true);
-
-	}
-
-	@Test
-	public void requestAccountRefresh() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
-	}
-
-	@Test
-	public void requestAccountUnlock() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
-	}
-
-	@Test
-	public void requestAccountEnable() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
+		verify(listener1, times(1)).beforeViewChange(any(V7ViewChangeEvent.class));
+		verify(listener2, never()).beforeViewChange(any(V7ViewChangeEvent.class));
+		verify(listener3, never()).beforeViewChange(any(V7ViewChangeEvent.class));
 	}
 
 }

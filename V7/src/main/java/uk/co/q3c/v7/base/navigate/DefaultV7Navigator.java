@@ -6,11 +6,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
-
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.V7View;
@@ -27,24 +23,23 @@ import com.vaadin.util.CurrentInstance;
 @UIScoped
 public class DefaultV7Navigator implements V7Navigator {
 
+	private final String previousViewName = null;
 	private V7View previousView = null;
+	private String currentViewName = null;
 	private V7View currentView = null;
 	private final List<V7ViewChangeListener> listeners = new LinkedList<V7ViewChangeListener>();
 	private final Provider<ErrorView> errorViewPro;
 	private final URIFragmentHandler uriHandler;
 	private final Map<String, Provider<V7View>> viewProMap;
-	private final LoginStatusMonitor loginMonitor;
+	private String previousFragment;
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler,
-			Map<String, Provider<V7View>> viewProMap, LoginStatusMonitor loginMonitor) {
+			Map<String, Provider<V7View>> viewProMap) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
 		this.uriHandler = uriHandler;
-		this.loginMonitor = loginMonitor;
-		// to set the initial status
-		loginMonitor.updateStatus(SecurityUtils.getSubject());
 	}
 
 	@Override
@@ -56,9 +51,10 @@ public class DefaultV7Navigator implements V7Navigator {
 			view = errorViewPro.get();
 		} else {
 			view = provider.get();
+			currentViewName = viewName;
 		}
 
-		navigateTo(view, viewName, fragment);
+		navigateTo(view, currentViewName, fragment);
 		getUI().getPage().setUriFragment(fragment, false);
 
 	}
@@ -171,45 +167,20 @@ public class DefaultV7Navigator implements V7Navigator {
 		return scopedUi;
 	}
 
-	// @Override
-	// public void login() {
-	// getUI().changeView(currentView, newView);
-	// setCurrentView(newView);
-	// }
-
+	/**
+	 * When a user has successfully logged in, they are routed back to the page they were on before going to the login
+	 * page. If they have gone straight to the login page (maybe they bookmarked it), they will be routed to the
+	 * 'authenticated landing page' instead (see
+	 * 
+	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#loginSuccessFul()
+	 */
 	@Override
-	public void logout() {
-		SecurityUtils.getSubject().logout();
-		loginMonitor.updateStatus(SecurityUtils.getSubject());
-	}
+	public void loginSuccessFul() {
+		if (previousView != null) {
+			navigateTo(previousView, previousViewName, previousFragment);
+		} else {
 
-	@Override
-	public void returnAfterLogin() {
-		loginMonitor.updateStatus(SecurityUtils.getSubject());
-	}
-
-	@Override
-	public void requestAccountReset(UsernamePasswordToken token) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void requestAccountRefresh(UsernamePasswordToken token) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void requestAccountUnlock(UsernamePasswordToken token) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void requestAccountEnable(UsernamePasswordToken token) {
-		// TODO Auto-generated method stub
-
+		}
 	}
 
 	public V7View getCurrentView() {
@@ -227,5 +198,13 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	protected void setPreviousView(V7View previousView) {
 		this.previousView = previousView;
+	}
+
+	public String getPreviousViewName() {
+		return previousViewName;
+	}
+
+	public String getCurrentViewName() {
+		return currentViewName;
 	}
 }

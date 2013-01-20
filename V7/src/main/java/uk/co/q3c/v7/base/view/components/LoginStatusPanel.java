@@ -96,7 +96,7 @@ public class LoginStatusPanel extends Panel implements LoginStatusMonitor, Click
 	@Override
 	public void buttonClick(ClickEvent event) {
 		if (loggedIn) {
-			navigator.logout();
+			navigator.navigateTo("logout");
 		} else {
 			navigator.navigateTo("login");
 		}

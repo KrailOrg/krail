@@ -42,17 +42,14 @@ public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
 
 	@Override
 	public void expiredCredentials(LoginView loginView, UsernamePasswordToken token) {
-		navigator.requestAccountRefresh(token);
 	}
 
 	@Override
 	public void accountLocked(LoginView loginView, UsernamePasswordToken token) {
-		navigator.requestAccountUnlock(token);
 	}
 
 	@Override
 	public void excessiveAttempts(LoginView loginView, UsernamePasswordToken token) {
-		navigator.requestAccountReset(token);
 	}
 
 	@Override
@@ -62,7 +59,6 @@ public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
 
 	@Override
 	public void disabledAccount(LoginView loginView, UsernamePasswordToken token) {
-		navigator.requestAccountEnable(token);
 	}
 
 }

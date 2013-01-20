@@ -101,7 +101,7 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).logout();
+		verify(navigator).navigateTo("logout");
 	}
 
 }

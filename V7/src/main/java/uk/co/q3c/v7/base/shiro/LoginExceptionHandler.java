@@ -48,7 +48,8 @@ public interface LoginExceptionHandler {
 	void incorrectCredentials(LoginView loginView, UsernamePasswordToken token);
 
 	/**
-	 * Response to {@link ExpiredCredentialsException}. See the javadoc of the exception
+	 * Response to {@link ExpiredCredentialsException}. See the javadoc of the exception. Typically, the implementation
+	 * of this method will navigate to a V7View which allows the user to update their password.
 	 * 
 	 * @param loginView
 	 * @param token
@@ -56,7 +57,9 @@ public interface LoginExceptionHandler {
 	void expiredCredentials(LoginView loginView, UsernamePasswordToken token);
 
 	/**
-	 * Response to {@link AccountLockedException}. See the javadoc of the exception
+	 * Response to {@link AccountLockedException}. See the javadoc of the exception. Typically, the implementation of
+	 * this method will navigate to a V7View which allows the user to request that their account is unlocked, although
+	 * it perhaps just inform the user and do nothing else.
 	 * 
 	 * @param loginView
 	 * @param token
@@ -65,8 +68,10 @@ public interface LoginExceptionHandler {
 
 	/**
 	 * Response to an {@link ExcessiveAttemptsException}, which occurs when a system is configured to raise an exception
-	 * when there is a specified limit to the number of times a user can try and login. A login failure beofer that
-	 * threshold is reached is handled by {@link #unknownAccount(LoginView, UsernamePasswordToken)}
+	 * when there is a specified limit to the number of times a user can try and login. A login failure before that
+	 * threshold is reached is handled by {@link #unknownAccount(LoginView, UsernamePasswordToken)}. Typically, the
+	 * implementation of this method will navigate to a V7View which allows the user to request a reset after filling in
+	 * appropriate security answers.
 	 * 
 	 * @param loginView
 	 * @param token
@@ -82,7 +87,9 @@ public interface LoginExceptionHandler {
 	void concurrentAccess(LoginView loginView, UsernamePasswordToken token);
 
 	/**
-	 * Response to {@link DisabledAcoountException}. See the javadoc of the exception
+	 * Response to {@link DisabledAcoountException}. See the javadoc of the exception. Typically, the implementation of
+	 * this method will navigate to a V7View which allows the user to request that their account is re-enabled, although
+	 * exact behaviour is up to the implementation.
 	 * 
 	 * @param loginView
 	 * @param token
