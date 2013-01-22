@@ -1,5 +1,6 @@
 package uk.co.q3c.v7.base.shiro;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -41,7 +42,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.accountLocked(loginView, token);
 		// then
-		verify(navigator).requestAccountUnlock(token);
+		assertThat(true).isFalse();
 
 	}
 
@@ -74,7 +75,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.disabledAccount(loginView, token);
 		// then
-		verify(navigator).requestAccountEnable(token);
+		assertThat(true).isFalse();
 	}
 
 	@Test
@@ -84,7 +85,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.excessiveAttempts(loginView, token);
 		// then
-		verify(navigator).requestAccountReset(token);
+		assertThat(true).isFalse();
 	}
 
 	@Test
@@ -94,7 +95,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.expiredCredentials(loginView, token);
 		// then
-		verify(navigator).requestAccountRefresh(token);
+		assertThat(true).isFalse();
 	}
 
 	@Test

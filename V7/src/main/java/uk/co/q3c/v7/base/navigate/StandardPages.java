@@ -18,7 +18,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.shiro.config.ConfigurationException;
-import org.apache.shiro.config.Ini;
 import org.apache.shiro.config.Ini.Section;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,21 +26,33 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewModule;
 
 /**
- * Provides the URIs for a number of 'special' pages - theses are pages which perform a particular role and are common
- * to most applications - login, home, landing etc. See each property for a description of their purpose. The
- * {@link V7View} mapping for each of these is still provided by {@link V7ViewModule}, or more likely, a sub-class of it
+ * Provides the URIs for a number of 'special' pages - theses are pages which
+ * perform a particular role and are common to most applications - login, home,
+ * landing etc. See each property for a description of their purpose. The
+ * {@link V7View} mapping for each of these is still provided by
+ * {@link V7ViewModule}, or more likely, a sub-class of it
  * <p>
- * Values are loaded from the 'pages' section of the 'V7.ini' file, which should be at the project root. Default values
- * are provided in case of file read problems.
+ * Values are loaded from the 'pages' section of the 'V7.ini' file, which should
+ * be at the project root. Default values are provided in case of file read
+ * problems.
  * 
  * @author David Sowerby 20 Jan 2013
  * 
  */
 @Singleton
-public class SpecialPages {
-	private static Logger log = LoggerFactory.getLogger(SpecialPages.class);
+public class StandardPages {
+	private static Logger log = LoggerFactory.getLogger(StandardPages.class);
 
 	private boolean loaded = false;
+	private String filepath = "classpath:V7.ini";
+
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
+	}
+
+	public String getFilepath() {
+		return filepath;
+	}
 
 	/**
 	 * The home page for non-authenticated users
@@ -64,20 +75,27 @@ public class SpecialPages {
 	private final String logout = "public/logout";
 
 	@Inject
-	protected SpecialPages() {
+	protected StandardPages() {
 		super();
-		load();
 	}
 
 	public void load() {
-		Ini ini = new Ini();
+		V7Ini ini = new V7Ini();
 		try {
-			ini.loadFromPath("classpath:V7.ini");
+			log.info("Loading from standard page configuration from {} ", filepath);
+			ini.loadFromPath(filepath);
 			Section section = ini.getSection("pages");
-			loadSection(section);
-			loaded = true;
+			if (section == null) {
+				log.warn("Configuration file {} does not have a [pages] section. No property values can be loaded, using defaults");
+			} else {
+				loadSection(section);
+				loaded = true;
+			}
 		} catch (ConfigurationException ce) {
-			log.warn("Could not load the V7.ini config file.  Default values are being used for all properties");
+			log.warn(
+					"Could not load the standard pages config.  Default values are being used for all properties, caused by exception\n {}",
+					ce.getMessage());
+
 		}
 
 	}
@@ -92,14 +110,14 @@ public class SpecialPages {
 
 				String name = field.getName();
 				// ignore the non-properties
-				if (!name.equals("log") && !name.equals("loaded")) {
+				if (!name.equals("log") && !name.equals("loaded") && !name.equals("filepath")) {
 					// retrieve the value for this property from the ini section
 					String value = section.get(name);
 					if (value != null) {
 						field.set(this, value);
 					} else {
 						log.warn(
-								"Property {} has no value specified in the V7.ini file.  Using the default value specified in SpecialPages instead",
+								"Property {} has no value specified in the V7.ini file.  Using the default value specified in StandardPages instead",
 								name);
 					}
 				}
