@@ -40,6 +40,11 @@ public class DemoViewModule extends V7ViewModule {
 		mapbinder.addBinding("public/view2").to(View2.class);
 		mapbinder.addBinding("public/login").to(LoginView.class);
 		mapbinder.addBinding("public/logout").to(LogoutView.class);
+		mapbinder.addBinding("public/reset-account").to(AccountRequestView.class);
+		mapbinder.addBinding("public/unlock-account").to(AccountRequestView.class);
+		mapbinder.addBinding("public/refresh-account").to(AccountRequestView.class);
+		mapbinder.addBinding("public/request-account").to(AccountRequestView.class);
+		mapbinder.addBinding("public/enable-account").to(AccountRequestView.class);
 	}
 
 }

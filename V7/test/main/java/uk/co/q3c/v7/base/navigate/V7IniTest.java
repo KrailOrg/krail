@@ -81,8 +81,8 @@ public class V7IniTest {
 		ini.validate();
 
 		// then
-		assertThat(ini.StandardPage(StandardPageKey.secureHome)).isEqualTo("secure/home");
-		assertThat(ini.StandardPage(StandardPageKey.publicHome)).isEqualTo("public/home");
+		assertThat(ini.standardPageURI(StandardPageKey.secureHome)).isEqualTo("secure/home");
+		assertThat(ini.standardPageURI(StandardPageKey.publicHome)).isEqualTo("public/home");
 
 	}
 
