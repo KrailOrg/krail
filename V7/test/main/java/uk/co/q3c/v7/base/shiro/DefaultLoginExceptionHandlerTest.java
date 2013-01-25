@@ -1,7 +1,8 @@
 package uk.co.q3c.v7.base.shiro;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+
+import javax.inject.Inject;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.junit.Before;
@@ -9,6 +10,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import uk.co.q3c.v7.base.navigate.IniModule;
+import uk.co.q3c.v7.base.navigate.V7Ini;
+import uk.co.q3c.v7.base.navigate.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
 
@@ -16,7 +20,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({ IniModule.class })
 public class DefaultLoginExceptionHandlerTest {
 
 	// @Inject
@@ -27,6 +31,9 @@ public class DefaultLoginExceptionHandlerTest {
 
 	@Mock
 	V7Navigator navigator;
+
+	@Inject
+	V7Ini ini;
 
 	UsernamePasswordToken token;
 
@@ -42,7 +49,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.accountLocked(loginView, token);
 		// then
-		assertThat(true).isFalse();
+		verify(navigator).navigateTo(StandardPageKey.unlockAccount);
 
 	}
 
@@ -75,7 +82,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.disabledAccount(loginView, token);
 		// then
-		assertThat(true).isFalse();
+		verify(navigator).navigateTo(StandardPageKey.enableAccount);
 	}
 
 	@Test
@@ -85,7 +92,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.excessiveAttempts(loginView, token);
 		// then
-		assertThat(true).isFalse();
+		verify(navigator).navigateTo(StandardPageKey.resetAccount);
 	}
 
 	@Test
@@ -95,7 +102,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.expiredCredentials(loginView, token);
 		// then
-		assertThat(true).isFalse();
+		verify(navigator).navigateTo(StandardPageKey.refreshAccount);
 	}
 
 	@Test

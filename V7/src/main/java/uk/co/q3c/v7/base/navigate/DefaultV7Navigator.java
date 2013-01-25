@@ -6,7 +6,15 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.navigate.V7Ini.StandardPageKey;
+import uk.co.q3c.v7.base.shiro.LoginStatusListener;
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.V7View;
@@ -21,9 +29,10 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @UIScoped
-public class DefaultV7Navigator implements V7Navigator {
+public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
-	private final String previousViewName = null;
+	private static Logger log = LoggerFactory.getLogger(DefaultV7Navigator.class);
+	private String previousViewName = null;
 	private V7View previousView = null;
 	private String currentViewName = null;
 	private V7View currentView = null;
@@ -32,14 +41,19 @@ public class DefaultV7Navigator implements V7Navigator {
 	private final URIFragmentHandler uriHandler;
 	private final Map<String, Provider<V7View>> viewProMap;
 	private String previousFragment;
+	private final V7Ini ini;
+	private String currentFragment;
 
 	@Inject
-	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler,
+	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler, V7Ini ini,
 			Map<String, Provider<V7View>> viewProMap) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
 		this.uriHandler = uriHandler;
+		this.ini = ini;
+		V7SecurityManager securityManager = (V7SecurityManager) SecurityUtils.getSecurityManager();
+		securityManager.addListener(this);
 	}
 
 	@Override
@@ -48,14 +62,13 @@ public class DefaultV7Navigator implements V7Navigator {
 		Provider<V7View> provider = viewProMap.get(viewName);
 		V7View view = null;
 		if (provider == null) {
+			log.debug("View not found for " + fragment);
 			view = errorViewPro.get();
 		} else {
 			view = provider.get();
-			currentViewName = viewName;
 		}
 
-		navigateTo(view, currentViewName, fragment);
-		getUI().getPage().setUriFragment(fragment, false);
+		navigateTo(view, viewName, fragment);
 
 	}
 
@@ -76,8 +89,11 @@ public class DefaultV7Navigator implements V7Navigator {
 		}
 		getUI().changeView(currentView, view);
 		view.enter(event);
-		setCurrentView(view);
-		// ui.getPage().setUriFragment(newUriFragment, false);
+
+		// we don't want to record being at the login page
+		// if (!(view instanceof LoginView)) {
+		setCurrentView(view, viewName, fragment);
+		// }
 		fireAfterViewChange(event);
 	}
 
@@ -172,17 +188,18 @@ public class DefaultV7Navigator implements V7Navigator {
 	 * page. If they have gone straight to the login page (maybe they bookmarked it), they will be routed to the
 	 * 'authenticated landing page' instead (see
 	 * 
-	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#loginSuccessFul()
+	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#loginSuccessful()
 	 */
 	@Override
-	public void loginSuccessFul() {
+	public void loginSuccessful() {
 		if (previousView != null) {
 			navigateTo(previousView, previousViewName, previousFragment);
 		} else {
-
+			navigateTo(StandardPageKey.secureHome);
 		}
 	}
 
+	@Override
 	public V7View getCurrentView() {
 		return currentView;
 	}
@@ -191,9 +208,16 @@ public class DefaultV7Navigator implements V7Navigator {
 		return previousView;
 	}
 
-	protected void setCurrentView(V7View newView) {
+	protected void setCurrentView(V7View newView, String viewName, String fragment) {
 		previousView = currentView;
+		previousViewName = currentViewName;
+		previousFragment = currentFragment;
 		currentView = newView;
+		currentViewName = viewName;
+		currentFragment = fragment;
+
+		uriHandler.setFragment(fragment);
+		getUI().getPage().setUriFragment(fragment, false);
 	}
 
 	protected void setPreviousView(V7View previousView) {
@@ -207,4 +231,29 @@ public class DefaultV7Navigator implements V7Navigator {
 	public String getCurrentViewName() {
 		return currentViewName;
 	}
+
+	@Override
+	public void navigateTo(StandardPageKey pageKey) {
+		String page = ini.StandardPage(pageKey);
+		navigateTo(page);
+	}
+
+	@Override
+	public void updateStatus(Subject subject) {
+		if (subject.isAuthenticated()) {
+			loginSuccessful();
+		}
+	}
+
+	public String getPreviousFragment() {
+		return previousFragment;
+	}
+
+	@Override
+	public void clearHistory() {
+		previousView = null;
+		previousViewName = null;
+		previousFragment = null;
+	}
+
 }

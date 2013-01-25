@@ -12,7 +12,7 @@ import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.V7UIModule;
 import uk.co.q3c.v7.base.view.DefaultErrorView;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
-import uk.co.q3c.v7.demo.view.HomeView;
+import uk.co.q3c.v7.demo.view.PublicHomeView;
 import uk.co.q3c.v7.demo.view.View1;
 import uk.co.q3c.v7.demo.view.View2;
 
@@ -76,7 +76,7 @@ public class BasicUITest extends UITestBase {
 		// when
 		ui.getGuiceNavigator().navigateTo("");
 		// then
-		assertThat(currentView).isInstanceOf(HomeView.class);
+		assertThat(currentView).isInstanceOf(PublicHomeView.class);
 		assertThat(ui.getPage().getLocation().toString()).isEqualTo(baseUri + "/#");
 		// when
 		ui.getGuiceNavigator().navigateTo(view1);

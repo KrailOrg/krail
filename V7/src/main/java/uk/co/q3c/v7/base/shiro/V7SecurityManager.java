@@ -20,11 +20,10 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.subject.SubjectContext;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 
 public class V7SecurityManager extends DefaultWebSecurityManager {
-	private final List<LoginStatusMonitor> listeners = new ArrayList<>();
+	private final List<LoginStatusListener> listeners = new ArrayList<>();
 
 	public V7SecurityManager() {
 		super();
@@ -50,23 +49,16 @@ public class V7SecurityManager extends DefaultWebSecurityManager {
 		fireListeners(subject);
 	}
 
-	@Override
-	public Subject createSubject(SubjectContext subjectContext) {
-		Subject subject = super.createSubject(subjectContext);
-		fireListeners(subject);
-		return subject;
-	}
-
-	public void addListener(LoginStatusMonitor listener) {
+	public void addListener(LoginStatusListener listener) {
 		listeners.add(listener);
 	}
 
-	public void removeListener(LoginStatusMonitor listener) {
+	public void removeListener(LoginStatusListener listener) {
 		listeners.remove(listener);
 	}
 
 	private void fireListeners(Subject subject) {
-		for (LoginStatusMonitor listener : listeners) {
+		for (LoginStatusListener listener : listeners) {
 			listener.updateStatus(subject);
 		}
 	}

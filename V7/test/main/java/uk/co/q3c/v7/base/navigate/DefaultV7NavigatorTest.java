@@ -10,15 +10,13 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import uk.co.q3c.base.shiro.ShiroIntegrationTestBase;
-import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
+import uk.co.q3c.v7.base.navigate.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
@@ -43,7 +41,6 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Mock
 	Provider<ErrorView> errorViewPro;
 
-	@Mock
 	StrictURIFragmentHandler uriHandler;
 
 	@Mock
@@ -79,6 +76,9 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Mock
 	V7View view2;
 
+	@Mock
+	V7View secureHomeView;
+
 	@Inject
 	Injector injector;
 
@@ -97,52 +97,57 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Mock
 	V7ViewChangeListener listener3;
 
+	V7Ini ini;
+
+	@Mock
+	Provider<V7View> secureHomePro;
+
 	@Override
 	@Before
 	public void setup() {
 		super.setup();
+		ini = new V7Ini();
+		ini.validate();
+
+		uriHandler = mock(StrictURIFragmentHandler.class);
+
 		when(loginViewPro.get()).thenReturn(loginView);
 		when(logoutViewPro.get()).thenReturn(logoutView);
 		when(viewProMap.get("view1")).thenReturn(view1Pro);
 		when(viewProMap.get("view2")).thenReturn(view2Pro);
 		when(viewProMap.get("login")).thenReturn(loginViewPro);
-		when(viewProMap.get("logout")).thenReturn(logoutViewPro);
+		when(viewProMap.get("public/logout")).thenReturn(logoutViewPro);
+		when(viewProMap.get("secure/home")).thenReturn(secureHomePro);
+
 		when(view1Pro.get()).thenReturn(view1);
 		when(view2Pro.get()).thenReturn(view2);
 		when(loginViewPro.get()).thenReturn(loginView);
 		when(logoutViewPro.get()).thenReturn(logoutView);
+		when(secureHomePro.get()).thenReturn(secureHomeView);
 
 		when(scopedUI.getPage()).thenReturn(page);
 		when(errorViewPro.get()).thenReturn(errorView);
 
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, viewProMap);
+		// when (ini.get(StandardPageKey.secureHome)).thenReturn
+
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap);
 		CurrentInstance.set(UI.class, scopedUI);
 	}
 
-	/**
-	 * A call to update login status is made as the UI is constructed. Logout event should be called (by the
-	 * V7SecurityManager), so there is still only one
-	 * {@link LoginStatusMonitor#updateStatus(org.apache.shiro.subject.Subject)} call.
-	 */
 	@Test
 	public void logout() {
+
 		// given
-		when(uriHandler.setFragment("logout")).thenReturn(uriHandler);
-		when(uriHandler.virtualPage()).thenReturn("logout");
-		UsernamePasswordToken upt = new UsernamePasswordToken("xxx", "password");
-		SecurityUtils.getSubject().login(upt);
-		assertThat(SecurityUtils.getSubject().isAuthenticated()).isTrue();
+		when(uriHandler.setFragment(anyString())).thenReturn(uriHandler);
+		when(uriHandler.virtualPage()).thenReturn(ini.StandardPage(StandardPageKey.logout));
+
 		// when
-		navigator.navigateTo("logout");
+		navigator.navigateTo(StandardPageKey.logout);
 		// then
 		assertThat(navigator.getCurrentView()).isInstanceOf(LogoutView.class);
 		verify(scopedUI).changeView(null, logoutView);
 	}
 
-	/**
-	 * A call to update login status is made as the UI is constructed, but no call made during login(). That happens in
-	 * {@link #returnAfterLogin()}
-	 */
 	@Test
 	public void login() {
 		// given
@@ -161,12 +166,28 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void loginSuccessFul() {
 
 		// given
-		navigator.setCurrentView(loginView);
+		navigator.setCurrentView(loginView, "xx", "yy");
 		navigator.setPreviousView(previousView);
 		// when
-		navigator.loginSuccessFul();
+		navigator.loginSuccessful();
 		// then
 		verify(scopedUI).changeView(loginView, previousView);
+
+	}
+
+	@Test
+	public void loginSuccessFul_noPreviousView() {
+
+		// given
+		// need to construct this test slightly differently
+		uriHandler = new StrictURIFragmentHandler();
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap);
+		navigator.setCurrentView(loginView, "xx", "yy");
+		navigator.setPreviousView(null);
+		// when
+		navigator.loginSuccessful();
+		// then
+		verify(scopedUI).changeView(loginView, secureHomeView);
 
 	}
 
@@ -222,6 +243,62 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		// then
 		assertThat(navigator.geNavigationParams()).isEqualTo(params);
 
+	}
+
+	@Test
+	public void currentAndPreviousViews_andClearHistory() {
+
+		// given
+		// need to construct this test slightly differently
+		uriHandler = new StrictURIFragmentHandler();
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap);
+		// when
+
+		// then
+		// start position
+		assertThat(navigator.getCurrentView()).isNull();
+		assertThat(navigator.getCurrentViewName()).isNull();
+		assertThat(navigator.getNavigationState()).isNull();
+
+		assertThat(navigator.getPreviousView()).isNull();
+		assertThat(navigator.getPreviousViewName()).isNull();
+		assertThat(navigator.getPreviousFragment()).isNull();
+
+		// when
+		navigator.navigateTo("view1/id=1");
+
+		// then
+		assertThat(navigator.getCurrentView()).isEqualTo(view1);
+		assertThat(navigator.getCurrentViewName()).isEqualTo("view1");
+		assertThat(navigator.getNavigationState()).isEqualTo("view1/id=1");
+
+		assertThat(navigator.getPreviousView()).isNull();
+		assertThat(navigator.getPreviousViewName()).isNull();
+		assertThat(navigator.getPreviousFragment()).isNull();
+
+		// when
+		navigator.navigateTo("view2/id=2");
+
+		// then
+		assertThat(navigator.getCurrentView()).isEqualTo(view2);
+		assertThat(navigator.getCurrentViewName()).isEqualTo("view2");
+		assertThat(navigator.getNavigationState()).isEqualTo("view2/id=2");
+
+		assertThat(navigator.getPreviousView()).isEqualTo(view1);
+		assertThat(navigator.getPreviousViewName()).isEqualTo("view1");
+		assertThat(navigator.getPreviousFragment()).isEqualTo("view1/id=1");
+
+		// when
+		navigator.clearHistory();
+
+		// then
+		assertThat(navigator.getCurrentView()).isEqualTo(view2);
+		assertThat(navigator.getCurrentViewName()).isEqualTo("view2");
+		assertThat(navigator.getNavigationState()).isEqualTo("view2/id=2");
+
+		assertThat(navigator.getPreviousView()).isNull();
+		assertThat(navigator.getPreviousViewName()).isNull();
+		assertThat(navigator.getPreviousFragment()).isNull();
 	}
 
 	/**

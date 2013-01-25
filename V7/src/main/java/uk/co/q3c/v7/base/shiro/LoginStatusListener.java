@@ -12,9 +12,8 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-public interface LoginStatusMonitor extends LoginStatusListener {
+import org.apache.shiro.subject.Subject;
 
-	String getActionLabel();
-
-	String getUserId();
+public interface LoginStatusListener {
+	void updateStatus(Subject subject);
 }

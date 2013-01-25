@@ -3,6 +3,7 @@ package uk.co.q3c.v7.demo.view;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.view.LoginView;
+import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewModule;
 
@@ -32,10 +33,13 @@ public class DemoViewModule extends V7ViewModule {
 
 	@Override
 	protected void bindViews(MapBinder<String, V7View> mapbinder) {
-		mapbinder.addBinding("").to(HomeView.class);
+		mapbinder.addBinding("").to(PublicHomeView.class);
+		mapbinder.addBinding("public/home").to(PublicHomeView.class);
+		mapbinder.addBinding("secure/home").to(SecureHomeView.class);
 		mapbinder.addBinding("secure/view1").to(View1.class);
 		mapbinder.addBinding("public/view2").to(View2.class);
-		mapbinder.addBinding("login").to(LoginView.class);
+		mapbinder.addBinding("public/login").to(LoginView.class);
+		mapbinder.addBinding("public/logout").to(LogoutView.class);
 	}
 
 }

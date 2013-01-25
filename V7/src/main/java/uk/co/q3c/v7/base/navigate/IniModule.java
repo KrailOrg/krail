@@ -10,11 +10,23 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.shiro;
+package uk.co.q3c.v7.base.navigate;
 
-public interface LoginStatusMonitor extends LoginStatusListener {
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 
-	String getActionLabel();
+public class IniModule extends AbstractModule {
 
-	String getUserId();
+	@Override
+	protected void configure() {
+	}
+
+	@Provides
+	protected V7Ini provideIni() {
+		V7Ini ini = new V7Ini();
+		ini.loadFromPath("classpath:V7.ini");
+		ini.validate();
+		return ini;
+	}
+
 }

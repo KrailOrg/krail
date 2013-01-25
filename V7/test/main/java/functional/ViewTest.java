@@ -1,4 +1,4 @@
-package uk.co.q3c.base.view;
+package functional;
 
 import static org.fest.assertions.Assertions.*;
 

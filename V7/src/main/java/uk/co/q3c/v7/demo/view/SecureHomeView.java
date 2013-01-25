@@ -5,10 +5,10 @@ import javax.inject.Inject;
 import uk.co.q3c.v7.base.view.components.FooterBar;
 import uk.co.q3c.v7.base.view.components.HeaderBar;
 
-public class HomeView extends DemoViewBase {
+public class SecureHomeView extends DemoViewBase {
 
 	@Inject
-	protected HomeView(FooterBar footerBar, HeaderBar headerBar) {
+	protected SecureHomeView(FooterBar footerBar, HeaderBar headerBar) {
 		super(footerBar, headerBar);
 		addNavButton("view 1", view1);
 		addNavButton("view 1 with parameters", view1 + "/id=22");

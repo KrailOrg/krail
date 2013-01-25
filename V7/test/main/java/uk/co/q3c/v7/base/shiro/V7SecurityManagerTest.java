@@ -56,15 +56,14 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 		getSubject().login(token);
 		// then
 		// subject may get re-created, so cannot rely on the instance
-		// 2 events, 1 for creation of new Subject
-		verify(monitor1, times(2)).updateStatus(any(Subject.class));
-		verify(monitor2, times(2)).updateStatus(any(Subject.class));
+		verify(monitor1, times(1)).updateStatus(any(Subject.class));
+		verify(monitor2, times(1)).updateStatus(any(Subject.class));
 
 		// when
 		getSubject().logout();
-		// 2 already recorded, plus 1 for logout
-		verify(monitor1, times(3)).updateStatus(any(Subject.class));
-		verify(monitor2, times(3)).updateStatus(any(Subject.class));
+		// 1 already recorded, plus 1 for logout
+		verify(monitor1, times(2)).updateStatus(any(Subject.class));
+		verify(monitor2, times(2)).updateStatus(any(Subject.class));
 	}
 
 }
