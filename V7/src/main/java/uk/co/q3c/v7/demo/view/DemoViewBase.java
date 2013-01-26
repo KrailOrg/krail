@@ -137,13 +137,26 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	@Override
 	public void processParams(List<String> params) {
 		this.params = Lists.newArrayList(params);
-		String s = "Using an instance of " + this.getClass().getSimpleName() + ".\n\nWe arrived at this page with ";
+		String s = "Using an instance of " + simpleClassName() + ".\n\nWe arrived at this page with ";
 		if (params.isEmpty()) {
 			s = s + " no parameters ";
 		} else {
 			s = s + " parameters: " + params.toString();
 		}
 		viewLabel.setValue(s);
+	}
+
+	/**
+	 * Removes the "enhancer by guice" from the class name
+	 * 
+	 * @param simpleName
+	 * @return
+	 */
+	private String simpleClassName() {
+		String s = this.getClass().getSimpleName();
+		int i = s.indexOf("$");
+		String s1 = s.substring(0, i);
+		return s1;
 	}
 
 	public Label getViewLabel() {
