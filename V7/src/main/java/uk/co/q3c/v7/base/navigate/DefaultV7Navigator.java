@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,13 +45,13 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler, V7Ini ini,
-			Map<String, Provider<V7View>> viewProMap) {
+			Map<String, Provider<V7View>> viewProMap, V7SecurityManager securityManager) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
 		this.uriHandler = uriHandler;
 		this.ini = ini;
-		V7SecurityManager securityManager = (V7SecurityManager) SecurityUtils.getSecurityManager();
+
 		securityManager.addListener(this);
 	}
 

@@ -52,7 +52,7 @@ public class LoginStatusPanel extends Panel implements LoginStatusMonitor, Click
 	private boolean loggedIn;
 
 	@Inject
-	protected LoginStatusPanel(V7Navigator navigator) {
+	protected LoginStatusPanel(V7Navigator navigator, V7SecurityManager securityManager) {
 		super();
 		this.navigator = navigator;
 		// this.setWidth("200px");
@@ -60,7 +60,6 @@ public class LoginStatusPanel extends Panel implements LoginStatusMonitor, Click
 		setSizeFull();
 		addStyleName(ChameleonTheme.PANEL_BORDERLESS);
 		// register with the security manager to monitor status changes
-		V7SecurityManager securityManager = (V7SecurityManager) SecurityUtils.getSecurityManager();
 		securityManager.addListener(this);
 		usernameLabel = new Label();
 		login_logout_Button = new Button();

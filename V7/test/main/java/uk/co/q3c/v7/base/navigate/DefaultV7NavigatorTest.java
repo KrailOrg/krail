@@ -130,7 +130,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 		// when (ini.get(StandardPageKey.secureHome)).thenReturn
 
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap);
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap, getSecurityManager());
 		CurrentInstance.set(UI.class, scopedUI);
 	}
 
@@ -181,7 +181,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		// given
 		// need to construct this test slightly differently
 		uriHandler = new StrictURIFragmentHandler();
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap);
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap, getSecurityManager());
 		navigator.setCurrentView(loginView, "xx", "yy");
 		navigator.setPreviousView(null);
 		// when
@@ -251,7 +251,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		// given
 		// need to construct this test slightly differently
 		uriHandler = new StrictURIFragmentHandler();
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap);
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap, getSecurityManager());
 		// when
 
 		// then

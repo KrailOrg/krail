@@ -47,8 +47,9 @@ public class LoginStatusPanelTest {
 
 	@Before
 	public void setup() {
-		SecurityUtils.setSecurityManager(new V7SecurityManager());
-		panel = new LoginStatusPanel(navigator);
+		V7SecurityManager securityManager = new V7SecurityManager();
+		SecurityUtils.setSecurityManager(securityManager);
+		panel = new LoginStatusPanel(navigator, securityManager);
 		loginoutBtn = ((LoginStatusPanel) panel).getLogin_logout_Button();
 	}
 

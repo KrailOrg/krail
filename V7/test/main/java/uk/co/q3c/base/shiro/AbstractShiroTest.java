@@ -21,6 +21,8 @@ import org.apache.shiro.util.LifecycleUtils;
 import org.apache.shiro.util.ThreadState;
 import org.junit.AfterClass;
 
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
+
 /**
  * Abstract test case enabling Shiro in test environments.
  */
@@ -69,8 +71,8 @@ public abstract class AbstractShiroTest {
 		SecurityUtils.setSecurityManager(securityManager);
 	}
 
-	protected static SecurityManager getSecurityManager() {
-		return SecurityUtils.getSecurityManager();
+	protected static V7SecurityManager getSecurityManager() {
+		return (V7SecurityManager) SecurityUtils.getSecurityManager();
 	}
 
 	@AfterClass
