@@ -155,8 +155,11 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	private String simpleClassName() {
 		String s = this.getClass().getSimpleName();
 		int i = s.indexOf("$");
-		String s1 = s.substring(0, i);
-		return s1;
+		if (i > 1) {
+			String s1 = s.substring(0, i);
+			return s1;
+		}
+		return s;
 	}
 
 	public Label getViewLabel() {

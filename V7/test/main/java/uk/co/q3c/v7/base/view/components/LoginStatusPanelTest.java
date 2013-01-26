@@ -15,14 +15,17 @@ package uk.co.q3c.v7.base.view.components;
 import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import uk.co.q3c.v7.base.navigate.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -44,6 +47,7 @@ public class LoginStatusPanelTest {
 
 	@Before
 	public void setup() {
+		SecurityUtils.setSecurityManager(new V7SecurityManager());
 		panel = new LoginStatusPanel(navigator);
 		loginoutBtn = ((LoginStatusPanel) panel).getLogin_logout_Button();
 	}
@@ -65,7 +69,7 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).navigateTo("login");
+		verify(navigator).navigateTo(StandardPageKey.login);
 	}
 
 	@Test
@@ -83,7 +87,7 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).navigateTo("login");
+		verify(navigator).navigateTo(StandardPageKey.login);
 	}
 
 	@Test
@@ -101,7 +105,7 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).navigateTo("logout");
+		verify(navigator).navigateTo(StandardPageKey.logout);
 	}
 
 }
