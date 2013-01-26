@@ -14,11 +14,14 @@ package uk.co.q3c.v7.base.view.components;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.navigate.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 
 import com.vaadin.ui.Button;
@@ -27,6 +30,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.themes.ChameleonTheme;
 
 /**
  * Represents the "logged in" status of the current {@link Subject}. Because it is UIScoped, only one can be used per
@@ -51,13 +55,22 @@ public class LoginStatusPanel extends Panel implements LoginStatusMonitor, Click
 	protected LoginStatusPanel(V7Navigator navigator) {
 		super();
 		this.navigator = navigator;
+		// this.setWidth("200px");
+		// this.setHeight("100px");
+		setSizeFull();
+		addStyleName(ChameleonTheme.PANEL_BORDERLESS);
+		// register with the security manager to monitor status changes
+		V7SecurityManager securityManager = (V7SecurityManager) SecurityUtils.getSecurityManager();
+		securityManager.addListener(this);
 		usernameLabel = new Label();
 		login_logout_Button = new Button();
 		login_logout_Button.addClickListener(this);
 		HorizontalLayout hl = new HorizontalLayout();
+		hl.setSpacing(true);
 		hl.addComponent(usernameLabel);
 		hl.addComponent(login_logout_Button);
 		this.setContent(hl);
+		updateStatus(SecurityUtils.getSubject());
 	}
 
 	@Override
@@ -96,9 +109,9 @@ public class LoginStatusPanel extends Panel implements LoginStatusMonitor, Click
 	@Override
 	public void buttonClick(ClickEvent event) {
 		if (loggedIn) {
-			navigator.navigateTo("logout");
+			navigator.navigateTo(StandardPageKey.logout);
 		} else {
-			navigator.navigateTo("login");
+			navigator.navigateTo(StandardPageKey.login);
 		}
 
 	}

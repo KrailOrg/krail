@@ -24,6 +24,8 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -205,7 +207,9 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 
 	@RequiresAuthentication
 	protected void doAuthenticationThing() {
-		System.out.println("doing authenticated task");
+		Notification.show(
+				"You got here because you have logged in. If you had not, Shiro would have raised an exception",
+				Type.HUMANIZED_MESSAGE);
 	}
 
 	/**
