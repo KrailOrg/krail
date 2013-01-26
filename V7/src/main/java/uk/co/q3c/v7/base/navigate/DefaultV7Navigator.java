@@ -234,7 +234,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Override
 	public void navigateTo(StandardPageKey pageKey) {
-		String page = ini.StandardPage(pageKey);
+		String page = ini.standardPageURI(pageKey);
 		navigateTo(page);
 	}
 

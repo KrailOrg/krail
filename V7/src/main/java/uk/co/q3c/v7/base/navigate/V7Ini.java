@@ -99,7 +99,7 @@ public class V7Ini extends Ini {
 		}
 	}
 
-	public String StandardPage(StandardPageKey pageKey) {
+	public String standardPageURI(StandardPageKey pageKey) {
 		Section section = getSection("pages");
 		String path = section.get(pageKey.name());
 		return path;

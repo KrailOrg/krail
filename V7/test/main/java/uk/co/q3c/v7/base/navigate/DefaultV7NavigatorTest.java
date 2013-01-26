@@ -139,7 +139,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 		// given
 		when(uriHandler.setFragment(anyString())).thenReturn(uriHandler);
-		when(uriHandler.virtualPage()).thenReturn(ini.StandardPage(StandardPageKey.logout));
+		when(uriHandler.virtualPage()).thenReturn(ini.standardPageURI(StandardPageKey.logout));
 
 		// when
 		navigator.navigateTo(StandardPageKey.logout);
