@@ -18,8 +18,8 @@ public class DemoUIProvider extends ScopedUIProvider {
 	private final UISelectCounter selectCounter;
 
 	@Inject
-	protected DemoUIProvider(Injector injector, Map<String, Provider<UI>> uiProMap, UIKeyProvider mainwindowKeyProvider,
-			UISelectCounter selectCounter) {
+	protected DemoUIProvider(Injector injector, Map<String, Provider<UI>> uiProMap,
+			UIKeyProvider mainwindowKeyProvider, UISelectCounter selectCounter) {
 		super(injector, uiProMap, mainwindowKeyProvider);
 		this.selectCounter = selectCounter;
 	}
@@ -36,11 +36,11 @@ public class DemoUIProvider extends ScopedUIProvider {
 
 		switch (uiSelect) {
 		case 0:
-			return BasicUI.class;
+			return DemoUI.class;
 		case 1:
 			return SideBarUI.class;
 		default:
-			return BasicUI.class;
+			return DemoUI.class;
 		}
 	}
 
