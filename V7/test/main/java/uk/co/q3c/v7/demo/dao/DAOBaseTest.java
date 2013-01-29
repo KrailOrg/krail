@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.demo.dao.orient;
+package uk.co.q3c.v7.demo.dao;
 
 import static org.fest.assertions.Assertions.*;
 
@@ -18,32 +18,13 @@ import java.util.List;
 import java.util.Locale;
 
 import org.joda.time.DateTime;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.q3c.v7.demo.usage.DemoUsageLog;
 
-import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
-import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
-import com.orientechnologies.orient.object.serialization.OObjectSerializerContext;
-import com.orientechnologies.orient.object.serialization.OObjectSerializerHelper;
+public abstract class DAOBaseTest {
 
-public class OrientDemoUsageLogDAOTest {
-
-	OrientDemoUsageLogDAO dao;
-	OObjectDatabaseTx db;
-
-	@Before
-	public void setup() {
-		db = new OObjectDatabaseTx("memory:scratchpad");
-		db.create();
-		OObjectSerializerContext serializerContext = new OObjectSerializerContext();
-		serializerContext.bind(new OrientCustomType_DateTime());
-		serializerContext.bind(new OrientCustomType_Locale());
-		OObjectSerializerHelper.bindSerializerContext(null, serializerContext);
-		dao = new OrientDemoUsageLogDAO();
-	}
+	protected DemoUsageLogDAO dao;
 
 	@Test
 	public void newEntitySaveAndUpdate() {
@@ -63,7 +44,7 @@ public class OrientDemoUsageLogDAOTest {
 
 		// when
 		dao.commit();
-		List<DemoUsageLog> result = db.query(new OSQLSynchQuery<DemoUsageLog>("select * from DemoUsageLog"));
+		List<DemoUsageLog> result = dao.findAll();
 		DemoUsageLog entity2 = result.get(0);
 
 		// then
@@ -91,10 +72,5 @@ public class OrientDemoUsageLogDAOTest {
 		// then
 		assertThat(entity.getSourceIP()).isEqualTo(entity3.getSourceIP());
 		assertThat(entity.getEvent()).isEqualTo(entity3.getEvent());
-	}
-
-	@After
-	public void teardown() {
-		db.drop();
 	}
 }

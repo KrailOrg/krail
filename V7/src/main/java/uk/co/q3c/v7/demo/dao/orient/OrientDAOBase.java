@@ -12,11 +12,16 @@
  */
 package uk.co.q3c.v7.demo.dao.orient;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.entity.EntityBase;
+import uk.co.q3c.v7.demo.dao.DAOBase;
+import uk.co.q3c.v7.demo.usage.DemoUsageLog;
 
 import com.orientechnologies.orient.core.id.ORID;
+import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import com.orientechnologies.orient.object.db.OObjectDatabasePool;
 import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
 
@@ -69,7 +74,13 @@ public abstract class OrientDAOBase<T extends EntityBase> implements DAOBase<T> 
 
 	@Override
 	public T load(Object identity) {
+		// cast is needed, otherwise byte enhancer gets confused
 		return db.load((ORID) identity);
+	}
+
+	@Override
+	public List<T> findAll() {
+		return db.query(new OSQLSynchQuery<DemoUsageLog>("select * from " + entityClass().getSimpleName()));
 	}
 
 }

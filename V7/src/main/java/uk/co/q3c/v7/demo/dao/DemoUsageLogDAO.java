@@ -12,7 +12,6 @@
  */
 package uk.co.q3c.v7.demo.dao;
 
-import uk.co.q3c.v7.demo.dao.orient.DAOBase;
 import uk.co.q3c.v7.demo.usage.DemoUsageLog;
 
 public interface DemoUsageLogDAO extends DAOBase<DemoUsageLog> {

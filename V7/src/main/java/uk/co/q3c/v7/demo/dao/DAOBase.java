@@ -10,7 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.demo.dao.orient;
+package uk.co.q3c.v7.demo.dao;
+
+import java.util.List;
 
 /**
  * T is the entity class
@@ -42,5 +44,7 @@ public interface DAOBase<T> {
 	Object getIdentity(T entity);
 
 	T load(Object identity);
+
+	List<T> findAll();
 
 }
