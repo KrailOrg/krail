@@ -10,15 +10,15 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.demo.dao.orient;
+package uk.co.q3c.v7.persist.orient.dao;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.entity.EntityBase;
-import uk.co.q3c.v7.demo.dao.DAOBase;
 import uk.co.q3c.v7.demo.usage.DemoUsageLog;
+import uk.co.q3c.v7.persist.dao.DAOBase;
 
 import com.orientechnologies.orient.core.id.ORID;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;

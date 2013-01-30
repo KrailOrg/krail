@@ -22,11 +22,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.config.IniModule;
+import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
-import uk.co.q3c.v7.base.navigate.IniModule;
-import uk.co.q3c.v7.base.navigate.V7Ini;
-import uk.co.q3c.v7.base.navigate.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.ui.V7UIModule;
 import uk.co.q3c.v7.base.view.V7View;

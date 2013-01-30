@@ -10,23 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.persist.orient.custom;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
+import java.util.Locale;
 
-public class IniModule extends AbstractModule {
+import com.orientechnologies.orient.core.serialization.serializer.object.OObjectSerializer;
+
+public class OrientCustomType_Locale implements OObjectSerializer<Locale, String> {
 
 	@Override
-	protected void configure() {
+	public Locale unserializeFieldValue(Class<?> iClass, String iFieldValue) {
+		return new Locale(iFieldValue);
 	}
 
-	@Provides
-	protected V7Ini provideIni() {
-		V7Ini ini = new V7Ini();
-		ini.loadFromPath("classpath:V7.ini");
-		ini.validate();
-		return ini;
+	@Override
+	public String serializeFieldValue(Class<?> iClass, Locale iFieldValue) {
+		return iFieldValue.toString();
 	}
 
 }

@@ -10,22 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.demo.dao.orient;
+package uk.co.q3c.v7.persist.orient.custom;
 
-import java.util.Locale;
+import org.joda.time.DateTime;
 
 import com.orientechnologies.orient.core.serialization.serializer.object.OObjectSerializer;
 
-public class OrientCustomType_Locale implements OObjectSerializer<Locale, String> {
+public class OrientCustomType_DateTime implements OObjectSerializer<DateTime, Long> {
 
 	@Override
-	public Locale unserializeFieldValue(Class<?> iClass, String iFieldValue) {
-		return new Locale(iFieldValue);
+	public Long serializeFieldValue(Class<?> iClass, DateTime iFieldValue) {
+		return iFieldValue.getMillis();
 	}
 
 	@Override
-	public String serializeFieldValue(Class<?> iClass, Locale iFieldValue) {
-		return iFieldValue.toString();
+	public DateTime unserializeFieldValue(Class<?> iClass, Long iFieldValue) {
+		return new DateTime(iFieldValue);
 	}
 
 }

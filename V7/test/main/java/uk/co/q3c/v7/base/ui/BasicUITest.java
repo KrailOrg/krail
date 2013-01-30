@@ -1,4 +1,4 @@
-package uk.co.q3c.base.ui;
+package uk.co.q3c.v7.base.ui;
 
 import static org.fest.assertions.Assertions.*;
 

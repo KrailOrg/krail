@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.config;
 
 import static org.fest.assertions.Assertions.*;
 
@@ -20,7 +20,8 @@ import org.apache.shiro.config.Ini.Section;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.q3c.v7.base.navigate.V7Ini.StandardPageKey;
+import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 
 public class V7IniTest {
 

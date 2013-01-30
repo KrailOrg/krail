@@ -10,9 +10,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.navigate.IniModule;
-import uk.co.q3c.v7.base.navigate.V7Ini;
-import uk.co.q3c.v7.base.navigate.V7Ini.StandardPageKey;
+import uk.co.q3c.v7.base.config.IniModule;
+import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
 

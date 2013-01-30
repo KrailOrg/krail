@@ -12,7 +12,7 @@
  */
 package fixture;
 
-import uk.co.q3c.base.guice.uiscope.TestUI;
+import uk.co.q3c.v7.base.guice.uiscope.TestUI;
 import uk.co.q3c.v7.base.ui.V7UIModule;
 
 import com.google.inject.multibindings.MapBinder;

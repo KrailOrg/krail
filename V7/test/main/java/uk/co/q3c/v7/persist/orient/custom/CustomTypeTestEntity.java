@@ -10,41 +10,40 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.demo.dao;
+package uk.co.q3c.v7.persist.orient.custom;
 
-import java.util.List;
+import java.util.Locale;
+
+import org.joda.time.DateTime;
+
+import uk.co.q3c.v7.base.entity.EntityBase;
 
 /**
- * T is the entity class
+ * A test class only - used to hold each of the custom types used in OrientDb, to enable testing of the serialisation /
+ * de-serialisation methods.
  * 
  * @author David Sowerby 29 Jan 2013
  * 
- * @param <KEY>
- * @param <T>
  */
-public interface DAOBase<T> {
+public class CustomTypeTestEntity extends EntityBase {
 
-	T save(T entity);
+	private DateTime dateTime;
+	private Locale locale;
 
-	void commit();
+	public DateTime getDateTime() {
+		return dateTime;
+	}
 
-	void close();
+	public void setDateTime(DateTime dateTime) {
+		this.dateTime = dateTime;
+	}
 
-	T newEntity();
+	public Locale getLocale() {
+		return locale;
+	}
 
-	/**
-	 * Returns The object representing the entity id. This has to be an Object so that the DAO can be non-implementation
-	 * specific, but if you call this method make sure the recordId is of a valid type for the implementation
-	 * 
-	 * @param entity
-	 *            for which you want the identity
-	 * @return
-	 */
-
-	Object getIdentity(T entity);
-
-	T load(Object identity);
-
-	List<T> findAll();
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
 
 }

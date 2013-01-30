@@ -13,6 +13,7 @@
 package uk.co.q3c.v7.demo.dao;
 
 import uk.co.q3c.v7.demo.usage.DemoUsageLog;
+import uk.co.q3c.v7.persist.dao.DAOBase;
 
 public interface DemoUsageLogDAO extends DAOBase<DemoUsageLog> {
 

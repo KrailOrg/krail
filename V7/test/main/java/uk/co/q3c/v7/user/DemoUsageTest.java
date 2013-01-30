@@ -10,21 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.demo.dao.orient;
+package uk.co.q3c.v7.user;
 
-import com.orientechnologies.orient.core.id.ORecordId;
-import com.orientechnologies.orient.core.serialization.serializer.object.OObjectSerializer;
+import static org.junit.Assert.*;
 
-public class OrientCustomType_ORecordId implements OObjectSerializer<ORecordId, String> {
+import org.junit.Test;
 
-	@Override
-	public ORecordId unserializeFieldValue(Class<?> iClass, String iFieldValue) {
-		return new ORecordId(iFieldValue);
-	}
+public class DemoUsageTest {
 
-	@Override
-	public String serializeFieldValue(Class<?> iClass, ORecordId iFieldValue) {
-		return iFieldValue.toString();
+	@Test
+	public void test() {
+		fail("Not yet implemented");
 	}
 
 }

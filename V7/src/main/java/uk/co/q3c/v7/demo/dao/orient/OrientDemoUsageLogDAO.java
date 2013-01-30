@@ -16,6 +16,7 @@ import javax.inject.Inject;
 
 import uk.co.q3c.v7.demo.dao.DemoUsageLogDAO;
 import uk.co.q3c.v7.demo.usage.DemoUsageLog;
+import uk.co.q3c.v7.persist.orient.dao.OrientDAOBase;
 
 public class OrientDemoUsageLogDAO extends OrientDAOBase<DemoUsageLog> implements DemoUsageLogDAO {
 

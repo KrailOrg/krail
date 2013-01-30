@@ -9,13 +9,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.base.guice.uiscope.TestUI;
-import uk.co.q3c.base.shiro.ShiroIntegrationTestBase;
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
+import uk.co.q3c.v7.base.guice.uiscope.TestUI;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.ShiroIntegrationTestBase;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.V7View;

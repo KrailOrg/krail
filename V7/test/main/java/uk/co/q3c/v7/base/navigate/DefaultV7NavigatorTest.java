@@ -15,8 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.base.shiro.ShiroIntegrationTestBase;
-import uk.co.q3c.v7.base.navigate.V7Ini.StandardPageKey;
+import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
+import uk.co.q3c.v7.base.shiro.ShiroIntegrationTestBase;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
@@ -102,11 +103,14 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Mock
 	Provider<V7View> secureHomePro;
 
+	@Inject
+	Provider<V7Ini> iniPro;
+
 	@Override
 	@Before
 	public void setup() {
 		super.setup();
-		ini = new V7Ini();
+		ini = iniPro.get();
 		ini.validate();
 
 		uriHandler = mock(StrictURIFragmentHandler.class);

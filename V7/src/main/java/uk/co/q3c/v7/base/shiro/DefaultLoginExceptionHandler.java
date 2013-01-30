@@ -16,7 +16,7 @@ import javax.inject.Inject;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 
-import uk.co.q3c.v7.base.navigate.V7Ini.StandardPageKey;
+import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
 

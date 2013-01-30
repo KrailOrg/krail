@@ -2,7 +2,7 @@ package uk.co.q3c.v7.base.navigate;
 
 import java.util.List;
 
-import uk.co.q3c.v7.base.navigate.V7Ini.StandardPageKey;
+import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.V7View;
