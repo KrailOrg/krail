@@ -10,17 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.user;
+package uk.co.q3c.v7.demo.dao;
 
-import static org.junit.Assert.*;
+import uk.co.q3c.v7.demo.dao.orient.OrientDemoUsageLogDAO;
 
-import org.junit.Test;
+import com.google.inject.AbstractModule;
 
-public class DemoUsageTest {
+public class DemoDAOModule extends AbstractModule {
 
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+	@Override
+	protected void configure() {
+		bind(DemoUsageLogDAO.class).to(OrientDemoUsageLogDAO.class);
 	}
 
 }

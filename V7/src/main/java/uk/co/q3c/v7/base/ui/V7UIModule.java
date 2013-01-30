@@ -14,6 +14,7 @@ import uk.co.q3c.v7.demo.ui.SideBarUI;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 import com.vaadin.server.UIProvider;
+import com.vaadin.server.WebBrowser;
 import com.vaadin.ui.UI;
 
 public class V7UIModule extends AbstractModule {
@@ -21,6 +22,8 @@ public class V7UIModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		MapBinder<String, UI> mapbinder = MapBinder.newMapBinder(binder(), String.class, UI.class);
+
+		bind(WebBrowser.class);
 
 		bindUIProvider();
 		addUIBindings(mapbinder);
