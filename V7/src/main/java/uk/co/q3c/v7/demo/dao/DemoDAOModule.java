@@ -21,6 +21,6 @@ public class DemoDAOModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(DemoUsageLogDAO.class).to(OrientDemoUsageLogDAO.class);
-	}
 
+	}
 }

@@ -138,4 +138,26 @@ public class DemoUsageTest {
 		assertThat(entry.getEvent()).isEqualTo("logout");
 
 	}
+
+	/**
+	 * Originally it seems that the browser may not be populated at first use. Diagnosis was wrong, problem fixed but
+	 * defensive coding left in place
+	 */
+	@Test
+	public void browserNullValues() {
+
+		// given
+		DemoUsageLog entry = new DemoUsageLog();
+		when(subject.isAuthenticated()).thenReturn(false);
+		when(daoPro.get()).thenReturn(dao);
+		when(dao.newEntity()).thenReturn(entry);
+		when(browserPro.get()).thenReturn(browser);
+		when(browser.getLocale()).thenReturn(null);
+		when(browser.getAddress()).thenReturn(null);
+		// when
+		demoUsage.updateStatus(subject);
+		// then
+		verify(dao).save(entry);
+
+	}
 }

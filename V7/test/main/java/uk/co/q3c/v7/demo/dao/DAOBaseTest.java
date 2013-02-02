@@ -21,7 +21,16 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import uk.co.q3c.v7.demo.usage.DemoUsageLog;
+import uk.co.q3c.v7.persist.dao.OrientDAOBaseTest;
 
+/**
+ * The test methods are actually from {@link DAOBaseTest}, the idea being that any other DAO implementations (for other
+ * databases) could be tested simply by extending this class (see {@link OrientDAOBaseTest} for an example. Uses
+ * DemoUsageLog as the DAO but for no particular reason - the methods tested are all from OrientDAOBase.
+ * 
+ * @author David Sowerby 1 Feb 2013
+ * 
+ */
 public abstract class DAOBaseTest {
 
 	protected DemoUsageLogDAO dao;

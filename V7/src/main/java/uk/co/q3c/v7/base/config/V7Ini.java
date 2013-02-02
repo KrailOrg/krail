@@ -1,14 +1,19 @@
 package uk.co.q3c.v7.base.config;
 
-import java.util.EnumMap;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Map;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.config.Ini;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
 
 /**
  * Extends the Shiro {@link Ini} class validate that all required entries are defined. Missing entries will either have
@@ -20,6 +25,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class V7Ini extends Ini {
 	private static Logger log = LoggerFactory.getLogger(V7Ini.class);
+	private static final String defaultPath = "classpath:V7.ini";
 
 	public static enum StandardPageKey {
 		publicHome, // The home page for non-authenticated users
@@ -33,41 +39,67 @@ public class V7Ini extends Ini {
 		enableAccount // the page to go to for the user to request that their account is enabled
 	};
 
-	/**
-	 * The login page
-	 */
-	public static final String loginKey = "login";
-
-	/**
-	 * The page to be presented after a user has logged out
-	 */
-	public static final String logoutKey = "logout";
-
-	/**
-	 * The page to be presented after a user has logged out
-	 */
-	public static final String resetAccountKey = "resetAccount";
-
-	private static final EnumMap<StandardPageKey, String> standardPagesDefaults = new EnumMap<>(StandardPageKey.class);
-	static {
-		standardPagesDefaults.put(StandardPageKey.publicHome, "public/home");
-		standardPagesDefaults.put(StandardPageKey.secureHome, "secure/home");
-		standardPagesDefaults.put(StandardPageKey.login, "public/login");
-		standardPagesDefaults.put(StandardPageKey.logout, "public/logout");
-		standardPagesDefaults.put(StandardPageKey.resetAccount, "public/reset-account");
-		standardPagesDefaults.put(StandardPageKey.unlockAccount, "public/unlock-account");
-		standardPagesDefaults.put(StandardPageKey.refreshAccount, "public/refresh-account");
-		standardPagesDefaults.put(StandardPageKey.requestAccount, "public/request-account");
-		standardPagesDefaults.put(StandardPageKey.enableAccount, "public/enable-account");
+	public static enum DbParam {
+		dbURL,
+		dbUser,
+		dbPwd
 	}
 
-	@Inject
-	protected V7Ini() {
+	private static String pageDefault(StandardPageKey key) {
+		switch (key) {
+		case publicHome:
+			return "public/home";
+		case secureHome:
+			return "secure/home";
+		case login:
+			return "public/login";
+		case logout:
+			return "public/logout";
+		case resetAccount:
+			return "public/reset-account";
+		case unlockAccount:
+			return "public/unlock-account";
+		case refreshAccount:
+			return "public/refresh-account";
+		case requestAccount:
+			return "public/request-account";
+		case enableAccount:
+			return "public/enable-account";
+		default:
+			return "unknown";
+		}
+	}
+
+	private static String dbDefault(DbParam key) {
+		switch (key) {
+		case dbURL:
+			return "memory:scratchpad";
+		case dbUser:
+			return "admin";
+		case dbPwd:
+			return "admin";
+		default:
+			return "unknown";
+		}
+
+	}
+
+	public V7Ini() {
 		super();
 	}
 
 	public void validate() {
 		validatePages(checkSection("pages"));
+		validateDb(checkSection("db"));
+	}
+
+	private void validateDb(Section section) {
+		for (DbParam key : DbParam.values()) {
+			if (!section.containsKey(key.name())) {
+				log.warn("The property {} is missing from V7.ini, using the default value", key.name());
+				section.put(key.name(), dbDefault(key));
+			}
+		}
 	}
 
 	private Section checkSection(String sectionName) {
@@ -80,10 +112,10 @@ public class V7Ini extends Ini {
 	}
 
 	protected void validatePages(Section section) {
-		for (StandardPageKey pageKey : standardPagesDefaults.keySet()) {
+		for (StandardPageKey pageKey : StandardPageKey.values()) {
 			if (!section.containsKey(pageKey.name())) {
 				log.warn("The property {} is missing from V7.ini, using the default value", pageKey.name());
-				section.put(pageKey.name(), standardPagesDefaults.get(pageKey));
+				section.put(pageKey.name(), pageDefault(pageKey));
 			}
 		}
 	}
@@ -99,6 +131,13 @@ public class V7Ini extends Ini {
 		}
 	}
 
+	/**
+	 * Calls {@link #loadFromPath(String)} with the {@link #defaultPath}
+	 */
+	public void load() {
+		loadFromPath(defaultPath);
+	}
+
 	public String standardPageURI(StandardPageKey pageKey) {
 		Section section = getSection("pages");
 		String path = section.get(pageKey.name());
@@ -106,4 +145,43 @@ public class V7Ini extends Ini {
 
 	}
 
+	public String dbParam(DbParam dbParam) {
+		Section section = getSection("db");
+		if (section == null) {
+			log.warn("db section should not be null in V7ini");
+			return null;
+		} else {
+			String value = section.get(dbParam.name());
+			return value;
+		}
+	}
+
+	public void save(String base, String directory, String filename) {
+		File d;
+		if (!Strings.isNullOrEmpty(base)) {
+			File b = new File(expandProperty(base));
+			d = new File(b, directory);
+		} else {
+			d = new File(directory);
+		}
+		File f = new File(d, filename);
+
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+			for (Section section : getSections()) {
+				bw.write("[" + section.getName() + "]\n");
+				for (Map.Entry<String, String> entry : section.entrySet()) {
+					bw.write(entry.getKey() + "=" + entry.getValue() + "\n");
+				}
+			}
+			bw.close();
+		} catch (IOException e) {
+			log.error("error saving to ini file", e);
+		}
+		log.info("Ini file saved: " + f.getAbsolutePath());
+	}
+
+	private String expandProperty(String s) {
+		String s1 = s.replace("$", "");
+		return System.getProperty(s1);
+	}
 }

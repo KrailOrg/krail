@@ -23,7 +23,7 @@ public class V7UIModule extends AbstractModule {
 	protected void configure() {
 		MapBinder<String, UI> mapbinder = MapBinder.newMapBinder(binder(), String.class, UI.class);
 
-		bind(WebBrowser.class);
+		bind(WebBrowser.class).toProvider(BrowserProvider.class);
 
 		bindUIProvider();
 		addUIBindings(mapbinder);

@@ -14,15 +14,13 @@ package uk.co.q3c.v7.persist.orient.dao;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import uk.co.q3c.v7.base.entity.EntityBase;
 import uk.co.q3c.v7.demo.usage.DemoUsageLog;
 import uk.co.q3c.v7.persist.dao.DAOBase;
+import uk.co.q3c.v7.persist.orient.db.OrientDbConnectionProvider;
 
 import com.orientechnologies.orient.core.id.ORID;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
-import com.orientechnologies.orient.object.db.OObjectDatabasePool;
 import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
 
 /**
@@ -37,11 +35,9 @@ import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
 public abstract class OrientDAOBase<T extends EntityBase> implements DAOBase<T> {
 	private final OObjectDatabaseTx db;
 
-	@Inject
-	protected OrientDAOBase() {
+	protected OrientDAOBase(OrientDbConnectionProvider dbPro) {
 		super();
-		// TODO move to Guice provider
-		db = OObjectDatabasePool.global().acquire("memory:scratchpad", "admin", "admin");
+		this.db = dbPro.get();
 		db.getEntityManager().registerEntityClass(entityClass());
 	}
 

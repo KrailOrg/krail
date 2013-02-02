@@ -10,22 +10,16 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.config;
+package uk.co.q3c.v7.persist.orient.db;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
+import static java.lang.annotation.RetentionPolicy.*;
 
-public class IniModule extends AbstractModule {
+import java.lang.annotation.Retention;
 
-	@Override
-	protected void configure() {
-	}
+import com.google.inject.BindingAnnotation;
 
-	@Provides
-	protected V7Ini provideIni() {
-		V7Ini ini = new V7Ini();
-		ini.loadFromPath("classpath:V7.ini");
-		return ini;
-	}
+@Retention(RUNTIME)
+@BindingAnnotation
+public @interface DbURL {
 
 }

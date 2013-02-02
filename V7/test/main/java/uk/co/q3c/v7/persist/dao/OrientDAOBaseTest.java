@@ -19,25 +19,32 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.config.IniModule;
+import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.demo.dao.DAOBaseTest;
 import uk.co.q3c.v7.demo.dao.orient.OrientDemoUsageLogDAO;
 import uk.co.q3c.v7.persist.orient.custom.OrientCustomType_DateTime;
 import uk.co.q3c.v7.persist.orient.custom.OrientCustomType_Locale;
+import uk.co.q3c.v7.persist.orient.db.OrientDbModule;
 
+import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
 import com.orientechnologies.orient.object.serialization.OObjectSerializerContext;
 import com.orientechnologies.orient.object.serialization.OObjectSerializerHelper;
 
 /**
- * Uses DemoUsageLog as the DAO but for no particular reason - the methods tested are all from OrientDAOBase
+ * Tests the common data access methods for all OrientDAOs. The test methods are actually from {@link DAOBaseTest}, this
+ * class provides the OrientDb specific database setup and teardown. Make sure you call {@link #setup()} and
+ * {@link #teardown()} from this class if you sub-class it.
  * 
  * @author David Sowerby 29 Jan 2013
  * 
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({ IniModule.class })
 public class OrientDAOBaseTest extends DAOBaseTest {
 
 	OObjectDatabaseTx db;
@@ -59,5 +66,12 @@ public class OrientDAOBaseTest extends DAOBaseTest {
 	@After
 	public void teardown() {
 		db.drop();
+	}
+
+	@ModuleProvider
+	public AbstractModule orientModuleProvider() {
+		V7Ini ini = new V7Ini();
+		ini.load();
+		return new OrientDbModule(ini);
 	}
 }

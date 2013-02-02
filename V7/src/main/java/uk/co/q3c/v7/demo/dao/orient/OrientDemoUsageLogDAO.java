@@ -17,12 +17,13 @@ import javax.inject.Inject;
 import uk.co.q3c.v7.demo.dao.DemoUsageLogDAO;
 import uk.co.q3c.v7.demo.usage.DemoUsageLog;
 import uk.co.q3c.v7.persist.orient.dao.OrientDAOBase;
+import uk.co.q3c.v7.persist.orient.db.OrientDbConnectionProvider;
 
 public class OrientDemoUsageLogDAO extends OrientDAOBase<DemoUsageLog> implements DemoUsageLogDAO {
 
 	@Inject
-	protected OrientDemoUsageLogDAO() {
-		super();
+	protected OrientDemoUsageLogDAO(OrientDbConnectionProvider dbPro) {
+		super(dbPro);
 	}
 
 	@Override

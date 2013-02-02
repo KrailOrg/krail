@@ -20,7 +20,7 @@ import org.apache.shiro.config.Ini.Section;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.V7Ini.DbParam;
 import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 
 public class V7IniTest {
@@ -30,6 +30,7 @@ public class V7IniTest {
 	String test0 = "test0.V7.ini"; // should be non-existent
 	String test1 = "test1.V7.ini";
 	String test2 = "test2.V7.ini";
+	String test3 = "test3.V7.ini";
 
 	V7Ini ini;
 
@@ -84,6 +85,63 @@ public class V7IniTest {
 		// then
 		assertThat(ini.standardPageURI(StandardPageKey.secureHome)).isEqualTo("secure/home");
 		assertThat(ini.standardPageURI(StandardPageKey.publicHome)).isEqualTo("public/home");
+
+	}
+
+	@Test
+	public void dbParam() {
+
+		// given
+		String testFile = test1;
+		// when
+		ini.loadFromPath(filepath(testFile));
+		// then
+		assertThat(ini.dbParam(DbParam.dbURL)).isEqualTo("memory:scratchpad");
+		assertThat(ini.dbParam(DbParam.dbUser)).isEqualTo("admin");
+		assertThat(ini.dbParam(DbParam.dbPwd)).isEqualTo("admin");
+
+	}
+
+	@Test
+	public void save() {
+
+		// given
+		String testFile = test3; // make usre content is not default
+		ini.loadFromPath(filepath(testFile));
+		ini.load();
+		// when
+		ini.save("$user.home", "temp", "V7.ini");
+		// then
+		File home = new File(System.getProperty("user.home"));
+		File temp = new File(home, "temp");
+		File f = new File(temp, "V7.ini");
+		assertThat(f.exists()).isTrue();
+		// when
+		V7Ini ini2 = new V7Ini();
+		ini2.loadFromPath("file:" + f.getAbsolutePath());
+		assertThat(ini2.getSectionNames()).isEqualTo(ini.getSectionNames());
+		for (Section section : ini.getSections()) {
+			assertThat(section.values().toString()).isEqualTo(ini2.get(section.getName()).values().toString());
+		}
+
+	}
+
+	/**
+	 * This is not really a test method, just a convenient way to save a file version of the default ini settings (to
+	 * $user.home/temp/V7.ini.default)
+	 */
+	@Test
+	public void saveDefaults() {
+
+		// given
+		File home = new File(System.getProperty("user.home"));
+		File temp = new File(home, "temp");
+		File f = new File(temp, "V7.ini.default");
+		ini.load();
+		// when
+		ini.save("$user.home", "temp", "V7.ini.default");
+		// then
+		assertThat(f.exists()).isTrue();
 
 	}
 

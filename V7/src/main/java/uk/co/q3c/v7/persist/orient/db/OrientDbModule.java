@@ -10,22 +10,27 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.config;
+package uk.co.q3c.v7.persist.orient.db;
+
+import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.V7Ini.DbParam;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 
-public class IniModule extends AbstractModule {
+public class OrientDbModule extends AbstractModule {
+
+	private final V7Ini ini;
+
+	public OrientDbModule(V7Ini ini) {
+		super();
+		this.ini = ini;
+	}
 
 	@Override
 	protected void configure() {
-	}
-
-	@Provides
-	protected V7Ini provideIni() {
-		V7Ini ini = new V7Ini();
-		ini.loadFromPath("classpath:V7.ini");
-		return ini;
+		bindConstant().annotatedWith(DbURL.class).to(ini.dbParam(DbParam.dbURL));
+		bindConstant().annotatedWith(DbUser.class).to(ini.dbParam(DbParam.dbUser));
+		bindConstant().annotatedWith(DbPwd.class).to(ini.dbParam(DbParam.dbPwd));
 	}
 
 }
