@@ -13,8 +13,6 @@ import org.apache.shiro.config.Ini;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Strings;
-
 /**
  * Extends the Shiro {@link Ini} class validate that all required entries are defined. Missing entries will either have
  * defaults set or an exception raised if appropriate. <b>NOTE:</b>Only {@link #loadFromPath(String)} has been
@@ -157,14 +155,7 @@ public class V7Ini extends Ini {
 	}
 
 	public void save(String base, String directory, String filename) {
-		File d;
-		if (!Strings.isNullOrEmpty(base)) {
-			File b = new File(expandProperty(base));
-			d = new File(b, directory);
-		} else {
-			d = new File(directory);
-		}
-		File f = new File(d, filename);
+		File f = ConfigUtil.fileFromPathWithVariable(base, directory, filename);
 
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
 			for (Section section : getSections()) {
@@ -180,8 +171,4 @@ public class V7Ini extends Ini {
 		log.info("Ini file saved: " + f.getAbsolutePath());
 	}
 
-	private String expandProperty(String s) {
-		String s1 = s.replace("$", "");
-		return System.getProperty(s1);
-	}
 }
