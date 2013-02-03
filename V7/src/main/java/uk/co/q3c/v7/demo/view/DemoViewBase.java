@@ -77,7 +77,8 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		authorisationButton = new Button("authorisation button");
 		authorisationButton.setImmediate(true);
 		authorisationButton.addClickListener(this);
-		authorisationButton.setDescription("This button should throw an authorisation exception");
+		authorisationButton
+				.setDescription("This button should throw an authorisation exception if you are logged in, or an authentication exception if you are not logged in");
 		authorisationButton.setWidth("100%");
 		addToCentrePanel(authorisationButton);
 
