@@ -29,7 +29,7 @@ public class ViewTest extends UITestBase {
 		// given
 
 		// when
-		ui.getGuiceNavigator().navigateTo(view2 + "/id=1");
+		ui.getV7Navigator().navigateTo(view2 + "/id=1");
 		// then
 		assertThat(currentView).isInstanceOf(View2.class);
 		assertThat(((DemoViewBase) currentView).getParams()).contains("id=1");

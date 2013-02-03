@@ -74,7 +74,7 @@ public class UIScopeTest extends UITestBase {
 		// when
 		// simulates key being cleared by framework during navigation
 		CurrentInstance.set(UIKey.class, null);
-		uia.getGuiceNavigator().navigateTo("view2");
+		uia.getV7Navigator().navigateTo("view2");
 
 		// then
 		// this is not a good test do I need TestBench?

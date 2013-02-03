@@ -21,6 +21,7 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 
+import com.google.gwt.thirdparty.guava.common.base.Strings;
 import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -58,18 +59,21 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Override
 	public void navigateTo(String fragment) {
-		String viewName = uriHandler.setFragment(fragment).virtualPage();
-		Provider<V7View> provider = viewProMap.get(viewName);
-		V7View view = null;
-		if (provider == null) {
-			log.debug("View not found for " + fragment);
-			view = errorViewPro.get();
+		if (Strings.isNullOrEmpty(fragment)) {
+			navigateTo(StandardPageKey.publicHome);
 		} else {
-			view = provider.get();
+			String viewName = uriHandler.setFragment(fragment).virtualPage();
+			Provider<V7View> provider = viewProMap.get(viewName);
+			V7View view = null;
+			if (provider == null) {
+				log.debug("View not found for " + fragment);
+				view = errorViewPro.get();
+			} else {
+				view = provider.get();
+			}
+
+			navigateTo(view, viewName, fragment);
 		}
-
-		navigateTo(view, viewName, fragment);
-
 	}
 
 	/**

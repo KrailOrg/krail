@@ -66,7 +66,7 @@ public class PublicHomeView extends VerticalViewBase implements ClickListener {
 	public void buttonClick(ClickEvent event) {
 		Button btn = event.getButton();
 		String uri = (btn.getData() == null) ? null : btn.getData().toString();
-		this.getScopedUI().getGuiceNavigator().navigateTo(uri);
+		this.getScopedUI().getV7Navigator().navigateTo(uri);
 	}
 
 }

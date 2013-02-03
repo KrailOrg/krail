@@ -23,10 +23,12 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 
 // TODO i18N
-public class DefaultLoginView extends VerticalViewBase implements LoginView, ClickListener {
+public class DefaultLoginView extends GridViewBase implements LoginView, ClickListener {
 	private final Label label;
 	private final TextField usernameBox;
 	private final TextField passwordBox;
@@ -44,11 +46,14 @@ public class DefaultLoginView extends VerticalViewBase implements LoginView, Cli
 		this.navigator = navigator;
 		this.headerBar = headerBar;
 		this.loginExceptionHandler = loginExceptionHandler;
+		this.setColumns(3);
+		this.setRows(3);
+		Panel centrePanel = new Panel();
+		VerticalLayout vl = new VerticalLayout();
+		centrePanel.setContent(vl);
 
-		setSpacing(true);
-		setHeight("");
+		vl.setSpacing(true);
 		label = new Label("Please log in");
-
 		usernameBox = new TextField("user name");
 		passwordBox = new TextField("password");
 
@@ -60,13 +65,21 @@ public class DefaultLoginView extends VerticalViewBase implements LoginView, Cli
 
 		statusMsgLabel = new Label("Please enter your username and password");
 
-		this.addComponent(label);
-		this.addComponent(demoInfoLabel);
-		this.addComponent(demoInfoLabel2);
-		this.addComponent(usernameBox);
-		this.addComponent(passwordBox);
-		this.addComponent(submitButton);
-		this.addComponent(statusMsgLabel);
+		vl.addComponent(label);
+		vl.addComponent(demoInfoLabel);
+		vl.addComponent(demoInfoLabel2);
+		vl.addComponent(usernameBox);
+		vl.addComponent(passwordBox);
+		vl.addComponent(submitButton);
+		vl.addComponent(statusMsgLabel);
+
+		this.addComponent(centrePanel, 1, 1);
+		this.setColumnExpandRatio(0, 1);
+		this.setColumnExpandRatio(2, 1);
+
+		this.setRowExpandRatio(0, 1);
+		this.setRowExpandRatio(2, 1);
+
 	}
 
 	@Override

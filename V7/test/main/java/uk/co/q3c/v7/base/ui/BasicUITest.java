@@ -69,17 +69,17 @@ public class BasicUITest extends UITestBase {
 
 		// given
 		// when
-		ui.getGuiceNavigator().navigateTo(view2);
+		ui.getV7Navigator().navigateTo(view2);
 		// then
 		assertThat(currentView).isInstanceOf(View2.class);
 		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri(view2));
 		// when
-		ui.getGuiceNavigator().navigateTo("");
+		ui.getV7Navigator().navigateTo("");
 		// then
 		assertThat(currentView).isInstanceOf(PublicHomeView.class);
 		assertThat(ui.getPage().getLocation().toString()).isEqualTo(baseUri + "/#");
 		// when
-		ui.getGuiceNavigator().navigateTo(view1);
+		ui.getV7Navigator().navigateTo(view1);
 		// then
 		assertThat(currentView).isInstanceOf(View1.class);
 		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri(view1));
@@ -90,9 +90,9 @@ public class BasicUITest extends UITestBase {
 	public void errorView() {
 
 		// given
-		ui.getGuiceNavigator().navigateTo(view1);
+		ui.getV7Navigator().navigateTo(view1);
 		// when
-		ui.getGuiceNavigator().navigateTo("viewx2");
+		ui.getV7Navigator().navigateTo("viewx2");
 		// then
 		assertThat(currentView).isInstanceOf(DefaultErrorView.class);
 		// uri stays where it was
@@ -106,7 +106,7 @@ public class BasicUITest extends UITestBase {
 		// given
 
 		// when
-		ui.getGuiceNavigator().navigateTo(view2 + "/a=b");
+		ui.getV7Navigator().navigateTo(view2 + "/a=b");
 		// then
 		assertThat(currentView).isInstanceOf(View2.class);
 		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri(view2 + "/a=b"));

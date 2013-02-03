@@ -49,12 +49,18 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 		super.detach();
 	}
 
+	/**
+	 * The Vaadin navigator has been replaced by the V7Navigator, use {@link #getV7Navigator()} instead.
+	 * 
+	 * @see com.vaadin.ui.UI#getNavigator()
+	 */
 	@Override
+	@Deprecated
 	public Navigator getNavigator() {
 		return null;
 	}
 
-	public V7Navigator getGuiceNavigator() {
+	public V7Navigator getV7Navigator() {
 		return navigator;
 	}
 

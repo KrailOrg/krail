@@ -76,7 +76,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 		System.out.println("initialising test");
 		CurrentInstance.set(UI.class, ui);
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
-		ui.getGuiceNavigator().addViewChangeListener(this);
+		ui.getV7Navigator().addViewChangeListener(this);
 		ui.doInit(mockedRequest, 1);
 
 	}

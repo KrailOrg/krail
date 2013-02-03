@@ -42,7 +42,8 @@ public class BasicUI extends ScopedUI {
 		doLayout();
 
 		// Navigate to the correct start point
-		getGuiceNavigator().navigateTo(page.getUriFragment());
+		String fragment = page.getUriFragment();
+		getV7Navigator().navigateTo(fragment);
 	}
 
 	protected void doLayout() {

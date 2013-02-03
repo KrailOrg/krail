@@ -217,7 +217,7 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 
 		String uri = (btn.getData() == null) ? null : btn.getData().toString();
 		if (uri != null) {
-			this.getScopedUI().getGuiceNavigator().navigateTo(uri);
+			this.getScopedUI().getV7Navigator().navigateTo(uri);
 		}
 	}
 
