@@ -24,14 +24,16 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ChameleonTheme;
 
 // TODO i18N
 public class DefaultLoginView extends GridViewBase implements LoginView, ClickListener {
 	private final Label label;
 	private final TextField usernameBox;
-	private final TextField passwordBox;
+	private final PasswordField passwordBox;
 	private final Label demoInfoLabel;
 	private final Label demoInfoLabel2;
 	private final Button submitButton;
@@ -48,14 +50,17 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		this.loginExceptionHandler = loginExceptionHandler;
 		this.setColumns(3);
 		this.setRows(3);
-		Panel centrePanel = new Panel();
+		this.setSizeFull();
+		Panel centrePanel = new Panel("Log in"); // TODO i18N
+		centrePanel.addStyleName(ChameleonTheme.PANEL_BUBBLE);
+		centrePanel.setSizeUndefined();
 		VerticalLayout vl = new VerticalLayout();
 		centrePanel.setContent(vl);
-
 		vl.setSpacing(true);
+		vl.setSizeUndefined();
 		label = new Label("Please log in");
 		usernameBox = new TextField("user name");
-		passwordBox = new TextField("password");
+		passwordBox = new PasswordField("password");
 
 		demoInfoLabel = new Label("for this demo, enter any user name, and a password of 'password'");
 		demoInfoLabel2 = new Label("In a real application your Shiro Realm implementation defines how to authenticate");
