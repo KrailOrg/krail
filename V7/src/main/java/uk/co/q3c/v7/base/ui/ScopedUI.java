@@ -9,6 +9,7 @@ import uk.co.q3c.v7.base.view.V7ViewHolder;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
@@ -25,8 +26,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 		this.errorHandler = errorHandler;
 		this.navigator = navigator;
 		viewDisplayPanel = new Panel();
-		viewDisplayPanel.setSizeUndefined();
-		viewDisplayPanel.setWidth("100%");
+		viewDisplayPanel.setSizeFull();
 	}
 
 	public void setInstanceKey(UIKey instanceKey) {
@@ -66,7 +66,9 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	// TODO fromView serves no purpose
 	@Override
 	public void changeView(V7View fromView, V7View toView) {
-		viewDisplayPanel.setContent(toView.getUiComponent());
+		Component content = toView.getUiComponent();
+		content.setSizeFull();
+		viewDisplayPanel.setContent(content);
 	}
 
 	public Panel getViewDisplayPanel() {

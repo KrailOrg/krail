@@ -40,8 +40,6 @@ public class BasicUI extends ScopedUI {
 
 		doLayout();
 
-		// Navigate to the start view
-		getGuiceNavigator().navigateTo("");
 	}
 
 	protected void doLayout() {

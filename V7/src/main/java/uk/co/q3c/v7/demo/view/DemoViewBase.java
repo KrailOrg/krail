@@ -67,12 +67,12 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		grid.setColumnExpandRatio(1, 1);
 		grid.setColumnExpandRatio(2, 1);
 
-		grid.setRowExpandRatio(0, 1);
-		grid.setRowExpandRatio(1, 1);
-		grid.setRowExpandRatio(2, 1);
+		grid.setRowExpandRatio(0, 0.1f);
+		grid.setRowExpandRatio(1, 1.5f);
+		grid.setRowExpandRatio(2, 0.5f);
 
-		getGrid().addComponent(msgPanel(), 1, 2);
-		getGrid().addComponent(linkPanel(), 0, 2);
+		getGrid().addComponent(msgPanel(), 2, 1);
+		getGrid().addComponent(linkPanel(), 0, 1);
 
 		authorisationButton = new Button("authorisation button");
 		authorisationButton.setImmediate(true);
@@ -118,8 +118,9 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		centrePanel.setCaption("switch to other views");
 		panelLayout = new VerticalLayout();
 		centrePanel.setContent(panelLayout);
-		panelLayout.setSizeFull();
-		centrePanel.setSizeFull();
+		panelLayout.setSpacing(false);
+		panelLayout.setWidth("100%");
+		// centrePanel.setSizeFull();
 		return centrePanel;
 	}
 
@@ -178,9 +179,9 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		Panel panel = new Panel("Use the footer bar for messages");
 		VerticalLayout vl = new VerticalLayout();
 		panel.setContent(vl);
-
-		panel.setSizeFull();
-		vl.setSizeFull();
+		panel.setSizeUndefined();
+		panel.setWidth("100%");
+		vl.setSizeUndefined();
 		vl.addComponent(new Label(
 				"This section uses a @UIScoped FooterBar, injected into the View, to display a message"));
 		vl.addComponent(new Label("Enter some text, and click 'fire message', and the text will appear in footer"));
