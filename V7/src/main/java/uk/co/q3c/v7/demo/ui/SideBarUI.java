@@ -8,6 +8,7 @@ import uk.co.q3c.v7.base.view.components.DefaultHeaderBar;
 import uk.co.q3c.v7.base.view.components.FooterBar;
 import uk.co.q3c.v7.demo.view.components.InfoBar;
 
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
@@ -15,6 +16,7 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ChameleonTheme;
 
+@PreserveOnRefresh
 public class SideBarUI extends BasicUI {
 
 	@Inject

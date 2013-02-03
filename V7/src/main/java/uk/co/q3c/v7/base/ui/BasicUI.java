@@ -7,13 +7,13 @@ import uk.co.q3c.v7.base.view.components.DefaultHeaderBar;
 import uk.co.q3c.v7.base.view.components.FooterBar;
 import uk.co.q3c.v7.demo.view.components.InfoBar;
 
-import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.ErrorHandler;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.VerticalLayout;
 
-@PreserveOnRefresh
+// @PreserveOnRefresh
 @Theme("chameleon")
 public class BasicUI extends ScopedUI {
 
@@ -36,10 +36,13 @@ public class BasicUI extends ScopedUI {
 	@Override
 	protected void init(VaadinRequest request) {
 		super.init(request);
-		getPage().setTitle("V7");
+		Page page = getPage();
+		page.setTitle("V7");
 
 		doLayout();
 
+		// Navigate to the correct start point
+		getGuiceNavigator().navigateTo(page.getUriFragment());
 	}
 
 	protected void doLayout() {

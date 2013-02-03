@@ -46,6 +46,7 @@ public class DefaultLoginView extends VerticalViewBase implements LoginView, Cli
 		this.loginExceptionHandler = loginExceptionHandler;
 
 		setSpacing(true);
+		setHeight("");
 		label = new Label("Please log in");
 
 		usernameBox = new TextField("user name");

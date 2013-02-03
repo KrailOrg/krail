@@ -21,8 +21,10 @@ import uk.co.q3c.v7.base.view.components.FooterBar;
 import uk.co.q3c.v7.demo.usage.DemoUsage;
 import uk.co.q3c.v7.demo.view.components.InfoBar;
 
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.server.ErrorHandler;
 
+@PreserveOnRefresh
 public class DemoUI extends BasicUI {
 
 	@Inject
