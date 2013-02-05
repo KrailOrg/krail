@@ -82,6 +82,23 @@ public class ConfigUtil {
 		} else {
 			return resourcePath;
 		}
+	}
 
+	/**
+	 * OrientDB uses 'local', 'remote' and 'memory' contexts for its database path. See
+	 * http://code.google.com/p/orient/wiki/Concepts#Database. This method will expand a system property in the file
+	 * path for the local option only. If the context is 'remote' or 'memory', the input string is returned unmodified.
+	 * 
+	 * @param resourcePath
+	 * @return
+	 */
+	public static String orientFilePathWithExpandedVariable(String resourcePath) {
+		if (resourcePath.contains("local:")) {
+			// use the #shiroFilePathWithExpandedVariable, but it needs 'file' not 'local'
+			String s = resourcePath.replaceFirst("local:", "file:");
+			return shiroFilePathWithExpandedVariable(s).replace("file:", "local:");
+		} else {
+			return resourcePath;
+		}
 	}
 }

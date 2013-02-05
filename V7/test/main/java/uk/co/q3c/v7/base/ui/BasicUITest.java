@@ -8,8 +8,6 @@ import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
-import uk.co.q3c.v7.base.ui.BasicUI;
-import uk.co.q3c.v7.base.ui.V7UIModule;
 import uk.co.q3c.v7.base.view.DefaultErrorView;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 import uk.co.q3c.v7.demo.view.PublicHomeView;
@@ -19,12 +17,19 @@ import uk.co.q3c.v7.demo.view.View2;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
+import fixture.TestIniModule;
 import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class, UIScopeModule.class, V7UIModule.class, DemoViewModule.class,
-		V7ShiroVaadinModule.class })
+		V7ShiroVaadinModule.class, TestIniModule.class })
 public class BasicUITest extends UITestBase {
+
+	// @Before
+	// public void setup() {
+	// ini = iniPro.get();
+	// ini.validate();
+	// }
 
 	@Test
 	public void headerBar() {
@@ -58,7 +63,7 @@ public class BasicUITest extends UITestBase {
 
 		// then
 		assertThat(ui).isNotNull();
-		assertThat(ui.getPage().getLocation().toString()).isEqualTo(baseUri + "/#");
+		assertThat(ui.getPage().getLocation().toString()).isEqualTo(baseUri + "/#public/home");
 		// cannot do this, there is no way that I can see to get the title back
 		// assertThat(basicUI().getPage().getTitle()).isEqualTo();
 
@@ -77,7 +82,7 @@ public class BasicUITest extends UITestBase {
 		ui.getV7Navigator().navigateTo("");
 		// then
 		assertThat(currentView).isInstanceOf(PublicHomeView.class);
-		assertThat(ui.getPage().getLocation().toString()).isEqualTo(baseUri + "/#");
+		assertThat(ui.getPage().getLocation().toString()).isEqualTo(baseUri + "/#public/home");
 		// when
 		ui.getV7Navigator().navigateTo(view1);
 		// then

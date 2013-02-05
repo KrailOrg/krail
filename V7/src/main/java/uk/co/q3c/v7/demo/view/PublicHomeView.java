@@ -13,7 +13,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.themes.ChameleonTheme;
 
 public class PublicHomeView extends VerticalViewBase implements ClickListener {
@@ -27,17 +26,12 @@ public class PublicHomeView extends VerticalViewBase implements ClickListener {
 	}
 
 	private void buildMainLayout() {
-		// HTML snippet
-		Panel p = new Panel();
-		p.setSizeFull();
-		p.setCaption("intro");
-		p.addStyleName(ChameleonTheme.PANEL_BUBBLE);
 		ThemeResource resource = new ThemeResource("html/homepage.html");
 		BrowserFrame html = new BrowserFrame();
 		html.setSource(resource);
-		html.setSizeFull();
-		p.setContent(html);
-		this.addComponent(p);
+		html.setWidth("100%");
+		html.setHeight("100%");
+		this.addComponent(html);
 		GridLayout gl = new GridLayout(3, 1);
 		Button btn = addNavButton("Enter", "public/view2");
 		gl.addComponent(btn, 1, 0);
@@ -45,6 +39,9 @@ public class PublicHomeView extends VerticalViewBase implements ClickListener {
 		gl.setColumnExpandRatio(0, 1);
 		gl.setColumnExpandRatio(2, 1);
 		this.addComponent(gl);
+		this.setSizeFull();
+		setExpandRatio(html, 0.75f);
+		setExpandRatio(gl, 0.25f);
 
 	}
 

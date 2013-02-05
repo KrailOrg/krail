@@ -15,16 +15,15 @@ package uk.co.q3c.v7.persist.dao;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.apache.shiro.config.Ini.Section;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.demo.dao.DAOBaseTest;
 import uk.co.q3c.v7.demo.dao.orient.OrientDemoUsageLogDAO;
-import uk.co.q3c.v7.persist.orient.custom.OrientCustomType_DateTime;
-import uk.co.q3c.v7.persist.orient.custom.OrientCustomType_Locale;
+import uk.co.q3c.v7.persist.orient.dao.OrientDAO;
 import uk.co.q3c.v7.persist.orient.db.OrientDbModule;
 
 import com.google.inject.AbstractModule;
@@ -32,8 +31,6 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
-import com.orientechnologies.orient.object.serialization.OObjectSerializerContext;
-import com.orientechnologies.orient.object.serialization.OObjectSerializerHelper;
 
 /**
  * Tests the common data access methods for all OrientDAOs. The test methods are actually from {@link DAOBaseTest}, this
@@ -44,7 +41,7 @@ import com.orientechnologies.orient.object.serialization.OObjectSerializerHelper
  * 
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ IniModule.class })
+@GuiceContext({})
 public class OrientDAOBaseTest extends DAOBaseTest {
 
 	OObjectDatabaseTx db;
@@ -54,24 +51,21 @@ public class OrientDAOBaseTest extends DAOBaseTest {
 
 	@Before
 	public void setup() {
-		db = new OObjectDatabaseTx("memory:scratchpad");
-		db.create();
-		OObjectSerializerContext serializerContext = new OObjectSerializerContext();
-		serializerContext.bind(new OrientCustomType_DateTime());
-		serializerContext.bind(new OrientCustomType_Locale());
-		OObjectSerializerHelper.bindSerializerContext(null, serializerContext);
 		dao = daoPro.get();
 	}
 
 	@After
 	public void teardown() {
-		db.drop();
+
+		((OrientDAO) dao).getDb().drop();
 	}
 
 	@ModuleProvider
 	public AbstractModule orientModuleProvider() {
 		V7Ini ini = new V7Ini();
 		ini.load();
+		Section section = ini.getSection("db");
+		section.put("dbURL", "memory:scratchpad");
 		return new OrientDbModule(ini);
 	}
 }

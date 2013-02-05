@@ -69,11 +69,10 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 
 	@Before
 	public void uiSetup() {
+		System.out.println("initialising test");
 
 		ui = createBasicUI();
 		headerBar = injector.getInstance(HeaderBar.class);
-		// VaadinRequest vr = new VaadinServletRequest(null, null);
-		System.out.println("initialising test");
 		CurrentInstance.set(UI.class, ui);
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
 		ui.getV7Navigator().addViewChangeListener(this);

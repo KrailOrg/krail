@@ -32,7 +32,7 @@ import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
  * 
  * @param <T>
  */
-public abstract class OrientDAOBase<T extends EntityBase> implements DAOBase<T> {
+public abstract class OrientDAOBase<T extends EntityBase> implements DAOBase<T>, OrientDAO {
 	private final OObjectDatabaseTx db;
 
 	protected OrientDAOBase(OrientDbConnectionProvider dbPro) {
@@ -77,6 +77,11 @@ public abstract class OrientDAOBase<T extends EntityBase> implements DAOBase<T> 
 	@Override
 	public List<T> findAll() {
 		return db.query(new OSQLSynchQuery<DemoUsageLog>("select * from " + entityClass().getSimpleName()));
+	}
+
+	@Override
+	public OObjectDatabaseTx getDb() {
+		return db;
 	}
 
 }

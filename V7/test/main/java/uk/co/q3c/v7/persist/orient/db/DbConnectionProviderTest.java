@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
 
 import com.google.inject.AbstractModule;
@@ -28,8 +27,10 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
 
+import fixture.TestIniModule;
+
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ IniModule.class })
+@GuiceContext({ TestIniModule.class })
 public class DbConnectionProviderTest {
 
 	@Inject
@@ -45,6 +46,7 @@ public class DbConnectionProviderTest {
 		// then
 		assertThat(db).isNotNull();
 		assertThat(db.getUser().getName()).isEqualTo("admin");
+		assertThat(db.getURL()).isEqualTo("local:/home/david/temp/demodb");
 
 	}
 
@@ -52,6 +54,7 @@ public class DbConnectionProviderTest {
 	public AbstractModule orientModule() {
 		V7Ini ini = new V7Ini();
 		ini.load();
+		ini.setSectionProperty("db", "dbURL", "local:$user.home/temp/demodb");
 		return new OrientDbModule(ini);
 	}
 

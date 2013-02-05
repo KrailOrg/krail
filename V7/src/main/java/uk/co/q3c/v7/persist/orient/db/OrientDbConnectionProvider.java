@@ -14,6 +14,10 @@ package uk.co.q3c.v7.persist.orient.db;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import uk.co.q3c.v7.base.config.ConfigUtil;
 import uk.co.q3c.v7.persist.orient.custom.OrientCustomType_DateTime;
 import uk.co.q3c.v7.persist.orient.custom.OrientCustomType_Locale;
 
@@ -27,7 +31,7 @@ import com.orientechnologies.orient.object.serialization.OObjectSerializerHelper
  */
 
 public class OrientDbConnectionProvider {
-
+	private static Logger log = LoggerFactory.getLogger(OrientDbConnectionProvider.class);
 	private final String dbURL;
 	private boolean initialised = false;
 	private final String pwd;
@@ -36,7 +40,7 @@ public class OrientDbConnectionProvider {
 	@Inject
 	protected OrientDbConnectionProvider(@DbURL String dbURL, @DbUser String user, @DbPwd String pwd) {
 		super();
-		this.dbURL = dbURL;
+		this.dbURL = ConfigUtil.orientFilePathWithExpandedVariable(dbURL);
 		this.user = user;
 		this.pwd = pwd;
 	}
@@ -47,6 +51,7 @@ public class OrientDbConnectionProvider {
 		}
 
 		OObjectDatabaseTx db = OObjectDatabasePool.global().acquire(dbURL, user, pwd);
+		log.debug("acquired connection to OrientDB database at " + dbURL);
 		return db;
 	}
 
@@ -54,6 +59,7 @@ public class OrientDbConnectionProvider {
 		OObjectDatabaseTx db = new OObjectDatabaseTx(dbURL);
 		if (!db.exists()) {
 			db.create();
+			log.debug("created OrientDB database at " + dbURL);
 		}
 		OObjectSerializerContext serializerContext = new OObjectSerializerContext();
 		serializerContext.bind(new OrientCustomType_DateTime());

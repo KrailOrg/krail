@@ -16,11 +16,12 @@ import uk.co.q3c.v7.demo.view.View2;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
+import fixture.TestIniModule;
 import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class, UIScopeModule.class, V7UIModule.class, DemoViewModule.class,
-		V7ShiroVaadinModule.class })
+		V7ShiroVaadinModule.class, TestIniModule.class })
 public class ViewTest extends UITestBase {
 
 	@Test

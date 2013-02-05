@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -19,8 +18,10 @@ import uk.co.q3c.v7.base.view.LoginView;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
+import fixture.TestIniModule;
+
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ IniModule.class })
+@GuiceContext({ TestIniModule.class })
 public class DefaultLoginExceptionHandlerTest {
 
 	// @Inject

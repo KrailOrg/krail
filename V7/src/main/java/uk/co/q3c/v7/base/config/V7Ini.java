@@ -138,6 +138,10 @@ public class V7Ini extends Ini {
 
 	public String standardPageURI(StandardPageKey pageKey) {
 		Section section = getSection("pages");
+		if (section == null) {
+			throw new ConfigurationException(
+					"The 'pages' section of V7Ini is null, which should not be possible.  Are you testing and have forgotten to call V7Ini.validate() in your @Before method?  Yopu may be able to resolve this by including IniModule in your @GuiceCOntext (see BasicUITest for an example)");
+		}
 		String path = section.get(pageKey.name());
 		return path;
 
