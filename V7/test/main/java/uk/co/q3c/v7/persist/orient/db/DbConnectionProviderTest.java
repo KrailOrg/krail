@@ -14,8 +14,11 @@ package uk.co.q3c.v7.persist.orient.db;
 
 import static org.fest.assertions.Assertions.*;
 
+import java.io.File;
+
 import javax.inject.Inject;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -46,15 +49,31 @@ public class DbConnectionProviderTest {
 		// then
 		assertThat(db).isNotNull();
 		assertThat(db.getUser().getName()).isEqualTo("admin");
-		assertThat(db.getURL()).isEqualTo("local:/home/david/temp/demodb");
+		assertThat(db.getURL()).isEqualTo("local:/home/david/temp/v7/testdb");
 
+	}
+
+	@Test
+	public void createWhenNotExisting() {
+
+		// given
+		File path = new File(System.getProperty("user.home"));
+		File temp = new File(path, "temp");
+		File orientDir = new File(temp, "v7/testdb");
+		FileUtils.deleteQuietly(orientDir);
+		assertThat(orientDir.exists()).isFalse();
+		// when
+		OObjectDatabaseTx db = dbcp.get();
+		// then
+		assertThat(orientDir.exists()).isTrue();
+		assertThat(db).isNotNull();
 	}
 
 	@ModuleProvider
 	public AbstractModule orientModule() {
 		V7Ini ini = new V7Ini();
 		ini.load();
-		ini.setSectionProperty("db", "dbURL", "local:$user.home/temp/demodb");
+		ini.setSectionProperty("db", "dbURL", "local:$user.home/temp/v7/testdb");
 		return new OrientDbModule(ini);
 	}
 
