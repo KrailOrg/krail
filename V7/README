@@ -1,0 +1,23 @@
+Ant and Ivy Example Files for Vaadin 7 Projects
+===============================================
+
+Before you can start using these files, make sure that you have both
+[Ant](http://ant.apache.org/) and [Ivy](http://ant.apache.org/ivy/)
+properly installed and configured. Make sure that you have the
+[ivy.jar](http://ant.apache.org/ivy/download.cgi) in Ant's library
+directory. This is usually `/usr/share/ant/lib`.
+
+Copy the files to the root of your project, and configure the
+`build.properties` file according to your project settings.
+
+ * **`ivy.xml`** is the Apache Ivy dependencies configuration file 
+ * **`build.xml`** is the Apache Ant build configuration file 
+ * **`build.properties`** contains properties used by `build.xml`
+
+The Ant buildscript has some build targets:
+
+ * **`clean`** cleans all build-related files and directories 
+ * **`compile-project`** compiles your project's Java sourcefiles into Java classfiles.
+ * **`compile-theme`** converts your `.scss` theme files into deployable `.css` files, if you have defined `theme.name` in `build.properties`
+ * **`compile-widgetset`** compiles all custom components in your project, if you have defined `widgetset` in `build.properties`
+ * **`package-war`** will combine all build targets above to make a deployable `.war` file.
