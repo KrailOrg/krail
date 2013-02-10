@@ -12,73 +12,30 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.lang.reflect.Field;
 import java.util.Locale;
 
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.vaadin.ui.AbstractComponent;
-
 /**
- * Utility class to manipulate Vaadin component settings to reflect locale changes
+ * Implementers capture I18N key information and provide Vaadin components in the I18NListener with translated caption,
+ * description and value. (Each of these is optional)
  * 
- * @author David Sowerby 8 Feb 2013
+ * @author David Sowerby 10 Feb 2013
  * 
  */
-public class I18NInterpreter {
-	private static Logger log = LoggerFactory.getLogger(I18NInterpreter.class);
-	private Locale locale;
+public interface I18NInterpreter {
 
-	@Inject
-	protected I18NInterpreter() {
-		super();
-	}
+	/**
+	 * Look up keys, translate to values for the {@link CurrentLocale#getLocale()}, and apply them to all selected
+	 * Vaadin components. Also applies the locale to each of the components
+	 * 
+	 * @param listener
+	 */
+	public abstract void interpret(I18NListener listener);
 
-	public void interpret(I18NListener listener) {
-		Class<?> clazz = listener.getClass();
-		Field[] fields = clazz.getDeclaredFields();
-		for (Field field : fields) {
-			if (AbstractComponent.class.isAssignableFrom(field.getType())) {
-				processComponent(listener, field);
-			}
-
-		}
-	}
-
-	private void processComponent(I18NListener listener, Field field) {
-		if (field.isAnnotationPresent(I18N.class)) {
-			I18N annotation = field.getAnnotation(I18N.class);
-			LabelKeys captionKey = annotation.caption();
-			DescriptionKeys descriptionKey = annotation.description();
-			DescriptionKeys valueKey = annotation.value();
-
-			String captionValue = captionKey.equals(LabelKeys._notdefined_) ? null : captionKey.getValue(locale);
-			String descriptionValue = descriptionKey.equals(DescriptionKeys._notdefined_) ? null : descriptionKey
-					.getValue(locale);
-			String valueValue = valueKey.equals(DescriptionKeys._notdefined_) ? null : valueKey.getValue(locale);
-
-			field.setAccessible(true);
-			try {
-				AbstractComponent c = (AbstractComponent) field.get(listener);
-				c.setCaption(captionValue);
-				c.setDescription(descriptionValue);
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				log.error("Unable to set I18N values for " + field.getName(), e);
-			}
-
-		}
-
-	}
-
-	public void setLocale(Locale locale) {
-		this.locale = locale;
-	}
-
-	public Locale getLocale() {
-		return locale;
-	}
+	/**
+	 * The Locale being used for translation
+	 * 
+	 * @return
+	 */
+	public abstract Locale getLocale();
 
 }

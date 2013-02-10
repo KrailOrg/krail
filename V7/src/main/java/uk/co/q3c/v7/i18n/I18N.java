@@ -17,9 +17,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.vaadin.data.Property;
+
 /**
  * Annotation used for marking a Vaadin UI component as needing I18N translation. The parameters provide the keys for
- * I18N lookup.
+ * I18N lookup. All parameters are optional, but the value parameter is relevant only for those components which
+ * implement {@link Property}. Its value would be ignored otherwise
  * 
  * @see https://sites.google.com/site/q3cjava/internationalisation-i18n
  * 

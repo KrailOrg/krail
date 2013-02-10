@@ -13,11 +13,16 @@
 package uk.co.q3c.v7.i18n;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 
 public class I18NTestClass implements I18NListener {
 
 	@I18N(caption = LabelKeys.ok, description = DescriptionKeys.ok)
 	private final Button buttonWithAnnotation;
+
+	@I18N(caption = LabelKeys.ok, description = DescriptionKeys.ok, value = DescriptionKeys.ok)
+	private final Label label;
+
 	private final Button buttonWithoutAnnotation;
 	private final Integer integer;
 	private double dubble;
@@ -26,6 +31,7 @@ public class I18NTestClass implements I18NListener {
 		super();
 		buttonWithAnnotation = new Button();
 		buttonWithoutAnnotation = new Button();
+		label = new Label();
 		integer = new Integer(5);
 	}
 
@@ -48,6 +54,10 @@ public class I18NTestClass implements I18NListener {
 
 	public double getDubble() {
 		return dubble;
+	}
+
+	public Label getLabel() {
+		return label;
 	}
 
 }

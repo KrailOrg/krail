@@ -16,6 +16,9 @@ import static org.fest.assertions.Assertions.*;
 
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,8 +34,16 @@ public class I18NInterpreterTest {
 
 	I18NTestClass testObject;
 
+	@Inject
+	CurrentLocale currentLocale;
+
+	@Inject
+	Provider<AnnotationI18NInterpreter> interpreterPro;
+
 	@Before
 	public void setup() {
+		currentLocale = new CurrentLocale(interpreterPro);
+		currentLocale.setLocale(Locale.UK);
 		testObject = new I18NTestClass();
 
 	}
@@ -41,13 +52,17 @@ public class I18NInterpreterTest {
 	public void interpretNoValue() {
 
 		// given
-		interpreter = new I18NInterpreter();
-		interpreter.setLocale(Locale.UK);
+		interpreter = interpreterPro.get();
 		// when
 		testObject.localeChange(interpreter);
 		// then
 		assertThat(testObject.getButtonWithAnnotation().getCaption()).isEqualTo("ok");
 		assertThat(testObject.getButtonWithAnnotation().getDescription()).isEqualTo("confirm this value is ok");
+		assertThat(testObject.getButtonWithAnnotation().getLocale()).isEqualTo(Locale.UK);
 
+		assertThat(testObject.getLabel().getCaption()).isEqualTo("ok");
+		assertThat(testObject.getLabel().getDescription()).isEqualTo("confirm this value is ok");
+		assertThat(testObject.getLabel().getValue()).isEqualTo("confirm this value is ok");
+		assertThat(testObject.getLabel().getLocale()).isEqualTo(Locale.UK);
 	}
 }

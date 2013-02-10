@@ -23,10 +23,10 @@ public class CurrentLocale {
 
 	private Locale locale = Locale.UK;
 	private final List<I18NListener> listeners = new ArrayList<>();
-	private final Provider<I18NInterpreter> interpreterPro;
+	private final Provider<AnnotationI18NInterpreter> interpreterPro;
 
 	@Inject
-	protected CurrentLocale(Provider<I18NInterpreter> interpreterPro) {
+	protected CurrentLocale(Provider<AnnotationI18NInterpreter> interpreterPro) {
 		super();
 		this.interpreterPro = interpreterPro;
 	}
@@ -53,7 +53,6 @@ public class CurrentLocale {
 	private void fireListeners(Locale locale) {
 		for (I18NListener listener : listeners) {
 			I18NInterpreter interpreter = interpreterPro.get();
-			interpreter.setLocale(locale);
 			listener.localeChange(interpreter);
 		}
 	}
