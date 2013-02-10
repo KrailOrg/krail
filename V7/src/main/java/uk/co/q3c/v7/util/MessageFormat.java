@@ -55,7 +55,7 @@ public class MessageFormat {
 	 * method is deliberately not tolerant of errors in the pattern structure - substitution will simply not occur, and
 	 * the unmodified pattern returned.
 	 * <p>
-	 * If you want to include a "{" in the output, simply escape it "\{". This will escape the whole placeholder
+	 * If you want to include a "{" in the output, simply escape it "\\{". This will escape the whole placeholder
 	 * <p>
 	 * You can have any number of parameters, provided the numbering sequence is continuous, starts from zero, and is
 	 * matched by the same number of arguments.
