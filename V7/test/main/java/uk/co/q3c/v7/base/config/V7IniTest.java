@@ -156,7 +156,6 @@ public class V7IniTest {
 		File f = new File("test");
 		File f2 = new File(f, filename);
 		String filepath = "file:" + f2.getAbsolutePath();
-		System.out.println(filepath);
 		return filepath;
 	}
 

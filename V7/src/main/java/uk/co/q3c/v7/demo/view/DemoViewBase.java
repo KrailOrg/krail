@@ -233,7 +233,6 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	 */
 	@RequiresPermissions("button:secure")
 	protected void doSecureThing() {
-		System.out.println("Secure button pressed");
 		throw new RuntimeException("Should not be here");
 
 	}

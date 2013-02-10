@@ -8,6 +8,8 @@ import javax.inject.Provider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
@@ -45,6 +47,7 @@ import com.vaadin.util.CurrentInstance;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class })
 public abstract class UITestBase extends ShiroIntegrationTestBase implements V7ViewChangeListener {
+	private static Logger log = LoggerFactory.getLogger(UITestBase.class);
 
 	@Inject
 	@Named(A.baseUri)
@@ -69,7 +72,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 
 	@Before
 	public void uiSetup() {
-		System.out.println("initialising test");
+		log.debug("initialising test");
 
 		ui = createBasicUI();
 		headerBar = injector.getInstance(HeaderBar.class);
