@@ -35,10 +35,6 @@ public class ViewTest extends UITestBase {
 		assertThat(currentView).isInstanceOf(View2.class);
 		assertThat(((DemoViewBase) currentView).getParams()).contains("id=1");
 
-		// String fragment = Page.getCurrent().getUriFragment();
-		// System.out.println("fragement=" + fragment);
-		// then
-
 	}
 
 }
