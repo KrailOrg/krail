@@ -16,7 +16,7 @@ import com.vaadin.ui.Button;
 
 public class I18NTestClass implements I18NListener {
 
-	@I18N(caption = LabelKeys.ok)
+	@I18N(caption = LabelKeys.ok, description = DescriptionKeys.ok)
 	private final Button buttonWithAnnotation;
 	private final Button buttonWithoutAnnotation;
 	private final Integer integer;

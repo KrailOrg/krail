@@ -38,7 +38,7 @@ public class I18NInterpreterTest {
 	}
 
 	@Test
-	public void interpret() {
+	public void interpretNoValue() {
 
 		// given
 		interpreter = new I18NInterpreter();

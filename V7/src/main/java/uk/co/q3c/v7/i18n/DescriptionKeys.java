@@ -15,15 +15,14 @@ package uk.co.q3c.v7.i18n;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public enum LabelKeys implements I18NKeys<Labels> {
+public enum DescriptionKeys implements I18NKeys<Descriptions> {
 	ok,
-	cancel,
 	_notdefined_;
 
 	@Override
-	public Labels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Labels.class.getName(), locale);
-		return (Labels) bundle;
+	public Descriptions getBundle(Locale locale) {
+		ResourceBundle bundle = ResourceBundle.getBundle(Descriptions.class.getName(), locale);
+		return (Descriptions) bundle;
 	}
 
 	@Override

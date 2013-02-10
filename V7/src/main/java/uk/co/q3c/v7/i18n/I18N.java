@@ -29,5 +29,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface I18N {
-	LabelKeys caption();
+	LabelKeys caption() default LabelKeys._notdefined_;
+
+	DescriptionKeys description() default DescriptionKeys._notdefined_;
+
+	/**
+	 * Usually only used with Vaadin Labels
+	 * 
+	 * @return
+	 */
+	DescriptionKeys value() default DescriptionKeys._notdefined_;
 }

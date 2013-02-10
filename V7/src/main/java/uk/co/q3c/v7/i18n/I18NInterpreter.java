@@ -51,18 +51,20 @@ public class I18NInterpreter {
 	private void processComponent(I18NListener listener, Field field) {
 		if (field.isAnnotationPresent(I18N.class)) {
 			I18N annotation = field.getAnnotation(I18N.class);
-			LabelKeys key = annotation.caption();
-			String value = "";
-			if (key != null) {
-				value = key.getValue(locale);
-			}
-			System.out.println(field.getName() + " has I18NLabel annotation with key = " + key.name() + " value= "
-					+ value);
+			LabelKeys captionKey = annotation.caption();
+			DescriptionKeys descriptionKey = annotation.description();
+			DescriptionKeys valueKey = annotation.value();
+
+			String captionValue = captionKey.equals(LabelKeys._notdefined_) ? null : captionKey.getValue(locale);
+			String descriptionValue = descriptionKey.equals(DescriptionKeys._notdefined_) ? null : descriptionKey
+					.getValue(locale);
+			String valueValue = valueKey.equals(DescriptionKeys._notdefined_) ? null : valueKey.getValue(locale);
 
 			field.setAccessible(true);
 			try {
 				AbstractComponent c = (AbstractComponent) field.get(listener);
-				c.setCaption(value);
+				c.setCaption(captionValue);
+				c.setDescription(descriptionValue);
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				log.error("Unable to set I18N values for " + field.getName(), e);
 			}

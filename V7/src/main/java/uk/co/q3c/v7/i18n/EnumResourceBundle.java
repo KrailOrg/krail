@@ -30,6 +30,9 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
 	}
 
 	public String getValue(E key) {
+		if (key == null) {
+			return null;
+		}
 		String value = getMap().get(key);
 		if (value != null) {
 			return value;
