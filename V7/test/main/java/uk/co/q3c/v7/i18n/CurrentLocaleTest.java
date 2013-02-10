@@ -88,4 +88,5 @@ public class CurrentLocaleTest implements I18NListener {
 		listenerFired = true;
 		this.interpreter = interpreter;
 	}
+
 }
