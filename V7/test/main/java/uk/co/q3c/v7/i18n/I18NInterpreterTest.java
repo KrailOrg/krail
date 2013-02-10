@@ -14,18 +14,40 @@ package uk.co.q3c.v7.i18n;
 
 import static org.fest.assertions.Assertions.*;
 
-import org.junit.Test;
+import java.util.Locale;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
 public class I18NInterpreterTest {
+
+	I18NInterpreter interpreter;
+
+	I18NTestClass testObject;
+
+	@Before
+	public void setup() {
+		testObject = new I18NTestClass();
+
+	}
+
 	@Test
-	public void register() {
+	public void interpret() {
 
 		// given
-
+		interpreter = new I18NInterpreter();
+		interpreter.setLocale(Locale.UK);
 		// when
-
+		testObject.localeChange(interpreter);
 		// then
-		assertThat(false).isEqualTo(true);
+		assertThat(testObject.getButtonWithAnnotation().getCaption()).isEqualTo("ok");
+		assertThat(testObject.getButtonWithAnnotation().getDescription()).isEqualTo("confirm this value is ok");
 
 	}
 }

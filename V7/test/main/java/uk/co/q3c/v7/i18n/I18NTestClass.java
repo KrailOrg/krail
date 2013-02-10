@@ -12,13 +12,42 @@
  */
 package uk.co.q3c.v7.i18n;
 
+import com.vaadin.ui.Button;
 
 public class I18NTestClass implements I18NListener {
 
+	@I18N(caption = LabelKeys.ok)
+	private final Button buttonWithAnnotation;
+	private final Button buttonWithoutAnnotation;
+	private final Integer integer;
+	private double dubble;
+
+	protected I18NTestClass() {
+		super();
+		buttonWithAnnotation = new Button();
+		buttonWithoutAnnotation = new Button();
+		integer = new Integer(5);
+	}
+
 	@Override
 	public void localeChange(I18NInterpreter interpreter) {
-		//
-		throw new RuntimeException("not yet implemented");
+		interpreter.interpret(this);
+	}
+
+	public Button getButtonWithAnnotation() {
+		return buttonWithAnnotation;
+	}
+
+	public Button getButtonWithoutAnnotation() {
+		return buttonWithoutAnnotation;
+	}
+
+	public Integer getInteger() {
+		return integer;
+	}
+
+	public double getDubble() {
+		return dubble;
 	}
 
 }
