@@ -13,48 +13,69 @@
 package uk.co.q3c.v7.base.guice;
 
 import static org.fest.assertions.Assertions.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.Verifications;
+import mockit.integration.junit4.JMockit;
 
 import org.apache.shiro.SecurityUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
 
-@RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@RunWith(JMockit.class)
 public class GuiceServletInjectorTest {
+
+	class MockedGuice {
+
+	}
 
 	GuiceServletInjector out;
 
-	@Mock
+	@Mocked
 	ServletContext servletContext;
 
-	@Mock
+	@Mocked
 	ServletContextEvent servletContextEvent;
+
+	@Mocked
+	Injector injector;
 
 	@Before
 	public void setup() {
 		out = new GuiceServletInjector();
+
 	}
 
 	@Test
 	public void contextInitialized() {
 
 		// given
-		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
+		new Expectations() {
+			{
+				servletContextEvent.getServletContext();
+				notStrict();
+				result = servletContext;
+			}
+		};
 		// when
 		out.contextInitialized(servletContextEvent);
 		// then
-		verify(servletContext).setAttribute(eq(Injector.class.getName()), any(Injector.class));
+		new Verifications() {
+			{
+				servletContext.setAttribute(Injector.class.getName(), any);
+			}
+		};
 
 	}
 
@@ -62,25 +83,51 @@ public class GuiceServletInjectorTest {
 	public void contextDestroyed() {
 
 		// given
-		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
+		new Expectations() {
+			{
+				servletContextEvent.getServletContext();
+				notStrict();
+				result = servletContext;
+			}
+		};
 		// when
 		out.contextDestroyed(servletContextEvent);
 
 		// then
-		verify(servletContext).removeAttribute(Injector.class.getName());
-
+		new Verifications() {
+			{
+				servletContext.removeAttribute(Injector.class.getName());
+			}
+		};
 	}
 
 	@Test
 	public void getInjector() {
 
 		// given
+		new Expectations() {
+			@SuppressWarnings("unused")
+			Guice mockedGuice;
+			@SuppressWarnings("unused")
+			SecurityUtils mockedSecurityUtils;
+			{
+				Guice.createInjector((AbstractModule[]) any);
+				result = injector;
+
+			}
+		};
 
 		// when
-		Injector injector = out.getInjector();
+		final Injector createdInjector = out.getInjector();
 		// then
-		assertThat(SecurityUtils.getSecurityManager()).isNotNull();
+
+		assertThat(createdInjector).isEqualTo(injector);
+		new Verifications() {
+			{
+
+				SecurityUtils.setSecurityManager((V7SecurityManager) any);
+			}
+		};
 
 	}
-
 }

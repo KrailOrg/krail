@@ -56,10 +56,6 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 		return injector;
 	}
 
-	public static Injector injector() {
-		return injector;
-	}
-
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		final ServletContext servletContext = servletContextEvent.getServletContext();
