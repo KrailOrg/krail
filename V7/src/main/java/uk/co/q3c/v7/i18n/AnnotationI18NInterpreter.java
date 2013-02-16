@@ -13,6 +13,8 @@
 package uk.co.q3c.v7.i18n;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -22,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.Table;
 
 /**
  * Utility class to manipulate Vaadin component settings to reflect locale changes. {@link I18N} field annotations
@@ -47,7 +50,7 @@ public class AnnotationI18NInterpreter implements I18NInterpreter {
 		locale = currentLocale.getLocale();
 	}
 
-	/** 
+	/**
 	 * @see uk.co.q3c.v7.i18n.I18NInterpreter#interpret(uk.co.q3c.v7.i18n.I18NListener)
 	 */
 	@Override
@@ -106,11 +109,35 @@ public class AnnotationI18NInterpreter implements I18NInterpreter {
 				}
 			}
 
+			// Table columns need special treatment
+			if (Table.class.isAssignableFrom(field.getType())) {
+				try {
+					Table table = (Table) field.get(listener);
+					Object[] columns = table.getVisibleColumns();
+					List<String> headers = new ArrayList<>();
+					for (Object column : columns) {
+						if (column instanceof LabelKeys) {
+							LabelKeys columnid = (LabelKeys) column;
+							String header = columnid.getValue(locale);
+							headers.add(header);
+						}
+					}
+					if (columns.length != headers.size()) {
+
+					} else {
+						log.warn("All column ids in {} must be of type LabelKeys for the I18NInterpreter",
+								field.getName());
+					}
+				} catch (Exception e) {
+					log.error("Unable to set I18N table columns headers for " + field.getName(), e);
+				}
+
+			}
 		}
 
 	}
 
-	/** 
+	/**
 	 * @see uk.co.q3c.v7.i18n.I18NInterpreter#getLocale()
 	 */
 	@Override

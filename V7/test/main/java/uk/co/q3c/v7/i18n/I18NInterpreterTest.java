@@ -49,7 +49,7 @@ public class I18NInterpreterTest {
 	}
 
 	@Test
-	public void interpretNoValue() {
+	public void interpret() {
 
 		// given
 		interpreter = interpreterPro.get();
@@ -64,5 +64,13 @@ public class I18NInterpreterTest {
 		assertThat(testObject.getLabel().getDescription()).isEqualTo("confirm this value is ok");
 		assertThat(testObject.getLabel().getValue()).isEqualTo("confirm this value is ok");
 		assertThat(testObject.getLabel().getLocale()).isEqualTo(Locale.UK);
+
+		assertThat(testObject.getTable().getCaption()).isEqualTo("ok");
+		assertThat(testObject.getTable().getDescription()).isEqualTo("confirm this value is ok");
+		assertThat(testObject.getTable().getLocale()).isEqualTo(Locale.UK);
+
+		// table should have caption and description (no value)
+		// but how to handle columns?
+
 	}
 }
