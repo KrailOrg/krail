@@ -12,15 +12,16 @@
  */
 package uk.co.q3c.v7.base.config;
 
-import javax.inject.Singleton;
+import javax.inject.Provider;
 
-import com.google.inject.AbstractModule;
-
-public class IniModule extends AbstractModule {
+public class V7IniProvider implements Provider<V7Ini> {
 
 	@Override
-	protected void configure() {
-		bind(V7Ini.class).toProvider(TestV7IniProvider.class).in(Singleton.class);
+	public V7Ini get() {
+		V7Ini ini = new V7Ini();
+		// exceptions are all handled in the load method
+		ini.loadFromPath("classpath:V7.ini");
+		return ini;
 	}
 
 }

@@ -12,15 +12,27 @@
  */
 package uk.co.q3c.v7.base.config;
 
-import javax.inject.Singleton;
+import javax.inject.Provider;
 
-import com.google.inject.AbstractModule;
+import org.apache.shiro.config.Ini.Section;
 
-public class IniModule extends AbstractModule {
+/**
+ * /** Replaces the configured database setting with an in memory db, as this is generally what is required for testing.
+ * *
+ * 
+ * @author David Sowerby 16 Feb 2013
+ * 
+ */
+public class TestV7IniProvider implements Provider<V7Ini> {
 
 	@Override
-	protected void configure() {
-		bind(V7Ini.class).toProvider(TestV7IniProvider.class).in(Singleton.class);
+	public V7Ini get() {
+		V7Ini ini = new V7Ini();
+		// exceptions are all handled in the load method
+		ini.loadFromPath("classpath:V7.ini");
+		Section section = ini.getSection("db");
+		section.put("dbURL", "memory:scratchpad");
+		return ini;
 	}
 
 }

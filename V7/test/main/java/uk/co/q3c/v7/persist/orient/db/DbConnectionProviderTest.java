@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.V7IniProvider;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -71,8 +72,8 @@ public class DbConnectionProviderTest {
 
 	@ModuleProvider
 	public AbstractModule orientModule() {
-		V7Ini ini = new V7Ini();
-		ini.load();
+		// need to use persistent db for this, so don't use TestV7iniProvider
+		V7Ini ini = new V7IniProvider().get();
 		ini.setSectionProperty("db", "dbURL", "local:$user.home/temp/v7/testdb");
 		return new OrientDbModule(ini);
 	}
