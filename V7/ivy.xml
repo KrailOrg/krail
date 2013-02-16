@@ -64,6 +64,8 @@
 		<dependency org="com.mycila.testing.plugins" name="mycila-testing-mockito" rev="2.8" />
 		<dependency org="org.mockito" name="mockito-all" rev="1.9.0" />
 		<dependency org="junit" name="junit" rev="4.+" />
+		<dependency org="com.googlecode.jmockit" name="jmockit" rev="1.0"/>
+            
 
 		<!-- Date Time -->
 		<dependency org="joda-time" name="joda-time" rev="2.1" />
