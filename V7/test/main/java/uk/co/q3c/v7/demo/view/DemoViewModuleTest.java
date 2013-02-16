@@ -68,5 +68,4 @@ public class DemoViewModuleTest extends UITestBase {
 		}
 
 	}
-
 }

@@ -14,6 +14,7 @@ package uk.co.q3c.v7.i18n;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Table;
 
 public class I18NTestClass implements I18NListener {
 
@@ -22,6 +23,9 @@ public class I18NTestClass implements I18NListener {
 
 	@I18N(caption = LabelKeys.ok, description = DescriptionKeys.ok, value = DescriptionKeys.ok)
 	private final Label label;
+
+	@I18N(caption = LabelKeys.ok, description = DescriptionKeys.ok)
+	private final Table table;
 
 	private final Button buttonWithoutAnnotation;
 	private final Integer integer;
@@ -33,6 +37,7 @@ public class I18NTestClass implements I18NListener {
 		buttonWithoutAnnotation = new Button();
 		label = new Label();
 		integer = new Integer(5);
+		table = new Table();
 	}
 
 	@Override
@@ -58,6 +63,10 @@ public class I18NTestClass implements I18NListener {
 
 	public Label getLabel() {
 		return label;
+	}
+
+	public Table getTable() {
+		return table;
 	}
 
 }
