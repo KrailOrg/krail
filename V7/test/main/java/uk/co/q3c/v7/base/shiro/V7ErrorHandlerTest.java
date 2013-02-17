@@ -13,13 +13,14 @@
 package uk.co.q3c.v7.base.shiro;
 
 import mockit.Expectations;
+import mockit.Injectable;
 import mockit.Mocked;
+import mockit.Tested;
 import mockit.integration.junit4.JMockit;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -29,18 +30,14 @@ import com.vaadin.server.ErrorEvent;
 @RunWith(JMockit.class)
 public class V7ErrorHandlerTest {
 
+	@Tested
 	V7ErrorHandler handler;
-	@Mocked
+	@Injectable
 	UnauthenticatedExceptionHandler authenticationHandler;
-	@Mocked
+	@Injectable
 	UnauthorizedExceptionHandler authorisationHandler;
 	@Mocked
 	ErrorEvent event;
-
-	@Before
-	public void setup() {
-		handler = new V7ErrorHandler(authenticationHandler, authorisationHandler);
-	}
 
 	@Test
 	public void authorisationError() {
