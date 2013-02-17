@@ -6,10 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.guice.BaseModule;
@@ -47,7 +44,6 @@ import com.vaadin.util.CurrentInstance;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class })
 public abstract class UITestBase extends ShiroIntegrationTestBase implements V7ViewChangeListener {
-	private static Logger log = LoggerFactory.getLogger(UITestBase.class);
 
 	@Inject
 	@Named(A.baseUri)
@@ -65,21 +61,17 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 
 	protected HeaderBar headerBar;
 
-	protected BasicUI ui;
+	protected ScopedUI ui;
 
 	@Inject
 	protected Provider<V7Navigator> navigatorPro;
 
-	@Before
-	public void uiSetup() {
-		log.debug("initialising test");
+	protected Class<? extends ScopedUI> uiClass;
 
-		ui = createBasicUI();
+	public void uiSetup() {
+		super.setup();
+		createUI(uiClass);
 		headerBar = injector.getInstance(HeaderBar.class);
-		CurrentInstance.set(UI.class, ui);
-		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
-		ui.getV7Navigator().addViewChangeListener(this);
-		ui.doInit(mockedRequest, 1);
 
 	}
 
@@ -105,9 +97,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	 * @return
 	 */
 	protected TestUI createTestUI() {
-		CurrentInstance.set(UI.class, null);
-		CurrentInstance.set(UIKey.class, null);
-		return (TestUI) provider.createInstance(TestUI.class);
+		return (TestUI) createUI(TestUI.class);
 	}
 
 	/**
@@ -117,9 +107,18 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	 * @return
 	 */
 	protected BasicUI createBasicUI() {
+		return (BasicUI) createUI(BasicUI.class);
+	}
+
+	private ScopedUI createUI(Class<? extends ScopedUI> clazz) {
 		CurrentInstance.set(UI.class, null);
 		CurrentInstance.set(UIKey.class, null);
-		return (BasicUI) provider.createInstance(BasicUI.class);
+		ui = (ScopedUI) provider.createInstance(clazz);
+		CurrentInstance.set(UI.class, ui);
+		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
+		ui.getV7Navigator().addViewChangeListener(this);
+		ui.doInit(mockedRequest, 1);
+		return ui;
 	}
 
 }

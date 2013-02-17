@@ -19,6 +19,8 @@ import com.vaadin.ui.themes.ChameleonTheme;
 @PreserveOnRefresh
 public class SideBarUI extends BasicUI {
 
+	private TextArea textArea;
+
 	@Inject
 	protected SideBarUI(DefaultHeaderBar headerBar, FooterBar footerBar, InfoBar infoBar, V7Navigator navigator,
 			ErrorHandler errorHandler) {
@@ -36,7 +38,7 @@ public class SideBarUI extends BasicUI {
 		sideBarPanel.addStyleName(ChameleonTheme.PANEL_BUBBLE);
 		VerticalLayout panelLayout = new VerticalLayout();
 		sideBarPanel.setContent(panelLayout);
-		TextArea textArea = new TextArea();
+		textArea = new TextArea();
 		textArea.setValue("This sidebar does nothing,except demonstrate the use of two UIs.  See class BasicProvider");
 		textArea.setWidth("150px");
 		panelLayout.addComponent(textArea);
@@ -51,6 +53,10 @@ public class SideBarUI extends BasicUI {
 		screenLayout.setExpandRatio(centreSection, 1);
 		centreSection.setExpandRatio(getViewDisplayPanel(), 1);
 		setContent(screenLayout);
+	}
+
+	public TextArea getTextArea() {
+		return textArea;
 	}
 
 }

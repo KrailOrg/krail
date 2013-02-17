@@ -27,16 +27,9 @@ import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.subject.WebSubject;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
-import uk.co.q3c.v7.base.shiro.AlwaysPasswordCredentialsMatcher;
-import uk.co.q3c.v7.base.shiro.DefaultLoginAttemptLog;
-import uk.co.q3c.v7.base.shiro.DefaultRealm;
-import uk.co.q3c.v7.base.shiro.LoginAttemptLog;
-import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -67,11 +60,10 @@ public abstract class ShiroIntegrationTestBase extends AbstractShiroTest {
 	@Inject
 	Realm realm;
 
-	@Before
 	public void setup() {
 		// trick the SubjectBuilder into using a WebSubject
 		when(servletRequest.getSession(false)).thenReturn(httpSession);
-		RealmSecurityManager rsm = (RealmSecurityManager) getSecurityManager();
+		RealmSecurityManager rsm = getSecurityManager();
 		rsm.setRealm(getRealm());
 		// 1. Build the Subject instance for the test to run:
 		subject = new WebSubject.Builder(getSecurityManager(), servletRequest, servletResponse).buildSubject();

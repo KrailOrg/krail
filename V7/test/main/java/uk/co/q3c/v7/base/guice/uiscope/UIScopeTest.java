@@ -41,8 +41,8 @@ public class UIScopeTest extends UITestBase {
 	public void uiScope() {
 		// given
 
-		uia = createTestUI();
-		uib = createTestUI();
+		uia = getTestUI();
+		uib = getTestUI();
 		// when
 
 		// then
@@ -85,6 +85,19 @@ public class UIScopeTest extends UITestBase {
 		// // then scope cache should have been cleared
 		// assertThat(scope.cacheHasEntryFor(uia)).isFalse();
 		// assertThat(scope.cacheHasEntryFor(uib)).isTrue();
+	}
+
+	/**
+	 * Cannot use the inherited {@link #createTestUI()}, because that sets up the CurrentInstance. For this test we need
+	 * more than one CurrentInstance
+	 * 
+	 * @return
+	 */
+	private TestUI getTestUI() {
+		CurrentInstance.set(UI.class, null);
+		CurrentInstance.set(UIKey.class, null);
+		return (TestUI) provider.createInstance(TestUI.class);
+
 	}
 
 }

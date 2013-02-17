@@ -2,6 +2,7 @@ package uk.co.q3c.v7.base.ui;
 
 import static org.fest.assertions.Assertions.*;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -25,11 +26,12 @@ import fixture.UITestBase;
 		V7ShiroVaadinModule.class, TestIniModule.class })
 public class BasicUITest extends UITestBase {
 
-	// @Before
-	// public void setup() {
-	// ini = iniPro.get();
-	// ini.validate();
-	// }
+	@Override
+	@Before
+	public void setup() {
+		uiClass = BasicUI.class;
+		super.uiSetup();
+	}
 
 	@Test
 	public void headerBar() {
@@ -119,7 +121,7 @@ public class BasicUITest extends UITestBase {
 	}
 
 	private BasicUI basicUI() {
-		return ui;
+		return (BasicUI) ui;
 	}
 
 	private String uri(String pageName) {
