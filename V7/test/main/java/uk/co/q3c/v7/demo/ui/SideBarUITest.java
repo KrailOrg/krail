@@ -12,33 +12,50 @@
  */
 package uk.co.q3c.v7.demo.ui;
 
+import static org.fest.assertions.Assertions.*;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.shiro.ShiroIntegrationTestBase;
-import uk.co.q3c.v7.base.ui.BasicUI;
+import uk.co.q3c.v7.base.guice.BaseModule;
+import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
+import uk.co.q3c.v7.base.ui.V7UIModule;
+import uk.co.q3c.v7.demo.view.DemoViewModule;
 
-public class SideBarUITest extends ShiroIntegrationTestBase {
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+
+import fixture.TestIniModule;
+import fixture.UITestBase;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({ BaseModule.class, UIScopeModule.class, V7UIModule.class, DemoViewModule.class,
+		V7ShiroVaadinModule.class, TestIniModule.class })
+public class SideBarUITest extends UITestBase {
+
+	@BeforeClass
+	public static void setupClass() {
+		uiClass = SideBarUI.class;
+	}
 
 	@Test
 	public void text() {
+
 		// given
-		// ui=
+
 		// when
 
 		// then
+		assertThat(ui().getTextArea().getValue()).isEqualTo(
+				"This sidebar does nothing,except demonstrate the use of two UIs.  See the javadoc for "
+						+ DemoUIProvider.class.getSimpleName());
 
 	}
 
-	/**
-	 * Use this method to create BasicUI instances, rather than the UIProvider It simulates the creation of a new
-	 * CurrentInstance (which happens for each request)
-	 * 
-	 * @return
-	 */
-	protected BasicUI createSideBarUI() {
-		// CurrentInstance.set(UI.class, null);
-		// CurrentInstance.set(UIKey.class, null);
-		// return (BasicUI) provider.createInstance(SideBarUI.class);
-		return null;
+	public SideBarUI ui() {
+		return (SideBarUI) ui;
 	}
+
 }

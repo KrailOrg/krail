@@ -39,7 +39,8 @@ public class SideBarUI extends BasicUI {
 		VerticalLayout panelLayout = new VerticalLayout();
 		sideBarPanel.setContent(panelLayout);
 		textArea = new TextArea();
-		textArea.setValue("This sidebar does nothing,except demonstrate the use of two UIs.  See class BasicProvider");
+		textArea.setValue("This sidebar does nothing,except demonstrate the use of two UIs.  See the javadoc for "
+				+ DemoUIProvider.class.getSimpleName());
 		textArea.setWidth("150px");
 		panelLayout.addComponent(textArea);
 		sideBarPanel.setSizeUndefined();
