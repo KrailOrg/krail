@@ -18,7 +18,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -49,12 +49,9 @@ public class DemoViewModuleTest extends UITestBase {
 	@Inject
 	V7Ini ini;
 
-	@Override
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setupClass() {
 		uiClass = BasicUI.class;
-		super.setup();
-
 	}
 
 	@Test

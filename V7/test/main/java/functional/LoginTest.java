@@ -2,7 +2,7 @@ package functional;
 
 import static org.fest.assertions.Assertions.*;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -31,11 +31,9 @@ public class LoginTest extends UITestBase {
 	String password = "password";
 	String badpassword = "passwrd";
 
-	@Override
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setupClass() {
 		uiClass = BasicUI.class;
-		super.uiSetup();
 	}
 
 	@Test

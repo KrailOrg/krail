@@ -39,8 +39,8 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 
 	@Override
 	@Before
-	public void setup() {
-		super.setup();
+	public void setupShiro() {
+		super.setupShiro();
 	}
 
 	@Test

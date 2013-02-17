@@ -44,7 +44,7 @@ public class StrictURIHandlerTest extends ShiroIntegrationTestBase {
 
 	@Override
 	@Before
-	public void setup() {
+	public void setupShiro() {
 		handler = new StrictURIFragmentHandler();
 	}
 

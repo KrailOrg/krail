@@ -2,7 +2,7 @@ package functional;
 
 import static org.fest.assertions.Assertions.*;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,11 +26,9 @@ import fixture.UITestBase;
 		V7ShiroVaadinModule.class, TestIniModule.class })
 public class ViewTest extends UITestBase {
 
-	@Override
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setupClass() {
 		uiClass = BasicUI.class;
-		super.uiSetup();
 	}
 
 	@Test

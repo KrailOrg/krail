@@ -27,6 +27,7 @@ import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.subject.WebSubject;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -60,7 +61,8 @@ public abstract class ShiroIntegrationTestBase extends AbstractShiroTest {
 	@Inject
 	Realm realm;
 
-	public void setup() {
+	@Before
+	public void setupShiro() {
 		// trick the SubjectBuilder into using a WebSubject
 		when(servletRequest.getSession(false)).thenReturn(httpSession);
 		RealmSecurityManager rsm = getSecurityManager();

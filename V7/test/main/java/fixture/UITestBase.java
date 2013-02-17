@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.A;
@@ -66,10 +67,10 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	@Inject
 	protected Provider<V7Navigator> navigatorPro;
 
-	protected Class<? extends ScopedUI> uiClass;
+	protected static Class<? extends ScopedUI> uiClass;
 
-	public void uiSetup() {
-		super.setup();
+	@Before
+	public void setup() {
 		createUI(uiClass);
 		headerBar = injector.getInstance(HeaderBar.class);
 

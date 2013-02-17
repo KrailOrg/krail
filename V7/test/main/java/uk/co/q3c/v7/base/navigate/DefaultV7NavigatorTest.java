@@ -108,8 +108,8 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 	@Override
 	@Before
-	public void setup() {
-		super.setup();
+	public void setupShiro() {
+		super.setupShiro();
 		ini = iniPro.get();
 		ini.validate();
 
