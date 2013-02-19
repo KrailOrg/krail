@@ -16,18 +16,17 @@ import static org.fest.assertions.Assertions.*;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.fest.assertions.Fail;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import uk.co.q3c.v7.base.shiro.AlwaysPasswordCredentialsMatcher;
-import uk.co.q3c.v7.base.shiro.DefaultLoginAttemptLog;
-import uk.co.q3c.v7.base.shiro.DefaultRealm;
-import uk.co.q3c.v7.base.shiro.LoginAttemptLog;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -41,10 +40,22 @@ public class DefaultRealmTest {
 	String onlyValidPassword = "password";
 
 	@Inject
-	Realm realm;
+	DefaultRealm realm;
 
 	@Inject
 	LoginAttemptLog attemptLog;
+
+	@Test
+	public void realmName() {
+
+		// given
+
+		// when
+
+		// then
+		assertThat(realm.getName()).isEqualTo("V7 Default Realm");
+
+	}
 
 	@Test
 	public void validPassword() {
@@ -82,6 +93,40 @@ public class DefaultRealmTest {
 		// then
 		// exception expected
 
+	}
+
+	@Test(expected = AccountException.class)
+	public void nullUserName() {
+
+		// given
+		UsernamePasswordToken tk = token(null, "rubbish");
+		// when
+		realm.getAuthenticationInfo(tk);
+		// then
+		// should not get this far
+		Fail.fail();
+
+	}
+
+	@Test
+	public void hasRole() {
+
+		// given
+		PrincipalCollection principals = new SimplePrincipalCollection("fred", realm.getName());
+		// when
+		// then
+		assertThat(realm.hasRole(principals, "goo")).isTrue();
+		assertThat(realm.hasRole(principals, "foo")).isTrue();
+	}
+
+	@Test
+	public void hasRole_nullPrincipals() {
+
+		// given
+		// when
+		boolean result = realm.hasRole(null, "goo");
+		// then
+		assertThat(result).isFalse();
 	}
 
 	private UsernamePasswordToken token(String username, String password) {

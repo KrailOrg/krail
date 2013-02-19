@@ -37,10 +37,6 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 		return instanceKey;
 	}
 
-	public void setScope(UIScope uiScope) {
-		this.uiScope = uiScope;
-	}
-
 	@Override
 	public void detach() {
 		if (uiScope != null) {

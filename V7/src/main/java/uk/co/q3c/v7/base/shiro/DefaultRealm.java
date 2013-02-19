@@ -11,7 +11,6 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -58,9 +57,7 @@ public class DefaultRealm extends AuthorizingRealm {
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		if (principals == null) {
-			throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
-		}
+
 		String username = (String) principals.fromRealm(getName()).iterator().next();
 		Set roleNames = ImmutableSet.of();
 		if (username != null) {
