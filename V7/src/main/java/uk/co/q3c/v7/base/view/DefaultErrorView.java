@@ -29,8 +29,4 @@ public class DefaultErrorView extends DemoViewBase implements ErrorView {
 		getViewLabel().setValue(s);
 	}
 
-	@Override
-	public int getColourIndex() {
-		return 3;
-	}
 }

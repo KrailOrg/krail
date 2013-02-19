@@ -18,9 +18,4 @@ public class View2 extends DemoViewBase {
 
 	}
 
-	@Override
-	public int getColourIndex() {
-		return 2;
-	}
-
 }

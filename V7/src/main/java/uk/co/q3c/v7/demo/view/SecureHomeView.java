@@ -17,9 +17,4 @@ public class SecureHomeView extends DemoViewBase {
 		addNavButton("invalid uri", "view3/id=22");
 	}
 
-	@Override
-	public int getColourIndex() {
-		return 0;
-	}
-
 }

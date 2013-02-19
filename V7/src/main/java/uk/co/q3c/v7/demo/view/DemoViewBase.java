@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
@@ -46,6 +47,7 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	private final Button authorisationButton;
 	private final Button disableIfNotAuthorisedButton;
 	private final Button authenticationButton;
+	private String lastNotification;
 
 	protected static final String home = "";
 	protected static final String view1 = "secure/view1";
@@ -149,19 +151,29 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	}
 
 	/**
-	 * Removes the "enhancer by guice" from the class name
+	 * Calls {@link #stripClassName(String)}to remove the "$$enhancer by guice" from the class name (if it is there)
 	 * 
 	 * @param simpleName
 	 * @return
 	 */
-	private String simpleClassName() {
+	public String simpleClassName() {
 		String s = this.getClass().getSimpleName();
-		int i = s.indexOf("$");
+		return stripClassName(s);
+	}
+
+	/**
+	 * Removes the "$$enhancer by guice" from the class name
+	 * 
+	 * @param simpleName
+	 * @return
+	 */
+	public String stripClassName(String className) {
+		int i = className.indexOf("$");
 		if (i > 1) {
-			String s1 = s.substring(0, i);
+			String s1 = className.substring(0, i);
 			return s1;
 		}
-		return s;
+		return className;
 	}
 
 	public Label getViewLabel() {
@@ -223,9 +235,9 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 
 	@RequiresAuthentication
 	protected void doAuthenticationThing() {
-		Notification.show(
-				"You got here because you have logged in. If you had not, Shiro would have raised an exception",
-				Type.HUMANIZED_MESSAGE);
+		String msg = "You got here because you have logged in. If you had not, Shiro would have raised an exception";
+		Notification.show(msg, Type.HUMANIZED_MESSAGE);
+		lastNotification = msg;
 	}
 
 	/**
@@ -233,7 +245,7 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 	 */
 	@RequiresPermissions("button:secure")
 	protected void doSecureThing() {
-		throw new RuntimeException("Should not be here");
+		throw new AuthorizationException("Should not be here");
 
 	}
 
@@ -269,5 +281,24 @@ public abstract class DemoViewBase extends VerticalViewBase implements ClickList
 		super.enter(event);
 	}
 
-	public abstract int getColourIndex();
+	public Button getSendMsgButton() {
+		return sendMsgButton;
+	}
+
+	public Button getAuthorisationButton() {
+		return authorisationButton;
+	}
+
+	public Button getAuthenticationButton() {
+		return authenticationButton;
+	}
+
+	public TextField getTextField() {
+		return textField;
+	}
+
+	public String getLastNotification() {
+		return lastNotification;
+	}
+
 }

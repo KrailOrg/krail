@@ -38,4 +38,8 @@ public class FooterBar extends HorizontalLayout {
 		msgLabel.setValue(msg);
 	}
 
+	public String getUserMessage() {
+		return msgLabel.getValue();
+	}
+
 }

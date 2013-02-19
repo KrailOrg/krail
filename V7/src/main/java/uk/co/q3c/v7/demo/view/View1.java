@@ -17,9 +17,4 @@ public class View1 extends DemoViewBase {
 		addNavButton("invalid uri", "view3/id=22");
 	}
 
-	@Override
-	public int getColourIndex() {
-		return 1;
-	}
-
 }
