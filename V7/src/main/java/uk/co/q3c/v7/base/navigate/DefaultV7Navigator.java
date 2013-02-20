@@ -260,4 +260,8 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		previousFragment = null;
 	}
 
+	public V7Ini getIni() {
+		return ini;
+	}
+
 }

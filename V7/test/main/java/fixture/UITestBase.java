@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.A;
+import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.V7IniProvider;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.TestUI;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
@@ -67,6 +69,11 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	@Inject
 	protected Provider<V7Navigator> navigatorPro;
 
+	@Inject
+	private V7IniProvider iniPro;
+
+	protected V7Ini ini;
+
 	protected static Class<? extends ScopedUI> uiClass;
 
 	@Before
@@ -119,6 +126,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
 		ui.getV7Navigator().addViewChangeListener(this);
 		ui.doInit(mockedRequest, 1);
+		ini = iniPro.get();
 		return ui;
 	}
 

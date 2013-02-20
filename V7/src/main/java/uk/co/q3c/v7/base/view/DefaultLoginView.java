@@ -143,4 +143,12 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		statusMsgLabel.setValue(msg);
 	}
 
+	public TextField getUsernameBox() {
+		return usernameBox;
+	}
+
+	public PasswordField getPasswordBox() {
+		return passwordBox;
+	}
+
 }
