@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 public enum LabelKeys implements I18NKeys<Labels> {
 	ok,
 	cancel,
+	small,
 	_notdefined_;
 
 	@Override

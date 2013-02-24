@@ -26,8 +26,9 @@ public class Labels_de extends Labels {
 	private static final EnumMap<LabelKeys, String> map = new EnumMap<LabelKeys, String>(LabelKeys.class);
 	// TODO make map unmodifiable
 	static {
-		map.put(LabelKeys.cancel, "stornieren");
 
+		map.put(LabelKeys.cancel, "stornieren");
+		map.put(LabelKeys.small, "klein");
 	}
 
 	@Override

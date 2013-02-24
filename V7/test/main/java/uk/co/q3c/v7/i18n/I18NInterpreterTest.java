@@ -42,9 +42,10 @@ public class I18NInterpreterTest {
 
 	@Before
 	public void setup() {
-		currentLocale = new CurrentLocale(interpreterPro);
-		currentLocale.setLocale(Locale.UK);
 		testObject = new I18NTestClass();
+		// ensure switching to UK forces a change
+		currentLocale.setLocale(Locale.CANADA_FRENCH);
+		currentLocale.addListener(testObject);
 
 	}
 
@@ -52,25 +53,57 @@ public class I18NInterpreterTest {
 	public void interpret() {
 
 		// given
-		interpreter = interpreterPro.get();
 		// when
-		testObject.localeChange(interpreter);
+		currentLocale.setLocale(Locale.UK);
 		// then
-		assertThat(testObject.getButtonWithAnnotation().getCaption()).isEqualTo("ok");
-		assertThat(testObject.getButtonWithAnnotation().getDescription()).isEqualTo("confirm this value is ok");
+		assertThat(testObject.getButtonWithAnnotation().getCaption()).isEqualTo("small");
+		assertThat(testObject.getButtonWithAnnotation().getDescription()).isEqualTo("use a small font");
 		assertThat(testObject.getButtonWithAnnotation().getLocale()).isEqualTo(Locale.UK);
 
-		assertThat(testObject.getLabel().getCaption()).isEqualTo("ok");
-		assertThat(testObject.getLabel().getDescription()).isEqualTo("confirm this value is ok");
-		assertThat(testObject.getLabel().getValue()).isEqualTo("confirm this value is ok");
+		assertThat(testObject.getLabel().getCaption()).isEqualTo("small");
+		assertThat(testObject.getLabel().getDescription()).isEqualTo("use a small font");
+		assertThat(testObject.getLabel().getValue()).isEqualTo("use a small font");
 		assertThat(testObject.getLabel().getLocale()).isEqualTo(Locale.UK);
 
-		assertThat(testObject.getTable().getCaption()).isEqualTo("ok");
-		assertThat(testObject.getTable().getDescription()).isEqualTo("confirm this value is ok");
+		assertThat(testObject.getTable().getCaption()).isEqualTo("small");
+		assertThat(testObject.getTable().getDescription()).isEqualTo("use a small font");
 		assertThat(testObject.getTable().getLocale()).isEqualTo(Locale.UK);
 
-		// table should have caption and description (no value)
-		// but how to handle columns?
+		Object[] columns = testObject.getTable().getVisibleColumns();
+		assertThat(columns.length).isEqualTo(3);
+
+		String[] headers = testObject.getTable().getColumnHeaders();
+		assertThat(headers).isEqualTo(new String[] { "small", "cancel", "not i18N" });
+
+	}
+
+	@Test
+	public void interpret_de() {
+
+		String use_a_small_font = "Benutzen Sie eine kleine Schriftart";
+
+		// given
+		// when
+		currentLocale.setLocale(Locale.GERMAN);
+		// then
+		assertThat(testObject.getButtonWithAnnotation().getCaption()).isEqualTo("klein");
+		assertThat(testObject.getButtonWithAnnotation().getDescription()).isEqualTo(use_a_small_font);
+		assertThat(testObject.getButtonWithAnnotation().getLocale()).isEqualTo(Locale.GERMAN);
+
+		assertThat(testObject.getLabel().getCaption()).isEqualTo("klein");
+		assertThat(testObject.getLabel().getDescription()).isEqualTo(use_a_small_font);
+		assertThat(testObject.getLabel().getValue()).isEqualTo(use_a_small_font);
+		assertThat(testObject.getButtonWithAnnotation().getLocale()).isEqualTo(Locale.GERMAN);
+
+		assertThat(testObject.getTable().getCaption()).isEqualTo("klein");
+		assertThat(testObject.getTable().getDescription()).isEqualTo(use_a_small_font);
+		assertThat(testObject.getButtonWithAnnotation().getLocale()).isEqualTo(Locale.GERMAN);
+
+		Object[] columns = testObject.getTable().getVisibleColumns();
+		assertThat(columns.length).isEqualTo(3);
+
+		String[] headers = testObject.getTable().getColumnHeaders();
+		assertThat(headers).isEqualTo(new String[] { "klein", "stornieren", "not i18N" });
 
 	}
 }

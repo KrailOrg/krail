@@ -120,14 +120,13 @@ public class AnnotationI18NInterpreter implements I18NInterpreter {
 							LabelKeys columnid = (LabelKeys) column;
 							String header = columnid.getValue(locale);
 							headers.add(header);
+						} else {
+							headers.add(column.toString());
 						}
 					}
-					if (columns.length != headers.size()) {
+					String headerArray[] = headers.toArray(new String[] {});
+					table.setColumnHeaders(headerArray);
 
-					} else {
-						log.warn("All column ids in {} must be of type LabelKeys for the I18NInterpreter",
-								field.getName());
-					}
 				} catch (Exception e) {
 					log.error("Unable to set I18N table columns headers for " + field.getName(), e);
 				}

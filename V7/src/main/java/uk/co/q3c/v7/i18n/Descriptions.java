@@ -28,6 +28,7 @@ public class Descriptions extends EnumResourceBundle<DescriptionKeys> {
 			DescriptionKeys.class);
 	// TODO make map unmodifiable
 	static {
+		map.put(DescriptionKeys.small_font, "use a small font");
 		map.put(DescriptionKeys.ok, "confirm this value is ok");
 	}
 

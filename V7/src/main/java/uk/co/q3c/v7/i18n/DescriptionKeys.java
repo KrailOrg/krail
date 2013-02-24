@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 
 public enum DescriptionKeys implements I18NKeys<Descriptions> {
 	ok,
+	small_font,
 	_notdefined_;
 
 	@Override
