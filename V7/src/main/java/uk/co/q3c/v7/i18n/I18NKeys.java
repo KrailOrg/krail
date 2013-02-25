@@ -19,4 +19,6 @@ public interface I18NKeys<E extends EnumResourceBundle<?>> {
 	E getBundle(Locale locale);
 
 	String getValue(Locale locale);
+
+	boolean isNullKey();
 }

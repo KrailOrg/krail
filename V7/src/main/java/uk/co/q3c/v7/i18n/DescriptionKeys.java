@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 public enum DescriptionKeys implements I18NKeys<Descriptions> {
 	ok,
 	small_font,
-	_notdefined_;
+	_nullkey_;
 
 	@Override
 	public Descriptions getBundle(Locale locale) {
@@ -30,4 +30,10 @@ public enum DescriptionKeys implements I18NKeys<Descriptions> {
 	public String getValue(Locale locale) {
 		return getBundle(locale).getValue(this);
 	}
+
+	@Override
+	public boolean isNullKey() {
+		return this.equals(_nullkey_);
+	}
+
 }

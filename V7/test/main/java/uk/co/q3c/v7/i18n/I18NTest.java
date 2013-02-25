@@ -51,7 +51,7 @@ public class I18NTest {
 		// given
 
 		// when
-		LabelKeys._notdefined_.getValue(Locale.GERMAN);
+		LabelKeys._nullkey_.getValue(Locale.GERMAN);
 		// then
 		// exception expected
 	}

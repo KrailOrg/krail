@@ -12,28 +12,20 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.EnumMap;
 
-public enum LabelKeys implements I18NKeys<Labels> {
-	ok,
-	cancel,
-	small,
-	_nullkey_;
+public class Descriptions_de extends Descriptions {
 
-	@Override
-	public Labels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Labels.class.getName(), locale);
-		return (Labels) bundle;
+	private static final EnumMap<DescriptionKeys, String> map = new EnumMap<DescriptionKeys, String>(
+			DescriptionKeys.class);
+
+	static {
+		map.put(DescriptionKeys.small_font, "Benutzen Sie eine kleine Schriftart");
 	}
 
 	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
+	public EnumMap<DescriptionKeys, String> getMap() {
+		return map;
 	}
 
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
-	}
 }

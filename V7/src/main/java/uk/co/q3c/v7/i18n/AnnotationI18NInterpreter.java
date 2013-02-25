@@ -68,13 +68,12 @@ public class AnnotationI18NInterpreter implements I18NInterpreter {
 	private void processComponent(I18NListener listener, Field field) {
 		if (field.isAnnotationPresent(I18N.class)) {
 			I18N annotation = field.getAnnotation(I18N.class);
-			LabelKeys captionKey = annotation.caption();
-			DescriptionKeys descriptionKey = annotation.description();
-			DescriptionKeys valueKey = annotation.value();
+			I18NKeys<?> captionKey = annotation.caption();
+			I18NKeys<?> descriptionKey = annotation.description();
+			I18NKeys<?> valueKey = annotation.value();
 
-			String captionValue = captionKey.equals(LabelKeys._notdefined_) ? null : captionKey.getValue(locale);
-			String descriptionValue = descriptionKey.equals(DescriptionKeys._notdefined_) ? null : descriptionKey
-					.getValue(locale);
+			String captionValue = captionKey.isNullKey() ? null : captionKey.getValue(locale);
+			String descriptionValue = descriptionKey.isNullKey() ? null : descriptionKey.getValue(locale);
 
 			field.setAccessible(true);
 			try {
@@ -97,8 +96,7 @@ public class AnnotationI18NInterpreter implements I18NInterpreter {
 					try {
 						@SuppressWarnings("unchecked")
 						Property<String> c = (Property<String>) field.get(listener);
-						String valueValue = valueKey.equals(DescriptionKeys._notdefined_) ? null : valueKey
-								.getValue(locale);
+						String valueValue = valueKey.isNullKey() ? null : valueKey.getValue(locale);
 						if (valueValue != null) {
 							c.setValue(valueValue);
 						}
