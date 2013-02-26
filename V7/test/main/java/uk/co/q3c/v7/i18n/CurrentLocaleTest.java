@@ -22,8 +22,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -89,4 +91,15 @@ public class CurrentLocaleTest implements I18NListener {
 		this.interpreter = interpreter;
 	}
 
+	@ModuleProvider
+	protected AbstractModule moduleProvider() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(I18NInterpreter.class).to(AnnotationI18NInterpreter.class);
+			}
+
+		};
+	}
 }
