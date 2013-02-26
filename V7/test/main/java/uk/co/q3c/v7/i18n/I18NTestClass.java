@@ -27,6 +27,14 @@ public class I18NTestClass implements I18NListener {
 	@I18N(caption = LabelKeys.small, description = DescriptionKeys.small_font)
 	private final Table table;
 
+	private final TestCompositeComponent ccs;
+
+	private final TestCompositeNonComponent cnc;
+
+	private final TestCompositeComponentNested ccsn;
+
+	private final TestCompositeNonComponentNested cncn;
+
 	private final Button buttonWithoutAnnotation;
 	private final Integer integer;
 	private double dubble;
@@ -39,6 +47,11 @@ public class I18NTestClass implements I18NListener {
 		integer = new Integer(5);
 		table = new Table();
 		setupTableColumns();
+
+		ccs = new TestCompositeComponent();
+		cnc = new TestCompositeNonComponent();
+		ccsn = new TestCompositeComponentNested();
+		cncn = new TestCompositeNonComponentNested();
 	}
 
 	private void setupTableColumns() {
@@ -74,6 +87,22 @@ public class I18NTestClass implements I18NListener {
 
 	public Table getTable() {
 		return table;
+	}
+
+	public TestCompositeComponent getCcs() {
+		return ccs;
+	}
+
+	public TestCompositeNonComponent getCnc() {
+		return cnc;
+	}
+
+	public TestCompositeComponentNested getCcsn() {
+		return ccsn;
+	}
+
+	public TestCompositeNonComponentNested getCncn() {
+		return cncn;
 	}
 
 }

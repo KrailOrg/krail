@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,11 +44,13 @@ import com.vaadin.ui.Table;
 public class AnnotationI18NInterpreter implements I18NInterpreter {
 	private static Logger log = LoggerFactory.getLogger(AnnotationI18NInterpreter.class);
 	private final Locale locale;
+	private final Provider<I18NInterpreter> interpreterPro;
 
 	@Inject
-	protected AnnotationI18NInterpreter(CurrentLocale currentLocale) {
+	protected AnnotationI18NInterpreter(CurrentLocale currentLocale, Provider<I18NInterpreter> interpreterPro) {
 		super();
 		locale = currentLocale.getLocale();
+		this.interpreterPro = interpreterPro;
 	}
 
 	/**
@@ -58,6 +61,12 @@ public class AnnotationI18NInterpreter implements I18NInterpreter {
 		Class<?> clazz = listener.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
+
+			// process any subitems which implement I18NListener
+			if (I18NListener.class.isAssignableFrom(field.getType())) {
+				processSubI18NListener(listener, field);
+			}
+
 			if (AbstractComponent.class.isAssignableFrom(field.getType())) {
 				processComponent(listener, field);
 			}
@@ -65,7 +74,19 @@ public class AnnotationI18NInterpreter implements I18NInterpreter {
 		}
 	}
 
+	private void processSubI18NListener(I18NListener listener, Field field) {
+		field.setAccessible(true);
+		field.setAccessible(true);
+		try {
+			I18NListener sub = (I18NListener) field.get(listener);
+			sub.localeChange(interpreterPro.get());
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			log.error("Unable to process I18N sub-listener " + field.getName(), e);
+		}
+	}
+
 	private void processComponent(I18NListener listener, Field field) {
+
 		if (field.isAnnotationPresent(I18N.class)) {
 			I18N annotation = field.getAnnotation(I18N.class);
 			I18NKeys<?> captionKey = annotation.caption();

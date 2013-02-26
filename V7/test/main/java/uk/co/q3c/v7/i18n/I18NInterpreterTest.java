@@ -23,8 +23,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -38,7 +40,7 @@ public class I18NInterpreterTest {
 	CurrentLocale currentLocale;
 
 	@Inject
-	Provider<AnnotationI18NInterpreter> interpreterPro;
+	Provider<I18NInterpreter> interpreterPro;
 
 	@Before
 	public void setup() {
@@ -75,6 +77,11 @@ public class I18NInterpreterTest {
 		String[] headers = testObject.getTable().getColumnHeaders();
 		assertThat(headers).isEqualTo(new String[] { "small", "cancel", "not i18N" });
 
+		assertThat(testObject.getCcs().isLocaleChangeCalled()).isTrue();
+		assertThat(testObject.getCcsn().isLocaleChangeCalled()).isTrue();
+		assertThat(testObject.getCncn().isLocaleChangeCalled()).isTrue();
+		assertThat(testObject.getCcsn().isLocaleChangeCalled()).isTrue();
+
 	}
 
 	@Test
@@ -105,5 +112,22 @@ public class I18NInterpreterTest {
 		String[] headers = testObject.getTable().getColumnHeaders();
 		assertThat(headers).isEqualTo(new String[] { "klein", "stornieren", "not i18N" });
 
+		assertThat(testObject.getCcs().isLocaleChangeCalled()).isTrue();
+		assertThat(testObject.getCcsn().isLocaleChangeCalled()).isTrue();
+		assertThat(testObject.getCncn().isLocaleChangeCalled()).isTrue();
+		assertThat(testObject.getCcsn().isLocaleChangeCalled()).isTrue();
+
+	}
+
+	@ModuleProvider
+	protected AbstractModule moduleProvider() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(I18NInterpreter.class).to(AnnotationI18NInterpreter.class);
+			}
+
+		};
 	}
 }

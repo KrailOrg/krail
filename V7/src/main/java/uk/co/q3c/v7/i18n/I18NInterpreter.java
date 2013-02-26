@@ -25,7 +25,8 @@ public interface I18NInterpreter {
 
 	/**
 	 * Look up keys, translate to values for the {@link CurrentLocale#getLocale()}, and apply them to all selected
-	 * Vaadin components. Also applies the locale to each of the components
+	 * Vaadin components. Also applies the locale to each of the components. The call is cascaded to any contained
+	 * properties which implement the {@link I18NListener} interface.
 	 * 
 	 * @param listener
 	 */
