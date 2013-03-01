@@ -10,11 +10,13 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.util;
+package uk.co.q3c.util;
 
 import static org.fest.assertions.Assertions.*;
 
 import org.junit.Test;
+
+import uk.co.q3c.util.MessageFormat;
 
 public class MessageFormatTest {
 	@Test

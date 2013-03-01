@@ -9,7 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.A;
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.config.V7IniProvider;
 import uk.co.q3c.v7.base.guice.BaseModule;
@@ -25,6 +24,7 @@ import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.base.view.components.HeaderBar;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
+import uk.co.q3c.v7.util.A;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;

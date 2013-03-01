@@ -1,4 +1,4 @@
-package uk.co.q3c.v7;
+package uk.co.q3c.v7.util;
 
 /**
  * Annotation names for Guice, to try and avoid typos

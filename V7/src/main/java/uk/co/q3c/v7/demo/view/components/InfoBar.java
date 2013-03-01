@@ -15,7 +15,7 @@ package uk.co.q3c.v7.demo.view.components;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import uk.co.q3c.v7.A;
+import uk.co.q3c.v7.util.A;
 
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
