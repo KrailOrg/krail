@@ -24,16 +24,17 @@ import java.util.Locale;
 public interface I18NInterpreter {
 
 	/**
-	 * Look up keys, translate to values for the {@link CurrentLocale#getLocale()}, and apply them to all selected
-	 * Vaadin components. Also applies the locale to each of the components. The call is cascaded to any contained
-	 * properties which implement the {@link I18NListener} interface.
+	 * Carries out the interpretation.
+	 * <p>
+	 * Looks up I18NKeys, translate to values, and applies the resultant values (and the locale) to relevant Vaadin
+	 * components. The call is cascaded to any contained properties which implement the {@link I18NListener} interface.
 	 * 
 	 * @param listener
 	 */
 	public abstract void interpret(I18NListener listener);
 
 	/**
-	 * The Locale being used for translation
+	 * The Locale being used by this interpreter
 	 * 
 	 * @return
 	 */

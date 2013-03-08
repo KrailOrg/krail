@@ -23,6 +23,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.demo.i18N.DemoI18N;
+import uk.co.q3c.v7.demo.i18N.DemoI18Nreader;
+
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -30,7 +33,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class I18NInterpreterTest {
+public class AnnotationI18NInterpreterTest {
 
 	I18NInterpreter interpreter;
 
@@ -41,6 +44,9 @@ public class I18NInterpreterTest {
 
 	@Inject
 	Provider<I18NInterpreter> interpreterPro;
+
+	@Inject
+	Provider<DemoI18Nreader> demoI18NreaderPro;
 
 	@Before
 	public void setup() {
@@ -119,6 +125,20 @@ public class I18NInterpreterTest {
 
 	}
 
+	@Test
+	public void multiAnnotations() {
+
+		// given
+		currentLocale.registerAnnotation(DemoI18N.class, demoI18NreaderPro);
+		System.out.println(currentLocale.registeredAnnotations());
+		// when
+		currentLocale.setLocale(Locale.GERMAN);
+		// then
+		assertThat(testObject.getDemoLabel().getCaption()).isEqualTo("ja");
+		assertThat(testObject.getDemoLabel().getDescription()).isEqualTo("ja");
+		assertThat(testObject.getDemoLabel().getValue()).isEqualTo("nein");
+	}
+
 	@ModuleProvider
 	protected AbstractModule moduleProvider() {
 		return new AbstractModule() {
@@ -126,6 +146,7 @@ public class I18NInterpreterTest {
 			@Override
 			protected void configure() {
 				bind(I18NInterpreter.class).to(AnnotationI18NInterpreter.class);
+
 			}
 
 		};

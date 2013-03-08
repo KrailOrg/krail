@@ -12,6 +12,9 @@
  */
 package uk.co.q3c.v7.i18n;
 
+import uk.co.q3c.v7.demo.i18N.DemoI18N;
+import uk.co.q3c.v7.demo.i18N.DemoLabelKeys;
+
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
@@ -26,6 +29,9 @@ public class I18NTestClass implements I18NListener {
 
 	@I18N(caption = LabelKeys.small, description = DescriptionKeys.small_font)
 	private final Table table;
+
+	@DemoI18N(caption = DemoLabelKeys.yes, description = DemoLabelKeys.yes, value = DemoLabelKeys.no)
+	private final Label demoLabel;
 
 	private final TestCompositeComponent ccs;
 
@@ -44,6 +50,7 @@ public class I18NTestClass implements I18NListener {
 		buttonWithAnnotation = new Button();
 		buttonWithoutAnnotation = new Button();
 		label = new Label();
+		demoLabel = new Label();
 		integer = new Integer(5);
 		table = new Table();
 		setupTableColumns();
@@ -103,6 +110,10 @@ public class I18NTestClass implements I18NListener {
 
 	public TestCompositeNonComponentNested getCncn() {
 		return cncn;
+	}
+
+	public Label getDemoLabel() {
+		return demoLabel;
 	}
 
 }

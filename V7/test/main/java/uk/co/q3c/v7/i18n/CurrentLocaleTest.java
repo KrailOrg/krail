@@ -13,14 +13,18 @@
 package uk.co.q3c.v7.i18n;
 
 import static org.fest.assertions.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import java.lang.annotation.Annotation;
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -36,6 +40,15 @@ public class CurrentLocaleTest implements I18NListener {
 
 	@Inject
 	CurrentLocale currentLocale;
+
+	@Mock
+	Provider<I18NReader> readerPro;
+
+	@Mock
+	I18NReader reader;
+
+	@Mock
+	Annotation annotation;
 
 	@Before
 	public void setup() {
@@ -82,6 +95,24 @@ public class CurrentLocaleTest implements I18NListener {
 		currentLocale.setLocale(Locale.ENGLISH);
 		// then
 		assertThat(listenerFired).isFalse();
+
+	}
+
+	@Test
+	public void registerAnnotation() {
+
+		// given
+		when(readerPro.get()).thenReturn(reader);
+		// when
+		currentLocale.registerAnnotation(annotation.getClass(), readerPro);
+		// then
+		assertThat(currentLocale.readerForAnnotation(annotation.getClass())).isEqualTo(readerPro);
+		assertThat(currentLocale.readerForAnnotation(Inject.class)).isNull();
+		Provider<? extends I18NAnnotationReader> r = currentLocale.readerForAnnotation(I18N.class);
+		assertThat(r).isNotNull();
+		assertThat(r.get()).isInstanceOf(I18NReader.class);
+		assertThat(currentLocale.getI18NReaders().size()).isEqualTo(2);
+		assertThat(currentLocale.registeredAnnotations()).contains(I18N.class, annotation.getClass());
 
 	}
 
