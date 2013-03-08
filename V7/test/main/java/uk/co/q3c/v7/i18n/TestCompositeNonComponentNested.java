@@ -16,7 +16,7 @@ public class TestCompositeNonComponentNested implements I18NListener {
 	private boolean localeChangeCalled;
 
 	@Override
-	public void localeChange(I18NInterpreter interpreter) {
+	public void localeChange(I18NTranslator interpreter) {
 		localeChangeCalled = true;
 	}
 

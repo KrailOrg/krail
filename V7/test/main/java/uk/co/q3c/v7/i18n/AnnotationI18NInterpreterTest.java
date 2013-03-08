@@ -35,7 +35,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 @GuiceContext({})
 public class AnnotationI18NInterpreterTest {
 
-	I18NInterpreter interpreter;
+	I18NTranslator interpreter;
 
 	I18NTestClass testObject;
 
@@ -43,7 +43,7 @@ public class AnnotationI18NInterpreterTest {
 	CurrentLocale currentLocale;
 
 	@Inject
-	Provider<I18NInterpreter> interpreterPro;
+	Provider<I18NTranslator> interpreterPro;
 
 	@Inject
 	Provider<DemoI18Nreader> demoI18NreaderPro;
@@ -145,7 +145,7 @@ public class AnnotationI18NInterpreterTest {
 
 			@Override
 			protected void configure() {
-				bind(I18NInterpreter.class).to(AnnotationI18NInterpreter.class);
+				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
 
 			}
 

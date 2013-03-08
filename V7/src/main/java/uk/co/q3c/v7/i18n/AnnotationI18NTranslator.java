@@ -33,7 +33,7 @@ import com.vaadin.ui.Table;
 
 /**
  * Utility class to manipulate Vaadin component settings to reflect locale changes. This implementation uses field
- * annotations to specify the keys to use, and this {@link I18NInterpreter} implementation then looks up the key values
+ * annotations to specify the keys to use, and this {@link I18NTranslator} implementation then looks up the key values
  * and sets caption, description and value properties of the component.
  * <p>
  * All the annotation parameters are optional. If caption or description keys are not specified, then the caption or
@@ -55,26 +55,26 @@ import com.vaadin.ui.Table;
  * @author David Sowerby 8 Feb 2013
  * 
  */
-public class AnnotationI18NInterpreter implements I18NInterpreter {
-	private static Logger log = LoggerFactory.getLogger(AnnotationI18NInterpreter.class);
+public class AnnotationI18NTranslator implements I18NTranslator {
+	private static Logger log = LoggerFactory.getLogger(AnnotationI18NTranslator.class);
 	private final CurrentLocale currentLocale;
-	private final Provider<I18NInterpreter> interpreterPro;
+	private final Provider<I18NTranslator> translatorPro;
 	private final Map<Class<? extends Annotation>, Provider<? extends I18NAnnotationReader>> readers;
 
 	@Inject
-	protected AnnotationI18NInterpreter(CurrentLocale currentLocale, Provider<I18NInterpreter> interpreterPro) {
+	protected AnnotationI18NTranslator(CurrentLocale currentLocale, Provider<I18NTranslator> translatorPro) {
 		super();
 		this.currentLocale = currentLocale;
-		this.interpreterPro = interpreterPro;
+		this.translatorPro = translatorPro;
 		this.readers = currentLocale.getI18NReaders();
 
 	}
 
 	/**
-	 * @see uk.co.q3c.v7.i18n.I18NInterpreter#interpret(uk.co.q3c.v7.i18n.I18NListener)
+	 * @see uk.co.q3c.v7.i18n.I18NTranslator#translate(uk.co.q3c.v7.i18n.I18NListener)
 	 */
 	@Override
-	public void interpret(I18NListener listener) {
+	public void translate(I18NListener listener) {
 		Class<?> clazz = listener.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
@@ -95,7 +95,7 @@ public class AnnotationI18NInterpreter implements I18NInterpreter {
 		field.setAccessible(true);
 		try {
 			I18NListener sub = (I18NListener) field.get(listener);
-			sub.localeChange(interpreterPro.get());
+			sub.localeChange(translatorPro.get());
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			log.error("Unable to process I18N sub-listener " + field.getName(), e);
 		}

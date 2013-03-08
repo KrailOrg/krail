@@ -12,8 +12,7 @@
  */
 package uk.co.q3c.v7.i18n;
 
-
 public interface I18NListener {
 
-	public void localeChange(I18NInterpreter interpreter);
+	public void localeChange(I18NTranslator translator);
 }

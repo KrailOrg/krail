@@ -30,8 +30,8 @@ import com.google.common.collect.Maps;
 /**
  * Provides a singleton reference to the currently selected Locale. {@link I18NListener}s can be added to listen for
  * locale changes. This class also support the use of annotations to specify the {@link I18NKeys} to be used for
- * interpretation. Annotations cannot be sub-classed, and in order to support the use of multiple annotations, they must
- * be registered with {@link CurrentLocale} so that the {@link I18NInterpreter} implementation can check for their
+ * translation. Annotations cannot be sub-classed, and in order to support the use of multiple annotations, they must be
+ * registered with {@link CurrentLocale} so that the {@link I18NTranslator} implementation can check for their
  * existence. The {@link I18N} annotation is registered by default.
  * 
  * @see https://sites.google.com/site/q3cjava/internationalisation-i18n
@@ -43,13 +43,13 @@ public class CurrentLocale {
 
 	private Locale locale = Locale.UK;
 	private final List<I18NListener> listeners = new ArrayList<>();
-	private final Provider<I18NInterpreter> interpreterPro;
+	private final Provider<I18NTranslator> translatorPro;
 	private final Map<Class<? extends Annotation>, Provider<? extends I18NAnnotationReader>> readers = new HashMap<>();
 
 	@Inject
-	protected CurrentLocale(Provider<I18NInterpreter> interpreterPro, Provider<I18NReader> readerPro) {
+	protected CurrentLocale(Provider<I18NTranslator> translatorPro, Provider<I18NReader> readerPro) {
 		super();
-		this.interpreterPro = interpreterPro;
+		this.translatorPro = translatorPro;
 		registerAnnotation(I18N.class, readerPro);
 	}
 
@@ -74,8 +74,8 @@ public class CurrentLocale {
 
 	private void fireListeners(Locale locale) {
 		for (I18NListener listener : listeners) {
-			I18NInterpreter interpreter = interpreterPro.get();
-			listener.localeChange(interpreter);
+			I18NTranslator translator = translatorPro.get();
+			listener.localeChange(translator);
 		}
 	}
 
@@ -84,7 +84,7 @@ public class CurrentLocale {
 	}
 
 	/**
-	 * Returns the Annotations which the interpreter will look for. Register an Annotation using
+	 * Returns the Annotations which the translator will look for. Register an Annotation using
 	 * {@link #registerAnnotation(Annotation)}
 	 * 
 	 * @return
@@ -95,7 +95,7 @@ public class CurrentLocale {
 	}
 
 	/**
-	 * Register an Annotation which you want the interpreter to use, together with a Provider for its associated reader
+	 * Register an Annotation which you want the translator to use, together with a Provider for its associated reader
 	 * 
 	 * @param annotation
 	 */

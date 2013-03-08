@@ -18,7 +18,7 @@ public class TestCompositeComponentNested extends Panel implements I18NListener 
 	private boolean localeChangeCalled;
 
 	@Override
-	public void localeChange(I18NInterpreter interpreter) {
+	public void localeChange(I18NTranslator interpreter) {
 		localeChangeCalled = true;
 	}
 

@@ -36,7 +36,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 public class CurrentLocaleTest implements I18NListener {
 
 	boolean listenerFired = false;
-	I18NInterpreter interpreter = null;
+	I18NTranslator interpreter = null;
 
 	@Inject
 	CurrentLocale currentLocale;
@@ -117,7 +117,7 @@ public class CurrentLocaleTest implements I18NListener {
 	}
 
 	@Override
-	public void localeChange(I18NInterpreter interpreter) {
+	public void localeChange(I18NTranslator interpreter) {
 		listenerFired = true;
 		this.interpreter = interpreter;
 	}
@@ -128,7 +128,7 @@ public class CurrentLocaleTest implements I18NListener {
 
 			@Override
 			protected void configure() {
-				bind(I18NInterpreter.class).to(AnnotationI18NInterpreter.class);
+				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
 			}
 
 		};

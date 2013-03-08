@@ -21,20 +21,19 @@ import java.util.Locale;
  * @author David Sowerby 10 Feb 2013
  * 
  */
-public interface I18NInterpreter {
+public interface I18NTranslator {
 
 	/**
-	 * Carries out the interpretation.
-	 * <p>
-	 * Looks up I18NKeys, translate to values, and applies the resultant values (and the locale) to relevant Vaadin
-	 * components. The call is cascaded to any contained properties which implement the {@link I18NListener} interface.
+	 * Implementations must derive the correct language 'value' from an {@link I18NKeys} key, apply the value (and the
+	 * locale) to relevant Vaadin components. This call is cascaded to any of the <code>listener</code>properties which
+	 * also implement the {@link I18NListener} interface.
 	 * 
 	 * @param listener
 	 */
-	public abstract void interpret(I18NListener listener);
+	public abstract void translate(I18NListener listener);
 
 	/**
-	 * The Locale being used by this interpreter
+	 * The Locale being used by this translator
 	 * 
 	 * @return
 	 */

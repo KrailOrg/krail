@@ -68,8 +68,8 @@ public class I18NTestClass implements I18NListener {
 	}
 
 	@Override
-	public void localeChange(I18NInterpreter interpreter) {
-		interpreter.interpret(this);
+	public void localeChange(I18NTranslator interpreter) {
+		interpreter.translate(this);
 	}
 
 	public Button getButtonWithAnnotation() {
