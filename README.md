@@ -15,9 +15,11 @@ Whenever I start a new application it feels like I cover the same ground - getti
 1. Document code which relates to specific integration, to enable others to extract what they want.
 Status
 
+## Status
+
 8th Feb 2013:  Vaadin 7.0.0 is integrated with Guice 3.0.  Shiro is fully working using annotations, although I still have to find a solution to path based security, which Shiro provides for standard web applications. 
 
-The issues tracker and [blog](http://rndjava.blogspot.co.uk/) provide some more detail. 
+The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information. 
 
 
 
