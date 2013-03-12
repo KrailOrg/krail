@@ -36,6 +36,9 @@ import com.vaadin.ui.Table;
  * annotations to specify the keys to use, and this {@link I18NTranslator} implementation then looks up the key values
  * and sets caption, description and value properties of the component.
  * <p>
+ * There are two sources of annotations. They may be applied to the UI Components directly, or on an entity which is
+ * being used as a model for form creation.
+ * <p>
  * All the annotation parameters are optional. If caption or description keys are not specified, then the caption or
  * description of the component is set to null. If the value key is not specified, the value of the component remains
  * unchanged.
@@ -191,6 +194,10 @@ public class AnnotationI18NTranslator implements I18NTranslator {
 	@Override
 	public Locale getLocale() {
 		return currentLocale.getLocale();
+	}
+
+	public void apply(AbstractComponent component, Field fieldWithAnnotations) {
+
 	}
 
 }

@@ -69,6 +69,10 @@
 
 		<!-- Date Time -->
 		<dependency org="joda-time" name="joda-time" rev="2.1" />
+		
+		<!-- Validation -->
+		<dependency org="org.apache.bval" name="bval-jsr303" rev="0.5"/>
+            
 
 
 		<!-- Utility -->

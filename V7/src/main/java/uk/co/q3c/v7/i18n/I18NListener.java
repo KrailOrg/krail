@@ -13,6 +13,10 @@
 package uk.co.q3c.v7.i18n;
 
 public interface I18NListener {
-
+	/**
+	 * Calls the translator to scan the listener's fields and apply translations
+	 * 
+	 * @param translator
+	 */
 	public void localeChange(I18NTranslator translator);
 }
