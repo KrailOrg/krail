@@ -72,8 +72,7 @@
 		
 		<!-- Validation -->
 		<dependency org="org.apache.bval" name="bval-jsr303" rev="0.5"/>
-            
-
+		<dependency org="javax.validation" name="validation-api" rev="1.1.0.CR1"/>
 
 		<!-- Utility -->
 		<dependency org="com.google.guava" name="guava" rev="13.0.1" />
