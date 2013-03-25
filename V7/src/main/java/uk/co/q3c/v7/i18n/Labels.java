@@ -30,6 +30,8 @@ public class Labels extends EnumResourceBundle<LabelKeys> {
 	static {
 		map.put(LabelKeys.ok, "ok");
 		map.put(LabelKeys.cancel, "cancel");
+		map.put(LabelKeys.first_name, "first name");
+		map.put(LabelKeys.last_name, "last name");
 		map.put(LabelKeys.small, "small");
 
 	}

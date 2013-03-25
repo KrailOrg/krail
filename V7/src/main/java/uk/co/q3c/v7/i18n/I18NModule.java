@@ -12,37 +12,13 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import com.google.inject.AbstractModule;
 
-/**
- * @see Labels
- * @author David Sowerby 24 Mar 2013
- * 
- */
-public enum LabelKeys implements I18NKeys<Labels> {
-	_nullkey_,
-	cancel,
-	first_name,
-	last_name,
-	ok,
-	small
-
-	;
+public class I18NModule extends AbstractModule {
 
 	@Override
-	public Labels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Labels.class.getName(), locale);
-		return (Labels) bundle;
+	protected void configure() {
+		bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
 	}
 
-	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
-	}
-
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
-	}
 }

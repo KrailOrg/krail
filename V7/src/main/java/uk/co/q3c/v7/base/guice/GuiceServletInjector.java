@@ -20,8 +20,8 @@ import org.apache.shiro.guice.aop.ShiroAopModule;
 import org.apache.shiro.mgt.SecurityManager;
 
 import uk.co.q3c.v7.base.config.IniModule;
-import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.config.TestV7IniProvider;
+import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
@@ -29,6 +29,7 @@ import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.demo.dao.DemoDAOModule;
 import uk.co.q3c.v7.demo.ui.DemoUIModule;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
+import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.persist.orient.db.OrientDbModule;
 
 import com.google.inject.Guice;
@@ -46,7 +47,8 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 		V7Ini ini = new TestV7IniProvider().get();
 		injector = Guice.createInjector(new DefaultShiroWebModule(ctx.get()), new V7ShiroVaadinModule(),
 				new ShiroAopModule(), new BaseModule(), new DemoViewModule(), new ThreadScopeModule(),
-				new UIScopeModule(), new DemoUIModule(), new IniModule(), new DemoDAOModule(), new OrientDbModule(ini));
+				new UIScopeModule(), new DemoUIModule(), new IniModule(), new DemoDAOModule(), new OrientDbModule(ini),
+				new I18NModule());
 
 		// The SecurityManager binding is in ShiroWebModule, and therefore DemoWebShiroModule. By default the binding is
 		// to DefaultWebSecurityManager

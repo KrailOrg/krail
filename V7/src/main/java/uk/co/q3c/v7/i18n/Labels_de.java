@@ -29,6 +29,8 @@ public class Labels_de extends Labels {
 
 		map.put(LabelKeys.cancel, "stornieren");
 		map.put(LabelKeys.small, "klein");
+		map.put(LabelKeys.first_name, "vorname");
+		map.put(LabelKeys.last_name, "nachname");
 	}
 
 	@Override

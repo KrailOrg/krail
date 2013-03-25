@@ -10,39 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.i18n;
+package uk.co.q3c.v7.base.ui.form;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import uk.co.q3c.v7.base.entity.EntityBase;
+import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 
 /**
- * @see Labels
+ * A sub-class of {@link BeanFieldSet} with type safety for descendants of {@link EntityBase}
+ * 
  * @author David Sowerby 24 Mar 2013
  * 
+ * @param <T>
  */
-public enum LabelKeys implements I18NKeys<Labels> {
-	_nullkey_,
-	cancel,
-	first_name,
-	last_name,
-	ok,
-	small
+public class EntityFieldSet<T extends EntityBase> extends BeanFieldSet<T> {
 
-	;
-
-	@Override
-	public Labels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Labels.class.getName(), locale);
-		return (Labels) bundle;
+	protected EntityFieldSet(AnnotationI18NTranslator translator) {
+		super(translator);
 	}
 
-	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
-	}
-
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
-	}
 }
