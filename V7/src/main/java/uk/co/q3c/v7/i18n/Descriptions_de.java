@@ -20,7 +20,9 @@ public class Descriptions_de extends Descriptions {
 			DescriptionKeys.class);
 
 	static {
+		map.put(DescriptionKeys.last_name, "die Nachname oder der Familienname");
 		map.put(DescriptionKeys.small_font, "Benutzen Sie eine kleine Schriftart");
+
 	}
 
 	@Override

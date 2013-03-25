@@ -91,6 +91,7 @@ public class FieldSetTest {
 		// then
 		assertThat(fieldSet.getFirstName().getCaption()).isEqualTo("first name");
 		assertThat(fieldSet.getLastName().getCaption()).isEqualTo("last name");
+		assertThat(fieldSet.getLastName().getDescription()).isEqualTo("the last name or family name");
 
 	}
 
@@ -105,6 +106,7 @@ public class FieldSetTest {
 		// then
 		assertThat(fieldSet.getFirstName().getCaption()).isEqualTo("vorname");
 		assertThat(fieldSet.getLastName().getCaption()).isEqualTo("nachname");
+		assertThat(fieldSet.getLastName().getDescription()).isEqualTo("die Nachname oder der Familienname");
 
 	}
 

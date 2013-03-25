@@ -16,9 +16,10 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public enum DescriptionKeys implements I18NKeys<Descriptions> {
+	_nullkey_,
+	last_name,
 	ok,
-	small_font,
-	_nullkey_;
+	small_font;
 
 	@Override
 	public Descriptions getBundle(Locale locale) {

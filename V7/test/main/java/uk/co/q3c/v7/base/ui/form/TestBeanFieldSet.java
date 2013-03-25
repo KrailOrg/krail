@@ -14,6 +14,7 @@ package uk.co.q3c.v7.base.ui.form;
 
 import uk.co.q3c.v7.base.entity.TestEntity;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.DescriptionKeys;
 import uk.co.q3c.v7.i18n.I18N;
 import uk.co.q3c.v7.i18n.LabelKeys;
 
@@ -23,7 +24,7 @@ public class TestBeanFieldSet extends EntityFieldSet<TestEntity> {
 
 	@I18N(caption = LabelKeys.first_name)
 	private TextField firstName;
-	@I18N(caption = LabelKeys.last_name)
+	@I18N(caption = LabelKeys.last_name, description = DescriptionKeys.last_name)
 	private TextField lastName;
 
 	protected TestBeanFieldSet(AnnotationI18NTranslator translator) {
