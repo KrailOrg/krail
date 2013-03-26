@@ -29,6 +29,7 @@ import uk.co.q3c.v7.i18n.I18NModule;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.data.Validator.InvalidValueException;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class })
@@ -107,6 +108,18 @@ public class FieldSetTest {
 		assertThat(fieldSet.getFirstName().getCaption()).isEqualTo("vorname");
 		assertThat(fieldSet.getLastName().getCaption()).isEqualTo("nachname");
 		assertThat(fieldSet.getLastName().getDescription()).isEqualTo("die Nachname oder der Familienname");
+
+	}
+
+	@Test(expected = InvalidValueException.class)
+	public void validationFailure() {
+
+		// given
+		te.setFirstName("P");
+		// when
+		fieldSet.setBean(te);
+		// then
+		fieldSet.getFirstName().validate();
 
 	}
 

@@ -14,6 +14,8 @@ package uk.co.q3c.v7.base.guice;
 
 import static org.fest.assertions.Assertions.*;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
@@ -27,13 +29,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.config.TestV7IniProvider;
+import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 
 @RunWith(JMockit.class)
 public class GuiceServletInjectorTest {
@@ -103,6 +105,7 @@ public class GuiceServletInjectorTest {
 		};
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void getInjector() {
 
@@ -120,7 +123,7 @@ public class GuiceServletInjectorTest {
 				iniPro.get();
 				result = new V7Ini();
 
-				Guice.createInjector((AbstractModule[]) any);
+				Guice.createInjector((List<Module>) any);
 				result = injector;
 
 			}
