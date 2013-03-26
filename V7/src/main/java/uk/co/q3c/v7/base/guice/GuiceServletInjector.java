@@ -24,8 +24,8 @@ import org.apache.shiro.mgt.SecurityManager;
 
 import uk.co.q3c.v7.app.AppModules;
 import uk.co.q3c.v7.base.config.IniModule;
-import uk.co.q3c.v7.base.config.TestV7IniProvider;
 import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.V7IniProvider;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
@@ -64,7 +64,7 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 
 	private List<Module> getModules() {
 		// ini load is handled by the provider
-		V7Ini ini = new TestV7IniProvider().get();
+		V7Ini ini = new V7IniProvider().get();
 		List<Module> baseModules = new ArrayList<>();
 		baseModules.add(new V7ShiroVaadinModule());
 		baseModules.add(new DefaultShiroWebModule(ctx.get()));

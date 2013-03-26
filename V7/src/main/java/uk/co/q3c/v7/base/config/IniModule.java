@@ -20,7 +20,7 @@ public class IniModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(V7Ini.class).toProvider(TestV7IniProvider.class).in(Singleton.class);
+		bind(V7Ini.class).toProvider(V7IniProvider.class).in(Singleton.class);
 	}
 
 }
