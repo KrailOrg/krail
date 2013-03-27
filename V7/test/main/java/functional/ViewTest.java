@@ -12,7 +12,6 @@ import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.ui.BasicUI;
-import uk.co.q3c.v7.base.ui.V7UIModule;
 import uk.co.q3c.v7.demo.view.DemoViewBase;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 import uk.co.q3c.v7.demo.view.View2;
@@ -22,10 +21,11 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.ui.Button.ClickEvent;
 
 import fixture.TestIniModule;
+import fixture.TestUIModule;
 import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, UIScopeModule.class, V7UIModule.class, DemoViewModule.class,
+@GuiceContext({ BaseModule.class, UIScopeModule.class, TestUIModule.class, DemoViewModule.class,
 		V7ShiroVaadinModule.class, TestIniModule.class })
 public class ViewTest extends UITestBase {
 
