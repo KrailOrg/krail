@@ -19,11 +19,13 @@ import com.google.inject.multibindings.MapBinder;
 
 /**
  * 
+ * The base class for all applications to use for binding views. Override {@link #bindViews(MapBinder)} to provide your
+ * application's view bindings. See {@link DemoViewModule} for an example
  * 
  * @author David Sowerby 9 Jan 2013
  * 
  */
-public class V7ViewModule extends AbstractModule {
+public abstract class V7ViewModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
@@ -57,9 +59,7 @@ public class V7ViewModule extends AbstractModule {
 	 * 
 	 * @param mapbinder
 	 */
-	protected void bindViews(MapBinder<String, V7View> mapbinder) {
-
-	}
+	protected abstract void bindViews(MapBinder<String, V7View> mapbinder);
 
 	/**
 	 * Override to provide your ErrorView
