@@ -19,7 +19,7 @@
 	</filter-mapping>
 
 	<listener>
-		<listener-class>uk.co.q3c.v7.base.guice.GuiceServletInjector</listener-class>
+		<listener-class>uk.co.q3c.v7.demo.guice.DemoGuiceServletInjector</listener-class>
 	</listener>
 	
 	<servlet>

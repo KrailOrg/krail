@@ -32,6 +32,7 @@ import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.config.V7IniProvider;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
+import uk.co.q3c.v7.demo.guice.DemoGuiceServletInjector;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -44,7 +45,7 @@ public class GuiceServletInjectorTest {
 
 	}
 
-	GuiceServletInjector out;
+	BaseGuiceServletInjector out;
 
 	@Mocked
 	ServletContext servletContext;
@@ -57,7 +58,7 @@ public class GuiceServletInjectorTest {
 
 	@Before
 	public void setup() {
-		out = new GuiceServletInjector();
+		out = new DemoGuiceServletInjector();
 
 	}
 

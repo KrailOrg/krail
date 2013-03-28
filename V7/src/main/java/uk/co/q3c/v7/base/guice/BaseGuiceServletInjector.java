@@ -22,7 +22,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.guice.aop.ShiroAopModule;
 import org.apache.shiro.mgt.SecurityManager;
 
-import uk.co.q3c.v7.app.AppModules;
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.config.V7IniProvider;
@@ -38,7 +37,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 
-public class GuiceServletInjector extends GuiceServletContextListener {
+public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
 	private static Injector injector;
 
 	private final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
@@ -75,9 +74,11 @@ public class GuiceServletInjector extends GuiceServletContextListener {
 		baseModules.add(new IniModule());
 		baseModules.add(new OrientDbModule(ini));
 		baseModules.add(new I18NModule());
-		baseModules.addAll(AppModules.appModules());
+		addAppModules(baseModules);
 		return baseModules;
 	}
+
+	protected abstract void addAppModules(List<Module> baseModules);
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {

@@ -10,28 +10,23 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.app;
+package uk.co.q3c.v7.demo.guice;
 
-import java.util.Arrays;
 import java.util.List;
 
+import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
 import uk.co.q3c.v7.demo.dao.DemoDAOModule;
 import uk.co.q3c.v7.demo.ui.DemoUIModule;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 
 import com.google.inject.Module;
 
-public class AppModules {
-	private static Module[] modules;
+public class DemoGuiceServletInjector extends BaseGuiceServletInjector {
 
-	public static List<Module> appModules() {
-		return Arrays.asList(modules);
+	@Override
+	protected void addAppModules(List<Module> baseModules) {
+		baseModules.add(new DemoViewModule());
+		baseModules.add(new DemoDAOModule());
+		baseModules.add(new DemoUIModule());
 	}
-
-	/**
-	 * replace this initialisation code with the modules for your app
-	 */
-	static {
-		modules = new Module[] { new DemoViewModule(), new DemoDAOModule(), new DemoUIModule() };
-	};
 }
