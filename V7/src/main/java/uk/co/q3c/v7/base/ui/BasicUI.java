@@ -9,8 +9,7 @@ import uk.co.q3c.v7.demo.view.components.InfoBar;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.ErrorHandler;
-import com.vaadin.server.Page;
-import com.vaadin.server.VaadinRequest;
+import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.VerticalLayout;
 
 // @PreserveOnRefresh
@@ -34,25 +33,8 @@ public class BasicUI extends ScopedUI {
 	}
 
 	@Override
-	protected void init(VaadinRequest request) {
-		super.init(request);
-		Page page = getPage();
-		page.setTitle("V7");
-
-		doLayout();
-
-		// Navigate to the correct start point
-		String fragment = page.getUriFragment();
-		getV7Navigator().navigateTo(fragment);
-	}
-
-	protected void doLayout() {
-
-		VerticalLayout screenLayout = new VerticalLayout(headerBar, infoBar, getViewDisplayPanel(), footerBar);
-		screenLayout.setSizeFull();
-		screenLayout.setExpandRatio(getViewDisplayPanel(), 1);
-		setContent(screenLayout);
-
+	protected AbstractOrderedLayout screenLayout() {
+		return new VerticalLayout(headerBar, infoBar, getViewDisplayPanel(), footerBar);
 	}
 
 	public DefaultHeaderBar getHeaderBar() {
@@ -61,6 +43,11 @@ public class BasicUI extends ScopedUI {
 
 	public FooterBar getFooterBar() {
 		return footerBar;
+	}
+
+	@Override
+	protected String pageTitle() {
+		return "V7";
 	}
 
 }
