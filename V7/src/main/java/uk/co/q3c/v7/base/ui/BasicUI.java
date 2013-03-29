@@ -3,8 +3,8 @@ package uk.co.q3c.v7.base.ui;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.view.components.DefaultHeaderBar;
-import uk.co.q3c.v7.base.view.components.FooterBar;
+import uk.co.q3c.v7.demo.view.components.FooterBar;
+import uk.co.q3c.v7.demo.view.components.HeaderBar;
 import uk.co.q3c.v7.demo.view.components.InfoBar;
 
 import com.vaadin.annotations.Theme;
@@ -16,14 +16,14 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("chameleon")
 public class BasicUI extends ScopedUI {
 
-	private final DefaultHeaderBar headerBar;
+	private final HeaderBar headerBar;
 
 	private final FooterBar footerBar;
 
 	private final InfoBar infoBar;
 
 	@Inject
-	protected BasicUI(DefaultHeaderBar headerBar, FooterBar footerBar, InfoBar infoBar, V7Navigator navigator,
+	protected BasicUI(HeaderBar headerBar, FooterBar footerBar, InfoBar infoBar, V7Navigator navigator,
 			ErrorHandler errorHandler) {
 		super(navigator, errorHandler);
 		this.footerBar = footerBar;
@@ -37,7 +37,7 @@ public class BasicUI extends ScopedUI {
 		return new VerticalLayout(headerBar, infoBar, getViewDisplayPanel(), footerBar);
 	}
 
-	public DefaultHeaderBar getHeaderBar() {
+	public HeaderBar getHeaderBar() {
 		return headerBar;
 	}
 

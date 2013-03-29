@@ -1,8 +1,9 @@
-package uk.co.q3c.v7.base.view.components;
+package uk.co.q3c.v7.demo.view.components;
 
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.view.components.LoginStatusPanel;
 
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -12,7 +13,7 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 
 @UIScoped
-public class DefaultHeaderBar extends CustomComponent implements HeaderBar {
+public class HeaderBar extends CustomComponent {
 	private GridLayout mainLayout;
 
 	private Label appLabel;
@@ -22,7 +23,7 @@ public class DefaultHeaderBar extends CustomComponent implements HeaderBar {
 	private final LoginStatusPanel loginPanel;
 
 	@Inject
-	protected DefaultHeaderBar(LoginStatusPanel loginPanel) {
+	protected HeaderBar(LoginStatusPanel loginPanel) {
 		setHeight("");
 		this.loginPanel = loginPanel;
 		buildMainLayout();

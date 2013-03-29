@@ -13,8 +13,8 @@ import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.VerticalViewBase;
-import uk.co.q3c.v7.base.view.components.FooterBar;
-import uk.co.q3c.v7.base.view.components.HeaderBar;
+import uk.co.q3c.v7.demo.view.components.FooterBar;
+import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.google.common.collect.Lists;
 import com.vaadin.server.ExternalResource;

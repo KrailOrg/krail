@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.base.view.components;
+package uk.co.q3c.v7.demo.view.components;
 
 import javax.inject.Inject;
 

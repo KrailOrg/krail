@@ -22,8 +22,8 @@ import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
-import uk.co.q3c.v7.base.view.components.HeaderBar;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
+import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
