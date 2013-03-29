@@ -52,7 +52,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	@Named(A.baseUri)
 	protected String baseUri;
 
-	VaadinRequest mockedRequest = mock(VaadinRequest.class);
+	protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
 
 	protected V7View currentView;
 
@@ -70,7 +70,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	protected Provider<V7Navigator> navigatorPro;
 
 	@Inject
-	private V7IniProvider iniPro;
+	protected V7IniProvider iniPro;
 
 	protected V7Ini ini;
 
@@ -78,9 +78,10 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 
 	@Before
 	public void setup() {
-		createUI(uiClass);
-		headerBar = injector.getInstance(HeaderBar.class);
-
+		if (uiClass != null) {
+			createUI(uiClass);
+			headerBar = injector.getInstance(HeaderBar.class);
+		}
 	}
 
 	@After
@@ -118,7 +119,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 		return (BasicUI) createUI(BasicUI.class);
 	}
 
-	private ScopedUI createUI(Class<? extends ScopedUI> clazz) {
+	protected ScopedUI createUI(Class<? extends ScopedUI> clazz) {
 		CurrentInstance.set(UI.class, null);
 		CurrentInstance.set(UIKey.class, null);
 		ui = (ScopedUI) provider.createInstance(clazz);

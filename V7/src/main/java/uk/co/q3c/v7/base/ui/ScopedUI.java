@@ -1,5 +1,6 @@
 package uk.co.q3c.v7.base.ui;
 
+import uk.co.q3c.v7.base.config.V7ConfigurationException;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -109,10 +110,22 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 			screenLayout = screenLayout();
 		}
 		screenLayout.setSizeFull();
+		if (screenLayout.getComponentIndex(getViewDisplayPanel()) < 0) {
+			String msg = "Your implementation of screenLayout() must include getViewDisplayPanel().  AS a minimum this could be 'return new VerticalLayout(getViewDisplayPanel())'";
+			throw new V7ConfigurationException(msg);
+		}
 		screenLayout.setExpandRatio(getViewDisplayPanel(), 1);
 		setContent(screenLayout);
 	}
 
+	/**
+	 * Override this to provide your screen layout. In order for Views to work one child component of this layout must
+	 * be provided by {@link #getViewDisplayPanel()}. The simplest example would be
+	 * {@code return new VerticalLayout(getViewDisplayPanel()}, which would set the View to take up all the available
+	 * screen space. {@link BasicUI} is an example of a UI which contains a header and footer bar.
+	 * 
+	 * @return
+	 */
 	protected abstract AbstractOrderedLayout screenLayout();
 
 	public V7View getView() {
