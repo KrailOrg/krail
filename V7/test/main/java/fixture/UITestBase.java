@@ -24,10 +24,8 @@ import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.base.view.components.HeaderBar;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
-import uk.co.q3c.v7.util.A;
 
 import com.google.inject.Injector;
-import com.google.inject.name.Named;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinRequest;
@@ -48,9 +46,7 @@ import com.vaadin.util.CurrentInstance;
 @GuiceContext({ BaseModule.class })
 public abstract class UITestBase extends ShiroIntegrationTestBase implements V7ViewChangeListener {
 
-	@Inject
-	@Named(A.baseUri)
-	protected String baseUri;
+	protected final String baseUri = "http://example.com";
 
 	protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
 

@@ -2,8 +2,6 @@ package uk.co.q3c.v7.base.guice.uiscope;
 
 import static org.mockito.Mockito.*;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,9 +10,7 @@ import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.view.components.HeaderBar;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
-import uk.co.q3c.v7.util.A;
 
-import com.google.inject.name.Named;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinServletRequest;
@@ -29,9 +25,6 @@ import fixture.UITestBase;
 @GuiceContext({ UIScopeModule.class, BaseModule.class, TestUIModule.class, DemoViewModule.class,
 		V7ShiroVaadinModule.class, TestIniModule.class })
 public class UIScopeTest extends UITestBase {
-	@Inject
-	@Named(A.baseUri)
-	String baseUri;
 
 	TestUI uib;
 
