@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE ivy-module [
-	<!ENTITY vaadin.version "7.0.0">
+	<!ENTITY vaadin.version "7.0.3">
 	<!ENTITY orient.version "1.4.0-SNAPSHOT">
 ]>
 <ivy-module version="2.0"
@@ -69,6 +69,9 @@
 
 		<!-- Date Time -->
 		<dependency org="joda-time" name="joda-time" rev="2.1" />
+		
+		<!-- Money -->
+		<dependency org="org.joda" name="joda-money" rev="0.8"/>
 		
 		<!-- Validation -->
 		<dependency org="org.apache.bval" name="bval-jsr303" rev="0.5"/>

@@ -10,14 +10,10 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.entity;
+package uk.co.q3c.v7.base.view.template;
 
-import javax.persistence.Id;
+import uk.co.q3c.v7.i18n.I18NListener;
 
-public class EntityBase {
-
-	@SuppressWarnings("unused")
-	@Id
-	private Object id;
+public interface ViewTemplate extends I18NListener {
 
 }

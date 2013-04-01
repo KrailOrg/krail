@@ -10,40 +10,33 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.persist.orient.custom;
+package uk.co.q3c.v7.base.data;
 
-import java.util.Locale;
-
-import org.joda.time.DateTime;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import uk.co.q3c.v7.base.data.EntityBase;
 
-/**
- * A test class only - used to hold each of the custom types used in OrientDb, to enable testing of the serialisation /
- * de-serialisation methods.
- * 
- * @author David Sowerby 29 Jan 2013
- * 
- */
-public class CustomTypeTestEntity extends EntityBase {
+public class TestEntity extends EntityBase {
+	@NotNull
+	@Size(min = 2, max = 14)
+	private String firstName;
+	private String lastName;
 
-	private DateTime dateTime;
-	private Locale locale;
-
-	public DateTime getDateTime() {
-		return dateTime;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setDateTime(DateTime dateTime) {
-		this.dateTime = dateTime;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public Locale getLocale() {
-		return locale;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLocale(Locale locale) {
-		this.locale = locale;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 }
