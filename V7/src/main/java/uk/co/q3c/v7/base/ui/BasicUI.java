@@ -8,6 +8,7 @@ import uk.co.q3c.v7.demo.view.components.HeaderBar;
 import uk.co.q3c.v7.demo.view.components.InfoBar;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.VerticalLayout;
@@ -24,8 +25,8 @@ public class BasicUI extends ScopedUI {
 
 	@Inject
 	protected BasicUI(HeaderBar headerBar, FooterBar footerBar, InfoBar infoBar, V7Navigator navigator,
-			ErrorHandler errorHandler) {
-		super(navigator, errorHandler);
+			ErrorHandler errorHandler, ConverterFactory converterFactory) {
+		super(navigator, errorHandler, converterFactory);
 		this.footerBar = footerBar;
 		this.headerBar = headerBar;
 		this.infoBar = infoBar;

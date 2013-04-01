@@ -8,6 +8,7 @@ import uk.co.q3c.v7.demo.view.components.FooterBar;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 import uk.co.q3c.v7.demo.view.components.InfoBar;
 
+import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 
 public class TestUI extends BasicUI {
@@ -17,8 +18,8 @@ public class TestUI extends BasicUI {
 
 	@Inject
 	protected TestUI(HeaderBar headerBar, FooterBar footerBar, InfoBar infoBar, V7Navigator navigator,
-			ErrorHandler errorHandler) {
-		super(headerBar, footerBar, infoBar, navigator, errorHandler);
+			ErrorHandler errorHandler, ConverterFactory converterFactory) {
+		super(headerBar, footerBar, infoBar, navigator, errorHandler, converterFactory);
 
 	}
 

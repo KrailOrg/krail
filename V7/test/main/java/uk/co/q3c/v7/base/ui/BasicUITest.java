@@ -1,11 +1,14 @@
 package uk.co.q3c.v7.base.ui;
 
 import static org.fest.assertions.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 
+import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
@@ -70,10 +73,12 @@ public class BasicUITest extends UITestBase {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void changePage() {
 
 		// given
+
 		// when
 		ui.getV7Navigator().navigateTo(view2);
 		// then
@@ -116,6 +121,18 @@ public class BasicUITest extends UITestBase {
 		// then
 		assertThat(currentView).isInstanceOf(View2.class);
 		assertThat(ui.getPage().getLocation().toString()).isEqualTo(uri(view2 + "/a=b"));
+
+	}
+
+	@Test
+	public void converterFactorySet() {
+
+		// given
+
+		// when
+
+		// then
+		verify(mockedSession).setConverterFactory(Matchers.any(V7DefaultConverterFactory.class));
 
 	}
 

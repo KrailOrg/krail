@@ -1,5 +1,6 @@
 package uk.co.q3c.v7.base.ui;
 
+import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -10,6 +11,7 @@ import uk.co.q3c.v7.demo.ui.SideBarUI;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
+import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.WebBrowser;
 import com.vaadin.ui.UI;
 
@@ -25,7 +27,12 @@ public abstract class V7UIModule extends AbstractModule {
 		addUIBindings(mapbinder);
 		bindNavigator();
 		bindURIHandler();
+		bindConverterFactory();
 		bindLoginStatusMonitor();
+	}
+
+	private void bindConverterFactory() {
+		bind(ConverterFactory.class).to(V7DefaultConverterFactory.class);
 	}
 
 	/**

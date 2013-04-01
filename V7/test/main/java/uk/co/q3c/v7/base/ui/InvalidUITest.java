@@ -23,6 +23,7 @@ import com.google.inject.multibindings.MapBinder;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.UIClassSelectionEvent;
 import com.vaadin.server.UIProvider;
@@ -53,8 +54,8 @@ public class InvalidUITest extends UITestBase {
 
 	static class DummyUI extends ScopedUI {
 		@Inject
-		protected DummyUI(V7Navigator navigator, ErrorHandler errorHandler) {
-			super(navigator, errorHandler);
+		protected DummyUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory) {
+			super(navigator, errorHandler, converterFactory);
 		}
 
 		@Override

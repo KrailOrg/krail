@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
@@ -59,6 +60,8 @@ public class UIScopeTest extends UITestBase {
 		CurrentInstance.set(UI.class, null);
 		CurrentInstance.set(UIKey.class, null);
 		CurrentInstance.set(UI.class, uia);
+		when(mockedSession.createConnectorId(Matchers.any(UI.class))).thenAnswer(new ConnectorIdAnswer());
+		uia.setSession(mockedSession);
 		uia.doInit(mockedRequest, 1);
 
 		HeaderBar originalHeader = uia.getHeaderBar();

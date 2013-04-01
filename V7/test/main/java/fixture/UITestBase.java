@@ -8,6 +8,9 @@ import javax.inject.Provider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.config.V7IniProvider;
@@ -28,7 +31,9 @@ import uk.co.q3c.v7.demo.view.components.HeaderBar;
 import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.server.ClientConnector;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
@@ -38,6 +43,10 @@ import com.vaadin.util.CurrentInstance;
  * they want to inject UIScoped objects - otherwise the injection happens before the UIScope context is ready.
  * <p>
  * A number of providers are made available by the class
+ * <p>
+ * ConnectorIDAnswer added to enable the use of the mocked session. When the session was not used there was no problem
+ * with having no connector ids, but the call to setConverterFactory in the UI.ini method changed that. Mocking the
+ * session requires provision of unique Ids for all connectors
  * 
  * @author David Sowerby 18 Jan 2013
  * 
@@ -45,10 +54,23 @@ import com.vaadin.util.CurrentInstance;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class })
 public abstract class UITestBase extends ShiroIntegrationTestBase implements V7ViewChangeListener {
+	// this is static to ensure count remains unique across all method calls
+	private static int connectCount = 1;
+
+	public class ConnectorIdAnswer implements Answer<String> {
+
+		@Override
+		public String answer(InvocationOnMock invocation) throws Throwable {
+			connectCount++;
+			return Integer.toString(connectCount);
+		}
+
+	}
 
 	protected final String baseUri = "http://example.com";
 
 	protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
+	protected VaadinSession mockedSession = mock(VaadinSession.class);
 
 	protected V7View currentView;
 
@@ -115,14 +137,17 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 		return (BasicUI) createUI(BasicUI.class);
 	}
 
+	@SuppressWarnings("deprecation")
 	protected ScopedUI createUI(Class<? extends ScopedUI> clazz) {
 		CurrentInstance.set(UI.class, null);
 		CurrentInstance.set(UIKey.class, null);
 		ui = (ScopedUI) provider.createInstance(clazz);
 		CurrentInstance.set(UI.class, ui);
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
+		when(mockedSession.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
+		ui.setSession(mockedSession);
 		ui.getV7Navigator().addViewChangeListener(this);
-		ui.doInit(mockedRequest, 1);
+		ui.doInit(mockedRequest, 23);
 		ini = iniPro.get();
 		return ui;
 	}

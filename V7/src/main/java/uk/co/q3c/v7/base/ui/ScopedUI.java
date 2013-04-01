@@ -8,6 +8,7 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewHolder;
 import uk.co.q3c.v7.i18n.I18NKeys;
 
+import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.Page;
@@ -25,11 +26,13 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	private final V7Navigator navigator;
 	private final ErrorHandler errorHandler;
 	private AbstractOrderedLayout screenLayout;
+	private final ConverterFactory converterFactory;
 
-	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler) {
+	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory) {
 		super();
 		this.errorHandler = errorHandler;
 		this.navigator = navigator;
+		this.converterFactory = converterFactory;
 		viewDisplayPanel = new Panel();
 		viewDisplayPanel.setSizeFull();
 	}
@@ -89,6 +92,9 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	 */
 	@Override
 	protected void init(VaadinRequest request) {
+
+		getSession().setConverterFactory(converterFactory);
+
 		// page isn't available during injected construction
 		Page page = getPage();
 		page.addUriFragmentChangedListener(navigator);
