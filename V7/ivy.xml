@@ -3,37 +3,32 @@
 	<!ENTITY vaadin.version "7.0.3">
 	<!ENTITY orient.version "1.4.0-SNAPSHOT">
 ]>
-<ivy-module version="2.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
 	<info organisation="com.example" module="v7proj" />
 	<configurations>
 		<!-- The default configuration, which should be deployed to the server -->
 		<conf name="default" />
-		<!-- A configuration only needed when compiling the widget set. Should 
-			not be deployed to the server -->
+		<!-- A configuration only needed when compiling the widget set. Should not be deployed to the server -->
 		<conf name="widgetset-compile" />
 	</configurations>
 	<dependencies>
 		<!-- The core server part of Vaadin -->
-		<dependency org="com.vaadin" name="vaadin-server" rev="&vaadin.version;"
-			conf="default->default" />
+		<dependency org="com.vaadin" name="vaadin-server" rev="&vaadin.version;" conf="default->default" />
 
 		<!-- Vaadin themes -->
 		<dependency org="com.vaadin" name="vaadin-themes" rev="&vaadin.version;" />
 
 		<!-- Precompiled DefaultWidgetSet -->
-		<dependency org="com.vaadin" name="vaadin-client-compiled"
-			rev="&vaadin.version;" />
+		<dependency org="com.vaadin" name="vaadin-client-compiled" rev="&vaadin.version;" />
 
 		<!-- Vaadin client side, needed for widget set compilation -->
 		<dependency org="com.vaadin" name="vaadin-client" rev="&vaadin.version;" />
 
 		<!-- Compiler for custom widget sets. Should not be deployed -->
-		<dependency org="com.vaadin" name="vaadin-client-compiler"
-			rev="&vaadin.version;" conf="widgetset-compile->default" />
-			
-	<!-- LIBRARIES -->
+		<dependency org="com.vaadin" name="vaadin-client-compiler" rev="&vaadin.version;" conf="widgetset-compile->default" />
+
+		<!-- LIBRARIES -->
 
 
 		<!-- Dependency Injection -->
@@ -64,42 +59,46 @@
 		<dependency org="com.mycila.testing.plugins" name="mycila-testing-mockito" rev="2.8" />
 		<dependency org="org.mockito" name="mockito-all" rev="1.9.0" />
 		<dependency org="junit" name="junit" rev="4.+" />
-		<dependency org="com.googlecode.jmockit" name="jmockit" rev="1.0"/>
-            
+		<dependency org="com.googlecode.jmockit" name="jmockit" rev="1.0" />
+
 
 		<!-- Date Time -->
 		<dependency org="joda-time" name="joda-time" rev="2.1" />
-		
+
 		<!-- Money -->
-		<dependency org="org.joda" name="joda-money" rev="0.8"/>
-		
+		<dependency org="org.joda" name="joda-money" rev="0.8" />
+
 		<!-- Validation -->
-		<dependency org="org.apache.bval" name="bval-jsr303" rev="0.5"/>
-		<dependency org="org.apache.bval" name="bval-guice" rev="0.5"/>
-		<dependency org="javax.validation" name="validation-api" rev="1.1.0.CR1"/>
+		<dependency org="org.apache.bval" name="bval-jsr303" rev="0.5" />
+		<dependency org="org.apache.bval" name="bval-guice" rev="0.5" />
+		<dependency org="javax.validation" name="validation-api" rev="1.1.0.CR1" />
 
 		<!-- Utility -->
 		<dependency org="com.google.guava" name="guava" rev="13.0.1" />
+		<!-- the easiest way to all the Jung parts -->
+		<dependency org="net.sf.jung" name="jung-samples" rev="2.0.1" />
+
+
 
 		<!-- Persistence -->
 		<!-- see http://code.google.com/p/orient/wiki/JavaAPI#Database_types and http://code.google.com/p/orient/wiki/GraphDatabaseTinkerpop -->
-		
+
 		<dependency org="com.orientechnologies" name="orientdb-core" rev="&orient.version;" />
 		<dependency org="com.orientechnologies" name="orient-commons" rev="&orient.version;" />
-		
+
 		<dependency org="com.orientechnologies" name="orientdb-client" rev="&orient.version;" /> <!-- needed for remote server -->
-		<dependency org="com.orientechnologies" name="orientdb-enterprise" rev="&orient.version;"/> <!-- needed for remote server -->
-            
-	
+		<dependency org="com.orientechnologies" name="orientdb-enterprise" rev="&orient.version;" /> <!-- needed for remote server -->
+
+
 		<dependency org="com.tinkerpop.blueprints" name="blueprints-core" rev="2.2.0" /> <!-- Graph Persistence -->
 		<dependency org="com.tinkerpop.blueprints" name="blueprints-orient-graph" rev="2.2.0" /> <!-- Graph Persistence -->
-		
-		<dependency org="com.orientechnologies" name="orientdb-object" rev="&orient.version;"/><!-- Object persistence -->
-            			
-			
-			
-			
-			
+
+		<dependency org="com.orientechnologies" name="orientdb-object" rev="&orient.version;" /><!-- Object persistence -->
+
+
+
+
+
 	</dependencies>
 </ivy-module>
     
