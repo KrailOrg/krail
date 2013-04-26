@@ -1,10 +1,10 @@
 package uk.co.q3c.v7.demo.view;
 
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.base.view.V7ViewModule;
 import uk.co.q3c.v7.util.A;
 
 import com.google.inject.multibindings.MapBinder;
@@ -17,7 +17,11 @@ import com.google.inject.name.Names;
  * @author david
  * 
  */
-public class DemoViewModule extends V7ViewModule {
+public class DemoViewModule extends ApplicationViewModule {
+
+	public DemoViewModule() {
+		super();
+	}
 
 	@Override
 	protected void configure() {

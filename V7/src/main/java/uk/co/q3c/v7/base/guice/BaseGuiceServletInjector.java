@@ -29,6 +29,7 @@ import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
+import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.persist.orient.db.OrientDbModule;
 
@@ -74,6 +75,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		baseModules.add(new IniModule());
 		baseModules.add(new OrientDbModule(ini));
 		baseModules.add(new I18NModule());
+		baseModules.add(new StandardViewModule());
 		addAppModules(baseModules);
 		return baseModules;
 	}

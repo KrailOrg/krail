@@ -18,39 +18,22 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 
 /**
+ * This module maps urls to {@link V7View} classes. The mapping is provided by the SiteMap.
  * 
- * The base class for all applications to use for binding views. Override {@link #bindViews(MapBinder)} to provide your
- * application's view bindings. See {@link DemoViewModule} for an example
- * 
- * @author David Sowerby 9 Jan 2013
+ * @author David Sowerby 6 Apr 2013
  * 
  */
-public abstract class V7ViewModule extends AbstractModule {
+public class ApplicationViewModule extends AbstractModule {
+
+	protected ApplicationViewModule() {
+		super();
+	}
 
 	@Override
 	protected void configure() {
-		// the fallback in case a View is not defined
-		bind(V7View.class).to(ErrorView.class);
-		bindErrorView();
-		bindLoginView();
-		bindLogoutView();
 
 		MapBinder<String, V7View> mapbinder = MapBinder.newMapBinder(binder(), String.class, V7View.class);
 		bindViews(mapbinder);
-	}
-
-	/**
-	 * Override this to provide your own login {@link V7View}
-	 */
-	protected void bindLoginView() {
-		bind(LoginView.class).to(DefaultLoginView.class);
-	}
-
-	/**
-	 * Override this to provide your own logout {@link V7View}
-	 */
-	protected void bindLogoutView() {
-		bind(LogoutView.class).to(DefaultLogoutView.class);
 	}
 
 	/**
@@ -59,13 +42,8 @@ public abstract class V7ViewModule extends AbstractModule {
 	 * 
 	 * @param mapbinder
 	 */
-	protected abstract void bindViews(MapBinder<String, V7View> mapbinder);
+	protected void bindViews(MapBinder<String, V7View> mapbinder) {
 
-	/**
-	 * Override to provide your ErrorView
-	 */
-	protected void bindErrorView() {
-		bind(ErrorView.class).to(DefaultErrorView.class);
 	}
 
 }

@@ -16,6 +16,7 @@ import uk.co.q3c.v7.base.shiro.DefaultLoginExceptionHandler;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.view.LoginView;
+import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.demo.view.TestRealm.Response;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -25,8 +26,8 @@ import fixture.TestUIModule;
 import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, UIScopeModule.class, TestUIModule.class, DemoViewModule.class,
-		V7ShiroVaadinModule.class, IniModule.class })
+@GuiceContext({ BaseModule.class, UIScopeModule.class, TestUIModule.class, StandardViewModule.class,
+		DemoViewModule.class, V7ShiroVaadinModule.class, IniModule.class })
 public class DefaultLoginViewTest extends UITestBase {
 
 	private TestRealm testRealm;
