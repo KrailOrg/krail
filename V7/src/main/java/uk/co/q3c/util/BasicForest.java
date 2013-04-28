@@ -16,14 +16,14 @@ import edu.uci.ics.jung.graph.Tree;
  * exposed through this wrapper, but you can access those via {@link #getGraph()}
  * 
  * @param <V>
- *            the type of object to be contained in the tree. Must implement equals
+ *            the type of object to be contained (the 'node'). Must implement equals
  */
-public class BasicTree<V> {
+public class BasicForest<V> {
 
 	private Forest<V, Integer> graph;
 	private int edgeCount = 0;
 
-	public BasicTree() {
+	public BasicForest() {
 		graph = new DelegateForest<V, Integer>();
 	}
 
@@ -212,12 +212,15 @@ public class BasicTree<V> {
 	@Override
 	public String toString() {
 		StringBuilder buf = new StringBuilder();
-		text(getRoots().get(0), buf, 0);
+		for (V rootNode : getRoots()) {
+			buf.append("\n");
+			text(rootNode, buf, 0);
+		}
 		return buf.toString();
 	}
 
 	public void text(V node, StringBuilder buf, int level) {
-		String indent = StringUtils.repeat("-", level);
+		String indent = StringUtils.repeat("-", level + 1);
 		buf.append(indent);
 		buf.append(node.toString() + "\n");
 		for (V child : getChildren(node)) {
@@ -234,7 +237,7 @@ public class BasicTree<V> {
 	}
 
 	/**
-	 * Assumes this is a genuine tree and that there is only one root
+	 * Assumes this is a genuine tree and that there is only one root, or just takes the first one
 	 * 
 	 * @return
 	 */

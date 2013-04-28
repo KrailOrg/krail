@@ -26,9 +26,9 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class BasicTreeTest {
+public class BasicForestTest {
 
-	BasicTree<String> tree;
+	BasicForest<String> tree;
 	String s0 = new String("0");
 	String s1 = new String("1");
 	String s11 = new String("1.1");
@@ -41,7 +41,7 @@ public class BasicTreeTest {
 
 	@Before
 	public void setup() {
-		tree = new BasicTree<>();
+		tree = new BasicForest<>();
 	}
 
 	@Test
@@ -198,6 +198,9 @@ public class BasicTreeTest {
 		assertThat(tree.getRoots()).containsOnly(s0);
 	}
 
+	/**
+	 * toString() puts a blank line at the start
+	 */
 	@Test
 	public void tostring() {
 		// given
@@ -205,7 +208,7 @@ public class BasicTreeTest {
 		// when
 		addAllNodes();
 		// then
-		assertThat(tree.toString()).isEqualTo("0\n-2\n--2.1\n--2.2\n-1\n--1.2\n---1.2.1\n--1.1\n---1.1.1\n");
+		assertThat(tree.toString()).isEqualTo("\n-0\n--2\n---2.1\n---2.2\n--1\n---1.2\n----1.2.1\n---1.1\n----1.1.1\n");
 	}
 
 	@Test
@@ -217,7 +220,7 @@ public class BasicTreeTest {
 		tree.text(s0, buf, 0);
 		String s = buf.toString();
 		// then
-		assertThat(s).isEqualTo("0\n-2\n--2.1\n--2.2\n-1\n--1.2\n---1.2.1\n--1.1\n---1.1.1\n");
+		assertThat(s).isEqualTo("-0\n--2\n---2.1\n---2.2\n--1\n---1.2\n----1.2.1\n---1.1\n----1.1.1\n");
 	}
 
 	@Test
