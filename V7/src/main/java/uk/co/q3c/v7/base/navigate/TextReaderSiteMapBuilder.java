@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.fest.util.Strings;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,16 +52,42 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 	private String labelKeys;
 	@SuppressWarnings("rawtypes")
 	private Class<? extends Enum> labelKeysClass;
+
 	private boolean appendView;
-	private final Set<String> missingEnums = new HashSet<>();
+
+	private Set<String> missingEnums;
+	private Set<String> invalidViewClasses;
+	private Set<String> undeclaredViewClasses;
+	private Set<String> indentationErrors;
+
+	private StringBuilder report;
+	private DateTime startTime;
+	private DateTime endTime;
+	private File sourceFile;
+	private boolean parsed = false;
+	private boolean enumNotI18N;
+	private boolean enumNotExtant;
 
 	@Inject
 	protected TextReaderSiteMapBuilder() {
 		super();
 	}
 
-	public void parse(File file) throws IOException {
+	private void init() {
+		startTime = DateTime.now();
+		endTime = null;
+		missingEnums = new HashSet<>();
+		invalidViewClasses = new HashSet<>();
+		undeclaredViewClasses = new HashSet<>();
+		indentationErrors = new HashSet<>();
+		enumNotI18N = false;
+		enumNotExtant = false;
+		parsed = false;
+	}
 
+	public void parse(File file) throws IOException {
+		init();
+		sourceFile = file;
 		@SuppressWarnings("unchecked")
 		List<String> lines = FileUtils.readLines(file);
 		siteMap = new SiteMap();
@@ -71,10 +98,18 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 			i++;
 		}
 
-		for (SectionName sectionName : SectionName.values()) {
-			processSection(sectionName, sections.get(sectionName));
+		// can only process if ALL required sections are present
+		if (missingSections().size() == 0) {
+			for (SectionName sectionName : SectionName.values()) {
+				processSection(sectionName, sections.get(sectionName));
+			}
+		} else {
+			log.warn("The site map source is missing these sections: {}", missingSections());
+			log.error("Site map failed to process, see previous log warnings for details");
 		}
 
+		endTime = DateTime.now();
+		parsed = true;
 	}
 
 	private void processSection(SectionName key, List<String> sectionLines) {
@@ -99,7 +134,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 		int i = 0;
 		for (String line : lines) {
 			if (!line.contains("=")) {
-				throw new SiteMapInvalidPropertyException("Option must contain an '=' sign at line " + i
+				throw new SiteMapFormatException("Option must contain an '=' sign at line " + i
 						+ " in the options section");
 			}
 			String[] pair = StringUtils.split(line, "=");
@@ -120,7 +155,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 			appendView = "true".equals(value);
 			break;
 		default:
-			throw new SiteMapInvalidPropertyException("unrecognised option '" + key + "'");
+			log.warn("unrecognised option '{}' in site map", key);
 		}
 	}
 
@@ -141,12 +176,14 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 			Class<I18NKeys> i18nClass = I18NKeys.class;
 			if (!i18nClass.isAssignableFrom(requestedLabelKeysClass)) {
 				valid = false;
+				enumNotI18N = true;
 			}
 		} catch (ClassNotFoundException e) {
 			valid = false;
+			enumNotExtant = true;
 		}
 		if (!valid) {
-			throw new SiteMapInvalidClassException(labelKeys + " is not a valid enum class for I18N labels");
+			log.warn(labelKeys + " is not a valid enum class for I18N labels");
 		} else {
 			labelKeysClass = (Class<? extends Enum<?>>) requestedLabelKeysClass;
 		}
@@ -214,7 +251,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 					@SuppressWarnings("rawtypes")
 					Enum labelKey = Enum.valueOf(labelKeysClass, labelKeyName);
 					node.setLabelKey(labelKey);
-				} catch (IllegalArgumentException iae) {
+				} catch (Exception e) {
 					missingEnums.add(labelKeyName);
 				}
 
@@ -238,7 +275,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 							node.setViewClass((Class<? extends V7View>) viewClass);
 							break;
 						} else {
-							throw new SiteMapInvalidClassException(fullViewName + " does not implement V7View");
+							invalidViewClasses.add(fullViewName);
 						}
 					} catch (ClassNotFoundException e) {
 						// don't need to do anything
@@ -246,7 +283,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 
 				}
 				if (node.getViewClass() == null) {
-					throw new SiteMapInvalidClassException("unable to find class for " + view);
+					undeclaredViewClasses.add(view);
 				}
 
 				// now add the node
@@ -270,6 +307,12 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 						SiteMapNode parentNode = siteMap.getParent(currentNode);
 						siteMap.addChild(parentNode, node);
 					} else if (treeLevel > currentLevel) {
+						if (treeLevel - currentLevel > 1) {
+							log.warn(
+									"indentation for {} line is too great.  It should be a maximum of 1 greater than its predecessor",
+									node.getUrlSegment());
+							indentationErrors.add(node.getUrlSegment());
+						}
 						siteMap.addChild(currentNode, node);
 						currentNode = node;
 						currentLevel++;
@@ -277,13 +320,10 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 
 				}
 
-				System.out.println(node.toString());
-
 			} else {
 				throw new SiteMapFormatException("line in map must start with a'-', line " + i);
 			}
 		}
-		System.out.println(missingEnums.toString());
 
 	}
 
@@ -312,20 +352,21 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 		}
 		if (strippedLine.startsWith("[")) {
 			if ((!strippedLine.endsWith("]"))) {
-				throw new SiteMapFormatException("section requires closing ']' at line " + linenum);
+				log.warn("section requires closing ']' at line " + linenum);
 			} else {
 				String sectionName = strippedLine.substring(1, strippedLine.length() - 1);
 
 				List<String> section = new ArrayList<>();
-
-				SectionName key = SectionName.valueOf(sectionName);
-				currentSection = key;
-				if (key == null) {
+				try {
+					SectionName key = SectionName.valueOf(sectionName);
+					currentSection = key;
+					sections.put(key, section);
+				} catch (IllegalArgumentException iae) {
 					log.warn(
 							"Invalid section '{}' in site map file, this section has been ignored. Only sections {} are allowed.",
 							sectionName, getSections().toString());
 				}
-				sections.put(key, section);
+
 			}
 			return;
 		}
@@ -371,6 +412,135 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 
 	public Set<String> getMissingEnums() {
 		return missingEnums;
+	}
+
+	private void buildReport() {
+		report = new StringBuilder();
+		String df = "dd MMM YYYY HH:mm:SS";
+
+		report.append("==================== SiteMap builder report ==================== \n\n");
+		report.append("parsing file:\t\t\t");
+		report.append(sourceFile.getAbsolutePath());
+		report.append("\n\n");
+
+		report.append("start at:\t\t\t");
+		report.append(startTime.toString(df));
+		report.append("\n");
+
+		report.append("end at:\t\t\t\t");
+		report.append(endTime.toString(df));
+		report.append("\n");
+
+		report.append("run time:\t\t\t");
+		report.append(runtime().toString());
+		report.append(" ms\n\n");
+
+		report.append("view packages declared:\t\t");
+		report.append(getViewPackages().toString());
+		report.append("\n\n");
+
+		report.append("pages defined:\t\t\t");
+		report.append(getSiteMap().getNodeCount());
+		report.append("\n\n");
+
+		report.append("missing enum declarations:\t");
+		report.append(missingEnums.size());
+		report.append("  (you could just paste these into your enum declaration)");
+		report.append("\n");
+		if (missingEnums.size() > 0) {
+			report.append("  -- ");
+			report.append(missingEnums);
+			report.append("\n");
+		}
+		report.append("\n");
+
+		report.append("invalid view classes:\t\t");
+		report.append(invalidViewClasses.size());
+		report.append("  (invalid because they do not implement V7View)\n");
+		if (invalidViewClasses.size() > 0) {
+			report.append("  -- ");
+			report.append(invalidViewClasses);
+			report.append("\n");
+		}
+		report.append("\n");
+
+		report.append("undeclared view classes:\t");
+		report.append(undeclaredViewClasses.size());
+		report.append("  (these could not be found in the view packages declared in the [viewPackages] section)\n");
+		if (undeclaredViewClasses.size() > 0) {
+			report.append("  -- ");
+			report.append(undeclaredViewClasses);
+			report.append("\n");
+		}
+		report.append("\n");
+
+		report.append("indentation errors:\t\t");
+		report.append(indentationErrors.size());
+		report.append("  (line indentation should be <= 1 greater than the preceding line.  Parsing will still work but you may not get the intended result\n");
+		if (undeclaredViewClasses.size() > 0) {
+			report.append("  -- ");
+			report.append(indentationErrors);
+			report.append("\n");
+		}
+		report.append("\n\n");
+
+		report.append("================================================================= ");
+
+	}
+
+	public Long runtime() {
+		Long r = endTime.getMillis() - startTime.getMillis();
+		return r;
+	}
+
+	public DateTime getStartTime() {
+		return startTime;
+	}
+
+	public DateTime getEndTime() {
+		return endTime;
+	}
+
+	public StringBuilder getReport() {
+		if (!parsed) {
+			throw new SiteMapException("File must be parsed before report is requested");
+		}
+		buildReport();
+		return report;
+	}
+
+	public void setEndTime(DateTime endTime) {
+		this.endTime = endTime;
+	}
+
+	public Set<String> missingSections() {
+		Set<String> missing = new HashSet<>();
+		for (SectionName section : SectionName.values()) {
+			if (!sections.containsKey(section)) {
+				missing.add(section.name());
+			}
+		}
+		return missing;
+	}
+
+	public Set<String> getInvalidViewClasses() {
+		return invalidViewClasses;
+	}
+
+	public Set<String> getUndeclaredViewClasses() {
+		return undeclaredViewClasses;
+	}
+
+	public boolean isEnumNotI18N() {
+		return enumNotI18N;
+	}
+
+	public boolean isEnumNotExtant() {
+		return enumNotExtant;
+	}
+
+	public Set<String> getIndentationErrors() {
+		return indentationErrors;
 	}
 
 }

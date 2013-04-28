@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
-public class SiteMapFormatException extends RuntimeException {
+public class SiteMapFormatException extends SiteMapException {
 
 	public SiteMapFormatException() {
 		super();

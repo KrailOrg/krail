@@ -20,12 +20,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.junit.Before;
+import org.joda.time.DateTime;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
+import uk.co.q3c.v7.base.view.testviews.subview.NotV7View;
 import uk.co.q3c.v7.base.view.testviews.subview.TransferView;
 import uk.co.q3c.v7.i18n.TestLabelKeys;
 
@@ -39,30 +40,26 @@ import fixture.testviews2.OptionsView;
 @GuiceContext({})
 public class TextReaderSiteMapTest {
 
-	private static final String propFileName = "sitemap.properties";
-	static File propDir;
-	private static File propFile;
+	private static File propDir;
+	private File propFile;
 	@Inject
 	TextReaderSiteMapBuilder reader;
 
 	@BeforeClass
 	public static void beforeClass() {
 		propDir = new File("test/main/java/uk/co/q3c/v7/base/navigate");
-		propFile = new File(propDir, propFileName);
-		System.out.println(propFile.getAbsolutePath());
-	}
 
-	@Before
-	public void setup() {
-		assertThat(propFile.exists()).isTrue();
 	}
 
 	@Test
 	public void parse() throws IOException {
 
 		// given
-
+		String propFileName = "sitemap_good.properties";
+		propFile = new File(propDir, propFileName);
+		DateTime start = DateTime.now();
 		// when
+		assertThat(propFile.exists()).isTrue();
 		reader.parse(propFile);
 		// then
 		assertThat(reader.getSiteMap()).isNotNull();
@@ -75,6 +72,9 @@ public class TextReaderSiteMapTest {
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
 		assertThat(reader.getMissingEnums()).isEmpty();
 		assertThat(reader.getSiteMap().getNodeCount()).isEqualTo(7);
+		assertThat(reader.missingSections().size()).isEqualTo(0);
+		assertThat(reader.isEnumNotExtant()).isFalse();
+		assertThat(reader.isEnumNotI18N()).isFalse();
 
 		SiteMap tree = reader.getSiteMap();
 		List<SiteMapNode> roots = tree.getRoots();
@@ -85,6 +85,162 @@ public class TextReaderSiteMapTest {
 		for (SiteMapNode node : roots) {
 			validateNode(tree, node);
 		}
+
+		assertThat(reader.getStartTime()).isNotNull();
+		assertThat(reader.getEndTime()).isNotNull();
+		assertThat(reader.getStartTime().getMillis()).isGreaterThanOrEqualTo(start.getMillis());
+		assertThat(reader.getEndTime().isAfter(reader.getStartTime())).isTrue();
+
+		assertThat(reader.getReport()).isNotNull();
+		assertThat(reader.getReport().toString()).isNotEmpty();
+		System.out.println(reader.getReport().toString());
+
+	}
+
+	@Test
+	public void sectionMissingClosingBracket() throws IOException {
+
+		// given
+		String propFileName = "sitemap_1.properties";
+		propFile = new File(propDir, propFileName);
+		// when
+		assertThat(propFile.exists()).isTrue();
+		reader.parse(propFile);
+		// then
+		assertThat(reader.missingSections().size()).isGreaterThan(0);
+	}
+
+	@Test
+	public void invalidPropertyName() throws IOException {
+
+		String propFileName = "sitemap_3.properties";
+		propFile = new File(propDir, propFileName);
+		// when
+		assertThat(propFile.exists()).isTrue();
+		reader.parse(propFile);
+		// then
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecureView");
+		System.out.println(reader.getReport());
+
+	}
+
+	@Test
+	public void invalidSectionName() throws IOException {
+
+		// given
+		String propFileName = "sitemap_2.properties";
+		propFile = new File(propDir, propFileName);
+		// when
+		assertThat(propFile.exists()).isTrue();
+		reader.parse(propFile);
+		// then
+		assertThat(reader.missingSections().size()).isGreaterThan(0);
+
+	}
+
+	/**
+	 * Does not implement i18N
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void invalidLabelKeysClass_no_i18N() throws IOException {
+
+		// given
+		String propFileName = "sitemap_4.properties";
+		propFile = new File(propDir, propFileName);
+		// when
+		assertThat(propFile.exists()).isTrue();
+		reader.parse(propFile);
+		// then
+		assertThat(reader.isEnumNotExtant()).isFalse();
+		assertThat(reader.isEnumNotI18N()).isTrue();
+		assertThat(reader.getMissingEnums().size()).isEqualTo(5);
+		assertThat(reader.getMissingEnums()).contains("moneyInOut", "home", "transfers", "login", "opt");
+		System.out.println(reader.getReport());
+	}
+
+	/**
+	 * Does not exist
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void invalidLabelKeysClass_does_not_exist() throws IOException {
+		// given
+		String propFileName = "sitemap_5.properties";
+		propFile = new File(propDir, propFileName);
+		// when
+		assertThat(propFile.exists()).isTrue();
+		reader.parse(propFile);
+		// then
+		assertThat(reader.isEnumNotExtant()).isTrue();
+		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.getMissingEnums().size()).isEqualTo(5);
+		assertThat(reader.getMissingEnums()).contains("moneyInOut", "home", "transfers", "login", "opt");
+		System.out.println(reader.getReport());
+
+	}
+
+	@Test
+	public void viewNotFound() throws IOException {
+
+		String propFileName = "sitemap_3.properties";
+		propFile = new File(propDir, propFileName);
+		// when
+		assertThat(propFile.exists()).isTrue();
+		reader.parse(propFile);
+		// then
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecureView");
+		System.out.println(reader.getReport());
+
+	}
+
+	@Test
+	public void viewNotV7View() throws IOException {
+
+		String propFileName = "sitemap_6.properties";
+		propFile = new File(propDir, propFileName);
+		// when
+		assertThat(propFile.exists()).isTrue();
+		reader.parse(propFile);
+		// then
+		assertThat(reader.getInvalidViewClasses()).containsOnly(NotV7View.class.getName());
+		System.out.println(reader.getReport());
+
+	}
+
+	/**
+	 * Tries to go out of structure by double indenting from previous
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void mapIndentTooGreat() throws IOException {
+
+		String propFileName = "sitemap_7.properties";
+		propFile = new File(propDir, propFileName);
+		// when
+		assertThat(propFile.exists()).isTrue();
+		reader.parse(propFile);
+
+		// then
+		assertThat(reader.getIndentationErrors()).containsOnly("transfers");
+		System.out.println(reader.getReport());
+		System.out.println(reader.getSiteMap().toString());
+	}
+
+	/**
+	 * Try to call report before parsing anything
+	 */
+	@Test(expected = SiteMapException.class)
+	public void reportBeforeParse() {
+
+		// given
+
+		// when
+		reader.getReport();
+		// then
 
 	}
 
@@ -129,93 +285,6 @@ public class TextReaderSiteMapTest {
 			assertThat(tree.url(node)).isEqualTo("secure/options");
 			break;
 		}
-	}
-
-	@Test
-	public void sectionMissingClosingBracket() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
-	}
-
-	@Test
-	public void invalidPropertyName() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
-	}
-
-	@Test
-	public void invalidSectionName() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
-	}
-
-	@Test
-	public void invalidLabelKeysClass() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
-	}
-
-	@Test
-	public void viewNotFound() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
-	}
-
-	@Test
-	public void viewNotV7View() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
-	}
-
-	/**
-	 * Tries to go out of structure by double indenting from previous
-	 */
-	@Test
-	public void mapIndentTooGreat() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
 	}
 
 }

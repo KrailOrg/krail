@@ -12,26 +12,25 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
-public class SiteMapInvalidPropertyException extends SiteMapFormatException {
+public class SiteMapException extends RuntimeException {
 
-	protected SiteMapInvalidPropertyException() {
+	protected SiteMapException() {
 		super();
 	}
 
-	protected SiteMapInvalidPropertyException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
+	protected SiteMapException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
-	protected SiteMapInvalidPropertyException(String message, Throwable cause) {
+	protected SiteMapException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	protected SiteMapInvalidPropertyException(String message) {
+	protected SiteMapException(String message) {
 		super(message);
 	}
 
-	protected SiteMapInvalidPropertyException(Throwable cause) {
+	protected SiteMapException(Throwable cause) {
 		super(cause);
 	}
 
