@@ -27,8 +27,12 @@ import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.config.V7IniProvider;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.SiteMap;
+import uk.co.q3c.v7.base.navigate.SiteMapProvider;
+import uk.co.q3c.v7.base.navigate.TextReaderSiteMapProvider;
 import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
+import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.persist.orient.db.OrientDbModule;
@@ -39,7 +43,8 @@ import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
-	private static Injector injector;
+	protected static Injector injector;
+	protected SiteMap sitemap;
 
 	private final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
 
@@ -52,7 +57,8 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	@Override
 	protected Injector getInjector() {
 
-		injector = Guice.createInjector(getModules());
+		injector = Guice.createInjector(new IniModule(), new DefaultShiroWebModule(ctx.get()));
+		injector.createChildInjector(getModules());
 
 		// The SecurityManager binding is in ShiroWebModule, and therefore DefaultShiroWebModule. By default the binding
 		// is to DefaultWebSecurityManager
@@ -66,13 +72,18 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		// ini load is handled by the provider
 		V7Ini ini = new V7IniProvider().get();
 		List<Module> baseModules = new ArrayList<>();
+
+		sitemap = null;
+		if (ini.optionReadSiteMap()) {
+			SiteMapProvider siteMapPro = new TextReaderSiteMapProvider();
+			sitemap = siteMapPro.get();
+			baseModules.add(new ApplicationViewModule(sitemap));
+		}
 		baseModules.add(new V7ShiroVaadinModule());
-		baseModules.add(new DefaultShiroWebModule(ctx.get()));
 		baseModules.add(new ShiroAopModule());
 		baseModules.add(new BaseModule());
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
-		baseModules.add(new IniModule());
 		baseModules.add(new OrientDbModule(ini));
 		baseModules.add(new I18NModule());
 		baseModules.add(new StandardViewModule());

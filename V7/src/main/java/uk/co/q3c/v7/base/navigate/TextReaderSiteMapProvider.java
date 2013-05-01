@@ -14,33 +14,41 @@ package uk.co.q3c.v7.base.navigate;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.fest.util.Strings;
+import org.apache.shiro.io.ResourceUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKeys;
 
-public class TextReaderSiteMapBuilder implements SiteMapBuilder {
+import com.google.common.base.Strings;
 
-	private static Logger log = LoggerFactory.getLogger(TextReaderSiteMapBuilder.class);
+public class TextReaderSiteMapProvider implements SiteMapProvider {
+
+	private static Logger log = LoggerFactory.getLogger(TextReaderSiteMapProvider.class);
 
 	private enum SectionName {
 		options,
 		viewPackages,
+		standardPages,
 		map;
 	}
 
@@ -48,6 +56,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 	private int commentLines;
 	private int blankLines;
 	private Map<SectionName, List<String>> sections;
+	private Map<StandardPageKey, String> standardPages;
 	private SectionName currentSection;
 	private String labelKeys;
 	@SuppressWarnings("rawtypes")
@@ -59,6 +68,8 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 	private Set<String> invalidViewClasses;
 	private Set<String> undeclaredViewClasses;
 	private Set<String> indentationErrors;
+	private Set<String> missingPages;
+	private Set<String> propertyErrors;
 
 	private StringBuilder report;
 	private DateTime startTime;
@@ -69,7 +80,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 	private boolean enumNotExtant;
 
 	@Inject
-	protected TextReaderSiteMapBuilder() {
+	public TextReaderSiteMapProvider() {
 		super();
 	}
 
@@ -80,18 +91,44 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 		invalidViewClasses = new HashSet<>();
 		undeclaredViewClasses = new HashSet<>();
 		indentationErrors = new HashSet<>();
+		missingPages = new HashSet<>();
+		propertyErrors = new HashSet<>();
+		standardPages = new TreeMap<>();
+		siteMap = new SiteMap();
+		sections = new HashMap<>();
 		enumNotI18N = false;
 		enumNotExtant = false;
 		parsed = false;
 	}
 
-	public void parse(File file) throws IOException {
-		init();
-		sourceFile = file;
-		@SuppressWarnings("unchecked")
-		List<String> lines = FileUtils.readLines(file);
-		siteMap = new SiteMap();
-		sections = new HashMap<>();
+	@Override
+	public void parse(String resourcePath) {
+		// File file = new File(ResourceUtils.applicationBaseDirectory(), fileName);
+
+		InputStream is;
+		try {
+			is = ResourceUtils.getInputStreamForPath(resourcePath);
+			InputStreamReader isr = new InputStreamReader(is);
+			Scanner scanner = new Scanner(isr);
+			List<String> lines = new ArrayList<>();
+			try {
+				while (scanner.hasNextLine()) {
+					lines.add(scanner.nextLine());
+				}
+			} finally {
+				scanner.close();
+			}
+			processLines(lines);
+
+		} catch (IOException e) {
+			log.error("Unable to load site map file", e);
+			return;
+		}
+
+	}
+
+	private void processLines(List<String> lines) {
+
 		int i = 0;
 		for (String line : lines) {
 			divideIntoSections(line, i);
@@ -112,6 +149,21 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 		parsed = true;
 	}
 
+	@Override
+	public void parse(File file) {
+		init();
+		sourceFile = file;
+
+		try {
+			@SuppressWarnings("unchecked")
+			List<String> lines = FileUtils.readLines(file);
+			processLines(lines);
+
+		} catch (Exception e) {
+			log.error("Sitemap could not be loaded", e);
+		}
+	}
+
 	private void processSection(SectionName key, List<String> sectionLines) {
 		switch (key) {
 		case map:
@@ -123,26 +175,74 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 			break;
 
 		case options:
-			processOptions(sectionLines);
+			processProperties(key, sectionLines);
 			break;
+		case standardPages:
+			processProperties(key, sectionLines);
+			for (StandardPageKey spk : StandardPageKey.values()) {
+				if (!standardPages.containsKey(spk)) {
+					missingPages.add(spk.name());
+				}
+			}
+			break;
+
 		default:
-			throw new SiteMapFormatException("Unrecognised section " + key + " in site map file");
+			// do nothing, just ignore it
 		}
 	}
 
-	private void processOptions(List<String> lines) {
-		int i = 0;
+	private void processProperties(SectionName sectionName, List<String> lines) {
+		int i = 1;
 		for (String line : lines) {
 			if (!line.contains("=")) {
-				throw new SiteMapFormatException("Option must contain an '=' sign at line " + i
-						+ " in the options section");
+				propertyErrors.add("Property must contain an '=' sign at line " + i + " in the " + sectionName
+						+ " section");
+			} else {
+				// split the line on '='
+				String[] pair = StringUtils.split(line, "=");
+				String key = pair[0].trim();
+
+				// malformed property may not have anything after the '='
+				String value = null;
+				if (pair.length > 1) {
+					value = pair[1].trim();
+				}
+
+				// check for empty key or value
+				boolean valid = true;
+
+				if (Strings.isNullOrEmpty(key)) {
+					propertyErrors.add("Property must have a key at line " + i + " in the " + sectionName + " section");
+					valid = false;
+				} else {
+					if (Strings.isNullOrEmpty(value)) {
+						propertyErrors.add("Property " + key + " cannot have an empty value");
+						valid = false;
+					}
+				}
+
+				// process valid properties only
+				if (valid) {
+					if (sectionName.equals(SectionName.options)) {
+						setOption(key, value);
+					} else {
+						setStandardPage(key, value);
+					}
+				}
 			}
-			String[] pair = StringUtils.split(line, "=");
-			String key = pair[0].trim();
-			String value = pair[1].trim();
+			// increment line count
 			i++;
-			setOption(key, value);
 		}
+	}
+
+	private void setStandardPage(String key, String value) {
+		try {
+			StandardPageKey pageKey = StandardPageKey.valueOf(key);
+			standardPages.put(pageKey, value);
+		} catch (Exception e) {
+			throw new SiteMapFormatException(key + " is not a valid standard page key");
+		}
+
 	}
 
 	private void setOption(String key, String value) {
@@ -248,8 +348,11 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 					if (labelKeyName == null) {
 						labelKeyName = segment;
 					}
+					// hyphen not valid in enum, translate to underscore
+					labelKeyName = labelKeyName.replace("-", "_");
 					@SuppressWarnings("rawtypes")
 					Enum labelKey = Enum.valueOf(labelKeysClass, labelKeyName);
+
 					node.setLabelKey(labelKey);
 				} catch (Exception e) {
 					missingEnums.add(labelKeyName);
@@ -272,7 +375,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 					try {
 						Class<?> viewClass = Class.forName(fullViewName);
 						if (V7View.class.isAssignableFrom(viewClass)) {
-							node.setViewClass((Class<? extends V7View>) viewClass);
+							node.setViewClass((Class<V7View>) viewClass);
 							break;
 						} else {
 							invalidViewClasses.add(fullViewName);
@@ -346,7 +449,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 			commentLines++;
 			return;
 		}
-		if (Strings.isEmpty(strippedLine)) {
+		if (Strings.isNullOrEmpty(strippedLine)) {
 			blankLines++;
 			return;
 		}
@@ -377,6 +480,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 		}
 	}
 
+	@Override
 	public SiteMap getSiteMap() {
 		return siteMap;
 	}
@@ -435,13 +539,52 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 		report.append(runtime().toString());
 		report.append(" ms\n\n");
 
+		report.append("missing sections:\t\t");
+		report.append(missingSections().size());
+		report.append("  (if any section is missing, parsing will fail, and results will be indeterminate - correct this first)");
+		report.append("\n");
+		if (missingSections().size() > 0) {
+			report.append("  -- ");
+			report.append(missingSections());
+			report.append("\n");
+		}
+		report.append("\n");
+
 		report.append("view packages declared:\t\t");
-		report.append(getViewPackages().toString());
+		if (getViewPackages() == null) {
+			report.append("none declared - site map will not build without them");
+		} else {
+			report.append(getViewPackages().toString());
+		}
 		report.append("\n\n");
 
 		report.append("pages defined:\t\t\t");
-		report.append(getSiteMap().getNodeCount());
+		report.append(getPagesDefined());
 		report.append("\n\n");
+
+		report.append("missing standard pages:\t\t");
+		report.append(missingPages.size());
+		report.append("  (these MUST be defined)");
+		report.append("\n");
+		if (missingPages.size() > 0) {
+			report.append("  -- ");
+			report.append(missingPages);
+			report.append("\n");
+		}
+		report.append("\n");
+
+		report.append("property format errors:\t\t");
+		report.append(propertyErrors.size());
+		report.append("  (should be key=value, spaces are ignored)");
+		report.append("\n");
+		if (missingPages.size() > 0) {
+			for (String p : propertyErrors) {
+				report.append("  -- ");
+				report.append(p);
+				report.append("\n");
+			}
+		}
+		report.append("\n");
 
 		report.append("missing enum declarations:\t");
 		report.append(missingEnums.size());
@@ -477,7 +620,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 		report.append("indentation errors:\t\t");
 		report.append(indentationErrors.size());
 		report.append("  (line indentation should be <= 1 greater than the preceding line.  Parsing will still work but you may not get the intended result\n");
-		if (undeclaredViewClasses.size() > 0) {
+		if (indentationErrors.size() > 0) {
 			report.append("  -- ");
 			report.append(indentationErrors);
 			report.append("\n");
@@ -486,6 +629,10 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 
 		report.append("================================================================= ");
 
+	}
+
+	public int getPagesDefined() {
+		return getSiteMap().getNodeCount();
 	}
 
 	public Long runtime() {
@@ -501,6 +648,7 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 		return endTime;
 	}
 
+	@Override
 	public StringBuilder getReport() {
 		if (!parsed) {
 			throw new SiteMapException("File must be parsed before report is requested");
@@ -541,6 +689,24 @@ public class TextReaderSiteMapBuilder implements SiteMapBuilder {
 
 	public Set<String> getIndentationErrors() {
 		return indentationErrors;
+	}
+
+	@Override
+	public SiteMap get() {
+		parse("classpath:sitemap.properties");
+		return getSiteMap();
+	}
+
+	public String standardPageUrl(StandardPageKey property) {
+		return standardPages.get(property);
+	}
+
+	public Set<String> getMissingPages() {
+		return missingPages;
+	}
+
+	public Set<String> getPropertyErrors() {
+		return propertyErrors;
 	}
 
 }

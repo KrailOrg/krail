@@ -95,6 +95,10 @@ public class SiteMapNode {
 		} else if (!urlSegment.equals(other.urlSegment))
 			return false;
 
+		if (viewClass == null) {
+			return other.viewClass == null;
+		}
+
 		if (viewClass.getName() == null) {
 			if (other.viewClass.getName() != null)
 				return false;

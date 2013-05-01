@@ -31,7 +31,9 @@ public class V7IniTest {
 	String test1 = "test1.V7.ini";
 	String test2 = "test2.V7.ini";
 	String test3 = "test3.V7.ini";
-
+	String test4 = "test4.V7.ini";
+	String test5 = "test5.V7.ini";
+	String test6 = "test6.V7.ini";
 	V7Ini ini;
 
 	@Before
@@ -100,6 +102,54 @@ public class V7IniTest {
 		assertThat(ini.dbParam(DbParam.dbUser)).isEqualTo("admin");
 		assertThat(ini.dbParam(DbParam.dbPwd)).isEqualTo("admin");
 
+	}
+
+	@Test
+	public void noOptionsSection() {
+
+		// given
+		String testFile = test3;
+		// when
+		ini.loadFromPath(filepath(testFile));
+
+		// then
+		assertThat(ini.optionReadSiteMap()).isTrue();
+	}
+
+	@Test
+	public void noOptionValues() {
+
+		// given
+		String testFile = test4;
+		// when
+		ini.loadFromPath(filepath(testFile));
+
+		// then
+		assertThat(ini.optionReadSiteMap()).isTrue();
+	}
+
+	@Test
+	public void optionValues1() {
+
+		// given
+		String testFile = test5;
+		// when
+		ini.loadFromPath(filepath(testFile));
+
+		// then
+		assertThat(ini.optionReadSiteMap()).isTrue();
+	}
+
+	@Test
+	public void optionValues2() {
+
+		// given
+		String testFile = test6;
+		// when
+		ini.loadFromPath(filepath(testFile));
+
+		// then
+		assertThat(ini.optionReadSiteMap()).isFalse();
 	}
 
 	@Test

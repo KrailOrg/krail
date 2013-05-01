@@ -12,7 +12,18 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
+import java.io.File;
 
-public interface SiteMapBuilder {
+public interface SiteMapProvider {
+
+	public abstract SiteMap getSiteMap();
+
+	public abstract void parse(File file);
+
+	public abstract void parse(String fileName);
+
+	public abstract SiteMap get();
+
+	public abstract StringBuilder getReport();
 
 }

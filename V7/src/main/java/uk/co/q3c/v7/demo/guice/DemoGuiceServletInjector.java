@@ -25,7 +25,7 @@ public class DemoGuiceServletInjector extends BaseGuiceServletInjector {
 
 	@Override
 	protected void addAppModules(List<Module> baseModules) {
-		baseModules.add(new DemoViewModule());
+		baseModules.add(new DemoViewModule(sitemap));
 		baseModules.add(new DemoDAOModule());
 		baseModules.add(new DemoUIModule());
 	}

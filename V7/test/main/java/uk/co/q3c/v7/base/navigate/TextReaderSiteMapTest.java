@@ -25,6 +25,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
 import uk.co.q3c.v7.base.view.testviews.subview.NotV7View;
 import uk.co.q3c.v7.base.view.testviews.subview.TransferView;
@@ -43,7 +44,7 @@ public class TextReaderSiteMapTest {
 	private static File propDir;
 	private File propFile;
 	@Inject
-	TextReaderSiteMapBuilder reader;
+	TextReaderSiteMapProvider reader;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -65,7 +66,7 @@ public class TextReaderSiteMapTest {
 		assertThat(reader.getSiteMap()).isNotNull();
 		assertThat(reader.getCommentLines()).isEqualTo(16);
 		assertThat(reader.getBlankLines()).isEqualTo(5);
-		assertThat(reader.getSections()).containsOnly("viewPackages", "options", "map");
+		assertThat(reader.getSections()).containsOnly("viewPackages", "options", "map", "standardPages");
 		assertThat(reader.getLabelKeys()).isEqualTo("uk.co.q3c.v7.i18n.TestLabelKeys");
 		assertThat(reader.isAppendView()).isTrue();
 		assertThat(reader.getLabelKeysClass()).isEqualTo(TestLabelKeys.class);
@@ -75,6 +76,11 @@ public class TextReaderSiteMapTest {
 		assertThat(reader.missingSections().size()).isEqualTo(0);
 		assertThat(reader.isEnumNotExtant()).isFalse();
 		assertThat(reader.isEnumNotI18N()).isFalse();
+
+		assertThat(reader.getMissingEnums()).containsOnly();
+		assertThat(reader.getInvalidViewClasses()).containsOnly();
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
+		assertThat(reader.getIndentationErrors()).containsOnly();
 
 		SiteMap tree = reader.getSiteMap();
 		List<SiteMapNode> roots = tree.getRoots();
@@ -93,6 +99,10 @@ public class TextReaderSiteMapTest {
 
 		assertThat(reader.getReport()).isNotNull();
 		assertThat(reader.getReport().toString()).isNotEmpty();
+
+		for (StandardPageKey spk : StandardPageKey.values()) {
+			assertThat(reader.standardPageUrl(spk)).isNotNull();
+		}
 		System.out.println(reader.getReport().toString());
 
 	}
@@ -107,7 +117,20 @@ public class TextReaderSiteMapTest {
 		assertThat(propFile.exists()).isTrue();
 		reader.parse(propFile);
 		// then
-		assertThat(reader.missingSections().size()).isGreaterThan(0);
+
+		assertThat(reader.isEnumNotExtant()).isFalse();
+		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.missingSections()).containsOnly("viewPackages");
+
+		assertThat(reader.getPagesDefined()).isEqualTo(0);
+		assertThat(reader.getViewPackages()).isNull();
+		assertThat(reader.getMissingPages()).containsOnly();
+		assertThat(reader.getPropertyErrors()).containsOnly();
+		assertThat(reader.getMissingEnums()).containsOnly();
+		assertThat(reader.getInvalidViewClasses()).containsOnly();
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
+		assertThat(reader.getIndentationErrors()).containsOnly();
+		System.out.println(reader.getReport());
 	}
 
 	@Test
@@ -119,7 +142,20 @@ public class TextReaderSiteMapTest {
 		assertThat(propFile.exists()).isTrue();
 		reader.parse(propFile);
 		// then
+
+		assertThat(reader.isEnumNotExtant()).isFalse();
+		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.missingSections()).containsOnly();
+
+		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+		assertThat(reader.getMissingPages()).containsOnly();
+		assertThat(reader.getPropertyErrors()).containsOnly();
+		assertThat(reader.getMissingEnums()).containsOnly();
+		assertThat(reader.getInvalidViewClasses()).containsOnly();
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecureView");
+		assertThat(reader.getIndentationErrors()).containsOnly();
+
 		System.out.println(reader.getReport());
 
 	}
@@ -134,8 +170,19 @@ public class TextReaderSiteMapTest {
 		assertThat(propFile.exists()).isTrue();
 		reader.parse(propFile);
 		// then
-		assertThat(reader.missingSections().size()).isGreaterThan(0);
+		assertThat(reader.missingSections()).containsOnly("options");
 
+		assertThat(reader.isEnumNotExtant()).isFalse();
+		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.getPagesDefined()).isEqualTo(0);
+		assertThat(reader.getMissingPages()).containsOnly();
+		assertThat(reader.getPropertyErrors()).containsOnly();
+		assertThat(reader.getMissingEnums()).containsOnly();
+		assertThat(reader.getInvalidViewClasses()).containsOnly();
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
+		assertThat(reader.getIndentationErrors()).containsOnly();
+
+		System.out.println(reader.getReport());
 	}
 
 	/**
@@ -153,10 +200,19 @@ public class TextReaderSiteMapTest {
 		assertThat(propFile.exists()).isTrue();
 		reader.parse(propFile);
 		// then
+
 		assertThat(reader.isEnumNotExtant()).isFalse();
 		assertThat(reader.isEnumNotI18N()).isTrue();
-		assertThat(reader.getMissingEnums().size()).isEqualTo(5);
+		assertThat(reader.missingSections()).containsOnly();
+
+		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+		assertThat(reader.getMissingPages()).containsOnly();
+		assertThat(reader.getPropertyErrors()).containsOnly();
 		assertThat(reader.getMissingEnums()).contains("moneyInOut", "home", "transfers", "login", "opt");
+		assertThat(reader.getInvalidViewClasses()).containsOnly();
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecureView");
+		assertThat(reader.getIndentationErrors()).containsOnly();
 		System.out.println(reader.getReport());
 	}
 
@@ -176,8 +232,17 @@ public class TextReaderSiteMapTest {
 		// then
 		assertThat(reader.isEnumNotExtant()).isTrue();
 		assertThat(reader.isEnumNotI18N()).isFalse();
-		assertThat(reader.getMissingEnums().size()).isEqualTo(5);
-		assertThat(reader.getMissingEnums()).contains("moneyInOut", "home", "transfers", "login", "opt");
+		assertThat(reader.missingSections()).containsOnly();
+
+		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+		assertThat(reader.getMissingPages()).containsOnly();
+		assertThat(reader.getPropertyErrors()).containsOnly();
+		assertThat(reader.getMissingEnums()).containsOnly("moneyInOut", "home", "transfers", "login", "opt");
+		assertThat(reader.getInvalidViewClasses()).containsOnly();
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecureView");
+		assertThat(reader.getIndentationErrors()).containsOnly();
+
 		System.out.println(reader.getReport());
 
 	}
@@ -191,7 +256,20 @@ public class TextReaderSiteMapTest {
 		assertThat(propFile.exists()).isTrue();
 		reader.parse(propFile);
 		// then
+
+		assertThat(reader.isEnumNotExtant()).isFalse();
+		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.missingSections()).containsOnly();
+
+		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+		assertThat(reader.getMissingPages()).containsOnly();
+		assertThat(reader.getPropertyErrors()).containsOnly();
+		assertThat(reader.getMissingEnums()).containsOnly();
+		assertThat(reader.getInvalidViewClasses()).containsOnly();
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecureView");
+		assertThat(reader.getIndentationErrors()).containsOnly();
+
 		System.out.println(reader.getReport());
 
 	}
@@ -205,7 +283,18 @@ public class TextReaderSiteMapTest {
 		assertThat(propFile.exists()).isTrue();
 		reader.parse(propFile);
 		// then
+		assertThat(reader.isEnumNotExtant()).isFalse();
+		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.missingSections()).containsOnly();
+
+		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+		assertThat(reader.getMissingPages()).containsOnly();
+		assertThat(reader.getPropertyErrors()).containsOnly();
+		assertThat(reader.getMissingEnums()).containsOnly();
 		assertThat(reader.getInvalidViewClasses()).containsOnly(NotV7View.class.getName());
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly("subview.NotV7View");
+		assertThat(reader.getIndentationErrors()).containsOnly();
 		System.out.println(reader.getReport());
 
 	}
@@ -225,7 +314,19 @@ public class TextReaderSiteMapTest {
 		reader.parse(propFile);
 
 		// then
+		assertThat(reader.isEnumNotExtant()).isFalse();
+		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.missingSections()).containsOnly();
+
+		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+		assertThat(reader.getMissingPages()).containsOnly();
+		assertThat(reader.getPropertyErrors()).containsOnly();
+		assertThat(reader.getMissingEnums()).containsOnly();
+		assertThat(reader.getInvalidViewClasses()).containsOnly();
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly("transfers");
+
 		System.out.println(reader.getReport());
 		System.out.println(reader.getSiteMap().toString());
 	}
@@ -242,6 +343,32 @@ public class TextReaderSiteMapTest {
 		reader.getReport();
 		// then
 
+	}
+
+	@Test
+	public void standardPageMissing() {
+
+		String propFileName = "sitemap_8.properties";
+		propFile = new File(propDir, propFileName);
+		// when
+		assertThat(propFile.exists()).isTrue();
+		reader.parse(propFile);
+
+		// then
+		assertThat(reader.isEnumNotExtant()).isFalse();
+		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.missingSections()).containsOnly();
+
+		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+		assertThat(reader.getMissingPages()).containsOnly("resetAccount", "requestAccount");
+		assertThat(reader.getPropertyErrors()).containsOnly("Property resetAccount cannot have an empty value");
+		assertThat(reader.getMissingEnums()).containsOnly();
+		assertThat(reader.getInvalidViewClasses()).containsOnly();
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
+		assertThat(reader.getIndentationErrors()).containsOnly();
+
+		System.out.println(reader.getReport());
 	}
 
 	private void validateNode(SiteMap tree, SiteMapNode node) {

@@ -12,7 +12,11 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import uk.co.q3c.v7.demo.view.DemoViewModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import uk.co.q3c.v7.base.navigate.SiteMap;
+import uk.co.q3c.v7.base.navigate.SiteMapNode;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
@@ -24,9 +28,19 @@ import com.google.inject.multibindings.MapBinder;
  * 
  */
 public class ApplicationViewModule extends AbstractModule {
+	private static Logger log = LoggerFactory.getLogger(ApplicationViewModule.class);
+	private final SiteMap sitemap;
 
+	/**
+	 * Used for testing or when sitemap not used
+	 */
 	protected ApplicationViewModule() {
+		sitemap = null;
+	}
+
+	public ApplicationViewModule(SiteMap sitemap) {
 		super();
+		this.sitemap = sitemap;
 	}
 
 	@Override
@@ -37,13 +51,28 @@ public class ApplicationViewModule extends AbstractModule {
 	}
 
 	/**
-	 * You will need to override this to provide the Views for your application. See {@link DemoViewModule} for an
-	 * example.
+	 * By default V7 is set to read the site map and create bindings from it. You can disable that by setting the
+	 * 'readSiteMap' property in the [options] section of V7.ini to false. You will then need to manually specify Views,
+	 * to provide the Views for your application, with a set of instructions like this:
+	 * <p>
+	 * 
+	 * mapbinder.addBinding("public/home").to(PublicHomeView.class);
+	 * mapbinder.addBinding("secure/home").to(SecureHomeView.class);
 	 * 
 	 * @param mapbinder
 	 */
 	protected void bindViews(MapBinder<String, V7View> mapbinder) {
-
+		if (sitemap == null) {
+			log.error(
+					"Sitemap is null, but {}.bindViews is still in use.  Either override the bindViews method, or set the 'readSiteMap' property in the [options] section of V7.ini to 'true",
+					this.getClass().getName());
+		} else {
+			for (SiteMapNode node : sitemap.getEntries()) {
+				// use sitemap.url(node) to get the fully qualified url - the node itself only contains the url segment
+				System.out.println(sitemap.url(node) + " : " + node.getViewClass().getName());
+				mapbinder.addBinding(sitemap.url(node)).to(node.getViewClass());
+			}
+		}
 	}
 
 }

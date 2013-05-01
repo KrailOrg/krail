@@ -26,7 +26,7 @@ public class SiteMap extends BasicForest<SiteMapNode> {
 		SiteMapNode parentNode = getParent(node);
 		if (parentNode != null) {
 			buf.insert(0, "/");
-			buf.insert(0, parentNode);
+			buf.insert(0, parentNode.getUrlSegment());
 			prependParent(parentNode, buf);
 		}
 	}

@@ -12,88 +12,54 @@
  */
 package uk.co.q3c.v7.base.guice;
 
+import static org.fest.assertions.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Map;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
-import mockit.Expectations;
-import mockit.Mocked;
-import mockit.Verifications;
-import mockit.integration.junit4.JMockit;
-
+import org.apache.shiro.SecurityUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import uk.co.q3c.v7.demo.guice.DemoGuiceServletInjector;
 
+import com.google.inject.Binding;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 
-@RunWith(JMockit.class)
-public class GuiceServletInjectorTest {
-
-	class MockedGuice {
-
-	}
+public class GuiceServletInjectorTest2 {
 
 	BaseGuiceServletInjector out;
 
-	@Mocked
 	ServletContext servletContext;
 
-	@Mocked
 	ServletContextEvent servletContextEvent;
 
-	@Mocked
 	Injector injector;
 
 	@Before
 	public void setup() {
 		out = new DemoGuiceServletInjector();
-
+		servletContext = mock(ServletContext.class);
+		servletContextEvent = mock(ServletContextEvent.class);
 	}
 
 	@Test
-	public void contextInitialized() {
+	public void getInjector() {
 
 		// given
-		new Expectations() {
-			{
-				servletContextEvent.getServletContext();
-				notStrict();
-				result = servletContext;
-			}
-		};
-		// when
+		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
 		out.contextInitialized(servletContextEvent);
-		// then
-		new Verifications() {
-			{
-				servletContext.setAttribute(Injector.class.getName(), any);
-			}
-		};
-
-	}
-
-	@Test
-	public void contextDestroyed() {
-
-		// given
-		new Expectations() {
-			{
-				servletContextEvent.getServletContext();
-				notStrict();
-				result = servletContext;
-			}
-		};
 		// when
-		out.contextDestroyed(servletContextEvent);
-
+		injector = out.getInjector();
 		// then
-		new Verifications() {
-			{
-				servletContext.removeAttribute(Injector.class.getName());
-			}
-		};
-	}
+		Map<Key<?>, Binding<?>> bindings = injector.getAllBindings();
+		System.out.println(bindings.size());
+		assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(V7SecurityManager.class);
 
+	}
 }

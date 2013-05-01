@@ -26,6 +26,9 @@ import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.SiteMap;
+import uk.co.q3c.v7.base.navigate.SiteMapProvider;
+import uk.co.q3c.v7.base.navigate.TextReaderSiteMapProvider;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.view.StandardViewModule;
@@ -34,6 +37,7 @@ import uk.co.q3c.v7.base.view.V7View;
 import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
 import fixture.TestIniModule;
 import fixture.TestUIModule;
@@ -41,7 +45,7 @@ import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class, UIScopeModule.class, TestUIModule.class, StandardViewModule.class,
-		DemoViewModule.class, V7ShiroVaadinModule.class, TestIniModule.class })
+		V7ShiroVaadinModule.class, TestIniModule.class })
 public class DemoViewModuleTest extends UITestBase {
 
 	@Inject
@@ -68,5 +72,14 @@ public class DemoViewModuleTest extends UITestBase {
 			assertThat(viewProMap.get(uri)).overridingErrorMessage(uri + " does not have a matching View").isNotNull();
 		}
 
+	}
+
+	@ModuleProvider
+	DemoViewModule demoViewModuleProvider() {
+		SiteMapProvider siteMapPro = new TextReaderSiteMapProvider();
+		SiteMap sitemap = siteMapPro.get();
+		System.out.println(siteMapPro.getReport());
+		System.out.println(siteMapPro.getSiteMap().toString());
+		return new DemoViewModule(sitemap);
 	}
 }

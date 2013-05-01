@@ -14,6 +14,9 @@ package uk.co.q3c.v7.base.config;
 
 import javax.inject.Singleton;
 
+import uk.co.q3c.v7.base.navigate.SiteMapProvider;
+import uk.co.q3c.v7.base.navigate.TextReaderSiteMapProvider;
+
 import com.google.inject.AbstractModule;
 
 public class IniModule extends AbstractModule {
@@ -21,6 +24,7 @@ public class IniModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(V7Ini.class).toProvider(V7IniProvider.class).in(Singleton.class);
+		bind(SiteMapProvider.class).to(TextReaderSiteMapProvider.class);
 	}
 
 }

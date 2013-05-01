@@ -175,4 +175,28 @@ public class V7Ini extends Ini {
 		log.info("Ini file saved: " + f.getAbsolutePath());
 	}
 
+	public boolean optionReadSiteMap() {
+		return getBooleanOption("readSiteMap");
+	}
+
+	private boolean getBooleanOption(String optionName) {
+		Section section = getSection("options");
+		if (section == null) {
+			return booleanOptionDefault(optionName);
+		}
+		if (section.containsKey(optionName)) {
+			return section.get(optionName).equals("true");
+		} else {
+			return booleanOptionDefault(optionName);
+		}
+	}
+
+	private boolean booleanOptionDefault(String optionName) {
+		switch (optionName) {
+		case "readSiteMap":
+			return true;
+		}
+		return false;
+	}
+
 }
