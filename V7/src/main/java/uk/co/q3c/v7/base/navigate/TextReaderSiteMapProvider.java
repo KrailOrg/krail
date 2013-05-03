@@ -13,7 +13,6 @@
 package uk.co.q3c.v7.base.navigate;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -47,6 +46,7 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 
 	private enum SectionName {
 		options,
+		redirects,
 		viewPackages,
 		standardPages,
 		map;
@@ -70,14 +70,17 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 	private Set<String> indentationErrors;
 	private Set<String> missingPages;
 	private Set<String> propertyErrors;
+	private Set<String> duplicateURLs;
+	private Set<String> viewlessURLs;
 
 	private StringBuilder report;
 	private DateTime startTime;
 	private DateTime endTime;
-	private File sourceFile;
+	private String source;
 	private boolean parsed = false;
 	private boolean enumNotI18N;
 	private boolean enumNotExtant;
+	private Map<String, String> redirects;
 
 	@Inject
 	public TextReaderSiteMapProvider() {
@@ -93,6 +96,10 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		indentationErrors = new HashSet<>();
 		missingPages = new HashSet<>();
 		propertyErrors = new HashSet<>();
+		viewlessURLs = new HashSet<>();
+		duplicateURLs = new HashSet<>();
+		redirects = new TreeMap<>();
+
 		standardPages = new TreeMap<>();
 		siteMap = new SiteMap();
 		sections = new HashMap<>();
@@ -104,7 +111,7 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 	@Override
 	public void parse(String resourcePath) {
 		// File file = new File(ResourceUtils.applicationBaseDirectory(), fileName);
-
+		source = resourcePath;
 		InputStream is;
 		try {
 			is = ResourceUtils.getInputStreamForPath(resourcePath);
@@ -120,7 +127,7 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 			}
 			processLines(lines);
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error("Unable to load site map file", e);
 			return;
 		}
@@ -128,7 +135,7 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 	}
 
 	private void processLines(List<String> lines) {
-
+		init();
 		int i = 0;
 		for (String line : lines) {
 			divideIntoSections(line, i);
@@ -140,6 +147,7 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 			for (SectionName sectionName : SectionName.values()) {
 				processSection(sectionName, sections.get(sectionName));
 			}
+			processStandardPages();
 		} else {
 			log.warn("The site map source is missing these sections: {}", missingSections());
 			log.error("Site map failed to process, see previous log warnings for details");
@@ -149,10 +157,23 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		parsed = true;
 	}
 
+	/**
+	 * Standard pages are added after the page map has been built. This may cause a duplication of urls - if so, that is
+	 * captured in {@link #duplicateURLs}. As the map is built from the standard page URLs, it may also cause
+	 * intermediate nodes to have no View assigned. This is checked and captured in {@link #viewlessURLs}
+	 */
+	private void processStandardPages() {
+
+		for (StandardPageKey spk : StandardPageKey.values()) {
+			String pageUrl = standardPages.get(spk);
+			// siteMap.append(pageUrl);
+		}
+	}
+
 	@Override
 	public void parse(File file) {
-		init();
-		sourceFile = file;
+
+		source = file.getAbsolutePath();
 
 		try {
 			@SuppressWarnings("unchecked")
@@ -177,6 +198,11 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		case options:
 			processProperties(key, sectionLines);
 			break;
+
+		case redirects:
+			processRedirects(key, sectionLines);
+			break;
+
 		case standardPages:
 			processProperties(key, sectionLines);
 			for (StandardPageKey spk : StandardPageKey.values()) {
@@ -188,6 +214,23 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 
 		default:
 			// do nothing, just ignore it
+		}
+	}
+
+	private void processRedirects(SectionName key, List<String> sectionLines) {
+		for (String line : sectionLines) {
+			// if starts with ':' then f==""
+			// split the line on ':'
+
+			if (line.startsWith(":")) {
+				redirects.put("", line.replace(":", "").trim());
+			} else {
+				String[] pair = null;
+				pair = StringUtils.split(line, ":");
+				String f = pair[0].trim();
+				String t = (pair.length > 1) ? pair[1].trim() : null;
+				redirects.put(f, t);
+			}
 		}
 	}
 
@@ -203,10 +246,7 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 				String key = pair[0].trim();
 
 				// malformed property may not have anything after the '='
-				String value = null;
-				if (pair.length > 1) {
-					value = pair[1].trim();
-				}
+				String value = (pair.length > 1) ? pair[1].trim() : null;
 
 				// check for empty key or value
 				boolean valid = true;
@@ -523,8 +563,8 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		String df = "dd MMM YYYY HH:mm:SS";
 
 		report.append("==================== SiteMap builder report ==================== \n\n");
-		report.append("parsing file:\t\t\t");
-		report.append(sourceFile.getAbsolutePath());
+		report.append("parsing source from:\t\t\t");
+		report.append(source);
 		report.append("\n\n");
 
 		report.append("start at:\t\t\t");
@@ -707,6 +747,22 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 
 	public Set<String> getPropertyErrors() {
 		return propertyErrors;
+	}
+
+	public Set<String> getRedirects() {
+		Set<String> ss = new HashSet<>();
+		for (Map.Entry<String, String> entry : redirects.entrySet()) {
+			ss.add(entry.getKey() + ":" + entry.getValue());
+		}
+		return ss;
+	}
+
+	public Set<String> getViewlessURLs() {
+		return viewlessURLs;
+	}
+
+	public Set<String> getDuplicateURLs() {
+		return duplicateURLs;
 	}
 
 }

@@ -64,13 +64,14 @@ public class TextReaderSiteMapTest {
 		reader.parse(propFile);
 		// then
 		assertThat(reader.getSiteMap()).isNotNull();
-		assertThat(reader.getCommentLines()).isEqualTo(16);
-		assertThat(reader.getBlankLines()).isEqualTo(5);
-		assertThat(reader.getSections()).containsOnly("viewPackages", "options", "map", "standardPages");
+		assertThat(reader.getCommentLines()).isEqualTo(24);
+		assertThat(reader.getBlankLines()).isEqualTo(9);
+		assertThat(reader.getSections()).containsOnly("viewPackages", "options", "map", "standardPages", "redirects");
 		assertThat(reader.getLabelKeys()).isEqualTo("uk.co.q3c.v7.i18n.TestLabelKeys");
 		assertThat(reader.isAppendView()).isTrue();
 		assertThat(reader.getLabelKeysClass()).isEqualTo(TestLabelKeys.class);
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+		assertThat(reader.getRedirects()).containsOnly(":public/home", "public:public/home", "secure:secure/home");
 		assertThat(reader.getMissingEnums()).isEmpty();
 		assertThat(reader.getSiteMap().getNodeCount()).isEqualTo(7);
 		assertThat(reader.missingSections().size()).isEqualTo(0);

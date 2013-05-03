@@ -69,7 +69,6 @@ public class ApplicationViewModule extends AbstractModule {
 		} else {
 			for (SiteMapNode node : sitemap.getEntries()) {
 				// use sitemap.url(node) to get the fully qualified url - the node itself only contains the url segment
-				System.out.println(sitemap.url(node) + " : " + node.getViewClass().getName());
 				mapbinder.addBinding(sitemap.url(node)).to(node.getViewClass());
 			}
 		}
