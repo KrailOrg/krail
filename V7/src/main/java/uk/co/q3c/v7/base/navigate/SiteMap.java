@@ -12,6 +12,10 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 import uk.co.q3c.util.BasicForest;
 
 public class SiteMap extends BasicForest<SiteMapNode> {
@@ -29,6 +33,46 @@ public class SiteMap extends BasicForest<SiteMapNode> {
 			buf.insert(0, parentNode.getUrlSegment());
 			prependParent(parentNode, buf);
 		}
+	}
+
+	/**
+	 * creates a SiteMapNode and appends it to the map according to the {@code url} given, then returns it. If a node
+	 * already exists at that location it is returned. If there are gaps in the structure, nodes are created to fill
+	 * them (the same idea as forcing directory creation on a file path)
+	 * 
+	 * @param toUrl
+	 * @return
+	 */
+	public SiteMapNode append(String url) {
+		SiteMapNode node = null;
+		String[] segments = StringUtils.split(url, "/");
+		List<SiteMapNode> nodes = getRoots();
+		SiteMapNode parentNode = null;
+		for (int i = 0; i < segments.length; i++) {
+			node = findNodeBySegment(nodes, segments[i], true);
+			addChild(parentNode, node);
+			nodes = getChildren(node);
+			parentNode = node;
+		}
+
+		return node;
+	}
+
+	private SiteMapNode findNodeBySegment(List<SiteMapNode> nodes, String segment, boolean createIfAbsent) {
+		SiteMapNode foundNode = null;
+		for (SiteMapNode node : nodes) {
+			if (node.getUrlSegment().equals(segment)) {
+				foundNode = node;
+				break;
+			}
+		}
+
+		if ((foundNode == null) && (createIfAbsent)) {
+			foundNode = new SiteMapNode();
+			foundNode.setUrlSegment(segment);
+
+		}
+		return foundNode;
 	}
 
 }

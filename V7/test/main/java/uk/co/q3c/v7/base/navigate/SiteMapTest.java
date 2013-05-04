@@ -40,4 +40,39 @@ public class SiteMapTest {
 		assertThat(map.url(child)).isEqualTo("public/home/login");
 	}
 
+	@Test
+	public void append() {
+
+		// given
+		SiteMap map = new SiteMap();
+		// when
+		SiteMapNode node = map.append("public/home");
+		// then
+		assertThat(node).isNotNull();
+		assertThat(node.getUrlSegment()).isEqualTo("home");
+		assertThat(map.getNodeCount()).isEqualTo(2);
+		assertThat(map.getParent(node).getUrlSegment()).isEqualTo("public");
+
+		// when
+		node = map.append("public/home/account");
+
+		// then
+		assertThat(node).isNotNull();
+		assertThat(node.getUrlSegment()).isEqualTo("account");
+		assertThat(map.getNodeCount()).isEqualTo(3);
+		assertThat(map.getParent(node).getUrlSegment()).isEqualTo("home");
+		assertThat(map.getParent(map.getParent(node)).getUrlSegment()).isEqualTo("public");
+
+		// when
+		node = map.append("public/home/transfer");
+
+		// then
+		assertThat(node).isNotNull();
+		assertThat(node.getUrlSegment()).isEqualTo("transfer");
+		assertThat(map.getNodeCount()).isEqualTo(4);
+		assertThat(map.getParent(node).getUrlSegment()).isEqualTo("home");
+		assertThat(map.getParent(map.getParent(node)).getUrlSegment()).isEqualTo("public");
+
+	}
+
 }
