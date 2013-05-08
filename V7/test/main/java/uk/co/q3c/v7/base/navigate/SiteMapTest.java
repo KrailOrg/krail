@@ -26,7 +26,7 @@ public class SiteMapTest {
 	public void url() {
 
 		// given
-		SiteMap map = new SiteMap();
+		Sitemap map = new Sitemap();
 		SiteMapNode grandparent = new SiteMapNode("public", PublicHomeView.class, DemoLabelKeys.home);
 		SiteMapNode parent = new SiteMapNode("home", PublicHomeView.class, DemoLabelKeys.home);
 		SiteMapNode child = new SiteMapNode("login", LoginView.class, DemoLabelKeys.login);
@@ -44,7 +44,7 @@ public class SiteMapTest {
 	public void append() {
 
 		// given
-		SiteMap map = new SiteMap();
+		Sitemap map = new Sitemap();
 		// when
 		SiteMapNode node = map.append("public/home");
 		// then

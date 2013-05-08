@@ -12,6 +12,9 @@
  */
 package uk.co.q3c.v7.base.view;
 
+import uk.co.q3c.v7.base.navigate.Sitemap;
+import uk.co.q3c.v7.base.navigate.TextReaderSiteMapProvider;
+
 import com.google.inject.AbstractModule;
 
 /**
@@ -29,9 +32,14 @@ public class StandardViewModule extends AbstractModule {
 	protected void configure() {
 		// the fallback in case a View is not defined
 		bind(V7View.class).to(ErrorView.class);
+		bindSiteMap();
 		bindErrorView();
 		bindLoginView();
 		bindLogoutView();
+	}
+
+	private void bindSiteMap() {
+		bind(Sitemap.class).toProvider(TextReaderSiteMapProvider.class);
 	}
 
 	/**

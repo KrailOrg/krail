@@ -14,15 +14,18 @@ package uk.co.q3c.v7.base.navigate;
 
 import java.io.File;
 
-public interface SiteMapProvider {
+import javax.inject.Provider;
 
-	public abstract SiteMap getSiteMap();
+public interface SitemapProvider extends Provider<Sitemap> {
+
+	public abstract Sitemap getSitemap();
 
 	public abstract void parse(File file);
 
 	public abstract void parse(String fileName);
 
-	public abstract SiteMap get();
+	@Override
+	public abstract Sitemap get();
 
 	public abstract StringBuilder getReport();
 

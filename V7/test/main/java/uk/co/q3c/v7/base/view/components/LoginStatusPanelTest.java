@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.StandardPageKeys;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
@@ -70,7 +70,7 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).navigateTo(StandardPageKey.login);
+		verify(navigator).navigateTo(StandardPageKeys.login);
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).navigateTo(StandardPageKey.login);
+		verify(navigator).navigateTo(StandardPageKeys.login);
 	}
 
 	@Test
@@ -106,7 +106,7 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).navigateTo(StandardPageKey.logout);
+		verify(navigator).navigateTo(StandardPageKeys.logout);
 	}
 
 }

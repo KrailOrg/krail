@@ -10,21 +10,25 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.config;
+package fixture.testviews2;
 
-import javax.inject.Singleton;
+import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
-import uk.co.q3c.v7.base.navigate.SitemapProvider;
-import uk.co.q3c.v7.base.navigate.TextReaderSiteMapProvider;
+import com.vaadin.ui.Component;
 
-import com.google.inject.AbstractModule;
-
-public class IniModule extends AbstractModule {
+public class LogoutView implements V7View {
 
 	@Override
-	protected void configure() {
-		bind(V7Ini.class).toProvider(V7IniProvider.class).in(Singleton.class);
-		bind(SitemapProvider.class).to(TextReaderSiteMapProvider.class);
+	public void enter(V7ViewChangeEvent event) {
+		//
+		throw new RuntimeException("not yet implemented");
+	}
+
+	@Override
+	public Component getUiComponent() {
+		// return null;
+		throw new RuntimeException("not yet implemented");
 	}
 
 }

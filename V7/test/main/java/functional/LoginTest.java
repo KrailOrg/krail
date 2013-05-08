@@ -7,9 +7,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.config.IniModule;
-import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.StandardPageKeys;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.view.LoginView;
@@ -41,7 +41,7 @@ public class LoginTest extends UITestBase {
 	public void loginSuccess_noPrevious() {
 
 		// given
-		navigatorPro.get().navigateTo(StandardPageKey.login);
+		navigatorPro.get().navigateTo(StandardPageKeys.login);
 		LoginView loginView = (LoginView) ui.getView();
 		loginView.setUsername(username);
 		loginView.setPassword(password);
@@ -60,7 +60,7 @@ public class LoginTest extends UITestBase {
 
 		// given
 		navigatorPro.get().navigateTo(view1);
-		navigatorPro.get().navigateTo(StandardPageKey.login);
+		navigatorPro.get().navigateTo(StandardPageKeys.login);
 		LoginView loginView = (LoginView) ui.getView();
 		loginView.setUsername(username);
 		loginView.setPassword(password);
@@ -79,7 +79,7 @@ public class LoginTest extends UITestBase {
 		// given
 
 		// when
-		navigatorPro.get().navigateTo(StandardPageKey.login);
+		navigatorPro.get().navigateTo(StandardPageKeys.login);
 
 		// then
 		assertThat(ui.getView()).isInstanceOf(LoginView.class);
@@ -101,7 +101,7 @@ public class LoginTest extends UITestBase {
 	public void exceedLogins() {
 
 		// given
-		navigatorPro.get().navigateTo(StandardPageKey.login);
+		navigatorPro.get().navigateTo(StandardPageKeys.login);
 		LoginView loginView = (LoginView) ui.getView();
 		loginView.setUsername(username);
 		loginView.setPassword(badpassword);

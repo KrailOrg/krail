@@ -16,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.shiro.ShiroIntegrationTestBase;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
@@ -106,6 +105,8 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Inject
 	Provider<V7Ini> iniPro;
 
+	Sitemap sitemap;
+
 	@Override
 	@Before
 	public void setupShiro() {
@@ -134,7 +135,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 		// when (ini.get(StandardPageKey.secureHome)).thenReturn
 
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap, getSecurityManager());
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, getSecurityManager());
 		CurrentInstance.set(UI.class, scopedUI);
 	}
 
@@ -143,10 +144,10 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 		// given
 		when(uriHandler.setFragment(anyString())).thenReturn(uriHandler);
-		when(uriHandler.virtualPage()).thenReturn(ini.standardPageURI(StandardPageKey.logout));
+		when(uriHandler.virtualPage()).thenReturn(sitemap.standardPageURI(StandardPageKeys.logout));
 
 		// when
-		navigator.navigateTo(StandardPageKey.logout);
+		navigator.navigateTo(StandardPageKeys.logout);
 		// then
 		assertThat(navigator.getCurrentView()).isInstanceOf(LogoutView.class);
 		verify(scopedUI).changeView(null, logoutView);
@@ -185,7 +186,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		// given
 		// need to construct this test slightly differently
 		uriHandler = new StrictURIFragmentHandler();
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap, getSecurityManager());
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, getSecurityManager());
 		navigator.setCurrentView(loginView, "xx", "yy");
 		navigator.setPreviousView(null);
 		// when
@@ -255,7 +256,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		// given
 		// need to construct this test slightly differently
 		uriHandler = new StrictURIFragmentHandler();
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, ini, viewProMap, getSecurityManager());
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, getSecurityManager());
 		// when
 
 		// then

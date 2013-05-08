@@ -14,6 +14,8 @@ import edu.uci.ics.jung.graph.Tree;
  * A very simple semantic wrapper for the <a href=http://jung.sourceforge.net/site/index.html> Jung</a> library, to use
  * the more familiar language of trees. Underneath is it a proper implementation of a graph - there are many methods not
  * exposed through this wrapper, but you can access those via {@link #getGraph()}
+ * <p>
+ * The E (edge) parameter for the underlying graph is a simple Integer
  * 
  * @param <V>
  *            the type of object to be contained (the 'node'). Must implement equals

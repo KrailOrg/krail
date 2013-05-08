@@ -16,16 +16,21 @@ import static org.fest.assertions.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.commons.io.FileUtils;
+import org.fest.assertions.Fail;
 import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
+import uk.co.q3c.v7.base.view.testviews.PublicHomeView;
+import uk.co.q3c.v7.base.view.testviews.SecureHomeView;
 import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
 import uk.co.q3c.v7.base.view.testviews.subview.NotV7View;
 import uk.co.q3c.v7.base.view.testviews.subview.TransferView;
@@ -34,7 +39,9 @@ import uk.co.q3c.v7.i18n.TestLabelKeys;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
+import fixture.testviews2.AlternateAccountView;
 import fixture.testviews2.LoginView;
+import fixture.testviews2.LogoutView;
 import fixture.testviews2.OptionsView;
 
 @RunWith(MycilaJunitRunner.class)
@@ -43,13 +50,21 @@ public class TextReaderSiteMapTest {
 
 	private static File propDir;
 	private File propFile;
+	private static File modifiedFile;
+	private List<String> lines;
 	@Inject
 	TextReaderSiteMapProvider reader;
 
 	@BeforeClass
 	public static void beforeClass() {
 		propDir = new File("test/main/java/uk/co/q3c/v7/base/navigate");
+		File modDir = new File(System.getProperty("user.home"));
+		modifiedFile = new File(modDir, "temp/sitemap.properties");
+	}
 
+	@Before
+	public void setup() throws IOException {
+		loadMasterFile();
 	}
 
 	@Test
@@ -63,33 +78,38 @@ public class TextReaderSiteMapTest {
 		assertThat(propFile.exists()).isTrue();
 		reader.parse(propFile);
 		// then
-		assertThat(reader.getSiteMap()).isNotNull();
+		assertThat(reader.getSitemap()).isNotNull();
 		assertThat(reader.getCommentLines()).isEqualTo(24);
 		assertThat(reader.getBlankLines()).isEqualTo(9);
 		assertThat(reader.getSections()).containsOnly("viewPackages", "options", "map", "standardPages", "redirects");
+		assertThat(reader.isLabelClassMissing()).isFalse();
+		assertThat(reader.isLabelClassNonExistent()).isFalse();
+		assertThat(reader.isLabelClassNotI18N()).isFalse();
 		assertThat(reader.getLabelKeys()).isEqualTo("uk.co.q3c.v7.i18n.TestLabelKeys");
 		assertThat(reader.isAppendView()).isTrue();
 		assertThat(reader.getLabelKeysClass()).isEqualTo(TestLabelKeys.class);
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
-		assertThat(reader.getRedirects()).containsOnly(":public/home", "public:public/home", "secure:secure/home");
+		assertThat(reader.redirectEntries()).containsOnly(":public/home", "public:public/home", "secure:secure/home");
 		assertThat(reader.getMissingEnums()).isEmpty();
-		assertThat(reader.getSiteMap().getNodeCount()).isEqualTo(7);
+
+		assertThat(reader.getSitemap().getNodeCount()).isEqualTo(14);
 		assertThat(reader.missingSections().size()).isEqualTo(0);
-		assertThat(reader.isEnumNotExtant()).isFalse();
-		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.isLabelClassNonExistent()).isFalse();
+		assertThat(reader.isLabelClassNotI18N()).isFalse();
 
 		assertThat(reader.getMissingEnums()).containsOnly();
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
 
-		SiteMap tree = reader.getSiteMap();
+		Sitemap tree = reader.getSitemap();
 		List<SiteMapNode> roots = tree.getRoots();
-		assertThat(roots.size()).isEqualTo(3);
+		assertThat(roots.size()).isEqualTo(2);
 
 		System.out.println(tree.toString());
 
-		for (SiteMapNode node : roots) {
+		Collection<SiteMapNode> nodes = reader.getSitemap().getEntries();
+		for (SiteMapNode node : nodes) {
 			validateNode(tree, node);
 		}
 
@@ -101,9 +121,10 @@ public class TextReaderSiteMapTest {
 		assertThat(reader.getReport()).isNotNull();
 		assertThat(reader.getReport().toString()).isNotEmpty();
 
-		for (StandardPageKey spk : StandardPageKey.values()) {
+		for (StandardPageKeys spk : StandardPageKeys.values()) {
 			assertThat(reader.standardPageUrl(spk)).isNotNull();
 		}
+		assertThat(reader.getSitemap().hasErrors()).isFalse();
 		System.out.println(reader.getReport().toString());
 
 	}
@@ -112,15 +133,15 @@ public class TextReaderSiteMapTest {
 	public void sectionMissingClosingBracket() throws IOException {
 
 		// given
-		String propFileName = "sitemap_1.properties";
-		propFile = new File(propDir, propFileName);
+		// given
+		substitute("[viewPackages]", "[viewPackages");
+		prepFile();
 		// when
-		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile);
+		reader.parse(modifiedFile);
 		// then
 
-		assertThat(reader.isEnumNotExtant()).isFalse();
-		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.isLabelClassNonExistent()).isFalse();
+		assertThat(reader.isLabelClassNotI18N()).isFalse();
 		assertThat(reader.missingSections()).containsOnly("viewPackages");
 
 		assertThat(reader.getPagesDefined()).isEqualTo(0);
@@ -131,31 +152,32 @@ public class TextReaderSiteMapTest {
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
+		assertThat(reader.getSitemap().hasErrors()).isTrue();
 		System.out.println(reader.getReport());
 	}
 
 	@Test
 	public void invalidPropertyName() throws IOException {
 
-		String propFileName = "sitemap_3.properties";
-		propFile = new File(propDir, propFileName);
+		insertAfter("labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys", "randomProperty=23");
+		prepFile();
 		// when
-		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile);
+		reader.parse(modifiedFile);
 		// then
 
-		assertThat(reader.isEnumNotExtant()).isFalse();
-		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.isLabelClassNonExistent()).isFalse();
+		assertThat(reader.isLabelClassNotI18N()).isFalse();
 		assertThat(reader.missingSections()).containsOnly();
 
-		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getPagesDefined()).isEqualTo(14);
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
 		assertThat(reader.getMissingPages()).containsOnly();
 		assertThat(reader.getPropertyErrors()).containsOnly();
 		assertThat(reader.getMissingEnums()).containsOnly();
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
-		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecureView");
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
+		assertThat(reader.getSitemap().hasErrors()).isFalse();
 
 		System.out.println(reader.getReport());
 
@@ -165,16 +187,16 @@ public class TextReaderSiteMapTest {
 	public void invalidSectionName() throws IOException {
 
 		// given
-		String propFileName = "sitemap_2.properties";
-		propFile = new File(propDir, propFileName);
+		substitute("[options]", "[option]");
+		prepFile();
 		// when
-		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile);
+		reader.parse(modifiedFile);
 		// then
+
 		assertThat(reader.missingSections()).containsOnly("options");
 
-		assertThat(reader.isEnumNotExtant()).isFalse();
-		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.isLabelClassNonExistent()).isFalse();
+		assertThat(reader.isLabelClassNotI18N()).isFalse();
 		assertThat(reader.getPagesDefined()).isEqualTo(0);
 		assertThat(reader.getMissingPages()).containsOnly();
 		assertThat(reader.getPropertyErrors()).containsOnly();
@@ -182,6 +204,7 @@ public class TextReaderSiteMapTest {
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
+		assertThat(reader.getSitemap().hasErrors()).isTrue();
 
 		System.out.println(reader.getReport());
 	}
@@ -195,25 +218,26 @@ public class TextReaderSiteMapTest {
 	public void invalidLabelKeysClass_no_i18N() throws IOException {
 
 		// given
-		String propFileName = "sitemap_4.properties";
-		propFile = new File(propDir, propFileName);
+		substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys_Invalid");
+		prepFile();
 		// when
-		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile);
+		reader.parse(modifiedFile);
 		// then
 
-		assertThat(reader.isEnumNotExtant()).isFalse();
-		assertThat(reader.isEnumNotI18N()).isTrue();
+		assertThat(reader.isLabelClassMissing()).isFalse();
+		assertThat(reader.isLabelClassNonExistent()).isFalse();
+		assertThat(reader.isLabelClassNotI18N()).isTrue();
 		assertThat(reader.missingSections()).containsOnly();
 
-		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getPagesDefined()).isEqualTo(14);
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
 		assertThat(reader.getMissingPages()).containsOnly();
 		assertThat(reader.getPropertyErrors()).containsOnly();
-		assertThat(reader.getMissingEnums()).contains("moneyInOut", "home", "transfers", "login", "opt");
+		assertThat(reader.getMissingEnums()).contains("moneyInOut", "transfers", "opt");
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
-		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecureView");
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
+		assertThat(reader.getSitemap().hasErrors()).isTrue();
 		System.out.println(reader.getReport());
 	}
 
@@ -225,24 +249,25 @@ public class TextReaderSiteMapTest {
 	@Test
 	public void invalidLabelKeysClass_does_not_exist() throws IOException {
 		// given
-		String propFileName = "sitemap_5.properties";
-		propFile = new File(propDir, propFileName);
+		substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys2");
+		prepFile();
 		// when
-		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile);
+		reader.parse(modifiedFile);
 		// then
-		assertThat(reader.isEnumNotExtant()).isTrue();
-		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.isLabelClassMissing()).isFalse();
+		assertThat(reader.isLabelClassNonExistent()).isTrue();
+		assertThat(reader.isLabelClassNotI18N()).isFalse();
 		assertThat(reader.missingSections()).containsOnly();
 
-		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getPagesDefined()).isEqualTo(14);
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
 		assertThat(reader.getMissingPages()).containsOnly();
 		assertThat(reader.getPropertyErrors()).containsOnly();
-		assertThat(reader.getMissingEnums()).containsOnly("moneyInOut", "home", "transfers", "login", "opt");
+		assertThat(reader.getMissingEnums()).containsOnly("moneyInOut", "transfers", "opt");
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
-		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecureView");
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
+		assertThat(reader.getSitemap().hasErrors()).isTrue();
 
 		System.out.println(reader.getReport());
 
@@ -251,26 +276,26 @@ public class TextReaderSiteMapTest {
 	@Test
 	public void viewNotFound() throws IOException {
 
-		String propFileName = "sitemap_3.properties";
-		propFile = new File(propDir, propFileName);
+		substitute("secureHome     = secure/home                  : SecureHome",
+				"secureHome     = secure/home                  : SecurelyHome");
+		prepFile();
 		// when
-		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile);
+		reader.parse(modifiedFile);
 		// then
 
-		assertThat(reader.isEnumNotExtant()).isFalse();
-		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.isLabelClassNonExistent()).isFalse();
+		assertThat(reader.isLabelClassNotI18N()).isFalse();
 		assertThat(reader.missingSections()).containsOnly();
 
-		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getPagesDefined()).isEqualTo(14);
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
 		assertThat(reader.getMissingPages()).containsOnly();
 		assertThat(reader.getPropertyErrors()).containsOnly();
 		assertThat(reader.getMissingEnums()).containsOnly();
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
-		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecureView");
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecurelyHomeView");
 		assertThat(reader.getIndentationErrors()).containsOnly();
-
+		assertThat(reader.getSitemap().hasErrors()).isTrue();
 		System.out.println(reader.getReport());
 
 	}
@@ -278,17 +303,18 @@ public class TextReaderSiteMapTest {
 	@Test
 	public void viewNotV7View() throws IOException {
 
-		String propFileName = "sitemap_6.properties";
-		propFile = new File(propDir, propFileName);
+		substitute("--money-in-out  : subview.MoneyInOut      ~ moneyInOut",
+				"--money-in-out : subview.NotV7 ~ moneyInOut");
+		prepFile();
 		// when
-		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile);
+		reader.parse(modifiedFile);
+
 		// then
-		assertThat(reader.isEnumNotExtant()).isFalse();
-		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.isLabelClassNonExistent()).isFalse();
+		assertThat(reader.isLabelClassNotI18N()).isFalse();
 		assertThat(reader.missingSections()).containsOnly();
 
-		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getPagesDefined()).isEqualTo(14);
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
 		assertThat(reader.getMissingPages()).containsOnly();
 		assertThat(reader.getPropertyErrors()).containsOnly();
@@ -296,6 +322,7 @@ public class TextReaderSiteMapTest {
 		assertThat(reader.getInvalidViewClasses()).containsOnly(NotV7View.class.getName());
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly("subview.NotV7View");
 		assertThat(reader.getIndentationErrors()).containsOnly();
+		assertThat(reader.getSitemap().hasErrors()).isTrue();
 		System.out.println(reader.getReport());
 
 	}
@@ -308,18 +335,17 @@ public class TextReaderSiteMapTest {
 	@Test
 	public void mapIndentTooGreat() throws IOException {
 
-		String propFileName = "sitemap_7.properties";
-		propFile = new File(propDir, propFileName);
+		substitute("--transfers     : subview.Transfer", "----transfers     : subview.Transfer");
+		prepFile();
 		// when
-		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile);
+		reader.parse(modifiedFile);
 
 		// then
-		assertThat(reader.isEnumNotExtant()).isFalse();
-		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.isLabelClassNonExistent()).isFalse();
+		assertThat(reader.isLabelClassNotI18N()).isFalse();
 		assertThat(reader.missingSections()).containsOnly();
 
-		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getPagesDefined()).isEqualTo(14);
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
 		assertThat(reader.getMissingPages()).containsOnly();
 		assertThat(reader.getPropertyErrors()).containsOnly();
@@ -327,9 +353,10 @@ public class TextReaderSiteMapTest {
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly("transfers");
+		assertThat(reader.getSitemap().hasErrors()).isFalse();
 
 		System.out.println(reader.getReport());
-		System.out.println(reader.getSiteMap().toString());
+		System.out.println(reader.getSitemap().toString());
 	}
 
 	/**
@@ -347,72 +374,202 @@ public class TextReaderSiteMapTest {
 	}
 
 	@Test
-	public void standardPageMissing() {
+	public void standardPageMissing() throws IOException {
 
-		String propFileName = "sitemap_8.properties";
-		propFile = new File(propDir, propFileName);
+		// given
+		substitute("resetAccount   = public/reset-account", "resetAccount   = ");
+		substitute("requestAccount = public/request-account", null);
+		prepFile();
 		// when
-		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile);
+		reader.parse(modifiedFile);
 
 		// then
-		assertThat(reader.isEnumNotExtant()).isFalse();
-		assertThat(reader.isEnumNotI18N()).isFalse();
+		assertThat(reader.isLabelClassNonExistent()).isFalse();
+		assertThat(reader.isLabelClassNotI18N()).isFalse();
 		assertThat(reader.missingSections()).containsOnly();
 
-		assertThat(reader.getPagesDefined()).isEqualTo(7);
+		assertThat(reader.getPagesDefined()).isEqualTo(12); // Two standard pages missing
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
 		assertThat(reader.getMissingPages()).containsOnly("resetAccount", "requestAccount");
-		assertThat(reader.getPropertyErrors()).containsOnly("Property resetAccount cannot have an empty value");
+		assertThat(reader.getPropertyErrors()).containsOnly("Property resetAccount must contain a url");
 		assertThat(reader.getMissingEnums()).containsOnly();
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
+		assertThat(reader.getSitemap().hasErrors()).isTrue();
 
 		System.out.println(reader.getReport());
 	}
 
-	private void validateNode(SiteMap tree, SiteMapNode node) {
+	@Test
+	public void redirectTargetMissing() {
 
-		switch (node.getUrlSegment()) {
-		case "":
-			assertThat(tree.getChildCount(node)).isEqualTo(0);
-			assertThat(tree.url(node)).isEqualTo("");
-			break;
+		// given
+
+		// when
+
+		// then
+		assertThat(false).isEqualTo(true);
+
+	}
+
+	@Test
+	public void redirectTargetNotValid() {
+
+		// given
+
+		// when
+
+		// then
+		assertThat(false).isEqualTo(true);
+
+	}
+
+	@Test
+	public void redirectTargetLoop() {
+
+		// given
+
+		// when
+
+		// then
+		assertThat(false).isEqualTo(true);
+
+	}
+
+	private void validateNode(Sitemap tree, SiteMapNode node) {
+		String url = tree.url(node);
+		switch (url) {
 
 		case "public":
-			assertThat(tree.getChildCount(node)).isEqualTo(1);
-			assertThat(tree.url(node)).isEqualTo("public");
-			SiteMapNode searchNode = new SiteMapNode("login", LoginView.class, TestLabelKeys.login);
-			assertThat(tree.getChildren(node)).contains(searchNode);
+			assertThat(tree.getChildCount(node)).isEqualTo(8);
+			assertThat(node.getUrlSegment()).isEqualTo("public");
+			assertThat(node.getViewClass()).isEqualTo(null);
+			assertThat(node.getLabelKey()).isEqualTo(null);
 			break;
 
-		case "secure":
-			assertThat(tree.getChildCount(node)).isEqualTo(3);
-			assertThat(tree.url(node)).isEqualTo("secure");
-			searchNode = new SiteMapNode("transfers", TransferView.class, TestLabelKeys.transfers);
-			assertThat(tree.getChildren(node)).contains(searchNode);
-			searchNode = new SiteMapNode("money-in-out", MoneyInOutView.class, TestLabelKeys.moneyInOut);
-			assertThat(tree.getChildren(node)).contains(searchNode);
-			searchNode = new SiteMapNode("options", OptionsView.class, TestLabelKeys.opt);
-			assertThat(tree.getChildren(node)).contains(searchNode);
-			break;
-
-		case "transfers":
+		case "public/home": {
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
-			assertThat(tree.url(node)).isEqualTo("secure/transfers");
-			break;
+			assertThat(node.getUrlSegment()).isEqualTo("home");
+			assertThat(node.getViewClass()).isEqualTo(PublicHomeView.class);
+			assertThat(node.getLabelKey()).isEqualTo(StandardPageKeys.publicHome);
 
-		case "money-in-out":
-			assertThat(tree.getChildCount(node)).isEqualTo(0);
-			assertThat(tree.url(node)).isEqualTo("secure/money-in-out");
-			break;
-
-		case "options":
-			assertThat(tree.getChildCount(node)).isEqualTo(0);
-			assertThat(tree.url(node)).isEqualTo("secure/options");
 			break;
 		}
+
+		case "public/login": {
+			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(node.getUrlSegment()).isEqualTo("login");
+			assertThat(node.getViewClass()).isEqualTo(LoginView.class);
+			assertThat(node.getLabelKey()).isEqualTo(StandardPageKeys.login);
+			break;
+		}
+
+		case "public/logout": {
+			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(node.getUrlSegment()).isEqualTo("logout");
+			assertThat(node.getViewClass()).isEqualTo(LogoutView.class);
+			assertThat(node.getLabelKey()).isEqualTo(StandardPageKeys.logout);
+			break;
+		}
+
+		case "public/enable-account":
+			assertThat(node.getUrlSegment()).isEqualTo("enable-account");
+			assertThat(node.getLabelKey()).isEqualTo(StandardPageKeys.enableAccount);
+			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(node.getViewClass()).isEqualTo(AlternateAccountView.class);
+			break;
+		case "public/request-account":
+			assertThat(node.getUrlSegment()).isEqualTo("request-account");
+			assertThat(node.getLabelKey()).isEqualTo(StandardPageKeys.requestAccount);
+			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(node.getViewClass()).isEqualTo(AlternateAccountView.class);
+			break;
+		case "public/refresh-account":
+			assertThat(node.getUrlSegment()).isEqualTo("refresh-account");
+			assertThat(node.getLabelKey()).isEqualTo(StandardPageKeys.refreshAccount);
+			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(node.getViewClass()).isEqualTo(AlternateAccountView.class);
+			break;
+		case "public/unlock-account":
+			assertThat(node.getUrlSegment()).isEqualTo("unlock-account");
+			assertThat(node.getLabelKey()).isEqualTo(StandardPageKeys.unlockAccount);
+			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(node.getViewClass()).isEqualTo(AlternateAccountView.class);
+			break;
+		case "public/reset-account": {
+			assertThat(node.getUrlSegment()).isEqualTo("reset-account");
+			assertThat(node.getLabelKey()).isEqualTo(StandardPageKeys.resetAccount);
+			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(node.getViewClass()).isEqualTo(AlternateAccountView.class);
+			break;
+		}
+
+		case "secure":
+			assertThat(tree.getChildCount(node)).isEqualTo(4);
+			assertThat(node.getUrlSegment()).isEqualTo("secure");
+			assertThat(node.getViewClass()).isEqualTo(null);
+			assertThat(node.getLabelKey()).isEqualTo(null);
+			break;
+
+		case "secure/home":
+			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(node.getUrlSegment()).isEqualTo("home");
+			assertThat(node.getViewClass()).isEqualTo(SecureHomeView.class);
+			assertThat(node.getLabelKey()).isEqualTo(StandardPageKeys.secureHome);
+			break;
+
+		case "secure/transfers":
+			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(node.getUrlSegment()).isEqualTo("transfers");
+			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
+			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.transfers);
+			break;
+
+		case "secure/money-in-out":
+			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(node.getUrlSegment()).isEqualTo("money-in-out");
+			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
+			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.moneyInOut);
+			break;
+
+		case "secure/options":
+			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(node.getUrlSegment()).isEqualTo("options");
+			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
+			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.opt);
+			break;
+
+		default:
+			Fail.fail("unexpected url: '" + url + "'");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void loadMasterFile() throws IOException {
+		propFile = new File(propDir, "sitemap_good.properties");
+		lines = FileUtils.readLines(propFile);
+	}
+
+	private void prepFile() throws IOException {
+		FileUtils.writeLines(modifiedFile, lines);
+	}
+
+	private void substitute(String original, String replacement) {
+		int index = lines.indexOf(original);
+		if (index >= 0) {
+			lines.remove(index);
+		} else {
+			throw new RuntimeException("Subsitution failed in test setup, " + original + " was not found");
+		}
+		if (replacement != null) {
+			lines.add(index, replacement);
+		}
+	}
+
+	private void insertAfter(String reference, String insertion) {
+		int index = lines.indexOf(reference);
+		lines.add(index + 1, insertion);
 	}
 
 }

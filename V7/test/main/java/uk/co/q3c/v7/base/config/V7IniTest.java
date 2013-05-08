@@ -21,11 +21,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.q3c.v7.base.config.V7Ini.DbParam;
-import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 
 public class V7IniTest {
 
 	private final String[] pages = new String[] { "publicHome", "secureHome", "login", "logout" };
+	private final String[] dbparams = new String[] { "dbURL", "dbUser", "dbPwd" };
 
 	String test0 = "test0.V7.ini"; // should be non-existent
 	String test1 = "test1.V7.ini";
@@ -42,18 +42,6 @@ public class V7IniTest {
 	}
 
 	@Test()
-	public void missingSection() {
-
-		// given
-		String testFile = test1;
-		// when
-		ini.loadFromPath(filepath(testFile));
-		ini.validate();
-		// then
-		allPropertiesHaveAValue("pages", pages);
-	}
-
-	@Test()
 	public void missingFile() {
 
 		// given
@@ -61,7 +49,7 @@ public class V7IniTest {
 		// when
 		ini.loadFromPath(filepath(testFile));
 		// then
-		allPropertiesHaveAValue("pages", pages);
+		allPropertiesHaveAValue("db", dbparams);
 	}
 
 	@Test()
@@ -72,22 +60,7 @@ public class V7IniTest {
 		// when
 		ini.loadFromPath(filepath(testFile));
 		// then
-		allPropertiesHaveAValue("pages", pages);
-	}
-
-	@Test
-	public void standardPage() {
-
-		// given
-		String testFile = test1;
-		// when
-		ini.loadFromPath(filepath(testFile));
-		ini.validate();
-
-		// then
-		assertThat(ini.standardPageURI(StandardPageKey.secureHome)).isEqualTo("secure/home");
-		assertThat(ini.standardPageURI(StandardPageKey.publicHome)).isEqualTo("public/home");
-
+		allPropertiesHaveAValue("db", dbparams);
 	}
 
 	@Test

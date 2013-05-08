@@ -25,47 +25,10 @@ public class V7Ini extends Ini {
 	private static Logger log = LoggerFactory.getLogger(V7Ini.class);
 	private static final String defaultPath = "classpath:V7.ini";
 
-	public static enum StandardPageKey {
-		publicHome, // The home page for non-authenticated users
-		secureHome, // The home page for authenticated users
-		login, // the login page
-		logout, // the page to go to after logging out
-		resetAccount, // page for the user to request an account reset
-		unlockAccount, // the page to go to for the user to request their account be unlocked
-		refreshAccount, // the page to go to for the user to refresh their account after credentials have expired
-		requestAccount, // the page to go to for the user to request an account (Equivalent to 'register')
-		enableAccount // the page to go to for the user to request that their account is enabled
-	};
-
 	public static enum DbParam {
 		dbURL,
 		dbUser,
 		dbPwd
-	}
-
-	private static String pageDefault(StandardPageKey key) {
-		switch (key) {
-		case publicHome:
-			return "public/home";
-		case secureHome:
-			return "secure/home";
-		case login:
-			return "public/login";
-		case logout:
-			return "public/logout";
-		case resetAccount:
-			return "public/reset-account";
-		case unlockAccount:
-			return "public/unlock-account";
-		case refreshAccount:
-			return "public/refresh-account";
-		case requestAccount:
-			return "public/request-account";
-		case enableAccount:
-			return "public/enable-account";
-		default:
-			return "unknown";
-		}
 	}
 
 	private static String dbDefault(DbParam key) {
@@ -87,7 +50,7 @@ public class V7Ini extends Ini {
 	}
 
 	public void validate() {
-		validatePages(checkSection("pages"));
+		// validatePages(checkSection("pages"));
 		validateDb(checkSection("db"));
 	}
 
@@ -109,14 +72,14 @@ public class V7Ini extends Ini {
 		return section;
 	}
 
-	protected void validatePages(Section section) {
-		for (StandardPageKey pageKey : StandardPageKey.values()) {
-			if (!section.containsKey(pageKey.name())) {
-				log.warn("The property {} is missing from V7.ini, using the default value", pageKey.name());
-				section.put(pageKey.name(), pageDefault(pageKey));
-			}
-		}
-	}
+	// protected void validatePages(Section section) {
+	// for (StandardPageKey pageKey : StandardPageKey.values()) {
+	// if (!section.containsKey(pageKey.name())) {
+	// log.warn("The property {} is missing from V7.ini, using the default value", pageKey.name());
+	// section.put(pageKey.name(), pageDefault(pageKey));
+	// }
+	// }
+	// }
 
 	@Override
 	public void loadFromPath(String resourcePath) throws ConfigurationException {
@@ -136,16 +99,16 @@ public class V7Ini extends Ini {
 		loadFromPath(defaultPath);
 	}
 
-	public String standardPageURI(StandardPageKey pageKey) {
-		Section section = getSection("pages");
-		if (section == null) {
-			throw new ConfigurationException(
-					"The 'pages' section of V7Ini is null, which should not be possible.  Are you testing and have forgotten to call V7Ini.validate() in your @Before method?  Yopu may be able to resolve this by including IniModule in your @GuiceCOntext (see BasicUITest for an example)");
-		}
-		String path = section.get(pageKey.name());
-		return path;
-
-	}
+	// public String standardPageURI(StandardPageKey pageKey) {
+	// Section section = getSection("pages");
+	// if (section == null) {
+	// throw new ConfigurationException(
+	// "The 'pages' section of V7Ini is null, which should not be possible.  Are you testing and have forgotten to call V7Ini.validate() in your @Before method?  Yopu may be able to resolve this by including IniModule in your @GuiceCOntext (see BasicUITest for an example)");
+	// }
+	// String path = section.get(pageKey.name());
+	// return path;
+	//
+	// }
 
 	public String dbParam(DbParam dbParam) {
 		Section section = getSection("db");

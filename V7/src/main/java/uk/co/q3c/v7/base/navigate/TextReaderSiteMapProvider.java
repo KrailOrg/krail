@@ -34,13 +34,12 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKeys;
 
 import com.google.common.base.Strings;
 
-public class TextReaderSiteMapProvider implements SiteMapProvider {
+public class TextReaderSiteMapProvider implements SitemapProvider {
 
 	private static Logger log = LoggerFactory.getLogger(TextReaderSiteMapProvider.class);
 
@@ -52,11 +51,11 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		map;
 	}
 
-	private SiteMap siteMap;
+	private Sitemap sitemap;
 	private int commentLines;
 	private int blankLines;
 	private Map<SectionName, List<String>> sections;
-	private Map<StandardPageKey, String> standardPages;
+
 	private SectionName currentSection;
 	private String labelKeys;
 	@SuppressWarnings("rawtypes")
@@ -72,15 +71,19 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 	private Set<String> propertyErrors;
 	private Set<String> duplicateURLs;
 	private Set<String> viewlessURLs;
+	private Set<String> unrecognisedOptions;
 
 	private StringBuilder report;
 	private DateTime startTime;
 	private DateTime endTime;
 	private String source;
 	private boolean parsed = false;
-	private boolean enumNotI18N;
-	private boolean enumNotExtant;
+	private boolean labelClassNotI18N;
+	private boolean labelClassNonExistent;
+	private boolean labelClassMissing = true;
+	private String labelClassName;
 	private Map<String, String> redirects;
+	private String defaultAccountView;
 
 	@Inject
 	public TextReaderSiteMapProvider() {
@@ -98,13 +101,14 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		propertyErrors = new HashSet<>();
 		viewlessURLs = new HashSet<>();
 		duplicateURLs = new HashSet<>();
+		unrecognisedOptions = new HashSet<>();
 		redirects = new TreeMap<>();
 
-		standardPages = new TreeMap<>();
-		siteMap = new SiteMap();
+		sitemap = new Sitemap();
 		sections = new HashMap<>();
-		enumNotI18N = false;
-		enumNotExtant = false;
+		labelClassNotI18N = false;
+		labelClassNonExistent = false;
+		labelClassMissing = true;
 		parsed = false;
 	}
 
@@ -128,8 +132,10 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 			processLines(lines);
 
 		} catch (Exception e) {
-			log.error("Unable to load site map file", e);
-			return;
+			log.error("Unable to load site map ", e);
+			sitemap.error();
+			String report = (parsed) ? getReport().toString() : "failed to parse input, unable to generate report";
+			log.debug(report);
 		}
 
 	}
@@ -144,13 +150,15 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 
 		// can only process if ALL required sections are present
 		if (missingSections().size() == 0) {
-			for (SectionName sectionName : SectionName.values()) {
-				processSection(sectionName, sections.get(sectionName));
-			}
+			processOptions();
+			processRedirects();
+			processMap();
 			processStandardPages();
+
 		} else {
 			log.warn("The site map source is missing these sections: {}", missingSections());
 			log.error("Site map failed to process, see previous log warnings for details");
+			sitemap.error();
 		}
 
 		endTime = DateTime.now();
@@ -164,10 +172,75 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 	 */
 	private void processStandardPages() {
 
-		for (StandardPageKey spk : StandardPageKey.values()) {
-			String pageUrl = standardPages.get(spk);
-			// siteMap.append(pageUrl);
+		List<String> lines = sections.get(SectionName.standardPages);
+		int i = 1;
+
+		for (String line : lines) {
+
+			StandardPageKeys pageKey = null;
+			String toUrl = null;
+			String viewName = null;
+
+			if (!line.contains("=")) {
+				propertyErrors
+						.add("Property must contain an '=' sign at line " + linenum(SectionName.standardPages, i));
+			} else {
+				String[] pair = StringUtils.split(line, "=");
+				String pageKeyName = pair[0].trim();
+
+				try {
+					pageKey = StandardPageKeys.valueOf(pageKeyName);
+					if (pair.length > 1) {
+						if (pair[1].contains(":")) {
+							String[] urlView = StringUtils.split(pair[1], ":");
+							toUrl = urlView[0].trim();
+							if (urlView.length > 1) {
+								viewName = urlView[1].trim();
+							}
+						} else {
+							toUrl = pair[1].trim();
+						}
+
+						standardPages().put(pageKey, toUrl);
+					} else {
+						propertyErrors.add("Property " + pageKeyName + " must contain a url");
+						missingPages.add(pageKeyName);
+						sitemap.error();
+					}
+				} catch (Exception e) {
+					propertyErrors.add(pageKeyName + " is not a valid " + StandardPageKeys.class.getSimpleName()
+							+ linenum(SectionName.standardPages, i));
+
+				}
+
+			}
+
+			// we now have defined a node, add it to the map
+			// bu but only if url is there
+			if (toUrl != null) {
+				SiteMapNode node = sitemap.append(toUrl);
+				node.setLabelKey(pageKey);
+				// and set the view
+				if (Strings.isNullOrEmpty(viewName)) {
+					viewName = defaultAccountView;
+				}
+				findView(node, node.getUrlSegment(), viewName);
+			}
+			i++;
 		}
+
+		// check for missing standard pages
+		for (StandardPageKeys spk : StandardPageKeys.values()) {
+			if (!standardPages().containsKey(spk)) {
+				missingPages.add(spk.name());
+				sitemap.error();
+			}
+		}
+
+	}
+
+	private String linenum(SectionName sectionName, int i) {
+		return "at line " + i + " in the " + sectionName + " section";
 	}
 
 	@Override
@@ -181,43 +254,15 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 			processLines(lines);
 
 		} catch (Exception e) {
-			log.error("Sitemap could not be loaded", e);
+			log.error("Unable to load site map", e);
+			String report = (parsed) ? getReport().toString() : "failed to parse input, unable to generate report";
+			sitemap.error();
+			log.debug(report);
 		}
 	}
 
-	private void processSection(SectionName key, List<String> sectionLines) {
-		switch (key) {
-		case map:
-			processMap(sectionLines);
-			break;
-
-		case viewPackages:
-			processViewPackages(sectionLines);
-			break;
-
-		case options:
-			processProperties(key, sectionLines);
-			break;
-
-		case redirects:
-			processRedirects(key, sectionLines);
-			break;
-
-		case standardPages:
-			processProperties(key, sectionLines);
-			for (StandardPageKey spk : StandardPageKey.values()) {
-				if (!standardPages.containsKey(spk)) {
-					missingPages.add(spk.name());
-				}
-			}
-			break;
-
-		default:
-			// do nothing, just ignore it
-		}
-	}
-
-	private void processRedirects(SectionName key, List<String> sectionLines) {
+	private void processRedirects() {
+		List<String> sectionLines = sections.get(SectionName.redirects);
 		for (String line : sectionLines) {
 			// if starts with ':' then f==""
 			// split the line on ':'
@@ -234,9 +279,11 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		}
 	}
 
-	private void processProperties(SectionName sectionName, List<String> lines) {
+	private void processOptions() {
+		List<String> sectionLines = sections.get(SectionName.options);
+		String sectionName = SectionName.options.name();
 		int i = 1;
-		for (String line : lines) {
+		for (String line : sectionLines) {
 			if (!line.contains("=")) {
 				propertyErrors.add("Property must contain an '=' sign at line " + i + " in the " + sectionName
 						+ " section");
@@ -263,11 +310,7 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 
 				// process valid properties only
 				if (valid) {
-					if (sectionName.equals(SectionName.options)) {
-						setOption(key, value);
-					} else {
-						setStandardPage(key, value);
-					}
+					setOption(key, value);
 				}
 			}
 			// increment line count
@@ -275,27 +318,25 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		}
 	}
 
-	private void setStandardPage(String key, String value) {
-		try {
-			StandardPageKey pageKey = StandardPageKey.valueOf(key);
-			standardPages.put(pageKey, value);
-		} catch (Exception e) {
-			throw new SiteMapFormatException(key + " is not a valid standard page key");
-		}
-
-	}
-
 	private void setOption(String key, String value) {
 		switch (key) {
 		case "labelKeys":
 			labelKeys = value;
-			validateLabelKeys();
+			if (!Strings.isNullOrEmpty(value)) {
+				labelClassMissing = false;
+				labelClassName = value;
+				validateLabelKeys();
+			}
 			break;
 		case "appendView":
 			appendView = "true".equals(value);
 			break;
+		case "defaultAccountView":
+			defaultAccountView = value;
+			break;
 		default:
 			log.warn("unrecognised option '{}' in site map", key);
+			unrecognisedOptions.add(key);
 		}
 	}
 
@@ -316,21 +357,20 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 			Class<I18NKeys> i18nClass = I18NKeys.class;
 			if (!i18nClass.isAssignableFrom(requestedLabelKeysClass)) {
 				valid = false;
-				enumNotI18N = true;
+				labelClassNotI18N = true;
+				log.warn(labelKeys + " does not implement I18NKeys");
 			}
 		} catch (ClassNotFoundException e) {
 			valid = false;
-			enumNotExtant = true;
+			labelClassNonExistent = true;
+			log.warn(labelKeys + " does not exist on the classpath");
 		}
 		if (!valid) {
 			log.warn(labelKeys + " is not a valid enum class for I18N labels");
+			sitemap.error();
 		} else {
 			labelKeysClass = (Class<? extends Enum<?>>) requestedLabelKeysClass;
 		}
-	}
-
-	private void processViewPackages(List<String> sectionLines) {
-		// seems like nothing needs to be done!
 	}
 
 	public List<String> getViewPackages() {
@@ -338,7 +378,8 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void processMap(List<String> sectionLines) {
+	private void processMap() {
+		List<String> sectionLines = sections.get(SectionName.map);
 		int i = 0;
 		SiteMapNode currentNode = null;
 		int currentLevel = 0;
@@ -377,13 +418,54 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 				}
 
 				// segment has been set, view & label may be null
-
-				// do the label, and try and get enum for it
-				// if the enum is missing, keep a note of it
-				// handy for identifying missing ones, just cut and paste from the console
-				// to the enum definition
 				SiteMapNode node = new SiteMapNode();
 				node.setUrlSegment(segment);
+
+				// do structure before labels
+				// labels are not needed for redirected pages
+				// but we cannot get full url until structure done
+
+				// add the node
+				if (treeLevel == 1) {
+					// at level 1 each becomes a 'root' (technically the site tree is a forest)
+					sitemap.addNode(node);
+					currentNode = node;
+					currentLevel = treeLevel;
+				} else {
+					// if indent going back up tree, walk up from current node to the parent level needed
+					if (treeLevel < currentLevel) {
+						int retraceLevels = currentLevel - treeLevel;
+						for (int k = 1; k <= retraceLevels; k++) {
+							currentNode = sitemap.getParent(currentNode);
+							currentLevel--;
+						}
+						sitemap.addChild(currentNode, node);
+						currentNode = node;
+						currentLevel++;
+					} else if (treeLevel == currentLevel) {
+						SiteMapNode parentNode = sitemap.getParent(currentNode);
+						sitemap.addChild(parentNode, node);
+					} else if (treeLevel > currentLevel) {
+						if (treeLevel - currentLevel > 1) {
+							log.warn(
+									"indentation for {} line is too great.  It should be a maximum of 1 greater than its predecessor",
+									node.getUrlSegment());
+							indentationErrors.add(node.getUrlSegment());
+						}
+						sitemap.addChild(currentNode, node);
+						currentNode = node;
+						currentLevel++;
+					}
+
+				}
+
+				String url = sitemap.url(node);
+				// do the view
+				if (!redirects.containsKey(url)) {
+					findView(node, segment, view);
+				}
+
+				// do the label
 				try {
 					if (labelKeyName == null) {
 						labelKeyName = segment;
@@ -395,77 +477,65 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 
 					node.setLabelKey(labelKey);
 				} catch (Exception e) {
-					missingEnums.add(labelKeyName);
-				}
+					// label is not needed if page is redirected
 
-				// do the view
-				// if view is null use the segment
-				if (view == null) {
-					view = StringUtils.capitalize(segment);
-				}
-
-				// user option whether to append 'View' or not
-				if (appendView) {
-					view = view + "View";
-				}
-
-				// try and find the view in the specified packages
-				for (String pkg : getViewPackages()) {
-					String fullViewName = pkg + "." + view;
-					try {
-						Class<?> viewClass = Class.forName(fullViewName);
-						if (V7View.class.isAssignableFrom(viewClass)) {
-							node.setViewClass((Class<V7View>) viewClass);
-							break;
-						} else {
-							invalidViewClasses.add(fullViewName);
-						}
-					} catch (ClassNotFoundException e) {
-						// don't need to do anything
+					if (!redirects.containsKey(url)) {
+						missingEnums.add(labelKeyName);
+						sitemap.error();
 					}
-
-				}
-				if (node.getViewClass() == null) {
-					undeclaredViewClasses.add(view);
-				}
-
-				// now add the node
-				if (treeLevel == 1) {
-					// at level 1 each becomes a 'root' (technically the site tree is a forest)
-					siteMap.addNode(node);
-					currentNode = node;
-					currentLevel = treeLevel;
-				} else {
-					// if indent going back up tree, walk up from current node to the parent level needed
-					if (treeLevel < currentLevel) {
-						int retraceLevels = currentLevel - treeLevel;
-						for (int k = 1; k <= retraceLevels; k++) {
-							currentNode = siteMap.getParent(currentNode);
-							currentLevel--;
-						}
-						siteMap.addChild(currentNode, node);
-						currentNode = node;
-						currentLevel++;
-					} else if (treeLevel == currentLevel) {
-						SiteMapNode parentNode = siteMap.getParent(currentNode);
-						siteMap.addChild(parentNode, node);
-					} else if (treeLevel > currentLevel) {
-						if (treeLevel - currentLevel > 1) {
-							log.warn(
-									"indentation for {} line is too great.  It should be a maximum of 1 greater than its predecessor",
-									node.getUrlSegment());
-							indentationErrors.add(node.getUrlSegment());
-						}
-						siteMap.addChild(currentNode, node);
-						currentNode = node;
-						currentLevel++;
-					}
-
 				}
 
 			} else {
-				throw new SiteMapFormatException("line in map must start with a'-', line " + i);
+				log.warn("line in map must start with a'-', line " + i);
+				sitemap.error();
 			}
+		}
+
+	}
+
+	/**
+	 * Updates the node with the required view. If {@link #appendView} is true the 'View' is appended to the
+	 * {@code viewName} before attempting to find its class declaration. If no class can be found, {@code viewName} is
+	 * added to {@link #undeclaredViewClasses}
+	 * 
+	 * @param node
+	 * @param segment
+	 * @param viewName
+	 */
+	@SuppressWarnings("unchecked")
+	private void findView(SiteMapNode node, String segment, String viewName) {
+		// if view is null use the segment
+		if (viewName == null) {
+			viewName = StringUtils.capitalize(segment);
+		}
+
+		// user option whether to append 'View' or not
+		if (appendView) {
+			viewName = viewName + "View";
+		}
+
+		// try and find the view in the specified packages
+		for (String pkg : getViewPackages()) {
+			String fullViewName = pkg + "." + viewName;
+			try {
+				Class<?> viewClass = Class.forName(fullViewName);
+				if (V7View.class.isAssignableFrom(viewClass)) {
+					node.setViewClass((Class<V7View>) viewClass);
+					break;
+				} else {
+					invalidViewClasses.add(fullViewName);
+					sitemap.error();
+				}
+			} catch (ClassNotFoundException e) {
+				// don't need to do anything
+			}
+
+		}
+
+		// record for report if view not found
+		if (node.getViewClass() == null) {
+			undeclaredViewClasses.add(viewName);
+			sitemap.error();
 		}
 
 	}
@@ -518,11 +588,12 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		if (section != null) {
 			section.add(strippedLine);
 		}
+
 	}
 
 	@Override
-	public SiteMap getSiteMap() {
-		return siteMap;
+	public Sitemap getSitemap() {
+		return sitemap;
 	}
 
 	public int getCommentLines() {
@@ -563,7 +634,7 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		String df = "dd MMM YYYY HH:mm:SS";
 
 		report.append("==================== SiteMap builder report ==================== \n\n");
-		report.append("parsing source from:\t\t\t");
+		report.append("parsing source from:\t\t");
 		report.append(source);
 		report.append("\n\n");
 
@@ -578,6 +649,11 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		report.append("run time:\t\t\t");
 		report.append(runtime().toString());
 		report.append(" ms\n\n");
+
+		report.append("significant errors:\t\t");
+		report.append(sitemap.getErrors());
+		report.append("  (these will need to be fixed for the program to run properly)");
+		report.append("\n\n");
 
 		report.append("missing sections:\t\t");
 		report.append(missingSections().size());
@@ -598,8 +674,31 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		}
 		report.append("\n\n");
 
+		report.append("I18N Label class:\t\t");
+		if (labelClassMissing) {
+			report.append("has not been declared, you need to define it using the 'labelKeys=' property in [options]");
+		} else {
+			if (labelClassNonExistent) {
+				report.append(labelClassName);
+				report.append("has been declared but does not exist on the classpath");
+			} else {
+				if (labelClassNotI18N) {
+					report.append(labelClassName);
+					report.append("has been declared, is on the classpath, but does not implement I18NKeys, as it should");
+				}
+			}
+		}
+		report.append("\n\n");
+
 		report.append("pages defined:\t\t\t");
 		report.append(getPagesDefined());
+		report.append("\n\n");
+
+		report.append("redirects:\t\t\t");
+		for (String entry : redirectEntries()) {
+			report.append("\n -- ");
+			report.append(entry);
+		}
 		report.append("\n\n");
 
 		report.append("missing standard pages:\t\t");
@@ -665,6 +764,16 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 			report.append(indentationErrors);
 			report.append("\n");
 		}
+		report.append("\n");
+
+		report.append("unrecognised options:\t\t");
+		report.append(unrecognisedOptions.size());
+		report.append("  (these have just been ignored, and do not count as errors)\n");
+		if (unrecognisedOptions.size() > 0) {
+			report.append("  -- ");
+			report.append(unrecognisedOptions);
+			report.append("\n");
+		}
 		report.append("\n\n");
 
 		report.append("================================================================= ");
@@ -672,7 +781,7 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 	}
 
 	public int getPagesDefined() {
-		return getSiteMap().getNodeCount();
+		return getSitemap().getNodeCount();
 	}
 
 	public Long runtime() {
@@ -719,12 +828,12 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		return undeclaredViewClasses;
 	}
 
-	public boolean isEnumNotI18N() {
-		return enumNotI18N;
+	public boolean isLabelClassNotI18N() {
+		return labelClassNotI18N;
 	}
 
-	public boolean isEnumNotExtant() {
-		return enumNotExtant;
+	public boolean isLabelClassNonExistent() {
+		return labelClassNonExistent;
 	}
 
 	public Set<String> getIndentationErrors() {
@@ -732,13 +841,17 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 	}
 
 	@Override
-	public SiteMap get() {
+	public Sitemap get() {
 		parse("classpath:sitemap.properties");
-		return getSiteMap();
+		return getSitemap();
 	}
 
-	public String standardPageUrl(StandardPageKey property) {
-		return standardPages.get(property);
+	public String standardPageUrl(StandardPageKeys property) {
+		return standardPages().get(property);
+	}
+
+	public Map<StandardPageKeys, String> standardPages() {
+		return sitemap.getStandardPages();
 	}
 
 	public Set<String> getMissingPages() {
@@ -749,12 +862,8 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 		return propertyErrors;
 	}
 
-	public Set<String> getRedirects() {
-		Set<String> ss = new HashSet<>();
-		for (Map.Entry<String, String> entry : redirects.entrySet()) {
-			ss.add(entry.getKey() + ":" + entry.getValue());
-		}
-		return ss;
+	public Map<String, String> getRedirects() {
+		return redirects;
 	}
 
 	public Set<String> getViewlessURLs() {
@@ -763,6 +872,18 @@ public class TextReaderSiteMapProvider implements SiteMapProvider {
 
 	public Set<String> getDuplicateURLs() {
 		return duplicateURLs;
+	}
+
+	public Set<String> redirectEntries() {
+		Set<String> ss = new HashSet<>();
+		for (Map.Entry<String, String> entry : redirects.entrySet()) {
+			ss.add(entry.getKey() + ":" + entry.getValue());
+		}
+		return ss;
+	}
+
+	public boolean isLabelClassMissing() {
+		return labelClassMissing;
 	}
 
 }

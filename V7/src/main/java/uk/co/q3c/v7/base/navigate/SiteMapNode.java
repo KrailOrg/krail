@@ -15,8 +15,24 @@ package uk.co.q3c.v7.base.navigate;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKeys;
 
+/**
+ * Represents a node in the site map (equivalent to a web site 'page'). It contains a url segment (this is just one part
+ * of the url, so the node for the page at /secure/account/open would contain just 'open'). To obtain the full url, use
+ * {@link Sitemap#url(SiteMapNode)}.
+ * <p>
+ * {@link #viewClass} is the class of {@link V7View} to be used in displaying the page, and the {@link #getLabelKey()}
+ * is an {@link I18NKeys} key to a localised label for the page
+ * <p>
+ * The {@link #id} is required because the url segment alone may not be unique, and the view class and labelKey are
+ * optional. For the node to be used in a graph, it needs a unique identifier. The id is provided by
+ * {@link Sitemap#addChild(SiteMapNode, SiteMapNode)} and {@link Sitemap#addNode(SiteMapNode)}
+ * 
+ * @author David Sowerby 6 May 2013
+ * 
+ */
 public class SiteMapNode {
 
+	private int id;
 	private String urlSegment;
 	private Class<? extends V7View> viewClass;
 	private Enum<? extends I18NKeys<?>> labelKey;
@@ -70,8 +86,7 @@ public class SiteMapNode {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((labelKey == null) ? 0 : labelKey.hashCode());
-		result = prime * result + ((urlSegment == null) ? 0 : urlSegment.hashCode());
+		result = prime * result + (id);
 		return result;
 	}
 
@@ -84,27 +99,14 @@ public class SiteMapNode {
 		if (getClass() != obj.getClass())
 			return false;
 		SiteMapNode other = (SiteMapNode) obj;
-		if (labelKey == null) {
-			if (other.labelKey != null)
-				return false;
-		} else if (!labelKey.equals(other.labelKey))
-			return false;
-		if (urlSegment == null) {
-			if (other.urlSegment != null)
-				return false;
-		} else if (!urlSegment.equals(other.urlSegment))
-			return false;
+		return id == other.id;
+	}
 
-		if (viewClass == null) {
-			return other.viewClass == null;
-		}
+	public int getId() {
+		return id;
+	}
 
-		if (viewClass.getName() == null) {
-			if (other.viewClass.getName() != null)
-				return false;
-		} else if (!viewClass.getName().equals(other.viewClass.getName()))
-			return false;
-
-		return true;
+	public void setId(int id) {
+		this.id = id;
 	}
 }

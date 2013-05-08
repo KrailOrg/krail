@@ -23,11 +23,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
-import uk.co.q3c.v7.base.navigate.SiteMap;
-import uk.co.q3c.v7.base.navigate.SiteMapProvider;
+import uk.co.q3c.v7.base.navigate.Sitemap;
+import uk.co.q3c.v7.base.navigate.SitemapProvider;
+import uk.co.q3c.v7.base.navigate.StandardPageKeys;
 import uk.co.q3c.v7.base.navigate.TextReaderSiteMapProvider;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.ui.BasicUI;
@@ -63,12 +63,12 @@ public class DemoViewModuleTest extends UITestBase {
 	public void allStandardPagesHaveViews() {
 
 		// given
-
+		Sitemap siteMap = null;
 		// when
 
 		// then
-		for (StandardPageKey key : StandardPageKey.values()) {
-			String uri = ini.standardPageURI(key);
+		for (StandardPageKeys key : StandardPageKeys.values()) {
+			String uri = siteMap.standardPageURI(key);
 			assertThat(viewProMap.get(uri)).overridingErrorMessage(uri + " does not have a matching View").isNotNull();
 		}
 
@@ -76,10 +76,10 @@ public class DemoViewModuleTest extends UITestBase {
 
 	@ModuleProvider
 	DemoViewModule demoViewModuleProvider() {
-		SiteMapProvider siteMapPro = new TextReaderSiteMapProvider();
-		SiteMap sitemap = siteMapPro.get();
+		SitemapProvider siteMapPro = new TextReaderSiteMapProvider();
+		Sitemap sitemap = siteMapPro.get();
 		System.out.println(siteMapPro.getReport());
-		System.out.println(siteMapPro.getSiteMap().toString());
+		System.out.println(siteMapPro.getSitemap().toString());
 		return new DemoViewModule(sitemap);
 	}
 }

@@ -27,8 +27,8 @@ import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.config.V7IniProvider;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
-import uk.co.q3c.v7.base.navigate.SiteMap;
-import uk.co.q3c.v7.base.navigate.SiteMapProvider;
+import uk.co.q3c.v7.base.navigate.Sitemap;
+import uk.co.q3c.v7.base.navigate.SitemapProvider;
 import uk.co.q3c.v7.base.navigate.TextReaderSiteMapProvider;
 import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
@@ -44,7 +44,7 @@ import com.google.inject.servlet.GuiceServletContextListener;
 
 public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
 	protected static Injector injector;
-	protected SiteMap sitemap;
+	protected Sitemap sitemap;
 
 	private final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
 
@@ -75,7 +75,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		sitemap = null;
 		if (ini.optionReadSiteMap()) {
-			SiteMapProvider siteMapPro = new TextReaderSiteMapProvider();
+			SitemapProvider siteMapPro = new TextReaderSiteMapProvider();
 			sitemap = siteMapPro.get();
 			baseModules.add(new ApplicationViewModule(sitemap));
 		}

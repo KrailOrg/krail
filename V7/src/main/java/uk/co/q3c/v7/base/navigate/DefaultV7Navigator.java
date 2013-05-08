@@ -10,8 +10,6 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
@@ -42,25 +40,27 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	private final URIFragmentHandler uriHandler;
 	private final Map<String, Provider<V7View>> viewProMap;
 	private String previousFragment;
-	private final V7Ini ini;
 	private String currentFragment;
+	private final Sitemap sitemap;
 
 	@Inject
-	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler, V7Ini ini,
+	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler, Sitemap sitemap,
 			Map<String, Provider<V7View>> viewProMap, V7SecurityManager securityManager) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
 		this.uriHandler = uriHandler;
-		this.ini = ini;
-
+		this.sitemap = sitemap;
 		securityManager.addListener(this);
 	}
 
 	@Override
 	public void navigateTo(String fragment) {
+		if (sitemap.hasErrors()) {
+			throw new SiteMapException("Unable to navigate, site map has errors");
+		}
 		if (Strings.isNullOrEmpty(fragment)) {
-			navigateTo(StandardPageKey.publicHome);
+			navigateTo(StandardPageKeys.publicHome);
 		} else {
 			String viewName = uriHandler.setFragment(fragment).virtualPage();
 			Provider<V7View> provider = viewProMap.get(viewName);
@@ -199,7 +199,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		if (previousView != null) {
 			navigateTo(previousView, previousViewName, previousFragment);
 		} else {
-			navigateTo(StandardPageKey.secureHome);
+			navigateTo(StandardPageKeys.secureHome);
 		}
 	}
 
@@ -237,8 +237,8 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	@Override
-	public void navigateTo(StandardPageKey pageKey) {
-		String page = ini.standardPageURI(pageKey);
+	public void navigateTo(StandardPageKeys pageKey) {
+		String page = sitemap.standardPageURI(pageKey);
 		navigateTo(page);
 	}
 
@@ -258,10 +258,6 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		previousView = null;
 		previousViewName = null;
 		previousFragment = null;
-	}
-
-	public V7Ini getIni() {
-		return ini;
 	}
 
 }

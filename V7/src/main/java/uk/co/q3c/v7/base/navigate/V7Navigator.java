@@ -2,7 +2,6 @@ package uk.co.q3c.v7.base.navigate;
 
 import java.util.List;
 
-import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.V7View;
@@ -25,11 +24,11 @@ public interface V7Navigator extends UriFragmentChangedListener {
 	void navigateTo(String navigationState);
 
 	/**
-	 * A convenience method to look up the URI fragment for the {@link StandardPageKey} and navigate to it
+	 * A convenience method to look up the URI fragment for the {@link StandardPageKeys} and navigate to it
 	 * 
 	 * @param pageKey
 	 */
-	void navigateTo(StandardPageKey pageKey);
+	void navigateTo(StandardPageKeys pageKey);
 
 	String getNavigationState();
 

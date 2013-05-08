@@ -9,9 +9,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.config.IniModule;
-import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.Sitemap;
+import uk.co.q3c.v7.base.navigate.StandardPageKeys;
 import uk.co.q3c.v7.base.shiro.DefaultLoginExceptionHandler;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.ui.BasicUI;
@@ -33,6 +34,8 @@ public class DefaultLoginViewTest extends UITestBase {
 	private TestRealm testRealm;
 	private LoginView loginView;
 
+	Sitemap sitemap;
+
 	@BeforeClass
 	public static void setupClass() {
 		uiClass = BasicUI.class;
@@ -43,7 +46,7 @@ public class DefaultLoginViewTest extends UITestBase {
 	@Before
 	public void setup() {
 		super.setup();
-		navigatorPro.get().navigateTo(StandardPageKey.login);
+		navigatorPro.get().navigateTo(StandardPageKeys.login);
 		loginView = (LoginView) ui.getView();
 	}
 
@@ -57,7 +60,7 @@ public class DefaultLoginViewTest extends UITestBase {
 		loginView.getSubmitButton().click();
 		// then
 		assertThat(navigatorPro.get().getNavigationState()).isEqualTo(
-				ini.standardPageURI(StandardPageKey.enableAccount));
+				sitemap.standardPageURI(StandardPageKeys.enableAccount));
 
 	}
 
@@ -70,8 +73,8 @@ public class DefaultLoginViewTest extends UITestBase {
 		// when
 		loginView.getSubmitButton().click();
 		// then
-		assertThat(navigatorPro.get().getNavigationState())
-				.isEqualTo(ini.standardPageURI(StandardPageKey.resetAccount));
+		assertThat(navigatorPro.get().getNavigationState()).isEqualTo(
+				sitemap.standardPageURI(StandardPageKeys.resetAccount));
 
 	}
 
@@ -85,7 +88,7 @@ public class DefaultLoginViewTest extends UITestBase {
 		loginView.getSubmitButton().click();
 		// then
 		assertThat(navigatorPro.get().getNavigationState()).isEqualTo(
-				ini.standardPageURI(StandardPageKey.unlockAccount));
+				sitemap.standardPageURI(StandardPageKeys.unlockAccount));
 
 	}
 
@@ -99,7 +102,7 @@ public class DefaultLoginViewTest extends UITestBase {
 		loginView.getSubmitButton().click();
 		// then
 		assertThat(navigatorPro.get().getNavigationState()).isEqualTo(
-				ini.standardPageURI(StandardPageKey.enableAccount));
+				sitemap.standardPageURI(StandardPageKeys.enableAccount));
 
 	}
 
@@ -126,7 +129,7 @@ public class DefaultLoginViewTest extends UITestBase {
 		loginView.getSubmitButton().click();
 		// then
 		assertThat(navigatorPro.get().getNavigationState()).isEqualTo(
-				ini.standardPageURI(StandardPageKey.refreshAccount));
+				sitemap.standardPageURI(StandardPageKeys.refreshAccount));
 
 	}
 

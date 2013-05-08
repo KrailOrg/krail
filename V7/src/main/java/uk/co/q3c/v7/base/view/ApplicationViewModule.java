@@ -15,7 +15,7 @@ package uk.co.q3c.v7.base.view;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.navigate.SiteMap;
+import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SiteMapNode;
 
 import com.google.inject.AbstractModule;
@@ -29,7 +29,7 @@ import com.google.inject.multibindings.MapBinder;
  */
 public class ApplicationViewModule extends AbstractModule {
 	private static Logger log = LoggerFactory.getLogger(ApplicationViewModule.class);
-	private final SiteMap sitemap;
+	private final Sitemap sitemap;
 
 	/**
 	 * Used for testing or when sitemap not used
@@ -38,7 +38,7 @@ public class ApplicationViewModule extends AbstractModule {
 		sitemap = null;
 	}
 
-	public ApplicationViewModule(SiteMap sitemap) {
+	public ApplicationViewModule(Sitemap sitemap) {
 		super();
 		this.sitemap = sitemap;
 	}

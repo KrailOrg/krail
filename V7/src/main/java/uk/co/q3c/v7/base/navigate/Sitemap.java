@@ -13,12 +13,19 @@
 package uk.co.q3c.v7.base.navigate;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
 import uk.co.q3c.util.BasicForest;
 
-public class SiteMap extends BasicForest<SiteMapNode> {
+import com.google.gwt.dev.util.collect.HashMap;
+
+public class Sitemap extends BasicForest<SiteMapNode> {
+
+	private int nextNodeId = 0;
+	private int errors = 0;
+	private final Map<StandardPageKeys, String> standardPages = new HashMap<>();
 
 	public String url(SiteMapNode node) {
 		StringBuilder buf = new StringBuilder(node.getUrlSegment());
@@ -73,6 +80,53 @@ public class SiteMap extends BasicForest<SiteMapNode> {
 
 		}
 		return foundNode;
+	}
+
+	@Override
+	public void addNode(SiteMapNode node) {
+		if (node.getId() == 0) {
+			node.setId(nextNodeId());
+		}
+		super.addNode(node);
+	}
+
+	@Override
+	public void addChild(SiteMapNode parentNode, SiteMapNode childNode) {
+		// super allows null parent
+		if (parentNode != null) {
+			if (parentNode.getId() == 0) {
+				parentNode.setId(nextNodeId());
+			}
+		}
+		if (childNode.getId() == 0) {
+			childNode.setId(nextNodeId());
+		}
+		super.addChild(parentNode, childNode);
+	}
+
+	public String standardPageURI(StandardPageKeys pageKey) {
+		return standardPages.get(pageKey);
+	}
+
+	private int nextNodeId() {
+		nextNodeId++;
+		return nextNodeId;
+	}
+
+	public Map<StandardPageKeys, String> getStandardPages() {
+		return standardPages;
+	}
+
+	public boolean hasErrors() {
+		return errors > 0;
+	}
+
+	public int getErrors() {
+		return errors;
+	}
+
+	public void error() {
+		errors++;
 	}
 
 }

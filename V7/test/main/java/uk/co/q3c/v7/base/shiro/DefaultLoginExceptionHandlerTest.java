@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.config.V7Ini.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.StandardPageKeys;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
 
@@ -50,7 +50,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.accountLocked(loginView, token);
 		// then
-		verify(navigator).navigateTo(StandardPageKey.unlockAccount);
+		verify(navigator).navigateTo(StandardPageKeys.unlockAccount);
 
 	}
 
@@ -83,7 +83,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.disabledAccount(loginView, token);
 		// then
-		verify(navigator).navigateTo(StandardPageKey.enableAccount);
+		verify(navigator).navigateTo(StandardPageKeys.enableAccount);
 	}
 
 	@Test
@@ -93,7 +93,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.excessiveAttempts(loginView, token);
 		// then
-		verify(navigator).navigateTo(StandardPageKey.resetAccount);
+		verify(navigator).navigateTo(StandardPageKeys.resetAccount);
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.expiredCredentials(loginView, token);
 		// then
-		verify(navigator).navigateTo(StandardPageKey.refreshAccount);
+		verify(navigator).navigateTo(StandardPageKeys.refreshAccount);
 	}
 
 	@Test
