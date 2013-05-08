@@ -114,6 +114,8 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		ini = iniPro.get();
 		ini.validate();
 
+		sitemap = new TextReaderSiteMapProvider().get();
+
 		uriHandler = mock(StrictURIFragmentHandler.class);
 
 		when(loginViewPro.get()).thenReturn(loginView);
