@@ -10,23 +10,24 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.config;
+package fixture;
 
-import javax.inject.Singleton;
+import java.io.File;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
-import uk.co.q3c.v7.base.navigate.SitemapProvider;
 import uk.co.q3c.v7.base.navigate.TextReaderSitemapProvider;
+import uk.co.q3c.v7.base.view.ApplicationViewModule;
 
-import com.google.inject.AbstractModule;
+public class TestHelper {
 
-public class IniModule extends AbstractModule {
-
-	@Override
-	protected void configure() {
-		bind(V7Ini.class).toProvider(V7IniProvider.class).in(Singleton.class);
-		bind(SitemapProvider.class).to(TextReaderSitemapProvider.class);
-		bind(Sitemap.class).toProvider(SitemapProvider.class).in(Singleton.class);
+	public static ApplicationViewModule applicationViewModuleUsingSitemap() {
+		TextReaderSitemapProvider sitemapPro = new TextReaderSitemapProvider();
+		File dir = new File("src/main/java");
+		File f = new File(dir, "sitemap.properties");
+		sitemapPro.setSourceFile(f);
+		Sitemap sitemap = sitemapPro.get();
+		ApplicationViewModule module = new ApplicationViewModule(sitemap);
+		return module;
 	}
 
 }

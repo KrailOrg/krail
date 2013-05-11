@@ -7,25 +7,28 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 
+import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
+import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
-import uk.co.q3c.v7.demo.view.DemoViewModule;
+import uk.co.q3c.v7.demo.view.DemoModule;
 import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
-import fixture.TestIniModule;
+import fixture.TestHelper;
 import fixture.TestUIModule;
 import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ UIScopeModule.class, BaseModule.class, TestUIModule.class, StandardViewModule.class,
-		DemoViewModule.class, V7ShiroVaadinModule.class, TestIniModule.class })
+@GuiceContext({ UIScopeModule.class, BaseModule.class, TestUIModule.class, StandardViewModule.class, DemoModule.class,
+		V7ShiroVaadinModule.class, IniModule.class })
 public class UIScopeTest extends UITestBase {
 
 	TestUI uib;
@@ -95,6 +98,11 @@ public class UIScopeTest extends UITestBase {
 		CurrentInstance.set(UIKey.class, null);
 		return (TestUI) provider.createInstance(TestUI.class);
 
+	}
+
+	@ModuleProvider
+	private ApplicationViewModule applicationViewModuleProvider() {
+		return TestHelper.applicationViewModuleUsingSitemap();
 	}
 
 }

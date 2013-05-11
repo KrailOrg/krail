@@ -10,23 +10,28 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.demo.i18N;
+package uk.co.q3c.v7.demo.i18n;
 
 import java.util.EnumMap;
 
+import uk.co.q3c.v7.i18n.EnumResourceBundle;
+
 /**
+ * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely
+ * defined as containing those value which are short, contain no parameters and are typically used for captions and
+ * labels. They can of course be used anywhere.
  * 
  * 
  * @author David Sowerby 9 Feb 2013
  * 
  */
-public class DemoLabels_de extends DemoLabels {
+public class DemoLabels extends EnumResourceBundle<DemoLabelKeys> {
 
 	private static final EnumMap<DemoLabelKeys, String> map = new EnumMap<DemoLabelKeys, String>(DemoLabelKeys.class);
-	// TODO make map unmodifiable
+
 	static {
-		map.put(DemoLabelKeys.yes, "ja");
-		map.put(DemoLabelKeys.no, "nein");
+		map.put(DemoLabelKeys.yes, "yes");
+		map.put(DemoLabelKeys.no, "no");
 
 	}
 

@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.testviews.PublicHomeView;
-import uk.co.q3c.v7.demo.i18N.DemoLabelKeys;
+import uk.co.q3c.v7.demo.i18n.DemoLabelKeys;
 
 public class SiteMapTest {
 

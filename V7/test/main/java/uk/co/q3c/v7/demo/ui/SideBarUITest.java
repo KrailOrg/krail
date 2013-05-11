@@ -18,22 +18,25 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
+import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
-import uk.co.q3c.v7.demo.view.DemoViewModule;
+import uk.co.q3c.v7.demo.view.DemoModule;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
-import fixture.TestIniModule;
+import fixture.TestHelper;
 import fixture.TestUIModule;
 import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class, UIScopeModule.class, TestUIModule.class, StandardViewModule.class,
-		DemoViewModule.class, V7ShiroVaadinModule.class, TestIniModule.class })
+@GuiceContext({ BaseModule.class, UIScopeModule.class, TestUIModule.class, StandardViewModule.class, DemoModule.class,
+		V7ShiroVaadinModule.class, IniModule.class })
 public class SideBarUITest extends UITestBase {
 
 	@BeforeClass
@@ -57,6 +60,11 @@ public class SideBarUITest extends UITestBase {
 
 	public SideBarUI ui() {
 		return (SideBarUI) ui;
+	}
+
+	@ModuleProvider
+	private ApplicationViewModule applicationViewModuleProvider() {
+		return TestHelper.applicationViewModuleUsingSitemap();
 	}
 
 }

@@ -24,12 +24,9 @@ import org.apache.shiro.mgt.SecurityManager;
 
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.config.V7IniProvider;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.Sitemap;
-import uk.co.q3c.v7.base.navigate.SitemapProvider;
-import uk.co.q3c.v7.base.navigate.TextReaderSiteMapProvider;
 import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
@@ -44,7 +41,6 @@ import com.google.inject.servlet.GuiceServletContextListener;
 
 public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
 	protected static Injector injector;
-	protected Sitemap sitemap;
 
 	private final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
 
@@ -58,6 +54,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	protected Injector getInjector() {
 
 		injector = Guice.createInjector(new IniModule(), new DefaultShiroWebModule(ctx.get()));
+
 		injector.createChildInjector(getModules());
 
 		// The SecurityManager binding is in ShiroWebModule, and therefore DefaultShiroWebModule. By default the binding
@@ -70,14 +67,14 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 	private List<Module> getModules() {
 		// ini load is handled by the provider
-		V7Ini ini = new V7IniProvider().get();
+		V7Ini ini = injector.getInstance(V7Ini.class);
 		List<Module> baseModules = new ArrayList<>();
 
-		sitemap = null;
 		if (ini.optionReadSiteMap()) {
-			SitemapProvider siteMapPro = new TextReaderSiteMapProvider();
-			sitemap = siteMapPro.get();
+			Sitemap sitemap = injector.getInstance(Sitemap.class);
 			baseModules.add(new ApplicationViewModule(sitemap));
+		} else {
+			// module for Views must be in addAppModules()
 		}
 		baseModules.add(new V7ShiroVaadinModule());
 		baseModules.add(new ShiroAopModule());

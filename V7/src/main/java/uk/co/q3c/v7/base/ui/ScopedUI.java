@@ -27,6 +27,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	private final ErrorHandler errorHandler;
 	private AbstractOrderedLayout screenLayout;
 	private final ConverterFactory converterFactory;
+	private V7View view;
 
 	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory) {
 		super();
@@ -79,6 +80,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 		Component content = toView.getUiComponent();
 		content.setSizeFull();
 		viewDisplayPanel.setContent(content);
+		this.view = toView;
 	}
 
 	public Panel getViewDisplayPanel() {
@@ -135,7 +137,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	protected abstract AbstractOrderedLayout screenLayout();
 
 	public V7View getView() {
-		return (V7View) viewDisplayPanel.getContent();
+		return view;
 	}
 
 	/**

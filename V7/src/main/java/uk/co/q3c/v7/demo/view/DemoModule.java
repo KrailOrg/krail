@@ -1,11 +1,10 @@
 package uk.co.q3c.v7.demo.view;
 
-import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
-import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.util.A;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
 /**
@@ -15,22 +14,14 @@ import com.google.inject.name.Names;
  * @author david
  * 
  */
-public class DemoViewModule extends ApplicationViewModule {
-	/**
-	 * used only for testing
-	 */
-	public DemoViewModule() {
-		super();
-	}
+public class DemoModule extends AbstractModule {
 
-	public DemoViewModule(Sitemap sitemap) {
-		super(sitemap);
+	public DemoModule() {
+		super();
 	}
 
 	@Override
 	protected void configure() {
-		super.configure();
-
 		// some Strings for the demo
 		bind(String.class).annotatedWith(Names.named(A.title)).toInstance(
 				"Guice Vaadin and Shiro demonstration application");

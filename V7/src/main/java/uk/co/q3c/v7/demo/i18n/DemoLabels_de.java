@@ -10,27 +10,29 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.demo.i18N;
+package uk.co.q3c.v7.demo.i18n;
 
-import java.lang.annotation.Annotation;
+import java.util.EnumMap;
 
-import uk.co.q3c.v7.i18n.I18NAnnotationReader;
-import uk.co.q3c.v7.i18n.I18NKeys;
+/**
+ * 
+ * 
+ * @author David Sowerby 9 Feb 2013
+ * 
+ */
+public class DemoLabels_de extends DemoLabels {
 
-public class DemoI18Nreader implements I18NAnnotationReader {
+	private static final EnumMap<DemoLabelKeys, String> map = new EnumMap<DemoLabelKeys, String>(DemoLabelKeys.class);
+	// TODO make map unmodifiable
+	static {
+		map.put(DemoLabelKeys.yes, "ja");
+		map.put(DemoLabelKeys.no, "nein");
 
-	@Override
-	public I18NKeys<?> caption(Annotation annotation) {
-		return ((DemoI18N) annotation).caption();
 	}
 
 	@Override
-	public I18NKeys<?> description(Annotation annotation) {
-		return ((DemoI18N) annotation).description();
+	public EnumMap<DemoLabelKeys, String> getMap() {
+		return map;
 	}
 
-	@Override
-	public I18NKeys<?> value(Annotation annotation) {
-		return ((DemoI18N) annotation).value();
-	}
 }

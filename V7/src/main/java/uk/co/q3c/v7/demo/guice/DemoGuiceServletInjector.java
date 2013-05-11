@@ -17,7 +17,7 @@ import java.util.List;
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
 import uk.co.q3c.v7.demo.dao.DemoDAOModule;
 import uk.co.q3c.v7.demo.ui.DemoUIModule;
-import uk.co.q3c.v7.demo.view.DemoViewModule;
+import uk.co.q3c.v7.demo.view.DemoModule;
 
 import com.google.inject.Module;
 
@@ -25,7 +25,7 @@ public class DemoGuiceServletInjector extends BaseGuiceServletInjector {
 
 	@Override
 	protected void addAppModules(List<Module> baseModules) {
-		baseModules.add(new DemoViewModule(sitemap));
+		baseModules.add(new DemoModule());
 		baseModules.add(new DemoDAOModule());
 		baseModules.add(new DemoUIModule());
 	}

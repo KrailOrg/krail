@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
@@ -39,9 +38,9 @@ import uk.co.q3c.v7.i18n.I18NKeys;
 
 import com.google.common.base.Strings;
 
-public class TextReaderSiteMapProvider implements SitemapProvider {
+public class TextReaderSitemapProvider implements SitemapProvider {
 
-	private static Logger log = LoggerFactory.getLogger(TextReaderSiteMapProvider.class);
+	private static Logger log = LoggerFactory.getLogger(TextReaderSitemapProvider.class);
 
 	private enum SectionName {
 		options,
@@ -82,11 +81,12 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 	private boolean labelClassNonExistent;
 	private boolean labelClassMissing = true;
 	private String labelClassName;
-	private Map<String, String> redirects;
+
 	private String defaultAccountView;
+	private File sourceFile;
 
 	@Inject
-	public TextReaderSiteMapProvider() {
+	public TextReaderSitemapProvider() {
 		super();
 	}
 
@@ -102,7 +102,6 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 		viewlessURLs = new HashSet<>();
 		duplicateURLs = new HashSet<>();
 		unrecognisedOptions = new HashSet<>();
-		redirects = new TreeMap<>();
 
 		sitemap = new Sitemap();
 		sections = new HashMap<>();
@@ -114,8 +113,8 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 
 	@Override
 	public void parse(String resourcePath) {
-		// File file = new File(ResourceUtils.applicationBaseDirectory(), fileName);
 		source = resourcePath;
+		log.info("Loading sitemap from {}", source);
 		InputStream is;
 		try {
 			is = ResourceUtils.getInputStreamForPath(resourcePath);
@@ -154,6 +153,7 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 			processRedirects();
 			processMap();
 			processStandardPages();
+			log.info("Sitemap loaded successfully");
 
 		} else {
 			log.warn("The site map source is missing these sections: {}", missingSections());
@@ -163,6 +163,7 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 
 		endTime = DateTime.now();
 		parsed = true;
+		sitemap.setReport(getReport().toString());
 	}
 
 	/**
@@ -247,7 +248,8 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 	public void parse(File file) {
 
 		source = file.getAbsolutePath();
-
+		sourceFile = file;
+		log.info("Loading sitemap from {}", source);
 		try {
 			@SuppressWarnings("unchecked")
 			List<String> lines = FileUtils.readLines(file);
@@ -268,13 +270,13 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 			// split the line on ':'
 
 			if (line.startsWith(":")) {
-				redirects.put("", line.replace(":", "").trim());
+				getRedirects().put("", line.replace(":", "").trim());
 			} else {
 				String[] pair = null;
 				pair = StringUtils.split(line, ":");
 				String f = pair[0].trim();
 				String t = (pair.length > 1) ? pair[1].trim() : null;
-				redirects.put(f, t);
+				getRedirects().put(f, t);
 			}
 		}
 	}
@@ -461,7 +463,7 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 
 				String url = sitemap.url(node);
 				// do the view
-				if (!redirects.containsKey(url)) {
+				if (!getRedirects().containsKey(url)) {
 					findView(node, segment, view);
 				}
 
@@ -479,7 +481,7 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 				} catch (Exception e) {
 					// label is not needed if page is redirected
 
-					if (!redirects.containsKey(url)) {
+					if (!getRedirects().containsKey(url)) {
 						missingEnums.add(labelKeyName);
 						sitemap.error();
 					}
@@ -676,15 +678,15 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 
 		report.append("I18N Label class:\t\t");
 		if (labelClassMissing) {
-			report.append("has not been declared, you need to define it using the 'labelKeys=' property in [options]");
+			report.append(" has not been declared, you need to define it using the 'labelKeys=' property in [options]");
 		} else {
 			if (labelClassNonExistent) {
 				report.append(labelClassName);
-				report.append("has been declared but does not exist on the classpath");
+				report.append(" has been declared but does not exist on the classpath");
 			} else {
 				if (labelClassNotI18N) {
 					report.append(labelClassName);
-					report.append("has been declared, is on the classpath, but does not implement I18NKeys, as it should");
+					report.append(" has been declared, is on the classpath, but does not implement I18NKeys, as it should");
 				}
 			}
 		}
@@ -840,9 +842,33 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 		return indentationErrors;
 	}
 
+	/**
+	 * If sitemap has already been parsed, returns it. If not, loads input and parses it. The source depends on what has
+	 * been set in {@link #source} and {@link #sourceFile}. The first available source is taken from the following
+	 * order:
+	 * <ol>
+	 * <li>source
+	 * <li>sourceFile
+	 * <li>default (which is "classpath:sitemap.properties")
+	 * 
+	 * @see uk.co.q3c.v7.base.navigate.SitemapProvider#get()
+	 */
+
 	@Override
 	public Sitemap get() {
-		parse("classpath:sitemap.properties");
+		if (parsed) {
+			return getSitemap();
+		}
+		if (source != null) {
+			parse(source);
+		} else {
+			if (sourceFile != null) {
+				parse(sourceFile);
+			} else {
+				parse("classpath:sitemap.properties");
+			}
+		}
+
 		return getSitemap();
 	}
 
@@ -863,7 +889,7 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 	}
 
 	public Map<String, String> getRedirects() {
-		return redirects;
+		return sitemap.getRedirects();
 	}
 
 	public Set<String> getViewlessURLs() {
@@ -876,7 +902,7 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 
 	public Set<String> redirectEntries() {
 		Set<String> ss = new HashSet<>();
-		for (Map.Entry<String, String> entry : redirects.entrySet()) {
+		for (Map.Entry<String, String> entry : getRedirects().entrySet()) {
 			ss.add(entry.getKey() + ":" + entry.getValue());
 		}
 		return ss;
@@ -884,6 +910,35 @@ public class TextReaderSiteMapProvider implements SitemapProvider {
 
 	public boolean isLabelClassMissing() {
 		return labelClassMissing;
+	}
+
+	public File getSourceFile() {
+		return sourceFile;
+	}
+
+	/**
+	 * 
+	 * Sets the source of the sitemap input. See also {@link #setSource(String)}, and {@link #get()} for loading order.
+	 * 
+	 * @param sourceFile
+	 */
+	public void setSourceFile(File sourceFile) {
+		this.sourceFile = sourceFile;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	/**
+	 * Sets the source of the sitemap input. Must be in the format of
+	 * {@link ResourceUtils#getInputStreamForPath(String)}. See also {@link #setSourceFile(File)}, and {@link #get()}
+	 * for loading order.
+	 * 
+	 * @param source
+	 */
+	public void setSource(String source) {
+		this.source = source;
 	}
 
 }

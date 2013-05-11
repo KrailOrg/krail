@@ -1,10 +1,9 @@
-package uk.co.q3c.v7.demo.view;
+package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.v7.base.view.VerticalViewBase;
 
 import com.vaadin.ui.Label;
 

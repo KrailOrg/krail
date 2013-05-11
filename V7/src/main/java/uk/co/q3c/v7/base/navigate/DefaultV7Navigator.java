@@ -57,23 +57,39 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	@Override
 	public void navigateTo(String fragment) {
 		if (sitemap.hasErrors()) {
-			throw new SiteMapException("Unable to navigate, site map has errors");
+			throw new SiteMapException("Unable to navigate, site map has errors\n" + sitemap.getReport());
 		}
 		if (Strings.isNullOrEmpty(fragment)) {
 			navigateTo(StandardPageKeys.publicHome);
 		} else {
-			String viewName = uriHandler.setFragment(fragment).virtualPage();
+
+			// fragment needs to be revised if redirected
+			String revisedFragment = checkRedirects(fragment);
+			String viewName = uriHandler.setFragment(revisedFragment).virtualPage();
 			Provider<V7View> provider = viewProMap.get(viewName);
 			V7View view = null;
 			if (provider == null) {
-				log.debug("View not found for " + fragment);
+				log.debug("View not found for " + revisedFragment);
 				view = errorViewPro.get();
 			} else {
 				view = provider.get();
 			}
 
-			navigateTo(view, viewName, fragment);
+			navigateTo(view, viewName, revisedFragment);
 		}
+	}
+
+	/**
+	 * Checks {@code fragment} to see whether it has been redirected
+	 * 
+	 * @param fragment
+	 * @return
+	 */
+	private String checkRedirects(String fragment) {
+		return fragment;
+		// uriHandler.setFragment(fragment);
+		// String page = uriHandler.virtualPage();
+		// if (sitemap.getRedirectFor(page));
 	}
 
 	/**
@@ -239,6 +255,9 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	@Override
 	public void navigateTo(StandardPageKeys pageKey) {
 		String page = sitemap.standardPageURI(pageKey);
+		if (page == null) {
+			throw new SiteMapException(pageKey + " cannot have a null path\n" + sitemap.getReport());
+		}
 		navigateTo(page);
 	}
 

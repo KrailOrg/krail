@@ -23,8 +23,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.demo.i18N.DemoI18N;
-import uk.co.q3c.v7.demo.i18N.DemoI18Nreader;
+import uk.co.q3c.v7.demo.i18n.DemoI18N;
+import uk.co.q3c.v7.demo.i18n.DemoI18Nreader;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;

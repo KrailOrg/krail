@@ -12,8 +12,8 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import uk.co.q3c.v7.demo.i18N.DemoI18N;
-import uk.co.q3c.v7.demo.i18N.DemoLabelKeys;
+import uk.co.q3c.v7.demo.i18n.DemoI18N;
+import uk.co.q3c.v7.demo.i18n.DemoLabelKeys;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;

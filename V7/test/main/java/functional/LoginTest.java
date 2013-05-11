@@ -12,20 +12,23 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.StandardPageKeys;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.ui.BasicUI;
+import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.StandardViewModule;
-import uk.co.q3c.v7.demo.view.DemoViewModule;
+import uk.co.q3c.v7.demo.view.DemoModule;
 import uk.co.q3c.v7.demo.view.View1;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
+import fixture.TestHelper;
 import fixture.TestUIModule;
 import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class, UIScopeModule.class, TestUIModule.class, StandardViewModule.class,
-		DemoViewModule.class, V7ShiroVaadinModule.class, IniModule.class })
+		V7ShiroVaadinModule.class, IniModule.class, DemoModule.class })
 public class LoginTest extends UITestBase {
 
 	String username = "wiggly";
@@ -41,6 +44,7 @@ public class LoginTest extends UITestBase {
 	public void loginSuccess_noPrevious() {
 
 		// given
+
 		navigatorPro.get().navigateTo(StandardPageKeys.login);
 		LoginView loginView = (LoginView) ui.getView();
 		loginView.setUsername(username);
@@ -113,6 +117,11 @@ public class LoginTest extends UITestBase {
 		// then
 		assertThat(navigatorPro.get().getNavigationState()).isEqualTo("public/reset-account");
 
+	}
+
+	@ModuleProvider
+	private ApplicationViewModule applicationViewModuleProvider() {
+		return TestHelper.applicationViewModuleUsingSitemap();
 	}
 
 }

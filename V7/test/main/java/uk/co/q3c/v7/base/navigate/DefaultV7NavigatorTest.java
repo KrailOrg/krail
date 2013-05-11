@@ -114,7 +114,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		ini = iniPro.get();
 		ini.validate();
 
-		sitemap = new TextReaderSiteMapProvider().get();
+		sitemap = new TextReaderSitemapProvider().get();
 
 		uriHandler = mock(StrictURIFragmentHandler.class);
 
@@ -348,6 +348,18 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		verify(listener1, times(1)).beforeViewChange(any(V7ViewChangeEvent.class));
 		verify(listener2, never()).beforeViewChange(any(V7ViewChangeEvent.class));
 		verify(listener3, never()).beforeViewChange(any(V7ViewChangeEvent.class));
+	}
+
+	@Test
+	public void redirection() {
+
+		// given
+		when(uriHandler.setFragment("secure")).thenReturn(uriHandler);
+		when(uriHandler.virtualPage()).thenReturn("secure");
+		// when
+		navigator.navigateTo("secure");
+		// then
+		assertThat(navigator.getNavigationState()).isEqualTo("secure/home");
 	}
 
 }

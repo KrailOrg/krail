@@ -10,25 +10,27 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package fixture.testviews2;
+package uk.co.q3c.v7.demo.i18n;
 
-import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
+import java.lang.annotation.Annotation;
 
-import com.vaadin.ui.Component;
+import uk.co.q3c.v7.i18n.I18NAnnotationReader;
+import uk.co.q3c.v7.i18n.I18NKeys;
 
-public class LoginView implements V7View {
+public class DemoI18Nreader implements I18NAnnotationReader {
 
 	@Override
-	public void enter(V7ViewChangeEvent event) {
-		//
-		throw new RuntimeException("not yet implemented");
+	public I18NKeys<?> caption(Annotation annotation) {
+		return ((DemoI18N) annotation).caption();
 	}
 
 	@Override
-	public Component getUiComponent() {
-		// return null;
-		throw new RuntimeException("not yet implemented");
+	public I18NKeys<?> description(Annotation annotation) {
+		return ((DemoI18N) annotation).description();
 	}
 
+	@Override
+	public I18NKeys<?> value(Annotation annotation) {
+		return ((DemoI18N) annotation).value();
+	}
 }

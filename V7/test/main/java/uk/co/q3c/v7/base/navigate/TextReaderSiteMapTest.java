@@ -40,9 +40,9 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 import fixture.testviews2.AlternateAccountView;
-import fixture.testviews2.LoginView;
 import fixture.testviews2.LogoutView;
 import fixture.testviews2.OptionsView;
+import fixture.testviews2.TestLoginView;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -53,7 +53,7 @@ public class TextReaderSiteMapTest {
 	private static File modifiedFile;
 	private List<String> lines;
 	@Inject
-	TextReaderSiteMapProvider reader;
+	TextReaderSitemapProvider reader;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -460,7 +460,7 @@ public class TextReaderSiteMapTest {
 		case "public/login": {
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUrlSegment()).isEqualTo("login");
-			assertThat(node.getViewClass()).isEqualTo(LoginView.class);
+			assertThat(node.getViewClass()).isEqualTo(TestLoginView.class);
 			assertThat(node.getLabelKey()).isEqualTo(StandardPageKeys.login);
 			break;
 		}

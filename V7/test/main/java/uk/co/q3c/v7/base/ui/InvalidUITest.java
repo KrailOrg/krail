@@ -14,8 +14,9 @@ import uk.co.q3c.v7.base.guice.uiscope.UIKeyProvider;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
+import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
-import uk.co.q3c.v7.demo.view.DemoViewModule;
+import uk.co.q3c.v7.demo.view.DemoModule;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
@@ -32,12 +33,13 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+import fixture.TestHelper;
 import fixture.TestIniModule;
 import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class, UIScopeModule.class, V7ShiroVaadinModule.class, StandardViewModule.class,
-		DemoViewModule.class, TestIniModule.class })
+		DemoModule.class, TestIniModule.class })
 public class InvalidUITest extends UITestBase {
 
 	static class DummyUIProvider extends ScopedUIProvider {
@@ -104,6 +106,11 @@ public class InvalidUITest extends UITestBase {
 			}
 
 		};
+	}
+
+	@ModuleProvider
+	private ApplicationViewModule applicationViewModuleProvider() {
+		return TestHelper.applicationViewModuleUsingSitemap();
 	}
 
 }

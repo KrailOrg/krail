@@ -71,7 +71,6 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 
 	protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
 	protected VaadinSession mockedSession = mock(VaadinSession.class);
-
 	protected V7View currentView;
 
 	@Inject

@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,13 +20,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import uk.co.q3c.util.BasicForest;
 
-import com.google.gwt.dev.util.collect.HashMap;
-
 public class Sitemap extends BasicForest<SiteMapNode> {
 
 	private int nextNodeId = 0;
 	private int errors = 0;
 	private final Map<StandardPageKeys, String> standardPages = new HashMap<>();
+	private String report;
+	private final Map<String, String> redirects = new HashMap<>();
 
 	public String url(SiteMapNode node) {
 		StringBuilder buf = new StringBuilder(node.getUrlSegment());
@@ -127,6 +128,33 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 
 	public void error() {
 		errors++;
+	}
+
+	public void setReport(String report) {
+		this.report = report;
+	}
+
+	public String getReport() {
+		return report;
+	}
+
+	/**
+	 * If the {@code page} has been redirected, return the page it has been redirected to, otherwise, just return
+	 * {@code page}
+	 * 
+	 * @param page
+	 * @return
+	 */
+	public String getRedirectFor(String page) {
+		if (redirects.containsKey(page)) {
+			return redirects.get(page);
+		} else {
+			return page;
+		}
+	}
+
+	public Map<String, String> getRedirects() {
+		return redirects;
 	}
 
 }
