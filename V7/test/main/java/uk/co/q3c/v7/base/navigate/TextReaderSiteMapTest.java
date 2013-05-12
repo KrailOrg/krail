@@ -390,8 +390,8 @@ public class TextReaderSiteMapTest {
 
 		assertThat(reader.getPagesDefined()).isEqualTo(12); // Two standard pages missing
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
-		assertThat(reader.getMissingPages()).containsOnly("resetAccount", "requestAccount");
-		assertThat(reader.getPropertyErrors()).containsOnly("Property resetAccount must contain a url");
+		assertThat(reader.getMissingPages()).containsOnly("requestAccount");
+		assertThat(reader.getPropertyErrors()).containsOnly();
 		assertThat(reader.getMissingEnums()).containsOnly();
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
@@ -402,38 +402,70 @@ public class TextReaderSiteMapTest {
 	}
 
 	@Test
-	public void redirectTargetMissing() {
+	public void standardPageEmpty() throws IOException {
 
 		// given
-
+		substitute("publicHome     = public/home                  : PublicHome",
+				"publicHome     =                 : PublicHome");
+		prepFile();
 		// when
-
+		reader.parse(modifiedFile);
 		// then
-		assertThat(false).isEqualTo(true);
+		assertThat(reader.getSitemap().standardPageURI(StandardPageKeys.publicHome)).isEqualTo("");
 
 	}
 
 	@Test
-	public void redirectTargetNotValid() {
+	public void redirectTargetNotADefinedPage() throws IOException {
 
 		// given
-
+		substitute("public : public/home", "public : wiggly/home");
+		prepFile();
 		// when
-
+		reader.parse(modifiedFile);
 		// then
-		assertThat(false).isEqualTo(true);
+		assertThat(reader.getRedirectErrors()).containsOnly(
+				"'wiggly/home' cannot be a redirect target, it has not been defined as a page");
+		assertThat(reader.getSitemap().hasErrors()).isTrue();
 
 	}
 
 	@Test
-	public void redirectTargetLoop() {
+	public void redirectTargetEmptyButValid() throws IOException {
 
 		// given
-
+		substitute("       : public/home", "wiggly  :   "); // redirect
+		substitute("publicHome     = public/home                  : PublicHome",
+				"publicHome     =                 : PublicHome");
+		insertAfter("--options                                 ~ opt", "-public");
+		insertAfter("-public", "--home   :  PublicHome");
+		prepFile();
 		// when
+		reader.parse(modifiedFile);
+		System.out.println(reader.getSitemap().toString());
+		// then
+
+		assertThat(reader.getSitemap().hasUrl("")).isTrue();
+		assertThat(reader.getRedirectErrors()).containsOnly();
+		assertThat(reader.getSitemap().hasErrors()).isFalse();
+
+	}
+
+	@Test
+	public void redirectTargetLoop() throws IOException {
+
+		// given
+		insertAfter("secure : secure/home", "public/home : public");
+		prepFile();
+		// when
+		reader.parse(modifiedFile);
 
 		// then
-		assertThat(false).isEqualTo(true);
+		assertThat(reader.getRedirectErrors()).contains(
+				"'public/home' cannot be both a redirect source and redirect target");
+		assertThat(reader.getRedirectErrors())
+				.contains("'public' cannot be both a redirect source and redirect target");
+		assertThat(reader.getSitemap().hasErrors()).isTrue();
 
 	}
 

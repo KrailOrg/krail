@@ -9,7 +9,15 @@ import java.util.List;
  * 
  */
 public interface URIFragmentHandler {
-
+	/**
+	 * returns the "virtual page path" of the URIFragment. The path is assumed to finish as soon as a paired parameter
+	 * is found. No attempt is made to validate the actual structure of the path, so for example something like
+	 * <code>view//subview/a=b</code> will return <code>view//subview</code>. An empty String is returned if
+	 * <code>navigationState</code> is null or empty. If <code>navigationState</code> contains only paired parameters,
+	 * an empty String is returned.
+	 * 
+	 * @see uk.co.q3c.v7.base.navigate.URIFragmentHandler#virtualPage(java.lang.String)
+	 */
 	public String virtualPage();
 
 	public URIFragmentHandler setFragment(String fragment);

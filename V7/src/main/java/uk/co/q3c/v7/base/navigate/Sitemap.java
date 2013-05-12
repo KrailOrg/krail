@@ -46,12 +46,20 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 	/**
 	 * creates a SiteMapNode and appends it to the map according to the {@code url} given, then returns it. If a node
 	 * already exists at that location it is returned. If there are gaps in the structure, nodes are created to fill
-	 * them (the same idea as forcing directory creation on a file path)
+	 * them (the same idea as forcing directory creation on a file path). An empty (not null) url is allowed. This
+	 * represents the site base url without any further qualification.
 	 * 
 	 * @param toUrl
 	 * @return
 	 */
 	public SiteMapNode append(String url) {
+
+		if (url.equals("")) {
+			SiteMapNode node = new SiteMapNode();
+			node.setUrlSegment(url);
+			addNode(node);
+			return node;
+		}
 		SiteMapNode node = null;
 		String[] segments = StringUtils.split(url, "/");
 		List<SiteMapNode> nodes = getRoots();
@@ -146,15 +154,41 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 	 * @return
 	 */
 	public String getRedirectFor(String page) {
-		if (redirects.containsKey(page)) {
-			return redirects.get(page);
-		} else {
-			return page;
-		}
+		return redirects.get(page);
 	}
 
 	public Map<String, String> getRedirects() {
 		return redirects;
+	}
+
+	public boolean hasUrl(String target) {
+		SiteMapNode node = findUrl(target);
+		return (node != null);
+	}
+
+	public SiteMapNode findUrl(String target) {
+		String[] segments = (target == "") ? new String[] { "" } : StringUtils.split(target, "/");
+		int i = 0;
+		String currentSegment = null;
+		List<SiteMapNode> nodes = getRoots();
+		boolean segmentNotFound = false;
+		SiteMapNode node = null;
+		while ((i < segments.length) && (!segmentNotFound)) {
+			currentSegment = segments[i];
+			node = findNodeBySegment(nodes, currentSegment, false);
+			if (node != null) {
+				nodes = getChildren(node);
+				i++;
+			} else {
+				segmentNotFound = true;
+			}
+
+		}
+		if (i == segments.length) {
+			return node;
+		} else {
+			return null;
+		}
 	}
 
 }

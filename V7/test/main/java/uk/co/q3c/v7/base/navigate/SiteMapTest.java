@@ -73,6 +73,33 @@ public class SiteMapTest {
 		assertThat(map.getParent(node).getUrlSegment()).isEqualTo("home");
 		assertThat(map.getParent(map.getParent(node)).getUrlSegment()).isEqualTo("public");
 
+		// when
+		node = map.append("");
+
+		// then
+		assertThat(node).isNotNull();
+		assertThat(node.getUrlSegment()).isEqualTo("");
+		assertThat(map.getNodeCount()).isEqualTo(5);
+		assertThat(map.getRoots()).contains(node);
+	}
+
+	@Test
+	public void hasUrl() {
+
+		// given
+		Sitemap map = new Sitemap();
+		map.append("public/home/view1");
+		map.append("public/home/view2");
+		map.append("secure/home/wiggly");
+
+		// when
+
+		// then
+		assertThat(map.hasUrl("public/home/view1")).isTrue();
+		assertThat(map.hasUrl("secure/home")).isTrue();
+		assertThat(map.hasUrl("secure/home/")).isTrue();
+		assertThat(map.hasUrl("secure/home/wiggle")).isFalse();
+		assertThat(map.hasUrl("wiggle")).isFalse();
 	}
 
 }

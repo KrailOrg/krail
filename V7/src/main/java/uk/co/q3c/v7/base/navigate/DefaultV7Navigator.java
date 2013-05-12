@@ -19,7 +19,6 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 
-import com.google.gwt.thirdparty.guava.common.base.Strings;
 import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -59,37 +58,46 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		if (sitemap.hasErrors()) {
 			throw new SiteMapException("Unable to navigate, site map has errors\n" + sitemap.getReport());
 		}
-		if (Strings.isNullOrEmpty(fragment)) {
-			navigateTo(StandardPageKeys.publicHome);
+
+		// fragment needs to be revised if redirected
+		String revisedFragment = null;
+		if (fragment == null) {
+			revisedFragment = checkRedirects("");
 		} else {
-
-			// fragment needs to be revised if redirected
-			String revisedFragment = checkRedirects(fragment);
-			String viewName = uriHandler.setFragment(revisedFragment).virtualPage();
-			Provider<V7View> provider = viewProMap.get(viewName);
-			V7View view = null;
-			if (provider == null) {
-				log.debug("View not found for " + revisedFragment);
-				view = errorViewPro.get();
-			} else {
-				view = provider.get();
-			}
-
-			navigateTo(view, viewName, revisedFragment);
+			revisedFragment = checkRedirects(fragment);
 		}
+		String viewName = uriHandler.virtualPage();
+		Provider<V7View> provider = viewProMap.get(viewName);
+		V7View view = null;
+		if (provider == null) {
+			log.debug("View not found for " + revisedFragment);
+			view = errorViewPro.get();
+		} else {
+			view = provider.get();
+		}
+
+		navigateTo(view, viewName, revisedFragment);
+
 	}
 
 	/**
-	 * Checks {@code fragment} to see whether it has been redirected
+	 * Checks {@code fragment} to see whether it has been redirected. If it has the full fragment is returned, but
+	 * modified for the redirected page. If not, the {@code fragment} is returned unchanged.
 	 * 
 	 * @param fragment
 	 * @return
 	 */
 	private String checkRedirects(String fragment) {
-		return fragment;
-		// uriHandler.setFragment(fragment);
-		// String page = uriHandler.virtualPage();
-		// if (sitemap.getRedirectFor(page));
+		uriHandler.setFragment(fragment);
+		String page = uriHandler.virtualPage();
+		String redirection = sitemap.getRedirectFor(page);
+		if (redirection == null) {
+			return fragment;
+		} else {
+			String newFragment = fragment.replaceFirst(page, redirection);
+			uriHandler.setFragment(newFragment);
+			return newFragment;
+		}
 	}
 
 	/**

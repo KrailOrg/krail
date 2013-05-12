@@ -71,6 +71,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private Set<String> duplicateURLs;
 	private Set<String> viewlessURLs;
 	private Set<String> unrecognisedOptions;
+	private Set<String> redirectErrors;
 
 	private StringBuilder report;
 	private DateTime startTime;
@@ -102,6 +103,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		viewlessURLs = new HashSet<>();
 		duplicateURLs = new HashSet<>();
 		unrecognisedOptions = new HashSet<>();
+		redirectErrors = new HashSet<>();
 
 		sitemap = new Sitemap();
 		sections = new HashMap<>();
@@ -153,6 +155,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			processRedirects();
 			processMap();
 			processStandardPages();
+			validateRedirects();
 			log.info("Sitemap loaded successfully");
 
 		} else {
@@ -164,6 +167,24 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		endTime = DateTime.now();
 		parsed = true;
 		sitemap.setReport(getReport().toString());
+	}
+
+	/**
+	 * Ensure that redirection targets exist, and that no loops can be created
+	 */
+	private void validateRedirects() {
+		for (String target : getRedirects().values()) {
+			if (getRedirects().keySet().contains(target)) {
+				redirectErrors.add("'" + target + "' cannot be both a redirect source and redirect target");
+				sitemap.error();
+			}
+			if (!sitemap.hasUrl(target)) {
+				redirectErrors.add("'" + target + "' cannot be a redirect target, it has not been defined as a page");
+				sitemap.error();
+
+			}
+		}
+
 	}
 
 	/**
@@ -194,19 +215,23 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 					if (pair.length > 1) {
 						if (pair[1].contains(":")) {
 							String[] urlView = StringUtils.split(pair[1], ":");
-							toUrl = urlView[0].trim();
-							if (urlView.length > 1) {
-								viewName = urlView[1].trim();
+							if (pair[1].startsWith(":")) {
+								toUrl = "";
+								viewName = pair[1].replace(":", "");
+							} else {
+								toUrl = urlView[0].trim();
+								if (urlView.length > 1) {
+									viewName = urlView[1].trim();
+								}
 							}
+
 						} else {
 							toUrl = pair[1].trim();
 						}
 
 						standardPages().put(pageKey, toUrl);
 					} else {
-						propertyErrors.add("Property " + pageKeyName + " must contain a url");
-						missingPages.add(pageKeyName);
-						sitemap.error();
+						standardPages().put(pageKey, "");
 					}
 				} catch (Exception e) {
 					propertyErrors.add(pageKeyName + " is not a valid " + StandardPageKeys.class.getSimpleName()
@@ -275,7 +300,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 				String[] pair = null;
 				pair = StringUtils.split(line, ":");
 				String f = pair[0].trim();
-				String t = (pair.length > 1) ? pair[1].trim() : null;
+				String t = (pair.length > 1) ? pair[1].trim() : "";
 				getRedirects().put(f, t);
 			}
 		}
@@ -939,6 +964,10 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	 */
 	public void setSource(String source) {
 		this.source = source;
+	}
+
+	public Set<String> getRedirectErrors() {
+		return redirectErrors;
 	}
 
 }

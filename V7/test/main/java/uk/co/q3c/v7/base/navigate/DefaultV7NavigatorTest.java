@@ -4,8 +4,6 @@ import static org.fest.assertions.Assertions.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -116,7 +114,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 		sitemap = new TextReaderSitemapProvider().get();
 
-		uriHandler = mock(StrictURIFragmentHandler.class);
+		uriHandler = new StrictURIFragmentHandler();
 
 		when(loginViewPro.get()).thenReturn(loginView);
 		when(logoutViewPro.get()).thenReturn(logoutView);
@@ -145,8 +143,6 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void logout() {
 
 		// given
-		when(uriHandler.setFragment(anyString())).thenReturn(uriHandler);
-		when(uriHandler.virtualPage()).thenReturn(sitemap.standardPageURI(StandardPageKeys.logout));
 
 		// when
 		navigator.navigateTo(StandardPageKeys.logout);
@@ -158,8 +154,6 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Test
 	public void login() {
 		// given
-		when(uriHandler.setFragment("login")).thenReturn(uriHandler);
-		when(uriHandler.virtualPage()).thenReturn("login");
 		// when
 		navigator.navigateTo("login");
 		// then
@@ -170,25 +164,21 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	}
 
 	@Test
-	public void loginSuccessFul() {
+	public void loginSuccessFul_toPreviousView() {
 
 		// given
-		navigator.setCurrentView(loginView, "xx", "yy");
-		navigator.setPreviousView(previousView);
+		navigator.navigateTo("public/view2");
+		navigator.navigateTo(StandardPageKeys.login);
 		// when
 		navigator.loginSuccessful();
 		// then
-		verify(scopedUI).changeView(loginView, previousView);
-
+		assertThat(navigator.getNavigationState()).isEqualTo("public/view2");
 	}
 
 	@Test
 	public void loginSuccessFul_noPreviousView() {
 
 		// given
-		// need to construct this test slightly differently
-		uriHandler = new StrictURIFragmentHandler();
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, getSecurityManager());
 		navigator.setCurrentView(loginView, "xx", "yy");
 		navigator.setPreviousView(null);
 		// when
@@ -202,8 +192,6 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void navigateTo() {
 
 		// given
-		when(uriHandler.setFragment("view2")).thenReturn(uriHandler);
-		when(uriHandler.virtualPage()).thenReturn("view2");
 		// when
 		navigator.navigateTo("view2");
 		// then
@@ -212,11 +200,21 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	}
 
 	@Test
+	public void navigateToEmptyPageWithParams() {
+
+		// given
+
+		// when
+		navigator.navigateTo("/id=2/age=5");
+		// then
+		assertThat(navigator.getNavigationState()).isEqualTo("public/home/id=2/age=5");
+
+	}
+
+	@Test
 	public void navigateTo_invalidURI() {
 
 		// given
-		when(uriHandler.setFragment("view3")).thenReturn(uriHandler);
-		when(uriHandler.virtualPage()).thenReturn("view3");
 		// when
 		navigator.navigateTo("view3");
 		// then
@@ -228,10 +226,10 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void getNavigationState() {
 
 		// given
-		String fragment = "public/view1";
-		when(uriHandler.fragment()).thenReturn(fragment);
+		String fragment = "public/view2";
+		// when(uriHandler.fragment()).thenReturn(fragment);
 		// when
-
+		navigator.navigateTo(fragment);
 		// then
 		assertThat(navigator.getNavigationState()).isEqualTo(fragment);
 
@@ -241,14 +239,11 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void getNavigationParams() {
 
 		// given
-		List<String> params = new ArrayList<>();
-		params.add("id=1");
-		params.add("age=2");
 
 		// when
-		when(uriHandler.parameterList()).thenReturn(params);
+		navigator.navigateTo("public/view2/id=1/age=2");
 		// then
-		assertThat(navigator.geNavigationParams()).isEqualTo(params);
+		assertThat(navigator.geNavigationParams()).containsOnly("id=1", "age=2");
 
 	}
 
@@ -256,9 +251,6 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void currentAndPreviousViews_andClearHistory() {
 
 		// given
-		// need to construct this test slightly differently
-		uriHandler = new StrictURIFragmentHandler();
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, getSecurityManager());
 		// when
 
 		// then
@@ -315,8 +307,6 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void listeners_allRespond() {
 
 		// given
-		when(uriHandler.setFragment("view2")).thenReturn(uriHandler);
-		when(uriHandler.virtualPage()).thenReturn("view2");
 		// need to return true, or first listener will block the second
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(true);
 		navigator.addViewChangeListener(listener1);
@@ -335,8 +325,6 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void listener_blocked() {
 
 		// given
-		when(uriHandler.setFragment("view2")).thenReturn(uriHandler);
-		when(uriHandler.virtualPage()).thenReturn("view2");
 		// to block second and subsequent
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(false);
 		navigator.addViewChangeListener(listener1);
@@ -354,8 +342,6 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void redirection() {
 
 		// given
-		when(uriHandler.setFragment("secure")).thenReturn(uriHandler);
-		when(uriHandler.virtualPage()).thenReturn("secure");
 		// when
 		navigator.navigateTo("secure");
 		// then
