@@ -25,7 +25,7 @@ public class DemoModule extends AbstractModule {
 		// some Strings for the demo
 		bind(String.class).annotatedWith(Names.named(A.title)).toInstance(
 				"Guice Vaadin and Shiro demonstration application");
-		bind(String.class).annotatedWith(Names.named(A.version)).toInstance("Vaadin 7.0.3");
+		bind(String.class).annotatedWith(Names.named(A.version)).toInstance("Vaadin 7.0.5");
 
 	}
 
