@@ -17,7 +17,7 @@ public class V7ShiroVaadinModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bindErrorHandler();
-		bindUnathenticatedHandler();
+		bindUnauthenticatedHandler();
 		bindUnauthorisedHandler();
 		bindLoginExceptionsHandler();
 	}
@@ -41,7 +41,7 @@ public class V7ShiroVaadinModule extends AbstractModule {
 	 * the {@link DefaultErrorHandler} calls this handler in response to an attempted unauthenticated action. If you
 	 * have defined your own ErrorHandler you may of course do something different
 	 */
-	protected void bindUnathenticatedHandler() {
+	protected void bindUnauthenticatedHandler() {
 		bind(UnauthenticatedExceptionHandler.class).to(DefaultUnauthenticatedExceptionHandler.class);
 	}
 
