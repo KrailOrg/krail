@@ -18,9 +18,11 @@ import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKeys;
 
+import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
 
 /**
@@ -35,13 +37,18 @@ public class UserNavigationTree extends Tree {
 	private final Sitemap sitemap;
 	private int maxLevel = -1;
 	private int level;
+	private final V7Navigator navigator;
 
 	@Inject
-	protected UserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale) {
+	protected UserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator) {
 		super();
 		this.sitemap = sitemap;
 		this.currentLocale = currentLocale;
+		this.navigator = navigator;
+		setImmediate(true);
+		addValueChangeListener(this);
 		loadNodes();
+
 	}
 
 	private void loadNodes() {
@@ -106,6 +113,14 @@ public class UserNavigationTree extends Tree {
 		if (maxLevel != 0) {
 			this.maxLevel = maxLevel;
 			loadNodes();
+		}
+	}
+
+	@Override
+	public void valueChange(Property.ValueChangeEvent event) {
+		if (getValue() != null) {
+			String url = sitemap.url((SitemapNode) getValue());
+			navigator.navigateTo(url);
 		}
 	}
 

@@ -13,6 +13,7 @@
 package uk.co.q3c.v7.base.view.components;
 
 import static org.fest.assertions.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Locale;
 
@@ -21,9 +22,11 @@ import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.testviews.PublicHomeView;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
@@ -38,6 +41,9 @@ public class UserNavigationTreeTest {
 
 	@Inject
 	CurrentLocale currentLocale;
+
+	@Mock
+	V7Navigator navigator;
 
 	Sitemap sitemap;
 
@@ -63,7 +69,7 @@ public class UserNavigationTreeTest {
 		currentLocale.setLocale(Locale.UK);
 		buildSitemap(0);
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(0);
 	}
@@ -76,7 +82,7 @@ public class UserNavigationTreeTest {
 		buildSitemap(1);
 
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(3);
 		assertThat(unt.getItemIds()).containsOnly(newNode1, newNode2, newNode3);
@@ -97,7 +103,7 @@ public class UserNavigationTreeTest {
 		buildSitemap(2);
 
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(6);
 		assertThat(unt.getItemIds()).containsOnly(newNode1, newNode2, newNode3, newNode4, newNode5, newNode6);
@@ -118,7 +124,7 @@ public class UserNavigationTreeTest {
 		currentLocale.setLocale(Locale.UK);
 		buildSitemap(2);
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
 		// then
 		assertThat(unt.getMaxLevel()).isEqualTo(-1);
 		// when
@@ -143,11 +149,35 @@ public class UserNavigationTreeTest {
 		buildSitemap(1);
 
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("home");
 
+	}
+
+	@Test
+	public void defaults() {
+
+		// given
+		buildSitemap(1);
+		// when
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
+		// then
+		assertThat(unt.isImmediate()).isTrue();
+
+	}
+
+	@Test
+	public void userSelection() {
+
+		// given
+		buildSitemap(2);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
+		// when
+		unt.setValue(newNode2);
+		// then
+		verify(navigator).navigateTo("a/a1");
 	}
 
 	@Test
@@ -158,7 +188,7 @@ public class UserNavigationTreeTest {
 		buildSitemap(1);
 
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("zu Hause");
