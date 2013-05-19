@@ -3,7 +3,7 @@ package uk.co.q3c.v7.demo.view.components;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.view.components.LoginStatusPanel;
+import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
