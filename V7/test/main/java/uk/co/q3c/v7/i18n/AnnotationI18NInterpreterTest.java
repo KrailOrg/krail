@@ -35,15 +35,10 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 @GuiceContext({})
 public class AnnotationI18NInterpreterTest {
 
-	I18NTranslator interpreter;
-
 	I18NTestClass testObject;
 
 	@Inject
 	CurrentLocale currentLocale;
-
-	@Inject
-	Provider<I18NTranslator> interpreterPro;
 
 	@Inject
 	Provider<DemoI18Nreader> demoI18NreaderPro;

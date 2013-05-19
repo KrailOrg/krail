@@ -46,7 +46,7 @@ import fixture.testviews2.TestLoginView;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class TextReaderSiteMapTest {
+public class TextReaderSitemapTest {
 
 	private static File propDir;
 	private File propFile;
@@ -103,13 +103,13 @@ public class TextReaderSiteMapTest {
 		assertThat(reader.getIndentationErrors()).containsOnly();
 
 		Sitemap tree = reader.getSitemap();
-		List<SiteMapNode> roots = tree.getRoots();
+		List<SitemapNode> roots = tree.getRoots();
 		assertThat(roots.size()).isEqualTo(2);
 
 		System.out.println(tree.toString());
 
-		Collection<SiteMapNode> nodes = reader.getSitemap().getEntries();
-		for (SiteMapNode node : nodes) {
+		Collection<SitemapNode> nodes = reader.getSitemap().getEntries();
+		for (SitemapNode node : nodes) {
 			validateNode(tree, node);
 		}
 
@@ -469,7 +469,7 @@ public class TextReaderSiteMapTest {
 
 	}
 
-	private void validateNode(Sitemap tree, SiteMapNode node) {
+	private void validateNode(Sitemap tree, SitemapNode node) {
 		String url = tree.url(node);
 		switch (url) {
 

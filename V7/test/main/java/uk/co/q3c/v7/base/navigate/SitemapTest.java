@@ -20,16 +20,16 @@ import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.testviews.PublicHomeView;
 import uk.co.q3c.v7.demo.i18n.DemoLabelKeys;
 
-public class SiteMapTest {
+public class SitemapTest {
 
 	@Test
 	public void url() {
 
 		// given
 		Sitemap map = new Sitemap();
-		SiteMapNode grandparent = new SiteMapNode("public", PublicHomeView.class, DemoLabelKeys.home);
-		SiteMapNode parent = new SiteMapNode("home", PublicHomeView.class, DemoLabelKeys.home);
-		SiteMapNode child = new SiteMapNode("login", LoginView.class, DemoLabelKeys.login);
+		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, DemoLabelKeys.home);
+		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, DemoLabelKeys.home);
+		SitemapNode child = new SitemapNode("login", LoginView.class, DemoLabelKeys.login);
 		map.addChild(grandparent, parent);
 		map.addChild(parent, child);
 		// when
@@ -46,7 +46,7 @@ public class SiteMapTest {
 		// given
 		Sitemap map = new Sitemap();
 		// when
-		SiteMapNode node = map.append("public/home");
+		SitemapNode node = map.append("public/home");
 		// then
 		assertThat(node).isNotNull();
 		assertThat(node.getUrlSegment()).isEqualTo("home");

@@ -244,7 +244,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			// we now have defined a node, add it to the map
 			// bu but only if url is there
 			if (toUrl != null) {
-				SiteMapNode node = sitemap.append(toUrl);
+				SitemapNode node = sitemap.append(toUrl);
 				node.setLabelKey(pageKey);
 				// and set the view
 				if (Strings.isNullOrEmpty(viewName)) {
@@ -408,7 +408,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private void processMap() {
 		List<String> sectionLines = sections.get(SectionName.map);
 		int i = 0;
-		SiteMapNode currentNode = null;
+		SitemapNode currentNode = null;
 		int currentLevel = 0;
 		for (String line : sectionLines) {
 			if (line.startsWith("-")) {
@@ -445,7 +445,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 				}
 
 				// segment has been set, view & label may be null
-				SiteMapNode node = new SiteMapNode();
+				SitemapNode node = new SitemapNode();
 				node.setUrlSegment(segment);
 
 				// do structure before labels
@@ -470,7 +470,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 						currentNode = node;
 						currentLevel++;
 					} else if (treeLevel == currentLevel) {
-						SiteMapNode parentNode = sitemap.getParent(currentNode);
+						SitemapNode parentNode = sitemap.getParent(currentNode);
 						sitemap.addChild(parentNode, node);
 					} else if (treeLevel > currentLevel) {
 						if (treeLevel - currentLevel > 1) {
@@ -530,7 +530,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	 * @param viewName
 	 */
 	@SuppressWarnings("unchecked")
-	private void findView(SiteMapNode node, String segment, String viewName) {
+	private void findView(SitemapNode node, String segment, String viewName) {
 		// if view is null use the segment
 		if (viewName == null) {
 			viewName = StringUtils.capitalize(segment);

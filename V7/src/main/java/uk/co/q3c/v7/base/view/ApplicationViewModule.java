@@ -15,7 +15,7 @@ package uk.co.q3c.v7.base.view;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.navigate.SiteMapNode;
+import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 
 import com.google.inject.AbstractModule;
@@ -65,7 +65,7 @@ public class ApplicationViewModule extends AbstractModule {
 					this.getClass().getName());
 		} else {
 
-			for (SiteMapNode node : sitemap.getEntries()) {
+			for (SitemapNode node : sitemap.getEntries()) {
 				// use sitemap.url(node) to get the fully qualified url - the node itself only contains the url segment
 				// intermediate nodes will not have a view if they have been redirected
 				Class<? extends V7View> viewClass = node.getViewClass();

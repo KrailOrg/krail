@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import uk.co.q3c.util.BasicForest;
 
-public class Sitemap extends BasicForest<SiteMapNode> {
+public class Sitemap extends BasicForest<SitemapNode> {
 
 	private int nextNodeId = 0;
 	private int errors = 0;
@@ -28,14 +28,14 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 	private String report;
 	private final Map<String, String> redirects = new HashMap<>();
 
-	public String url(SiteMapNode node) {
+	public String url(SitemapNode node) {
 		StringBuilder buf = new StringBuilder(node.getUrlSegment());
 		prependParent(node, buf);
 		return buf.toString();
 	}
 
-	private void prependParent(SiteMapNode node, StringBuilder buf) {
-		SiteMapNode parentNode = getParent(node);
+	private void prependParent(SitemapNode node, StringBuilder buf) {
+		SitemapNode parentNode = getParent(node);
 		if (parentNode != null) {
 			buf.insert(0, "/");
 			buf.insert(0, parentNode.getUrlSegment());
@@ -52,18 +52,18 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 	 * @param toUrl
 	 * @return
 	 */
-	public SiteMapNode append(String url) {
+	public SitemapNode append(String url) {
 
 		if (url.equals("")) {
-			SiteMapNode node = new SiteMapNode();
+			SitemapNode node = new SitemapNode();
 			node.setUrlSegment(url);
 			addNode(node);
 			return node;
 		}
-		SiteMapNode node = null;
+		SitemapNode node = null;
 		String[] segments = StringUtils.split(url, "/");
-		List<SiteMapNode> nodes = getRoots();
-		SiteMapNode parentNode = null;
+		List<SitemapNode> nodes = getRoots();
+		SitemapNode parentNode = null;
 		for (int i = 0; i < segments.length; i++) {
 			node = findNodeBySegment(nodes, segments[i], true);
 			addChild(parentNode, node);
@@ -74,9 +74,9 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 		return node;
 	}
 
-	private SiteMapNode findNodeBySegment(List<SiteMapNode> nodes, String segment, boolean createIfAbsent) {
-		SiteMapNode foundNode = null;
-		for (SiteMapNode node : nodes) {
+	private SitemapNode findNodeBySegment(List<SitemapNode> nodes, String segment, boolean createIfAbsent) {
+		SitemapNode foundNode = null;
+		for (SitemapNode node : nodes) {
 			if (node.getUrlSegment().equals(segment)) {
 				foundNode = node;
 				break;
@@ -84,7 +84,7 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 		}
 
 		if ((foundNode == null) && (createIfAbsent)) {
-			foundNode = new SiteMapNode();
+			foundNode = new SitemapNode();
 			foundNode.setUrlSegment(segment);
 
 		}
@@ -92,7 +92,7 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 	}
 
 	@Override
-	public void addNode(SiteMapNode node) {
+	public void addNode(SitemapNode node) {
 		if (node.getId() == 0) {
 			node.setId(nextNodeId());
 		}
@@ -100,7 +100,7 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 	}
 
 	@Override
-	public void addChild(SiteMapNode parentNode, SiteMapNode childNode) {
+	public void addChild(SitemapNode parentNode, SitemapNode childNode) {
 		// super allows null parent
 		if (parentNode != null) {
 			if (parentNode.getId() == 0) {
@@ -162,17 +162,17 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 	}
 
 	public boolean hasUrl(String target) {
-		SiteMapNode node = findUrl(target);
+		SitemapNode node = findUrl(target);
 		return (node != null);
 	}
 
-	public SiteMapNode findUrl(String target) {
+	public SitemapNode findUrl(String target) {
 		String[] segments = (target == "") ? new String[] { "" } : StringUtils.split(target, "/");
 		int i = 0;
 		String currentSegment = null;
-		List<SiteMapNode> nodes = getRoots();
+		List<SitemapNode> nodes = getRoots();
 		boolean segmentNotFound = false;
-		SiteMapNode node = null;
+		SitemapNode node = null;
 		while ((i < segments.length) && (!segmentNotFound)) {
 			currentSegment = segments[i];
 			node = findNodeBySegment(nodes, currentSegment, false);
