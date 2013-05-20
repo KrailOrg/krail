@@ -445,7 +445,7 @@ public class TextReaderSitemapTest {
 		System.out.println(reader.getSitemap().toString());
 		// then
 
-		assertThat(reader.getSitemap().hasUrl("")).isTrue();
+		assertThat(reader.getSitemap().urls()).contains("");
 		assertThat(reader.getRedirectErrors()).containsOnly();
 		assertThat(reader.getSitemap().hasErrors()).isFalse();
 

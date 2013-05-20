@@ -224,4 +224,9 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
 		return parameters.get(paramName);
 	}
 
+	@Override
+	public List<String> getPathSegments() {
+		return pathSegments;
+	}
+
 }

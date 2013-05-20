@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,21 @@ import org.apache.commons.lang3.StringUtils;
 
 import uk.co.q3c.util.BasicForest;
 
+/**
+ * Encapsulates the site layout. Individual "virtual pages" are represented by {@link SitemapNode} instances. This map
+ * is usually built by an implementation of {@link SitemapProvider}, and is one of the fundamental building blocks of
+ * the application, as it maps out pages, URLs and Views.
+ * <p>
+ * Because of it use as such a fundamental building block, an instance of this class has to be created early in he
+ * application start up process. It is better therefore not to introduce dependencies into this class, otherwise the
+ * design, and ordering of construction, of Guice modules starts to get complicated.
+ * <p>
+ * A potential solution for dependencies can be seen in {@link SitemapURIConverter}, which acts as an intermediary
+ * between this class and {@link URIFragmentHandler} implementations, thus avoiding the creation of dependencies here.
+ * 
+ * @author David Sowerby 19 May 2013
+ * 
+ */
 public class Sitemap extends BasicForest<SitemapNode> {
 
 	private int nextNodeId = 0;
@@ -161,22 +177,25 @@ public class Sitemap extends BasicForest<SitemapNode> {
 		return redirects;
 	}
 
-	public boolean hasUrl(String target) {
-		SitemapNode node = findUrl(target);
-		return (node != null);
-	}
-
-	public SitemapNode findUrl(String target) {
-		String[] segments = (target == "") ? new String[] { "" } : StringUtils.split(target, "/");
+	/**
+	 * Returns a list of {@link SitemapNode} matching the {@code segments} provided. If there is an incomplete match (a
+	 * segment cannot be found) then a list of nodes is returned correct to the longest path possible.
+	 * 
+	 * @param segments
+	 * @return
+	 */
+	public List<SitemapNode> nodeChainForSegments(List<String> segments) {
+		List<SitemapNode> nodeChain = new ArrayList<>();
 		int i = 0;
 		String currentSegment = null;
 		List<SitemapNode> nodes = getRoots();
 		boolean segmentNotFound = false;
 		SitemapNode node = null;
-		while ((i < segments.length) && (!segmentNotFound)) {
-			currentSegment = segments[i];
+		while ((i < segments.size()) && (!segmentNotFound)) {
+			currentSegment = segments.get(i);
 			node = findNodeBySegment(nodes, currentSegment, false);
 			if (node != null) {
+				nodeChain.add(node);
 				nodes = getChildren(node);
 				i++;
 			} else {
@@ -184,11 +203,14 @@ public class Sitemap extends BasicForest<SitemapNode> {
 			}
 
 		}
-		if (i == segments.length) {
-			return node;
-		} else {
-			return null;
-		}
+		return nodeChain;
 	}
 
+	public List<String> urls() {
+		List<String> list = new ArrayList<>();
+		for (SitemapNode node : getAllNodes()) {
+			list.add(url(node));
+		}
+		return list;
+	}
 }

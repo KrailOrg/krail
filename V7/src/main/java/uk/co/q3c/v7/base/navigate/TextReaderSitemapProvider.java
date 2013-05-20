@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -173,12 +174,13 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	 * Ensure that redirection targets exist, and that no loops can be created
 	 */
 	private void validateRedirects() {
+		Collection<String> urls = sitemap.urls();
 		for (String target : getRedirects().values()) {
 			if (getRedirects().keySet().contains(target)) {
 				redirectErrors.add("'" + target + "' cannot be both a redirect source and redirect target");
 				sitemap.error();
 			}
-			if (!sitemap.hasUrl(target)) {
+			if (!urls.contains(target)) {
 				redirectErrors.add("'" + target + "' cannot be a redirect target, it has not been defined as a page");
 				sitemap.error();
 

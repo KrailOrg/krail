@@ -14,6 +14,9 @@ package uk.co.q3c.v7.base.navigate;
 
 import static org.fest.assertions.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 import uk.co.q3c.v7.base.view.LoginView;
@@ -84,22 +87,47 @@ public class SitemapTest {
 	}
 
 	@Test
-	public void hasUrl() {
+	public void nodeChainForSegments() {
 
 		// given
 		Sitemap map = new Sitemap();
 		map.append("public/home/view1");
 		map.append("public/home/view2");
 		map.append("secure/home/wiggly");
+		List<String> segments = new ArrayList<>();
+		segments.add("public");
+		segments.add("home");
+		segments.add("view1");
 
 		// when
-
+		List<SitemapNode> result = map.nodeChainForSegments(segments);
 		// then
-		assertThat(map.hasUrl("public/home/view1")).isTrue();
-		assertThat(map.hasUrl("secure/home")).isTrue();
-		assertThat(map.hasUrl("secure/home/")).isTrue();
-		assertThat(map.hasUrl("secure/home/wiggle")).isFalse();
-		assertThat(map.hasUrl("wiggle")).isFalse();
+		assertThat(result.size()).isEqualTo(3);
+		assertThat(result.get(0).getUrlSegment()).isEqualTo("public");
+		assertThat(result.get(1).getUrlSegment()).isEqualTo("home");
+		assertThat(result.get(2).getUrlSegment()).isEqualTo("view1");
+
 	}
 
+	@Test
+	public void nodeChainForSegments_partial() {
+
+		// given
+		Sitemap map = new Sitemap();
+		map.append("public/home/view1");
+		map.append("public/home/view2");
+		map.append("secure/home/wiggly");
+		List<String> segments = new ArrayList<>();
+		segments.add("public");
+		segments.add("home");
+		segments.add("viewx");
+
+		// when
+		List<SitemapNode> result = map.nodeChainForSegments(segments);
+		// then
+		assertThat(result.size()).isEqualTo(2);
+		assertThat(result.get(0).getUrlSegment()).isEqualTo("public");
+		assertThat(result.get(1).getUrlSegment()).isEqualTo("home");
+
+	}
 }

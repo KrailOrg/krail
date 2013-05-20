@@ -259,4 +259,8 @@ public class BasicForest<V> {
 		return graph;
 	}
 
+	public Collection<V> getAllNodes() {
+		return graph.getVertices();
+	}
+
 }
