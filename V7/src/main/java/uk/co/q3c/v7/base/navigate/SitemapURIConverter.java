@@ -14,6 +14,10 @@ package uk.co.q3c.v7.base.navigate;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import com.google.gwt.thirdparty.guava.common.collect.Lists;
+
 /**
  * Utility class to convert between URI fragments using {@link URIFragmentHandler} and {@link Sitemap}. This separate
  * class is used to
@@ -29,40 +33,65 @@ import java.util.List;
  */
 public class SitemapURIConverter {
 
-	private Sitemap sitemap;
-	private URIFragmentHandler uriHandler;
-	private V7Navigator navigator;
+	private final Sitemap sitemap;
+	private final URIFragmentHandler uriHandler;
+
+	@Inject
+	protected SitemapURIConverter(Sitemap sitemap, URIFragmentHandler uriHandler) {
+		super();
+		this.sitemap = sitemap;
+		this.uriHandler = uriHandler;
+	}
 
 	/**
-	 * returns a list of {@link SitemapNode} matching the virtual page of the {@code navigationState} provided. If
-	 * {@code navigationState} is invalid (does not match the site map) then nodes are matched as far as possible along
-	 * the chain, and that result returned
+	 * returns a list of {@link SitemapNode} matching the virtual page of the {@code navigationState} provided. Uses the
+	 * {@link URIFragmentHandler} to get URI path segments and {@link Sitemap} to obtain the node chain.
+	 * {@code allowPartialPath} determines how a partial match is handled (see
+	 * {@link Sitemap#nodeChainForSegments(List, boolean)} javadoc
 	 * 
 	 * @param navigationState
 	 * @return
 	 */
-	public List<SitemapNode> nodeChainForUri(String navigationState) {
-		String navState = navigator.getNavigationState();
-		uriHandler.setFragment(navState);
-		List<String> segments = uriHandler.getPathSegments();
-		List<SitemapNode> nodeChain = sitemap.nodeChainForSegments(segments);
+	public List<SitemapNode> nodeChainForUri(String navigationState, boolean allowPartialPath) {
+		uriHandler.setFragment(navigationState);
+		String[] segments = uriHandler.getPathSegments();
+		List<SitemapNode> nodeChain = sitemap.nodeChainForSegments(Lists.newArrayList(segments), allowPartialPath);
 		return nodeChain;
 	}
 
-	public boolean hasNodeForUri(String navigationState) {
-		return nodeForUri(navigationState) != null;
+	/**
+	 * Returns true if a node is found for {@code navigationState}. If {@code allowPartialPath} is true, a node is
+	 * considered found even if only a partial match for the {@code navigationState} is found. If
+	 * {@code allowPartialPath} is false, then a full match must occur for true to be returned.
+	 * 
+	 * @param navigationState
+	 * @param allowPartialPath
+	 * @return
+	 */
+	public boolean hasNodeForUri(String navigationState, boolean allowPartialPath) {
+		SitemapNode node = nodeForUri(navigationState, allowPartialPath);
+		return node != null;
 	}
 
 	/**
 	 * Returns the last node in the chain of {@link SitemapNode} representing {@code navigationState}. The chain is
-	 * provided by {@link #nodeChainForUri(String)}, and this method just returns the last node in that chain.
+	 * provided by {@link #nodeChainForUri(String)}, and this method just returns the last node in that chain. Returns
+	 * null if no node found.
+	 * <p>
+	 * If {@code allowPartialPath} is true, a node is considered found even if only a partial match for the
+	 * {@code navigationState} is found. In this case the last node in the match is returned. If
+	 * {@code allowPartialPath} is false, then a full match must occur for a node to be returned.
 	 * 
 	 * @param navigationState
 	 * @return
 	 */
-	public SitemapNode nodeForUri(String navigationState) {
-		List<SitemapNode> nodeChain = nodeChainForUri(navigationState);
-		return nodeChain.get(nodeChain.size() - 1);
+	public SitemapNode nodeForUri(String navigationState, boolean allowPartialPath) {
+		List<SitemapNode> nodeChain = nodeChainForUri(navigationState, allowPartialPath);
+		if (nodeChain.size() == 0) {
+			return null;
+		} else {
+			return nodeChain.get(nodeChain.size() - 1);
+		}
 	}
 
 }

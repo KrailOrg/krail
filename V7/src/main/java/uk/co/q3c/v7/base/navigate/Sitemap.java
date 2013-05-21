@@ -179,12 +179,16 @@ public class Sitemap extends BasicForest<SitemapNode> {
 
 	/**
 	 * Returns a list of {@link SitemapNode} matching the {@code segments} provided. If there is an incomplete match (a
-	 * segment cannot be found) then a list of nodes is returned correct to the longest path possible.
+	 * segment cannot be found) then:
+	 * <ol>
+	 * <li>if {@code allowPartialPath} is true a list of nodes is returned correct to the longest path possible.
+	 * <li>if {@code allowPartialPath} is false an empty list is returned
 	 * 
 	 * @param segments
 	 * @return
 	 */
-	public List<SitemapNode> nodeChainForSegments(List<String> segments) {
+
+	public List<SitemapNode> nodeChainForSegments(List<String> segments, boolean allowPartialPath) {
 		List<SitemapNode> nodeChain = new ArrayList<>();
 		int i = 0;
 		String currentSegment = null;
@@ -202,6 +206,9 @@ public class Sitemap extends BasicForest<SitemapNode> {
 				segmentNotFound = true;
 			}
 
+		}
+		if (segmentNotFound && !allowPartialPath) {
+			nodeChain.clear();
 		}
 		return nodeChain;
 	}

@@ -225,8 +225,9 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
 	}
 
 	@Override
-	public List<String> getPathSegments() {
-		return pathSegments;
+	public String[] getPathSegments() {
+		String[] segs = virtualPage.split("/");
+		return segs;
 	}
 
 }

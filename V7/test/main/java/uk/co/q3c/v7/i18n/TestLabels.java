@@ -30,6 +30,7 @@ public class TestLabels extends EnumResourceBundle<TestLabelKeys> {
 	static {
 		map.put(TestLabelKeys.home, "home");
 		map.put(TestLabelKeys.transfers, "transfers");
+		map.put(TestLabelKeys.opt, "option");
 
 	}
 

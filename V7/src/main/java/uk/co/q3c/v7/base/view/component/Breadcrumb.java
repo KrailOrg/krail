@@ -15,10 +15,13 @@ package uk.co.q3c.v7.base.view.component;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.SitemapURIConverter;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.I18NKeys;
 import uk.co.q3c.v7.i18n.I18NListener;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 
@@ -29,27 +32,62 @@ public class Breadcrumb extends HorizontalLayout implements I18NListener, V7View
 	private final List<BreadcrumbStep> steps = new ArrayList<>();
 	private final V7Navigator navigator;
 	private final SitemapURIConverter converter;
+	private final CurrentLocale currentLocale;
 
-	protected Breadcrumb(V7Navigator navigator, SitemapURIConverter converter) {
+	protected Breadcrumb(V7Navigator navigator, SitemapURIConverter converter, CurrentLocale currentLocale) {
 		this.navigator = navigator;
 		navigator.addViewChangeListener(this);
 		this.converter = converter;
+		this.currentLocale = currentLocale;
 		moveToNavigationState();
 	}
 
 	private void moveToNavigationState() {
-		converter.nodeChainForUri(navigator.getNavigationState());
+		List<SitemapNode> nodeChain = converter.nodeChainForUri(navigator.getNavigationState(), true);
+		int maxIndex = (nodeChain.size() > steps.size() ? nodeChain.size() : steps.size());
+		for (int i = 0; i < maxIndex; i++) {
+			// nothing left in chain
+			if (i + 1 > nodeChain.size()) {
+				// but steps still exist
+				if (i < steps.size()) {
+					steps.get(i).setVisible(false);
+				}
+			} else {
+				// chain continues
+				BreadcrumbStep step = null;
+				// steps still exist, re-use
+				if (i < steps.size()) {
+					step = steps.get(i);
+				} else {
+					// create step
+					step = new BreadcrumbStep();
+					steps.add(step);
+				}
+				setupStep(step, nodeChain.get(i));
+			}
+
+		}
+	}
+
+	private void setupStep(BreadcrumbStep step, SitemapNode sitemapNode) {
+		step.setVisible(true);
+		step.setNode(sitemapNode);
+		I18NKeys<?> key = (I18NKeys<?>) step.getNode().getLabelKey();
+		step.setCaption(key.getValue(currentLocale.getLocale()));
 	}
 
 	@Override
 	public void localeChange(I18NTranslator translator) {
-		moveToNavigationState();
+		for (BreadcrumbStep step : steps) {
+			I18NKeys<?> key = (I18NKeys<?>) step.getNode().getLabelKey();
+			step.setCaption(key.getValue(translator.getLocale()));
+		}
 	}
 
 	@Override
 	public boolean beforeViewChange(V7ViewChangeEvent event) {
-		// return false;
-		throw new RuntimeException("not yet implemented");
+		// do nothing
+		return true;
 	}
 
 	@Override
@@ -62,6 +100,10 @@ public class Breadcrumb extends HorizontalLayout implements I18NListener, V7View
 		navigator.removeViewChangeListener(this);
 		super.detach();
 
+	}
+
+	public List<BreadcrumbStep> getSteps() {
+		return steps;
 	}
 
 }

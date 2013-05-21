@@ -100,13 +100,28 @@ public class SitemapTest {
 		segments.add("view1");
 
 		// when
-		List<SitemapNode> result = map.nodeChainForSegments(segments);
+		List<SitemapNode> result = map.nodeChainForSegments(segments, true);
 		// then
 		assertThat(result.size()).isEqualTo(3);
 		assertThat(result.get(0).getUrlSegment()).isEqualTo("public");
 		assertThat(result.get(1).getUrlSegment()).isEqualTo("home");
 		assertThat(result.get(2).getUrlSegment()).isEqualTo("view1");
 
+		// given
+		segments.remove(1);
+
+		// when
+		result = map.nodeChainForSegments(segments, true);
+
+		// then
+		assertThat(result.size()).isEqualTo(1);
+		assertThat(result.get(0).getUrlSegment()).isEqualTo("public");
+
+		// when
+		result = map.nodeChainForSegments(segments, false);
+
+		// then
+		assertThat(result.size()).isEqualTo(0);
 	}
 
 	@Test
@@ -123,7 +138,7 @@ public class SitemapTest {
 		segments.add("viewx");
 
 		// when
-		List<SitemapNode> result = map.nodeChainForSegments(segments);
+		List<SitemapNode> result = map.nodeChainForSegments(segments, true);
 		// then
 		assertThat(result.size()).isEqualTo(2);
 		assertThat(result.get(0).getUrlSegment()).isEqualTo("public");

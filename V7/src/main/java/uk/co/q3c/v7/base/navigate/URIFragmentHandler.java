@@ -56,11 +56,11 @@ public interface URIFragmentHandler {
 	void setUseBang(boolean useBang);
 
 	/**
-	 * Returns the virtual page path, but as a list of segments
+	 * Returns the virtual page path, but as an array of segments
 	 * 
 	 * @return
 	 * @see #virtualPage()
 	 */
-	List<String> getPathSegments();
+	String[] getPathSegments();
 
 }

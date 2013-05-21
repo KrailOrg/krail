@@ -14,8 +14,26 @@ package uk.co.q3c.v7.base.view.component;
 
 import uk.co.q3c.v7.base.navigate.SitemapNode;
 
-public class BreadcrumbStep {
+import com.vaadin.ui.Button;
+
+public class BreadcrumbStep extends Button {
 
 	private SitemapNode node;
 	private String params;
+
+	public SitemapNode getNode() {
+		return node;
+	}
+
+	public void setNode(SitemapNode node) {
+		this.node = node;
+	}
+
+	public String getParams() {
+		return params;
+	}
+
+	public void setParams(String params) {
+		this.params = params;
+	}
 }

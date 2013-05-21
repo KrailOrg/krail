@@ -24,20 +24,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.navigate.Sitemap;
-import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.view.testviews.PublicHomeView;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
-import uk.co.q3c.v7.i18n.TestLabelKeys;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class })
-public class UserNavigationTreeTest {
+public class UserNavigationTreeTest extends TestWithSitemap {
 
 	@Inject
 	CurrentLocale currentLocale;
@@ -45,21 +41,10 @@ public class UserNavigationTreeTest {
 	@Mock
 	V7Navigator navigator;
 
-	Sitemap sitemap;
-
-	SitemapNode newNode1;
-	SitemapNode newNode2;
-	SitemapNode newNode3;
-
-	private SitemapNode newNode4;
-
-	private SitemapNode newNode5;
-
-	private SitemapNode newNode6;
-
+	@Override
 	@Before
 	public void setup() {
-
+		super.setup();
 	}
 
 	@Test
@@ -193,37 +178,6 @@ public class UserNavigationTreeTest {
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("zu Hause");
 
-	}
-
-	private void buildSitemap(int i) {
-		sitemap = new Sitemap();
-		switch (i) {
-		case 0:
-			break; // empty sitemap
-		case 2:
-			newNode4 = newNode("b");
-			newNode5 = newNode("b1");
-			newNode6 = newNode("b11");
-			sitemap.addChild(newNode4, newNode5);
-			sitemap.addChild(newNode5, newNode6);
-
-		case 1:
-			newNode1 = newNode("a");
-			newNode2 = newNode("a1");
-			newNode3 = newNode("a11");
-			sitemap.addChild(newNode1, newNode2);
-			sitemap.addChild(newNode2, newNode3);
-			break;
-		}
-
-	}
-
-	private SitemapNode newNode(String urlSegment) {
-		SitemapNode node0 = new SitemapNode();
-		node0.setLabelKey(TestLabelKeys.home);
-		node0.setUrlSegment(urlSegment);
-		node0.setViewClass(PublicHomeView.class);
-		return node0;
 	}
 
 }
