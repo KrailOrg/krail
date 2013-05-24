@@ -25,8 +25,8 @@ public class DemoLabels_de extends DemoLabels {
 	private static final EnumMap<DemoLabelKeys, String> map = new EnumMap<DemoLabelKeys, String>(DemoLabelKeys.class);
 	// TODO make map unmodifiable
 	static {
-		map.put(DemoLabelKeys.yes, "ja");
-		map.put(DemoLabelKeys.no, "nein");
+		map.put(DemoLabelKeys.Yes, "ja");
+		map.put(DemoLabelKeys.No, "nein");
 
 	}
 

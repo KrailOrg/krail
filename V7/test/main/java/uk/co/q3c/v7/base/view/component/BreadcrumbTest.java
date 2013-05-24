@@ -63,7 +63,7 @@ public class BreadcrumbTest extends TestWithSitemap {
 
 		// given
 		buildSitemap(2);
-		newNode2.setLabelKey(TestLabelKeys.opt);
+		newNode2.setLabelKey(TestLabelKeys.Opt);
 		List<SitemapNode> nodeChain = new ArrayList<>();
 		nodeChain.add(newNode1);
 		nodeChain.add(newNode2);

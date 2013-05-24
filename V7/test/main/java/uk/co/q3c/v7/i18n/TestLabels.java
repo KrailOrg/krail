@@ -28,9 +28,9 @@ public class TestLabels extends EnumResourceBundle<TestLabelKeys> {
 	private static final EnumMap<TestLabelKeys, String> map = new EnumMap<TestLabelKeys, String>(TestLabelKeys.class);
 
 	static {
-		map.put(TestLabelKeys.home, "home");
-		map.put(TestLabelKeys.transfers, "transfers");
-		map.put(TestLabelKeys.opt, "option");
+		map.put(TestLabelKeys.Home, "home");
+		map.put(TestLabelKeys.Transfers, "transfers");
+		map.put(TestLabelKeys.Opt, "option");
 
 	}
 

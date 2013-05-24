@@ -30,7 +30,7 @@ public class I18NTestClass implements I18NListener {
 	@I18N(caption = LabelKeys.small, description = DescriptionKeys.small_font)
 	private final Table table;
 
-	@DemoI18N(caption = DemoLabelKeys.yes, description = DemoLabelKeys.yes, value = DemoLabelKeys.no)
+	@DemoI18N(caption = DemoLabelKeys.Yes, description = DemoLabelKeys.Yes, value = DemoLabelKeys.No)
 	private final Label demoLabel;
 
 	private final TestCompositeComponent ccs;

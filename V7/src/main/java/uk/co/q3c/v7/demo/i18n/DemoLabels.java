@@ -30,8 +30,8 @@ public class DemoLabels extends EnumResourceBundle<DemoLabelKeys> {
 	private static final EnumMap<DemoLabelKeys, String> map = new EnumMap<DemoLabelKeys, String>(DemoLabelKeys.class);
 
 	static {
-		map.put(DemoLabelKeys.yes, "yes");
-		map.put(DemoLabelKeys.no, "no");
+		map.put(DemoLabelKeys.Yes, "yes");
+		map.put(DemoLabelKeys.No, "no");
 
 	}
 

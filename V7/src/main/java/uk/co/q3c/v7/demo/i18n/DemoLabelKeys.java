@@ -20,18 +20,20 @@ import uk.co.q3c.v7.i18n.I18NKeys;
 public enum DemoLabelKeys implements I18NKeys<DemoLabels> {
 
 	_nullkey_,
-	yes,
-	no,
-	view1,
-	view2,
-	home,
-	reset_account,
-	logout,
-	unlock_account,
-	enable_account,
-	login,
-	refresh_account,
-	request_account;
+	Yes,
+	No,
+	View1,
+	View2,
+	Home,
+	Secure,
+	Public,
+	Reset_Account,
+	Logout,
+	Unlock_Account,
+	Enable_Account,
+	Login,
+	Refresh_Account,
+	Request_Account;
 
 	@Override
 	public DemoLabels getBundle(Locale locale) {

@@ -30,9 +30,9 @@ public class SitemapTest {
 
 		// given
 		Sitemap map = new Sitemap();
-		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, DemoLabelKeys.home);
-		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, DemoLabelKeys.home);
-		SitemapNode child = new SitemapNode("login", LoginView.class, DemoLabelKeys.login);
+		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, DemoLabelKeys.Home);
+		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, DemoLabelKeys.Home);
+		SitemapNode child = new SitemapNode("login", LoginView.class, DemoLabelKeys.Login);
 		map.addChild(grandparent, parent);
 		map.addChild(parent, child);
 		// when

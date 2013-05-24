@@ -25,7 +25,7 @@ public class TestLabels_de extends TestLabels {
 	private static final EnumMap<TestLabelKeys, String> map = new EnumMap<TestLabelKeys, String>(TestLabelKeys.class);
 	// TODO make map unmodifiable
 	static {
-		map.put(TestLabelKeys.home, "zu Hause");
+		map.put(TestLabelKeys.Home, "zu Hause");
 
 	}
 

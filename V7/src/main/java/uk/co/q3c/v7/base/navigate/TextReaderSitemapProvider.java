@@ -29,6 +29,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.shiro.io.ResourceUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -157,6 +158,8 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			processMap();
 			processStandardPages();
 			validateRedirects();
+			checkLabelKeys();
+
 			log.info("Sitemap loaded successfully");
 
 		} else {
@@ -168,6 +171,14 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		endTime = DateTime.now();
 		parsed = true;
 		sitemap.setReport(getReport().toString());
+	}
+
+	private void checkLabelKeys() {
+		for (SitemapNode node : sitemap.getAllNodes()) {
+			if (node.getLabelKey() == null) {
+				labelKeyForName(null, node, true);
+			}
+		}
 	}
 
 	/**
@@ -406,7 +417,6 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		return sections.get(SectionName.viewPackages);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void processMap() {
 		List<String> sectionLines = sections.get(SectionName.map);
 		int i = 0;
@@ -494,28 +504,33 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 					findView(node, segment, view);
 				}
 
-				// do the label
-				try {
-					if (labelKeyName == null) {
-						labelKeyName = segment;
-					}
-					// hyphen not valid in enum, translate to underscore
-					labelKeyName = labelKeyName.replace("-", "_");
-					@SuppressWarnings("rawtypes")
-					Enum labelKey = Enum.valueOf(labelKeysClass, labelKeyName);
-
-					node.setLabelKey(labelKey);
-				} catch (Exception e) {
-					// label is not needed if page is redirected
-
-					if (!getRedirects().containsKey(url)) {
-						missingEnums.add(labelKeyName);
-						sitemap.error();
-					}
-				}
+				// do the label, don't flag as missing till final check
+				labelKeyForName(labelKeyName, node, true);
 
 			} else {
 				log.warn("line in map must start with a'-', line " + i);
+				sitemap.error();
+			}
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private void labelKeyForName(String labelKeyName, SitemapNode node, boolean flagAsMissing) {
+		try {
+
+			if (labelKeyName == null) {
+				labelKeyName = WordUtils.capitalize(node.getUrlSegment());
+				// hyphen not valid in enum, but may be used in segment
+				labelKeyName = labelKeyName.replace("-", "_");
+			}
+
+			@SuppressWarnings({ "rawtypes" })
+			Enum labelKey = Enum.valueOf(labelKeysClass, labelKeyName);
+			node.setLabelKey(labelKey);
+		} catch (Exception e) {
+			if (flagAsMissing) {
+				missingEnums.add(labelKeyName);
 				sitemap.error();
 			}
 		}

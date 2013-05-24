@@ -46,7 +46,7 @@ import fixture.testviews2.TestLoginView;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class TextReaderSitemapTest {
+public class TextReaderSitemapProviderTest {
 
 	private static File propDir;
 	private File propFile;
@@ -233,7 +233,7 @@ public class TextReaderSitemapTest {
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
 		assertThat(reader.getMissingPages()).containsOnly();
 		assertThat(reader.getPropertyErrors()).containsOnly();
-		assertThat(reader.getMissingEnums()).contains("moneyInOut", "transfers", "opt");
+		assertThat(reader.getMissingEnums()).contains("MoneyInOut", "Transfers", "Opt");
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
@@ -263,7 +263,9 @@ public class TextReaderSitemapTest {
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
 		assertThat(reader.getMissingPages()).containsOnly();
 		assertThat(reader.getPropertyErrors()).containsOnly();
-		assertThat(reader.getMissingEnums()).containsOnly("moneyInOut", "transfers", "opt");
+		// multiple failures where an attempt is made to identify from segment as well
+		assertThat(reader.getMissingEnums()).containsOnly("MoneyInOut", "Money_in_out", "Opt", "Options", "Transfers",
+				"Secure", "Public");
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
@@ -303,8 +305,8 @@ public class TextReaderSitemapTest {
 	@Test
 	public void viewNotV7View() throws IOException {
 
-		substitute("--money-in-out  : subview.MoneyInOut      ~ moneyInOut",
-				"--money-in-out : subview.NotV7 ~ moneyInOut");
+		substitute("--money-in-out  : subview.MoneyInOut      ~ MoneyInOut",
+				"--money-in-out : subview.NotV7 ~ MoneyInOut");
 		prepFile();
 		// when
 		reader.parse(modifiedFile);
@@ -437,7 +439,7 @@ public class TextReaderSitemapTest {
 		substitute("       : public/home", "wiggly  :   "); // redirect
 		substitute("publicHome     = public/home                  : PublicHome",
 				"publicHome     =                 : PublicHome");
-		insertAfter("--options                                 ~ opt", "-public");
+		insertAfter("--options                                 ~ Opt", "-public");
 		insertAfter("-public", "--home   :  PublicHome");
 		prepFile();
 		// when
@@ -477,7 +479,7 @@ public class TextReaderSitemapTest {
 			assertThat(tree.getChildCount(node)).isEqualTo(8);
 			assertThat(node.getUrlSegment()).isEqualTo("public");
 			assertThat(node.getViewClass()).isEqualTo(null);
-			assertThat(node.getLabelKey()).isEqualTo(null);
+			assertThat(node.getLabelKey()).isNotNull();
 			break;
 
 		case "public/home": {
@@ -541,7 +543,7 @@ public class TextReaderSitemapTest {
 			assertThat(tree.getChildCount(node)).isEqualTo(4);
 			assertThat(node.getUrlSegment()).isEqualTo("secure");
 			assertThat(node.getViewClass()).isEqualTo(null);
-			assertThat(node.getLabelKey()).isEqualTo(null);
+			assertThat(node.getLabelKey()).isNotNull();
 			break;
 
 		case "secure/home":
@@ -555,21 +557,21 @@ public class TextReaderSitemapTest {
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUrlSegment()).isEqualTo("transfers");
 			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.transfers);
+			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Transfers);
 			break;
 
 		case "secure/money-in-out":
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUrlSegment()).isEqualTo("money-in-out");
 			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.moneyInOut);
+			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.MoneyInOut);
 			break;
 
 		case "secure/options":
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUrlSegment()).isEqualTo("options");
 			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.opt);
+			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Opt);
 			break;
 
 		default:
