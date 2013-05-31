@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -26,11 +27,13 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
 
 /**
- * A navigation tree for users to find their way around the site. Uses {@link Sitemap} as the site structure
+ * A navigation tree for users to find their way around the site. Uses {@link Sitemap} as the site structure. This is
+ * naturally a {@link UIScoped} class, as it makes sense for one instance to be in use per browser tab
  * 
  * @author David Sowerby 17 May 2013
  * 
  */
+@UIScoped
 public class UserNavigationTree extends Tree {
 
 	private final CurrentLocale currentLocale;
@@ -46,6 +49,7 @@ public class UserNavigationTree extends Tree {
 		this.currentLocale = currentLocale;
 		this.navigator = navigator;
 		setImmediate(true);
+		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		addValueChangeListener(this);
 		loadNodes();
 
@@ -64,6 +68,7 @@ public class UserNavigationTree extends Tree {
 	private void loadNode(SitemapNode parentNode, SitemapNode childNode) {
 		this.addItem(childNode);
 		I18NKeys<?> key = (I18NKeys<?>) childNode.getLabelKey();
+
 		String caption = key.getValue(currentLocale.getLocale());
 		this.setItemCaption(childNode, caption);
 		setParent(childNode, parentNode);

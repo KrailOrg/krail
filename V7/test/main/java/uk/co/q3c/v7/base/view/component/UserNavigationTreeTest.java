@@ -95,6 +95,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		assertThat(unt.getParent(newNode2)).isEqualTo(newNode1);
 		assertThat(unt.getParent(newNode3)).isEqualTo(newNode2);
 		assertThat(unt.getParent(newNode1)).isEqualTo(null);
+		assertThat(unt.getItemCaption(newNode1)).isEqualTo("home");
+		assertThat(unt.getItemCaption(newNode2)).isEqualTo("home");
 
 		assertThat(unt.getParent(newNode5)).isEqualTo(newNode4);
 		assertThat(unt.getParent(newNode6)).isEqualTo(newNode5);

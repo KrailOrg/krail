@@ -40,6 +40,7 @@ public class TestWithSitemap {
 		switch (i) {
 		case 0:
 			break; // empty sitemap
+
 		case 2:
 			newNode4 = newNode("b");
 			newNode5 = newNode("b1");
