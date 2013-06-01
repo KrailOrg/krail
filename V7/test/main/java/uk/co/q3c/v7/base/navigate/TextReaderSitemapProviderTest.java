@@ -127,6 +127,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getSitemap().hasErrors()).isFalse();
 		System.out.println(reader.getReport().toString());
 
+		System.out.println(reader.getSitemap());
 	}
 
 	@Test

@@ -14,6 +14,7 @@ package uk.co.q3c.v7.base.navigate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,12 +27,17 @@ import uk.co.q3c.util.BasicForest;
  * is usually built by an implementation of {@link SitemapProvider}, and is one of the fundamental building blocks of
  * the application, as it maps out pages, URLs and Views.
  * <p>
- * Because of it use as such a fundamental building block, an instance of this class has to be created early in he
+ * <p>
+ * Because of it use as such a fundamental building block, an instance of this class has to be created early in the
  * application start up process. It is better therefore not to introduce dependencies into this class, otherwise the
  * design, and ordering of construction, of Guice modules starts to get complicated.
  * <p>
+ * <p>
  * A potential solution for dependencies can be seen in {@link SitemapURIConverter}, which acts as an intermediary
  * between this class and {@link URIFragmentHandler} implementations, thus avoiding the creation of dependencies here.
+ * <p>
+ * <p>
+ * Uses LinkedHashMap to hold the site map itself, to retain insertion order<br>
  * 
  * @author David Sowerby 19 May 2013
  * 
@@ -42,7 +48,8 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	private int errors = 0;
 	private final Map<StandardPageKeys, String> standardPages = new HashMap<>();
 	private String report;
-	private final Map<String, String> redirects = new HashMap<>();
+	// Uses LinkedHashMap to retain insertion order
+	private final Map<String, String> redirects = new LinkedHashMap<>();
 
 	public String url(SitemapNode node) {
 		StringBuilder buf = new StringBuilder(node.getUrlSegment());
