@@ -67,8 +67,13 @@ public class TextReaderSitemapProviderTest {
 		loadMasterFile();
 	}
 
+	/**
+	 * Map does not define every page, some are automatically added standard pages
+	 * 
+	 * @throws IOException
+	 */
 	@Test
-	public void parse() throws IOException {
+	public void parse_partialMap() throws IOException {
 
 		// given
 		String propFileName = "sitemap_good.properties";
@@ -79,7 +84,7 @@ public class TextReaderSitemapProviderTest {
 		reader.parse(propFile);
 		// then
 		assertThat(reader.getSitemap()).isNotNull();
-		assertThat(reader.getCommentLines()).isEqualTo(24);
+		assertThat(reader.getCommentLines()).isEqualTo(26);
 		assertThat(reader.getBlankLines()).isEqualTo(9);
 		assertThat(reader.getSections()).containsOnly("viewPackages", "options", "map", "standardPages", "redirects");
 		assertThat(reader.isLabelClassMissing()).isFalse();
@@ -266,7 +271,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getPropertyErrors()).containsOnly();
 		// multiple failures where an attempt is made to identify from segment as well
 		assertThat(reader.getMissingEnums()).containsOnly("MoneyInOut", "Money_in_out", "Opt", "Options", "Transfers",
-				"Secure", "Public");
+				"Secure", "Public", "Home");
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
@@ -276,12 +281,18 @@ public class TextReaderSitemapProviderTest {
 
 	}
 
+	/**
+	 * An invalid view is defined in standard pages, but redefined in map correctly
+	 * 
+	 * @throws IOException
+	 */
 	@Test
-	public void viewNotFound() throws IOException {
+	public void standardpage_view_overruled() throws IOException {
 
 		substitute("secureHome     = secure/home                  : SecureHome",
 				"secureHome     = secure/home                  : SecurelyHome");
 		prepFile();
+		outputModifiedFile();
 		// when
 		reader.parse(modifiedFile);
 		// then
@@ -296,7 +307,33 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getPropertyErrors()).containsOnly();
 		assertThat(reader.getMissingEnums()).containsOnly();
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
-		assertThat(reader.getUndeclaredViewClasses()).containsOnly("SecurelyHomeView");
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
+		assertThat(reader.getIndentationErrors()).containsOnly();
+		assertThat(reader.getSitemap().hasErrors()).isFalse();
+		System.out.println(reader.getReport());
+	}
+
+	@Test
+	public void viewNotFound() throws IOException {
+
+		substitute("--home          : PublicHome", "--home          : PubliclyHome");
+		prepFile();
+		outputModifiedFile();
+		// when
+		reader.parse(modifiedFile);
+		// then
+
+		assertThat(reader.isLabelClassNonExistent()).isFalse();
+		assertThat(reader.isLabelClassNotI18N()).isFalse();
+		assertThat(reader.missingSections()).containsOnly();
+
+		assertThat(reader.getPagesDefined()).isEqualTo(14);
+		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+		assertThat(reader.getMissingPages()).containsOnly();
+		assertThat(reader.getPropertyErrors()).containsOnly();
+		assertThat(reader.getMissingEnums()).containsOnly();
+		assertThat(reader.getInvalidViewClasses()).containsOnly();
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly("PubliclyHomeView");
 		assertThat(reader.getIndentationErrors()).containsOnly();
 		assertThat(reader.getSitemap().hasErrors()).isTrue();
 		System.out.println(reader.getReport());
@@ -605,6 +642,12 @@ public class TextReaderSitemapProviderTest {
 	private void insertAfter(String reference, String insertion) {
 		int index = lines.indexOf(reference);
 		lines.add(index + 1, insertion);
+	}
+
+	private void outputModifiedFile() {
+		for (String line : lines) {
+			System.out.println(line);
+		}
 	}
 
 }
