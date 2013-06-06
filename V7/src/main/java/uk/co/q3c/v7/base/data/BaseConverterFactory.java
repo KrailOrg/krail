@@ -13,9 +13,6 @@
 package uk.co.q3c.v7.base.data;
 
 import org.apache.james.mime4j.field.datetime.DateTime;
-import org.joda.money.Money;
-
-import uk.co.q3c.v7.demo.data.MoneyConverter;
 
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.converter.DefaultConverterFactory;
@@ -29,10 +26,6 @@ public class BaseConverterFactory extends DefaultConverterFactory {
 
 		if (modelType == DateTime.class) {
 			return (Converter<PRESENTATION, MODEL>) new DateTimeConverter();
-		}
-
-		if (modelType == Money.class) {
-			return (Converter<PRESENTATION, MODEL>) new MoneyConverter();
 		}
 
 		return super.createConverter(presentationType, modelType);
