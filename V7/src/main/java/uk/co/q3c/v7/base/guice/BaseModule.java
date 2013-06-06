@@ -20,8 +20,14 @@ public class BaseModule extends ServletModule {
 
 	@Override
 	protected void configureServlets() {
-		serve("/*").with(BaseServlet.class);
+		bindServlet();
 		ShiroWebModule.bindGuiceFilter(binder());
-
+	}
+	
+	/**
+	 * <code>serve("/*").with(BaseServlet.class);</code>
+	 */
+	protected void bindServlet() {
+		serve("/*").with(BaseServlet.class);
 	}
 }

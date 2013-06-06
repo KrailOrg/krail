@@ -84,7 +84,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		}
 		baseModules.add(new V7ShiroVaadinModule());
 		baseModules.add(new ShiroAopModule());
-		baseModules.add(new BaseModule());
+		baseModules.add(createBaseModule());
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
 		baseModules.add(new I18NModule());
@@ -93,6 +93,13 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		return baseModules;
 	}
 
+	/**
+	 * Override this to provide your own BaseModule
+	 */
+	protected BaseModule createBaseModule() {
+		return new BaseModule();
+	}
+	
 	protected abstract void addAppModules(List<Module> baseModules);
 
 	@Override
