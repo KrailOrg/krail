@@ -21,6 +21,8 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.config.TestV7IniProvider;
 import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.demo.config.DemoIni;
+import uk.co.q3c.v7.demo.config.TestDemoIniProvider;
 import uk.co.q3c.v7.demo.dao.DAOBaseTest;
 import uk.co.q3c.v7.demo.dao.orient.OrientDemoUsageLogDAO;
 import uk.co.q3c.v7.persist.orient.dao.OrientDAO;
@@ -63,7 +65,7 @@ public class OrientDAOBaseTest extends DAOBaseTest {
 	@ModuleProvider
 	public AbstractModule orientModuleProvider() {
 		// use provider to make sure ini is correctly initialised
-		V7Ini ini = new TestV7IniProvider().get();
+		DemoIni ini = new TestDemoIniProvider().get();
 		return new OrientDbModule(ini);
 	}
 }

@@ -12,7 +12,11 @@
  */
 package uk.co.q3c.v7.base.config;
 
+import java_cup.production;
+
 import javax.inject.Singleton;
+
+import org.apache.shiro.config.Ini;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapProvider;
@@ -20,12 +24,33 @@ import uk.co.q3c.v7.base.navigate.TextReaderSitemapProvider;
 
 import com.google.inject.AbstractModule;
 
-public class IniModule extends AbstractModule {
+public class BaseIniModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		bindIni();
+		bindSitemapProvider();
+		bindSitemap();		
+	}
+	
+	/**
+	 * Override this to provide your own Ini
+	 */
+	protected void bindIni() {
 		bind(V7Ini.class).toProvider(V7IniProvider.class).in(Singleton.class);
+	}
+	
+	/**
+	 * Override this to provide your own SitemapProvider
+	 */
+	protected void bindSitemapProvider(){
 		bind(SitemapProvider.class).to(TextReaderSitemapProvider.class);
+	}
+	
+	/**
+	 * Override this to provide your own Sitemap
+	 */
+	protected void bindSitemap(){
 		bind(Sitemap.class).toProvider(SitemapProvider.class).in(Singleton.class);
 	}
 

@@ -23,27 +23,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class V7Ini extends Ini {
 	private static Logger log = LoggerFactory.getLogger(V7Ini.class);
-	private static final String defaultPath = "classpath:V7.ini";
-
-	public static enum DbParam {
-		dbURL,
-		dbUser,
-		dbPwd
-	}
-
-	private static String dbDefault(DbParam key) {
-		switch (key) {
-		case dbURL:
-			return "memory:scratchpad";
-		case dbUser:
-			return "admin";
-		case dbPwd:
-			return "admin";
-		default:
-			return "unknown";
-		}
-
-	}
+	public static final String DEFAULT_PATH = "classpath:V7.ini";
 
 	public V7Ini() {
 		super();
@@ -51,19 +31,9 @@ public class V7Ini extends Ini {
 
 	public void validate() {
 		// validatePages(checkSection("pages"));
-		validateDb(checkSection("db"));
 	}
 
-	private void validateDb(Section section) {
-		for (DbParam key : DbParam.values()) {
-			if (!section.containsKey(key.name())) {
-				log.warn("The property {} is missing from V7.ini, using the default value", key.name());
-				section.put(key.name(), dbDefault(key));
-			}
-		}
-	}
-
-	private Section checkSection(String sectionName) {
+	protected Section checkSection(String sectionName) {
 		Section section = getSection(sectionName);
 		if (section == null) {
 			log.warn("The section {} is missing from V7.ini, using default values", sectionName);
@@ -93,10 +63,10 @@ public class V7Ini extends Ini {
 	}
 
 	/**
-	 * Calls {@link #loadFromPath(String)} with the {@link #defaultPath}
+	 * Calls {@link #loadFromPath(String)} with the {@link #DEFAULT_PATH}
 	 */
 	public void load() {
-		loadFromPath(defaultPath);
+		loadFromPath(DEFAULT_PATH);
 	}
 
 	// public String standardPageURI(StandardPageKey pageKey) {
@@ -110,17 +80,9 @@ public class V7Ini extends Ini {
 	//
 	// }
 
-	public String dbParam(DbParam dbParam) {
-		Section section = getSection("db");
-		if (section == null) {
-			log.warn("db section should not be null in V7ini");
-			return null;
-		} else {
-			String value = section.get(dbParam.name());
-			return value;
-		}
-	}
-
+	/**
+	 * This method should not be used if the file is in the classpath (the file will be overwritten the next deploy)
+	 */
 	public void save(String base, String directory, String filename) {
 		File f = ConfigUtil.fileFromPathWithVariable(base, directory, filename);
 

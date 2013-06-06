@@ -18,7 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.config.IniModule;
+import uk.co.q3c.v7.base.config.BaseIniModule;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
@@ -36,7 +36,7 @@ import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class, UIScopeModule.class, TestUIModule.class, StandardViewModule.class, DemoModule.class,
-		V7ShiroVaadinModule.class, IniModule.class })
+		V7ShiroVaadinModule.class, BaseIniModule.class })
 public class SideBarUITest extends UITestBase {
 
 	@BeforeClass

@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.config.IniModule;
+import uk.co.q3c.v7.base.config.BaseIniModule;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.StandardPageKeys;
@@ -28,7 +28,7 @@ import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class, UIScopeModule.class, TestUIModule.class, StandardViewModule.class,
-		V7ShiroVaadinModule.class, IniModule.class, DemoModule.class })
+		V7ShiroVaadinModule.class, BaseIniModule.class, DemoModule.class })
 public class LoginTest extends UITestBase {
 
 	String username = "wiggly";

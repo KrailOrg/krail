@@ -12,16 +12,16 @@
  */
 package uk.co.q3c.v7.persist.orient.db;
 
-import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.config.V7Ini.DbParam;
+import uk.co.q3c.v7.demo.config.DemoIni;
+import uk.co.q3c.v7.demo.config.DemoIni.DbParam;
 
 import com.google.inject.AbstractModule;
 
 public class OrientDbModule extends AbstractModule {
 
-	private final V7Ini ini;
+	private final DemoIni ini;
 
-	public OrientDbModule(V7Ini ini) {
+	public OrientDbModule(DemoIni ini) {
 		super();
 		this.ini = ini;
 	}

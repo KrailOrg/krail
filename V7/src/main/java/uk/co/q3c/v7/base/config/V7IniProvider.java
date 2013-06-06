@@ -14,14 +14,13 @@ package uk.co.q3c.v7.base.config;
 
 import javax.inject.Provider;
 
-public class V7IniProvider implements Provider<V7Ini> {
+import org.apache.shiro.config.Ini;
+
+public class V7IniProvider extends BaseIniProvider<V7Ini> {
 
 	@Override
-	public V7Ini get() {
-		V7Ini ini = new V7Ini();
-		// exceptions are all handled in the load method
-		ini.loadFromPath("classpath:V7.ini");
-		return ini;
+	protected V7Ini createIni(){
+		return new V7Ini();
 	}
-
+	
 }

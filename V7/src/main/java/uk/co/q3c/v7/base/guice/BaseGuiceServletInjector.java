@@ -22,7 +22,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.guice.aop.ShiroAopModule;
 import org.apache.shiro.mgt.SecurityManager;
 
-import uk.co.q3c.v7.base.config.IniModule;
+import uk.co.q3c.v7.base.config.BaseIniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
@@ -32,7 +32,6 @@ import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.i18n.I18NModule;
-import uk.co.q3c.v7.persist.orient.db.OrientDbModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -53,7 +52,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	@Override
 	protected Injector getInjector() {
 
-		injector = Guice.createInjector(new IniModule(), new DefaultShiroWebModule(ctx.get()));
+		injector = Guice.createInjector(createIniModule(), new DefaultShiroWebModule(ctx.get()));
 
 		injector.createChildInjector(getModules());
 
@@ -63,6 +62,13 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		SecurityUtils.setSecurityManager(securityManager);
 
 		return injector;
+	}
+	
+	/**
+	 * Override this to provide your own IniModule
+	 */
+	protected BaseIniModule createIniModule(){
+		return new BaseIniModule();
 	}
 
 	private List<Module> getModules() {
@@ -81,7 +87,6 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		baseModules.add(new BaseModule());
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
-		baseModules.add(new OrientDbModule(ini));
 		baseModules.add(new I18NModule());
 		baseModules.add(new StandardViewModule());
 		addAppModules(baseModules);
