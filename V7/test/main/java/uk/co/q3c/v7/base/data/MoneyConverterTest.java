@@ -21,7 +21,7 @@ import org.joda.money.Money;
 import org.joda.money.format.MoneyFormatException;
 import org.junit.Test;
 
-import uk.co.q3c.v7.base.data.MoneyConverter;
+import uk.co.q3c.v7.demo.data.MoneyConverter;
 
 public class MoneyConverterTest {
 	MoneyConverter converter;

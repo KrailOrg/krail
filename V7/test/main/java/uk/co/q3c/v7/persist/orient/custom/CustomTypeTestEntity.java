@@ -16,7 +16,7 @@ import java.util.Locale;
 
 import org.joda.time.DateTime;
 
-import uk.co.q3c.v7.base.data.EntityBase;
+import uk.co.q3c.v7.demo.data.EntityBase;
 
 /**
  * A test class only - used to hold each of the custom types used in OrientDb, to enable testing of the serialisation /

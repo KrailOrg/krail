@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.ui.form;
 
-import uk.co.q3c.v7.base.data.EntityBase;
+import uk.co.q3c.v7.demo.data.EntityBase;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 
 /**

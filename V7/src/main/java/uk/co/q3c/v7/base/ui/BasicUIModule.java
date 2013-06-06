@@ -1,6 +1,6 @@
 package uk.co.q3c.v7.base.ui;
 
-import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
+import uk.co.q3c.v7.base.data.BaseConverterFactory;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -30,8 +30,11 @@ public abstract class BasicUIModule extends AbstractModule {
 		bindLoginStatusMonitor();
 	}
 
-	private void bindConverterFactory() {
-		bind(ConverterFactory.class).to(V7DefaultConverterFactory.class);
+	/**
+	 * Override to bind your choice of ConverterFactory
+	 */
+	protected void bindConverterFactory() {
+		bind(ConverterFactory.class).to(BaseConverterFactory.class);
 	}
 
 	/**

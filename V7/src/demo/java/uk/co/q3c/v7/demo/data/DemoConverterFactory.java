@@ -10,24 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.data;
+package uk.co.q3c.v7.demo.data;
 
-import org.apache.james.mime4j.field.datetime.DateTime;
 import org.joda.money.Money;
 
+import uk.co.q3c.v7.base.data.BaseConverterFactory;
+import uk.co.q3c.v7.demo.data.MoneyConverter;
+
 import com.vaadin.data.util.converter.Converter;
-import com.vaadin.data.util.converter.DefaultConverterFactory;
 
-public class V7DefaultConverterFactory extends DefaultConverterFactory {
+public class DemoConverterFactory extends BaseConverterFactory {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <PRESENTATION, MODEL> Converter<PRESENTATION, MODEL> createConverter(Class<PRESENTATION> presentationType,
 			Class<MODEL> modelType) {
-
-		if (modelType == DateTime.class) {
-			return (Converter<PRESENTATION, MODEL>) new DateTimeConverter();
-		}
 
 		if (modelType == Money.class) {
 			return (Converter<PRESENTATION, MODEL>) new MoneyConverter();

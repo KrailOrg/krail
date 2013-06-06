@@ -14,7 +14,7 @@ package uk.co.q3c.v7.demo.usage;
 
 import org.joda.time.DateTime;
 
-import uk.co.q3c.v7.base.data.EntityBase;
+import uk.co.q3c.v7.demo.data.EntityBase;
 
 public class DemoUsageLog extends EntityBase {
 

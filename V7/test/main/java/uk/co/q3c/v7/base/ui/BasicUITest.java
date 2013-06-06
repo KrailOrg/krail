@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 
 import uk.co.q3c.v7.base.config.BaseIniModule;
-import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
+import uk.co.q3c.v7.base.data.BaseConverterFactory;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
@@ -136,7 +136,7 @@ public class BasicUITest extends UITestBase {
 		// when
 
 		// then
-		verify(mockedSession).setConverterFactory(Matchers.any(V7DefaultConverterFactory.class));
+		verify(mockedSession).setConverterFactory(Matchers.any(BaseConverterFactory.class));
 
 	}
 
