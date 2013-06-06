@@ -92,7 +92,7 @@ public class InvalidUITest extends UITestBase {
 
 	@ModuleProvider
 	protected AbstractModule uiProvider() {
-		return new V7UIModule() {
+		return new BasicUIModule() {
 
 			@Override
 			protected void addUIBindings(MapBinder<String, UI> mapbinder) {

@@ -13,7 +13,7 @@
 package fixture;
 
 import uk.co.q3c.v7.base.guice.uiscope.TestUI;
-import uk.co.q3c.v7.base.ui.V7UIModule;
+import uk.co.q3c.v7.base.ui.BasicUIModule;
 import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 
 import com.google.inject.multibindings.MapBinder;
@@ -26,7 +26,7 @@ import com.vaadin.ui.UI;
  * @author David Sowerby 12 Jan 2013
  * 
  */
-public class TestUIModule extends V7UIModule {
+public class TestUIModule extends BasicUIModule {
 
 	@Override
 	protected void addUIBindings(MapBinder<String, UI> mapbinder) {

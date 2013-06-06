@@ -7,7 +7,6 @@ import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.view.components.LoginStatusPanel;
-import uk.co.q3c.v7.demo.ui.SideBarUI;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
@@ -15,7 +14,7 @@ import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.WebBrowser;
 import com.vaadin.ui.UI;
 
-public abstract class V7UIModule extends AbstractModule {
+public abstract class BasicUIModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
@@ -65,7 +64,6 @@ public abstract class V7UIModule extends AbstractModule {
 	 */
 	protected void addUIBindings(MapBinder<String, UI> mapbinder) {
 		mapbinder.addBinding(BasicUI.class.getName()).to(BasicUI.class);
-		mapbinder.addBinding(SideBarUI.class.getName()).to(SideBarUI.class);
 	}
 
 }

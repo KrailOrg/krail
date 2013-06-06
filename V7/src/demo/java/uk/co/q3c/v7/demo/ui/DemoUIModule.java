@@ -1,12 +1,12 @@
 package uk.co.q3c.v7.demo.ui;
 
-import uk.co.q3c.v7.base.ui.V7UIModule;
+import uk.co.q3c.v7.base.ui.BasicUIModule;
 
 import com.google.inject.multibindings.MapBinder;
 import com.vaadin.server.UIProvider;
 import com.vaadin.ui.UI;
 
-public class DemoUIModule extends V7UIModule {
+public class DemoUIModule extends BasicUIModule {
 
 	@Override
 	protected void bindUIProvider() {
