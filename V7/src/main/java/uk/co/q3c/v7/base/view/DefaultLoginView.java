@@ -17,7 +17,6 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
-import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -38,15 +37,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	private final Label demoInfoLabel2;
 	private final Button submitButton;
 	private final V7Navigator navigator;
-	private final HeaderBar headerBar;
 	private final Label statusMsgLabel;
 	private final LoginExceptionHandler loginExceptionHandler;
 
 	@Inject
-	protected DefaultLoginView(V7Navigator navigator, HeaderBar headerBar, LoginExceptionHandler loginExceptionHandler) {
+	protected DefaultLoginView(V7Navigator navigator, LoginExceptionHandler loginExceptionHandler) {
 		super();
 		this.navigator = navigator;
-		this.headerBar = headerBar;
 		this.loginExceptionHandler = loginExceptionHandler;
 		this.setColumns(3);
 		this.setRows(3);
