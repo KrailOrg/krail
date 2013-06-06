@@ -18,7 +18,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ChameleonTheme;
 
 @PreserveOnRefresh
-public class SideBarUI extends BasicUI {
+public class SideBarUI extends DemoUI {
 
 	private TextArea textArea;
 

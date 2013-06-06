@@ -24,15 +24,38 @@ import uk.co.q3c.v7.demo.view.components.InfoBar;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
+import com.vaadin.ui.AbstractOrderedLayout;
+import com.vaadin.ui.VerticalLayout;
 
 @PreserveOnRefresh
 public class DemoUI extends BasicUI {
 
+	private final HeaderBar headerBar;
+
+	private final FooterBar footerBar;
+
+	private final InfoBar infoBar;
+	
 	@Inject
 	protected DemoUI(HeaderBar headerBar, FooterBar footerBar, InfoBar infoBar, V7Navigator navigator,
-			ErrorHandler errorHandler, DemoUsage usageLog, ConverterFactory converterFactory) {
-		super(headerBar, footerBar, infoBar, navigator, errorHandler, converterFactory);
+			ErrorHandler errorHandler, ConverterFactory converterFactory/*, DemoUsage usageLog */) { //<-- it is too "magic" to have a listener registered simply becouse it get injected
+		super(navigator, errorHandler, converterFactory);
+		this.footerBar = footerBar;
+		this.headerBar = headerBar;
+		this.infoBar = infoBar;
+	}
+	
+	@Override
+	protected AbstractOrderedLayout screenLayout() {
+		return new VerticalLayout(headerBar, infoBar, getViewDisplayPanel(), footerBar);
+	}
 
+	public HeaderBar getHeaderBar() {
+		return headerBar;
+	}
+
+	public FooterBar getFooterBar() {
+		return footerBar;
 	}
 
 }

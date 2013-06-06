@@ -16,6 +16,7 @@ import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.DefaultErrorView;
 import uk.co.q3c.v7.base.view.StandardViewModule;
+import uk.co.q3c.v7.demo.ui.DemoUI;
 import uk.co.q3c.v7.demo.view.DemoModule;
 import uk.co.q3c.v7.demo.view.PublicHomeView;
 import uk.co.q3c.v7.demo.view.View1;
@@ -47,7 +48,7 @@ public class BasicUITest extends UITestBase {
 		// when
 
 		// then
-		assertThat(basicUI().getHeaderBar()).isNotNull();
+		assertThat(demoUI().getHeaderBar()).isNotNull();
 
 	}
 
@@ -59,7 +60,7 @@ public class BasicUITest extends UITestBase {
 		// when
 
 		// then
-		assertThat(basicUI().getFooterBar()).isNotNull();
+		assertThat(demoUI().getFooterBar()).isNotNull();
 
 	}
 
@@ -139,8 +140,8 @@ public class BasicUITest extends UITestBase {
 
 	}
 
-	private BasicUI basicUI() {
-		return (BasicUI) ui;
+	private DemoUI demoUI() {
+		return (DemoUI) ui;
 	}
 
 	private String uri(String pageName) {
