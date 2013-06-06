@@ -13,6 +13,7 @@
 package uk.co.q3c.v7.base.ui.form;
 
 import uk.co.q3c.v7.base.data.TestEntity;
+import uk.co.q3c.v7.demo.ui.form.EntityFieldSet;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.DescriptionKeys;
 import uk.co.q3c.v7.i18n.I18N;
