@@ -5,10 +5,10 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.BaseIni;
 
 @Singleton
-public class DemoIni extends V7Ini {
+public class DemoIni extends BaseIni {
 	private static Logger log = LoggerFactory.getLogger(DemoIni.class);
 
 	public static enum DbParam {

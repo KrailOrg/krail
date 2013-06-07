@@ -17,7 +17,7 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import uk.co.q3c.v7.base.config.BaseIniModule;
-import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.BaseIni;
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
 import uk.co.q3c.v7.demo.config.DemoIni;
 import uk.co.q3c.v7.demo.config.DemoIniProvider;
@@ -46,7 +46,7 @@ public class DemoGuiceServletInjector extends BaseGuiceServletInjector {
 			@Override
 			protected void bindIni() {
 				//FIXME i dont like this double binding, there is a more elegant way ?
-				bind(V7Ini.class).toProvider(DemoIniProvider.class).in(Singleton.class);
+				bind(BaseIni.class).toProvider(DemoIniProvider.class).in(Singleton.class);
 				bind(DemoIni.class).toProvider(DemoIniProvider.class).in(Singleton.class);
 			}
 		};

@@ -23,7 +23,7 @@ import org.apache.shiro.guice.aop.ShiroAopModule;
 import org.apache.shiro.mgt.SecurityManager;
 
 import uk.co.q3c.v7.base.config.BaseIniModule;
-import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.BaseIni;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.Sitemap;
@@ -73,7 +73,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 	private List<Module> getModules() {
 		// ini load is handled by the provider
-		V7Ini ini = injector.getInstance(V7Ini.class);
+		BaseIni ini = injector.getInstance(BaseIni.class);
 		List<Module> baseModules = new ArrayList<>();
 
 		if (ini.optionReadSiteMap()) {

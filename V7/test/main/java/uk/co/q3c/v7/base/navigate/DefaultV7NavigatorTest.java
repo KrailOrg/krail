@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.BaseIni;
 import uk.co.q3c.v7.base.shiro.ShiroIntegrationTestBase;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
@@ -95,13 +95,13 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Mock
 	V7ViewChangeListener listener3;
 
-	V7Ini ini;
+	BaseIni ini;
 
 	@Mock
 	Provider<V7View> secureHomePro;
 
 	@Inject
-	Provider<V7Ini> iniPro;
+	Provider<BaseIni> iniPro;
 
 	Sitemap sitemap;
 

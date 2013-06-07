@@ -12,11 +12,7 @@
  */
 package uk.co.q3c.v7.base.config;
 
-import java_cup.production;
-
 import javax.inject.Singleton;
-
-import org.apache.shiro.config.Ini;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapProvider;
@@ -37,7 +33,7 @@ public class BaseIniModule extends AbstractModule {
 	 * Override this to provide your own Ini
 	 */
 	protected void bindIni() {
-		bind(V7Ini.class).toProvider(V7IniProvider.class).in(Singleton.class);
+		bind(BaseIni.class).toProvider(BaseIniProvider.class).in(Singleton.class);
 	}
 	
 	/**

@@ -14,7 +14,7 @@ package fixture;
 
 import org.apache.shiro.config.Ini.Section;
 
-import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.BaseIni;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -32,8 +32,8 @@ public class TestIniModule extends AbstractModule {
 	}
 
 	@Provides
-	protected V7Ini provideIni() {
-		V7Ini ini = new V7Ini();
+	protected BaseIni provideIni() {
+		BaseIni ini = new BaseIni();
 		ini.loadFromPath("classpath:V7.ini");
 		Section section = ini.getSection("db");
 		section.put("dbURL", "memory:scratchpad");

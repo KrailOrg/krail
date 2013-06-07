@@ -22,8 +22,6 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.config.V7IniProvider;
 import uk.co.q3c.v7.demo.config.DemoIni;
 import uk.co.q3c.v7.demo.config.DemoIniProvider;
 

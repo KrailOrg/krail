@@ -12,8 +12,8 @@ import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.config.V7IniProvider;
+import uk.co.q3c.v7.base.config.BaseIni;
+import uk.co.q3c.v7.base.config.AbstractIniProvider;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.TestUI;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
@@ -87,9 +87,9 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	protected Provider<V7Navigator> navigatorPro;
 
 	@Inject
-	protected V7IniProvider iniPro;
+	protected AbstractIniProvider iniPro;
 
-	protected V7Ini ini;
+	protected BaseIni ini;
 
 	protected static Class<? extends ScopedUI> uiClass;
 

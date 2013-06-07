@@ -16,7 +16,7 @@ import javax.inject.Provider;
 
 import org.apache.shiro.config.Ini.Section;
 
-import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.BaseIni;
 
 /**
  * /** Replaces the configured database setting with an in memory db, as this is generally what is required for testing.
@@ -25,7 +25,7 @@ import uk.co.q3c.v7.base.config.V7Ini;
  * @author David Sowerby 16 Feb 2013
  * 
  */
-public class TestDemoIniProvider implements Provider<V7Ini> {
+public class TestDemoIniProvider implements Provider<DemoIni> {
 
 	@Override
 	public DemoIni get() {

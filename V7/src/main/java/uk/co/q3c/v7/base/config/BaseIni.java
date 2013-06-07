@@ -21,11 +21,11 @@ import org.slf4j.LoggerFactory;
  * 
  */
 @Singleton
-public class V7Ini extends Ini {
-	private static Logger log = LoggerFactory.getLogger(V7Ini.class);
+public class BaseIni extends Ini {
+	private static Logger log = LoggerFactory.getLogger(BaseIni.class);
 	public static final String DEFAULT_PATH = "classpath:V7.ini";
 
-	public V7Ini() {
+	public BaseIni() {
 		super();
 	}
 
@@ -104,24 +104,32 @@ public class V7Ini extends Ini {
 		return getBooleanOption("readSiteMap");
 	}
 
-	private boolean getBooleanOption(String optionName) {
+	protected boolean getBooleanOption(String optionName) {		
+		return getOption(optionName).equals("true");
+	}
+	
+	protected Integer getIntegerOption(String optionName) {
+		return Integer.parseInt(getOption(optionName));
+	}
+	
+	protected String getOption(String optionName) {
 		Section section = getSection("options");
 		if (section == null) {
-			return booleanOptionDefault(optionName);
+			return optionDefault(optionName);
 		}
 		if (section.containsKey(optionName)) {
-			return section.get(optionName).equals("true");
+			return section.get(optionName);
 		} else {
-			return booleanOptionDefault(optionName);
+			return optionDefault(optionName);
 		}
 	}
-
-	private boolean booleanOptionDefault(String optionName) {
+	
+	protected String optionDefault(String optionName) {
 		switch (optionName) {
 		case "readSiteMap":
-			return true;
+			return "true";
 		}
-		return false;
+		return "false";
 	}
 
 }

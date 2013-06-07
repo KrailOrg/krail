@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.config.BaseIniModule;
-import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.BaseIni;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.Sitemap;
@@ -52,7 +52,7 @@ public class DemoViewModuleTest extends UITestBase {
 	Map<String, Provider<V7View>> viewProMap;
 
 	@Inject
-	V7Ini ini;
+	BaseIni ini;
 
 	@Inject
 	Sitemap sitemap;

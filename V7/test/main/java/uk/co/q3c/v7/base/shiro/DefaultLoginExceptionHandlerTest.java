@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.config.BaseIni;
 import uk.co.q3c.v7.base.navigate.StandardPageKeys;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
@@ -34,7 +34,7 @@ public class DefaultLoginExceptionHandlerTest {
 	V7Navigator navigator;
 
 	@Inject
-	V7Ini ini;
+	BaseIni ini;
 
 	UsernamePasswordToken token;
 

@@ -22,7 +22,7 @@ import org.junit.Test;
 
 import uk.co.q3c.v7.demo.config.DemoIni.DbParam;
 
-public class V7IniTest {
+public class BaseIniTest {
 
 	private final String[] pages = new String[] { "publicHome", "secureHome", "login", "logout" };
 	private final String[] dbparams = new String[] { "dbURL", "dbUser", "dbPwd" };
@@ -34,11 +34,11 @@ public class V7IniTest {
 	String test4 = "test4.V7.ini";
 	String test5 = "test5.V7.ini";
 	String test6 = "test6.V7.ini";
-	V7Ini ini;
+	BaseIni ini;
 
 	@Before
 	public void setup() {
-		ini = new V7Ini();
+		ini = new BaseIni();
 	}
 
 	@Test()
@@ -140,7 +140,7 @@ public class V7IniTest {
 		File f = new File(temp, "V7.ini");
 		assertThat(f.exists()).isTrue();
 		// when
-		V7Ini ini2 = new V7Ini();
+		BaseIni ini2 = new BaseIni();
 		ini2.loadFromPath("file:" + f.getAbsolutePath());
 		assertThat(ini2.getSectionNames()).isEqualTo(ini.getSectionNames());
 		for (Section section : ini.getSections()) {

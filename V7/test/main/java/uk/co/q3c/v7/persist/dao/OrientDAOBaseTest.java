@@ -19,8 +19,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.config.TestV7IniProvider;
-import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.demo.config.DemoIni;
 import uk.co.q3c.v7.demo.config.TestDemoIniProvider;
 import uk.co.q3c.v7.demo.dao.DAOBaseTest;
