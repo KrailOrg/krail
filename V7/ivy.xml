@@ -12,6 +12,9 @@
 		<!-- A configuration only needed when compiling the widget set. Should not be deployed to the server -->
 		<conf name="widgetset-compile" />
 	</configurations>
+	<publications>
+		<artifact name="v7" type="jar" />
+	</publications>
 	<dependencies>
 		<!-- The core server part of Vaadin -->
 		<dependency org="com.vaadin" name="vaadin-server" rev="&vaadin.version;" conf="default->default" />
