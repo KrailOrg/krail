@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.data;
 
-import org.apache.james.mime4j.field.datetime.DateTime;
+import org.joda.time.DateTime;
 
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.converter.DefaultConverterFactory;
