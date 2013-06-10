@@ -36,6 +36,7 @@ public class SitemapNode {
 	private String urlSegment;
 	private Class<? extends V7View> viewClass;
 	private Enum<? extends I18NKeys<?>> labelKey;
+	private String label;
 
 	public SitemapNode(String urlSegment, Class<? extends V7View> viewClass, Enum<? extends I18NKeys<?>> labelKey) {
 		super();
@@ -108,5 +109,13 @@ public class SitemapNode {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 }

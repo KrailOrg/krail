@@ -52,4 +52,6 @@ public interface V7Navigator extends UriFragmentChangedListener {
 
 	V7View getCurrentView();
 
+	void navigateTo(SitemapNode node);
+
 }

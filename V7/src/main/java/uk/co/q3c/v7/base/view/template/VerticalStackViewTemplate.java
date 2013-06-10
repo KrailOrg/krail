@@ -23,7 +23,8 @@ import com.vaadin.ui.VerticalLayout;
  * Extends {@link VerticalLayout} but unlike most ViewTemplates, only adds a little functionality.
  * <p>
  * <li>implements {@link I18NListener} and passes Locale change to all contained components
- * <li>provides a {@link #set(int, Component)} method, to enable explicit setting the position of a component.
+ * <li>provides a {@link #set(int, Component)} method, to enable explicit setting the position of a component, filling
+ * the intervening spaces with blank panels
  * 
  * @author David Sowerby 29 Mar 2013
  * 

@@ -25,9 +25,11 @@ import uk.co.q3c.v7.i18n.I18NKeys;
 import uk.co.q3c.v7.i18n.I18NListener;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 
-public class Breadcrumb extends HorizontalLayout implements I18NListener, V7ViewChangeListener {
+public class Breadcrumb extends HorizontalLayout implements I18NListener, V7ViewChangeListener, Button.ClickListener {
 
 	private final List<BreadcrumbStep> steps = new ArrayList<>();
 	private final V7Navigator navigator;
@@ -61,6 +63,7 @@ public class Breadcrumb extends HorizontalLayout implements I18NListener, V7View
 				} else {
 					// create step
 					step = new BreadcrumbStep();
+					step.addClickListener(this);
 					steps.add(step);
 				}
 				setupStep(step, nodeChain.get(i));
@@ -70,10 +73,15 @@ public class Breadcrumb extends HorizontalLayout implements I18NListener, V7View
 	}
 
 	private void setupStep(BreadcrumbStep step, SitemapNode sitemapNode) {
-		step.setVisible(true);
+		// TODO can label translate be removed? May be done in build of sitemap later
+
 		step.setNode(sitemapNode);
 		I18NKeys<?> key = (I18NKeys<?>) step.getNode().getLabelKey();
-		step.setCaption(key.getValue(currentLocale.getLocale()));
+		sitemapNode.setLabel(key.getValue(currentLocale.getLocale()));
+
+		step.setVisible(true);
+		step.setNode(sitemapNode);
+
 	}
 
 	@Override
@@ -104,6 +112,13 @@ public class Breadcrumb extends HorizontalLayout implements I18NListener, V7View
 
 	public List<BreadcrumbStep> getSteps() {
 		return steps;
+	}
+
+	@Override
+	public void buttonClick(ClickEvent event) {
+		BreadcrumbStep step = (BreadcrumbStep) event.getButton();
+		navigator.navigateTo(step.getNode());
+
 	}
 
 }

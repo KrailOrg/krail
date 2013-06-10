@@ -153,6 +153,13 @@ public class BreadcrumbTest extends TestWithSitemap {
 		assertThat(breadcrumb.getSteps().get(1).isVisible()).isTrue();
 		assertThat(breadcrumb.getSteps().get(2).isVisible()).isTrue();
 		assertThat(breadcrumb.getSteps().get(3).isVisible()).isTrue();
+
+		// given
+		BreadcrumbStep step = breadcrumb.getSteps().get(2);
+		// when button clicked
+		step.click();
+		// then
+		verify(navigator).navigateTo(step.getNode());
 	}
 
 }

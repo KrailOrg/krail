@@ -21,12 +21,17 @@ public class BreadcrumbStep extends Button {
 	private SitemapNode node;
 	private String params;
 
+	protected BreadcrumbStep() {
+		super();
+	}
+
 	public SitemapNode getNode() {
 		return node;
 	}
 
 	public void setNode(SitemapNode node) {
 		this.node = node;
+		this.setCaption(node.getLabel());
 	}
 
 	public String getParams() {
@@ -36,4 +41,5 @@ public class BreadcrumbStep extends Button {
 	public void setParams(String params) {
 		this.params = params;
 	}
+
 }

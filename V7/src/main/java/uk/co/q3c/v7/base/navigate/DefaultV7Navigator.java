@@ -287,4 +287,10 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		previousFragment = null;
 	}
 
+	@Override
+	public void navigateTo(SitemapNode node) {
+		String url = sitemap.url(node);
+		navigateTo(url);
+	}
+
 }

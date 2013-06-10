@@ -248,6 +248,19 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	}
 
 	@Test
+	public void navigateToNode() {
+
+		// given
+
+		SitemapNode node = new SitemapURIConverter(sitemap, uriHandler).nodeForUri("public/view2", false);
+		// when
+		navigator.navigateTo(node);
+		// then
+		assertThat(navigator.getNavigationState()).isEqualTo("public/view2");
+
+	}
+
+	@Test
 	public void currentAndPreviousViews_andClearHistory() {
 
 		// given
