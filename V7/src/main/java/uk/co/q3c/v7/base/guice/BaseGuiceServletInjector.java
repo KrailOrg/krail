@@ -55,7 +55,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		injector = Guice.createInjector(new IniModule(), new DefaultShiroWebModule(ctx.get()));
 
-		injector.createChildInjector(getModules());
+		injector = injector.createChildInjector(getModules());
 
 		// The SecurityManager binding is in ShiroWebModule, and therefore DefaultShiroWebModule. By default the binding
 		// is to DefaultWebSecurityManager
