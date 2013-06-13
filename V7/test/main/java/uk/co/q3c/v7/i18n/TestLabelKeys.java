@@ -24,7 +24,9 @@ public enum TestLabelKeys implements I18NKeys<TestLabels> {
 	MoneyInOut,
 	Secure,
 	Public,
-	Opt;
+	Opt,
+	Yes,
+	No;
 
 	@Override
 	public TestLabels getBundle(Locale locale) {

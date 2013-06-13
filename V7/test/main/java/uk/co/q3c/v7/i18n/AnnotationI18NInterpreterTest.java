@@ -124,7 +124,7 @@ public class AnnotationI18NInterpreterTest {
 	public void multiAnnotations() {
 
 		// given
-		currentLocale.registerAnnotation(DemoI18N.class, demoI18NreaderPro);
+		currentLocale.registerAnnotation(TestI18N.class, demoI18NreaderPro);
 		System.out.println(currentLocale.registeredAnnotations());
 		// when
 		currentLocale.setLocale(Locale.GERMAN);

@@ -3,28 +3,44 @@ package uk.co.q3c.v7.base.guice.uiscope;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.ui.BasicUI;
-import uk.co.q3c.v7.demo.view.components.FooterBar;
-import uk.co.q3c.v7.demo.view.components.HeaderBar;
-import uk.co.q3c.v7.demo.view.components.InfoBar;
+import uk.co.q3c.v7.base.ui.ScopedUI;
+import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
+import com.vaadin.ui.AbstractOrderedLayout;
+import com.vaadin.ui.HorizontalLayout;
 
-public class TestUI extends BasicUI {
+public class TestUI extends ScopedUI {
 
 	@Inject
-	private HeaderBar extraHeaderBar;
+	private LoginStatusPanel panel1;
 
 	@Inject
-	protected TestUI(HeaderBar headerBar, FooterBar footerBar, InfoBar infoBar, V7Navigator navigator,
-			ErrorHandler errorHandler, ConverterFactory converterFactory) {
-		super(headerBar, footerBar, infoBar, navigator, errorHandler, converterFactory);
+	private LoginStatusPanel panel2;
+
+	@Inject
+	protected TestUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory) {
+		super(navigator, errorHandler, converterFactory);
 
 	}
 
-	public HeaderBar getExtraHeaderBar() {
-		return extraHeaderBar;
+	public LoginStatusPanel getPanel2() {
+		return panel2;
+	}
+
+	@Override
+	protected AbstractOrderedLayout screenLayout() {
+		return new HorizontalLayout();
+	}
+
+	@Override
+	protected String pageTitle() {
+		return "TestUI";
+	}
+
+	public LoginStatusPanel getPanel1() {
+		return panel1;
 	}
 
 }

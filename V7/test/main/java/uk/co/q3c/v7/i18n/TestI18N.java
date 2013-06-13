@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.demo.i18n;
+package uk.co.q3c.v7.i18n;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -31,15 +31,15 @@ import com.vaadin.data.Property;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface DemoI18N {
-	DemoLabelKeys caption() default DemoLabelKeys._nullkey_;
+public @interface TestI18N {
+	TestLabelKeys caption() default TestLabelKeys._nullkey_;
 
-	DemoLabelKeys description() default DemoLabelKeys._nullkey_;
+	TestLabelKeys description() default TestLabelKeys._nullkey_;
 
 	/**
 	 * Usually only used with Vaadin Labels
 	 * 
 	 * @return
 	 */
-	DemoLabelKeys value() default DemoLabelKeys._nullkey_;
+	TestLabelKeys value() default TestLabelKeys._nullkey_;
 }
