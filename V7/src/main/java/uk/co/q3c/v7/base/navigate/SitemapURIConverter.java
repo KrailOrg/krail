@@ -16,7 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.google.gwt.thirdparty.guava.common.collect.Lists;
+import com.google.common.collect.Lists;
 
 /**
  * Utility class to convert between URI fragments using {@link URIFragmentHandler} and {@link Sitemap}. This separate
