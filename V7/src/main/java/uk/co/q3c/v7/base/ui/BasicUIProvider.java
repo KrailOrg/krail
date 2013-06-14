@@ -10,39 +10,29 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.i18n;
+package uk.co.q3c.v7.base.ui;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.Map;
 
-public enum TestLabelKeys implements I18NKeys<TestLabels> {
+import javax.inject.Inject;
 
-	_nullkey_,
-	Home,
-	Transfers,
-	Login,
-	MoneyInOut,
-	Secure,
-	Public,
-	Opt,
-	Yes,
-	No,
-	View1,
-	View2;
+import uk.co.q3c.v7.base.guice.uiscope.UIKeyProvider;
 
-	@Override
-	public TestLabels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(TestLabels.class.getName(), locale);
-		return (TestLabels) bundle;
+import com.google.inject.Injector;
+import com.google.inject.Provider;
+import com.vaadin.server.UIClassSelectionEvent;
+import com.vaadin.ui.UI;
+
+public class BasicUIProvider extends ScopedUIProvider {
+
+	@Inject
+	protected BasicUIProvider(Injector injector, Map<String, Provider<UI>> uiProMap, UIKeyProvider uiKeyProvider) {
+		super(injector, uiProMap, uiKeyProvider);
 	}
 
 	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
+	public Class<? extends UI> getUIClass(UIClassSelectionEvent event) {
+		return BasicUI.class;
 	}
 
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
-	}
 }

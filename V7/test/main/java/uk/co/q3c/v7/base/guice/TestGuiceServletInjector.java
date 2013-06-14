@@ -10,39 +10,19 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.i18n;
+package uk.co.q3c.v7.base.guice;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.List;
 
-public enum TestLabelKeys implements I18NKeys<TestLabels> {
+import com.google.inject.Module;
 
-	_nullkey_,
-	Home,
-	Transfers,
-	Login,
-	MoneyInOut,
-	Secure,
-	Public,
-	Opt,
-	Yes,
-	No,
-	View1,
-	View2;
+import fixture.TestUIModule;
+
+public class TestGuiceServletInjector extends BaseGuiceServletInjector {
 
 	@Override
-	public TestLabels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(TestLabels.class.getName(), locale);
-		return (TestLabels) bundle;
+	protected void addAppModules(List<Module> baseModules) {
+		baseModules.add(new TestUIModule());
 	}
 
-	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
-	}
-
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
-	}
 }

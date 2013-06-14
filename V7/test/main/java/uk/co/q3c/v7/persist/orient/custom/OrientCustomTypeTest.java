@@ -22,9 +22,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.q3c.v7.demo.usage.DemoUsageLog;
-import uk.co.q3c.v7.persist.orient.custom.OrientCustomType_DateTime;
-
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
 import com.orientechnologies.orient.object.serialization.OObjectSerializerContext;
@@ -56,7 +53,7 @@ public class OrientCustomTypeTest {
 		db.save(entity);
 		db.commit();
 		// then
-		List<CustomTypeTestEntity> result = db.query(new OSQLSynchQuery<DemoUsageLog>(
+		List<CustomTypeTestEntity> result = db.query(new OSQLSynchQuery<CustomTypeTestEntity>(
 				"select * from CustomTypeTestEntity"));
 		CustomTypeTestEntity entity2 = result.get(0);
 		assertThat(entity2.getDateTime()).isEqualTo(entity.getDateTime());

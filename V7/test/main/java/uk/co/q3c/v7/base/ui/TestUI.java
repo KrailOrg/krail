@@ -1,15 +1,14 @@
-package uk.co.q3c.v7.base.guice.uiscope;
+package uk.co.q3c.v7.base.ui;
 
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 
 public class TestUI extends ScopedUI {
 
@@ -31,7 +30,7 @@ public class TestUI extends ScopedUI {
 
 	@Override
 	protected AbstractOrderedLayout screenLayout() {
-		return new HorizontalLayout();
+		return new VerticalLayout(getViewDisplayPanel());
 	}
 
 	@Override

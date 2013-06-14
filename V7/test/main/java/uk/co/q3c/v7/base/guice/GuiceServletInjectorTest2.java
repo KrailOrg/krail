@@ -25,7 +25,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
-import uk.co.q3c.v7.demo.guice.DemoGuiceServletInjector;
 
 import com.google.inject.Binding;
 import com.google.inject.Injector;
@@ -43,7 +42,7 @@ public class GuiceServletInjectorTest2 {
 
 	@Before
 	public void setup() {
-		out = new DemoGuiceServletInjector();
+		out = new TestGuiceServletInjector();
 		servletContext = mock(ServletContext.class);
 		servletContextEvent = mock(ServletContextEvent.class);
 	}

@@ -2,6 +2,8 @@ package uk.co.q3c.v7.base.guice.uiscope;
 
 import static org.mockito.Mockito.*;
 
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +12,9 @@ import org.mockito.Matchers;
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+import uk.co.q3c.v7.base.ui.TestUI;
+import uk.co.q3c.v7.base.ui.TestUIProvider;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
@@ -33,6 +38,9 @@ public class UIScopeTest extends UITestBase {
 	TestUI uib;
 
 	TestUI uia;
+
+	@Inject
+	TestUIProvider provider;
 
 	@Test
 	public void uiScope() {
@@ -102,6 +110,11 @@ public class UIScopeTest extends UITestBase {
 	@ModuleProvider
 	private ApplicationViewModule applicationViewModuleProvider() {
 		return TestHelper.applicationViewModuleUsingSitemap();
+	}
+
+	@Override
+	protected ScopedUIProvider getUIProvider() {
+		return provider;
 	}
 
 }

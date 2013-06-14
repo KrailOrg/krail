@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.testviews.PublicHomeView;
-import uk.co.q3c.v7.demo.i18n.DemoLabelKeys;
+import uk.co.q3c.v7.i18n.TestLabelKeys;
 
 public class SitemapTest {
 
@@ -30,9 +30,9 @@ public class SitemapTest {
 
 		// given
 		Sitemap map = new Sitemap();
-		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, DemoLabelKeys.Home);
-		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, DemoLabelKeys.Home);
-		SitemapNode child = new SitemapNode("login", LoginView.class, DemoLabelKeys.Login);
+		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, TestLabelKeys.Home);
+		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, TestLabelKeys.Home);
+		SitemapNode child = new SitemapNode("login", LoginView.class, TestLabelKeys.Login);
 		map.addChild(grandparent, parent);
 		map.addChild(parent, child);
 		// when

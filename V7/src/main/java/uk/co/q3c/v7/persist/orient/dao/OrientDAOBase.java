@@ -15,7 +15,6 @@ package uk.co.q3c.v7.persist.orient.dao;
 import java.util.List;
 
 import uk.co.q3c.v7.base.data.EntityBase;
-import uk.co.q3c.v7.demo.usage.DemoUsageLog;
 import uk.co.q3c.v7.persist.dao.DAOBase;
 import uk.co.q3c.v7.persist.orient.db.OrientDbConnectionProvider;
 
@@ -76,7 +75,7 @@ public abstract class OrientDAOBase<T extends EntityBase> implements DAOBase<T>,
 
 	@Override
 	public List<T> findAll() {
-		return db.query(new OSQLSynchQuery<DemoUsageLog>("select * from " + entityClass().getSimpleName()));
+		return db.query(new OSQLSynchQuery<T>("select * from " + entityClass().getSimpleName()));
 	}
 
 	@Override

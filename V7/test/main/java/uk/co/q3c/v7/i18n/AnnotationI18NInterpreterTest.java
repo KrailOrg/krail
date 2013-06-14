@@ -23,9 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.demo.i18n.DemoI18N;
-import uk.co.q3c.v7.demo.i18n.DemoI18Nreader;
-
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -41,7 +38,7 @@ public class AnnotationI18NInterpreterTest {
 	CurrentLocale currentLocale;
 
 	@Inject
-	Provider<DemoI18Nreader> demoI18NreaderPro;
+	Provider<TestI18Nreader> demoI18NreaderPro;
 
 	@Before
 	public void setup() {

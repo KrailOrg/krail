@@ -1,5 +1,8 @@
 package uk.co.q3c.v7.base.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.v7.base.config.V7ConfigurationException;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
@@ -19,7 +22,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
 public abstract class ScopedUI extends UI implements V7ViewHolder {
-
+	private static Logger log = LoggerFactory.getLogger(ScopedUI.class);
 	private UIKey instanceKey;
 	private UIScope uiScope;
 	private final Panel viewDisplayPanel;
@@ -119,7 +122,8 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 		}
 		screenLayout.setSizeFull();
 		if (screenLayout.getComponentIndex(getViewDisplayPanel()) < 0) {
-			String msg = "Your implementation of screenLayout() must include getViewDisplayPanel().  AS a minimum this could be 'return new VerticalLayout(getViewDisplayPanel())'";
+			String msg = "Your implementation of ScopedUI.screenLayout() must include getViewDisplayPanel().  AS a minimum this could be 'return new VerticalLayout(getViewDisplayPanel())'";
+			log.error(msg);
 			throw new V7ConfigurationException(msg);
 		}
 		screenLayout.setExpandRatio(getViewDisplayPanel(), 1);

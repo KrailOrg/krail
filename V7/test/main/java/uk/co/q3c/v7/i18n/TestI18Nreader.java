@@ -12,37 +12,22 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.lang.annotation.Annotation;
 
-public enum TestLabelKeys implements I18NKeys<TestLabels> {
-
-	_nullkey_,
-	Home,
-	Transfers,
-	Login,
-	MoneyInOut,
-	Secure,
-	Public,
-	Opt,
-	Yes,
-	No,
-	View1,
-	View2;
+public class TestI18Nreader implements I18NAnnotationReader {
 
 	@Override
-	public TestLabels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(TestLabels.class.getName(), locale);
-		return (TestLabels) bundle;
+	public I18NKeys<?> caption(Annotation annotation) {
+		return ((TestI18N) annotation).caption();
 	}
 
 	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
+	public I18NKeys<?> description(Annotation annotation) {
+		return ((TestI18N) annotation).description();
 	}
 
 	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
+	public I18NKeys<?> value(Annotation annotation) {
+		return ((TestI18N) annotation).value();
 	}
 }

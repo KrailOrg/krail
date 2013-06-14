@@ -24,8 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.demo.guice.DemoGuiceServletInjector;
-
 import com.google.inject.Injector;
 
 @RunWith(JMockit.class)
@@ -48,7 +46,7 @@ public class GuiceServletInjectorTest {
 
 	@Before
 	public void setup() {
-		out = new DemoGuiceServletInjector();
+		out = new TestGuiceServletInjector();
 
 	}
 

@@ -7,7 +7,6 @@ import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
-import uk.co.q3c.v7.demo.ui.SideBarUI;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
@@ -65,7 +64,6 @@ public abstract class V7UIModule extends AbstractModule {
 	 */
 	protected void addUIBindings(MapBinder<String, UI> mapbinder) {
 		mapbinder.addBinding(BasicUI.class.getName()).to(BasicUI.class);
-		mapbinder.addBinding(SideBarUI.class.getName()).to(SideBarUI.class);
 	}
 
 }

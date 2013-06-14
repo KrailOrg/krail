@@ -22,7 +22,8 @@ public class TestHelper {
 
 	public static ApplicationViewModule applicationViewModuleUsingSitemap() {
 		TextReaderSitemapProvider sitemapPro = new TextReaderSitemapProvider();
-		File dir = new File("src/main/java");
+		// has to be on classpath, called as a Resource
+		File dir = new File("test/main/java");
 		File f = new File(dir, "sitemap.properties");
 		sitemapPro.setSourceFile(f);
 		Sitemap sitemap = sitemapPro.get();
