@@ -38,7 +38,7 @@ public class AnnotationI18NInterpreterTest {
 	CurrentLocale currentLocale;
 
 	@Inject
-	Provider<TestI18Nreader> demoI18NreaderPro;
+	Provider<TestI18Nreader> testI18NreaderPro;
 
 	@Before
 	public void setup() {
@@ -121,14 +121,14 @@ public class AnnotationI18NInterpreterTest {
 	public void multiAnnotations() {
 
 		// given
-		currentLocale.registerAnnotation(TestI18N.class, demoI18NreaderPro);
+		currentLocale.registerAnnotation(TestI18N.class, testI18NreaderPro);
 		System.out.println(currentLocale.registeredAnnotations());
 		// when
 		currentLocale.setLocale(Locale.GERMAN);
 		// then
-		assertThat(testObject.getDemoLabel().getCaption()).isEqualTo("ja");
-		assertThat(testObject.getDemoLabel().getDescription()).isEqualTo("ja");
-		assertThat(testObject.getDemoLabel().getValue()).isEqualTo("nein");
+		assertThat(testObject.getDemoLabel().getCaption()).isEqualTo("Ja");
+		assertThat(testObject.getDemoLabel().getDescription()).isEqualTo("Ja");
+		assertThat(testObject.getDemoLabel().getValue()).isEqualTo("Nein");
 	}
 
 	@ModuleProvider

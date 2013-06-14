@@ -26,7 +26,8 @@ public class TestLabels_de extends TestLabels {
 	// TODO make map unmodifiable
 	static {
 		map.put(TestLabelKeys.Home, "zu Hause");
-
+		map.put(TestLabelKeys.Yes, "Ja");
+		map.put(TestLabelKeys.No, "Nein");
 	}
 
 	@Override

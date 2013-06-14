@@ -31,6 +31,8 @@ public class TestLabels extends EnumResourceBundle<TestLabelKeys> {
 		map.put(TestLabelKeys.Home, "home");
 		map.put(TestLabelKeys.Transfers, "transfers");
 		map.put(TestLabelKeys.Opt, "option");
+		map.put(TestLabelKeys.Yes, "Yes");
+		map.put(TestLabelKeys.No, "No");
 
 	}
 
