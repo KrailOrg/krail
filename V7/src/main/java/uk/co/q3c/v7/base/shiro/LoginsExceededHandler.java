@@ -12,7 +12,9 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-public interface LoginsExceededHandler {
+import java.io.Serializable;
+
+public interface LoginsExceededHandler extends Serializable {
 
 	void invoke();
 
