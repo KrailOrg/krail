@@ -20,16 +20,29 @@ public class DefaultShiroWebModule extends ShiroWebModule {
 	@Override
 	protected void configureShiroWeb() {
 		// bind the authentication realm
+		bindShiroRealm();
+		bindCredentialsMatcher();
+	}
+	
+	/**
+	 * Override this to provide your own Realm
+	 * default: <code>bindRealm().to(DefaultRealm.class);</code>
+	 */
+	protected void bindShiroRealm() {
 		bindRealm().to(DefaultRealm.class);
-		bindCredentials();
+		//this is just an implementatin detail, other realms may not need LoginAttemptLog
 		bindLoginAttemptLog();
 	}
 
-	protected void bindLoginAttemptLog() {
+	private void bindLoginAttemptLog() {
 		bind(LoginAttemptLog.class).to(DefaultLoginAttemptLog.class);
 	}
 
-	protected void bindCredentials() {
+	/**
+	 * Override this to provide your own CredentialsMatcher
+	 * default: <code>bind(CredentialsMatcher.class).to(AlwaysPasswordCredentialsMatcher.class);</code>
+	 */
+	protected void bindCredentialsMatcher() {
 		bind(CredentialsMatcher.class).to(AlwaysPasswordCredentialsMatcher.class);
 	}
 
