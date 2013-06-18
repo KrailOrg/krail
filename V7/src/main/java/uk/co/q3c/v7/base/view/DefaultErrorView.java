@@ -26,7 +26,7 @@ public class DefaultErrorView extends VerticalViewBase implements ErrorView {
 	@Override
 	public void processParams(List<String> params) {
 		String s = "This is the ErrorView and would say something like \""
-				+ this.getScopedUI().getV7Navigator().getNavigationState() + " is not a valid uri\"";
+				+ this.getNavigator().getNavigationState() + " is not a valid uri\"";
 		viewLabel.setValue(s);
 	}
 

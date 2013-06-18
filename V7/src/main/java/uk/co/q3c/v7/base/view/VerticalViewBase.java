@@ -7,9 +7,11 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 
 import com.vaadin.ui.Component;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public abstract class VerticalViewBase extends VerticalLayout implements V7View {
@@ -28,14 +30,28 @@ public abstract class VerticalViewBase extends VerticalLayout implements V7View 
 		processParams(params);
 	}
 
+//	/**
+//	 * typecasts and returns getUI()
+//	 * 
+//	 * @return
+//	 */
+//	public ScopedUI getScopedUI() {
+//		return (ScopedUI) getUI();
+//	}
+	
 	/**
 	 * typecasts and returns getUI()
 	 * 
 	 * @return
 	 */
-
-	public ScopedUI getScopedUI() {
-		return (ScopedUI) getUI();
+	//why do you use getScopedUI instead of getUI ?
+	@Override
+	public ScopedUI getUI() {
+		return (ScopedUI) super.getUI();
+	}
+	
+	public V7Navigator getNavigator() {
+		return getUI().getV7Navigator();
 	}
 
 	protected abstract void processParams(List<String> params);
