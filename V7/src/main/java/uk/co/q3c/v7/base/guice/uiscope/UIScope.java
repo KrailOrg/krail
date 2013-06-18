@@ -52,7 +52,7 @@ public class UIScope implements Scope {
 				UIKey uiKey = CurrentInstance.get(UIKey.class);
 				// this may be null if we are in the process of constructing the UI
 				ScopedUI currentUI = (ScopedUI) UI.getCurrent();
-				final String msg = "This should not be possible, unless perhaps you are testing and have not set up the test fixture correctly.  Try sub-classing UITestBase and calling createTestUI() or createBasicUI() to prepare the UIScope correctly.  If you are not testing please report a bug";
+				final String msg = "This can happen if you include UIScoped components in your ScopedUIProvider, or you are testing and have not set up the test fixture correctly.  For the latter, try sub-classing UITestBase and calling createTestUI() or createBasicUI() to prepare the UIScope correctly.  If you are not testing please report a bug";
 				if (uiKey == null) {
 					if (currentUI == null) {
 						throw new UIScopeException("UI and uiKey are null. " + msg);

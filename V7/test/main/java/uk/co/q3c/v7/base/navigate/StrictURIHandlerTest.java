@@ -185,11 +185,37 @@ public class StrictURIHandlerTest extends ShiroIntegrationTestBase {
 
 	}
 
-	// @ModuleProvider
-	// protected ShiroWebModule shiroWebModule() {
-	// ServletContext mockedContext = mock(ServletContext.class);
-	// ctx.set(mockedContext);
-	// return new DemoShiroWebModule(ctx.get());
-	// }
+	@Test
+	public void pathSegments() {
+
+		// given
+		handler.setFragment("home/view/wiggly");
+		// when
+		String[] result = handler.getPathSegments();
+		// then
+		assertThat(result).containsOnly("home", "view", "wiggly");
+		assertThat(result[0]).isEqualTo("home");
+		assertThat(result[1]).isEqualTo("view");
+		assertThat(result[2]).isEqualTo("wiggly");
+
+		// given
+		handler.setFragment("home/view/wiggly/id=1");
+		// when
+		result = handler.getPathSegments();
+		// then
+		assertThat(result).containsOnly("home", "view", "wiggly");
+		assertThat(result[0]).isEqualTo("home");
+		assertThat(result[1]).isEqualTo("view");
+		assertThat(result[2]).isEqualTo("wiggly");
+
+		// given
+		handler.setFragment("");
+		// when
+		result = handler.getPathSegments();
+		// then
+		assertThat(result).containsOnly("");
+		assertThat(result[0]).isEqualTo("");
+
+	}
 
 }

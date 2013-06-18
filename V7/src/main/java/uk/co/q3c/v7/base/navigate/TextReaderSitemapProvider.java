@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +29,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.shiro.io.ResourceUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -156,6 +158,8 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			processMap();
 			processStandardPages();
 			validateRedirects();
+			checkLabelKeys();
+
 			log.info("Sitemap loaded successfully");
 
 		} else {
@@ -169,16 +173,25 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		sitemap.setReport(getReport().toString());
 	}
 
+	private void checkLabelKeys() {
+		for (SitemapNode node : sitemap.getAllNodes()) {
+			if (node.getLabelKey() == null) {
+				labelKeyForName(null, node, true);
+			}
+		}
+	}
+
 	/**
 	 * Ensure that redirection targets exist, and that no loops can be created
 	 */
 	private void validateRedirects() {
+		Collection<String> urls = sitemap.urls();
 		for (String target : getRedirects().values()) {
 			if (getRedirects().keySet().contains(target)) {
 				redirectErrors.add("'" + target + "' cannot be both a redirect source and redirect target");
 				sitemap.error();
 			}
-			if (!sitemap.hasUrl(target)) {
+			if (!urls.contains(target)) {
 				redirectErrors.add("'" + target + "' cannot be a redirect target, it has not been defined as a page");
 				sitemap.error();
 
@@ -244,7 +257,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			// we now have defined a node, add it to the map
 			// bu but only if url is there
 			if (toUrl != null) {
-				SiteMapNode node = sitemap.append(toUrl);
+				SitemapNode node = sitemap.append(toUrl);
 				node.setLabelKey(pageKey);
 				// and set the view
 				if (Strings.isNullOrEmpty(viewName)) {
@@ -404,11 +417,10 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		return sections.get(SectionName.viewPackages);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void processMap() {
 		List<String> sectionLines = sections.get(SectionName.map);
 		int i = 0;
-		SiteMapNode currentNode = null;
+		SitemapNode currentNode = null;
 		int currentLevel = 0;
 		for (String line : sectionLines) {
 			if (line.startsWith("-")) {
@@ -445,7 +457,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 				}
 
 				// segment has been set, view & label may be null
-				SiteMapNode node = new SiteMapNode();
+				SitemapNode node = new SitemapNode();
 				node.setUrlSegment(segment);
 
 				// do structure before labels
@@ -470,7 +482,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 						currentNode = node;
 						currentLevel++;
 					} else if (treeLevel == currentLevel) {
-						SiteMapNode parentNode = sitemap.getParent(currentNode);
+						SitemapNode parentNode = sitemap.getParent(currentNode);
 						sitemap.addChild(parentNode, node);
 					} else if (treeLevel > currentLevel) {
 						if (treeLevel - currentLevel > 1) {
@@ -492,28 +504,33 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 					findView(node, segment, view);
 				}
 
-				// do the label
-				try {
-					if (labelKeyName == null) {
-						labelKeyName = segment;
-					}
-					// hyphen not valid in enum, translate to underscore
-					labelKeyName = labelKeyName.replace("-", "_");
-					@SuppressWarnings("rawtypes")
-					Enum labelKey = Enum.valueOf(labelKeysClass, labelKeyName);
-
-					node.setLabelKey(labelKey);
-				} catch (Exception e) {
-					// label is not needed if page is redirected
-
-					if (!getRedirects().containsKey(url)) {
-						missingEnums.add(labelKeyName);
-						sitemap.error();
-					}
-				}
+				// do the label, don't flag as missing till final check
+				labelKeyForName(labelKeyName, node, true);
 
 			} else {
 				log.warn("line in map must start with a'-', line " + i);
+				sitemap.error();
+			}
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private void labelKeyForName(String labelKeyName, SitemapNode node, boolean flagAsMissing) {
+		try {
+
+			if (labelKeyName == null) {
+				labelKeyName = WordUtils.capitalize(node.getUrlSegment());
+				// hyphen not valid in enum, but may be used in segment
+				labelKeyName = labelKeyName.replace("-", "_");
+			}
+
+			@SuppressWarnings({ "rawtypes" })
+			Enum labelKey = Enum.valueOf(labelKeysClass, labelKeyName);
+			node.setLabelKey(labelKey);
+		} catch (Exception e) {
+			if (flagAsMissing) {
+				missingEnums.add(labelKeyName);
 				sitemap.error();
 			}
 		}
@@ -530,7 +547,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	 * @param viewName
 	 */
 	@SuppressWarnings("unchecked")
-	private void findView(SiteMapNode node, String segment, String viewName) {
+	private void findView(SitemapNode node, String segment, String viewName) {
 		// if view is null use the segment
 		if (viewName == null) {
 			viewName = StringUtils.capitalize(segment);

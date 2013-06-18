@@ -6,7 +6,7 @@ import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
-import uk.co.q3c.v7.base.view.components.LoginStatusPanel;
+import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;

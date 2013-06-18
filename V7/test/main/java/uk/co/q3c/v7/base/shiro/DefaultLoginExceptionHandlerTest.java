@@ -18,10 +18,7 @@ import uk.co.q3c.v7.base.view.LoginView;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
-import fixture.TestIniModule;
-
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ TestIniModule.class })
 public class DefaultLoginExceptionHandlerTest {
 
 	// @Inject

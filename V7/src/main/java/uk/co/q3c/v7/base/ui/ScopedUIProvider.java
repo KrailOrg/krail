@@ -23,6 +23,8 @@ import com.vaadin.util.CurrentInstance;
  * then just extend from UIProvider directly
  * 
  * Subclasses should implement getUIClass(UIClassSelectionEvent event) to provide logic for selecting the UI class.
+ * <p>
+ * <b>Note:</b>Do not try and inject any {@link UIScoped} dependencies
  * 
  * @author David Sowerby
  * 

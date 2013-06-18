@@ -16,7 +16,7 @@ public interface URIFragmentHandler {
 	 * <code>navigationState</code> is null or empty. If <code>navigationState</code> contains only paired parameters,
 	 * an empty String is returned.
 	 * 
-	 * @see uk.co.q3c.v7.base.navigate.URIFragmentHandler#virtualPage(java.lang.String)
+	 * @see #getPathSegments()
 	 */
 	public String virtualPage();
 
@@ -54,5 +54,13 @@ public interface URIFragmentHandler {
 	 * @param useBang
 	 */
 	void setUseBang(boolean useBang);
+
+	/**
+	 * Returns the virtual page path, but as an array of segments
+	 * 
+	 * @return
+	 * @see #virtualPage()
+	 */
+	String[] getPathSegments();
 
 }

@@ -8,18 +8,17 @@ import com.vaadin.ui.Label;
 
 public class DefaultErrorView extends VerticalViewBase implements ErrorView {
 
-	private Label viewLabel;
-	
+	private final Label viewLabel;
+
 	@Inject
 	protected DefaultErrorView() {
-
-		//TODO: document how to replace this implementation with teh user one
-		doLayout();
+		super();
+		viewLabel = new Label();
+		getViewLabel().addStyleName("warning");
 
 	}
 
 	protected void doLayout() {
-		viewLabel = new Label();
 		viewLabel.addStyleName("warning");
 		addComponent(viewLabel);
 	}
@@ -29,6 +28,10 @@ public class DefaultErrorView extends VerticalViewBase implements ErrorView {
 		String s = "This is the ErrorView and would say something like \""
 				+ this.getScopedUI().getV7Navigator().getNavigationState() + " is not a valid uri\"";
 		viewLabel.setValue(s);
+	}
+
+	public Label getViewLabel() {
+		return viewLabel;
 	}
 
 }

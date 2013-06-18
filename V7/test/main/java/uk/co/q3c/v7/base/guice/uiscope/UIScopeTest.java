@@ -2,6 +2,8 @@ package uk.co.q3c.v7.base.guice.uiscope;
 
 import static org.mockito.Mockito.*;
 
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,10 +12,12 @@ import org.mockito.Matchers;
 import uk.co.q3c.v7.base.config.BaseIniModule;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+import uk.co.q3c.v7.base.ui.TestUI;
+import uk.co.q3c.v7.base.ui.TestUIProvider;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
-import uk.co.q3c.v7.demo.view.DemoModule;
-import uk.co.q3c.v7.demo.view.components.HeaderBar;
+import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -27,13 +31,16 @@ import fixture.TestUIModule;
 import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ UIScopeModule.class, BaseModule.class, TestUIModule.class, StandardViewModule.class, DemoModule.class,
+@GuiceContext({ UIScopeModule.class, BaseModule.class, TestUIModule.class, StandardViewModule.class,
 		V7ShiroVaadinModule.class, BaseIniModule.class })
 public class UIScopeTest extends UITestBase {
 
 	TestUI uib;
 
 	TestUI uia;
+
+	@Inject
+	TestUIProvider provider;
 
 	@Test
 	public void uiScope() {
@@ -47,15 +54,15 @@ public class UIScopeTest extends UITestBase {
 		// Just to make sure we are not looking at the same instance
 		Assert.assertNotEquals(uia, uib);
 
-		// ui instances should have different header bars
-		Assert.assertNotEquals(uia.getHeaderBar(), uib.getHeaderBar());
-		Assert.assertNotEquals(uia.getHeaderBar(), uib.getExtraHeaderBar());
-		Assert.assertNotEquals(uia.getExtraHeaderBar(), uib.getHeaderBar());
-		Assert.assertNotEquals(uia.getExtraHeaderBar(), uib.getExtraHeaderBar());
+		// ui instances should have different panels
+		Assert.assertNotEquals(uia.getPanel1(), uib.getPanel1());
+		Assert.assertNotEquals(uia.getPanel2(), uib.getPanel2());
+		Assert.assertNotEquals(uia.getPanel2(), uib.getPanel1());
+		Assert.assertNotEquals(uia.getPanel2(), uib.getPanel2());
 
 		// but both header bars should be the same within a ui instance
-		Assert.assertEquals(uia.getHeaderBar(), uia.getExtraHeaderBar());
-		Assert.assertEquals(uib.getHeaderBar(), uib.getExtraHeaderBar());
+		Assert.assertEquals(uia.getPanel1(), uia.getPanel2());
+		Assert.assertEquals(uib.getPanel1(), uib.getPanel2());
 
 		// given
 		VaadinServletRequest mockedRequest = mock(VaadinServletRequest.class);
@@ -68,7 +75,7 @@ public class UIScopeTest extends UITestBase {
 		uia.setSession(mockedSession);
 		uia.doInit(mockedRequest, 1);
 
-		HeaderBar originalHeader = uia.getHeaderBar();
+		LoginStatusPanel originalHeader = uia.getPanel1();
 
 		// when
 		// simulates key being cleared by framework during navigation
@@ -77,7 +84,7 @@ public class UIScopeTest extends UITestBase {
 
 		// then
 		// this is not a good test do I need TestBench?
-		Assert.assertEquals(uia.getHeaderBar(), originalHeader);
+		Assert.assertEquals(uia.getPanel1(), originalHeader);
 
 		// // when ui is closed
 		// uia.detach();
@@ -103,6 +110,11 @@ public class UIScopeTest extends UITestBase {
 	@ModuleProvider
 	private ApplicationViewModule applicationViewModuleProvider() {
 		return TestHelper.applicationViewModuleUsingSitemap();
+	}
+
+	@Override
+	protected ScopedUIProvider getUIProvider() {
+		return provider;
 	}
 
 }

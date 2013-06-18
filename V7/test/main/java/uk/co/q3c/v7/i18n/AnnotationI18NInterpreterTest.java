@@ -23,9 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.demo.i18n.DemoI18N;
-import uk.co.q3c.v7.demo.i18n.DemoI18Nreader;
-
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -35,18 +32,13 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 @GuiceContext({})
 public class AnnotationI18NInterpreterTest {
 
-	I18NTranslator interpreter;
-
 	I18NTestClass testObject;
 
 	@Inject
 	CurrentLocale currentLocale;
 
 	@Inject
-	Provider<I18NTranslator> interpreterPro;
-
-	@Inject
-	Provider<DemoI18Nreader> demoI18NreaderPro;
+	Provider<TestI18Nreader> testI18NreaderPro;
 
 	@Before
 	public void setup() {
@@ -129,14 +121,14 @@ public class AnnotationI18NInterpreterTest {
 	public void multiAnnotations() {
 
 		// given
-		currentLocale.registerAnnotation(DemoI18N.class, demoI18NreaderPro);
+		currentLocale.registerAnnotation(TestI18N.class, testI18NreaderPro);
 		System.out.println(currentLocale.registeredAnnotations());
 		// when
 		currentLocale.setLocale(Locale.GERMAN);
 		// then
-		assertThat(testObject.getDemoLabel().getCaption()).isEqualTo("ja");
-		assertThat(testObject.getDemoLabel().getDescription()).isEqualTo("ja");
-		assertThat(testObject.getDemoLabel().getValue()).isEqualTo("nein");
+		assertThat(testObject.getDemoLabel().getCaption()).isEqualTo("Ja");
+		assertThat(testObject.getDemoLabel().getDescription()).isEqualTo("Ja");
+		assertThat(testObject.getDemoLabel().getValue()).isEqualTo("Nein");
 	}
 
 	@ModuleProvider

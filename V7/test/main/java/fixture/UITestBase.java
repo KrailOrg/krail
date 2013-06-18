@@ -14,19 +14,19 @@ import org.mockito.stubbing.Answer;
 
 import uk.co.q3c.v7.base.config.BaseIni;
 import uk.co.q3c.v7.base.config.AbstractIniProvider;
+import uk.co.q3c.v7.base.config.BaseIniProvider;
 import uk.co.q3c.v7.base.guice.BaseModule;
-import uk.co.q3c.v7.base.guice.uiscope.TestUI;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.ShiroIntegrationTestBase;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+import uk.co.q3c.v7.base.ui.TestUI;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
-import uk.co.q3c.v7.demo.ui.DemoUIProvider;
-import uk.co.q3c.v7.demo.view.components.HeaderBar;
 
 import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -74,12 +74,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	protected V7View currentView;
 
 	@Inject
-	protected DemoUIProvider provider;
-
-	@Inject
-	Injector injector;
-
-	protected HeaderBar headerBar;
+	protected Injector injector;
 
 	protected ScopedUI ui;
 
@@ -87,7 +82,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	protected Provider<V7Navigator> navigatorPro;
 
 	@Inject
-	protected AbstractIniProvider iniPro;
+	protected BaseIniProvider iniPro;
 
 	protected BaseIni ini;
 
@@ -97,7 +92,6 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	public void setup() {
 		if (uiClass != null) {
 			createUI(uiClass);
-			headerBar = injector.getInstance(HeaderBar.class);
 		}
 	}
 
@@ -140,7 +134,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	protected ScopedUI createUI(Class<? extends ScopedUI> clazz) {
 		CurrentInstance.set(UI.class, null);
 		CurrentInstance.set(UIKey.class, null);
-		ui = (ScopedUI) provider.createInstance(clazz);
+		ui = (ScopedUI) getUIProvider().createInstance(clazz);
 		CurrentInstance.set(UI.class, ui);
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
 		when(mockedSession.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
@@ -150,5 +144,10 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 		ini = iniPro.get();
 		return ui;
 	}
+
+	/**
+	 * Override to define your UIProvider
+	 */
+	protected abstract ScopedUIProvider getUIProvider();
 
 }

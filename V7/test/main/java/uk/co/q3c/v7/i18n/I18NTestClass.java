@@ -12,9 +12,6 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import uk.co.q3c.v7.demo.i18n.DemoI18N;
-import uk.co.q3c.v7.demo.i18n.DemoLabelKeys;
-
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
@@ -30,7 +27,7 @@ public class I18NTestClass implements I18NListener {
 	@I18N(caption = LabelKeys.small, description = DescriptionKeys.small_font)
 	private final Table table;
 
-	@DemoI18N(caption = DemoLabelKeys.yes, description = DemoLabelKeys.yes, value = DemoLabelKeys.no)
+	@TestI18N(caption = TestLabelKeys.Yes, description = TestLabelKeys.Yes, value = TestLabelKeys.No)
 	private final Label demoLabel;
 
 	private final TestCompositeComponent ccs;

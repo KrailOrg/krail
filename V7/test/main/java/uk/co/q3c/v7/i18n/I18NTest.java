@@ -15,7 +15,6 @@ package uk.co.q3c.v7.i18n;
 import static org.fest.assertions.Assertions.*;
 
 import java.util.Locale;
-import java.util.MissingResourceException;
 
 import org.junit.Test;
 
@@ -45,15 +44,14 @@ public class I18NTest {
 		assertThat(LabelKeys.ok.getValue(germanSwitzerland)).isEqualTo("ok");
 	}
 
-	@Test(expected = MissingResourceException.class)
 	public void getMissingValue() {
 
 		// given
 
 		// when
-		LabelKeys._nullkey_.getValue(Locale.GERMAN);
+		String value = LabelKeys._nullkey_.getValue(Locale.GERMAN);
 		// then
-		// exception expected
+		assertThat(value).isEqualTo("x");
 	}
 
 }

@@ -12,9 +12,9 @@
  */
 package fixture;
 
-import uk.co.q3c.v7.base.guice.uiscope.TestUI;
+import uk.co.q3c.v7.base.ui.BasicUIProvider;
+import uk.co.q3c.v7.base.ui.TestUI;
 import uk.co.q3c.v7.base.ui.BasicUIModule;
-import uk.co.q3c.v7.demo.ui.DemoUIProvider;
 
 import com.google.inject.multibindings.MapBinder;
 import com.vaadin.server.UIProvider;
@@ -36,7 +36,7 @@ public class TestUIModule extends BasicUIModule {
 
 	@Override
 	protected void bindUIProvider() {
-		bind(UIProvider.class).to(DemoUIProvider.class);
+		bind(UIProvider.class).to(BasicUIProvider.class);
 	}
 
 }

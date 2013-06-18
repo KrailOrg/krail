@@ -12,7 +12,9 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,22 +22,43 @@ import org.apache.commons.lang3.StringUtils;
 
 import uk.co.q3c.util.BasicForest;
 
-public class Sitemap extends BasicForest<SiteMapNode> {
+/**
+ * Encapsulates the site layout. Individual "virtual pages" are represented by {@link SitemapNode} instances. This map
+ * is usually built by an implementation of {@link SitemapProvider}, and is one of the fundamental building blocks of
+ * the application, as it maps out pages, URLs and Views.
+ * <p>
+ * <p>
+ * Because of it use as such a fundamental building block, an instance of this class has to be created early in the
+ * application start up process. It is better therefore not to introduce dependencies into this class, otherwise the
+ * design, and ordering of construction, of Guice modules starts to get complicated.
+ * <p>
+ * <p>
+ * A potential solution for dependencies can be seen in {@link SitemapURIConverter}, which acts as an intermediary
+ * between this class and {@link URIFragmentHandler} implementations, thus avoiding the creation of dependencies here.
+ * <p>
+ * <p>
+ * Uses LinkedHashMap to hold the site map itself, to retain insertion order<br>
+ * 
+ * @author David Sowerby 19 May 2013
+ * 
+ */
+public class Sitemap extends BasicForest<SitemapNode> {
 
 	private int nextNodeId = 0;
 	private int errors = 0;
 	private final Map<StandardPageKeys, String> standardPages = new HashMap<>();
 	private String report;
-	private final Map<String, String> redirects = new HashMap<>();
+	// Uses LinkedHashMap to retain insertion order
+	private final Map<String, String> redirects = new LinkedHashMap<>();
 
-	public String url(SiteMapNode node) {
+	public String url(SitemapNode node) {
 		StringBuilder buf = new StringBuilder(node.getUrlSegment());
 		prependParent(node, buf);
 		return buf.toString();
 	}
 
-	private void prependParent(SiteMapNode node, StringBuilder buf) {
-		SiteMapNode parentNode = getParent(node);
+	private void prependParent(SitemapNode node, StringBuilder buf) {
+		SitemapNode parentNode = getParent(node);
 		if (parentNode != null) {
 			buf.insert(0, "/");
 			buf.insert(0, parentNode.getUrlSegment());
@@ -52,18 +75,18 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 	 * @param toUrl
 	 * @return
 	 */
-	public SiteMapNode append(String url) {
+	public SitemapNode append(String url) {
 
 		if (url.equals("")) {
-			SiteMapNode node = new SiteMapNode();
+			SitemapNode node = new SitemapNode();
 			node.setUrlSegment(url);
 			addNode(node);
 			return node;
 		}
-		SiteMapNode node = null;
+		SitemapNode node = null;
 		String[] segments = StringUtils.split(url, "/");
-		List<SiteMapNode> nodes = getRoots();
-		SiteMapNode parentNode = null;
+		List<SitemapNode> nodes = getRoots();
+		SitemapNode parentNode = null;
 		for (int i = 0; i < segments.length; i++) {
 			node = findNodeBySegment(nodes, segments[i], true);
 			addChild(parentNode, node);
@@ -74,9 +97,9 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 		return node;
 	}
 
-	private SiteMapNode findNodeBySegment(List<SiteMapNode> nodes, String segment, boolean createIfAbsent) {
-		SiteMapNode foundNode = null;
-		for (SiteMapNode node : nodes) {
+	private SitemapNode findNodeBySegment(List<SitemapNode> nodes, String segment, boolean createIfAbsent) {
+		SitemapNode foundNode = null;
+		for (SitemapNode node : nodes) {
 			if (node.getUrlSegment().equals(segment)) {
 				foundNode = node;
 				break;
@@ -84,7 +107,7 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 		}
 
 		if ((foundNode == null) && (createIfAbsent)) {
-			foundNode = new SiteMapNode();
+			foundNode = new SitemapNode();
 			foundNode.setUrlSegment(segment);
 
 		}
@@ -92,7 +115,7 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 	}
 
 	@Override
-	public void addNode(SiteMapNode node) {
+	public void addNode(SitemapNode node) {
 		if (node.getId() == 0) {
 			node.setId(nextNodeId());
 		}
@@ -100,7 +123,7 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 	}
 
 	@Override
-	public void addChild(SiteMapNode parentNode, SiteMapNode childNode) {
+	public void addChild(SitemapNode parentNode, SitemapNode childNode) {
 		// super allows null parent
 		if (parentNode != null) {
 			if (parentNode.getId() == 0) {
@@ -161,22 +184,29 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 		return redirects;
 	}
 
-	public boolean hasUrl(String target) {
-		SiteMapNode node = findUrl(target);
-		return (node != null);
-	}
+	/**
+	 * Returns a list of {@link SitemapNode} matching the {@code segments} provided. If there is an incomplete match (a
+	 * segment cannot be found) then:
+	 * <ol>
+	 * <li>if {@code allowPartialPath} is true a list of nodes is returned correct to the longest path possible.
+	 * <li>if {@code allowPartialPath} is false an empty list is returned
+	 * 
+	 * @param segments
+	 * @return
+	 */
 
-	public SiteMapNode findUrl(String target) {
-		String[] segments = (target == "") ? new String[] { "" } : StringUtils.split(target, "/");
+	public List<SitemapNode> nodeChainForSegments(List<String> segments, boolean allowPartialPath) {
+		List<SitemapNode> nodeChain = new ArrayList<>();
 		int i = 0;
 		String currentSegment = null;
-		List<SiteMapNode> nodes = getRoots();
+		List<SitemapNode> nodes = getRoots();
 		boolean segmentNotFound = false;
-		SiteMapNode node = null;
-		while ((i < segments.length) && (!segmentNotFound)) {
-			currentSegment = segments[i];
+		SitemapNode node = null;
+		while ((i < segments.size()) && (!segmentNotFound)) {
+			currentSegment = segments.get(i);
 			node = findNodeBySegment(nodes, currentSegment, false);
 			if (node != null) {
+				nodeChain.add(node);
 				nodes = getChildren(node);
 				i++;
 			} else {
@@ -184,11 +214,17 @@ public class Sitemap extends BasicForest<SiteMapNode> {
 			}
 
 		}
-		if (i == segments.length) {
-			return node;
-		} else {
-			return null;
+		if (segmentNotFound && !allowPartialPath) {
+			nodeChain.clear();
 		}
+		return nodeChain;
 	}
 
+	public List<String> urls() {
+		List<String> list = new ArrayList<>();
+		for (SitemapNode node : getAllNodes()) {
+			list.add(url(node));
+		}
+		return list;
+	}
 }

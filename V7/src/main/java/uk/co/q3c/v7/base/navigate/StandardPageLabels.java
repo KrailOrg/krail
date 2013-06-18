@@ -33,11 +33,22 @@ public class StandardPageLabels extends EnumResourceBundle<StandardPageKeys> {
 	static {
 		map.put(StandardPageKeys.login, "login");
 		map.put(StandardPageKeys.logout, "logout");
+		map.put(StandardPageKeys.publicHome, "home");
+		map.put(StandardPageKeys.secureHome, "home");
+		map.put(StandardPageKeys.refreshAccount, "refresh account");
+		map.put(StandardPageKeys.requestAccount, "request account");
+		map.put(StandardPageKeys.resetAccount, "reset account");
+		map.put(StandardPageKeys.unlockAccount, "unlock account");
+		map.put(StandardPageKeys.enableAccount, "enable account");
 
 	}
 
 	@Override
 	public EnumMap<StandardPageKeys, String> getMap() {
+		return map;
+	}
+
+	public static EnumMap<StandardPageKeys, String> map() {
 		return map;
 	}
 

@@ -16,7 +16,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import uk.co.q3c.v7.i18n.I18NKeys;
-import uk.co.q3c.v7.i18n.Labels;
 
 public enum StandardPageKeys implements I18NKeys<StandardPageLabels> {
 
@@ -58,7 +57,7 @@ public enum StandardPageKeys implements I18NKeys<StandardPageLabels> {
 
 	@Override
 	public StandardPageLabels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Labels.class.getName(), locale);
+		ResourceBundle bundle = ResourceBundle.getBundle(StandardPageLabels.class.getName(), locale);
 		return (StandardPageLabels) bundle;
 	}
 

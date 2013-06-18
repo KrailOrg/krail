@@ -14,7 +14,6 @@ package uk.co.q3c.v7.i18n;
 
 import java.util.EnumMap;
 import java.util.Enumeration;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBundle {
@@ -40,7 +39,9 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
 		@SuppressWarnings("unchecked")
 		EnumResourceBundle<E> enumparent = (EnumResourceBundle<E>) parent;
 		if (enumparent == null) {
-			throw new MissingResourceException("resource not defined", this.getClass().getName(), key.name());
+			return null;
+			// changed to returning null so that the enum name() can be used as default
+			// throw new MissingResourceException("resource not defined", this.getClass().getName(), key.name());
 		}
 		return enumparent.getValue(key);
 

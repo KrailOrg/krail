@@ -13,10 +13,9 @@ import com.vaadin.ui.VerticalLayout;
 // @PreserveOnRefresh
 @Theme("chameleon")
 public class BasicUI extends ScopedUI {
-	
+
 	@Inject
-	protected BasicUI(V7Navigator navigator,
-			ErrorHandler errorHandler, ConverterFactory converterFactory) {
+	protected BasicUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory) {
 		super(navigator, errorHandler, converterFactory);
 	}
 
@@ -25,10 +24,9 @@ public class BasicUI extends ScopedUI {
 		return new VerticalLayout(getViewDisplayPanel());
 	}
 
-
 	@Override
 	protected String pageTitle() {
-		return "V7";
+		return "V7 base";
 	}
 
 }

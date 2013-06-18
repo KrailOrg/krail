@@ -20,12 +20,9 @@ import org.apache.shiro.config.Ini.Section;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.q3c.v7.demo.config.DemoIni.DbParam;
-
 public class BaseIniTest {
 
 	private final String[] pages = new String[] { "publicHome", "secureHome", "login", "logout" };
-	private final String[] dbparams = new String[] { "dbURL", "dbUser", "dbPwd" };
 
 	String test0 = "test0.V7.ini"; // should be non-existent
 	String test1 = "test1.V7.ini";
@@ -48,8 +45,6 @@ public class BaseIniTest {
 		String testFile = test0;
 		// when
 		ini.loadFromPath(filepath(testFile));
-		// then
-		allPropertiesHaveAValue("db", dbparams);
 	}
 
 	@Test()
@@ -59,23 +54,7 @@ public class BaseIniTest {
 		String testFile = test2;
 		// when
 		ini.loadFromPath(filepath(testFile));
-		// then
-		allPropertiesHaveAValue("db", dbparams);
 	}
-
-//	@Test
-//	public void dbParam() {
-//
-//		// given
-//		String testFile = test1;
-//		// when
-//		ini.loadFromPath(filepath(testFile));
-//		// then
-//		assertThat(ini.dbParam(DbParam.dbURL)).isEqualTo("memory:scratchpad");
-//		assertThat(ini.dbParam(DbParam.dbUser)).isEqualTo("admin");
-//		assertThat(ini.dbParam(DbParam.dbPwd)).isEqualTo("admin");
-//
-//	}
 
 	@Test
 	public void noOptionsSection() {

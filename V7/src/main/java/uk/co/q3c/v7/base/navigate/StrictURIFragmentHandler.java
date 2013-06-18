@@ -11,9 +11,9 @@ import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import com.google.gwt.thirdparty.guava.common.base.Joiner;
-import com.google.gwt.thirdparty.guava.common.base.Strings;
+import com.google.common.base.Strings;
 
 /**
  * 
@@ -222,6 +222,12 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
 	@Override
 	public String parameterValue(String paramName) {
 		return parameters.get(paramName);
+	}
+
+	@Override
+	public String[] getPathSegments() {
+		String[] segs = virtualPage.split("/");
+		return segs;
 	}
 
 }
