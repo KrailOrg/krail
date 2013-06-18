@@ -1,6 +1,7 @@
 package fixture;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -9,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
+import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -31,28 +33,33 @@ import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.ClientConnector;
+import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 /**
- * Extend this class to test anything related to a Vaadin UI (or in the case of V7, as {@link ScopedUI}. Note that the
- * {@link UIScope} is not prepared until the {@link #uiSetup()} method is called, so subclasses must use providers if
- * they want to inject UIScoped objects - otherwise the injection happens before the UIScope context is ready.
+ * Extend this class to test anything related to a Vaadin UI (or in the case of
+ * V7, as {@link ScopedUI}. Note that the {@link UIScope} is not prepared until
+ * the {@link #uiSetup()} method is called, so subclasses must use providers if
+ * they want to inject UIScoped objects - otherwise the injection happens before
+ * the UIScope context is ready.
  * <p>
  * A number of providers are made available by the class
  * <p>
- * ConnectorIDAnswer added to enable the use of the mocked session. When the session was not used there was no problem
- * with having no connector ids, but the call to setConverterFactory in the UI.ini method changed that. Mocking the
- * session requires provision of unique Ids for all connectors
+ * ConnectorIDAnswer added to enable the use of the mocked session. When the
+ * session was not used there was no problem with having no connector ids, but
+ * the call to setConverterFactory in the UI.ini method changed that. Mocking
+ * the session requires provision of unique Ids for all connectors
  * 
  * @author David Sowerby 18 Jan 2013
  * 
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseModule.class })
-public abstract class UITestBase extends ShiroIntegrationTestBase implements V7ViewChangeListener {
+public abstract class UITestBase extends ShiroIntegrationTestBase implements
+		V7ViewChangeListener {
 	// this is static to ensure count remains unique across all method calls
 	private static int connectCount = 1;
 
@@ -74,6 +81,9 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 
 	@Inject
 	protected Injector injector;
+
+	@Mock
+	protected ErrorHandler errorHandler;
 
 	protected ScopedUI ui;
 
@@ -110,8 +120,9 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	}
 
 	/**
-	 * Use this method to create TestUI instances, rather than the UIProvider It simulates the creation of a new
-	 * CurrentInstance (which happens for each request)
+	 * Use this method to create TestUI instances, rather than the UIProvider It
+	 * simulates the creation of a new CurrentInstance (which happens for each
+	 * request)
 	 * 
 	 * @return
 	 */
@@ -120,8 +131,9 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	}
 
 	/**
-	 * Use this method to create BasicUI instances, rather than the UIProvider It simulates the creation of a new
-	 * CurrentInstance (which happens for each request)
+	 * Use this method to create BasicUI instances, rather than the UIProvider
+	 * It simulates the creation of a new CurrentInstance (which happens for
+	 * each request)
 	 * 
 	 * @return
 	 */
@@ -136,7 +148,10 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 		ui = (ScopedUI) getUIProvider().createInstance(clazz);
 		CurrentInstance.set(UI.class, ui);
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
-		when(mockedSession.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
+		when(
+				mockedSession.createConnectorId(Matchers
+						.any(ClientConnector.class))).thenAnswer(
+				new ConnectorIdAnswer());
 		ui.setSession(mockedSession);
 		ui.getV7Navigator().addViewChangeListener(this);
 		ui.doInit(mockedRequest, 23);
