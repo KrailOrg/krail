@@ -32,34 +32,38 @@ import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.i18n.I18NModule;
-import uk.co.q3c.v7.persist.orient.db.OrientDbModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 
-public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
+public abstract class BaseGuiceServletInjector extends
+		GuiceServletContextListener {
 	protected static Injector injector;
 
 	private final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
 
 	/**
-	 * Module instances for the base should be added in {@link #getModules()}. Module instance for the app using V7
-	 * should be added to {@link AppModules#appModules()}
+	 * Module instances for the base should be added in {@link #getModules()}.
+	 * Module instance for the app using V7 should be added to
+	 * {@link AppModules#appModules()}
 	 * 
 	 * @see com.google.inject.servlet.GuiceServletContextListener#getInjector()
 	 */
 	@Override
 	protected Injector getInjector() {
 
-		injector = Guice.createInjector(new IniModule(), new DefaultShiroWebModule(ctx.get()));
+		injector = Guice.createInjector(new IniModule(),
+				new DefaultShiroWebModule(ctx.get()));
 
 		injector = injector.createChildInjector(getModules());
 
-		// The SecurityManager binding is in ShiroWebModule, and therefore DefaultShiroWebModule. By default the binding
+		// The SecurityManager binding is in ShiroWebModule, and therefore
+		// DefaultShiroWebModule. By default the binding
 		// is to DefaultWebSecurityManager
-		SecurityManager securityManager = injector.getInstance(SecurityManager.class);
+		SecurityManager securityManager = injector
+				.getInstance(SecurityManager.class);
 		SecurityUtils.setSecurityManager(securityManager);
 
 		return injector;
@@ -81,7 +85,6 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		baseModules.add(new BaseModule());
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
-		baseModules.add(new OrientDbModule(ini));
 		baseModules.add(new I18NModule());
 		baseModules.add(new StandardViewModule());
 		addAppModules(baseModules);
@@ -92,7 +95,8 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
-		final ServletContext servletContext = servletContextEvent.getServletContext();
+		final ServletContext servletContext = servletContextEvent
+				.getServletContext();
 		ctx.set(servletContext);
 		super.contextInitialized(servletContextEvent);
 	}
