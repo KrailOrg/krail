@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.testng.collections.Lists;
 
 import edu.uci.ics.jung.graph.DelegateForest;
 import edu.uci.ics.jung.graph.Forest;
@@ -266,7 +265,7 @@ public class BasicForest<V> {
 	 * @return
 	 */
 	public List<V> getAllNodes() {
-		return Lists.newArrayList(graph.getVertices());
+		return new ArrayList<>(graph.getVertices());
 	}
 
 }
