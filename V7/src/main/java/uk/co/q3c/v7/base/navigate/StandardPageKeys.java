@@ -30,30 +30,31 @@ public enum StandardPageKeys implements I18NKeys<StandardPageLabels> {
 	enableAccount // the page to go to for the user to request that their account is enabled
 	;
 
-	private static String pageDefault(StandardPageKeys key) {
-		switch (key) {
-		case publicHome:
-			return "public/home";
-		case secureHome:
-			return "secure/home";
-		case login:
-			return "public/login";
-		case logout:
-			return "public/logout";
-		case resetAccount:
-			return "public/reset-account";
-		case unlockAccount:
-			return "public/unlock-account";
-		case refreshAccount:
-			return "public/refresh-account";
-		case requestAccount:
-			return "public/request-account";
-		case enableAccount:
-			return "public/enable-account";
-		default:
-			return "unknown";
-		}
-	}
+	/* Never used */
+//	private static String pageDefault(StandardPageKeys key) {
+//		switch (key) {
+//		case publicHome:
+//			return "public/home";
+//		case secureHome:
+//			return "secure/home";
+//		case login:
+//			return "public/login";
+//		case logout:
+//			return "public/logout";
+//		case resetAccount:
+//			return "public/reset-account";
+//		case unlockAccount:
+//			return "public/unlock-account";
+//		case refreshAccount:
+//			return "public/refresh-account";
+//		case requestAccount:
+//			return "public/request-account";
+//		case enableAccount:
+//			return "public/enable-account";
+//		default:
+//			return "unknown";
+//		}
+//	}
 
 	@Override
 	public StandardPageLabels getBundle(Locale locale) {
