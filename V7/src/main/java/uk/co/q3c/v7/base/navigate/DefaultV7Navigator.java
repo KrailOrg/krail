@@ -107,7 +107,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 *            view to activate
 	 * @param viewName
 	 *            (optional) name of the view or null not to change the navigation state
-	 * @param parameters
+	 * @param fragment
 	 *            parameters passed in the navigation state to the view
 	 */
 	protected void navigateTo(V7View view, String viewName, String fragment) {
