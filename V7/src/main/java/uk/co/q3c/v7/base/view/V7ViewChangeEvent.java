@@ -2,6 +2,9 @@ package uk.co.q3c.v7.base.view;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 
+/* the event could implement a suspend & resume mechanism to allow beforeViewChange to 
+ * handle the navigation without have to save the parameters to re-initiate the navigation */
+
 public class V7ViewChangeEvent {
 	private final V7View oldView;
 	private final V7View newView;
