@@ -52,7 +52,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	@Override
 	protected Injector getInjector() {
 
-		injector = Guice.createInjector(createIniModule(), createShiroWebModule(ctx.get()));
+		injector = Guice.createInjector(createIniModule());
 
 		injector = injector.createChildInjector(getModules());
 
@@ -89,15 +89,22 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		} else {
 			// module for Views must be in addAppModules()
 		}
-		
-		baseModules.add(createShiroVaadinModule());
-		baseModules.add(new ShiroAopModule());
-		baseModules.add(createBaseModule());
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
-		baseModules.add(new I18NModule());
-		baseModules.add(new StandardViewModule());
+		
 		addAppModules(baseModules);
+		
+		baseModules.add(createShiroWebModule(ctx.get()));
+		baseModules.add(createShiroVaadinModule());
+		baseModules.add(new ShiroAopModule());
+		
+		baseModules.add(createBaseModule());
+		
+		baseModules.add(new I18NModule());
+		
+		baseModules.add(new StandardViewModule());
+		
+		
 		return baseModules;
 	}
 	
@@ -109,7 +116,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 	
 	/**
-	 * Override this to provide your own ShiroModule or null to disable shiro
+	 * Override this to provide your own ShiroModule
 	 */
 	protected V7ShiroVaadinModule createShiroVaadinModule(){
 		return new V7ShiroVaadinModule();
