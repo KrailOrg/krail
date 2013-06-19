@@ -14,6 +14,14 @@ package uk.co.q3c.v7.base.shiro;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.ConcurrentAccessException;
+import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.ExpiredCredentialsException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 
 import uk.co.q3c.v7.base.navigate.StandardPageKeys;
@@ -33,42 +41,42 @@ public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
 	}
 
 	@Override
-	public void unknownAccount(LoginView loginView, UsernamePasswordToken token) {
+	public void unknownAccount(LoginView loginView, UsernamePasswordToken token, UnknownAccountException uae) {
 		loginView.setStatusMessage(INVALID_LOGIN);
 	}
 
 	@Override
-	public void incorrectCredentials(LoginView loginView, UsernamePasswordToken token) {
+	public void incorrectCredentials(LoginView loginView, UsernamePasswordToken token, IncorrectCredentialsException ice) {
 		loginView.setStatusMessage(INVALID_LOGIN);
 	}
 
 	@Override
-	public void expiredCredentials(LoginView loginView, UsernamePasswordToken token) {
+	public void expiredCredentials(LoginView loginView, UsernamePasswordToken token, ExpiredCredentialsException ece) {
 		navigator.navigateTo(StandardPageKeys.refreshAccount);
 	}
 
 	@Override
-	public void accountLocked(LoginView loginView, UsernamePasswordToken token) {
+	public void accountLocked(LoginView loginView, UsernamePasswordToken token,	LockedAccountException lae) {
 		navigator.navigateTo(StandardPageKeys.unlockAccount);
 	}
-
+	
 	@Override
-	public void excessiveAttempts(LoginView loginView, UsernamePasswordToken token) {
+	public void excessiveAttempts(LoginView loginView, UsernamePasswordToken token, ExcessiveAttemptsException excess) {
 		navigator.navigateTo(StandardPageKeys.resetAccount);
 	}
 
 	@Override
-	public void concurrentAccess(LoginView loginView, UsernamePasswordToken token) {
+	public void concurrentAccess(LoginView loginView, UsernamePasswordToken token, ConcurrentAccessException cae) {
 		loginView.setStatusMessage(CONCURRENT);
 	}
 
 	@Override
-	public void disabledAccount(LoginView loginView, UsernamePasswordToken token) {
+	public void disabledAccount(LoginView loginView, UsernamePasswordToken token, DisabledAccountException dae) {
 		navigator.navigateTo(StandardPageKeys.enableAccount);
 	}
 
 	@Override
-	public void genericException(LoginView loginView, UsernamePasswordToken token) {
+	public void genericException(LoginView loginView, UsernamePasswordToken token, AuthenticationException ae) {
 		loginView.setStatusMessage(GENERIC);
 	}
 

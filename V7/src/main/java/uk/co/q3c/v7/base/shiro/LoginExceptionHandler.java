@@ -14,10 +14,13 @@ package uk.co.q3c.v7.base.shiro;
 
 import javax.security.auth.login.AccountLockedException;
 
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ConcurrentAccessException;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.ExpiredCredentialsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 
@@ -36,16 +39,18 @@ public interface LoginExceptionHandler {
 	 * 
 	 * @param loginView
 	 * @param token
+	 * @param uae 
 	 */
-	void unknownAccount(LoginView loginView, UsernamePasswordToken token);
+	void unknownAccount(LoginView loginView, UsernamePasswordToken token, UnknownAccountException uae);
 
 	/**
 	 * Response to {@link IncorrectCredentialsException}. See the javadoc of the exception
 	 * 
 	 * @param loginView
 	 * @param token
+	 * @param ice 
 	 */
-	void incorrectCredentials(LoginView loginView, UsernamePasswordToken token);
+	void incorrectCredentials(LoginView loginView, UsernamePasswordToken token, IncorrectCredentialsException ice);
 
 	/**
 	 * Response to {@link ExpiredCredentialsException}. See the javadoc of the exception. Typically, the implementation
@@ -53,8 +58,9 @@ public interface LoginExceptionHandler {
 	 * 
 	 * @param loginView
 	 * @param token
+	 * @param ece 
 	 */
-	void expiredCredentials(LoginView loginView, UsernamePasswordToken token);
+	void expiredCredentials(LoginView loginView, UsernamePasswordToken token, ExpiredCredentialsException ece);
 
 	/**
 	 * Response to {@link AccountLockedException}. See the javadoc of the exception. Typically, the implementation of
@@ -63,8 +69,9 @@ public interface LoginExceptionHandler {
 	 * 
 	 * @param loginView
 	 * @param token
+	 * @param lae 
 	 */
-	void accountLocked(LoginView loginView, UsernamePasswordToken token);
+	void accountLocked(LoginView loginView, UsernamePasswordToken token, LockedAccountException lae);
 
 	/**
 	 * Response to an {@link ExcessiveAttemptsException}, which occurs when a system is configured to raise an exception
@@ -75,16 +82,18 @@ public interface LoginExceptionHandler {
 	 * 
 	 * @param loginView
 	 * @param token
+	 * @param excess 
 	 */
-	void excessiveAttempts(LoginView loginView, UsernamePasswordToken token);
+	void excessiveAttempts(LoginView loginView, UsernamePasswordToken token, ExcessiveAttemptsException excess);
 
 	/**
 	 * Response to {@link ConcurrentAccessException}. See the javadoc of the exception
 	 * 
 	 * @param loginView
 	 * @param token
+	 * @param cae 
 	 */
-	void concurrentAccess(LoginView loginView, UsernamePasswordToken token);
+	void concurrentAccess(LoginView loginView, UsernamePasswordToken token, ConcurrentAccessException cae);
 
 	/**
 	 * Response to {@link DisabledAcoountException}. See the javadoc of the exception. Typically, the implementation of
@@ -93,8 +102,9 @@ public interface LoginExceptionHandler {
 	 * 
 	 * @param loginView
 	 * @param token
+	 * @param dae 
 	 */
-	void disabledAccount(LoginView loginView, UsernamePasswordToken token);
+	void disabledAccount(LoginView loginView, UsernamePasswordToken token, DisabledAccountException dae);
 
 	/**
 	 * Response to {@link AuthenticationException}. See the javadoc of the exception. Typically, the implementation of
@@ -103,7 +113,8 @@ public interface LoginExceptionHandler {
 	 * 
 	 * @param loginView
 	 * @param token
+	 * @param ae 
 	 */
-	void genericException(LoginView loginView, UsernamePasswordToken token);
+	void genericException(LoginView loginView, UsernamePasswordToken token, AuthenticationException ae);
 
 }

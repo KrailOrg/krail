@@ -44,7 +44,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// given
 		token = new UsernamePasswordToken("fred", "password");
 		// when
-		handler.accountLocked(loginView, token);
+		handler.accountLocked(loginView, token, null); //right?
 		// then
 		verify(navigator).navigateTo(StandardPageKeys.unlockAccount);
 
@@ -55,7 +55,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// given
 		token = new UsernamePasswordToken("fred", "password");
 		// when
-		handler.unknownAccount(loginView, token);
+		handler.unknownAccount(loginView, token, null);
 		// then
 		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.INVALID_LOGIN);
 
@@ -66,7 +66,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// given
 		token = new UsernamePasswordToken("fred", "password");
 		// when
-		handler.concurrentAccess(loginView, token);
+		handler.concurrentAccess(loginView, token, null);
 		// then
 		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.CONCURRENT);
 
@@ -77,7 +77,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// given
 		token = new UsernamePasswordToken("fred", "password");
 		// when
-		handler.disabledAccount(loginView, token);
+		handler.disabledAccount(loginView, token, null);
 		// then
 		verify(navigator).navigateTo(StandardPageKeys.enableAccount);
 	}
@@ -87,7 +87,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// given
 		token = new UsernamePasswordToken("fred", "password");
 		// when
-		handler.excessiveAttempts(loginView, token);
+		handler.excessiveAttempts(loginView, token, null);
 		// then
 		verify(navigator).navigateTo(StandardPageKeys.resetAccount);
 	}
@@ -97,7 +97,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// given
 		token = new UsernamePasswordToken("fred", "password");
 		// when
-		handler.expiredCredentials(loginView, token);
+		handler.expiredCredentials(loginView, token, null);
 		// then
 		verify(navigator).navigateTo(StandardPageKeys.refreshAccount);
 	}
@@ -107,7 +107,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// given
 		token = new UsernamePasswordToken("fred", "password");
 		// when
-		handler.incorrectCredentials(loginView, token);
+		handler.incorrectCredentials(loginView, token, null);
 		// then
 		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.INVALID_LOGIN);
 	}
