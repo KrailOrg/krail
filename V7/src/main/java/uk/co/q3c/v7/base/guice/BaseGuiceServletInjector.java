@@ -104,7 +104,7 @@ public abstract class BaseGuiceServletInjector extends
 		
 		baseModules.add(new I18NModule());
 		
-		baseModules.add(new StandardViewModule());
+		baseModules.add(createViewModule());
 
 		addAppModules(baseModules, ini);
 		return baseModules;
@@ -122,6 +122,13 @@ public abstract class BaseGuiceServletInjector extends
 	 */
 	protected V7ShiroVaadinModule createShiroVaadinModule(){
 		return new V7ShiroVaadinModule();
+	}
+	
+	/**
+	 * Override this to provide your own ViewModule
+	 */
+	protected StandardViewModule createViewModule(){
+		return new StandardViewModule();
 	}
 
 	protected abstract void addAppModules(List<Module> baseModules, BaseIni ini);
