@@ -96,8 +96,6 @@ public abstract class BaseGuiceServletInjector extends
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
 		
-		addAppModules(baseModules);
-		
 		baseModules.add(createShiroWebModule(ctx.get()));
 		baseModules.add(createShiroVaadinModule());
 		baseModules.add(new ShiroAopModule());
@@ -107,8 +105,8 @@ public abstract class BaseGuiceServletInjector extends
 		baseModules.add(new I18NModule());
 		
 		baseModules.add(new StandardViewModule());
-		
-		
+
+		addAppModules(baseModules, ini);
 		return baseModules;
 	}
 	
@@ -126,7 +124,7 @@ public abstract class BaseGuiceServletInjector extends
 		return new V7ShiroVaadinModule();
 	}
 
-	protected abstract void addAppModules(List<Module> baseModules);
+	protected abstract void addAppModules(List<Module> baseModules, BaseIni ini);
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
