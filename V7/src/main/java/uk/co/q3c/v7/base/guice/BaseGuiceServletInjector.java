@@ -38,14 +38,16 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 
-public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
+public abstract class BaseGuiceServletInjector extends
+		GuiceServletContextListener {
 	protected static Injector injector;
 
 	private final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
 
 	/**
-	 * Module instances for the base should be added in {@link #getModules()}. Module instance for the app using V7
-	 * should be added to {@link AppModules#appModules()}
+	 * Module instances for the base should be added in {@link #getModules()}.
+	 * Module instance for the app using V7 should be added to
+	 * {@link AppModules#appModules()}
 	 * 
 	 * @see com.google.inject.servlet.GuiceServletContextListener#getInjector()
 	 */
@@ -56,9 +58,11 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		injector = injector.createChildInjector(getModules());
 
-		// The SecurityManager binding is in ShiroWebModule, and therefore DefaultShiroWebModule. By default the binding
+		// The SecurityManager binding is in ShiroWebModule, and therefore
+		// DefaultShiroWebModule. By default the binding
 		// is to DefaultWebSecurityManager
-		SecurityManager securityManager = injector.getInstance(SecurityManager.class);
+		SecurityManager securityManager = injector
+				.getInstance(SecurityManager.class);
 		SecurityUtils.setSecurityManager(securityManager);
 
 		return injector;
@@ -126,7 +130,8 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
-		final ServletContext servletContext = servletContextEvent.getServletContext();
+		final ServletContext servletContext = servletContextEvent
+				.getServletContext();
 		ctx.set(servletContext);
 		super.contextInitialized(servletContextEvent);
 	}
