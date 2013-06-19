@@ -87,11 +87,11 @@ public abstract class BaseGuiceServletInjector extends
 		baseModules.add(new UIScopeModule());
 		baseModules.add(new I18NModule());
 		baseModules.add(new StandardViewModule());
-		addAppModules(baseModules);
+		addAppModules(baseModules, ini);
 		return baseModules;
 	}
 
-	protected abstract void addAppModules(List<Module> baseModules);
+	protected abstract void addAppModules(List<Module> baseModules, V7Ini ini);
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {

@@ -14,6 +14,8 @@ package uk.co.q3c.v7.base.guice;
 
 import java.util.List;
 
+import uk.co.q3c.v7.base.config.V7Ini;
+
 import com.google.inject.Module;
 
 import fixture.TestUIModule;
@@ -21,7 +23,7 @@ import fixture.TestUIModule;
 public class TestGuiceServletInjector extends BaseGuiceServletInjector {
 
 	@Override
-	protected void addAppModules(List<Module> baseModules) {
+	protected void addAppModules(List<Module> baseModules, V7Ini ini) {
 		baseModules.add(new TestUIModule());
 	}
 
