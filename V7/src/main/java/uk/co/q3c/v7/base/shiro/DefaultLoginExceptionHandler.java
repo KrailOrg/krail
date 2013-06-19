@@ -23,8 +23,9 @@ import uk.co.q3c.v7.base.view.LoginView;
 public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
 	// TODO i18N
 	private final V7Navigator navigator;
-	public static final String invalidLogin = "That username or password was not recognised";
-	public static final String concurrent = "This account is already in use.  You must log out of that session before you can log in again.";
+	public static final String INVALID_LOGIN = "That username or password was not recognised";
+	public static final String CONCURRENT = "This account is already in use.  You must log out of that session before you can log in again.";
+	public static final String GENERIC = "An unexpected error has occurred.";
 
 	@Inject
 	protected DefaultLoginExceptionHandler(V7Navigator navigator) {
@@ -33,12 +34,12 @@ public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
 
 	@Override
 	public void unknownAccount(LoginView loginView, UsernamePasswordToken token) {
-		loginView.setStatusMessage(invalidLogin);
+		loginView.setStatusMessage(INVALID_LOGIN);
 	}
 
 	@Override
 	public void incorrectCredentials(LoginView loginView, UsernamePasswordToken token) {
-		loginView.setStatusMessage(invalidLogin);
+		loginView.setStatusMessage(INVALID_LOGIN);
 	}
 
 	@Override
@@ -58,12 +59,17 @@ public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
 
 	@Override
 	public void concurrentAccess(LoginView loginView, UsernamePasswordToken token) {
-		loginView.setStatusMessage(concurrent);
+		loginView.setStatusMessage(CONCURRENT);
 	}
 
 	@Override
 	public void disabledAccount(LoginView loginView, UsernamePasswordToken token) {
 		navigator.navigateTo(StandardPageKeys.enableAccount);
+	}
+
+	@Override
+	public void genericException(LoginView loginView, UsernamePasswordToken token) {
+		loginView.setStatusMessage(GENERIC);
 	}
 
 }

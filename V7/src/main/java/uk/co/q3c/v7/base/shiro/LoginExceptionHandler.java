@@ -96,4 +96,14 @@ public interface LoginExceptionHandler {
 	 */
 	void disabledAccount(LoginView loginView, UsernamePasswordToken token);
 
+	/**
+	 * Response to {@link AuthenticationException}. See the javadoc of the exception. Typically, the implementation of
+	 * this method will let the user know that an unexpected error has happened, although
+	 * exact behaviour is up to the implementation.
+	 * 
+	 * @param loginView
+	 * @param token
+	 */
+	void genericException(LoginView loginView, UsernamePasswordToken token);
+
 }

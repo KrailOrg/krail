@@ -109,7 +109,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		} catch (ConcurrentAccessException cae) {
 			loginExceptionHandler.concurrentAccess(this, token);
 		} catch (AuthenticationException ae) {
-			loginExceptionHandler.disabledAccount(this, token);
+			loginExceptionHandler.genericException(this, token);
 		}
 		// unexpected condition - error?
 		// an exception would be raised if login failed

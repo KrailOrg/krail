@@ -58,7 +58,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.unknownAccount(loginView, token);
 		// then
-		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.invalidLogin);
+		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.INVALID_LOGIN);
 
 	}
 
@@ -69,7 +69,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.concurrentAccess(loginView, token);
 		// then
-		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.concurrent);
+		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.CONCURRENT);
 
 	}
 
@@ -110,6 +110,6 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.incorrectCredentials(loginView, token);
 		// then
-		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.invalidLogin);
+		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.INVALID_LOGIN);
 	}
 }
