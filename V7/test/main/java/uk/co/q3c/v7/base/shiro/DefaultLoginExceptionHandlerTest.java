@@ -16,7 +16,6 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
 public class DefaultLoginExceptionHandlerTest {

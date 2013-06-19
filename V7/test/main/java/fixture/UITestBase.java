@@ -15,7 +15,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import uk.co.q3c.v7.base.config.BaseIni;
-import uk.co.q3c.v7.base.config.AbstractIniProvider;
 import uk.co.q3c.v7.base.config.BaseIniProvider;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;

@@ -11,7 +11,6 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 
 import com.vaadin.ui.Component;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public abstract class VerticalViewBase extends VerticalLayout implements V7View {
