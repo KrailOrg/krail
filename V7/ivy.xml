@@ -80,6 +80,10 @@
 		<dependency org="com.google.guava" name="guava" rev="13.0.1" />
 		<!-- the easiest way to all the Jung parts -->
 		<dependency org="net.sf.jung" name="jung-samples" rev="2.0.1" />
+		<dependency org="org.apache.commons" name="commons-lang3" rev="3.1"/>
+		<dependency org="commons-io" name="commons-io" rev="2.4"/>
+            
+            
 
 
 

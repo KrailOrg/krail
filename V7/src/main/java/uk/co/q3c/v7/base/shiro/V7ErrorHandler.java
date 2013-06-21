@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.shiro;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 
@@ -35,7 +35,8 @@ public class V7ErrorHandler extends DefaultErrorHandler {
 	private final UnauthorizedExceptionHandler authorisationHandler;
 
 	@Inject
-	protected V7ErrorHandler(UnauthenticatedExceptionHandler authenticationHandler,
+	protected V7ErrorHandler(
+			UnauthenticatedExceptionHandler authenticationHandler,
 			UnauthorizedExceptionHandler authorisationHandler) {
 		super();
 		this.authenticationHandler = authenticationHandler;
@@ -47,14 +48,16 @@ public class V7ErrorHandler extends DefaultErrorHandler {
 		Throwable originalError = event.getThrowable();
 
 		// handle an unauthorised access attempt
-		int unauthorised = ExceptionUtils.indexOfThrowable(originalError, UnauthorizedException.class);
+		int unauthorised = ExceptionUtils.indexOfThrowable(originalError,
+				UnauthorizedException.class);
 		if (unauthorised >= 0) {
 			authorisationHandler.invoke();
 			return;
 		}
 
 		// handle an unauthenticated access attempt
-		int unauthenticated = ExceptionUtils.indexOfThrowable(originalError, UnauthenticatedException.class);
+		int unauthenticated = ExceptionUtils.indexOfThrowable(originalError,
+				UnauthenticatedException.class);
 		if (unauthenticated >= 0) {
 			authenticationHandler.invoke();
 			return;

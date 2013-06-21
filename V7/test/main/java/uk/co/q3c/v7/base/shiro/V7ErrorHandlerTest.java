@@ -18,7 +18,7 @@ import mockit.Mocked;
 import mockit.Tested;
 import mockit.integration.junit4.JMockit;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.junit.Test;
@@ -49,7 +49,8 @@ public class V7ErrorHandlerTest {
 				Throwable exception = new UnauthorizedException();
 				event.getThrowable();
 				returns(exception);
-				ExceptionUtils.indexOfThrowable(exception, UnauthorizedException.class);
+				ExceptionUtils.indexOfThrowable(exception,
+						UnauthorizedException.class);
 				authorisationHandler.invoke();
 
 			}
@@ -70,10 +71,12 @@ public class V7ErrorHandlerTest {
 				Throwable exception = new UnauthenticatedException();
 				event.getThrowable();
 				returns(exception);
-				ExceptionUtils.indexOfThrowable(exception, UnauthorizedException.class);
+				ExceptionUtils.indexOfThrowable(exception,
+						UnauthorizedException.class);
 				result = -1;
 
-				ExceptionUtils.indexOfThrowable(exception, UnauthenticatedException.class);
+				ExceptionUtils.indexOfThrowable(exception,
+						UnauthenticatedException.class);
 				authenticationHandler.invoke();
 
 			}
@@ -93,10 +96,12 @@ public class V7ErrorHandlerTest {
 				Throwable exception = new RuntimeException();
 				event.getThrowable();
 				returns(exception);
-				ExceptionUtils.indexOfThrowable(exception, UnauthorizedException.class);
+				ExceptionUtils.indexOfThrowable(exception,
+						UnauthorizedException.class);
 				result = -1;
 
-				ExceptionUtils.indexOfThrowable(exception, UnauthenticatedException.class);
+				ExceptionUtils.indexOfThrowable(exception,
+						UnauthenticatedException.class);
 				result = -1;
 
 				// default handler
