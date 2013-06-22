@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
-import static org.fest.assertions.Assertions.*;
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +30,12 @@ public class SitemapTest {
 
 		// given
 		Sitemap map = new Sitemap();
-		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, TestLabelKeys.Home);
-		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, TestLabelKeys.Home);
-		SitemapNode child = new SitemapNode("login", LoginView.class, TestLabelKeys.Login);
+		SitemapNode grandparent = new SitemapNode("public",
+				PublicHomeView.class, TestLabelKeys.Home);
+		SitemapNode parent = new SitemapNode("home", PublicHomeView.class,
+				TestLabelKeys.Home);
+		SitemapNode child = new SitemapNode("login", LoginView.class,
+				TestLabelKeys.Login);
 		map.addChild(grandparent, parent);
 		map.addChild(parent, child);
 		// when
@@ -64,7 +67,8 @@ public class SitemapTest {
 		assertThat(node.getUrlSegment()).isEqualTo("account");
 		assertThat(map.getNodeCount()).isEqualTo(3);
 		assertThat(map.getParent(node).getUrlSegment()).isEqualTo("home");
-		assertThat(map.getParent(map.getParent(node)).getUrlSegment()).isEqualTo("public");
+		assertThat(map.getParent(map.getParent(node)).getUrlSegment())
+				.isEqualTo("public");
 
 		// when
 		node = map.append("public/home/transfer");
@@ -74,7 +78,8 @@ public class SitemapTest {
 		assertThat(node.getUrlSegment()).isEqualTo("transfer");
 		assertThat(map.getNodeCount()).isEqualTo(4);
 		assertThat(map.getParent(node).getUrlSegment()).isEqualTo("home");
-		assertThat(map.getParent(map.getParent(node)).getUrlSegment()).isEqualTo("public");
+		assertThat(map.getParent(map.getParent(node)).getUrlSegment())
+				.isEqualTo("public");
 
 		// when
 		node = map.append("");
@@ -145,4 +150,24 @@ public class SitemapTest {
 		assertThat(result.get(1).getUrlSegment()).isEqualTo("home");
 
 	}
+
+	@Test
+	public void getRedirectFor() {
+
+		// given
+		// given
+		Sitemap map = new Sitemap();
+		map.append("public/home/view1");
+		map.append("public/home/view2");
+		map.append("secure/home/wiggly");
+		map.getRedirects().put("home", "public/home");
+		// when redirect exists
+		String page = map.getRedirectFor("home");
+		// then
+		assertThat(page).isEqualTo("public/home");
+		// when redirect does not exist
+		page = map.getRedirectFor("wiggly");
+		assertThat(page).isEqualTo("wiggly");
+	}
+
 }
