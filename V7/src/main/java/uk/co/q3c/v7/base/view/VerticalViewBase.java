@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 
 import com.vaadin.ui.Component;
@@ -14,17 +15,19 @@ import com.vaadin.ui.VerticalLayout;
 
 public abstract class VerticalViewBase extends VerticalLayout implements V7View {
 	private static Logger log = LoggerFactory.getLogger(VerticalViewBase.class);
+	private final V7Navigator navigator;
 
 	@Inject
-	protected VerticalViewBase() {
+	protected VerticalViewBase(V7Navigator navigator) {
 		super();
+		this.navigator = navigator;
 	}
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {
-		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri: "
-				+ event.getNavigator().getNavigationState());
-		List<String> params = event.getNavigator().geNavigationParams();
+		log.debug("entered view: " + this.getClass().getSimpleName()
+				+ " with uri: " + navigator.getNavigationState());
+		List<String> params = navigator.getNavigationParams();
 		processParams(params);
 	}
 
@@ -34,8 +37,9 @@ public abstract class VerticalViewBase extends VerticalLayout implements V7View 
 	 * @return
 	 */
 
-	public ScopedUI getScopedUI() {
-		return (ScopedUI) getUI();
+	@Override
+	public ScopedUI getUI() {
+		return (ScopedUI) super.getUI();
 	}
 
 	protected abstract void processParams(List<String> params);
@@ -45,4 +49,7 @@ public abstract class VerticalViewBase extends VerticalLayout implements V7View 
 		return this;
 	}
 
+	public V7Navigator getNavigator() {
+		return navigator;
+	}
 }

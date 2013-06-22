@@ -216,7 +216,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	@Override
-	public List<String> geNavigationParams() {
+	public List<String> getNavigationParams() {
 		return uriHandler.parameterList();
 	}
 
