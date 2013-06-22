@@ -13,7 +13,8 @@ public class DefaultErrorView extends VerticalViewBase implements ErrorView {
 	private final Label viewLabel;
 
 	@Inject
-	protected DefaultErrorView() {
+	protected DefaultErrorView(V7Navigator navigator) {
+		super(navigator);
 		viewLabel = new Label();
 		getViewLabel().addStyleName("warning");
 

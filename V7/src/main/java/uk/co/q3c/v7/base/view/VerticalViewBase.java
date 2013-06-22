@@ -15,17 +15,19 @@ import com.vaadin.ui.VerticalLayout;
 
 public abstract class VerticalViewBase extends VerticalLayout implements V7View {
 	private static Logger log = LoggerFactory.getLogger(VerticalViewBase.class);
+	private final V7Navigator navigator;
 
 	@Inject
-	protected VerticalViewBase() {
+	protected VerticalViewBase(V7Navigator navigator) {
 		super();
+		this.navigator = navigator;
 	}
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {
 		log.debug("entered view: " + this.getClass().getSimpleName()
-				+ " with uri: " + event.getNavigator().getNavigationState());
-		List<String> params = event.getNavigator().getNavigationParams();
+				+ " with uri: " + navigator.getNavigationState());
+		List<String> params = navigator.getNavigationParams();
 		processParams(params);
 	}
 
@@ -57,6 +59,6 @@ public abstract class VerticalViewBase extends VerticalLayout implements V7View 
 	}
 
 	public V7Navigator getNavigator() {
-		return getUI().getV7Navigator();
+		return navigator;
 	}
 }

@@ -13,7 +13,8 @@ public class AccountRequestView extends VerticalViewBase {
 	private final Label infoLabel;
 
 	@Inject
-	protected AccountRequestView() {
+	protected AccountRequestView(V7Navigator navigator) {
+		super(navigator);
 		infoLabel = new Label("Account request");
 		addComponent(infoLabel);
 	}
