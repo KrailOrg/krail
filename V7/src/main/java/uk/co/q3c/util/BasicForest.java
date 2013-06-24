@@ -277,7 +277,7 @@ public class BasicForest<V> {
 	 * @return
 	 */
 	public List<V> getAllNodes() {
-		return new ArrayList<>(graph.getVertices());
+		return new ArrayList<V>(graph.getVertices());
 	}
 
 }

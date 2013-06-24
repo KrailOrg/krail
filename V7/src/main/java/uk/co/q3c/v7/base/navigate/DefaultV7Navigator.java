@@ -29,7 +29,8 @@ import com.vaadin.util.CurrentInstance;
 @UIScoped
 public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
-	private static Logger log = LoggerFactory.getLogger(DefaultV7Navigator.class);
+	private static Logger log = LoggerFactory
+			.getLogger(DefaultV7Navigator.class);
 	private String previousViewName = null;
 	private V7View previousView = null;
 	private String currentViewName = null;
@@ -43,8 +44,10 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	private final Sitemap sitemap;
 
 	@Inject
-	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler, Sitemap sitemap,
-			Map<String, Provider<V7View>> viewProMap, V7SecurityManager securityManager) {
+	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro,
+			URIFragmentHandler uriHandler, Sitemap sitemap,
+			Map<String, Provider<V7View>> viewProMap,
+			V7SecurityManager securityManager) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
@@ -56,7 +59,9 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	@Override
 	public void navigateTo(String fragment) {
 		if (sitemap.hasErrors()) {
-			throw new SiteMapException("Unable to navigate, site map has errors\n" + sitemap.getReport());
+			throw new SiteMapException(
+					"Unable to navigate, site map has errors\n"
+							+ sitemap.getReport());
 		}
 
 		// fragment needs to be revised if redirected
@@ -81,8 +86,9 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	/**
-	 * Checks {@code fragment} to see whether it has been redirected. If it has the full fragment is returned, but
-	 * modified for the redirected page. If not, the {@code fragment} is returned unchanged.
+	 * Checks {@code fragment} to see whether it has been redirected. If it has
+	 * the full fragment is returned, but modified for the redirected page. If
+	 * not, the {@code fragment} is returned unchanged.
 	 * 
 	 * @param fragment
 	 * @return
@@ -91,7 +97,8 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		uriHandler.setFragment(fragment);
 		String page = uriHandler.virtualPage();
 		String redirection = sitemap.getRedirectFor(page);
-		if (redirection == null) {
+		// if no redirect found, page is returned
+		if (redirection == page) {
 			return fragment;
 		} else {
 			String newFragment = fragment.replaceFirst(page, redirection);
@@ -101,17 +108,23 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	/**
-	 * Internal method activating a view, setting its parameters and calling listeners.
+	 * Internal method activating a view, setting its parameters and calling
+	 * listeners.
 	 * 
 	 * @param view
 	 *            view to activate
 	 * @param viewName
-	 *            (optional) name of the view or null not to change the navigation state
+	 *            (optional) name of the view or null not to change the
+	 *            navigation state
 	 * @param fragment
-	 *            parameters passed in the navigation state to the view
+	 *            parameters passed in the navigation state to the view. In this
+	 *            context, the parameters are all the parameters, which include
+	 *            the part which forms the pseudo URI. For example,
+	 *            secure/transfers/id=23
 	 */
 	protected void navigateTo(V7View view, String viewName, String fragment) {
-		V7ViewChangeEvent event = new V7ViewChangeEvent(this, currentView, view, viewName, fragment);
+		V7ViewChangeEvent event = new V7ViewChangeEvent(this, currentView,
+				view, viewName, fragment);
 		if (!fireBeforeViewChange(event)) {
 			return;
 		}
@@ -128,15 +141,18 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	/**
 	 * Fires an event before an imminent view change.
 	 * <p>
-	 * Listeners are called in registration order. If any listener returns <code>false</code>, the rest of the listeners
-	 * are not called and the view change is blocked.
+	 * Listeners are called in registration order. If any listener returns
+	 * <code>false</code>, the rest of the listeners are not called and the view
+	 * change is blocked.
 	 * <p>
-	 * The view change listeners may also e.g. open a warning or question dialog and save the parameters to re-initiate
-	 * the navigation operation upon user action.
+	 * The view change listeners may also e.g. open a warning or question dialog
+	 * and save the parameters to re-initiate the navigation operation upon user
+	 * action.
 	 * 
 	 * @param event
 	 *            view change event (not null, view change not yet performed)
-	 * @return true if the view change should be allowed, false to silently block the navigation operation
+	 * @return true if the view change should be allowed, false to silently
+	 *         block the navigation operation
 	 */
 	protected boolean fireBeforeViewChange(V7ViewChangeEvent event) {
 		for (V7ViewChangeListener l : listeners) {
@@ -165,8 +181,10 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 * Listen to changes of the active view.
 	 * <p>
 	 * Registered listeners are invoked in registration order before (
-	 * {@link ViewChangeListener#beforeViewChange(ViewChangeEvent) beforeViewChange()}) and after (
-	 * {@link ViewChangeListener#afterViewChange(ViewChangeEvent) afterViewChange()}) a view change occurs.
+	 * {@link ViewChangeListener#beforeViewChange(ViewChangeEvent)
+	 * beforeViewChange()}) and after (
+	 * {@link ViewChangeListener#afterViewChange(ViewChangeEvent)
+	 * afterViewChange()}) a view change occurs.
 	 * 
 	 * @param listener
 	 *            Listener to invoke during a view change.
@@ -198,7 +216,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	@Override
-	public List<String> geNavigationParams() {
+	public List<String> getNavigationParams() {
 		return uriHandler.parameterList();
 	}
 
@@ -212,8 +230,9 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	/**
-	 * When a user has successfully logged in, they are routed back to the page they were on before going to the login
-	 * page. If they have gone straight to the login page (maybe they bookmarked it), they will be routed to the
+	 * When a user has successfully logged in, they are routed back to the page
+	 * they were on before going to the login page. If they have gone straight
+	 * to the login page (maybe they bookmarked it), they will be routed to the
 	 * 'authenticated landing page' instead (see
 	 * 
 	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#loginSuccessful()
@@ -236,7 +255,8 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		return previousView;
 	}
 
-	protected void setCurrentView(V7View newView, String viewName, String fragment) {
+	protected void setCurrentView(V7View newView, String viewName,
+			String fragment) {
 		previousView = currentView;
 		previousViewName = currentViewName;
 		previousFragment = currentFragment;
@@ -264,7 +284,8 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	public void navigateTo(StandardPageKeys pageKey) {
 		String page = sitemap.standardPageURI(pageKey);
 		if (page == null) {
-			throw new SiteMapException(pageKey + " cannot have a null path\n" + sitemap.getReport());
+			throw new SiteMapException(pageKey + " cannot have a null path\n"
+					+ sitemap.getReport());
 		}
 		navigateTo(page);
 	}

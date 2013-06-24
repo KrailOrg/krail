@@ -23,18 +23,23 @@ import org.apache.commons.lang3.StringUtils;
 import uk.co.q3c.util.BasicForest;
 
 /**
- * Encapsulates the site layout. Individual "virtual pages" are represented by {@link SitemapNode} instances. This map
- * is usually built by an implementation of {@link SitemapProvider}, and is one of the fundamental building blocks of
+ * Encapsulates the site layout. Individual "virtual pages" are represented by
+ * {@link SitemapNode} instances. This map is usually built by an implementation
+ * of {@link SitemapProvider}, and is one of the fundamental building blocks of
  * the application, as it maps out pages, URLs and Views.
  * <p>
  * <p>
- * Because of it use as such a fundamental building block, an instance of this class has to be created early in the
- * application start up process. It is better therefore not to introduce dependencies into this class, otherwise the
- * design, and ordering of construction, of Guice modules starts to get complicated.
+ * Because of it use as such a fundamental building block, an instance of this
+ * class has to be created early in the application start up process. It is
+ * better therefore not to introduce dependencies into this class, otherwise the
+ * design, and ordering of construction, of Guice modules starts to get
+ * complicated.
  * <p>
  * <p>
- * A potential solution for dependencies can be seen in {@link SitemapURIConverter}, which acts as an intermediary
- * between this class and {@link URIFragmentHandler} implementations, thus avoiding the creation of dependencies here.
+ * A potential solution for dependencies can be seen in
+ * {@link SitemapURIConverter}, which acts as an intermediary between this class
+ * and {@link URIFragmentHandler} implementations, thus avoiding the creation of
+ * dependencies here.
  * <p>
  * <p>
  * Uses LinkedHashMap to hold the site map itself, to retain insertion order<br>
@@ -67,10 +72,12 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	}
 
 	/**
-	 * creates a SiteMapNode and appends it to the map according to the {@code url} given, then returns it. If a node
-	 * already exists at that location it is returned. If there are gaps in the structure, nodes are created to fill
-	 * them (the same idea as forcing directory creation on a file path). An empty (not null) url is allowed. This
-	 * represents the site base url without any further qualification.
+	 * creates a SiteMapNode and appends it to the map according to the
+	 * {@code url} given, then returns it. If a node already exists at that
+	 * location it is returned. If there are gaps in the structure, nodes are
+	 * created to fill them (the same idea as forcing directory creation on a
+	 * file path). An empty (not null) url is allowed. This represents the site
+	 * base url without any further qualification.
 	 * 
 	 * @param toUrl
 	 * @return
@@ -97,7 +104,8 @@ public class Sitemap extends BasicForest<SitemapNode> {
 		return node;
 	}
 
-	private SitemapNode findNodeBySegment(List<SitemapNode> nodes, String segment, boolean createIfAbsent) {
+	private SitemapNode findNodeBySegment(List<SitemapNode> nodes,
+			String segment, boolean createIfAbsent) {
 		SitemapNode foundNode = null;
 		for (SitemapNode node : nodes) {
 			if (node.getUrlSegment().equals(segment)) {
@@ -170,14 +178,18 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	}
 
 	/**
-	 * If the {@code page} has been redirected, return the page it has been redirected to, otherwise, just return
-	 * {@code page}
+	 * If the {@code page} has been redirected, return the page it has been
+	 * redirected to, otherwise, just return {@code page}
 	 * 
 	 * @param page
 	 * @return
 	 */
 	public String getRedirectFor(String page) {
-		return redirects.get(page);
+		String p = redirects.get(page);
+		if (p == null) {
+			return page;
+		}
+		return p;
 	}
 
 	public Map<String, String> getRedirects() {
@@ -185,17 +197,20 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	}
 
 	/**
-	 * Returns a list of {@link SitemapNode} matching the {@code segments} provided. If there is an incomplete match (a
-	 * segment cannot be found) then:
+	 * Returns a list of {@link SitemapNode} matching the {@code segments}
+	 * provided. If there is an incomplete match (a segment cannot be found)
+	 * then:
 	 * <ol>
-	 * <li>if {@code allowPartialPath} is true a list of nodes is returned correct to the longest path possible.
+	 * <li>if {@code allowPartialPath} is true a list of nodes is returned
+	 * correct to the longest path possible.
 	 * <li>if {@code allowPartialPath} is false an empty list is returned
 	 * 
 	 * @param segments
 	 * @return
 	 */
 
-	public List<SitemapNode> nodeChainForSegments(List<String> segments, boolean allowPartialPath) {
+	public List<SitemapNode> nodeChainForSegments(List<String> segments,
+			boolean allowPartialPath) {
 		List<SitemapNode> nodeChain = new ArrayList<>();
 		int i = 0;
 		String currentSegment = null;

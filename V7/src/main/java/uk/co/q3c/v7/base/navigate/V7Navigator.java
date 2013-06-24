@@ -32,7 +32,7 @@ public interface V7Navigator extends UriFragmentChangedListener {
 
 	String getNavigationState();
 
-	List<String> geNavigationParams();
+	List<String> getNavigationParams();
 
 	void addViewChangeListener(V7ViewChangeListener listener);
 

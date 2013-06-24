@@ -243,7 +243,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		// when
 		navigator.navigateTo("public/view2/id=1/age=2");
 		// then
-		assertThat(navigator.geNavigationParams()).containsOnly("id=1", "age=2");
+		assertThat(navigator.getNavigationParams()).containsOnly("id=1", "age=2");
 
 	}
 
