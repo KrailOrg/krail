@@ -24,8 +24,7 @@ import com.vaadin.ui.Panel;
 public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 
 	@Inject
-	protected DefaultLogoutView(V7Navigator navigator) {
-		super(navigator);
+	protected DefaultLogoutView() {
 	}
 
 	@Override
