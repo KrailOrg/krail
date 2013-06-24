@@ -75,13 +75,6 @@ public abstract class BaseGuiceServletInjector extends
 		return new BaseIniModule();
 	}
 	
-	/**
-	 * Override this to provide your own ShiroWebModule
-	 */
-	protected DefaultShiroWebModule createShiroWebModule(ServletContext ctx){
-		return new DefaultShiroWebModule(ctx);
-	}
-	
 	private List<Module> getModules() {
 		// ini load is handled by the provider
 		BaseIni ini = injector.getInstance(BaseIni.class);
@@ -108,6 +101,13 @@ public abstract class BaseGuiceServletInjector extends
 
 		addAppModules(baseModules, ini);
 		return baseModules;
+	}
+	
+	/**
+	 * Override this to provide your own ShiroWebModule
+	 */
+	protected DefaultShiroWebModule createShiroWebModule(ServletContext ctx){
+		return new DefaultShiroWebModule(ctx);
 	}
 	
 	/**
