@@ -16,7 +16,7 @@ import org.junit.Before;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
-import uk.co.q3c.v7.base.view.testviews.PublicHomeView;
+import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.i18n.TestLabelKeys;
 
 public class TestWithSitemap {

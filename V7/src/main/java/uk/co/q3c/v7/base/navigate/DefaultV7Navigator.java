@@ -242,7 +242,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		if (previousView != null) {
 			navigateTo(previousView, previousViewName, previousFragment);
 		} else {
-			navigateTo(StandardPageKeys.secureHome);
+			navigateTo(StandardPageKey.Secure_Home);
 		}
 	}
 
@@ -281,7 +281,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	@Override
-	public void navigateTo(StandardPageKeys pageKey) {
+	public void navigateTo(StandardPageKey pageKey) {
 		String page = sitemap.standardPageURI(pageKey);
 		if (page == null) {
 			throw new SiteMapException(pageKey + " cannot have a null path\n"

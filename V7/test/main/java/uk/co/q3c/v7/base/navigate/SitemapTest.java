@@ -20,7 +20,7 @@ import java.util.List;
 import org.junit.Test;
 
 import uk.co.q3c.v7.base.view.LoginView;
-import uk.co.q3c.v7.base.view.testviews.PublicHomeView;
+import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.i18n.TestLabelKeys;
 
 public class SitemapTest {
@@ -30,12 +30,9 @@ public class SitemapTest {
 
 		// given
 		Sitemap map = new Sitemap();
-		SitemapNode grandparent = new SitemapNode("public",
-				PublicHomeView.class, TestLabelKeys.Home);
-		SitemapNode parent = new SitemapNode("home", PublicHomeView.class,
-				TestLabelKeys.Home);
-		SitemapNode child = new SitemapNode("login", LoginView.class,
-				TestLabelKeys.Login);
+		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, TestLabelKeys.Home);
+		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, TestLabelKeys.Home);
+		SitemapNode child = new SitemapNode("login", LoginView.class, TestLabelKeys.Login);
 		map.addChild(grandparent, parent);
 		map.addChild(parent, child);
 		// when
@@ -67,8 +64,7 @@ public class SitemapTest {
 		assertThat(node.getUrlSegment()).isEqualTo("account");
 		assertThat(map.getNodeCount()).isEqualTo(3);
 		assertThat(map.getParent(node).getUrlSegment()).isEqualTo("home");
-		assertThat(map.getParent(map.getParent(node)).getUrlSegment())
-				.isEqualTo("public");
+		assertThat(map.getParent(map.getParent(node)).getUrlSegment()).isEqualTo("public");
 
 		// when
 		node = map.append("public/home/transfer");
@@ -78,8 +74,7 @@ public class SitemapTest {
 		assertThat(node.getUrlSegment()).isEqualTo("transfer");
 		assertThat(map.getNodeCount()).isEqualTo(4);
 		assertThat(map.getParent(node).getUrlSegment()).isEqualTo("home");
-		assertThat(map.getParent(map.getParent(node)).getUrlSegment())
-				.isEqualTo("public");
+		assertThat(map.getParent(map.getParent(node)).getUrlSegment()).isEqualTo("public");
 
 		// when
 		node = map.append("");

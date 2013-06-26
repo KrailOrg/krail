@@ -45,11 +45,11 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private static Logger log = LoggerFactory.getLogger(TextReaderSitemapProvider.class);
 
 	private enum SectionName {
-		options,
-		redirects,
-		viewPackages,
-		standardPages,
-		map;
+		options, redirects, viewPackages, standardPageMapping, map;
+	}
+
+	private enum ValidOption {
+		appendView, labelKeys, generatePublicHomePage, generateAuthenticationPages, generateRequestAccount, generateRequestAccountReset, systemAccountUri
 	}
 
 	private Sitemap sitemap;
@@ -58,11 +58,38 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private Map<SectionName, List<String>> sections;
 
 	private SectionName currentSection;
-	private String labelKeys;
+
 	@SuppressWarnings("rawtypes")
 	private Class<? extends Enum> labelKeysClass;
-
+	// options
 	private boolean appendView;
+	private String labelKeys;
+	private boolean generatePublicHomePage = true;
+
+	public boolean isGeneratePublicHomePage() {
+		return generatePublicHomePage;
+	}
+
+	public boolean isGenerateAuthenticationPages() {
+		return generateAuthenticationPages;
+	}
+
+	public boolean isGenerateRequestAccount() {
+		return generateRequestAccount;
+	}
+
+	public boolean isGenerateRequestAccountReset() {
+		return generateRequestAccountReset;
+	}
+
+	public String getSystemAccountUri() {
+		return systemAccountUri;
+	}
+
+	private boolean generateAuthenticationPages = true;
+	private boolean generateRequestAccount = true;
+	private boolean generateRequestAccountReset = true;
+	private String systemAccountUri = "public/system-account";
 
 	private Set<String> missingEnums;
 	private Set<String> invalidViewClasses;
@@ -74,6 +101,10 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private Set<String> viewlessURLs;
 	private Set<String> unrecognisedOptions;
 	private Set<String> redirectErrors;
+	private Set<String> syntaxErrors;
+
+	// messages to go in the report, for info only
+	private Set<String> infoMessages;
 
 	private StringBuilder report;
 	private DateTime startTime;
@@ -85,7 +116,6 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private boolean labelClassMissing = true;
 	private String labelClassName;
 
-	private String defaultAccountView;
 	private File sourceFile;
 
 	@Inject
@@ -106,6 +136,8 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		duplicateURLs = new HashSet<>();
 		unrecognisedOptions = new HashSet<>();
 		redirectErrors = new HashSet<>();
+		infoMessages = new HashSet<>();
+		syntaxErrors = new HashSet<>();
 
 		sitemap = new Sitemap();
 		sections = new HashMap<>();
@@ -136,7 +168,6 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 
 		} catch (Exception e) {
 			log.error("Unable to load site map ", e);
-			sitemap.error();
 			String report = (parsed) ? getReport().toString() : "failed to parse input, unable to generate report";
 			log.debug(report);
 		}
@@ -156,21 +187,69 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			processOptions();
 			processRedirects();
 			processMap();
-			processStandardPages();
+			// processStandardPages();
+			generateStandardPages();
 			validateRedirects();
 			checkLabelKeys();
+			checkViews();
+			sitemap.setErrors(errorSum());
 
 			log.info("Sitemap loaded successfully");
 
 		} else {
 			log.warn("The site map source is missing these sections: {}", missingSections());
 			log.error("Site map failed to process, see previous log warnings for details");
-			sitemap.error();
+			sitemap.setErrors(errorSum());
 		}
 
 		endTime = DateTime.now();
 		parsed = true;
 		sitemap.setReport(getReport().toString());
+	}
+
+	/**
+	 * indentation errors and + unrecognisedOptions are given as warnings rather than errors
+	 * 
+	 * @return
+	 */
+	private int errorSum() {
+		int c = missingSections().size() + missingEnums.size() + invalidViewClasses.size()
+				+ undeclaredViewClasses.size() + missingPages.size() + propertyErrors.size() +
+
+				viewlessURLs.size() + duplicateURLs.size() + redirectErrors.size() + infoMessages.size()
+				+ syntaxErrors.size();
+		if (getViewPackages() == null || getViewPackages().isEmpty()) {
+			c++;
+		}
+
+		if (labelClassNotI18N) {
+			c++;
+		}
+		if (labelClassNonExistent) {
+			c++;
+		}
+		if (labelClassMissing) {
+			c++;
+		}
+
+		return c;
+	}
+
+	private int warningSum() {
+		int c = unrecognisedOptions.size() + indentationErrors.size();
+		return c;
+	}
+
+	/**
+	 * Looks for any URIs without views and captures them in {@link #viewlessURLs} for reporting
+	 */
+	private void checkViews() {
+		for (SitemapNode node : sitemap.getAllNodes()) {
+			if (node.getViewClass() == null) {
+				viewlessURLs.add(sitemap.url(node));
+			}
+		}
+
 	}
 
 	private void checkLabelKeys() {
@@ -189,11 +268,9 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		for (String target : getRedirects().values()) {
 			if (getRedirects().keySet().contains(target)) {
 				redirectErrors.add("'" + target + "' cannot be both a redirect source and redirect target");
-				sitemap.error();
 			}
 			if (!urls.contains(target)) {
 				redirectErrors.add("'" + target + "' cannot be a redirect target, it has not been defined as a page");
-				sitemap.error();
 
 			}
 		}
@@ -201,86 +278,127 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	}
 
 	/**
-	 * Standard pages are added after the page map has been built. This may cause a duplication of urls - if so, that is
-	 * captured in {@link #duplicateURLs}. As the map is built from the standard page URLs, it may also cause
-	 * intermediate nodes to have no View assigned. This is checked and captured in {@link #viewlessURLs}
+	 * Generates the standard pages according to the settings of options. See
+	 * https://sites.google.com/site/q3cjava/sitemap#TOC-options-
 	 */
-	private void processStandardPages() {
-
-		List<String> lines = sections.get(SectionName.standardPages);
-		int i = 1;
-
-		for (String line : lines) {
-
-			StandardPageKeys pageKey = null;
-			String toUrl = null;
-			String viewName = null;
-
-			if (!line.contains("=")) {
-				propertyErrors
-						.add("Property must contain an '=' sign at line " + linenum(SectionName.standardPages, i));
-			} else {
-				String[] pair = StringUtils.split(line, "=");
-				String pageKeyName = pair[0].trim();
-
-				try {
-					pageKey = StandardPageKeys.valueOf(pageKeyName);
-					if (pair.length > 1) {
-						if (pair[1].contains(":")) {
-							String[] urlView = StringUtils.split(pair[1], ":");
-							if (pair[1].startsWith(":")) {
-								toUrl = "";
-								viewName = pair[1].replace(":", "");
-							} else {
-								toUrl = urlView[0].trim();
-								if (urlView.length > 1) {
-									viewName = urlView[1].trim();
-								}
-							}
-
-						} else {
-							toUrl = pair[1].trim();
-						}
-
-						standardPages().put(pageKey, toUrl);
-					} else {
-						standardPages().put(pageKey, "");
-					}
-				} catch (Exception e) {
-					propertyErrors.add(pageKeyName + " is not a valid " + StandardPageKeys.class.getSimpleName()
-							+ linenum(SectionName.standardPages, i));
-
-				}
-
-			}
-
-			// we now have defined a node, add it to the map
-			// bu but only if url is there
-			if (toUrl != null) {
-				SitemapNode node = sitemap.append(toUrl);
-				node.setLabelKey(pageKey);
-				// and set the view
-				if (Strings.isNullOrEmpty(viewName)) {
-					viewName = defaultAccountView;
-				}
-				findView(node, node.getUrlSegment(), viewName);
-			}
-			i++;
+	private void generateStandardPages() {
+		if (generatePublicHomePage) {
+			generatePage(StandardPageKey.Public_Home);
 		}
+		if (generateAuthenticationPages) {
+			generatePage(StandardPageKey.Secure_Home);
+			generatePage(StandardPageKey.Login);
+			generatePage(StandardPageKey.Logout);
 
-		// check for missing standard pages
-		for (StandardPageKeys spk : StandardPageKeys.values()) {
-			if (!standardPages().containsKey(spk)) {
-				missingPages.add(spk.name());
-				sitemap.error();
+			if (generateRequestAccount || generateRequestAccountReset) {
+				generatePage(StandardPageKey.System_Account);
+			}
+
+			if (generateRequestAccount) {
+				generatePage(StandardPageKey.Request_Account);
+			}
+
+			if (generateRequestAccountReset) {
+				generatePage(StandardPageKey.Unlock_Account);
+				generatePage(StandardPageKey.Refresh_Account);
+				generatePage(StandardPageKey.Enable_Account);
+				generatePage(StandardPageKey.Reset_Account);
 			}
 		}
 
 	}
 
-	private String linenum(SectionName sectionName, int i) {
-		return "at line " + i + " in the " + sectionName + " section";
+	/**
+	 * Creates a Sitemap node and assigns the default values from the {@code key}
+	 * 
+	 * @param key
+	 */
+	private void generatePage(StandardPageKey key) {
+		SitemapNode node = sitemap.append(StandardPageKey.defaultUri(key));
+		node.setLabelKey(key);
+		node.setViewClass(StandardPageKey.defaultViewInterface(key));
+		node.setUrlSegment(StandardPageKey.defaultSegment(key));
+		sitemap.getStandardPages().put(key, sitemap.url(node));
 	}
+
+	// /**
+	// * Standard pages are added after the page map has been built. This may cause a duplication of urls - if so, that
+	// is
+	// * captured in {@link #duplicateURLs}. As the map is built from the standard page URLs, it may also cause
+	// * intermediate nodes to have no View assigned. This is checked and captured in {@link #viewlessURLs}
+	// */
+	// private void processStandardPages() {
+	//
+	// List<String> lines = sections.get(SectionName.standardPageMapping);
+	// int i = 1;
+	//
+	// for (String line : lines) {
+	//
+	// StandardPageKey pageKey = null;
+	// String toUrl = null;
+	// String viewName = null;
+	//
+	// if (!line.contains("=")) {
+	// propertyErrors.add("Property must contain an '=' sign at line "
+	// + linenum(SectionName.standardPageMapping, i));
+	// } else {
+	// String[] pair = StringUtils.split(line, "=");
+	// String pageKeyName = pair[0].trim();
+	//
+	// try {
+	// pageKey = StandardPageKey.valueOf(pageKeyName);
+	// if (pair.length > 1) {
+	// if (pair[1].contains(":")) {
+	// String[] urlView = StringUtils.split(pair[1], ":");
+	// if (pair[1].startsWith(":")) {
+	// toUrl = "";
+	// viewName = pair[1].replace(":", "");
+	// } else {
+	// toUrl = urlView[0].trim();
+	// if (urlView.length > 1) {
+	// viewName = urlView[1].trim();
+	// }
+	// }
+	//
+	// } else {
+	// toUrl = pair[1].trim();
+	// }
+	//
+	// standardPages().put(pageKey, toUrl);
+	// } else {
+	// standardPages().put(pageKey, "");
+	// }
+	// } catch (Exception e) {
+	// propertyErrors.add(pageKeyName + " is not a valid " + StandardPageKey.class.getSimpleName()
+	// + linenum(SectionName.standardPageMapping, i));
+	//
+	// }
+	//
+	// }
+	//
+	// // we now have defined a node, add it to the map
+	// // but only if url is there
+	// if (toUrl != null) {
+	// SitemapNode node = sitemap.append(toUrl);
+	// node.setLabelKey(pageKey);
+	// // and set the view
+	// findView(node, node.getUrlSegment(), viewName);
+	// }
+	// i++;
+	// }
+	//
+	// // check for missing standard pages
+	// for (StandardPageKey spk : StandardPageKey.values()) {
+	// if (!standardPages().containsKey(spk)) {
+	// missingPages.add(spk.name());
+	// }
+	// }
+	//
+	// }
+
+	// private String linenum(SectionName sectionName, int i) {
+	// return "at line " + i + " in the " + sectionName + " section";
+	// }
 
 	@Override
 	public void parse(File file) {
@@ -289,14 +407,12 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		sourceFile = file;
 		log.info("Loading sitemap from {}", source);
 		try {
-			@SuppressWarnings("unchecked")
 			List<String> lines = FileUtils.readLines(file);
 			processLines(lines);
 
 		} catch (Exception e) {
 			log.error("Unable to load site map", e);
 			String report = (parsed) ? getReport().toString() : "failed to parse input, unable to generate report";
-			sitemap.error();
 			log.debug(report);
 		}
 	}
@@ -359,25 +475,43 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	}
 
 	private void setOption(String key, String value) {
-		switch (key) {
-		case "labelKeys":
-			labelKeys = value;
-			if (!Strings.isNullOrEmpty(value)) {
-				labelClassMissing = false;
-				labelClassName = value;
-				validateLabelKeys();
+
+		try {
+			ValidOption k = ValidOption.valueOf(key);
+			switch (k) {
+			case appendView:
+				appendView = "true".equals(value);
+				break;
+			case generateAuthenticationPages:
+				generateAuthenticationPages = "true".equals(value);
+				break;
+			case generatePublicHomePage:
+				generatePublicHomePage = "true".equals(value);
+				break;
+			case generateRequestAccount:
+				generateRequestAccount = "true".equals(value);
+				break;
+			case generateRequestAccountReset:
+				generateRequestAccountReset = "true".equals(value);
+				break;
+			case labelKeys:
+				labelKeys = value;
+				if (!Strings.isNullOrEmpty(value)) {
+					labelClassMissing = false;
+					labelClassName = value;
+					validateLabelKeys();
+				}
+				break;
+			case systemAccountUri:
+				systemAccountUri = value;
+				break;
 			}
-			break;
-		case "appendView":
-			appendView = "true".equals(value);
-			break;
-		case "defaultAccountView":
-			defaultAccountView = value;
-			break;
-		default:
+
+		} catch (Exception e) {
 			log.warn("unrecognised option '{}' in site map", key);
 			unrecognisedOptions.add(key);
 		}
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -407,7 +541,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		}
 		if (!valid) {
 			log.warn(labelKeys + " is not a valid enum class for I18N labels");
-			sitemap.error();
+			this.labelClassNotI18N = true;
 		} else {
 			labelKeysClass = (Class<? extends Enum<?>>) requestedLabelKeysClass;
 		}
@@ -466,12 +600,14 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 
 				// add the node
 				if (treeLevel == 1) {
-					// at level 1 each becomes a 'root' (technically the site tree is a forest)
+					// at level 1 each becomes a 'root' (technically the site
+					// tree is a forest)
 					sitemap.addNode(node);
 					currentNode = node;
 					currentLevel = treeLevel;
 				} else {
-					// if indent going back up tree, walk up from current node to the parent level needed
+					// if indent going back up tree, walk up from current node
+					// to the parent level needed
 					if (treeLevel < currentLevel) {
 						int retraceLevels = currentLevel - treeLevel;
 						for (int k = 1; k <= retraceLevels; k++) {
@@ -508,33 +644,41 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 				labelKeyForName(labelKeyName, node, true);
 
 			} else {
-				log.warn("line in map must start with a'-', line " + i);
-				sitemap.error();
+				String msg = "line in map must start with a'-', line " + i;
+				log.warn(msg);
+				syntaxErrors.add(msg);
 			}
 		}
 
 	}
 
 	@SuppressWarnings("unchecked")
-	private void labelKeyForName(String labelKeyName, SitemapNode node, boolean flagAsMissing) {
+	public void labelKeyForName(String labelKeyName, SitemapNode node, boolean flagAsMissing) {
+		String keyName = null;
 		try {
-
-			if (labelKeyName == null) {
-				labelKeyName = WordUtils.capitalize(node.getUrlSegment());
-				// hyphen not valid in enum, but may be used in segment
-				labelKeyName = labelKeyName.replace("-", "_");
-			}
-
+			keyName = keyName(labelKeyName, node);
 			@SuppressWarnings({ "rawtypes" })
-			Enum labelKey = Enum.valueOf(labelKeysClass, labelKeyName);
+			Enum labelKey = Enum.valueOf(labelKeysClass, keyName);
 			node.setLabelKey(labelKey);
 		} catch (Exception e) {
 			if (flagAsMissing) {
-				missingEnums.add(labelKeyName);
-				sitemap.error();
+				missingEnums.add(keyName);
 			}
 		}
+	}
 
+	public String keyName(String labelKeyName, SitemapNode node) {
+		String keyName = labelKeyName;
+		if (keyName == null) {
+			keyName = node.getUrlSegment().replace("-", " ");
+			keyName = keyName.replace("_", " ");
+			keyName = WordUtils.capitalize(keyName);
+			// hyphen not valid in enum, but may be used in segment
+			keyName = keyName.replace(" ", "_");
+			return keyName;
+		} else {
+			return keyName;
+		}
 	}
 
 	/**
@@ -568,18 +712,11 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 					break;
 				} else {
 					invalidViewClasses.add(fullViewName);
-					sitemap.error();
 				}
 			} catch (ClassNotFoundException e) {
 				// don't need to do anything
 			}
 
-		}
-
-		// record for report if view not found
-		if (node.getViewClass() == null) {
-			undeclaredViewClasses.add(viewName);
-			sitemap.error();
 		}
 
 	}
@@ -694,46 +831,6 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		report.append(runtime().toString());
 		report.append(" ms\n\n");
 
-		report.append("significant errors:\t\t");
-		report.append(sitemap.getErrors());
-		report.append("  (these will need to be fixed for the program to run properly)");
-		report.append("\n\n");
-
-		report.append("missing sections:\t\t");
-		report.append(missingSections().size());
-		report.append("  (if any section is missing, parsing will fail, and results will be indeterminate - correct this first)");
-		report.append("\n");
-		if (missingSections().size() > 0) {
-			report.append("  -- ");
-			report.append(missingSections());
-			report.append("\n");
-		}
-		report.append("\n");
-
-		report.append("view packages declared:\t\t");
-		if (getViewPackages() == null) {
-			report.append("none declared - site map will not build without them");
-		} else {
-			report.append(getViewPackages().toString());
-		}
-		report.append("\n\n");
-
-		report.append("I18N Label class:\t\t");
-		if (labelClassMissing) {
-			report.append(" has not been declared, you need to define it using the 'labelKeys=' property in [options]");
-		} else {
-			if (labelClassNonExistent) {
-				report.append(labelClassName);
-				report.append(" has been declared but does not exist on the classpath");
-			} else {
-				if (labelClassNotI18N) {
-					report.append(labelClassName);
-					report.append(" has been declared, is on the classpath, but does not implement I18NKeys, as it should");
-				}
-			}
-		}
-		report.append("\n\n");
-
 		report.append("pages defined:\t\t\t");
 		report.append(getPagesDefined());
 		report.append("\n\n");
@@ -745,83 +842,109 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		}
 		report.append("\n\n");
 
-		report.append("missing standard pages:\t\t");
-		report.append(missingPages.size());
-		report.append("  (these MUST be defined)");
-		report.append("\n");
-		if (missingPages.size() > 0) {
-			report.append("  -- ");
-			report.append(missingPages);
-			report.append("\n");
+		if (getViewPackages() != null) {
+			report.append("view packages declared:\t\t");
+			report.append(getViewPackages().toString());
+			report.append("\n\n");
 		}
-		report.append("\n");
 
-		report.append("property format errors:\t\t");
-		report.append(propertyErrors.size());
-		report.append("  (should be key=value, spaces are ignored)");
-		report.append("\n");
-		if (missingPages.size() > 0) {
-			for (String p : propertyErrors) {
-				report.append("  -- ");
-				report.append(p);
-				report.append("\n");
+		if (!(labelClassMissing || labelClassNonExistent || labelClassNotI18N)) {
+			report.append("I18N Label class:\t\t");
+			report.append(labelClassName);
+			report.append("\n\n");
+		}
+
+		report.append("parsing status:  ");
+		if (sitemap.hasErrors()) {
+			report.append("FAILED");
+		} else {
+			report.append("PASSED");
+		}
+
+		report.append("\n\n");
+
+		if (sitemap.hasErrors()) {
+			report.append(" -------- errors --------\n\n");
+		}
+		reportChunk(missingSections(), "missing sections",
+				"if any section is missing, parsing will fail, and results will be indeterminate - correct this first");
+
+		if (getViewPackages() == null) {
+			report.append("No view packages declared - site map will not build without them\n\n");
+		}
+
+		if (labelClassMissing || labelClassNonExistent || labelClassNotI18N) {
+			report.append("I18N Label class:\t\t");
+			if (labelClassMissing) {
+				report.append(" has not been declared, you need to define it using the 'labelKeys=' property in [options]");
+				report.append("\n\n");
+			} else {
+				if (labelClassNonExistent) {
+					report.append(labelClassName);
+					report.append(" has been declared but does not exist on the classpath");
+					report.append("\n\n");
+				} else {
+					if (labelClassNotI18N) {
+						report.append(labelClassName);
+						report.append(" has been declared, is on the classpath, but does not implement I18NKeys, as it should");
+						report.append("\n\n");
+					}
+				}
 			}
 		}
-		report.append("\n");
 
-		report.append("missing enum declarations:\t");
-		report.append(missingEnums.size());
-		report.append("  (you could just paste these into your enum declaration)");
-		report.append("\n");
-		if (missingEnums.size() > 0) {
-			report.append("  -- ");
-			report.append(missingEnums);
-			report.append("\n");
-		}
-		report.append("\n");
+		reportChunk(missingPages, "missing pages", "these MUST be defined");
+		reportChunk(propertyErrors, "property errors", "should be key=value, spaces are ignored");
+		reportChunk(missingEnums, "missing enum declarations", "you could just paste these into your enum declaration");
+		reportChunk(invalidViewClasses, "invalid view classes", "(invalid because they do not implement V7View");
+		reportChunk(undeclaredViewClasses, "undeclared view classes",
+				"these could not be found in the view packages declared in the [viewPackages] section");
 
-		report.append("invalid view classes:\t\t");
-		report.append(invalidViewClasses.size());
-		report.append("  (invalid because they do not implement V7View)\n");
-		if (invalidViewClasses.size() > 0) {
-			report.append("  -- ");
-			report.append(invalidViewClasses);
-			report.append("\n");
-		}
-		report.append("\n");
+		reportChunk(syntaxErrors, "syntax errors",
+				"these have been ignored, and the system may work, but you may not get the intended result", true);
+		reportChunk(redirectErrors, "redirect errors", "Redirect(s) causing an inconsistency and must be fixed", true);
 
-		report.append("undeclared view classes:\t");
-		report.append(undeclaredViewClasses.size());
-		report.append("  (these could not be found in the view packages declared in the [viewPackages] section)\n");
-		if (undeclaredViewClasses.size() > 0) {
-			report.append("  -- ");
-			report.append(undeclaredViewClasses);
-			report.append("\n");
+		if (warningSum() > 0) {
+			report.append(" --------------- warnings ---------");
+			report.append("\n\n");
+			reportChunk(
+					indentationErrors,
+					"indentation errors",
+					"line indentation should be <= 1 greater than the preceding line.  Parsing will still work but you may not get the intended result");
+			reportChunk(unrecognisedOptions, "unrecognised options", "these have just been ignored, will do no harm");
 		}
-		report.append("\n");
-
-		report.append("indentation errors:\t\t");
-		report.append(indentationErrors.size());
-		report.append("  (line indentation should be <= 1 greater than the preceding line.  Parsing will still work but you may not get the intended result\n");
-		if (indentationErrors.size() > 0) {
-			report.append("  -- ");
-			report.append(indentationErrors);
-			report.append("\n");
-		}
-		report.append("\n");
-
-		report.append("unrecognised options:\t\t");
-		report.append(unrecognisedOptions.size());
-		report.append("  (these have just been ignored, and do not count as errors)\n");
-		if (unrecognisedOptions.size() > 0) {
-			report.append("  -- ");
-			report.append(unrecognisedOptions);
-			report.append("\n");
-		}
-		report.append("\n\n");
 
 		report.append("================================================================= ");
 
+	}
+
+	private void reportChunk(Set<String> source, String name, String explain) {
+		reportChunk(source, name, explain, false);
+	}
+
+	private void reportChunk(Set<String> source, String name, String explain, boolean multiline) {
+		if (source.size() > 0) {
+			report.append(name);
+			report.append("\t\t");
+			report.append(source.size());
+			report.append("  (");
+			report.append(explain);
+			report.append(")\n");
+			if (source.size() > 0) {
+				if (multiline) {
+					for (String s : source) {
+						report.append("\t");
+						report.append(s);
+						report.append("\n");
+					}
+				} else {
+					report.append("  -- ");
+					report.append(source);
+					report.append("\n");
+				}
+			}
+			report.append("\n");
+		}
 	}
 
 	public int getPagesDefined() {
@@ -914,11 +1037,11 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		return getSitemap();
 	}
 
-	public String standardPageUrl(StandardPageKeys property) {
-		return standardPages().get(property);
+	public String standardPageUrl(StandardPageKey key) {
+		return standardPages().get(key);
 	}
 
-	public Map<StandardPageKeys, String> standardPages() {
+	public Map<StandardPageKey, String> standardPages() {
 		return sitemap.getStandardPages();
 	}
 
@@ -960,7 +1083,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 
 	/**
 	 * 
-	 * Sets the source of the sitemap input. See also {@link #setSource(String)}, and {@link #get()} for loading order.
+	 * Sets the source of the sitemap input. See also {@link #setSource(String)} , and {@link #get()} for loading order.
 	 * 
 	 * @param sourceFile
 	 */
@@ -987,4 +1110,11 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		return redirectErrors;
 	}
 
+	public Set<String> getSyntaxErrors() {
+		return syntaxErrors;
+	}
+
+	public Set<String> getInfoMessages() {
+		return infoMessages;
+	}
 }

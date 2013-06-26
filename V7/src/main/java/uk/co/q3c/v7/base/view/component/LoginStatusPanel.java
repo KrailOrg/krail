@@ -18,7 +18,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.StandardPageKeys;
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
@@ -108,9 +108,9 @@ public class LoginStatusPanel extends Panel implements LoginStatusMonitor, Click
 	@Override
 	public void buttonClick(ClickEvent event) {
 		if (loggedIn) {
-			navigator.navigateTo(StandardPageKeys.logout);
+			navigator.navigateTo(StandardPageKey.Logout);
 		} else {
-			navigator.navigateTo(StandardPageKeys.login);
+			navigator.navigateTo(StandardPageKey.Login);
 		}
 
 	}

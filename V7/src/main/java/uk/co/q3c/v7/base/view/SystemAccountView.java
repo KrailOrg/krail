@@ -10,25 +10,16 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package fixture.testviews2;
+package uk.co.q3c.v7.base.view;
 
-import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
-
-import com.vaadin.ui.Component;
-
-public class LogoutView implements V7View {
-
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-		//
-		throw new RuntimeException("not yet implemented");
-	}
-
-	@Override
-	public Component getUiComponent() {
-		// return null;
-		throw new RuntimeException("not yet implemented");
-	}
+/**
+ * The View to use as a parent page for all system account related pages. The default binding is to
+ * {@link DefaultSystemAccountView}. The binding is in StandardViewModule. To bind this interface to your own
+ * implementation, sub-class {@link StandardViewModule} and override the appropriate binding method.
+ * 
+ * @author David Sowerby 1 Jan 2013
+ * 
+ */
+public interface SystemAccountView extends V7View {
 
 }

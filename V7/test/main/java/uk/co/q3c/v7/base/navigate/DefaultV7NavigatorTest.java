@@ -145,7 +145,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		// given
 
 		// when
-		navigator.navigateTo(StandardPageKeys.logout);
+		navigator.navigateTo(StandardPageKey.Logout);
 		// then
 		assertThat(navigator.getCurrentView()).isInstanceOf(LogoutView.class);
 		verify(scopedUI).changeView(null, logoutView);
@@ -168,7 +168,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 		// given
 		navigator.navigateTo("public/view2");
-		navigator.navigateTo(StandardPageKeys.login);
+		navigator.navigateTo(StandardPageKey.Login);
 		// when
 		navigator.loginSuccessful();
 		// then

@@ -25,30 +25,31 @@ import uk.co.q3c.v7.i18n.EnumResourceBundle;
  * @author David Sowerby 9 Feb 2013
  * 
  */
-public class StandardPageLabels extends EnumResourceBundle<StandardPageKeys> {
+public class StandardPageLabels extends EnumResourceBundle<StandardPageKey> {
 
-	private static final EnumMap<StandardPageKeys, String> map = new EnumMap<StandardPageKeys, String>(
-			StandardPageKeys.class);
+	private static final EnumMap<StandardPageKey, String> map = new EnumMap<StandardPageKey, String>(
+			StandardPageKey.class);
 
 	static {
-		map.put(StandardPageKeys.login, "login");
-		map.put(StandardPageKeys.logout, "logout");
-		map.put(StandardPageKeys.publicHome, "home");
-		map.put(StandardPageKeys.secureHome, "home");
-		map.put(StandardPageKeys.refreshAccount, "refresh account");
-		map.put(StandardPageKeys.requestAccount, "request account");
-		map.put(StandardPageKeys.resetAccount, "reset account");
-		map.put(StandardPageKeys.unlockAccount, "unlock account");
-		map.put(StandardPageKeys.enableAccount, "enable account");
+		// map.put(StandardPageKeys.Login, "Login");
+		// map.put(StandardPageKeys.Logout, "Logout");
+		// map.put(StandardPageKeys.Public_Home, "Home");
+		// map.put(StandardPageKeys.Secure_Home, "Home");
+		// map.put(StandardPageKeys.Refresh_Account, "Refresh Account");
+		// map.put(StandardPageKeys.Request_Account, "Request account");
+		// map.put(StandardPageKeys.Reset_Account, "reset account");
+		// map.put(StandardPageKeys.Unlock_Account, "unlock account");
+		// map.put(StandardPageKeys.Enable_Account, "enable account");
+		// map.put(StandardPageKeys.System_Account, "system account");
 
 	}
 
 	@Override
-	public EnumMap<StandardPageKeys, String> getMap() {
+	public EnumMap<StandardPageKey, String> getMap() {
 		return map;
 	}
 
-	public static EnumMap<StandardPageKeys, String> map() {
+	public static EnumMap<StandardPageKey, String> map() {
 		return map;
 	}
 

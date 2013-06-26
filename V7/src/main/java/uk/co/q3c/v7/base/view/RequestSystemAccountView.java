@@ -10,24 +10,18 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.view.testviews;
+package uk.co.q3c.v7.base.view;
 
-import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
-
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
-
-public class PublicHomeView implements V7View {
-
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-
-	}
-
-	@Override
-	public Component getUiComponent() {
-		return new Label("not used");
-	}
+/**
+ * The View to use as a home page for authenticated users. The default binding
+ * is to {@link DefaultRequestSystemAccountView}. The binding is in
+ * StandardViewModule. To bind this interface to your own implementation,
+ * sub-class {@link StandardViewModule} and override the appropriate binding
+ * method.
+ * 
+ * @author David Sowerby 1 Jan 2013
+ * 
+ */
+public interface RequestSystemAccountView extends V7View {
 
 }

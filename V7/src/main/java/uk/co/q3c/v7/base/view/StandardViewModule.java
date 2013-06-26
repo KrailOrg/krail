@@ -32,6 +32,74 @@ public class StandardViewModule extends AbstractModule {
 		bindErrorView();
 		bindLoginView();
 		bindLogoutView();
+		bindSecureHomeView();
+		bindPublicHomeView();
+		bindRequestSystemAccountView();
+		bindRequestSystemAccountResetView();
+		bindRequestSystemAccountEnableView();
+		bindRequestSystemAccountUnlockView();
+		bindRequestSystemAccountRefreshView();
+		bindSystemAccountView();
+
+	}
+
+	/**
+	 * Override this to provide your own {@link V7View} for the parent page of system account related pages.
+	 */
+	private void bindSystemAccountView() {
+		bind(SystemAccountView.class).to(SystemAccountView.class);
+
+	}
+
+	/**
+	 * Override this to provide your own {@link V7View} for a user to request that their system account is refreshed
+	 */
+	private void bindRequestSystemAccountRefreshView() {
+		bind(RequestSystemAccountRefreshView.class).to(DefaultRequestSystemAccountRefreshView.class);
+	}
+
+	/**
+	 * Override this to provide your own {@link V7View} for a user to request that their system account is unlocked
+	 */
+	private void bindRequestSystemAccountUnlockView() {
+		bind(RequestSystemAccountUnlockView.class).to(DefaultRequestSystemAccountUnlockView.class);
+	}
+
+	/**
+	 * Override this to provide your own {@link V7View} for a user to request that their system account is enabled
+	 */
+	private void bindRequestSystemAccountEnableView() {
+		bind(RequestSystemAccountEnableView.class).to(DefaultRequestSystemAccountEnableView.class);
+	}
+
+	/**
+	 * Override this to provide your own {@link V7View} for a user to request that their system account is reset
+	 */
+	private void bindRequestSystemAccountResetView() {
+		bind(RequestSystemAccountResetView.class).to(DefaultRequestSystemAccountResetView.class);
+	}
+
+	/**
+	 * Override this to provide your own {@link V7View} for a user to request a system account
+	 */
+	private void bindRequestSystemAccountView() {
+		bind(RequestSystemAccountView.class).to(DefaultRequestSystemAccountView.class);
+	}
+
+	/**
+	 * Override this to provide your own secure home {@link V7View}
+	 */
+	protected void bindSecureHomeView() {
+		bind(SecureHomeView.class).to(DefaultSecureHomeView.class);
+
+	}
+
+	/**
+	 * Override this to provide your own public home {@link V7View}
+	 */
+	protected void bindPublicHomeView() {
+		bind(PublicHomeView.class).to(DefaultPublicHomeView.class);
+
 	}
 
 	/**
