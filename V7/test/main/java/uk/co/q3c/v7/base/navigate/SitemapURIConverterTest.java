@@ -56,14 +56,14 @@ public class SitemapURIConverterTest extends TestWithSitemap {
 		List<SitemapNode> results = converter.nodeChainForUri("a/a1", true);
 		// then
 		assertThat(results.size()).isEqualTo(2);
-		assertThat(results.get(0).getUrlSegment()).isEqualTo("a");
-		assertThat(results.get(1).getUrlSegment()).isEqualTo("a1");
+		assertThat(results.get(0).getUriSegment()).isEqualTo("a");
+		assertThat(results.get(1).getUriSegment()).isEqualTo("a1");
 
 		results = converter.nodeChainForUri("a/a1", false);
 		// then
 		assertThat(results.size()).isEqualTo(2);
-		assertThat(results.get(0).getUrlSegment()).isEqualTo("a");
-		assertThat(results.get(1).getUrlSegment()).isEqualTo("a1");
+		assertThat(results.get(0).getUriSegment()).isEqualTo("a");
+		assertThat(results.get(1).getUriSegment()).isEqualTo("a1");
 
 	}
 
@@ -76,12 +76,12 @@ public class SitemapURIConverterTest extends TestWithSitemap {
 		List<SitemapNode> results = converter.nodeChainForUri("", true);
 		// then
 		assertThat(results.size()).isEqualTo(1);
-		assertThat(results.get(0).getUrlSegment()).isEqualTo("");
+		assertThat(results.get(0).getUriSegment()).isEqualTo("");
 
 		results = converter.nodeChainForUri("", false);
 		// then
 		assertThat(results.size()).isEqualTo(1);
-		assertThat(results.get(0).getUrlSegment()).isEqualTo("");
+		assertThat(results.get(0).getUriSegment()).isEqualTo("");
 
 	}
 
@@ -94,12 +94,12 @@ public class SitemapURIConverterTest extends TestWithSitemap {
 		List<SitemapNode> results = converter.nodeChainForUri("a/a2", true);
 		// then
 		assertThat(results.size()).isEqualTo(1);
-		assertThat(results.get(0).getUrlSegment()).isEqualTo("a");
+		assertThat(results.get(0).getUriSegment()).isEqualTo("a");
 
 		results = converter.nodeChainForUri("a/a2/id=1", true);
 		// then
 		assertThat(results.size()).isEqualTo(1);
-		assertThat(results.get(0).getUrlSegment()).isEqualTo("a");
+		assertThat(results.get(0).getUriSegment()).isEqualTo("a");
 
 		// when
 		results = converter.nodeChainForUri("a/a2", false);
@@ -138,15 +138,15 @@ public class SitemapURIConverterTest extends TestWithSitemap {
 		// when
 
 		// then
-		assertThat(converter.nodeForUri("a", true).getUrlSegment()).isEqualTo("a");
-		assertThat(converter.nodeForUri("a/a1", true).getUrlSegment()).isEqualTo("a1");
-		assertThat(converter.nodeForUri("a/a1/a11", true).getUrlSegment()).isEqualTo("a11");
-		assertThat(converter.nodeForUri("a/a1/a12", true).getUrlSegment()).isEqualTo("a1");
+		assertThat(converter.nodeForUri("a", true).getUriSegment()).isEqualTo("a");
+		assertThat(converter.nodeForUri("a/a1", true).getUriSegment()).isEqualTo("a1");
+		assertThat(converter.nodeForUri("a/a1/a11", true).getUriSegment()).isEqualTo("a11");
+		assertThat(converter.nodeForUri("a/a1/a12", true).getUriSegment()).isEqualTo("a1");
 		assertThat(converter.nodeForUri("a2", true)).isNull();
 
-		assertThat(converter.nodeForUri("a", false).getUrlSegment()).isEqualTo("a");
-		assertThat(converter.nodeForUri("a/a1", false).getUrlSegment()).isEqualTo("a1");
-		assertThat(converter.nodeForUri("a/a1/a11", false).getUrlSegment()).isEqualTo("a11");
+		assertThat(converter.nodeForUri("a", false).getUriSegment()).isEqualTo("a");
+		assertThat(converter.nodeForUri("a/a1", false).getUriSegment()).isEqualTo("a1");
+		assertThat(converter.nodeForUri("a/a1/a11", false).getUriSegment()).isEqualTo("a11");
 		assertThat(converter.nodeForUri("a/a1/a12", false)).isNull();
 		assertThat(converter.nodeForUri("a2", false)).isNull();
 

@@ -124,7 +124,7 @@ public class UserNavigationTree extends Tree {
 	@Override
 	public void valueChange(Property.ValueChangeEvent event) {
 		if (getValue() != null) {
-			String url = sitemap.url((SitemapNode) getValue());
+			String url = sitemap.uri((SitemapNode) getValue());
 			navigator.navigateTo(url);
 		}
 	}

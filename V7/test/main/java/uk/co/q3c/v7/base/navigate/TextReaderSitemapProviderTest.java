@@ -150,7 +150,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getReport().toString()).isNotEmpty();
 
 		for (StandardPageKey spk : StandardPageKey.values()) {
-			assertThat(reader.standardPageUrl(spk)).overridingErrorMessage("not expecting null for " + spk.name())
+			assertThat(reader.standardPageUri(spk)).overridingErrorMessage("not expecting null for " + spk.name())
 					.isNotNull();
 		}
 		System.out.println(reader.getReport().toString());
@@ -164,7 +164,7 @@ public class TextReaderSitemapProviderTest {
 
 		// given
 		SitemapNode node = new SitemapNode();
-		node.setUrlSegment("reset-account");
+		node.setUriSegment("reset-account");
 		// when
 		String keyName = reader.keyName(null, node);
 		// then
@@ -453,7 +453,7 @@ public class TextReaderSitemapProviderTest {
 		System.out.println(reader.getSitemap().toString());
 		// then
 
-		assertThat(reader.getSitemap().urls()).contains("");
+		assertThat(reader.getSitemap().uris()).contains("");
 		assertThat(reader.getRedirectErrors()).containsOnly();
 		System.out.println(reader.getSitemap().getReport());
 		assertThat(reader.getSitemap().hasErrors()).isFalse();
@@ -536,20 +536,32 @@ public class TextReaderSitemapProviderTest {
 
 	}
 
+	@Test
+	public void systemAccountUriChange() throws IOException {
+
+		// given
+		substitute("systemAccountUri=public/system-account", "systemAccountUri=public/sysaccount");
+		prepFile();
+		// when
+		reader.parse(modifiedFile);
+		// then
+		// assertThat(reader.getSitemap().).isEqualTo(expected);
+	}
+
 	private void validateNode(Sitemap tree, SitemapNode node) {
-		String url = tree.url(node);
-		switch (url) {
+		String uri = tree.uri(node);
+		switch (uri) {
 
 		case "public":
 			assertThat(tree.getChildCount(node)).isEqualTo(3);
-			assertThat(node.getUrlSegment()).isEqualTo("public");
+			assertThat(node.getUriSegment()).isEqualTo("public");
 			assertThat(node.getViewClass()).isEqualTo(PublicHomeView.class);
 			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Public_Home);
 			break;
 
 		case "public/login": {
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
-			assertThat(node.getUrlSegment()).isEqualTo("login");
+			assertThat(node.getUriSegment()).isEqualTo("login");
 			assertThat(node.getViewClass()).isEqualTo(LoginView.class);
 			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Login);
 			break;
@@ -557,7 +569,7 @@ public class TextReaderSitemapProviderTest {
 
 		case "public/logout": {
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
-			assertThat(node.getUrlSegment()).isEqualTo("logout");
+			assertThat(node.getUriSegment()).isEqualTo("logout");
 			assertThat(node.getViewClass()).isEqualTo(LogoutView.class);
 			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Logout);
 			break;
@@ -565,38 +577,38 @@ public class TextReaderSitemapProviderTest {
 
 		case "public/system-account": {
 			assertThat(tree.getChildCount(node)).isEqualTo(5);
-			assertThat(node.getUrlSegment()).isEqualTo("system-account");
+			assertThat(node.getUriSegment()).isEqualTo("system-account");
 			assertThat(node.getViewClass()).isEqualTo(SystemAccountView.class);
 			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.System_Account);
 			break;
 		}
 
 		case "public/system-account/enable-account":
-			assertThat(node.getUrlSegment()).isEqualTo("enable-account");
+			assertThat(node.getUriSegment()).isEqualTo("enable-account");
 			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Enable_Account);
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getViewClass()).isEqualTo(RequestSystemAccountEnableView.class);
 			break;
 		case "public/system-account/request-account":
-			assertThat(node.getUrlSegment()).isEqualTo("request-account");
+			assertThat(node.getUriSegment()).isEqualTo("request-account");
 			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Request_Account);
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getViewClass()).isEqualTo(RequestSystemAccountView.class);
 			break;
 		case "public/system-account/refresh-account":
-			assertThat(node.getUrlSegment()).isEqualTo("refresh-account");
+			assertThat(node.getUriSegment()).isEqualTo("refresh-account");
 			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Refresh_Account);
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getViewClass()).isEqualTo(RequestSystemAccountRefreshView.class);
 			break;
 		case "public/system-account/unlock-account":
-			assertThat(node.getUrlSegment()).isEqualTo("unlock-account");
+			assertThat(node.getUriSegment()).isEqualTo("unlock-account");
 			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Unlock_Account);
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getViewClass()).isEqualTo(RequestSystemAccountUnlockView.class);
 			break;
 		case "public/system-account/reset-account": {
-			assertThat(node.getUrlSegment()).isEqualTo("reset-account");
+			assertThat(node.getUriSegment()).isEqualTo("reset-account");
 			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Reset_Account);
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getViewClass()).isEqualTo(RequestSystemAccountResetView.class);
@@ -605,34 +617,34 @@ public class TextReaderSitemapProviderTest {
 
 		case "secure":
 			assertThat(tree.getChildCount(node)).isEqualTo(3);
-			assertThat(node.getUrlSegment()).isEqualTo("secure");
+			assertThat(node.getUriSegment()).isEqualTo("secure");
 			assertThat(node.getViewClass()).isEqualTo(SecureHomeView.class);
 			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Secure_Home);
 			break;
 
 		case "secure/transfers":
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
-			assertThat(node.getUrlSegment()).isEqualTo("transfers");
+			assertThat(node.getUriSegment()).isEqualTo("transfers");
 			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Transfers);
 			break;
 
 		case "secure/money-in-out":
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
-			assertThat(node.getUrlSegment()).isEqualTo("money-in-out");
+			assertThat(node.getUriSegment()).isEqualTo("money-in-out");
 			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.MoneyInOut);
 			break;
 
 		case "secure/options":
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
-			assertThat(node.getUrlSegment()).isEqualTo("options");
+			assertThat(node.getUriSegment()).isEqualTo("options");
 			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Opt);
 			break;
 
 		default:
-			Fail.fail("unexpected url: '" + url + "'");
+			Fail.fail("unexpected uri: '" + uri + "'");
 		}
 	}
 

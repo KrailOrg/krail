@@ -62,7 +62,7 @@ public class TestWithSitemap {
 	protected SitemapNode newNode(String urlSegment) {
 		SitemapNode node0 = new SitemapNode();
 		node0.setLabelKey(TestLabelKeys.Home);
-		node0.setUrlSegment(urlSegment);
+		node0.setUriSegment(urlSegment);
 		node0.setViewClass(PublicHomeView.class);
 		return node0;
 	}

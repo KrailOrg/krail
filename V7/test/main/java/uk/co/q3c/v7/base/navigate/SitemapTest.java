@@ -38,9 +38,9 @@ public class SitemapTest {
 		// when
 
 		// then
-		assertThat(map.url(grandparent)).isEqualTo("public");
-		assertThat(map.url(parent)).isEqualTo("public/home");
-		assertThat(map.url(child)).isEqualTo("public/home/login");
+		assertThat(map.uri(grandparent)).isEqualTo("public");
+		assertThat(map.uri(parent)).isEqualTo("public/home");
+		assertThat(map.uri(child)).isEqualTo("public/home/login");
 	}
 
 	@Test
@@ -52,36 +52,36 @@ public class SitemapTest {
 		SitemapNode node = map.append("public/home");
 		// then
 		assertThat(node).isNotNull();
-		assertThat(node.getUrlSegment()).isEqualTo("home");
+		assertThat(node.getUriSegment()).isEqualTo("home");
 		assertThat(map.getNodeCount()).isEqualTo(2);
-		assertThat(map.getParent(node).getUrlSegment()).isEqualTo("public");
+		assertThat(map.getParent(node).getUriSegment()).isEqualTo("public");
 
 		// when
 		node = map.append("public/home/account");
 
 		// then
 		assertThat(node).isNotNull();
-		assertThat(node.getUrlSegment()).isEqualTo("account");
+		assertThat(node.getUriSegment()).isEqualTo("account");
 		assertThat(map.getNodeCount()).isEqualTo(3);
-		assertThat(map.getParent(node).getUrlSegment()).isEqualTo("home");
-		assertThat(map.getParent(map.getParent(node)).getUrlSegment()).isEqualTo("public");
+		assertThat(map.getParent(node).getUriSegment()).isEqualTo("home");
+		assertThat(map.getParent(map.getParent(node)).getUriSegment()).isEqualTo("public");
 
 		// when
 		node = map.append("public/home/transfer");
 
 		// then
 		assertThat(node).isNotNull();
-		assertThat(node.getUrlSegment()).isEqualTo("transfer");
+		assertThat(node.getUriSegment()).isEqualTo("transfer");
 		assertThat(map.getNodeCount()).isEqualTo(4);
-		assertThat(map.getParent(node).getUrlSegment()).isEqualTo("home");
-		assertThat(map.getParent(map.getParent(node)).getUrlSegment()).isEqualTo("public");
+		assertThat(map.getParent(node).getUriSegment()).isEqualTo("home");
+		assertThat(map.getParent(map.getParent(node)).getUriSegment()).isEqualTo("public");
 
 		// when
 		node = map.append("");
 
 		// then
 		assertThat(node).isNotNull();
-		assertThat(node.getUrlSegment()).isEqualTo("");
+		assertThat(node.getUriSegment()).isEqualTo("");
 		assertThat(map.getNodeCount()).isEqualTo(5);
 		assertThat(map.getRoots()).contains(node);
 	}
@@ -103,9 +103,9 @@ public class SitemapTest {
 		List<SitemapNode> result = map.nodeChainForSegments(segments, true);
 		// then
 		assertThat(result.size()).isEqualTo(3);
-		assertThat(result.get(0).getUrlSegment()).isEqualTo("public");
-		assertThat(result.get(1).getUrlSegment()).isEqualTo("home");
-		assertThat(result.get(2).getUrlSegment()).isEqualTo("view1");
+		assertThat(result.get(0).getUriSegment()).isEqualTo("public");
+		assertThat(result.get(1).getUriSegment()).isEqualTo("home");
+		assertThat(result.get(2).getUriSegment()).isEqualTo("view1");
 
 		// given
 		segments.remove(1);
@@ -115,7 +115,7 @@ public class SitemapTest {
 
 		// then
 		assertThat(result.size()).isEqualTo(1);
-		assertThat(result.get(0).getUrlSegment()).isEqualTo("public");
+		assertThat(result.get(0).getUriSegment()).isEqualTo("public");
 
 		// when
 		result = map.nodeChainForSegments(segments, false);
@@ -141,8 +141,8 @@ public class SitemapTest {
 		List<SitemapNode> result = map.nodeChainForSegments(segments, true);
 		// then
 		assertThat(result.size()).isEqualTo(2);
-		assertThat(result.get(0).getUrlSegment()).isEqualTo("public");
-		assertThat(result.get(1).getUrlSegment()).isEqualTo("home");
+		assertThat(result.get(0).getUriSegment()).isEqualTo("public");
+		assertThat(result.get(1).getUriSegment()).isEqualTo("home");
 
 	}
 
@@ -150,19 +150,54 @@ public class SitemapTest {
 	public void getRedirectFor() {
 
 		// given
-		// given
-		Sitemap map = new Sitemap();
-		map.append("public/home/view1");
-		map.append("public/home/view2");
-		map.append("secure/home/wiggly");
-		map.getRedirects().put("home", "public/home");
+		Sitemap sitemap = new Sitemap();
+		sitemap.append("public/home/view1");
+		sitemap.append("public/home/view2");
+		sitemap.append("secure/home/wiggly");
+		sitemap.getRedirects().put("home", "public/home");
 		// when redirect exists
-		String page = map.getRedirectFor("home");
+		String page = sitemap.getRedirectFor("home");
 		// then
 		assertThat(page).isEqualTo("public/home");
 		// when redirect does not exist
-		page = map.getRedirectFor("wiggly");
+		page = sitemap.getRedirectFor("wiggly");
 		assertThat(page).isEqualTo("wiggly");
+	}
+
+	@Test
+	public void uris() {
+
+		// given
+		Sitemap sitemap = new Sitemap();
+		sitemap.append("public/home/view1");
+		sitemap.append("public/home/view2");
+		sitemap.append("secure/home/wiggly");
+
+		// when
+
+		// then
+		assertThat(sitemap.uris()).containsOnly("public/home/view1", "public/home/view2", "secure/home/wiggly",
+				"secure/home", "secure", "public/home", "public");
+
+	}
+
+	@Test
+	public void hasUri() {
+
+		// given
+		// given
+		Sitemap sitemap = new Sitemap();
+		sitemap.append("public/home/view1");
+		sitemap.append("public/home/view2");
+		sitemap.append("secure/home/wiggly");
+
+		// when
+
+		// then
+		assertThat(sitemap.hasUri("public/home")).isTrue();
+		assertThat(sitemap.hasUri("secure/home")).isTrue();
+		assertThat(sitemap.hasUri("secure/home/wiggly")).isTrue();
+
 	}
 
 }

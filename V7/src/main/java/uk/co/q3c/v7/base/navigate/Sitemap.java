@@ -25,7 +25,7 @@ import uk.co.q3c.util.BasicForest;
 /**
  * Encapsulates the site layout. Individual "virtual pages" are represented by {@link SitemapNode} instances. This map
  * is usually built by an implementation of {@link SitemapProvider}, and is one of the fundamental building blocks of
- * the application, as it maps out pages, URLs and Views.
+ * the application, as it maps out pages, URIs and Views.
  * <p>
  * <p>
  * Because of it use as such a fundamental building block, an instance of this class has to be created early in the
@@ -51,8 +51,8 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	// Uses LinkedHashMap to retain insertion order
 	private final Map<String, String> redirects = new LinkedHashMap<>();
 
-	public String url(SitemapNode node) {
-		StringBuilder buf = new StringBuilder(node.getUrlSegment());
+	public String uri(SitemapNode node) {
+		StringBuilder buf = new StringBuilder(node.getUriSegment());
 		prependParent(node, buf);
 		return buf.toString();
 	}
@@ -61,30 +61,30 @@ public class Sitemap extends BasicForest<SitemapNode> {
 		SitemapNode parentNode = getParent(node);
 		if (parentNode != null) {
 			buf.insert(0, "/");
-			buf.insert(0, parentNode.getUrlSegment());
+			buf.insert(0, parentNode.getUriSegment());
 			prependParent(parentNode, buf);
 		}
 	}
 
 	/**
-	 * creates a SiteMapNode and appends it to the map according to the {@code url} given, then returns it. If a node
+	 * creates a SiteMapNode and appends it to the map according to the {@code uri} given, then returns it. If a node
 	 * already exists at that location it is returned. If there are gaps in the structure, nodes are created to fill
-	 * them (the same idea as forcing directory creation on a file path). An empty (not null) url is allowed. This
-	 * represents the site base url without any further qualification.
+	 * them (the same idea as forcing directory creation on a file path). An empty (not null) URI is allowed. This
+	 * represents the site base URI without any further qualification.
 	 * 
-	 * @param toUrl
+	 * @param uri
 	 * @return
 	 */
-	public SitemapNode append(String url) {
+	public SitemapNode append(String uri) {
 
-		if (url.equals("")) {
+		if (uri.equals("")) {
 			SitemapNode node = new SitemapNode();
-			node.setUrlSegment(url);
+			node.setUriSegment(uri);
 			addNode(node);
 			return node;
 		}
 		SitemapNode node = null;
-		String[] segments = StringUtils.split(url, "/");
+		String[] segments = StringUtils.split(uri, "/");
 		List<SitemapNode> nodes = getRoots();
 		SitemapNode parentNode = null;
 		for (int i = 0; i < segments.length; i++) {
@@ -100,7 +100,7 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	private SitemapNode findNodeBySegment(List<SitemapNode> nodes, String segment, boolean createIfAbsent) {
 		SitemapNode foundNode = null;
 		for (SitemapNode node : nodes) {
-			if (node.getUrlSegment().equals(segment)) {
+			if (node.getUriSegment().equals(segment)) {
 				foundNode = node;
 				break;
 			}
@@ -108,7 +108,7 @@ public class Sitemap extends BasicForest<SitemapNode> {
 
 		if ((foundNode == null) && (createIfAbsent)) {
 			foundNode = new SitemapNode();
-			foundNode.setUrlSegment(segment);
+			foundNode.setUriSegment(segment);
 
 		}
 		return foundNode;
@@ -220,12 +220,30 @@ public class Sitemap extends BasicForest<SitemapNode> {
 		return nodeChain;
 	}
 
-	public List<String> urls() {
+	/**
+	 * Returns a list of all the URIs contained in the sitemap. This is a fairly expensive call, as each URI has to be
+	 * built from the node structure.
+	 * 
+	 * @return
+	 */
+	public List<String> uris() {
 		List<String> list = new ArrayList<>();
 		for (SitemapNode node : getAllNodes()) {
-			list.add(url(node));
+			list.add(uri(node));
 		}
 		return list;
+	}
+
+	/**
+	 * Returns true if the sitemap contains {@code uri}. This is a fairly expensive call, as each URI has to be built
+	 * from the node structure, before this method can be evaluated
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public boolean hasUri(String uri) {
+		List<String> list = uris();
+		return list.contains(uri);
 	}
 
 	public void setErrors(int errorSum) {

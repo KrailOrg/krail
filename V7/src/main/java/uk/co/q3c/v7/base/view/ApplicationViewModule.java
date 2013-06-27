@@ -70,7 +70,7 @@ public class ApplicationViewModule extends AbstractModule {
 				// intermediate nodes will not have a view if they have been redirected
 				Class<? extends V7View> viewClass = node.getViewClass();
 				if (viewClass != null) {
-					String url = sitemap.url(node);
+					String url = sitemap.uri(node);
 					mapbinder.addBinding(url).to(viewClass);
 				}
 			}

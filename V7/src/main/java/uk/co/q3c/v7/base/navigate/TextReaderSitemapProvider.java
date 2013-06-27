@@ -97,8 +97,8 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private Set<String> indentationErrors;
 	private Set<String> missingPages;
 	private Set<String> propertyErrors;
-	private Set<String> duplicateURLs;
-	private Set<String> viewlessURLs;
+	private Set<String> duplicateURIs;
+	private Set<String> viewlessURIs;
 	private Set<String> unrecognisedOptions;
 	private Set<String> redirectErrors;
 	private Set<String> syntaxErrors;
@@ -132,8 +132,8 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		indentationErrors = new HashSet<>();
 		missingPages = new HashSet<>();
 		propertyErrors = new HashSet<>();
-		viewlessURLs = new HashSet<>();
-		duplicateURLs = new HashSet<>();
+		viewlessURIs = new HashSet<>();
+		duplicateURIs = new HashSet<>();
 		unrecognisedOptions = new HashSet<>();
 		redirectErrors = new HashSet<>();
 		infoMessages = new HashSet<>();
@@ -215,7 +215,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private int errorSum() {
 		int c = missingSections().size() + missingEnums.size() + invalidViewClasses.size();
 		c += undeclaredViewClasses.size() + missingPages.size() + propertyErrors.size();
-		c += viewlessURLs.size() + duplicateURLs.size() + redirectErrors.size() + syntaxErrors.size();
+		c += viewlessURIs.size() + duplicateURIs.size() + redirectErrors.size() + syntaxErrors.size();
 
 		if (getViewPackages() == null || getViewPackages().isEmpty()) {
 			c++;
@@ -238,12 +238,12 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	}
 
 	/**
-	 * Looks for any URIs without views and captures them in {@link #viewlessURLs} for reporting
+	 * Looks for any URIs without views and captures them in {@link #viewlessURIs} for reporting
 	 */
 	private void checkViews() {
 		for (SitemapNode node : sitemap.getAllNodes()) {
 			if (node.getViewClass() == null) {
-				viewlessURLs.add("uri: \"" + sitemap.url(node) + "\"");
+				viewlessURIs.add("uri: \"" + sitemap.uri(node) + "\"");
 			}
 		}
 
@@ -261,12 +261,12 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	 * Ensure that redirection targets exist, and that no loops can be created
 	 */
 	private void validateRedirects() {
-		Collection<String> urls = sitemap.urls();
+		Collection<String> uris = sitemap.uris();
 		for (String target : getRedirects().values()) {
 			if (getRedirects().keySet().contains(target)) {
 				redirectErrors.add("'" + target + "' cannot be both a redirect source and redirect target");
 			}
-			if (!urls.contains(target)) {
+			if (!uris.contains(target)) {
 				redirectErrors.add("'" + target + "' cannot be a redirect target, it has not been defined as a page");
 
 			}
@@ -314,8 +314,8 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		SitemapNode node = sitemap.append(StandardPageKey.defaultUri(key));
 		node.setLabelKey(key);
 		node.setViewClass(StandardPageKey.defaultViewInterface(key));
-		node.setUrlSegment(StandardPageKey.defaultSegment(key));
-		sitemap.getStandardPages().put(key, sitemap.url(node));
+		node.setUriSegment(StandardPageKey.defaultSegment(key));
+		sitemap.getStandardPages().put(key, sitemap.uri(node));
 	}
 
 	// /**
@@ -589,11 +589,11 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 
 				// segment has been set, view & label may be null
 				SitemapNode node = new SitemapNode();
-				node.setUrlSegment(segment);
+				node.setUriSegment(segment);
 
 				// do structure before labels
 				// labels are not needed for redirected pages
-				// but we cannot get full url until structure done
+				// but we cannot get full URI until structure done
 
 				// add the node
 				if (treeLevel == 1) {
@@ -621,8 +621,8 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 						if (treeLevel - currentLevel > 1) {
 							log.warn(
 									"indentation for {} line is too great.  It should be a maximum of 1 greater than its predecessor",
-									node.getUrlSegment());
-							indentationErrors.add(node.getUrlSegment());
+									node.getUriSegment());
+							indentationErrors.add(node.getUriSegment());
 						}
 						sitemap.addChild(currentNode, node);
 						currentNode = node;
@@ -631,9 +631,9 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 
 				}
 
-				String url = sitemap.url(node);
+				String uri = sitemap.uri(node);
 				// do the view
-				if (!getRedirects().containsKey(url)) {
+				if (!getRedirects().containsKey(uri)) {
 					findView(node, segment, view);
 				}
 
@@ -667,7 +667,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	public String keyName(String labelKeyName, SitemapNode node) {
 		String keyName = labelKeyName;
 		if (keyName == null) {
-			keyName = node.getUrlSegment().replace("-", " ");
+			keyName = node.getUriSegment().replace("-", " ");
 			keyName = keyName.replace("_", " ");
 			keyName = WordUtils.capitalize(keyName);
 			// hyphen not valid in enum, but may be used in segment
@@ -903,7 +903,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		reportChunk(syntaxErrors, "syntax errors",
 				"these have been ignored, and the system may work, but you may not get the intended result", true);
 		reportChunk(redirectErrors, "redirect errors", "Redirect(s) causing an inconsistency and must be fixed", true);
-		reportChunk(viewlessURLs, "viewless URIs", "these URIs have no view associated with them", true);
+		reportChunk(viewlessURIs, "viewless URIs", "these URIs have no view associated with them", true);
 
 		if (warningSum() > 0) {
 			report.append(" --------------- warnings ---------");
@@ -1038,7 +1038,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		return getSitemap();
 	}
 
-	public String standardPageUrl(StandardPageKey key) {
+	public String standardPageUri(StandardPageKey key) {
 		return standardPages().get(key);
 	}
 
@@ -1058,12 +1058,12 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		return sitemap.getRedirects();
 	}
 
-	public Set<String> getViewlessURLs() {
-		return viewlessURLs;
+	public Set<String> getViewlessURIs() {
+		return viewlessURIs;
 	}
 
-	public Set<String> getDuplicateURLs() {
-		return duplicateURLs;
+	public Set<String> getDuplicateURIs() {
+		return duplicateURIs;
 	}
 
 	public Set<String> redirectEntries() {
