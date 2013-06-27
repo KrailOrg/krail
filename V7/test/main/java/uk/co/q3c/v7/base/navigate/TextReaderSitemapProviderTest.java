@@ -49,6 +49,19 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 
 import fixture.testviews2.OptionsView;
 
+/**
+ * There aere several things set up to help with testing. The sitemap.properties file can be modified using
+ * {@link #substitute(String, String)}, {@link #deleteLine(String)}, {@link #insertAfter(String, String)} <br>
+ * <br>
+ * {@link #outputModifiedFile()} will show the changes made<br>
+ * <br>
+ * The sitemap.getReport() is useful for debugging.<br>
+ * <br>
+ * Sitemap.toString() will show the page structure
+ * 
+ * @author dsowerby
+ * 
+ */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class TextReaderSitemapProviderTest {
@@ -307,7 +320,7 @@ public class TextReaderSitemapProviderTest {
 	@Test
 	public void viewNotFound() throws IOException {
 
-		substitute("--home          : PublicHome", "--home          : PubliclyHome");
+		substitute("--transfers     : subview.Transfer", "--transfers     : subview.Transfers");
 		prepFile();
 		outputModifiedFile();
 		// when
@@ -324,7 +337,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getPropertyErrors()).containsOnly();
 		assertThat(reader.getMissingEnums()).containsOnly();
 		assertThat(reader.getInvalidViewClasses()).containsOnly();
-		assertThat(reader.getUndeclaredViewClasses()).containsOnly("PubliclyHomeView");
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly("subview.TransfersView");
 		assertThat(reader.getIndentationErrors()).containsOnly();
 		assertThat(reader.getSitemap().hasErrors()).isTrue();
 		System.out.println(reader.getReport());
@@ -351,7 +364,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getPropertyErrors()).containsOnly();
 		assertThat(reader.getMissingEnums()).containsOnly();
 		assertThat(reader.getInvalidViewClasses()).containsOnly(NotV7View.class.getName());
-		assertThat(reader.getUndeclaredViewClasses()).containsOnly("subview.NotV7View");
+		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
 		assertThat(reader.getSitemap().hasErrors()).isTrue();
 		System.out.println(reader.getReport());
@@ -405,53 +418,10 @@ public class TextReaderSitemapProviderTest {
 	}
 
 	@Test
-	public void standardPageMissing() throws IOException {
-
-		// given
-		substitute("resetAccount   = public/reset-account", "resetAccount   = ");
-		substitute("requestAccount = public/request-account", null);
-		prepFile();
-		// when
-		reader.parse(modifiedFile);
-
-		// then
-		assertThat(reader.isLabelClassNonExistent()).isFalse();
-		assertThat(reader.isLabelClassNotI18N()).isFalse();
-		assertThat(reader.missingSections()).containsOnly();
-
-		assertThat(reader.getPagesDefined()).isEqualTo(12); // Two standard
-															// pages missing
-		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
-		assertThat(reader.getMissingPages()).containsOnly("requestAccount");
-		assertThat(reader.getPropertyErrors()).containsOnly();
-		assertThat(reader.getMissingEnums()).containsOnly();
-		assertThat(reader.getInvalidViewClasses()).containsOnly();
-		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
-		assertThat(reader.getIndentationErrors()).containsOnly();
-		assertThat(reader.getSitemap().hasErrors()).isTrue();
-
-		System.out.println(reader.getReport());
-	}
-
-	@Test
-	public void standardPageEmpty() throws IOException {
-
-		// given
-		substitute("publicHome     = public/home                  : PublicHome",
-				"publicHome     =                 : PublicHome");
-		prepFile();
-		// when
-		reader.parse(modifiedFile);
-		// then
-		assertThat(reader.getSitemap().standardPageURI(StandardPageKey.Public_Home)).isEqualTo("");
-
-	}
-
-	@Test
 	public void redirectTargetNotADefinedPage() throws IOException {
 
 		// given
-		substitute("public : public/home", "public : wiggly/home");
+		insertAfter("[redirects]", "wiggly : wiggly/home");
 		prepFile();
 		// when
 		reader.parse(modifiedFile);
@@ -462,15 +432,21 @@ public class TextReaderSitemapProviderTest {
 
 	}
 
+	/**
+	 * 
+	 * Also tests emptyUri
+	 * 
+	 * @throws IOException
+	 */
 	@Test
 	public void redirectTargetEmptyButValid() throws IOException {
 
 		// given
-		substitute("       : public/public-home", "wiggly  :   "); // redirect
-		substitute("publicHome     = public/home                  : PublicHome",
-				"publicHome     =                 : PublicHome");
-		insertAfter("--options                                 ~ Opt", "-public");
-		insertAfter("-public", "--home   :  PublicHome");
+		// make empty segment a valid page
+		insertAfter("[map]", "-   :  WigglyHome ~Home");
+		// redirect to empty
+		substitute("       : public", "wiggly  :   ");
+
 		prepFile();
 		// when
 		reader.parse(modifiedFile);
@@ -479,6 +455,7 @@ public class TextReaderSitemapProviderTest {
 
 		assertThat(reader.getSitemap().urls()).contains("");
 		assertThat(reader.getRedirectErrors()).containsOnly();
+		System.out.println(reader.getSitemap().getReport());
 		assertThat(reader.getSitemap().hasErrors()).isFalse();
 
 	}
@@ -548,16 +525,13 @@ public class TextReaderSitemapProviderTest {
 	public void redirectTargetLoop() throws IOException {
 
 		// given
-		insertAfter("secure : secure/home", "public/home : public");
+		insertAfter("       : public", "public: ");
 		prepFile();
 		// when
 		reader.parse(modifiedFile);
 
 		// then
-		assertThat(reader.getRedirectErrors()).contains(
-				"'public/home' cannot be both a redirect source and redirect target");
-		assertThat(reader.getRedirectErrors())
-				.contains("'public' cannot be both a redirect source and redirect target");
+		assertThat(reader.getRedirectErrors()).contains("'' cannot be both a redirect source and redirect target");
 		assertThat(reader.getSitemap().hasErrors()).isTrue();
 
 	}

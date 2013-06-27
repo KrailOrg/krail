@@ -47,7 +47,7 @@ public class StandardViewModule extends AbstractModule {
 	 * Override this to provide your own {@link V7View} for the parent page of system account related pages.
 	 */
 	private void bindSystemAccountView() {
-		bind(SystemAccountView.class).to(SystemAccountView.class);
+		bind(SystemAccountView.class).to(DefaultSystemAccountView.class);
 
 	}
 

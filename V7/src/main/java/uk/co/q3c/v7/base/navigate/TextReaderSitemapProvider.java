@@ -213,15 +213,13 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	 * @return
 	 */
 	private int errorSum() {
-		int c = missingSections().size() + missingEnums.size() + invalidViewClasses.size()
-				+ undeclaredViewClasses.size() + missingPages.size() + propertyErrors.size() +
+		int c = missingSections().size() + missingEnums.size() + invalidViewClasses.size();
+		c += undeclaredViewClasses.size() + missingPages.size() + propertyErrors.size();
+		c += viewlessURLs.size() + duplicateURLs.size() + redirectErrors.size() + syntaxErrors.size();
 
-				viewlessURLs.size() + duplicateURLs.size() + redirectErrors.size() + infoMessages.size()
-				+ syntaxErrors.size();
 		if (getViewPackages() == null || getViewPackages().isEmpty()) {
 			c++;
 		}
-
 		if (labelClassNotI18N) {
 			c++;
 		}
@@ -231,7 +229,6 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		if (labelClassMissing) {
 			c++;
 		}
-
 		return c;
 	}
 
@@ -246,7 +243,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private void checkViews() {
 		for (SitemapNode node : sitemap.getAllNodes()) {
 			if (node.getViewClass() == null) {
-				viewlessURLs.add(sitemap.url(node));
+				viewlessURLs.add("uri: \"" + sitemap.url(node) + "\"");
 			}
 		}
 
@@ -701,12 +698,12 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		if (appendView) {
 			viewName = viewName + "View";
 		}
-
+		Class<?> viewClass = null;
 		// try and find the view in the specified packages
 		for (String pkg : getViewPackages()) {
 			String fullViewName = pkg + "." + viewName;
 			try {
-				Class<?> viewClass = Class.forName(fullViewName);
+				viewClass = Class.forName(fullViewName);
 				if (V7View.class.isAssignableFrom(viewClass)) {
 					node.setViewClass((Class<V7View>) viewClass);
 					break;
@@ -717,6 +714,9 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 				// don't need to do anything
 			}
 
+		}
+		if (viewClass == null) {
+			undeclaredViewClasses.add(viewName);
 		}
 
 	}
@@ -896,13 +896,14 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		reportChunk(missingPages, "missing pages", "these MUST be defined");
 		reportChunk(propertyErrors, "property errors", "should be key=value, spaces are ignored");
 		reportChunk(missingEnums, "missing enum declarations", "you could just paste these into your enum declaration");
-		reportChunk(invalidViewClasses, "invalid view classes", "(invalid because they do not implement V7View");
+		reportChunk(invalidViewClasses, "invalid view classes", "invalid because they do not implement V7View");
 		reportChunk(undeclaredViewClasses, "undeclared view classes",
 				"these could not be found in the view packages declared in the [viewPackages] section");
 
 		reportChunk(syntaxErrors, "syntax errors",
 				"these have been ignored, and the system may work, but you may not get the intended result", true);
 		reportChunk(redirectErrors, "redirect errors", "Redirect(s) causing an inconsistency and must be fixed", true);
+		reportChunk(viewlessURLs, "viewless URIs", "these URIs have no view associated with them", true);
 
 		if (warningSum() > 0) {
 			report.append(" --------------- warnings ---------");

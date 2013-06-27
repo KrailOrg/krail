@@ -42,8 +42,8 @@ public class StandardPageKeysTest {
 		// when
 
 		// then
-		assertThat(StandardPageKey.defaultSegment(StandardPageKey.Public_Home)).isEqualTo("public-home");
-		assertThat(StandardPageKey.defaultSegment(StandardPageKey.Secure_Home)).isEqualTo("secure-home");
+		assertThat(StandardPageKey.defaultSegment(StandardPageKey.Public_Home)).isEqualTo("public");
+		assertThat(StandardPageKey.defaultSegment(StandardPageKey.Secure_Home)).isEqualTo("secure");
 		assertThat(StandardPageKey.defaultSegment(StandardPageKey.Login)).isEqualTo("login");
 		assertThat(StandardPageKey.defaultSegment(StandardPageKey.Request_Account)).isEqualTo("request-account");
 		assertThat(StandardPageKey.defaultSegment(StandardPageKey.Unlock_Account)).isEqualTo("unlock-account");
@@ -58,8 +58,8 @@ public class StandardPageKeysTest {
 		// when
 
 		// then
-		assertThat(StandardPageKey.defaultUri(StandardPageKey.Public_Home)).isEqualTo("public/public-home");
-		assertThat(StandardPageKey.defaultUri(StandardPageKey.Secure_Home)).isEqualTo("secure/secure-home");
+		assertThat(StandardPageKey.defaultUri(StandardPageKey.Public_Home)).isEqualTo("public");
+		assertThat(StandardPageKey.defaultUri(StandardPageKey.Secure_Home)).isEqualTo("secure");
 		assertThat(StandardPageKey.defaultUri(StandardPageKey.Login)).isEqualTo("public/login");
 		assertThat(StandardPageKey.defaultUri(StandardPageKey.Request_Account)).isEqualTo(
 				"public/system-account/request-account");

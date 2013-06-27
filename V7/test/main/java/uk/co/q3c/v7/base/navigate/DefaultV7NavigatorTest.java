@@ -1,8 +1,11 @@
 package uk.co.q3c.v7.base.navigate;
 
-import static org.fest.assertions.Assertions.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Map;
 
@@ -122,7 +125,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		when(viewProMap.get("view2")).thenReturn(view2Pro);
 		when(viewProMap.get("login")).thenReturn(loginViewPro);
 		when(viewProMap.get("public/logout")).thenReturn(logoutViewPro);
-		when(viewProMap.get("secure/home")).thenReturn(secureHomePro);
+		when(viewProMap.get("secure")).thenReturn(secureHomePro);
 
 		when(view1Pro.get()).thenReturn(view1);
 		when(view2Pro.get()).thenReturn(view2);
@@ -207,7 +210,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		// when
 		navigator.navigateTo("/id=2/age=5");
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo("public/home/id=2/age=5");
+		assertThat(navigator.getNavigationState()).isEqualTo("public/id=2/age=5");
 
 	}
 
@@ -251,12 +254,12 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void navigateToNode() {
 
 		// given
-
-		SitemapNode node = new SitemapURIConverter(sitemap, uriHandler).nodeForUri("public/view2", false);
+		String uri = "secure/options";
+		SitemapNode node = new SitemapURIConverter(sitemap, uriHandler).nodeForUri(uri, false);
 		// when
 		navigator.navigateTo(node);
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo("public/view2");
+		assertThat(navigator.getNavigationState()).isEqualTo(uri);
 
 	}
 
@@ -356,9 +359,9 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 		// given
 		// when
-		navigator.navigateTo("secure");
+		navigator.navigateTo("wiggly");
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo("secure/home");
+		assertThat(navigator.getNavigationState()).isEqualTo("secure/transfers");
 	}
 
 }
