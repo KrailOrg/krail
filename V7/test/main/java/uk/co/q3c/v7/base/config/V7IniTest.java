@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.config;
 
-import static org.fest.assertions.Assertions.*;
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.io.File;
 
@@ -24,7 +24,7 @@ import uk.co.q3c.v7.base.config.V7Ini.DbParam;
 
 public class V7IniTest {
 
-	private final String[] pages = new String[] { "publicHome", "secureHome", "login", "logout" };
+	private final String[] pages = new String[] { "publicHome", "privateHome", "login", "logout" };
 	private final String[] dbparams = new String[] { "dbURL", "dbUser", "dbPwd" };
 
 	String test0 = "test0.V7.ini"; // should be non-existent

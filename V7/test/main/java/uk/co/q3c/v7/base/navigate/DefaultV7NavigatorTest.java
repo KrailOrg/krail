@@ -78,7 +78,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	V7View view2;
 
 	@Mock
-	V7View secureHomeView;
+	V7View privateHomeView;
 
 	@Inject
 	Injector injector;
@@ -101,7 +101,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	V7Ini ini;
 
 	@Mock
-	Provider<V7View> secureHomePro;
+	Provider<V7View> privateHomePro;
 
 	@Inject
 	Provider<V7Ini> iniPro;
@@ -115,7 +115,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		ini = iniPro.get();
 		ini.validate();
 
-		sitemap = new TextReaderSitemapProvider().get();
+		sitemap = new TextReaderSitemapProvider(new StandardPageBuilder()).get();
 
 		uriHandler = new StrictURIFragmentHandler();
 
@@ -125,18 +125,16 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		when(viewProMap.get("view2")).thenReturn(view2Pro);
 		when(viewProMap.get("login")).thenReturn(loginViewPro);
 		when(viewProMap.get("public/logout")).thenReturn(logoutViewPro);
-		when(viewProMap.get("secure")).thenReturn(secureHomePro);
+		when(viewProMap.get("private")).thenReturn(privateHomePro);
 
 		when(view1Pro.get()).thenReturn(view1);
 		when(view2Pro.get()).thenReturn(view2);
 		when(loginViewPro.get()).thenReturn(loginView);
 		when(logoutViewPro.get()).thenReturn(logoutView);
-		when(secureHomePro.get()).thenReturn(secureHomeView);
+		when(privateHomePro.get()).thenReturn(privateHomeView);
 
 		when(scopedUI.getPage()).thenReturn(page);
 		when(errorViewPro.get()).thenReturn(errorView);
-
-		// when (ini.get(StandardPageKey.secureHome)).thenReturn
 
 		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, getSecurityManager());
 		CurrentInstance.set(UI.class, scopedUI);
@@ -187,7 +185,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		// when
 		navigator.loginSuccessful();
 		// then
-		verify(scopedUI).changeView(loginView, secureHomeView);
+		verify(scopedUI).changeView(loginView, privateHomeView);
 
 	}
 
@@ -254,7 +252,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void navigateToNode() {
 
 		// given
-		String uri = "secure/options";
+		String uri = "private/options";
 		SitemapNode node = new SitemapURIConverter(sitemap, uriHandler).nodeForUri(uri, false);
 		// when
 		navigator.navigateTo(node);
@@ -361,7 +359,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		// when
 		navigator.navigateTo("wiggly");
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo("secure/transfers");
+		assertThat(navigator.getNavigationState()).isEqualTo("private/transfers");
 	}
 
 }

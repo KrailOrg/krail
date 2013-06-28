@@ -32,7 +32,7 @@ public class StandardViewModule extends AbstractModule {
 		bindErrorView();
 		bindLoginView();
 		bindLogoutView();
-		bindSecureHomeView();
+		bindPrivateHomeView();
 		bindPublicHomeView();
 		bindRequestSystemAccountView();
 		bindRequestSystemAccountResetView();
@@ -87,10 +87,10 @@ public class StandardViewModule extends AbstractModule {
 	}
 
 	/**
-	 * Override this to provide your own secure home {@link V7View}
+	 * Override this to provide your own private home {@link V7View}
 	 */
-	protected void bindSecureHomeView() {
-		bind(SecureHomeView.class).to(DefaultSecureHomeView.class);
+	protected void bindPrivateHomeView() {
+		bind(PrivateHomeView.class).to(DefaultPrivateHomeView.class);
 
 	}
 

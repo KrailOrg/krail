@@ -44,6 +44,8 @@ import uk.co.q3c.util.BasicForest;
  */
 public class Sitemap extends BasicForest<SitemapNode> {
 
+	private String publicRoot = "public";
+	private String privateRoot = "private";
 	private int nextNodeId = 0;
 	private int errors = 0;
 	private final Map<StandardPageKey, String> standardPages = new HashMap<>();
@@ -250,4 +252,21 @@ public class Sitemap extends BasicForest<SitemapNode> {
 		errors = errorSum;
 
 	}
+
+	public String getPublicRoot() {
+		return publicRoot;
+	}
+
+	public void setPublicRoot(String publicRoot) {
+		this.publicRoot = publicRoot;
+	}
+
+	public String getPrivateRoot() {
+		return privateRoot;
+	}
+
+	public void setPrivateRoot(String privateRoot) {
+		this.privateRoot = privateRoot;
+	}
+
 }

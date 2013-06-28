@@ -93,7 +93,7 @@ public class SitemapTest {
 		Sitemap map = new Sitemap();
 		map.append("public/home/view1");
 		map.append("public/home/view2");
-		map.append("secure/home/wiggly");
+		map.append("private/home/wiggly");
 		List<String> segments = new ArrayList<>();
 		segments.add("public");
 		segments.add("home");
@@ -131,7 +131,7 @@ public class SitemapTest {
 		Sitemap map = new Sitemap();
 		map.append("public/home/view1");
 		map.append("public/home/view2");
-		map.append("secure/home/wiggly");
+		map.append("private/home/wiggly");
 		List<String> segments = new ArrayList<>();
 		segments.add("public");
 		segments.add("home");
@@ -153,7 +153,7 @@ public class SitemapTest {
 		Sitemap sitemap = new Sitemap();
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
-		sitemap.append("secure/home/wiggly");
+		sitemap.append("private/home/wiggly");
 		sitemap.getRedirects().put("home", "public/home");
 		// when redirect exists
 		String page = sitemap.getRedirectFor("home");
@@ -171,13 +171,13 @@ public class SitemapTest {
 		Sitemap sitemap = new Sitemap();
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
-		sitemap.append("secure/home/wiggly");
+		sitemap.append("private/home/wiggly");
 
 		// when
 
 		// then
-		assertThat(sitemap.uris()).containsOnly("public/home/view1", "public/home/view2", "secure/home/wiggly",
-				"secure/home", "secure", "public/home", "public");
+		assertThat(sitemap.uris()).containsOnly("public/home/view1", "public/home/view2", "private/home/wiggly",
+				"private/home", "private", "public/home", "public");
 
 	}
 
@@ -189,14 +189,14 @@ public class SitemapTest {
 		Sitemap sitemap = new Sitemap();
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
-		sitemap.append("secure/home/wiggly");
+		sitemap.append("private/home/wiggly");
 
 		// when
 
 		// then
 		assertThat(sitemap.hasUri("public/home")).isTrue();
-		assertThat(sitemap.hasUri("secure/home")).isTrue();
-		assertThat(sitemap.hasUri("secure/home/wiggly")).isTrue();
+		assertThat(sitemap.hasUri("private/home")).isTrue();
+		assertThat(sitemap.hasUri("private/home/wiggly")).isTrue();
 
 	}
 

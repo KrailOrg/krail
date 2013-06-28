@@ -49,7 +49,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	}
 
 	private enum ValidOption {
-		appendView, labelKeys, generatePublicHomePage, generateAuthenticationPages, generateRequestAccount, generateRequestAccountReset, systemAccountUri
+		appendView, labelKeys, generatePublicHomePage, generateAuthenticationPages, generateRequestAccount, generateRequestAccountReset, systemAccountRoot, publicRoot, privateRoot
 	}
 
 	private Sitemap sitemap;
@@ -64,32 +64,6 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	// options
 	private boolean appendView;
 	private String labelKeys;
-	private boolean generatePublicHomePage = true;
-
-	public boolean isGeneratePublicHomePage() {
-		return generatePublicHomePage;
-	}
-
-	public boolean isGenerateAuthenticationPages() {
-		return generateAuthenticationPages;
-	}
-
-	public boolean isGenerateRequestAccount() {
-		return generateRequestAccount;
-	}
-
-	public boolean isGenerateRequestAccountReset() {
-		return generateRequestAccountReset;
-	}
-
-	public String getSystemAccountUri() {
-		return systemAccountUri;
-	}
-
-	private boolean generateAuthenticationPages = true;
-	private boolean generateRequestAccount = true;
-	private boolean generateRequestAccountReset = true;
-	private String systemAccountUri = "public/system-account";
 
 	private Set<String> missingEnums;
 	private Set<String> invalidViewClasses;
@@ -117,10 +91,12 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private String labelClassName;
 
 	private File sourceFile;
+	private final StandardPageBuilder standardPageBuilder;
 
 	@Inject
-	public TextReaderSitemapProvider() {
+	public TextReaderSitemapProvider(StandardPageBuilder standardPageBuilder) {
 		super();
+		this.standardPageBuilder = standardPageBuilder;
 	}
 
 	private void init() {
@@ -140,6 +116,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		syntaxErrors = new HashSet<>();
 
 		sitemap = new Sitemap();
+		standardPageBuilder.setSitemap(sitemap);
 		sections = new HashMap<>();
 		labelClassNotI18N = false;
 		labelClassNonExistent = false;
@@ -279,43 +256,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	 * https://sites.google.com/site/q3cjava/sitemap#TOC-options-
 	 */
 	private void generateStandardPages() {
-		if (generatePublicHomePage) {
-			generatePage(StandardPageKey.Public_Home);
-		}
-		if (generateAuthenticationPages) {
-			generatePage(StandardPageKey.Secure_Home);
-			generatePage(StandardPageKey.Login);
-			generatePage(StandardPageKey.Logout);
-
-			if (generateRequestAccount || generateRequestAccountReset) {
-				generatePage(StandardPageKey.System_Account);
-			}
-
-			if (generateRequestAccount) {
-				generatePage(StandardPageKey.Request_Account);
-			}
-
-			if (generateRequestAccountReset) {
-				generatePage(StandardPageKey.Unlock_Account);
-				generatePage(StandardPageKey.Refresh_Account);
-				generatePage(StandardPageKey.Enable_Account);
-				generatePage(StandardPageKey.Reset_Account);
-			}
-		}
-
-	}
-
-	/**
-	 * Creates a Sitemap node and assigns the default values from the {@code key}
-	 * 
-	 * @param key
-	 */
-	private void generatePage(StandardPageKey key) {
-		SitemapNode node = sitemap.append(StandardPageKey.defaultUri(key));
-		node.setLabelKey(key);
-		node.setViewClass(StandardPageKey.defaultViewInterface(key));
-		node.setUriSegment(StandardPageKey.defaultSegment(key));
-		sitemap.getStandardPages().put(key, sitemap.uri(node));
+		standardPageBuilder.generateStandardPages();
 	}
 
 	// /**
@@ -480,16 +421,16 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 				appendView = "true".equals(value);
 				break;
 			case generateAuthenticationPages:
-				generateAuthenticationPages = "true".equals(value);
+				standardPageBuilder.setGenerateAuthenticationPages("true".equals(value));
 				break;
 			case generatePublicHomePage:
-				generatePublicHomePage = "true".equals(value);
+				standardPageBuilder.setGeneratePublicHomePage("true".equals(value));
 				break;
 			case generateRequestAccount:
-				generateRequestAccount = "true".equals(value);
+				standardPageBuilder.setGenerateRequestAccount("true".equals(value));
 				break;
 			case generateRequestAccountReset:
-				generateRequestAccountReset = "true".equals(value);
+				standardPageBuilder.setGenerateRequestAccountReset("true".equals(value));
 				break;
 			case labelKeys:
 				labelKeys = value;
@@ -499,8 +440,15 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 					validateLabelKeys();
 				}
 				break;
-			case systemAccountUri:
-				systemAccountUri = value;
+			case systemAccountRoot:
+				setSystemAccountRoot(value);
+				break;
+			case privateRoot:
+				sitemap.setPrivateRoot(value);
+				break;
+
+			case publicRoot:
+				sitemap.setPublicRoot(value);
 				break;
 			}
 
@@ -508,6 +456,11 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			log.warn("unrecognised option '{}' in site map", key);
 			unrecognisedOptions.add(key);
 		}
+
+	}
+
+	private void setSystemAccountRoot(String systemAccountRoot) {
+		standardPageBuilder.setSystemAccountRoot(systemAccountRoot);
 
 	}
 
@@ -1118,4 +1071,25 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	public Set<String> getInfoMessages() {
 		return infoMessages;
 	}
+
+	public boolean isGeneratePublicHomePage() {
+		return standardPageBuilder.isGeneratePublicHomePage();
+	}
+
+	public boolean isGenerateAuthenticationPages() {
+		return standardPageBuilder.isGenerateAuthenticationPages();
+	}
+
+	public boolean isGenerateRequestAccount() {
+		return standardPageBuilder.isGenerateRequestAccount();
+	}
+
+	public boolean isGenerateRequestAccountReset() {
+		return standardPageBuilder.isGenerateRequestAccountReset();
+	}
+
+	public String getSystemAccountUri() {
+		return standardPageBuilder.getSystemAccountRoot();
+	}
+
 }

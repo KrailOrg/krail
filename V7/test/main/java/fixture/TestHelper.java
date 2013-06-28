@@ -15,13 +15,14 @@ package fixture;
 import java.io.File;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
+import uk.co.q3c.v7.base.navigate.StandardPageBuilder;
 import uk.co.q3c.v7.base.navigate.TextReaderSitemapProvider;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 
 public class TestHelper {
 
 	public static ApplicationViewModule applicationViewModuleUsingSitemap() {
-		TextReaderSitemapProvider sitemapPro = new TextReaderSitemapProvider();
+		TextReaderSitemapProvider sitemapPro = new TextReaderSitemapProvider(new StandardPageBuilder());
 		// has to be on classpath, called as a Resource
 		File dir = new File("test/main/java");
 		File f = new File(dir, "sitemap.properties");

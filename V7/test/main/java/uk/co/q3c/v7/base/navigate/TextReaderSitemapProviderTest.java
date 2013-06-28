@@ -31,13 +31,13 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
+import uk.co.q3c.v7.base.view.PrivateHomeView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountEnableView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountResetView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountView;
-import uk.co.q3c.v7.base.view.SecureHomeView;
 import uk.co.q3c.v7.base.view.SystemAccountView;
 import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
 import uk.co.q3c.v7.base.view.testviews.subview.NotV7View;
@@ -507,7 +507,7 @@ public class TextReaderSitemapProviderTest {
 		substitute("generateAuthenticationPages=true", "generateAuthenticationPages=tru");
 		substitute("generateRequestAccount=true", "generateRequestAccount=false");
 		substitute("generateRequestAccountReset=true", "generateRequestAccountReset=false");
-		substitute("systemAccountUri=public/system-account", "systemAccountUri=public/sysaccount");
+		substitute("systemAccountRoot=public/system-account", "systemAccountRoot=public/sysaccount");
 		prepFile();
 		// when
 		reader.parse(modifiedFile);
@@ -537,15 +537,21 @@ public class TextReaderSitemapProviderTest {
 	}
 
 	@Test
-	public void systemAccountUriChange() throws IOException {
+	public void rootsChange() throws IOException {
 
 		// given
-		substitute("systemAccountUri=public/system-account", "systemAccountUri=public/sysaccount");
+		substitute("systemAccountRoot=public/system-account", "systemAccountRoot=open/sysaccount");
+		insertAfter("systemAccountRoot=open/sysaccount", "publicRoot=open");
+		insertAfter("publicRoot=open", "privateRoot=secret");
 		prepFile();
 		// when
+		outputModifiedFile();
 		reader.parse(modifiedFile);
 		// then
-		// assertThat(reader.getSitemap().).isEqualTo(expected);
+		assertThat(reader.getSitemap().getPrivateRoot()).isEqualTo("secret");
+		assertThat(reader.getSitemap().getPublicRoot()).isEqualTo("open");
+		assertThat(reader.getSystemAccountUri()).isEqualTo("open/sysaccount");
+
 	}
 
 	private void validateNode(Sitemap tree, SitemapNode node) {
@@ -615,28 +621,28 @@ public class TextReaderSitemapProviderTest {
 			break;
 		}
 
-		case "secure":
+		case "private":
 			assertThat(tree.getChildCount(node)).isEqualTo(3);
-			assertThat(node.getUriSegment()).isEqualTo("secure");
-			assertThat(node.getViewClass()).isEqualTo(SecureHomeView.class);
-			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Secure_Home);
+			assertThat(node.getUriSegment()).isEqualTo("private");
+			assertThat(node.getViewClass()).isEqualTo(PrivateHomeView.class);
+			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Private_Home);
 			break;
 
-		case "secure/transfers":
+		case "private/transfers":
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("transfers");
 			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Transfers);
 			break;
 
-		case "secure/money-in-out":
+		case "private/money-in-out":
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("money-in-out");
 			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.MoneyInOut);
 			break;
 
-		case "secure/options":
+		case "private/options":
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("options");
 			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);

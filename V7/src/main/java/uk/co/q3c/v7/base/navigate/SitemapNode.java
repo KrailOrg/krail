@@ -17,7 +17,7 @@ import uk.co.q3c.v7.i18n.I18NKeys;
 
 /**
  * Represents a node in the site map (equivalent to a web site 'page'). It contains a URI segment (this is just one part
- * of the URI, so the node for the page at /secure/account/open would contain just 'open'). To obtain the full URI, use
+ * of the URI, so the node for the page at /private/account/open would contain just 'open'). To obtain the full URI, use
  * {@link Sitemap#uri(SitemapNode)}.
  * <p>
  * {@link #viewClass} is the class of {@link V7View} to be used in displaying the page, and the {@link #getLabelKey()}
@@ -73,14 +73,25 @@ public class SitemapNode {
 		this.viewClass = viewClass;
 	}
 
-	@Override
-	public String toString() {
+	public String toStringAsMapEntry() {
 		StringBuilder buf = new StringBuilder();
 		buf.append((uriSegment == null) ? "no segment given" : uriSegment);
 		buf.append((viewClass == null) ? "" : "\t\t:  " + viewClass.getSimpleName());
 		buf.append((labelKey == null) ? "" : "\t~  " + labelKey.name());
 		return buf.toString();
 
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder();
+		buf.append("segment=");
+		buf.append((uriSegment == null) ? "null" : uriSegment);
+		buf.append(", viewClass=");
+		buf.append((viewClass == null) ? "null" : viewClass.getName());
+		buf.append(", labelKey=");
+		buf.append((labelKey == null) ? "null" : labelKey.name());
+		return buf.toString();
 	}
 
 	@Override

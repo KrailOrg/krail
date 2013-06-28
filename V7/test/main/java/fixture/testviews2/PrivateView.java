@@ -17,7 +17,7 @@ import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
 import com.vaadin.ui.Component;
 
-public class SecureView implements V7View {
+public class PrivateView implements V7View {
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {

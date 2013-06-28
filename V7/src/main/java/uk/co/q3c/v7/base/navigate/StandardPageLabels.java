@@ -31,17 +31,7 @@ public class StandardPageLabels extends EnumResourceBundle<StandardPageKey> {
 			StandardPageKey.class);
 
 	static {
-		// map.put(StandardPageKeys.Login, "Login");
-		// map.put(StandardPageKeys.Logout, "Logout");
-		// map.put(StandardPageKeys.Public_Home, "Home");
-		// map.put(StandardPageKeys.Secure_Home, "Home");
-		// map.put(StandardPageKeys.Refresh_Account, "Refresh Account");
-		// map.put(StandardPageKeys.Request_Account, "Request account");
-		// map.put(StandardPageKeys.Reset_Account, "reset account");
-		// map.put(StandardPageKeys.Unlock_Account, "unlock account");
-		// map.put(StandardPageKeys.Enable_Account, "enable account");
-		// map.put(StandardPageKeys.System_Account, "system account");
-
+		// map not needed for base language as translation done in key
 	}
 
 	@Override

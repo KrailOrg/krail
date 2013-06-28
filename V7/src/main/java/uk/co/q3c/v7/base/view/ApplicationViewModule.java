@@ -15,8 +15,8 @@ package uk.co.q3c.v7.base.view;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.Sitemap;
+import uk.co.q3c.v7.base.navigate.SitemapNode;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
@@ -54,7 +54,7 @@ public class ApplicationViewModule extends AbstractModule {
 	 * <p>
 	 * 
 	 * mapbinder.addBinding("public/home").to(PublicHomeView.class);
-	 * mapbinder.addBinding("secure/home").to(SecureHomeView.class);
+	 * mapbinder.addBinding("private/home").to(PrivateHomeView.class);
 	 * 
 	 * @param mapbinder
 	 */

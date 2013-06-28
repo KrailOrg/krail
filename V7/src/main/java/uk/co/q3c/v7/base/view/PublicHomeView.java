@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.view;
 
 /**
  * The View to use as a home page for authenticated users. The default binding
- * is to {@link DefaultSecureHomeView}. The binding is in StandardViewModule. To
+ * is to {@link DefaultPrivateHomeView}. The binding is in StandardViewModule. To
  * bind this interface to your own implementation, sub-class
  * {@link StandardViewModule} and override the appropriate binding method.
  * 

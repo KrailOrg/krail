@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -41,7 +41,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 @GuiceContext({})
 public abstract class ShiroIntegrationTestBase extends AbstractShiroTest {
 
-	protected static final String view1 = "secure/view1";
+	protected static final String view1 = "private/view1";
 	protected static final String view2 = "public/view2";
 
 	protected Subject subject;

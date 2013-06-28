@@ -22,7 +22,7 @@ public enum TestLabelKeys implements I18NKeys<TestLabels> {
 	Transfers,
 	Login,
 	MoneyInOut,
-	Secure,
+	Private,
 	Public,
 	Opt,
 	Yes,
