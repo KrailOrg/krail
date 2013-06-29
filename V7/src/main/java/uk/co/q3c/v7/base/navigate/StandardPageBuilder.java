@@ -1,5 +1,8 @@
 package uk.co.q3c.v7.base.navigate;
 
+import java.util.EnumMap;
+import java.util.List;
+
 import javax.inject.Singleton;
 
 import org.slf4j.Logger;
@@ -16,6 +19,7 @@ import uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountView;
 import uk.co.q3c.v7.base.view.SystemAccountView;
 import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.i18n.I18NKeys;
 
 /**
  * Used during the process of building the {@link Sitemap}. Provides the logic for building standard pages using options
@@ -34,6 +38,7 @@ public class StandardPageBuilder {
 	private boolean generateRequestAccountReset = true;
 	private String systemAccountRoot = "public/system-account";
 	private Sitemap sitemap;
+	private final EnumMap<StandardPageKey, String> pageMappings = new EnumMap<>(StandardPageKey.class);
 
 	public void generateStandardPages() {
 		if (generatePublicHomePage) {
@@ -144,6 +149,10 @@ public class StandardPageBuilder {
 		return null;
 	}
 
+	public String uri(StandardPageKey key) {
+		return defaultUri(key);
+	}
+
 	// public void setSystemAccountURI(String uri) {
 	// String[] segments = uri.split("/");
 	// if (segments.length == 1) {
@@ -194,4 +203,25 @@ public class StandardPageBuilder {
 		}
 		return null;
 	}
+
+	/**
+	 * publicHome=public : WigglyHome ~ Yes
+	 * 
+	 * @param pageMappings
+	 */
+	public void setPageMapping(List<String> pageMappings) {
+		DeconstructPageMapping dec = new DeconstructPageMapping();
+		for (String line : pageMappings) {
+			PageRecord pr = dec.deconstruct(line);
+		}
+	}
+
+	public I18NKeys<?> key(StandardPageKey publicHome) {
+		return null;
+	}
+
+	public Class<? extends V7View> viewInterface(StandardPageKey publicHome) {
+		return null;
+	}
+
 }

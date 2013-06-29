@@ -1,0 +1,49 @@
+package uk.co.q3c.v7.base.navigate;
+
+public class PageRecord {
+	private String StandardPageKeyName;
+	private String uri;
+	private String viewClassName;
+	private String segment;
+	private String labelKeyName;
+
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
+
+	public String getViewClassName() {
+		return viewClassName;
+	}
+
+	public void setViewClassName(String viewClassName) {
+		this.viewClassName = viewClassName;
+	}
+
+	public String getSegment() {
+		return segment;
+	}
+
+	public void setSegment(String segment) {
+		this.segment = segment;
+	}
+
+	public String getStandardPageKeyName() {
+		return StandardPageKeyName;
+	}
+
+	public void setStandardPageKeyName(String standardPageKeyName) {
+		StandardPageKeyName = standardPageKeyName;
+	}
+
+	public String getLabelKeyName() {
+		return labelKeyName;
+	}
+
+	public void setLabelKeyName(String labelKeyName) {
+		this.labelKeyName = labelKeyName;
+	}
+}

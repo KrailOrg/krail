@@ -2,6 +2,9 @@ package uk.co.q3c.v7.base.navigate;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +18,7 @@ import uk.co.q3c.v7.base.view.RequestSystemAccountResetView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountView;
 import uk.co.q3c.v7.base.view.SystemAccountView;
+import fixture.testviews2.WigglyHomeView;
 
 public class StandardPageBuilderTest {
 
@@ -156,6 +160,26 @@ public class StandardPageBuilderTest {
 		assertThat(builder.defaultSegment(StandardPageKey.Refresh_Account)).isEqualTo("refresh-account");
 		assertThat(builder.defaultSegment(StandardPageKey.Reset_Account)).isEqualTo("reset-account");
 		assertThat(builder.defaultSegment(StandardPageKey.Enable_Account)).isEqualTo("enable-account");
+	}
+
+	/**
+	 * publicHome=public : WigglyHome ~ Yes
+	 */
+	@Test
+	public void standardPageMapping() {
+
+		// given
+		List<String> pageMappings = new ArrayList<>();
+		pageMappings.add("publicHome=public : WigglyHome ~ Yes");
+
+		// when
+		builder.setPageMapping(pageMappings);
+		// then
+		assertThat(builder.defaultUri(StandardPageKey.Public_Home)).isEqualTo("public");
+		assertThat(builder.uri(StandardPageKey.Public_Home)).isEqualTo("public");
+		assertThat(builder.viewInterface(StandardPageKey.Public_Home)).isEqualTo(WigglyHomeView.class);
+		assertThat(builder.key(StandardPageKey.Public_Home)).isEqualTo("public");
+
 	}
 
 }
