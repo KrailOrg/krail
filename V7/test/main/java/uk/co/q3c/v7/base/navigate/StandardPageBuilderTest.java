@@ -1,6 +1,6 @@
 package uk.co.q3c.v7.base.navigate;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,7 +175,6 @@ public class StandardPageBuilderTest {
 		// when
 		builder.setPageMapping(pageMappings);
 		// then
-		assertThat(builder.defaultUri(StandardPageKey.Public_Home)).isEqualTo("public");
 		assertThat(builder.uri(StandardPageKey.Public_Home)).isEqualTo("public");
 		assertThat(builder.viewInterface(StandardPageKey.Public_Home)).isEqualTo(WigglyHomeView.class);
 		assertThat(builder.key(StandardPageKey.Public_Home)).isEqualTo("public");

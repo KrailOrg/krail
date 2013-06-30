@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,7 +66,7 @@ import fixture.testviews2.OptionsView;
 @GuiceContext({})
 public class TextReaderSitemapProviderTest {
 	private static int COMMENT_LINES = 9;
-	private static int BLANK_LINES = 10;
+	private static int BLANK_LINES = 9;
 	private static int PAGE_COUNT = 13;
 	private static File propDir;
 	private File propFile;

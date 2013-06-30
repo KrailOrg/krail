@@ -45,11 +45,23 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private static Logger log = LoggerFactory.getLogger(TextReaderSitemapProvider.class);
 
 	private enum SectionName {
-		options, redirects, viewPackages, standardPageMapping, map;
+		options,
+		redirects,
+		viewPackages,
+		standardPageMapping,
+		map;
 	}
 
 	private enum ValidOption {
-		appendView, labelKeys, generatePublicHomePage, generateAuthenticationPages, generateRequestAccount, generateRequestAccountReset, systemAccountRoot, publicRoot, privateRoot
+		appendView,
+		labelKeys,
+		generatePublicHomePage,
+		generateAuthenticationPages,
+		generateRequestAccount,
+		generateRequestAccountReset,
+		systemAccountRoot,
+		publicRoot,
+		privateRoot
 	}
 
 	private Sitemap sitemap;
@@ -92,11 +104,13 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 
 	private File sourceFile;
 	private final StandardPageBuilder standardPageBuilder;
+	private LabelKeyForName lkfn;
 
 	@Inject
 	public TextReaderSitemapProvider(StandardPageBuilder standardPageBuilder) {
 		super();
 		this.standardPageBuilder = standardPageBuilder;
+
 	}
 
 	private void init() {
@@ -229,7 +243,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private void checkLabelKeys() {
 		for (SitemapNode node : sitemap.getAllNodes()) {
 			if (node.getLabelKey() == null) {
-				labelKeyForName(null, node, true);
+				labelKeyForName(null, node);
 			}
 		}
 	}
@@ -494,6 +508,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			this.labelClassNotI18N = true;
 		} else {
 			labelKeysClass = (Class<? extends Enum<?>>) requestedLabelKeysClass;
+			lkfn = new LabelKeyForName(labelKeysClass);
 		}
 	}
 
@@ -590,8 +605,8 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 					findView(node, segment, view);
 				}
 
-				// do the label, don't flag as missing till final check
-				labelKeyForName(labelKeyName, node, true);
+				// do the label
+				labelKeyForName(labelKeyName, node);
 
 			} else {
 				String msg = "line in map must start with a'-', line " + i;
@@ -603,17 +618,14 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void labelKeyForName(String labelKeyName, SitemapNode node, boolean flagAsMissing) {
-		String keyName = null;
-		try {
-			keyName = keyName(labelKeyName, node);
-			@SuppressWarnings({ "rawtypes" })
-			Enum labelKey = Enum.valueOf(labelKeysClass, keyName);
-			node.setLabelKey(labelKey);
-		} catch (Exception e) {
-			if (flagAsMissing) {
-				missingEnums.add(keyName);
-			}
+	public void labelKeyForName(String labelKeyName, SitemapNode node) {
+		// gets name from segment if necessary
+		String keyName = keyName(labelKeyName, node);
+		// could be null if invalid label keys given
+		if (lkfn != null) {
+			node.setLabelKey(lkfn.keyForName(keyName, missingEnums));
+		} else {
+			missingEnums.add(keyName);
 		}
 	}
 

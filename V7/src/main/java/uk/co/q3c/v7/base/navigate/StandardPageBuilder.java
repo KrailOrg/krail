@@ -1,7 +1,9 @@
 package uk.co.q3c.v7.base.navigate;
 
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Singleton;
 
@@ -38,6 +40,7 @@ public class StandardPageBuilder {
 	private boolean generateRequestAccountReset = true;
 	private String systemAccountRoot = "public/system-account";
 	private Sitemap sitemap;
+	private final Set<String> syntaxErrors = new HashSet<>();
 	private final EnumMap<StandardPageKey, String> pageMappings = new EnumMap<>(StandardPageKey.class);
 
 	public void generateStandardPages() {
@@ -211,8 +214,24 @@ public class StandardPageBuilder {
 	 */
 	public void setPageMapping(List<String> pageMappings) {
 		DeconstructPageMapping dec = new DeconstructPageMapping();
+		int i = 0;
 		for (String line : pageMappings) {
-			PageRecord pr = dec.deconstruct(line);
+			i++;
+			boolean failed = false;
+			PageRecord pr = dec.deconstruct(line, i);
+			if (pr == null) {
+				syntaxErrors.addAll(dec.getSyntaxErrors());
+			} else {
+				try {
+					StandardPageKey spk = StandardPageKey.valueOf(pr.getStandardPageKeyName());
+				} catch (Exception e) {
+					syntaxErrors.add(pr.getStandardPageKeyName() + " is not a valid standard page key");
+					failed = true;
+				}
+				if (!failed) {
+
+				}
+			}
 		}
 	}
 
