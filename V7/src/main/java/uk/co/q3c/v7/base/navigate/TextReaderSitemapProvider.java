@@ -71,8 +71,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 
 	private SectionName currentSection;
 
-	@SuppressWarnings("rawtypes")
-	private Class<? extends Enum> labelKeysClass;
+	private Class<? extends Enum<?>> labelKeysClass;
 	// options
 	private boolean appendView;
 	private String labelKeys;
@@ -88,6 +87,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private Set<String> unrecognisedOptions;
 	private Set<String> redirectErrors;
 	private Set<String> syntaxErrors;
+	private Set<String> standardPageErrors;
 
 	// messages to go in the report, for info only
 	private Set<String> infoMessages;
@@ -128,6 +128,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		redirectErrors = new HashSet<>();
 		infoMessages = new HashSet<>();
 		syntaxErrors = new HashSet<>();
+		standardPageErrors = new HashSet<>();
 
 		sitemap = new Sitemap();
 		standardPageBuilder.setSitemap(sitemap);
@@ -206,7 +207,8 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private int errorSum() {
 		int c = missingSections().size() + missingEnums.size() + invalidViewClasses.size();
 		c += undeclaredViewClasses.size() + missingPages.size() + propertyErrors.size();
-		c += viewlessURIs.size() + duplicateURIs.size() + redirectErrors.size() + syntaxErrors.size();
+		c += viewlessURIs.size() + duplicateURIs.size() + redirectErrors.size() + syntaxErrors.size()
+				+ standardPageErrors.size();
 
 		if (getViewPackages() == null || getViewPackages().isEmpty()) {
 			c++;
@@ -270,6 +272,9 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	 * https://sites.google.com/site/q3cjava/sitemap#TOC-options-
 	 */
 	private void generateStandardPages() {
+		standardPageBuilder.setLabelKeysClass(labelKeysClass);
+		standardPageBuilder.setMissingEnums(missingEnums);
+		standardPageBuilder.setStandardPageErrors(standardPageErrors);
 		standardPageBuilder.generateStandardPages();
 	}
 
@@ -869,6 +874,8 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 				"these have been ignored, and the system may work, but you may not get the intended result", true);
 		reportChunk(redirectErrors, "redirect errors", "Redirect(s) causing an inconsistency and must be fixed", true);
 		reportChunk(viewlessURIs, "viewless URIs", "these URIs have no view associated with them", true);
+		reportChunk(standardPageErrors, "standard page errors",
+				"incomplete or incorrect defintion of standard pages in [standardPageMapping]", true);
 
 		if (warningSum() > 0) {
 			report.append(" --------------- warnings ---------");

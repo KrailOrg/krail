@@ -25,23 +25,22 @@ public class DeconstructPageMapping {
 			syntaxErrors.add(missingLabelKeyMsg + " at line " + lineNumber);
 			return null;
 		}
-		if (!line.contains(":")) {
-			syntaxErrors.add(missingViewMsg + " at line " + lineNumber);
-			return null;
-		}
+		// if (!line.contains(":")) {
+		// syntaxErrors.add(missingViewMsg + " at line " + lineNumber);
+		// return null;
+		// }
 		if (!line.contains("=")) {
 			syntaxErrors.add(missingUriMsg + " at line " + lineNumber);
 			return null;
 		}
+		// Public_Home=public ~ Yes
 		PageRecord pr = new PageRecord();
 		String[] s = line.split("=");
 		pr.setStandardPageKeyName(s[0].trim());
-		String[] s1 = s[1].split(":");
+		String[] s1 = s[1].split("~");
 		pr.setUri(s1[0].trim());
 		pr.setSegment(segmentFromUri(s1[0]).trim());
-		String[] s2 = s1[1].split("~");
-		pr.setViewClassName(s2[0].trim());
-		pr.setLabelKeyName(s2[1].trim());
+		pr.setLabelKeyName(s1[1].trim());
 
 		if (pr.getStandardPageKeyName().isEmpty()) {
 			syntaxErrors.add(emptyStandardPageKey + " at line " + lineNumber);
@@ -49,10 +48,6 @@ public class DeconstructPageMapping {
 		}
 		if (pr.getLabelKeyName().isEmpty()) {
 			syntaxErrors.add(emptyLabelKeyMsg + " at line " + lineNumber);
-			return null;
-		}
-		if (pr.getViewClassName().isEmpty()) {
-			syntaxErrors.add(emptyViewMsg + " at line " + lineNumber);
 			return null;
 		}
 		return pr;

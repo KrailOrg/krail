@@ -1,7 +1,5 @@
 package uk.co.q3c.v7.base.navigate;
 
-import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -10,6 +8,7 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
@@ -19,6 +18,7 @@ import uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountResetView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountView;
+import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.base.view.SystemAccountView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKeys;
@@ -40,8 +40,10 @@ public class StandardPageBuilder {
 	private boolean generateRequestAccountReset = true;
 	private String systemAccountRoot = "public/system-account";
 	private Sitemap sitemap;
-	private final Set<String> syntaxErrors = new HashSet<>();
-	private final EnumMap<StandardPageKey, String> pageMappings = new EnumMap<>(StandardPageKey.class);
+	// private final EnumMap<StandardPageKey, String> pageMappings = new EnumMap<>(StandardPageKey.class);
+	private Class<? extends Enum<?>> labelKeysClass;
+	private Set<String> missingEnums;
+	private Set<String> standardPageErrors;
 
 	public void generateStandardPages() {
 		if (generatePublicHomePage) {
@@ -79,7 +81,7 @@ public class StandardPageBuilder {
 		log.debug("generating page for {}", key);
 		SitemapNode node = sitemap.append(defaultUri(key));
 		node.setLabelKey(key);
-		node.setViewClass(defaultViewInterface(key));
+		node.setViewClass(viewClass(key));
 		node.setUriSegment(defaultSegment(key));
 		sitemap.getStandardPages().put(key, sitemap.uri(node));
 		log.debug("standard page added as node at URI " + sitemap.uri(node) + ", " + node.toString());
@@ -181,7 +183,15 @@ public class StandardPageBuilder {
 
 	}
 
-	public Class<? extends V7View> defaultViewInterface(StandardPageKey key) {
+	/**
+	 * The view class is always the same for a given standard page ... it is an interface, so to implement your own,
+	 * provide an implementation a sub-class of {@link StandardViewModule}, and load that module in your sub-class of
+	 * {@link BaseGuiceServletInjector}
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public Class<? extends V7View> viewClass(StandardPageKey key) {
 		switch (key) {
 		case Public_Home:
 			return PublicHomeView.class;
@@ -212,35 +222,54 @@ public class StandardPageBuilder {
 	 * 
 	 * @param pageMappings
 	 */
-	public void setPageMapping(List<String> pageMappings) {
+	@SuppressWarnings("unchecked")
+	public void setPageMappings(List<String> pageMappings) {
 		DeconstructPageMapping dec = new DeconstructPageMapping();
 		int i = 0;
 		for (String line : pageMappings) {
 			i++;
-			boolean failed = false;
+			// check a line for syntax
 			PageRecord pr = dec.deconstruct(line, i);
-			if (pr == null) {
-				syntaxErrors.addAll(dec.getSyntaxErrors());
-			} else {
+			// null when there are syntax failures
+			if (pr != null) {
+				// identify the standard page being defined
 				try {
 					StandardPageKey spk = StandardPageKey.valueOf(pr.getStandardPageKeyName());
+					LabelKeyForName labelKeyForName = new LabelKeyForName(labelKeysClass);
+					Enum<?> labelKey = labelKeyForName.keyForName(pr.getLabelKeyName(), missingEnums);
+					SitemapNode node = sitemap.append(pr.getUri());
+					node.setLabelKey((Enum<? extends I18NKeys<?>>) labelKey);
+					node.setViewClass(viewClass(spk));
+					sitemap.getStandardPages().put(spk, sitemap.uri(node));
 				} catch (Exception e) {
-					syntaxErrors.add(pr.getStandardPageKeyName() + " is not a valid standard page key");
-					failed = true;
+					standardPageErrors.add(pr.getStandardPageKeyName() + " is not a valid standard page key in line "
+							+ i);
 				}
-				if (!failed) {
-
-				}
+			} else {
+				// there were errors in syntax
+				standardPageErrors.addAll(dec.getSyntaxErrors());
 			}
 		}
 	}
 
-	public I18NKeys<?> key(StandardPageKey publicHome) {
-		return null;
+	// public I18NKeys<?> key(StandardPageKey publicHome) {
+	// return null;
+	// }
+
+	public void setLabelKeysClass(Class<? extends Enum<?>> labelKeysClass) {
+		this.labelKeysClass = labelKeysClass;
 	}
 
-	public Class<? extends V7View> viewInterface(StandardPageKey publicHome) {
-		return null;
+	public void setMissingEnums(Set<String> missingEnums) {
+		this.missingEnums = missingEnums;
+	}
+
+	public void setStandardPageErrors(Set<String> standardPageErrors) {
+		this.standardPageErrors = standardPageErrors;
+	}
+
+	public Sitemap getSitemap() {
+		return sitemap;
 	}
 
 }

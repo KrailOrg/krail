@@ -4,6 +4,7 @@ import static org.fest.assertions.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,17 +19,21 @@ import uk.co.q3c.v7.base.view.RequestSystemAccountResetView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountView;
 import uk.co.q3c.v7.base.view.SystemAccountView;
-import fixture.testviews2.WigglyHomeView;
+import uk.co.q3c.v7.i18n.TestLabelKeys;
 
 public class StandardPageBuilderTest {
 
 	private StandardPageBuilder builder;
 	private Sitemap sitemap;
+	private SitemapURIConverter converter;
+	private URIFragmentHandler uriHandler;
 
 	@Before
 	public void setup() {
 		builder = new StandardPageBuilder();
 		sitemap = new Sitemap();
+		uriHandler = new StrictURIFragmentHandler();
+		converter = new SitemapURIConverter(sitemap, uriHandler);
 		builder.setSitemap(sitemap);
 	}
 
@@ -111,21 +116,16 @@ public class StandardPageBuilderTest {
 		// when
 
 		// then
-		assertThat(builder.defaultViewInterface(StandardPageKey.Public_Home)).isEqualTo(PublicHomeView.class);
-		assertThat(builder.defaultViewInterface(StandardPageKey.Login)).isEqualTo(LoginView.class);
-		assertThat(builder.defaultViewInterface(StandardPageKey.Logout)).isEqualTo(LogoutView.class);
-		assertThat(builder.defaultViewInterface(StandardPageKey.Private_Home)).isEqualTo(PrivateHomeView.class);
-		assertThat(builder.defaultViewInterface(StandardPageKey.System_Account)).isEqualTo(SystemAccountView.class);
-		assertThat(builder.defaultViewInterface(StandardPageKey.Enable_Account)).isEqualTo(
-				RequestSystemAccountEnableView.class);
-		assertThat(builder.defaultViewInterface(StandardPageKey.Unlock_Account)).isEqualTo(
-				RequestSystemAccountUnlockView.class);
-		assertThat(builder.defaultViewInterface(StandardPageKey.Reset_Account)).isEqualTo(
-				RequestSystemAccountResetView.class);
-		assertThat(builder.defaultViewInterface(StandardPageKey.Request_Account)).isEqualTo(
-				RequestSystemAccountView.class);
-		assertThat(builder.defaultViewInterface(StandardPageKey.Refresh_Account)).isEqualTo(
-				RequestSystemAccountRefreshView.class);
+		assertThat(builder.viewClass(StandardPageKey.Public_Home)).isEqualTo(PublicHomeView.class);
+		assertThat(builder.viewClass(StandardPageKey.Login)).isEqualTo(LoginView.class);
+		assertThat(builder.viewClass(StandardPageKey.Logout)).isEqualTo(LogoutView.class);
+		assertThat(builder.viewClass(StandardPageKey.Private_Home)).isEqualTo(PrivateHomeView.class);
+		assertThat(builder.viewClass(StandardPageKey.System_Account)).isEqualTo(SystemAccountView.class);
+		assertThat(builder.viewClass(StandardPageKey.Enable_Account)).isEqualTo(RequestSystemAccountEnableView.class);
+		assertThat(builder.viewClass(StandardPageKey.Unlock_Account)).isEqualTo(RequestSystemAccountUnlockView.class);
+		assertThat(builder.viewClass(StandardPageKey.Reset_Account)).isEqualTo(RequestSystemAccountResetView.class);
+		assertThat(builder.viewClass(StandardPageKey.Request_Account)).isEqualTo(RequestSystemAccountView.class);
+		assertThat(builder.viewClass(StandardPageKey.Refresh_Account)).isEqualTo(RequestSystemAccountRefreshView.class);
 	}
 
 	@Test
@@ -170,15 +170,74 @@ public class StandardPageBuilderTest {
 
 		// given
 		List<String> pageMappings = new ArrayList<>();
-		pageMappings.add("publicHome=public : WigglyHome ~ Yes");
+		pageMappings.add("Public_Home=public  ~ Yes");
+		builder.setLabelKeysClass(TestLabelKeys.class);
 
 		// when
-		builder.setPageMapping(pageMappings);
+		builder.setPageMappings(pageMappings);
+		Map<StandardPageKey, String> standardPages = builder.getSitemap().getStandardPages();
+		SitemapNode node = converter.nodeForUri("public", false);
 		// then
-		assertThat(builder.uri(StandardPageKey.Public_Home)).isEqualTo("public");
-		assertThat(builder.viewInterface(StandardPageKey.Public_Home)).isEqualTo(WigglyHomeView.class);
-		assertThat(builder.key(StandardPageKey.Public_Home)).isEqualTo("public");
+		assertThat(node).isNotNull();
+		assertThat(standardPages.get(StandardPageKey.Public_Home)).isEqualTo("public");
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Yes);
+		assertThat(node.getUriSegment()).isEqualTo("public");
+		assertThat(node.getViewClass()).isEqualTo(builder.viewClass(StandardPageKey.Public_Home));
+		assertThat(builder.getSitemap().uri(node)).isEqualTo("public");
 
 	}
 
+	@Test
+	public void standardPageMapping_different() {
+
+		// given
+		List<String> pageMappings = new ArrayList<>();
+		pageMappings.add("Public_Home=  wildly/different  ~ Yes");
+		builder.setLabelKeysClass(TestLabelKeys.class);
+
+		// when
+		builder.setPageMappings(pageMappings);
+		Map<StandardPageKey, String> standardPages = builder.getSitemap().getStandardPages();
+		SitemapNode node = converter.nodeForUri("wildly/different", false);
+		// then
+		assertThat(node).isNotNull();
+		assertThat(standardPages.get(StandardPageKey.Public_Home)).isEqualTo("wildly/different");
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Yes);
+		assertThat(node.getUriSegment()).isEqualTo("different");
+		assertThat(node.getViewClass()).isEqualTo(builder.viewClass(StandardPageKey.Public_Home));
+		assertThat(builder.getSitemap().uri(node)).isEqualTo("wildly/different");
+
+	}
+
+	@Test
+	public void standardPageMapping_multiple() {
+
+		// given
+		List<String> pageMappings = new ArrayList<>();
+		pageMappings.add("Public_Home=  wildly/different  ~ Yes");
+		pageMappings.add("Private_Home=  almost/different  ~ No");
+		builder.setLabelKeysClass(TestLabelKeys.class);
+
+		// when
+		builder.setPageMappings(pageMappings);
+		Map<StandardPageKey, String> standardPages = builder.getSitemap().getStandardPages();
+		SitemapNode node = converter.nodeForUri("wildly/different", false);
+		// then
+		assertThat(node).isNotNull();
+		assertThat(standardPages.get(StandardPageKey.Public_Home)).isEqualTo("wildly/different");
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Yes);
+		assertThat(node.getUriSegment()).isEqualTo("different");
+		assertThat(node.getViewClass()).isEqualTo(builder.viewClass(StandardPageKey.Public_Home));
+		assertThat(builder.getSitemap().uri(node)).isEqualTo("wildly/different");
+
+		node = converter.nodeForUri("almost/different", false);
+		// then
+		assertThat(node).isNotNull();
+		assertThat(standardPages.get(StandardPageKey.Private_Home)).isEqualTo("almost/different");
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.No);
+		assertThat(node.getUriSegment()).isEqualTo("different");
+		assertThat(node.getViewClass()).isEqualTo(builder.viewClass(StandardPageKey.Private_Home));
+		assertThat(builder.getSitemap().uri(node)).isEqualTo("almost/different");
+
+	}
 }

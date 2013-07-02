@@ -1,6 +1,6 @@
 package uk.co.q3c.v7.base.navigate;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,14 +20,13 @@ public class DeconstructPageMappingTest {
 
 		// given
 		PageRecord pr;
-		String line = "Public_Home=public : WigglyHome ~ Yes";
+		String line = "Public_Home=public  ~ Yes";
 		// when
 		pr = dpm.deconstruct(line, lineNumber);
 		// then
 		assertThat(pr.getStandardPageKeyName()).isEqualTo("Public_Home");
 		assertThat(pr.getUri()).isEqualTo("public");
 		assertThat(pr.getSegment()).isEqualTo("public");
-		assertThat(pr.getViewClassName()).isEqualTo("WigglyHome");
 		assertThat(pr.getLabelKeyName()).isEqualTo("Yes");
 	}
 
@@ -36,7 +35,7 @@ public class DeconstructPageMappingTest {
 
 		// given
 		PageRecord pr;
-		String line = "Public_Home=public : WigglyHome ";
+		String line = "Public_Home=public  ";
 		// when
 		pr = dpm.deconstruct(line, lineNumber);
 		// then
@@ -51,7 +50,7 @@ public class DeconstructPageMappingTest {
 
 		// given
 		PageRecord pr;
-		String line = "Public_Home=public : WigglyHome ~  ";
+		String line = "Public_Home=public  ~  ";
 		// when
 		pr = dpm.deconstruct(line, lineNumber);
 		// then
@@ -62,40 +61,11 @@ public class DeconstructPageMappingTest {
 	}
 
 	@Test
-	public void line_missing_viewName() {
-
-		// given
-		PageRecord pr;
-		String line = "Public_Home=public  ~ Yes";
-		// when
-		pr = dpm.deconstruct(line, lineNumber);
-		// then
-		assertThat(pr).isNull();
-		assertThat(dpm.getSyntaxErrors())
-				.containsOnly(DeconstructPageMapping.missingViewMsg + " at line " + lineNumber);
-
-	}
-
-	@Test
-	public void line_empty_viewName() {
-
-		// given
-		PageRecord pr;
-		String line = "Public_Home=public : ~ Yes";
-		// when
-		pr = dpm.deconstruct(line, lineNumber);
-		// then
-		assertThat(pr).isNull();
-		assertThat(dpm.getSyntaxErrors()).containsOnly(DeconstructPageMapping.emptyViewMsg + " at line " + lineNumber);
-
-	}
-
-	@Test
 	public void line_missingUri() {
 
 		// given
 		PageRecord pr;
-		String line = "Public_Home : WigglyHome ~ Yes";
+		String line = "Public_Home  ~ Yes";
 		// when
 		pr = dpm.deconstruct(line, lineNumber);
 		// then
@@ -108,7 +78,7 @@ public class DeconstructPageMappingTest {
 
 		// given
 		PageRecord pr;
-		String line = " =public : WigglyHome ~ Yes";
+		String line = " =public  ~ Yes";
 		// when
 		pr = dpm.deconstruct(line, lineNumber);
 		// then
