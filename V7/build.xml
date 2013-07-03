@@ -130,4 +130,10 @@
 	
 	<target name="build-and-package" depends="compile-theme, compile-project, compile-widgetset, package-war">
 	</target>
+	
+	<target name="report" depends="-init">
+		    <delete dir="${artifacts}/report"/>
+		    <mkdir dir="${artifacts}/report"/>
+		    <ivy:report todir="${artifacts}/report" />
+		</target>
 </project>
