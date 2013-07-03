@@ -11,6 +11,8 @@
 		<conf name="default" />
 		<!-- A configuration only needed when compiling the widget set. Should not be deployed to the server -->
 		<conf name="widgetset-compile" />
+
+		<conf name="test" visibility="private" />
 	</configurations>
 	<publications>
 		<artifact name="v7" type="jar" />
@@ -52,17 +54,17 @@
 
 		<!-- Logging -->
 		<dependency org="org.slf4j" name="slf4j-api" rev="1.6.6" />
-		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.6" />
+		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.6" conf="test->default" />
 
 
 		<!-- Testing -->
-		<dependency org="org.easytesting" name="fest-assert" rev="1.4" />
-		<dependency org="com.mycila" name="mycila-guice" rev="2.10.ga" />
-		<dependency org="com.mycila.testing.plugins" name="mycila-testing-guice" rev="2.8" />
-		<dependency org="com.mycila.testing.plugins" name="mycila-testing-mockito" rev="2.8" />
-		<dependency org="org.mockito" name="mockito-all" rev="1.9.0" />
-		<dependency org="junit" name="junit" rev="4.+" />
-		<dependency org="com.googlecode.jmockit" name="jmockit" rev="1.0" />
+		<dependency org="org.easytesting" name="fest-assert" rev="1.4" conf="test->default" />
+		<dependency org="com.mycila" name="mycila-guice" rev="2.10.ga" conf="test->default" />
+		<dependency org="com.mycila.testing.plugins" name="mycila-testing-guice" rev="2.8" conf="test->default" />
+		<dependency org="com.mycila.testing.plugins" name="mycila-testing-mockito" rev="2.8" conf="test->default" />
+		<dependency org="org.mockito" name="mockito-all" rev="1.9.0" conf="test->default" />
+		<dependency org="junit" name="junit" rev="4.+" conf="test->default" />
+		<dependency org="com.googlecode.jmockit" name="jmockit" rev="1.0" conf="test->default" />
 
 
 		<!-- Date Time -->
