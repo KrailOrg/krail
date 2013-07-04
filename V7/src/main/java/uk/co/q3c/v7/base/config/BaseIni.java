@@ -129,7 +129,7 @@ public class BaseIni extends Ini {
 		case "readSiteMap":
 			return "true";
 		}
-		return "false";
+		return null;
 	}
 
 }
