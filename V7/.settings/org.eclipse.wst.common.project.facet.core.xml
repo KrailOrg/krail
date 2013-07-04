@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faceted-project>
   <runtime name="Apache Tomcat v7.0"/>
-  <fixed facet="wst.jsdt.web"/>
-  <fixed facet="jst.web"/>
+  <fixed facet="jst.utility"/>
   <fixed facet="java"/>
-  <fixed facet="com.vaadin.integration.eclipse.core"/>
-  <installed facet="jst.web" version="2.4"/>
-  <installed facet="wst.jsdt.web" version="1.0"/>
-  <installed facet="com.vaadin.integration.eclipse.core" version="7.0"/>
   <installed facet="java" version="1.7"/>
+  <installed facet="jst.utility" version="1.0"/>
 </faceted-project>
