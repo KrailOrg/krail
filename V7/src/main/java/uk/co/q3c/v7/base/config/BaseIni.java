@@ -112,22 +112,28 @@ public class BaseIni extends Ini {
 		return Integer.parseInt(getOption(optionName));
 	}
 	
-	protected String getOption(String optionName) {
-		Section section = getSection("options");
+	protected String getProperty(String sectionName, String optionName) {
+		Section section = getSection(sectionName);
 		if (section == null) {
-			return optionDefault(optionName);
+			return propertyDefault(sectionName, optionName);
 		}
 		if (section.containsKey(optionName)) {
 			return section.get(optionName);
 		} else {
-			return optionDefault(optionName);
+			return propertyDefault(sectionName, optionName);
 		}
 	}
 	
-	protected String optionDefault(String optionName) {
-		switch (optionName) {
-		case "readSiteMap":
-			return "true";
+	protected String getOption(String optionName) {
+		return getProperty("options", optionName);
+	}
+	
+	protected String propertyDefault(String sectionName, String optionName) {
+		if("options".equals(sectionName)) {
+			switch (optionName) {
+			case "readSiteMap":
+				return "true";
+			}
 		}
 		return null;
 	}
