@@ -8,6 +8,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+	<classpathentry kind="lib" path="lib/validation-api-1.0.0.GA.jar"/>
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
