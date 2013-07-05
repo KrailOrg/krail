@@ -9,9 +9,6 @@
 	<configurations>
 		<!-- The default configuration, which should be deployed to the server -->
 		<conf name="default" />
-		<!-- A configuration only needed when compiling the widget set. Should not be deployed to the server -->
-		<conf name="widgetset-compile" />
-
 		<conf name="test" visibility="private" />
 	</configurations>
 	<publications>
@@ -29,9 +26,6 @@
 
 		<!-- Vaadin client side, needed for widget set compilation -->
 		<dependency org="com.vaadin" name="vaadin-client" rev="&vaadin.version;" />
-
-		<!-- Compiler for custom widget sets. Should not be deployed -->
-		<dependency org="com.vaadin" name="vaadin-client-compiler" rev="&vaadin.version;" conf="widgetset-compile->default" />
 
 		<!-- LIBRARIES -->
 
