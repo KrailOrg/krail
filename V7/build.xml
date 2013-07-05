@@ -7,7 +7,6 @@
 	
     <ivy:resolve file="ivy.xml" />
 	<ivy:cachepath pathid="ivy.deps.default" conf="default" />
-	<ivy:cachepath pathid="ivy.deps.widgetset" conf="widgetset-compile" />
 	<ivy:cachefileset setid="ivy.deps.default.fileset" conf="default"/>
 	
 	<path id="classpath">
