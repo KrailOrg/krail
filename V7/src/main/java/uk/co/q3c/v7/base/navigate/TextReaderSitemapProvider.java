@@ -521,6 +521,12 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		return sections.get(SectionName.viewPackages);
 	}
 
+	private void processMap2() {
+		URITracker uriTracker = new URITracker();
+		List<String> sectionLines = sections.get(SectionName.map);
+
+	}
+
 	private void processMap() {
 		List<String> sectionLines = sections.get(SectionName.map);
 		int i = 0;

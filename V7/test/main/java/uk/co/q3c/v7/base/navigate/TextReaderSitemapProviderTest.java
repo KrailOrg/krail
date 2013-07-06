@@ -554,6 +554,23 @@ public class TextReaderSitemapProviderTest {
 
 	}
 
+	@Test
+	public void fail1() {
+
+		// given
+		String propFileName = "sitemap_fail1.properties";
+		propFile = new File(propDir, propFileName);
+
+		// when
+		assertThat(propFile.exists()).isTrue();
+		reader.parse(propFile);
+
+		// then
+		System.out.println(reader.getSitemap().getReport());
+		assertThat(reader.getSitemap().hasErrors()).isFalse();
+
+	}
+
 	private void validateNode(Sitemap tree, SitemapNode node) {
 		String uri = tree.uri(node);
 		switch (uri) {
