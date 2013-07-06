@@ -7,12 +7,12 @@ import org.junit.Test;
 
 public class DeconstructPageMappingTest {
 
-	private DeconstructPageMapping dpm;
+	private StandardPageMappingReader dpm;
 	int lineNumber = 2;
 
 	@Before
 	public void setup() {
-		dpm = new DeconstructPageMapping();
+		dpm = new StandardPageMappingReader();
 	}
 
 	@Test
@@ -41,7 +41,7 @@ public class DeconstructPageMappingTest {
 		// then
 		assertThat(pr).isNull();
 		assertThat(dpm.getSyntaxErrors()).containsOnly(
-				DeconstructPageMapping.missingLabelKeyMsg + " at line " + lineNumber);
+				StandardPageMappingReader.missingLabelKeyMsg + " at line " + lineNumber);
 
 	}
 
@@ -56,7 +56,7 @@ public class DeconstructPageMappingTest {
 		// then
 		assertThat(pr).isNull();
 		assertThat(dpm.getSyntaxErrors()).containsOnly(
-				DeconstructPageMapping.emptyLabelKeyMsg + " at line " + lineNumber);
+				StandardPageMappingReader.emptyLabelKeyMsg + " at line " + lineNumber);
 
 	}
 
@@ -70,7 +70,7 @@ public class DeconstructPageMappingTest {
 		pr = dpm.deconstruct(line, lineNumber);
 		// then
 		assertThat(pr).isNull();
-		assertThat(dpm.getSyntaxErrors()).containsOnly(DeconstructPageMapping.missingUriMsg + " at line " + lineNumber);
+		assertThat(dpm.getSyntaxErrors()).containsOnly(StandardPageMappingReader.missingUriMsg + " at line " + lineNumber);
 	}
 
 	@Test
@@ -84,6 +84,6 @@ public class DeconstructPageMappingTest {
 		// then
 		assertThat(pr).isNull();
 		assertThat(dpm.getSyntaxErrors()).containsOnly(
-				DeconstructPageMapping.emptyStandardPageKey + " at line " + lineNumber);
+				StandardPageMappingReader.emptyStandardPageKey + " at line " + lineNumber);
 	}
 }

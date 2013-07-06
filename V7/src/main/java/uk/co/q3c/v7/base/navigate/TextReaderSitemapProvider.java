@@ -178,9 +178,9 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		if (missingSections().size() == 0) {
 			processOptions();
 			processRedirects();
-			processMap();
 			// processStandardPages();
 			generateStandardPages();
+			processMap();
 			validateRedirects();
 			checkLabelKeys();
 			checkViews();
@@ -521,112 +521,130 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		return sections.get(SectionName.viewPackages);
 	}
 
-	private void processMap2() {
-		URITracker uriTracker = new URITracker();
-		List<String> sectionLines = sections.get(SectionName.map);
-
-	}
-
 	private void processMap() {
+		URITracker uriTracker = new URITracker();
+		MapLineReader reader = new MapLineReader();
 		List<String> sectionLines = sections.get(SectionName.map);
-		int i = 0;
-		SitemapNode currentNode = null;
-		int currentLevel = 0;
+		int lineIndex = 1;
+		int currentIndent = 0;
 		for (String line : sectionLines) {
-			if (line.startsWith("-")) {
-				int treeLevel = lastIndent(line);
-				int viewStart = line.indexOf(":");
-				int labelStart = line.indexOf("~");
-				String segment = null;
-				String view = null;
-				String labelKeyName = null;
-				if ((labelStart > 0) && (viewStart > 0)) {
-					if (viewStart < labelStart) {
-						segment = line.substring(treeLevel, viewStart);
-						view = line.substring(viewStart + 1, labelStart);
-						labelKeyName = line.substring(labelStart + 1);
-					} else {
-						segment = line.substring(treeLevel, labelStart);
-						labelKeyName = line.substring(labelStart + 1, viewStart);
-						view = line.substring(viewStart + 1);
-					}
-				} else {
-					// only label
-					if (labelStart > 0) {
-						segment = line.substring(treeLevel, labelStart);
-						labelKeyName = line.substring(labelStart + 1);
-					}// only view
-					else if (viewStart > 0) {
-						segment = line.substring(treeLevel, viewStart);
-						view = line.substring(viewStart + 1);
-					}
-					// only segment
-					else {
-						segment = line.substring(treeLevel);
-					}
-				}
-
-				// segment has been set, view & label may be null
-				SitemapNode node = new SitemapNode();
-				node.setUriSegment(segment);
-
-				// do structure before labels
-				// labels are not needed for redirected pages
-				// but we cannot get full URI until structure done
-
-				// add the node
-				if (treeLevel == 1) {
-					// at level 1 each becomes a 'root' (technically the site
-					// tree is a forest)
-					sitemap.addNode(node);
-					currentNode = node;
-					currentLevel = treeLevel;
-				} else {
-					// if indent going back up tree, walk up from current node
-					// to the parent level needed
-					if (treeLevel < currentLevel) {
-						int retraceLevels = currentLevel - treeLevel;
-						for (int k = 1; k <= retraceLevels; k++) {
-							currentNode = sitemap.getParent(currentNode);
-							currentLevel--;
-						}
-						sitemap.addChild(currentNode, node);
-						currentNode = node;
-						currentLevel++;
-					} else if (treeLevel == currentLevel) {
-						SitemapNode parentNode = sitemap.getParent(currentNode);
-						sitemap.addChild(parentNode, node);
-					} else if (treeLevel > currentLevel) {
-						if (treeLevel - currentLevel > 1) {
-							log.warn(
-									"indentation for {} line is too great.  It should be a maximum of 1 greater than its predecessor",
-									node.getUriSegment());
-							indentationErrors.add(node.getUriSegment());
-						}
-						sitemap.addChild(currentNode, node);
-						currentNode = node;
-						currentLevel++;
-					}
-
-				}
-
-				String uri = sitemap.uri(node);
-				// do the view
-				if (!getRedirects().containsKey(uri)) {
-					findView(node, segment, view);
-				}
-
-				// do the label
-				labelKeyForName(labelKeyName, node);
-
+			MapLineRecord lineRecord = reader.processLine(lineIndex, line, syntaxErrors, indentationErrors,
+					currentIndent);
+			uriTracker.track(lineRecord.getIndentLevel(), lineRecord.getSegment());
+			SitemapNode node = sitemap.append(uriTracker.uri());
+			// if node is a standard page do not overwrite it
+			if (node.getLabelKey() instanceof StandardPageKey) {
+				// warning
 			} else {
-				String msg = "line in map must start with a'-', line " + i;
-				log.warn(msg);
-				syntaxErrors.add(msg);
+				node.setUriSegment(lineRecord.getSegment());
+				findView(node, lineRecord.getSegment(), lineRecord.getViewName());
+				labelKeyForName(lineRecord.getKeyName(), node);
 			}
+			currentIndent = lineRecord.getIndentLevel();
+			lineIndex++;
 		}
-
 	}
+
+	// private void processMap() {
+	// List<String> sectionLines = sections.get(SectionName.map);
+	// int i = 0;
+	// SitemapNode currentNode = null;
+	// int currentLevel = 0;
+	// for (String line : sectionLines) {
+	// if (line.startsWith("-")) {
+	// int treeLevel = lastIndent(line);
+	// int viewStart = line.indexOf(":");
+	// int labelStart = line.indexOf("~");
+	// String segment = null;
+	// String view = null;
+	// String labelKeyName = null;
+	// if ((labelStart > 0) && (viewStart > 0)) {
+	// if (viewStart < labelStart) {
+	// segment = line.substring(treeLevel, viewStart);
+	// view = line.substring(viewStart + 1, labelStart);
+	// labelKeyName = line.substring(labelStart + 1);
+	// } else {
+	// segment = line.substring(treeLevel, labelStart);
+	// labelKeyName = line.substring(labelStart + 1, viewStart);
+	// view = line.substring(viewStart + 1);
+	// }
+	// } else {
+	// // only label
+	// if (labelStart > 0) {
+	// segment = line.substring(treeLevel, labelStart);
+	// labelKeyName = line.substring(labelStart + 1);
+	// }// only view
+	// else if (viewStart > 0) {
+	// segment = line.substring(treeLevel, viewStart);
+	// view = line.substring(viewStart + 1);
+	// }
+	// // only segment
+	// else {
+	// segment = line.substring(treeLevel);
+	// }
+	// }
+	//
+	// // segment has been set, view & label may be null
+	// SitemapNode node = new SitemapNode();
+	// node.setUriSegment(segment);
+	//
+	// // do structure before labels
+	// // labels are not needed for redirected pages
+	// // but we cannot get full URI until structure done
+	//
+	// // add the node
+	// if (treeLevel == 1) {
+	// // at level 1 each becomes a 'root' (technically the site
+	// // tree is a forest)
+	// sitemap.addNode(node);
+	// currentNode = node;
+	// currentLevel = treeLevel;
+	// } else {
+	// // if indent going back up tree, walk up from current node
+	// // to the parent level needed
+	// if (treeLevel < currentLevel) {
+	// int retraceLevels = currentLevel - treeLevel;
+	// for (int k = 1; k <= retraceLevels; k++) {
+	// currentNode = sitemap.getParent(currentNode);
+	// currentLevel--;
+	// }
+	// sitemap.addChild(currentNode, node);
+	// currentNode = node;
+	// currentLevel++;
+	// } else if (treeLevel == currentLevel) {
+	// SitemapNode parentNode = sitemap.getParent(currentNode);
+	// sitemap.addChild(parentNode, node);
+	// } else if (treeLevel > currentLevel) {
+	// if (treeLevel - currentLevel > 1) {
+	// log.warn(
+	// "indentation for {} line is too great.  It should be a maximum of 1 greater than its predecessor",
+	// node.getUriSegment());
+	// indentationErrors.add(node.getUriSegment());
+	// }
+	// sitemap.addChild(currentNode, node);
+	// currentNode = node;
+	// currentLevel++;
+	// }
+	//
+	// }
+	//
+	// String uri = sitemap.uri(node);
+	// // do the view
+	// if (!getRedirects().containsKey(uri)) {
+	// findView(node, segment, view);
+	// }
+	//
+	// // do the label
+	// labelKeyForName(labelKeyName, node);
+	//
+	// } else {
+	// String msg = "line in map must start with a'-', line " + i;
+	// log.warn(msg);
+	// syntaxErrors.add(msg);
+	// }
+	// }
+	//
+	// }
 
 	@SuppressWarnings("unchecked")
 	public void labelKeyForName(String labelKeyName, SitemapNode node) {

@@ -10,7 +10,7 @@ import java.util.Set;
  * @author David Sowerby
  * 
  */
-public class DeconstructPageMapping {
+public class StandardPageMappingReader {
 
 	private final Set<String> syntaxErrors = new HashSet<>();
 	public static final String missingLabelKeyMsg = "Line must contain label key prefixed with '~'";

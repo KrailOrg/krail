@@ -224,7 +224,7 @@ public class StandardPageBuilder {
 	 */
 	@SuppressWarnings("unchecked")
 	public void setPageMappings(List<String> pageMappings) {
-		DeconstructPageMapping dec = new DeconstructPageMapping();
+		StandardPageMappingReader dec = new StandardPageMappingReader();
 		int i = 0;
 		for (String line : pageMappings) {
 			i++;

@@ -28,121 +28,111 @@ import org.slf4j.LoggerFactory;
 
 public class MapLineReader {
 	private static Logger log = LoggerFactory.getLogger(MapLineReader.class);
+	public static final String NO_HYPHEN = "Line must start with hyphen(s) to indicate indent level, line ";
+	public static final String VIEW_FIRST = "View name must precede label key name at line ";
+	private int index = 0;
+	private String line;
+	private MapLineRecord lineRecord;
 
-	public MapLineRecord processLine(int lineIndex, String line, Set<String> syntaxErrors) {
-		if (!line.startsWith("-")) {
-			String msg = "line in map must start with a'-', line " + lineIndex;
-			log.warn(msg);
-			syntaxErrors.add(msg);
-			return null;
-		}
-		MapLineRecord linerecord = new MapLineRecord();
-		linerecord.setIndentLevel(lastIndent(line));
-		int viewStart = line.indexOf(":");
-		int labelStart = line.indexOf("~");
+	public MapLineRecord processLine(int lineIndex, String line, Set<String> syntaxErrors,
+			Set<String> indentationErrors, int currentIndent) {
+		index = 0;
+		this.line = line;
+		lineRecord = new MapLineRecord();
+		StringBuilder buf = new StringBuilder();
 
-		boolean hasView = viewStart > -1;
-		boolean hasLabel = labelStart > -1;
+		int keyIndex = line.indexOf('~');
+		int viewIndex = line.indexOf(':');
 
-		int segmentEnd = 0;
-		if (hasView) {
-			segmentEnd = viewStart - 1;
-		} else if (hasLabel) {
-			segmentEnd = labelStart - 1;
-		} else {
-			segmentEnd = line.length() - 1;
+		if ((keyIndex > 0) && (keyIndex < viewIndex)) {
+			syntaxErrors.add(VIEW_FIRST + lineIndex);
+			return lineRecord;
 		}
 
-		String segment = null;
-		String view = null;
-		String labelKeyName = null;
-		if ((labelStart > 0) && (viewStart > 0)) {
-			if (viewStart < labelStart) {
-				segment = line.substring(treeLevel, viewStart);
-				view = line.substring(viewStart + 1, labelStart);
-				labelKeyName = line.substring(labelStart + 1);
-			} else {
-				segment = line.substring(treeLevel, labelStart);
-				labelKeyName = line.substring(labelStart + 1, viewStart);
-				view = line.substring(viewStart + 1);
-			}
-		} else {
-			// only label
-			if (labelStart > 0) {
-				segment = line.substring(treeLevel, labelStart);
-				labelKeyName = line.substring(labelStart + 1);
-			}// only view
-			else if (viewStart > 0) {
-				segment = line.substring(treeLevel, viewStart);
-				view = line.substring(viewStart + 1);
-			}
-			// only segment
-			else {
-				segment = line.substring(treeLevel);
-			}
-		}
+		// leading spaces
+		spaces();
 
-		// segment has been set, view & label may be null
-		SitemapNode node = new SitemapNode();
-		node.setUriSegment(segment);
-
-		// do structure before labels
-		// labels are not needed for redirected pages
-		// but we cannot get full URI until structure done
-
-		// add the node
-		if (treeLevel == 1) {
-			// at level 1 each becomes a 'root' (technically the site
-			// tree is a forest)
-			sitemap.addNode(node);
-			currentNode = node;
-			currentLevel = treeLevel;
-		} else {
-			// if indent going back up tree, walk up from current node
-			// to the parent level needed
-			if (treeLevel < currentLevel) {
-				int retraceLevels = currentLevel - treeLevel;
-				for (int k = 1; k <= retraceLevels; k++) {
-					currentNode = sitemap.getParent(currentNode);
-					currentLevel--;
-				}
-				sitemap.addChild(currentNode, node);
-				currentNode = node;
-				currentLevel++;
-			} else if (treeLevel == currentLevel) {
-				SitemapNode parentNode = sitemap.getParent(currentNode);
-				sitemap.addChild(parentNode, node);
-			} else if (treeLevel > currentLevel) {
-				if (treeLevel - currentLevel > 1) {
-					log.warn(
-							"indentation for {} line is too great.  It should be a maximum of 1 greater than its predecessor",
-							node.getUriSegment());
-					indentationErrors.add(node.getUriSegment());
-				}
-				sitemap.addChild(currentNode, node);
-				currentNode = node;
-				currentLevel++;
-			}
-
-		}
-
-		String uri = sitemap.uri(node);
-		// do the view
-		if (!getRedirects().containsKey(uri)) {
-			findView(node, segment, view);
-		}
-
-		// do the label
-		labelKeyForName(labelKeyName, node);
-
-	}
-
-	private int lastIndent(String line) {
-		int index = 0;
+		int indent = 0;
+		// hyphen indent
 		while (line.charAt(index) == '-') {
 			index++;
+			indent++;
 		}
-		return index;
+
+		lineRecord.setIndentLevel(indent);
+
+		// no hyphens at start, cannot establish indent level
+		if (indent == 0) {
+			syntaxErrors.add(NO_HYPHEN + lineIndex);
+			return lineRecord;
+		}
+
+		spaces();
+		// processing segment
+		while ((index < line.length() && (line.charAt(index) != ' ') && (line.charAt(index) != ':') && (line
+				.charAt(index) != '~'))) {
+			buf.append(line.charAt(index));
+			index++;
+		}
+		lineRecord.setSegment(buf.toString());
+
+		// has to be done here, because we don't know what the segment is until now
+		if (indent - currentIndent > 1) {
+			indentationErrors.add(lineRecord.getSegment());
+		}
+		spaces();
+
+		// may be segment only
+		if (index < line.length()) {
+			char c = line.charAt(index);
+			// processing view
+			if (c == ':') {
+				index++;
+				spaces();
+				buf = new StringBuilder();
+				while ((index < line.length()) && (line.charAt(index) != ' ') && (line.charAt(index) != '~')) {
+					buf.append(line.charAt(index));
+					index++;
+				}
+				lineRecord.setViewName(buf.toString());
+				spaces();
+
+				// may be no label key
+				if (index < line.length()) {
+					c = line.charAt(index);
+					if (c == '~') {
+						index++;
+						spaces();
+						label();
+					}
+				}
+
+			} else {
+				// processing label without view
+				if (c == '~') {
+					index++;
+					spaces();
+					label();
+				}
+			}
+		}
+		return lineRecord;
+	}
+
+	private void spaces() {
+		// spaces
+		while ((index < line.length()) && (line.charAt(index) == ' ')) {
+			index++;
+		}
+	};
+
+	private void label() {
+		StringBuilder buf = new StringBuilder();
+		while ((index < line.length()) && (line.charAt(index) != ' ')) {
+			buf.append(line.charAt(index));
+			index++;
+		}
+		lineRecord.setKeyName(buf.toString());
 	}
 
 }
