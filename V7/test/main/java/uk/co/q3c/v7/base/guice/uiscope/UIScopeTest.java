@@ -11,7 +11,7 @@ import org.mockito.Matchers;
 
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.guice.BaseModule;
-import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
+import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 import uk.co.q3c.v7.base.ui.TestUI;
 import uk.co.q3c.v7.base.ui.TestUIProvider;
@@ -32,7 +32,7 @@ import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ UIScopeModule.class, BaseModule.class, TestUIModule.class, StandardViewModule.class,
-		V7ShiroVaadinModule.class, IniModule.class })
+		ShiroVaadinModule.class, IniModule.class })
 public class UIScopeTest extends UITestBase {
 
 	TestUI uib;

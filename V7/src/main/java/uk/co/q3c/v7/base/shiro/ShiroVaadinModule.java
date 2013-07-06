@@ -8,9 +8,9 @@ import com.google.inject.Provides;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorHandler;
 
-public class V7ShiroVaadinModule extends AbstractModule {
+public class ShiroVaadinModule extends AbstractModule {
 
-	public V7ShiroVaadinModule() {
+	public ShiroVaadinModule() {
 		super();
 	}
 
