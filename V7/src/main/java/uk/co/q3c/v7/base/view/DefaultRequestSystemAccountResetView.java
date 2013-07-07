@@ -1,18 +1,14 @@
 package uk.co.q3c.v7.base.view;
 
-import com.vaadin.ui.Component;
+import javax.inject.Inject;
 
-public class DefaultRequestSystemAccountResetView implements RequestSystemAccountResetView {
+import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-		throw new RuntimeException("not yet implemented");
+public class DefaultRequestSystemAccountResetView extends DefaultViewBase implements RequestSystemAccountResetView {
 
-	}
-
-	@Override
-	public Component getUiComponent() {
-		throw new RuntimeException("not yet implemented");
+	@Inject
+	protected DefaultRequestSystemAccountResetView(UserNavigationTree navtree) {
+		super(navtree);
 	}
 
 }

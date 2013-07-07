@@ -1,18 +1,16 @@
 package uk.co.q3c.v7.base.view;
 
-import com.vaadin.ui.Component;
+import javax.inject.Inject;
 
-public class DefaultSystemAccountView implements SystemAccountView {
+import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-		throw new RuntimeException("not yet implemented");
 
-	}
+public class DefaultSystemAccountView extends DefaultViewBase implements SystemAccountView {
 
-	@Override
-	public Component getUiComponent() {
-		throw new RuntimeException("not yet implemented");
+	@Inject
+
+	protected DefaultSystemAccountView(UserNavigationTree navtree) {
+		super(navtree);
 	}
 
 }

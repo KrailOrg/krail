@@ -1,21 +1,13 @@
 package uk.co.q3c.v7.base.view;
 
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Panel;
+import javax.inject.Inject;
 
-public class DefaultRequestSystemAccountEnableView implements RequestSystemAccountEnableView {
+import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
-	private Panel panel;
-
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-		throw new RuntimeException("not yet implemented");
-
-	}
-
-	@Override
-	public Component getUiComponent() {
-		throw new RuntimeException("not yet implemented");
+public class DefaultRequestSystemAccountEnableView extends DefaultViewBase implements RequestSystemAccountEnableView {
+	@Inject
+	protected DefaultRequestSystemAccountEnableView(UserNavigationTree navtree) {
+		super(navtree);
 	}
 
 }
