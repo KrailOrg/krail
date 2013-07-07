@@ -32,7 +32,17 @@ import com.vaadin.data.util.converter.Converter;
 public class MoneyConverter implements Converter<String, Money> {
 
 	@Override
-	public Money convertToModel(String value, Locale locale)
+	public Class<Money> getModelType() {
+		return Money.class;
+	}
+
+	@Override
+	public Class<String> getPresentationType() {
+		return String.class;
+	}
+
+	@Override
+	public Money convertToModel(String value, Class<? extends Money> targetType, Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException {
 
 		CurrencyUnit uk = CurrencyUnit.getInstance(Locale.UK);
@@ -51,23 +61,12 @@ public class MoneyConverter implements Converter<String, Money> {
 				throw mfe;
 			}
 		}
-
 	}
 
 	@Override
-	public String convertToPresentation(Money value, Locale locale)
+	public String convertToPresentation(Money value, Class<? extends String> targetType, Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException {
 		return value.toString();
-	}
-
-	@Override
-	public Class<Money> getModelType() {
-		return Money.class;
-	}
-
-	@Override
-	public Class<String> getPresentationType() {
-		return String.class;
 	}
 
 }

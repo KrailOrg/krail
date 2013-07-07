@@ -21,8 +21,6 @@ import org.joda.money.Money;
 import org.joda.money.format.MoneyFormatException;
 import org.junit.Test;
 
-import uk.co.q3c.v7.base.data.MoneyConverter;
-
 public class MoneyConverterTest {
 	MoneyConverter converter;
 
@@ -45,7 +43,7 @@ public class MoneyConverterTest {
 		// given
 		converter = new MoneyConverter();
 		// when
-		Money money = converter.convertToModel("1025.44", Locale.UK);
+		Money money = converter.convertToModel("1025.44", Money.class, Locale.UK);
 		// then
 		Money expected = Money.ofMinor(CurrencyUnit.getInstance(Locale.UK), 102544);
 		assertThat(money).isEqualTo(expected);
@@ -57,7 +55,7 @@ public class MoneyConverterTest {
 		// given
 		converter = new MoneyConverter();
 		// when
-		Money money = converter.convertToModel("1,025.44", Locale.UK);
+		Money money = converter.convertToModel("1,025.44", Money.class, Locale.UK);
 		// then
 		Money expected = Money.ofMinor(CurrencyUnit.getInstance(Locale.UK), 102544);
 		assertThat(money).isEqualTo(expected);
@@ -69,7 +67,7 @@ public class MoneyConverterTest {
 		// given
 		converter = new MoneyConverter();
 		// when
-		Money money = converter.convertToModel("£1,025.44", Locale.UK);
+		Money money = converter.convertToModel("£1,025.44", Money.class, Locale.UK);
 		// then
 		Money expected = Money.ofMinor(CurrencyUnit.getInstance(Locale.UK), 102544);
 		assertThat(money).isEqualTo(expected);
@@ -81,7 +79,7 @@ public class MoneyConverterTest {
 		// given
 		converter = new MoneyConverter();
 		// when
-		Money money = converter.convertToModel("$1,025.44", Locale.UK);
+		Money money = converter.convertToModel("$1,025.44", Money.class, Locale.UK);
 		// then
 		Money expected = Money.ofMinor(CurrencyUnit.getInstance(Locale.UK), 102544);
 		assertThat(money).isEqualTo(expected);

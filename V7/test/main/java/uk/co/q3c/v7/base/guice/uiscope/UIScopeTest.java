@@ -2,6 +2,8 @@ package uk.co.q3c.v7.base.guice.uiscope;
 
 import static org.mockito.Mockito.*;
 
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 import org.junit.Assert;
@@ -18,6 +20,7 @@ import uk.co.q3c.v7.base.ui.TestUIProvider;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
+import uk.co.q3c.v7.i18n.I18NModule;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -32,7 +35,7 @@ import fixture.UITestBase;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ UIScopeModule.class, BaseModule.class, TestUIModule.class, StandardViewModule.class,
-		ShiroVaadinModule.class, IniModule.class })
+		ShiroVaadinModule.class, IniModule.class, I18NModule.class })
 public class UIScopeTest extends UITestBase {
 
 	TestUI uib;
@@ -72,6 +75,7 @@ public class UIScopeTest extends UITestBase {
 		CurrentInstance.set(UIKey.class, null);
 		CurrentInstance.set(UI.class, uia);
 		when(mockedSession.createConnectorId(Matchers.any(UI.class))).thenAnswer(new ConnectorIdAnswer());
+		when(mockedSession.getLocale()).thenReturn(Locale.UK);
 		uia.setSession(mockedSession);
 		uia.doInit(mockedRequest, 1);
 
