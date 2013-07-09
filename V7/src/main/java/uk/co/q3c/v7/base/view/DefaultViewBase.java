@@ -56,9 +56,8 @@ public abstract class DefaultViewBase implements V7View {
 		grid.setColumnExpandRatio(1, 0.33f);
 		grid.setColumnExpandRatio(2, 0.33f);
 
-		grid.setRowExpandRatio(0, 0.33f);
-		grid.setRowExpandRatio(1, 0.33f);
-		grid.setRowExpandRatio(2, 0.33f);
+		grid.setRowExpandRatio(0, 0.5f);
+		grid.setRowExpandRatio(2, 0.5f);
 
 		label.setSizeFull();
 		layout.setSplitPosition(200f, Unit.PIXELS);
