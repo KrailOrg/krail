@@ -48,6 +48,7 @@ public abstract class DefaultViewBase implements V7View {
 	protected void buildUI() {
 		layout = new HorizontalSplitPanel();
 		label = new Label("This is the " + this.getClass().getSimpleName());
+		label.setHeight("100px");
 		grid = new GridLayout(3, 3);
 
 		grid.addComponent(label, 1, 1);
@@ -56,8 +57,9 @@ public abstract class DefaultViewBase implements V7View {
 		grid.setColumnExpandRatio(1, 0.33f);
 		grid.setColumnExpandRatio(2, 0.33f);
 
-		grid.setRowExpandRatio(0, 0.5f);
-		grid.setRowExpandRatio(2, 0.5f);
+		grid.setRowExpandRatio(0, 0.4f);
+		grid.setRowExpandRatio(1, 0.2f);
+		grid.setRowExpandRatio(2, 0.4f);
 
 		label.setSizeFull();
 		layout.setSplitPosition(200f, Unit.PIXELS);
