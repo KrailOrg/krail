@@ -1,0 +1,100 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+project.ext.set('guiceVersion','3.0')
+project.ext.set('orientVersion','1.4.0')
+project.ext.set('shiroVersion','1.2.1')
+project.ext.set('tinkerVersion', '2.3.0')
+project.ext.set('vaadinVersion', '7.1.0')
+
+
+
+
+repositories { mavenCentral() }
+
+configurations { providedCompile }
+
+sourceSets.main.compileClasspath += configurations.providedCompile
+sourceSets.test.compileClasspath += configurations.providedCompile
+sourceSets.test.runtimeClasspath += configurations.providedCompile
+
+
+dependencies{
+
+
+	//Vaadin
+
+	//The core server part of Vaadin -->
+	compile 'com.vaadin:vaadin-server:'+vaadinVersion
+
+
+
+	//Dependency Injection
+	compile   'com.google.inject:guice:'+guiceVersion
+	compile   'com.google.inject.extensions:guice-servlet:'+guiceVersion
+	compile   'com.google.inject.extensions:guice-assistedinject:'+guiceVersion
+	compile   'com.google.inject.extensions:guice-multibindings:'+guiceVersion
+
+
+	//User access control
+	compile 'org.apache.shiro:shiro-core:'+shiroVersion
+	compile 'org.apache.shiro:shiro-web:'+shiroVersion
+	compile 'org.apache.shiro:shiro-guice:'+shiroVersion
+
+	//Logging
+	compile 'org.slf4j:slf4j-api:1.6.6'
+	compile 'org.slf4j:slf4j-log4j12:1.6.6'
+
+
+
+	//Testing
+	testCompile 'org.easytesting:fest-assert:1.4'
+	testCompile 'com.mycila:mycila-guice:2.10.ga'
+	testCompile 'com.mycila.testing.plugins:mycila-testing-guice:2.8'
+	testCompile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
+	testCompile 'org.mockito:mockito-all:1.9.0'
+	testCompile 'junit:junit:4.+'
+	testCompile 'com.googlecode.jmockit:jmockit:1.0'
+
+	//Date Time
+	compile 'joda-time:joda-time:2.1'
+
+	//Money
+	compile 'org.joda:joda-money:0.8'
+
+	//Validation
+	compile 'org.apache.bval:bval-jsr303:0.5'
+	compile 'org.apache.bval:bval-guice:0.5'
+	compile 'javax.validation:validation-api:1.1.0.CR1'
+
+	//Utility
+	compile 'com.google.guava:guava:13.0.1'
+	//the easiest way to all the Jung parts
+	compile 'net.sf.jung:jung-samples:2.0.1'
+	compile 'org.apache.commons:commons-lang3:3.1'
+	compile 'commons-io:commons-io:2.4'
+
+	//servlet
+	providedCompile "javax.servlet:javax.servlet-api:3.+"
+
+	//Persistence
+	//see http://code.google.com/p/orient/wiki/JavaAPI#Database_types and http://code.google.com/p/orient/wiki/GraphDatabaseTinkerpop
+
+	compile 'javax.persistence:persistence-api:1.0.2'
+	compile 'com.orientechnologies:orientdb-core:'+orientVersion
+	compile 'com.orientechnologies:orient-commons:'+orientVersion
+
+	compile 'com.orientechnologies:orientdb-client:'+orientVersion //needed for remote server
+	compile 'com.orientechnologies:orientdb-enterprise:'+orientVersion //needed for remote server
+
+
+	compile 'com.tinkerpop.blueprints:blueprints-core:'+tinkerVersion   //Graph Persistence
+	compile 'com.tinkerpop.blueprints:blueprints-orient-graph:'+tinkerVersion  //Graph Persistence
+
+
+	compile 'com.orientechnologies:orientdb-object:'+orientVersion//Object persistence
+
+	
+
+
+}
