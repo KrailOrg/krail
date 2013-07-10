@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.config;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.*;
 
 import java.io.File;
 
@@ -176,7 +176,7 @@ public class V7IniTest {
 	}
 
 	private String filepath(String filename) {
-		File f = new File("test");
+		File f = new File("src/test/java");
 		File f2 = new File(f, filename);
 		String filepath = "file:" + f2.getAbsolutePath();
 		return filepath;

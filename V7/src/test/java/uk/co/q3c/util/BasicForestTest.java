@@ -52,6 +52,7 @@ public class BasicForestTest {
 		tree.addNode(s1);
 		// then
 		assertThat(tree.containsNode(s1)).isTrue();
+
 	}
 
 	@Test

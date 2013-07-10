@@ -77,7 +77,7 @@ public class TextReaderSitemapProviderTest {
 
 	@BeforeClass
 	public static void beforeClass() {
-		propDir = new File("test/main/java/uk/co/q3c/v7/base/navigate");
+		propDir = new File("src/test/java/uk/co/q3c/v7/base/navigate");
 		File modDir = new File(System.getProperty("user.home"));
 		modifiedFile = new File(modDir, "temp/sitemap.properties");
 	}

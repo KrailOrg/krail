@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="src" path="test/main/java"/>
+	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="/home/david/.gradle/caches/artifacts-15/filestore/javax.persistence/persistence-api/1.0.2/jar/8a7f96961047da52a53b7347b6a919c6fbc6d7fa/persistence-api-1.0.2.jar" sourcepath="/home/david/.gradle/caches/artifacts-15/filestore/javax.persistence/persistence-api/1.0.2/source/eb8ae77be88577b23e64ce1e5386e874b08b49cc/persistence-api-1.0.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/home/david/.gradle/caches/artifacts-15/filestore/com.orientechnologies/orientdb-core/1.4.0/jar/89538128e9b1e9863b5dcc4400fb56430bf9ba92/orientdb-core-1.4.0.jar" sourcepath="/home/david/.gradle/caches/artifacts-15/filestore/com.orientechnologies/orientdb-core/1.4.0/source/7a7549493589a4c4821b20f07bc5cb4deeeac2c4/orientdb-core-1.4.0-sources.jar"/>
