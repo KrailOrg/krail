@@ -55,6 +55,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Override
 	public void navigateTo(String fragment) {
+		sitemapCheck();
 		if (sitemap.hasErrors()) {
 			throw new SiteMapException("Unable to navigate, site map has errors\n" + sitemap.getReport());
 		}
@@ -88,6 +89,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 * @return
 	 */
 	private String checkRedirects(String fragment) {
+		sitemapCheck();
 		uriHandler.setFragment(fragment);
 		String page = uriHandler.virtualPage();
 		String redirection = sitemap.getRedirectFor(page);
@@ -264,11 +266,18 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Override
 	public void navigateTo(StandardPageKey pageKey) {
+		sitemapCheck();
 		String page = sitemap.standardPageURI(pageKey);
 		if (page == null) {
 			throw new SiteMapException(pageKey + " cannot have a null path\n" + sitemap.getReport());
 		}
 		navigateTo(page);
+	}
+
+	private void sitemapCheck() {
+		if (sitemap == null) {
+			throw new SiteMapException("Sitemap has failed to load");
+		}
 	}
 
 	@Override
@@ -291,6 +300,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Override
 	public void navigateTo(SitemapNode node) {
+		sitemapCheck();
 		String url = sitemap.uri(node);
 		navigateTo(url);
 	}

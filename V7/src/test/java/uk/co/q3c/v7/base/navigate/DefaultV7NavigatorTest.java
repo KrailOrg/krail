@@ -1,11 +1,8 @@
 package uk.co.q3c.v7.base.navigate;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.fest.assertions.Assertions.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Map;
 
@@ -106,6 +103,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Inject
 	Provider<V7Ini> iniPro;
 
+	@Mock
 	Sitemap sitemap;
 
 	@Override
@@ -115,23 +113,9 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		ini = iniPro.get();
 		ini.validate();
 
-		sitemap = new TextReaderSitemapProvider(new StandardPageBuilder()).get();
+		// sitemap = new TextReaderSitemapProvider(new StandardPageBuilder()).get();
 
 		uriHandler = new StrictURIFragmentHandler();
-
-		when(loginViewPro.get()).thenReturn(loginView);
-		when(logoutViewPro.get()).thenReturn(logoutView);
-		when(viewProMap.get("view1")).thenReturn(view1Pro);
-		when(viewProMap.get("view2")).thenReturn(view2Pro);
-		when(viewProMap.get("login")).thenReturn(loginViewPro);
-		when(viewProMap.get("public/logout")).thenReturn(logoutViewPro);
-		when(viewProMap.get("private")).thenReturn(privateHomePro);
-
-		when(view1Pro.get()).thenReturn(view1);
-		when(view2Pro.get()).thenReturn(view2);
-		when(loginViewPro.get()).thenReturn(loginView);
-		when(logoutViewPro.get()).thenReturn(logoutView);
-		when(privateHomePro.get()).thenReturn(privateHomeView);
 
 		when(scopedUI.getPage()).thenReturn(page);
 		when(errorViewPro.get()).thenReturn(errorView);
@@ -144,7 +128,11 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void logout() {
 
 		// given
-
+		String page = "public/logout";
+		when(sitemap.standardPageURI(StandardPageKey.Logout)).thenReturn(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(logoutViewPro);
+		when(logoutViewPro.get()).thenReturn(logoutView);
 		// when
 		navigator.navigateTo(StandardPageKey.Logout);
 		// then
@@ -155,8 +143,12 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Test
 	public void login() {
 		// given
+		String page = "public/login";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(loginViewPro);
+		when(loginViewPro.get()).thenReturn(loginView);
 		// when
-		navigator.navigateTo("login");
+		navigator.navigateTo(page);
 		// then
 
 		assertThat(navigator.getCurrentView()).isInstanceOf(LoginView.class);
@@ -168,18 +160,38 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void loginSuccessFul_toPreviousView() {
 
 		// given
-		navigator.navigateTo("public/view2");
+		String page = "public/view2";
+		String page2 = "public/login";
+
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectFor(page2)).thenReturn(page2);
+
+		when(viewProMap.get(page)).thenReturn(view2Pro);
+		when(viewProMap.get(page2)).thenReturn(loginViewPro);
+
+		when(view2Pro.get()).thenReturn(view2);
+		when(loginViewPro.get()).thenReturn(loginView);
+
+		when(sitemap.standardPageURI(StandardPageKey.Login)).thenReturn(page2);
+
+		navigator.navigateTo(page);
 		navigator.navigateTo(StandardPageKey.Login);
 		// when
 		navigator.loginSuccessful();
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo("public/view2");
+		assertThat(navigator.getNavigationState()).isEqualTo(page);
 	}
 
 	@Test
 	public void loginSuccessFul_noPreviousView() {
 
 		// given
+		String page = "private";
+		when(sitemap.standardPageURI(StandardPageKey.Private_Home)).thenReturn(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(privateHomePro);
+		when(privateHomePro.get()).thenReturn(privateHomeView);
+
 		navigator.setCurrentView(loginView, "xx", "yy");
 		navigator.setPreviousView(null);
 		// when
@@ -193,8 +205,13 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void navigateTo() {
 
 		// given
+		String page = "public/view2";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(view2Pro);
+		when(view2Pro.get()).thenReturn(view2);
+
 		// when
-		navigator.navigateTo("view2");
+		navigator.navigateTo(page);
 		// then
 		assertThat(navigator.getCurrentView()).isEqualTo(view2);
 
@@ -204,9 +221,13 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void navigateToEmptyPageWithParams() {
 
 		// given
-
+		String page1 = "";
+		String fragment1 = page1 + "/id=2/age=5";
+		when(sitemap.getRedirectFor(page1)).thenReturn("public");
+		when(viewProMap.get(page1)).thenReturn(view1Pro);
+		when(view1Pro.get()).thenReturn(view1);
 		// when
-		navigator.navigateTo("/id=2/age=5");
+		navigator.navigateTo(fragment1);
 		// then
 		assertThat(navigator.getNavigationState()).isEqualTo("public/id=2/age=5");
 
@@ -216,8 +237,13 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void navigateTo_invalidURI() {
 
 		// given
+		// given
+		String page = "public/view3";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(null);
+		when(view2Pro.get()).thenReturn(view2);
 		// when
-		navigator.navigateTo("view3");
+		navigator.navigateTo(page);
 		// then
 		assertThat(navigator.getCurrentView()).isEqualTo(errorView);
 
@@ -227,12 +253,14 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void getNavigationState() {
 
 		// given
-		String fragment = "public/view2";
-		// when(uriHandler.fragment()).thenReturn(fragment);
+		String page = "public/view2";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(view2Pro);
+		when(view2Pro.get()).thenReturn(view2);
 		// when
-		navigator.navigateTo(fragment);
+		navigator.navigateTo(page);
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo(fragment);
+		assertThat(navigator.getNavigationState()).isEqualTo(page);
 
 	}
 
@@ -240,7 +268,10 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void getNavigationParams() {
 
 		// given
-
+		String page = "public/view2";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(view2Pro);
+		when(view2Pro.get()).thenReturn(view2);
 		// when
 		navigator.navigateTo("public/view2/id=1/age=2");
 		// then
@@ -252,12 +283,17 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void navigateToNode() {
 
 		// given
-		String uri = "private/options";
-		SitemapNode node = new SitemapURIConverter(sitemap, uriHandler).nodeForUri(uri, false);
+		String page = "public/view2";
+		SitemapNode node = new SitemapNode();
+		when(sitemap.uri(node)).thenReturn(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(view2Pro);
+		when(view2Pro.get()).thenReturn(view2);
+
 		// when
 		navigator.navigateTo(node);
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo(uri);
+		assertThat(navigator.getNavigationState()).isEqualTo(page);
 
 	}
 
@@ -265,6 +301,18 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void currentAndPreviousViews_andClearHistory() {
 
 		// given
+		String page1 = "view1";
+		String fragment1 = page1 + "/id=1";
+		when(sitemap.getRedirectFor(page1)).thenReturn(page1);
+		when(viewProMap.get(page1)).thenReturn(view1Pro);
+		when(view1Pro.get()).thenReturn(view1);
+
+		String page2 = "view2";
+		String fragment2 = page2 + "/id=2";
+		when(sitemap.getRedirectFor(page2)).thenReturn(page2);
+		when(viewProMap.get(page2)).thenReturn(view2Pro);
+		when(view2Pro.get()).thenReturn(view2);
+
 		// when
 
 		// then
@@ -278,36 +326,36 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		assertThat(navigator.getPreviousFragment()).isNull();
 
 		// when
-		navigator.navigateTo("view1/id=1");
+		navigator.navigateTo(fragment1);
 
 		// then
 		assertThat(navigator.getCurrentView()).isEqualTo(view1);
-		assertThat(navigator.getCurrentViewName()).isEqualTo("view1");
-		assertThat(navigator.getNavigationState()).isEqualTo("view1/id=1");
+		assertThat(navigator.getCurrentViewName()).isEqualTo(page1);
+		assertThat(navigator.getNavigationState()).isEqualTo(fragment1);
 
 		assertThat(navigator.getPreviousView()).isNull();
 		assertThat(navigator.getPreviousViewName()).isNull();
 		assertThat(navigator.getPreviousFragment()).isNull();
 
 		// when
-		navigator.navigateTo("view2/id=2");
+		navigator.navigateTo(fragment2);
 
 		// then
 		assertThat(navigator.getCurrentView()).isEqualTo(view2);
-		assertThat(navigator.getCurrentViewName()).isEqualTo("view2");
-		assertThat(navigator.getNavigationState()).isEqualTo("view2/id=2");
+		assertThat(navigator.getCurrentViewName()).isEqualTo(page2);
+		assertThat(navigator.getNavigationState()).isEqualTo(fragment2);
 
 		assertThat(navigator.getPreviousView()).isEqualTo(view1);
-		assertThat(navigator.getPreviousViewName()).isEqualTo("view1");
-		assertThat(navigator.getPreviousFragment()).isEqualTo("view1/id=1");
+		assertThat(navigator.getPreviousViewName()).isEqualTo(page1);
+		assertThat(navigator.getPreviousFragment()).isEqualTo(fragment1);
 
 		// when
 		navigator.clearHistory();
 
 		// then
 		assertThat(navigator.getCurrentView()).isEqualTo(view2);
-		assertThat(navigator.getCurrentViewName()).isEqualTo("view2");
-		assertThat(navigator.getNavigationState()).isEqualTo("view2/id=2");
+		assertThat(navigator.getCurrentViewName()).isEqualTo(page2);
+		assertThat(navigator.getNavigationState()).isEqualTo(fragment2);
 
 		assertThat(navigator.getPreviousView()).isNull();
 		assertThat(navigator.getPreviousViewName()).isNull();
@@ -321,6 +369,10 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void listeners_allRespond() {
 
 		// given
+		String page = "public/view2";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(view2Pro);
+		when(view2Pro.get()).thenReturn(view2);
 		// need to return true, or first listener will block the second
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(true);
 		navigator.addViewChangeListener(listener1);
@@ -328,7 +380,7 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		navigator.addViewChangeListener(listener3);
 		// when
 		navigator.removeViewChangeListener(listener3);
-		navigator.navigateTo("view2");
+		navigator.navigateTo(page);
 		// then
 		verify(listener1, times(1)).beforeViewChange(any(V7ViewChangeEvent.class));
 		verify(listener2, times(1)).beforeViewChange(any(V7ViewChangeEvent.class));
@@ -339,13 +391,17 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void listener_blocked() {
 
 		// given
+		String page = "public/view2";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(view2Pro);
+		when(view2Pro.get()).thenReturn(view2);
 		// to block second and subsequent
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(false);
 		navigator.addViewChangeListener(listener1);
 		navigator.addViewChangeListener(listener2);
 		navigator.addViewChangeListener(listener3);
 		// when
-		navigator.navigateTo("view2");
+		navigator.navigateTo(page);
 		// then
 		verify(listener1, times(1)).beforeViewChange(any(V7ViewChangeEvent.class));
 		verify(listener2, never()).beforeViewChange(any(V7ViewChangeEvent.class));
@@ -356,10 +412,16 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	public void redirection() {
 
 		// given
+		String page = "wiggly";
+		String page2 = "private/transfers";
+
+		when(sitemap.getRedirectFor(page)).thenReturn(page2);
+		when(viewProMap.get(page2)).thenReturn(view2Pro);
+		when(view2Pro.get()).thenReturn(view2);
 		// when
-		navigator.navigateTo("wiggly");
+		navigator.navigateTo(page);
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo("private/transfers");
+		assertThat(navigator.getNavigationState()).isEqualTo(page2);
 	}
 
 }
