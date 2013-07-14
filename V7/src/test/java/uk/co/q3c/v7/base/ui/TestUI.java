@@ -19,7 +19,7 @@ public class TestUI extends ScopedUI {
 	private LoginStatusPanel panel2;
 
 	@Inject
-	protected TestUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory) {
+	public TestUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory) {
 		super(navigator, errorHandler, converterFactory);
 
 	}

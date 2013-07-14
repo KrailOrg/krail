@@ -17,7 +17,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIKeyProvider;
-import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 
 import com.google.inject.Injector;
 import com.google.inject.Provider;
@@ -27,7 +26,7 @@ import com.vaadin.ui.UI;
 public class TestUIProvider extends ScopedUIProvider {
 
 	@Inject
-	protected TestUIProvider(Injector injector, Map<String, Provider<UI>> uiProMap, UIKeyProvider uiKeyProvider) {
+	public TestUIProvider(Injector injector, Map<String, Provider<UI>> uiProMap, UIKeyProvider uiKeyProvider) {
 		super(injector, uiProMap, uiKeyProvider);
 	}
 
