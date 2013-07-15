@@ -31,6 +31,7 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
 import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
+import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.i18n.I18NModule;
@@ -85,6 +86,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		baseModules.add(shiroWebModule(ctx.get(), ini));
 		baseModules.add(shiroVaadinModule());
 		baseModules.add(new ShiroAopModule());
+		baseModules.add(userOptionsModule(ini));
 
 		baseModules.add(baseModule());
 
@@ -94,6 +96,10 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		addAppModules(baseModules, ini);
 		return baseModules;
+	}
+
+	private Module userOptionsModule(V7Ini ini) {
+		return new DefaultUserOptionModule(ini);
 	}
 
 	/**
