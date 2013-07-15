@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.shiro.subject.Subject;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
@@ -29,6 +30,7 @@ import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 import uk.co.q3c.v7.base.view.DefaultErrorView;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.base.view.component.SubjectProvider;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 
@@ -86,6 +88,7 @@ public class UIScopeTest {
 			bind(ConverterFactory.class).to(V7DefaultConverterFactory.class);
 			bind(UnauthenticatedExceptionHandler.class).to(DefaultUnauthenticatedExceptionHandler.class);
 			bind(UnauthorizedExceptionHandler.class).to(DefaultUnauthorizedExceptionHandler.class);
+			bind(Subject.class).toProvider(SubjectProvider.class);
 		}
 	}
 

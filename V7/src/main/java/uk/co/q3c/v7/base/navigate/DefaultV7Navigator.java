@@ -41,15 +41,17 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	private String previousFragment;
 	private String currentFragment;
 	private final Sitemap sitemap;
+	private final Provider<Subject> subjectPro;
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler, Sitemap sitemap,
-			Map<String, Provider<V7View>> viewProMap, V7SecurityManager securityManager) {
+			Map<String, Provider<V7View>> viewProMap, V7SecurityManager securityManager, Provider<Subject> subjectPro) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
 		this.uriHandler = uriHandler;
 		this.sitemap = sitemap;
+		this.subjectPro = subjectPro;
 		securityManager.addListener(this);
 	}
 
@@ -281,7 +283,8 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	@Override
-	public void updateStatus(Subject subject) {
+	public void updateStatus() {
+		Subject subject = subjectPro.get();
 		if (subject.isAuthenticated()) {
 			loginSuccessful();
 		}

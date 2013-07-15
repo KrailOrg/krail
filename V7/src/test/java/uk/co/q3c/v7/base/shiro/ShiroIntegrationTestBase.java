@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -33,6 +33,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
@@ -58,6 +59,9 @@ public abstract class ShiroIntegrationTestBase extends AbstractShiroTest {
 	@Mock
 	HttpServletResponse servletResponse;
 
+	@Mock
+	protected Provider<Subject> subjectPro;
+
 	@Inject
 	Realm realm;
 
@@ -71,6 +75,7 @@ public abstract class ShiroIntegrationTestBase extends AbstractShiroTest {
 		subject = new WebSubject.Builder(getSecurityManager(), servletRequest, servletResponse).buildSubject();
 		// 2. Bind the subject to the current thread:
 		setSubject(subject);
+		when(subjectPro.get()).thenReturn(subject);
 
 	}
 

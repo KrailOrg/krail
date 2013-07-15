@@ -12,17 +12,14 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -55,14 +52,14 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 		getSubject().login(token);
 		// then
 		// subject may get re-created, so cannot rely on the instance
-		verify(monitor1, times(1)).updateStatus(any(Subject.class));
-		verify(monitor2, times(1)).updateStatus(any(Subject.class));
+		verify(monitor1, times(1)).updateStatus();
+		verify(monitor2, times(1)).updateStatus();
 
 		// when
 		getSubject().logout();
 		// 1 already recorded, plus 1 for logout
-		verify(monitor1, times(2)).updateStatus(any(Subject.class));
-		verify(monitor2, times(2)).updateStatus(any(Subject.class));
+		verify(monitor1, times(2)).updateStatus();
+		verify(monitor2, times(2)).updateStatus();
 	}
 
 }

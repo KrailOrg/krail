@@ -26,7 +26,6 @@ import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
-import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -46,11 +45,15 @@ public class LoginStatusPanelTest {
 
 	Button loginoutBtn;
 
+	@Mock
+	SubjectProvider subjectPro;
+
 	@Before
 	public void setup() {
 		V7SecurityManager securityManager = new V7SecurityManager();
 		SecurityUtils.setSecurityManager(securityManager);
-		panel = new LoginStatusPanel(navigator, securityManager);
+		when(subjectPro.get()).thenReturn(subject);
+		panel = new LoginStatusPanel(navigator, securityManager, subjectPro);
 		loginoutBtn = ((LoginStatusPanel) panel).getLogin_logout_Button();
 	}
 
@@ -63,7 +66,7 @@ public class LoginStatusPanelTest {
 		when(subject.getPrincipal()).thenReturn(null);
 
 		// when
-		panel.updateStatus(subject);
+		panel.updateStatus();
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log in");
 		assertThat(panel.getUserId()).isEqualTo("guest");
@@ -82,7 +85,7 @@ public class LoginStatusPanelTest {
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.getPrincipal()).thenReturn("userId");
 		// when
-		panel.updateStatus(subject);
+		panel.updateStatus();
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log in");
 		assertThat(panel.getUserId()).isEqualTo("userId?");
@@ -100,7 +103,7 @@ public class LoginStatusPanelTest {
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.getPrincipal()).thenReturn("userId");
 		// when
-		panel.updateStatus(subject);
+		panel.updateStatus();
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log out");
 		assertThat(panel.getUserId()).isEqualTo("userId");

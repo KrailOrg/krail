@@ -120,7 +120,8 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		when(scopedUI.getPage()).thenReturn(page);
 		when(errorViewPro.get()).thenReturn(errorView);
 
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, getSecurityManager());
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, getSecurityManager(),
+				subjectPro);
 		CurrentInstance.set(UI.class, scopedUI);
 	}
 
