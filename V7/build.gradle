@@ -38,8 +38,8 @@ dependencies{
 
 
 	compile 'com.orientechnologies:orientdb-object:'+orientVersion//Object persistence
-	
-	
+
+
 
 	//Vaadin
 
@@ -84,7 +84,8 @@ dependencies{
 	//Validation
 	compile 'org.apache.bval:bval-jsr303:0.5'
 	compile 'org.apache.bval:bval-guice:0.5'
-	compile 'javax.validation:validation-api:1.1.0.CR1'
+	 compile 'javax.validation:validation-api:1.0.0.GA'
+
 
 	//Utility
 	compile 'com.google.guava:guava:13.0.1'
@@ -98,7 +99,7 @@ dependencies{
 
 
 
-	
+
 
 
 }

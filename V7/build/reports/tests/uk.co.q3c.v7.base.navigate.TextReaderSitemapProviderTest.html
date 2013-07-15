@@ -1,0 +1,619 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Test results - Class uk.co.q3c.v7.base.navigate.TextReaderSitemapProviderTest</title>
+<link href="base-style.css" rel="stylesheet" type="text/css"/>
+<link href="style.css" rel="stylesheet" type="text/css"/>
+<script src="report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>Class uk.co.q3c.v7.base.navigate.TextReaderSitemapProviderTest</h1>
+<div class="breadcrumbs">
+<a href="index.html">all</a> &gt; 
+<a href="uk.co.q3c.v7.base.navigate.html">uk.co.q3c.v7.base.navigate</a> &gt; TextReaderSitemapProviderTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">18</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.177s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">fail1</td>
+<td>0.009s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">invalidLabelKeysClass_does_not_exist</td>
+<td>0.048s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">invalidLabelKeysClass_no_i18N</td>
+<td>0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">invalidPropertyName</td>
+<td>0.008s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">invalidSectionName</td>
+<td>0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">keyName</td>
+<td>0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">mapIndentTooGreat</td>
+<td>0.010s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">options</td>
+<td>0.012s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">options_to_non_default</td>
+<td>0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">parse_partialMap</td>
+<td>0.020s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">redirectTargetEmptyButValid</td>
+<td>0.009s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">redirectTargetLoop</td>
+<td>0.008s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">redirectTargetNotADefinedPage</td>
+<td>0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">reportBeforeParse</td>
+<td>0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">rootsChange</td>
+<td>0.010s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">sectionMissingClosingBracket</td>
+<td>0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">viewNotFound</td>
+<td>0.008s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">viewNotV7View</td>
+<td>0.008s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/temp/sitemap.properties
+
+start at:			15 Jul 2013 19:05:19
+end at:				15 Jul 2013 19:05:20
+run time:			12 ms
+
+pages defined:			13
+
+redirects:			
+ -- :public
+
+view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews]
+
+parsing status:  FAILED
+
+ -------- errors --------
+
+I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKeys2 has been declared but does not exist on the classpath
+
+missing enum declarations		5  (you could just paste these into your enum declaration)
+  -- [MoneyInOut, Money_In_Out, Opt, Options, Transfers]
+
+================================================================= 
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/temp/sitemap.properties
+
+start at:			15 Jul 2013 19:05:24
+end at:				15 Jul 2013 19:05:24
+run time:			5 ms
+
+pages defined:			13
+
+redirects:			
+ -- :public
+
+view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews]
+
+I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKeys
+
+parsing status:  PASSED
+
+ --------------- warnings ---------
+
+indentation errors		1  (line indentation should be &lt;= 1 greater than the preceding line.  Parsing will still work but you may not get the intended result)
+  -- [transfers]
+
+================================================================= 
+
+-segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
+--segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
+--segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
+--segment=system-account, viewClass=uk.co.q3c.v7.base.view.SystemAccountView, labelKey=System_Account
+---segment=unlock-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView, labelKey=Unlock_Account
+---segment=refresh-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView, labelKey=Refresh_Account
+---segment=request-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountView, labelKey=Request_Account
+---segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
+---segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
+
+-segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
+--segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
+--segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
+--segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
+
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good.properties
+
+start at:			15 Jul 2013 19:05:28
+end at:				15 Jul 2013 19:05:29
+run time:			6 ms
+
+pages defined:			13
+
+redirects:			
+ -- :public
+
+view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews]
+
+I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKeys
+
+parsing status:  PASSED
+
+================================================================= 
+
+-segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
+--segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
+--segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
+--segment=system-account, viewClass=uk.co.q3c.v7.base.view.SystemAccountView, labelKey=System_Account
+---segment=unlock-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView, labelKey=Unlock_Account
+---segment=refresh-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView, labelKey=Refresh_Account
+---segment=request-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountView, labelKey=Request_Account
+---segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
+---segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
+
+-segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
+--segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
+--segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
+--segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
+
+
+-segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
+--segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
+--segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
+--segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
+
+-segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
+--segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
+--segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
+--segment=system-account, viewClass=uk.co.q3c.v7.base.view.SystemAccountView, labelKey=System_Account
+---segment=unlock-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView, labelKey=Unlock_Account
+---segment=refresh-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView, labelKey=Refresh_Account
+---segment=request-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountView, labelKey=Request_Account
+---segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
+---segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
+
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good.properties
+
+start at:			15 Jul 2013 19:05:28
+end at:				15 Jul 2013 19:05:29
+run time:			6 ms
+
+pages defined:			13
+
+redirects:			
+ -- :public
+
+view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews]
+
+I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKeys
+
+parsing status:  PASSED
+
+================================================================= 
+
+-segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
+--segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
+--segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
+--segment=system-account, viewClass=uk.co.q3c.v7.base.view.SystemAccountView, labelKey=System_Account
+---segment=unlock-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView, labelKey=Unlock_Account
+---segment=refresh-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView, labelKey=Refresh_Account
+---segment=request-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountView, labelKey=Request_Account
+---segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
+---segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
+
+-segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
+--segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
+--segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
+--segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
+
+# File format version 3.0
+# This section identifies all the packages which may contain views.  The most efficient use is to identify 
+# only the root package(s) here, and qualify with sub-packages in the map section
+# syntax is like this:  uk.co.q3c.app.views
+[viewPackages]
+fixture.testviews2
+uk.co.q3c.v7.base.view.testviews
+
+[options]
+# The fully qualified name of the enum class to use for label keys
+labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys
+generatePublicHomePage=true
+generateAuthenticationPages=true
+generateRequestAccount=true
+generateRequestAccountReset=true
+systemAccountRoot=open/sysaccount
+publicRoot=open
+privateRoot=secret
+
+
+# if true, 'View' is appended to all view names in the tree - just makes things a it more readable
+appendView=true
+
+
+#redirect from : to  
+#Empty space is taken to be the root url
+[redirects]
+       : public
+
+
+[map]
+
+-private
+--transfers     : subview.Transfer
+--money-in-out  : subview.MoneyInOut      ~ MoneyInOut
+--options                                 ~ Opt
+
+#This section is optional, but can be used to change the default standard page mappings
+[standardPageMapping]
+
+-segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
+--segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
+--segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
+--segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
+
+-segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
+--segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
+--segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
+--segment=system-account, viewClass=uk.co.q3c.v7.base.view.SystemAccountView, labelKey=System_Account
+---segment=unlock-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView, labelKey=Unlock_Account
+---segment=refresh-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView, labelKey=Refresh_Account
+---segment=request-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountView, labelKey=Request_Account
+---segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
+---segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
+
+-segment=, viewClass=fixture.testviews2.WigglyHomeView, labelKey=Home
+
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/temp/sitemap.properties
+
+start at:			15 Jul 2013 19:05:40
+end at:				15 Jul 2013 19:05:40
+run time:			5 ms
+
+pages defined:			14
+
+redirects:			
+ -- wiggly:
+
+view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews]
+
+I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKeys
+
+parsing status:  PASSED
+
+================================================================= 
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/temp/sitemap.properties
+
+start at:			15 Jul 2013 19:05:42
+end at:				15 Jul 2013 19:05:42
+run time:			0 ms
+
+pages defined:			0
+
+redirects:			
+
+view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews, labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys, generatePublicHomePage=true, generateAuthenticationPages=true, generateRequestAccount=true, generateRequestAccountReset=true, systemAccountRoot=public/system-account, appendView=true]
+
+parsing status:  FAILED
+
+ -------- errors --------
+
+missing sections		1  (if any section is missing, parsing will fail, and results will be indeterminate - correct this first)
+  -- [options]
+
+I18N Label class:		 has not been declared, you need to define it using the 'labelKeys=' property in [options]
+
+================================================================= 
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_fail1.properties
+
+start at:			15 Jul 2013 19:05:44
+end at:				15 Jul 2013 19:05:45
+run time:			7 ms
+
+pages defined:			12
+
+redirects:			
+ -- :public/view2
+
+view packages declared:		[uk.co.q3c.v7.base.view, fixture.testviews2]
+
+I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKeys
+
+parsing status:  PASSED
+
+================================================================= 
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/temp/sitemap.properties
+
+start at:			15 Jul 2013 19:05:46
+end at:				15 Jul 2013 19:05:47
+run time:			4 ms
+
+pages defined:			13
+
+redirects:			
+ -- :public
+
+view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews]
+
+I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKeys
+
+parsing status:  PASSED
+
+ --------------- warnings ---------
+
+unrecognised options		1  (these have just been ignored, will do no harm)
+  -- [randomProperty]
+
+================================================================= 
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/temp/sitemap.properties
+
+start at:			15 Jul 2013 19:05:50
+end at:				15 Jul 2013 19:05:51
+run time:			4 ms
+
+pages defined:			13
+
+redirects:			
+ -- :public
+
+view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews]
+
+parsing status:  FAILED
+
+ -------- errors --------
+
+I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKeys_Invalid has been declared, is on the classpath, but does not implement I18NKeys, as it should
+
+missing enum declarations		5  (you could just paste these into your enum declaration)
+  -- [MoneyInOut, Money_In_Out, Opt, Options, Transfers]
+
+================================================================= 
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/temp/sitemap.properties
+
+start at:			15 Jul 2013 19:05:52
+end at:				15 Jul 2013 19:05:53
+run time:			5 ms
+
+pages defined:			13
+
+redirects:			
+ -- :public
+
+view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews]
+
+I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKeys
+
+parsing status:  FAILED
+
+ -------- errors --------
+
+invalid view classes		1  (invalid because they do not implement V7View)
+  -- [uk.co.q3c.v7.base.view.testviews.subview.NotV7View]
+
+viewless URIs		1  (these URIs have no view associated with them)
+	uri: &quot;private/money-in-out&quot;
+
+================================================================= 
+# File format version 3.0
+# This section identifies all the packages which may contain views.  The most efficient use is to identify 
+# only the root package(s) here, and qualify with sub-packages in the map section
+# syntax is like this:  uk.co.q3c.app.views
+[viewPackages]
+fixture.testviews2
+uk.co.q3c.v7.base.view.testviews
+
+[options]
+# The fully qualified name of the enum class to use for label keys
+labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys
+generatePublicHomePage=true
+generateAuthenticationPages=true
+generateRequestAccount=true
+generateRequestAccountReset=true
+systemAccountRoot=public/system-account
+
+
+# if true, 'View' is appended to all view names in the tree - just makes things a it more readable
+appendView=true
+
+
+#redirect from : to  
+#Empty space is taken to be the root url
+[redirects]
+       : public
+
+
+[map]
+
+-private
+--transfers     : subview.Transfers
+--money-in-out  : subview.MoneyInOut      ~ MoneyInOut
+--options                                 ~ Opt
+
+#This section is optional, but can be used to change the default standard page mappings
+[standardPageMapping]
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/temp/sitemap.properties
+
+start at:			15 Jul 2013 19:05:54
+end at:				15 Jul 2013 19:05:55
+run time:			4 ms
+
+pages defined:			13
+
+redirects:			
+ -- :public
+
+view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews]
+
+I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKeys
+
+parsing status:  FAILED
+
+ -------- errors --------
+
+undeclared view classes		1  (these could not be found in the view packages declared in the [viewPackages] section)
+  -- [subview.TransfersView]
+
+viewless URIs		1  (these URIs have no view associated with them)
+	uri: &quot;private/transfers&quot;
+
+================================================================= 
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/temp/sitemap.properties
+
+start at:			15 Jul 2013 19:05:56
+end at:				15 Jul 2013 19:05:56
+run time:			0 ms
+
+pages defined:			0
+
+redirects:			
+
+parsing status:  FAILED
+
+ -------- errors --------
+
+missing sections		1  (if any section is missing, parsing will fail, and results will be indeterminate - correct this first)
+  -- [viewPackages]
+
+No view packages declared - site map will not build without them
+
+I18N Label class:		 has not been declared, you need to define it using the 'labelKeys=' property in [options]
+
+================================================================= 
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>Generated by 
+<a href="http://www.gradle.org">Gradle 1.6</a> at 15-Jul-2013 19:05:38</p>
+</div>
+</div>
+</body>
