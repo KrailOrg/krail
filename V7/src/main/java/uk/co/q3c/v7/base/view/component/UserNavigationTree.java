@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKeys;
@@ -61,7 +62,9 @@ public class UserNavigationTree extends Tree {
 
 		for (SitemapNode node : nodeList) {
 			level = 1;
-			loadNode(null, node);
+			if (!node.getLabelKey().equals(StandardPageKey.Logout)) {
+				loadNode(null, node);
+			}
 		}
 	}
 
@@ -83,7 +86,9 @@ public class UserNavigationTree extends Tree {
 				setChildrenAllowed(newParentNode, false);
 			}
 			for (SitemapNode child : children) {
-				loadNode(newParentNode, child);
+				if (!child.getLabelKey().equals(StandardPageKey.Logout)) {
+					loadNode(newParentNode, child);
+				}
 			}
 
 		} else {

@@ -182,4 +182,50 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 	}
 
+	/**
+	 * https://github.com/davidsowerby/v7/issues/143
+	 */
+	@Test
+	public void contextAware() {
+
+		// given
+
+		// when
+
+		// then
+		assertThat(false).isEqualTo(true);
+
+	}
+
+	/**
+	 * https://github.com/davidsowerby/v7/issues/148
+	 */
+	@Test
+	public void excludeLogout() {
+
+		// given
+		buildSitemap(3);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
+		// when
+
+		// then
+		assertThat(unt.getItemIds().size()).isEqualTo(1);
+
+	}
+
+	/**
+	 * https://github.com/davidsowerby/v7/issues/133
+	 */
+	@Test
+	public void presentationOrder() {
+
+		// given
+
+		// when
+
+		// then
+		assertThat(false).isEqualTo(true);
+
+	}
+
 }

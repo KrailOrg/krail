@@ -16,6 +16,7 @@ import org.junit.Before;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.i18n.TestLabelKeys;
 
@@ -54,6 +55,14 @@ public class TestWithSitemap {
 			newNode3 = newNode("a11");
 			sitemap.addChild(newNode1, newNode2);
 			sitemap.addChild(newNode2, newNode3);
+			break;
+
+		case 3:
+			newNode1 = newNode("public");
+			newNode1.setLabelKey(StandardPageKey.Public_Home);
+			newNode2 = newNode("logout");
+			newNode2.setLabelKey(StandardPageKey.Logout);
+			sitemap.addChild(newNode1, newNode2);
 			break;
 		}
 
