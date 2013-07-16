@@ -12,12 +12,20 @@
  */
 package uk.co.q3c.v7.base.useropt;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mycila.inject.internal.guava.base.Splitter;
+import com.mycila.inject.internal.guava.collect.Lists;
 
 /**
  * A set of user options. Although not mandatory, typically the option group and option are the simple class name and
@@ -58,6 +66,37 @@ public class DefaultUserOption implements UserOption {
 	@Override
 	public void setOption(String optionGroup, String option, double value) {
 		userOptionStore.optionMap(optionGroup, option).put(option, Double.toString(value));
+	}
+
+	public void setOption(String optionGroup, String option, List<String> list) {
+		StringBuilder buf = new StringBuilder();
+		boolean first = true;
+		for (String s : list) {
+			if (!first) {
+				buf.append("|");
+			} else {
+				first = false;
+			}
+			buf.append(s);
+		}
+
+		userOptionStore.optionMap(optionGroup, option).put(option, buf.toString());
+	}
+
+	public void setOption(String optionGroup, String option, Map<String, String> map) {
+		StringBuilder buf = new StringBuilder();
+		boolean first = true;
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			if (!first) {
+				buf.append("|");
+			} else {
+				first = false;
+			}
+			buf.append(entry.getKey());
+			buf.append("=");
+			buf.append(entry.getValue());
+		}
+		userOptionStore.optionMap(optionGroup, option).put(option, buf.toString());
 	}
 
 	@Override
@@ -114,4 +153,29 @@ public class DefaultUserOption implements UserOption {
 		}
 	}
 
+	public Map<String, String> getOptionAsMap(String optionGroup, String option, Map<String, String> defaultValue) {
+		String optionValue = userOptionStore.getOptionValue(optionGroup, option);
+		if (optionValue == null) {
+			return defaultValue;
+		} else {
+			Map<String, String> map = new TreeMap<>();
+			Iterable<String> entries = Splitter.on("|").split(optionValue);
+			for (String entry : entries) {
+				String[] kv = entry.split("=");
+				map.put(kv[0], kv[1]);
+			}
+			return map;
+		}
+	}
+
+	public List<String> getOptionAsList(String optionGroup, String option, List<String> defaultValue) {
+		String optionValue = userOptionStore.getOptionValue(optionGroup, option);
+		if (optionValue == null) {
+			return defaultValue;
+		} else {
+			Iterable<String> entries = Splitter.on("|").split(optionValue);
+			ArrayList<String> list = Lists.newArrayList(entries);
+			return list;
+		}
+	}
 }
