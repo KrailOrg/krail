@@ -31,7 +31,7 @@ import com.mycila.inject.internal.guava.collect.Lists;
  * A set of user options. Although not mandatory, typically the option group and option are the simple class name and
  * field of the object (respectively) requiring the option value. <br>
  * <br>
- * The storage mechanism is injected to enable use of different storage methods.
+ * The {@link UserOptionStore} is injected to enable use of different storage methods.
  * 
  * @author David Sowerby 15 Jul 2013
  * 

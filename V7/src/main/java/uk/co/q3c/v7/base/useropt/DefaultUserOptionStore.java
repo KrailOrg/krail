@@ -19,7 +19,8 @@ import javax.inject.Singleton;
 
 /**
  * A volatile storage mechanism for {@link UserOption} implementations. The option values are simply stored in a map and
- * will therefore disappear when out of scope. To use persistent storage, provide your own implementation
+ * will therefore disappear when out of scope. To use persistent storage, provide your own implementation - the
+ * implementation of this is effectively a DAO.
  * 
  * @author David Sowerby 16 Jul 2013
  * 

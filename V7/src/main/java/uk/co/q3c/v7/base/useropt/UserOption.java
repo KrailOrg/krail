@@ -14,6 +14,21 @@ package uk.co.q3c.v7.base.useropt;
 
 import org.joda.time.DateTime;
 
+/**
+ * 
+ * A set of user options. Although not mandatory, typically the option group and option are the simple class name and
+ * field of the object (respectively) requiring the option value. <br>
+ * <br>
+ * The {@link UserOptionStore} into the constructor of the implementation of this interface to enable use of different
+ * storage methods. See {@link DefaultUserOption} for an example <br>
+ * <br>
+ * all the get methods follow the same principle - a default value is supplied by the caller and returned if there is no
+ * value for the required option in the store. This means that the default value is set by the caller from a point close
+ * to where that value is used.
+ * 
+ * @author David Sowerby 17 Jul 2013
+ * 
+ */
 public interface UserOption {
 
 	public void setOption(String optionGroup, String option, int value);
