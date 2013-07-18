@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivysettings>
 	<settings defaultResolver="default" />
-	<resolvers>
-		<chain name="default">
-			<!-- Public Maven repository -->
-			<ibiblio name="public" m2compatible="true" />
 
+	<!-- <caches defaultCacheDir="${ivy.settings.dir}/ivy-cache" /> -->
+	<resolvers>
+		<filesystem name="local" checkmodified="true" local="true"
+			force="true">
+			<ivy pattern="${ivy.default.ivy.user.dir}/local/[organisation]/[module](/[branch])/ivy-[revision].xml" />
+			<artifact pattern="${ivy.default.ivy.user.dir}/local/[organisation]/[module](/[branch])/[type]/[artifact]-[revision].[ext]" />
+		</filesystem>
+      	<filesystem name="local-maven-2" m2compatible="true"
+            local="true">
+            <artifact
+                pattern="${user.home}/.m2/local/[organisation]/[module]/[revision]/[module]-[revision].[ext]" />
+            <ivy
+                pattern="${user.home}/.m2/local/[organisation]/[module]/[revision]/[module]-[revision].pom" />
+        </filesystem>
+
+		<chain name="vaadin">
 			<!-- Vaadin Add-on repository -->
-			<ibiblio name="vaadin-addons" usepoms="true" m2compatible="true" root="http://maven.vaadin.com/vaadin-addons" />
+			<ibiblio name="vaadin-addons" usepoms="true" m2compatible="true"
+				root="http://maven.vaadin.com/vaadin-addons" />
 
 			<!-- Vaadin snapshots repository -->
 			<ibiblio name="vaadin-snapshots" usepoms="true" m2compatible="true"
@@ -15,22 +28,38 @@
 			<!-- Repository used for Vaadin modified smartsprites library -->
 			<dual name="custom-smartsprites">
 				<filesystem name="smartsprites-ivy">
-					<ivy pattern="${basedir}/ivymodule/[module]-ivy-[revision].xml" />
+					<ivy pattern="${ivy.basedir}/ivymodule/[module]-ivy-[revision].xml" />
 				</filesystem>
 				<url name="smartsprites-artifact">
-					<artifact pattern="http://dev.vaadin.com/svn/versions/6.8/build/smartsprites/lib/[artifact](-[revision]).[ext]" />
+					<artifact
+						pattern="http://dev.vaadin.com/svn/versions/6.8/build/smartsprites/lib/[artifact](-[revision]).[ext]" />
 				</url>
 			</dual>
- 
-			<ibiblio name="Sonatype Nexus Snapshots" usepoms="true" m2compatible="true"
-				root="https://oss.sonatype.org/content/repositories/snapshots" />
+		</chain>
 
+		<chain name="main">
+			<!-- Local Repository -->
+			<ibiblio name="public" m2compatible="true"
+				root="http://192.168.0.5:8081/nexus/content/repositories/central/" />
+
+			<!-- Public Maven repository -->
+			<ibiblio name="public" m2compatible="true" />
+
+			<resolver ref="vaadin" />
+		</chain>
+
+		<chain name="default" returnFirst="true">
+			<resolver ref="local" />
+			<resolver ref="local-maven-2"/>
+			<resolver ref="main" />
 		</chain>
 	</resolvers>
 	<modules>
+		<module organisation="it.bonfiglioli" name="*" resolver="local" />
+		<module organisation="uk.co.q3c" name="*" resolver="local" />
 		<!-- Vaadin patched SmartSprites -->
-		<module organisation="com.carrotsearch" name="smartsprites" revision="0.2.3-itmill" resolver="custom-smartsprites" />
+		<module organisation="com.carrotsearch" name="smartsprites"
+			revision="0.2.3-itmill" resolver="custom-smartsprites" />
 	</modules>
-
 
 </ivysettings>
