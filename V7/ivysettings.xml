@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ivysettings>
+<ivysettings>	
+	<!--
+	    This property is used later in the ivy.xml file to set
+	    the project's revision. Unless overridden, it defaults
+	    to the Maven SNAPSHOT convention, as that it works well
+	    for publishing local test builds to ~/.m2/repository.
+  	-->	
+	<property name="revision" value="SNAPSHOT" override="false"/>
+
+	<credentials host="192.168.0.5" realm="Sonatype Nexus Repository Manager" username="admin" passwd="servsif"/>
+
 	<settings defaultResolver="default" />
 
-	<!-- <caches defaultCacheDir="${ivy.settings.dir}/ivy-cache" /> -->
+	<!-- Pulls in the "public" resolver for ibiblio-hosted jars. -->
+  	<include url="${ivy.default.settings.dir}/ivysettings-public.xml"/>
+ 
 	<resolvers>
 		<filesystem name="local" checkmodified="true" local="true"
 			force="true">
@@ -15,7 +27,12 @@
                 pattern="${user.home}/.m2/local/[organisation]/[module]/[revision]/[module]-[revision].[ext]" />
             <ivy
                 pattern="${user.home}/.m2/local/[organisation]/[module]/[revision]/[module]-[revision].pom" />
-        </filesystem>
+        </filesystem>    
+        
+        <ibiblio name="central-mirror" m2compatible="true" root="http://192.168.0.5:8081/nexus/content/repositories/central/" />
+        
+        <ibiblio name="nexus-releases" m2compatible="true" root="http://192.168.0.5:8081/nexus/content/repositories/releases/" />
+        <ibiblio name="nexus-snaphots" m2compatible="true" root="http://192.168.0.5:8081/nexus/content/repositories/snapshots/" />
 
 		<chain name="vaadin">
 			<!-- Vaadin Add-on repository -->
@@ -38,9 +55,11 @@
 		</chain>
 
 		<chain name="main">
+			<resolver ref="nexus-releases" />
+			<resolver ref="nexus-snaphots" />
+		
 			<!-- Local Repository -->
-			<ibiblio name="public" m2compatible="true"
-				root="http://192.168.0.5:8081/nexus/content/repositories/central/" />
+			<resolver ref="central-mirror" />
 
 			<!-- Public Maven repository -->
 			<ibiblio name="public" m2compatible="true" />

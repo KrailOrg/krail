@@ -1,103 +1,111 @@
 <?xml version="1.0"?>
-<project basedir="." default="build-pakage-and-publish-local" xmlns:ivy="antlib:org.apache.ivy.ant" name="Build script">
-	
-	<loadproperties srcfile="build.properties"/>
-	<property name="workdir" value="${artifacts}/work"/>
-	
+<project basedir="." default="build-pakage-and-publish" xmlns:ivy="antlib:org.apache.ivy.ant" name="Build script">
+
+	<loadproperties srcfile="build.properties" />
+	<property name="workdir" value="${artifacts}/work" />
+
 	<path id="classpath">
 		<fileset dir="${libraries}" erroronmissingdir="no">
-			<include name="*.jar"/>
+			<include name="*.jar" />
 		</fileset>
-		<path refid="ivy.deps.default"/>
+		<path refid="ivy.deps.default" />
 	</path>
-	
+
 	<target name="clean">
-		<delete dir="${workdir}"/>
-		<delete dir="${artifacts}"/>
+		<delete dir="${workdir}" />
+		<delete dir="${artifacts}" />
 	</target>
-	
+
 	<target name="init">
-		<mkdir dir="${artifacts}"/>
-		<mkdir dir="${workdir}"/>
+		<mkdir dir="${artifacts}" />
+		<mkdir dir="${workdir}" />
 	</target>
-	
+
 	<target name="resolve">
 		<ivy:resolve file="ivy.xml" />
 		<ivy:cachepath pathid="ivy.deps.default" conf="default" />
-		<ivy:cachefileset setid="ivy.deps.default.fileset" conf="default"/>
+		<ivy:cachefileset setid="ivy.deps.default.fileset" conf="default" />
 	</target>
-	
+
 	<target name="report" depends="resolve">
-	    <ivy:report todir="${workdir}" />
+		<ivy:report todir="${workdir}" />
 	</target>
-	
+
 	<target name="compile" depends="clean, init, resolve">
 		<javac destdir="${workdir}" debug="${compile.debug}" includeantruntime="no">
-			<src path="${sources}"/>
-			<classpath refid="classpath"/>
+			<src path="${sources}" />
+			<classpath refid="classpath" />
 		</javac>
 	</target>
-	
-	<available file=".git" type="dir" property="git.present"/>
+
+	<available file=".git" type="dir" property="git.present" />
 	<target name="git.revision" description="Store git revision in ${repository.version}" if="git.present">
-	    <exec executable="git" outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
-	        <arg value="rev-parse"/>
-	        <arg value="HEAD"/>
-	    </exec>
-	    <condition property="repository.version" value="${git.revision}" else="unknown">
-	        <and>
-	            <isset property="git.revision"/>
-	            <length string="${git.revision}" trim="yes" length="0" when="greater"/>
-	        </and>
-	    </condition>
+		<exec executable="git" outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
+			<arg value="rev-parse" />
+			<arg value="HEAD" />
+		</exec>
+		<condition property="repository.version" value="${git.revision}" else="unknown">
+			<and>
+				<isset property="git.revision" />
+				<length string="${git.revision}" trim="yes" length="0" when="greater" />
+			</and>
+		</condition>
 	</target>
-	
-	<target name="pakage" depends="init, git.revision" description="Packages everything in a JAR that has been deployed in ${workdir}">		
+
+	<target name="pakage" depends="init, git.revision" description="Packages everything in a JAR that has been deployed in ${workdir}">
 		<!-- include sources -->
 		<copy todir="${workdir}">
-			<fileset dir="${sources}"/>
+			<fileset dir="${sources}" />
 		</copy>
-		
-		<jar destfile="${artifacts}/${jarfilename}"
-		     basedir="${workdir}"
-		     includes="**/*.*" >
+
+		<jar destfile="${artifacts}/${jarfilename}" basedir="${workdir}" includes="**/*.*">
 			<manifest>
-			    <!-- <attribute name="Built-By" value="${user.name}"/> -->
-			    <section name="common">
-			      <attribute name="git-commit" value="${repository.version}"/>			      
-			    </section>
-			  </manifest>
+				<!-- <attribute name="Built-By" value="${user.name}"/> -->
+				<section name="common">
+					<attribute name="git-commit" value="${repository.version}" />
+				</section>
+			</manifest>
 		</jar>
 	</target>
-	
+
 	<target name="build-and-pakage" depends="compile, pakage">
 	</target>
-	
+
 	<target name="now">
 		<tstamp>
-			<format property="now" pattern="yyyyMMddHHmmss"/>
+			<format property="now" pattern="yyyyMMddHHmmss" />
 		</tstamp>
 	</target>
-	
+
 	<target name="local-version">
-		<property name="version" value="${module.version.major}.${module.version.minor}-local"/>
+		<property name="version" value="${module.version.major}.${module.version.minor}-local" />
 	</target>
-	
+
 	<target name="version">
-		<property name="version" value="${module.version.major}.${module.version.minor}"/>
+		<property name="version" value="${module.version.major}.${module.version.minor}-${module.version.revision}" />
 	</target>
-	
-	<target name="publish-local" depends="now, local-version" description="--> publish this project in the local ivy repository">
-	    <ivy:deliver deliverpattern="${artifacts}/ivy.xml" pubrevision="${version}" status="integration"/>
+
+	<target name="publish-local" depends="now, version" description="--> publish this project in the local ivy repository">
+		<ivy:deliver deliverpattern="${artifacts}/ivy.xml" pubrevision="${version}" status="integration" />
 		<ivy:publish resolver="local" pubrevision="${version}" pubdate="${now}" status="integration" overwrite="true">
-		    <artifacts pattern="${artifacts}/[artifact].[ext]" />
+			<artifacts pattern="${artifacts}/[artifact].[ext]" />
 		</ivy:publish>
-		<echo message="project ${ant.project.name} published locally with version ${version}"/>
+		<echo message="project ${ant.project.name} published locally with version ${version}" />
 	</target>
-	
+
 	<target name="pakage-and-publish-local" depends="resolve, pakage, publish-local">
 	</target>
-	
+
 	<target name="build-pakage-and-publish-local" depends="compile, pakage-and-publish-local">
 	</target>
+
+	<target name="publish-nexus-snaphots" depends="resolve, now, version" description="--> publish this project in the network ivy repository">
+		<ivy:deliver deliverpattern="${artifacts}/ivy.xml" pubrevision="${version}" status="integration" />
+		<ivy:publish resolver="nexus-snaphots" pubrevision="${version}" pubdate="${now}" status="integration" overwrite="true">
+			<artifacts pattern="${artifacts}/[artifact].[ext]" />
+		</ivy:publish>
+		<echo message="project ${ant.project.name} published to nexus with version ${version}" />
+	</target>
+	
+	<target name="build-pakage-and-publish" depends="resolve, compile, pakage, publish-local, publish-nexus-snaphots" ></target>
 </project>
