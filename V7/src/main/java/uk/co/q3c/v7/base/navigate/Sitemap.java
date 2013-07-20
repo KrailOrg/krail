@@ -52,6 +52,8 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	private String report;
 	// Uses LinkedHashMap to retain insertion order
 	private final Map<String, String> redirects = new LinkedHashMap<>();
+	private SitemapNode privateRootNode;
+	private SitemapNode publicRootNode;
 
 	public String uri(SitemapNode node) {
 		StringBuilder buf = new StringBuilder(node.getUriSegment());
@@ -267,6 +269,20 @@ public class Sitemap extends BasicForest<SitemapNode> {
 
 	public void setPrivateRoot(String privateRoot) {
 		this.privateRoot = privateRoot;
+	}
+
+	public SitemapNode getPrivateRootNode() {
+		if (this.privateRootNode == null) {
+			privateRootNode = findNodeBySegment(getRoots(), privateRoot, false);
+		}
+		return privateRootNode;
+	}
+
+	public SitemapNode getPublicRootNode() {
+		if (this.publicRootNode == null) {
+			publicRootNode = findNodeBySegment(getRoots(), publicRoot, false);
+		}
+		return publicRootNode;
 	}
 
 }

@@ -2,15 +2,19 @@ package uk.co.q3c.v7.base.navigate;
 
 import static org.fest.assertions.Assertions.*;
 
+import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.ShiroIntegrationTestBase;
+import uk.co.q3c.v7.base.view.component.SubjectProvider;
 
+import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ UIScopeModule.class })
@@ -216,6 +220,22 @@ public class StrictURIHandlerTest extends ShiroIntegrationTestBase {
 		assertThat(result).containsOnly("");
 		assertThat(result[0]).isEqualTo("");
 
+	}
+
+	@ModuleProvider
+	protected AbstractModule module() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				// bind(CredentialsMatcher.class).to(AlwaysPasswordCredentialsMatcher.class);
+				// bind(LoginAttemptLog.class).to(DefaultLoginAttemptLog.class);
+				// bind(Realm.class).to(DefaultRealm.class);
+				bind(Subject.class).toProvider(SubjectProvider.class);
+
+			}
+
+		};
 	}
 
 }

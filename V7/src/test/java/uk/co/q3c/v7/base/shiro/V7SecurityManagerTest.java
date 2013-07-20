@@ -16,13 +16,18 @@ import static org.mockito.Mockito.*;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import uk.co.q3c.v7.base.view.component.SubjectProvider;
+
+import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -60,6 +65,18 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 		// 1 already recorded, plus 1 for logout
 		verify(monitor1, times(2)).updateStatus();
 		verify(monitor2, times(2)).updateStatus();
+	}
+
+	@ModuleProvider
+	AbstractModule moduleProvider() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(Subject.class).toProvider(SubjectProvider.class);
+
+			}
+		};
 	}
 
 }

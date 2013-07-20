@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,11 +23,14 @@ import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
+import uk.co.q3c.v7.base.view.component.SubjectProvider;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.Page;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
@@ -423,6 +427,19 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		navigator.navigateTo(page);
 		// then
 		assertThat(navigator.getNavigationState()).isEqualTo(page2);
+	}
+
+	@ModuleProvider
+	protected AbstractModule module() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(Subject.class).toProvider(SubjectProvider.class);
+
+			}
+
+		};
 	}
 
 }

@@ -64,6 +64,14 @@ public class TestWithSitemap {
 			newNode2.setLabelKey(StandardPageKey.Logout);
 			sitemap.addChild(newNode1, newNode2);
 			break;
+		case 4:
+			newNode1 = newNode("public");
+			newNode1.setLabelKey(StandardPageKey.Public_Home);
+			newNode2 = newNode("logout");
+			newNode2.setLabelKey(StandardPageKey.Logout);
+			sitemap.addChild(newNode1, newNode2);
+			sitemap.setPrivateRoot("private");
+			sitemap.setPublicRoot("public");
 		}
 
 	}

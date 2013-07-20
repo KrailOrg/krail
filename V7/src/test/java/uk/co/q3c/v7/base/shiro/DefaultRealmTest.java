@@ -13,37 +13,40 @@
 package uk.co.q3c.v7.base.shiro;
 
 import static org.fest.assertions.Assertions.*;
-
-import javax.inject.Inject;
+import static org.mockito.Mockito.*;
 
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.realm.Realm;
+import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.fest.assertions.Fail;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
-import com.google.inject.AbstractModule;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
+import uk.co.q3c.v7.base.navigate.Sitemap;
 
-@RunWith(MycilaJunitRunner.class)
-@GuiceContext()
 public class DefaultRealmTest {
 
 	String onlyValidPassword = "password";
 
-	@Inject
 	DefaultRealm realm;
 
-	@Inject
-	LoginAttemptLog attemptLog;
+	LoginAttemptLog attemptLog = new DefaultLoginAttemptLog();
+
+	CredentialsMatcher matcher = new AlwaysPasswordCredentialsMatcher();
+	@Mock
+	Sitemap sitemap;
+
+	@Before
+	public void setup() {
+		sitemap = mock(Sitemap.class);
+		realm = new DefaultRealm(attemptLog, matcher, sitemap);
+	}
 
 	@Test
 	public void realmName() {
@@ -87,6 +90,7 @@ public class DefaultRealmTest {
 		// given
 
 		// when
+		@SuppressWarnings("unused")
 		AuthenticationInfo info = realm.getAuthenticationInfo(token("fred", "rubbish"));
 		info = realm.getAuthenticationInfo(token("fred", "rubbish"));
 		info = realm.getAuthenticationInfo(token("fred", "rubbish"));
@@ -108,45 +112,26 @@ public class DefaultRealmTest {
 
 	}
 
+	/**
+	 * Has authenticated subject been given permissions for private root
+	 */
 	@Test
-	public void hasRole() {
+	public void uri() {
 
 		// given
-		PrincipalCollection principals = new SimplePrincipalCollection("fred", realm.getName());
+		when(sitemap.getPrivateRoot()).thenReturn("private");
+		PrincipalCollection pc = new SimplePrincipalCollection();
 		// when
+		AuthorizationInfo info = realm.getAuthorizationInfo(pc);
 		// then
-		assertThat(realm.hasRole(principals, "goo")).isTrue();
-		assertThat(realm.hasRole(principals, "foo")).isTrue();
-	}
+		assertThat(info).isNotNull();
+		assertThat(info.getStringPermissions().contains("uri:view:private:*"));
 
-	@Test
-	public void hasRole_nullPrincipals() {
-
-		// given
-		// when
-		boolean result = realm.hasRole(null, "goo");
-		// then
-		assertThat(result).isFalse();
 	}
 
 	private UsernamePasswordToken token(String username, String password) {
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		return token;
-	}
-
-	@ModuleProvider
-	protected AbstractModule module() {
-		return new AbstractModule() {
-
-			@Override
-			protected void configure() {
-				bind(CredentialsMatcher.class).to(AlwaysPasswordCredentialsMatcher.class);
-				bind(LoginAttemptLog.class).to(DefaultLoginAttemptLog.class);
-				bind(Realm.class).to(DefaultRealm.class);
-
-			}
-
-		};
 	}
 
 }

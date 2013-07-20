@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,7 +185,6 @@ public class SitemapTest {
 	public void hasUri() {
 
 		// given
-		// given
 		Sitemap sitemap = new Sitemap();
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
@@ -200,4 +199,67 @@ public class SitemapTest {
 
 	}
 
+	@Test
+	public void privateNode() {
+
+		// given
+		Sitemap sitemap = new Sitemap();
+		sitemap.append("public/home/view1");
+		sitemap.append("public/home/view2");
+		sitemap.append("private/home/wiggly");
+
+		// when
+
+		// then
+		assertThat(sitemap.getPrivateRoot()).isEqualTo("private");
+		assertThat(sitemap.getParent(sitemap.getPrivateRootNode())).isNull();
+		assertThat(sitemap.getPrivateRootNode().getUriSegment()).isEqualTo("private");
+
+	}
+
+	@Test
+	public void publicNode() {
+
+		// given
+		Sitemap sitemap = new Sitemap();
+		sitemap.append("public/home/view1");
+		sitemap.append("public/home/view2");
+		sitemap.append("private/home/wiggly");
+
+		// when
+
+		// then
+		assertThat(sitemap.getPublicRoot()).isEqualTo("public");
+		assertThat(sitemap.getParent(sitemap.getPublicRootNode())).isNull();
+		assertThat(sitemap.getPublicRootNode().getUriSegment()).isEqualTo("public");
+
+	}
+
+	@Test
+	public void privateNodeRootNotSet() {
+
+		// given
+		Sitemap sitemap = new Sitemap();
+		sitemap.setPrivateRoot(null);
+		// when
+
+		// then
+		assertThat(sitemap.getPrivateRoot()).isNull();
+		assertThat(sitemap.getPrivateRootNode()).isNull();
+
+	}
+
+	@Test
+	public void publicNodeRootNotSet() {
+
+		// given
+		Sitemap sitemap = new Sitemap();
+		sitemap.setPublicRoot(null);
+		// when
+
+		// then
+		assertThat(sitemap.getPublicRoot()).isNull();
+		assertThat(sitemap.getPublicRootNode()).isNull();
+
+	}
 }

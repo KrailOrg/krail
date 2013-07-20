@@ -45,13 +45,13 @@ public class DefaultShiroWebModule extends ShiroWebModule {
 
 		bindCredentials();
 		bindLoginAttemptLog();
-		bindRealm2();
+		bindRealms();
 	}
 
 	/**
 	 * Override this to bind your own Realm implementation
 	 */
-	protected void bindRealm2() {
+	protected void bindRealms() {
 		bindRealm().to(DefaultRealm.class);
 	}
 
