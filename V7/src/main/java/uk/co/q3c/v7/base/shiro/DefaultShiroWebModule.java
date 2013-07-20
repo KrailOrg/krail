@@ -49,7 +49,7 @@ public class DefaultShiroWebModule extends ShiroWebModule {
 	}
 
 	/**
-	 * Override this to bind your own Realm implementation
+	 * Override this to bind your own Realm implementation(s). Multiple calls can be made to bindRealm();
 	 */
 	protected void bindRealms() {
 		bindRealm().to(DefaultRealm.class);
