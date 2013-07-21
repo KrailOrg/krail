@@ -28,13 +28,13 @@
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">0</div>
+<div class="counter">1</div>
 <p>failures</p>
 </div>
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.647s</div>
+<div class="counter">0.572s</div>
 <p>duration</p>
 </div>
 </td>
@@ -43,8 +43,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox success" id="successRate">
-<div class="percent">100%</div>
+<div class="infoBox failures" id="successRate">
+<div class="percent">0%</div>
 <p>successful</p>
 </div>
 </td>
@@ -54,16 +54,155 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Tests</a>
+<a href="#tab0">Failed tests</a>
 </li>
 <li>
-<a href="#tab1">Standard output</a>
-</li>
-<li>
-<a href="#tab2">Standard error</a>
+<a href="#tab1">Tests</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
+<h2>Failed tests</h2>
+<div class="test">
+<a name="getInjector"></a>
+<h3 class="failures">getInjector</h3>
+<span class="code">
+<pre>com.google.inject.CreationException: Guice creation errors:
+
+1) null returned by binding at uk.co.q3c.v7.base.config.IniModule.configure(IniModule.java:32)
+ but parameter 2 of uk.co.q3c.v7.base.shiro.DefaultRealm.&lt;init&gt;() is not @Nullable
+  while locating uk.co.q3c.v7.base.navigate.Sitemap
+    for parameter 2 at uk.co.q3c.v7.base.shiro.DefaultRealm.&lt;init&gt;(DefaultRealm.java:29)
+  while locating uk.co.q3c.v7.base.shiro.DefaultRealm
+  while locating org.apache.shiro.realm.Realm annotated with @com.google.inject.multibindings.Element(setName=,uniqueId=3)
+  at org.apache.shiro.guice.ShiroModule.bindRealm(ShiroModule.java:103)
+  while locating java.util.Set&lt;org.apache.shiro.realm.Realm&gt;
+  while locating java.util.Collection&lt;org.apache.shiro.realm.Realm&gt;
+    for parameter 0 at uk.co.q3c.v7.base.shiro.V7SecurityManager.&lt;init&gt;(V7SecurityManager.java:33)
+  at org.apache.shiro.guice.ShiroModule.configure(ShiroModule.java:55)
+  while locating org.apache.shiro.mgt.SecurityManager
+
+2) null returned by binding at uk.co.q3c.v7.base.config.IniModule.configure(IniModule.java:32)
+ but parameter 2 of uk.co.q3c.v7.base.shiro.DefaultRealm.&lt;init&gt;() is not @Nullable
+  while locating uk.co.q3c.v7.base.navigate.Sitemap
+    for parameter 2 at uk.co.q3c.v7.base.shiro.DefaultRealm.&lt;init&gt;(DefaultRealm.java:29)
+  while locating uk.co.q3c.v7.base.shiro.DefaultRealm
+  while locating org.apache.shiro.realm.Realm annotated with @com.google.inject.multibindings.Element(setName=,uniqueId=3)
+  at org.apache.shiro.guice.ShiroModule.bindRealm(ShiroModule.java:103)
+  while locating java.util.Set&lt;org.apache.shiro.realm.Realm&gt;
+  while locating java.util.Collection&lt;org.apache.shiro.realm.Realm&gt;
+    for parameter 0 at uk.co.q3c.v7.base.shiro.V7SecurityManager.&lt;init&gt;(V7SecurityManager.java:33)
+  at org.apache.shiro.guice.web.ShiroWebModule.configureShiro(ShiroWebModule.java:121)
+  while locating org.apache.shiro.web.mgt.WebSecurityManager
+    for parameter 2 at org.apache.shiro.guice.web.WebGuiceEnvironment.&lt;init&gt;(WebGuiceEnvironment.java:39)
+  at org.apache.shiro.guice.web.WebGuiceEnvironment.class(WebGuiceEnvironment.java:39)
+  while locating org.apache.shiro.guice.web.WebGuiceEnvironment
+  at org.apache.shiro.guice.ShiroModule.configure(ShiroModule.java:57)
+  while locating org.apache.shiro.env.Environment
+
+3) null returned by binding at uk.co.q3c.v7.base.config.IniModule.configure(IniModule.java:32)
+ but parameter 2 of uk.co.q3c.v7.base.shiro.DefaultRealm.&lt;init&gt;() is not @Nullable
+  while locating uk.co.q3c.v7.base.navigate.Sitemap
+    for parameter 2 at uk.co.q3c.v7.base.shiro.DefaultRealm.&lt;init&gt;(DefaultRealm.java:29)
+  while locating uk.co.q3c.v7.base.shiro.DefaultRealm
+  while locating org.apache.shiro.realm.Realm annotated with @com.google.inject.multibindings.Element(setName=,uniqueId=3)
+  at org.apache.shiro.guice.ShiroModule.bindRealm(ShiroModule.java:103)
+  while locating java.util.Set&lt;org.apache.shiro.realm.Realm&gt;
+  while locating java.util.Collection&lt;org.apache.shiro.realm.Realm&gt;
+    for parameter 0 at uk.co.q3c.v7.base.shiro.V7SecurityManager.&lt;init&gt;(V7SecurityManager.java:33)
+  at org.apache.shiro.guice.web.ShiroWebModule.configureShiro(ShiroWebModule.java:121)
+  while locating org.apache.shiro.web.mgt.WebSecurityManager
+
+4) null returned by binding at uk.co.q3c.v7.base.config.IniModule.configure(IniModule.java:32)
+ but parameter 2 of uk.co.q3c.v7.base.shiro.DefaultRealm.&lt;init&gt;() is not @Nullable
+  while locating uk.co.q3c.v7.base.navigate.Sitemap
+    for parameter 2 at uk.co.q3c.v7.base.shiro.DefaultRealm.&lt;init&gt;(DefaultRealm.java:29)
+  while locating uk.co.q3c.v7.base.shiro.DefaultRealm
+  while locating org.apache.shiro.realm.Realm annotated with @com.google.inject.multibindings.Element(setName=,uniqueId=3)
+  at org.apache.shiro.guice.ShiroModule.bindRealm(ShiroModule.java:103)
+  while locating java.util.Set&lt;org.apache.shiro.realm.Realm&gt;
+  while locating java.util.Collection&lt;org.apache.shiro.realm.Realm&gt;
+    for parameter 0 at uk.co.q3c.v7.base.shiro.V7SecurityManager.&lt;init&gt;(V7SecurityManager.java:33)
+  at org.apache.shiro.guice.web.ShiroWebModule.configureShiro(ShiroWebModule.java:121)
+  while locating org.apache.shiro.web.mgt.WebSecurityManager
+    for parameter 2 at org.apache.shiro.guice.web.WebGuiceEnvironment.&lt;init&gt;(WebGuiceEnvironment.java:39)
+  at org.apache.shiro.guice.web.WebGuiceEnvironment.class(WebGuiceEnvironment.java:39)
+  while locating org.apache.shiro.guice.web.WebGuiceEnvironment
+  at org.apache.shiro.guice.web.ShiroWebModule.configureShiro(ShiroWebModule.java:122)
+  while locating org.apache.shiro.web.env.WebEnvironment
+
+5) null returned by binding at uk.co.q3c.v7.base.config.IniModule.configure(IniModule.java:32)
+ but parameter 2 of uk.co.q3c.v7.base.shiro.DefaultRealm.&lt;init&gt;() is not @Nullable
+  while locating uk.co.q3c.v7.base.navigate.Sitemap
+    for parameter 2 at uk.co.q3c.v7.base.shiro.DefaultRealm.&lt;init&gt;(DefaultRealm.java:29)
+  while locating uk.co.q3c.v7.base.shiro.DefaultRealm
+  while locating org.apache.shiro.realm.Realm annotated with @com.google.inject.multibindings.Element(setName=,uniqueId=3)
+  at org.apache.shiro.guice.ShiroModule.bindRealm(ShiroModule.java:103)
+  while locating java.util.Set&lt;org.apache.shiro.realm.Realm&gt;
+  while locating java.util.Collection&lt;org.apache.shiro.realm.Realm&gt;
+    for parameter 0 at uk.co.q3c.v7.base.shiro.V7SecurityManager.&lt;init&gt;(V7SecurityManager.java:33)
+  at org.apache.shiro.guice.web.ShiroWebModule.configureShiro(ShiroWebModule.java:121)
+  while locating org.apache.shiro.web.mgt.WebSecurityManager
+    for parameter 0 at org.apache.shiro.guice.web.GuiceShiroFilter.&lt;init&gt;(GuiceShiroFilter.java:34)
+  at org.apache.shiro.guice.web.ShiroWebModule.configureShiro(ShiroWebModule.java:123)
+  while locating org.apache.shiro.guice.web.GuiceShiroFilter
+
+5 errors
+	at com.google.inject.internal.Errors.throwCreationExceptionIfErrorsExist(Errors.java:435)
+	at com.google.inject.internal.InternalInjectorCreator.injectDynamically(InternalInjectorCreator.java:183)
+	at com.google.inject.internal.InternalInjectorCreator.build(InternalInjectorCreator.java:109)
+	at com.google.inject.internal.InjectorImpl.createChildInjector(InjectorImpl.java:217)
+	at uk.co.q3c.v7.base.guice.BaseGuiceServletInjector.getInjector(BaseGuiceServletInjector.java:60)
+	at com.google.inject.servlet.GuiceServletContextListener.contextInitialized(GuiceServletContextListener.java:45)
+	at uk.co.q3c.v7.base.guice.BaseGuiceServletInjector.contextInitialized(BaseGuiceServletInjector.java:157)
+	at uk.co.q3c.v7.base.guice.GuiceServletInjectorTest2.getInjector(GuiceServletInjectorTest2.java:55)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:44)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:271)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:70)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:309)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecuter.runTestClass(JUnitTestClassExecuter.java:80)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecuter.execute(JUnitTestClassExecuter.java:47)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassProcessor.processTestClass(JUnitTestClassProcessor.java:69)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.processTestClass(SuiteTestClassProcessor.java:49)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.gradle.messaging.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:35)
+	at org.gradle.messaging.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.messaging.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:32)
+	at org.gradle.messaging.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:93)
+	at com.sun.proxy.$Proxy2.processTestClass(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.processTestClass(TestWorker.java:103)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.gradle.messaging.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:35)
+	at org.gradle.messaging.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.messaging.remote.internal.hub.MessageHub$Handler.run(MessageHub.java:355)
+	at org.gradle.internal.concurrent.DefaultExecutorFactory$StoppableExecutorImpl$1.run(DefaultExecutorFactory.java:66)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:724)
+</pre>
+</span>
+</div>
+</div>
+<div id="tab1" class="tab">
 <h2>Tests</h2>
 <table>
 <thead>
@@ -74,31 +213,16 @@
 </tr>
 </thead>
 <tr>
-<td class="success">getInjector</td>
-<td>0.647s</td>
-<td class="success">passed</td>
+<td class="failures">getInjector</td>
+<td>0.572s</td>
+<td class="failures">failed</td>
 </tr>
 </table>
-</div>
-<div id="tab1" class="tab">
-<h2>Standard output</h2>
-<span class="code">
-<pre>77
-</pre>
-</span>
-</div>
-<div id="tab2" class="tab">
-<h2>Standard error</h2>
-<span class="code">
-<pre>Jul 15, 2013 7:05:33 PM com.google.inject.servlet.GuiceFilter setPipeline
-WARNING: Multiple Servlet injectors detected. This is a warning indicating that you have more than one GuiceFilter running in your web application. If this is deliberate, you may safely ignore this message. If this is NOT deliberate however, your application may not work as expected.
-</pre>
-</span>
 </div>
 </div>
 <div id="footer">
 <p>Generated by 
-<a href="http://www.gradle.org">Gradle 1.6</a> at 15-Jul-2013 19:05:38</p>
+<a href="http://www.gradle.org">Gradle 1.6</a> at 21-Jul-2013 14:36:05</p>
 </div>
 </div>
 </body>
