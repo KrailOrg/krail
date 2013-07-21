@@ -25,6 +25,7 @@ import org.apache.shiro.web.mgt.WebSecurityManager;
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.view.component.SubjectProvider;
 
+import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.binder.AnnotatedBindingBuilder;
 
 /**
@@ -43,9 +44,11 @@ public class DefaultShiroWebModule extends ShiroWebModule {
 	@Override
 	protected void configureShiroWeb() {
 
-		bindCredentials();
+		install(new FactoryModuleBuilder().build(URIPermissionFactory.class));
+		bindCredentialsMatcher();
 		bindLoginAttemptLog();
 		bindRealms();
+
 	}
 
 	/**
@@ -65,7 +68,7 @@ public class DefaultShiroWebModule extends ShiroWebModule {
 	/**
 	 * Override this method to bind your own {@link CredentialsMatcher} implementation
 	 */
-	protected void bindCredentials() {
+	protected void bindCredentialsMatcher() {
 		bind(CredentialsMatcher.class).to(AlwaysPasswordCredentialsMatcher.class);
 	}
 

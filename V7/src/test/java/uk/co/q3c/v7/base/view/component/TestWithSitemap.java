@@ -69,7 +69,10 @@ public class TestWithSitemap {
 			newNode1.setLabelKey(StandardPageKey.Public_Home);
 			newNode2 = newNode("logout");
 			newNode2.setLabelKey(StandardPageKey.Logout);
+			newNode3 = newNode("private");
+			newNode4 = newNode("wiggly");
 			sitemap.addChild(newNode1, newNode2);
+			sitemap.addChild(newNode3, newNode4);
 			sitemap.setPrivateRoot("private");
 			sitemap.setPublicRoot("public");
 		}

@@ -13,26 +13,42 @@
 package uk.co.q3c.v7.base.view.component;
 
 import static org.fest.assertions.Assertions.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Locale;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import uk.co.q3c.v7.base.guice.uiscope.UIKey;
+import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
+import uk.co.q3c.v7.base.shiro.URIViewPermission;
+import uk.co.q3c.v7.base.ui.BasicUI;
+import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.ui.UI;
+import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class })
+@GuiceContext({ I18NModule.class, UIScopeModule.class })
 public class UserNavigationTreeTest extends TestWithSitemap {
 
 	@Inject
@@ -41,10 +57,29 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 	@Mock
 	V7Navigator navigator;
 
+	@Mock
+	SubjectProvider subjectPro;
+
+	@Mock
+	Subject subject;
+
+	@Inject
+	Injector injector;
+
+	URIPermissionFactory uriPermissionFactory;
+
+	@Mock
+	BasicUI ui;
+
 	@Override
 	@Before
 	public void setup() {
 		super.setup();
+		when(subjectPro.get()).thenReturn(subject);
+		when(subject.isPermitted(any(Permission.class))).thenReturn(true);
+		when(subject.isPermitted(anyString())).thenReturn(true);
+		createUI();
+		uriPermissionFactory = injector.getInstance(URIPermissionFactory.class);
 	}
 
 	@Test
@@ -54,7 +89,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		currentLocale.setLocale(Locale.UK);
 		buildSitemap(0);
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
+				uriPermissionFactory);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(0);
 	}
@@ -67,7 +103,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(1);
 
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
+				uriPermissionFactory);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(3);
 		assertThat(unt.getItemIds()).containsOnly(newNode1, newNode2, newNode3);
@@ -88,7 +125,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(2);
 
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
+				uriPermissionFactory);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(6);
 		assertThat(unt.getItemIds()).containsOnly(newNode1, newNode2, newNode3, newNode4, newNode5, newNode6);
@@ -111,7 +149,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		currentLocale.setLocale(Locale.UK);
 		buildSitemap(2);
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
+				uriPermissionFactory);
 		// then
 		assertThat(unt.getMaxLevel()).isEqualTo(-1);
 		// when
@@ -136,7 +175,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(1);
 
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
+				uriPermissionFactory);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("home");
@@ -149,7 +189,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		// given
 		buildSitemap(1);
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
+				uriPermissionFactory);
 		// then
 		assertThat(unt.isImmediate()).isTrue();
 
@@ -160,7 +201,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		buildSitemap(2);
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
+				uriPermissionFactory);
 		// when
 		unt.setValue(newNode2);
 		// then
@@ -175,7 +217,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(1);
 
 		// when
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
+				uriPermissionFactory);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("zu Hause");
@@ -190,10 +233,18 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 
-		// when
+		URIViewPermission privatePage = uriPermissionFactory.createViewPermission("private");
+		buildSitemap(4);
 
+		when(subject.isPermitted(privatePage)).thenReturn(false);
+		// when
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
+				uriPermissionFactory);
 		// then
-		assertThat(false).isEqualTo(true);
+		assertThat(unt.containsId(newNode1)).isTrue();
+		assertThat(unt.containsId(newNode2)).isFalse(); // logout
+		assertThat(unt.containsId(newNode3)).isFalse();
+		assertThat(unt.containsId(newNode4)).isFalse();
 
 	}
 
@@ -205,9 +256,9 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		buildSitemap(3);
-		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator);
 		// when
-
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
+				uriPermissionFactory);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(1);
 
@@ -228,4 +279,27 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 	}
 
+	// @SuppressWarnings("deprecation")
+	protected ScopedUI createUI() {
+		UIKey uiKey = new UIKey(3);
+		CurrentInstance.set(UI.class, null);
+		CurrentInstance.set(UIKey.class, uiKey);
+		CurrentInstance.set(UI.class, ui);
+		when(ui.getInstanceKey()).thenReturn(uiKey);
+
+		return ui;
+	}
+
+	@ModuleProvider
+	protected AbstractModule moduleProvider() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+			}
+
+		};
+	}
 }
