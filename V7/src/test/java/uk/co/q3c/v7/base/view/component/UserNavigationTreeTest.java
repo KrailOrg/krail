@@ -234,9 +234,12 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		// given
 
 		URIViewPermission privatePage = uriPermissionFactory.createViewPermission("private");
+		URIViewPermission publicPage = uriPermissionFactory.createViewPermission("public");
 		buildSitemap(4);
 
 		when(subject.isPermitted(privatePage)).thenReturn(false);
+		// represents case where user not authenticated
+		when(subject.isPermitted(publicPage)).thenReturn(false);
 		// when
 		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
 				uriPermissionFactory);

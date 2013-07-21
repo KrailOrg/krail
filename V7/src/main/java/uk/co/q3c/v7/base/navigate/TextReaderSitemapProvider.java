@@ -187,6 +187,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			sitemap.setErrors(errorSum());
 
 			log.info("Sitemap loaded successfully");
+			log.debug(sitemap.toString());
 
 		} else {
 			log.warn("The site map source is missing these sections: {}", missingSections());

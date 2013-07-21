@@ -26,10 +26,16 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.fest.assertions.Fail;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
 
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
 public class DefaultRealmTest {
 
 	String onlyValidPassword = "password";
@@ -39,13 +45,17 @@ public class DefaultRealmTest {
 	LoginAttemptLog attemptLog = new DefaultLoginAttemptLog();
 
 	CredentialsMatcher matcher = new AlwaysPasswordCredentialsMatcher();
+
+	@Mock
+	URIPermissionFactory permissionFactory;
+
 	@Mock
 	Sitemap sitemap;
 
 	@Before
 	public void setup() {
 		sitemap = mock(Sitemap.class);
-		realm = new DefaultRealm(attemptLog, matcher, sitemap);
+		realm = new DefaultRealm(attemptLog, matcher, sitemap, permissionFactory);
 	}
 
 	@Test
@@ -119,7 +129,9 @@ public class DefaultRealmTest {
 	public void uri() {
 
 		// given
+		URIViewPermission viewPermission = mock(URIViewPermission.class);
 		when(sitemap.getPrivateRoot()).thenReturn("private");
+		when(permissionFactory.createViewPermission("private", true)).thenReturn(viewPermission);
 		PrincipalCollection pc = new SimplePrincipalCollection();
 		// when
 		AuthorizationInfo info = realm.getAuthorizationInfo(pc);

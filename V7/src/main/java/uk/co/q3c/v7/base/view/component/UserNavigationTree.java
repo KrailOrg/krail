@@ -18,6 +18,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.Sitemap;
@@ -41,7 +43,7 @@ import com.vaadin.ui.Tree;
  */
 @UIScoped
 public class UserNavigationTree extends Tree {
-
+	private static Logger log = LoggerFactory.getLogger(UserNavigationTree.class);
 	private final CurrentLocale currentLocale;
 	private final Sitemap sitemap;
 	private int maxLevel = -1;
@@ -74,7 +76,9 @@ public class UserNavigationTree extends Tree {
 			level = 1;
 			// doesn't make sense to show the logout page
 			if (!node.getLabelKey().equals(StandardPageKey.Logout)) {
-				loadNode(null, node);
+				{
+					loadNode(null, node, node.equals(sitemap.getPublicRootNode()));
+				}
 			}
 		}
 	}
@@ -85,12 +89,14 @@ public class UserNavigationTree extends Tree {
 	 * @param parentNode
 	 * @param childNode
 	 */
-	private void loadNode(SitemapNode parentNode, SitemapNode childNode) {
+	private void loadNode(SitemapNode parentNode, SitemapNode childNode, boolean publicBranch) {
 		// construct the permission
-		URIViewPermission pagePermissionRequired = uriPermissionFactory.createViewPermission(sitemap.uri(childNode));
+		String uri = sitemap.uri(childNode);
+		URIViewPermission pagePermissionRequired = uriPermissionFactory.createViewPermission(uri);
 
 		// if permitted, add it
-		if (subjectPro.get().isPermitted(pagePermissionRequired)) {
+		if (publicBranch || subjectPro.get().isPermitted(pagePermissionRequired)) {
+			log.debug("user has permission to view URI {}", uri);
 			this.addItem(childNode);
 			I18NKeys<?> key = (I18NKeys<?>) childNode.getLabelKey();
 
@@ -109,7 +115,7 @@ public class UserNavigationTree extends Tree {
 				}
 				for (SitemapNode child : children) {
 					if (!child.getLabelKey().equals(StandardPageKey.Logout)) {
-						loadNode(newParentNode, child);
+						loadNode(newParentNode, child, publicBranch);
 					}
 				}
 
@@ -117,6 +123,8 @@ public class UserNavigationTree extends Tree {
 				// no children, visual tree should not allow expanding the node
 				setChildrenAllowed(newParentNode, false);
 			}
+		} else {
+			log.debug("user does not have permission to view {}, page not loaded in to UserNavigationTree", uri);
 		}
 	}
 

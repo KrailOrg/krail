@@ -23,12 +23,15 @@ public class DefaultRealm extends AuthorizingRealm {
 
 	private final LoginAttemptLog loginAttemptLog;
 	private final Sitemap sitemap;
+	private final URIPermissionFactory permissionFactory;
 
 	@Inject
-	protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher, Sitemap sitemap) {
+	protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher, Sitemap sitemap,
+			URIPermissionFactory permissionFactory) {
 		super(matcher);
 		this.loginAttemptLog = loginAttemptLog;
 		this.sitemap = sitemap;
+		this.permissionFactory = permissionFactory;
 		setCachingEnabled(false);
 	}
 
@@ -86,8 +89,10 @@ public class DefaultRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-		String permission = "uri:view:" + sitemap.getPrivateRoot() + ":*";
-		info.addStringPermission(permission);
+		String privatePermission = "uri:view:" + sitemap.getPrivateRoot() + ":*";
+		URIViewPermission publicPermission = permissionFactory.createViewPermission(sitemap.getPublicRoot(), true);
+		info.addObjectPermission(publicPermission);
+		info.addStringPermission(privatePermission);
 		return info;
 	}
 
