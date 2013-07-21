@@ -238,7 +238,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(4);
 
 		when(subject.isPermitted(privatePage)).thenReturn(false);
-		// represents case where user not authenticated
+		// represents the case where user not authenticated
 		when(subject.isPermitted(publicPage)).thenReturn(false);
 		// when
 		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
