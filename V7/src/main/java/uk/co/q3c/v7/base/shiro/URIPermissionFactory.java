@@ -12,26 +12,32 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import javax.inject.Inject;
+public interface URIPermissionFactory {
 
-import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+	/**
+	 * Creates a Permission object from the uri. The '/' characters are changed to ':' to facilitate use of Shiro
+	 * WildcardPermission
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	URIViewPermission createViewPermission(String uri);
 
-public class URIPermissionFactory {
-
-	private final URIFragmentHandler uriHandler;
-
-	@Inject
-	protected URIPermissionFactory(URIFragmentHandler uriHandler) {
-		super();
-		this.uriHandler = uriHandler;
-	}
-
-	public URIViewPermission createViewPermission(String uri) {
-		return new URIViewPermission(uriHandler, uri);
-	}
-
-	public URIViewPermission createViewPermission(String uri, boolean appendWildcard) {
-		return new URIViewPermission(uriHandler, uri, appendWildcard);
-	}
+	/**
+	 * Creates a Permission object from the uri. The '/' characters are changed to ':' to facilitate use of Shiro
+	 * WildcardPermission. If {@code appendWildCard} is true, a final ':*' is added. The fill translation is, for
+	 * example, for a URI of:<br>
+	 * <br>
+	 * <i>private/deptx/teamy/current projects</i> becomes a Shiro permission of <br>
+	 * <br>
+	 * <i>uri:view:private:deptx:teamy:current projects</i> with no wildcard, or <br>
+	 * <br>
+	 * <i>uri:view:private:deptx:teamy:current projects:*</i> with a wildcard
+	 * 
+	 * @param uri
+	 * @param appendWildcard
+	 * @return
+	 */
+	URIViewPermission createViewPermission(String uri, boolean appendWildcard);
 
 }

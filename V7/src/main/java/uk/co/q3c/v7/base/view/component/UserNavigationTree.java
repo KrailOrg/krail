@@ -24,7 +24,7 @@ import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
+import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKeys;
@@ -48,11 +48,11 @@ public class UserNavigationTree extends Tree {
 	private int level;
 	private final V7Navigator navigator;
 	private final Provider<Subject> subjectPro;
-	private final URIPermissionFactory uriPermissionFactory;
+	private final DefaultURIPermissionFactory uriPermissionFactory;
 
 	@Inject
 	protected UserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator,
-			Provider<Subject> subjectPro, URIPermissionFactory uriPermissionFactory) {
+			Provider<Subject> subjectPro, DefaultURIPermissionFactory uriPermissionFactory) {
 		super();
 		this.sitemap = sitemap;
 		this.currentLocale = currentLocale;

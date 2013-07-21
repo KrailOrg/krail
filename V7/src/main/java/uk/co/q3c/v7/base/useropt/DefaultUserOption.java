@@ -24,8 +24,8 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mycila.inject.internal.guava.base.Splitter;
-import com.mycila.inject.internal.guava.collect.Lists;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 
 /**
  * A set of user options. Although not mandatory, typically the option group and option are the simple class name and

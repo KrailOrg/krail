@@ -32,7 +32,7 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
+import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
@@ -66,7 +66,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 	@Inject
 	Injector injector;
 
-	URIPermissionFactory uriPermissionFactory;
+	DefaultURIPermissionFactory uriPermissionFactory;
 
 	@Mock
 	BasicUI ui;
@@ -79,7 +79,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		when(subject.isPermitted(any(Permission.class))).thenReturn(true);
 		when(subject.isPermitted(anyString())).thenReturn(true);
 		createUI();
-		uriPermissionFactory = injector.getInstance(URIPermissionFactory.class);
+		uriPermissionFactory = injector.getInstance(DefaultURIPermissionFactory.class);
 	}
 
 	@Test
