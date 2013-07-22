@@ -94,4 +94,14 @@ public class SitemapURIConverter {
 		}
 	}
 
+	/**
+	 * Returns true if the page within the supplied fragment is public (it can be viewed by unauthenticated users)
+	 * 
+	 * @param fragment
+	 * @return
+	 */
+	public boolean pageIsPublic(String fragment) {
+		return true;
+	}
+
 }

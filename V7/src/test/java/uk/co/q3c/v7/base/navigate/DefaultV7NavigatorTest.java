@@ -6,8 +6,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +13,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.shiro.ShiroIntegrationTestBase;
+import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
@@ -23,21 +22,17 @@ import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
-import uk.co.q3c.v7.base.view.component.SubjectProvider;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.Page;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
+public class DefaultV7NavigatorTest {
 	DefaultV7Navigator navigator;
 
 	@Mock
@@ -80,9 +75,9 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 	@Mock
 	V7View privateHomeView;
-
-	@Inject
-	Injector injector;
+	//
+	// // @Inject
+	// Injector injector;
 
 	@Mock
 	Page page;
@@ -99,23 +94,36 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 	@Mock
 	V7ViewChangeListener listener3;
 
-	V7Ini ini;
+	// V7Ini ini;
 
 	@Mock
 	Provider<V7View> privateHomePro;
 
-	@Inject
+	@Mock
 	Provider<V7Ini> iniPro;
 
 	@Mock
 	Sitemap sitemap;
 
-	@Override
+	@Mock
+	DefaultURIPermissionFactory uriPermissionFactory;
+
+	@Mock
+	SitemapURIConverter sitemapURIConverter;
+
+	@Mock
+	V7SecurityManager securityManager;
+
+	@Mock
+	Provider<Subject> subjectPro;
+
+	@Mock
+	Subject subject;
+
 	@Before
-	public void setupShiro() {
-		super.setupShiro();
-		ini = iniPro.get();
-		ini.validate();
+	public void setup() {
+		// ini = iniPro.get();
+		// ini.validate();
 
 		// sitemap = new TextReaderSitemapProvider(new StandardPageBuilder()).get();
 
@@ -123,9 +131,11 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 
 		when(scopedUI.getPage()).thenReturn(page);
 		when(errorViewPro.get()).thenReturn(errorView);
+		when(subjectPro.get()).thenReturn(subject);
+		when(sitemapURIConverter.pageIsPublic(anyString())).thenReturn(true);
 
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, getSecurityManager(),
-				subjectPro);
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, securityManager, subjectPro,
+				uriPermissionFactory, sitemapURIConverter);
 		CurrentInstance.set(UI.class, scopedUI);
 	}
 
@@ -429,17 +439,15 @@ public class DefaultV7NavigatorTest extends ShiroIntegrationTestBase {
 		assertThat(navigator.getNavigationState()).isEqualTo(page2);
 	}
 
-	@ModuleProvider
-	protected AbstractModule module() {
-		return new AbstractModule() {
+	@Test
+	public void privatePage() {
 
-			@Override
-			protected void configure() {
-				bind(Subject.class).toProvider(SubjectProvider.class);
+		// given
+		when(sitemapURIConverter.pageIsPublic(anyString())).thenReturn(false);
+		// when
 
-			}
+		// then
+		assertThat(false).isEqualTo(true);
 
-		};
 	}
-
 }

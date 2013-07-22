@@ -6,12 +6,16 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
+import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
+import uk.co.q3c.v7.base.shiro.URIViewPermission;
+import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
@@ -42,19 +46,30 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	private String currentFragment;
 	private final Sitemap sitemap;
 	private final Provider<Subject> subjectPro;
+	private final URIPermissionFactory uriPermissionFactory;
+	private final SitemapURIConverter sitemapURIConverter;
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler, Sitemap sitemap,
-			Map<String, Provider<V7View>> viewProMap, V7SecurityManager securityManager, Provider<Subject> subjectPro) {
+			Map<String, Provider<V7View>> viewProMap, V7SecurityManager securityManager, Provider<Subject> subjectPro,
+			URIPermissionFactory uriPermissionFactory, SitemapURIConverter sitemapURIConverter) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
 		this.uriHandler = uriHandler;
 		this.sitemap = sitemap;
 		this.subjectPro = subjectPro;
+		this.uriPermissionFactory = uriPermissionFactory;
+		this.sitemapURIConverter = sitemapURIConverter;
 		securityManager.addListener(this);
 	}
 
+	/**
+	 * Takes a URI fragment, checks for any redirects defined by the {@link Sitemap}, then calls
+	 * {@link #navigateTo(V7View, String, String)} to change the view
+	 * 
+	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#navigateTo(java.lang.String)
+	 */
 	@Override
 	public void navigateTo(String fragment) {
 		sitemapCheck();
@@ -106,7 +121,10 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	/**
-	 * Internal method activating a view, setting its parameters and calling listeners.
+	 * Navigates to a view, setting its parameters and calling listeners. If a page is public then any user (even
+	 * unauthenticated) can navigate to it. If it is not public then permissions are checked, and if the user is not
+	 * authorised, a {@link AuthorizationException} is thrown. This would be caught by the the implementation bound to
+	 * {@link UnauthorizedExceptionHandler}
 	 * 
 	 * @param view
 	 *            view to activate
@@ -117,6 +135,36 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 *            parameters, which include the part which forms the pseudo URI. For example, private/transfers/id=23
 	 */
 	protected void navigateTo(V7View view, String viewName, String fragment) {
+		boolean publicPage = sitemapURIConverter.pageIsPublic(fragment);
+
+		// if page is public don't check permissions as they will fail!
+		if (publicPage) {
+			changeView(view, viewName, fragment);
+			return;
+		}
+
+		// check permissions, raise exception if not allowed
+		URIViewPermission permission = uriPermissionFactory.createViewPermission(fragment);
+		if (subjectPro.get().isPermitted(permission)) {
+			changeView(view, viewName, fragment);
+		} else {
+			throw new AuthorizationException(fragment);
+		}
+
+	}
+
+	/**
+	 * Internal method activating a view, setting its parameters and calling listeners.
+	 * 
+	 * @param view
+	 *            view to activate
+	 * @param viewName
+	 *            (optional) name of the view or null not to change the navigation state
+	 * @param fragment
+	 *            parameters passed in the navigation state to the view. In this context, the parameters are all the
+	 *            parameters, which include the part which forms the pseudo URI. For example, private/transfers/id=23
+	 */
+	private void changeView(V7View view, String viewName, String fragment) {
 		V7ViewChangeEvent event = new V7ViewChangeEvent(this, currentView, view, viewName, fragment);
 		if (!fireBeforeViewChange(event)) {
 			return;
