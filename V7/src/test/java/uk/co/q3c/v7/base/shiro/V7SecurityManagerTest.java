@@ -16,21 +16,27 @@ import static org.mockito.Mockito.*;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.view.component.SubjectProvider;
+import uk.co.q3c.v7.base.guice.uiscope.UIKey;
+import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.ui.BasicUI;
+import uk.co.q3c.v7.base.ui.ScopedUI;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.ui.UI;
+import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({ UIScopeModule.class })
 public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 
 	@Mock
@@ -39,10 +45,15 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 	@Mock
 	LoginStatusMonitor monitor2;
 
+	@Mock
+	BasicUI ui;
+
 	@Override
 	@Before
 	public void setupShiro() {
+
 		super.setupShiro();
+
 	}
 
 	@Test
@@ -67,14 +78,26 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 		verify(monitor2, times(2)).updateStatus();
 	}
 
+	protected ScopedUI createUI() {
+		UIKey uiKey = new UIKey(3);
+		CurrentInstance.set(UI.class, null);
+		CurrentInstance.set(UIKey.class, uiKey);
+		CurrentInstance.set(UI.class, ui);
+		when(ui.getInstanceKey()).thenReturn(uiKey);
+
+		return ui;
+	}
+
 	@ModuleProvider
 	AbstractModule moduleProvider() {
+		// creates the UIScope before injections
+		createUI();
 		return new AbstractModule() {
 
 			@Override
 			protected void configure() {
-				bind(Subject.class).toProvider(SubjectProvider.class);
-
+				bind(URIPermissionFactory.class).to(DefaultURIPermissionFactory.class);
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 			}
 		};
 	}
