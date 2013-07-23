@@ -50,8 +50,8 @@ public class DateTimeConverterTest {
 		Date d = new Date();
 		DateTime dt = new DateTime(d);
 		// when
-		DateTime dt2 = dtc.convertToModel(d, Locale.UK);
-		Date d2 = dtc.convertToPresentation(dt, Locale.UK);
+		DateTime dt2 = dtc.convertToModel(d, DateTime.class, Locale.UK);
+		Date d2 = dtc.convertToPresentation(dt, Date.class, Locale.UK);
 		// then
 		assertThat(dt).isEqualTo(dt2);
 		assertThat(d).isEqualTo(d2);
