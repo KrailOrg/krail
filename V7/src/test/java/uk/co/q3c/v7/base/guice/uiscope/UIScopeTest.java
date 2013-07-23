@@ -18,8 +18,10 @@ import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.DefaultUnauthenticatedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.DefaultUnauthorizedExceptionHandler;
+import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.UnauthenticatedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.V7ErrorHandler;
@@ -89,6 +91,8 @@ public class UIScopeTest {
 			bind(UnauthenticatedExceptionHandler.class).to(DefaultUnauthenticatedExceptionHandler.class);
 			bind(UnauthorizedExceptionHandler.class).to(DefaultUnauthorizedExceptionHandler.class);
 			bind(Subject.class).toProvider(SubjectProvider.class);
+			bind(URIPermissionFactory.class).to(DefaultURIPermissionFactory.class);
+			bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 		}
 	}
 

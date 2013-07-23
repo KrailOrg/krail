@@ -1,20 +1,29 @@
 package uk.co.q3c.v7.base.navigate;
 
 import static org.fest.assertions.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
+import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.ShiroIntegrationTestBase;
+import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
+import uk.co.q3c.v7.base.ui.BasicUI;
+import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.component.SubjectProvider;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.ui.UI;
+import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ UIScopeModule.class })
@@ -45,6 +54,9 @@ public class StrictURIHandlerTest extends ShiroIntegrationTestBase {
 	final String subView_p2_bang = "!view1/subView/a=b/year=1970";
 
 	StrictURIFragmentHandler handler;
+
+	@Mock
+	BasicUI ui;
 
 	@Override
 	@Before
@@ -222,8 +234,19 @@ public class StrictURIHandlerTest extends ShiroIntegrationTestBase {
 
 	}
 
+	protected ScopedUI createUI() {
+		UIKey uiKey = new UIKey(3);
+		CurrentInstance.set(UI.class, null);
+		CurrentInstance.set(UIKey.class, uiKey);
+		CurrentInstance.set(UI.class, ui);
+		when(ui.getInstanceKey()).thenReturn(uiKey);
+
+		return ui;
+	}
+
 	@ModuleProvider
 	protected AbstractModule module() {
+		createUI();
 		return new AbstractModule() {
 
 			@Override
@@ -232,6 +255,8 @@ public class StrictURIHandlerTest extends ShiroIntegrationTestBase {
 				// bind(LoginAttemptLog.class).to(DefaultLoginAttemptLog.class);
 				// bind(Realm.class).to(DefaultRealm.class);
 				bind(Subject.class).toProvider(SubjectProvider.class);
+				bind(URIPermissionFactory.class).to(DefaultURIPermissionFactory.class);
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 
 			}
 

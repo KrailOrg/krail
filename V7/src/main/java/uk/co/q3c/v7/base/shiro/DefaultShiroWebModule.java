@@ -45,6 +45,7 @@ public class DefaultShiroWebModule extends ShiroWebModule {
 	protected void configureShiroWeb() {
 
 		install(new FactoryModuleBuilder().build(URIPermissionFactory.class));
+		expose(URIPermissionFactory.class);
 		bindCredentialsMatcher();
 		bindLoginAttemptLog();
 		bindRealms();
