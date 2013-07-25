@@ -44,7 +44,16 @@ import com.google.inject.servlet.GuiceServletContextListener;
 public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
 	protected static Injector injector;
 
-	private final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
+	private ThreadLocal<ServletContext> ctx;
+
+	protected BaseGuiceServletInjector() {
+		super();
+
+	}
+
+	protected ThreadLocal<ServletContext> createThreadLocalServletContext() {
+		return new ThreadLocal<ServletContext>();
+	}
 
 	/**
 	 * Module instances for the base should be added in {@link #getModules()}. Module instance for the app using V7
@@ -152,6 +161,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
+		ctx = createThreadLocalServletContext();
 		final ServletContext servletContext = servletContextEvent.getServletContext();
 		ctx.set(servletContext);
 		super.contextInitialized(servletContextEvent);

@@ -14,6 +14,8 @@ package uk.co.q3c.v7.base.guice;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import uk.co.q3c.v7.base.config.V7Ini;
 
 import com.google.inject.Module;
@@ -22,9 +24,21 @@ import fixture.TestUIModule;
 
 public class TestGuiceServletInjector extends BaseGuiceServletInjector {
 
+	private final ThreadLocal<ServletContext> testctx;
+
+	protected TestGuiceServletInjector(ThreadLocal<ServletContext> testctx) {
+		super();
+		this.testctx = testctx;
+	}
+
 	@Override
 	protected void addAppModules(List<Module> baseModules, V7Ini ini) {
 		baseModules.add(new TestUIModule());
+	}
+
+	@Override
+	protected ThreadLocal<ServletContext> createThreadLocalServletContext() {
+		return testctx;
 	}
 
 }

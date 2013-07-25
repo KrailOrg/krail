@@ -12,86 +12,57 @@
  */
 package uk.co.q3c.v7.base.guice;
 
+import static org.fest.assertions.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
-import mockit.Expectations;
-import mockit.Mocked;
-import mockit.Verifications;
-import mockit.integration.junit4.JMockit;
-
+import org.apache.shiro.SecurityUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 
 import com.google.inject.Injector;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
 
-@RunWith(JMockit.class)
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
 public class GuiceServletInjectorTest {
-
-	class MockedGuice {
-
-	}
 
 	BaseGuiceServletInjector out;
 
-	@Mocked
-	ServletContext servletContext;
+	@Mock
+	ThreadLocal<ServletContext> thread_local_servletContext;
 
-	@Mocked
+	@Mock
 	ServletContextEvent servletContextEvent;
 
-	@Mocked
-	Injector injector;
+	@Mock
+	ServletContext servletContext;
 
 	@Before
 	public void setup() {
-		out = new TestGuiceServletInjector();
+		out = new TestGuiceServletInjector(thread_local_servletContext);
 
 	}
 
 	@Test
-	public void contextInitialized() {
+	public void configure() {
 
 		// given
-		new Expectations() {
-			{
-				servletContextEvent.getServletContext();
-				notStrict();
-				result = servletContext;
-			}
-		};
-		// when
+		when(thread_local_servletContext.get()).thenReturn(servletContext);
+		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
 		out.contextInitialized(servletContextEvent);
-		// then
-		new Verifications() {
-			{
-				servletContext.setAttribute(Injector.class.getName(), any);
-			}
-		};
-
-	}
-
-	@Test
-	public void contextDestroyed() {
-
-		// given
-		new Expectations() {
-			{
-				servletContextEvent.getServletContext();
-				notStrict();
-				result = servletContext;
-			}
-		};
 		// when
-		out.contextDestroyed(servletContextEvent);
-
+		Injector injector = out.getInjector();
 		// then
-		new Verifications() {
-			{
-				servletContext.removeAttribute(Injector.class.getName());
-			}
-		};
+		assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(V7SecurityManager.class);
+
 	}
 
 }
