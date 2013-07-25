@@ -72,6 +72,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 */
 	@Override
 	public void navigateTo(String fragment) {
+		log.debug("Navigating to fragment: {}", fragment);
 		sitemapCheck();
 		if (sitemap.hasErrors()) {
 			throw new SiteMapException("Unable to navigate, site map has errors\n" + sitemap.getReport());
@@ -84,11 +85,14 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		} else {
 			revisedFragment = checkRedirects(fragment);
 		}
+
+		log.debug("fragment after redirect check is {}", revisedFragment);
 		String viewName = uriHandler.virtualPage();
+		log.debug("page to look up View is {}", viewName);
 		Provider<V7View> provider = viewProMap.get(viewName);
 		V7View view = null;
 		if (provider == null) {
-			log.debug("View not found for " + revisedFragment);
+			log.debug("View not found for page '{}'" + revisedFragment);
 			view = errorViewPro.get();
 		} else {
 			view = provider.get();
