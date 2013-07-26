@@ -18,6 +18,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Singleton;
+
 import org.apache.commons.lang3.StringUtils;
 
 import uk.co.q3c.util.BasicForest;
@@ -42,6 +44,7 @@ import uk.co.q3c.util.BasicForest;
  * @author David Sowerby 19 May 2013
  * 
  */
+@Singleton
 public class Sitemap extends BasicForest<SitemapNode> {
 
 	private String publicRoot = "public";
