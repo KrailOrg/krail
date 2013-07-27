@@ -84,7 +84,7 @@ dependencies{
 	//Validation
 	compile 'org.apache.bval:bval-jsr303:0.5'
 	compile 'org.apache.bval:bval-guice:0.5'
-	 compile 'javax.validation:validation-api:1.0.0.GA'
+	compile 'javax.validation:validation-api:1.0.0.GA'
 
 
 	//Utility
@@ -98,6 +98,8 @@ dependencies{
 	compile "javax.servlet:javax.servlet-api:3.+"
 
 
+	test.testLogging.showStandardStreams = true
+	test{ exclude '**/GuiceServletInjectorTest.class' }
 
 
 

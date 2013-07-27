@@ -16,6 +16,7 @@ import javax.inject.Singleton;
 
 import org.apache.shiro.subject.Subject;
 
+import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapProvider;
 import uk.co.q3c.v7.base.navigate.TextReaderSitemapProvider;
 import uk.co.q3c.v7.base.view.component.SubjectProvider;
@@ -27,8 +28,8 @@ public class IniModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(V7Ini.class).toProvider(V7IniProvider.class).in(Singleton.class);
-		bind(SitemapProvider.class).to(TextReaderSitemapProvider.class).asEagerSingleton();
-		// bind(Sitemap.class).toProvider(SitemapProvider.class);
+		bind(SitemapProvider.class).to(TextReaderSitemapProvider.class);
+		bind(Sitemap.class).toProvider(SitemapProvider.class).in(Singleton.class);
 		bindSubjectProvider();
 	}
 
