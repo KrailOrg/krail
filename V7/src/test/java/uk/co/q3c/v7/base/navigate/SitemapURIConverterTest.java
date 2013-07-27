@@ -152,4 +152,24 @@ public class SitemapURIConverterTest extends TestWithSitemap {
 
 	}
 
+	@Test
+	public void pageIsPublic() {
+
+		// given
+		buildSitemap(4);
+		// when
+
+		// then
+		assertThat(converter.pageIsPublic("public")).isTrue();
+		assertThat(converter.pageIsPublic("private")).isFalse();
+		assertThat(converter.pageIsPublic("public/logout")).isTrue();
+		assertThat(converter.pageIsPublic("private/wiggly")).isFalse();
+		// invalid page should be false
+		assertThat(converter.pageIsPublic("random")).isFalse();
+		// with params
+		assertThat(converter.pageIsPublic("public/logout/id=1")).isTrue();
+		assertThat(converter.pageIsPublic("private/wiggly/id=1")).isFalse();
+
+	}
+
 }

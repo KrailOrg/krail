@@ -101,8 +101,12 @@ public class SitemapURIConverter {
 	 * @return
 	 */
 	public boolean pageIsPublic(String fragment) {
-
-		return true;
+		SitemapNode node = nodeForUri(fragment, false);
+		if (node == null) {
+			return false;
+		}
+		SitemapNode rootNode = sitemap.getRootFor(node);
+		return (rootNode.equals(sitemap.getPublicRootNode()));
 	}
 
 }
