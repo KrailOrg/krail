@@ -266,6 +266,21 @@ public class BasicForestTest {
 		assertThat(tree.getNodeCount()).isEqualTo(9);
 	}
 
+	@Test
+	public void getRootFor() {
+
+		// given
+		addAllNodes();
+		tree.addNode("x");
+		// when
+
+		// then
+		assertThat(tree.getRootFor(null)).isNull();
+		assertThat(tree.getRootFor(s1)).isEqualTo(s0);
+		assertThat(tree.getRootFor(s0)).isEqualTo(s0);
+		assertThat(tree.getRootFor(s121)).isEqualTo(s0);
+	}
+
 	private void addAllNodes() {
 
 		tree.addNode(s0);
