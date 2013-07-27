@@ -9,8 +9,6 @@ import java.util.TreeMap;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
@@ -40,10 +38,8 @@ import com.google.common.base.Strings;
  * <br>
  * Optionally uses hash(#) or hashBang(#!). Some people get excited about hashbangs. Try Googling it<br>
  * <br>
- * Holds the current navigation state for the UI, so it is UIScoped
  * 
  */
-@UIScoped
 public class StrictURIFragmentHandler implements URIFragmentHandler, Serializable {
 
 	private String fragment;

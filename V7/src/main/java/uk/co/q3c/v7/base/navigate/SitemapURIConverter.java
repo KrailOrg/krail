@@ -101,6 +101,7 @@ public class SitemapURIConverter {
 	 * @return
 	 */
 	public boolean pageIsPublic(String fragment) {
+
 		return true;
 	}
 
