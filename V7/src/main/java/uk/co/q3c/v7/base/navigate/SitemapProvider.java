@@ -24,9 +24,6 @@ public interface SitemapProvider extends Provider<Sitemap> {
 
 	public abstract void parse(String fileName);
 
-	@Override
-	public abstract Sitemap get();
-
 	public abstract StringBuilder getReport();
 
 }
