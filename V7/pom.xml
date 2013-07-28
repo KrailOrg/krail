@@ -459,13 +459,14 @@
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>com.vaadin</groupId>
-                                        <artifactId> vaadin-maven-plugin 
-                                        </artifactId>
-                                        <versionRange> [7.1.0,) 
-                                        </versionRange>
+                                        <artifactId>vaadin-maven-plugin</artifactId>
+                                        <versionRange>[7.1.0,)</versionRange>
                                         <goals>
+                                            <goal>clean</goal>
                                             <goal>resources</goal>
+                                            <goal>update-theme</goal>
                                             <goal>update-widgetset</goal>
+                                            <goal>compile-theme</goal>
                                             <goal>compile</goal>
                                         </goals>
                                     </pluginExecutionFilter>
