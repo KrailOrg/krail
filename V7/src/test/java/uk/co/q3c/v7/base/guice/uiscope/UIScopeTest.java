@@ -1,6 +1,7 @@
 package uk.co.q3c.v7.base.guice.uiscope;
 
 import static org.fest.assertions.Assertions.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
@@ -32,7 +33,6 @@ import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 import uk.co.q3c.v7.base.view.DefaultErrorView;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.base.view.component.SubjectProvider;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 
@@ -57,17 +57,27 @@ public class UIScopeTest {
 
 	private ScopedUI ui;
 	private Injector injector;
-	private static V7Navigator navigator;
+	// private static V7Navigator navigator;
 	static Provider<UI> uiProvider;
 	protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
 	protected VaadinSession mockedSession = mock(VaadinSession.class);
 	public int connectCount;
 	UIKeyProvider uiKeyProvider = new UIKeyProvider();
 	static Map<String, Provider<UI>> uibinder;
+	static Subject subject = mock(Subject.class);
 
 	UIProvider provider;
 
 	static class TestObject {
+
+	}
+
+	static class MockSubjectProvider implements Provider<Subject> {
+
+		@Override
+		public Subject get() {
+			return subject;
+		}
 
 	}
 
@@ -78,7 +88,7 @@ public class UIScopeTest {
 			bind(UIProvider.class).to(BasicUIProvider.class);
 			MapBinder<String, UI> uiProviders = MapBinder.newMapBinder(binder(), String.class, UI.class);
 			uiProviders.addBinding(BasicUI.class.getName()).to(BasicUI.class);
-			MapBinder<String, V7View> mapbinder = MapBinder.newMapBinder(binder(), String.class, V7View.class);
+			MapBinder.newMapBinder(binder(), String.class, V7View.class);
 			uibinder = new HashMap<>();
 			uibinder.put(BasicUI.class.getName(), uiProvider);
 			bind(V7Navigator.class).to(DefaultV7Navigator.class);
@@ -90,7 +100,7 @@ public class UIScopeTest {
 			bind(ConverterFactory.class).to(V7DefaultConverterFactory.class);
 			bind(UnauthenticatedExceptionHandler.class).to(DefaultUnauthenticatedExceptionHandler.class);
 			bind(UnauthorizedExceptionHandler.class).to(DefaultUnauthorizedExceptionHandler.class);
-			bind(Subject.class).toProvider(SubjectProvider.class);
+			bind(Subject.class).toProvider(MockSubjectProvider.class);
 			bind(URIPermissionFactory.class).to(DefaultURIPermissionFactory.class);
 			bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 		}
@@ -106,70 +116,21 @@ public class UIScopeTest {
 
 	}
 
-	//
-	// @Test
-	// public void uiScope() {
-	// // given
-	//
-	// uia = getTestUI();
-	// uib = getTestUI();
-	// // when
-	//
-	// // then
-	// // Just to make sure we are not looking at the same instance
-	// Assert.assertNotEquals(uia, uib);
-	//
-	// // ui instances should have different panels
-	// Assert.assertNotEquals(uia.getPanel1(), uib.getPanel1());
-	// Assert.assertNotEquals(uia.getPanel2(), uib.getPanel2());
-	// Assert.assertNotEquals(uia.getPanel2(), uib.getPanel1());
-	// Assert.assertNotEquals(uia.getPanel2(), uib.getPanel2());
-	//
-	// // but both header bars should be the same within a ui instance
-	// Assert.assertEquals(uia.getPanel1(), uia.getPanel2());
-	// Assert.assertEquals(uib.getPanel1(), uib.getPanel2());
-	//
-	// // given
-	// VaadinServletRequest mockedRequest = mock(VaadinServletRequest.class);
-	// when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
-	//
-	// CurrentInstance.set(UI.class, null);
-	// CurrentInstance.set(UIKey.class, null);
-	// CurrentInstance.set(UI.class, uia);
-	// when(mockedSession.createConnectorId(Matchers.any(UI.class))).thenAnswer(new ConnectorIdAnswer());
-	// when(mockedSession.getLocale()).thenReturn(Locale.UK);
-	// uia.setSession(mockedSession);
-	// uia.doInit(mockedRequest, 1);
-	//
-	// LoginStatusPanel originalHeader = uia.getPanel1();
-	//
-	// // when
-	// // simulates key being cleared by framework during navigation
-	// CurrentInstance.set(UIKey.class, null);
-	// uia.getV7Navigator().navigateTo("view2");
-	//
-	// // then
-	// // this is not a good test do I need TestBench?
-	// Assert.assertEquals(uia.getPanel1(), originalHeader);
-	//
-	// // // when ui is closed
-	// // uia.detach();
-	// //
-	// // // then scope cache should have been cleared
-	// // assertThat(scope.cacheHasEntryFor(uia)).isFalse();
-	// // assertThat(scope.cacheHasEntryFor(uib)).isTrue();
-	// }
-
 	@Test
 	public void uiScope2() {
 
 		// given
+
+		when(subject.isPermitted(anyString())).thenReturn(true);
+		when(subject.isPermitted(any(org.apache.shiro.authz.Permission.class))).thenReturn(true);
+		when(mockedSession.hasLock()).thenReturn(true);
+
 		// when
+
 		injector = Guice.createInjector(new TestModule(), new UIScopeModule());
 		provider = injector.getInstance(UIProvider.class);
-		when(mockedSession.hasLock()).thenReturn(true);
 		createUI(BasicUI.class);
-		navigator = injector.getInstance(V7Navigator.class);
+		// navigator = injector.getInstance(V7Navigator.class);
 		TestObject to1 = injector.getInstance(TestObject.class);
 		createUI(BasicUI.class);
 		TestObject to2 = injector.getInstance(TestObject.class);
@@ -197,27 +158,7 @@ public class UIScopeTest {
 		return ui;
 	}
 
-	// /**
-	// * Cannot use the inherited {@link #createTestUI()}, because that sets up the CurrentInstance. For this test we
-	// need
-	// * more than one CurrentInstance
-	// *
-	// * @return
-	// */
-	// private TestUI getTestUI() {
-	// CurrentInstance.set(UI.class, null);
-	// CurrentInstance.set(UIKey.class, null);
-	// return (TestUI) provider.createInstance(TestUI.class);
-	//
-	// }
-	//
-	// @ModuleProvider
-	// private ApplicationViewModule applicationViewModuleProvider() {
-	// return TestHelper.applicationViewModuleUsingSitemap();
-	// }
-	//
 	protected ScopedUIProvider getUIProvider() {
-		// return new TestUIProvider(injector, uibinder, uiKeyProvider);
 		return (ScopedUIProvider) provider;
 	}
 
