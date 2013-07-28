@@ -94,4 +94,19 @@ public class SitemapURIConverter {
 		}
 	}
 
+	/**
+	 * Returns true if the page within the supplied fragment is public (it can be viewed by unauthenticated users)
+	 * 
+	 * @param fragment
+	 * @return
+	 */
+	public boolean pageIsPublic(String fragment) {
+		SitemapNode node = nodeForUri(fragment, false);
+		if (node == null) {
+			return false;
+		}
+		SitemapNode rootNode = sitemap.getRootFor(node);
+		return (rootNode.equals(sitemap.getPublicRootNode()));
+	}
+
 }

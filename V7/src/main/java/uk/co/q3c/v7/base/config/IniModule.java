@@ -14,9 +14,12 @@ package uk.co.q3c.v7.base.config;
 
 import javax.inject.Singleton;
 
+import org.apache.shiro.subject.Subject;
+
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapProvider;
 import uk.co.q3c.v7.base.navigate.TextReaderSitemapProvider;
+import uk.co.q3c.v7.base.view.component.SubjectProvider;
 
 import com.google.inject.AbstractModule;
 
@@ -27,6 +30,11 @@ public class IniModule extends AbstractModule {
 		bind(V7Ini.class).toProvider(V7IniProvider.class).in(Singleton.class);
 		bind(SitemapProvider.class).to(TextReaderSitemapProvider.class);
 		bind(Sitemap.class).toProvider(SitemapProvider.class).in(Singleton.class);
+		bindSubjectProvider();
+	}
+
+	protected void bindSubjectProvider() {
+		bind(Subject.class).toProvider(SubjectProvider.class);
 	}
 
 }

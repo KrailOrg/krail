@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
+import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.joda.time.DateTime;
 
@@ -28,6 +29,12 @@ public interface LoginAttemptLog {
 
 	void recordSuccessfulAttempt(UsernamePasswordToken upToken);
 
+	/**
+	 * Implementations should record failed attempts and throw a {@link ExcessiveAttemptsException} if the maximum
+	 * allowable attempts is exceeded
+	 * 
+	 * @param upToken
+	 */
 	void recordFailedAttempt(UsernamePasswordToken upToken);
 
 	int failedAttempts(String username);

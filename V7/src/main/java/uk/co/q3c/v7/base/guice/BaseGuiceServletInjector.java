@@ -15,6 +15,7 @@ package uk.co.q3c.v7.base.guice;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Provider;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
@@ -23,14 +24,18 @@ import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.guice.aop.ShiroAopModule;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.Sitemap;
+import uk.co.q3c.v7.base.navigate.SitemapProvider;
 import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
 import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
+import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.i18n.I18NModule;
@@ -41,9 +46,20 @@ import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
+	private static Logger log = LoggerFactory.getLogger(BaseGuiceServletInjector.class);
+
 	protected static Injector injector;
 
-	private final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
+	private ThreadLocal<ServletContext> ctx;
+
+	protected BaseGuiceServletInjector() {
+		super();
+
+	}
+
+	protected ThreadLocal<ServletContext> createThreadLocalServletContext() {
+		return new ThreadLocal<ServletContext>();
+	}
 
 	/**
 	 * Module instances for the base should be added in {@link #getModules()}. Module instance for the app using V7
@@ -73,10 +89,13 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		List<Module> baseModules = new ArrayList<>();
 
 		if (ini.optionReadSiteMap()) {
-			Sitemap sitemap = injector.getInstance(Sitemap.class);
+			log.debug("ini sitemap option is true, loading sitemap");
+			Provider<Sitemap> sitemapPro = injector.getInstance(SitemapProvider.class);
+			Sitemap sitemap = sitemapPro.get();
 			baseModules.add(new ApplicationViewModule(sitemap));
 		} else {
 			// module for Views must be in addAppModules()
+			log.debug("ini sitemap option is false, not loading sitemap");
 		}
 
 		baseModules.add(new ThreadScopeModule());
@@ -85,6 +104,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		baseModules.add(shiroWebModule(ctx.get(), ini));
 		baseModules.add(shiroVaadinModule());
 		baseModules.add(new ShiroAopModule());
+		baseModules.add(userOptionsModule(ini));
 
 		baseModules.add(baseModule());
 
@@ -94,6 +114,10 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		addAppModules(baseModules, ini);
 		return baseModules;
+	}
+
+	private Module userOptionsModule(V7Ini ini) {
+		return new DefaultUserOptionModule(ini);
 	}
 
 	/**
@@ -146,6 +170,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
+		ctx = createThreadLocalServletContext();
 		final ServletContext servletContext = servletContextEvent.getServletContext();
 		ctx.set(servletContext);
 		super.contextInitialized(servletContextEvent);
