@@ -57,9 +57,12 @@ public class DefaultURIPermissionFactoryTest {
 		// given
 		// when
 		URIViewPermission permission = factory.createViewPermission("private", true);
-
 		// then
 		assertThat(permission.toString()).isEqualTo("[uri]:[view]:[private]:[*]");
+		// when
+		permission = factory.createViewPermission("private", false);
+		// then
+		assertThat(permission.toString()).isEqualTo("[uri]:[view]:[private]");
 	}
 
 	@ModuleProvider
