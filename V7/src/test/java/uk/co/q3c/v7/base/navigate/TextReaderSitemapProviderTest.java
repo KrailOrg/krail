@@ -42,10 +42,14 @@ import uk.co.q3c.v7.base.view.SystemAccountView;
 import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
 import uk.co.q3c.v7.base.view.testviews.subview.NotV7View;
 import uk.co.q3c.v7.base.view.testviews.subview.TransferView;
+import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.TestLabelKeys;
 
+import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
 import fixture.testviews2.OptionsView;
 
@@ -708,6 +712,18 @@ public class TextReaderSitemapProviderTest {
 		for (String line : lines) {
 			System.out.println(line);
 		}
+	}
+
+	@ModuleProvider
+	protected AbstractModule module() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+			}
+
+		};
 	}
 
 }

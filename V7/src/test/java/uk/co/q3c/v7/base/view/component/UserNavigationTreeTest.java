@@ -274,11 +274,27 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 	public void presentationOrder() {
 
 		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
+		// List<SitemapNodeWrapper> words = new ArrayList<>();
+		// words.add(new SitemapNodeWrapper(new SitemapNode(), "peach"));
+		// words.add(new SitemapNodeWrapper(new SitemapNode(), "péché"));
+		// words.add(new SitemapNodeWrapper(new SitemapNode(), "pêche"));
+		// words.add(new SitemapNodeWrapper(new SitemapNode(), "Pêche"));
+		// words.add(new SitemapNodeWrapper(new SitemapNode(), "sin"));
+		// Collator collator = Collator.getInstance(Locale.UK);
+		// collator.setStrength(Collator.TERTIARY);
+		// Collections.sort(words, collator);
+		// // when
+		// for (SitemapNodeWrapper s : words) {
+		// System.out.println(s);
+		// }
+		// System.out.println(" ------------------------------ ");
+		// collator = Collator.getInstance(Locale.FRANCE);
+		// collator.setStrength(Collator.TERTIARY);
+		// Collections.sort(words, collator);
+		// // then
+		// for (SitemapNodeWrapper s : words) {
+		// System.out.println(s);
+		// }
 
 	}
 

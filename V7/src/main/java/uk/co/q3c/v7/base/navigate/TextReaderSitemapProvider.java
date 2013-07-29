@@ -15,6 +15,7 @@ package uk.co.q3c.v7.base.navigate;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKeys;
 
 import com.google.common.base.Strings;
@@ -105,11 +107,15 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private File sourceFile;
 	private final StandardPageBuilder standardPageBuilder;
 	private LabelKeyForName lkfn;
+	private final CurrentLocale currentLocale;
+	private final Collator collator;
 
 	@Inject
-	public TextReaderSitemapProvider(StandardPageBuilder standardPageBuilder) {
+	public TextReaderSitemapProvider(StandardPageBuilder standardPageBuilder, CurrentLocale currentLocale) {
 		super();
 		this.standardPageBuilder = standardPageBuilder;
+		this.currentLocale = currentLocale;
+		this.collator = Collator.getInstance(currentLocale.getLocale());
 
 	}
 
@@ -647,13 +653,12 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	//
 	// }
 
-	@SuppressWarnings("unchecked")
 	public void labelKeyForName(String labelKeyName, SitemapNode node) {
 		// gets name from segment if necessary
 		String keyName = keyName(labelKeyName, node);
 		// could be null if invalid label keys given
 		if (lkfn != null) {
-			node.setLabelKey(lkfn.keyForName(keyName, missingEnums));
+			node.setLabelKey(lkfn.keyForName(keyName, missingEnums), currentLocale.getLocale(), collator);
 		} else {
 			missingEnums.add(keyName);
 		}

@@ -14,8 +14,10 @@ package uk.co.q3c.v7.base.navigate;
 
 import static org.fest.assertions.Assertions.*;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.junit.Test;
 
@@ -29,10 +31,12 @@ public class SitemapTest {
 	public void url() {
 
 		// given
+		Locale locale = Locale.UK;
+		Collator collator = Collator.getInstance(locale);
 		Sitemap map = new Sitemap();
-		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, TestLabelKeys.Home);
-		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, TestLabelKeys.Home);
-		SitemapNode child = new SitemapNode("login", LoginView.class, TestLabelKeys.Login);
+		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, TestLabelKeys.Home, locale, collator);
+		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, TestLabelKeys.Home, locale, collator);
+		SitemapNode child = new SitemapNode("login", LoginView.class, TestLabelKeys.Login, locale, collator);
 		map.addChild(grandparent, parent);
 		map.addChild(parent, child);
 		// when

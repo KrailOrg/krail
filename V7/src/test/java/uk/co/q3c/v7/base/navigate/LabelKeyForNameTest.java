@@ -42,7 +42,7 @@ public class LabelKeyForNameTest {
 		LabelKeyForName lkfn = new LabelKeyForName(LabelKeys.class);
 		Set<String> missingEnums = new HashSet<>();
 		// when
-		Enum<?> result = lkfn.keyForName("first_name", missingEnums);
+		Object result = lkfn.keyForName("first_name", missingEnums);
 		// then
 		assertThat(result).isEqualTo(LabelKeys.first_name);
 		assertThat(missingEnums).isEmpty();
@@ -59,7 +59,7 @@ public class LabelKeyForNameTest {
 		LabelKeyForName lkfn = new LabelKeyForName(LabelKeys.class);
 		Set<String> missingEnums = new HashSet<>();
 		// when
-		Enum<?> result = lkfn.keyForName(null, missingEnums);
+		Object result = lkfn.keyForName(null, missingEnums);
 		// then
 		assertThat(result).isNull();
 		assertThat(missingEnums).contains();
@@ -73,7 +73,7 @@ public class LabelKeyForNameTest {
 		LabelKeyForName lkfn = new LabelKeyForName(LabelKeys.class);
 		Set<String> missingEnums = new HashSet<>();
 		// when
-		Enum<?> result = lkfn.keyForName("firt_name", missingEnums);
+		Object result = lkfn.keyForName("firt_name", missingEnums);
 		// then
 		assertThat(result).isNull();
 		assertThat(missingEnums).contains("firt_name");
