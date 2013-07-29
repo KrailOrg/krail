@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2013 David Sowerby
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
@@ -28,22 +28,6 @@ import com.vaadin.data.util.converter.Converter;
 public class DateTimeConverter implements Converter<Date, DateTime> {
 
 	@Override
-	public DateTime convertToModel(Date value,
-			Class<? extends DateTime> targetType, Locale locale)
-			throws com.vaadin.data.util.converter.Converter.ConversionException {
-
-		return new DateTime(value);
-
-	}
-
-	@Override
-	public Date convertToPresentation(DateTime value,
-			Class<? extends Date> targetType, Locale locale)
-			throws com.vaadin.data.util.converter.Converter.ConversionException {
-		return value.toDate();
-	}
-
-	@Override
 	public Class<DateTime> getModelType() {
 		return DateTime.class;
 	}
@@ -51,5 +35,17 @@ public class DateTimeConverter implements Converter<Date, DateTime> {
 	@Override
 	public Class<Date> getPresentationType() {
 		return Date.class;
+	}
+
+	@Override
+	public DateTime convertToModel(Date value, Class<? extends DateTime> targetType, Locale locale)
+			throws com.vaadin.data.util.converter.Converter.ConversionException {
+		return new DateTime(value);
+	}
+
+	@Override
+	public Date convertToPresentation(DateTime value, Class<? extends Date> targetType, Locale locale)
+			throws com.vaadin.data.util.converter.Converter.ConversionException {
+		return value.toDate();
 	}
 }

@@ -50,6 +50,12 @@ public class DefaultLoginAttemptLog implements LoginAttemptLog {
 		list.add(now);
 	}
 
+	/**
+	 * records a failed login attempt and throws a ExcessiveAttemptsException if the number of attempts exceeds
+	 * {@link #maxAttempts}
+	 * 
+	 * @see uk.co.q3c.v7.base.shiro.LoginAttemptLog#recordFailedAttempt(org.apache.shiro.authc.UsernamePasswordToken)
+	 */
 	@Override
 	public void recordFailedAttempt(UsernamePasswordToken upToken) {
 		Integer record = unsuccessful.get(upToken.getUsername());

@@ -13,12 +13,12 @@
 package uk.co.q3c.v7.base.view.component;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.StandardPageKeys;
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
@@ -50,11 +50,13 @@ public class LoginStatusPanel extends Panel implements LoginStatusMonitor, Click
 	private final Button login_logout_Button;
 	private final V7Navigator navigator;
 	private boolean loggedIn;
+	private final Provider<Subject> subjectPro;
 
 	@Inject
-	protected LoginStatusPanel(V7Navigator navigator, V7SecurityManager securityManager) {
+	protected LoginStatusPanel(V7Navigator navigator, V7SecurityManager securityManager, Provider<Subject> subjectPro) {
 		super();
 		this.navigator = navigator;
+		this.subjectPro = subjectPro;
 		// this.setWidth("200px");
 		// this.setHeight("100px");
 		setSizeFull();
@@ -69,11 +71,12 @@ public class LoginStatusPanel extends Panel implements LoginStatusMonitor, Click
 		hl.addComponent(usernameLabel);
 		hl.addComponent(login_logout_Button);
 		this.setContent(hl);
-		updateStatus(SecurityUtils.getSubject());
+		updateStatus();
 	}
 
 	@Override
-	public void updateStatus(Subject subject) {
+	public void updateStatus() {
+		Subject subject = subjectPro.get();
 		if (subject.isAuthenticated()) {
 			loggedIn = true;
 			login_logout_Button.setCaption("log out");
@@ -108,9 +111,9 @@ public class LoginStatusPanel extends Panel implements LoginStatusMonitor, Click
 	@Override
 	public void buttonClick(ClickEvent event) {
 		if (loggedIn) {
-			navigator.navigateTo(StandardPageKeys.logout);
+			navigator.navigateTo(StandardPageKey.Logout);
 		} else {
-			navigator.navigateTo(StandardPageKeys.login);
+			navigator.navigateTo(StandardPageKey.Login);
 		}
 
 	}

@@ -15,11 +15,19 @@ package uk.co.q3c.v7.base.view.component;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
+import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKeys;
 
@@ -35,19 +43,24 @@ import com.vaadin.ui.Tree;
  */
 @UIScoped
 public class UserNavigationTree extends Tree {
-
+	private static Logger log = LoggerFactory.getLogger(UserNavigationTree.class);
 	private final CurrentLocale currentLocale;
 	private final Sitemap sitemap;
 	private int maxLevel = -1;
 	private int level;
 	private final V7Navigator navigator;
+	private final Provider<Subject> subjectPro;
+	private final DefaultURIPermissionFactory uriPermissionFactory;
 
 	@Inject
-	protected UserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator) {
+	protected UserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator,
+			Provider<Subject> subjectPro, DefaultURIPermissionFactory uriPermissionFactory) {
 		super();
 		this.sitemap = sitemap;
 		this.currentLocale = currentLocale;
 		this.navigator = navigator;
+		this.subjectPro = subjectPro;
+		this.uriPermissionFactory = uriPermissionFactory;
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		addValueChangeListener(this);
@@ -61,36 +74,58 @@ public class UserNavigationTree extends Tree {
 
 		for (SitemapNode node : nodeList) {
 			level = 1;
-			loadNode(null, node);
+			// doesn't make sense to show the logout page
+			if (!node.getLabelKey().equals(StandardPageKey.Logout)) {
+				{
+					loadNode(null, node, node.equals(sitemap.getPublicRootNode()));
+				}
+			}
 		}
 	}
 
-	private void loadNode(SitemapNode parentNode, SitemapNode childNode) {
-		this.addItem(childNode);
-		I18NKeys<?> key = (I18NKeys<?>) childNode.getLabelKey();
+	/**
+	 * Checks each node to ensure that the Subject has permission to view, and if so, adds it to this tree
+	 * 
+	 * @param parentNode
+	 * @param childNode
+	 */
+	private void loadNode(SitemapNode parentNode, SitemapNode childNode, boolean publicBranch) {
+		// construct the permission
+		String uri = sitemap.uri(childNode);
+		URIViewPermission pagePermissionRequired = uriPermissionFactory.createViewPermission(uri);
 
-		String caption = key.getValue(currentLocale.getLocale());
-		this.setItemCaption(childNode, caption);
-		setParent(childNode, parentNode);
+		// if permitted, add it
+		if (publicBranch || subjectPro.get().isPermitted(pagePermissionRequired)) {
+			log.debug("user has permission to view URI {}", uri);
+			this.addItem(childNode);
+			I18NKeys<?> key = (I18NKeys<?>) childNode.getLabelKey();
 
-		SitemapNode newParentNode = childNode;
-		level++;
+			String caption = key.getValue(currentLocale.getLocale());
+			this.setItemCaption(childNode, caption);
+			setParent(childNode, parentNode);
 
-		if ((maxLevel < 0) || (level <= maxLevel)) {
-			List<SitemapNode> children = sitemap.getChildren(newParentNode);
-			if (children.size() == 0) {
+			SitemapNode newParentNode = childNode;
+			level++;
+
+			if ((maxLevel < 0) || (level <= maxLevel)) {
+				List<SitemapNode> children = sitemap.getChildren(newParentNode);
+				if (children.size() == 0) {
+					// no children, visual tree should not allow expanding the node
+					setChildrenAllowed(newParentNode, false);
+				}
+				for (SitemapNode child : children) {
+					if (!child.getLabelKey().equals(StandardPageKey.Logout)) {
+						loadNode(newParentNode, child, publicBranch);
+					}
+				}
+
+			} else {
 				// no children, visual tree should not allow expanding the node
 				setChildrenAllowed(newParentNode, false);
 			}
-			for (SitemapNode child : children) {
-				loadNode(newParentNode, child);
-			}
-
 		} else {
-			// no children, visual tree should not allow expanding the node
-			setChildrenAllowed(newParentNode, false);
+			log.debug("user does not have permission to view {}, page not loaded in to UserNavigationTree", uri);
 		}
-
 	}
 
 	/**
@@ -124,7 +159,7 @@ public class UserNavigationTree extends Tree {
 	@Override
 	public void valueChange(Property.ValueChangeEvent event) {
 		if (getValue() != null) {
-			String url = sitemap.url((SitemapNode) getValue());
+			String url = sitemap.uri((SitemapNode) getValue());
 			navigator.navigateTo(url);
 		}
 	}

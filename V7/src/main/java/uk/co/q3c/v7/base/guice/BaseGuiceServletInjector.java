@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2013 David Sowerby
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
@@ -15,20 +15,27 @@ package uk.co.q3c.v7.base.guice;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Provider;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.guice.aop.ShiroAopModule;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.config.BaseIniModule;
-import uk.co.q3c.v7.base.config.BaseIni;
+import uk.co.q3c.v7.base.config.IniModule;
+import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.Sitemap;
+import uk.co.q3c.v7.base.navigate.SitemapProvider;
 import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
-import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
+import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
+import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.i18n.I18NModule;
@@ -38,16 +45,25 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 
-public abstract class BaseGuiceServletInjector extends
-		GuiceServletContextListener {
+public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
+	private static Logger log = LoggerFactory.getLogger(BaseGuiceServletInjector.class);
+
 	protected static Injector injector;
 
-	private final ThreadLocal<ServletContext> ctx = new ThreadLocal<ServletContext>();
+	private ThreadLocal<ServletContext> ctx;
+
+	protected BaseGuiceServletInjector() {
+		super();
+
+	}
+
+	protected ThreadLocal<ServletContext> createThreadLocalServletContext() {
+		return new ThreadLocal<ServletContext>();
+	}
 
 	/**
-	 * Module instances for the base should be added in {@link #getModules()}.
-	 * Module instance for the app using V7 should be added to
-	 * {@link AppModules#appModules()}
+	 * Module instances for the base should be added in {@link #getModules()}. Module instance for the app using V7
+	 * should be added to {@link AppModules#appModules()}
 	 * 
 	 * @see com.google.inject.servlet.GuiceServletContextListener#getInjector()
 	 */
@@ -61,82 +77,107 @@ public abstract class BaseGuiceServletInjector extends
 		// The SecurityManager binding is in ShiroWebModule, and therefore
 		// DefaultShiroWebModule. By default the binding
 		// is to DefaultWebSecurityManager
-		SecurityManager securityManager = injector
-				.getInstance(SecurityManager.class);
+		SecurityManager securityManager = injector.getInstance(SecurityManager.class);
 		SecurityUtils.setSecurityManager(securityManager);
 
 		return injector;
 	}
-	
+
 	/**
 	 * Override this to provide your own IniModule
 	 */
-	protected BaseIniModule createIniModule(){
-		return new BaseIniModule();
+	protected IniModule createIniModule(){
+		return new IniModule();
 	}
 	
 	private List<Module> getModules() {
 		// ini load is handled by the provider
-		BaseIni ini = injector.getInstance(BaseIni.class);
+		V7Ini ini = injector.getInstance(V7Ini.class);
 		List<Module> baseModules = new ArrayList<>();
 
 		if (ini.optionReadSiteMap()) {
-			Sitemap sitemap = injector.getInstance(Sitemap.class);
+			log.debug("ini sitemap option is true, loading sitemap");
+			Provider<Sitemap> sitemapPro = injector.getInstance(SitemapProvider.class);
+			Sitemap sitemap = sitemapPro.get();
 			baseModules.add(new ApplicationViewModule(sitemap));
 		} else {
 			// module for Views must be in addAppModules()
+			log.debug("ini sitemap option is false, not loading sitemap");
 		}
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
-		
-		baseModules.add(createShiroWebModule(ctx.get()));
-		baseModules.add(createShiroVaadinModule());
+
+		baseModules.add(shiroWebModule(ctx.get(), ini));
+		baseModules.add(shiroVaadinModule());
 		baseModules.add(new ShiroAopModule());
-		
-		baseModules.add(createBaseModule());
-		
+		baseModules.add(userOptionsModule(ini));
+
+		baseModules.add(baseModule());
+
 		baseModules.add(new I18NModule());
-		
-		baseModules.add(createViewModule());
+
+		baseModules.add(standardViewModule());
 
 		addAppModules(baseModules, ini);
 		return baseModules;
 	}
-	
-	/**
-	 * Override this to provide your own ShiroWebModule
-	 */
-	protected DefaultShiroWebModule createShiroWebModule(ServletContext ctx){
-		return new DefaultShiroWebModule(ctx);
+
+	private Module userOptionsModule(V7Ini ini) {
+		return new DefaultUserOptionModule(ini);
 	}
-	
+
 	/**
-	 * Override this to provide your own BaseModule
+	 * Override this if you have sub-classed the {@link BaseModule}
+	 * 
+	 * @return
 	 */
-	protected BaseModule createBaseModule() {
+	protected Module baseModule() {
 		return new BaseModule();
 	}
-	
+
 	/**
-	 * Override this to provide your own ShiroModule
+	 * Override this method if you have sub-classed {@link ShiroVaadinModule} to provide your own bindings for Shiro
+	 * related exceptions.
+	 * 
+	 * @return
 	 */
-	protected V7ShiroVaadinModule createShiroVaadinModule(){
-		return new V7ShiroVaadinModule();
+	protected Module shiroVaadinModule() {
+		return new ShiroVaadinModule();
 	}
-	
+
 	/**
-	 * Override this to provide your own ViewModule
+	 * Override this if you have sub-classed {@link StandardViewModule} to provide bindings to your own standard page
+	 * views
 	 */
-	protected StandardViewModule createViewModule(){
+	protected Module standardViewModule() {
 		return new StandardViewModule();
 	}
 
-	protected abstract void addAppModules(List<Module> baseModules, BaseIni ini);
+	/**
+	 * Override this method if you have sub-classed {@link DefaultShiroWebModule} to provide bindings to your Shiro
+	 * related implementations (for example, {@link Realm} and {@link CredentialsMatcher}
+	 * 
+	 * @param servletContext
+	 * @param ini
+	 * @return
+	 */
+
+	protected Module shiroWebModule(ServletContext servletContext, V7Ini ini) {
+		return new DefaultShiroWebModule(servletContext);
+	}
+
+	/**
+	 * Add as many application specific Guice modules as you wish by overriding this method.
+	 * 
+	 * @param baseModules
+	 * @param ini
+	 */
+	protected abstract void addAppModules(List<Module> baseModules, V7Ini ini);
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
-		final ServletContext servletContext = servletContextEvent
-				.getServletContext();
+		ctx = createThreadLocalServletContext();
+		final ServletContext servletContext = servletContextEvent.getServletContext();
 		ctx.set(servletContext);
 		super.contextInitialized(servletContextEvent);
 	}

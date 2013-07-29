@@ -16,14 +16,14 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKeys;
 
 /**
- * Represents a node in the site map (equivalent to a web site 'page'). It contains a url segment (this is just one part
- * of the url, so the node for the page at /secure/account/open would contain just 'open'). To obtain the full url, use
- * {@link Sitemap#url(SitemapNode)}.
+ * Represents a node in the site map (equivalent to a web site 'page'). It contains a URI segment (this is just one part
+ * of the URI, so the node for the page at /private/account/open would contain just 'open'). To obtain the full URI, use
+ * {@link Sitemap#uri(SitemapNode)}.
  * <p>
  * {@link #viewClass} is the class of {@link V7View} to be used in displaying the page, and the {@link #getLabelKey()}
  * is an {@link I18NKeys} key to a localised label for the page
  * <p>
- * The {@link #id} is required because the url segment alone may not be unique, and the view class and labelKey are
+ * The {@link #id} is required because the URI segment alone may not be unique, and the view class and labelKey are
  * optional. For the node to be used in a graph, it needs a unique identifier. The id is provided by
  * {@link Sitemap#addChild(SitemapNode, SitemapNode)} and {@link Sitemap#addNode(SitemapNode)}
  * 
@@ -33,14 +33,14 @@ import uk.co.q3c.v7.i18n.I18NKeys;
 public class SitemapNode {
 
 	private int id;
-	private String urlSegment;
+	private String uriSegment;
 	private Class<? extends V7View> viewClass;
 	private Enum<? extends I18NKeys<?>> labelKey;
 	private String label;
 
-	public SitemapNode(String urlSegment, Class<? extends V7View> viewClass, Enum<? extends I18NKeys<?>> labelKey) {
+	public SitemapNode(String uriSegment, Class<? extends V7View> viewClass, Enum<? extends I18NKeys<?>> labelKey) {
 		super();
-		this.urlSegment = urlSegment;
+		this.uriSegment = uriSegment;
 		this.viewClass = viewClass;
 		this.labelKey = labelKey;
 	}
@@ -49,12 +49,12 @@ public class SitemapNode {
 
 	}
 
-	public String getUrlSegment() {
-		return urlSegment;
+	public String getUriSegment() {
+		return uriSegment;
 	}
 
-	public void setUrlSegment(String urlSegment) {
-		this.urlSegment = urlSegment;
+	public void setUriSegment(String uriSegment) {
+		this.uriSegment = uriSegment;
 	}
 
 	public Enum<? extends I18NKeys<?>> getLabelKey() {
@@ -73,14 +73,25 @@ public class SitemapNode {
 		this.viewClass = viewClass;
 	}
 
-	@Override
-	public String toString() {
+	public String toStringAsMapEntry() {
 		StringBuilder buf = new StringBuilder();
-		buf.append((urlSegment == null) ? "no segment given" : urlSegment);
+		buf.append((uriSegment == null) ? "no segment given" : uriSegment);
 		buf.append((viewClass == null) ? "" : "\t\t:  " + viewClass.getSimpleName());
 		buf.append((labelKey == null) ? "" : "\t~  " + labelKey.name());
 		return buf.toString();
 
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder();
+		buf.append("segment=");
+		buf.append((uriSegment == null) ? "null" : uriSegment);
+		buf.append(", viewClass=");
+		buf.append((viewClass == null) ? "null" : viewClass.getName());
+		buf.append(", labelKey=");
+		buf.append((labelKey == null) ? "null" : labelKey.name());
+		return buf.toString();
 	}
 
 	@Override

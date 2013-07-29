@@ -40,13 +40,13 @@ public class V7SecurityManager extends DefaultWebSecurityManager {
 	@Override
 	protected void onSuccessfulLogin(AuthenticationToken token, AuthenticationInfo info, Subject subject) {
 		super.onSuccessfulLogin(token, info, subject);
-		fireListeners(subject);
+		fireListeners();
 	}
 
 	@Override
 	public void logout(Subject subject) {
 		super.logout(subject);
-		fireListeners(subject);
+		fireListeners();
 	}
 
 	public void addListener(LoginStatusListener listener) {
@@ -57,9 +57,9 @@ public class V7SecurityManager extends DefaultWebSecurityManager {
 		listeners.remove(listener);
 	}
 
-	private void fireListeners(Subject subject) {
+	private void fireListeners() {
 		for (LoginStatusListener listener : listeners) {
-			listener.updateStatus(subject);
+			listener.updateStatus();
 		}
 	}
 

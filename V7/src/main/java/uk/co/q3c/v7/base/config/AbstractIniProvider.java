@@ -2,7 +2,7 @@ package uk.co.q3c.v7.base.config;
 
 import com.google.inject.Provider;
 
-public abstract class AbstractIniProvider<T extends BaseIni> implements Provider<T> {
+public abstract class AbstractIniProvider<T extends V7Ini> implements Provider<T> {
 
 	@Override
 	public T get() {

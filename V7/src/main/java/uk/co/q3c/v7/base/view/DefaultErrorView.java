@@ -5,35 +5,26 @@ import java.util.List;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
-import com.vaadin.ui.Label;
-
-public class DefaultErrorView extends VerticalViewBase implements ErrorView {
-
-	private final Label viewLabel;
+public class DefaultErrorView extends DefaultViewBase implements ErrorView {
 
 	@Inject
-	protected DefaultErrorView(V7Navigator navigator) {
-		super(navigator);
-		viewLabel = new Label();
-		getViewLabel().addStyleName("warning");
+	protected DefaultErrorView(V7Navigator navigator, UserNavigationTree navtree) {
+		super(navigator, navtree);
 
 	}
 
-	protected void doLayout() {
-		viewLabel.addStyleName("warning");
-		addComponent(viewLabel);
-	}
-	
 	@Override
 	public void processParams(List<String> params) {
-		String s = "This is the ErrorView and would say something like \""
-				+ getNavigator().getNavigationState() + " is not a valid uri\"";
-		getViewLabel().setValue(s);
+		String s = "\"" + getNavigator().getNavigationState() + "\" is not a valid URI";
+		getLabel().setValue(s);
 	}
 
-	public Label getViewLabel() {
-		return viewLabel;
+	@Override
+	protected void buildUI() {
+		super.buildUI();
+		getLabel().addStyleName("warning");
 	}
 
 }
