@@ -39,6 +39,8 @@ public interface UserOption {
 
 	public void setOption(String optionGroup, String option, double value);
 
+	public void setOption(String optionGroup, String option, boolean value);
+
 	public int getOptionAsInt(String optionGroup, String option, int defaultValue);
 
 	public String getOptionAsString(String optionGroup, String option, String defaultValue);
@@ -46,5 +48,7 @@ public interface UserOption {
 	public DateTime getOptionAsDateTime(String optionGroup, String option, DateTime defaultValue);
 
 	public double getOptionAsDouble(String optionGroup, String option, double defaultValue);
+
+	public boolean getOptionAsBoolean(String optionGroup, String option, boolean defaultValue);
 
 }

@@ -30,6 +30,10 @@ import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.BasicUIProvider;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+import uk.co.q3c.v7.base.useropt.DefaultUserOption;
+import uk.co.q3c.v7.base.useropt.DefaultUserOptionStore;
+import uk.co.q3c.v7.base.useropt.UserOption;
+import uk.co.q3c.v7.base.useropt.UserOptionStore;
 import uk.co.q3c.v7.base.view.DefaultErrorView;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.V7View;
@@ -103,6 +107,8 @@ public class UIScopeTest {
 			bind(Subject.class).toProvider(MockSubjectProvider.class);
 			bind(URIPermissionFactory.class).to(DefaultURIPermissionFactory.class);
 			bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+			bind(UserOption.class).to(DefaultUserOption.class);
+			bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
 		}
 	}
 

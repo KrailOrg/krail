@@ -28,6 +28,7 @@ import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
+import uk.co.q3c.v7.base.useropt.UserOption;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKeys;
 
@@ -51,24 +52,30 @@ public class UserNavigationTree extends Tree {
 	private final V7Navigator navigator;
 	private final Provider<Subject> subjectPro;
 	private final DefaultURIPermissionFactory uriPermissionFactory;
+	private boolean sorted;
+	private final UserOption userOption;
+	private static final String sortedOpt = "sorted";
 
 	@Inject
 	protected UserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator,
-			Provider<Subject> subjectPro, DefaultURIPermissionFactory uriPermissionFactory) {
+			Provider<Subject> subjectPro, DefaultURIPermissionFactory uriPermissionFactory, UserOption userOption) {
 		super();
 		this.sitemap = sitemap;
 		this.currentLocale = currentLocale;
 		this.navigator = navigator;
 		this.subjectPro = subjectPro;
 		this.uriPermissionFactory = uriPermissionFactory;
+		this.userOption = userOption;
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		addValueChangeListener(this);
+
 		loadNodes();
 
 	}
 
 	private void loadNodes() {
+		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, false);
 		this.removeAllItems();
 		List<SitemapNode> nodeList = sitemap.getRoots();
 
@@ -98,7 +105,7 @@ public class UserNavigationTree extends Tree {
 		if (publicBranch || subjectPro.get().isPermitted(pagePermissionRequired)) {
 			log.debug("user has permission to view URI {}", uri);
 			this.addItem(childNode);
-			I18NKeys<?> key = (I18NKeys<?>) childNode.getLabelKey();
+			I18NKeys<?> key = childNode.getLabelKey();
 
 			String caption = key.getValue(currentLocale.getLocale());
 			this.setItemCaption(childNode, caption);
@@ -162,6 +169,14 @@ public class UserNavigationTree extends Tree {
 			String url = sitemap.uri((SitemapNode) getValue());
 			navigator.navigateTo(url);
 		}
+	}
+
+	public boolean isSorted() {
+		return sorted;
+	}
+
+	public void setSorted(boolean sorted) {
+		this.sorted = sorted;
 	}
 
 }
