@@ -14,6 +14,8 @@ package uk.co.q3c.v7.base.navigate;
 
 import java.util.Set;
 
+import uk.co.q3c.v7.i18n.I18NKeys;
+
 @SuppressWarnings("rawtypes")
 public class LabelKeyForName {
 	private final Class<? extends Enum> labelKeysClass;
@@ -25,14 +27,15 @@ public class LabelKeyForName {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public Enum keyForName(String keyName, Set<String> missingEnums) {
+	public I18NKeys<?> keyForName(String keyName, Set<String> missingEnums) {
 		if (keyName == null) {
 			// don't add to missingEnums, null can be legitimate
 			return null;
 		}
 		try {
 			Enum labelKey = Enum.valueOf(labelKeysClass, keyName);
-			return labelKey;
+			I18NKeys<?> i18nKey = (I18NKeys<?>) labelKey;
+			return i18nKey;
 		} catch (Exception e) {
 			// flagAsMissing
 			if (missingEnums != null) {

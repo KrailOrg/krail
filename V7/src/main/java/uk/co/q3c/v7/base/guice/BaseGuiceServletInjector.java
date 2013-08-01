@@ -70,7 +70,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	@Override
 	protected Injector getInjector() {
 
-		injector = Guice.createInjector(new IniModule());
+		injector = Guice.createInjector(new IniModule(), new I18NModule());
 
 		injector = injector.createChildInjector(getModules());
 
@@ -107,8 +107,6 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		baseModules.add(userOptionsModule(ini));
 
 		baseModules.add(baseModule());
-
-		baseModules.add(new I18NModule());
 
 		baseModules.add(standardViewModule());
 

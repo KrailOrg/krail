@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,12 +23,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.navigate.CollationKeyOrder;
+import uk.co.q3c.v7.base.navigate.InsertionOrder;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
+import uk.co.q3c.v7.base.useropt.UserOption;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKeys;
 
@@ -51,34 +55,49 @@ public class UserNavigationTree extends Tree {
 	private final V7Navigator navigator;
 	private final Provider<Subject> subjectPro;
 	private final DefaultURIPermissionFactory uriPermissionFactory;
+	private boolean sorted;
+	private final UserOption userOption;
+	private static final String sortedOpt = "sorted";
 
 	@Inject
 	protected UserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator,
-			Provider<Subject> subjectPro, DefaultURIPermissionFactory uriPermissionFactory) {
+			Provider<Subject> subjectPro, DefaultURIPermissionFactory uriPermissionFactory, UserOption userOption) {
 		super();
 		this.sitemap = sitemap;
 		this.currentLocale = currentLocale;
 		this.navigator = navigator;
 		this.subjectPro = subjectPro;
 		this.uriPermissionFactory = uriPermissionFactory;
+		this.userOption = userOption;
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
+		// set user option
+		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, false);
 		addValueChangeListener(this);
+
 		loadNodes();
 
 	}
 
 	private void loadNodes() {
+
 		this.removeAllItems();
 		List<SitemapNode> nodeList = sitemap.getRoots();
+
+		// which order, sorted or insertion?
+		if (sorted) {
+			log.debug("'sorted' is true, sorting by collation key");
+			Collections.sort(nodeList, new CollationKeyOrder());
+		} else {
+			log.debug("'sorted' is false, using insertion order");
+			Collections.sort(nodeList, new InsertionOrder());
+		}
 
 		for (SitemapNode node : nodeList) {
 			level = 1;
 			// doesn't make sense to show the logout page
 			if (!node.getLabelKey().equals(StandardPageKey.Logout)) {
-				{
-					loadNode(null, node, node.equals(sitemap.getPublicRootNode()));
-				}
+				loadNode(null, node, node.equals(sitemap.getPublicRootNode()));
 			}
 		}
 	}
@@ -98,7 +117,7 @@ public class UserNavigationTree extends Tree {
 		if (publicBranch || subjectPro.get().isPermitted(pagePermissionRequired)) {
 			log.debug("user has permission to view URI {}", uri);
 			this.addItem(childNode);
-			I18NKeys<?> key = (I18NKeys<?>) childNode.getLabelKey();
+			I18NKeys<?> key = childNode.getLabelKey();
 
 			String caption = key.getValue(currentLocale.getLocale());
 			this.setItemCaption(childNode, caption);
@@ -112,6 +131,13 @@ public class UserNavigationTree extends Tree {
 				if (children.size() == 0) {
 					// no children, visual tree should not allow expanding the node
 					setChildrenAllowed(newParentNode, false);
+				} else {
+					// which order, sorted or insertion?
+					if (sorted) {
+						Collections.sort(children, new CollationKeyOrder());
+					} else {
+						Collections.sort(children, new InsertionOrder());
+					}
 				}
 				for (SitemapNode child : children) {
 					if (!child.getLabelKey().equals(StandardPageKey.Logout)) {
@@ -161,6 +187,18 @@ public class UserNavigationTree extends Tree {
 		if (getValue() != null) {
 			String url = sitemap.uri((SitemapNode) getValue());
 			navigator.navigateTo(url);
+		}
+	}
+
+	public boolean isSorted() {
+		return sorted;
+	}
+
+	public void setSorted(boolean sorted) {
+		if (sorted != this.sorted) {
+			this.sorted = sorted;
+			loadNodes();
+			userOption.setOption(this.getClass().getSimpleName(), sortedOpt, this.sorted);
 		}
 	}
 

@@ -16,6 +16,7 @@ import static org.fest.assertions.Assertions.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -51,6 +52,8 @@ public class BreadcrumbTest extends TestWithSitemap {
 
 	SitemapNode newNode7;
 
+	Collator collator;
+
 	@Override
 	@Before
 	public void setup() {
@@ -63,13 +66,15 @@ public class BreadcrumbTest extends TestWithSitemap {
 
 		// given
 		buildSitemap(2);
-		newNode2.setLabelKey(TestLabelKeys.Opt);
 		List<SitemapNode> nodeChain = new ArrayList<>();
 		nodeChain.add(newNode1);
 		nodeChain.add(newNode2);
 		nodeChain.add(newNode3);
 		when(converter.nodeChainForUri(anyString(), eq(true))).thenReturn(nodeChain);
 		when(currentLocale.getLocale()).thenReturn(Locale.UK);
+		collator = Collator.getInstance(currentLocale.getLocale());
+		newNode2.setLabelKey(TestLabelKeys.Opt, currentLocale.getLocale(), collator);
+
 		// when
 		breadcrumb = new Breadcrumb(navigator, converter, currentLocale);
 		// then
