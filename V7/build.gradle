@@ -98,7 +98,7 @@ dependencies{
 	compile "javax.servlet:javax.servlet-api:3.+"
 
 
-	test.testLogging.showStandardStreams = true
+//	test.testLogging.showStandardStreams = true
 	test{ exclude '**/GuiceServletInjectorTest.class' }
 
 

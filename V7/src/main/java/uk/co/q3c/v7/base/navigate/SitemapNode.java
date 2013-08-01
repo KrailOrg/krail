@@ -29,18 +29,22 @@ import uk.co.q3c.v7.i18n.I18NKeys;
  * <p>
  * The {@link #id} is required because the URI segment alone may not be unique, and the view class and labelKey are
  * optional. For the node to be used in a graph, it needs a unique identifier. The id is provided by
- * {@link Sitemap#addChild(SitemapNode, SitemapNode)} and {@link Sitemap#addNode(SitemapNode)}
+ * {@link Sitemap#addChild(SitemapNode, SitemapNode)} and {@link Sitemap#addNode(SitemapNode)}. This field has an
+ * additional purpose in providing a record of insertion order, so that nodes can be sorted by insertion order if
+ * required.
  * <p>
  * To enable locale sensitive sorting of nodes - for example within a UserNavigationTree - a collation key from
  * {@link Collator} is added by the {@link #setLabelKey(I18NKeys, Locale, Collator)} method. This means the collation
  * key generally created only once, is available for sorting as often as needed, and will only need to be updated when
  * if locale or labelKey changes. This approach also takes advantage of the improved performance of the collation key
  * sorting (http://docs.oracle.com/javase/tutorial/i18n/text/perform.html)
+ * <p>
+ * Sorting by insertion order or collation key order is provided by
  * 
  * @author David Sowerby 6 May 2013
  * 
  */
-public class SitemapNode implements Comparable<SitemapNode> {
+public class SitemapNode {
 
 	private int id;
 	private String uriSegment;
@@ -149,11 +153,6 @@ public class SitemapNode implements Comparable<SitemapNode> {
 
 	public CollationKey getCollationKey() {
 		return collationKey;
-	}
-
-	@Override
-	public int compareTo(SitemapNode other) {
-		return collationKey.compareTo(other.collationKey);
 	}
 
 }

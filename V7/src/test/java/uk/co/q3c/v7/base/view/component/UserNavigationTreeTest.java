@@ -16,6 +16,9 @@ import static org.fest.assertions.Assertions.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -29,6 +32,7 @@ import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -274,31 +278,31 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 	/**
 	 * https://github.com/davidsowerby/v7/issues/133
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void presentationOrder() {
 
 		// given
-		// List<SitemapNodeWrapper> words = new ArrayList<>();
-		// words.add(new SitemapNodeWrapper(new SitemapNode(), "peach"));
-		// words.add(new SitemapNodeWrapper(new SitemapNode(), "péché"));
-		// words.add(new SitemapNodeWrapper(new SitemapNode(), "pêche"));
-		// words.add(new SitemapNodeWrapper(new SitemapNode(), "Pêche"));
-		// words.add(new SitemapNodeWrapper(new SitemapNode(), "sin"));
-		// Collator collator = Collator.getInstance(Locale.UK);
-		// collator.setStrength(Collator.TERTIARY);
-		// Collections.sort(words, collator);
-		// // when
-		// for (SitemapNodeWrapper s : words) {
-		// System.out.println(s);
-		// }
-		// System.out.println(" ------------------------------ ");
-		// collator = Collator.getInstance(Locale.FRANCE);
-		// collator.setStrength(Collator.TERTIARY);
-		// Collections.sort(words, collator);
-		// // then
-		// for (SitemapNodeWrapper s : words) {
-		// System.out.println(s);
-		// }
+		buildSitemap(4);
+		UserNavigationTree unt = new UserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
+				uriPermissionFactory, userOption);
+		// when
+
+		// sorted is false by default, should be insertion order
+
+		// then
+		assertThat(unt.rootItemIds().size()).isEqualTo(2);
+		List<SitemapNode> roots = new ArrayList<SitemapNode>((Collection<? extends SitemapNode>) unt.rootItemIds());
+		assertThat(roots.get(0).getUriSegment()).isEqualTo("public");
+		assertThat(roots.get(1).getUriSegment()).isEqualTo("private");
+
+		unt.setSorted(true);
+
+		// then
+		roots = new ArrayList<SitemapNode>((Collection<? extends SitemapNode>) unt.rootItemIds());
+		assertThat(roots.get(0).getUriSegment()).isEqualTo("private");
+		assertThat(roots.get(1).getUriSegment()).isEqualTo("public");
+		verify(userOption).setOption(UserNavigationTree.class.getSimpleName(), "sorted", true);
 
 	}
 

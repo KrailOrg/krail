@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.navigate.CollationKeyOrder;
+import uk.co.q3c.v7.base.navigate.InsertionOrder;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
@@ -68,6 +71,8 @@ public class UserNavigationTree extends Tree {
 		this.userOption = userOption;
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
+		// set user option
+		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, false);
 		addValueChangeListener(this);
 
 		loadNodes();
@@ -75,17 +80,24 @@ public class UserNavigationTree extends Tree {
 	}
 
 	private void loadNodes() {
-		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, false);
+
 		this.removeAllItems();
 		List<SitemapNode> nodeList = sitemap.getRoots();
+
+		// which order, sorted or insertion?
+		if (sorted) {
+			log.debug("'sorted' is true, sorting by collation key");
+			Collections.sort(nodeList, new CollationKeyOrder());
+		} else {
+			log.debug("'sorted' is false, using insertion order");
+			Collections.sort(nodeList, new InsertionOrder());
+		}
 
 		for (SitemapNode node : nodeList) {
 			level = 1;
 			// doesn't make sense to show the logout page
 			if (!node.getLabelKey().equals(StandardPageKey.Logout)) {
-				{
-					loadNode(null, node, node.equals(sitemap.getPublicRootNode()));
-				}
+				loadNode(null, node, node.equals(sitemap.getPublicRootNode()));
 			}
 		}
 	}
@@ -119,6 +131,13 @@ public class UserNavigationTree extends Tree {
 				if (children.size() == 0) {
 					// no children, visual tree should not allow expanding the node
 					setChildrenAllowed(newParentNode, false);
+				} else {
+					// which order, sorted or insertion?
+					if (sorted) {
+						Collections.sort(children, new CollationKeyOrder());
+					} else {
+						Collections.sort(children, new InsertionOrder());
+					}
 				}
 				for (SitemapNode child : children) {
 					if (!child.getLabelKey().equals(StandardPageKey.Logout)) {
@@ -176,7 +195,11 @@ public class UserNavigationTree extends Tree {
 	}
 
 	public void setSorted(boolean sorted) {
-		this.sorted = sorted;
+		if (sorted != this.sorted) {
+			this.sorted = sorted;
+			loadNodes();
+			userOption.setOption(this.getClass().getSimpleName(), sortedOpt, this.sorted);
+		}
 	}
 
 }
