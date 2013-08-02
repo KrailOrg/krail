@@ -1,7 +1,7 @@
 # V7
 
 ## Introduction
-V7 is a libary which provides base application for Java / web development combining Vaadin, Guice and Apache Shiro. 
+V7 is a libary which provides a base application for Java / web development combining Vaadin, Guice and Apache Shiro. 
 
 ## Motivation
 Whenever I start a new application it feels like I cover the same ground - getting the basic application architecture in place first, and trying to get the various parts working together.  Of course, when I start looking for answers to integration questions, I find that there are many others out there asking the same questions.  So I thought I should build a basic reference application, using common OSS components, and use that as a start point for any applications I want to put together in future.  And since I am using only OSS components, it seems only fair that I should share the results with any one who wishes to use it.  With any luck, others will also find it useful.
