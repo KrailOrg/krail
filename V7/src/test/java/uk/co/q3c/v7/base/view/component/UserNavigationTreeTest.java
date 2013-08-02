@@ -86,6 +86,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		when(subjectPro.get()).thenReturn(subject);
 		when(subject.isPermitted(any(Permission.class))).thenReturn(true);
 		when(subject.isPermitted(anyString())).thenReturn(true);
+		when(userOption.getOptionAsInt(UserNavigationTree.class.getSimpleName(), UserNavigationTree.maxLevelOpt, -1))
+				.thenReturn(-1);
 		createUI();
 		uriPermissionFactory = injector.getInstance(DefaultURIPermissionFactory.class);
 	}
@@ -172,6 +174,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		unt.setMaxLevel(0);
 		// then 0 not allowed
 		assertThat(unt.getMaxLevel()).isEqualTo(2);
+		verify(userOption).setOption(UserNavigationTree.class.getSimpleName(), UserNavigationTree.maxLevelOpt, 2);
 
 	}
 

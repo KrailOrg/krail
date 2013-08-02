@@ -50,14 +50,15 @@ public class UserNavigationTree extends Tree {
 	private static Logger log = LoggerFactory.getLogger(UserNavigationTree.class);
 	private final CurrentLocale currentLocale;
 	private final Sitemap sitemap;
-	private int maxLevel = -1;
+	private int maxLevel;
 	private int level;
 	private final V7Navigator navigator;
 	private final Provider<Subject> subjectPro;
 	private final DefaultURIPermissionFactory uriPermissionFactory;
 	private boolean sorted;
 	private final UserOption userOption;
-	private static final String sortedOpt = "sorted";
+	public static final String sortedOpt = "sorted";
+	public static final String maxLevelOpt = "maxLevel";
 
 	@Inject
 	protected UserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator,
@@ -73,6 +74,7 @@ public class UserNavigationTree extends Tree {
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		// set user option
 		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, false);
+		maxLevel = userOption.getOptionAsInt(this.getClass().getSimpleName(), maxLevelOpt, -1);
 		addValueChangeListener(this);
 
 		loadNodes();
@@ -179,6 +181,7 @@ public class UserNavigationTree extends Tree {
 		if (maxLevel != 0) {
 			this.maxLevel = maxLevel;
 			loadNodes();
+			userOption.setOption(this.getClass().getSimpleName(), maxLevelOpt, this.maxLevel);
 		}
 	}
 
