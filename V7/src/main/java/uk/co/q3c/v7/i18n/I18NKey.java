@@ -14,7 +14,7 @@ package uk.co.q3c.v7.i18n;
 
 import java.util.Locale;
 
-public interface I18NKeys<E extends EnumResourceBundle<?>> {
+public interface I18NKey<E extends EnumResourceBundle<?>> {
 
 	E getBundle(Locale locale);
 

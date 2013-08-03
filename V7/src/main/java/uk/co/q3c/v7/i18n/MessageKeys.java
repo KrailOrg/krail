@@ -15,7 +15,7 @@ package uk.co.q3c.v7.i18n;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public enum MessageKeys implements I18NKeys<Messages> {
+public enum MessageKeys implements I18NKey<Messages> {
 	_nullkey_,
 	last_name,
 	ok,

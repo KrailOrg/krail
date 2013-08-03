@@ -123,9 +123,9 @@ public class AnnotationI18NTranslator implements I18NTranslator {
 		I18NAnnotationReader reader = provider.get();
 
 		// get the keys from the reader
-		I18NKeys<?> captionKey = reader.caption(annotation);
-		I18NKeys<?> descriptionKey = reader.description(annotation);
-		I18NKeys<?> valueKey = reader.value(annotation);
+		I18NKey<?> captionKey = reader.caption(annotation);
+		I18NKey<?> descriptionKey = reader.description(annotation);
+		I18NKey<?> valueKey = reader.value(annotation);
 
 		// check for nulls. Nulls are used for caption and description so that content can be cleared.
 		// for value, this is not the case, as it may be a bad idea

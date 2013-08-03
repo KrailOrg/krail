@@ -29,7 +29,7 @@ import com.google.common.collect.Maps;
 
 /**
  * Provides a singleton reference to the currently selected Locale. {@link I18NListener}s can be added to listen for
- * locale changes. This class also support the use of annotations to specify the {@link I18NKeys} to be used for
+ * locale changes. This class also support the use of annotations to specify the {@link I18NKey} to be used for
  * translation. Annotations cannot be sub-classed, and in order to support the use of multiple annotations, they must be
  * registered with {@link CurrentLocale} so that the {@link I18NTranslator} implementation can check for their
  * existence. The {@link I18N} annotation is registered by default.

@@ -17,7 +17,7 @@ import java.text.Collator;
 import java.util.Locale;
 
 import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.i18n.I18NKeys;
+import uk.co.q3c.v7.i18n.I18NKey;
 
 /**
  * Represents a node in the site map (equivalent to a web site 'page'). It contains a URI segment (this is just one part
@@ -25,7 +25,7 @@ import uk.co.q3c.v7.i18n.I18NKeys;
  * {@link Sitemap#uri(SitemapNode)}.
  * <p>
  * {@link #viewClass} is the class of {@link V7View} to be used in displaying the page, and the {@link #getLabelKey()}
- * is an {@link I18NKeys} key to a localised label for the page
+ * is an {@link I18NKey} key to a localised label for the page
  * <p>
  * The {@link #id} is required because the URI segment alone may not be unique, and the view class and labelKey are
  * optional. For the node to be used in a graph, it needs a unique identifier. The id is provided by
@@ -34,7 +34,7 @@ import uk.co.q3c.v7.i18n.I18NKeys;
  * required.
  * <p>
  * To enable locale sensitive sorting of nodes - for example within a UserNavigationTree - a collation key from
- * {@link Collator} is added by the {@link #setLabelKey(I18NKeys, Locale, Collator)} method. This means the collation
+ * {@link Collator} is added by the {@link #setLabelKey(I18NKey, Locale, Collator)} method. This means the collation
  * key generally created only once, is available for sorting as often as needed, and will only need to be updated when
  * if locale or labelKey changes. This approach also takes advantage of the improved performance of the collation key
  * sorting (http://docs.oracle.com/javase/tutorial/i18n/text/perform.html)
@@ -49,11 +49,11 @@ public class SitemapNode {
 	private int id;
 	private String uriSegment;
 	private Class<? extends V7View> viewClass;
-	private I18NKeys<?> labelKey;
+	private I18NKey<?> labelKey;
 	private String label;
 	private CollationKey collationKey;
 
-	public SitemapNode(String uriSegment, Class<? extends V7View> viewClass, I18NKeys<?> labelKey, Locale locale,
+	public SitemapNode(String uriSegment, Class<? extends V7View> viewClass, I18NKey<?> labelKey, Locale locale,
 			Collator collator) {
 		super();
 		this.uriSegment = uriSegment;
@@ -73,7 +73,7 @@ public class SitemapNode {
 		this.uriSegment = uriSegment;
 	}
 
-	public I18NKeys<?> getLabelKey() {
+	public I18NKey<?> getLabelKey() {
 		return labelKey;
 	}
 
@@ -84,7 +84,7 @@ public class SitemapNode {
 	 * @param labelKey
 	 * @param locale
 	 */
-	public void setLabelKey(I18NKeys<?> labelKey, Locale locale, Collator collator) {
+	public void setLabelKey(I18NKey<?> labelKey, Locale locale, Collator collator) {
 		this.labelKey = labelKey;
 		label = labelKey.getValue(locale);
 		collationKey = collator.getCollationKey(label);

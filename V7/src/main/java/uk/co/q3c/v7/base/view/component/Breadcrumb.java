@@ -22,7 +22,7 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NKeys;
+import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.I18NListener;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 
@@ -79,7 +79,7 @@ public class Breadcrumb extends HorizontalLayout implements I18NListener, V7View
 		// TODO can label translate be removed? May be done in build of sitemap later
 
 		step.setNode(sitemapNode);
-		I18NKeys<?> key = step.getNode().getLabelKey();
+		I18NKey<?> key = step.getNode().getLabelKey();
 		sitemapNode.setLabelKey(key, currentLocale.getLocale(), collator);
 
 		step.setVisible(true);
@@ -90,7 +90,7 @@ public class Breadcrumb extends HorizontalLayout implements I18NListener, V7View
 	@Override
 	public void localeChange(I18NTranslator translator) {
 		for (BreadcrumbStep step : steps) {
-			I18NKeys<?> key = step.getNode().getLabelKey();
+			I18NKey<?> key = step.getNode().getLabelKey();
 			step.setCaption(key.getValue(translator.getLocale()));
 		}
 	}

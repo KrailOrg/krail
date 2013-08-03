@@ -33,7 +33,7 @@ import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.useropt.UserOption;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NKeys;
+import uk.co.q3c.v7.i18n.I18NKey;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
@@ -119,7 +119,7 @@ public class UserNavigationTree extends Tree {
 		if (publicBranch || subjectPro.get().isPermitted(pagePermissionRequired)) {
 			log.debug("user has permission to view URI {}", uri);
 			this.addItem(childNode);
-			I18NKeys<?> key = childNode.getLabelKey();
+			I18NKey<?> key = childNode.getLabelKey();
 
 			String caption = key.getValue(currentLocale.getLocale());
 			this.setItemCaption(childNode, caption);

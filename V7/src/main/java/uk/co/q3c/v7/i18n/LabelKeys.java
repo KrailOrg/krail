@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
  * @author David Sowerby 24 Mar 2013
  * 
  */
-public enum LabelKeys implements I18NKeys<Labels> {
+public enum LabelKeys implements I18NKey<Labels> {
 	_nullkey_,
 	cancel,
 	first_name,

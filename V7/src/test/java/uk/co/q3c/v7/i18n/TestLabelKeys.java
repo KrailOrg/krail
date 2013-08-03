@@ -15,7 +15,7 @@ package uk.co.q3c.v7.i18n;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public enum TestLabelKeys implements I18NKeys<TestLabels> {
+public enum TestLabelKeys implements I18NKey<TestLabels> {
 
 	_nullkey_,
 	Home,

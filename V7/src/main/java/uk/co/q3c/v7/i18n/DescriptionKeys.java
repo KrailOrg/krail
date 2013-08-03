@@ -15,7 +15,7 @@ package uk.co.q3c.v7.i18n;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public enum DescriptionKeys implements I18NKeys<Descriptions> {
+public enum DescriptionKeys implements I18NKey<Descriptions> {
 	_nullkey_,
 	last_name,
 	ok,

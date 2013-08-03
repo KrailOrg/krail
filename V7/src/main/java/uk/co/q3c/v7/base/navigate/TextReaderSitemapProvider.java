@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NKeys;
+import uk.co.q3c.v7.i18n.I18NKey;
 
 import com.google.common.base.Strings;
 
@@ -504,7 +504,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 
 			// instance of I18NKeys
 			@SuppressWarnings("rawtypes")
-			Class<I18NKeys> i18nClass = I18NKeys.class;
+			Class<I18NKey> i18nClass = I18NKey.class;
 			if (!i18nClass.isAssignableFrom(requestedLabelKeysClass)) {
 				valid = false;
 				labelClassNotI18N = true;
