@@ -15,16 +15,16 @@ package uk.co.q3c.v7.i18n;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public enum MessageKeys implements I18NKey<Messages> {
+public enum DescriptionKey implements I18NKey<Descriptions> {
 	_nullkey_,
 	last_name,
 	ok,
 	small_font;
 
 	@Override
-	public Messages getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Messages.class.getName(), locale);
-		return (Messages) bundle;
+	public Descriptions getBundle(Locale locale) {
+		ResourceBundle bundle = ResourceBundle.getBundle(Descriptions.class.getName(), locale);
+		return (Descriptions) bundle;
 	}
 
 	@Override

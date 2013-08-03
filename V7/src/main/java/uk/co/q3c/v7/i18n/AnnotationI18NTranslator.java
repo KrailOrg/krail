@@ -173,8 +173,8 @@ public class AnnotationI18NTranslator implements I18NTranslator {
 				Object[] columns = table.getVisibleColumns();
 				List<String> headers = new ArrayList<>();
 				for (Object column : columns) {
-					if (column instanceof LabelKeys) {
-						LabelKeys columnid = (LabelKeys) column;
+					if (column instanceof LabelKey) {
+						LabelKey columnid = (LabelKey) column;
 						String header = columnid.getValue(currentLocale.getLocale());
 						headers.add(header);
 					} else {

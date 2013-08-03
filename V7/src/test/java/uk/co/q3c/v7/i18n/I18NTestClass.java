@@ -18,13 +18,13 @@ import com.vaadin.ui.Table;
 
 public class I18NTestClass implements I18NListener {
 
-	@I18N(caption = LabelKeys.small, description = DescriptionKeys.small_font)
+	@I18N(caption = LabelKey.small, description = DescriptionKey.small_font)
 	private final Button buttonWithAnnotation;
 
-	@I18N(caption = LabelKeys.small, description = DescriptionKeys.small_font, value = DescriptionKeys.small_font)
+	@I18N(caption = LabelKey.small, description = DescriptionKey.small_font, value = DescriptionKey.small_font)
 	private final Label label;
 
-	@I18N(caption = LabelKeys.small, description = DescriptionKeys.small_font)
+	@I18N(caption = LabelKey.small, description = DescriptionKey.small_font)
 	private final Table table;
 
 	@TestI18N(caption = TestLabelKeys.Yes, description = TestLabelKeys.Yes, value = TestLabelKeys.No)
@@ -59,8 +59,8 @@ public class I18NTestClass implements I18NListener {
 	}
 
 	private void setupTableColumns() {
-		table.addContainerProperty(LabelKeys.small, String.class, "numpty");
-		table.addContainerProperty(LabelKeys.cancel, String.class, "numpty");
+		table.addContainerProperty(LabelKey.small, String.class, "numpty");
+		table.addContainerProperty(LabelKey.cancel, String.class, "numpty");
 		table.addContainerProperty("not i18N", String.class, "numpty");
 	}
 

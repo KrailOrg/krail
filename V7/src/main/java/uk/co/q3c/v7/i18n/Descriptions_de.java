@@ -16,17 +16,17 @@ import java.util.EnumMap;
 
 public class Descriptions_de extends Descriptions {
 
-	private static final EnumMap<DescriptionKeys, String> map = new EnumMap<DescriptionKeys, String>(
-			DescriptionKeys.class);
+	private static final EnumMap<DescriptionKey, String> map = new EnumMap<DescriptionKey, String>(
+			DescriptionKey.class);
 
 	static {
-		map.put(DescriptionKeys.last_name, "die Nachname oder der Familienname");
-		map.put(DescriptionKeys.small_font, "Benutzen Sie eine kleine Schriftart");
+		map.put(DescriptionKey.last_name, "die Nachname oder der Familienname");
+		map.put(DescriptionKey.small_font, "Benutzen Sie eine kleine Schriftart");
 
 	}
 
 	@Override
-	public EnumMap<DescriptionKeys, String> getMap() {
+	public EnumMap<DescriptionKey, String> getMap() {
 		return map;
 	}
 

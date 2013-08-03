@@ -15,16 +15,25 @@ package uk.co.q3c.v7.i18n;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public enum DescriptionKeys implements I18NKey<Descriptions> {
+/**
+ * @see Labels
+ * @author David Sowerby 24 Mar 2013
+ * 
+ */
+public enum LabelKey implements I18NKey<Labels> {
 	_nullkey_,
+	cancel,
+	first_name,
 	last_name,
 	ok,
-	small_font;
+	small
+
+	;
 
 	@Override
-	public Descriptions getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Descriptions.class.getName(), locale);
-		return (Descriptions) bundle;
+	public Labels getBundle(Locale locale) {
+		ResourceBundle bundle = ResourceBundle.getBundle(Labels.class.getName(), locale);
+		return (Labels) bundle;
 	}
 
 	@Override
@@ -36,5 +45,4 @@ public enum DescriptionKeys implements I18NKey<Descriptions> {
 	public boolean isNullKey() {
 		return this.equals(_nullkey_);
 	}
-
 }

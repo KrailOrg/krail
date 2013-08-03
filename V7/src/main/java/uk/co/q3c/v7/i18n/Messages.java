@@ -27,18 +27,18 @@ import java.util.EnumMap;
  * @author David Sowerby 3 Aug 2013
  * 
  */
-public class Messages extends EnumResourceBundle<MessageKeys> {
+public class Messages extends EnumResourceBundle<MessageKey> {
 
-	private static final EnumMap<MessageKeys, String> map = new EnumMap<MessageKeys, String>(MessageKeys.class);
+	private static final EnumMap<MessageKey, String> map = new EnumMap<MessageKey, String>(MessageKey.class);
 	// TODO make map unmodifiable
 	static {
-		map.put(MessageKeys.last_name, "The Last Name or Family Name");
-		map.put(MessageKeys.ok, "Confirm this Value is OK");
-		map.put(MessageKeys.small_font, "Use a Small Font");
+		map.put(MessageKey.last_name, "The Last Name or Family Name");
+		map.put(MessageKey.ok, "Confirm this Value is OK");
+		map.put(MessageKey.small_font, "Use a Small Font");
 	}
 
 	@Override
-	public EnumMap<MessageKeys, String> getMap() {
+	public EnumMap<MessageKey, String> getMap() {
 		return map;
 	}
 

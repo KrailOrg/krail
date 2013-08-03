@@ -32,14 +32,14 @@ import com.vaadin.data.Property;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface I18N {
-	LabelKeys caption() default LabelKeys._nullkey_;
+	LabelKey caption() default LabelKey._nullkey_;
 
-	DescriptionKeys description() default DescriptionKeys._nullkey_;
+	DescriptionKey description() default DescriptionKey._nullkey_;
 
 	/**
 	 * Usually only used with Vaadin Labels
 	 * 
 	 * @return
 	 */
-	DescriptionKeys value() default DescriptionKeys._nullkey_;
+	DescriptionKey value() default DescriptionKey._nullkey_;
 }

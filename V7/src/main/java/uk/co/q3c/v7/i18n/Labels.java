@@ -23,25 +23,25 @@ import java.util.EnumMap;
  * <li>{@link Messages} : contains parameters Typically used for tooltips. For short labels {@link Labels} is used, and
  * for values containing parameters, Messages is used.
  * 
- * @see LabelKeys
+ * @see LabelKey
  * @author David Sowerby 9 Feb 2013
  * 
  */
-public class Labels extends EnumResourceBundle<LabelKeys> {
+public class Labels extends EnumResourceBundle<LabelKey> {
 
-	private static final EnumMap<LabelKeys, String> map = new EnumMap<LabelKeys, String>(LabelKeys.class);
+	private static final EnumMap<LabelKey, String> map = new EnumMap<LabelKey, String>(LabelKey.class);
 	// TODO make map unmodifiable
 	static {
-		map.put(LabelKeys.ok, "ok");
-		map.put(LabelKeys.cancel, "cancel");
-		map.put(LabelKeys.first_name, "first name");
-		map.put(LabelKeys.last_name, "last name");
-		map.put(LabelKeys.small, "small");
+		map.put(LabelKey.ok, "ok");
+		map.put(LabelKey.cancel, "cancel");
+		map.put(LabelKey.first_name, "first name");
+		map.put(LabelKey.last_name, "last name");
+		map.put(LabelKey.small, "small");
 
 	}
 
 	@Override
-	public EnumMap<LabelKeys, String> getMap() {
+	public EnumMap<LabelKey, String> getMap() {
 		return map;
 	}
 

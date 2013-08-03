@@ -23,18 +23,18 @@ import java.util.EnumMap;
  */
 public class Labels_de extends Labels {
 
-	private static final EnumMap<LabelKeys, String> map = new EnumMap<LabelKeys, String>(LabelKeys.class);
+	private static final EnumMap<LabelKey, String> map = new EnumMap<LabelKey, String>(LabelKey.class);
 	// TODO make map unmodifiable
 	static {
 
-		map.put(LabelKeys.cancel, "stornieren");
-		map.put(LabelKeys.small, "klein");
-		map.put(LabelKeys.first_name, "vorname");
-		map.put(LabelKeys.last_name, "nachname");
+		map.put(LabelKey.cancel, "stornieren");
+		map.put(LabelKey.small, "klein");
+		map.put(LabelKey.first_name, "vorname");
+		map.put(LabelKey.last_name, "nachname");
 	}
 
 	@Override
-	public EnumMap<LabelKeys, String> getMap() {
+	public EnumMap<LabelKey, String> getMap() {
 		return map;
 	}
 
