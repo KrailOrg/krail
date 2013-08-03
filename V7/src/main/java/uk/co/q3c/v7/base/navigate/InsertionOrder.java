@@ -10,17 +10,21 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.shiro;
+package uk.co.q3c.v7.base.navigate;
 
-import static org.junit.Assert.*;
+import java.util.Comparator;
 
-import org.junit.Test;
-
-public class URIPermissionFactoryTest {
-
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+/**
+ * Comparator which can be used to sort SitemapNode by insertion order, based on {@link SitemapNode#getId()}
+ */
+public class InsertionOrder implements Comparator<SitemapNode> {
+	/**
+	 * 
+	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+	 */
+	@Override
+	public int compare(SitemapNode o1, SitemapNode o2) {
+		return o1.getId() - o2.getId();
 	}
 
 }

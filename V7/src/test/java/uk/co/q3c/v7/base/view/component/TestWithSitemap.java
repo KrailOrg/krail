@@ -12,6 +12,9 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import java.text.Collator;
+import java.util.Locale;
+
 import org.junit.Before;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
@@ -31,9 +34,13 @@ public class TestWithSitemap {
 	protected SitemapNode newNode5;
 	protected SitemapNode newNode6;
 
+	Locale locale = Locale.UK;
+	Collator collator;
+
 	@Before
 	public void setup() {
 		sitemap = new Sitemap();
+		collator = Collator.getInstance(locale);
 	}
 
 	protected void buildSitemap(int i) {
@@ -59,16 +66,16 @@ public class TestWithSitemap {
 
 		case 3:
 			newNode1 = newNode("public");
-			newNode1.setLabelKey(StandardPageKey.Public_Home);
+			newNode1.setLabelKey(StandardPageKey.Public_Home, locale, collator);
 			newNode2 = newNode("logout");
-			newNode2.setLabelKey(StandardPageKey.Logout);
+			newNode2.setLabelKey(StandardPageKey.Logout, locale, collator);
 			sitemap.addChild(newNode1, newNode2);
 			break;
 		case 4:
 			newNode1 = newNode("public");
-			newNode1.setLabelKey(StandardPageKey.Public_Home);
+			newNode1.setLabelKey(StandardPageKey.Public_Home, locale, collator);
 			newNode2 = newNode("logout");
-			newNode2.setLabelKey(StandardPageKey.Logout);
+			newNode2.setLabelKey(StandardPageKey.Logout, locale, collator);
 			newNode3 = newNode("private");
 			newNode4 = newNode("wiggly");
 			sitemap.addChild(newNode1, newNode2);
@@ -81,7 +88,7 @@ public class TestWithSitemap {
 
 	protected SitemapNode newNode(String urlSegment) {
 		SitemapNode node0 = new SitemapNode();
-		node0.setLabelKey(TestLabelKeys.Home);
+		node0.setLabelKey(TestLabelKeys.Home, locale, collator);
 		node0.setUriSegment(urlSegment);
 		node0.setViewClass(PublicHomeView.class);
 		return node0;

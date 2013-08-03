@@ -6,7 +6,9 @@ import static org.mockito.Mockito.*;
 
 import java.util.Map;
 
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.Subject;
+import org.fest.assertions.Fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -439,15 +441,19 @@ public class DefaultV7NavigatorTest {
 		assertThat(navigator.getNavigationState()).isEqualTo(page2);
 	}
 
-	@Test
+	@Test(expected = AuthorizationException.class)
 	public void privatePage() {
 
 		// given
+		String page = "public/view2";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(view2Pro);
+		when(view2Pro.get()).thenReturn(view2);
 		when(sitemapURIConverter.pageIsPublic(anyString())).thenReturn(false);
 		// when
-
+		navigator.navigateTo(page);
 		// then
-		assertThat(false).isEqualTo(true);
+		Fail.fail("Exception was expected");
 
 	}
 }

@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
@@ -19,8 +22,18 @@ import uk.co.q3c.v7.base.view.RequestSystemAccountResetView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountView;
 import uk.co.q3c.v7.base.view.SystemAccountView;
+import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.TestLabelKeys;
 
+import com.google.inject.AbstractModule;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
 public class StandardPageBuilderTest {
 
 	private StandardPageBuilder builder;
@@ -28,9 +41,12 @@ public class StandardPageBuilderTest {
 	private SitemapURIConverter converter;
 	private URIFragmentHandler uriHandler;
 
+	@Inject
+	CurrentLocale currentLocale;
+
 	@Before
 	public void setup() {
-		builder = new StandardPageBuilder();
+		builder = new StandardPageBuilder(currentLocale);
 		sitemap = new Sitemap();
 		uriHandler = new StrictURIFragmentHandler();
 		converter = new SitemapURIConverter(sitemap, uriHandler);
@@ -240,4 +256,17 @@ public class StandardPageBuilderTest {
 		assertThat(builder.getSitemap().uri(node)).isEqualTo("almost/different");
 
 	}
+
+	@ModuleProvider
+	protected AbstractModule module() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+			}
+
+		};
+	}
+
 }

@@ -12,6 +12,10 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
+import java.text.CollationKey;
+import java.text.Collator;
+import java.util.Locale;
+
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKeys;
 
@@ -25,7 +29,17 @@ import uk.co.q3c.v7.i18n.I18NKeys;
  * <p>
  * The {@link #id} is required because the URI segment alone may not be unique, and the view class and labelKey are
  * optional. For the node to be used in a graph, it needs a unique identifier. The id is provided by
- * {@link Sitemap#addChild(SitemapNode, SitemapNode)} and {@link Sitemap#addNode(SitemapNode)}
+ * {@link Sitemap#addChild(SitemapNode, SitemapNode)} and {@link Sitemap#addNode(SitemapNode)}. This field has an
+ * additional purpose in providing a record of insertion order, so that nodes can be sorted by insertion order if
+ * required.
+ * <p>
+ * To enable locale sensitive sorting of nodes - for example within a UserNavigationTree - a collation key from
+ * {@link Collator} is added by the {@link #setLabelKey(I18NKeys, Locale, Collator)} method. This means the collation
+ * key generally created only once, is available for sorting as often as needed, and will only need to be updated when
+ * if locale or labelKey changes. This approach also takes advantage of the improved performance of the collation key
+ * sorting (http://docs.oracle.com/javase/tutorial/i18n/text/perform.html)
+ * <p>
+ * Sorting by insertion order or collation key order is provided by
  * 
  * @author David Sowerby 6 May 2013
  * 
@@ -35,14 +49,16 @@ public class SitemapNode {
 	private int id;
 	private String uriSegment;
 	private Class<? extends V7View> viewClass;
-	private Enum<? extends I18NKeys<?>> labelKey;
+	private I18NKeys<?> labelKey;
 	private String label;
+	private CollationKey collationKey;
 
-	public SitemapNode(String uriSegment, Class<? extends V7View> viewClass, Enum<? extends I18NKeys<?>> labelKey) {
+	public SitemapNode(String uriSegment, Class<? extends V7View> viewClass, I18NKeys<?> labelKey, Locale locale,
+			Collator collator) {
 		super();
 		this.uriSegment = uriSegment;
 		this.viewClass = viewClass;
-		this.labelKey = labelKey;
+		setLabelKey(labelKey, locale, collator);
 	}
 
 	public SitemapNode() {
@@ -57,12 +73,21 @@ public class SitemapNode {
 		this.uriSegment = uriSegment;
 	}
 
-	public Enum<? extends I18NKeys<?>> getLabelKey() {
+	public I18NKeys<?> getLabelKey() {
 		return labelKey;
 	}
 
-	public void setLabelKey(Enum<? extends I18NKeys<?>> labelKey) {
+	/**
+	 * Sets the label key, but also requires the locale to enable translation for the label, and Collator for the
+	 * collation key
+	 * 
+	 * @param labelKey
+	 * @param locale
+	 */
+	public void setLabelKey(I18NKeys<?> labelKey, Locale locale, Collator collator) {
 		this.labelKey = labelKey;
+		label = labelKey.getValue(locale);
+		collationKey = collator.getCollationKey(label);
 	}
 
 	public Class<? extends V7View> getViewClass() {
@@ -77,7 +102,7 @@ public class SitemapNode {
 		StringBuilder buf = new StringBuilder();
 		buf.append((uriSegment == null) ? "no segment given" : uriSegment);
 		buf.append((viewClass == null) ? "" : "\t\t:  " + viewClass.getSimpleName());
-		buf.append((labelKey == null) ? "" : "\t~  " + labelKey.name());
+		buf.append((labelKey == null) ? "" : "\t~  " + ((Enum<?>) labelKey).name());
 		return buf.toString();
 
 	}
@@ -90,7 +115,7 @@ public class SitemapNode {
 		buf.append(", viewClass=");
 		buf.append((viewClass == null) ? "null" : viewClass.getName());
 		buf.append(", labelKey=");
-		buf.append((labelKey == null) ? "null" : labelKey.name());
+		buf.append((labelKey == null) ? "null" : ((Enum<?>) labelKey).name());
 		return buf.toString();
 	}
 
@@ -126,7 +151,8 @@ public class SitemapNode {
 		return label;
 	}
 
-	public void setLabel(String label) {
-		this.label = label;
+	public CollationKey getCollationKey() {
+		return collationKey;
 	}
+
 }
