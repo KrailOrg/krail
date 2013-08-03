@@ -5,4 +5,4 @@ target/
 .classpath
 widgetsets
 build
-V7/build/
+build/
