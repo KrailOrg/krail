@@ -18,13 +18,16 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 
+import uk.co.q3c.v7.base.navigate.InvalidURIException;
+import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
+
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorEvent;
 
 /**
- * Extends the {@link DefaultErrorHandler} to intercept Shiro related exceptions
- * - {@link UnauthorizedException} and {@link UnauthenticatedException}. Uses
- * pluggable handlers for both.
+ * Extends the {@link DefaultErrorHandler} to intercept known V& exceptions, including Shiro related exceptions -
+ * {@link UnauthorizedException} and {@link UnauthenticatedException}. Uses pluggable handlers for all caught
+ * exceptions.
  * 
  * @author David Sowerby 4 Jan 2013
  * 
@@ -33,33 +36,39 @@ public class V7ErrorHandler extends DefaultErrorHandler {
 
 	private final UnauthenticatedExceptionHandler authenticationHandler;
 	private final UnauthorizedExceptionHandler authorisationHandler;
+	private final InvalidURIExceptionHandler invalidUriHandler;
 
 	@Inject
-	protected V7ErrorHandler(
-			UnauthenticatedExceptionHandler authenticationHandler,
-			UnauthorizedExceptionHandler authorisationHandler) {
+	protected V7ErrorHandler(UnauthenticatedExceptionHandler authenticationHandler,
+			UnauthorizedExceptionHandler authorisationHandler, InvalidURIExceptionHandler invalidUriHandler) {
 		super();
 		this.authenticationHandler = authenticationHandler;
 		this.authorisationHandler = authorisationHandler;
+		this.invalidUriHandler = invalidUriHandler;
 	}
 
 	@Override
 	public void error(ErrorEvent event) {
 		Throwable originalError = event.getThrowable();
 
-		// handle an unauthorised access attempt
-		int unauthorised = ExceptionUtils.indexOfThrowable(originalError,
-				UnauthorizedException.class);
-		if (unauthorised >= 0) {
-			authorisationHandler.invoke();
+		// handle an attempt to navigate to an invalid page
+		int invalidURI = ExceptionUtils.indexOfThrowable(originalError, InvalidURIException.class);
+		if (invalidURI >= 0) {
+			invalidUriHandler.invoke();
 			return;
 		}
 
 		// handle an unauthenticated access attempt
-		int unauthenticated = ExceptionUtils.indexOfThrowable(originalError,
-				UnauthenticatedException.class);
+		int unauthenticated = ExceptionUtils.indexOfThrowable(originalError, UnauthenticatedException.class);
 		if (unauthenticated >= 0) {
 			authenticationHandler.invoke();
+			return;
+		}
+
+		// handle an unauthorised access attempt
+		int unauthorised = ExceptionUtils.indexOfThrowable(originalError, UnauthorizedException.class);
+		if (unauthorised >= 0) {
+			authorisationHandler.invoke();
 			return;
 		}
 

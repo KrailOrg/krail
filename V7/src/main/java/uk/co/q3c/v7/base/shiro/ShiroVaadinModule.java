@@ -3,6 +3,9 @@ package uk.co.q3c.v7.base.shiro;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.ShiroException;
 
+import uk.co.q3c.v7.base.navigate.DefaultInvalidURIExceptionHandler;
+import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.vaadin.server.DefaultErrorHandler;
@@ -20,10 +23,19 @@ public class ShiroVaadinModule extends AbstractModule {
 		bindUnauthenticatedHandler();
 		bindUnauthorisedHandler();
 		bindLoginExceptionsHandler();
+		bindInvalidURIHandler();
 	}
 
 	/**
-	 * error handler for the VaadinSession, needed to handle Shiro exceptions
+	 * the {@link DefaultErrorHandler} calls this handler in response to an attempt to navigate to an invalid URI. If
+	 * you have defined your own ErrorHandler you may of course do something different
+	 */
+	protected void bindInvalidURIHandler() {
+		bind(InvalidURIExceptionHandler.class).to(DefaultInvalidURIExceptionHandler.class);
+	}
+
+	/**
+	 * error handler for the VaadinSession, handles V7 (and therefore Shiro) exceptions
 	 */
 	protected void bindErrorHandler() {
 		bind(ErrorHandler.class).to(V7ErrorHandler.class);

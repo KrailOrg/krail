@@ -15,11 +15,15 @@ package uk.co.q3c.v7.i18n;
 import java.util.EnumMap;
 
 /**
- * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely
- * defined as containing those value which are short, contain no parameters and are typically used for captions and
- * labels. They can of course be used anywhere.
+ * The base for the resource bundle of {@link Labels}. The separation between them is arbitrary, but helps break down
+ * what could other wise be long lists, and only one of them needs to look up parameter values:
+ * <ol>
+ * <li>{@link Labels} : short, usually one or two words, no parameters, generally used as captions
+ * <li>{@link Descriptions} : longer, typically several words, no parameters, generally used in tooltips
+ * <li>{@link Messages} : contains parameters Typically used for tooltips. For short labels {@link Labels} is used, and
+ * for values containing parameters, Messages is used.
  * 
- * 
+ * @see LabelKeys
  * @author David Sowerby 9 Feb 2013
  * 
  */

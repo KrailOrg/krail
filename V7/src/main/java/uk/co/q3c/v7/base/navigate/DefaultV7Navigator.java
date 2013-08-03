@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,8 +93,9 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		Provider<V7View> provider = viewProMap.get(viewName);
 		V7View view = null;
 		if (provider == null) {
-			log.debug("View not found for page '{}'" + revisedFragment);
-			view = errorViewPro.get();
+			String msg = "View not found for page '" + revisedFragment + "'";
+			log.debug(msg);
+			throw new InvalidURIException(msg);
 		} else {
 			view = provider.get();
 		}
@@ -152,7 +154,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		if (subjectPro.get().isPermitted(permission)) {
 			changeView(view, viewName, fragment);
 		} else {
-			throw new AuthorizationException(fragment);
+			throw new UnauthorizedException(fragment);
 		}
 
 	}

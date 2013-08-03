@@ -9,7 +9,7 @@ public class DefaultUnauthenticatedExceptionHandler implements UnauthenticatedEx
 	// TODO i18N
 	@Override
 	public void invoke() {
-		Notification n = new Notification("Authentication", "You have not logged in", Notification.TYPE_ERROR_MESSAGE,
+		Notification n = new Notification("Authentication", "You have not logged in", Notification.Type.ERROR_MESSAGE,
 				false);
 		n.show(Page.getCurrent());
 	}
