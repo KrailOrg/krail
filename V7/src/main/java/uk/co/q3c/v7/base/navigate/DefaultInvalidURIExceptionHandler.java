@@ -14,25 +14,25 @@ package uk.co.q3c.v7.base.navigate;
 
 import javax.inject.Inject;
 
-import com.vaadin.server.Page;
-import com.vaadin.ui.Notification;
+import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.i18n.MessageKey;
+import uk.co.q3c.v7.i18n.Notifier;
 
 public class DefaultInvalidURIExceptionHandler implements InvalidURIExceptionHandler {
 
 	private final V7Navigator navigator;
+	private final Notifier notifier;
 
 	@Inject
-	protected DefaultInvalidURIExceptionHandler(V7Navigator navigator) {
+	protected DefaultInvalidURIExceptionHandler(V7Navigator navigator, Notifier notifier) {
 		super();
 		this.navigator = navigator;
+		this.notifier = notifier;
 	}
 
-	// TODO I18N
 	@Override
 	public void invoke() {
-		Notification n = new Notification("Invalid page", navigator.getNavigationState() + " is not a valid page",
-				Notification.Type.HUMANIZED_MESSAGE, false);
-		n.show(Page.getCurrent());
+		notifier.notify(LabelKey.Invalid_Page, MessageKey.invalidURI, navigator.getNavigationState());
 	}
 
 }

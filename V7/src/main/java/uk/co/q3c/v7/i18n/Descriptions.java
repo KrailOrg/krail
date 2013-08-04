@@ -29,13 +29,12 @@ import java.util.EnumMap;
  */
 public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 
-	private static final EnumMap<DescriptionKey, String> map = new EnumMap<DescriptionKey, String>(
-			DescriptionKey.class);
+	private static final EnumMap<DescriptionKey, String> map = new EnumMap<DescriptionKey, String>(DescriptionKey.class);
 	// TODO make map unmodifiable
 	static {
-		map.put(DescriptionKey.last_name, "the last name or family name");
-		map.put(DescriptionKey.ok, "confirm this value is ok");
-		map.put(DescriptionKey.small_font, "use a small font");
+		map.put(DescriptionKey.Last_Name, "the last name or family name");
+		map.put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok");
+		map.put(DescriptionKey.No_Permission, "You do not have permission for that action");
 	}
 
 	@Override

@@ -18,9 +18,8 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 /**
- * A utility class to retrieve an I18N value from a key. The same can be achieved using
- * {@link I18NKey#getValue(Locale)}, this class simply provides a slightly neater syntax, and a method for expanding a
- * pattern with parameters.
+ * A utility class to retrieve an I18N value from a key. The same can be achieved using {@link I18NKey#getValue(Locale)}
+ * , this class simply provides a slightly neater syntax, and a method for expanding a pattern with parameters.
  * 
  * @author David Sowerby 3 Aug 2013
  * 
@@ -37,6 +36,9 @@ public class I18NValue {
 
 	public String message(Locale locale, I18NKey<?> key, Object... arguments) {
 		String pattern = key.getValue(locale);
+		if (pattern == null) {
+			return key.name().replace("_", " ");
+		}
 		if ((arguments == null) || (arguments.length == 0)) {
 			return pattern;
 		}

@@ -17,10 +17,12 @@ import java.util.ResourceBundle;
 
 public enum DescriptionKey implements I18NKey<Descriptions> {
 	_nullkey_,
-	last_name,
-	ok,
-	small_font;
-
+	Confirm_Ok,
+	Last_Name,
+	No_Permission,
+	You_have_not_logged_in,
+	// Small_Font;
+	;
 	@Override
 	public Descriptions getBundle(Locale locale) {
 		ResourceBundle bundle = ResourceBundle.getBundle(Descriptions.class.getName(), locale);

@@ -21,4 +21,6 @@ public interface I18NKey<E extends EnumResourceBundle<?>> {
 	String getValue(Locale locale);
 
 	boolean isNullKey();
+
+	String name();
 }

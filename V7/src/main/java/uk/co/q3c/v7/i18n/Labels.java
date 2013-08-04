@@ -32,11 +32,11 @@ public class Labels extends EnumResourceBundle<LabelKey> {
 	private static final EnumMap<LabelKey, String> map = new EnumMap<LabelKey, String>(LabelKey.class);
 	// TODO make map unmodifiable
 	static {
-		map.put(LabelKey.ok, "ok");
-		map.put(LabelKey.cancel, "cancel");
-		map.put(LabelKey.first_name, "first name");
-		map.put(LabelKey.last_name, "last name");
-		map.put(LabelKey.small, "small");
+		map.put(LabelKey.Ok, "Ok");
+		map.put(LabelKey.Cancel, "Cancel");
+		map.put(LabelKey.First_Name, "First Name");
+		map.put(LabelKey.Last_Name, "Last Name");
+		map.put(LabelKey.Small, "Small");
 
 	}
 

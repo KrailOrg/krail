@@ -42,9 +42,9 @@ public class LabelKeyForNameTest {
 		LabelKeyForName lkfn = new LabelKeyForName(LabelKey.class);
 		Set<String> missingEnums = new HashSet<>();
 		// when
-		Object result = lkfn.keyForName("first_name", missingEnums);
+		Object result = lkfn.keyForName("First_Name", missingEnums);
 		// then
-		assertThat(result).isEqualTo(LabelKey.first_name);
+		assertThat(result).isEqualTo(LabelKey.First_Name);
 		assertThat(missingEnums).isEmpty();
 
 	}

@@ -22,13 +22,16 @@ import java.util.ResourceBundle;
  */
 public enum LabelKey implements I18NKey<Labels> {
 	_nullkey_,
-	cancel,
-	first_name,
-	last_name,
-	ok,
-	small
-
-	;
+	Authentication,
+	Authorisation,
+	Cancel,
+	First_Name,
+	Invalid_Page,
+	Last_Name,
+	No,
+	Ok,
+	Small,
+	Yes, ;
 
 	@Override
 	public Labels getBundle(Locale locale) {
@@ -38,7 +41,8 @@ public enum LabelKey implements I18NKey<Labels> {
 
 	@Override
 	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
+		String value = getBundle(locale).getValue(this);
+		return value;
 	}
 
 	@Override

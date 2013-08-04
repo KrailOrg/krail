@@ -22,9 +22,9 @@ import com.vaadin.ui.TextField;
 
 public class TestBeanFieldSet extends EntityFieldSet<TestEntity> {
 
-	@I18N(caption = LabelKey.first_name)
+	@I18N(caption = LabelKey.First_Name)
 	private TextField firstName;
-	@I18N(caption = LabelKey.last_name, description = DescriptionKey.last_name)
+	@I18N(caption = LabelKey.Last_Name, description = DescriptionKey.Last_Name)
 	private TextField lastName;
 
 	protected TestBeanFieldSet(AnnotationI18NTranslator translator) {

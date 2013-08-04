@@ -27,10 +27,10 @@ public class Labels_de extends Labels {
 	// TODO make map unmodifiable
 	static {
 
-		map.put(LabelKey.cancel, "stornieren");
-		map.put(LabelKey.small, "klein");
-		map.put(LabelKey.first_name, "vorname");
-		map.put(LabelKey.last_name, "nachname");
+		map.put(LabelKey.Cancel, "Stornieren");
+		map.put(LabelKey.Small, "Klein");
+		map.put(LabelKey.First_Name, "Vorname");
+		map.put(LabelKey.Last_Name, "Nachname");
 	}
 
 	@Override

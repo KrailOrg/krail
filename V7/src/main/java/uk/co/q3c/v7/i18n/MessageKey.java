@@ -17,9 +17,9 @@ import java.util.ResourceBundle;
 
 public enum MessageKey implements I18NKey<Messages> {
 	_nullkey_,
-	last_name,
-	ok,
-	small_font;
+	invalidURI,
+
+	;
 
 	@Override
 	public Messages getBundle(Locale locale) {

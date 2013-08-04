@@ -32,9 +32,7 @@ public class Messages extends EnumResourceBundle<MessageKey> {
 	private static final EnumMap<MessageKey, String> map = new EnumMap<MessageKey, String>(MessageKey.class);
 	// TODO make map unmodifiable
 	static {
-		map.put(MessageKey.last_name, "The Last Name or Family Name");
-		map.put(MessageKey.ok, "Confirm this Value is OK");
-		map.put(MessageKey.small_font, "Use a Small Font");
+		map.put(MessageKey.invalidURI, "{0} is not a valid page");
 	}
 
 	@Override
