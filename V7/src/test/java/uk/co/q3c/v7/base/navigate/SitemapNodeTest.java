@@ -20,7 +20,7 @@ import java.util.Locale;
 import org.junit.Test;
 
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.i18n.TestLabelKeys;
+import uk.co.q3c.v7.i18n.TestLabelKey;
 
 public class SitemapNodeTest {
 
@@ -33,9 +33,9 @@ public class SitemapNodeTest {
 		Collator collator = Collator.getInstance(locale);
 		// when
 
-		node.setLabelKey(TestLabelKeys.Yes, locale, collator);
+		node.setLabelKey(TestLabelKey.Yes, locale, collator);
 		// then
-		assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Yes);
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
 		assertThat(node.getLabel()).isEqualTo("Yes");
 		assertThat(node.getCollationKey()).isEqualTo(collator.getCollationKey("Yes"));
 	}
@@ -49,9 +49,9 @@ public class SitemapNodeTest {
 		Collator collator = Collator.getInstance(locale);
 		// when
 
-		node.setLabelKey(TestLabelKeys.Yes, locale, collator);
+		node.setLabelKey(TestLabelKey.Yes, locale, collator);
 		// then
-		assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Yes);
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
 		assertThat(node.getLabel()).isEqualTo("Ja");
 		assertThat(node.getCollationKey()).isEqualTo(collator.getCollationKey("Ja"));
 	}
@@ -64,11 +64,11 @@ public class SitemapNodeTest {
 		Collator collator = Collator.getInstance(locale);
 
 		// when
-		SitemapNode node = new SitemapNode("one", PublicHomeView.class, TestLabelKeys.Yes, locale, collator);
+		SitemapNode node = new SitemapNode("one", PublicHomeView.class, TestLabelKey.Yes, locale, collator);
 		// then
 		assertThat(node.getUriSegment()).isEqualTo("one");
 		assertThat(node.getViewClass()).isEqualTo(PublicHomeView.class);
-		assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Yes);
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
 		assertThat(node.getLabel()).isEqualTo("Yes");
 		assertThat(node.getCollationKey()).isEqualTo(collator.getCollationKey("Yes"));
 
@@ -82,7 +82,7 @@ public class SitemapNodeTest {
 		Collator collator = Collator.getInstance(locale);
 
 		// when
-		SitemapNode node = new SitemapNode("one", PublicHomeView.class, TestLabelKeys.Yes, locale, collator);
+		SitemapNode node = new SitemapNode("one", PublicHomeView.class, TestLabelKey.Yes, locale, collator);
 		// then
 		assertThat(node.getUriSegment()).isEqualTo("one");
 		assertThat(node.getViewClass()).isEqualTo(PublicHomeView.class);

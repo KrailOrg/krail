@@ -21,7 +21,7 @@ import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.i18n.TestLabelKeys;
+import uk.co.q3c.v7.i18n.TestLabelKey;
 
 public class TestWithSitemap {
 
@@ -88,7 +88,7 @@ public class TestWithSitemap {
 
 	protected SitemapNode newNode(String urlSegment) {
 		SitemapNode node0 = new SitemapNode();
-		node0.setLabelKey(TestLabelKeys.Home, locale, collator);
+		node0.setLabelKey(TestLabelKey.Home, locale, collator);
 		node0.setUriSegment(urlSegment);
 		node0.setViewClass(PublicHomeView.class);
 		return node0;

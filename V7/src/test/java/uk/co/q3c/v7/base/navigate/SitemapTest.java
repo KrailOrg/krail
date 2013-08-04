@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.i18n.TestLabelKeys;
+import uk.co.q3c.v7.i18n.TestLabelKey;
 
 public class SitemapTest {
 
@@ -34,9 +34,9 @@ public class SitemapTest {
 		Locale locale = Locale.UK;
 		Collator collator = Collator.getInstance(locale);
 		Sitemap map = new Sitemap();
-		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, TestLabelKeys.Home, locale, collator);
-		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, TestLabelKeys.Home, locale, collator);
-		SitemapNode child = new SitemapNode("login", LoginView.class, TestLabelKeys.Login, locale, collator);
+		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, TestLabelKey.Home, locale, collator);
+		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, TestLabelKey.Home, locale, collator);
+		SitemapNode child = new SitemapNode("login", LoginView.class, TestLabelKey.Login, locale, collator);
 		map.addChild(grandparent, parent);
 		map.addChild(parent, child);
 		// when

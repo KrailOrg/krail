@@ -12,37 +12,14 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
 
-public enum TestLabelKeys implements I18NKey<TestLabels> {
+public enum TestLabelKey_Invalid {
 
 	_nullkey_,
-	Home,
-	Transfers,
-	Login,
-	MoneyInOut,
-	Private,
-	Public,
-	Opt,
-	Yes,
-	No,
-	View1,
-	View2;
+	home,
+	transfers,
+	login,
+	moneyInOut,
+	opt;
 
-	@Override
-	public TestLabels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(TestLabels.class.getName(), locale);
-		return (TestLabels) bundle;
-	}
-
-	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
-	}
-
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
-	}
 }

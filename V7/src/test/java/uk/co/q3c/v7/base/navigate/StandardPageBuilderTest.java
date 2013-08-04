@@ -25,7 +25,7 @@ import uk.co.q3c.v7.base.view.SystemAccountView;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NTranslator;
-import uk.co.q3c.v7.i18n.TestLabelKeys;
+import uk.co.q3c.v7.i18n.TestLabelKey;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -187,7 +187,7 @@ public class StandardPageBuilderTest {
 		// given
 		List<String> pageMappings = new ArrayList<>();
 		pageMappings.add("Public_Home=public  ~ Yes");
-		builder.setLabelKeysClass(TestLabelKeys.class);
+		builder.setLabelKeysClass(TestLabelKey.class);
 
 		// when
 		builder.setPageMappings(pageMappings);
@@ -196,7 +196,7 @@ public class StandardPageBuilderTest {
 		// then
 		assertThat(node).isNotNull();
 		assertThat(standardPages.get(StandardPageKey.Public_Home)).isEqualTo("public");
-		assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Yes);
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
 		assertThat(node.getUriSegment()).isEqualTo("public");
 		assertThat(node.getViewClass()).isEqualTo(builder.viewClass(StandardPageKey.Public_Home));
 		assertThat(builder.getSitemap().uri(node)).isEqualTo("public");
@@ -209,7 +209,7 @@ public class StandardPageBuilderTest {
 		// given
 		List<String> pageMappings = new ArrayList<>();
 		pageMappings.add("Public_Home=  wildly/different  ~ Yes");
-		builder.setLabelKeysClass(TestLabelKeys.class);
+		builder.setLabelKeysClass(TestLabelKey.class);
 
 		// when
 		builder.setPageMappings(pageMappings);
@@ -218,7 +218,7 @@ public class StandardPageBuilderTest {
 		// then
 		assertThat(node).isNotNull();
 		assertThat(standardPages.get(StandardPageKey.Public_Home)).isEqualTo("wildly/different");
-		assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Yes);
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
 		assertThat(node.getUriSegment()).isEqualTo("different");
 		assertThat(node.getViewClass()).isEqualTo(builder.viewClass(StandardPageKey.Public_Home));
 		assertThat(builder.getSitemap().uri(node)).isEqualTo("wildly/different");
@@ -232,7 +232,7 @@ public class StandardPageBuilderTest {
 		List<String> pageMappings = new ArrayList<>();
 		pageMappings.add("Public_Home=  wildly/different  ~ Yes");
 		pageMappings.add("Private_Home=  almost/different  ~ No");
-		builder.setLabelKeysClass(TestLabelKeys.class);
+		builder.setLabelKeysClass(TestLabelKey.class);
 
 		// when
 		builder.setPageMappings(pageMappings);
@@ -241,7 +241,7 @@ public class StandardPageBuilderTest {
 		// then
 		assertThat(node).isNotNull();
 		assertThat(standardPages.get(StandardPageKey.Public_Home)).isEqualTo("wildly/different");
-		assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Yes);
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
 		assertThat(node.getUriSegment()).isEqualTo("different");
 		assertThat(node.getViewClass()).isEqualTo(builder.viewClass(StandardPageKey.Public_Home));
 		assertThat(builder.getSitemap().uri(node)).isEqualTo("wildly/different");
@@ -250,7 +250,7 @@ public class StandardPageBuilderTest {
 		// then
 		assertThat(node).isNotNull();
 		assertThat(standardPages.get(StandardPageKey.Private_Home)).isEqualTo("almost/different");
-		assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.No);
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.No);
 		assertThat(node.getUriSegment()).isEqualTo("different");
 		assertThat(node.getViewClass()).isEqualTo(builder.viewClass(StandardPageKey.Private_Home));
 		assertThat(builder.getSitemap().uri(node)).isEqualTo("almost/different");

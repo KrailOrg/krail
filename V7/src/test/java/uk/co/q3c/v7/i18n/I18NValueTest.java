@@ -50,7 +50,7 @@ public class I18NValueTest {
 		// current locale is UK
 
 		// when
-		String result = i18NValue.message(TestLabelKeys.Login);
+		String result = i18NValue.message(TestLabelKey.Login);
 
 		// then
 		assertThat(result).isEqualTo("Login");

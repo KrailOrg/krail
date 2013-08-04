@@ -27,7 +27,7 @@ public class I18NTestClass implements I18NListener {
 	@I18N(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
 	private final Table table;
 
-	@TestI18N(caption = TestLabelKeys.Yes, description = TestLabelKeys.Yes, value = TestLabelKeys.No)
+	@TestI18N(caption = TestLabelKey.Yes, description = TestLabelKey.Yes, value = TestLabelKey.No)
 	private final Label demoLabel;
 
 	private final TestCompositeComponent ccs;
