@@ -362,4 +362,9 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		navigateTo(url);
 	}
 
+	@Override
+	public void error() {
+		changeView(errorViewPro.get(), "ErrorView", "error");
+	}
+
 }

@@ -456,4 +456,16 @@ public class DefaultV7NavigatorTest {
 		Fail.fail("Exception was expected");
 
 	}
+
+	@Test
+	public void error() {
+
+		// given
+
+		// when
+		navigator.error();
+		// then
+		assertThat(navigator.getCurrentView()).isInstanceOf(ErrorView.class);
+
+	}
 }
