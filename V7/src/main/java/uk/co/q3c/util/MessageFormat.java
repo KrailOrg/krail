@@ -40,11 +40,11 @@ public class MessageFormat {
 	 * pattern string of the format:
 	 * <p>
 	 * <ul>
-	 * <i>this is a {1} pattern where the {0} can be in any {2}</i>
+	 * <em>this is a {1} pattern where the {0} can be in any {2}</i>
 	 * </ul>
 	 * and arguments
 	 * <ul>
-	 * <i>parameters, simple, order</i>
+	 * <i>parameters, simple, order</em>
 	 * </ul>
 	 * will result in
 	 * <ul>

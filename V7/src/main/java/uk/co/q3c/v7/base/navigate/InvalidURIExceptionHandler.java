@@ -10,24 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.i18n;
+package uk.co.q3c.v7.base.navigate;
 
-import java.lang.annotation.Annotation;
+public interface InvalidURIExceptionHandler {
 
-public class TestI18Nreader implements I18NAnnotationReader {
-
-	@Override
-	public I18NKey<?> caption(Annotation annotation) {
-		return ((TestI18N) annotation).caption();
-	}
-
-	@Override
-	public I18NKey<?> description(Annotation annotation) {
-		return ((TestI18N) annotation).description();
-	}
-
-	@Override
-	public I18NKey<?> value(Annotation annotation) {
-		return ((TestI18N) annotation).value();
-	}
+	public void invoke();
 }

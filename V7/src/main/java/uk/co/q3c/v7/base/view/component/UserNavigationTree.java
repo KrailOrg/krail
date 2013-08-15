@@ -33,7 +33,7 @@ import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.useropt.UserOption;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NKeys;
+import uk.co.q3c.v7.i18n.I18NKey;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
@@ -50,14 +50,15 @@ public class UserNavigationTree extends Tree {
 	private static Logger log = LoggerFactory.getLogger(UserNavigationTree.class);
 	private final CurrentLocale currentLocale;
 	private final Sitemap sitemap;
-	private int maxLevel = -1;
+	private int maxLevel;
 	private int level;
 	private final V7Navigator navigator;
 	private final Provider<Subject> subjectPro;
 	private final DefaultURIPermissionFactory uriPermissionFactory;
 	private boolean sorted;
 	private final UserOption userOption;
-	private static final String sortedOpt = "sorted";
+	public static final String sortedOpt = "sorted";
+	public static final String maxLevelOpt = "maxLevel";
 
 	@Inject
 	protected UserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator,
@@ -73,6 +74,7 @@ public class UserNavigationTree extends Tree {
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		// set user option
 		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, false);
+		maxLevel = userOption.getOptionAsInt(this.getClass().getSimpleName(), maxLevelOpt, -1);
 		addValueChangeListener(this);
 
 		loadNodes();
@@ -117,7 +119,7 @@ public class UserNavigationTree extends Tree {
 		if (publicBranch || subjectPro.get().isPermitted(pagePermissionRequired)) {
 			log.debug("user has permission to view URI {}", uri);
 			this.addItem(childNode);
-			I18NKeys<?> key = childNode.getLabelKey();
+			I18NKey<?> key = childNode.getLabelKey();
 
 			String caption = key.getValue(currentLocale.getLocale());
 			this.setItemCaption(childNode, caption);
@@ -179,6 +181,7 @@ public class UserNavigationTree extends Tree {
 		if (maxLevel != 0) {
 			this.maxLevel = maxLevel;
 			loadNodes();
+			userOption.setOption(this.getClass().getSimpleName(), maxLevelOpt, this.maxLevel);
 		}
 	}
 

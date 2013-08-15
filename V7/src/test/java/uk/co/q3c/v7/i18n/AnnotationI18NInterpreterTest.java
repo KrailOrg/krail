@@ -56,24 +56,24 @@ public class AnnotationI18NInterpreterTest {
 		// when
 		currentLocale.setLocale(Locale.UK);
 		// then
-		assertThat(testObject.getButtonWithAnnotation().getCaption()).isEqualTo("small");
-		assertThat(testObject.getButtonWithAnnotation().getDescription()).isEqualTo("use a small font");
+		assertThat(testObject.getButtonWithAnnotation().getCaption()).isEqualTo("Ok");
+		assertThat(testObject.getButtonWithAnnotation().getDescription()).isEqualTo("Confirm this Value is Ok");
 		assertThat(testObject.getButtonWithAnnotation().getLocale()).isEqualTo(Locale.UK);
 
-		assertThat(testObject.getLabel().getCaption()).isEqualTo("small");
-		assertThat(testObject.getLabel().getDescription()).isEqualTo("use a small font");
-		assertThat(testObject.getLabel().getValue()).isEqualTo("use a small font");
+		assertThat(testObject.getLabel().getCaption()).isEqualTo("Ok");
+		assertThat(testObject.getLabel().getDescription()).isEqualTo("Confirm this Value is Ok");
+		assertThat(testObject.getLabel().getValue()).isEqualTo("Confirm this Value is Ok");
 		assertThat(testObject.getLabel().getLocale()).isEqualTo(Locale.UK);
 
-		assertThat(testObject.getTable().getCaption()).isEqualTo("small");
-		assertThat(testObject.getTable().getDescription()).isEqualTo("use a small font");
+		assertThat(testObject.getTable().getCaption()).isEqualTo("Ok");
+		assertThat(testObject.getTable().getDescription()).isEqualTo("Confirm this Value is Ok");
 		assertThat(testObject.getTable().getLocale()).isEqualTo(Locale.UK);
 
 		Object[] columns = testObject.getTable().getVisibleColumns();
 		assertThat(columns.length).isEqualTo(3);
 
 		String[] headers = testObject.getTable().getColumnHeaders();
-		assertThat(headers).isEqualTo(new String[] { "small", "cancel", "not i18N" });
+		assertThat(headers).isEqualTo(new String[] { "Small", "Cancel", "not i18N" });
 
 		assertThat(testObject.getCcs().isLocaleChangeCalled()).isTrue();
 		assertThat(testObject.getCcsn().isLocaleChangeCalled()).isTrue();
@@ -85,30 +85,30 @@ public class AnnotationI18NInterpreterTest {
 	@Test
 	public void interpret_de() {
 
-		String use_a_small_font = "Benutzen Sie eine kleine Schriftart";
+		String confirmValueOk = "Bestätigen, dass dieser Wert in Ordnung ist";
 
 		// given
 		// when
 		currentLocale.setLocale(Locale.GERMAN);
 		// then
-		assertThat(testObject.getButtonWithAnnotation().getCaption()).isEqualTo("klein");
-		assertThat(testObject.getButtonWithAnnotation().getDescription()).isEqualTo(use_a_small_font);
+		assertThat(testObject.getButtonWithAnnotation().getCaption()).isEqualTo("Ok");
+		assertThat(testObject.getButtonWithAnnotation().getDescription()).isEqualTo(confirmValueOk);
 		assertThat(testObject.getButtonWithAnnotation().getLocale()).isEqualTo(Locale.GERMAN);
 
-		assertThat(testObject.getLabel().getCaption()).isEqualTo("klein");
-		assertThat(testObject.getLabel().getDescription()).isEqualTo(use_a_small_font);
-		assertThat(testObject.getLabel().getValue()).isEqualTo(use_a_small_font);
+		assertThat(testObject.getLabel().getCaption()).isEqualTo("Ok");
+		assertThat(testObject.getLabel().getDescription()).isEqualTo(confirmValueOk);
+		assertThat(testObject.getLabel().getValue()).isEqualTo(confirmValueOk);
 		assertThat(testObject.getButtonWithAnnotation().getLocale()).isEqualTo(Locale.GERMAN);
 
-		assertThat(testObject.getTable().getCaption()).isEqualTo("klein");
-		assertThat(testObject.getTable().getDescription()).isEqualTo(use_a_small_font);
+		assertThat(testObject.getTable().getCaption()).isEqualTo("Ok");
+		assertThat(testObject.getTable().getDescription()).isEqualTo(confirmValueOk);
 		assertThat(testObject.getButtonWithAnnotation().getLocale()).isEqualTo(Locale.GERMAN);
 
 		Object[] columns = testObject.getTable().getVisibleColumns();
 		assertThat(columns.length).isEqualTo(3);
 
 		String[] headers = testObject.getTable().getColumnHeaders();
-		assertThat(headers).isEqualTo(new String[] { "klein", "stornieren", "not i18N" });
+		assertThat(headers).isEqualTo(new String[] { "Klein", "Stornieren", "not i18N" });
 
 		assertThat(testObject.getCcs().isLocaleChangeCalled()).isTrue();
 		assertThat(testObject.getCcsn().isLocaleChangeCalled()).isTrue();

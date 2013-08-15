@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import uk.co.q3c.v7.i18n.LabelKeys;
+import uk.co.q3c.v7.i18n.LabelKey;
 
 public class LabelKeyForNameTest {
 
@@ -39,12 +39,12 @@ public class LabelKeyForNameTest {
 	public void keyForName_good() {
 
 		// given
-		LabelKeyForName lkfn = new LabelKeyForName(LabelKeys.class);
+		LabelKeyForName lkfn = new LabelKeyForName(LabelKey.class);
 		Set<String> missingEnums = new HashSet<>();
 		// when
-		Object result = lkfn.keyForName("first_name", missingEnums);
+		Object result = lkfn.keyForName("First_Name", missingEnums);
 		// then
-		assertThat(result).isEqualTo(LabelKeys.first_name);
+		assertThat(result).isEqualTo(LabelKey.First_Name);
 		assertThat(missingEnums).isEmpty();
 
 	}
@@ -56,7 +56,7 @@ public class LabelKeyForNameTest {
 	public void keyForName_null() {
 
 		// given
-		LabelKeyForName lkfn = new LabelKeyForName(LabelKeys.class);
+		LabelKeyForName lkfn = new LabelKeyForName(LabelKey.class);
 		Set<String> missingEnums = new HashSet<>();
 		// when
 		Object result = lkfn.keyForName(null, missingEnums);
@@ -70,7 +70,7 @@ public class LabelKeyForNameTest {
 	public void keyForName_bad() {
 
 		// given
-		LabelKeyForName lkfn = new LabelKeyForName(LabelKeys.class);
+		LabelKeyForName lkfn = new LabelKeyForName(LabelKey.class);
 		Set<String> missingEnums = new HashSet<>();
 		// when
 		Object result = lkfn.keyForName("firt_name", missingEnums);

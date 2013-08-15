@@ -33,15 +33,15 @@ public class I18NTest {
 		// when
 
 		// then
-		assertThat(LabelKeys.cancel.getValue(Locale.UK)).isEqualTo("cancel");
-		assertThat(LabelKeys.ok.getValue(Locale.UK)).isEqualTo("ok");
-		assertThat(LabelKeys.cancel.getValue(Locale.GERMAN)).isEqualTo("stornieren");
-		assertThat(LabelKeys.ok.getValue(Locale.GERMAN)).isEqualTo("ok");
+		assertThat(LabelKey.Cancel.getValue(Locale.UK)).isEqualTo("Cancel");
+		assertThat(LabelKey.Ok.getValue(Locale.UK)).isEqualTo("Ok");
+		assertThat(LabelKey.Cancel.getValue(Locale.GERMAN)).isEqualTo("Stornieren");
+		assertThat(LabelKey.Ok.getValue(Locale.GERMAN)).isEqualTo("Ok");
 
 		// this in inherited from Labels_de
-		assertThat(LabelKeys.cancel.getValue(germanSwitzerland)).isEqualTo("stornieren");
+		assertThat(LabelKey.Cancel.getValue(germanSwitzerland)).isEqualTo("Stornieren");
 		// this is inherited from Labels (2 levels of inheritance)
-		assertThat(LabelKeys.ok.getValue(germanSwitzerland)).isEqualTo("ok");
+		assertThat(LabelKey.Ok.getValue(germanSwitzerland)).isEqualTo("Ok");
 	}
 
 	public void getMissingValue() {
@@ -49,7 +49,7 @@ public class I18NTest {
 		// given
 
 		// when
-		String value = LabelKeys._nullkey_.getValue(Locale.GERMAN);
+		String value = LabelKey._nullkey_.getValue(Locale.GERMAN);
 		// then
 		assertThat(value).isEqualTo("x");
 	}

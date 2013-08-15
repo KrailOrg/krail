@@ -16,10 +16,10 @@ import java.lang.annotation.Annotation;
 
 public interface I18NAnnotationReader {
 
-	public I18NKeys<?> caption(Annotation annotation);
+	public I18NKey<?> caption(Annotation annotation);
 
-	public I18NKeys<?> description(Annotation annotation);
+	public I18NKey<?> description(Annotation annotation);
 
-	public I18NKeys<?> value(Annotation annotation);
+	public I18NKey<?> value(Annotation annotation);
 
 }

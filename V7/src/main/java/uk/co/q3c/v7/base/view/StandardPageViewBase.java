@@ -12,12 +12,7 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import java.util.List;
-
 import javax.inject.Inject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
@@ -28,23 +23,22 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 
-public abstract class DefaultViewBase implements V7View {
-	private static Logger log = LoggerFactory.getLogger(DefaultViewBase.class);
+public abstract class StandardPageViewBase extends ViewBase {
 
 	private HorizontalSplitPanel layout;
 	private final UserNavigationTree navtree;
 	private Label label;
-	private final V7Navigator navigator;
+
 	private GridLayout grid;
 
 	@Inject
-	protected DefaultViewBase(V7Navigator navigator, UserNavigationTree navtree) {
-		super();
+	protected StandardPageViewBase(V7Navigator navigator, UserNavigationTree navtree) {
+		super(navigator);
 		this.navtree = navtree;
-		this.navigator = navigator;
 		buildUI();
 	}
 
+	@Override
 	protected void buildUI() {
 		layout = new HorizontalSplitPanel();
 		label = new Label("This is the " + this.getClass().getSimpleName());
@@ -69,13 +63,6 @@ public abstract class DefaultViewBase implements V7View {
 	}
 
 	@Override
-	public void enter(V7ViewChangeEvent event) {
-		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri: " + navigator.getNavigationState());
-		List<String> params = navigator.getNavigationParams();
-		processParams(params);
-	}
-
-	@Override
 	public Component getUiComponent() {
 		return layout;
 	}
@@ -84,9 +71,4 @@ public abstract class DefaultViewBase implements V7View {
 		return label;
 	}
 
-	protected abstract void processParams(List<String> params);
-
-	public V7Navigator getNavigator() {
-		return navigator;
-	}
 }

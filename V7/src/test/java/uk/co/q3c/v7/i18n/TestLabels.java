@@ -23,21 +23,21 @@ import java.util.EnumMap;
  * @author David Sowerby 9 Feb 2013
  * 
  */
-public class TestLabels extends EnumResourceBundle<TestLabelKeys> {
+public class TestLabels extends EnumResourceBundle<TestLabelKey> {
 
-	private static final EnumMap<TestLabelKeys, String> map = new EnumMap<TestLabelKeys, String>(TestLabelKeys.class);
+	private static final EnumMap<TestLabelKey, String> map = new EnumMap<TestLabelKey, String>(TestLabelKey.class);
 
 	static {
-		map.put(TestLabelKeys.Home, "home");
-		map.put(TestLabelKeys.Transfers, "transfers");
-		map.put(TestLabelKeys.Opt, "option");
-		map.put(TestLabelKeys.Yes, "Yes");
-		map.put(TestLabelKeys.No, "No");
+		map.put(TestLabelKey.Home, "home");
+		map.put(TestLabelKey.Transfers, "transfers");
+		map.put(TestLabelKey.Opt, "option");
+		map.put(TestLabelKey.Yes, "Yes");
+		map.put(TestLabelKey.No, "No");
 
 	}
 
 	@Override
-	public EnumMap<TestLabelKeys, String> getMap() {
+	public EnumMap<TestLabelKey, String> getMap() {
 		return map;
 	}
 

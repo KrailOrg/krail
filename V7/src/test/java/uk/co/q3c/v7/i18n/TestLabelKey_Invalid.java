@@ -12,33 +12,14 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.lang.annotation.Annotation;
 
-/**
- * Reads the keys for this an {@link I18N} annotation
- * 
- * @author David Sowerby 3 Mar 2013
- * 
- */
-public class I18NReader implements I18NAnnotationReader {
+public enum TestLabelKey_Invalid {
 
-	protected I18NReader() {
-		super();
-	}
-
-	@Override
-	public I18NKey<?> caption(Annotation annotation) {
-		return ((I18N) annotation).caption();
-	}
-
-	@Override
-	public I18NKey<?> description(Annotation annotation) {
-		return ((I18N) annotation).description();
-	}
-
-	@Override
-	public I18NKey<?> value(Annotation annotation) {
-		return ((I18N) annotation).value();
-	}
+	_nullkey_,
+	home,
+	transfers,
+	login,
+	moneyInOut,
+	opt;
 
 }

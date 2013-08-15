@@ -14,17 +14,17 @@ package uk.co.q3c.v7.base.ui.form;
 
 import uk.co.q3c.v7.base.data.TestEntity;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
-import uk.co.q3c.v7.i18n.DescriptionKeys;
+import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18N;
-import uk.co.q3c.v7.i18n.LabelKeys;
+import uk.co.q3c.v7.i18n.LabelKey;
 
 import com.vaadin.ui.TextField;
 
 public class TestBeanFieldSet extends EntityFieldSet<TestEntity> {
 
-	@I18N(caption = LabelKeys.first_name)
+	@I18N(caption = LabelKey.First_Name)
 	private TextField firstName;
-	@I18N(caption = LabelKeys.last_name, description = DescriptionKeys.last_name)
+	@I18N(caption = LabelKey.Last_Name, description = DescriptionKey.Last_Name)
 	private TextField lastName;
 
 	protected TestBeanFieldSet(AnnotationI18NTranslator translator) {

@@ -241,7 +241,7 @@ public class DefaultV7NavigatorTest {
 		String page1 = "";
 		String fragment1 = page1 + "/id=2/age=5";
 		when(sitemap.getRedirectFor(page1)).thenReturn("public");
-		when(viewProMap.get(page1)).thenReturn(view1Pro);
+		when(viewProMap.get("public")).thenReturn(view1Pro);
 		when(view1Pro.get()).thenReturn(view1);
 		// when
 		navigator.navigateTo(fragment1);
@@ -250,7 +250,7 @@ public class DefaultV7NavigatorTest {
 
 	}
 
-	@Test
+	@Test(expected = InvalidURIException.class)
 	public void navigateTo_invalidURI() {
 
 		// given
@@ -454,6 +454,18 @@ public class DefaultV7NavigatorTest {
 		navigator.navigateTo(page);
 		// then
 		Fail.fail("Exception was expected");
+
+	}
+
+	@Test
+	public void error() {
+
+		// given
+
+		// when
+		navigator.error();
+		// then
+		assertThat(navigator.getCurrentView()).isInstanceOf(ErrorView.class);
 
 	}
 }

@@ -24,7 +24,7 @@ import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.base.view.SystemAccountView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NKeys;
+import uk.co.q3c.v7.i18n.I18NKey;
 
 /**
  * Used during the process of building the {@link Sitemap}. Provides the logic for building standard pages using options
@@ -247,7 +247,7 @@ public class StandardPageBuilder {
 				try {
 					StandardPageKey spk = StandardPageKey.valueOf(pr.getStandardPageKeyName());
 					LabelKeyForName labelKeyForName = new LabelKeyForName(labelKeysClass);
-					I18NKeys<?> labelKey = labelKeyForName.keyForName(pr.getLabelKeyName(), missingEnums);
+					I18NKey<?> labelKey = labelKeyForName.keyForName(pr.getLabelKeyName(), missingEnums);
 					SitemapNode node = sitemap.append(pr.getUri());
 					node.setLabelKey(labelKey, currentLocale.getLocale(), collator);
 					node.setViewClass(viewClass(spk));

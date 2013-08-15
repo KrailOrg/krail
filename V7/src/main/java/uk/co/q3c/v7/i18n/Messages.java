@@ -15,8 +15,8 @@ package uk.co.q3c.v7.i18n;
 import java.util.EnumMap;
 
 /**
- * The base for the resource bundle of {@link Descriptions}. The separation between them is arbitrary, but helps break
- * down what could other wise be long lists, and only one of them needs to look up parameter values:
+ * The base for the resource bundle of {@link Messages}. The separation between them is arbitrary, but helps break down
+ * what could other wise be long lists, and only one of them needs to look up parameter values:
  * <ol>
  * <li>{@link Labels} : short, usually one or two words, no parameters, generally used as captions
  * <li>{@link Descriptions} : longer, typically several words, no parameters, generally used in tooltips
@@ -24,21 +24,19 @@ import java.util.EnumMap;
  * for values containing parameters, Messages is used.
  * 
  * 
- * @author David Sowerby 9 Feb 2013
+ * @author David Sowerby 3 Aug 2013
  * 
  */
-public class Descriptions extends EnumResourceBundle<DescriptionKey> {
+public class Messages extends EnumResourceBundle<MessageKey> {
 
-	private static final EnumMap<DescriptionKey, String> map = new EnumMap<DescriptionKey, String>(DescriptionKey.class);
+	private static final EnumMap<MessageKey, String> map = new EnumMap<MessageKey, String>(MessageKey.class);
 	// TODO make map unmodifiable
 	static {
-		map.put(DescriptionKey.Last_Name, "the last name or family name");
-		map.put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok");
-		map.put(DescriptionKey.No_Permission, "You do not have permission for that action");
+		map.put(MessageKey.invalidURI, "{0} is not a valid page");
 	}
 
 	@Override
-	public EnumMap<DescriptionKey, String> getMap() {
+	public EnumMap<MessageKey, String> getMap() {
 		return map;
 	}
 

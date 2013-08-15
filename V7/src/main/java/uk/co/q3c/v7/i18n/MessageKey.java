@@ -13,12 +13,28 @@
 package uk.co.q3c.v7.i18n;
 
 import java.util.Locale;
+import java.util.ResourceBundle;
 
-public interface I18NKeys<E extends EnumResourceBundle<?>> {
+public enum MessageKey implements I18NKey<Messages> {
+	_nullkey_,
+	invalidURI,
 
-	E getBundle(Locale locale);
+	;
 
-	String getValue(Locale locale);
+	@Override
+	public Messages getBundle(Locale locale) {
+		ResourceBundle bundle = ResourceBundle.getBundle(Messages.class.getName(), locale);
+		return (Messages) bundle;
+	}
 
-	boolean isNullKey();
+	@Override
+	public String getValue(Locale locale) {
+		return getBundle(locale).getValue(this);
+	}
+
+	@Override
+	public boolean isNullKey() {
+		return this.equals(_nullkey_);
+	}
+
 }

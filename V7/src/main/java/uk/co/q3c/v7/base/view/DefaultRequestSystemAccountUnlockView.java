@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
-public class DefaultRequestSystemAccountUnlockView extends DefaultViewBase implements RequestSystemAccountUnlockView {
+public class DefaultRequestSystemAccountUnlockView extends StandardPageViewBase implements RequestSystemAccountUnlockView {
 
 	@Inject
 	protected DefaultRequestSystemAccountUnlockView(V7Navigator navigator, UserNavigationTree navtree) {
