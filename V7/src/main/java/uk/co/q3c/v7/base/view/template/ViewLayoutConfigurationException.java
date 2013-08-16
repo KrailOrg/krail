@@ -12,8 +12,27 @@
  */
 package uk.co.q3c.v7.base.view.template;
 
-import uk.co.q3c.v7.i18n.I18NListener;
+public class ViewLayoutConfigurationException extends RuntimeException {
 
-public interface ViewTemplate extends I18NListener {
+	public ViewLayoutConfigurationException() {
+		super();
+	}
+
+	public ViewLayoutConfigurationException(String message, Throwable cause, boolean enableSuppression,
+			boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public ViewLayoutConfigurationException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public ViewLayoutConfigurationException(String message) {
+		super(message);
+	}
+
+	public ViewLayoutConfigurationException(Throwable cause) {
+		super(cause);
+	}
 
 }

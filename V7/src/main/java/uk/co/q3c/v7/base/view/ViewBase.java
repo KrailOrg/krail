@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.view.template.ViewBaseWithLayout;
 
 public abstract class ViewBase implements V7View {
 
@@ -31,6 +32,14 @@ public abstract class ViewBase implements V7View {
 		super();
 		this.navigator = navigator;
 		buildUI();
+		assemble();
+	}
+
+	/**
+	 * This method is called after {@link #buildUI()}, and is primarily intended for use by descendant class
+	 * {@link ViewBaseWithLayout}
+	 */
+	protected void assemble() {
 	}
 
 	protected abstract void buildUI();

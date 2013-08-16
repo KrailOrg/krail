@@ -29,7 +29,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 public class I18NValueTest {
 
 	@Inject
-	I18NValue i18NValue;
+	Translate i18NValue;
 
 	@Test
 	public void value() {
@@ -37,7 +37,7 @@ public class I18NValueTest {
 		// given
 		// current locale is UK
 		// when
-		String result = i18NValue.message(LabelKey.First_Name);
+		String result = i18NValue.from(LabelKey.First_Name);
 		// then
 		assertThat(result).isEqualTo("First Name");
 
@@ -50,7 +50,7 @@ public class I18NValueTest {
 		// current locale is UK
 
 		// when
-		String result = i18NValue.message(TestLabelKey.Login);
+		String result = i18NValue.from(TestLabelKey.Login);
 
 		// then
 		assertThat(result).isEqualTo("Login");
@@ -63,7 +63,7 @@ public class I18NValueTest {
 		// given
 
 		// when
-		String result = i18NValue.message(MessageKey.invalidURI, "public/wiggly/id=3");
+		String result = i18NValue.from(MessageKey.invalidURI, "public/wiggly/id=3");
 		// then
 		assertThat(result).isEqualTo("public/wiggly/id=3 is not a valid page");
 

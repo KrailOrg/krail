@@ -18,23 +18,24 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 /**
- * A utility class to retrieve an I18N value from a key. The same can be achieved using {@link I18NKey#getValue(Locale)}
- * , this class simply provides a slightly neater syntax, and a method for expanding a pattern with parameters.
+ * A utility class to retrieve an I18N value from a key, and arguments. You can also get the value for the key (but
+ * cannot use arguments) by using {@link I18NKey#getValue(Locale)}. This class simply provides a slightly neater syntax,
+ * a method for expanding a pattern with parameters and defaults to {@link CurrentLocale}
  * 
  * @author David Sowerby 3 Aug 2013
  * 
  */
-public class I18NValue {
+public class Translate {
 
 	private final CurrentLocale currentLocale;
 
 	@Inject
-	protected I18NValue(CurrentLocale currentLocale) {
+	protected Translate(CurrentLocale currentLocale) {
 		super();
 		this.currentLocale = currentLocale;
 	}
 
-	public String message(Locale locale, I18NKey<?> key, Object... arguments) {
+	public String from(Locale locale, I18NKey<?> key, Object... arguments) {
 		String pattern = key.getValue(locale);
 		if (pattern == null) {
 			return key.name().replace("_", " ");
@@ -46,11 +47,11 @@ public class I18NValue {
 		return result;
 	}
 
-	public String message(I18NKey<?> key, Object... arguments) {
-		return message(currentLocale.getLocale(), key, arguments);
+	public String from(I18NKey<?> key, Object... arguments) {
+		return from(currentLocale.getLocale(), key, arguments);
 	}
 
-	public String message(I18NKey<?> key) {
-		return message(currentLocale.getLocale(), key, (Object[]) null);
+	public String from(I18NKey<?> key) {
+		return from(currentLocale.getLocale(), key, (Object[]) null);
 	}
 }
