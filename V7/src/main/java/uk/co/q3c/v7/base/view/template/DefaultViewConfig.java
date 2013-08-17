@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.view.template;
 
+import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -67,15 +68,18 @@ public class DefaultViewConfig implements ViewConfig {
 	 * @param section1
 	 * @param section2
 	 */
+	@Override
 	public void addSplit(int section1, int section2) {
 		splits.add(createSplit(section1, section2));
 	}
 
+	@Override
 	public void removeSplit(int section1, int section2) {
 		Split split = createSplit(section1, section2);
 		splits.remove(split);
 	}
 
+	@Override
 	public boolean hasSplit(int section1, int section2) {
 		Split split = createSplit(section1, section2);
 		return splits.contains(split);
@@ -105,6 +109,15 @@ public class DefaultViewConfig implements ViewConfig {
 	@Override
 	public void setExpandedItem(int index) {
 		this.expandedItem = index;
+	}
+
+	@Override
+	public Iterator<Split> splitIterator() {
+		return splits.iterator();
+	}
+
+	public int getExpandedItem() {
+		return expandedItem;
 	}
 
 }

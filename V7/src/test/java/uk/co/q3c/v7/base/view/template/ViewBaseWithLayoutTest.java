@@ -54,7 +54,7 @@ public class ViewBaseWithLayoutTest {
 	class TestViewBaseWithLayout extends ViewBaseWithLayout {
 
 		protected TestViewBaseWithLayout(V7Navigator navigator) {
-			super(navigator, translate);
+			super(navigator, new VerticalViewLayout(), translate);
 		}
 
 		@Override
@@ -63,8 +63,6 @@ public class ViewBaseWithLayoutTest {
 			button2 = new Button();
 			label1 = new Label();
 			label2 = new Label();
-
-			setLayout(new VerticalViewLayout());// inject
 
 		}
 
@@ -226,5 +224,31 @@ public class ViewBaseWithLayoutTest {
 		// then
 		assertThat(vbwl.orderedComponents().get(0).isEnabled()).isTrue();
 		assertThat(vbwl.orderedComponents().get(1).isEnabled()).isFalse();
+	}
+
+	@Test
+	public void changeLayout() {
+
+		// given
+
+		// when
+
+		// then
+		assertThat(false).isEqualTo(true);
+
+	}
+
+	@Test
+	public void inversepower() {
+
+		// given
+		System.out.println("2 power 3:  " + Math.pow(2, 3));
+		System.out.println((int) (Math.log(8) / Math.log(2)));
+
+		// when
+
+		// then
+		assertThat(false).isEqualTo(true);
+
 	}
 }

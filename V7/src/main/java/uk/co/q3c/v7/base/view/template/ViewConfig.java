@@ -12,6 +12,10 @@
  */
 package uk.co.q3c.v7.base.view.template;
 
+import java.util.Iterator;
+
+import uk.co.q3c.v7.base.view.template.DefaultViewConfig.Split;
+
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 
@@ -23,5 +27,13 @@ public interface ViewConfig {
 	 * determines which component to expand from the index provided
 	 */
 	void setExpandedItem(int index);
+
+	void addSplit(int section1, int section2);
+
+	void removeSplit(int section1, int section2);
+
+	boolean hasSplit(int section1, int section2);
+
+	Iterator<Split> splitIterator();
 
 }

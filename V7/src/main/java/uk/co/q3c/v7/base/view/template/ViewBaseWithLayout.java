@@ -183,10 +183,10 @@ public abstract class ViewBaseWithLayout extends ViewBase {
 	}
 
 	@Inject
-	protected ViewBaseWithLayout(V7Navigator navigator, Translate translate) {
+	protected ViewBaseWithLayout(V7Navigator navigator, ViewLayout viewLayout, Translate translate) {
 		super(navigator);
-		// this.wrapperPro = wrapperPro;
 		this.translate = translate;
+		this.layout = viewLayout;
 	}
 
 	public ViewConfig getConfig() {
@@ -241,7 +241,7 @@ public abstract class ViewBaseWithLayout extends ViewBase {
 
 	@Override
 	public void assemble() {
-		layout.assemble(config);
+		// layout.assemble(config);
 	}
 
 	public List<AbstractComponent> orderedComponents() {
