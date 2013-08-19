@@ -14,6 +14,8 @@ package uk.co.q3c.v7.base.view.template;
 
 import static org.fest.assertions.Assertions.*;
 
+import java.util.LinkedList;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,6 +42,86 @@ public class VerticalViewLayoutTest {
 		image = new Image();
 		label = new Label();
 		panel = new Panel();
+
+	}
+
+	/**
+	 * If the buildPslitters tests fails the some or all of the other tests will
+	 */
+	@Test
+	public void buildSplitters_1() {
+
+		// given
+
+		// when
+		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(1);
+		// then
+		assertThat(q.getFirst().getId()).isEqualTo("vsp0");
+		// when
+	}
+
+	@Test
+	public void build_splitters_2() {
+
+		// when
+		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(2);
+		// then
+		assertThat(q.getFirst().getId()).isEqualTo("vsp1");
+		q.pop();
+		assertThat(q.getFirst().getId()).isEqualTo("vsp0");
+	}
+
+	@Test
+	public void build_splitters_3() {
+
+		// given
+
+		// when
+		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(3);
+		// then
+		assertThat(q.getFirst().getId()).isEqualTo("vsp1");
+		q.pop();
+		assertThat(q.getFirst().getId()).isEqualTo("vsp2");
+	}
+
+	@Test
+	public void build_splitters_4() {
+
+		// given
+
+		// when
+		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(4);
+		// then
+		assertThat(q.getFirst().getId()).isEqualTo("vsp3");
+		q.pop();
+		assertThat(q.getFirst().getId()).isEqualTo("vsp1");
+		q.pop();
+		assertThat(q.getFirst().getId()).isEqualTo("vsp2");
+	}
+
+	@Test
+	public void build_splitters_5() {
+		// when
+		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(5);
+		// then
+		assertThat(q.getFirst().getId()).isEqualTo("vsp3");
+		q.pop();
+		assertThat(q.getFirst().getId()).isEqualTo("vsp4");
+		q.pop();
+		assertThat(q.getFirst().getId()).isEqualTo("vsp2");
+	}
+
+	@Test
+	public void build_splitters_6() { // when
+		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(6);
+		// then
+		assertThat(q.getFirst().getId()).isEqualTo("vsp3");
+		q.pop();
+		assertThat(q.getFirst().getId()).isEqualTo("vsp4");
+		q.pop();
+		assertThat(q.getFirst().getId()).isEqualTo("vsp5");
+		q.pop();
+		assertThat(q.getFirst().getId()).isEqualTo("vsp2");
 
 	}
 
@@ -105,17 +187,18 @@ public class VerticalViewLayoutTest {
 		// when
 		vvl.assemble(config);
 		// then
-		assertThat(vvl.layoutRoot).isInstanceOf(VerticalLayout.class);
-		VerticalLayout vl0 = (VerticalLayout) vvl.layoutRoot;
-		assertThat(vl0.getComponentIndex(button)).isEqualTo(0);
-		assertThat(vl0.getComponent(1)).isInstanceOf(VerticalSplitPanel.class);
-		VerticalSplitPanel vsp = (VerticalSplitPanel) vl0.getComponent(1);
-		assertThat(vsp.getFirstComponent()).isInstanceOf(Image.class);
-		assertThat(vsp.getSecondComponent()).isInstanceOf(VerticalLayout.class);
+		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
+		VerticalSplitPanel vsp = (VerticalSplitPanel) vvl.layoutRoot;
+		assertThat(vsp.getFirstComponent()).isInstanceOf(VerticalLayout.class);
+		VerticalLayout vl = (VerticalLayout) vsp.getFirstComponent();
+		assertThat(vl.getComponentCount()).isEqualTo(2);
+		assertThat(vl.getComponent(0)).isEqualTo(button);
+		assertThat(vl.getComponent(1)).isEqualTo(image);
+
 		VerticalLayout vl1 = (VerticalLayout) vsp.getSecondComponent();
 		assertThat(vl1.getComponentCount()).isEqualTo(2);
-		assertThat(vl1.getComponentIndex(label)).isEqualTo(0);
-		assertThat(vl1.getComponentIndex(panel)).isEqualTo(1);
+		assertThat(vl1.getComponent(0)).isEqualTo(label);
+		assertThat(vl1.getComponent(1)).isEqualTo(panel);
 
 	}
 
@@ -133,16 +216,16 @@ public class VerticalViewLayoutTest {
 		// when
 		vvl.assemble(config);
 		// then
-		assertThat(vvl.layoutRoot).isInstanceOf(VerticalLayout.class);
-		VerticalLayout vl0 = (VerticalLayout) vvl.layoutRoot;
-		assertThat(vl0.getComponent(0)).isEqualTo(button);
-		assertThat(vl0.getComponent(1)).isEqualTo(image);
-		assertThat(vl0.getComponent(2)).isInstanceOf(VerticalSplitPanel.class);
+		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
+		VerticalSplitPanel vsp = (VerticalSplitPanel) vvl.layoutRoot;
+		assertThat(vsp.getFirstComponent()).isInstanceOf(VerticalLayout.class);
+		VerticalLayout vl = (VerticalLayout) vsp.getFirstComponent();
+		assertThat(vl.getComponentCount()).isEqualTo(3);
+		assertThat(vl.getComponent(0)).isEqualTo(button);
+		assertThat(vl.getComponent(1)).isEqualTo(image);
+		assertThat(vl.getComponent(2)).isEqualTo(label);
 
-		VerticalSplitPanel vsp = (VerticalSplitPanel) vl0.getComponent(2);
-		assertThat(vsp.getFirstComponent()).isInstanceOf(Label.class);
-		assertThat(vsp.getSecondComponent()).isInstanceOf(Panel.class);
-
+		assertThat(vsp.getSecondComponent()).isEqualTo(panel);
 	}
 
 	@Test
@@ -161,14 +244,18 @@ public class VerticalViewLayoutTest {
 		vvl.assemble(config);
 		// then
 		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
-		VerticalSplitPanel vsp1 = (VerticalSplitPanel) vvl.layoutRoot;
+
+		VerticalSplitPanel vsp0 = (VerticalSplitPanel) vvl.layoutRoot;
+		assertThat(vsp0.getFirstComponent()).isInstanceOf(VerticalSplitPanel.class);
+		VerticalSplitPanel vsp1 = (VerticalSplitPanel) vsp0.getFirstComponent();
+
 		assertThat(vsp1.getFirstComponent()).isEqualTo(button);
-		assertThat(vsp1.getSecondComponent()).isInstanceOf(VerticalSplitPanel.class);
-		VerticalSplitPanel vsp2 = (VerticalSplitPanel) vsp1.getSecondComponent();
-		assertThat(vsp2.getFirstComponent()).isEqualTo(image);
-		assertThat(vsp2.getSecondComponent()).isInstanceOf(VerticalLayout.class);
-		VerticalLayout vl = ((VerticalLayout) vsp2.getSecondComponent());
+		assertThat(vsp1.getSecondComponent()).isEqualTo(image);
+
+		assertThat(vsp0.getSecondComponent()).isInstanceOf(VerticalLayout.class);
+		VerticalLayout vl = (VerticalLayout) vsp1.getSecondComponent();
 		assertThat(vl.getComponent(0)).isEqualTo(label);
 		assertThat(vl.getComponent(1)).isEqualTo(panel);
+
 	}
 }

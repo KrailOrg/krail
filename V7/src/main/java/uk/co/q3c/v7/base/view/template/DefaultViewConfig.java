@@ -120,4 +120,9 @@ public class DefaultViewConfig implements ViewConfig {
 		return expandedItem;
 	}
 
+	@Override
+	public int splitCount() {
+		return splits.size();
+	}
+
 }

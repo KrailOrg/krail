@@ -36,4 +36,6 @@ public interface ViewConfig {
 
 	Iterator<Split> splitIterator();
 
+	int splitCount();
+
 }
