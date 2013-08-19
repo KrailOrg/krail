@@ -126,6 +126,109 @@ public class VerticalViewLayoutTest {
 	}
 
 	@Test
+	public void buildPop_1() {
+
+		// given
+		vvl.addComponent(button);
+		vvl.addComponent(image);
+		vvl.addComponent(label);
+		vvl.addComponent(panel);
+		ViewConfig config = vvl.defaultConfig();
+		config.addSplit(0, 1);
+		// when
+		LinkedList<Integer> result = vvl.buildPopulations(config);
+
+		// then
+		assertThat(result.size()).isEqualTo(2);
+		assertThat(result.get(0)).isEqualTo(1);
+		assertThat(result.get(1)).isEqualTo(3);
+
+	}
+
+	@Test
+	public void buildPop_2() {
+
+		// given
+		vvl.addComponent(button);
+		vvl.addComponent(image);
+		vvl.addComponent(label);
+		vvl.addComponent(panel);
+		ViewConfig config = vvl.defaultConfig();
+		config.addSplit(1, 2);
+		// when
+		LinkedList<Integer> result = vvl.buildPopulations(config);
+
+		// then
+		assertThat(result.size()).isEqualTo(2);
+		assertThat(result.get(0)).isEqualTo(2);
+		assertThat(result.get(1)).isEqualTo(2);
+
+	}
+
+	@Test
+	public void buildPop_3() {
+
+		// given
+		vvl.addComponent(button);
+		vvl.addComponent(image);
+		vvl.addComponent(label);
+		vvl.addComponent(panel);
+		ViewConfig config = vvl.defaultConfig();
+		config.addSplit(1, 3);
+		// when
+		LinkedList<Integer> result = vvl.buildPopulations(config);
+
+		// then
+		assertThat(result.size()).isEqualTo(2);
+		assertThat(result.get(0)).isEqualTo(3);
+		assertThat(result.get(1)).isEqualTo(1);
+	}
+
+	@Test
+	public void buildPop_1_2() {
+
+		// given
+		vvl.addComponent(button);
+		vvl.addComponent(image);
+		vvl.addComponent(label);
+		vvl.addComponent(panel);
+		ViewConfig config = vvl.defaultConfig();
+		config.addSplit(0, 1);
+		config.addSplit(1, 2);
+		// when
+		LinkedList<Integer> result = vvl.buildPopulations(config);
+
+		// then
+		assertThat(result.size()).isEqualTo(3);
+		assertThat(result.get(0)).isEqualTo(1);
+		assertThat(result.get(1)).isEqualTo(1);
+		assertThat(result.get(2)).isEqualTo(2);
+	}
+
+	@Test
+	public void buildPop_1_2_3() {
+
+		// given
+		vvl.addComponent(button);
+		vvl.addComponent(image);
+		vvl.addComponent(label);
+		vvl.addComponent(panel);
+		ViewConfig config = vvl.defaultConfig();
+		config.addSplit(0, 1);
+		config.addSplit(1, 2);
+		config.addSplit(2, 3);
+		// when
+		LinkedList<Integer> result = vvl.buildPopulations(config);
+
+		// then
+		assertThat(result.size()).isEqualTo(4);
+		assertThat(result.get(0)).isEqualTo(1);
+		assertThat(result.get(1)).isEqualTo(1);
+		assertThat(result.get(2)).isEqualTo(1);
+		assertThat(result.get(3)).isEqualTo(1);
+	}
+
+	@Test
 	public void assemble_no_splits() {
 
 		// given
@@ -256,6 +359,18 @@ public class VerticalViewLayoutTest {
 		VerticalLayout vl = (VerticalLayout) vsp1.getSecondComponent();
 		assertThat(vl.getComponent(0)).isEqualTo(label);
 		assertThat(vl.getComponent(1)).isEqualTo(panel);
+
+	}
+
+	@Test
+	public void invalidSplit() {
+
+		// given
+
+		// when
+
+		// then
+		assertThat(false).isEqualTo(true);
 
 	}
 }

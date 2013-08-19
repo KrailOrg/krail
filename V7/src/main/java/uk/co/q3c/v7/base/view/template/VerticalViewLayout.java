@@ -115,6 +115,21 @@ public class VerticalViewLayout extends ViewLayoutBase {
 		return config;
 	}
 
+	protected LinkedList<Integer> buildPopulations(ViewConfig config) {
+		LinkedList<Integer> populations = new LinkedList<>();
+		Iterator<Split> spliterator = config.splitIterator();
+		int marker = 0;
+		while (spliterator.hasNext()) {
+			Split split = spliterator.next();
+			int pop = split.section2 - marker;
+			populations.add(pop);
+			marker = split.section2;
+		}
+		int remainder = components.size() - marker;
+		populations.add(remainder);
+		return populations;
+	}
+
 	protected LinkedList<VerticalSplitPanel> buildSplitterQueue(int numberOfSplitters) {
 		LinkedList<VerticalSplitPanel> oldQ = new LinkedList<>();
 		LinkedList<VerticalSplitPanel> newQ = new LinkedList<>();
