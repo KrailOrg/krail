@@ -16,9 +16,11 @@ import static org.fest.assertions.Assertions.*;
 
 import java.util.LinkedList;
 
+import org.fest.assertions.Fail;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.vaadin.ui.AbstractSplitPanel;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
@@ -54,9 +56,10 @@ public class VerticalViewLayoutTest {
 		// given
 
 		// when
-		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(1);
+		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(1);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp0");
+
 		// when
 	}
 
@@ -64,7 +67,7 @@ public class VerticalViewLayoutTest {
 	public void build_splitters_2() {
 
 		// when
-		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(2);
+		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(2);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp1");
 		q.pop();
@@ -77,7 +80,7 @@ public class VerticalViewLayoutTest {
 		// given
 
 		// when
-		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(3);
+		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(3);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp1");
 		q.pop();
@@ -90,7 +93,7 @@ public class VerticalViewLayoutTest {
 		// given
 
 		// when
-		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(4);
+		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(4);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp3");
 		q.pop();
@@ -102,7 +105,7 @@ public class VerticalViewLayoutTest {
 	@Test
 	public void build_splitters_5() {
 		// when
-		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(5);
+		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(5);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp3");
 		q.pop();
@@ -113,7 +116,7 @@ public class VerticalViewLayoutTest {
 
 	@Test
 	public void build_splitters_6() { // when
-		LinkedList<VerticalSplitPanel> q = vvl.buildSplitterQueue(6);
+		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(6);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp3");
 		q.pop();
@@ -347,30 +350,51 @@ public class VerticalViewLayoutTest {
 		vvl.assemble(config);
 		// then
 		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
-
 		VerticalSplitPanel vsp0 = (VerticalSplitPanel) vvl.layoutRoot;
+
 		assertThat(vsp0.getFirstComponent()).isInstanceOf(VerticalSplitPanel.class);
+		assertThat(vsp0.getSecondComponent()).isInstanceOf(VerticalLayout.class);
+
 		VerticalSplitPanel vsp1 = (VerticalSplitPanel) vsp0.getFirstComponent();
+		VerticalLayout vl1 = (VerticalLayout) vsp0.getSecondComponent();
 
 		assertThat(vsp1.getFirstComponent()).isEqualTo(button);
 		assertThat(vsp1.getSecondComponent()).isEqualTo(image);
 
-		assertThat(vsp0.getSecondComponent()).isInstanceOf(VerticalLayout.class);
-		VerticalLayout vl = (VerticalLayout) vsp1.getSecondComponent();
-		assertThat(vl.getComponent(0)).isEqualTo(label);
-		assertThat(vl.getComponent(1)).isEqualTo(panel);
+		assertThat(vl1.getComponent(0)).isEqualTo(label);
+		assertThat(vl1.getComponent(1)).isEqualTo(panel);
 
 	}
 
-	@Test
-	public void invalidSplit() {
+	/**
+	 * Cannot be more than one between section1 and section2
+	 */
+	@Test(expected = ViewLayoutConfigurationException.class)
+	public void invalidSplit_1() {
 
 		// given
-
+		ViewConfig config = vvl.defaultConfig();
 		// when
-
+		config.addSplit(3, 1);
+		vvl.assemble(config);
 		// then
-		assertThat(false).isEqualTo(true);
+		Fail.fail("expected exception");
+
+	}
+
+	/**
+	 * Cannot be more than one between section1 and section2
+	 */
+	@Test(expected = ViewLayoutConfigurationException.class)
+	public void invalidSplit_2() {
+
+		// given
+		ViewConfig config = vvl.defaultConfig();
+		// when
+		config.addSplit(1, 3);
+		vvl.assemble(config);
+		// then
+		Fail.fail("expected exception");
 
 	}
 }
