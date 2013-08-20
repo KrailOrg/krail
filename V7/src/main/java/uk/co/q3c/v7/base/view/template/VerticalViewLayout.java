@@ -40,13 +40,12 @@ public class VerticalViewLayout extends ViewLayoutBase {
 	}
 
 	@Override
-	public void assemble(ViewConfig config) {
+	public void doAssemble(ViewConfig config) {
 		if (config.splitCount() == 0) {
 			assembleNoSplits();
 			return;
 		}
-		validateSplits(config);
-		LinkedList<AbstractSplitPanel> q = buildSplitterQueue(config.splitCount());
+		LinkedList<AbstractSplitPanel> q = buildSplitterQueue(validSplitCount());
 		LinkedList<Integer> populations = buildPopulations(config);
 
 		int c = 0;
@@ -80,15 +79,15 @@ public class VerticalViewLayout extends ViewLayoutBase {
 		return new VerticalLayout();
 	}
 
-	protected void validateSplits(ViewConfig config) {
-		Iterator<Split> spliterator = config.splitIterator();
-		while (spliterator.hasNext()) {
-			Split split = spliterator.next();
-			int diff = Math.abs(split.section1 - split.section2);
-			if (diff > 1) {
-				throw new ViewLayoutConfigurationException("A splitter can only be between adjacent components");
-			}
-		}
+	/**
+	 * For this layout, a split can only be between consecutively numbered components
+	 * 
+	 * @see uk.co.q3c.v7.base.view.template.ViewLayout#isValidSplit(uk.co.q3c.v7.base.view.template.DefaultViewConfig.Split)
+	 */
+	@Override
+	public boolean isValidSplit(Split split) {
+		int diff = Math.abs(split.section1 - split.section2);
+		return (diff == 1);
 	}
 
 	/**
@@ -103,16 +102,10 @@ public class VerticalViewLayout extends ViewLayoutBase {
 		layoutRoot = vl;
 	}
 
-	@Override
-	public ViewConfig defaultConfig() {
-		DefaultViewConfig config = new DefaultViewConfig();
-		return config;
-	}
-
 	protected LinkedList<Integer> buildPopulations(ViewConfig config) {
 		LinkedList<Integer> populations = new LinkedList<>();
-		Iterator<Split> spliterator = config.splitIterator();
 		int marker = 0;
+		Iterator<Split> spliterator = validSplits.iterator();
 		while (spliterator.hasNext()) {
 			Split split = spliterator.next();
 			int pop = split.section2 - marker;

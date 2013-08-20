@@ -13,8 +13,12 @@
 package uk.co.q3c.v7.base.view.template;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+import uk.co.q3c.v7.base.view.template.DefaultViewConfig.Split;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 
 import com.vaadin.ui.AbstractComponent;
@@ -25,16 +29,30 @@ public abstract class ViewLayoutBase implements ViewLayout {
 	protected Component layoutRoot;
 
 	protected final List<AbstractComponent> components;
+	/**
+	 * Sorted set required as the splits need to be processed in order
+	 */
+	protected final SortedSet<Split> validSplits = new TreeSet<>();
 
 	protected ViewLayoutBase() {
 		super();
 		components = new ArrayList<>();
+
 	}
 
 	@Override
 	public void localeChange(I18NTranslator translator) {
 		translator.translate(this);
 	}
+
+	@Override
+	public void assemble(ViewConfig config) {
+		validateSplits(config);
+		doAssemble(config);
+
+	}
+
+	protected abstract void doAssemble(ViewConfig config);
 
 	@Override
 	public int transferComponentsFrom(ViewLayout source) {
@@ -63,4 +81,26 @@ public abstract class ViewLayoutBase implements ViewLayout {
 		return layoutRoot;
 	}
 
+	@Override
+	public ViewConfig defaultConfig() {
+		DefaultViewConfig config = new DefaultViewConfig();
+		return config;
+	}
+
+	@Override
+	public void validateSplits(ViewConfig config) {
+		Iterator<Split> spliterator = config.splitIterator();
+		validSplits.clear();
+		while (spliterator.hasNext()) {
+			Split split = spliterator.next();
+			if (isValidSplit(split)) {
+				validSplits.add(split);
+			}
+
+		}
+	}
+
+	public int validSplitCount() {
+		return validSplits.size();
+	}
 }

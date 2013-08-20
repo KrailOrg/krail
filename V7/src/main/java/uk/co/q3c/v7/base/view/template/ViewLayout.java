@@ -15,6 +15,7 @@ package uk.co.q3c.v7.base.view.template;
 import java.util.List;
 
 import uk.co.q3c.v7.base.ui.ScopedUI;
+import uk.co.q3c.v7.base.view.template.DefaultViewConfig.Split;
 import uk.co.q3c.v7.i18n.I18NListener;
 
 import com.vaadin.ui.AbstractComponent;
@@ -92,4 +93,22 @@ public interface ViewLayout extends I18NListener {
 	 * @return
 	 */
 	public ViewConfig defaultConfig();
+
+	/**
+	 * Each layout must define what is a valid split for that specific implementation. Invalid splits are ignored, but
+	 * do not raise errors. This allows layouts to be changed without unnecessary errors being thrown.
+	 * 
+	 * @param split
+	 * @return
+	 */
+	boolean isValidSplit(Split split);
+
+	/**
+	 * Checks that splits are 'valid' (as defined by {@link #isValidSplit(Split)}), and retains a set of validated Split
+	 * instances for layout processing
+	 * 
+	 * @param config
+	 */
+	void validateSplits(ViewConfig config);
+
 }

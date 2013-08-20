@@ -16,7 +16,6 @@ import static org.fest.assertions.Assertions.*;
 
 import java.util.LinkedList;
 
-import org.fest.assertions.Fail;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -138,6 +137,7 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(panel);
 		ViewConfig config = vvl.defaultConfig();
 		config.addSplit(0, 1);
+		vvl.validateSplits(config);
 		// when
 		LinkedList<Integer> result = vvl.buildPopulations(config);
 
@@ -158,6 +158,7 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(panel);
 		ViewConfig config = vvl.defaultConfig();
 		config.addSplit(1, 2);
+		vvl.validateSplits(config);
 		// when
 		LinkedList<Integer> result = vvl.buildPopulations(config);
 
@@ -177,7 +178,8 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
 		ViewConfig config = vvl.defaultConfig();
-		config.addSplit(1, 3);
+		config.addSplit(2, 3);
+		vvl.validateSplits(config);
 		// when
 		LinkedList<Integer> result = vvl.buildPopulations(config);
 
@@ -198,6 +200,8 @@ public class VerticalViewLayoutTest {
 		ViewConfig config = vvl.defaultConfig();
 		config.addSplit(0, 1);
 		config.addSplit(1, 2);
+		vvl.validateSplits(config);
+
 		// when
 		LinkedList<Integer> result = vvl.buildPopulations(config);
 
@@ -220,6 +224,7 @@ public class VerticalViewLayoutTest {
 		config.addSplit(0, 1);
 		config.addSplit(1, 2);
 		config.addSplit(2, 3);
+		vvl.validateSplits(config);
 		// when
 		LinkedList<Integer> result = vvl.buildPopulations(config);
 
@@ -366,35 +371,37 @@ public class VerticalViewLayoutTest {
 
 	}
 
-	/**
-	 * Cannot be more than one between section1 and section2
-	 */
-	@Test(expected = ViewLayoutConfigurationException.class)
-	public void invalidSplit_1() {
+	@Test
+	public void tolerateInvalidSplit() {
 
 		// given
+		vvl.addComponent(button);
+		vvl.addComponent(image);
+		vvl.addComponent(label);
+		vvl.addComponent(panel);
 		ViewConfig config = vvl.defaultConfig();
-		// when
-		config.addSplit(3, 1);
-		vvl.assemble(config);
-		// then
-		Fail.fail("expected exception");
-
-	}
-
-	/**
-	 * Cannot be more than one between section1 and section2
-	 */
-	@Test(expected = ViewLayoutConfigurationException.class)
-	public void invalidSplit_2() {
-
-		// given
-		ViewConfig config = vvl.defaultConfig();
-		// when
+		config.addSplit(0, 1);
 		config.addSplit(1, 3);
+		config.addSplit(1, 2);
+
+		// when
 		vvl.assemble(config);
 		// then
-		Fail.fail("expected exception");
+		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
+		VerticalSplitPanel vsp0 = (VerticalSplitPanel) vvl.layoutRoot;
+
+		assertThat(vsp0.getFirstComponent()).isInstanceOf(VerticalSplitPanel.class);
+		assertThat(vsp0.getSecondComponent()).isInstanceOf(VerticalLayout.class);
+
+		VerticalSplitPanel vsp1 = (VerticalSplitPanel) vsp0.getFirstComponent();
+		VerticalLayout vl1 = (VerticalLayout) vsp0.getSecondComponent();
+
+		assertThat(vsp1.getFirstComponent()).isEqualTo(button);
+		assertThat(vsp1.getSecondComponent()).isEqualTo(image);
+
+		assertThat(vl1.getComponent(0)).isEqualTo(label);
+		assertThat(vl1.getComponent(1)).isEqualTo(panel);
 
 	}
+
 }
