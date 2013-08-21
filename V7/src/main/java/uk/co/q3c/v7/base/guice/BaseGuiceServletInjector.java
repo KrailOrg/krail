@@ -35,6 +35,8 @@ import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapProvider;
 import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
 import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
+import uk.co.q3c.v7.base.shiro.VaadinSessionManager;
 import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
@@ -79,6 +81,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		// is to DefaultWebSecurityManager
 		SecurityManager securityManager = injector.getInstance(SecurityManager.class);
 		SecurityUtils.setSecurityManager(securityManager);
+                ((V7SecurityManager) securityManager).setSessionManager(new VaadinSessionManager());
 
 		return injector;
 	}
