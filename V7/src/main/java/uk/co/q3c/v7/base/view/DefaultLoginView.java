@@ -3,6 +3,7 @@ package uk.co.q3c.v7.base.view;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -14,6 +15,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
@@ -39,12 +41,14 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	private final V7Navigator navigator;
 	private final Label statusMsgLabel;
 	private final LoginExceptionHandler loginExceptionHandler;
+        private final Provider<Subject> subjectPro;
 
 	@Inject
-	protected DefaultLoginView(V7Navigator navigator, LoginExceptionHandler loginExceptionHandler) {
+	protected DefaultLoginView(V7Navigator navigator, LoginExceptionHandler loginExceptionHandler, Provider<Subject> subjectPro) {
 		super();
 		this.navigator = navigator;
 		this.loginExceptionHandler = loginExceptionHandler;
+		this.subjectPro = subjectPro;
 		this.setColumns(3);
 		this.setRows(3);
 		this.setSizeFull();
@@ -93,7 +97,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	public void buttonClick(ClickEvent event) {
 		UsernamePasswordToken token = new UsernamePasswordToken(usernameBox.getValue(), passwordBox.getValue());
 		try {
-			SecurityUtils.getSubject().login(token);
+		    subjectPro.get().login(token);
 		} catch (UnknownAccountException uae) {
 			loginExceptionHandler.unknownAccount(this, token);
 		} catch (IncorrectCredentialsException ice) {

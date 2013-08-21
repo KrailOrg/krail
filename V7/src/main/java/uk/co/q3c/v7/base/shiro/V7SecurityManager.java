@@ -18,11 +18,11 @@ import java.util.List;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 
-public class V7SecurityManager extends DefaultWebSecurityManager {
+public class V7SecurityManager extends DefaultSecurityManager {
 	private final List<LoginStatusListener> listeners = new ArrayList<>();
 
 	public V7SecurityManager() {

@@ -67,7 +67,7 @@ public class MoneyConverterTest {
 		// given
 		converter = new MoneyConverter();
 		// when
-		Money money = converter.convertToModel("£1,025.44", Money.class, Locale.UK);
+		Money money = converter.convertToModel("1,025.44", Money.class, Locale.UK);
 		// then
 		Money expected = Money.ofMinor(CurrencyUnit.getInstance(Locale.UK), 102544);
 		assertThat(money).isEqualTo(expected);
