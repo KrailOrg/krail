@@ -21,6 +21,7 @@ import java.util.TreeSet;
 import uk.co.q3c.v7.base.view.template.DefaultViewConfig.Split;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 
+import com.vaadin.server.Sizeable;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 
@@ -48,8 +49,22 @@ public abstract class ViewLayoutBase implements ViewLayout {
 	@Override
 	public void assemble(ViewConfig config) {
 		validateSplits(config);
+		setComponentDefaults(config);
 		doAssemble(config);
 
+	}
+
+	private void setComponentDefaults(ViewConfig config) {
+		if (config.isDefaultsEnabled()) {
+			for (Component c : components) {
+				if (c.getWidth() == Sizeable.SIZE_UNDEFINED) {
+					c.setWidth(config.getDefaultWidth(), config.getDefaultUnit());
+				}
+				if (c.getHeight() == Sizeable.SIZE_UNDEFINED) {
+					c.setHeight(config.getDefaultHeight(), config.getDefaultUnit());
+				}
+			}
+		}
 	}
 
 	protected abstract void doAssemble(ViewConfig config);
@@ -100,6 +115,7 @@ public abstract class ViewLayoutBase implements ViewLayout {
 		}
 	}
 
+	@Override
 	public int validSplitCount() {
 		return validSplits.size();
 	}

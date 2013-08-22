@@ -111,4 +111,11 @@ public interface ViewLayout extends I18NListener {
 	 */
 	void validateSplits(ViewConfig config);
 
+	/**
+	 * The number of splits defined which are valid for this layout
+	 * 
+	 * @return
+	 */
+	int validSplitCount();
+
 }

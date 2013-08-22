@@ -16,10 +16,16 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.vaadin.server.Sizeable.Unit;
+
 public class DefaultViewConfig implements ViewConfig {
 
 	private final SortedSet<Split> splits;
 	private int expandedItem;
+	private final Unit defaultUnit = Unit.PIXELS;
+	private final float defaultHeight = -1;
+	private final float defaultWidth = -1;
+	private boolean defaultsEnabled = true;
 
 	public static class Split implements Comparable<Split> {
 		int section1;
@@ -125,4 +131,33 @@ public class DefaultViewConfig implements ViewConfig {
 		return splits.size();
 	}
 
+	@Override
+	public Unit getDefaultUnit() {
+		return defaultUnit;
+	}
+
+	@Override
+	public float getDefaultHeight() {
+		return defaultHeight;
+	}
+
+	@Override
+	public float getDefaultWidth() {
+		return defaultWidth;
+	}
+
+	@Override
+	public void enableDefaults() {
+		defaultsEnabled = true;
+	}
+
+	@Override
+	public void disableDefaults() {
+		defaultsEnabled = false;
+	}
+
+	@Override
+	public boolean isDefaultsEnabled() {
+		return defaultsEnabled;
+	}
 }
