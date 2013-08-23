@@ -26,13 +26,20 @@ import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 
 /**
- * To change config you can either setConfig(config), or getConfig(), set whatever needs to be set, and then call
- * assemble()
+ * Uses a {@link ViewLayout} instance to provide component layout, a {@link ViewConfig} instance to provide
+ * configuration and component default settings.
+ * <p>
+ * Provides a number of methods to build a chain, for example:
+ * <p>
+ * add(Button).width(50).height("20%").caption("neat");
+ * <p>
+ * This is implemented using the internal class {@link ComponentWrapper}
+ * <p>
+ * To change config: getConfig(), make changes, and then call assemble() to implement changes
  */
-public abstract class ViewBaseWithLayout extends ViewBase {
+public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLayout {
 	private ViewLayout layout;
 	private ViewConfig config;
-	// private final Provider<ComponentWrapper> wrapperPro;
 	private final Translate translate;
 
 	protected class ComponentWrapper {
@@ -187,14 +194,12 @@ public abstract class ViewBaseWithLayout extends ViewBase {
 		super(navigator);
 		this.translate = translate;
 		this.layout = viewLayout;
+		this.config = layout.defaultConfig();
 	}
 
+	@Override
 	public ViewConfig getConfig() {
 		return config;
-	}
-
-	public void setConfig(DefaultViewConfig config) {
-		this.config = config;
 	}
 
 	/**
@@ -212,6 +217,7 @@ public abstract class ViewBaseWithLayout extends ViewBase {
 	 * @return
 	 */
 	public AbstractComponent addComponent(AbstractComponent component) {
+		config.setDefaults(component);
 		layout.addComponent(component);
 		return component;
 	}
@@ -230,18 +236,19 @@ public abstract class ViewBaseWithLayout extends ViewBase {
 		this.layout = layout;
 	}
 
+	/**
+	 * Sets the config to use for this instance, and the layout it contains
+	 * 
+	 * @param config
+	 */
 	public void setConfig(ViewConfig config) {
 		this.config = config;
+		layout.setConfig(config);
 	}
 
 	@Override
 	public Component getUiComponent() {
 		return layout.getLayoutRoot();
-	}
-
-	@Override
-	public void assemble() {
-		// layout.assemble(config);
 	}
 
 	public List<AbstractComponent> orderedComponents() {

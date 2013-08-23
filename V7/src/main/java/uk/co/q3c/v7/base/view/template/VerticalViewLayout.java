@@ -40,7 +40,7 @@ public class VerticalViewLayout extends ViewLayoutBase {
 	}
 
 	@Override
-	public void doAssemble(ViewConfig config) {
+	public void doAssemble() {
 		if (config.splitCount() == 0) {
 			assembleNoSplits();
 			return;

@@ -74,9 +74,20 @@ public interface ViewLayout extends I18NListener {
 	void addComponent(AbstractComponent component);
 
 	/**
-	 * Assembles (or re-assembles) the layout in accordance with the supplied config
+	 * Assembles (or re-assembles) the layout. Uses the config provided by setConfig
 	 */
-	public void assemble(ViewConfig config);
+	public void assemble();
+
+	/**
+	 * sets the config to use
+	 */
+	public void setConfig(ViewConfig config);
+
+	/**
+	 * gets the current config
+	 * 
+	 */
+	public ViewConfig getConfig();
 
 	/**
 	 * Returns the Component at the root of the layout. This is placed in the {@link ScopedUI} to display the view
@@ -109,7 +120,7 @@ public interface ViewLayout extends I18NListener {
 	 * 
 	 * @param config
 	 */
-	void validateSplits(ViewConfig config);
+	void validateSplits();
 
 	/**
 	 * The number of splits defined which are valid for this layout

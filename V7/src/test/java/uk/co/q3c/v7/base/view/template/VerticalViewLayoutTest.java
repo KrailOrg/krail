@@ -39,6 +39,8 @@ public class VerticalViewLayoutTest {
 	@Before
 	public void setup() {
 		vvl = new VerticalViewLayout();
+		// config is normally set by View implementation
+		vvl.setConfig(vvl.defaultConfig());
 		button = new Button();
 		image = new Image();
 		label = new Label();
@@ -135,9 +137,10 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(image);
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
-		ViewConfig config = vvl.defaultConfig();
+		ViewConfig config = vvl.getConfig();
 		config.addSplit(0, 1);
-		vvl.validateSplits(config);
+		vvl.setConfig(config);
+		vvl.validateSplits();
 		// when
 		LinkedList<Integer> result = vvl.buildPopulations(config);
 
@@ -156,9 +159,10 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(image);
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
-		ViewConfig config = vvl.defaultConfig();
+		ViewConfig config = vvl.getConfig();
 		config.addSplit(1, 2);
-		vvl.validateSplits(config);
+		vvl.setConfig(config);
+		vvl.validateSplits();
 		// when
 		LinkedList<Integer> result = vvl.buildPopulations(config);
 
@@ -177,9 +181,10 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(image);
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
-		ViewConfig config = vvl.defaultConfig();
+		ViewConfig config = vvl.getConfig();
 		config.addSplit(2, 3);
-		vvl.validateSplits(config);
+		vvl.setConfig(config);
+		vvl.validateSplits();
 		// when
 		LinkedList<Integer> result = vvl.buildPopulations(config);
 
@@ -197,10 +202,11 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(image);
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
-		ViewConfig config = vvl.defaultConfig();
+		ViewConfig config = vvl.getConfig();
 		config.addSplit(0, 1);
 		config.addSplit(1, 2);
-		vvl.validateSplits(config);
+		vvl.setConfig(config);
+		vvl.validateSplits();
 
 		// when
 		LinkedList<Integer> result = vvl.buildPopulations(config);
@@ -220,11 +226,12 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(image);
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
-		ViewConfig config = vvl.defaultConfig();
+		ViewConfig config = vvl.getConfig();
 		config.addSplit(0, 1);
 		config.addSplit(1, 2);
 		config.addSplit(2, 3);
-		vvl.validateSplits(config);
+		vvl.setConfig(config);
+		vvl.validateSplits();
 		// when
 		LinkedList<Integer> result = vvl.buildPopulations(config);
 
@@ -246,7 +253,7 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
 		// when
-		vvl.assemble(vvl.defaultConfig());
+		vvl.assemble();
 		// then
 		assertThat(vvl.layoutRoot).isInstanceOf(VerticalLayout.class);
 		VerticalLayout vl = (VerticalLayout) vvl.layoutRoot;
@@ -266,11 +273,10 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(image);
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
-		ViewConfig config = vvl.defaultConfig();
+		ViewConfig config = vvl.getConfig();
 		config.addSplit(0, 1);
-
 		// when
-		vvl.assemble(config);
+		vvl.assemble();
 		// then
 		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
 		VerticalSplitPanel vsp = (VerticalSplitPanel) vvl.layoutRoot;
@@ -292,11 +298,11 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(image);
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
-		ViewConfig config = vvl.defaultConfig();
+		ViewConfig config = vvl.getConfig();
 		config.addSplit(1, 2);
 
 		// when
-		vvl.assemble(config);
+		vvl.assemble();
 		// then
 		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
 		VerticalSplitPanel vsp = (VerticalSplitPanel) vvl.layoutRoot;
@@ -321,11 +327,11 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(image);
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
-		ViewConfig config = vvl.defaultConfig();
+		ViewConfig config = vvl.getConfig();
 		config.addSplit(2, 3);
 
 		// when
-		vvl.assemble(config);
+		vvl.assemble();
 		// then
 		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
 		VerticalSplitPanel vsp = (VerticalSplitPanel) vvl.layoutRoot;
@@ -347,12 +353,12 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(image);
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
-		ViewConfig config = vvl.defaultConfig();
+		ViewConfig config = vvl.getConfig();
 		config.addSplit(0, 1);
 		config.addSplit(1, 2);
 
 		// when
-		vvl.assemble(config);
+		vvl.assemble();
 		// then
 		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
 		VerticalSplitPanel vsp0 = (VerticalSplitPanel) vvl.layoutRoot;
@@ -379,13 +385,13 @@ public class VerticalViewLayoutTest {
 		vvl.addComponent(image);
 		vvl.addComponent(label);
 		vvl.addComponent(panel);
-		ViewConfig config = vvl.defaultConfig();
+		ViewConfig config = vvl.getConfig();
 		config.addSplit(0, 1);
 		config.addSplit(1, 3);
 		config.addSplit(1, 2);
 
 		// when
-		vvl.assemble(config);
+		vvl.assemble();
 		// then
 		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
 		VerticalSplitPanel vsp0 = (VerticalSplitPanel) vvl.layoutRoot;

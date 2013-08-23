@@ -37,11 +37,15 @@ public abstract class ViewBase implements V7View {
 
 	/**
 	 * This method is called after {@link #buildUI()}, and is primarily intended for use by descendant class
-	 * {@link ViewBaseWithLayout}
+	 * {@link ViewBaseWithLayout}.
 	 */
 	protected void assemble() {
 	}
 
+	/**
+	 * Implement this method to create and assemble the user interface components for the view. If you use sub-class
+	 * {@link ViewBaseWithLayout} there are some useful shorthand methods for creating and sizing components
+	 */
 	protected abstract void buildUI();
 
 	@Override
@@ -51,6 +55,12 @@ public abstract class ViewBase implements V7View {
 		processParams(params);
 	}
 
+	/**
+	 * This method is called with the URI parameters separated from the "address" part of the URI, and is typically used
+	 * to set up the state of a view in response to the parameter values
+	 * 
+	 * @param params
+	 */
 	protected abstract void processParams(List<String> params);
 
 	public V7Navigator getNavigator() {

@@ -21,13 +21,13 @@ import java.util.TreeSet;
 import uk.co.q3c.v7.base.view.template.DefaultViewConfig.Split;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 
-import com.vaadin.server.Sizeable;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 
 public abstract class ViewLayoutBase implements ViewLayout {
 
 	protected Component layoutRoot;
+	protected ViewConfig config;
 
 	protected final List<AbstractComponent> components;
 	/**
@@ -47,27 +47,16 @@ public abstract class ViewLayoutBase implements ViewLayout {
 	}
 
 	@Override
-	public void assemble(ViewConfig config) {
-		validateSplits(config);
-		setComponentDefaults(config);
-		doAssemble(config);
+	public void assemble() {
+		validateSplits();
+		doAssemble();
 
 	}
 
-	private void setComponentDefaults(ViewConfig config) {
-		if (config.isDefaultsEnabled()) {
-			for (Component c : components) {
-				if (c.getWidth() == Sizeable.SIZE_UNDEFINED) {
-					c.setWidth(config.getDefaultWidth(), config.getDefaultUnit());
-				}
-				if (c.getHeight() == Sizeable.SIZE_UNDEFINED) {
-					c.setHeight(config.getDefaultHeight(), config.getDefaultUnit());
-				}
-			}
-		}
-	}
-
-	protected abstract void doAssemble(ViewConfig config);
+	/**
+	 * Override this to assemble components into layouts. See {@link VerticalViewLayout#doAssemble()} for an example
+	 */
+	protected abstract void doAssemble();
 
 	@Override
 	public int transferComponentsFrom(ViewLayout source) {
@@ -103,7 +92,7 @@ public abstract class ViewLayoutBase implements ViewLayout {
 	}
 
 	@Override
-	public void validateSplits(ViewConfig config) {
+	public void validateSplits() {
 		Iterator<Split> spliterator = config.splitIterator();
 		validSplits.clear();
 		while (spliterator.hasNext()) {
@@ -118,5 +107,15 @@ public abstract class ViewLayoutBase implements ViewLayout {
 	@Override
 	public int validSplitCount() {
 		return validSplits.size();
+	}
+
+	@Override
+	public ViewConfig getConfig() {
+		return config;
+	}
+
+	@Override
+	public void setConfig(ViewConfig config) {
+		this.config = config;
 	}
 }

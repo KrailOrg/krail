@@ -239,16 +239,27 @@ public class ViewBaseWithLayoutTest {
 	}
 
 	@Test
-	public void inversepower() {
+	public void construct() {
 
 		// given
-		System.out.println("2 power 3:  " + Math.pow(2, 3));
-		System.out.println((int) (Math.log(8) / Math.log(2)));
 
 		// when
 
 		// then
-		assertThat(false).isEqualTo(true);
+		assertThat(vbwl.getConfig()).isNotNull();
 
 	}
+
+	@Test
+	public void configToLayout() {
+
+		// given
+		DefaultViewConfig config = new DefaultViewConfig();
+		// when config set
+		vbwl.setConfig(config);
+		// then
+		assertThat(vbwl.getLayout().getConfig()).isEqualTo(config);
+
+	}
+
 }

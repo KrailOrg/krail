@@ -17,15 +17,18 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.ui.AbstractComponent;
 
 public class DefaultViewConfig implements ViewConfig {
 
 	private final SortedSet<Split> splits;
 	private int expandedItem;
-	private final Unit defaultUnit = Unit.PIXELS;
-	private final float defaultHeight = -1;
-	private final float defaultWidth = -1;
-	private boolean defaultsEnabled = true;
+	private Unit widthUnit = Unit.PIXELS;
+	private Unit heightUnit = Unit.PIXELS;
+	private float height = -1;
+	private float width = -1;
+	private boolean widthEnabled = true;
+	private boolean heightEnabled = true;
 
 	public static class Split implements Comparable<Split> {
 		int section1;
@@ -73,16 +76,19 @@ public class DefaultViewConfig implements ViewConfig {
 	 * 
 	 * @param section1
 	 * @param section2
+	 * @return
 	 */
 	@Override
-	public void addSplit(int section1, int section2) {
+	public ViewConfig addSplit(int section1, int section2) {
 		splits.add(createSplit(section1, section2));
+		return this;
 	}
 
 	@Override
-	public void removeSplit(int section1, int section2) {
+	public ViewConfig removeSplit(int section1, int section2) {
 		Split split = createSplit(section1, section2);
 		splits.remove(split);
+		return this;
 	}
 
 	@Override
@@ -132,32 +138,95 @@ public class DefaultViewConfig implements ViewConfig {
 	}
 
 	@Override
-	public Unit getDefaultUnit() {
-		return defaultUnit;
+	public void setDefaults(AbstractComponent component) {
+		if (widthEnabled) {
+			component.setWidth(width, widthUnit);
+		}
+		if (heightEnabled) {
+			component.setHeight(height, heightUnit);
+		}
 	}
 
 	@Override
-	public float getDefaultHeight() {
-		return defaultHeight;
+	public ViewConfig noWidth() {
+		widthEnabled = false;
+		return this;
 	}
 
 	@Override
-	public float getDefaultWidth() {
-		return defaultWidth;
+	public ViewConfig noHeight() {
+		heightEnabled = false;
+		return this;
 	}
 
 	@Override
-	public void enableDefaults() {
-		defaultsEnabled = true;
+	public ViewConfig doWidth() {
+		widthEnabled = true;
+		return this;
 	}
 
 	@Override
-	public void disableDefaults() {
-		defaultsEnabled = false;
+	public ViewConfig doHeight() {
+		heightEnabled = true;
+		return this;
 	}
 
 	@Override
-	public boolean isDefaultsEnabled() {
-		return defaultsEnabled;
+	public ViewConfig width(float width) {
+		this.width = width;
+		return this;
+	}
+
+	@Override
+	public ViewConfig height(float height) {
+		this.height = height;
+		return this;
+	}
+
+	@Override
+	public ViewConfig widthUnit(Unit widthUnit) {
+		this.widthUnit = widthUnit;
+		return this;
+	}
+
+	@Override
+	public ViewConfig heightUnit(Unit heightUnit) {
+		this.heightUnit = heightUnit;
+		return this;
+	}
+
+	@Override
+	public ViewConfig noSize() {
+		widthEnabled = false;
+		heightEnabled = false;
+		return this;
+	}
+
+	@Override
+	public ViewConfig doSize() {
+		widthEnabled = true;
+		heightEnabled = true;
+		return this;
+	}
+
+	@Override
+	public ViewConfig sizeUnit(Unit widthUnit, Unit heightUnit) {
+		this.widthUnit = widthUnit;
+		this.heightUnit = heightUnit;
+		return this;
+	}
+
+	@Override
+	public ViewConfig sizeUnit(Unit unit) {
+		this.widthUnit = unit;
+		this.heightUnit = unit;
+		return this;
+	}
+
+	@Override
+	public ViewConfig size(float width, float height) {
+		this.width = width;
+		this.height = height;
+		return this;
 	}
 }
