@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.view.template;
+package uk.co.q3c.v7.base.view.layout;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,9 +18,10 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import uk.co.q3c.v7.base.view.template.DefaultViewConfig.Split;
+import uk.co.q3c.v7.base.view.layout.DefaultViewConfig.Split;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 
@@ -88,6 +89,7 @@ public abstract class ViewLayoutBase implements ViewLayout {
 	@Override
 	public ViewConfig defaultConfig() {
 		DefaultViewConfig config = new DefaultViewConfig();
+		config.widthUnit(Unit.PERCENTAGE).width(100).noHeight();
 		return config;
 	}
 

@@ -10,12 +10,12 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.view.template;
+package uk.co.q3c.v7.base.view.layout;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import uk.co.q3c.v7.base.view.template.DefaultViewConfig.Split;
+import uk.co.q3c.v7.base.view.layout.DefaultViewConfig.Split;
 
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.AbstractSplitPanel;
@@ -82,7 +82,7 @@ public class VerticalViewLayout extends ViewLayoutBase {
 	/**
 	 * For this layout, a split can only be between consecutively numbered components
 	 * 
-	 * @see uk.co.q3c.v7.base.view.template.ViewLayout#isValidSplit(uk.co.q3c.v7.base.view.template.DefaultViewConfig.Split)
+	 * @see uk.co.q3c.v7.base.view.layout.ViewLayout#isValidSplit(uk.co.q3c.v7.base.view.layout.DefaultViewConfig.Split)
 	 */
 	@Override
 	public boolean isValidSplit(Split split) {

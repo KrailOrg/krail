@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.view.template;
+package uk.co.q3c.v7.base.view.layout;
 
 import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -25,7 +25,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.view.template.ViewBaseWithLayout.ComponentWrapper;
+import uk.co.q3c.v7.base.view.layout.DefaultViewConfig;
+import uk.co.q3c.v7.base.view.layout.VerticalViewLayout;
+import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout;
+import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout.ComponentWrapper;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 

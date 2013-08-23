@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.view.template;
+package uk.co.q3c.v7.base.view.layout;
 
 import static org.fest.assertions.Assertions.*;
 
@@ -19,17 +19,18 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractSplitPanel;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.VerticalSplitPanel;
 
-public class VerticalViewLayoutTest {
+public class HorizontalViewLayoutTest {
 
-	VerticalViewLayout vvl;
+	HorizontalViewLayout hvl;
 
 	Button button;
 	Image image;
@@ -38,9 +39,9 @@ public class VerticalViewLayoutTest {
 
 	@Before
 	public void setup() {
-		vvl = new VerticalViewLayout();
+		hvl = new HorizontalViewLayout();
 		// config is normally set by View implementation
-		vvl.setConfig(vvl.defaultConfig());
+		hvl.setConfig(hvl.defaultConfig());
 		button = new Button();
 		image = new Image();
 		label = new Label();
@@ -57,7 +58,7 @@ public class VerticalViewLayoutTest {
 		// given
 
 		// when
-		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(1);
+		LinkedList<AbstractSplitPanel> q = hvl.buildSplitterQueue(1);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp0");
 
@@ -68,7 +69,7 @@ public class VerticalViewLayoutTest {
 	public void build_splitters_2() {
 
 		// when
-		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(2);
+		LinkedList<AbstractSplitPanel> q = hvl.buildSplitterQueue(2);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp1");
 		q.pop();
@@ -81,7 +82,7 @@ public class VerticalViewLayoutTest {
 		// given
 
 		// when
-		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(3);
+		LinkedList<AbstractSplitPanel> q = hvl.buildSplitterQueue(3);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp1");
 		q.pop();
@@ -94,7 +95,7 @@ public class VerticalViewLayoutTest {
 		// given
 
 		// when
-		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(4);
+		LinkedList<AbstractSplitPanel> q = hvl.buildSplitterQueue(4);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp3");
 		q.pop();
@@ -106,7 +107,7 @@ public class VerticalViewLayoutTest {
 	@Test
 	public void build_splitters_5() {
 		// when
-		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(5);
+		LinkedList<AbstractSplitPanel> q = hvl.buildSplitterQueue(5);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp3");
 		q.pop();
@@ -117,7 +118,7 @@ public class VerticalViewLayoutTest {
 
 	@Test
 	public void build_splitters_6() { // when
-		LinkedList<AbstractSplitPanel> q = vvl.buildSplitterQueue(6);
+		LinkedList<AbstractSplitPanel> q = hvl.buildSplitterQueue(6);
 		// then
 		assertThat(q.getFirst().getId()).isEqualTo("vsp3");
 		q.pop();
@@ -133,16 +134,16 @@ public class VerticalViewLayoutTest {
 	public void buildPop_1() {
 
 		// given
-		vvl.addComponent(button);
-		vvl.addComponent(image);
-		vvl.addComponent(label);
-		vvl.addComponent(panel);
-		ViewConfig config = vvl.getConfig();
+		hvl.addComponent(button);
+		hvl.addComponent(image);
+		hvl.addComponent(label);
+		hvl.addComponent(panel);
+		ViewConfig config = hvl.getConfig();
 		config.addSplit(0, 1);
-		vvl.setConfig(config);
-		vvl.validateSplits();
+		hvl.setConfig(config);
+		hvl.validateSplits();
 		// when
-		LinkedList<Integer> result = vvl.buildPopulations(config);
+		LinkedList<Integer> result = hvl.buildPopulations(config);
 
 		// then
 		assertThat(result.size()).isEqualTo(2);
@@ -155,16 +156,16 @@ public class VerticalViewLayoutTest {
 	public void buildPop_2() {
 
 		// given
-		vvl.addComponent(button);
-		vvl.addComponent(image);
-		vvl.addComponent(label);
-		vvl.addComponent(panel);
-		ViewConfig config = vvl.getConfig();
+		hvl.addComponent(button);
+		hvl.addComponent(image);
+		hvl.addComponent(label);
+		hvl.addComponent(panel);
+		ViewConfig config = hvl.getConfig();
 		config.addSplit(1, 2);
-		vvl.setConfig(config);
-		vvl.validateSplits();
+		hvl.setConfig(config);
+		hvl.validateSplits();
 		// when
-		LinkedList<Integer> result = vvl.buildPopulations(config);
+		LinkedList<Integer> result = hvl.buildPopulations(config);
 
 		// then
 		assertThat(result.size()).isEqualTo(2);
@@ -177,16 +178,16 @@ public class VerticalViewLayoutTest {
 	public void buildPop_3() {
 
 		// given
-		vvl.addComponent(button);
-		vvl.addComponent(image);
-		vvl.addComponent(label);
-		vvl.addComponent(panel);
-		ViewConfig config = vvl.getConfig();
+		hvl.addComponent(button);
+		hvl.addComponent(image);
+		hvl.addComponent(label);
+		hvl.addComponent(panel);
+		ViewConfig config = hvl.getConfig();
 		config.addSplit(2, 3);
-		vvl.setConfig(config);
-		vvl.validateSplits();
+		hvl.setConfig(config);
+		hvl.validateSplits();
 		// when
-		LinkedList<Integer> result = vvl.buildPopulations(config);
+		LinkedList<Integer> result = hvl.buildPopulations(config);
 
 		// then
 		assertThat(result.size()).isEqualTo(2);
@@ -198,18 +199,18 @@ public class VerticalViewLayoutTest {
 	public void buildPop_1_2() {
 
 		// given
-		vvl.addComponent(button);
-		vvl.addComponent(image);
-		vvl.addComponent(label);
-		vvl.addComponent(panel);
-		ViewConfig config = vvl.getConfig();
+		hvl.addComponent(button);
+		hvl.addComponent(image);
+		hvl.addComponent(label);
+		hvl.addComponent(panel);
+		ViewConfig config = hvl.getConfig();
 		config.addSplit(0, 1);
 		config.addSplit(1, 2);
-		vvl.setConfig(config);
-		vvl.validateSplits();
+		hvl.setConfig(config);
+		hvl.validateSplits();
 
 		// when
-		LinkedList<Integer> result = vvl.buildPopulations(config);
+		LinkedList<Integer> result = hvl.buildPopulations(config);
 
 		// then
 		assertThat(result.size()).isEqualTo(3);
@@ -222,18 +223,18 @@ public class VerticalViewLayoutTest {
 	public void buildPop_1_2_3() {
 
 		// given
-		vvl.addComponent(button);
-		vvl.addComponent(image);
-		vvl.addComponent(label);
-		vvl.addComponent(panel);
-		ViewConfig config = vvl.getConfig();
+		hvl.addComponent(button);
+		hvl.addComponent(image);
+		hvl.addComponent(label);
+		hvl.addComponent(panel);
+		ViewConfig config = hvl.getConfig();
 		config.addSplit(0, 1);
 		config.addSplit(1, 2);
 		config.addSplit(2, 3);
-		vvl.setConfig(config);
-		vvl.validateSplits();
+		hvl.setConfig(config);
+		hvl.validateSplits();
 		// when
-		LinkedList<Integer> result = vvl.buildPopulations(config);
+		LinkedList<Integer> result = hvl.buildPopulations(config);
 
 		// then
 		assertThat(result.size()).isEqualTo(4);
@@ -248,15 +249,15 @@ public class VerticalViewLayoutTest {
 
 		// given
 
-		vvl.addComponent(button);
-		vvl.addComponent(image);
-		vvl.addComponent(label);
-		vvl.addComponent(panel);
+		hvl.addComponent(button);
+		hvl.addComponent(image);
+		hvl.addComponent(label);
+		hvl.addComponent(panel);
 		// when
-		vvl.assemble();
+		hvl.assemble();
 		// then
-		assertThat(vvl.layoutRoot).isInstanceOf(VerticalLayout.class);
-		VerticalLayout vl = (VerticalLayout) vvl.layoutRoot;
+		assertThat(hvl.layoutRoot).isInstanceOf(HorizontalLayout.class);
+		HorizontalLayout vl = (HorizontalLayout) hvl.layoutRoot;
 		assertThat(vl.getComponentCount()).isEqualTo(4);
 		assertThat(vl.getComponentIndex(button)).isEqualTo(0);
 		assertThat(vl.getComponentIndex(image)).isEqualTo(1);
@@ -269,20 +270,20 @@ public class VerticalViewLayoutTest {
 	public void assemble_split_0() {
 
 		// given
-		vvl.addComponent(button);
-		vvl.addComponent(image);
-		vvl.addComponent(label);
-		vvl.addComponent(panel);
-		ViewConfig config = vvl.getConfig();
+		hvl.addComponent(button);
+		hvl.addComponent(image);
+		hvl.addComponent(label);
+		hvl.addComponent(panel);
+		ViewConfig config = hvl.getConfig();
 		config.addSplit(0, 1);
 		// when
-		vvl.assemble();
+		hvl.assemble();
 		// then
-		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
-		VerticalSplitPanel vsp = (VerticalSplitPanel) vvl.layoutRoot;
+		assertThat(hvl.layoutRoot).isInstanceOf(HorizontalSplitPanel.class);
+		HorizontalSplitPanel vsp = (HorizontalSplitPanel) hvl.layoutRoot;
 		assertThat(vsp.getFirstComponent()).isEqualTo(button);
-		assertThat(vsp.getSecondComponent()).isInstanceOf(VerticalLayout.class);
-		VerticalLayout vl = (VerticalLayout) vsp.getSecondComponent();
+		assertThat(vsp.getSecondComponent()).isInstanceOf(HorizontalLayout.class);
+		HorizontalLayout vl = (HorizontalLayout) vsp.getSecondComponent();
 		assertThat(vl.getComponentCount()).isEqualTo(3);
 		assertThat(vl.getComponentIndex(image)).isEqualTo(0);
 		assertThat(vl.getComponentIndex(label)).isEqualTo(1);
@@ -294,25 +295,25 @@ public class VerticalViewLayoutTest {
 	public void assemble_split_1() {
 
 		// given
-		vvl.addComponent(button);
-		vvl.addComponent(image);
-		vvl.addComponent(label);
-		vvl.addComponent(panel);
-		ViewConfig config = vvl.getConfig();
+		hvl.addComponent(button);
+		hvl.addComponent(image);
+		hvl.addComponent(label);
+		hvl.addComponent(panel);
+		ViewConfig config = hvl.getConfig();
 		config.addSplit(1, 2);
 
 		// when
-		vvl.assemble();
+		hvl.assemble();
 		// then
-		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
-		VerticalSplitPanel vsp = (VerticalSplitPanel) vvl.layoutRoot;
-		assertThat(vsp.getFirstComponent()).isInstanceOf(VerticalLayout.class);
-		VerticalLayout vl = (VerticalLayout) vsp.getFirstComponent();
+		assertThat(hvl.layoutRoot).isInstanceOf(HorizontalSplitPanel.class);
+		HorizontalSplitPanel vsp = (HorizontalSplitPanel) hvl.layoutRoot;
+		assertThat(vsp.getFirstComponent()).isInstanceOf(HorizontalLayout.class);
+		HorizontalLayout vl = (HorizontalLayout) vsp.getFirstComponent();
 		assertThat(vl.getComponentCount()).isEqualTo(2);
 		assertThat(vl.getComponent(0)).isEqualTo(button);
 		assertThat(vl.getComponent(1)).isEqualTo(image);
 
-		VerticalLayout vl1 = (VerticalLayout) vsp.getSecondComponent();
+		HorizontalLayout vl1 = (HorizontalLayout) vsp.getSecondComponent();
 		assertThat(vl1.getComponentCount()).isEqualTo(2);
 		assertThat(vl1.getComponent(0)).isEqualTo(label);
 		assertThat(vl1.getComponent(1)).isEqualTo(panel);
@@ -323,20 +324,20 @@ public class VerticalViewLayoutTest {
 	public void assemble_split_2() {
 
 		// given
-		vvl.addComponent(button);
-		vvl.addComponent(image);
-		vvl.addComponent(label);
-		vvl.addComponent(panel);
-		ViewConfig config = vvl.getConfig();
+		hvl.addComponent(button);
+		hvl.addComponent(image);
+		hvl.addComponent(label);
+		hvl.addComponent(panel);
+		ViewConfig config = hvl.getConfig();
 		config.addSplit(2, 3);
 
 		// when
-		vvl.assemble();
+		hvl.assemble();
 		// then
-		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
-		VerticalSplitPanel vsp = (VerticalSplitPanel) vvl.layoutRoot;
-		assertThat(vsp.getFirstComponent()).isInstanceOf(VerticalLayout.class);
-		VerticalLayout vl = (VerticalLayout) vsp.getFirstComponent();
+		assertThat(hvl.layoutRoot).isInstanceOf(HorizontalSplitPanel.class);
+		HorizontalSplitPanel vsp = (HorizontalSplitPanel) hvl.layoutRoot;
+		assertThat(vsp.getFirstComponent()).isInstanceOf(HorizontalLayout.class);
+		HorizontalLayout vl = (HorizontalLayout) vsp.getFirstComponent();
 		assertThat(vl.getComponentCount()).isEqualTo(3);
 		assertThat(vl.getComponent(0)).isEqualTo(button);
 		assertThat(vl.getComponent(1)).isEqualTo(image);
@@ -349,25 +350,25 @@ public class VerticalViewLayoutTest {
 	public void assemble_split_0_and_1() {
 
 		// given
-		vvl.addComponent(button);
-		vvl.addComponent(image);
-		vvl.addComponent(label);
-		vvl.addComponent(panel);
-		ViewConfig config = vvl.getConfig();
+		hvl.addComponent(button);
+		hvl.addComponent(image);
+		hvl.addComponent(label);
+		hvl.addComponent(panel);
+		ViewConfig config = hvl.getConfig();
 		config.addSplit(0, 1);
 		config.addSplit(1, 2);
 
 		// when
-		vvl.assemble();
+		hvl.assemble();
 		// then
-		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
-		VerticalSplitPanel vsp0 = (VerticalSplitPanel) vvl.layoutRoot;
+		assertThat(hvl.layoutRoot).isInstanceOf(HorizontalSplitPanel.class);
+		HorizontalSplitPanel vsp0 = (HorizontalSplitPanel) hvl.layoutRoot;
 
-		assertThat(vsp0.getFirstComponent()).isInstanceOf(VerticalSplitPanel.class);
-		assertThat(vsp0.getSecondComponent()).isInstanceOf(VerticalLayout.class);
+		assertThat(vsp0.getFirstComponent()).isInstanceOf(HorizontalSplitPanel.class);
+		assertThat(vsp0.getSecondComponent()).isInstanceOf(HorizontalLayout.class);
 
-		VerticalSplitPanel vsp1 = (VerticalSplitPanel) vsp0.getFirstComponent();
-		VerticalLayout vl1 = (VerticalLayout) vsp0.getSecondComponent();
+		HorizontalSplitPanel vsp1 = (HorizontalSplitPanel) vsp0.getFirstComponent();
+		HorizontalLayout vl1 = (HorizontalLayout) vsp0.getSecondComponent();
 
 		assertThat(vsp1.getFirstComponent()).isEqualTo(button);
 		assertThat(vsp1.getSecondComponent()).isEqualTo(image);
@@ -381,26 +382,26 @@ public class VerticalViewLayoutTest {
 	public void tolerateInvalidSplit() {
 
 		// given
-		vvl.addComponent(button);
-		vvl.addComponent(image);
-		vvl.addComponent(label);
-		vvl.addComponent(panel);
-		ViewConfig config = vvl.getConfig();
+		hvl.addComponent(button);
+		hvl.addComponent(image);
+		hvl.addComponent(label);
+		hvl.addComponent(panel);
+		ViewConfig config = hvl.getConfig();
 		config.addSplit(0, 1);
 		config.addSplit(1, 3);
 		config.addSplit(1, 2);
 
 		// when
-		vvl.assemble();
+		hvl.assemble();
 		// then
-		assertThat(vvl.layoutRoot).isInstanceOf(VerticalSplitPanel.class);
-		VerticalSplitPanel vsp0 = (VerticalSplitPanel) vvl.layoutRoot;
+		assertThat(hvl.layoutRoot).isInstanceOf(HorizontalSplitPanel.class);
+		HorizontalSplitPanel vsp0 = (HorizontalSplitPanel) hvl.layoutRoot;
 
-		assertThat(vsp0.getFirstComponent()).isInstanceOf(VerticalSplitPanel.class);
-		assertThat(vsp0.getSecondComponent()).isInstanceOf(VerticalLayout.class);
+		assertThat(vsp0.getFirstComponent()).isInstanceOf(HorizontalSplitPanel.class);
+		assertThat(vsp0.getSecondComponent()).isInstanceOf(HorizontalLayout.class);
 
-		VerticalSplitPanel vsp1 = (VerticalSplitPanel) vsp0.getFirstComponent();
-		VerticalLayout vl1 = (VerticalLayout) vsp0.getSecondComponent();
+		HorizontalSplitPanel vsp1 = (HorizontalSplitPanel) vsp0.getFirstComponent();
+		HorizontalLayout vl1 = (HorizontalLayout) vsp0.getSecondComponent();
 
 		assertThat(vsp1.getFirstComponent()).isEqualTo(button);
 		assertThat(vsp1.getSecondComponent()).isEqualTo(image);
@@ -410,4 +411,19 @@ public class VerticalViewLayoutTest {
 
 	}
 
+	@Test
+	public void defaultConfig() {
+
+		// given
+		ViewConfig config = hvl.defaultConfig();
+		// when
+
+		// then
+		assertThat(config.isHeightEnabled()).isTrue();
+		assertThat(config.getHeightUnit()).isEqualTo(Unit.PERCENTAGE);
+		assertThat(config.getHeight()).isEqualTo(100);
+		assertThat(config.isWidthEnabled()).isFalse();
+		assertThat(config.splitCount()).isEqualTo(0);
+
+	}
 }

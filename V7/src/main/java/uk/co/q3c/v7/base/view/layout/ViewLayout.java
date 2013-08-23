@@ -10,12 +10,12 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.view.template;
+package uk.co.q3c.v7.base.view.layout;
 
 import java.util.List;
 
 import uk.co.q3c.v7.base.ui.ScopedUI;
-import uk.co.q3c.v7.base.view.template.DefaultViewConfig.Split;
+import uk.co.q3c.v7.base.view.layout.DefaultViewConfig.Split;
 import uk.co.q3c.v7.i18n.I18NListener;
 
 import com.vaadin.ui.AbstractComponent;
