@@ -60,20 +60,8 @@ public abstract class ViewLayoutBase implements ViewLayout {
 	protected abstract void doAssemble();
 
 	@Override
-	public int transferComponentsFrom(ViewLayout source) {
-
-		throw new RuntimeException("not yet implemented");
-	}
-
-	@Override
 	public List<AbstractComponent> orderedComponents() {
 		return new ArrayList<>(components);
-	}
-
-	@Override
-	public void setComponent(int index, AbstractComponent component) {
-		//
-		throw new RuntimeException("not yet implemented");
 	}
 
 	@Override

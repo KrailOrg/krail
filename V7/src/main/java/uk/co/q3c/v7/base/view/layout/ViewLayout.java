@@ -34,14 +34,6 @@ import com.vaadin.ui.Component;
 public interface ViewLayout extends I18NListener {
 
 	/**
-	 * Transfer components from source to this instance
-	 * 
-	 * @param source
-	 * @return
-	 */
-	public int transferComponentsFrom(ViewLayout source);
-
-	/**
 	 * A safe copy of the components contained by this template
 	 * 
 	 * @return
@@ -49,23 +41,10 @@ public interface ViewLayout extends I18NListener {
 	List<AbstractComponent> orderedComponents();
 
 	/**
-	 * Places a component at a specific index in the template. The exact interpretation of what the index represents is
-	 * defined by each implementation. If the index exceeds what the layout would expect, no error is raised, and the
-	 * component held even if it is not used. This is to allow switching between patterns without dropping components.
-	 * During initial build, or when adding a series of components, it is generally more efficient to use
-	 * {@link #addComponent(int, Component)}, but this method is useful where you just want to replace one or two
-	 * components;
-	 * 
-	 * @param index
-	 * @param component
-	 */
-	void setComponent(int index, AbstractComponent component);
-
-	/**
 	 * Adds a component, and allocates it the next available index. If the index exceeds what the layout would expect,
-	 * no error is raised, and the component held even if it is not used. This is to allow switching between patterns
-	 * without dropping components. During initial build, or when adding a series of components, it is generally more
-	 * efficient to use this method than {@link #setComponent(int, Component)}
+	 * no error is raised, and the component held even if it is not used. The order in which components are added must
+	 * reflect the ordering expected by the implementation. Typically there will be a diagram documenting the layout and
+	 * component order.
 	 * 
 	 * @param index
 	 * @param component
@@ -106,8 +85,8 @@ public interface ViewLayout extends I18NListener {
 	public ViewConfig defaultConfig();
 
 	/**
-	 * Each layout must define what is a valid split for that specific implementation. Invalid splits are ignored, but
-	 * do not raise errors. This allows layouts to be changed without unnecessary errors being thrown.
+	 * Each layout must define what is a valid split for that specific implementation. Invalid splits are ignored, and
+	 * do not raise errors.
 	 * 
 	 * @param split
 	 * @return
@@ -123,7 +102,7 @@ public interface ViewLayout extends I18NListener {
 	void validateSplits();
 
 	/**
-	 * The number of splits defined which are valid for this layout
+	 * The number of defined splits which are valid for this layout
 	 * 
 	 * @return
 	 */

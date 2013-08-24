@@ -28,7 +28,7 @@ import com.vaadin.ui.VerticalSplitPanel;
  * instances of either {@link VerticalSplitPanel} or {@link HorizontalSplitPanel}, and are defined as being between two
  * component indexes. Most calls return 'this' to enable cascaded calls:
  * <p>
- * addSplit(1,2).addSplit(2,3);
+ * addSplit(1,2).addSplit(2,3).noWidth();
  * 
  * @author David Sowerby 20 Aug 2013
  * 

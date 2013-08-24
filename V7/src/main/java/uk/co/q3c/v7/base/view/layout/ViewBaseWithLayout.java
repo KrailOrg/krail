@@ -29,11 +29,9 @@ import com.vaadin.ui.Component;
  * Uses a {@link ViewLayout} instance to provide component layout, a {@link ViewConfig} instance to provide
  * configuration and component default settings.
  * <p>
- * Provides a number of methods to build a chain, for example:
+ * Provides a number of methods to build a chain (using the internal class {@link ComponentWrapper}), for example:
  * <p>
  * add(Button).width(50).height("20%").caption("neat");
- * <p>
- * This is implemented using the internal class {@link ComponentWrapper}
  * <p>
  * To change config: getConfig(), make changes, and then call assemble() to implement changes
  */
@@ -200,15 +198,6 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 	@Override
 	public ViewConfig getConfig() {
 		return config;
-	}
-
-	/**
-	 * @see ViewLayout#setComponent(int, Component)
-	 * @param index
-	 * @param component
-	 */
-	public void setComponent(int index, AbstractComponent component) {
-		layout.setComponent(index, component);
 	}
 
 	/**

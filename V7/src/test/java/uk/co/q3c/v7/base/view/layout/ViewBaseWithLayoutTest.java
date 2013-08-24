@@ -25,9 +25,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.view.layout.DefaultViewConfig;
-import uk.co.q3c.v7.base.view.layout.VerticalViewLayout;
-import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout;
 import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout.ComponentWrapper;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
@@ -227,18 +224,6 @@ public class ViewBaseWithLayoutTest {
 		// then
 		assertThat(vbwl.orderedComponents().get(0).isEnabled()).isTrue();
 		assertThat(vbwl.orderedComponents().get(1).isEnabled()).isFalse();
-	}
-
-	@Test
-	public void changeLayout() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(false).isEqualTo(true);
-
 	}
 
 	@Test
