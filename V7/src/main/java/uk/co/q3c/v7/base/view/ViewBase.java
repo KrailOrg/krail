@@ -22,31 +22,29 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout;
 
+import com.vaadin.ui.Component;
+
 public abstract class ViewBase implements V7View {
 
 	private static Logger log = LoggerFactory.getLogger(ViewBase.class);
 	private final V7Navigator navigator;
+	protected Component rootComponent;
 
 	@Inject
 	protected ViewBase(V7Navigator navigator) {
 		super();
 		this.navigator = navigator;
-		buildUI();
-		assemble();
-	}
 
-	/**
-	 * This method is called after {@link #buildUI()}, and is primarily intended for use by descendant class
-	 * {@link ViewBaseWithLayout}.
-	 */
-	protected void assemble() {
 	}
 
 	/**
 	 * Implement this method to create and assemble the user interface components for the view. If you use sub-class
-	 * {@link ViewBaseWithLayout} there are some useful shorthand methods for creating and sizing components
+	 * {@link ViewBaseWithLayout} there are some useful shorthand methods for creating and sizing components.
+	 * <p>
+	 * If you are sub-classing this class directly, this method must populate {@link #rootComponent} with the component
+	 * at the root of component hierarchy (the one which will be inserted into the Vaadin UI for display)
 	 */
-	protected abstract void buildUI();
+	protected abstract void buildView();
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {
@@ -65,6 +63,14 @@ public abstract class ViewBase implements V7View {
 
 	public V7Navigator getNavigator() {
 		return navigator;
+	}
+
+	@Override
+	public Component getRootComponent() {
+		if (rootComponent == null) {
+			buildView();
+		}
+		return rootComponent;
 	}
 
 }

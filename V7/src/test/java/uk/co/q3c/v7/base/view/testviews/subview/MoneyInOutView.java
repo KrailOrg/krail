@@ -26,7 +26,7 @@ public class MoneyInOutView implements V7View {
 	}
 
 	@Override
-	public Component getUiComponent() {
+	public Component getRootComponent() {
 		// return null;
 		throw new RuntimeException("not yet implemented");
 	}

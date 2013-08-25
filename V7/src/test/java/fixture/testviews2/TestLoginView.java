@@ -27,7 +27,7 @@ public class TestLoginView implements LoginView {
 	}
 
 	@Override
-	public Component getUiComponent() {
+	public Component getRootComponent() {
 		return new Label("not used");
 	}
 

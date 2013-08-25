@@ -193,6 +193,7 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 		this.translate = translate;
 		this.layout = viewLayout;
 		this.config = layout.defaultConfig();
+		layout.setConfig(config);
 	}
 
 	@Override
@@ -236,8 +237,13 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 	}
 
 	@Override
-	public Component getUiComponent() {
-		return layout.getLayoutRoot();
+	public Component getRootComponent() {
+		if (rootComponent == null) {
+			buildView();
+			layout.assemble();
+			rootComponent = layout.getLayoutRoot();
+		}
+		return rootComponent;
 	}
 
 	public List<AbstractComponent> orderedComponents() {

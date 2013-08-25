@@ -80,7 +80,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	// TODO fromView serves no purpose
 	@Override
 	public void changeView(V7View fromView, V7View toView) {
-		Component content = toView.getUiComponent();
+		Component content = toView.getRootComponent();
 		content.setSizeFull();
 		viewDisplayPanel.setContent(content);
 		this.view = toView;

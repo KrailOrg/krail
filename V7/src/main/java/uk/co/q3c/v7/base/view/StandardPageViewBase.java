@@ -35,12 +35,13 @@ public abstract class StandardPageViewBase extends ViewBase {
 	protected StandardPageViewBase(V7Navigator navigator, UserNavigationTree navtree) {
 		super(navigator);
 		this.navtree = navtree;
-		buildUI();
+		buildView();
 	}
 
 	@Override
-	protected void buildUI() {
+	protected void buildView() {
 		layout = new HorizontalSplitPanel();
+		rootComponent = layout;
 		label = new Label("This is the " + this.getClass().getSimpleName());
 		label.setHeight("100px");
 		grid = new GridLayout(3, 3);
@@ -63,7 +64,7 @@ public abstract class StandardPageViewBase extends ViewBase {
 	}
 
 	@Override
-	public Component getUiComponent() {
+	public Component getRootComponent() {
 		return layout;
 	}
 

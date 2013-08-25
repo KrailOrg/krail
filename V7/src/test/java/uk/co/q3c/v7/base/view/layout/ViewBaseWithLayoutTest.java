@@ -58,11 +58,16 @@ public class ViewBaseWithLayoutTest {
 		}
 
 		@Override
-		protected void buildUI() {
+		protected void buildView() {
 			button1 = new Button();
 			button2 = new Button();
 			label1 = new Label();
 			label2 = new Label();
+
+			vbwl.add(button1);
+			vbwl.add(button2);
+			vbwl.add(label1);
+			vbwl.add(label2);
 
 		}
 
@@ -88,11 +93,8 @@ public class ViewBaseWithLayoutTest {
 
 		// given
 
-		// when
-		vbwl.add(button1);
-		vbwl.add(button2);
-		vbwl.add(label1);
-		vbwl.add(label2);
+		// when force build and layout
+		vbwl.getRootComponent();
 		// then
 		assertThat(vbwl.orderedComponents().size()).isEqualTo(4);
 		assertThat(vbwl.orderedComponents().get(0)).isEqualTo(button1);

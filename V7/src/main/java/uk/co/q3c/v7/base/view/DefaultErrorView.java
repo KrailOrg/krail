@@ -9,7 +9,6 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.V7ErrorHandler;
 
-import com.vaadin.ui.Component;
 import com.vaadin.ui.TextArea;
 
 /**
@@ -47,14 +46,10 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 	}
 
 	@Override
-	public Component getUiComponent() {
-		return textArea;
-	}
-
-	@Override
-	protected void buildUI() {
+	protected void buildView() {
 		textArea = new TextArea();
 		textArea.setSizeFull();
+		rootComponent = textArea;
 	}
 
 	public TextArea getTextArea() {

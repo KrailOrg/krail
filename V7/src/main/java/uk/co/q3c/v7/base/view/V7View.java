@@ -24,5 +24,5 @@ public interface V7View {
 	 * 
 	 * @return
 	 */
-	public Component getUiComponent();
+	public Component getRootComponent();
 }

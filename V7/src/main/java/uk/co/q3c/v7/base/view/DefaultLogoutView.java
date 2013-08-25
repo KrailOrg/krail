@@ -29,7 +29,7 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 	}
 
 	@Override
-	public Component getUiComponent() {
+	public Component getRootComponent() {
 		Panel p = new Panel("Logged out");
 		p.setSizeFull();
 		addComponent(p);

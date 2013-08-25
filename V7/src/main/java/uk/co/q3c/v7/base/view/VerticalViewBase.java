@@ -45,7 +45,7 @@ public abstract class VerticalViewBase extends VerticalLayout implements V7View 
 	protected abstract void processParams(List<String> params);
 
 	@Override
-	public Component getUiComponent() {
+	public Component getRootComponent() {
 		return this;
 	}
 
