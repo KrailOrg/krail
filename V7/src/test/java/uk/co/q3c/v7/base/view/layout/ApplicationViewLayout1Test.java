@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.view.layout;
 
+import static org.fest.assertions.Assertions.*;
+
 import java.util.List;
 
 import org.fest.assertions.Fail;
@@ -25,6 +27,9 @@ import uk.co.q3c.v7.i18n.Translate;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 
 @RunWith(MycilaJunitRunner.class)
@@ -95,7 +100,16 @@ public class ApplicationViewLayout1Test {
 		// when
 		view.getRootComponent();
 		// then
-		Fail.fail("test not written");
+		AbstractComponent c = view.getLayout().orderedComponents().get(0);
+		assertThat(c).isEqualTo(logo);
+		HorizontalLayout row0 = (HorizontalLayout) c.getParent();
+		assertThat(row0.getComponentCount()).isEqualTo(3);
+		assertThat(row0.getHeight()).isEqualTo(70);
+		assertThat(row0.getHeightUnits()).isEqualTo(Unit.PIXELS);
+		assertThat(row0.getWidth()).isEqualTo(100);
+		assertThat(row0.getWidthUnits()).isEqualTo(Unit.PERCENTAGE);
+
+		Fail.fail("test not complete");
 
 	}
 }
