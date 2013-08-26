@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2013 David Sowerby
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
@@ -24,7 +24,7 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 
-import uk.co.q3c.v7.base.navigate.StandardPageKeys;
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
 
@@ -52,17 +52,17 @@ public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
 
 	@Override
 	public void expiredCredentials(LoginView loginView, UsernamePasswordToken token, ExpiredCredentialsException ece) {
-		navigator.navigateTo(StandardPageKeys.refreshAccount);
+		navigator.navigateTo(StandardPageKey.Refresh_Account);
 	}
 
 	@Override
 	public void accountLocked(LoginView loginView, UsernamePasswordToken token,	LockedAccountException lae) {
-		navigator.navigateTo(StandardPageKeys.unlockAccount);
+		navigator.navigateTo(StandardPageKey.Unlock_Account);
 	}
-	
+
 	@Override
 	public void excessiveAttempts(LoginView loginView, UsernamePasswordToken token, ExcessiveAttemptsException excess) {
-		navigator.navigateTo(StandardPageKeys.resetAccount);
+		navigator.navigateTo(StandardPageKey.Reset_Account);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
 
 	@Override
 	public void disabledAccount(LoginView loginView, UsernamePasswordToken token, DisabledAccountException dae) {
-		navigator.navigateTo(StandardPageKeys.enableAccount);
+		navigator.navigateTo(StandardPageKey.Enable_Account);
 	}
 
 	@Override

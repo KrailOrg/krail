@@ -24,7 +24,7 @@ import java.util.Locale;
 public interface I18NTranslator {
 
 	/**
-	 * Implementations must derive the correct language 'value' from an {@link I18NKeys} key, apply the value (and the
+	 * Implementations must derive the correct language 'value' from an {@link I18NKey} key, apply the value (and the
 	 * locale) to relevant Vaadin components. This call is cascaded to any of the <code>listener</code>properties which
 	 * also implement the {@link I18NListener} interface.
 	 * 

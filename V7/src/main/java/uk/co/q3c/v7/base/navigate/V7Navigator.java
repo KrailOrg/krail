@@ -24,11 +24,11 @@ public interface V7Navigator extends UriFragmentChangedListener {
 	void navigateTo(String navigationState);
 
 	/**
-	 * A convenience method to look up the URI fragment for the {@link StandardPageKeys} and navigate to it
+	 * A convenience method to look up the URI fragment for the {@link StandardPageKey} and navigate to it
 	 * 
 	 * @param pageKey
 	 */
-	void navigateTo(StandardPageKeys pageKey);
+	void navigateTo(StandardPageKey pageKey);
 
 	String getNavigationState();
 
@@ -53,5 +53,11 @@ public interface V7Navigator extends UriFragmentChangedListener {
 	V7View getCurrentView();
 
 	void navigateTo(SitemapNode node);
+
+	/**
+	 * Navigate to the error view. It is assumed that the view has already been set up with error information, usually
+	 * via the V7ErrorHandler
+	 */
+	void error();
 
 }

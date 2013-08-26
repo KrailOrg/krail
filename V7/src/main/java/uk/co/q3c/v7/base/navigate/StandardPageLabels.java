@@ -25,30 +25,21 @@ import uk.co.q3c.v7.i18n.EnumResourceBundle;
  * @author David Sowerby 9 Feb 2013
  * 
  */
-public class StandardPageLabels extends EnumResourceBundle<StandardPageKeys> {
+public class StandardPageLabels extends EnumResourceBundle<StandardPageKey> {
 
-	private static final EnumMap<StandardPageKeys, String> map = new EnumMap<StandardPageKeys, String>(
-			StandardPageKeys.class);
+	private static final EnumMap<StandardPageKey, String> map = new EnumMap<StandardPageKey, String>(
+			StandardPageKey.class);
 
 	static {
-		map.put(StandardPageKeys.login, "login");
-		map.put(StandardPageKeys.logout, "logout");
-		map.put(StandardPageKeys.publicHome, "home");
-		map.put(StandardPageKeys.secureHome, "home");
-		map.put(StandardPageKeys.refreshAccount, "refresh account");
-		map.put(StandardPageKeys.requestAccount, "request account");
-		map.put(StandardPageKeys.resetAccount, "reset account");
-		map.put(StandardPageKeys.unlockAccount, "unlock account");
-		map.put(StandardPageKeys.enableAccount, "enable account");
-
+		// map not needed for base language as translation done in key
 	}
 
 	@Override
-	public EnumMap<StandardPageKeys, String> getMap() {
+	public EnumMap<StandardPageKey, String> getMap() {
 		return map;
 	}
 
-	public static EnumMap<StandardPageKeys, String> map() {
+	public static EnumMap<StandardPageKey, String> map() {
 		return map;
 	}
 

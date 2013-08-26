@@ -15,29 +15,33 @@ package uk.co.q3c.v7.i18n;
 import java.util.EnumMap;
 
 /**
- * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely
- * defined as containing those value which are short, contain no parameters and are typically used for captions and
- * labels. They can of course be used anywhere.
+ * The base for the resource bundle of {@link Labels}. The separation between them is arbitrary, but helps break down
+ * what could other wise be long lists, and only one of them needs to look up parameter values:
+ * <ol>
+ * <li>{@link Labels} : short, usually one or two words, no parameters, generally used as captions
+ * <li>{@link Descriptions} : longer, typically several words, no parameters, generally used in tooltips
+ * <li>{@link Messages} : contains parameters Typically used for tooltips. For short labels {@link Labels} is used, and
+ * for values containing parameters, Messages is used.
  * 
- * 
+ * @see LabelKey
  * @author David Sowerby 9 Feb 2013
  * 
  */
-public class Labels extends EnumResourceBundle<LabelKeys> {
+public class Labels extends EnumResourceBundle<LabelKey> {
 
-	private static final EnumMap<LabelKeys, String> map = new EnumMap<LabelKeys, String>(LabelKeys.class);
+	private static final EnumMap<LabelKey, String> map = new EnumMap<LabelKey, String>(LabelKey.class);
 	// TODO make map unmodifiable
 	static {
-		map.put(LabelKeys.ok, "ok");
-		map.put(LabelKeys.cancel, "cancel");
-		map.put(LabelKeys.first_name, "first name");
-		map.put(LabelKeys.last_name, "last name");
-		map.put(LabelKeys.small, "small");
+		map.put(LabelKey.Ok, "Ok");
+		map.put(LabelKey.Cancel, "Cancel");
+		map.put(LabelKey.First_Name, "First Name");
+		map.put(LabelKey.Last_Name, "Last Name");
+		map.put(LabelKey.Small, "Small");
 
 	}
 
 	@Override
-	public EnumMap<LabelKeys, String> getMap() {
+	public EnumMap<LabelKey, String> getMap() {
 		return map;
 	}
 

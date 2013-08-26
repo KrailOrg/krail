@@ -12,8 +12,7 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import org.apache.shiro.subject.Subject;
 
 public interface LoginStatusListener {
-	void updateStatus(Subject subject);
+	void updateStatus();
 }
