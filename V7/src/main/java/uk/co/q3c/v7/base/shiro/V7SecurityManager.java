@@ -16,13 +16,28 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.vaadin.server.VaadinSession;
 
 public class V7SecurityManager extends DefaultSecurityManager {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(V7SecurityManager.class);
+
+	/**
+	 * The attribute name used in the {@link VaadinSession} to store the
+	 * {@link Subject}.
+	 */
+	private final static String SUBJECT_ATTRIBUTE = V7SecurityManager.class
+			.getName() + ".subject";
+
 	private final List<LoginStatusListener> listeners = new ArrayList<>();
 
 	public V7SecurityManager() {
@@ -38,8 +53,10 @@ public class V7SecurityManager extends DefaultSecurityManager {
 	}
 
 	@Override
-	protected void onSuccessfulLogin(AuthenticationToken token, AuthenticationInfo info, Subject subject) {
+	protected void onSuccessfulLogin(AuthenticationToken token,
+			AuthenticationInfo info, Subject subject) {
 		super.onSuccessfulLogin(token, info, subject);
+		setSubject(subject);
 		fireListeners();
 	}
 
@@ -61,6 +78,50 @@ public class V7SecurityManager extends DefaultSecurityManager {
 		for (LoginStatusListener listener : listeners) {
 			listener.updateStatus();
 		}
+	}
+
+	private VaadinSession getVaadinSession() {
+		VaadinSession session = VaadinSession.getCurrent();
+
+		// This should never happen, but just in case we'll check.
+		if (session == null) {
+			LOG.debug("session is null");
+			throw new IllegalStateException(
+					"Unable to locate VaadinSession to store Shiro Subject.");
+		}
+
+		return session;
+	}
+
+	/**
+	 * Returns the subject for the application and thread which represents the
+	 * current user. The subject is always available; however it may represent
+	 * an anonymous user.
+	 * 
+	 * @return the subject for the current application and thread
+	 * @see SecurityUtils#getSubject()
+	 */
+	// @Override
+	public Subject getSubject() {
+		LOG.debug("getting Subject");
+
+		VaadinSession session = getVaadinSession();
+
+		Subject subject = (Subject) session.getAttribute(SUBJECT_ATTRIBUTE);
+		if (subject == null) {
+			LOG.debug("Subject is null");
+			// Create a new subject using the configured security manager.
+			subject = (new Subject.Builder(this)).buildSubject();
+			session.setAttribute(SUBJECT_ATTRIBUTE, subject);
+		}
+		return subject;
+	}
+
+	public void setSubject(Subject subject) {
+		LOG.debug("setting Subject");
+
+		VaadinSession session = getVaadinSession();
+		session.setAttribute(SUBJECT_ATTRIBUTE, subject);
 	}
 
 }
