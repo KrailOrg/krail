@@ -33,8 +33,10 @@ import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapProvider;
-import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
-import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
+import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
+import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
+import uk.co.q3c.v7.base.shiro.VaadinSessionManager;
 import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
@@ -62,27 +64,30 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Module instances for the base should be added in {@link #getModules()}. Module instance for the app using V7
-	 * should be added to {@link AppModules#appModules()}
+	 * Module instances for the base should be added in {@link #getModules()}.
+	 * Module instance for the app using V7 should be added to
+	 * {@link AppModules#appModules()}
 	 * 
 	 * @see com.google.inject.servlet.GuiceServletContextListener#getInjector()
 	 */
 	@Override
 	protected Injector getInjector() {
 
-		injector = Guice.createInjector(createIniModule());
+		injector = Guice.createInjector(createIniModule(), new I18NModule());
 
 		injector = injector.createChildInjector(getModules());
 
 		// The SecurityManager binding is in ShiroWebModule, and therefore
 		// DefaultShiroWebModule. By default the binding
 		// is to DefaultWebSecurityManager
-		SecurityManager securityManager = injector.getInstance(SecurityManager.class);
+		SecurityManager securityManager = injector
+				.getInstance(SecurityManager.class);
 		SecurityUtils.setSecurityManager(securityManager);
+                ((V7SecurityManager) securityManager).setSessionManager(new VaadinSessionManager());
 
 		return injector;
 	}
-
+	
 	/**
 	 * Override this to provide your own IniModule
 	 */
@@ -114,14 +119,12 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		baseModules.add(baseModule());
 
-		baseModules.add(new I18NModule());
-
 		baseModules.add(standardViewModule());
 
 		addAppModules(baseModules, ini);
 		return baseModules;
 	}
-
+	
 	private Module userOptionsModule(V7Ini ini) {
 		return new DefaultUserOptionModule(ini);
 	}
@@ -136,13 +139,13 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Override this method if you have sub-classed {@link ShiroVaadinModule} to provide your own bindings for Shiro
+	 * Override this method if you have sub-classed {@link V7ShiroVaadinModule} to provide your own bindings for Shiro
 	 * related exceptions.
 	 * 
 	 * @return
 	 */
 	protected Module shiroVaadinModule() {
-		return new ShiroVaadinModule();
+		return new V7ShiroVaadinModule();
 	}
 
 	/**
@@ -154,7 +157,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Override this method if you have sub-classed {@link DefaultShiroWebModule} to provide bindings to your Shiro
+	 * Override this method if you have sub-classed {@link DefaultShiroModule} to provide bindings to your Shiro
 	 * related implementations (for example, {@link Realm} and {@link CredentialsMatcher}
 	 * 
 	 * @param servletContext
@@ -163,7 +166,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	 */
 
 	protected Module shiroWebModule(ServletContext servletContext, V7Ini ini) {
-		return new DefaultShiroWebModule(servletContext);
+		return new DefaultShiroModule();
 	}
 
 	/**
@@ -177,7 +180,8 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		ctx = createThreadLocalServletContext();
-		final ServletContext servletContext = servletContextEvent.getServletContext();
+		final ServletContext servletContext = servletContextEvent
+				.getServletContext();
 		ctx.set(servletContext);
 		super.contextInitialized(servletContextEvent);
 	}

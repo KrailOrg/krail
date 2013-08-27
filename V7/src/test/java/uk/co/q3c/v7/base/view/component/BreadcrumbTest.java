@@ -16,6 +16,7 @@ import static org.fest.assertions.Assertions.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -29,7 +30,7 @@ import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.SitemapURIConverter;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.TestLabelKeys;
+import uk.co.q3c.v7.i18n.TestLabelKey;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -51,6 +52,8 @@ public class BreadcrumbTest extends TestWithSitemap {
 
 	SitemapNode newNode7;
 
+	Collator collator;
+
 	@Override
 	@Before
 	public void setup() {
@@ -63,13 +66,15 @@ public class BreadcrumbTest extends TestWithSitemap {
 
 		// given
 		buildSitemap(2);
-		newNode2.setLabelKey(TestLabelKeys.Opt);
 		List<SitemapNode> nodeChain = new ArrayList<>();
 		nodeChain.add(newNode1);
 		nodeChain.add(newNode2);
 		nodeChain.add(newNode3);
 		when(converter.nodeChainForUri(anyString(), eq(true))).thenReturn(nodeChain);
 		when(currentLocale.getLocale()).thenReturn(Locale.UK);
+		collator = Collator.getInstance(currentLocale.getLocale());
+		newNode2.setLabelKey(TestLabelKey.Opt, currentLocale.getLocale(), collator);
+
 		// when
 		breadcrumb = new Breadcrumb(navigator, converter, currentLocale);
 		// then

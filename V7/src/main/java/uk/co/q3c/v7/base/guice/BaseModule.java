@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2013 David Sowerby
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
@@ -12,8 +12,6 @@
  */
 package uk.co.q3c.v7.base.guice;
 
-import org.apache.shiro.guice.web.ShiroWebModule;
-
 import com.google.inject.servlet.ServletModule;
 
 public class BaseModule extends ServletModule {
@@ -21,7 +19,6 @@ public class BaseModule extends ServletModule {
 	@Override
 	protected void configureServlets() {
 		bindServlet();
-		ShiroWebModule.bindGuiceFilter(binder());
 	}
 	
 	/**

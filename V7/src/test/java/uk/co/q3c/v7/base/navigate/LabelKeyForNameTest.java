@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import uk.co.q3c.v7.i18n.LabelKeys;
+import uk.co.q3c.v7.i18n.LabelKey;
 
 public class LabelKeyForNameTest {
 
@@ -39,12 +39,12 @@ public class LabelKeyForNameTest {
 	public void keyForName_good() {
 
 		// given
-		LabelKeyForName lkfn = new LabelKeyForName(LabelKeys.class);
+		LabelKeyForName lkfn = new LabelKeyForName(LabelKey.class);
 		Set<String> missingEnums = new HashSet<>();
 		// when
-		Enum<?> result = lkfn.keyForName("first_name", missingEnums);
+		Object result = lkfn.keyForName("First_Name", missingEnums);
 		// then
-		assertThat(result).isEqualTo(LabelKeys.first_name);
+		assertThat(result).isEqualTo(LabelKey.First_Name);
 		assertThat(missingEnums).isEmpty();
 
 	}
@@ -56,10 +56,10 @@ public class LabelKeyForNameTest {
 	public void keyForName_null() {
 
 		// given
-		LabelKeyForName lkfn = new LabelKeyForName(LabelKeys.class);
+		LabelKeyForName lkfn = new LabelKeyForName(LabelKey.class);
 		Set<String> missingEnums = new HashSet<>();
 		// when
-		Enum<?> result = lkfn.keyForName(null, missingEnums);
+		Object result = lkfn.keyForName(null, missingEnums);
 		// then
 		assertThat(result).isNull();
 		assertThat(missingEnums).contains();
@@ -70,10 +70,10 @@ public class LabelKeyForNameTest {
 	public void keyForName_bad() {
 
 		// given
-		LabelKeyForName lkfn = new LabelKeyForName(LabelKeys.class);
+		LabelKeyForName lkfn = new LabelKeyForName(LabelKey.class);
 		Set<String> missingEnums = new HashSet<>();
 		// when
-		Enum<?> result = lkfn.keyForName("firt_name", missingEnums);
+		Object result = lkfn.keyForName("firt_name", missingEnums);
 		// then
 		assertThat(result).isNull();
 		assertThat(missingEnums).contains("firt_name");

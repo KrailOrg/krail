@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
-public class DefaultRequestSystemAccountRefreshView extends DefaultViewBase implements RequestSystemAccountRefreshView {
+public class DefaultRequestSystemAccountRefreshView extends StandardPageViewBase implements RequestSystemAccountRefreshView {
 
 	@Inject
 	protected DefaultRequestSystemAccountRefreshView(V7Navigator navigator, UserNavigationTree navtree) {

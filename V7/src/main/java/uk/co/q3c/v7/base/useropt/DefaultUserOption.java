@@ -68,6 +68,11 @@ public class DefaultUserOption implements UserOption {
 		userOptionStore.optionMap(optionGroup, option).put(option, Double.toString(value));
 	}
 
+	@Override
+	public void setOption(String optionGroup, String option, boolean value) {
+		userOptionStore.optionMap(optionGroup, option).put(option, Boolean.toString(value));
+	}
+
 	public void setOption(String optionGroup, String option, List<String> list) {
 		StringBuilder buf = new StringBuilder();
 		boolean first = true;
@@ -153,6 +158,21 @@ public class DefaultUserOption implements UserOption {
 		}
 	}
 
+	@Override
+	public boolean getOptionAsBoolean(String optionGroup, String option, boolean defaultValue) {
+		String optionValue = userOptionStore.getOptionValue(optionGroup, option);
+		if (optionValue == null) {
+			return defaultValue;
+		} else {
+			try {
+				return Boolean.parseBoolean(optionValue);
+			} catch (Exception e) {
+				log.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
+				return defaultValue;
+			}
+		}
+	}
+
 	public Map<String, String> getOptionAsMap(String optionGroup, String option, Map<String, String> defaultValue) {
 		String optionValue = userOptionStore.getOptionValue(optionGroup, option);
 		if (optionValue == null) {
@@ -178,4 +198,5 @@ public class DefaultUserOption implements UserOption {
 			return list;
 		}
 	}
+
 }

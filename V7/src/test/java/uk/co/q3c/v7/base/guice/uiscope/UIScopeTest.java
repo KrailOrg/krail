@@ -15,7 +15,9 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
+import uk.co.q3c.v7.base.navigate.DefaultInvalidURIExceptionHandler;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
+import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -30,8 +32,14 @@ import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.BasicUIProvider;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+import uk.co.q3c.v7.base.useropt.DefaultUserOption;
+import uk.co.q3c.v7.base.useropt.DefaultUserOptionStore;
+import uk.co.q3c.v7.base.useropt.UserOption;
+import uk.co.q3c.v7.base.useropt.UserOptionStore;
 import uk.co.q3c.v7.base.view.DefaultErrorView;
+import uk.co.q3c.v7.base.view.DefaultPublicHomeView;
 import uk.co.q3c.v7.base.view.ErrorView;
+import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.I18NTranslator;
@@ -66,6 +74,8 @@ public class UIScopeTest {
 	static Map<String, Provider<UI>> uibinder;
 	static Subject subject = mock(Subject.class);
 
+	static MapBinder<String, V7View> viewProMap;
+
 	UIProvider provider;
 
 	static class TestObject {
@@ -88,9 +98,13 @@ public class UIScopeTest {
 			bind(UIProvider.class).to(BasicUIProvider.class);
 			MapBinder<String, UI> uiProviders = MapBinder.newMapBinder(binder(), String.class, UI.class);
 			uiProviders.addBinding(BasicUI.class.getName()).to(BasicUI.class);
-			MapBinder.newMapBinder(binder(), String.class, V7View.class);
 			uibinder = new HashMap<>();
 			uibinder.put(BasicUI.class.getName(), uiProvider);
+
+			viewProMap = MapBinder.newMapBinder(binder(), String.class, V7View.class);
+			viewProMap.addBinding("").to(PublicHomeView.class);
+
+			bind(PublicHomeView.class).to(DefaultPublicHomeView.class);
 			bind(V7Navigator.class).to(DefaultV7Navigator.class);
 			bind(TestObject.class).in(UIScoped.class);
 			bind(ErrorView.class).to(DefaultErrorView.class);
@@ -103,6 +117,9 @@ public class UIScopeTest {
 			bind(Subject.class).toProvider(MockSubjectProvider.class);
 			bind(URIPermissionFactory.class).to(DefaultURIPermissionFactory.class);
 			bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+			bind(UserOption.class).to(DefaultUserOption.class);
+			bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+			bind(InvalidURIExceptionHandler.class).to(DefaultInvalidURIExceptionHandler.class);
 		}
 	}
 

@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
-public class DefaultPrivateHomeView extends DefaultViewBase implements PrivateHomeView {
+public class DefaultPrivateHomeView extends StandardPageViewBase implements PrivateHomeView {
 
 	@Inject
 	protected DefaultPrivateHomeView(V7Navigator navigator, UserNavigationTree navtree) {

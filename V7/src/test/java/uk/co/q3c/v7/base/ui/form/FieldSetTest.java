@@ -90,8 +90,8 @@ public class FieldSetTest {
 		// when
 		fieldSet.setBean(te);
 		// then
-		assertThat(fieldSet.getFirstName().getCaption()).isEqualTo("first name");
-		assertThat(fieldSet.getLastName().getCaption()).isEqualTo("last name");
+		assertThat(fieldSet.getFirstName().getCaption()).isEqualTo("First Name");
+		assertThat(fieldSet.getLastName().getCaption()).isEqualTo("Last Name");
 		assertThat(fieldSet.getLastName().getDescription()).isEqualTo("the last name or family name");
 
 	}
@@ -105,8 +105,8 @@ public class FieldSetTest {
 		// when
 		currentLocale.setLocale(Locale.GERMAN);
 		// then
-		assertThat(fieldSet.getFirstName().getCaption()).isEqualTo("vorname");
-		assertThat(fieldSet.getLastName().getCaption()).isEqualTo("nachname");
+		assertThat(fieldSet.getFirstName().getCaption()).isEqualTo("Vorname");
+		assertThat(fieldSet.getLastName().getCaption()).isEqualTo("Nachname");
 		assertThat(fieldSet.getLastName().getDescription()).isEqualTo("die Nachname oder der Familienname");
 
 	}

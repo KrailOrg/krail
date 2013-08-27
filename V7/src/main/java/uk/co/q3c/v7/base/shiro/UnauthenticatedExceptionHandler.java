@@ -1,10 +1,9 @@
 package uk.co.q3c.v7.base.shiro;
 
-
 public interface UnauthenticatedExceptionHandler {
 
 	/**
-	 * Returns true if exception is handled
+	 * invoke the handler
 	 * 
 	 * @param t
 	 * @return

@@ -131,4 +131,18 @@ public class DefaultUserOptionTest {
 
 	}
 
+	@Test
+	public void bool() {
+
+		// given
+
+		// when
+		dfo.setOption("a", "a", true);
+		// then
+		assertThat(dfo.getOptionAsBoolean("a", "a", false)).isEqualTo(true);
+		// returns default
+		assertThat(dfo.getOptionAsBoolean("a", "b", false)).isEqualTo(false);
+
+	}
+
 }

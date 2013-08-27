@@ -15,26 +15,30 @@ package uk.co.q3c.v7.i18n;
 import java.util.EnumMap;
 
 /**
- * The base for the resource bundle of Descriptions. This is an arbitrary division of i18N keys & values, but is loosely
- * defined as containing those value which are fairly long, but do not contain parameters. Used for tooltips.
+ * The base for the resource bundle of {@link Descriptions}. The separation between them is arbitrary, but helps break
+ * down what could other wise be long lists, and only one of them needs to look up parameter values:
+ * <ol>
+ * <li>{@link Labels} : short, usually one or two words, no parameters, generally used as captions
+ * <li>{@link Descriptions} : longer, typically several words, no parameters, generally used in tooltips
+ * <li>{@link Messages} : contains parameters Typically used for tooltips. For short labels {@link Labels} is used, and
+ * for values containing parameters, Messages is used.
  * 
  * 
  * @author David Sowerby 9 Feb 2013
  * 
  */
-public class Descriptions extends EnumResourceBundle<DescriptionKeys> {
+public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 
-	private static final EnumMap<DescriptionKeys, String> map = new EnumMap<DescriptionKeys, String>(
-			DescriptionKeys.class);
+	private static final EnumMap<DescriptionKey, String> map = new EnumMap<DescriptionKey, String>(DescriptionKey.class);
 	// TODO make map unmodifiable
 	static {
-		map.put(DescriptionKeys.last_name, "the last name or family name");
-		map.put(DescriptionKeys.ok, "confirm this value is ok");
-		map.put(DescriptionKeys.small_font, "use a small font");
+		map.put(DescriptionKey.Last_Name, "the last name or family name");
+		map.put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok");
+		map.put(DescriptionKey.No_Permission, "You do not have permission for that action");
 	}
 
 	@Override
-	public EnumMap<DescriptionKeys, String> getMap() {
+	public EnumMap<DescriptionKey, String> getMap() {
 		return map;
 	}
 

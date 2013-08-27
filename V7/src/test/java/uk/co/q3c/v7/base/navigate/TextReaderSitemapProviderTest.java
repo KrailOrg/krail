@@ -42,10 +42,14 @@ import uk.co.q3c.v7.base.view.SystemAccountView;
 import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
 import uk.co.q3c.v7.base.view.testviews.subview.NotV7View;
 import uk.co.q3c.v7.base.view.testviews.subview.TransferView;
-import uk.co.q3c.v7.i18n.TestLabelKeys;
+import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.I18NTranslator;
+import uk.co.q3c.v7.i18n.TestLabelKey;
 
+import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
 import fixture.testviews2.OptionsView;
 
@@ -111,9 +115,9 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.isLabelClassMissing()).isFalse();
 		assertThat(reader.isLabelClassNonExistent()).isFalse();
 		assertThat(reader.isLabelClassNotI18N()).isFalse();
-		assertThat(reader.getLabelKeys()).isEqualTo("uk.co.q3c.v7.i18n.TestLabelKeys");
+		assertThat(reader.getLabelKeys()).isEqualTo("uk.co.q3c.v7.i18n.TestLabelKey");
 		assertThat(reader.isAppendView()).isTrue();
-		assertThat(reader.getLabelKeysClass()).isEqualTo(TestLabelKeys.class);
+		assertThat(reader.getLabelKeysClass()).isEqualTo(TestLabelKey.class);
 		assertThat(reader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
 		assertThat(reader.redirectEntries()).containsOnly(":public");
 		assertThat(reader.getMissingEnums()).isEmpty();
@@ -202,7 +206,7 @@ public class TextReaderSitemapProviderTest {
 	@Test
 	public void invalidPropertyName() throws IOException {
 
-		insertAfter("labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys", "randomProperty=23");
+		insertAfter("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "randomProperty=23");
 		prepFile();
 		// when
 		reader.parse(modifiedFile);
@@ -261,7 +265,7 @@ public class TextReaderSitemapProviderTest {
 	public void invalidLabelKeysClass_no_i18N() throws IOException {
 
 		// given
-		substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys_Invalid");
+		substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKey_Invalid");
 		prepFile();
 		// when
 		reader.parse(modifiedFile);
@@ -292,7 +296,7 @@ public class TextReaderSitemapProviderTest {
 	@Test
 	public void invalidLabelKeysClass_does_not_exist() throws IOException {
 		// given
-		substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKeys2");
+		substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKey2");
 		prepFile();
 		// when
 		reader.parse(modifiedFile);
@@ -473,7 +477,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.isGenerateAuthenticationPages()).isTrue();
 		assertThat(reader.isGenerateRequestAccount()).isTrue();
 		assertThat(reader.isGenerateRequestAccountReset()).isTrue();
-		assertThat(reader.getLabelKeys()).isEqualTo("uk.co.q3c.v7.i18n.TestLabelKeys");
+		assertThat(reader.getLabelKeys()).isEqualTo("uk.co.q3c.v7.i18n.TestLabelKey");
 		assertThat(reader.getSystemAccountUri()).isEqualTo("public/system-account");
 
 		// given properties not defined
@@ -649,21 +653,21 @@ public class TextReaderSitemapProviderTest {
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("transfers");
 			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Transfers);
+			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Transfers);
 			break;
 
 		case "private/money-in-out":
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("money-in-out");
 			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.MoneyInOut);
+			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.MoneyInOut);
 			break;
 
 		case "private/options":
 			assertThat(tree.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("options");
 			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKeys.Opt);
+			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Opt);
 			break;
 
 		default:
@@ -708,6 +712,18 @@ public class TextReaderSitemapProviderTest {
 		for (String line : lines) {
 			System.out.println(line);
 		}
+	}
+
+	@ModuleProvider
+	protected AbstractModule module() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+			}
+
+		};
 	}
 
 }

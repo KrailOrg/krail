@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2013 David Sowerby
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
@@ -14,12 +14,9 @@ package uk.co.q3c.v7.base.config;
 
 import javax.inject.Singleton;
 
-import org.apache.shiro.subject.Subject;
-
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapProvider;
 import uk.co.q3c.v7.base.navigate.TextReaderSitemapProvider;
-import uk.co.q3c.v7.base.view.component.SubjectProvider;
 
 import com.google.inject.AbstractModule;
 
@@ -36,7 +33,7 @@ public class IniModule extends AbstractModule {
 	 * Override this to provide your own Ini
 	 */
 	protected void bindIni() {
-		bind(V7Ini.class).toProvider(V7IniProvider.class).in(Singleton.class);
+		bind(V7Ini.class).toProvider(BaseIniProvider.class).in(Singleton.class);
 	}
 	
 	/**
@@ -51,11 +48,6 @@ public class IniModule extends AbstractModule {
 	 */
 	protected void bindSitemap(){
 		bind(Sitemap.class).toProvider(SitemapProvider.class).in(Singleton.class);
-		bindSubjectProvider();
-	}
-
-	protected void bindSubjectProvider() {
-		bind(Subject.class).toProvider(SubjectProvider.class);
 	}
 
 }

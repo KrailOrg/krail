@@ -1,8 +1,10 @@
 package uk.co.q3c.v7.base.navigate;
 
+import java.text.Collator;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.slf4j.Logger;
@@ -21,7 +23,8 @@ import uk.co.q3c.v7.base.view.RequestSystemAccountView;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.base.view.SystemAccountView;
 import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.i18n.I18NKeys;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.I18NKey;
 
 /**
  * Used during the process of building the {@link Sitemap}. Provides the logic for building standard pages using options
@@ -44,6 +47,15 @@ public class StandardPageBuilder {
 	private Class<? extends Enum<?>> labelKeysClass;
 	private Set<String> missingEnums;
 	private Set<String> standardPageErrors;
+	private final CurrentLocale currentLocale;
+	private final Collator collator;
+
+	@Inject
+	protected StandardPageBuilder(CurrentLocale currentLocale) {
+		super();
+		this.currentLocale = currentLocale;
+		this.collator = Collator.getInstance(currentLocale.getLocale());
+	}
 
 	public void generateStandardPages() {
 		if (generatePublicHomePage) {
@@ -80,7 +92,7 @@ public class StandardPageBuilder {
 	private void generatePage(StandardPageKey key) {
 		log.debug("generating page for {}", key);
 		SitemapNode node = sitemap.append(defaultUri(key));
-		node.setLabelKey(key);
+		node.setLabelKey(key, currentLocale.getLocale(), collator);
 		node.setViewClass(viewClass(key));
 		node.setUriSegment(defaultSegment(key));
 		sitemap.getStandardPages().put(key, sitemap.uri(node));
@@ -222,7 +234,6 @@ public class StandardPageBuilder {
 	 * 
 	 * @param pageMappings
 	 */
-	@SuppressWarnings("unchecked")
 	public void setPageMappings(List<String> pageMappings) {
 		StandardPageMappingReader dec = new StandardPageMappingReader();
 		int i = 0;
@@ -236,9 +247,9 @@ public class StandardPageBuilder {
 				try {
 					StandardPageKey spk = StandardPageKey.valueOf(pr.getStandardPageKeyName());
 					LabelKeyForName labelKeyForName = new LabelKeyForName(labelKeysClass);
-					Enum<?> labelKey = labelKeyForName.keyForName(pr.getLabelKeyName(), missingEnums);
+					I18NKey<?> labelKey = labelKeyForName.keyForName(pr.getLabelKeyName(), missingEnums);
 					SitemapNode node = sitemap.append(pr.getUri());
-					node.setLabelKey((Enum<? extends I18NKeys<?>>) labelKey);
+					node.setLabelKey(labelKey, currentLocale.getLocale(), collator);
 					node.setViewClass(viewClass(spk));
 					sitemap.getStandardPages().put(spk, sitemap.uri(node));
 				} catch (Exception e) {

@@ -28,6 +28,22 @@ import com.vaadin.data.util.converter.Converter;
 public class DateTimeConverter implements Converter<Date, DateTime> {
 
 	@Override
+	public DateTime convertToModel(Date value,
+			Class<? extends DateTime> targetType, Locale locale)
+			throws com.vaadin.data.util.converter.Converter.ConversionException {
+
+		return new DateTime(value);
+
+	}
+
+	@Override
+	public Date convertToPresentation(DateTime value,
+			Class<? extends Date> targetType, Locale locale)
+			throws com.vaadin.data.util.converter.Converter.ConversionException {
+		return value.toDate();
+	}
+
+	@Override
 	public Class<DateTime> getModelType() {
 		return DateTime.class;
 	}
@@ -37,15 +53,4 @@ public class DateTimeConverter implements Converter<Date, DateTime> {
 		return Date.class;
 	}
 
-	@Override
-	public DateTime convertToModel(Date value, Class<? extends DateTime> targetType, Locale locale)
-			throws com.vaadin.data.util.converter.Converter.ConversionException {
-		return new DateTime(value);
-	}
-
-	@Override
-	public Date convertToPresentation(DateTime value, Class<? extends Date> targetType, Locale locale)
-			throws com.vaadin.data.util.converter.Converter.ConversionException {
-		return value.toDate();
-	}
 }

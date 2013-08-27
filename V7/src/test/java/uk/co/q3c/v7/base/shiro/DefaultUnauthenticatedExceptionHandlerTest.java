@@ -12,67 +12,46 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.fest.assertions.Assertions.*;
-import mockit.Expectations;
-import mockit.NonStrictExpectations;
-import mockit.Tested;
-import mockit.Verifications;
-import mockit.integration.junit4.JMockit;
+import static org.mockito.Mockito.*;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
-import com.vaadin.server.Page;
+import uk.co.q3c.v7.i18n.DescriptionKey;
+import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.i18n.Notifier;
+
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.ui.Notification;
 
-@RunWith(JMockit.class)
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
 public class DefaultUnauthenticatedExceptionHandlerTest {
 
-	@Tested
+	@Mock
+	Notifier notifier;
+
 	DefaultUnauthenticatedExceptionHandler handler;
 
-	@Test
-	public void invoke_logic() {
-
-		// given
-		new Expectations() {
-			Page page;
-			{
-				Page.getCurrent();
-				result = page;
-				page.showNotification((Notification) any);
-			}
-		};
-		// when
-		handler.invoke();
-		// then
-		// expectations
-
+	@Before
+	public void setup() {
+		handler = new DefaultUnauthenticatedExceptionHandler(notifier);
 	}
 
 	@Test
-	public void invoke_verifyParameters() {
+	public void notify_() {
 
 		// given
-		new NonStrictExpectations() {
-			Page page;
-			{
-				Page.getCurrent();
-				result = page;
-			}
-		};
+
 		// when
 		handler.invoke();
 		// then
-		new Verifications() {
-			Page page;
-			{
-				Notification n;
-				page.showNotification(n = withCapture());
-				assertThat(n.getCaption()).isEqualTo("Authentication");
-				assertThat(n.getDescription()).isEqualTo("You have not logged in");
-			}
-		};
+		verify(notifier).notify(LabelKey.Authentication, DescriptionKey.You_have_not_logged_in,
+				Notification.Type.ERROR_MESSAGE);
 
 	}
+
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2013 David Sowerby
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
@@ -67,7 +67,7 @@ public class MoneyConverterTest {
 		// given
 		converter = new MoneyConverter();
 		// when
-		Money money = converter.convertToModel("£1,025.44", Money.class, Locale.UK);
+		Money money = converter.convertToModel("1,025.44", Money.class, Locale.UK);
 		// then
 		Money expected = Money.ofMinor(CurrencyUnit.getInstance(Locale.UK), 102544);
 		assertThat(money).isEqualTo(expected);

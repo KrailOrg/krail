@@ -15,9 +15,9 @@ package uk.co.q3c.v7.base.navigate;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import uk.co.q3c.v7.i18n.I18NKeys;
+import uk.co.q3c.v7.i18n.I18NKey;
 
-public enum StandardPageKey implements I18NKeys<StandardPageLabels> {
+public enum StandardPageKey implements I18NKey<StandardPageLabels> {
 
 	Public_Home, // The home page for non-authenticated users
 	Private_Home, // The home page for authenticated users

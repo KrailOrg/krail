@@ -24,14 +24,14 @@ import java.util.EnumMap;
  */
 public class Labels_de_CH extends Labels {
 
-	private static final EnumMap<LabelKeys, String> map = new EnumMap<LabelKeys, String>(LabelKeys.class);
+	private static final EnumMap<LabelKey, String> map = new EnumMap<LabelKey, String>(LabelKey.class);
 	// TODO make map unmodifiable
 	static {
 
 	}
 
 	@Override
-	public EnumMap<LabelKeys, String> getMap() {
+	public EnumMap<LabelKey, String> getMap() {
 		return map;
 	}
 

@@ -1,12 +1,13 @@
 package uk.co.q3c.v7.base.view;
 
-
 /**
- * Simply to differentiate from a "normal" view even though interface is the same
+ * Interface for ErrorViews. Binding to implementation can be changed in {@link StandardViewModule}
  * 
  * @author david
  * 
  */
 public interface ErrorView extends V7View {
+
+	void setError(Throwable throwable);
 
 }

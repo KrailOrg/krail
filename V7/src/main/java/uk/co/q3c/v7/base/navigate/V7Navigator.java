@@ -54,4 +54,10 @@ public interface V7Navigator extends UriFragmentChangedListener {
 
 	void navigateTo(SitemapNode node);
 
+	/**
+	 * Navigate to the error view. It is assumed that the view has already been set up with error information, usually
+	 * via the V7ErrorHandler
+	 */
+	void error();
+
 }

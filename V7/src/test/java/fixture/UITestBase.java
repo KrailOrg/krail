@@ -1,4 +1,4 @@
-package fixture;
+﻿package fixture;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import uk.co.q3c.v7.base.config.BaseIniProvider;
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.config.V7IniProvider;
 import uk.co.q3c.v7.base.guice.BaseModule;
@@ -91,7 +92,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements
 	protected Provider<V7Navigator> navigatorPro;
 
 	@Inject
-	protected V7IniProvider iniPro;
+	protected BaseIniProvider iniPro;
 
 	protected V7Ini ini;
 

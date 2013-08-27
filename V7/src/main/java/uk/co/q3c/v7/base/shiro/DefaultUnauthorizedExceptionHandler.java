@@ -2,16 +2,26 @@ package uk.co.q3c.v7.base.shiro;
 
 import java.io.Serializable;
 
-import com.vaadin.server.Page;
+import javax.inject.Inject;
+
+import uk.co.q3c.v7.i18n.DescriptionKey;
+import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.i18n.Notifier;
+
 import com.vaadin.ui.Notification;
 
 public class DefaultUnauthorizedExceptionHandler implements UnauthorizedExceptionHandler, Serializable {
-	// TODO i18N
-	@Override
-	public void invoke() {
-		Notification n = new Notification("Authorization", "Go away, you are not allowed to do that",
-				Notification.TYPE_WARNING_MESSAGE, false);
-		n.show(Page.getCurrent());
+
+	private final Notifier notifier;
+
+	@Inject
+	protected DefaultUnauthorizedExceptionHandler(Notifier notifier) {
+		super();
+		this.notifier = notifier;
 	}
 
+	@Override
+	public void invoke() {
+		notifier.notify(LabelKey.Authorisation, DescriptionKey.No_Permission, Notification.Type.ERROR_MESSAGE);
+	}
 }

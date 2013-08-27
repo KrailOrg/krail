@@ -6,7 +6,9 @@ import static org.mockito.Mockito.*;
 
 import java.util.Map;
 
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.Subject;
+import org.fest.assertions.Fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -239,7 +241,7 @@ public class DefaultV7NavigatorTest {
 		String page1 = "";
 		String fragment1 = page1 + "/id=2/age=5";
 		when(sitemap.getRedirectFor(page1)).thenReturn("public");
-		when(viewProMap.get(page1)).thenReturn(view1Pro);
+		when(viewProMap.get("public")).thenReturn(view1Pro);
 		when(view1Pro.get()).thenReturn(view1);
 		// when
 		navigator.navigateTo(fragment1);
@@ -248,7 +250,7 @@ public class DefaultV7NavigatorTest {
 
 	}
 
-	@Test
+	@Test(expected = InvalidURIException.class)
 	public void navigateTo_invalidURI() {
 
 		// given
@@ -439,15 +441,31 @@ public class DefaultV7NavigatorTest {
 		assertThat(navigator.getNavigationState()).isEqualTo(page2);
 	}
 
-	@Test
+	@Test(expected = AuthorizationException.class)
 	public void privatePage() {
 
 		// given
+		String page = "public/view2";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(viewProMap.get(page)).thenReturn(view2Pro);
+		when(view2Pro.get()).thenReturn(view2);
 		when(sitemapURIConverter.pageIsPublic(anyString())).thenReturn(false);
 		// when
-
+		navigator.navigateTo(page);
 		// then
-		assertThat(false).isEqualTo(true);
+		Fail.fail("Exception was expected");
+
+	}
+
+	@Test
+	public void error() {
+
+		// given
+
+		// when
+		navigator.error();
+		// then
+		assertThat(navigator.getCurrentView()).isInstanceOf(ErrorView.class);
 
 	}
 }

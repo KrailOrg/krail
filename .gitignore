@@ -1,1 +1,10 @@
+target/
+.DS_Store
+.settings
+.project
+.classpath
+widgetsets
+build
+build/
 /V7/artifacts
+/V7/bin
