@@ -12,11 +12,11 @@
  */
 package uk.co.q3c.v7.base.view.layout;
 
-import static org.fest.assertions.Assertions.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
-import org.fest.assertions.Fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +27,7 @@ import uk.co.q3c.v7.i18n.Translate;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.HorizontalLayout;
@@ -101,15 +102,21 @@ public class ApplicationViewLayout1Test {
 		view.getRootComponent();
 		// then
 		AbstractComponent c = view.getLayout().orderedComponents().get(0);
-		assertThat(c).isEqualTo(logo);
 		HorizontalLayout row0 = (HorizontalLayout) c.getParent();
-		assertThat(row0.getComponentCount()).isEqualTo(3);
-		assertThat(row0.getHeight()).isEqualTo(70);
-		assertThat(row0.getHeightUnits()).isEqualTo(Unit.PIXELS);
-		assertThat(row0.getWidth()).isEqualTo(100);
-		assertThat(row0.getWidthUnits()).isEqualTo(Unit.PERCENTAGE);
+		assertThat(row0.getComponentCount(), is(3));
+		assertThat(row0.getHeight(), is(Sizeable.SIZE_UNDEFINED));
+		assertThat(row0.getHeightUnits(), is(Unit.PIXELS));
+		assertThat(row0.getWidth(), is(100f));
+		assertThat(row0.getWidthUnits(), is(Unit.PERCENTAGE));
 
-		Fail.fail("test not complete");
+		assertThat(c, is((Object) logo));
+		assertThat(c.getCaption(), is("logo"));
+		assertThat(c.getWidth(), is(50f));
+		assertThat(c.getHeight(), is(70f));
+		c = (AbstractComponent) row0.getComponent(1);
+		assertThat(c, is((Object) header));
+
+		fail("test not complete");
 
 	}
 }
