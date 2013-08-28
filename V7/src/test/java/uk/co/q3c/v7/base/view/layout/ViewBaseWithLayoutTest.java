@@ -110,7 +110,7 @@ public class ViewBaseWithLayoutTest {
 
 		// when
 		vbwl.add(Button.class).caption("wiggly").height(20).width(100).style("pretty");
-		vbwl.add(Label.class).caption("label").heightPer(80).widthPer(60);
+		vbwl.add(Label.class).caption("label").heightPercent(80).widthPercent(60);
 		vbwl.add(Panel.class).caption("panel").height("80pt").width("60em");
 		// then
 		assertThat(vbwl.orderedComponents().size()).isEqualTo(3);

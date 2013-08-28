@@ -47,9 +47,11 @@ public class ApplicationViewLayout1 extends ViewLayoutBase {
 		layoutRoot = baseLayout;
 
 		HorizontalLayout row0 = new HorizontalLayout(components.get(0), components.get(1), components.get(2));
+		row0.setWidth("100%");
 		add(row0);
 		add(components.get(3));
 		HorizontalSplitPanel row2 = new HorizontalSplitPanel();
+		row2.setWidth("100%");
 		components.get(4).setSizeFull();
 
 		row2.setFirstComponent(components.get(4));
@@ -62,7 +64,6 @@ public class ApplicationViewLayout1 extends ViewLayoutBase {
 	}
 
 	private void add(AbstractComponent component) {
-		component.setWidth("100%");
 		baseLayout.addComponent(component);
 	}
 }

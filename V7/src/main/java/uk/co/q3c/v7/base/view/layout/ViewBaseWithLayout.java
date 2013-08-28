@@ -21,6 +21,7 @@ import uk.co.q3c.v7.base.view.ViewBase;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
@@ -90,7 +91,7 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 		 * @param height
 		 * @return
 		 */
-		public ComponentWrapper heightPer(int height) {
+		public ComponentWrapper heightPercent(int height) {
 			component.setHeight(height + "%");
 			return this;
 		}
@@ -118,12 +119,32 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 		}
 
 		/**
+		 * Sets width to undefined and units to pixels
+		 * 
+		 * @return
+		 */
+		public ComponentWrapper widthUndefined() {
+			component.setWidth(Sizeable.SIZE_UNDEFINED, Unit.PIXELS);
+			return this;
+		}
+
+		/**
+		 * Sets width and height to undefined and units to pixels
+		 * 
+		 * @return
+		 */
+		public ComponentWrapper sizeUndefined() {
+			component.setSizeUndefined();
+			return this;
+		}
+
+		/**
 		 * Width in percentage
 		 * 
 		 * @param width
 		 * @return
 		 */
-		public ComponentWrapper widthPer(int width) {
+		public ComponentWrapper widthPercent(int width) {
 			component.setWidth(width + Unit.PERCENTAGE.getSymbol());
 			return this;
 		}
