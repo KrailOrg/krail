@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.view.layout;
 
 import uk.co.q3c.v7.base.view.layout.DefaultViewConfig.Split;
 
-import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
@@ -63,7 +63,7 @@ public class ApplicationViewLayout1 extends ViewLayoutBase {
 		add(components.get(8));
 	}
 
-	private void add(AbstractComponent component) {
+	private void add(Component component) {
 		baseLayout.addComponent(component);
 	}
 }

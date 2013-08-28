@@ -32,6 +32,7 @@ import uk.co.q3c.v7.i18n.Translate;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
@@ -211,8 +212,8 @@ public class ViewBaseWithLayoutTest {
 		vbwl.add(Button.class).immediate();
 		vbwl.add(new Button()).notImmediate();
 		// then
-		assertThat(vbwl.orderedComponents().get(0).isImmediate()).isTrue();
-		assertThat(vbwl.orderedComponents().get(1).isImmediate()).isFalse();
+		assertThat(((AbstractComponent) vbwl.orderedComponents().get(0)).isImmediate()).isTrue();
+		assertThat(((AbstractComponent) vbwl.orderedComponents().get(1)).isImmediate()).isFalse();
 	}
 
 	@Test

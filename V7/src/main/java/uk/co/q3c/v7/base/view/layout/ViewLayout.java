@@ -18,7 +18,6 @@ import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.layout.DefaultViewConfig.Split;
 import uk.co.q3c.v7.i18n.I18NListener;
 
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 
 /**
@@ -38,7 +37,7 @@ public interface ViewLayout extends I18NListener {
 	 * 
 	 * @return
 	 */
-	List<AbstractComponent> orderedComponents();
+	List<Component> orderedComponents();
 
 	/**
 	 * Adds a component, and allocates it the next available index. If the index exceeds what the layout would expect,
@@ -50,7 +49,7 @@ public interface ViewLayout extends I18NListener {
 	 * @param component
 	 * 
 	 */
-	void addComponent(AbstractComponent component);
+	void addComponent(Component component);
 
 	/**
 	 * Assembles (or re-assembles) the layout. Uses the config provided by setConfig

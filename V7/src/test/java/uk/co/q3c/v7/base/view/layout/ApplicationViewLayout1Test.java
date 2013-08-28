@@ -29,7 +29,6 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
@@ -107,7 +106,7 @@ public class ApplicationViewLayout1Test {
 		assertThat(r, instanceOf(VerticalLayout.class));
 		VerticalLayout root = (VerticalLayout) r;
 
-		AbstractComponent c = view.getLayout().orderedComponents().get(0);
+		Component c = view.getLayout().orderedComponents().get(0);
 		HorizontalLayout row0 = (HorizontalLayout) c.getParent();
 		assertThat(row0.getComponentCount(), is(3));
 		assertThat(row0.getWidth(), is(100f));
@@ -122,64 +121,64 @@ public class ApplicationViewLayout1Test {
 		assertThat(c.getHeight(), is(70f));
 		assertThat(c.getHeightUnits(), is(Unit.PIXELS));
 
-		c = (AbstractComponent) row0.getComponent(1);
+		c = row0.getComponent(1);
 		assertThat(c, is((Object) header));
 		assertThat(header.getWidth(), is(Sizeable.SIZE_UNDEFINED));
 		assertThat(header.getWidthUnits(), is(Unit.PIXELS));
 		assertThat(header.getHeight(), is(100f));
 		assertThat(header.getHeightUnits(), is(Unit.PERCENTAGE));
 
-		c = (AbstractComponent) row0.getComponent(2);
+		c = row0.getComponent(2);
 		assertThat(c, is((Object) loginOut));
 		assertThat(loginOut.getWidth(), is(100f));
 		assertThat(loginOut.getWidthUnits(), is(Unit.PIXELS));
 		assertThat(loginOut.getHeight(), is(100f));
 		assertThat(loginOut.getHeightUnits(), is(Unit.PERCENTAGE));
 
-		c = (AbstractComponent) root.getComponent(1);
+		c = root.getComponent(1);
 		assertThat(c, is((Object) menu));
 		assertThat(menu.getWidth(), is(100f));
 		assertThat(menu.getWidthUnits(), is(Unit.PERCENTAGE));
 		assertThat(menu.getHeight(), is(60f));
 		assertThat(menu.getHeightUnits(), is(Unit.PIXELS));
 
-		c = (AbstractComponent) root.getComponent(2);
+		c = root.getComponent(2);
 		assertThat(c, instanceOf(HorizontalSplitPanel.class));
 		HorizontalSplitPanel hsp = (HorizontalSplitPanel) c;
 
-		c = (AbstractComponent) hsp.getFirstComponent();
+		c = hsp.getFirstComponent();
 		assertThat(c, is((Object) nav));
 		assertThat(nav.getWidth(), is(100f));
 		assertThat(nav.getWidthUnits(), is(Unit.PERCENTAGE));
 		assertThat(nav.getHeight(), is(100f));
 		assertThat(nav.getHeightUnits(), is(Unit.PERCENTAGE));
 
-		c = (AbstractComponent) hsp.getSecondComponent();
+		c = hsp.getSecondComponent();
 		assertThat(c, instanceOf(VerticalLayout.class));
 
 		VerticalLayout vl = (VerticalLayout) c;
-		c = (AbstractComponent) vl.getComponent(0);
+		c = vl.getComponent(0);
 		assertThat(c, is((Object) breadcrumb));
 		assertThat(breadcrumb.getWidth(), is(100f));
 		assertThat(breadcrumb.getWidthUnits(), is(Unit.PERCENTAGE));
 		assertThat(breadcrumb.getHeight(), is(45f));
 		assertThat(breadcrumb.getHeightUnits(), is(Unit.PIXELS));
 
-		c = (AbstractComponent) vl.getComponent(1);
+		c = vl.getComponent(1);
 		assertThat(c, is((Object) body));
 		assertThat(body.getWidth(), is(100f));
 		assertThat(body.getWidthUnits(), is(Unit.PERCENTAGE));
 		assertThat(body.getHeight(), is(100f));
 		assertThat(body.getHeightUnits(), is(Unit.PERCENTAGE));
 
-		c = (AbstractComponent) vl.getComponent(2);
+		c = vl.getComponent(2);
 		assertThat(c, is((Object) subpage));
 		assertThat(subpage.getWidth(), is(100f));
 		assertThat(subpage.getWidthUnits(), is(Unit.PERCENTAGE));
 		assertThat(subpage.getHeight(), is(55f));
 		assertThat(subpage.getHeightUnits(), is(Unit.PIXELS));
 
-		c = (AbstractComponent) root.getComponent(3);
+		c = root.getComponent(3);
 		assertThat(c, is((Object) messageBar));
 
 		assertThat(messageBar.getWidth(), is(100f));

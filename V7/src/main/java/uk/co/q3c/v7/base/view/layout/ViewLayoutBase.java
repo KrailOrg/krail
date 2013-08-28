@@ -22,7 +22,6 @@ import uk.co.q3c.v7.base.view.layout.DefaultViewConfig.Split;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 
 public abstract class ViewLayoutBase implements ViewLayout {
@@ -30,7 +29,7 @@ public abstract class ViewLayoutBase implements ViewLayout {
 	protected Component layoutRoot;
 	protected ViewConfig config;
 
-	protected final List<AbstractComponent> components;
+	protected final List<Component> components;
 	/**
 	 * Sorted set required as the splits need to be processed in order
 	 */
@@ -60,12 +59,12 @@ public abstract class ViewLayoutBase implements ViewLayout {
 	protected abstract void doAssemble();
 
 	@Override
-	public List<AbstractComponent> orderedComponents() {
+	public List<Component> orderedComponents() {
 		return new ArrayList<>(components);
 	}
 
 	@Override
-	public void addComponent(AbstractComponent component) {
+	public void addComponent(Component component) {
 		components.add(component);
 	}
 

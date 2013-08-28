@@ -17,7 +17,6 @@ import java.util.Iterator;
 import uk.co.q3c.v7.base.view.layout.DefaultViewConfig.Split;
 
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalSplitPanel;
@@ -84,7 +83,7 @@ public interface ViewConfig {
 	 * 
 	 * @param component
 	 */
-	void setDefaults(AbstractComponent component);
+	void setDefaults(Component component);
 
 	/**
 	 * Do not set any default widths

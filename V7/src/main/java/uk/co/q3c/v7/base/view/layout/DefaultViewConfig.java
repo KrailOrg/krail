@@ -17,7 +17,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.Component;
 
 public class DefaultViewConfig implements ViewConfig {
 
@@ -138,7 +138,7 @@ public class DefaultViewConfig implements ViewConfig {
 	}
 
 	@Override
-	public void setDefaults(AbstractComponent component) {
+	public void setDefaults(Component component) {
 		if (widthEnabled) {
 			component.setWidth(width, widthUnit);
 		}

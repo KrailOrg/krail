@@ -42,14 +42,14 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 	private final Translate translate;
 
 	protected class ComponentWrapper {
-		private final AbstractComponent component;
+		private final Component component;
 
-		protected ComponentWrapper(AbstractComponent component) {
+		protected ComponentWrapper(Component component) {
 			super();
 			this.component = component;
 		}
 
-		public AbstractComponent getComponent() {
+		public Component getComponent() {
 			return component;
 		}
 
@@ -186,13 +186,29 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 			return this;
 		}
 
+		/**
+		 * If the component is a subclass of {@link AbstractComponent}, setImmediate(true), otherwise ignore the call
+		 * 
+		 * @return
+		 */
 		public ComponentWrapper immediate() {
-			component.setImmediate(true);
+			if (component instanceof AbstractComponent) {
+				AbstractComponent c = (AbstractComponent) component;
+				c.setImmediate(true);
+			}
 			return this;
 		}
 
+		/**
+		 * If the component is a subclass of {@link AbstractComponent}, setImmediate(true), otherwise ignore the call
+		 * 
+		 * @return
+		 */
 		public ComponentWrapper notImmediate() {
-			component.setImmediate(false);
+			if (component instanceof AbstractComponent) {
+				AbstractComponent c = (AbstractComponent) component;
+				c.setImmediate(false);
+			}
 			return this;
 		}
 
@@ -227,13 +243,13 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 	 * @param component
 	 * @return
 	 */
-	public AbstractComponent addComponent(AbstractComponent component) {
+	public Component addComponent(Component component) {
 		config.setDefaults(component);
 		layout.addComponent(component);
 		return component;
 	}
 
-	public ComponentWrapper add(AbstractComponent component) {
+	public ComponentWrapper add(Component component) {
 		addComponent(component);
 		ComponentWrapper wrapper = new ComponentWrapper(component);
 		return wrapper;
@@ -267,13 +283,13 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 		return rootComponent;
 	}
 
-	public List<AbstractComponent> orderedComponents() {
+	public List<Component> orderedComponents() {
 		return layout.orderedComponents();
 	}
 
-	public AbstractComponent addComponent(Class<? extends AbstractComponent> clazz) {
+	public Component addComponent(Class<? extends Component> clazz) {
 		try {
-			AbstractComponent c = clazz.newInstance();
+			Component c = clazz.newInstance();
 			layout.addComponent(c);
 			return c;
 		} catch (Exception e) {
@@ -282,8 +298,8 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 		}
 	}
 
-	public ComponentWrapper add(Class<? extends AbstractComponent> clazz) {
-		AbstractComponent component = addComponent(clazz);
+	public ComponentWrapper add(Class<? extends Component> clazz) {
+		Component component = addComponent(clazz);
 		ComponentWrapper wrapper = new ComponentWrapper(component);
 		return wrapper;
 	}
