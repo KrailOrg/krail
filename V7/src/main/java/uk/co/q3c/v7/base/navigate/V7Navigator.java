@@ -24,11 +24,11 @@ public interface V7Navigator extends UriFragmentChangedListener {
 	void navigateTo(String navigationState);
 
 	/**
-	 * A convenience method to look up the URI fragment for the {@link StandardPageKey} and navigate to it
+	 * A convenience method to look up the URI fragment for the {@link PageKey} and navigate to it
 	 * 
 	 * @param pageKey
 	 */
-	void navigateTo(StandardPageKey pageKey);
+	void navigateTo(PageKey pageKey);
 
 	String getNavigationState();
 

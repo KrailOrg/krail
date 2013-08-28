@@ -20,6 +20,7 @@ import uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountResetView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView;
 import uk.co.q3c.v7.base.view.RequestSystemAccountView;
+import uk.co.q3c.v7.base.view.RootView;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.base.view.SystemAccountView;
 import uk.co.q3c.v7.base.view.V7View;
@@ -37,27 +38,31 @@ import uk.co.q3c.v7.i18n.I18NKey;
 @Singleton
 public class StandardPageBuilder {
 	private static Logger log = LoggerFactory.getLogger(StandardPageBuilder.class);
+	
 	private boolean generatePublicHomePage = true;
 	private boolean generateAuthenticationPages = true;
 	private boolean generateRequestAccount = true;
 	private boolean generateRequestAccountReset = true;
 	private String systemAccountRoot = "public/system-account";
+	
 	private Sitemap sitemap;
-	// private final EnumMap<StandardPageKey, String> pageMappings = new EnumMap<>(StandardPageKey.class);
+
 	private Class<? extends Enum<?>> labelKeysClass;
 	private Set<String> missingEnums;
 	private Set<String> standardPageErrors;
 	private final CurrentLocale currentLocale;
-	private final Collator collator;
 
 	@Inject
 	protected StandardPageBuilder(CurrentLocale currentLocale) {
 		super();
 		this.currentLocale = currentLocale;
-		this.collator = Collator.getInstance(currentLocale.getLocale());
 	}
 
 	public void generateStandardPages() {
+		//root
+		generatePage(StandardPageKey.Root);
+		
+		//optionals pages		
 		if (generatePublicHomePage) {
 			generatePage(StandardPageKey.Public_Home);
 		}
@@ -67,7 +72,7 @@ public class StandardPageBuilder {
 			generatePage(StandardPageKey.Logout);
 
 			if (generateRequestAccount || generateRequestAccountReset) {
-				generatePage(StandardPageKey.System_Account);
+				generatePage(StandardPageKey.Account);
 			}
 
 			if (generateRequestAccount) {
@@ -91,12 +96,10 @@ public class StandardPageBuilder {
 	 */
 	private void generatePage(StandardPageKey key) {
 		log.debug("generating page for {}", key);
-		SitemapNode node = sitemap.append(defaultUri(key));
-		node.setLabelKey(key, currentLocale.getLocale(), collator);
+		SitemapNode node = sitemap.addNode(key, defaultUri(key));
+		node.setLabelKey(key, currentLocale.getLocale());
 		node.setViewClass(viewClass(key));
-		node.setUriSegment(defaultSegment(key));
-		sitemap.getStandardPages().put(key, sitemap.uri(node));
-		log.debug("standard page added as node at URI " + sitemap.uri(node) + ", " + node.toString());
+		log.debug("standard page added as node at URI " + node.getUri() + ", " + node.toString());
 	}
 
 	public boolean isGeneratePublicHomePage() {
@@ -144,55 +147,12 @@ public class StandardPageBuilder {
 		this.systemAccountRoot = systemAccountRoot;
 	}
 
-	public String defaultUri(StandardPageKey key) {
-		switch (key) {
-		case Private_Home:
-			return sitemap.getPrivateRoot();
-		case Public_Home:
-			return sitemap.getPublicRoot();
-		case Login:
-		case Logout:
-			return sitemap.getPublicRoot() + "/" + defaultSegment(key);
-
-		case Request_Account:
-		case Refresh_Account:
-		case Enable_Account:
-		case Unlock_Account:
-		case Reset_Account:
-			return getSystemAccountRoot() + "/" + defaultSegment(key);
-		case System_Account:
-			return getSystemAccountRoot();
-		}
-		return null;
+	public String defaultUri(PageKey key) {
+		return key.getUri();
 	}
 
-	public String uri(StandardPageKey key) {
+	public String uri(PageKey key) {
 		return defaultUri(key);
-	}
-
-	// public void setSystemAccountURI(String uri) {
-	// String[] segments = uri.split("/");
-	// if (segments.length == 1) {
-	// systemAccountPath = segments[0];
-	// systemAccountSegment = segments[0];
-	// return;
-	// }
-	// String[] pathSegments = Arrays.copyOf(segments, segments.length - 1);
-	// systemAccountSegment = segments[segments.length - 1];
-	// systemAccountPath = Joiner.on("/").join(pathSegments);
-	// }
-
-	public String defaultSegment(StandardPageKey key) {
-		switch (key) {
-		case Public_Home:
-			return sitemap.getPublicRoot();
-		case Private_Home:
-			return sitemap.getPrivateRoot();
-		default:
-			String s = key.name().toLowerCase().replace("_", "-");
-			return s;
-		}
-
 	}
 
 	/**
@@ -205,6 +165,8 @@ public class StandardPageBuilder {
 	 */
 	public Class<? extends V7View> viewClass(StandardPageKey key) {
 		switch (key) {
+		case Root:
+			return RootView.class;
 		case Public_Home:
 			return PublicHomeView.class;
 		case Private_Home:
@@ -223,49 +185,45 @@ public class StandardPageBuilder {
 			return RequestSystemAccountView.class;
 		case Enable_Account:
 			return RequestSystemAccountEnableView.class;
-		case System_Account:
+		case Account:
 			return SystemAccountView.class;
 		}
 		return null;
 	}
 
-	/**
-	 * publicHome=public : WigglyHome ~ Yes
-	 * 
-	 * @param pageMappings
-	 */
-	public void setPageMappings(List<String> pageMappings) {
-		StandardPageMappingReader dec = new StandardPageMappingReader();
-		int i = 0;
-		for (String line : pageMappings) {
-			i++;
-			// check a line for syntax
-			PageRecord pr = dec.deconstruct(line, i);
-			// null when there are syntax failures
-			if (pr != null) {
-				// identify the standard page being defined
-				try {
-					StandardPageKey spk = StandardPageKey.valueOf(pr.getStandardPageKeyName());
-					LabelKeyForName labelKeyForName = new LabelKeyForName(labelKeysClass);
-					I18NKey<?> labelKey = labelKeyForName.keyForName(pr.getLabelKeyName(), missingEnums);
-					SitemapNode node = sitemap.append(pr.getUri());
-					node.setLabelKey(labelKey, currentLocale.getLocale(), collator);
-					node.setViewClass(viewClass(spk));
-					sitemap.getStandardPages().put(spk, sitemap.uri(node));
-				} catch (Exception e) {
-					standardPageErrors.add(pr.getStandardPageKeyName() + " is not a valid standard page key in line "
-							+ i);
-				}
-			} else {
-				// there were errors in syntax
-				standardPageErrors.addAll(dec.getSyntaxErrors());
-			}
-		}
-	}
-
-	// public I18NKeys<?> key(StandardPageKey publicHome) {
-	// return null;
-	// }
+//	/**
+//	 * publicHome=public : WigglyHome ~ Yes
+//	 * 
+//	 * @param pageMappings
+//	 */
+//	public void setPageMappings(List<String> pageMappings) {
+//		StandardPageMappingReader dec = new StandardPageMappingReader();
+//		int i = 0;
+//		for (String line : pageMappings) {
+//			i++;
+//			// check a line for syntax
+//			PageRecord pr = dec.deconstruct(line, i);
+//			// null when there are syntax failures
+//			if (pr != null) {
+//				// identify the standard page being defined
+//				try {
+//					StandardPageKey spk = StandardPageKey.valueOf(pr.getStandardPageKeyName());
+//					LabelKeyForName labelKeyForName = new LabelKeyForName(labelKeysClass);
+//					I18NKey<?> labelKey = labelKeyForName.keyForName(pr.getLabelKeyName(), missingEnums);
+//					SitemapNode node = sitemap.append(pr.getUri());
+//					node.setLabelKey(labelKey, currentLocale.getLocale(), collator);
+//					node.setViewClass(viewClass(spk));
+//					sitemap.getStandardPages().put(spk, sitemap.uri(node));
+//				} catch (Exception e) {
+//					standardPageErrors.add(pr.getStandardPageKeyName() + " is not a valid standard page key in line "
+//							+ i);
+//				}
+//			} else {
+//				// there were errors in syntax
+//				standardPageErrors.addAll(dec.getSyntaxErrors());
+//			}
+//		}
+//	}
 
 	public void setLabelKeysClass(Class<? extends Enum<?>> labelKeysClass) {
 		this.labelKeysClass = labelKeysClass;

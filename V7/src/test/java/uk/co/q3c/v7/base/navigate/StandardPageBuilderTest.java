@@ -65,7 +65,7 @@ public class StandardPageBuilderTest {
 		assertThat(builder.defaultUri(StandardPageKey.Login)).isEqualTo("public/login");
 		assertThat(builder.defaultUri(StandardPageKey.Logout)).isEqualTo("public/logout");
 		assertThat(builder.defaultUri(StandardPageKey.Private_Home)).isEqualTo("private");
-		assertThat(builder.defaultUri(StandardPageKey.System_Account)).isEqualTo("public/system-account");
+		assertThat(builder.defaultUri(StandardPageKey.Account)).isEqualTo("public/system-account");
 		assertThat(builder.defaultUri(StandardPageKey.Enable_Account))
 				.isEqualTo("public/system-account/enable-account");
 		assertThat(builder.defaultUri(StandardPageKey.Unlock_Account))
@@ -90,7 +90,7 @@ public class StandardPageBuilderTest {
 		assertThat(builder.defaultUri(StandardPageKey.Login)).isEqualTo("public/login");
 		assertThat(builder.defaultUri(StandardPageKey.Logout)).isEqualTo("public/logout");
 		assertThat(builder.defaultUri(StandardPageKey.Private_Home)).isEqualTo("private");
-		assertThat(builder.defaultUri(StandardPageKey.System_Account)).isEqualTo("public/sysaccount");
+		assertThat(builder.defaultUri(StandardPageKey.Account)).isEqualTo("public/sysaccount");
 		assertThat(builder.defaultUri(StandardPageKey.Enable_Account)).isEqualTo("public/sysaccount/enable-account");
 		assertThat(builder.defaultUri(StandardPageKey.Unlock_Account)).isEqualTo("public/sysaccount/unlock-account");
 		assertThat(builder.defaultUri(StandardPageKey.Reset_Account)).isEqualTo("public/sysaccount/reset-account");
@@ -113,7 +113,7 @@ public class StandardPageBuilderTest {
 		assertThat(builder.defaultUri(StandardPageKey.Login)).isEqualTo("open/login");
 		assertThat(builder.defaultUri(StandardPageKey.Logout)).isEqualTo("open/logout");
 		assertThat(builder.defaultUri(StandardPageKey.Private_Home)).isEqualTo("secret");
-		assertThat(builder.defaultUri(StandardPageKey.System_Account)).isEqualTo("open/system-account");
+		assertThat(builder.defaultUri(StandardPageKey.Account)).isEqualTo("open/system-account");
 		assertThat(builder.defaultUri(StandardPageKey.Enable_Account)).isEqualTo("open/system-account/enable-account");
 		assertThat(builder.defaultUri(StandardPageKey.Unlock_Account)).isEqualTo("open/system-account/unlock-account");
 		assertThat(builder.defaultUri(StandardPageKey.Reset_Account)).isEqualTo("open/system-account/reset-account");
@@ -136,7 +136,7 @@ public class StandardPageBuilderTest {
 		assertThat(builder.viewClass(StandardPageKey.Login)).isEqualTo(LoginView.class);
 		assertThat(builder.viewClass(StandardPageKey.Logout)).isEqualTo(LogoutView.class);
 		assertThat(builder.viewClass(StandardPageKey.Private_Home)).isEqualTo(PrivateHomeView.class);
-		assertThat(builder.viewClass(StandardPageKey.System_Account)).isEqualTo(SystemAccountView.class);
+		assertThat(builder.viewClass(StandardPageKey.Account)).isEqualTo(SystemAccountView.class);
 		assertThat(builder.viewClass(StandardPageKey.Enable_Account)).isEqualTo(RequestSystemAccountEnableView.class);
 		assertThat(builder.viewClass(StandardPageKey.Unlock_Account)).isEqualTo(RequestSystemAccountUnlockView.class);
 		assertThat(builder.viewClass(StandardPageKey.Reset_Account)).isEqualTo(RequestSystemAccountResetView.class);
@@ -170,7 +170,7 @@ public class StandardPageBuilderTest {
 		assertThat(builder.defaultSegment(StandardPageKey.Private_Home)).isEqualTo("private");
 		assertThat(builder.defaultSegment(StandardPageKey.Login)).isEqualTo("login");
 		assertThat(builder.defaultSegment(StandardPageKey.Logout)).isEqualTo("logout");
-		assertThat(builder.defaultSegment(StandardPageKey.System_Account)).isEqualTo("system-account");
+		assertThat(builder.defaultSegment(StandardPageKey.Account)).isEqualTo("system-account");
 		assertThat(builder.defaultSegment(StandardPageKey.Request_Account)).isEqualTo("request-account");
 		assertThat(builder.defaultSegment(StandardPageKey.Unlock_Account)).isEqualTo("unlock-account");
 		assertThat(builder.defaultSegment(StandardPageKey.Refresh_Account)).isEqualTo("refresh-account");

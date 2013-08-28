@@ -10,21 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate;
-
-import java.util.Comparator;
+package uk.co.q3c.v7.base.view;
 
 /**
- * Comparator which can be used to sort SitemapNode by insertion order, based on {@link SitemapNode#getId()}
+ * The View to use as a home page for authenticated users. The default binding
+ * is to {@link DefaultPrivateHomeView}. The binding is in StandardViewModule. To
+ * bind this interface to your own implementation, sub-class
+ * {@link StandardViewModule} and override the appropriate binding method.
+ * 
+ * @author David Sowerby 1 Jan 2013
+ * 
  */
-public class InsertionOrder implements Comparator<SitemapNode> {
-	/**
-	 * 
-	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-	 */
-	@Override
-	public int compare(SitemapNode o1, SitemapNode o2) {
-		return o1.getId() - o2.getId();
-	}
+public interface RootView extends V7View {
 
 }

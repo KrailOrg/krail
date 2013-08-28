@@ -29,6 +29,7 @@ public class StandardViewModule extends AbstractModule {
 	protected void configure() {
 		// the fallback in case a View is not defined
 		bind(V7View.class).to(ErrorView.class);
+		bindRootView();
 		bindErrorView();
 		bindLoginView();
 		bindLogoutView();
@@ -43,6 +44,14 @@ public class StandardViewModule extends AbstractModule {
 
 	}
 
+	/**
+	 * Override this to provide your own {@link V7View} for the root page.
+	 */
+	private void bindRootView() {
+		bind(RootView.class).to(DefaultRootView.class);
+
+	}
+	
 	/**
 	 * Override this to provide your own {@link V7View} for the parent page of system account related pages.
 	 */

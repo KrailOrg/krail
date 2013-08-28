@@ -108,14 +108,12 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private final StandardPageBuilder standardPageBuilder;
 	private LabelKeyForName lkfn;
 	private final CurrentLocale currentLocale;
-	private final Collator collator;
 
 	@Inject
 	public TextReaderSitemapProvider(StandardPageBuilder standardPageBuilder, CurrentLocale currentLocale) {
 		super();
 		this.standardPageBuilder = standardPageBuilder;
 		this.currentLocale = currentLocale;
-		this.collator = Collator.getInstance(currentLocale.getLocale());
 
 	}
 
@@ -243,7 +241,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private void checkViews() {
 		for (SitemapNode node : sitemap.getAllNodes()) {
 			if (node.getViewClass() == null) {
-				viewlessURIs.add("uri: \"" + sitemap.uri(node) + "\"");
+				viewlessURIs.add("uri: \"" + node.getUri() + "\"");
 			}
 		}
 
@@ -261,12 +259,11 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	 * Ensure that redirection targets exist, and that no loops can be created
 	 */
 	private void validateRedirects() {
-		Collection<String> uris = sitemap.uris();
-		for (String target : getRedirects().values()) {
-			if (getRedirects().keySet().contains(target)) {
+		for (String target : sitemap.getRedirects().values()) {
+			if (sitemap.getRedirects().keySet().contains(target)) {
 				redirectErrors.add("'" + target + "' cannot be both a redirect source and redirect target");
 			}
-			if (!uris.contains(target)) {
+			if (!sitemap.hasUri(target)) {
 				redirectErrors.add("'" + target + "' cannot be a redirect target, it has not been defined as a page");
 
 			}
@@ -388,13 +385,13 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			// split the line on ':'
 
 			if (line.startsWith(":")) {
-				getRedirects().put("", line.replace(":", "").trim());
+				sitemap.addRedirect("", line.replace(":", "").trim());
 			} else {
 				String[] pair = null;
 				pair = StringUtils.split(line, ":");
 				String f = pair[0].trim();
 				String t = (pair.length > 1) ? pair[1].trim() : "";
-				getRedirects().put(f, t);
+				sitemap.addRedirect(f, t);
 			}
 		}
 	}
@@ -470,11 +467,11 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 				setSystemAccountRoot(value);
 				break;
 			case privateRoot:
-				sitemap.setPrivateRoot(value);
+				StandardPageKey.Private_Home.setUri(value);
 				break;
 
 			case publicRoot:
-				sitemap.setPublicRoot(value);
+				StandardPageKey.Public_Home.setUri(value);
 				break;
 			}
 
@@ -538,7 +535,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			MapLineRecord lineRecord = reader.processLine(lineIndex, line, syntaxErrors, indentationErrors,
 					currentIndent);
 			uriTracker.track(lineRecord.getIndentLevel(), lineRecord.getSegment());
-			SitemapNode node = sitemap.append(uriTracker.uri());
+			SitemapNode node = sitemap.addNode(uriTracker.uri());
 			// if node is a standard page do not overwrite it
 			if (node.getLabelKey() instanceof StandardPageKey) {
 				// warning
@@ -658,7 +655,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		String keyName = keyName(labelKeyName, node);
 		// could be null if invalid label keys given
 		if (lkfn != null) {
-			node.setLabelKey(lkfn.keyForName(keyName, missingEnums), currentLocale.getLocale(), collator);
+			node.setLabelKey(lkfn.keyForName(keyName, missingEnums), currentLocale.getLocale());
 		} else {
 			missingEnums.add(keyName);
 		}
@@ -1040,24 +1037,12 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		return getSitemap();
 	}
 
-	public String standardPageUri(StandardPageKey key) {
-		return standardPages().get(key);
-	}
-
-	public Map<StandardPageKey, String> standardPages() {
-		return sitemap.getStandardPages();
-	}
-
 	public Set<String> getMissingPages() {
 		return missingPages;
 	}
 
 	public Set<String> getPropertyErrors() {
 		return propertyErrors;
-	}
-
-	public Map<String, String> getRedirects() {
-		return sitemap.getRedirects();
 	}
 
 	public Set<String> getViewlessURIs() {
@@ -1070,7 +1055,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 
 	public Set<String> redirectEntries() {
 		Set<String> ss = new HashSet<>();
-		for (Map.Entry<String, String> entry : getRedirects().entrySet()) {
+		for (Map.Entry<String, String> entry : sitemap.getRedirects().entrySet()) {
 			ss.add(entry.getKey() + ":" + entry.getValue());
 		}
 		return ss;

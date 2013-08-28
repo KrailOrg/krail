@@ -17,20 +17,40 @@ import java.util.ResourceBundle;
 
 import uk.co.q3c.v7.i18n.I18NKey;
 
-public enum StandardPageKey implements I18NKey<StandardPageLabels> {
+public enum StandardPageKey implements PageKey {
 
-	Public_Home, // The home page for non-authenticated users
-	Private_Home, // The home page for authenticated users
-	Login, // the login page
-	Logout, // the page to go to after logging out
-	Reset_Account, // page for the user to request an account reset
-	Unlock_Account, // the page to go to for the user to request their account be unlocked
-	Refresh_Account, // the page to go to for the user to refresh their account after credentials have expired
-	Request_Account, // the page to go to for the user to request an account (Equivalent to 'register')
-	Enable_Account, // the page to go to for the user to request that their account is enabled
-	System_Account // parent page for all above with Account in the name
+	Root(""), //The site root
+	Public_Home (StandardPageKey.Root, "public"), // The home page for non-authenticated users
+	Private_Home (StandardPageKey.Root,"private"), // The home page for authenticated users
+	Login (StandardPageKey.Public_Home,"login"), // the login page
+	Logout (StandardPageKey.Public_Home,"logout"), // the page to go to after logging out
+	Account (StandardPageKey.Root, "account"), // parent page for all above with Account in the name
+	Reset_Account (StandardPageKey.Account, "reset"), // page for the user to request an account reset
+	Unlock_Account (StandardPageKey.Account, "unlock"), // the page to go to for the user to request their account be unlocked
+	Refresh_Account (StandardPageKey.Account, "refresh"), // the page to go to for the user to refresh their account after credentials have expired
+	Request_Account (StandardPageKey.Account, "request"), // the page to go to for the user to request an account (Equivalent to 'register')
+	Enable_Account (StandardPageKey.Account, "enable") // the page to go to for the user to request that their account is enable
 	;
 
+	private String uri;
+	
+	private StandardPageKey(String defaultUri) {
+		this(null, defaultUri);
+	}
+	
+	/**
+	 * If no parent specified root will be used
+	 */
+	private StandardPageKey(PageKey parent, String uriSegment) {
+		assert !uriSegment.contains(Sitemap.PATH_SEPARATOR);
+		
+		if(parent != null){
+			this.uri = Sitemap.uri(parent.getUri(), uriSegment);
+		}else{
+			this.uri = Sitemap.uri((String)null, uriSegment);
+		}
+	}
+	
 	@Override
 	public StandardPageLabels getBundle(Locale locale) {
 		ResourceBundle bundle = ResourceBundle.getBundle(StandardPageLabels.class.getName(), locale);
@@ -50,6 +70,15 @@ public enum StandardPageKey implements I18NKey<StandardPageLabels> {
 	@Override
 	public boolean isNullKey() {
 		return false;
+	}
+
+	@Override
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String value) {
+		this.uri = value;
 	}
 
 }

@@ -18,6 +18,7 @@ import org.apache.shiro.realm.ldap.JndiLdapRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
 
 public class DefaultRealm extends AuthorizingRealm {
 
@@ -89,8 +90,8 @@ public class DefaultRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-		String privatePermission = "uri:view:" + sitemap.getPrivateRoot() + ":*";
-		URIViewPermission publicPermission = permissionFactory.createViewPermission(sitemap.getPublicRoot(), true);
+		String privatePermission = "uri:view:" + StandardPageKey.Private_Home.getUri() + ":*";
+		URIViewPermission publicPermission = permissionFactory.createViewPermission(StandardPageKey.Public_Home.getUri(), true);
 		info.addObjectPermission(publicPermission);
 		info.addStringPermission(privatePermission);
 		return info;

@@ -38,7 +38,6 @@ public class SitemapURIConverter {
 
 	@Inject
 	protected SitemapURIConverter(Sitemap sitemap, URIFragmentHandler uriHandler) {
-		super();
 		this.sitemap = sitemap;
 		this.uriHandler = uriHandler;
 	}
@@ -59,54 +58,10 @@ public class SitemapURIConverter {
 		return nodeChain;
 	}
 
-	/**
-	 * Returns true if a node is found for {@code navigationState}. If {@code allowPartialPath} is true, a node is
-	 * considered found even if only a partial match for the {@code navigationState} is found. If
-	 * {@code allowPartialPath} is false, then a full match must occur for true to be returned.
-	 * 
-	 * @param navigationState
-	 * @param allowPartialPath
-	 * @return
-	 */
-	public boolean hasNodeForUri(String navigationState, boolean allowPartialPath) {
-		SitemapNode node = nodeForUri(navigationState, allowPartialPath);
-		return node != null;
-	}
-
-	/**
-	 * Returns the last node in the chain of {@link SitemapNode} representing {@code navigationState}. The chain is
-	 * provided by {@link #nodeChainForUri(String)}, and this method just returns the last node in that chain. Returns
-	 * null if no node found.
-	 * <p>
-	 * If {@code allowPartialPath} is true, a node is considered found even if only a partial match for the
-	 * {@code navigationState} is found. In this case the last node in the match is returned. If
-	 * {@code allowPartialPath} is false, then a full match must occur for a node to be returned.
-	 * 
-	 * @param navigationState
-	 * @return
-	 */
-	public SitemapNode nodeForUri(String navigationState, boolean allowPartialPath) {
-		List<SitemapNode> nodeChain = nodeChainForUri(navigationState, allowPartialPath);
-		if (nodeChain.size() == 0) {
-			return null;
-		} else {
-			return nodeChain.get(nodeChain.size() - 1);
-		}
-	}
-
-	/**
-	 * Returns true if the page within the supplied fragment is public (it can be viewed by unauthenticated users)
-	 * 
-	 * @param fragment
-	 * @return
-	 */
-	public boolean pageIsPublic(String fragment) {
-		SitemapNode node = nodeForUri(fragment, false);
-		if (node == null) {
-			return false;
-		}
-		SitemapNode rootNode = sitemap.getRootFor(node);
-		return (rootNode.equals(sitemap.getPublicRootNode()));
+	public boolean pageIsPublic(String uri) {
+		// TODO Auto-generated method stub
+		assert false;
+		return false;
 	}
 
 }

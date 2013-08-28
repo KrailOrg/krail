@@ -136,8 +136,7 @@ public class DefaultV7NavigatorTest {
 		when(subjectPro.get()).thenReturn(subject);
 		when(sitemapURIConverter.pageIsPublic(anyString())).thenReturn(true);
 
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, securityManager, subjectPro,
-				uriPermissionFactory, sitemapURIConverter);
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, securityManager, subjectPro);
 		CurrentInstance.set(UI.class, scopedUI);
 	}
 
@@ -146,7 +145,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/logout";
-		when(sitemap.standardPageURI(StandardPageKey.Logout)).thenReturn(page);
+		when(StandardPageKey.Logout.getUri()).thenReturn(page);
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(viewProMap.get(page)).thenReturn(logoutViewPro);
 		when(logoutViewPro.get()).thenReturn(logoutView);
@@ -189,7 +188,7 @@ public class DefaultV7NavigatorTest {
 		when(view2Pro.get()).thenReturn(view2);
 		when(loginViewPro.get()).thenReturn(loginView);
 
-		when(sitemap.standardPageURI(StandardPageKey.Login)).thenReturn(page2);
+		when(StandardPageKey.Login.getUri()).thenReturn(page2);
 
 		navigator.navigateTo(page);
 		navigator.navigateTo(StandardPageKey.Login);
@@ -204,7 +203,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "private";
-		when(sitemap.standardPageURI(StandardPageKey.Private_Home)).thenReturn(page);
+		when(StandardPageKey.Private_Home.getUri()).thenReturn(page);
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(viewProMap.get(page)).thenReturn(privateHomePro);
 		when(privateHomePro.get()).thenReturn(privateHomeView);
@@ -301,8 +300,8 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view2";
-		SitemapNode node = new SitemapNode();
-		when(sitemap.uri(node)).thenReturn(page);
+		SitemapNode node = new SitemapNode(sitemap,"");
+		when(node.getUri()).thenReturn(page);
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(viewProMap.get(page)).thenReturn(view2Pro);
 		when(view2Pro.get()).thenReturn(view2);

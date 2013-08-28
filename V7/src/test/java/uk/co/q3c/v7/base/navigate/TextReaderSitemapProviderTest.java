@@ -606,7 +606,7 @@ public class TextReaderSitemapProviderTest {
 			assertThat(tree.getChildCount(node)).isEqualTo(5);
 			assertThat(node.getUriSegment()).isEqualTo("system-account");
 			assertThat(node.getViewClass()).isEqualTo(SystemAccountView.class);
-			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.System_Account);
+			assertThat(node.getLabelKey()).isEqualTo(StandardPageKey.Account);
 			break;
 		}
 

@@ -36,14 +36,12 @@ public class Breadcrumb extends HorizontalLayout implements I18NListener, V7View
 	private final V7Navigator navigator;
 	private final SitemapURIConverter converter;
 	private final CurrentLocale currentLocale;
-	private final Collator collator;
 
 	protected Breadcrumb(V7Navigator navigator, SitemapURIConverter converter, CurrentLocale currentLocale) {
 		this.navigator = navigator;
 		navigator.addViewChangeListener(this);
 		this.converter = converter;
 		this.currentLocale = currentLocale;
-		this.collator = Collator.getInstance(currentLocale.getLocale());
 		moveToNavigationState();
 	}
 
@@ -80,7 +78,7 @@ public class Breadcrumb extends HorizontalLayout implements I18NListener, V7View
 
 		step.setNode(sitemapNode);
 		I18NKey<?> key = step.getNode().getLabelKey();
-		sitemapNode.setLabelKey(key, currentLocale.getLocale(), collator);
+		sitemapNode.setLabelKey(key, currentLocale.getLocale());
 
 		step.setVisible(true);
 		step.setNode(sitemapNode);

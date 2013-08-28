@@ -23,8 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.CollationKeyOrder;
-import uk.co.q3c.v7.base.navigate.InsertionOrder;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
@@ -86,20 +84,20 @@ public class UserNavigationTree extends Tree {
 		this.removeAllItems();
 		List<SitemapNode> nodeList = sitemap.getRoots();
 
-		// which order, sorted or insertion?
-		if (sorted) {
-			log.debug("'sorted' is true, sorting by collation key");
-			Collections.sort(nodeList, new CollationKeyOrder());
-		} else {
-			log.debug("'sorted' is false, using insertion order");
-			Collections.sort(nodeList, new InsertionOrder());
-		}
+//		// which order, sorted or insertion?
+//		if (sorted) {
+//			log.debug("'sorted' is true, sorting by collation key");
+//			Collections.sort(nodeList, new CollationKeyOrder());
+//		} else {
+//			log.debug("'sorted' is false, using insertion order");
+//			Collections.sort(nodeList, new InsertionOrder());
+//		}
 
 		for (SitemapNode node : nodeList) {
 			level = 1;
 			// doesn't make sense to show the logout page
 			if (!node.getLabelKey().equals(StandardPageKey.Logout)) {
-				loadNode(null, node, node.equals(sitemap.getPublicRootNode()));
+				loadNode(null, node, sitemap.hasPermissions(subjectPro.get(), node));
 			}
 		}
 	}
@@ -112,7 +110,7 @@ public class UserNavigationTree extends Tree {
 	 */
 	private void loadNode(SitemapNode parentNode, SitemapNode childNode, boolean publicBranch) {
 		// construct the permission
-		String uri = sitemap.uri(childNode);
+		String uri = childNode.getUri();
 		URIViewPermission pagePermissionRequired = uriPermissionFactory.createViewPermission(uri);
 
 		// if permitted, add it
@@ -134,12 +132,12 @@ public class UserNavigationTree extends Tree {
 					// no children, visual tree should not allow expanding the node
 					setChildrenAllowed(newParentNode, false);
 				} else {
-					// which order, sorted or insertion?
-					if (sorted) {
-						Collections.sort(children, new CollationKeyOrder());
-					} else {
-						Collections.sort(children, new InsertionOrder());
-					}
+//					// which order, sorted or insertion?
+//					if (sorted) {
+//						Collections.sort(children, new CollationKeyOrder());
+//					} else {
+//						Collections.sort(children, new InsertionOrder());
+//					}
 				}
 				for (SitemapNode child : children) {
 					if (!child.getLabelKey().equals(StandardPageKey.Logout)) {
@@ -188,7 +186,7 @@ public class UserNavigationTree extends Tree {
 	@Override
 	public void valueChange(Property.ValueChangeEvent event) {
 		if (getValue() != null) {
-			String url = sitemap.uri((SitemapNode) getValue());
+			String url = ((SitemapNode) getValue()).getUri();
 			navigator.navigateTo(url);
 		}
 	}
