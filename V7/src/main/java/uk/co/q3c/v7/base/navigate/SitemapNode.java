@@ -16,6 +16,8 @@ import java.text.CollationKey;
 import java.text.Collator;
 import java.util.Locale;
 
+import org.apache.shiro.subject.Subject;
+
 import com.google.common.base.Objects;
 
 import uk.co.q3c.v7.base.view.V7View;
@@ -58,6 +60,7 @@ public class SitemapNode {
 	private final Sitemap sitemap;
 	private String uri;
 	private Class<? extends V7View> viewClass;
+	private final ViewPermissions permissions;
 	private I18NKey<?> labelKey;
 	private String label;
 
@@ -70,10 +73,11 @@ public class SitemapNode {
 			Locale locale) {
 		this.sitemap = sitemap;
 		setUri(uri);
-		this.viewClass = viewClass;
+		setViewClass(viewClass);
 		if (labelKey != null) {
 			setLabelKey(labelKey, locale);
 		}
+		this.permissions = new ViewPermissions(this);
 	}
 
 	public String getUri() {
@@ -83,14 +87,16 @@ public class SitemapNode {
 	public void setUri(String uri) {
 		this.uri = uri;
 	}
-	
+
 	public String getUriSegment() {
-		return getUri().substring(getUri().lastIndexOf(Sitemap.PATH_SEPARATOR)+1);
+		return getUri().substring(
+				getUri().lastIndexOf(Sitemap.PATH_SEPARATOR) + 1);
 	}
-	
+
 	public void setUriSegment(String segment) {
 		setUri(Sitemap.uri(getParent(), segment));
 	}
+
 	public I18NKey<?> getLabelKey() {
 		return labelKey;
 	}
@@ -112,7 +118,14 @@ public class SitemapNode {
 	}
 
 	public void setViewClass(Class<? extends V7View> viewClass) {
-		this.viewClass = viewClass;
+		if (this.viewClass != viewClass) {
+			this.viewClass = viewClass;
+			permissions.clear();
+			if (this.viewClass != null) {
+				permissions
+						.buildPermissionsFromViewAnnotations(this.viewClass);
+			}
+		}
 	}
 
 	public String toStringAsMapEntry() {
@@ -165,4 +178,11 @@ public class SitemapNode {
 		return getUri().equals(other.getUri());
 	}
 
+	public void checkPermissions(Subject subject) {
+		permissions.checkPermissions(subject);
+	}
+
+	public ViewPermissions getPermissions() {
+		return permissions;
+	}
 }

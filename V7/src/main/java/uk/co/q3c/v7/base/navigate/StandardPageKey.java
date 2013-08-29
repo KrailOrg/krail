@@ -18,13 +18,12 @@ import java.util.ResourceBundle;
 import uk.co.q3c.v7.i18n.I18NKey;
 
 public enum StandardPageKey implements PageKey {
-
-	Root(""), //The site root
-	Public_Home (StandardPageKey.Root, "public"), // The home page for non-authenticated users
-	Private_Home (StandardPageKey.Root,"private"), // The home page for authenticated users
+	Root (""), // The root
+	Public_Home ("public"), // The home page for non-authenticated users
+	Private_Home ("private"), // The home page for authenticated users
 	Login (StandardPageKey.Public_Home,"login"), // the login page
 	Logout (StandardPageKey.Public_Home,"logout"), // the page to go to after logging out
-	Account (StandardPageKey.Root, "account"), // parent page for all above with Account in the name
+	Account ("account"), // parent page for all above with Account in the name
 	Reset_Account (StandardPageKey.Account, "reset"), // page for the user to request an account reset
 	Unlock_Account (StandardPageKey.Account, "unlock"), // the page to go to for the user to request their account be unlocked
 	Refresh_Account (StandardPageKey.Account, "refresh"), // the page to go to for the user to refresh their account after credentials have expired
@@ -38,8 +37,8 @@ public enum StandardPageKey implements PageKey {
 		this(null, defaultUri);
 	}
 	
-	/**
-	 * If no parent specified root will be used
+	/** 
+	 * @param parent if parent is null the uri represents a root
 	 */
 	private StandardPageKey(PageKey parent, String uriSegment) {
 		assert !uriSegment.contains(Sitemap.PATH_SEPARATOR);

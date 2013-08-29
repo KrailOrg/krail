@@ -28,8 +28,9 @@ import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
 
 /**
- * Used during the process of building the {@link Sitemap}. Provides the logic for building standard pages using options
- * provided by the {@link SitemapProvider} and defaults from {@link StandardPageKeyTest}
+ * Used during the process of building the {@link Sitemap}. Provides the logic
+ * for building standard pages using options provided by the
+ * {@link SitemapProvider} and defaults from {@link StandardPageKeyTest}
  * 
  * @author David Sowerby 28 June 2013
  * 
@@ -37,14 +38,15 @@ import uk.co.q3c.v7.i18n.I18NKey;
  */
 @Singleton
 public class StandardPageBuilder {
-	private static Logger log = LoggerFactory.getLogger(StandardPageBuilder.class);
-	
+	private static Logger log = LoggerFactory
+			.getLogger(StandardPageBuilder.class);
+
 	private boolean generatePublicHomePage = true;
 	private boolean generateAuthenticationPages = true;
 	private boolean generateRequestAccount = true;
 	private boolean generateRequestAccountReset = true;
 	private String systemAccountRoot = "public/system-account";
-	
+
 	private Sitemap sitemap;
 
 	private Class<? extends Enum<?>> labelKeysClass;
@@ -59,10 +61,8 @@ public class StandardPageBuilder {
 	}
 
 	public void generateStandardPages() {
-		//root
 		generatePage(StandardPageKey.Root);
 		
-		//optionals pages		
 		if (generatePublicHomePage) {
 			generatePage(StandardPageKey.Public_Home);
 		}
@@ -90,7 +90,8 @@ public class StandardPageBuilder {
 	}
 
 	/**
-	 * Creates a Sitemap node and assigns the default values from the {@code key}
+	 * Creates a Sitemap node and assigns the default values from the
+	 * {@code key}
 	 * 
 	 * @param key
 	 */
@@ -99,7 +100,8 @@ public class StandardPageBuilder {
 		SitemapNode node = sitemap.addNode(key, defaultUri(key));
 		node.setLabelKey(key, currentLocale.getLocale());
 		node.setViewClass(viewClass(key));
-		log.debug("standard page added as node at URI " + node.getUri() + ", " + node.toString());
+		log.debug("standard page added as node at URI " + node.getUri() + ", "
+				+ node.toString());
 	}
 
 	public boolean isGeneratePublicHomePage() {
@@ -122,7 +124,8 @@ public class StandardPageBuilder {
 		this.generatePublicHomePage = generatePublicHomePage;
 	}
 
-	public void setGenerateAuthenticationPages(boolean generateAuthenticationPages) {
+	public void setGenerateAuthenticationPages(
+			boolean generateAuthenticationPages) {
 		this.generateAuthenticationPages = generateAuthenticationPages;
 	}
 
@@ -130,7 +133,8 @@ public class StandardPageBuilder {
 		this.generateRequestAccount = generateRequestAccount;
 	}
 
-	public void setGenerateRequestAccountReset(boolean generateRequestAccountReset) {
+	public void setGenerateRequestAccountReset(
+			boolean generateRequestAccountReset) {
 		this.generateRequestAccountReset = generateRequestAccountReset;
 	}
 
@@ -156,9 +160,10 @@ public class StandardPageBuilder {
 	}
 
 	/**
-	 * The view class is always the same for a given standard page ... it is an interface, so to implement your own,
-	 * provide an implementation a sub-class of {@link StandardViewModule}, and load that module in your sub-class of
-	 * {@link BaseGuiceServletInjector}
+	 * The view class is always the same for a given standard page ... it is an
+	 * interface, so to implement your own, provide an implementation a
+	 * sub-class of {@link StandardViewModule}, and load that module in your
+	 * sub-class of {@link BaseGuiceServletInjector}
 	 * 
 	 * @param key
 	 * @return
@@ -190,40 +195,6 @@ public class StandardPageBuilder {
 		}
 		return null;
 	}
-
-//	/**
-//	 * publicHome=public : WigglyHome ~ Yes
-//	 * 
-//	 * @param pageMappings
-//	 */
-//	public void setPageMappings(List<String> pageMappings) {
-//		StandardPageMappingReader dec = new StandardPageMappingReader();
-//		int i = 0;
-//		for (String line : pageMappings) {
-//			i++;
-//			// check a line for syntax
-//			PageRecord pr = dec.deconstruct(line, i);
-//			// null when there are syntax failures
-//			if (pr != null) {
-//				// identify the standard page being defined
-//				try {
-//					StandardPageKey spk = StandardPageKey.valueOf(pr.getStandardPageKeyName());
-//					LabelKeyForName labelKeyForName = new LabelKeyForName(labelKeysClass);
-//					I18NKey<?> labelKey = labelKeyForName.keyForName(pr.getLabelKeyName(), missingEnums);
-//					SitemapNode node = sitemap.append(pr.getUri());
-//					node.setLabelKey(labelKey, currentLocale.getLocale(), collator);
-//					node.setViewClass(viewClass(spk));
-//					sitemap.getStandardPages().put(spk, sitemap.uri(node));
-//				} catch (Exception e) {
-//					standardPageErrors.add(pr.getStandardPageKeyName() + " is not a valid standard page key in line "
-//							+ i);
-//				}
-//			} else {
-//				// there were errors in syntax
-//				standardPageErrors.addAll(dec.getSyntaxErrors());
-//			}
-//		}
-//	}
 
 	public void setLabelKeysClass(Class<? extends Enum<?>> labelKeysClass) {
 		this.labelKeysClass = labelKeysClass;

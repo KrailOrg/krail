@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.view;
 
+import uk.co.q3c.v7.base.shiro.Public;
+
 /**
  * The View to use for a user to request that their system account is reset. The default binding is to
  * {@link DefaultRequestSystemAccountResetView}. The binding is in StandardViewModule. To bind this interface to your
@@ -20,6 +22,7 @@ package uk.co.q3c.v7.base.view;
  * @author David Sowerby 1 Jan 2013
  * 
  */
+@Public
 public interface RequestSystemAccountResetView extends V7View {
 
 }

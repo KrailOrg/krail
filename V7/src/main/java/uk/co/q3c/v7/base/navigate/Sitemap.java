@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import javax.inject.Singleton;
@@ -63,35 +64,22 @@ import uk.co.q3c.v7.base.view.V7View;
 public class Sitemap extends BasicForest<SitemapNode> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Sitemap.class);
-	
+
 	public static final String PATH_SEPARATOR = "/";
 
-	/**
-	 * If the parent is not specified the root is used
-	 * @param segment
-	 * @return
-	 */
-	public static String uri(String segment) {
-		return uri("", segment);
-	}
-	
 	public static String uri(SitemapNode parent, String segment) {
 		if (parent != null) {
 			return uri(parent.getUri(), segment);
 		} else {
-			return uri((String)null, segment);
+			return uri((String) null, segment);
 		}
 	}
 
 	public static String uri(String parentUri, String segment) {
 		if (parentUri != null) {
-			if(parentUri.endsWith(PATH_SEPARATOR)){
-				return parentUri + segment;
-			}else{
-				return parentUri + PATH_SEPARATOR + segment;
-			}
+			return parentUri + PATH_SEPARATOR + segment;
 		} else {
-			return PATH_SEPARATOR + segment;
+			return segment;
 		}
 	}
 
@@ -125,14 +113,20 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	}
 
 	private SitemapNode findNodeByUri(String uri, boolean createIfAbsent) {
-		String[] segments = StringUtils.split(uri, PATH_SEPARATOR);
-		if(segments.length == 0) {
-			//the root
-			segments = new String[]{""};
+		if (uri == null) {
+			assert uri != null;
 		}
+
+		String[] segments = StringUtils.split(uri, PATH_SEPARATOR);
+
+		// bugfix: "".split("/") should return {""} but returns {}
+		if (segments.length == 0) {
+			segments = new String[] { "" };
+		}
+
 		int i = 0;
 
-		SitemapNode parent = getRoot();
+		SitemapNode parent = null;
 		while (i < segments.length) {
 			parent = findChildNode(parent, segments[i], createIfAbsent);
 			if (parent == null) {
@@ -154,18 +148,20 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	 */
 	private SitemapNode findChildNode(SitemapNode parent, String segment,
 			boolean createIfAbsent) {
+		String searchedNode = uri(parent, segment);
+
 		SitemapNode foundNode = null;
 		List<SitemapNode> childrens = parent != null ? getChildren(parent)
 				: getRoots();
 		for (SitemapNode node : childrens) {
-			if (node.getUri().equals(uri(parent, segment))) {
+			if (node.getUri().equals(searchedNode)) {
 				foundNode = node;
 				break;
 			}
 		}
 		if (foundNode == null) {
 			if (createIfAbsent == true) {
-				foundNode = new SitemapNode(this, uri(parent, segment));
+				foundNode = new SitemapNode(this, searchedNode);
 				addChild(parent, foundNode);
 				return foundNode;
 			} else {
@@ -211,9 +207,9 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	public Map<String, String> getRedirects() {
 		return uriRedirects;
 	}
-	
+
 	public void addRedirect(String source, String target) {
-		getRedirects().put(uri(source), uri(target));
+		getRedirects().put(source, target);
 	}
 
 	/**
@@ -231,9 +227,14 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	}
 
 	public void checkPermissions(String uri, Subject subject)
-			throws UnauthenticatedException, UnauthorizedException {
-		LOGGER.error("non implementato: vengono concessi tutti i permessi");
-		return;
+			throws NoSuchElementException, UnauthenticatedException,
+			UnauthorizedException {
+		SitemapNode node = findNodeByUri(uri, false);
+		if (node != null) {
+			node.checkPermissions(subject);
+		} else {
+			throw new NoSuchElementException(uri);
+		}
 	}
 
 	public boolean hasPermissions(Subject subject, SitemapNode node) {

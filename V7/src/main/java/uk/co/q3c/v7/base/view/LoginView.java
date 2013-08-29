@@ -13,6 +13,8 @@
 package uk.co.q3c.v7.base.view;
 
 
+import uk.co.q3c.v7.base.shiro.Public;
+
 import com.vaadin.ui.Button;
 
 /**
@@ -21,6 +23,7 @@ import com.vaadin.ui.Button;
  * @author David Sowerby 1 Jan 2013
  * 
  */
+@Public
 public interface LoginView extends V7View {
 
 	void setUsername(String username);

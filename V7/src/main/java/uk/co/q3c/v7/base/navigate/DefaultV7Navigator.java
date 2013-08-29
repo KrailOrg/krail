@@ -29,6 +29,7 @@ import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
@@ -39,7 +40,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	private final Sitemap sitemap;
 	private NavigationState previousNavigationState = null;
-	private NavigationState currentNavigationState = new NavigationState(null, null, null);
+	private NavigationState currentNavigationState = null;
 	private final List<V7ViewChangeListener> listeners = new LinkedList<V7ViewChangeListener>();
 	private final Provider<ErrorView> errorViewPro;
 	private final URIFragmentHandler uriHandler;
@@ -73,7 +74,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	public void navigateTo(String uri) {
 
 		assert uri != null;
-
+		
 		log.debug("Navigating to uri: {}", uri);
 		sitemapCheck();
 		if (sitemap.hasErrors()) {
@@ -89,7 +90,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		String revisedUri = checkRedirects(uri);
 		log.debug("fragment after redirect check is {}", revisedUri);
 
-		String viewUriFragment = sitemap.uri(uriHandler.virtualPage());
+		String viewUriFragment = uriHandler.virtualPage();
 		log.debug("page to look up View is {}", viewUriFragment);
 		Provider<V7View> provider = viewProvidersMap.get(viewUriFragment);
 		V7View view = null;
@@ -152,14 +153,21 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 		try {
 			sitemap.checkPermissions(uri, subjectProvider.get());
-		} catch (UnauthorizedException e) {
-			throw new UnauthorizedException(uri);
 		} catch (UnauthenticatedException e) {
-			throw new UnauthenticatedException(uri);
+			onUnauthenticatedException(e);
+			return;
+		} catch (UnauthorizedException e) {
+			throw e;
 		}
 
 		// is permitted, proceed
 		changeView(view, viewName, uri);
+	}
+	
+	protected void onUnauthenticatedException(UnauthenticatedException e) {
+		//reditect to login
+		Notification.show("Devi effettuare il login per utilizzare questa pagina", Notification.Type.HUMANIZED_MESSAGE);
+		navigateTo(StandardPageKey.Login);
 	}
 
 	/**
@@ -184,7 +192,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 			//aborted
 			return;
 		}
-		getUI().changeView(currentNavigationState.getView(), view);
+		getUI().changeView(currentNavigationState!=null?currentNavigationState.getView():null, view);
 		view.enter(event);
 
 		setCurrentView(view, viewName, uri);

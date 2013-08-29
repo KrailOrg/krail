@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.view;
 
+import uk.co.q3c.v7.base.shiro.Public;
+
 /**
  * The View to use as a home page for authenticated users. The default binding
  * is to {@link DefaultRequestSystemAccountView}. The binding is in
@@ -22,6 +24,7 @@ package uk.co.q3c.v7.base.view;
  * @author David Sowerby 1 Jan 2013
  * 
  */
+@Public
 public interface RequestSystemAccountView extends V7View {
 
 }

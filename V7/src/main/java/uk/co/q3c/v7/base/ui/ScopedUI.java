@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.config.V7ConfigurationException;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
+import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewHolder;
@@ -108,7 +109,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 		doLayout();
 		// Navigate to the correct start point
 		String fragment = getPage().getUriFragment();
-		getV7Navigator().navigateTo(fragment!=null?fragment:"");
+		getV7Navigator().navigateTo(fragment);
 
 	}
 
