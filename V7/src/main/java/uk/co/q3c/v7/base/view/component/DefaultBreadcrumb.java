@@ -16,6 +16,9 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.SitemapURIConverter;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -30,6 +33,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 
+@UIScoped
 public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener, V7ViewChangeListener,
 		Button.ClickListener, Breadcrumb {
 
@@ -39,6 +43,7 @@ public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener,
 	private final CurrentLocale currentLocale;
 	private final Collator collator;
 
+	@Inject
 	protected DefaultBreadcrumb(V7Navigator navigator, SitemapURIConverter converter, CurrentLocale currentLocale) {
 		this.navigator = navigator;
 		navigator.addViewChangeListener(this);
