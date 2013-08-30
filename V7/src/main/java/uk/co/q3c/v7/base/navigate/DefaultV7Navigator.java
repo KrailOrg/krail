@@ -268,7 +268,8 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Override
 	public void uriFragmentChanged(UriFragmentChangedEvent event) {
-		navigateTo(event.getPage().getUriFragment());
+		String uri = event.getPage().getUriFragment();
+		navigateTo(uri!=null?uri:"");
 	}
 
 	@Override

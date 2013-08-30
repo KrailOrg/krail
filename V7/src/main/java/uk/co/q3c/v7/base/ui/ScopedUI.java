@@ -109,7 +109,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 		doLayout();
 		// Navigate to the correct start point
 		String fragment = getPage().getUriFragment();
-		getV7Navigator().navigateTo(fragment);
+		getV7Navigator().navigateTo(fragment==null?"":fragment);
 
 	}
 
