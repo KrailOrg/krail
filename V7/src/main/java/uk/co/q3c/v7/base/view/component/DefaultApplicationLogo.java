@@ -12,8 +12,18 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import com.vaadin.ui.Component;
+import javax.inject.Inject;
 
-public interface Breadcrumb extends Component {
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+
+import com.vaadin.ui.Image;
+
+@UIScoped
+public class DefaultApplicationLogo extends Image implements ApplicationLogo {
+
+	@Inject
+	protected DefaultApplicationLogo() {
+		super();
+	}
 
 }

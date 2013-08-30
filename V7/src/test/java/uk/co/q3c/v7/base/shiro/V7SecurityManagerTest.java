@@ -27,6 +27,7 @@ import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
+import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -40,10 +41,10 @@ import com.vaadin.util.CurrentInstance;
 public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 
 	@Mock
-	LoginStatusMonitor monitor1;
+	LoginStatusPanel monitor1;
 
 	@Mock
-	LoginStatusMonitor monitor2;
+	LoginStatusPanel monitor2;
 
 	@Mock
 	BasicUI ui;

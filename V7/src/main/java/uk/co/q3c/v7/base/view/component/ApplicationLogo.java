@@ -14,6 +14,6 @@ package uk.co.q3c.v7.base.view.component;
 
 import com.vaadin.ui.Component;
 
-public interface Breadcrumb extends Component {
+public interface ApplicationLogo extends Component {
 
 }

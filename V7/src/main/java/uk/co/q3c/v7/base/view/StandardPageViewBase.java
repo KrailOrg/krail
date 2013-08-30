@@ -15,7 +15,7 @@ package uk.co.q3c.v7.base.view;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.view.component.UserNavigationTree;
+import uk.co.q3c.v7.base.view.component.DefaultUserNavigationTree;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
@@ -26,13 +26,13 @@ import com.vaadin.ui.Label;
 public abstract class StandardPageViewBase extends ViewBase {
 
 	private HorizontalSplitPanel layout;
-	private final UserNavigationTree navtree;
+	private final DefaultUserNavigationTree navtree;
 	private Label label;
 
 	private GridLayout grid;
 
 	@Inject
-	protected StandardPageViewBase(V7Navigator navigator, UserNavigationTree navtree) {
+	protected StandardPageViewBase(V7Navigator navigator, DefaultUserNavigationTree navtree) {
 		super(navigator);
 		this.navtree = navtree;
 		buildView();

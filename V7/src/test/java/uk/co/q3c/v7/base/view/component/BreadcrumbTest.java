@@ -39,7 +39,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 @GuiceContext({})
 public class BreadcrumbTest extends TestWithSitemap {
 
-	Breadcrumb breadcrumb;
+	DefaultBreadcrumb breadcrumb;
 
 	@Mock
 	V7Navigator navigator;
@@ -76,7 +76,7 @@ public class BreadcrumbTest extends TestWithSitemap {
 		newNode2.setLabelKey(TestLabelKey.Opt, currentLocale.getLocale(), collator);
 
 		// when
-		breadcrumb = new Breadcrumb(navigator, converter, currentLocale);
+		breadcrumb = new DefaultBreadcrumb(navigator, converter, currentLocale);
 		// then
 		assertThat(breadcrumb.getSteps().size()).isEqualTo(3);
 		assertThat(breadcrumb.getSteps().get(0).getCaption()).isEqualTo("home");

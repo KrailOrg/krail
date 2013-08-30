@@ -12,7 +12,8 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import com.vaadin.ui.Component;
 
-public interface ApplicationMenu {
+public interface ApplicationMenu extends Component {
 
 }

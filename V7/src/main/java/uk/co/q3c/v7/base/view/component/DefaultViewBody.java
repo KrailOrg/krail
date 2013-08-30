@@ -12,8 +12,19 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import com.vaadin.ui.Component;
+import java.util.List;
 
-public interface Breadcrumb extends Component {
+import com.vaadin.ui.Panel;
+
+public class DefaultViewBody extends Panel implements ViewBody {
+
+	public DefaultViewBody() {
+		super();
+	}
+
+	@Override
+	public void processParams(List<String> params) {
+
+	}
 
 }

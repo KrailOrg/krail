@@ -5,7 +5,7 @@ import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
+import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 
 import com.google.inject.AbstractModule;
@@ -38,7 +38,7 @@ public abstract class V7UIModule extends AbstractModule {
 	 * Override to bind your choice of LoginStatusMonitor
 	 */
 	protected void bindLoginStatusMonitor() {
-		bind(LoginStatusMonitor.class).to(LoginStatusPanel.class);
+		bind(LoginStatusPanel.class).to(DefaultLoginStatusPanel.class);
 	}
 
 	/**

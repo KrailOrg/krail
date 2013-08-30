@@ -24,7 +24,6 @@ import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -35,7 +34,7 @@ import com.vaadin.ui.Button;
 @GuiceContext({})
 public class LoginStatusPanelTest {
 
-	LoginStatusMonitor panel;
+	LoginStatusPanel panel;
 
 	@Mock
 	Subject subject;
@@ -53,8 +52,8 @@ public class LoginStatusPanelTest {
 		V7SecurityManager securityManager = new V7SecurityManager();
 		SecurityUtils.setSecurityManager(securityManager);
 		when(subjectPro.get()).thenReturn(subject);
-		panel = new LoginStatusPanel(navigator, securityManager, subjectPro);
-		loginoutBtn = ((LoginStatusPanel) panel).getLogin_logout_Button();
+		panel = new DefaultLoginStatusPanel(navigator, securityManager, subjectPro);
+		loginoutBtn = ((DefaultLoginStatusPanel) panel).getLogin_logout_Button();
 	}
 
 	@Test

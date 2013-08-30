@@ -10,11 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.shiro;
+package uk.co.q3c.v7.base.view.component;
 
-public interface LoginStatusMonitor extends LoginStatusListener {
+import javax.inject.Inject;
 
-	String getActionLabel();
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 
-	String getUserId();
+import com.vaadin.ui.Panel;
+
+@UIScoped
+public class DefaultApplicationHeader extends Panel implements ApplicationHeader {
+
+	@Inject
+	protected DefaultApplicationHeader() {
+		super();
+	}
+
 }
