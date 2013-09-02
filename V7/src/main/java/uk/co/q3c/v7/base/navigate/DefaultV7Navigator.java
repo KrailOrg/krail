@@ -166,7 +166,6 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	
 	protected void onUnauthenticatedException(UnauthenticatedException e) {
 		//reditect to login
-		Notification.show("Devi effettuare il login per utilizzare questa pagina", Notification.Type.HUMANIZED_MESSAGE);
 		navigateTo(StandardPageKey.Login);
 	}
 
