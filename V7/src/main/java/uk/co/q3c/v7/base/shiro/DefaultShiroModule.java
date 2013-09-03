@@ -18,6 +18,7 @@ import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.guice.ShiroModule;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.config.IniModule;
@@ -27,57 +28,70 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.binder.AnnotatedBindingBuilder;
 
 /**
- * Bindings for Shiro. Logically, the binding for {@link Subject} to {@link SubjectProvider} should be here, but that
- * makes the injector creation complicated, so it resides in {@link IniModule}
+ * Bindings for Shiro. Logically, the binding for {@link Subject} to
+ * {@link SubjectProvider} should be here, but that makes the injector creation
+ * complicated, so it resides in {@link IniModule}
  * 
  * @author David Sowerby 15 Jul 2013
  * 
  */
 public class DefaultShiroModule extends ShiroModule {
 
-    public DefaultShiroModule() {
-        super();
-    }
+	public DefaultShiroModule() {
+		super();
+	}
 
-    @Override
-    protected void configureShiro() {
-        install(new FactoryModuleBuilder().build(URIPermissionFactory.class));
-        expose(URIPermissionFactory.class);
-        bindCredentialsMatcher();
-        bindLoginAttemptLog();
-        bindRealms();
-    }
+	@Override
+	protected void configureShiro() {
+		install(new FactoryModuleBuilder().build(URIPermissionFactory.class));
+		expose(URIPermissionFactory.class);
+		bindCredentialsMatcher();
+		bindLoginAttemptLog();
+		bindRealms();
+	}
 
-    @Override
-    public void bindSecurityManager(AnnotatedBindingBuilder<? super SecurityManager> bind) {
-        try {
-            bind.toConstructor(V7SecurityManager.class.getConstructor(Collection.class)).asEagerSingleton();
-        } catch (NoSuchMethodException e) {
-            throw new ConfigurationException(
-                    "This really shouldn't happen.  Either something has changed in Shiro, or there's a bug in "
-                            + ShiroModule.class.getSimpleName(), e);
-        }
-    }
+	@Override
+	public void bindSecurityManager(
+			AnnotatedBindingBuilder<? super SecurityManager> bind) {
+		try {
+			bind.toConstructor(
+					V7SecurityManager.class.getConstructor(Collection.class))
+					.asEagerSingleton();
+		} catch (NoSuchMethodException e) {
+			throw new ConfigurationException(
+					"This really shouldn't happen.  Either something has changed in Shiro, or there's a bug in "
+							+ ShiroModule.class.getSimpleName(), e);
+		}
+	}
 
-    /**
-     * Override this to bind your own Realm implementation(s). Multiple calls can be made to bindRealm();
-     */
-    protected void bindRealms() {
-        bindRealm().to(DefaultRealm.class);
-    }
+	@Override
+	protected void bindSessionManager(
+			AnnotatedBindingBuilder<SessionManager> bind) {
+		bind.to(VaadinSessionManager.class);
+	}
 
-    /**
-     * Override this to bind your own implementation of {@link LoginAttemptLog}
-     */
-    protected void bindLoginAttemptLog() {
-        bind(LoginAttemptLog.class).to(DefaultLoginAttemptLog.class);
-    }
+	/**
+	 * Override this to bind your own Realm implementation(s). Multiple calls
+	 * can be made to bindRealm();
+	 */
+	protected void bindRealms() {
+		bindRealm().to(DefaultRealm.class);
+	}
 
-    /**
-     * Override this method to bind your own {@link CredentialsMatcher} implementation
-     */
-    protected void bindCredentialsMatcher() {
-        bind(CredentialsMatcher.class).to(AlwaysPasswordCredentialsMatcher.class);
-    }
+	/**
+	 * Override this to bind your own implementation of {@link LoginAttemptLog}
+	 */
+	protected void bindLoginAttemptLog() {
+		bind(LoginAttemptLog.class).to(DefaultLoginAttemptLog.class);
+	}
+
+	/**
+	 * Override this method to bind your own {@link CredentialsMatcher}
+	 * implementation
+	 */
+	protected void bindCredentialsMatcher() {
+		bind(CredentialsMatcher.class).to(
+				AlwaysPasswordCredentialsMatcher.class);
+	}
 
 }

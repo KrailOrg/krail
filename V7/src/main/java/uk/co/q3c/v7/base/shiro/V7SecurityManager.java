@@ -21,10 +21,12 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
 import com.vaadin.server.VaadinSession;
 
 public class V7SecurityManager extends DefaultSecurityManager {
@@ -52,6 +54,12 @@ public class V7SecurityManager extends DefaultSecurityManager {
 		super(singleRealm);
 	}
 
+	@Inject
+	@Override
+	public void setSessionManager(SessionManager sessionManager) {
+		super.setSessionManager(sessionManager);
+	}
+	
 	@Override
 	protected void onSuccessfulLogin(AuthenticationToken token,
 			AuthenticationInfo info, Subject subject) {

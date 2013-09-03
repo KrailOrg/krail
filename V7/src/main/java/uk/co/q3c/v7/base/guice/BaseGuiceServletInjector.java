@@ -83,7 +83,6 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		SecurityManager securityManager = injector
 				.getInstance(SecurityManager.class);
 		SecurityUtils.setSecurityManager(securityManager);
-                ((V7SecurityManager) securityManager).setSessionManager(new VaadinSessionManager());
 
 		return injector;
 	}
