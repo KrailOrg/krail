@@ -1,0 +1,9 @@
+@import "addons.scss";
+@import "v7demo.scss";
+
+/* This file prefixes all rules with the theme name to avoid causing conflicts with other themes. */
+/* The actual styles should be defined in v7demo.scss */
+.v7demo {
+  @include addons;
+  @include v7demo;
+}

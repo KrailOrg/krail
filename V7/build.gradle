@@ -48,11 +48,7 @@ dependencies{
 
 
 
-	//Dependency Injection
-	compile   'com.google.inject:guice:'+guiceVersion
-	compile   'com.google.inject.extensions:guice-servlet:'+guiceVersion
-	compile   'com.google.inject.extensions:guice-assistedinject:'+guiceVersion
-	compile   'com.google.inject.extensions:guice-multibindings:'+guiceVersion
+
 
 
 	//User access control
@@ -68,11 +64,6 @@ dependencies{
 
 	//Testing
 	testCompile 'org.easytesting:fest-assert:1.4'
-	testCompile 'com.mycila:mycila-guice:2.10.ga'
-	testCompile 'com.mycila.testing.plugins:mycila-testing-guice:2.8'
-	testCompile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
-	testCompile 'org.mockito:mockito-all:1.9.0'
-	testCompile 'junit:junit:4.+'
 	testCompile 'com.googlecode.jmockit:jmockit:1.0'
 
 	//Date Time

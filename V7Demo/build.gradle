@@ -1,0 +1,20 @@
+apply plugin: 'war'
+apply plugin: 'jetty'
+
+def vaadinVersion='7.1.0'
+
+
+dependencies {
+
+//	compile project ':V7'
+	compile group:'com.vaadin', name:'vaadin-server', version:vaadinVersion
+	compile group:'com.vaadin', name:'vaadin-client-compiled', version:vaadinVersion
+	compile group:'com.vaadin', name:'vaadin-themes', version:vaadinVersion
+            
+	
+	
+}
+
+
+
+
