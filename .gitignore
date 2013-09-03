@@ -1,0 +1,11 @@
+/build/classes
+/build/dependency-cache
+/build/libs
+/build/test-results
+/build/tmp
+/logs
+/bin
+/.gradle
+settings.gradle~
+build.gradle~
+.gitignore~
