@@ -1,5 +1,7 @@
 //master gradle build file
 
+project.ext.vaadinVersion='7.1.0'
+
 allprojects{
         group = 'uk.co.q3c.v7'
         version = '0.5'
@@ -12,6 +14,7 @@ subprojects{
         targetCompatibility = 1.7
 
 	def guiceVersion='3.0'
+	
 
         repositories{
                 mavenCentral()

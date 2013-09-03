@@ -1,15 +1,15 @@
-apply plugin: 'war'
-apply plugin: 'jetty'
+//apply plugin: 'war'
+//apply plugin: 'jetty'
+apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
-def vaadinVersion='7.1.0'
 
-
+configurations{
+	vaadin.version=vaadinVersion
+	
+}
 dependencies {
 
-//	compile project ':V7'
-	compile group:'com.vaadin', name:'vaadin-server', version:vaadinVersion
-	compile group:'com.vaadin', name:'vaadin-client-compiled', version:vaadinVersion
-	compile group:'com.vaadin', name:'vaadin-themes', version:vaadinVersion
+
             
 	
 	
