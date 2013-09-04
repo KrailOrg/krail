@@ -23,6 +23,7 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 
 	private Throwable error;
 	private TextArea textArea;
+	private boolean viewBuilt = false;
 
 	@Inject
 	protected DefaultErrorView(V7Navigator navigator) {
@@ -37,6 +38,9 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 
 	@Override
 	public void setError(Throwable error) {
+		if (!viewBuilt) {
+			buildView();
+		}
 		this.error = error;
 		textArea.setReadOnly(false);
 		String s = StackTraceUtil.getStackTrace(error);
@@ -50,6 +54,7 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 		textArea = new TextArea();
 		textArea.setSizeFull();
 		rootComponent = textArea;
+		viewBuilt = true;
 	}
 
 	public TextArea getTextArea() {

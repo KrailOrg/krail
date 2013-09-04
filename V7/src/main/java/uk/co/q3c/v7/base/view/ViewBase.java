@@ -48,7 +48,7 @@ public abstract class ViewBase implements V7View {
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {
-		log.debug("entered view: " + this.getClass().getSimpleName() + "with uri " + navigator.getNavigationState());
+		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri " + navigator.getNavigationState());
 		List<String> params = navigator.getNavigationParams();
 		processParams(params);
 	}
