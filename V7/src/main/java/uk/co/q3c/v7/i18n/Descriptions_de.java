@@ -20,7 +20,7 @@ public class Descriptions_de extends Descriptions {
 
 	static {
 		map.put(DescriptionKey.Last_Name, "die Nachname oder der Familienname");
-		map.put(DescriptionKey.Confirm_Ok, "Bestätigen, dass dieser Wert in Ordnung ist");
+		map.put(DescriptionKey.Confirm_Ok, "BestÃ¤tigen, dass dieser Wert in Ordnung ist");
 
 	}
 

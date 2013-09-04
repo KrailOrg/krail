@@ -1,4 +1,4 @@
-﻿package uk.co.q3c.v7.base.ui;
+package uk.co.q3c.v7.base.ui;
 
 import org.apache.shiro.subject.Subject;
 

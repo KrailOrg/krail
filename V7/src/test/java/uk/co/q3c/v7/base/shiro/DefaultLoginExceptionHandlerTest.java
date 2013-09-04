@@ -1,4 +1,4 @@
-﻿package uk.co.q3c.v7.base.shiro;
+package uk.co.q3c.v7.base.shiro;
 
 import static org.mockito.Mockito.verify;
 

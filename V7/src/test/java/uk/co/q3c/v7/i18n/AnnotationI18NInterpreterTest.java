@@ -85,7 +85,7 @@ public class AnnotationI18NInterpreterTest {
 	@Test
 	public void interpret_de() {
 
-		String confirmValueOk = "Bestätigen, dass dieser Wert in Ordnung ist";
+		String confirmValueOk = "BestÃ¤tigen, dass dieser Wert in Ordnung ist";
 
 		// given
 		// when
