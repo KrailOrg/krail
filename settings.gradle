@@ -1,1 +1,1 @@
-include 'V7', 'V7Demo'
+include 'V7', 'demo', 'testApp'

@@ -1,0 +1,20 @@
+//apply plugin: 'war'
+//apply plugin: 'jetty'
+apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
+
+
+configurations{
+	vaadin.version='7.1.0'
+	
+}
+dependencies {
+
+
+            
+	
+	
+}
+
+
+
+

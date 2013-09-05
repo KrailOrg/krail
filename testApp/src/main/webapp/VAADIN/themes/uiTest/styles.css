@@ -1,0 +1,7005 @@
+.v-assistive-device-only {
+	position: absolute;
+	top: -2000px;
+	left: -2000px;
+	width: 10px;
+	overflow: hidden;
+}
+
+.v-vaadin-version:after {
+	content: "7.1.0";
+}
+
+.v-generated-body {
+	width: 100%;
+	height: 100%;
+	border: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+.v-debug-console {
+	background: #fff;
+	opacity: 0.9;
+	border: 1px solid #000;
+	font-family: sans-serif;
+}
+
+.v-debug-console-caption {
+	background: #000;
+	border-bottom: 1px solid grey;
+	color: white;
+	font-weight: bold;
+}
+
+.v-debug-console-content {
+	font-size: x-small;
+	overflow: auto;
+	white-space: pre;
+}
+
+.v-debug-console-content input {
+	font-size: xx-small;
+}
+
+.v-app .invalidlayout, .v-app .invalidlayout * {
+	background: #f99 !important;
+}
+
+@font-face {
+	font-family: "vdebugfont";
+	src: url(../base/debug/fonts/font.eot);
+	src: url(../base/debug/fonts/font.eot?#iefix) format("embedded-opentype"), url(../base/debug/fonts/font.woff) format("woff"), url(../base/debug/fonts/font.ttf) format("truetype"), url(../base/debug/fonts/font.svg#fontawesome) format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+
+.v-debugwindow [data-icon]:before, .v-debugwindow-menu [data-icon]:before {
+	font-family: "vdebugfont";
+	content: attr(data-icon);
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	font-style: normal;
+	vertical-align: text-bottom;
+}
+
+.v-debugwindow {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-moz-opacity: 0.8;
+	-webkit-opacity: 0.8;
+	opacity: 0.8;
+	color: #666;
+	font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
+	font-size: 13px;
+}
+
+.v-debugwindow .v-debugwindow-handle {
+	position: absolute;
+	bottom: 0;
+	background-color: #fff;
+	-moz-opacity: 0;
+	-webkit-opacity: 0;
+	opacity: 0;
+	z-index: 1000;
+}
+
+.v-debugwindow .v-debugwindow-handle-sw {
+	width: 7px;
+	height: 7px;
+}
+
+.v-debugwindow .v-debugwindow-handle-se {
+	right: 0;
+	width: 14px;
+	height: 14px;
+}
+
+.v-debugwindow:hover {
+	-moz-opacity: 1;
+	-webkit-opacity: 1;
+	opacity: 1;
+}
+
+.v-debugwindow * {
+	font-size: inherit !important;
+}
+
+.v-debugwindow-size0, .v-debugwindow-menu .v-debugwindow-button-size0 {
+	font-size: 10px;
+}
+
+.v-debugwindow-size1, .v-debugwindow-menu .v-debugwindow-button-size1 {
+	font-size: 13px;
+}
+
+.v-debugwindow-size2, .v-debugwindow-menu .v-debugwindow-button-size2 {
+	font-size: 16px;
+}
+
+.v-debugwindow-head {
+	text-align: right;
+	background-color: transparent;
+}
+
+.v-debugwindow-tabs {
+	display: inline-block;
+	background-color: #fff;
+}
+
+.v-debugwindow-tab, .v-debugwindow-controls > * {
+	width: 2em;
+	border: none;
+	margin: 0;
+	line-height: 1.5em;
+	background-color: #fff;
+	color: #666;
+}
+
+.v-debugwindow-tab {
+	position: relative;
+	top: 1px;
+	border-width: 1px 0 1px 1px;
+	border-style: solid;
+	border-color: #666;
+	border-radius: 2px 2px 0 0;
+}
+
+.v-debugwindow-tab-selected {
+	color: #666;
+	background-color: #fff;
+	border-bottom: 1px solid #fff;
+}
+
+.v-debugwindow-controls {
+	position: relative;
+	top: 1px;
+	display: inline-block;
+	background-color: #fff;
+	border: 1px solid #666;
+	border-radius: 2px 2px 0 0;
+}
+
+.v-debugwindow-section-head {
+	text-align: left;
+	background-color: #fff;
+	border: 1px solid #666;
+	border-bottom: 1px solid #999;
+	box-shadow: 0px 0px 7px 0 rgba(55, 55, 55, 0.6);
+	min-height: 1.5em;
+	line-height: 1.5em;
+	padding-left: 5px;
+}
+
+.v-debugwindow-button {
+	border: none;
+	background-color: transparent;
+	color: #666;
+}
+
+.v-debugwindow-button:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+.v-debugwindow-button-active {
+	color: #666;
+	box-shadow: 1px 1px 3px 0 inset;
+}
+
+.v-debugwindow-content {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	box-shadow: 0px 0px 7px 0 rgba(55, 55, 55, 0.6);
+	background-color: #fff;
+	border: 1px solid #666;
+	border-top: none;
+}
+
+.v-debugwindow-menu {
+	background-color: #fff;
+	padding: 4px;
+	border: 1px solid #999;
+	border-top: none;
+	border-radius: 0 0 5px 5px;
+	box-shadow: 0px 0px 7px 0 rgba(55, 55, 55, 0.6);
+}
+
+.v-debugwindow-menu-content {
+	min-width: 100px;
+}
+
+.v-debugwindow-menu-content .v-debugwindow-button {
+	line-height: 22px;
+}
+
+.v-debugwindow-menu-content > div > .v-debugwindow-button {
+	width: 33%;
+}
+
+.v-debugwindow-row {
+	display: table-row;
+}
+
+.v-debugwindow-row:nth-child(odd) {
+	background-color: rgba(0, 61, 255, 0.11);
+}
+
+.v-debugwindow-row > span {
+	display: table-cell;
+	padding: 4px;
+}
+
+.v-debugwindow-row.SEVERE {
+	color: #550000;
+	background-color: #FFC5C5;
+}
+
+.v-debugwindow-row.WARNING {
+	background-color: #FFFF99;
+}
+
+.v-debugwindow-row.FINE {
+	color: #777;
+}
+
+.v-debugwindow-row.FINER {
+	color: #888;
+}
+
+.v-debugwindow-row.FINEST {
+	color: #888;
+}
+
+.v-debugwindow-row > span.caption {
+	color: #999;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.v-debugwindow-row > span.value {
+	width: 100%;
+}
+
+.v-debugwindow-log {
+	font-family: monospace;
+}
+
+.v-debugwindow-log .v-debugwindow-reset {
+	color: #fff;
+	background-color: #4C92ED;
+	padding: 4px;
+}
+
+.v-debugwindow-log .v-debugwindow-time {
+	text-align: right;
+	color: #999;
+}
+
+.v-debugwindow-log .v-debugwindow-message {
+	white-space: nowrap;
+	width: 100%;
+}
+
+.v-debugwindow-log .v-debugwindow-message:hover {
+	white-space: normal;
+	word-wrap: break-word;
+}
+
+.v-debugwindow-log .v-debugwindow-message em {
+	background-color: #C4E6F8;
+}
+
+.v-debugwindow-hierarchy .v-debugwindow-info {
+	padding: 1em;
+}
+
+.v-debugwindow-network .v-debugwindow-row {
+	display: block !important;
+}
+
+.v-debugwindow-network .v-debugwindow-row > span {
+	display: inline;
+}
+
+/** sprite: verticals; sprite-image: url(common/img/vertical-sprites.png); sprite-layout: vertical */
+
+/** sprite: horizontals; sprite-image: url(common/img/horizontal-sprites.png); sprite-layout: horizontal */
+
+/** sprite: black-verticals; sprite-image: url(common/img/black-vertical-sprites.png); sprite-layout: vertical; sprite-matte-color: #1e2022 */
+
+/** sprite: black-horizontals; sprite-image: url(common/img/black-horizontal-sprites.png); sprite-layout: horizontal; sprite-matte-color: #1e2022 */
+
+/** sprite: buttons; sprite-image: url(button/img/button-sprites.png); sprite-layout: vertical */
+
+/** sprite: black-buttons; sprite-image: url(button/img/black-button-sprites.png); sprite-layout: vertical */
+
+.v-generated-body {
+	background: #f5f5f5;
+}
+
+.uiTest .v-widget {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	text-align: left;
+	display: inline-block;
+	white-space: normal;
+	vertical-align: bottom;
+	font-size: 12px;
+	line-height: normal;
+}
+
+.uiTest .v-absolutelayout-wrapper {
+	position: absolute;
+	overflow: hidden;
+}
+
+.uiTest .v-absolutelayout-margin, .uiTest .v-absolutelayout-canvas {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.uiTest .v-absolutelayout.v-has-height > div, .uiTest .v-absolutelayout.v-has-height > div > div {
+	height: 100%;
+}
+
+.uiTest .v-absolutelayout.v-has-width > div, .uiTest .v-absolutelayout.v-has-width > div > div {
+	width: 100%;
+}
+
+.uiTest .v-accordion {
+	position: relative;
+	outline: none;
+	overflow: visible;
+	text-align: left;
+	font-size: 0;
+}
+
+.uiTest .v-accordion-item {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+}
+
+.uiTest .v-accordion-item-caption {
+	overflow: visible;
+	white-space: nowrap;
+	background: #eee;
+	border-bottom: 1px solid #ddd;
+}
+
+.uiTest .v-accordion-item-caption .v-caption {
+	cursor: pointer;
+	font-size: 12px;
+}
+
+.uiTest .v-accordion-item-open .v-accordion-item-caption .v-caption {
+	cursor: default;
+}
+
+.uiTest .v-accordion-item-content {
+	position: absolute;
+	width: 100%;
+}
+
+.uiTest .v-button {
+	display: inline-block;
+	zoom: 1;
+	text-align: center !important;
+	text-decoration: none;
+	border: 2px outset #ddd;
+	background: #eee;
+	cursor: pointer;
+	white-space: nowrap;
+	margin: 0;
+	padding: 0.2em 1em;
+	color: inherit;
+	font: inherit;
+	font-size: 12px;
+	line-height: normal;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.uiTest .v-button.v-disabled {
+	cursor: default;
+}
+
+.uiTest .v-button-wrap, .uiTest .v-button-caption {
+	vertical-align: baseline;
+	white-space: nowrap;
+	font: inherit;
+	color: inherit;
+	line-height: normal;
+}
+
+.uiTest .v-button .v-icon {
+	vertical-align: middle;
+	margin-right: 3px;
+	border: none;
+}
+
+.uiTest .v-button .v-errorindicator {
+	display: inline-block;
+	zoom: 1;
+	vertical-align: middle;
+	float: none;
+}
+
+.uiTest .v-button-link {
+	border: none;
+	text-align: left !important;
+	background: transparent;
+	padding: 0;
+	color: inherit;
+	-khtml-user-select: text;
+	-moz-user-select: text;
+	-ie-user-select: text;
+	user-select: text;
+}
+
+.v-sa .uiTest .v-button-link:focus {
+	outline-offset: -3px;
+}
+
+.uiTest .v-button-link .v-button-caption {
+	text-decoration: underline;
+	color: inherit;
+	text-align: left;
+}
+
+.uiTest .v-nativebutton .v-icon {
+	vertical-align: middle;
+	margin-right: 3px;
+	border: none;
+}
+
+.uiTest .v-nativebutton .v-errorindicator {
+	display: inline-block;
+	zoom: 1;
+	vertical-align: middle;
+	float: none;
+}
+
+.uiTest .v-nativebutton-link {
+	border: none;
+	text-align: left !important;
+	background: transparent;
+	padding: 0;
+	color: inherit;
+	-khtml-user-select: text;
+	-moz-user-select: text;
+	-ie-user-select: text;
+	user-select: text;
+}
+
+.uiTest .v-nativebutton-link .v-nativebutton-caption {
+	text-decoration: underline;
+	color: inherit;
+	text-align: left;
+}
+
+.uiTest .v-nativebutton {
+	text-align: center !important;
+	cursor: pointer;
+	white-space: nowrap;
+	margin: 0;
+	color: inherit;
+	font: inherit;
+	line-height: normal;
+}
+
+.uiTest .v-nativebutton .v-nativebutton-caption {
+	vertical-align: middle;
+	white-space: nowrap;
+	font: inherit;
+	color: inherit;
+}
+
+.uiTest .v-nativebutton .v-icon {
+	vertical-align: middle;
+	margin-right: 3px;
+}
+
+.uiTest .v-nativebutton .v-errorindicator {
+	display: inline-block;
+	zoom: 1;
+	float: none;
+}
+
+.v-ie .uiTest .v-nativebutton {
+	overflow: visible;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.v-ie .uiTest .v-nativebutton-link {
+	padding: 0;
+}
+
+.uiTest .v-checkbox {
+	display: block;
+}
+
+.uiTest .v-checkbox, .uiTest .v-checkbox label, .uiTest .v-checkbox input, .uiTest .v-checkbox .v-icon {
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+.uiTest .v-checkbox .v-icon {
+	margin: 0 2px;
+}
+
+.uiTest .v-checkbox .v-errorindicator {
+	float: none;
+	display: inline;
+	display: inline-block;
+	zoom: 1;
+}
+
+.uiTest .v-captionwrapper {
+	text-align: left;
+}
+
+.uiTest .v-caption {
+	overflow: hidden;
+	white-space: nowrap;
+	font-size: 12px;
+}
+
+.uiTest .v-errorindicator {
+	display: inline-block;
+}
+
+.uiTest .v-caption .v-icon {
+	display: inline-block;
+	padding-right: 2px;
+	vertical-align: middle;
+}
+
+.uiTest .v-caption .v-captiontext {
+	display: inline-block;
+	overflow: hidden;
+	vertical-align: middle;
+}
+
+.uiTest .v-caption .v-required-field-indicator {
+	display: inline-block;
+}
+
+.uiTest .v-colorpicker {
+	text-align: center;
+}
+
+.uiTest .v-colorpicker-button-color {
+	border: 1px solid silver;
+	float: left;
+	width: 10px;
+	height: 10px;
+	margin-top: 2px;
+	margin-right: 5px;
+}
+
+.uiTest .v-colorpicker-area {
+	border: 1px solid silver;
+	margin: 1px auto;
+}
+
+.uiTest .v-colorpicker-history {
+	margin: 5px;
+}
+
+.uiTest .v-colorpicker-history td {
+	border: 1px solid silver !important;
+}
+
+.uiTest .v-colorpicker-history td {
+	line-height: 15px;
+}
+
+.uiTest .v-colorpicker-popup {
+	width: 244px;
+}
+
+.uiTest .v-colorpicker-popup .v-scrollable {
+	background-color: #dddddd;
+}
+
+.uiTest .v-colorpicker-popup .v-tabsheet-content .v-scrollable {
+	background-color: #eaeaea;
+}
+
+.uiTest .v-colorpicker-popup .v-tabsheet-content .v-tabsheet-tabsheetpanel {
+	background: transparent;
+}
+
+.uiTest .v-colorpicker-popup .resize-button {
+	border: 0px solid silver;
+	background: url(../base/colorpicker/images/resizebg.png);
+	margin-top: 5px;
+}
+
+.uiTest .v-colorpicker-popup .resize-button-caption {
+	display: none;
+}
+
+.uiTest .v-colorpicker-popup .resize-button:hover {
+	background: url(../base/colorpicker/images/resizebg-selected.png);
+}
+
+.uiTest .v-colorpicker-popup .resize-button:focus {
+	outline: none;
+}
+
+.uiTest .v-colorpicker-gradient {
+	width: 220px;
+	height: 220px;
+	padding-left: 10px;
+	margin-top: 0px;
+}
+
+.uiTest .v-colorpicker-gradient .v-colorpicker-gradient-clicklayer {
+	background-color: white;
+	filter: alpha(opacity = 0);
+	opacity: 0;
+}
+
+.uiTest .v-colorpicker-popup .rgb-gradient .v-colorpicker-gradient-background {
+	width: 220px;
+	height: 220px;
+	background: url(../base/colorpicker/images/gradient2.png);
+}
+
+.uiTest .v-colorpicker-popup .hsv-gradient .v-colorpicker-gradient-foreground {
+	background: url(../base/colorpicker/images/gradient.png);
+}
+
+.uiTest .v-colorpicker-popup .v-colorpicker-gradient-lowerbox {
+	border-right: 1px solid white;
+	border-top: 1px solid white;
+}
+
+.uiTest .v-colorpicker-popup .v-colorpicker-gradient-higherbox {
+	border-left: 1px solid white;
+	border-bottom: 1px solid white;
+}
+
+.uiTest .v-colorpicker-popup .rgb-sliders {
+	width: 227px;
+	padding-left: 10px;
+	color: #444444;
+	text-shadow: 0 1px 0 #FFFFFF;
+}
+
+.uiTest .v-colorpicker-popup .rgb-sliders .red .v-slider-base {
+	background-color: red;
+}
+
+.uiTest .v-colorpicker-popup .rgb-sliders .green .v-slider-base {
+	background-color: green;
+}
+
+.uiTest .v-colorpicker-popup .rgb-sliders .blue .v-slider-base {
+	background-color: blue;
+}
+
+.uiTest .v-colorpicker-popup .hsv-sliders {
+	padding-left: 10px;
+	color: #444444;
+	text-shadow: 0 1px 0 #FFFFFF;
+}
+
+.uiTest .v-colorpicker-popup .hue-slider {
+	height: 10px;
+	border: 0px solid silver;
+	background-image: url(../base/colorpicker/images/slider_hue_bg.png);
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: 0 3px;
+	margin-top: 0px;
+}
+
+.uiTest .v-colorpicker-popup .hue-slider .v-slider-handle {
+	margin-top: -2px;
+}
+
+.uiTest .v-colorpicker-popup .hue-slider .v-slider-base {
+	border: 0px none;
+	height: 0px;
+	background-color: transparent;
+}
+
+.uiTest .v-colorpicker-popup .v-colorpicker-preview {
+	margin-top: 5px;
+	padding-left: 11px;
+	padding-right: 10px;
+	margin-bottom: 0px;
+}
+
+.uiTest .v-colorpicker-popup .v-absolutelayout-wrapper {
+	width: 100%;
+	height: 100%;
+}
+
+.uiTest .v-colorpicker-popup .v-colorpicker-preview-textfield {
+	background: none;
+	overflow: hidden;
+	overflow-y: hidden;
+	overflow-x: hidden;
+}
+
+.uiTest .v-colorpicker-popup .v-textfield-dark {
+	color: #FFFFFF;
+}
+
+.uiTest .v-colorpicker-popup .v-textfield-light {
+	color: #000000;
+}
+
+.uiTest .v-colorpicker-popup .colorselect {
+	margin-top: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.uiTest .v-colorpicker-popup .v-tabsheet .v-colorpicker-grid {
+	height: 319px;
+}
+
+.uiTest .v-colorpicker-popup .colorselect td {
+	line-height: 15px;
+}
+
+.uiTest .v-colorpicker-popup .v-filterselect {
+	padding-right: 16px;
+}
+
+.uiTest .v-calendar-nresize DIV DIV {
+	cursor: n-resize !important;
+}
+
+.uiTest .v-calendar-sresize DIV DIV {
+	cursor: s-resize !important;
+}
+
+.uiTest .v-calendar {
+	background-color: #fff;
+}
+
+.uiTest .v-calendar-header-month, .uiTest .v-calendar-header-week {
+	border-bottom: 1px solid #c1c1c1;
+}
+
+.uiTest .v-calendar-header-day {
+	text-align: center;
+	color: #666;
+	font-size: 12px;
+	line-height: normal;
+}
+
+.uiTest .v-calendar-header-week .v-calendar-header-day:hover {
+	cursor: pointer;
+	color: #222;
+}
+
+.uiTest .v-calendar-header-day-today {
+	font-weight: bold;
+	color: #444;
+}
+
+.uiTest .v-calendar-header-month td:first-child {
+	padding-left: 19px;
+}
+
+.uiTest .v-calendar-header-week .v-calendar-back, .uiTest .v-calendar-header-week .v-calendar-next {
+	border: none;
+	padding: 0;
+	margin: 0;
+	height: 12px;
+	width: 12px;
+	overflow: hidden;
+	background: transparent url(../base/calendar/img/arrows.png) no-repeat 50% 0;
+	opacity: 0.3;
+	filter: alpha(opacity = 30);
+	cursor: default;
+}
+
+.uiTest .v-calendar-header-week .v-calendar-back:hover, .uiTest .v-calendar-header-week .v-calendar-next:hover {
+	opacity: 0.6;
+	filter: alpha(opacity = 60);
+}
+
+.uiTest .v-calendar-header-week .v-calendar-back:active, .uiTest .v-calendar-header-week .v-calendar-next:active {
+	opacity: 1;
+	filter: alpha(opacity = 100);
+}
+
+.uiTest .v-calendar-header-week .v-calendar-next {
+	background-position: 50% -12px;
+}
+
+.uiTest .v-calendar-month {
+	outline: none;
+}
+
+.uiTest .v-calendar-week-numbers {
+	width: 20px;
+	border-right: 1px solid #ccc;
+}
+
+.uiTest .v-calendar-week-number {
+	border: none;
+	background: transparent;
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
+	opacity: 0.5;
+	width: 20px;
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+}
+
+.uiTest .v-calendar-week-number:hover {
+	opacity: 1;
+}
+
+.uiTest .v-calendar-month-day {
+	border-bottom: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	outline: none;
+}
+
+.uiTest .v-calendar-month-day-today {
+	background-color: #e7f0f5;
+}
+
+.uiTest .v-calendar-month-day-selected {
+	background-color: #fffee7;
+}
+
+.uiTest .v-calendar-month-day-dragemphasis {
+	background-color: #a8a8a8;
+}
+
+.uiTest .v-calendar-month-day-scrollable {
+	overflow-y: scroll;
+}
+
+.uiTest .v-calendar-day-number {
+	height: 18px;
+	line-height: 18px;
+	font-size: 12px;
+	text-align: right;
+	padding-right: 3px;
+	white-space: nowrap;
+}
+
+.uiTest .v-calendar-day-number:hover {
+	cursor: pointer;
+	opacity: 0.6;
+	filter: alpha(opacity = 60);
+}
+
+.uiTest .v-calendar-month .v-calendar-spacer, .uiTest .v-calendar-month .v-calendar-bottom-spacer, .uiTest .v-calendar-month .v-calendar-bottom-spacer-empty {
+	height: 15px;
+	font-size: 11px;
+}
+
+.uiTest .v-calendar-month .v-calendar-bottom-spacer:hover {
+	cursor: pointer;
+	opacity: 0.6;
+	filter: alpha(opacity = 60);
+}
+
+.uiTest .v-calendar-event {
+	line-height: 14px;
+	font-size: 11px;
+	padding: 0 0 0 4px;
+	cursor: pointer;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	outline: none;
+}
+
+.uiTest .v-calendar-event-month {
+	margin-bottom: 1px;
+	white-space: nowrap;
+}
+
+.uiTest .v-calendar-event-month:hover {
+	text-decoration: underline;
+}
+
+.uiTest .v-calendar-event-all-day {
+	background: #999;
+	display: block;
+	margin-left: -2px;
+}
+
+.uiTest div.v-calendar-event-all-day {
+	color: #fff;
+	height: 14px;
+}
+
+.uiTest .v-calendar-event-continued-from {
+	margin-left: 0;
+}
+
+.uiTest .v-calendar-event-start {
+	-webkit-border-top-left-radius: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-moz-border-radius-topleft: 6px;
+	-moz-border-radius-bottomleft: 6px;
+	border-top-left-radius: 6px;
+	border-bottom-left-radius: 6px;
+	margin-left: 0;
+}
+
+.uiTest .v-calendar-event-end {
+	-webkit-border-top-right-radius: 6px;
+	-webkit-border-bottom-right-radius: 6px;
+	-moz-border-radius-topright: 6px;
+	-moz-border-radius-bottomright: 6px;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+}
+
+.uiTest .v-calendar-week-wrapper {
+	position: relative;
+}
+
+.uiTest .v-calendar-times {
+	width: 51px;
+}
+
+.uiTest .v-calendar-time {
+	padding: 0 8px 7px 0;
+	margin-top: -7px;
+	text-align: right;
+	font-size: 11px;
+	color: #666;
+	border-right: 1px solid #ccc;
+}
+
+.uiTest .v-calendar-weekly-longevents {
+	border-left: 1px solid #ccc;
+	border-bottom: 2px solid #bbb;
+	margin-left: 50px;
+}
+
+.uiTest .v-calendar-weekly-longevents .v-calendar-datecell {
+	border-right: 1px solid #ccc;
+	padding: 1px 0 0;
+}
+
+.uiTest .v-calendar-weekly-longevents .v-calendar-event {
+	height: 14px;
+	margin-bottom: 1px;
+}
+
+.uiTest .v-calendar-weekly-longevents .v-calendar-event:hover {
+	text-decoration: underline;
+}
+
+.uiTest .v-calendar-day-times {
+	border-right: 1px solid #ccc;
+	outline: none;
+}
+
+.uiTest .v-calendar-day-times .v-datecellslot, .uiTest .v-calendar-day-times .v-datecellslot-even {
+	border-bottom: 1px solid #ccc;
+}
+
+.uiTest .v-calendar-day-times .v-datecellslot-even {
+	border-bottom-color: #eee;
+}
+
+.uiTest .v-calendar-day-times .v-daterange {
+	background-color: #a8a8a8;
+}
+
+.uiTest .v-calendar-day-times .v-reserved {
+	background-color: #FF3333;
+}
+
+.uiTest .v-calendar-day-times .dragemphasis {
+	background-color: #a8a8a8;
+}
+
+.uiTest .v-calendar-week-wrapper .v-calendar-event {
+	padding: 0;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	margin-top: -1px;
+}
+
+.uiTest .v-calendar-event-caption {
+	position: absolute;
+	z-index: 1;
+	top: 2px;
+	left: 4px;
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: normal;
+}
+
+.uiTest .v-calendar-event-content {
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #777;
+	background: #eee;
+	opacity: 0.8;
+	filter: alpha(opacity = 80);
+	height: 14px;
+}
+
+.uiTest .v-calendar-current-time {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	overflow: hidden;
+	background: #5a6c86;
+	opacity: 0.6;
+	filter: alpha(opacity = 60);
+	z-index: 2;
+}
+
+.uiTest .v-calendar-event-resizetop {
+	position: absolute;
+	cursor: n-resize;
+	height: 5%;
+	min-height: 3px;
+	top: 0;
+	width: 100%;
+	z-index: 1;
+}
+
+.uiTest .v-calendar-event-resizebottom {
+	position: absolute;
+	cursor: s-resize;
+	height: 5%;
+	min-height: 3px;
+	bottom: 0;
+	width: 100%;
+	z-index: 1;
+}
+
+.uiTest .v-calendar-month-sizedheight .v-calendar-month-day {
+	height: 100px;
+}
+
+.uiTest .v-calendar-month-sizedwidth .v-calendar-month-day {
+	width: 100px;
+}
+
+.uiTest .v-calendar-header-month-Hsized .v-calendar-header-day {
+	width: 101px;
+}
+
+.uiTest .v-calendar-header-month-Hsized td:first-child {
+	padding-left: 21px;
+}
+
+.uiTest .v-calendar-header-day-Hsized {
+	width: 200px;
+}
+
+.uiTest .v-calendar-week-numbers-Vsized .v-calendar-week-number {
+	height: 100px;
+	line-height: 100px;
+}
+
+.uiTest .v-calendar-week-wrapper-Vsized {
+	height: 400px;
+	overflow-x: hidden !important;
+}
+
+.uiTest .v-calendar-times-Vsized .v-calendar-time {
+	height: 38px;
+}
+
+.uiTest .v-calendar-times-Hsized .v-calendar-time {
+	width: 42px;
+}
+
+.uiTest .v-calendar-day-times-Vsized .v-datecellslot, .uiTest .v-calendar-day-times-Vsized .v-datecellslot-even {
+	height: 18px;
+}
+
+.uiTest .v-calendar-day-times-Hsized, .uiTest .v-calendar-day-times-Hsized .v-datecellslot, .uiTest .v-calendar-day-times-Hsized .v-datecellslot-even {
+	width: 200px;
+}
+
+.uiTest.v-app {
+	height: 100%;
+}
+
+.uiTest.v-app, .uiTest .v-window, .uiTest .v-popupview-popup, .uiTest .v-label, .uiTest .v-caption {
+	cursor: default;
+}
+
+body .uiTest.v-app .v-app-loading {
+	background-image: url(../base/common/img/loading-indicator.gif);
+	background-repeat: no-repeat;
+	background-position: 50%;
+	width: 100%;
+	height: 100%;
+}
+
+.uiTest .v-ui {
+	height: 100%;
+	width: 100%;
+	outline: none;
+	position: relative;
+}
+
+.uiTest .v-ui.v-ui-embedded {
+	margin-top: -1px;
+	border-top: 1px solid transparent;
+}
+
+.uiTest .v-ui:active, .uiTest .v-ui:focus {
+	outline: none;
+}
+
+.uiTest.v-app select, .uiTest .v-window select {
+	margin: 0;
+}
+
+.uiTest .v-disabled {
+	opacity: 0.3;
+	filter: alpha(opacity=30);
+	cursor: default;
+}
+
+.uiTest .v-disabled * {
+	cursor: default;
+}
+
+* html .uiTest .v-disabled {
+	zoom: 1;
+}
+
+* + html .uiTest .v-disabled {
+	zoom: 1;
+}
+
+.uiTest .v-disabled .v-disabled {
+	opacity: 1;
+}
+
+.uiTest .v-required-field-indicator {
+	padding-left: 2px;
+	color: red;
+}
+
+.uiTest .v-form fieldset {
+	border: none;
+	padding: 0;
+	margin: 0;
+	height: 100%;
+}
+
+.uiTest .v-form-content {
+	height: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.uiTest .v-tooltip {
+	cursor: default;
+	background: #fff;
+}
+
+.uiTest .v-tooltip-text {
+	overflow: auto;
+}
+
+.uiTest .v-tooltip .v-errormessage {
+	overflow: auto;
+}
+
+.uiTest .v-contextmenu {
+	background: #fff;
+}
+
+.uiTest .v-contextmenu .gwt-MenuItem {
+	cursor: pointer;
+	vertical-align: middle;
+	padding: 0;
+	border: 0;
+	margin: 0;
+}
+
+.uiTest .v-contextmenu .gwt-MenuItem div {
+	cursor: pointer;
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+.uiTest .v-contextmenu .gwt-MenuItem-selected div {
+	background: #aaa;
+	color: #fff;
+}
+
+.uiTest .v-contextmenu table {
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+}
+
+.uiTest .v-contextmenu .gwt-MenuItem img {
+	margin-right: 1em;
+	vertical-align: middle;
+}
+
+.uiTest .v-label pre {
+	margin: 0;
+}
+
+.uiTest .v-label-undef-w {
+	white-space: nowrap;
+}
+
+.uiTest .v-label h1, .uiTest .v-label h2, .uiTest .v-label h3, .uiTest .v-label h4, .uiTest .v-label h5, .uiTest .v-label h6 {
+	line-height: normal;
+}
+
+.uiTest .v-loading-indicator, .uiTest .v-loading-indicator-delay, .uiTest .v-loading-indicator-wait {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 30000;
+	width: 31px;
+	height: 31px;
+	background: transparent url(../base/common/img/loading-indicator.gif);
+	margin-right: 5px;
+	margin-top: 5px;
+}
+
+.uiTest .v-loading-indicator-delay {
+	background-image: url(../base/common/img/loading-indicator-delay.gif);
+}
+
+.uiTest .v-loading-indicator-wait {
+	background-image: url(../base/common/img/loading-indicator-wait.gif);
+}
+
+.uiTest.v-app input[type="text"], .uiTest.v-app input[type="password"], .uiTest.v-app input[type="reset"], .uiTest.v-app select, .uiTest.v-app textarea, .uiTest .v-window input[type="text"], .uiTest .v-window input[type="password"], .uiTest .v-window input[type="reset"], .uiTest .v-window select, .uiTest .v-window textarea {
+	padding: 2px;
+}
+
+.uiTest input::-ms-clear {
+	display: none;
+}
+
+.uiTest .v-drag-element {
+	z-index: 60000;
+	position: absolute !important;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+	cursor: default;
+}
+
+.uiTest .v-clip {
+	overflow: hidden;
+}
+
+.uiTest .v-scrollable {
+	overflow: auto;
+	font-size: 0;
+	line-height: normal;
+}
+
+.v-ios.v-sa6 .uiTest .v-scrollable {
+	-webkit-overflow-scrolling: touch;
+}
+
+.uiTest.v-overlay-container {
+	width: 0;
+	height: 0;
+}
+
+.uiTest .v-vertical.v-margin-top, .uiTest .v-horizontal.v-margin-top {
+	padding-top: 12px;
+}
+
+.uiTest .v-vertical.v-margin-right, .uiTest .v-horizontal.v-margin-right {
+	padding-right: 12px;
+}
+
+.uiTest .v-vertical.v-margin-bottom, .uiTest .v-horizontal.v-margin-bottom {
+	padding-bottom: 12px;
+}
+
+.uiTest .v-vertical.v-margin-left, .uiTest .v-horizontal.v-margin-left {
+	padding-left: 12px;
+}
+
+.uiTest .v-gridlayout.v-layout-margin-top {
+	padding-top: 24px;
+}
+
+.uiTest .v-gridlayout, .uiTest .v-verticallayout, .uiTest .v-horizontallayout {
+	font-size: 0;
+	line-height: normal;
+}
+
+.uiTest .v-gridlayout.v-layout-margin-bottom {
+	padding-bottom: 24px;
+}
+
+.uiTest .v-gridlayout.v-layout-margin-left {
+	padding-left: 24px;
+}
+
+.uiTest .v-gridlayout.v-layout-margin-right {
+	padding-right: 24px;
+}
+
+.uiTest .v-gridlayout .v-layout-spacing-on {
+	padding-left: 12px;
+	padding-top: 12px;
+}
+
+.uiTest .v-spacing {
+	width: 6px;
+	height: 6px;
+}
+
+.uiTest .v-vertical, .uiTest .v-horizontal {
+	display: inline-block;
+}
+
+.uiTest div.v-layout.v-horizontal.v-widget {
+	white-space: nowrap;
+}
+
+.uiTest .v-layout.v-vertical > .v-expand, .uiTest .v-layout.v-horizontal > .v-expand {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+}
+
+.uiTest .v-slot, .uiTest .v-spacing {
+	display: inline-block;
+	white-space: normal;
+	vertical-align: top;
+}
+
+.uiTest .v-vertical > .v-slot:after {
+	display: inline-block;
+	clear: both;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	line-height: 0;
+}
+
+.uiTest .v-vertical > .v-slot, .uiTest .v-vertical > .v-expand > .v-slot {
+	display: block;
+	clear: both;
+}
+
+.uiTest .v-horizontal > .v-slot, .uiTest .v-horizontal > .v-expand > .v-slot {
+	height: 100%;
+}
+
+.uiTest .v-horizontal > .v-expand > .v-slot {
+	position: relative;
+}
+
+.uiTest .v-vertical > .v-spacing, .uiTest .v-vertical > .v-expand > .v-spacing {
+	width: 0;
+	display: block;
+	clear: both;
+}
+
+.uiTest .v-horizontal > .v-spacing, .uiTest .v-horizontal > .v-expand > .v-spacing {
+	height: 0;
+}
+
+.uiTest .v-align-middle:before, .uiTest .v-align-bottom:before, .uiTest .v-expand > .v-align-middle:before, .uiTest .v-expand > .v-align-bottom:before {
+	content: "";
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+	width: 0;
+}
+
+.uiTest .v-align-middle, .uiTest .v-align-bottom {
+	white-space: nowrap;
+}
+
+.uiTest .v-align-middle > .v-widget, .uiTest .v-align-bottom > .v-widget {
+	display: inline-block;
+}
+
+.uiTest .v-align-middle, .uiTest .v-align-middle > .v-widget {
+	vertical-align: middle;
+}
+
+.uiTest .v-align-bottom, .uiTest .v-align-bottom > .v-widget {
+	vertical-align: bottom;
+}
+
+.uiTest .v-align-center {
+	text-align: center;
+}
+
+.uiTest .v-align-center > .v-widget {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.uiTest .v-align-right {
+	text-align: right;
+}
+
+.uiTest .v-align-right > .v-widget {
+	margin-left: auto;
+}
+
+.uiTest .v-has-caption, .uiTest .v-has-caption > .v-caption {
+	display: inline-block;
+}
+
+.uiTest .v-caption {
+	overflow: visible;
+	vertical-align: middle;
+}
+
+.uiTest .v-caption-on-left, .uiTest .v-caption-on-right {
+	white-space: nowrap;
+}
+
+.uiTest .v-caption-on-top > .v-caption, .uiTest .v-caption-on-bottom > .v-caption {
+	display: block;
+}
+
+.uiTest .v-caption-on-left > .v-caption {
+	padding-right: 0.5em;
+}
+
+.uiTest .v-caption-on-right > .v-caption {
+	vertical-align: top;
+}
+
+.uiTest .v-caption-on-left > .v-widget, .uiTest .v-caption-on-right > .v-widget {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.uiTest .v-has-caption.v-has-width > .v-widget {
+	width: 100% !important;
+}
+
+.uiTest .v-has-caption.v-has-height > .v-widget {
+	height: 100% !important;
+}
+
+.uiTest .v-errorindicator {
+	vertical-align: middle;
+}
+
+.uiTest .v-csslayout {
+	overflow: hidden;
+}
+
+.uiTest div.v-csslayout {
+	display: block;
+}
+
+.uiTest .v-csslayout-margin, .uiTest .v-csslayout-container {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.uiTest .v-has-width > .v-csslayout-margin, .uiTest .v-has-width > .v-csslayout-margin > .v-csslayout-container {
+	width: 100%;
+}
+
+.uiTest .v-has-height > .v-csslayout-margin, .uiTest .v-has-height > .v-csslayout-margin > .v-csslayout-container {
+	height: 100%;
+}
+
+.uiTest .v-csslayout-margin-top {
+	padding-top: 12px;
+}
+
+.uiTest .v-csslayout-margin-bottom {
+	padding-bottom: 12px;
+}
+
+.uiTest .v-csslayout-margin-left {
+	padding-left: 12px;
+}
+
+.uiTest .v-csslayout-margin-right {
+	padding-right: 12px;
+}
+
+.uiTest .v-customcomponent {
+	overflow: hidden;
+}
+
+.uiTest .v-customlayout {
+	overflow: hidden;
+}
+
+.uiTest .v-datefield {
+	white-space: nowrap;
+	display: inline-block;
+}
+
+.uiTest .v-datefield-textfield {
+	vertical-align: top;
+}
+
+.v-ie .uiTest .v-datefield-button:after {
+	content: "\200B";
+}
+
+.uiTest .v-datefield-button {
+	cursor: pointer;
+	vertical-align: top;
+}
+
+.uiTest .v-has-width > input.v-datefield-textfield {
+	width: 100%;
+}
+
+.uiTest .v-datefield-prompt .v-datefield-textfield {
+	color: #999;
+	font-style: italic;
+}
+
+.uiTest .v-datefield .v-datefield-button-readonly {
+	display: none;
+}
+
+.uiTest .v-datefield-calendarpanel table {
+	width: 100%;
+}
+
+.uiTest .v-datefield-calendarpanel td {
+	padding: 0;
+	margin: 0;
+}
+
+.uiTest .v-datefield-calendarpanel:focus {
+	outline: none;
+}
+
+.uiTest .v-datefield-calendarpanel-header td {
+	text-align: center;
+}
+
+.uiTest .v-datefield-calendarpanel-month {
+	text-align: center;
+	white-space: nowrap;
+}
+
+.uiTest .v-datefield-calendarpanel-weeknumber {
+	color: #999;
+	border-right: 1px solid #ddd;
+	font-size: 11.7px;
+}
+
+.uiTest .v-datefield-calendarpanel-day, .uiTest .v-datefield-calendarpanel-day-today {
+	cursor: pointer;
+}
+
+.uiTest .v-datefield-calendarpanel-day-today {
+	border: 1px solid #ddd;
+}
+
+.uiTest .v-disabled .v-datefield-calendarpanel-day, .uiTest .v-disabled .v-datefield-calendarpanel-day-today {
+	cursor: default;
+}
+
+.uiTest .v-datefield-calendarpanel-day-disabled, .uiTest .v-datefield-calendarpanel-day-outside-range {
+	cursor: default;
+	opacity: 0.5;
+}
+
+.uiTest .v-datefield-calendarpanel-prevyear button.outside-range, .uiTest .v-datefield-calendarpanel-nextyear button.outside-range, .uiTest .v-datefield-calendarpanel-prevmonth button.outside-range, .uiTest .v-datefield-calendarpanel-nextmonth button.outside-range {
+	opacity: 0.5;
+}
+
+.uiTest .v-datefield-calendarpanel-day-selected {
+	cursor: default;
+	background: #333;
+	color: #fff;
+}
+
+.uiTest .v-datefield-calendarpanel-day-focused {
+	outline: 1px dotted black;
+}
+
+.uiTest .v-datefield-calendarpanel-day-offmonth {
+	color: #666;
+}
+
+.uiTest .v-datefield-time {
+	white-space: nowrap;
+}
+
+.uiTest .v-datefield-time .v-label {
+	display: inline;
+}
+
+.uiTest .v-datefield-popup {
+	background: #fff;
+}
+
+.uiTest .v-datefield-popupcalendar input.v-datefield-textfield {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.uiTest .v-inline-datefield {
+	white-space: nowrap;
+	display: inline-block;
+}
+
+.uiTest .v-inline-datefield-textfield {
+	vertical-align: top;
+}
+
+.v-ie .uiTest .v-inline-datefield-button:after {
+	content: "\200B";
+}
+
+.uiTest .v-inline-datefield-button {
+	cursor: pointer;
+	vertical-align: top;
+}
+
+.uiTest .v-has-width > input.v-inline-datefield-textfield {
+	width: 100%;
+}
+
+.uiTest .v-inline-datefield-prompt .v-inline-datefield-textfield {
+	color: #999;
+	font-style: italic;
+}
+
+.uiTest .v-inline-datefield .v-inline-datefield-button-readonly {
+	display: none;
+}
+
+.uiTest .v-inline-datefield-calendarpanel table {
+	width: 100%;
+}
+
+.uiTest .v-inline-datefield-calendarpanel td {
+	padding: 0;
+	margin: 0;
+}
+
+.uiTest .v-inline-datefield-calendarpanel:focus {
+	outline: none;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-header td {
+	text-align: center;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-month {
+	text-align: center;
+	white-space: nowrap;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-weeknumber {
+	color: #999;
+	border-right: 1px solid #ddd;
+	font-size: 11.7px;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-day, .uiTest .v-inline-datefield-calendarpanel-day-today {
+	cursor: pointer;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-day-today {
+	border: 1px solid #ddd;
+}
+
+.uiTest .v-disabled .v-inline-datefield-calendarpanel-day, .uiTest .v-disabled .v-inline-datefield-calendarpanel-day-today {
+	cursor: default;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-day-disabled, .uiTest .v-inline-datefield-calendarpanel-day-outside-range {
+	cursor: default;
+	opacity: 0.5;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-prevyear button.outside-range, .uiTest .v-inline-datefield-calendarpanel-nextyear button.outside-range, .uiTest .v-inline-datefield-calendarpanel-prevmonth button.outside-range, .uiTest .v-inline-datefield-calendarpanel-nextmonth button.outside-range {
+	opacity: 0.5;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-day-selected {
+	cursor: default;
+	background: #333;
+	color: #fff;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-day-focused {
+	outline: 1px dotted black;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-day-offmonth {
+	color: #666;
+}
+
+.uiTest .v-inline-datefield-time {
+	white-space: nowrap;
+}
+
+.uiTest .v-inline-datefield-time .v-label {
+	display: inline;
+}
+
+.uiTest .v-inline-datefield-popup {
+	background: #fff;
+}
+
+.uiTest .v-inline-datefield-popupcalendar input.v-inline-datefield-textfield {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.uiTest .v-ddwrapper {
+	padding: 2px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	position: relative;
+}
+
+.uiTest [draggable=true] {
+	-khtml-user-drag: element;
+	-webkit-user-drag: element;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+}
+
+.v-ie .uiTest .v-ddwrapper a.drag-start {
+	display: block;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	background-color: cyan;
+	filter: alpha(opacity=0);
+}
+
+.uiTest .v-ddwrapper-over {
+	border: 2px solid #1d9dff;
+	background-color: #bcdcff;
+	padding: 0;
+}
+
+.uiTest .v-ddwrapper-over {
+	background-color: rgba(169, 209, 255, 0.6);
+}
+
+.uiTest .no-box-drag-hints .v-ddwrapper-over {
+	border: none;
+	background-color: transparent;
+	padding: 2px;
+}
+
+.uiTest.v-app .v-ddwrapper-over-top, .uiTest .v-window .v-ddwrapper-over-top, .uiTest .v-popupview-popup .v-ddwrapper-over-top {
+	border: none;
+	border-top: 2px solid #1d9dff;
+	background-color: transparent;
+	padding: 2px;
+	padding-top: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+}
+
+.uiTest.v-app .v-ddwrapper-over-bottom, .uiTest .v-window .v-ddwrapper-over-bottom, .uiTest .v-popupview-popup .v-ddwrapper-over-bottom {
+	border: none;
+	border-bottom: 2px solid #1d9dff;
+	background-color: transparent;
+	padding: 2px;
+	padding-bottom: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+}
+
+.uiTest.v-app .v-ddwrapper-over-left, .uiTest .v-window .v-ddwrapper-over-left, .uiTest .v-popupview-popup .v-ddwrapper-over-left {
+	border: none;
+	border-left: 2px solid #1d9dff;
+	background-color: transparent;
+	padding: 2px;
+	padding-left: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+}
+
+.uiTest.v-app .v-ddwrapper-over-right, .uiTest .v-window .v-ddwrapper-over-right, .uiTest .v-popupview-popup .v-ddwrapper-over-right {
+	border: none;
+	border-right: 2px solid #1d9dff;
+	background-color: transparent;
+	padding: 2px;
+	padding-right: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+}
+
+.uiTest .v-ddwrapper, .uiTest .v-ddwrapper-over, .uiTest.v-app .v-ddwrapper-over-top, .uiTest .v-window .v-ddwrapper-over-top, .uiTest .v-popupview-popup .v-ddwrapper-over-top, .uiTest.v-app .v-ddwrapper-over-bottom, .uiTest .v-window .v-ddwrapper-over-bottom, .uiTest .v-popupview-popup .v-ddwrapper-over-bottom, .uiTest.v-app .v-ddwrapper-over-left, .uiTest .v-window .v-ddwrapper-over-left, .uiTest .v-popupview-popup .v-ddwrapper-over-left, .uiTest.v-app .v-ddwrapper-over-right, .uiTest .v-window .v-ddwrapper-over-right, .uiTest .v-popupview-popup .v-ddwrapper-over-right {
+	border-color: rgba(0, 109, 232, 0.6);
+}
+
+.uiTest .v-ddwrapper-over-top:before, .uiTest .v-ddwrapper-over-bottom:after, .uiTest .v-ddwrapper-over-left:before, .uiTest .v-ddwrapper-over-right:before {
+	display: block;
+	position: absolute;
+	width: 6px;
+	height: 6px;
+	margin-top: -4px;
+	margin-left: -2px;
+	background: transparent url(../base/common/img/drag-slot-dot.png) no-repeat;
+}
+
+.uiTest .v-ddwrapper-over-bottom:after {
+	margin-top: -2px;
+}
+
+.uiTest .v-ddwrapper-over-left:before, .uiTest .v-ddwrapper-over-right:before {
+	background-position: 0 -6px;
+	margin-top: -2px;
+	margin-left: -4px;
+}
+
+.uiTest .v-ddwrapper-over-right:before {
+	position: relative;
+	margin-bottom: -4px;
+	margin-right: -4px;
+	margin-left: 0;
+	width: auto;
+	background-position: 100% -6px;
+}
+
+.uiTest .no-horizontal-drag-hints .v-ddwrapper-over-left {
+	padding-left: 2px;
+	border-left: none;
+}
+
+.uiTest .no-horizontal-drag-hints .v-ddwrapper-over-right {
+	padding-right: 2px;
+	border-right: none;
+}
+
+.uiTest .no-vertical-drag-hints .v-ddwrapper-over-top {
+	padding-top: 2px;
+	border-top: none;
+}
+
+.uiTest .no-vertical-drag-hints .v-ddwrapper-over-bottom {
+	padding-bottom: 2px;
+	border-bottom: none;
+}
+
+.uiTest .no-horizontal-drag-hints .v-ddwrapper-over-left:before, .uiTest .no-horizontal-drag-hints .v-ddwrapper-over-right:before, .uiTest .no-vertical-drag-hints .v-ddwrapper-over-top:before, .uiTest .no-vertical-drag-hints .v-ddwrapper-over-bottom:after {
+	display: none;
+}
+
+.uiTest .v-table .v-embedded-image {
+	display: inline-block;
+}
+
+.uiTest .v-formlayout.v-has-width > table {
+	width: 100%;
+}
+
+.uiTest .v-formlayout.v-has-height > table {
+	height: 100%;
+}
+
+.uiTest .v-formlayout-cell .v-errorindicator {
+	display: block;
+}
+
+.uiTest .v-formlayout-error-indicator {
+	width: 12px;
+}
+
+.uiTest .v-formlayout-captioncell {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.uiTest .v-formlayout-errorcell, .uiTest .v-formlayout-captioncell {
+	width: 1px;
+}
+
+.uiTest .v-formlayout-captioncell .v-caption {
+	overflow: visible;
+}
+
+.uiTest .v-formlayout-spacing > tbody > .v-formlayout-row > .v-formlayout-captioncell, .uiTest .v-formlayout-spacing > tbody > .v-formlayout-row > .v-formlayout-contentcell, .uiTest .v-formlayout-spacing > tbody > .v-formlayout-row > .v-formlayout-errorcell {
+	padding-top: 6px;
+}
+
+.uiTest .v-formlayout-spacing > tbody > .v-formlayout-firstrow > .v-formlayout-captioncell, .uiTest .v-formlayout-spacing > tbody > .v-formlayout-firstrow > .v-formlayout-contentcell, .uiTest .v-formlayout-spacing > tbody > .v-formlayout-firstrow > .v-formlayout-errorcell {
+	padding-top: 0;
+}
+
+.uiTest .v-formlayout-margin-top > tbody > .v-formlayout-firstrow > .v-formlayout-captioncell, .uiTest .v-formlayout-margin-top > tbody > .v-formlayout-firstrow > .v-formlayout-contentcell, .uiTest .v-formlayout-margin-top > tbody > .v-formlayout-firstrow > .v-formlayout-errorcell {
+	padding-top: 12px;
+}
+
+.uiTest .v-formlayout-margin-bottom > tbody > .v-formlayout-lastrow > .v-formlayout-captioncell, .uiTest .v-formlayout-margin-bottom > tbody > .v-formlayout-lastrow > .v-formlayout-contentcell, .uiTest .v-formlayout-margin-bottom > tbody > .v-formlayout-lastrow > .v-formlayout-errorcell {
+	padding-bottom: 12px;
+}
+
+.uiTest .v-formlayout-margin-left > tbody > .v-formlayout-row > .v-formlayout-captioncell {
+	padding-left: 12px;
+}
+
+.uiTest .v-formlayout-margin-right > tbody > .v-formlayout-row > .v-formlayout-contentcell {
+	padding-right: 12px;
+}
+
+.uiTest .v-formlayout-captioncell .v-caption .v-required-field-indicator {
+	float: none;
+}
+
+.uiTest .v-gridlayout {
+	position: relative;
+}
+
+.uiTest .v-gridlayout-slot {
+	position: absolute;
+}
+
+.uiTest .v-gridlayout-margin-top {
+	padding-top: 12px;
+}
+
+.uiTest .v-gridlayout-margin-bottom {
+	padding-bottom: 12px;
+}
+
+.uiTest .v-gridlayout-margin-left {
+	padding-left: 12px;
+}
+
+.uiTest .v-gridlayout-margin-right {
+	padding-right: 12px;
+}
+
+.uiTest .v-gridlayout-spacing-on {
+	padding-left: 6px;
+	padding-top: 6px;
+	overflow: hidden;
+}
+
+.uiTest .v-gridlayout-spacing, .uiTest .v-gridlayout-spacing-off {
+	padding-left: 0;
+	padding-top: 0;
+}
+
+.uiTest .v-gridlayout-spacing-off {
+	overflow: hidden;
+}
+
+.uiTest .v-label {
+	overflow: hidden;
+}
+
+.uiTest .v-label.v-has-width {
+	white-space: normal;
+}
+
+.uiTest .v-link {
+	white-space: nowrap;
+}
+
+.uiTest .v-link a {
+	vertical-align: middle;
+	text-decoration: none;
+}
+
+.uiTest .v-link span {
+	text-decoration: underline;
+	vertical-align: middle;
+}
+
+.uiTest .v-disabled a {
+	cursor: default;
+}
+
+.uiTest .v-link img {
+	vertical-align: middle;
+	border: none;
+}
+
+.uiTest .v-loginform {
+	height: 140px;
+	width: 200px;
+}
+
+.uiTest .v-app-loginpage .v-button, .uiTest .v-app-loginpage .v-button {
+	float: left;
+}
+
+.uiTest .v-menubar {
+	display: inline-block;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.uiTest .v-menubar .v-menubar-menuitem {
+	cursor: default;
+	vertical-align: middle;
+	white-space: nowrap;
+	display: inline;
+	display: inline-block;
+	zoom: 1;
+}
+
+.uiTest .v-menubar .v-menubar-menuitem-caption .v-icon {
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+.uiTest .v-menubar-submenu {
+	background: #fff;
+}
+
+.uiTest .v-menubar-menuitem-selected {
+	background: #333;
+	color: #fff;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-menuitem {
+	cursor: default;
+	display: block;
+	position: relative;
+	padding-right: 1.5em;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-menuitem-caption {
+	display: block;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-menuitem *, .uiTest .v-menubar-submenu .v-menubar-menuitem-caption * {
+	white-space: nowrap;
+}
+
+.uiTest .v-menubar-submenu-indicator {
+	display: none;
+	font-family: arial, helvetica, sans-serif;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-submenu-indicator {
+	display: block;
+	position: absolute;
+	right: 0;
+	width: 1em;
+	height: 1em;
+	font-size: 11.7px;
+}
+
+.uiTest .v-menubar-menuitem-disabled, .uiTest .v-menubar span.v-menubar-menuitem-disabled:hover, .uiTest .v-menubar span.v-menubar-menuitem-disabled:focus, .uiTest .v-menubar span.v-menubar-menuitem-disabled:active {
+	color: #999;
+}
+
+.uiTest .v-menubar-more-menuitem {
+	font-family: arial, helvetica, sans-serif;
+}
+
+.uiTest .v-menubar-separator {
+	overflow: hidden;
+}
+
+.uiTest .v-menubar-separator span {
+	display: block;
+	text-indent: -9999px;
+	font-size: 1px;
+	line-height: 1px;
+	border-top: 1px solid #ddd;
+	margin: 3px 0 2px;
+	overflow: hidden;
+}
+
+.uiTest .v-menubar .v-icon, .uiTest .v-menubar-submenu .v-icon {
+	margin-right: 3px;
+}
+
+.uiTest .v-menubar:focus, .uiTest .v-menubar-popup:focus, .uiTest .v-menubar-popup .popupContent:focus, .uiTest .v-menubar-popup .popupContent .v-menubar-submenu:focus {
+	outline: none;
+}
+
+.uiTest .v-menubar-submenu-check-column .v-menubar-menuitem {
+	padding-left: 6px;
+}
+
+.uiTest .v-menubar-submenu-check-column .v-menubar-menuitem-caption {
+	padding-left: 18px;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-menuitem-checked .v-menubar-menuitem-caption {
+	background: transparent url(../base/menubar/img/check.gif) no-repeat left;
+}
+
+.uiTest .v-Notification {
+	background: #999;
+	color: #fff;
+	cursor: pointer;
+	overflow: hidden;
+	padding: 1em;
+	max-width: 85%;
+}
+
+.uiTest .v-Notification h1, .uiTest .v-Notification p, .uiTest .v-Notification-error h1, .uiTest .v-Notification-error p, .uiTest .v-Notification-warning h1, .uiTest .v-Notification-warning p {
+	display: inline;
+	margin: 0 0.5em 0 0;
+}
+
+.uiTest .v-Notification-warning {
+	background: orange;
+}
+
+.uiTest .v-Notification-error {
+	background: red;
+}
+
+.uiTest .v-Notification-tray h1 {
+	display: block;
+}
+
+.uiTest .v-Notification-tray p {
+	display: block;
+}
+
+.uiTest .v-Notification-system {
+	background-color: red;
+	opacity: 0.7;
+	filter: alpha(opacity=70);
+}
+
+.uiTest .v-Notification-system h1 {
+	display: block;
+	margin: 0;
+}
+
+.uiTest .v-orderedlayout, .uiTest .v-horizontallayout, .uiTest .v-verticallayout {
+	position: relative;
+}
+
+.uiTest .v-orderedlayout-margin-top, .uiTest .v-horizontallayout-margin-top, .uiTest .v-verticallayout-margin-top {
+	padding-top: 12px;
+}
+
+.uiTest .v-orderedlayout-margin-right, .uiTest .v-horizontallayout-margin-right, .uiTest .v-verticallayout-margin-right {
+	padding-right: 12px;
+}
+
+.uiTest .v-orderedlayout-margin-bottom, .uiTest .v-horizontallayout-margin-bottom, .uiTest .v-verticallayout-margin-bottom {
+	padding-bottom: 12px;
+}
+
+.uiTest .v-orderedlayout-margin-left, .uiTest .v-horizontallayout-margin-left, .uiTest .v-verticallayout-margin-left {
+	padding-left: 12px;
+}
+
+.uiTest .v-orderedlayout-spacing-on, .uiTest .v-horizontallayout-spacing-on, .uiTest .v-verticallayout-spacing-on {
+	padding-top: 6px;
+	padding-left: 6px;
+}
+
+.uiTest .v-orderedlayout-spacing-off, .uiTest .v-horizontallayout-spacing-off, .uiTest .v-verticallayout-spacing-off {
+	padding-top: 0;
+	padding-left: 0;
+}
+
+.uiTest .v-horizontallayout-slot, .uiTest .v-verticallayout-slot {
+	position: absolute;
+}
+
+.uiTest .v-panel, .uiTest .v-panel-caption, .uiTest .v-panel-content, .uiTest .v-panel-deco, .uiTest .v-panel-light, .uiTest .v-panel-caption-light, .uiTest .v-panel-content-light, .uiTest .v-panel-deco-light {
+	outline: none;
+	text-align: left;
+}
+
+.uiTest .v-panel-caption .v-errorindicator {
+	float: none;
+	display: inline;
+}
+
+.uiTest .v-panel-caption .v-icon {
+	display: inline;
+	vertical-align: middle;
+}
+
+.uiTest .v-panel-caption span {
+	vertical-align: middle;
+}
+
+.uiTest .v-panel-caption {
+	white-space: nowrap;
+	overflow: hidden;
+	font-weight: bold;
+}
+
+.uiTest .v-panel-nocaption {
+	overflow: hidden;
+}
+
+.uiTest .v-panel-content {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.uiTest .v-panel.v-has-width > .v-panel-content {
+	width: 100%;
+}
+
+.uiTest .v-panel.v-has-height > .v-panel-content {
+	height: 100%;
+}
+
+.uiTest .v-popupview {
+	cursor: pointer;
+	text-decoration: underline;
+	white-space: nowrap;
+}
+
+.uiTest .v-popupview-popup {
+	overflow: auto;
+}
+
+.uiTest .v-popupview-loading {
+	width: 30px;
+	height: 30px;
+	background: transparent url(../base/common/img/ajax-loader-medium.gif) no-repeat 50%;
+}
+
+.uiTest .v-progressbar {
+	width: 150px;
+}
+
+.uiTest .v-progressbar-wrapper {
+	height: 7px;
+	border: 1px solid #ddd;
+}
+
+.uiTest .v-progressbar-indicator {
+	height: 7px;
+	background: #ddd;
+}
+
+.uiTest div.v-progressbar-indeterminate {
+	height: 20px;
+	width: 20px;
+	background: #fff url(../base/common/img/ajax-loader-medium.gif) no-repeat 50%;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+
+.uiTest .v-progressbar-indeterminate .v-progressbar-wrapper, .uiTest .v-progressbar-indeterminate .v-progressbar-indicator, .uiTest .v-progressbar-indeterminate-disabled .v-progressbar-wrapper, .uiTest .v-progressbar-indeterminate-disabled .v-progressbar-indicator {
+	display: none;
+}
+
+.uiTest div.v-progressbar-indeterminate-disabled {
+	height: 20px;
+	width: 20px;
+	background: transparent;
+}
+
+.uiTest .v-progressindicator {
+	width: 150px;
+}
+
+.uiTest .v-progressindicator-wrapper {
+	height: 7px;
+	border: 1px solid #ddd;
+}
+
+.uiTest .v-progressindicator-indicator {
+	height: 7px;
+	background: #ddd;
+}
+
+.uiTest div.v-progressindicator-indeterminate {
+	height: 20px;
+	width: 20px;
+	background: #fff url(../base/common/img/ajax-loader-medium.gif) no-repeat 50%;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+
+.uiTest .v-progressindicator-indeterminate .v-progressindicator-wrapper, .uiTest .v-progressindicator-indeterminate .v-progressindicator-indicator, .uiTest .v-progressindicator-indeterminate-disabled .v-progressindicator-wrapper, .uiTest .v-progressindicator-indeterminate-disabled .v-progressindicator-indicator {
+	display: none;
+}
+
+.uiTest div.v-progressindicator-indeterminate-disabled {
+	height: 20px;
+	width: 20px;
+	background: transparent;
+}
+
+.uiTest .v-select {
+	text-align: left;
+}
+
+.uiTest .v-select-optiongroup .v-select-option {
+	display: block;
+	white-space: nowrap;
+}
+
+.uiTest .v-select-optiongroup .v-icon {
+	vertical-align: middle;
+	white-space: nowrap;
+	margin: 0 2px;
+}
+
+.v-ie .uiTest .v-select-optiongroup .v-select-option {
+	zoom: 1;
+}
+
+.uiTest .v-select-select {
+	display: block;
+}
+
+.uiTest .v-select-twincol {
+	white-space: nowrap;
+}
+
+.uiTest .v-select-twincol-options {
+	float: left;
+}
+
+.uiTest .v-select-twincol-caption-left {
+	float: left;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.uiTest .v-select-twincol-selections {
+	font-weight: bold;
+}
+
+.uiTest .v-select-twincol-caption-right {
+	float: right;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.uiTest .v-select-twincol-buttons {
+	float: left;
+	text-align: center;
+}
+
+.uiTest .v-select-twincol-buttons .v-select-twincol-deco {
+	clear: both;
+}
+
+.uiTest .v-select-twincol .v-textfield {
+	display: block;
+	float: left;
+	clear: left;
+}
+
+.uiTest .v-select-twincol .v-button {
+	float: left;
+}
+
+.uiTest .v-select-twincol-buttons .v-button {
+	float: none;
+}
+
+.uiTest .v-filterselect {
+	white-space: nowrap;
+	text-align: left;
+	display: inline-block;
+	padding-right: 1em;
+}
+
+.uiTest .v-filterselect .v-icon {
+	float: left;
+}
+
+.uiTest.v-app .v-filterselect-input, .uiTest .v-window .v-filterselect-input, .uiTest .v-popupview-popup .v-filterselect-input {
+	margin: 0;
+	float: left;
+	-webkit-border-radius: 0px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.uiTest .v-filterselect-prompt .v-filterselect-input {
+	color: #999;
+	font-style: italic;
+}
+
+.uiTest .v-filterselect-button {
+	display: inline-block;
+	cursor: pointer;
+	width: 1em;
+	margin-right: -1em;
+	height: 1em;
+	background: transparent url(../base/common/img/sprites.png) no-repeat -5px -8px;
+}
+
+.uiTest .v-filterselect.v-readonly .v-filterselect-button {
+	display: none;
+}
+
+.uiTest .v-filterselect.v-readonly, .uiTest .v-filterselect.v-readonly .v-filterselect-input {
+	background: transparent;
+}
+
+.uiTest .v-filterselect-suggestpopup {
+	background: #fff;
+	border: 1px solid #eee;
+}
+
+.uiTest .v-filterselect-suggestmenu table {
+	border-collapse: collapse;
+	border: none;
+	vertical-align: top;
+}
+
+.uiTest .v-filterselect-suggestmenu .gwt-MenuItem {
+	white-space: nowrap;
+}
+
+.uiTest .v-filterselect-suggestmenu .gwt-MenuItem .v-icon {
+	margin-right: 3px;
+	vertical-align: middle;
+}
+
+.uiTest .v-filterselect-suggestmenu .gwt-MenuItem span {
+	vertical-align: middle;
+}
+
+.uiTest .v-filterselect-suggestmenu .gwt-MenuItem-selected {
+	background: #333;
+	color: #fff;
+}
+
+.uiTest .v-filterselect-nextpage, .uiTest .v-filterselect-nextpage-off, .uiTest .v-filterselect-prevpage-off, .uiTest .v-filterselect-prevpage {
+	width: 100%;
+	background: #aaa;
+	text-align: center;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.uiTest .v-filterselect-nextpage-off, .uiTest .v-filterselect-prevpage-off {
+	color: #666;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+	cursor: default;
+}
+
+.uiTest .v-filterselect-nextpage-off span, .uiTest .v-filterselect-prevpage-off span {
+	cursor: default;
+}
+
+.uiTest .v-filterselect-status {
+	white-space: nowrap;
+	text-align: center;
+}
+
+.uiTest .v-filterselect-no-input .v-filterselect-input {
+	cursor: default;
+}
+
+.uiTest .v-shadow {
+	position: absolute;
+}
+
+.uiTest .v-shadow .top-left {
+	position: absolute;
+	overflow: hidden;
+	top: -3px;
+	left: -5px;
+	width: 10px;
+	height: 10px;
+	background: transparent url(../base/shadow/img/top-left.png);
+}
+
+.uiTest .v-shadow .top {
+	position: absolute;
+	overflow: hidden;
+	top: -3px;
+	left: 5px;
+	height: 10px;
+	right: 5px;
+	background: transparent url(../base/shadow/img/top.png);
+}
+
+.uiTest .v-shadow .top-right {
+	position: absolute;
+	overflow: hidden;
+	top: -3px;
+	right: -5px;
+	width: 10px;
+	height: 10px;
+	background: transparent url(../base/shadow/img/top-right.png);
+}
+
+.uiTest .v-shadow .left {
+	position: absolute;
+	overflow: hidden;
+	top: 7px;
+	left: -5px;
+	width: 10px;
+	bottom: 3px;
+	background: transparent url(../base/shadow/img/left.png);
+}
+
+.uiTest .v-shadow .center {
+	position: absolute;
+	overflow: hidden;
+	top: 7px;
+	left: 5px;
+	bottom: 3px;
+	right: 5px;
+	background: transparent url(../base/shadow/img/center.png);
+}
+
+.uiTest .v-shadow .right {
+	position: absolute;
+	overflow: hidden;
+	top: 7px;
+	right: -5px;
+	width: 10px;
+	bottom: 3px;
+	background: transparent url(../base/shadow/img/right.png);
+}
+
+.uiTest .v-shadow .bottom-left {
+	position: absolute;
+	overflow: hidden;
+	bottom: -7px;
+	left: -5px;
+	width: 10px;
+	height: 10px;
+	background: transparent url(../base/shadow/img/bottom-left.png);
+}
+
+.uiTest .v-shadow .bottom {
+	position: absolute;
+	overflow: hidden;
+	bottom: -7px;
+	left: 5px;
+	right: 5px;
+	height: 10px;
+	background: transparent url(../base/shadow/img/bottom.png);
+}
+
+.uiTest .v-shadow .bottom-right {
+	position: absolute;
+	overflow: hidden;
+	bottom: -7px;
+	right: -5px;
+	width: 10px;
+	height: 10px;
+	background: transparent url(../base/shadow/img/bottom-right.png);
+}
+
+.uiTest .v-slider {
+	margin: 5px 0;
+}
+
+.uiTest .v-slider-base {
+	height: 2px;
+	border-top: 1px solid #ddd;
+	background: #eee;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #eee;
+}
+
+.uiTest .v-slider-handle {
+	background: #aaa;
+	width: 12px;
+	height: 12px;
+	margin-top: -5px;
+	font-size: 0;
+}
+
+.uiTest .v-slider-vertical {
+	width: 2px;
+	height: auto;
+	margin: 0 5px;
+	border: none;
+	border-left: 1px solid #cccfd0;
+	border-right: 1px solid #cccfd0;
+}
+
+.uiTest .v-slider-vertical .v-slider-base {
+	width: 2px;
+	border-bottom: 1px solid #eee;
+	border-right: none;
+}
+
+.uiTest .v-slider-vertical .v-slider-handle {
+	width: 12px;
+	height: 12px;
+	font-size: 0;
+	margin-left: -5px;
+}
+
+.uiTest .v-slider-feedback {
+	padding: 2px 5px;
+	background: #444;
+	color: #fff;
+	font-size: 11px;
+	line-height: 13px;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	margin: -2px 0 0 2px;
+	text-shadow: 0 1px 0 #000;
+}
+
+.uiTest .v-splitpanel-horizontal, .uiTest .v-splitpanel-vertical {
+	overflow: hidden;
+}
+
+.uiTest .v-splitpanel-hsplitter {
+	width: 6px;
+}
+
+.uiTest .v-splitpanel-hsplitter div {
+	width: 6px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	background: #ddd;
+	cursor: e-resize;
+	cursor: col-resize;
+}
+
+.uiTest .v-disabled .v-splitpanel-hsplitter div {
+	cursor: default;
+}
+
+.uiTest .v-splitpanel-vsplitter {
+	height: 6px;
+}
+
+.uiTest .v-splitpanel-vsplitter div {
+	height: 6px;
+	background: #ddd;
+	cursor: s-resize;
+	cursor: row-resize;
+}
+
+.uiTest .v-disabled .v-splitpanel-vsplitter div {
+	cursor: default;
+}
+
+.uiTest .v-table {
+	overflow: hidden;
+	text-align: left;
+}
+
+.uiTest .v-table-header-wrap {
+	overflow: hidden;
+	border: 1px solid #aaa;
+	border-bottom: none;
+	background: #efefef;
+}
+
+.uiTest .v-table-header table, .uiTest .v-table-table {
+	border-spacing: 0;
+	border-collapse: separate;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.uiTest .v-table-table {
+	font-size: 12px;
+}
+
+.uiTest .v-table-header td {
+	padding: 0;
+}
+
+.uiTest .v-table-header-cell, .uiTest .v-table-header-cell-asc, .uiTest .v-table-header-cell-desc {
+	cursor: pointer;
+}
+
+.uiTest .v-table.v-disabled .v-table-header-cell, .uiTest .v-table.v-disabled .v-table-header-cell-asc, .uiTest .v-table.v-disabled .v-table-header-cell-desc {
+	cursor: default;
+}
+
+.uiTest .v-table-footer-wrap {
+	overflow: hidden;
+	border: 1px solid #aaa;
+	border-top: none;
+	background: #efefef;
+}
+
+.uiTest .v-table-footer table {
+	border-spacing: 0;
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.uiTest .v-table-footer td {
+	padding: 0;
+	border-right: 1px solid #aaa;
+}
+
+.uiTest .v-table-footer-cell {
+	cursor: pointer;
+}
+
+.uiTest .v-table-footer-container {
+	float: right;
+	padding-right: 6px;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.uiTest .v-table-resizer {
+	display: block;
+	height: 1.2em;
+	float: right;
+	background: #aaa;
+	cursor: e-resize;
+	cursor: col-resize;
+	width: 1px;
+	overflow: hidden;
+}
+
+.uiTest .v-table.v-disabled .v-table-resizer {
+	cursor: default;
+}
+
+.uiTest .v-table-caption-container {
+	overflow: hidden;
+	white-space: nowrap;
+	margin-left: 6px;
+}
+
+.uiTest .v-table-caption-container-align-right {
+	float: right;
+}
+
+.uiTest .v-table-sort-indicator {
+	width: 0px;
+	height: 1.2em;
+	float: right;
+}
+
+.uiTest .v-table-header-cell-asc .v-table-sort-indicator, .uiTest .v-table-header-cell-desc .v-table-sort-indicator {
+	width: 16px;
+	height: 1.2em;
+	float: right;
+}
+
+.uiTest .v-table-header-cell-asc .v-table-sort-indicator {
+	background: transparent url(../base/common/img/sprites.png) no-repeat right 6px;
+}
+
+.uiTest .v-table-header-cell-desc .v-table-sort-indicator {
+	background: transparent url(../base/common/img/sprites.png) no-repeat right -10px;
+}
+
+.uiTest .v-table-caption-container-align-center {
+	text-align: center;
+}
+
+.uiTest .v-table-caption-container-align-right {
+	text-align: right;
+}
+
+.uiTest .v-table-caption-container .v-icon, .uiTest .v-table-header-drag .v-icon {
+	vertical-align: middle;
+}
+
+.uiTest .v-table-body {
+	border: 1px solid #aaa;
+}
+
+.uiTest .v-table-row-spacer {
+	height: 10px;
+	overflow: hidden;
+}
+
+.uiTest .v-table-row, .uiTest .v-table-row-odd {
+	background: #fff;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+}
+
+.uiTest .v-table-generated-row {
+	background: #efefef;
+}
+
+.uiTest .v-table-body-noselection .v-table-row, .uiTest .v-table-body-noselection .v-table-row-odd {
+	cursor: default;
+}
+
+.uiTest .v-table .v-selected {
+	background: #999;
+	color: #fff;
+}
+
+.uiTest .v-table-cell-content {
+	white-space: nowrap;
+	overflow: hidden;
+	padding: 0 6px;
+	border-right: 1px solid #aaa;
+}
+
+.uiTest .v-table-cell-wrapper {
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.uiTest .v-table-cell-wrapper-align-center {
+	text-align: center;
+}
+
+.uiTest .v-table-cell-wrapper-align-right {
+	text-align: right;
+}
+
+.uiTest .v-table-column-selector {
+	float: right;
+	background: transparent url(../base/common/img/sprites.png) no-repeat 4px -37px;
+	margin: -1.2em 0 0 0;
+	height: 1.2em;
+	width: 14px;
+	position: relative;
+	cursor: pointer;
+}
+
+.uiTest .v-table.v-disabled .v-table-column-selector {
+	cursor: default;
+}
+
+.uiTest .v-table-focus-slot-left {
+	border-left: 2px solid #999;
+	float: none;
+	margin-bottom: -1.2em;
+	width: auto;
+	background: transparent;
+	border-right: 1px solid #aaa;
+}
+
+.uiTest .v-table-focus-slot-right {
+	border-right: 2px solid #999;
+	margin-left: -2px;
+}
+
+.uiTest .v-table-header-drag {
+	position: absolute;
+	background: #efefef;
+	border: 1px solid #eee;
+	opacity: 0.9;
+	filter: alpha(opacity=90);
+	margin-top: 20px;
+	z-index: 30000;
+}
+
+.uiTest .v-table-header-drag .v-icon {
+	vertical-align: middle;
+}
+
+.uiTest .v-table-scrollposition {
+	width: 160px;
+	background: #eee;
+	border: 1px solid #aaa;
+}
+
+.uiTest .v-table-scrollposition span {
+	display: block;
+	text-align: center;
+}
+
+.uiTest .v-table-body:focus, .uiTest .v-table-body-wrapper:focus {
+	outline: none;
+}
+
+.uiTest .v-table-body.focused {
+	border-color: #388ddd;
+}
+
+.uiTest .v-table-focus .v-table-cell-content {
+	border-top: 1px dotted #0066bd;
+	border-bottom: 1px dotted #0066bd;
+}
+
+.uiTest .v-table-focus .v-table-cell-wrapper {
+	margin-top: -1px;
+	margin-bottom: -1px;
+}
+
+.uiTest .v-off {
+	color: #ddd;
+}
+
+.uiTest .v-table-drag .v-table-body {
+	border-color: #1d9dff;
+}
+
+.uiTest .v-table-row-drag-middle .v-table-cell-content {
+	background-color: #bcdcff;
+}
+
+.uiTest .v-table-row-drag-top .v-table-cell-content {
+	border-top: 2px solid #1d9dff;
+}
+
+.uiTest .v-table-row-drag-top .v-table-cell-wrapper {
+	margin-top: -2px;
+}
+
+.uiTest .v-table-row-drag-bottom .v-table-cell-content {
+	border-bottom: 2px solid #1d9dff;
+}
+
+.uiTest .v-table-row-drag-bottom .v-table-cell-wrapper {
+	margin-bottom: -2px;
+}
+
+.uiTest .v-table-row-drag-top .v-table-cell-content:first-child:before, .uiTest .v-table-row-drag-bottom .v-table-cell-content:first-child:after {
+	display: block;
+	position: absolute;
+	width: 6px;
+	height: 6px;
+	margin-top: -4px;
+	margin-left: -6px;
+	background: transparent url(../base/common/img/drag-slot-dot.png);
+}
+
+.v-ff .uiTest .v-table-row-drag-bottom .v-table-cell-content:first-child:after, .v-ie .uiTest .v-table-row-drag-bottom .v-table-cell-content:first-child:after {
+	margin-top: -2px;
+}
+
+.uiTest .v-tabsheet, .uiTest .v-tabsheet-content, .uiTest .v-tabsheet-deco {
+	outline: none;
+	text-align: left;
+}
+
+.uiTest .v-tabsheet-tabs {
+	empty-cells: hide;
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	width: 100%;
+	overflow: hidden;
+}
+
+.uiTest .v-tabsheet-tabitemcell:focus {
+	outline: none;
+}
+
+.uiTest .v-tabsheet-tabitemcell, .uiTest .v-tabsheet-spacertd {
+	margin: 0;
+	padding: 0;
+	vertical-align: bottom;
+}
+
+.uiTest .v-tabsheet-spacertd {
+	width: 100%;
+}
+
+.uiTest .v-tabsheet-spacertd div {
+	border-left: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	height: 1em;
+	padding: 0.2em 0;
+}
+
+.uiTest .v-tabsheet-hidetabs > .v-tabsheet-tabcontainer {
+	display: none;
+}
+
+.uiTest .v-tabsheet-scroller {
+	white-space: nowrap;
+	text-align: right;
+	margin-top: -1em;
+}
+
+.uiTest .v-disabled .v-tabsheet-scroller {
+	display: none;
+}
+
+.uiTest .v-tabsheet-scrollerPrev, .uiTest .v-tabsheet-scrollerNext, .uiTest .v-tabsheet-scrollerPrev-disabled, .uiTest .v-tabsheet-scrollerNext-disabled {
+	border: 1px solid #aaa;
+	background: #fff;
+	width: 12px;
+	height: 1em;
+	cursor: pointer;
+}
+
+.uiTest .v-tabsheet-scrollerPrev-disabled, .uiTest .v-tabsheet-scrollerNext-disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+.uiTest .v-tabsheet-tabs .v-caption, .uiTest .v-tabsheet-tabs .v-caption span {
+	white-space: nowrap;
+}
+
+.uiTest .v-tabsheet-caption-close {
+	display: inline;
+	display: inline-block;
+	zoom: 1;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+	font-weight: bold;
+	cursor: pointer;
+	vertical-align: middle;
+	user-select: none;
+	-khtml-user-select: none;
+	-ms-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+}
+
+.uiTest .v-tabsheet .v-disabled .v-tabsheet-caption-close {
+	cursor: default;
+	visibility: hidden;
+}
+
+.uiTest .v-tabsheet-tabitem:hover .v-tabsheet-caption-close {
+	visibility: visible;
+}
+
+.uiTest .v-tabsheet-tabitem {
+	border: 1px solid #aaa;
+	border-right: none;
+	cursor: pointer;
+	padding: 0.2em 0.5em;
+}
+
+.uiTest .v-tabsheet-tabitem .v-caption {
+	cursor: inherit;
+}
+
+.uiTest .v-tabsheet.v-disabled .v-tabsheet-tabitem, .uiTest .v-tabsheet-tabitemcell-disabled .v-tabsheet-tabitem {
+	cursor: default;
+}
+
+.uiTest .v-tabsheet-tabitem-selected {
+	cursor: default;
+	border-bottom-color: #fff;
+}
+
+.uiTest .v-tabsheet-tabitem-selected .v-caption {
+	cursor: default;
+}
+
+.uiTest .v-tabsheet-content {
+	border: 1px solid #aaa;
+	border-top: none;
+	border-bottom: none;
+	position: relative;
+}
+
+.uiTest .v-tabsheet-deco {
+	height: 1px;
+	background: #aaa;
+	overflow: hidden;
+}
+
+.uiTest .v-tabsheet-hidetabs .v-tabsheet-content {
+	border: none;
+}
+
+.uiTest .v-tabsheet-hidetabs .v-tabsheet-deco {
+	height: 0;
+}
+
+.uiTest .v-textfield {
+	text-align: left;
+}
+
+.uiTest .v-textarea {
+	resize: none;
+	white-space: pre-wrap;
+}
+
+.uiTest input.v-textfield-prompt, .uiTest textarea.v-textarea-prompt {
+	color: #999;
+	font-style: italic;
+}
+
+.uiTest input.v-textfield-readonly, .uiTest textarea.v-textarea-readonly {
+	background: transparent;
+	border: none;
+	resize: none;
+}
+
+.uiTest input.v-disabled, .uiTest textarea.v-disabled {
+	resize: none;
+}
+
+.uiTest input.v-textfield-readonly:focus, .uiTest textarea.v-textarea-readonly:focus {
+	outline: none;
+}
+
+.v-sa .uiTest input:focus, .v-sa .uiTest textarea:focus {
+	outline-width: medium;
+}
+
+.uiTest .v-richtextarea {
+	border: 1px solid #aaa;
+	overflow: hidden;
+}
+
+.uiTest .v-richtextarea .gwt-RichTextArea {
+	background: #fff;
+	border: none;
+}
+
+.uiTest .v-richtextarea .gwt-HTML {
+	height: 100%;
+	font-size: 12px;
+}
+
+.uiTest .v-richtextarea .gwt-RichTextToolbar {
+	white-space: nowrap;
+	background: #959595 url(../base/textfield/img/richtext-toolbar-bg.png) repeat-x 0 -42px;
+	border-bottom: 1px solid #7d7d7d;
+	padding: 2px;
+	overflow: hidden;
+}
+
+.uiTest .v-richtextarea .gwt-RichTextToolbar-top {
+	padding-bottom: 1px;
+	overflow: hidden;
+	white-space: normal;
+}
+
+.uiTest .v-richtextarea .gwt-RichTextToolbar-bottom {
+	clear: left;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.uiTest .v-richtextarea .gwt-RichTextToolbar .gwt-ToggleButton, .uiTest .v-richtextarea .gwt-RichTextToolbar .gwt-PushButton {
+	float: left;
+	display: inline;
+	width: 22px;
+	height: 21px;
+	overflow: hidden;
+	background: transparent url(../base/textfield/img/richtext-toolbar-bg.png) repeat-x;
+	cursor: pointer;
+	margin-right: 2px;
+	text-align: center;
+}
+
+.uiTest .v-richtextarea .gwt-RichTextToolbar .gwt-ToggleButton-down, .uiTest .v-richtextarea .gwt-RichTextToolbar .gwt-PushButton-down, .uiTest .v-richtextarea .gwt-RichTextToolbar .gwt-ToggleButton-down-hovering, .uiTest .v-richtextarea .gwt-RichTextToolbar .gwt-PushButton-down-hovering {
+	background-position: 0 -21px;
+}
+
+.uiTest .v-richtextarea .gwt-RichTextToolbar .gwt-ListBox {
+	width: 24.5%;
+	margin-right: 2px;
+}
+
+.uiTest .v-richtextarea-readonly {
+	border: none;
+}
+
+.uiTest .v-tree {
+	text-align: left;
+	padding: 1px 0;
+	outline: none;
+}
+
+.uiTest .v-tree-node {
+	background: transparent url(../base/common/img/sprites.png) no-repeat 5px -37px;
+	padding: 1px 0;
+}
+
+.uiTest .v-tree-node-caption:focus {
+	outline: none;
+}
+
+.uiTest div.v-tree-node-leaf {
+	background: transparent;
+}
+
+.uiTest .v-tree-node-expanded {
+	background: transparent url(../base/common/img/sprites.png) no-repeat -5px -10px;
+}
+
+.uiTest .v-tree-node-caption {
+	margin-left: 1em;
+}
+
+.uiTest .v-tree-node span {
+	cursor: pointer;
+}
+
+.uiTest .v-tree-node-caption div {
+	white-space: nowrap;
+}
+
+.uiTest .v-tree-node-caption span, .uiTest .v-tree-node-caption .v-icon {
+	vertical-align: middle;
+}
+
+.uiTest .v-tree-node-selected span {
+	background: #999;
+	color: #fff;
+}
+
+.uiTest .v-tree-node-children {
+	padding-left: 1em;
+}
+
+.uiTest .v-tree .v-tree-node-drag-top {
+	border-top: 2px solid #1d9dff;
+	margin-top: -1px;
+	padding-top: 0;
+}
+
+.uiTest .v-tree .v-tree-node-drag-bottom {
+	border-bottom: 2px solid #1d9dff;
+	margin-bottom: -1px;
+	padding-bottom: 0;
+}
+
+.uiTest .v-tree .v-tree-node-drag-top:before, .uiTest .v-tree .v-tree-node-drag-bottom:after, .uiTest .v-tree .v-tree-node-caption-drag-center:after {
+	display: block;
+	position: absolute;
+	width: 6px;
+	height: 6px;
+	margin-top: -4px;
+	background: transparent url(../base/common/img/drag-slot-dot.png);
+}
+
+.uiTest .v-tree .v-tree-node-drag-bottom:after {
+	margin-top: -2px;
+}
+
+.uiTest .v-tree .v-tree-node-caption-drag-center:after {
+	margin-left: 14px;
+}
+
+.v-ff .uiTest .v-tree .v-tree-node-caption-drag-center:after, .v-ie .uiTest .v-tree .v-tree-node-caption-drag-center:after {
+	margin-top: -2px;
+}
+
+.uiTest .v-tree .v-tree-node-drag-top {
+	background-position: 5px -38px;
+}
+
+.uiTest .v-tree .v-tree-node-drag-top.v-tree-node-expanded {
+	background-position: -5px -11px;
+}
+
+.uiTest .v-tree .v-tree-node-caption-drag-center div {
+	border: 2px solid #1d9dff;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	margin: -2px 2px -2px -2px;
+	background-color: #bcdcff;
+}
+
+.uiTest .v-tree .v-tree-node-caption-drag-center div {
+	background-color: rgba(169, 209, 255, 0.6);
+}
+
+.uiTest .v-tree .v-tree-node-caption-drag-center div, .uiTest .v-tree .v-tree-node-drag-top, .uiTest .v-tree .v-tree-node-drag-bottom {
+	border-color: rgba(0, 109, 232, 0.6);
+}
+
+.uiTest .v-tree-connectors .v-tree-node-caption {
+	padding-top: 1px;
+}
+
+.uiTest .v-tree-connectors .v-tree-node {
+	background: transparent url(../base/tree/img/connector-expand.png) no-repeat 2px -52px;
+}
+
+.uiTest .v-tree-connectors .v-tree-node-expanded {
+	background: transparent url(../base/tree/img/connector-collapse.png) no-repeat 2px -52px;
+}
+
+.uiTest .v-tree-connectors .v-tree-node-last {
+	background: transparent url(../base/tree/img/connector-expand-last.png) no-repeat 2px -52px;
+}
+
+.uiTest .v-tree-connectors .v-tree-node-expanded.v-tree-node-last {
+	background: transparent url(../base/tree/img/connector-collapse-last.png) no-repeat 2px -52px;
+}
+
+.uiTest .v-tree-connectors .v-tree-node-leaf {
+	background: transparent url(../base/tree/img/connector-leaf.png) repeat-y 2px 50%;
+}
+
+.uiTest .v-tree-connectors .v-tree-node-leaf-last {
+	background: transparent url(../base/tree/img/connector-leaf-last.png) repeat-y 2px 50%;
+}
+
+.uiTest .v-tree-connectors .v-tree-node-children {
+	background: transparent url(../base/tree/img/connector.png) repeat-y 2px 0;
+}
+
+.uiTest .v-tree-connectors .v-tree-node-children-last {
+	background: transparent;
+}
+
+.uiTest .v-tree-connectors .v-tree-node-drag-top, .uiTest .v-tree-connectors .v-tree-node-expanded.v-tree-node-drag-top {
+	background-position: 2px -53px;
+}
+
+.uiTest .v-tree-connectors .v-tree-node-drag-top.v-tree-node-leaf {
+	background-position: 2px 50%;
+}
+
+.uiTest .v-treetable-treespacer {
+	display: inline-block;
+	background: transparent;
+	height: 10px;
+	width: 18px;
+	position: absolute;
+	left: 0;
+	top: 5px;
+}
+
+.uiTest .v-treetable-node-closed {
+	background: url(../base/treetable/img/arrow-right.png) right top no-repeat;
+}
+
+.uiTest .v-treetable-node-open {
+	background: url(../base/treetable/img/arrow-down.png) right top no-repeat;
+}
+
+.uiTest .v-treetable .v-checkbox {
+	display: inline-block;
+	padding-bottom: 4px;
+}
+
+.uiTest .v-treetable .v-table-row .v-table-cell-content, .uiTest .v-treetable .v-table-row-odd .v-table-cell-content {
+	position: relative;
+	z-index: 10;
+}
+
+.uiTest .v-treetable .v-table-cell-wrapper {
+	position: relative;
+}
+
+.uiTest .v-treetable .v-table-body .v-table-table .v-table-row-animating {
+	zoom: 1;
+	z-index: 1;
+}
+
+.uiTest .v-treetable .v-table-body .v-table-table .v-table-row-animating, .uiTest .v-treetable .v-table-body .v-table-table .v-table-row-animating .v-table-cell-content {
+	background: transparent;
+}
+
+.uiTest .v-treetable-animation-clone {
+	border-spacing: 0;
+	zoom: 1;
+}
+
+.uiTest div.v-treetable-animation-clone-wrapper {
+	position: absolute;
+	z-index: 2;
+	background-color: #fff;
+}
+
+.uiTest div.v-treetable-animation-clone-wrapper table.v-treetable-animation-clone {
+	background-color: #fff;
+}
+
+.uiTest div table.v-treetable-animation-clone tr.v-table-row, .uiTest div table.v-treetable-animation-clone tr.v-table-row-odd, .uiTest div table.v-treetable-animation-clone tr.v-table-row td.v-table-cell-content, .uiTest div table.v-treetable-animation-clone tr.v-table-row-odd td.v-table-cell-content {
+	visibility: visible;
+}
+
+.uiTest .v-upload {
+	white-space: nowrap;
+}
+
+.uiTest .v-upload-immediate {
+	position: relative;
+	margin: 0;
+	overflow: hidden;
+}
+
+.v-ff .uiTest .v-upload-immediate, .v-op .uiTest .v-upload-immediate {
+	display: inline-block;
+}
+
+.uiTest .v-upload-immediate input {
+	opacity: 0;
+	filter: alpha(opacity=0);
+	z-index: 2;
+	position: absolute;
+	right: 0;
+	height: 21px;
+	text-align: right;
+	border: none;
+	background: transparent;
+}
+
+.uiTest .v-upload-immediate button {
+	position: relative;
+	left: 0;
+	top: 0;
+	width: 100%;
+	text-align: left;
+}
+
+.uiTest .v-window {
+	background: #fff;
+}
+
+.uiTest .v-window-contents {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.uiTest .v-window.v-has-width > div.popupContent, .uiTest .v-window.v-has-width .v-window-wrap, .uiTest .v-window.v-has-width .v-window-contents, .uiTest .v-window.v-has-width .v-window-contents > div {
+	width: 100%;
+}
+
+.uiTest .v-window.v-has-height > div.popupContent, .uiTest .v-window.v-has-height .v-window-wrap, .uiTest .v-window.v-has-height .v-window-contents, .uiTest .v-window.v-has-height .v-window-contents > div {
+	height: 100%;
+}
+
+.uiTest .v-window-outerheader {
+	padding: 0.3em 1em;
+	height: 1.6em;
+	position: relative;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.uiTest .v-window-outerheader, .uiTest .v-window-draggingCurtain {
+	cursor: move;
+}
+
+.uiTest .v-window-header {
+	font-weight: bold;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ie-user-select: none;
+	user-select: none;
+}
+
+.uiTest div.v-window-header {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	-ms-text-overflow: ellipsis;
+	overflow: hidden;
+	padding: 0;
+}
+
+.uiTest .v-window-header .v-icon {
+	vertical-align: middle;
+}
+
+.uiTest .v-window-contents > div {
+	outline: none;
+}
+
+.uiTest .v-window-footer {
+	overflow: hidden;
+	zoom: 1;
+	height: 10px;
+	position: relative;
+	cursor: move;
+}
+
+.uiTest .v-window-resizebox {
+	width: 10px;
+	height: 10px;
+	background: #ddd;
+	overflow: hidden;
+	position: absolute;
+	right: 0;
+}
+
+.uiTest .v-window-resizebox, .uiTest .v-window-resizingCurtain {
+	cursor: se-resize;
+}
+
+.uiTest .v-window div.v-window-footer-noresize {
+	height: 0;
+}
+
+.uiTest .v-window-resizebox-disabled, .uiTest .v-window-restorebox-disabled, .uiTest .v-window-maximizebox-disabled {
+	cursor: default;
+	display: none;
+}
+
+.uiTest .v-window-closebox, .uiTest .v-window-restorebox, .uiTest .v-window-maximizebox {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 1em;
+	height: 1em;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+.uiTest .v-window-maximizebox, .uiTest .v-window-restorebox {
+	right: 1.1em;
+}
+
+.uiTest .v-window-closebox {
+	background: red;
+}
+
+.uiTest .v-window-maximizebox {
+	background: blue;
+}
+
+.uiTest .v-window-restorebox {
+	background: yellow;
+}
+
+.uiTest .v-window-modalitycurtain {
+	top: 0;
+	left: 0;
+	background: #999;
+	opacity: 0.5;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	filter: alpha(opacity=50);
+}
+
+.uiTest .v-shadow-window {
+	position: absolute;
+}
+
+.uiTest .v-shadow-window .top-left {
+	position: absolute;
+	overflow: hidden;
+	top: -10px;
+	left: -15px;
+	width: 28px;
+	height: 28px;
+	background: transparent url(../base/window/img/shadow/top-left.png);
+}
+
+.uiTest .v-shadow-window .top {
+	position: absolute;
+	overflow: hidden;
+	top: -10px;
+	left: 13px;
+	height: 28px;
+	right: 13px;
+	background: transparent url(../base/window/img/shadow/top.png);
+}
+
+.uiTest .v-shadow-window .top-right {
+	position: absolute;
+	overflow: hidden;
+	top: -10px;
+	right: -15px;
+	width: 28px;
+	height: 28px;
+	background: transparent url(../base/window/img/shadow/top-right.png);
+}
+
+.uiTest .v-shadow-window .left {
+	position: absolute;
+	overflow: hidden;
+	top: 18px;
+	left: -15px;
+	width: 28px;
+	bottom: 10px;
+	background: transparent url(../base/window/img/shadow/left.png);
+}
+
+.uiTest .v-shadow-window .center {
+	position: absolute;
+	overflow: hidden;
+	top: 18px;
+	left: 13px;
+	bottom: 10px;
+	right: 13px;
+	background: transparent url(../base/window/img/shadow/center.png);
+}
+
+.uiTest .v-shadow-window .right {
+	position: absolute;
+	overflow: hidden;
+	top: 18px;
+	right: -15px;
+	width: 28px;
+	bottom: 10px;
+	background: transparent url(../base/window/img/shadow/right.png);
+}
+
+.uiTest .v-shadow-window .bottom-left {
+	position: absolute;
+	overflow: hidden;
+	bottom: -18px;
+	left: -15px;
+	width: 28px;
+	height: 28px;
+	background: transparent url(../base/window/img/shadow/bottom-left.png);
+}
+
+.uiTest .v-shadow-window .bottom {
+	position: absolute;
+	overflow: hidden;
+	bottom: -18px;
+	left: 13px;
+	right: 13px;
+	height: 28px;
+	background: transparent url(../base/window/img/shadow/bottom.png);
+}
+
+.uiTest .v-shadow-window .bottom-right {
+	position: absolute;
+	overflow: hidden;
+	bottom: -18px;
+	right: -15px;
+	width: 28px;
+	height: 28px;
+	background: transparent url(../base/window/img/shadow/bottom-right.png);
+}
+
+.uiTest .v-accordion {
+	border: 1px solid #bebebe;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+
+.uiTest .v-accordion-item {
+	background-color: #fff;
+}
+
+.uiTest .v-accordion-item-caption {
+	height: 19px;
+	background: #e4e4e4 repeat-x;
+	background-image: url(../reindeer/tabsheet/img/tabbar-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	font-size: 11px;
+	line-height: normal;
+	border-top: 1px solid #bebebe;
+	text-shadow: #fff 0 1px 0;
+}
+
+.uiTest .v-accordion-item-caption .v-caption {
+	font-size: 11px;
+}
+
+.uiTest .v-accordion-item-caption .v-captiontext {
+	vertical-align: baseline;
+}
+
+.uiTest .v-accordion-item-first .v-accordion-item-caption {
+	border-top: none;
+}
+
+.uiTest .v-accordion-item-caption .v-caption {
+	padding: 3px 0 0 10px;
+}
+
+.uiTest .v-accordion-item-open .v-accordion-item-caption {
+	background-image: url(../reindeer/tabsheet/img/tabbar-bg-sel.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	border-bottom: 1px solid #bbb;
+}
+
+.uiTest .v-accordion-item-caption .v-icon {
+	margin-top: -3px;
+}
+
+.v-ie .uiTest .v-accordion-item-caption .v-icon, .v-ff .uiTest .v-accordion-item-caption .v-icon {
+	margin-top: -6px;
+}
+
+.uiTest .v-accordion-borderless {
+	border: none;
+	border-radius: 0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+}
+
+.uiTest .v-button:focus {
+	background-image: url(../reindeer/button/img/left-focus.png);/** sprite-ref: buttons */
+	outline: none;
+}
+
+.uiTest .v-button:focus .v-button-wrap {
+	background-image: url(../reindeer/button/img/right-focus.png);/** sprite-ref: buttons; sprite-alignment: right */
+	outline: none;
+}
+
+.uiTest .v-button:active, .uiTest .v-button.v-pressed {
+	background-image: url(../reindeer/button/img/left-pressed.png);/** sprite-ref: buttons */
+	outline: none;
+}
+
+.uiTest .v-button:active .v-button-wrap, .uiTest .v-button.v-pressed .v-button-wrap {
+	background-image: url(../reindeer/button/img/right-pressed.png);/** sprite-ref: buttons; sprite-alignment: right */
+	outline: none;
+}
+
+.uiTest .v-button, .uiTest .v-disabled.v-button {
+	height: 26px;
+	padding: 0 0 0 6px;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-image: url(../reindeer/button/img/left.png);/** sprite-ref: buttons */
+	border: none;
+	cursor: default;
+}
+
+.uiTest .v-button-wrap, .uiTest .v-disabled.v-button .v-button-wrap {
+	display: block;
+	height: 22px;
+	padding: 4px 15px 0 9px;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: right top;
+	background-image: url(../reindeer/button/img/right.png);/** sprite-ref: buttons; sprite-alignment: right */
+}
+
+.uiTest .v-button-caption {
+	color: #222;
+	text-shadow: #fff 0 1px 0;
+	font-weight: bold;
+	font-size: 11px;
+	line-height: 16px;
+}
+
+.uiTest .black .v-button:focus {
+	background-image: url(../reindeer/button/img/black/left-focus.png);/** sprite-ref: black-buttons */
+}
+
+.uiTest .black .v-button:focus .v-button-wrap {
+	background-image: url(../reindeer/button/img/black/right-focus.png);/** sprite-ref: black-buttons; sprite-alignment: right */
+}
+
+.uiTest .black .v-button:active, .uiTest .black .v-button.v-pressed {
+	background-image: url(../reindeer/button/img/black/left-pressed.png);/** sprite-ref: black-buttons */
+}
+
+.uiTest .black .v-button:active .v-button-wrap, .uiTest .black .v-button.v-pressed .v-button-wrap {
+	background-image: url(../reindeer/button/img/black/right-pressed.png);/** sprite-ref: black-buttons; sprite-alignment: right */
+}
+
+.uiTest .black .v-button, .uiTest .black .v-disabled.v-button {
+	background-image: url(../reindeer/button/img/black/left.png);/** sprite-ref: black-buttons */
+}
+
+.uiTest .black .v-button-wrap, .uiTest .black .v-disabled.v-button .v-button-wrap {
+	background-image: url(../reindeer/button/img/black/right.png);/** sprite-ref: black-buttons; sprite-alignment: right */
+}
+
+.uiTest .black .v-button-caption {
+	color: #c9ccce;
+	text-shadow: #121314 0 -1px 0;
+}
+
+.uiTest .v-button-primary:focus {
+	background-image: url(../reindeer/button/img/primary-left-focus.png);/** sprite-ref: buttons */
+}
+
+.uiTest .v-button-primary:focus .v-button-wrap {
+	background-image: url(../reindeer/button/img/primary-right-focus.png);/** sprite-ref: buttons; sprite-alignment: right */
+}
+
+.uiTest .v-button-primary:active, .uiTest .v-button-primary.v-pressed {
+	background-image: url(../reindeer/button/img/primary-left-pressed.png);/** sprite-ref: buttons */
+}
+
+.uiTest .v-button-primary:active .v-button-wrap, .uiTest .v-button-primary.v-pressed .v-button-wrap {
+	background-image: url(../reindeer/button/img/primary-right-pressed.png);/** sprite-ref: buttons; sprite-alignment: right */
+}
+
+.uiTest .v-button-primary, .uiTest .v-disabled.v-button-primary {
+	background-image: url(../reindeer/button/img/primary-left.png);/** sprite-ref: buttons */
+}
+
+.uiTest .v-button-primary .v-button-wrap, .uiTest .v-disabled.v-button-primary .v-button-wrap {
+	background-image: url(../reindeer/button/img/primary-right.png);/** sprite-ref: buttons; sprite-alignment: right */
+}
+
+.uiTest .black .v-button-primary:focus {
+	background-image: url(../reindeer/button/img/black/primary-left-focus.png);/** sprite-ref: black-buttons */
+}
+
+.uiTest .black .v-button-primary:focus .v-button-wrap {
+	background-image: url(../reindeer/button/img/black/primary-right-focus.png);/** sprite-ref: black-buttons; sprite-alignment: right */
+	color: #eaf4fb;
+}
+
+.uiTest .black .v-button-primary:active, .uiTest .black .v-button-primary.v-pressed {
+	background-image: url(../reindeer/button/img/black/primary-left-pressed.png);/** sprite-ref: black-buttons */
+}
+
+.uiTest .black .v-button-primary:active .v-button-wrap, .uiTest .black .v-button-primary.v-pressed .v-button-wrap {
+	background-image: url(../reindeer/button/img/black/primary-right-pressed.png);/** sprite-ref: black-buttons; sprite-alignment: right */
+}
+
+.uiTest .black .v-button-primary, .uiTest .black .v-disabled.v-button-primary {
+	background-image: url(../reindeer/button/img/black/primary-left.png);/** sprite-ref: black-buttons */
+}
+
+.uiTest .black .v-button-primary .v-button-wrap, .uiTest .black .v-disabled.v-button-primary .v-button-wrap {
+	background-image: url(../reindeer/button/img/black/primary-right.png);/** sprite-ref: black-buttons; sprite-alignment: right */
+}
+
+.uiTest .v-button-small:focus {
+	background-image: url(../reindeer/button/img/small-left-focus.png);/** sprite-ref: buttons */
+}
+
+.uiTest .v-button-small:focus .v-button-wrap {
+	background-image: url(../reindeer/button/img/small-right-focus.png);/** sprite-ref: buttons; sprite-alignment: right */
+}
+
+.uiTest .v-button-small:active, .uiTest .v-button-small.v-pressed {
+	background-image: url(../reindeer/button/img/small-left-pressed.png);/** sprite-ref: buttons */
+}
+
+.uiTest .v-button-small:active .v-button-wrap, .uiTest .v-button-small.v-pressed .v-button-wrap {
+	background-image: url(../reindeer/button/img/small-right-pressed.png);/** sprite-ref: buttons; sprite-alignment: right */
+}
+
+.uiTest .v-button-small, .uiTest .v-disabled.v-button-small {
+	background-image: url(../reindeer/button/img/small-left.png);/** sprite-ref: buttons */
+	height: 20px;
+}
+
+.uiTest .v-button-small .v-button-wrap, .uiTest .v-disabled.v-button-small .v-button-wrap {
+	background-image: url(../reindeer/button/img/small-right.png);/** sprite-ref: buttons; sprite-alignment: right */
+	height: 19px;
+	padding: 1px 14px 0 8px;
+}
+
+.uiTest .v-button-small .v-button-caption {
+	font-weight: normal;
+}
+
+.uiTest .black .v-button-small:focus {
+	background-image: url(../reindeer/button/img/black/small-left-focus.png);/** sprite-ref: black-buttons */
+}
+
+.uiTest .black .v-button-small:focus .v-button-wrap {
+	background-image: url(../reindeer/button/img/black/small-right-focus.png);/** sprite-ref: black-buttons; sprite-alignment: right */
+}
+
+.uiTest .black .v-button-small:active, .uiTest .black .v-button-small.v-pressed {
+	background-image: url(../reindeer/button/img/black/small-left-pressed.png);/** sprite-ref: black-buttons */
+}
+
+.uiTest .black .v-button-small:active .v-button-wrap, .uiTest .black .v-button-small.v-pressed .v-button-wrap {
+	background-image: url(../reindeer/button/img/black/small-right-pressed.png);/** sprite-ref: black-buttons; sprite-alignment: right */
+}
+
+.uiTest .black .v-button-small, .uiTest .black .v-disabled.v-button-small {
+	background-image: url(../reindeer/button/img/black/small-left.png);/** sprite-ref: black-buttons */
+}
+
+.uiTest .black .v-button-small .v-button-wrap, .uiTest .black .v-disabled.v-button-small .v-button-wrap {
+	background-image: url(../reindeer/button/img/black/small-right.png);/** sprite-ref: black-buttons; sprite-alignment: right */
+}
+
+.uiTest .v-button.v-button-link, .uiTest .v-button.v-button-link:focus, .uiTest .v-button.v-button-link:active, .uiTest .v-button-link.v-pressed, .uiTest .v-disabled.v-button.v-button-link, .uiTest .v-button.v-button-link .v-button-wrap, .uiTest .v-button.v-button-link:focus .v-button-wrap, .uiTest .v-button.v-button-link:active .v-button-wrap, .uiTest .v-button-link.v-pressed .v-button-wrap, .uiTest .v-disabled.v-button.v-button-link .v-button-wrap {
+	background: transparent;
+	height: auto;
+	padding: 0;
+	cursor: pointer;
+	line-height: inherit;
+}
+
+.uiTest .v-button.v-button-link.v-disabled, .uiTest .v-button.v-button-link.v-disabled .v-button-wrap {
+	cursor: default;
+}
+
+.uiTest .v-button-link .v-button-caption {
+	line-height: inherit;
+	font-weight: normal;
+	color: #1b699f;
+	font-size: 12px;
+	text-shadow: none;
+}
+
+.uiTest .v-button-link:focus .v-button-caption {
+	outline: 1px dotted #1b699f;
+}
+
+.uiTest .v-nativebutton-link .v-nativebutton-caption {
+	line-height: inherit;
+	font-weight: normal;
+	color: #1b699f;
+	font-size: 12px;
+	text-shadow: none;
+}
+
+.uiTest .v-nativebutton-link:focus .v-nativebutton-caption {
+	outline: 1px dotted #1b699f;
+}
+
+.v-ie8 .uiTest .v-nativebutton-link {
+	padding: 0;
+	text-align: left;
+}
+
+.uiTest .v-colorpicker-popup {
+	width: 246px;
+}
+
+.uiTest .v-colorpicker-popup .v-tabsheet .v-colorpicker-grid {
+	height: 284px;
+}
+
+.uiTest .v-colorpicker-popup .v-filterselect {
+	padding-right: 25px;
+}
+
+.uiTest.v-app {
+	background: #f5f5f5;
+}
+
+.uiTest.v-app, .uiTest .v-window, .uiTest .v-popupview-popup, .uiTest .v-tooltip, .uiTest.v-app input, .uiTest.v-app select, .uiTest.v-app button, .uiTest.v-app textarea, .uiTest .v-window input, .uiTest .v-window select, .uiTest .v-window button, .uiTest .v-window textarea, .uiTest .v-popupview-popup input, .uiTest .v-popupview-popup select, .uiTest .v-popupview-popup button, .uiTest .v-popupview-popup textarea, .uiTest .v-filterselect-suggestpopup, .uiTest .v-datefield-popup, .uiTest .v-contextmenu, .uiTest .v-Notification, .uiTest .v-menubar-submenu, .uiTest .v-drag-element, .uiTest .v-table-header-drag {
+	font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
+	font-size: 12px;
+	line-height: normal;
+	color: #222;
+}
+
+.uiTest.v-app .black, .uiTest .v-window-black, .uiTest .v-window .black, .uiTest .v-popupview-popup .black {
+	color: #c9ccce;
+	text-shadow: #000 0 0 1px;
+}
+
+.uiTest .v-errorindicator {
+	width: 13px;
+	height: 15px;
+	background: transparent url(../reindeer/common/icons/error.png) no-repeat 50%;
+}
+
+.uiTest .v-tooltip {
+	background-color: #fffcdd;
+	border: 1px solid #b8b295;
+	font-size: 11px;
+	color: #222;
+}
+
+.uiTest .v-tooltip-text {
+	padding: 2px 4px;
+}
+
+.uiTest .v-tooltip .v-errormessage {
+	padding: 3px 4px;
+	background: #ffecc6;
+	color: #b74100;
+	border: none;
+	border-top: 1px solid #fff3dc;
+}
+
+.uiTest .v-tooltip .v-errormessage h2 {
+	font-size: 16px;
+	font-weight: normal;
+	color: #ab3101;
+	margin: 2px 0 8px 0;
+}
+
+.uiTest .v-tooltip .v-errormessage h3 {
+	font-size: 13px;
+	font-weight: bold;
+	margin: 1px 0 4px 0;
+}
+
+.uiTest .v-contextmenu {
+	background: #f8f8f9;
+	border: none;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-o-border-radius: 3px;
+	overflow: hidden;
+	padding: 4px 0;
+}
+
+.uiTest .v-contextmenu .gwt-MenuItem {
+	padding: 1px 12px 1px 8px;
+	height: 16px;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	cursor: default;
+}
+
+.uiTest .v-contextmenu .gwt-MenuItem .v-icon {
+	margin-right: 3px;
+}
+
+.uiTest .v-contextmenu .gwt-MenuItem-selected {
+	background: transparent repeat-x;
+	background-image: url(../reindeer/common/img/sel-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	color: #fff;
+	text-shadow: #3b5a7a 0 1px 0;
+}
+
+.v-ie .uiTest .v-contextmenu .gwt-MenuItem-selected {
+	background-image: url(../reindeer/common/img/sel-bg.png);
+	background-position: left top;
+}
+
+.uiTest .v-contextmenu .gwt-MenuItem-selected div {
+	background: transparent;
+	cursor: default;
+}
+
+.portlet .uiTest.v-app {
+	background: transparent;
+}
+
+.portlet .uiTest.v-app .v-radiobutton input, .uiTest .portlet .v-window .v-radiobutton input, .uiTest .portlet .v-popupview-popup .v-radiobutton input, .portlet .uiTest.v-app .v-checkbox input, .uiTest .portlet .v-window .v-checkbox input, .uiTest .portlet .v-popupview-popup .v-checkbox input {
+	margin-right: 3px;
+	background: transparent;
+}
+
+.uiTest .v-datefield {
+	overflow: hidden;
+}
+
+.uiTest input.v-textfield-readonly:focus {
+	background-color: transparent;
+}
+
+.uiTest .v-datefield-calendarpanel {
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+	height: auto !important;
+}
+
+.uiTest .v-datefield-year .v-datefield-calendarpanel-prevmonth, .uiTest .v-datefield-year .v-datefield-calendarpanel-nextmonth {
+	display: none;
+}
+
+.uiTest .v-datefield-calendarpanel td {
+	vertical-align: top;
+}
+
+.uiTest td.v-datefield-calendarpanel-month {
+	height: 23px;
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/datefield/img/header-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest span.v-datefield-calendarpanel-month {
+	display: block;
+	text-align: center;
+	height: 16px;
+	padding: 3px 10px 0 10px;
+	border-left: 1px solid #efefef;
+	border-right: 1px solid #d8d8d8;
+	text-shadow: #fff 0 1px 0;
+	overflow: hidden;
+	margin-top: 1px;
+}
+
+.uiTest .v-datefield-year .v-datefield-calendarpanel-month {
+	width: 35px;
+}
+
+.uiTest .v-datefield-month .v-datefield-calendarpanel-month, .uiTest .v-datefield-day .v-datefield-calendarpanel-month, .uiTest .v-datefield-full .v-datefield-calendarpanel-month {
+	width: 124px;
+}
+
+.uiTest .v-datefield-month, .uiTest .v-datefield-day, .uiTest .v-datefield-full {
+	min-width: 240px;
+}
+
+.uiTest .v-datefield-popupcalendar {
+	min-width: 0;
+	padding-right: 24px;
+}
+
+.uiTest .v-datefield-year .v-datefield-calendarpanel {
+	width: 100px;
+}
+
+.uiTest td.v-datefield-calendarpanel-prevyear {
+	text-align: right;
+}
+
+.uiTest td.v-datefield-calendarpanel-nextyear {
+	text-align: left;
+}
+
+.uiTest .v-datefield-calendarpanel-prevyear button, .uiTest .v-datefield-calendarpanel-nextyear button, .uiTest .v-datefield-calendarpanel-prevmonth button, .uiTest .v-datefield-calendarpanel-nextmonth button {
+	width: 24px;
+	height: 23px;
+	border: none;
+	background: transparent;
+	background-repeat: no-repeat;
+	background-image: url(../reindeer/datefield/img/year-prev.png);/** sprite-ref: verticals */
+	overflow: hidden;
+	padding: 0;
+	text-indent: -9999px;
+	outline: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+
+.v-ie .uiTest .v-datefield-calendarpanel-prevyear button, .v-ie .uiTest .v-datefield-calendarpanel-nextyear button, .v-ie .uiTest .v-datefield-calendarpanel-prevmonth button, .v-ie .uiTest .v-datefield-calendarpanel-nextmonth button {
+	text-indent: 0;
+	font-size: 1px;
+}
+
+.uiTest .v-datefield-calendarpanel-nextyear button {
+	background-position: left top;
+	background-image: url(../reindeer/datefield/img/year-next.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-datefield-calendarpanel-prevyear button:active, .v-ie .uiTest .v-datefield-calendarpanel-prevyear button.v-pressed {
+	background-image: url(../reindeer/datefield/img/year-prev-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-datefield-calendarpanel-nextyear button:active, .v-ie .uiTest .v-datefield-calendarpanel-nextyear button.v-pressed {
+	background-image: url(../reindeer/datefield/img/year-next-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-datefield-calendarpanel-prevmonth, .uiTest .v-datefield-calendarpanel-nextmonth {
+	width: 24px;
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/datefield/img/header-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest .v-datefield-calendarpanel-prevmonth button, .uiTest .v-datefield-calendarpanel-nextmonth button {
+	width: 100%;
+	height: 21px;
+	border-left: 1px solid #efefef;
+	border-right: 1px solid #d8d8d8;
+	background: transparent;
+	background-position: center top;
+	background-image: url(../reindeer/datefield/img/month-prev.png);/** sprite-ref: verticals; sprite-alignment: center */
+	min-width: 24px;
+	margin-top: 1px;
+}
+
+.v-ie .uiTest .v-datefield-calendarpanel-prevmonth button, .v-ie .uiTest .v-datefield-calendarpanel-nextmonth button {
+	border: none;
+}
+
+.uiTest .v-datefield-calendarpanel-nextmonth button {
+	background-image: url(../reindeer/datefield/img/month-next.png);/** sprite-ref: verticals; sprite-alignment: center */
+}
+
+.uiTest .v-datefield-calendarpanel-prevmonth button:active, .v-ie .uiTest .v-datefield-calendarpanel-prevmonth button.v-pressed {
+	background-position: center top;
+	background-image: url(../reindeer/datefield/img/month-prev-pressed.png);/** sprite-ref: verticals; sprite-alignment: center */
+}
+
+.uiTest .v-datefield-calendarpanel-nextmonth button:active, .v-ie .uiTest .v-datefield-calendarpanel-nextmonth button.v-pressed {
+	background-position: center top;
+	background-image: url(../reindeer/datefield/img/month-next-pressed.png);/** sprite-ref: verticals; sprite-alignment: center */
+}
+
+.uiTest .v-datefield-calendarpanel-body, .uiTest .v-datefield-calendarpanel-time {
+	text-align: center;
+	vertical-align: top;
+}
+
+.uiTest .v-datefield-calendarpanel-body table {
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+	width: 220px;
+	margin: 0 auto;
+}
+
+.uiTest .v-datefield-calendarpanel-weekdays td {
+	width: 14.2%;
+	overflow: hidden;
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/datefield/img/weekday-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat; sprite-margin-bottom: 3px */
+	font-size: 10px;
+	line-height: normal;
+	text-transform: uppercase;
+	color: #eaeff1;
+	text-shadow: #3b4651 0 -1px 0;
+	vertical-align: top;
+	padding: 0;
+}
+
+.uiTest .v-datefield-calendarpanel-weeknumbers td {
+	width: 12.4%;
+}
+
+.uiTest .v-datefield-calendarpanel-weekdays strong {
+	display: block;
+	text-align: right;
+	padding: 1px 5px 0 0;
+	height: 14px;
+	border-top: 1px solid #596775;
+}
+
+.uiTest .v-datefield-calendarpanel-weekdays .v-first {
+	background-repeat: no-repeat;
+	background-image: url(../reindeer/datefield/img/weekday-first.png);/** sprite-ref: verticals; sprite-margin-bottom: 3px */
+}
+
+.uiTest .v-datefield-calendarpanel-weekdays .v-last {
+	background-repeat: no-repeat;
+	background-position: right top;
+	background-image: url(../reindeer/datefield/img/weekday-last.png);/** sprite-ref: verticals; sprite-alignment: right; sprite-margin-bottom: 3px */
+}
+
+.v-ie .uiTest .v-datefield-calendarpanel-weekdays td {
+	background: url(../reindeer/datefield/img/weekday-bg.png) repeat-x;
+	background-position: left top;
+}
+
+.v-ie .uiTest .v-datefield-calendarpanel .v-first {
+	background: url(../reindeer/datefield/img/weekday-first.png) no-repeat;
+}
+
+.v-ie .uiTest .v-datefield-calendarpanel .v-last {
+	background: url(../reindeer/datefield/img/weekday-last.png) no-repeat right top;
+}
+
+.uiTest .v-datefield-calendarpanel-body td {
+	text-align: right;
+	height: 19px;
+}
+
+.uiTest .v-datefield-calendarpanel-day, .uiTest .v-datefield-calendarpanel-weeknumber, .uiTest .v-datefield-calendarpanel-day-today {
+	padding: 2px 5px 2px 0;
+	display: block;
+	margin: 1px 0 0 5px;
+}
+
+.uiTest .v-datefield-calendarpanel-weeknumber {
+	margin: 0;
+	padding-top: 4px;
+	padding-bottom: 3px;
+	font-size: 10.8px;
+}
+
+.uiTest .v-datefield-calendarpanel-day-today {
+	color: #4095d1;
+	border: none;
+}
+
+.uiTest .v-datefield-calendarpanel-day-selected {
+	background: #507ba3;
+	color: #fff;
+	text-shadow: #3b5b79 0 1px 0;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+
+.uiTest .v-datefield-calendarpanel-time select {
+	padding: 0;
+	font-size: 11px;
+	margin: 2px;
+}
+
+.uiTest .v-datefield-popup {
+	background: #f8f8f9;
+	padding: 8px 4px;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+.v-sa .uiTest .v-datefield-popup, .v-op .uiTest .v-datefield-popup {
+	background: rgba(255, 255, 255, 0.95);
+}
+
+.uiTest .v-datefield-year > .v-datefield-textfield {
+	width: 4.5em;
+}
+
+.uiTest .v-datefield-month > .v-datefield-textfield {
+	width: 5.5em;
+}
+
+.uiTest .v-datefield-day > .v-datefield-textfield {
+	width: 6em;
+}
+
+.uiTest .v-datefield-full > .v-datefield-textfield {
+	width: 12.5em;
+}
+
+.uiTest .v-datefield-popupcalendar input.v-datefield-textfield {
+	border-right-width: 0;
+	-moz-border-radius-topright: 0;
+	-moz-border-radius-bottomright: 0;
+	-webkit-border-top-right-radius: 0;
+	-webkit-border-bottom-right-radius: 0;
+	height: 23px;
+}
+
+.uiTest .v-datefield.v-readonly input.v-datefield-textfield {
+	border-right-width: 1px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+.uiTest .v-datefield-prompt .v-datefield-textfield {
+	color: #999;
+	font-style: normal;
+}
+
+.uiTest .v-datefield-popupcalendar .v-datefield-button {
+	width: 24px;
+	margin-right: -24px;
+	height: 23px;
+	background: transparent;
+	border: none;
+	padding: 0;
+	background-image: url(../reindeer/datefield/img/popup-btn.png);/** sprite-ref: verticals */
+	cursor: pointer;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+
+.uiTest .v-datefield-popupcalendar .v-datefield-button:active {
+	background-image: url(../reindeer/datefield/img/popup-btn-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .black .v-datefield-popupcalendar .v-datefield-button {
+	background-image: url(../reindeer/datefield/img/popup-btn-black.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black .v-datefield-popupcalendar .v-datefield-button:active {
+	background-image: url(../reindeer/datefield/img/popup-btn-black-pressed.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black td.v-datefield-calendarpanel-month {
+	background-image: url(../reindeer/datefield/img/header-bg-black.png);/** sprite-ref: black-verticals; sprite-alignment: repeat */
+	height: 21px;
+}
+
+.uiTest .black span.v-datefield-calendarpanel-month {
+	border-left: 1px solid #333638;
+	border-right: 1px solid #232527;
+	color: #c9ccce;
+	text-shadow: #000 0 -1px 0;
+	padding: 4px 10px 1px 10px;
+	margin-top: 0;
+}
+
+.uiTest .black .v-datefield-calendarpanel-prevyear button, .uiTest .black .v-datefield-calendarpanel-nextyear button, .uiTest .black .v-datefield-calendarpanel-prevmonth button, .uiTest .black .v-datefield-calendarpanel-nextmonth button {
+	background-image: url(../reindeer/datefield/img/year-prev-black.png);/** sprite-ref: black-verticals */
+	height: 21px;
+}
+
+.uiTest .black .v-datefield-calendarpanel-nextyear button {
+	background-image: url(../reindeer/datefield/img/year-next-black.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black .v-datefield-calendarpanel-prevyear button:active, .v-ie .uiTest .black .v-datefield-calendarpanel-prevyear button.v-pressed {
+	background-image: url(../reindeer/datefield/img/year-prev-black-pressed.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black .v-datefield-calendarpanel-nextyear button:active, .v-ie .uiTest .black .v-datefield-calendarpanel-nextyear button.v-pressed {
+	background-image: url(../reindeer/datefield/img/year-next-black-pressed.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black .v-datefield-calendarpanel-prevmonth, .uiTest .black .v-datefield-calendarpanel-nextmonth {
+	background-image: url(../reindeer/datefield/img/header-bg-black.png);/** sprite-ref: black-verticals; sprite-alignment: repeat */
+}
+
+.uiTest .black .v-datefield-calendarpanel-prevmonth button, .uiTest .black .v-datefield-calendarpanel-nextmonth button {
+	border-left: 1px solid #333638;
+	border-right: 1px solid #232527;
+	background-image: url(../reindeer/datefield/img/month-prev-black.png);/** sprite-ref: black-verticals; sprite-alignment: center */
+	margin-top: 0;
+}
+
+.uiTest .black .v-datefield-calendarpanel-nextmonth button {
+	background-image: url(../reindeer/datefield/img/month-next-black.png);/** sprite-ref: black-verticals; sprite-alignment: center */
+}
+
+.uiTest .black .v-datefield-calendarpanel-prevmonth button:active, .v-ie .uiTest .black .v-datefield-calendarpanel-prevmonth button.v-pressed {
+	background-image: url(../reindeer/datefield/img/month-prev-black-pressed.png);/** sprite-ref: black-verticals; sprite-alignment: center */
+}
+
+.uiTest .black .v-datefield-calendarpanel-nextmonth button:active, .v-ie .uiTest .black .v-datefield-calendarpanel-nextmonth button.v-pressed {
+	background-image: url(../reindeer/datefield/img/month-next-black-pressed.png);/** sprite-ref: black-verticals; sprite-alignment: center */
+}
+
+.v-ie .uiTest .black .v-datefield-calendarpanel-prevmonth button, .v-ie .uiTest .black .v-datefield-calendarpanel-nextmonth button {
+	border: none;
+}
+
+.uiTest .black .v-datefield-calendarpanel-weekdays td {
+	background-image: url(../reindeer/datefield/img/weekday-bg-black.png);/** sprite-ref: black-verticals; sprite-alignment: repeat; sprite-margin-bottom: 3px */
+	color: #0a0b0b;
+	text-shadow: #5a5c5e 0 1px 0;
+}
+
+.uiTest .black .v-datefield-calendarpanel-weekdays strong {
+	border-top-color: #1b1c1d;
+}
+
+.uiTest .black .v-datefield-calendarpanel .v-first {
+	background-image: url(../reindeer/datefield/img/weekday-first-black.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 3px */
+}
+
+.uiTest .black .v-datefield-calendarpanel .v-last {
+	background-image: url(../reindeer/datefield/img/weekday-last-black.png);/** sprite-ref: black-verticals; sprite-alignment: right */
+}
+
+.uiTest .black .v-datefield-prompt .v-datefield-textfield {
+	color: #5f6366;
+}
+
+.uiTest .v-inline-datefield {
+	overflow: hidden;
+}
+
+.uiTest input.v-textfield-readonly:focus {
+	background-color: transparent;
+}
+
+.uiTest .v-inline-datefield-calendarpanel {
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+	height: auto !important;
+}
+
+.uiTest .v-inline-datefield-year .v-inline-datefield-calendarpanel-prevmonth, .uiTest .v-inline-datefield-year .v-inline-datefield-calendarpanel-nextmonth {
+	display: none;
+}
+
+.uiTest .v-inline-datefield-calendarpanel td {
+	vertical-align: top;
+}
+
+.uiTest td.v-inline-datefield-calendarpanel-month {
+	height: 23px;
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/datefield/img/header-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest span.v-inline-datefield-calendarpanel-month {
+	display: block;
+	text-align: center;
+	height: 16px;
+	padding: 3px 10px 0 10px;
+	border-left: 1px solid #efefef;
+	border-right: 1px solid #d8d8d8;
+	text-shadow: #fff 0 1px 0;
+	overflow: hidden;
+	margin-top: 1px;
+}
+
+.uiTest .v-inline-datefield-year .v-inline-datefield-calendarpanel-month {
+	width: 35px;
+}
+
+.uiTest .v-inline-datefield-month .v-inline-datefield-calendarpanel-month, .uiTest .v-inline-datefield-day .v-inline-datefield-calendarpanel-month, .uiTest .v-inline-datefield-full .v-inline-datefield-calendarpanel-month {
+	width: 124px;
+}
+
+.uiTest .v-inline-datefield-month, .uiTest .v-inline-datefield-day, .uiTest .v-inline-datefield-full {
+	min-width: 240px;
+}
+
+.uiTest .v-inline-datefield-popupcalendar {
+	min-width: 0;
+	padding-right: 24px;
+}
+
+.uiTest .v-inline-datefield-year .v-inline-datefield-calendarpanel {
+	width: 100px;
+}
+
+.uiTest td.v-inline-datefield-calendarpanel-prevyear {
+	text-align: right;
+}
+
+.uiTest td.v-inline-datefield-calendarpanel-nextyear {
+	text-align: left;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-prevyear button, .uiTest .v-inline-datefield-calendarpanel-nextyear button, .uiTest .v-inline-datefield-calendarpanel-prevmonth button, .uiTest .v-inline-datefield-calendarpanel-nextmonth button {
+	width: 24px;
+	height: 23px;
+	border: none;
+	background: transparent;
+	background-repeat: no-repeat;
+	background-image: url(../reindeer/datefield/img/year-prev.png);/** sprite-ref: verticals */
+	overflow: hidden;
+	padding: 0;
+	text-indent: -9999px;
+	outline: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+
+.v-ie .uiTest .v-inline-datefield-calendarpanel-prevyear button, .v-ie .uiTest .v-inline-datefield-calendarpanel-nextyear button, .v-ie .uiTest .v-inline-datefield-calendarpanel-prevmonth button, .v-ie .uiTest .v-inline-datefield-calendarpanel-nextmonth button {
+	text-indent: 0;
+	font-size: 1px;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-nextyear button {
+	background-position: left top;
+	background-image: url(../reindeer/datefield/img/year-next.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-inline-datefield-calendarpanel-prevyear button:active, .v-ie .uiTest .v-inline-datefield-calendarpanel-prevyear button.v-pressed {
+	background-image: url(../reindeer/datefield/img/year-prev-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-inline-datefield-calendarpanel-nextyear button:active, .v-ie .uiTest .v-inline-datefield-calendarpanel-nextyear button.v-pressed {
+	background-image: url(../reindeer/datefield/img/year-next-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-inline-datefield-calendarpanel-prevmonth, .uiTest .v-inline-datefield-calendarpanel-nextmonth {
+	width: 24px;
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/datefield/img/header-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest .v-inline-datefield-calendarpanel-prevmonth button, .uiTest .v-inline-datefield-calendarpanel-nextmonth button {
+	width: 100%;
+	height: 21px;
+	border-left: 1px solid #efefef;
+	border-right: 1px solid #d8d8d8;
+	background: transparent;
+	background-position: center top;
+	background-image: url(../reindeer/datefield/img/month-prev.png);/** sprite-ref: verticals; sprite-alignment: center */
+	min-width: 24px;
+	margin-top: 1px;
+}
+
+.v-ie .uiTest .v-inline-datefield-calendarpanel-prevmonth button, .v-ie .uiTest .v-inline-datefield-calendarpanel-nextmonth button {
+	border: none;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-nextmonth button {
+	background-image: url(../reindeer/datefield/img/month-next.png);/** sprite-ref: verticals; sprite-alignment: center */
+}
+
+.uiTest .v-inline-datefield-calendarpanel-prevmonth button:active, .v-ie .uiTest .v-inline-datefield-calendarpanel-prevmonth button.v-pressed {
+	background-position: center top;
+	background-image: url(../reindeer/datefield/img/month-prev-pressed.png);/** sprite-ref: verticals; sprite-alignment: center */
+}
+
+.uiTest .v-inline-datefield-calendarpanel-nextmonth button:active, .v-ie .uiTest .v-inline-datefield-calendarpanel-nextmonth button.v-pressed {
+	background-position: center top;
+	background-image: url(../reindeer/datefield/img/month-next-pressed.png);/** sprite-ref: verticals; sprite-alignment: center */
+}
+
+.uiTest .v-inline-datefield-calendarpanel-body, .uiTest .v-inline-datefield-calendarpanel-time {
+	text-align: center;
+	vertical-align: top;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-body table {
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+	width: 220px;
+	margin: 0 auto;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-weekdays td {
+	width: 14.2%;
+	overflow: hidden;
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/datefield/img/weekday-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat; sprite-margin-bottom: 3px */
+	font-size: 10px;
+	line-height: normal;
+	text-transform: uppercase;
+	color: #eaeff1;
+	text-shadow: #3b4651 0 -1px 0;
+	vertical-align: top;
+	padding: 0;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-weeknumbers td {
+	width: 12.4%;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-weekdays strong {
+	display: block;
+	text-align: right;
+	padding: 1px 5px 0 0;
+	height: 14px;
+	border-top: 1px solid #596775;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-weekdays .v-first {
+	background-repeat: no-repeat;
+	background-image: url(../reindeer/datefield/img/weekday-first.png);/** sprite-ref: verticals; sprite-margin-bottom: 3px */
+}
+
+.uiTest .v-inline-datefield-calendarpanel-weekdays .v-last {
+	background-repeat: no-repeat;
+	background-position: right top;
+	background-image: url(../reindeer/datefield/img/weekday-last.png);/** sprite-ref: verticals; sprite-alignment: right; sprite-margin-bottom: 3px */
+}
+
+.v-ie .uiTest .v-inline-datefield-calendarpanel-weekdays td {
+	background: url(../reindeer/datefield/img/weekday-bg.png) repeat-x;
+	background-position: left top;
+}
+
+.v-ie .uiTest .v-inline-datefield-calendarpanel .v-first {
+	background: url(../reindeer/datefield/img/weekday-first.png) no-repeat;
+}
+
+.v-ie .uiTest .v-inline-datefield-calendarpanel .v-last {
+	background: url(../reindeer/datefield/img/weekday-last.png) no-repeat right top;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-body td {
+	text-align: right;
+	height: 19px;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-day, .uiTest .v-inline-datefield-calendarpanel-weeknumber, .uiTest .v-inline-datefield-calendarpanel-day-today {
+	padding: 2px 5px 2px 0;
+	display: block;
+	margin: 1px 0 0 5px;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-weeknumber {
+	margin: 0;
+	padding-top: 4px;
+	padding-bottom: 3px;
+	font-size: 10.8px;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-day-today {
+	color: #4095d1;
+	border: none;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-day-selected {
+	background: #507ba3;
+	color: #fff;
+	text-shadow: #3b5b79 0 1px 0;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+
+.uiTest .v-inline-datefield-calendarpanel-time select {
+	padding: 0;
+	font-size: 11px;
+	margin: 2px;
+}
+
+.uiTest .v-inline-datefield-popup {
+	background: #f8f8f9;
+	padding: 8px 4px;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+.v-sa .uiTest .v-inline-datefield-popup, .v-op .uiTest .v-inline-datefield-popup {
+	background: rgba(255, 255, 255, 0.95);
+}
+
+.uiTest .v-inline-datefield-year > .v-inline-datefield-textfield {
+	width: 4.5em;
+}
+
+.uiTest .v-inline-datefield-month > .v-inline-datefield-textfield {
+	width: 5.5em;
+}
+
+.uiTest .v-inline-datefield-day > .v-inline-datefield-textfield {
+	width: 6em;
+}
+
+.uiTest .v-inline-datefield-full > .v-inline-datefield-textfield {
+	width: 12.5em;
+}
+
+.uiTest .v-inline-datefield-popupcalendar input.v-inline-datefield-textfield {
+	border-right-width: 0;
+	-moz-border-radius-topright: 0;
+	-moz-border-radius-bottomright: 0;
+	-webkit-border-top-right-radius: 0;
+	-webkit-border-bottom-right-radius: 0;
+	height: 23px;
+}
+
+.uiTest .v-inline-datefield.v-readonly input.v-inline-datefield-textfield {
+	border-right-width: 1px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+.uiTest .v-inline-datefield-prompt .v-inline-datefield-textfield {
+	color: #999;
+	font-style: normal;
+}
+
+.uiTest .v-inline-datefield-popupcalendar .v-inline-datefield-button {
+	width: 24px;
+	margin-right: -24px;
+	height: 23px;
+	background: transparent;
+	border: none;
+	padding: 0;
+	background-image: url(../reindeer/datefield/img/popup-btn.png);/** sprite-ref: verticals */
+	cursor: pointer;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+
+.uiTest .v-inline-datefield-popupcalendar .v-inline-datefield-button:active {
+	background-image: url(../reindeer/datefield/img/popup-btn-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .black .v-inline-datefield-popupcalendar .v-inline-datefield-button {
+	background-image: url(../reindeer/datefield/img/popup-btn-black.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black .v-inline-datefield-popupcalendar .v-inline-datefield-button:active {
+	background-image: url(../reindeer/datefield/img/popup-btn-black-pressed.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black td.v-inline-datefield-calendarpanel-month {
+	background-image: url(../reindeer/datefield/img/header-bg-black.png);/** sprite-ref: black-verticals; sprite-alignment: repeat */
+	height: 21px;
+}
+
+.uiTest .black span.v-inline-datefield-calendarpanel-month {
+	border-left: 1px solid #333638;
+	border-right: 1px solid #232527;
+	color: #c9ccce;
+	text-shadow: #000 0 -1px 0;
+	padding: 4px 10px 1px 10px;
+	margin-top: 0;
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel-prevyear button, .uiTest .black .v-inline-datefield-calendarpanel-nextyear button, .uiTest .black .v-inline-datefield-calendarpanel-prevmonth button, .uiTest .black .v-inline-datefield-calendarpanel-nextmonth button {
+	background-image: url(../reindeer/datefield/img/year-prev-black.png);/** sprite-ref: black-verticals */
+	height: 21px;
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel-nextyear button {
+	background-image: url(../reindeer/datefield/img/year-next-black.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel-prevyear button:active, .v-ie .uiTest .black .v-inline-datefield-calendarpanel-prevyear button.v-pressed {
+	background-image: url(../reindeer/datefield/img/year-prev-black-pressed.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel-nextyear button:active, .v-ie .uiTest .black .v-inline-datefield-calendarpanel-nextyear button.v-pressed {
+	background-image: url(../reindeer/datefield/img/year-next-black-pressed.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel-prevmonth, .uiTest .black .v-inline-datefield-calendarpanel-nextmonth {
+	background-image: url(../reindeer/datefield/img/header-bg-black.png);/** sprite-ref: black-verticals; sprite-alignment: repeat */
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel-prevmonth button, .uiTest .black .v-inline-datefield-calendarpanel-nextmonth button {
+	border-left: 1px solid #333638;
+	border-right: 1px solid #232527;
+	background-image: url(../reindeer/datefield/img/month-prev-black.png);/** sprite-ref: black-verticals; sprite-alignment: center */
+	margin-top: 0;
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel-nextmonth button {
+	background-image: url(../reindeer/datefield/img/month-next-black.png);/** sprite-ref: black-verticals; sprite-alignment: center */
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel-prevmonth button:active, .v-ie .uiTest .black .v-inline-datefield-calendarpanel-prevmonth button.v-pressed {
+	background-image: url(../reindeer/datefield/img/month-prev-black-pressed.png);/** sprite-ref: black-verticals; sprite-alignment: center */
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel-nextmonth button:active, .v-ie .uiTest .black .v-inline-datefield-calendarpanel-nextmonth button.v-pressed {
+	background-image: url(../reindeer/datefield/img/month-next-black-pressed.png);/** sprite-ref: black-verticals; sprite-alignment: center */
+}
+
+.v-ie .uiTest .black .v-inline-datefield-calendarpanel-prevmonth button, .v-ie .uiTest .black .v-inline-datefield-calendarpanel-nextmonth button {
+	border: none;
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel-weekdays td {
+	background-image: url(../reindeer/datefield/img/weekday-bg-black.png);/** sprite-ref: black-verticals; sprite-alignment: repeat; sprite-margin-bottom: 3px */
+	color: #0a0b0b;
+	text-shadow: #5a5c5e 0 1px 0;
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel-weekdays strong {
+	border-top-color: #1b1c1d;
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel .v-first {
+	background-image: url(../reindeer/datefield/img/weekday-first-black.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 3px */
+}
+
+.uiTest .black .v-inline-datefield-calendarpanel .v-last {
+	background-image: url(../reindeer/datefield/img/weekday-last-black.png);/** sprite-ref: black-verticals; sprite-alignment: right */
+}
+
+.uiTest .black .v-inline-datefield-prompt .v-inline-datefield-textfield {
+	color: #5f6366;
+}
+
+.uiTest .v-inline-datefield {
+	line-height: 14px;
+}
+
+.uiTest .v-formlayout-errorcell {
+	width: 13px;
+}
+
+.uiTest .v-formlayout-cell .v-errorindicator {
+	width: 13px;
+	height: 16px;
+	background: transparent url(../reindeer/common/icons/error.png) no-repeat 50%;
+}
+
+.uiTest .v-formlayout-captioncell {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.uiTest .v-formlayout-spacing > tbody > .v-formlayout-row > .v-formlayout-captioncell, .uiTest .v-formlayout-spacing > tbody > .v-formlayout-row > .v-formlayout-contentcell, .uiTest .v-formlayout-spacing > tbody > .v-formlayout-row > .v-formlayout-errorcell {
+	padding-top: 8px;
+}
+
+.uiTest .v-formlayout-margin-top > tbody > .v-formlayout-firstrow > .v-formlayout-captioncell, .uiTest .v-formlayout-margin-top > tbody > .v-formlayout-firstrow > .v-formlayout-contentcell, .uiTest .v-formlayout-margin-top > tbody > .v-formlayout-firstrow > .v-formlayout-errorcell {
+	padding-top: 15px;
+}
+
+.uiTest .v-formlayout-margin-bottom > tbody > .v-formlayout-lastrow > .v-formlayout-captioncell, .uiTest .v-formlayout-margin-bottom > tbody > .v-formlayout-lastrow > .v-formlayout-contentcell, .uiTest .v-formlayout-margin-bottom > tbody > .v-formlayout-lastrow > .v-formlayout-errorcell {
+	padding-bottom: 15px;
+}
+
+.uiTest .v-formlayout-margin-left > tbody > .v-formlayout-row > .v-formlayout-captioncell {
+	padding-left: 18px;
+}
+
+.uiTest .v-formlayout-margin-right > tbody > .v-formlayout-row > .v-formlayout-contentcell {
+	padding-right: 18px;
+}
+
+.uiTest .v-form-errormessage {
+	background: transparent url(../reindeer/common/icons/error.png) no-repeat 3px 2px;
+	padding-left: 20px;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	min-height: 20px;
+}
+
+.uiTest .v-form fieldset {
+	border: none;
+	border-top: 1px solid #babfc0;
+}
+
+.uiTest .v-form-nocaption fieldset {
+	border: none;
+}
+
+.uiTest .v-form-nocaption legend {
+	display: none;
+}
+
+.uiTest .v-form legend {
+	margin: 0 0 0 20px;
+	padding: 0 5px;
+	font-weight: bold;
+	color: #222;
+}
+
+.uiTest .black .v-form legend {
+	color: #e3e6e8;
+}
+
+.uiTest .v-label {
+	line-height: 18px;
+}
+
+.uiTest .white .black, .uiTest .blue .black {
+	color: #C9CCCE;
+	text-shadow: 0 0 1px #000;
+}
+
+.uiTest .black .v-label-h1, .uiTest .black .v-label-h2, .uiTest .black .v-caption-h1, .uiTest .black .v-caption-h2, .uiTest .white .black .v-label-h1, .uiTest .white .black .v-label-h2, .uiTest .white .black .v-caption-h1, .uiTest .white .black .v-caption-h2, .uiTest .blue .black .v-label-h1, .uiTest .blue .black .v-label-h2, .uiTest .blue .black .v-caption-h1, .uiTest .blue .black .v-caption-h2 {
+	color: #fff;
+	text-shadow: rgba(0, 0, 0, 0.8) 0 2px 2px;
+}
+
+.uiTest .black .v-label-light, .uiTest .white .black .v-label-light {
+	color: #72787c;
+}
+
+.uiTest .black .v-label hr, .uiTest .white .black .v-label hr {
+	background: #0c0d0e;
+	color: #0c0d0e;
+	border-bottom-color: #292b2e;
+}
+
+.uiTest.v-app .white, .uiTest .v-window .white, .uiTest.v-app .blue, .uiTest .v-window .blue {
+	color: #222;
+	text-shadow: none;
+}
+
+.uiTest .blue .v-label-h1, .uiTest .blue .v-label-h2, .uiTest .blue .v-caption-h1, .uiTest .blue .v-caption-h2, .uiTest .white .blue .v-label-h1, .uiTest .white .blue .v-label-h2, .uiTest .white .blue .v-caption-h1, .uiTest .white .blue .v-caption-h2 {
+	color: #fff;
+	text-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px;
+}
+
+.uiTest .blue .v-label-light, .uiTest .white .blue .v-label-light {
+	color: #6e7c83;
+}
+
+.uiTest .blue .v-label hr, .uiTest .white .blue .v-label hr {
+	background: #a3bcc9;
+	color: #a3bcc9;
+	border-bottom-color: #cfe2eb;
+}
+
+.uiTest .v-label-h1, .uiTest .v-label-h2, .uiTest .v-caption-h1, .uiTest .v-caption-h2, .uiTest .white .v-label-h1, .uiTest .white .v-label-h2, .uiTest .white .v-caption-h1, .uiTest .white .v-caption-h2 {
+	font-family: Helvetica, Arial, "Lucida Grande", Geneva, Tahoma, Verdana, sans-serif;
+	font-size: 24px;
+	line-height: 30px;
+	font-weight: bold;
+	color: #44698b;
+	letter-spacing: -0.02em;
+	text-shadow: #fff 0 -1px 1px;
+}
+
+.uiTest .v-label-h2, .uiTest .v-caption-h2, .uiTest .white .v-label-h2, .uiTest .white .v-caption-h2 {
+	font-size: 16px;
+	line-height: 22px;
+}
+
+.uiTest .v-label-light, .uiTest .white .v-label-light {
+	font-size: 11px;
+	line-height: 13px;
+	color: #707070;
+}
+
+.uiTest .v-label hr, .uiTest .white .v-label hr {
+	height: 2px;
+	overflow: hidden;
+	background: #dcdcdc;
+	color: #dcdcdc;
+	border: none;
+	border-bottom: 1px solid #fff;
+}
+
+.v-sa .uiTest .v-label hr, .v-ie8 .uiTest .v-label hr {
+	height: 1px;
+}
+
+.uiTest .v-table .v-label {
+	line-height: normal;
+}
+
+.uiTest .v-orderedlayout-margin-top, .uiTest .v-horizontallayout-margin-top, .uiTest .v-verticallayout-margin-top, .uiTest .v-layout.v-margin-top {
+	padding-top: 18px;
+}
+
+.uiTest .v-orderedlayout-margin-right, .uiTest .v-horizontallayout-margin-right, .uiTest .v-verticallayout-margin-right, .uiTest .v-layout.v-margin-right {
+	padding-right: 18px;
+}
+
+.uiTest .v-orderedlayout-margin-bottom, .uiTest .v-horizontallayout-margin-bottom, .uiTest .v-verticallayout-margin-bottom, .uiTest .v-layout.v-margin-bottom {
+	padding-bottom: 18px;
+}
+
+.uiTest .v-orderedlayout-margin-left, .uiTest .v-horizontallayout-margin-left, .uiTest .v-verticallayout-margin-left, .uiTest .v-layout.v-margin-left {
+	padding-left: 18px;
+}
+
+.uiTest .v-orderedlayout-spacing-on, .uiTest .v-horizontallayout-spacing-on, .uiTest .v-verticallayout-spacing-on {
+	padding-top: 7px;
+	padding-left: 6px;
+}
+
+.uiTest .v-spacing {
+	height: 7px;
+	width: 6px;
+}
+
+.uiTest .v-verticallayout-blue, .uiTest .v-horizontallayout-blue, .uiTest .v-orderedlayout-blue, .uiTest .v-gridlayout-blue, .uiTest .v-csslayout-blue, .uiTest .v-formlayout-blue, .uiTest .v-splitpanel-vertical-blue, .uiTest .v-splitpanel-horizontal-blue {
+	background-color: #bcd3de;
+}
+
+.uiTest .v-panel-content > div.blue {
+	background-color: #bcd3de;
+}
+
+.uiTest .v-verticallayout-white, .uiTest .v-horizontallayout-white, .uiTest .v-orderedlayout-white, .uiTest .v-gridlayout-white, .uiTest .v-csslayout-white, .uiTest .v-formlayout-white, .uiTest .v-splitpanel-vertical-white, .uiTest .v-splitpanel-horizontal-white {
+	background-color: #fff;
+	color: #222;
+}
+
+.uiTest .v-panel-content > div.white {
+	background-color: #fff;
+	color: #222;
+}
+
+.uiTest .v-verticallayout-black, .uiTest .v-horizontallayout-black, .uiTest .v-orderedlayout-black, .uiTest .v-gridlayout-black, .uiTest .v-csslayout-black, .uiTest .v-formlayout-black, .uiTest .v-splitpanel-vertical-black, .uiTest .v-splitpanel-horizontal-black {
+	background: #1e2022 url(../reindeer/layouts/img/black-bg.png) repeat-x;
+}
+
+.uiTest .v-panel-content > div.black {
+	background: #1e2022 url(../reindeer/layouts/img/black-bg.png) repeat-x;
+}
+
+.uiTest .v-link a:link span {
+	color: #1b699f;
+}
+
+.uiTest .v-link a:visited span {
+	color: #5c7485;
+}
+
+.uiTest .v-link a:hover span {
+	color: #2483c4;
+}
+
+.uiTest .v-menubar {
+	height: 23px;
+	background: #323336 repeat-x;
+	background-image: url(../reindeer/menubar/img/bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	color: #d1d3d6;
+	text-shadow: rgba(0, 0, 0, 0.9) 0 1px 0;
+	padding: 0 8px;
+}
+
+.uiTest .v-menubar .v-menubar-menuitem {
+	padding: 3px 8px;
+	height: 17px;
+	line-height: 16px;
+}
+
+.uiTest .v-menubar .v-menubar-menuitem:hover {
+	color: #fff;
+}
+
+.uiTest .v-menubar-submenu {
+	background: #f8f8f9;
+	border: none;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-o-border-radius: 3px;
+	overflow: hidden;
+	padding: 4px 0;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-menuitem {
+	padding: 1px 26px 1px 10px;
+	line-height: 16px;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-menuitem-caption .v-icon {
+	vertical-align: middle;
+}
+
+.uiTest .v-menubar .v-menubar-menuitem-selected, .uiTest .v-menubar-submenu .v-menubar-menuitem-selected {
+	background: #4d749f repeat-x;
+	background-image: url(../reindeer/common/img/sel-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	color: #fff;
+	text-shadow: 0 1px 0 #3b5a7a;
+}
+
+.uiTest .v-menubar .v-menubar-menuitem-selected {
+	background-image: url(../reindeer/menubar/img/menu-sel-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat; sprite-margin-bottom: 1px  */
+}
+
+.uiTest .v-menubar-submenu .v-menubar-submenu-indicator {
+	background: transparent url(../reindeer/menubar/img/submenu-icon.png) no-repeat right 70%;
+	width: 26px;
+	height: 16px;
+	text-indent: -9999px;
+	font-size: 10.8px;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-menuitem-selected .v-menubar-submenu-indicator {
+	background-image: url(../reindeer/menubar/img/submenu-icon-hover.png);
+}
+
+.uiTest .v-menubar-submenu-check-column .v-menubar-menuitem {
+	padding-left: 6px;
+}
+
+.uiTest .v-menubar-submenu-check-column .v-menubar-menuitem-caption {
+	padding-left: 18px;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-menuitem-checked .v-menubar-menuitem-caption {
+	background: transparent url(../reindeer/menubar/img/checked.png) no-repeat left;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-menuitem-unchecked .v-menubar-menuitem-caption {
+	background: transparent url(../reindeer/menubar/img/unchecked.png) no-repeat left;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-menuitem-selected-checked .v-menubar-menuitem-caption {
+	background: transparent url(../reindeer/menubar/img/checked-selected.png) no-repeat left;
+}
+
+.uiTest .v-menubar-submenu .v-menubar-menuitem-selected-unchecked .v-menubar-menuitem-caption {
+	background: transparent url(../reindeer/menubar/img/unchecked-selected.png) no-repeat left;
+}
+
+.uiTest .v-Notification {
+	color: #fff;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	font-size: 16px;
+	background: #c8ccd0;
+	font-weight: bold;
+}
+
+.v-ie9 .uiTest .v-Notification H1, .v-ie10 .uiTest .v-Notification H1 {
+	font-weight: bold;
+}
+
+.uiTest .v-Notification p {
+	line-height: 1.3;
+}
+
+.uiTest .v-Notification-warning {
+	background: #fdf3b5;
+	color: #ca9a61;
+	border: 3px solid #fee3af;
+}
+
+.uiTest .v-Notification-error {
+	background: #b40000 url(../reindeer/notification/img/error-close.png) no-repeat right top;
+	border: 3px solid #ca3030;
+}
+
+.uiTest .v-Notification-tray {
+	margin: 0 5px 5px 0;
+	background: #3b3c3e;
+	border: 2px solid #585b5c;
+	padding: 0.8em 0.9em;
+}
+
+.uiTest .v-Notification-tray h1 {
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.uiTest .v-Notification-tray p {
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.uiTest .v-Notification-system {
+	background-color: #b40000;
+}
+
+.uiTest .blue .v-panel-caption, .uiTest .blue .v-panel-nocaption, .uiTest .blue .v-panel-content {
+	border-color: #a8bcc5;
+}
+
+.uiTest .v-panel-caption, .uiTest .v-panel-nocaption, .uiTest .white .v-panel-caption, .uiTest .white .v-panel-nocaption {
+	border-bottom: 1px solid #e5e5e5;
+	line-height: 16px;
+}
+
+.v-webkit .uiTest .v-panel-caption, .v-webkit .uiTest .v-panel-nocaption, .v-gecko .uiTest .v-panel-caption, .v-gecko .uiTest .v-panel-nocaption, .v-ie9 .uiTest .v-panel-caption, .v-ie9 .uiTest .v-panel-nocaption, .v-ie10 .uiTest .v-panel-caption, .v-ie10 .uiTest .v-panel-nocaption {
+	border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+.v-webkit .uiTest .v-panel-content, .v-gecko .uiTest .v-panel-content, .v-ie9 .uiTest .v-panel-content, .v-ie10 .uiTest .v-panel-content {
+	border-top-color: rgba(0, 0, 0, 0.07);
+}
+
+.v-webkit .uiTest .v-panel-deco, .v-gecko .uiTest .v-panel-deco, .v-ie9 .uiTest .v-panel-deco, .v-ie10 .uiTest .v-panel-deco {
+	border-top-color: rgba(0, 0, 0, 0.1);
+	background: rgba(0, 0, 0, 0.08);
+}
+
+.uiTest .v-panel-caption {
+	padding-bottom: 2px;
+}
+
+.uiTest .v-panel-content, .uiTest .white .v-panel-content {
+	background: #fff;
+	border: 1px solid #dcdcdc;
+	border-bottom: none;
+	border-top: none;
+}
+
+.uiTest .blue .v-panel-deco {
+	border-color: #92a3ac;
+	background: #adc2cd;
+}
+
+.uiTest .v-panel-deco, .uiTest .white .v-panel-deco {
+	height: 1px;
+	border-top: 1px solid #bebebe;
+	background: #e2e2e2;
+	overflow: hidden;
+}
+
+.uiTest .v-panel-caption .v-errorindicator {
+	height: 16px;
+	width: 13px;
+	background: url(../reindeer/common/icons/error.png) no-repeat 50%;
+	display: inline;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.uiTest .v-panel-light .v-panel-caption-light, .uiTest .v-panel-light .v-panel-nocaption-light {
+	border: none;
+}
+
+.uiTest .v-panel-light .v-panel-content-light {
+	border: none;
+	background: transparent;
+}
+
+.uiTest .v-panel-light .v-panel-deco-light {
+	height: 0;
+	border: none;
+}
+
+.uiTest .v-popupview {
+	color: #1b699f;
+}
+
+.uiTest .v-popupview:hover {
+	color: #2483c4;
+}
+
+.uiTest .v-popupview-popup {
+	background: #fff;
+	padding: 3px;
+}
+
+.uiTest .v-progressbar-wrapper {
+	background: #dfe2e4 url(../reindeer/progressindicator/img/base.gif) repeat-x;
+	border: 1px solid #bfbfbf;
+}
+
+.uiTest .v-disabled .v-progressbar-wrapper {
+	background-image: url(../reindeer/progressindicator/img/disabled.gif);
+}
+
+.uiTest .v-progressbar-indicator {
+	background: #f7f9f9 url(../reindeer/progressindicator/img/progress.png);
+}
+
+.uiTest .v-progressindicator-wrapper {
+	background: #dfe2e4 url(../reindeer/progressindicator/img/base.gif) repeat-x;
+	border: 1px solid #bfbfbf;
+}
+
+.uiTest .v-disabled .v-progressindicator-wrapper {
+	background-image: url(../reindeer/progressindicator/img/disabled.gif);
+}
+
+.uiTest .v-progressindicator-indicator {
+	background: #f7f9f9 url(../reindeer/progressindicator/img/progress.png);
+}
+
+.uiTest .v-filterselect {
+	height: 24px;
+	background-repeat: no-repeat;
+	background-image: url(../reindeer/select/img/left.png);/** sprite-ref: verticals; sprite-margin-bottom: 1px */
+	padding-left: 2px;
+	padding-right: 25px;
+}
+
+.uiTest.v-app .v-filterselect-input, .uiTest .v-window .v-filterselect-input, .uiTest .v-popupview-popup .v-filterselect-input {
+	background: transparent repeat-x;
+	background-image: url(../reindeer/select/img/center.png);/** sprite-ref: verticals; sprite-alignment: repeat; sprite-margin-bottom: 1px */
+	border: none;
+	height: 24px;
+}
+
+.uiTest.v-app input.v-filterselect-input, .uiTest .v-window input.v-filterselect-input, .uiTest .v-popupview-popup input.v-filterselect-input {
+	padding: 4px 0 4px 2px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.uiTest .v-filterselect-prompt .v-filterselect-input {
+	font-style: normal;
+}
+
+.uiTest .v-filterselect-input:focus {
+	outline: none;
+}
+
+.uiTest .v-filterselect-focus {
+	background-image: url(../reindeer/select/img/left-focus.png);/** sprite-ref: verticals; sprite-margin-bottom: 1px */
+}
+
+.uiTest .v-filterselect-focus .v-filterselect-input {
+	background-image: url(../reindeer/select/img/center-focus.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest .v-filterselect-button {
+	overflow: hidden;
+	width: 25px;
+	height: 24px;
+	background-position: 0 0;
+	background-image: url(../reindeer/select/img/right.png);/** sprite-ref: verticals ; sprite-margin-bottom: 1px */
+	cursor: default;
+	margin-right: -25px;
+}
+
+.uiTest .v-filterselect-button:hover {
+	background-image: url(../reindeer/select/img/right-hover.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-filterselect-button:active {
+	background-image: url(../reindeer/select/img/right-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-filterselect-focus .v-filterselect-button {
+	background-image: url(../reindeer/select/img/right-focus.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-filterselect-focus .v-filterselect-button:hover {
+	background-image: url(../reindeer/select/img/right-focus-hover.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-filterselect-focus .v-filterselect-button:active {
+	background-image: url(../reindeer/select/img/right-focus-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-disabled .v-filterselect-button:hover, .uiTest .v-readonly .v-filterselect-button:hover {
+	background-image: url(../reindeer/select/img/right.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-filterselect-suggestpopup {
+	background: #f8f8f9;
+	border: none;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-o-border-radius: 3px;
+	overflow: hidden;
+}
+
+.uiTest .v-filterselect-suggestmenu {
+	margin: 4px 0;
+}
+
+.uiTest .v-filterselect-suggestmenu .gwt-MenuItem {
+	padding: 1px 8px;
+	height: 16px;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	cursor: default;
+}
+
+.uiTest .v-filterselect-suggestmenu .gwt-MenuItem .v-icon {
+	margin-right: 3px;
+}
+
+.uiTest .v-filterselect-suggestmenu .gwt-MenuItem-selected {
+	background: transparent repeat-x;
+	background-image: url(../reindeer/common/img/sel-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	color: #fff;
+	text-shadow: #3b5a7a 0 1px 0;
+}
+
+.uiTest .v-filterselect-nextpage, .uiTest .v-filterselect-nextpage-off, .uiTest .v-filterselect-prevpage-off, .uiTest .v-filterselect-prevpage {
+	height: 11px;
+	width: 100%;
+	background: transparent;
+	margin-bottom: -4px;
+}
+
+.uiTest .v-filterselect-nextpage, .uiTest .v-filterselect-nextpage-off {
+	margin: -4px 0 0;
+}
+
+.uiTest .v-filterselect-nextpage:hover {
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/select/img/page-down-hover.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest .v-filterselect-prevpage:hover {
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/select/img/page-up-hover.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest .v-filterselect-nextpage:active {
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/select/img/page-down-pressed.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest .v-filterselect-prevpage:active {
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/select/img/page-up-pressed.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest .v-filterselect-nextpage-off span, .uiTest .v-filterselect-prevpage-off span {
+	display: none;
+}
+
+.uiTest .v-filterselect-nextpage span, .uiTest .v-filterselect-prevpage span {
+	display: block;
+	height: 11px;
+	width: 100%;
+	overflow: hidden;
+	text-indent: -99999px;
+	background: transparent no-repeat center 3px;
+	background-image: url(../reindeer/select/img/arrow-down.png);/** sprite-ref: verticals; sprite-margin-top: 3px; sprite-margin-bottom: 3px; sprite-alignment: center */
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+}
+
+.uiTest .v-filterselect-prevpage span {
+	background-image: url(../reindeer/select/img/arrow-up.png);/** sprite-ref: verticals; sprite-margin-top: 3px; sprite-margin-bottom: 3px; sprite-alignment: center */
+}
+
+.uiTest .v-filterselect-nextpage:hover span {
+	background-image: url(../reindeer/select/img/arrow-down-hover.png);/** sprite-ref: verticals; sprite-margin-top: 3px; sprite-margin-bottom: 3px; sprite-alignment: center */
+}
+
+.uiTest .v-filterselect-prevpage:hover span {
+	background-image: url(../reindeer/select/img/arrow-up-hover.png);/** sprite-ref: verticals; sprite-margin-top: 3px; sprite-margin-bottom: 3px; sprite-alignment: center */
+}
+
+.uiTest .v-filterselect-status {
+	text-shadow: #e9eaeb 0 1px 0;
+	font-size: 11px;
+	line-height: normal;
+	width: 100%;
+	padding: 3px 0;
+	height: 11px;
+	overflow: hidden;
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/select/img/status-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	-moz-border-radius-bottomleft: 3px;
+	-moz-border-radius-bottomright: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+}
+
+.v-ie .uiTest .v-filterselect-suggestmenu .gwt-MenuItem-selected {
+	background: transparent url(../reindeer/common/img/sel-bg.png) repeat-x;
+}
+
+.v-ie .uiTest .v-filterselect-nextpage:hover {
+	background: transparent url(../reindeer/select/img/page-down-hover.png) repeat-x;
+}
+
+.v-ie .uiTest .v-filterselect-prevpage:hover {
+	background: transparent url(../reindeer/select/img/page-up-hover.png) repeat-x;
+}
+
+.v-ie .uiTest .v-filterselect-prevpage span {
+	background: transparent url(../reindeer/select/img/arrow-up.png) no-repeat center 3px;
+}
+
+.v-ie .uiTest .v-filterselect-nextpage span {
+	background: transparent url(../reindeer/select/img/arrow-down.png) no-repeat center 3px;
+}
+
+.v-ie .uiTest .v-filterselect-prevpage:hover span {
+	background: transparent url(../reindeer/select/img/arrow-up-hover.png) no-repeat center 3px;
+}
+
+.v-ie .uiTest .v-filterselect-nextpage:hover span {
+	background: transparent url(../reindeer/select/img/arrow-down-hover.png) no-repeat center 3px;
+}
+
+.v-ie .uiTest .v-filterselect-status {
+	background: transparent url(../reindeer/select/img/status-bg.png) repeat-x;
+}
+
+.uiTest .v-filterselect .v-icon {
+	width: 16px;
+	position: relative;
+}
+
+.uiTest .v-filterselect .v-icon + .v-filterselect-input {
+	margin-left: -16px;
+	padding-left: 18px;
+}
+
+.uiTest .black .v-filterselect {
+	background-image: url(../reindeer/select/img/black/left-black.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 1px */
+}
+
+.uiTest.v-app .black .v-filterselect-input, .uiTest .v-window .black .v-filterselect-input, .uiTest .v-window-black .v-filterselect-input, .uiTest .v-popupview-popup .black .v-filterselect-input {
+	color: #c9ccce;
+	background-image: url(../reindeer/select/img/black/center-black.png);/** sprite-ref: black-verticals; sprite-alignment: repeat; sprite-margin-bottom: 1px */
+}
+
+.uiTest .black .v-filterselect-focus {
+	background-image: url(../reindeer/select/img/black/left-black-focus.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 1px */
+}
+
+.uiTest .black .v-filterselect-focus .v-filterselect-input {
+	background-image: url(../reindeer/select/img/black/center-black-focus.png);/** sprite-ref: black-verticals; sprite-alignment: repeat; sprite-margin-bottom: 1px */
+}
+
+.uiTest .black .v-filterselect-button {
+	background-image: url(../reindeer/select/img/black/right-black.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 1px */
+}
+
+.uiTest .black .v-filterselect-button:hover {
+	background-image: url(../reindeer/select/img/black/right-black-hover.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 1px */
+}
+
+.uiTest .black .v-filterselect-button:active {
+	background-image: url(../reindeer/select/img/black/right-black-pressed.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 1px */
+}
+
+.uiTest .black .v-filterselect-focus .v-filterselect-button {
+	background-image: url(../reindeer/select/img/black/right-black-focus.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 1px */
+}
+
+.uiTest .black .v-filterselect-focus .v-filterselect-button:hover {
+	background-image: url(../reindeer/select/img/black/right-black-focus-hover.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 1px */
+}
+
+.uiTest .black .v-filterselect-focus .v-filterselect-button:active {
+	background-image: url(../reindeer/select/img/black/right-black-focus-pressed.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 1px */
+}
+
+.uiTest .black .v-disabled .v-filterselect-button:hover, .uiTest .black .v-readonly .v-filterselect-button:hover {
+	background-image: url(../reindeer/select/img/black/right-black.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 1px */
+}
+
+.uiTest .black .v-filterselect-prompt .v-filterselect-input {
+	color: #5f6366;
+}
+
+.uiTest .black .v-select select, .uiTest .black .v-select-twincol select {
+	border-color: #38393a;
+	border-top-color: #2c2d2e;
+	border-bottom-color: #3e3f3f;
+	background: #151717;
+	color: #c9ccce;
+}
+
+.uiTest .v-slider {
+	border-top: 1px solid #9a9c9e;
+	border-bottom: 1px solid #bdbfc1;
+	margin: 4px 0;
+}
+
+.uiTest .v-slider-base {
+	height: 1px;
+	background: #e0e2e2;
+	border-top: 1px solid #adb0b1;
+	border-left: 1px solid #a0a3a6;
+	border-right: 1px solid #a0a3a6;
+}
+
+.uiTest .v-slider-handle {
+	background: transparent;
+	background-image: url(../reindeer/slider/img/knob.png);/** sprite-ref: verticals */
+	width: 10px;
+	height: 10px;
+	margin-top: -5px;
+}
+
+.uiTest .v-slider-handle-active {
+	background-image: url(../reindeer/slider/img/knob-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-slider-vertical {
+	width: 2px;
+	margin: 0 5px;
+	border: none;
+	border-left: 1px solid #9a9c9e;
+	border-right: 1px solid #bdbfc1;
+}
+
+.uiTest .v-slider-vertical .v-slider-base {
+	width: 2px;
+	border-left: 1px solid #adb0b1;
+	border-right: none;
+	border-top: 1px solid #adb0b1;
+	border-bottom: 1px solid #adb0b1;
+}
+
+.uiTest .v-slider-vertical .v-slider-handle {
+	width: 10px;
+	height: 10px;
+	margin-left: -5px;
+}
+
+.uiTest .v-splitpanel-hsplitter, .uiTest .v-splitpanel-hsplitter-locked {
+	width: 7px;
+	background-repeat: repeat-y;
+	background-image: url(../reindeer/splitpanel/img/hor-bg.png);/** sprite-ref: horizontals; sprite-alignment: repeat */
+}
+
+.uiTest .v-splitpanel-hsplitter div {
+	width: 7px;
+	height: 100%;
+	background: transparent;
+	background-repeat: no-repeat;
+	background-position: 50%;
+	background-image: url(../reindeer/splitpanel/img/hor-handle.png);/** sprite-ref: horizontals; sprite-alignment: center */
+}
+
+.uiTest .v-splitpanel-vsplitter, .uiTest .v-splitpanel-vsplitter-locked {
+	height: 7px;
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/splitpanel/img/ver-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest .v-splitpanel-vsplitter div {
+	height: 7px;
+	background: transparent;
+	background-repeat: no-repeat;
+	background-position: 50%;
+	background-image: url(../reindeer/splitpanel/img/ver-handle.png);/** sprite-ref: verticals; sprite-alignment: center */
+}
+
+.uiTest .blue .v-splitpanel-hsplitter-small, .uiTest .blue .v-splitpanel-hsplitter-small-locked {
+	background: #7c8a91;
+}
+
+.uiTest .black .v-splitpanel-hsplitter-small, .uiTest .black .v-splitpanel-hsplitter-small-locked {
+	background: #4e5253;
+}
+
+.uiTest .v-splitpanel-hsplitter-small, .uiTest .v-splitpanel-hsplitter-small-locked, .uiTest .white .v-splitpanel-hsplitter-small, .uiTest .white .v-splitpanel-hsplitter-small-locked {
+	width: 1px;
+	background: #949698;
+}
+
+.uiTest .v-splitpanel-vsplitter-small, .uiTest .v-splitpanel-vsplitter-small-locked, .uiTest .white .v-splitpanel-vsplitter-small, .uiTest .white .v-splitpanel-vsplitter-small-locked {
+	height: 1px;
+	background: #949698;
+}
+
+.uiTest .v-splitpanel-hsplitter-small div {
+	width: 5px;
+	margin-left: -2px;
+	background: transparent;
+}
+
+.uiTest .v-splitpanel-vsplitter-small div {
+	height: 5px;
+	margin-top: -2px;
+	background: transparent;
+}
+
+.uiTest .blue .v-table-header-wrap {
+	border-color: #92a2aa;
+}
+
+.uiTest .blue .v-table-body {
+	border-color: #92a2aa;
+	border-top-color: #c2c3c4;
+}
+
+.uiTest .v-table-header-wrap, .uiTest .white .v-table-header-wrap, .uiTest .v-table-footer-wrap, .uiTest .white .v-table-footer-wrap, .uiTest .v-table-header-drag {
+	border-color: #c2c3c4;
+	background: transparent repeat-x;
+	background-image: url(../reindeer/table/img/header-bg-light.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	height: 20px;
+	text-transform: uppercase;
+	font-size: 10px;
+	font-weight: bold;
+	color: #222;
+	text-shadow: #f3f5f8 0 1px 0;
+	line-height: normal;
+}
+
+.uiTest .v-table-footer-wrap, .uiTest .white .v-table-footer-wrap {
+	text-transform: none;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.uiTest .v-table-footer td, .uiTest .white .v-table-footer td {
+	border-color: #c2c3c4;
+}
+
+.uiTest .v-table-footer-container {
+	padding-right: 7px;
+}
+
+.uiTest .v-table-header, .uiTest .v-table-footer, .uiTest .v-table-footer table {
+	height: 20px;
+}
+
+.uiTest .v-table-caption-container, .uiTest .v-table-header-drag {
+	padding-top: 4px;
+	padding-right: 4px;
+}
+
+.uiTest .v-table-caption-container .v-icon, .uiTest .v-table-header-drag .v-icon {
+	height: 16px;
+	margin: -4px 3px 0 0;
+	vertical-align: middle;
+}
+
+.v-ie .uiTest .v-table-caption-container .v-icon, .v-ie .uiTest .v-table-header-drag .v-icon {
+	margin-top: -3px;
+}
+
+.uiTest .v-table-resizer {
+	height: 20px;
+	width: 2px;
+	background: transparent;
+	border-right: 1px solid #c2c3c4;
+}
+
+.uiTest .v-table-sort-indicator {
+	background: transparent;
+	width: 0px;
+	height: 20px;
+}
+
+.uiTest .v-table-header-cell-asc .v-table-sort-indicator {
+	background: transparent no-repeat right 7px;
+	background-image: url(../reindeer/table/img/asc-light.png);/** sprite-ref: verticals; sprite-alignment: right; sprite-margin-top: 7px; sprite-margin-bottom: 6px; sprite-margin-right: 6px; */
+	width: 16px;
+}
+
+.uiTest .v-table-header-cell-desc .v-table-sort-indicator {
+	background: transparent no-repeat right 7px;
+	background-image: url(../reindeer/table/img/desc-light.png);/** sprite-ref: verticals; sprite-alignment: right; sprite-margin-top: 7px; sprite-margin-bottom: 6px; sprite-margin-right: 6px; */
+	width: 16px;
+}
+
+.uiTest .v-table-body, .uiTest .white .v-table-body {
+	border-color: #c2c3c4;
+	background: #fff;
+}
+
+.uiTest .v-table-cell-content {
+	padding-top: 0;
+	border-right-color: #d3d4d5;
+	vertical-align: top;
+}
+
+.uiTest .v-table-cell-wrapper {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.uiTest .v-table-row-odd {
+	background: #eff0f1;
+}
+
+.uiTest .v-table-generated-row {
+	background: #dcdee0;
+	text-transform: uppercase;
+	font-size: 10px;
+	font-weight: bold;
+	color: #222;
+	text-shadow: #f3f5f8 0 1px 0;
+	line-height: normal;
+}
+
+.uiTest .v-table-generated-row .v-table-cell-wrapper {
+	padding-top: 4px;
+	padding-bottom: 5px;
+}
+
+.uiTest .v-table-cell-content:last-child {
+	border-right-color: transparent;
+}
+
+.uiTest .v-table .v-selected, .uiTest .black .v-table .v-selected {
+	background: #4d749f url(../reindeer/common/img/sel-bg.png) repeat-x;
+	color: #fff;
+	text-shadow: #3b5a7a 0 1px 0;
+}
+
+.uiTest .v-table .v-selected .v-table-cell-content {
+	border-right-color: #466c90;
+}
+
+.uiTest .v-table-column-selector {
+	width: 16px;
+	height: 20px;
+	margin-top: -20px;
+	background: transparent no-repeat;
+	background-image: url(../reindeer/table/img/col-sel-light.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-table-column-selector:active {
+	background-image: url(../reindeer/table/img/col-sel-light-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-table-focus-slot-left {
+	border-left: 1px solid #222;
+	margin-bottom: -20px;
+	width: auto;
+}
+
+.uiTest .v-table-focus-slot-right {
+	border-right-color: #222;
+	margin-right: 0;
+}
+
+.uiTest .v-table-header-drag {
+	padding-left: 6px;
+	height: 16px;
+}
+
+.uiTest .v-table-header-drag img {
+	height: 16px;
+	margin: -3px 3px 0 0;
+}
+
+.uiTest .v-table-scrollposition {
+	width: auto;
+	background: transparent;
+	border: none;
+}
+
+.uiTest .v-table-scrollposition span {
+	background: transparent repeat-x;
+	background-image: url(../reindeer/table/img/scroll-indic-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	border: 1px solid #939494;
+	border: none;
+	border-radius-bottomleft: 4px;
+	border-radius-bottomright: 4px;
+	-moz-border-radius-bottomleft: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-webkit-border-bottom-left-radius: 4px;
+	-webkit-border-bottom-right-radius: 4px;
+	height: 13px;
+	padding: 4px 30px;
+	white-space: nowrap;
+	color: #222;
+	text-shadow: #fff 0 1px 0;
+	position: relative;
+	top: 1px;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 1px 2px;
+	-moz-box-shadow: rgba(0, 0, 0, 0.5) 0 1px 2px;
+}
+
+.uiTest .v-table-borderless .v-table-scrollposition span {
+	top: 0;
+}
+
+.uiTest .v-contextmenu .v-on, .uiTest .v-contextmenu .v-off {
+	display: inline-block;
+	zoom: 1;
+	background: transparent no-repeat 0 4px;
+	background-image: url(../reindeer/common/icons/bullet.png);/** sprite-ref: verticals; sprite-margin-top: 4px; sprite-margin-bottom: 4px */
+	padding-left: 12px;
+	padding-right: 4px;
+}
+
+.uiTest .v-contextmenu .v-off {
+	background-image: none;
+	color: #666;
+}
+
+.uiTest .v-contextmenu .gwt-MenuItem-selected .v-on {
+	background-image: url(../reindeer/common/icons/bullet-white.png);/** sprite-ref: verticals; sprite-margin-top: 4px; sprite-margin-bottom: 5px */
+}
+
+.uiTest .v-table-strong .v-table-header-wrap, .uiTest .v-table-strong .v-table-header-drag {
+	border-color: #2b3033;
+	border-top-color: #2b3033;
+	background-image: url(../reindeer/table/img/header-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	color: #e7e9ea;
+	text-shadow: #000 0 -1px 0;
+}
+
+.uiTest .v-table-strong .v-table-body {
+	border-top-color: #2b3033;
+}
+
+.uiTest .v-table-strong .v-table-resizer {
+	border-right-color: #1c1f21;
+}
+
+.uiTest .v-table-strong .v-table-header-cell-asc .v-table-sort-indicator {
+	background-image: url(../reindeer/table/img/asc.png);/** sprite-ref: verticals; sprite-alignment: right; sprite-margin-top: 7px; sprite-margin-bottom: 6px; sprite-margin-right: 6px; */
+}
+
+.uiTest .v-table-strong .v-table-header-cell-desc .v-table-sort-indicator {
+	background-image: url(../reindeer/table/img/desc.png);/** sprite-ref: verticals; sprite-alignment: right; sprite-margin-top: 7px; sprite-margin-bottom: 6px; sprite-margin-right: 6px; */
+}
+
+.uiTest .v-table-strong .v-table-column-selector {
+	background-image: url(../reindeer/table/img/col-sel.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-table-strong .v-table-column-selector:active {
+	background-image: url(../reindeer/table/img/col-sel-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-table-strong .v-table-focus-slot-left, .uiTest .v-table-strong .v-table-focus-slot-right {
+	border-color: #9ca1a5;
+}
+
+.uiTest .black .v-table-header-wrap, .uiTest .black .v-table-header-drag {
+	border-color: #252729;
+	background-image: url(../reindeer/table/img/header-bg-black.png);/** sprite-ref: black-verticals; sprite-alignment: repeat */
+	color: #e7eaee;
+	text-shadow: #000 0 -1px 0;
+}
+
+.uiTest .black .v-table-resizer {
+	border-right-color: #252729;
+}
+
+.uiTest .black .v-table-header-cell-asc .v-table-sort-indicator {
+	background-image: url(../reindeer/table/img/asc.png);/** sprite-ref: black-verticals; sprite-alignment: right; sprite-margin-top: 7px; sprite-margin-bottom: 6px; sprite-margin-right: 6px; */
+}
+
+.uiTest .black .v-table-header-cell-desc .v-table-sort-indicator {
+	background-image: url(../reindeer/table/img/desc.png);/** sprite-ref: black-verticals; sprite-alignment: right; sprite-margin-top: 7px; sprite-margin-bottom: 6px; sprite-margin-right: 6px; */
+}
+
+.uiTest .black .v-table-column-selector {
+	background-image: url(../reindeer/table/img/col-sel-black.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black .v-table-column-selector:active {
+	background-image: url(../reindeer/table/img/col-sel-black-pressed.png);/** sprite-ref: black-verticals */
+}
+
+.uiTest .black .v-table-focus-slot-left, .uiTest .black .v-table-focus-slot-right {
+	border-color: #9ca1a5;
+}
+
+.uiTest .black .v-table-body {
+	border-color: #252729;
+	background: transparent;
+}
+
+.uiTest .black .v-table-cell-content {
+	border-right-color: #252729;
+	border-bottom: 1px solid #252729;
+}
+
+.uiTest .black .v-table-cell-wrapper {
+	padding-bottom: 2px;
+}
+
+.uiTest .black .v-table-row-odd {
+	background: transparent;
+}
+
+.uiTest .black .v-table .v-selected .v-table-cell-content {
+	border-bottom: 1px solid #4d749f;
+}
+
+.uiTest .v-table-borderless .v-table-header-wrap, .uiTest .v-table-borderless .v-table-body {
+	border: none;
+}
+
+.uiTest .v-tabsheet-tabitemcell, .uiTest .v-tabsheet-spacertd {
+	height: 32px;
+}
+
+.uiTest .v-tabsheet-tabitemcell {
+	background: no-repeat;
+	background-image: url(../reindeer/tabsheet/img/framed/tab-left.png);/** sprite-ref: verticals */
+	padding-left: 3px;
+}
+
+.uiTest .v-tabsheet-tabitemcell-first {
+	padding-left: 10px;
+	background-image: url(../reindeer/tabsheet/img/framed/tab-first-left.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-tabitem, .uiTest .v-tabsheet-spacertd div {
+	border: none;
+	height: 32px;
+	background: transparent repeat-x;
+	background-image: url(../reindeer/tabsheet/img/framed/tab-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	padding: 0;
+	color: #222;
+	text-shadow: #fff 0 1px 0;
+}
+
+.uiTest .v-tabsheet-tabitem .v-caption {
+	border: none;
+	height: 23px;
+	background: no-repeat right top;
+	background-image: url(../reindeer/tabsheet/img/framed/tab-right.png);/** sprite-ref: verticals; sprite-alignment: right */
+	padding: 9px 8px 0 6px;
+}
+
+.uiTest .v-tabsheet-tabitem .v-caption-closable {
+	padding-right: 0;
+	padding-left: 17px;
+}
+
+.uiTest .v-tabsheet-tabitem .v-captiontext {
+	height: 16px;
+	line-height: 16px;
+	vertical-align: baseline;
+}
+
+.uiTest .v-tabsheet-caption-close {
+	float: right;
+	width: 19px;
+	height: 18px;
+	margin: -1px -1px 0;
+	padding-left: 2px;
+	background: transparent;
+	background-image: url(../reindeer/tabsheet/img/close-btn.png);/** sprite-ref: verticals */
+	cursor: default;
+	text-indent: -999px;
+	overflow: hidden;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+.v-ff .uiTest .v-tabsheet-caption-close {
+	margin-top: -17px;
+}
+
+.v-ff .uiTest .v-tabsheet-caption-close:only-child {
+	margin-top: -1px;
+}
+
+.uiTest .v-tabsheet-caption-close:hover {
+	background-image: url(../reindeer/tabsheet/img/close-btn-hover.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-caption-close:active {
+	background-image: url(../reindeer/tabsheet/img/close-btn-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-tabitem-selected .v-tabsheet-caption-close {
+	background-image: url(../reindeer/tabsheet/img/close-btn-sel.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-tabitem-selected .v-tabsheet-caption-close:hover {
+	background-image: url(../reindeer/tabsheet/img/close-btn-sel-hover.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-tabitem-selected .v-tabsheet-caption-close:active {
+	background-image: url(../reindeer/tabsheet/img/close-btn-sel-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-tabitemcell-selected {
+	background-image: url(../reindeer/tabsheet/img/framed/tab-left-sel.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-tabitemcell-selected-first {
+	background-image: url(../reindeer/tabsheet/img/framed/tab-first-left-sel.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-tabitem-selected {
+	background-image: url(../reindeer/tabsheet/img/framed/tab-bg-sel.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	color: #232930;
+}
+
+.uiTest .v-tabsheet-tabitem-selected .v-caption {
+	background-image: url(../reindeer/tabsheet/img/framed/tab-right-sel.png);/** sprite-ref: verticals; sprite-alignment: right */
+}
+
+.uiTest .v-tabsheet-spacertd div {
+	margin-right: 4px;
+}
+
+.uiTest .v-tabsheet-spacertd {
+	background: transparent no-repeat right top;
+	background-image: url(../reindeer/tabsheet/img/framed/tab-spacer-right.png);/** sprite-ref: verticals; sprite-alignment: right */
+}
+
+.uiTest .blue .v-tabsheet-content {
+	border-color: #a8bcc5;
+}
+
+.uiTest .v-tabsheet-content, .uiTest .white .v-tabsheet-content {
+	border: 1px solid #dcdcdc;
+	border-bottom: none;
+	border-top: none;
+	color: #222;
+	text-shadow: none;
+}
+
+.uiTest .v-tabsheet-tabsheetpanel {
+	background: #fff;
+}
+
+.v-sa .uiTest .v-tabsheet-content {
+	border-color: rgba(0, 0, 0, 0.1);
+}
+
+.uiTest .blue .v-tabsheet-deco {
+	border-color: #92a3ac;
+	background: #adc2cd;
+}
+
+.uiTest .v-tabsheet-deco, .uiTest .white .v-tabsheet-deco {
+	height: 1px;
+	border-top: 1px solid #bebebe;
+	background: #e2e2e2;
+	overflow: hidden;
+}
+
+.v-sa .uiTest .v-tabsheet-deco {
+	border-top-color: rgba(0, 0, 0, 0.1);
+	background: rgba(0, 0, 0, 0.08);
+}
+
+.uiTest .v-tabsheet-tabs .v-icon, .uiTest .v-tabsheet-tabs .v-captiontext, .uiTest .v-tabsheet-tabs .v-errorindicator {
+	display: inline;
+	float: none;
+}
+
+.v-sa .uiTest .v-tabsheet-tabs .v-captiontext {
+	display: inline-block;
+}
+
+.uiTest .v-tabsheet-tabs .v-icon {
+	width: 16px !important;
+	height: 16px !important;
+}
+
+.uiTest .v-tabsheet-tabs .v-errorindicator {
+	display: inline-block;
+	width: 13px;
+	height: 16px;
+	background: transparent url(../reindeer/common/icons/error.png) no-repeat 50%;
+}
+
+.v-ie .uiTest .v-tabsheet-tabs .v-errorindicator {
+	zoom: 1;
+	display: inline-block;
+}
+
+.uiTest .v-tabsheet-scroller {
+	height: 31px;
+	margin-top: -31px;
+	padding: 0 3px 0 4px;
+	border-right: 1px solid #c2c2c2;
+	border-left: 1px solid #cfcfcf;
+	position: relative;
+	float: right;
+	background: transparent url(../reindeer/tabsheet/img/framed/tab-bg.png) repeat-x left -1px;
+	width: 36px;
+}
+
+.uiTest .v-tabsheet-scroller button {
+	margin-top: 7px;
+}
+
+.uiTest .v-tabsheet-scrollerPrev, .uiTest .v-tabsheet-scrollerNext, .uiTest .v-tabsheet-scrollerPrev-disabled, .uiTest .v-tabsheet-scrollerNext-disabled {
+	border: none;
+	background: transparent;
+	background-image: url(../reindeer/tabsheet/img/tab-prev.png);/** sprite-ref: verticals */
+	width: 18px;
+	height: 17px;
+	overflow: hidden;
+}
+
+.uiTest .v-tabsheet-scroller button::-moz-focus-inner {
+	border: none;
+}
+
+.uiTest .v-tabsheet-scrollerNext {
+	background-image: url(../reindeer/tabsheet/img/tab-next.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-scrollerPrev:active {
+	background-image: url(../reindeer/tabsheet/img/tab-prev-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-scrollerNext:active {
+	background-image: url(../reindeer/tabsheet/img/tab-next-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-scrollerPrev-disabled, .uiTest .v-tabsheet-scrollerPrev-disabled:active {
+	background-image: url(../reindeer/tabsheet/img/tab-prev-disabled.png);/** sprite-ref: verticals */
+	opacity: 1;
+	filter: none;
+}
+
+.uiTest .v-tabsheet-scrollerNext-disabled, .uiTest .v-tabsheet-scrollerNext-disabled:active {
+	background-image: url(../reindeer/tabsheet/img/tab-next-disabled.png);/** sprite-ref: verticals; sprite-margin-bottom: 1px */
+	opacity: 1;
+	filter: none;
+}
+
+.uiTest .v-tabsheet-borderless .v-tabsheet-tabitemcell-first {
+	padding-left: 7px;
+	background: url(../reindeer/tabsheet/img/framed/tab-first-left.png) no-repeat -3px 0;
+}
+
+.uiTest .v-tabsheet-borderless .v-tabsheet-tabitemcell-selected-first {
+	background: url(../reindeer/tabsheet/img/framed/tab-first-left-sel.png) no-repeat -3px 0;
+}
+
+.uiTest .v-tabsheet-borderless .v-tabsheet-spacertd div {
+	margin-right: 0;
+}
+
+.uiTest .v-tabsheet-borderless .v-tabsheet-spacertd {
+	background: transparent;
+}
+
+.uiTest .v-tabsheet-borderless .v-tabsheet-content {
+	border: none;
+}
+
+.uiTest .v-tabsheet-borderless .v-tabsheet-deco {
+	height: 0;
+	border-top: none;
+}
+
+.uiTest .blue .v-tabsheet-tabs-minimal .v-tabsheet-spacertd div, .uiTest .blue .v-tabsheet-tabs-minimal .v-tabsheet-tabitem, .uiTest .blue .v-tabsheet-tabs-minimal .v-tabsheet-tabitem-selected {
+	border-color: #7c8a91;
+}
+
+.uiTest .blue .v-tabsheet-tabs-minimal .v-tabsheet-caption-close {
+	color: #7c8a91;
+}
+
+.uiTest .blue .v-tabsheet-tabs-minimal .v-tabsheet-caption-close:hover {
+	color: #BCD3DE;
+	background: #778d98;
+}
+
+.uiTest .blue .v-tabsheet-tabs-minimal .v-tabsheet-caption-close:active {
+	background: #4f6874;
+}
+
+.uiTest .v-tabsheet-tabs-minimal .v-tabsheet-spacertd div, .uiTest .white .v-tabsheet-tabs-minimal .v-tabsheet-spacertd div {
+	border-bottom: 1px solid #bfbfbf;
+	height: auto;
+	background: transparent;
+}
+
+.uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitemcell, .uiTest .v-tabsheet-tabs-minimal .v-tabsheet-spacertd {
+	height: auto;
+	background: transparent;
+	padding-left: 0;
+}
+
+.uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem, .uiTest .white .v-tabsheet-tabs-minimal .v-tabsheet-tabitem {
+	border: none;
+	border-bottom: 1px solid #bfbfbf;
+	color: #4d748f;
+	padding: 0;
+	height: auto;
+	background: transparent;
+	text-shadow: none;
+}
+
+.uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem .v-caption {
+	padding: 5px 16px;
+	height: auto;
+	background: transparent;
+}
+
+.uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitemcell-selected {
+	background: transparent;
+}
+
+.uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem-selected, .uiTest .white .v-tabsheet-tabs-minimal .v-tabsheet-tabitem-selected {
+	background: transparent;
+	border: 1px solid #bfbfbf;
+	border-bottom: none;
+	color: #222;
+}
+
+.uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem-selected .v-caption {
+	background: transparent;
+	padding: 4px 15px 6px 15px;
+}
+
+.uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem .v-caption-closable, .uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem-selected .v-caption-closable {
+	padding-right: 6px;
+}
+
+.uiTest .v-tabsheet-content-minimal, .uiTest .white .v-tabsheet-content-minimal {
+	border: none;
+}
+
+.uiTest .v-tabsheet-content-minimal .v-tabsheet-tabsheetpanel {
+	background: transparent;
+}
+
+.uiTest .v-tabsheet-deco-minimal, .uiTest .white .v-tabsheet-deco-minimal {
+	height: 0;
+	border: none;
+}
+
+.uiTest .v-tabsheet-tabcontainer-minimal .v-tabsheet-scroller {
+	margin-top: -20px;
+	height: 17px;
+	padding: 0;
+	border: none;
+	background: transparent;
+}
+
+.uiTest .v-tabsheet-tabcontainer-minimal .v-tabsheet-scroller button {
+	margin-top: 0;
+}
+
+.uiTest .v-tabsheet-tabs-minimal .v-tabsheet-caption-close, .uiTest .v-tabsheet-tabs-minimal .v-tabsheet-caption-close:hover, .uiTest .v-tabsheet-tabs-minimal .v-tabsheet-caption-close:active {
+	text-indent: 0;
+	background: transparent;
+	margin-left: 3px;
+	margin-right: -3px;
+	padding: 0;
+	color: #999;
+	width: 14px;
+	height: 14px;
+	line-height: 14px;
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+}
+
+.v-ie9 .uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem .v-tabsheet-caption-close, .v-ie9 .uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem .v-tabsheet-caption-close:hover, .v-ie9 .uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem .v-tabsheet-caption-close:active, .v-ie10 .uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem .v-tabsheet-caption-close, .v-ie10 .uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem .v-tabsheet-caption-close:hover, .v-ie10 .uiTest .v-tabsheet-tabs-minimal .v-tabsheet-tabitem .v-tabsheet-caption-close:active {
+	margin-left: 2.5px;
+	margin-top: 1px;
+}
+
+.uiTest .v-tabsheet-tabs-minimal .v-tabsheet-caption-close:hover, .uiTest .white .v-tabsheet-tabs-minimal .v-tabsheet-caption-close:hover {
+	color: #fff;
+	background: #aaa;
+}
+
+.uiTest .v-tabsheet-tabs-minimal .v-tabsheet-caption-close:active, .uiTest .white .v-tabsheet-tabs-minimal .v-tabsheet-caption-close:active {
+	background: #777;
+}
+
+.uiTest .black .v-tabsheet-tabs-minimal .v-tabsheet-spacertd div, .uiTest .black .v-tabsheet-tabs-minimal .v-tabsheet-tabitem, .uiTest .black .v-tabsheet-tabs-minimal .v-tabsheet-tabitem-selected {
+	border-color: #3e4044;
+	color: #6a7f89;
+}
+
+.uiTest .black .v-tabsheet-tabs-minimal .v-tabsheet-tabitem-selected {
+	color: #c9ccce;
+}
+
+.uiTest .black .v-tabsheet-content-minimal, .uiTest .black .v-tabsheet-content-bar {
+	color: #c9ccce;
+	text-shadow: #000 0 0 1px;
+}
+
+.uiTest .black .v-tabsheet-tabs-minimal .v-tabsheet-caption-close {
+	color: #72787c;
+}
+
+.uiTest .black .v-tabsheet-tabs-minimal .v-tabsheet-caption-close:hover {
+	color: #1d2021;
+	background: #4d5154;
+}
+
+.uiTest .black .v-tabsheet-tabs-minimal .v-tabsheet-caption-close:active {
+	background: #626669;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitemcell, .uiTest .v-tabsheet-tabs-bar .v-tabsheet-spacertd {
+	height: 20px;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-spacertd {
+	background: transparent;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitemcell {
+	background-image: url(../reindeer/tabsheet/img/bar/tab-left.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitemcell-first {
+	padding-left: 6px;
+	background-image: url(../reindeer/tabsheet/img/bar/tab-first-left.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitem, .uiTest .v-tabsheet-tabs-bar .v-tabsheet-spacertd div {
+	height: 20px;
+	background-image: url(../reindeer/tabsheet/img/bar/tab-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	margin: 0;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitem .v-caption {
+	font-size: 11px;
+	height: 18px;
+	background-image: url(../reindeer/tabsheet/img/bar/tab-right.png);/** sprite-ref: verticals; sprite-alignment: right */
+	padding: 2px 12px 0 10px;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitem .v-caption-closable, .uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitem-selected .v-caption-closable {
+	padding-right: 8px;
+	padding-left: 14px;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-caption-close, .uiTest .v-tabsheet-tabs-bar .v-tabsheet-caption-close:hover, .uiTest .v-tabsheet-tabs-bar .v-tabsheet-caption-close:active {
+	text-indent: 0;
+	background: transparent;
+	margin-left: 3px;
+	margin-right: -3px;
+	padding: 1px 0 0 1px;
+	color: #3c3c3c;
+	width: 13px;
+	height: 13px;
+	line-height: 12px;
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-caption-close {
+	margin-top: 1px;
+}
+
+.v-ff .uiTest .v-tabsheet-tabs-bar .v-tabsheet-caption-close {
+	margin-top: -14px;
+}
+
+.v-ie9 .uiTest .v-tabsheet-tabs-bar .v-tabsheet-caption-close:only-child, .v-ie9 .uiTest .v-tabsheet-tabs-bar .v-captiontext:first-child + .v-tabsheet-caption-close, .v-ie10 .uiTest .v-tabsheet-tabs-bar .v-tabsheet-caption-close:only-child, .v-ie10 .uiTest .v-tabsheet-tabs-bar .v-captiontext:first-child + .v-tabsheet-caption-close {
+	margin-top: -14px;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-caption-close:hover {
+	background: #bfbfbf;
+	-webkit-box-shadow: 0 1px 0 #fff;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-caption-close:active {
+	background: #a9a9a9;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitem-selected .v-tabsheet-caption-close {
+	color: #404142;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitem-selected .v-tabsheet-caption-close:hover {
+	background: #5e666e;
+	color: #fff;
+	text-shadow: 0 -1px 0 #222;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitem-selected .v-tabsheet-caption-close:active {
+	background: #404142;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitemcell-selected {
+	background-image: url(../reindeer/tabsheet/img/bar/tab-left-sel.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitemcell-selected-first {
+	background-image: url(../reindeer/tabsheet/img/bar/tab-first-left-sel.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitem-selected {
+	background-image: url(../reindeer/tabsheet/img/bar/tab-bg-sel.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	color: #232930;
+}
+
+.uiTest .v-tabsheet-tabs-bar .v-tabsheet-tabitem-selected .v-caption {
+	background-image: url(../reindeer/tabsheet/img/bar/tab-right-sel.png);/** sprite-ref: verticals; sprite-alignment: right */
+}
+
+.uiTest .v-tabsheet-tabcontainer-bar .v-tabsheet-scroller {
+	margin-top: -20px;
+	height: 19px;
+	border-right: none;
+	background-image: url(../reindeer/tabsheet/img/bar/tab-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest .v-tabsheet-tabcontainer-bar .v-tabsheet-scroller button {
+	margin-top: 1px;
+}
+
+.uiTest .v-tabsheet-content-bar, .uiTest .white .v-tabsheet-content-bar {
+	border: none;
+}
+
+.uiTest .v-tabsheet-content-bar .v-tabsheet-tabsheetpanel {
+	background: transparent;
+}
+
+.uiTest .v-tabsheet-deco-bar, .uiTest .white .v-tabsheet-deco-bar {
+	height: 0;
+	border: none;
+}
+
+.uiTest .v-tabsheet-tabs-selected-closable .v-tabsheet-tabitem .v-tabsheet-caption-close, .uiTest .v-tabsheet-tabs-selected-closable .v-tabsheet-tabitem:hover .v-tabsheet-caption-close {
+	visibility: hidden;
+}
+
+.uiTest .v-tabsheet-tabs-selected-closable .v-tabsheet-tabitem-selected .v-tabsheet-caption-close, .uiTest .v-tabsheet-tabs-selected-closable .v-tabsheet-tabitem-selected:hover .v-tabsheet-caption-close {
+	visibility: visible;
+}
+
+.uiTest .v-tabsheet-tabs-hover-closable .v-tabsheet-caption-close {
+	visibility: hidden;
+}
+
+.uiTest .v-tabsheet-tabs-hover-closable .v-tabsheet-tabitem:hover .v-tabsheet-caption-close {
+	visibility: visible;
+}
+
+.uiTest .blue .v-textfield, .uiTest .blue .v-textarea {
+	border-color: #92a2aa;
+	border-top-color: #7c8a90;
+	border-bottom-color: #a1b3bc;
+}
+
+.uiTest .v-textfield, .uiTest .v-textarea, .uiTest .white .v-textfield, .uiTest .white .v-textarea {
+	border: 1px solid #bcbdbe;
+	border-top-color: #a2a3a4;
+	border-bottom-color: #d2d3d4;
+	background: #fff;
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/textfield/img/bg.png);/** sprite-ref: verticals; sprite-alignment: repeat; sprite-margin-bottom: 22px */
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	margin: 0;
+	height: 23px;
+	line-height: normal;
+}
+
+.uiTest .v-textarea, .uiTest .white .v-textarea {
+	background-image: none;
+	height: auto;
+}
+
+.uiTest.v-app input.v-textfield, .uiTest .v-window input.v-textfield, .uiTest.v-app textarea.v-textarea, .uiTest .v-window textarea.v-textarea {
+	padding: 3px 3px 4px;
+}
+
+.uiTest.v-app input.v-textfield.v-widget, .uiTest .v-window input.v-textfield.v-widget {
+	height: 24px;
+}
+
+.uiTest.v-app .v-textfield-focus, .uiTest .v-window .v-textfield-focus, .uiTest .v-popupview-popup .v-textfield-focus, .uiTest.v-app .v-textarea-focus, .uiTest .v-window .v-textarea-focus, .uiTest .v-popupview-popup .v-textarea-focus {
+	border-color: #5b97d0;
+	border-top-color: #4f83b4;
+	border-bottom-color: #5ca0df;
+	outline: none;
+	background-color: #fff;
+}
+
+.uiTest input.v-textfield-prompt, .uiTest textarea.v-textarea-prompt {
+	font-style: normal;
+	color: #999;
+}
+
+.uiTest.v-app input.v-textfield-small {
+	font-size: 11px;
+	line-height: normal;
+	height: auto;
+	padding: 2px;
+}
+
+.uiTest.v-app textarea.v-textarea-small {
+	font-size: 11px;
+}
+
+.uiTest.v-app .v-table input.v-textfield.v-widget, .uiTest .v-window .v-table input.v-textfield.v-widget {
+	padding: 1px 2px;
+	height: auto;
+	line-height: normal;
+}
+
+.uiTest .v-table-cell-wrapper > input.v-textfield {
+	margin-top: -2px;
+	margin-bottom: -2px;
+}
+
+.uiTest .black .v-textfield, .uiTest .black .v-textarea {
+	border-color: #38393a;
+	border-top-color: #2c2d2e;
+	border-bottom-color: #3e3f3f;
+	background: #151717;
+	background-image: url(../reindeer/textfield/img/bg-black.png);/** sprite-ref: black-verticals; sprite-alignment: repeat; sprite-margin-bottom: 22px */
+	color: #c9ccce;
+	text-shadow: #000 0 0 1px;
+}
+
+.uiTest .black .v-textarea {
+	background-image: none;
+}
+
+.uiTest.v-app .black .v-textfield-focus, .uiTest .v-window-black .v-textfield-focus, .uiTest .v-window .black .v-textfield-focus, .uiTest .v-popupview-popup .black .v-textfield-focus, .uiTest.v-app .black .v-textarea-focus, .uiTest .v-window-black .v-textarea-focus, .uiTest .v-window .black .v-textarea-focus, .uiTest .v-popupview-popup .black .v-textarea-focus {
+	border-color: #4b7192;
+	border-top-color: #3b5a75;
+	border-bottom-color: #507596;
+	background-color: #151717;
+}
+
+.uiTest .black input.v-textfield-prompt {
+	color: #5f6366;
+}
+
+.uiTest input.v-textfield-readonly, .uiTest .black input.v-textfield-readonly, .uiTest textarea.v-textarea-readonly, .uiTest .black textarea.v-textarea-readonly {
+	border: none;
+	background: transparent;
+}
+
+.uiTest .v-tree-node {
+	background: transparent url(../reindeer/tree/img/arrows.png) no-repeat 6px -10px;
+}
+
+.uiTest .v-tree-node-expanded {
+	background-position: -7px 5px;
+}
+
+.uiTest .v-tree-node-caption {
+	margin-left: 16px;
+	padding-bottom: 1px;
+}
+
+.uiTest .v-tree-node span {
+	padding: 1px 2px;
+	display: inline-block;
+}
+
+.uiTest .v-tree-node-selected span {
+	background: #4d749f repeat-x;
+	background-image: url(../reindeer/common/img/sel-bg.png);
+	color: #fff;
+	padding: 1px 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	text-shadow: #2b425a 0 1px 0;
+	display: inline-block;
+}
+
+.uiTest .v-tree-node-children {
+	padding-left: 16px;
+}
+
+.uiTest .v-tree-node-caption.v-tree-node-focused span {
+	padding-left: 1px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.uiTest .v-tree-node-focused span {
+	border: 1px dotted black;
+}
+
+.uiTest .v-tree .v-tree-node-drag-top {
+	background-position: 6px -11px;
+}
+
+.uiTest .v-tree .v-tree-node-drag-top.v-tree-node-expanded {
+	background-position: -7px 4px;
+}
+
+.uiTest .v-tree-connectors .v-tree-node-drag-top, .uiTest .v-tree-connectors .v-tree-node-expanded.v-tree-node-drag-top {
+	background-position: 2px -53px;
+}
+
+.uiTest .v-tree-connectors .v-tree-node-drag-top.v-tree-node-leaf {
+	background-position: 2px 50%;
+}
+
+.uiTest .v-window {
+	background: transparent;
+}
+
+.uiTest .v-window-wrap {
+	border: 1px solid #808386;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.v-sa .uiTest .v-window-wrap, .v-op .uiTest .v-window-wrap {
+	border-color: rgba(0, 0, 0, 0.2);
+}
+
+.uiTest .v-window-outerheader {
+	padding: 12px 52px 0 14px;
+	height: 37px;
+	background: black repeat-x;
+	background-image: url(../reindeer/window/img/header-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest .v-window-header {
+	font-weight: bold;
+	font-size: 12px;
+	line-height: normal;
+	color: #fff;
+	text-shadow: #000 0 -1px 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-ms-text-overflow: ellipsis;
+}
+
+.uiTest .v-window-error .v-window-header {
+	padding-left: 13px;
+	background: transparent url(../reindeer/common/icons/error.png) no-repeat 0 50%;
+}
+
+.uiTest .v-window-resizebox {
+	width: 15px;
+	height: 15px;
+	cursor: se-resize;
+	background: transparent;
+	background-image: url(../reindeer/window/img/resize.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-footer {
+	background-color: white;
+	background-repeat: repeat-x;
+	background-image: url(../reindeer/window/img/footer-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+	height: 15px;
+}
+
+.uiTest .v-window-closebox {
+	top: 12px;
+	right: 10px;
+	width: 15px;
+	height: 16px;
+	background: transparent;
+	background-image: url(../reindeer/window/img/close.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-closebox:hover {
+	background-image: url(../reindeer/window/img/close-hover.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-closebox:active {
+	background-image: url(../reindeer/window/img/close-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-maximizebox, .uiTest .v-window-restorebox {
+	top: 12px;
+	right: 28px;
+	width: 15px;
+	height: 16px;
+	background: transparent;
+}
+
+.uiTest .v-window-maximizebox, .uiTest .v-window-maximizebox:hover, .uiTest .v-window-maximizebox:active {
+	background-image: url(../reindeer/window/img/maximize.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-restorebox, .uiTest .v-window-restorebox:hover, .uiTest .v-window-restorebox:active {
+	background-image: url(../reindeer/window/img/restore.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-contents {
+	background: #fff;
+}
+
+.uiTest .v-window-modalitycurtain {
+	background: #56595b;
+}
+
+.uiTest .v-window-light .v-window-outerheader {
+	background: transparent;
+	padding: 15px 52px 0 18px;
+}
+
+.uiTest .v-window-light .v-window-header {
+	font-size: 16px;
+	color: #292e34;
+	text-shadow: none;
+}
+
+.uiTest .v-window-light .v-window-resizebox {
+	width: 12px;
+	height: 12px;
+	background-image: url(../reindeer/window/img/light/resize.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-light .v-window-footer {
+	background: transparent;
+	height: 12px;
+}
+
+.uiTest .v-window-light .v-window-closebox {
+	right: 1px;
+	top: 17px;
+	width: 19px;
+	height: 15px;
+	background-image: url(../reindeer/window/img/light/close.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-light .v-window-closebox:hover {
+	background-image: url(../reindeer/window/img/light/close-hover.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-light .v-window-closebox:active {
+	background-image: url(../reindeer/window/img/light/close-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-light .v-window-maximizebox {
+	top: 17px;
+	background-image: url(../reindeer/window/img/light/maximize.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-light .v-window-maximizebox:hover {
+	background-image: url(../reindeer/window/img/light/maximize-hover.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-light .v-window-maximizebox:active {
+	background-image: url(../reindeer/window/img/light/maximize-active.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-light .v-window-restorebox {
+	top: 17px;
+	background-image: url(../reindeer/window/img/light/restore.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-light .v-window-restorebox:hover {
+	background-image: url(../reindeer/window/img/light/restore-hover.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-light .v-window-restorebox:active {
+	background-image: url(../reindeer/window/img/light/restore-active.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-light .v-window-contents {
+	background: transparent;
+}
+
+.uiTest .v-window-light .v-window-wrap {
+	background: #f7f7f8 repeat-x;
+	background-image: url(../reindeer/window/img/light/content-bg.png);/** sprite-ref: verticals; sprite-alignment: repeat */
+}
+
+.uiTest .v-window-black .v-window-wrap {
+	border-color: #2e3030;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	overflow: hidden;
+}
+
+.v-sa .uiTest .v-window-black .v-window-wrap, .v-op .uiTest .v-window-black .v-window-wrap {
+	border-color: rgba(0, 0, 0, 0.8);
+}
+
+.uiTest .v-window-black .v-window-wrap {
+	background-color: #1d2021;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+}
+
+.v-sa .uiTest .v-window-black .v-window-wrap, .v-op .uiTest .v-window-black .v-window-wrap {
+	background-color: rgba(29, 32, 33, 0.9);
+}
+
+.uiTest .v-window-black .v-window-outerheader {
+	height: 29px;
+	padding: 7px 14px;
+	background: transparent repeat-x;
+	background-image: url(../reindeer/window/img/black/header-bg.png);/** sprite-ref: black-verticals; sprite-alignment: repeat */
+	text-align: center;
+	-moz-border-radius-topright: 7px;
+	-moz-border-radius-topleft: 7px;
+	-webkit-border-top-right-radius: 7px;
+	-webkit-border-top-left-radius: 7px;
+	overflow: hidden;
+	border: none;
+}
+
+.uiTest .v-window-black .v-window-header {
+	font-size: 12px;
+	font-weight: normal;
+	color: #dddfe1;
+}
+
+.uiTest .v-window-black .v-window-closebox {
+	top: 8px;
+	background-image: url(../reindeer/window/img/black/close.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-black .v-window-closebox:hover {
+	background-image: url(../reindeer/window/img/black/close-hover.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-black .v-window-closebox:active {
+	background-image: url(../reindeer/window/img/black/close-pressed.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-black .v-window-footer {
+	background: transparent;
+	border: none;
+	height: 14px;
+}
+
+.uiTest .v-window-black .v-window-resizebox {
+	background: transparent no-repeat;
+	background-image: url(../reindeer/window/img/black/resize.png);/** sprite-ref: black-verticals; sprite-margin-bottom: 4px */
+	width: 14px;
+	height: 14px;
+}
+
+.uiTest .v-window-black .v-window-maximizebox {
+	top: 8px;
+	background-image: url(../reindeer/window/img/black/maximize.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-black .v-window-maximizebox:hover {
+	background-image: url(../reindeer/window/img/black/maximize-hover.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-black .v-window-maximizebox:active {
+	background-image: url(../reindeer/window/img/black/maximize-active.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-black .v-window-restorebox {
+	top: 8px;
+	background-image: url(../reindeer/window/img/black/restore.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-black .v-window-restorebox:hover {
+	background-image: url(../reindeer/window/img/black/restore-hover.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-black .v-window-restorebox:active {
+	background-image: url(../reindeer/window/img/black/restore-active.png);/** sprite-ref: verticals */
+}
+
+.uiTest .v-window-black .v-window-contents {
+	border: none;
+	background: transparent repeat-x;
+	background-image: url(../reindeer/window/img/black/content-bg.png);/** sprite-ref: black-verticals; sprite-alignment: repeat */
+}

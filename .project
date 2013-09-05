@@ -14,10 +14,11 @@
 	<natures>
 		<nature>org.springsource.ide.eclipse.gradle.core.nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.jdt.groovy.core.groovyNature</nature>
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1378326302764</id>
+			<id>1378408885270</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -25,7 +26,11 @@
 				<arguments>
 					<matcher>
 						<id>org.eclipse.ui.ide.multiFilter</id>
-						<arguments>1.0-projectRelativePath-equals-true-false-V7Demo</arguments>
+						<arguments>1.0-projectRelativePath-equals-true-false-demo</arguments>
+					</matcher>
+					<matcher>
+						<id>org.eclipse.ui.ide.multiFilter</id>
+						<arguments>1.0-projectRelativePath-equals-true-false-testApp</arguments>
 					</matcher>
 					<matcher>
 						<id>org.eclipse.ui.ide.multiFilter</id>
