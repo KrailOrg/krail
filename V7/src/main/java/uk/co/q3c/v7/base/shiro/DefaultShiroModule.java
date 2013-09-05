@@ -51,7 +51,7 @@ public class DefaultShiroModule extends ShiroModule {
 	}
 
 	@Override
-	public void bindSecurityManager(
+	protected void bindSecurityManager(
 			AnnotatedBindingBuilder<? super SecurityManager> bind) {
 		try {
 			bind.toConstructor(

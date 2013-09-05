@@ -111,8 +111,6 @@ public class V7SecurityManager extends DefaultSecurityManager {
 	 */
 	// @Override
 	public Subject getSubject() {
-		LOG.debug("getting Subject");
-
 		VaadinSession session = getVaadinSession();
 
 		Subject subject = (Subject) session.getAttribute(SUBJECT_ATTRIBUTE);
