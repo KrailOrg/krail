@@ -3,14 +3,30 @@
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
 
-configurations{
-	vaadin.version=vaadinVersion
+configurations{ 
+ 
 	
 }
-dependencies {
+
+vaadin {
+	
+	vaadin.version vaadinVersion
+	
+}
 
 
-            
+repositories{
+		maven{
+			url "http://maven.vaadin.com/vaadin-addons"
+			
+		}
+}
+
+
+dependencies { 
+	
+	
+	testCompile 'com.vaadin:vaadin-testbench:3.1.1' 
 	
 	
 }
