@@ -12,6 +12,7 @@
  */
 package fixture.testviews2;
 
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
@@ -19,6 +20,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 
+@UIScoped
 public class TestLoginView implements LoginView {
 
 	@Override

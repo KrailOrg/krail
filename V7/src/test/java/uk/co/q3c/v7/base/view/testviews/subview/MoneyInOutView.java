@@ -12,11 +12,13 @@
  */
 package uk.co.q3c.v7.base.view.testviews.subview;
 
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
 import com.vaadin.ui.Component;
 
+@UIScoped
 public class MoneyInOutView implements V7View {
 
 	@Override

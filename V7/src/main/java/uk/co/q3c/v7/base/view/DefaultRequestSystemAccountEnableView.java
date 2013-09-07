@@ -4,10 +4,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.component.DefaultUserNavigationTree;
 
-public class DefaultRequestSystemAccountEnableView extends StandardPageViewBase implements RequestSystemAccountEnableView {
+@UIScoped
+public class DefaultRequestSystemAccountEnableView extends StandardPageViewBase implements
+		RequestSystemAccountEnableView {
 	@Inject
 	protected DefaultRequestSystemAccountEnableView(V7Navigator navigator, DefaultUserNavigationTree navtree) {
 		super(navigator, navtree);

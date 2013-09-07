@@ -14,6 +14,9 @@ package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
@@ -33,12 +36,13 @@ import uk.co.q3c.v7.i18n.Translate;
 /**
  * This view provides the base for a fairly typical layout for an application. It is not expected that it will be used
  * directly, as the body needs to be defined by a sub-class. All the components in the view - except the body - can be
- * replaced by mapping their interfaces to different implementations in the {@link DefaultComponentModule}. The body component
- * is created by overriding the {@link #createBody()} method
+ * replaced by mapping their interfaces to different implementations in the {@link DefaultComponentModule}. The body
+ * component is created by overriding the {@link #createBody()} method
  * 
  * @author David Sowerby 29 Aug 2013
  * 
  */
+@UIScoped
 public class ApplicationView1 extends ViewBaseWithLayout {
 
 	private final UserNavigationTree navTree;
@@ -51,6 +55,7 @@ public class ApplicationView1 extends ViewBaseWithLayout {
 	private final ApplicationHeader header;
 	private final ViewBody body;
 
+	@Inject
 	protected ApplicationView1(V7Navigator navigator, ApplicationViewLayout1 viewLayout, Translate translate,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, LoginStatusPanel loginOut, ApplicationMenu menu,
 			SubpagePanel subpage, MessageStatusPanel messageBar, ApplicationLogo logo, ApplicationHeader header) {
