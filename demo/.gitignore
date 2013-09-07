@@ -1,8 +1,14 @@
-/build
+/build/classes
+/build/dependency-cache
+/build/libs
+/build/test-results
+/build/tmp
+/logs
 /bin
 /.gradle
-/logs
+/build
 /.classpath
 /.project
-/error-screenshots
 /.settings
+/.gradle
+/error-screenshots
