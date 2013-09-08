@@ -12,15 +12,15 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import javax.inject.Inject;
+import com.vaadin.ui.Component;
 
-import com.vaadin.ui.Panel;
-
-public class DefaultMessageStatusPanel extends Panel implements MessageStatusPanel {
-
-	@Inject
-	protected DefaultMessageStatusPanel() {
-		super();
-	}
+/**
+ * The implementation for this interface combines a {@link UserNavigationTree} implementation with controls for
+ * selecting options
+ * 
+ * @author David Sowerby 8 Sep 2013
+ * 
+ */
+public interface UserNavigationPanel extends Component {
 
 }

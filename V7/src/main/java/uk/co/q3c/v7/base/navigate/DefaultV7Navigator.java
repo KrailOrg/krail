@@ -49,6 +49,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	private final Provider<Subject> subjectPro;
 	private final URIPermissionFactory uriPermissionFactory;
 	private final SitemapURIConverter sitemapURIConverter;
+	private boolean respondToLoginStatusChange;
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler, Sitemap sitemap,
@@ -280,11 +281,13 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 */
 	@Override
 	public void loginSuccessful() {
+		respondToLoginStatusChange = false;
 		if (previousView != null) {
 			navigateTo(previousView, previousViewName, previousFragment);
 		} else {
 			navigateTo(StandardPageKey.Private_Home);
 		}
+		respondToLoginStatusChange = true;
 	}
 
 	@Override

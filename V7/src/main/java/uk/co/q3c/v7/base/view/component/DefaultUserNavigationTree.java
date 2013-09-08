@@ -27,11 +27,14 @@ import uk.co.q3c.v7.base.navigate.CollationKeyOrder;
 import uk.co.q3c.v7.base.navigate.InsertionOrder;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
+import uk.co.q3c.v7.base.navigate.SitemapURIConverter;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.useropt.UserOption;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
+import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
 
@@ -39,14 +42,14 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
 
 /**
- * A navigation tree for users to find their way around the site. Uses {@link Sitemap} as the site structure. This is
- * naturally a {@link UIScoped} class, as it makes sense for one instance to be in use per browser tab
+ * A navigation tree for users to find their way around the site. Uses {@link Sitemap} as the site structure. Although
+ * this seems naturally to be a {@link UIScoped} class it is not currently possible to have a UIScoped Component (see
+ * https://github.com/davidsowerby/v7/issues/177)
  * 
  * @author David Sowerby 17 May 2013
  * 
  */
-@UIScoped
-public class DefaultUserNavigationTree extends Tree implements UserNavigationTree {
+public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener {
 	private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
 	private final CurrentLocale currentLocale;
 	private final Sitemap sitemap;
@@ -57,12 +60,14 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	private final DefaultURIPermissionFactory uriPermissionFactory;
 	private boolean sorted;
 	private final UserOption userOption;
+	private final SitemapURIConverter sitemapURIConverter;
 	public static final String sortedOpt = "sorted";
 	public static final String maxLevelOpt = "maxLevel";
 
 	@Inject
 	protected DefaultUserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator,
-			Provider<Subject> subjectPro, DefaultURIPermissionFactory uriPermissionFactory, UserOption userOption) {
+			Provider<Subject> subjectPro, DefaultURIPermissionFactory uriPermissionFactory, UserOption userOption,
+			SitemapURIConverter sitemapURIConverter) {
 		super();
 		this.sitemap = sitemap;
 		this.currentLocale = currentLocale;
@@ -70,12 +75,14 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		this.subjectPro = subjectPro;
 		this.uriPermissionFactory = uriPermissionFactory;
 		this.userOption = userOption;
+		this.sitemapURIConverter = sitemapURIConverter;
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		// set user option
 		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, false);
 		maxLevel = userOption.getOptionAsInt(this.getClass().getSimpleName(), maxLevelOpt, -1);
 		addValueChangeListener(this);
+		navigator.addViewChangeListener(this);
 
 		loadNodes();
 
@@ -202,6 +209,29 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 			this.sorted = sorted;
 			loadNodes();
 			userOption.setOption(this.getClass().getSimpleName(), sortedOpt, this.sorted);
+		}
+	}
+
+	/**
+	 * 
+	 * @see uk.co.q3c.v7.base.view.V7ViewChangeListener#beforeViewChange(uk.co.q3c.v7.base.view.V7ViewChangeEvent)
+	 */
+	@Override
+	public boolean beforeViewChange(V7ViewChangeEvent event) {
+		return true; // do nothing, and don't block
+	}
+
+	/**
+	 * After a navigation change, select the appropriate node.
+	 * 
+	 * @see uk.co.q3c.v7.base.view.V7ViewChangeListener#afterViewChange(uk.co.q3c.v7.base.view.V7ViewChangeEvent)
+	 */
+	@Override
+	public void afterViewChange(V7ViewChangeEvent event) {
+		SitemapNode selectedNode = sitemapURIConverter.nodeForUri(navigator.getNavigationState(), false);
+		// shouldn't get null, but just in case
+		if (selectedNode != null) {
+			this.select(selectedNode);
 		}
 	}
 

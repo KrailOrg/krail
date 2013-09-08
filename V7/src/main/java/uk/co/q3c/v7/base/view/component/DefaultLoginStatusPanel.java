@@ -17,11 +17,9 @@ import javax.inject.Provider;
 
 import org.apache.shiro.subject.Subject;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
-import uk.co.q3c.v7.base.ui.ScopedUI;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -32,8 +30,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.themes.ChameleonTheme;
 
 /**
- * Represents the "logged in" status of the current {@link Subject}. Because it is UIScoped, only one can be used per
- * {@link ScopedUI}.
+ * Represents the "logged in" status of the current {@link Subject}.
  * <p>
  * 
  * 
@@ -42,7 +39,6 @@ import com.vaadin.ui.themes.ChameleonTheme;
  * 
  */
 // TODO I18N
-@UIScoped
 public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, ClickListener {
 
 	private final Label usernameLabel;
@@ -52,7 +48,8 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 	private final Provider<Subject> subjectPro;
 
 	@Inject
-	protected DefaultLoginStatusPanel(V7Navigator navigator, V7SecurityManager securityManager, Provider<Subject> subjectPro) {
+	protected DefaultLoginStatusPanel(V7Navigator navigator, V7SecurityManager securityManager,
+			Provider<Subject> subjectPro) {
 		super();
 		this.navigator = navigator;
 		this.subjectPro = subjectPro;

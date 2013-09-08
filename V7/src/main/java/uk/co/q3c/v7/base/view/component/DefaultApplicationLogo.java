@@ -14,11 +14,8 @@ package uk.co.q3c.v7.base.view.component;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-
 import com.vaadin.ui.Image;
 
-@UIScoped
 public class DefaultApplicationLogo extends Image implements ApplicationLogo {
 
 	@Inject
