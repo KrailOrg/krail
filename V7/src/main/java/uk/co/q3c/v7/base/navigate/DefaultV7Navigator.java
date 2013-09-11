@@ -49,7 +49,6 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	private final Provider<Subject> subjectPro;
 	private final URIPermissionFactory uriPermissionFactory;
 	private final SitemapURIConverter sitemapURIConverter;
-	private boolean respondToLoginStatusChange;
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler, Sitemap sitemap,
@@ -75,6 +74,12 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	@Override
 	public void navigateTo(String fragment) {
 		log.debug("Navigating to fragment: {}", fragment);
+		// this is partly to stop unnecessary changes, but also to prevent UserNavigationTree and other navigation aware
+		// components from causing a loop by responding to a change of URI
+		if ((fragment != null) && (fragment.equals(currentFragment))) {
+			log.debug("fragment unchanged, no navigation required");
+			return;
+		}
 		sitemapCheck();
 		if (sitemap.hasErrors()) {
 			throw new SiteMapException("Unable to navigate, site map has errors\n" + sitemap.getReport());
@@ -281,13 +286,11 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 */
 	@Override
 	public void loginSuccessful() {
-		respondToLoginStatusChange = false;
 		if (previousView != null) {
 			navigateTo(previousView, previousViewName, previousFragment);
 		} else {
 			navigateTo(StandardPageKey.Private_Home);
 		}
-		respondToLoginStatusChange = true;
 	}
 
 	@Override
