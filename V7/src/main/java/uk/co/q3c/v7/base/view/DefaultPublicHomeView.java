@@ -13,7 +13,7 @@ public class DefaultPublicHomeView extends StandardPageViewBase implements Publi
 
 	@Inject
 	protected DefaultPublicHomeView(V7Navigator navigator, DefaultUserNavigationTree navtree) {
-		super(navigator, navtree);
+		super(navigator);
 	}
 
 	@Override

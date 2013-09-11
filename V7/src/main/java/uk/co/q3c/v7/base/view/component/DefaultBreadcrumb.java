@@ -50,7 +50,7 @@ public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener,
 		this.converter = converter;
 		this.currentLocale = currentLocale;
 		this.collator = Collator.getInstance(currentLocale.getLocale());
-		moveToNavigationState();
+
 	}
 
 	private void moveToNavigationState() {

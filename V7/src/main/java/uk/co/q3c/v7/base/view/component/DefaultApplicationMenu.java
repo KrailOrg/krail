@@ -21,6 +21,8 @@ public class DefaultApplicationMenu extends MenuBar implements ApplicationMenu {
 	@Inject
 	protected DefaultApplicationMenu() {
 		super();
+
+		this.addItem("item 1", null, null).addItem("item 1", null, null);
 	}
 
 }

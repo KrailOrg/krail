@@ -14,13 +14,27 @@ package uk.co.q3c.v7.base.view.component;
 
 import javax.inject.Inject;
 
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 
 public class DefaultSubpagePanel extends Panel implements SubpagePanel {
 
+	private Label label;
+	private HorizontalLayout layout;
+
 	@Inject
 	protected DefaultSubpagePanel() {
 		super();
+		build();
+	}
+
+	private void build() {
+		layout = new HorizontalLayout();
+		label = new Label("Sub page panel");
+		layout.addComponent(label);
+		this.setContent(layout);
+
 	}
 
 }

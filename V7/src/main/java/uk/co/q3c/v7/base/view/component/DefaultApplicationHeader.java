@@ -14,13 +14,26 @@ package uk.co.q3c.v7.base.view.component;
 
 import javax.inject.Inject;
 
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 
 public class DefaultApplicationHeader extends Panel implements ApplicationHeader {
+	private Label label;
+	private HorizontalLayout layout;
 
 	@Inject
 	protected DefaultApplicationHeader() {
 		super();
+		build();
+	}
+
+	private void build() {
+		layout = new HorizontalLayout();
+		label = new Label("Application Header");
+		layout.addComponent(label);
+		this.setContent(layout);
+
 	}
 
 }

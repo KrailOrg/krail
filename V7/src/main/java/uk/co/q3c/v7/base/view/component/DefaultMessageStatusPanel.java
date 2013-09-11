@@ -14,13 +14,27 @@ package uk.co.q3c.v7.base.view.component;
 
 import javax.inject.Inject;
 
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 
 public class DefaultMessageStatusPanel extends Panel implements MessageStatusPanel {
 
+	private Label label;
+	private HorizontalLayout layout;
+
 	@Inject
 	protected DefaultMessageStatusPanel() {
 		super();
+		build();
+	}
+
+	private void build() {
+		layout = new HorizontalLayout();
+		label = new Label("Message bar");
+		layout.addComponent(label);
+		this.setContent(layout);
+
 	}
 
 }

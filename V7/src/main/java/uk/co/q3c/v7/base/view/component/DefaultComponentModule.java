@@ -23,9 +23,13 @@ public class DefaultComponentModule extends AbstractModule {
 		bindLoginStatusPanel();
 		bindApplicationMenu();
 		bindSubpagePanel();
-		bindLoginStatusPanel();
+		bindMessageStatusPanel();
 		bindApplicationLogo();
 		bindApplicationHeader();
+	}
+
+	private void bindMessageStatusPanel() {
+		bind(MessageStatusPanel.class).to(DefaultMessageStatusPanel.class);
 	}
 
 	private void bindApplicationHeader() {
