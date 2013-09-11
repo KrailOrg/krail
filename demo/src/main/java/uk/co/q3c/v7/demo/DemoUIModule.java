@@ -1,4 +1,4 @@
-package com.example.v7demo;
+package uk.co.q3c.v7.demo;
 
 import uk.co.q3c.v7.base.ui.V7UIModule;
 

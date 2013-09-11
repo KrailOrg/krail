@@ -1,4 +1,4 @@
-package com.example.v7demo;
+package uk.co.q3c.v7.demo;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;

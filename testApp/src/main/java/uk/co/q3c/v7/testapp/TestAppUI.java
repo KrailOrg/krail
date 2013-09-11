@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.uitest;
+package uk.co.q3c.v7.testapp;
 
 import javax.inject.Inject;
 

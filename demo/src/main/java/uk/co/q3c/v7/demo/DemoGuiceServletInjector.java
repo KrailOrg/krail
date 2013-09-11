@@ -1,11 +1,11 @@
-package com.example.v7demo;
+package uk.co.q3c.v7.demo;
 
 import java.util.List;
 
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
+import uk.co.q3c.v7.demo.view.DemoViewModule;
 
-import com.example.v7demo.view.DemoViewModule;
 import com.google.inject.Module;
 
 public class DemoGuiceServletInjector extends BaseGuiceServletInjector {

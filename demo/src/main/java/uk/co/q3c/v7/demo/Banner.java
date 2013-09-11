@@ -1,4 +1,4 @@
-package com.example.v7demo;
+package uk.co.q3c.v7.demo;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;

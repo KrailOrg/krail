@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.example.v7demo.view;
+package uk.co.q3c.v7.demo.view;
 
 import java.util.List;
 
