@@ -121,12 +121,13 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 			screenLayout = screenLayout();
 		}
 		screenLayout.setSizeFull();
-		if (screenLayout.getComponentIndex(getViewDisplayPanel()) < 0) {
+		if (viewDisplayPanel.getParent() == null) {
 			String msg = "Your implementation of ScopedUI.screenLayout() must include getViewDisplayPanel().  AS a minimum this could be 'return new VerticalLayout(getViewDisplayPanel())'";
 			log.error(msg);
 			throw new V7ConfigurationException(msg);
 		}
-		screenLayout.setExpandRatio(getViewDisplayPanel(), 1);
+		// screenLayout.setExpandRatio(getViewDisplayPanel(), 1);
+		viewDisplayPanel.setSizeFull();
 		setContent(screenLayout);
 	}
 
