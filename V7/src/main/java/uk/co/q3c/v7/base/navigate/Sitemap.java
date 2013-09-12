@@ -49,12 +49,6 @@ import uk.co.q3c.v7.base.view.V7View;
  * complicated.
  * <p>
  * <p>
- * A potential solution for dependencies can be seen in
- * {@link SitemapURIConverter}, which acts as an intermediary between this class
- * and {@link URIFragmentHandler} implementations, thus avoiding the creation of
- * dependencies here.
- * <p>
- * <p>
  * Uses LinkedHashMap to hold the site map itself, to retain insertion order<br>
  * 
  * @author David Sowerby 19 May 2013
@@ -194,14 +188,14 @@ public class Sitemap extends BasicForest<SitemapNode> {
 
 	/**
 	 * If the {@code uri} has been redirected, return the uri it has been
-	 * redirected to, otherwise, just return {@code uri}
+	 * redirected to, otherwise, just return null
 	 * 
 	 * @param uri
-	 * @return
+	 * @return ridirect url or null
 	 */
 	public String getRedirectFor(String uri) {
 		String p = uriRedirects.get(uri);
-		return (p == null) ? uri : p;
+		return p;
 	}
 
 	public Map<String, String> getRedirects() {

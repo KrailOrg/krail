@@ -24,7 +24,6 @@ import org.apache.shiro.subject.Subject;
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.view.component.SubjectProvider;
 
-import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.binder.AnnotatedBindingBuilder;
 
 /**
@@ -43,8 +42,6 @@ public class DefaultShiroModule extends ShiroModule {
 
 	@Override
 	protected void configureShiro() {
-		install(new FactoryModuleBuilder().build(URIPermissionFactory.class));
-		expose(URIPermissionFactory.class);
 		bindCredentialsMatcher();
 		bindLoginAttemptLog();
 		bindRealms();

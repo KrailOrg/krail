@@ -4,14 +4,17 @@ import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
-import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
-import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.StrictURIFragment;
+import uk.co.q3c.v7.base.navigate.StrictUriFragmentFactory;
+import uk.co.q3c.v7.base.navigate.URIFragment;
+import uk.co.q3c.v7.base.navigate.UriFragmentFactory;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
 import uk.co.q3c.v7.base.shiro.VaadinSecurityContext;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 import com.google.inject.multibindings.MapBinder;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.WebBrowser;
@@ -28,7 +31,7 @@ public abstract class V7UIModule extends AbstractModule {
 		bindUIProvider();
 		addUIBindings(mapbinder);
 		bindNavigator();
-		bindURIHandler();
+		bindURIFragmentFactory();
 		bindConverterFactory();
 		bindLoginStatusMonitor();
 	}
@@ -53,10 +56,10 @@ public abstract class V7UIModule extends AbstractModule {
 	protected abstract void bindUIProvider();
 
 	/**
-	 * Override to bind your choice of URI handler
+	 * Override to bind your choice of URI fragment
 	 */
-	protected void bindURIHandler() {
-		bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+	protected void bindURIFragmentFactory() {
+		bind(UriFragmentFactory.class).to(StrictUriFragmentFactory.class).in(Singleton.class);
 	}
 
 	protected void bindNavigator() {

@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -37,12 +37,12 @@ public abstract class ViewBase implements V7View {
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {
-		log.debug("entered view: " + this.getClass().getSimpleName() + "with uri " + navigator.getNavigationState());
-		List<String> params = navigator.getNavigationParams();
-		processParams(params);
+		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri: "
+				+ event.getNewNavigationState().getFragment().getUri());
+		processParams(event.getNewNavigationState().getFragment().getParameters());
 	}
 
-	protected abstract void processParams(List<String> params);
+	protected abstract void processParams(Map<String, String> params);
 
 	public V7Navigator getNavigator() {
 		return navigator;

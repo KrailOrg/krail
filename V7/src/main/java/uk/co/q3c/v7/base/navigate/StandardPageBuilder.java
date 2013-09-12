@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
+import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
@@ -62,6 +63,8 @@ public class StandardPageBuilder {
 
 	public void generateStandardPages() {
 		generatePage(StandardPageKey.Root);
+		
+		generatePage(StandardPageKey.Error);
 		
 		if (generatePublicHomePage) {
 			generatePage(StandardPageKey.Public_Home);
@@ -172,6 +175,8 @@ public class StandardPageBuilder {
 		switch (key) {
 		case Root:
 			return RootView.class;
+		case Error:
+			return ErrorView.class;
 		case Public_Home:
 			return PublicHomeView.class;
 		case Private_Home:

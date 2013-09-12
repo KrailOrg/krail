@@ -12,7 +12,6 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,8 +26,6 @@ import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapNode;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
-import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.useropt.UserOption;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
@@ -37,42 +34,44 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
 
 /**
- * A navigation tree for users to find their way around the site. Uses {@link Sitemap} as the site structure. This is
- * naturally a {@link UIScoped} class, as it makes sense for one instance to be in use per browser tab
+ * A navigation tree for users to find their way around the site. Uses
+ * {@link Sitemap} as the site structure. This is naturally a {@link UIScoped}
+ * class, as it makes sense for one instance to be in use per browser tab
  * 
  * @author David Sowerby 17 May 2013
  * 
  */
 @UIScoped
 public class UserNavigationTree extends Tree {
-	private static Logger log = LoggerFactory.getLogger(UserNavigationTree.class);
+	private static Logger log = LoggerFactory
+			.getLogger(UserNavigationTree.class);
 	private final CurrentLocale currentLocale;
 	private final Sitemap sitemap;
 	private int maxLevel;
 	private int level;
 	private final V7Navigator navigator;
 	private final Provider<Subject> subjectPro;
-	private final DefaultURIPermissionFactory uriPermissionFactory;
 	private boolean sorted;
 	private final UserOption userOption;
 	public static final String sortedOpt = "sorted";
 	public static final String maxLevelOpt = "maxLevel";
 
 	@Inject
-	protected UserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator,
-			Provider<Subject> subjectPro, DefaultURIPermissionFactory uriPermissionFactory, UserOption userOption) {
+	protected UserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale,
+			V7Navigator navigator, Provider<Subject> subjectPro, UserOption userOption) {
 		super();
 		this.sitemap = sitemap;
 		this.currentLocale = currentLocale;
 		this.navigator = navigator;
 		this.subjectPro = subjectPro;
-		this.uriPermissionFactory = uriPermissionFactory;
 		this.userOption = userOption;
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		// set user option
-		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, false);
-		maxLevel = userOption.getOptionAsInt(this.getClass().getSimpleName(), maxLevelOpt, -1);
+		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(),
+				sortedOpt, false);
+		maxLevel = userOption.getOptionAsInt(this.getClass().getSimpleName(),
+				maxLevelOpt, -1);
 		addValueChangeListener(this);
 
 		loadNodes();
@@ -82,81 +81,69 @@ public class UserNavigationTree extends Tree {
 	private void loadNodes() {
 
 		this.removeAllItems();
-		List<SitemapNode> nodeList = sitemap.getRoots();
+		List<SitemapNode> roots = sitemap.getRoots();
 
-//		// which order, sorted or insertion?
-//		if (sorted) {
-//			log.debug("'sorted' is true, sorting by collation key");
-//			Collections.sort(nodeList, new CollationKeyOrder());
-//		} else {
-//			log.debug("'sorted' is false, using insertion order");
-//			Collections.sort(nodeList, new InsertionOrder());
-//		}
-
-		for (SitemapNode node : nodeList) {
+		for (SitemapNode root : roots) {
 			level = 1;
 			// doesn't make sense to show the logout page
-			if (!node.getLabelKey().equals(StandardPageKey.Logout)) {
-				loadNode(null, node, sitemap.hasPermissions(subjectPro.get(), node));
+			if (!root.getLabelKey().equals(StandardPageKey.Logout)) {
+				loadNode(null, root);
 			}
 		}
 	}
 
 	/**
-	 * Checks each node to ensure that the Subject has permission to view, and if so, adds it to this tree
+	 * Checks each node to ensure that the Subject has permission to view, and
+	 * if so, adds it to this tree
 	 * 
-	 * @param parentNode
-	 * @param childNode
+	 * @param node
 	 */
-	private void loadNode(SitemapNode parentNode, SitemapNode childNode, boolean publicBranch) {
+	//FIXME the parent mught be useless since i can get it from the node itself
+	private void loadNode(SitemapNode parent, SitemapNode node) {
 		// construct the permission
-		String uri = childNode.getUri();
-		URIViewPermission pagePermissionRequired = uriPermissionFactory.createViewPermission(uri);
+		String uri = node.getUri();
 
 		// if permitted, add it
-		if (publicBranch || subjectPro.get().isPermitted(pagePermissionRequired)) {
+		if (node.isPermitted(subjectPro.get())) {
 			log.debug("user has permission to view URI {}", uri);
-			this.addItem(childNode);
-			I18NKey<?> key = childNode.getLabelKey();
+			this.addItem(node);
+			I18NKey<?> key = node.getLabelKey();
 
 			String caption = key.getValue(currentLocale.getLocale());
-			this.setItemCaption(childNode, caption);
-			setParent(childNode, parentNode);
+			this.setItemCaption(node, caption);
+			setParent(node, parent);
 
-			SitemapNode newParentNode = childNode;
+			SitemapNode newParentNode = node;
 			level++;
 
 			if ((maxLevel < 0) || (level <= maxLevel)) {
 				List<SitemapNode> children = sitemap.getChildren(newParentNode);
 				if (children.size() == 0) {
-					// no children, visual tree should not allow expanding the node
+					// no children, visual tree should not allow expanding the
+					// node
 					setChildrenAllowed(newParentNode, false);
 				} else {
-//					// which order, sorted or insertion?
-//					if (sorted) {
-//						Collections.sort(children, new CollationKeyOrder());
-//					} else {
-//						Collections.sort(children, new InsertionOrder());
-//					}
-				}
-				for (SitemapNode child : children) {
-					if (!child.getLabelKey().equals(StandardPageKey.Logout)) {
-						loadNode(newParentNode, child, publicBranch);
+					for (SitemapNode child : children) {
+						if (!child.getLabelKey().equals(StandardPageKey.Logout)) {
+							loadNode(newParentNode, child);
+						}
 					}
 				}
-
 			} else {
 				// no children, visual tree should not allow expanding the node
 				setChildrenAllowed(newParentNode, false);
 			}
 		} else {
-			log.debug("user does not have permission to view {}, page not loaded in to UserNavigationTree", uri);
+			log.debug(
+					"user does not have permission to view {}, page not loaded in to UserNavigationTree",
+					uri);
 		}
 	}
 
 	/**
-	 * Returns true if the {@code node} is a leaf as far as this {@link UserNavigationTree} is concerned. It may be a
-	 * leaf here, but not in the {@link #sitemap}, depending on the setting of {@link #maxLevel}
+	 * Returns true if the {@code node} is a leaf as far as this
+	 * {@link UserNavigationTree} is concerned. It may be a leaf here, but not
+	 * in the {@link #sitemap}, depending on the setting of {@link #maxLevel}
 	 * 
 	 * @param node
 	 * @return
@@ -170,8 +157,9 @@ public class UserNavigationTree extends Tree {
 	}
 
 	/**
-	 * Set the maximum level or depth of the tree you want to be visible. 0 is not allowed, and is ignored. Set to < 0
-	 * if you want this tree to display the full {@link #sitemap}
+	 * Set the maximum level or depth of the tree you want to be visible. 0 is
+	 * not allowed, and is ignored. Set to < 0 if you want this tree to display
+	 * the full {@link #sitemap}
 	 * 
 	 * @param level
 	 */
@@ -179,7 +167,8 @@ public class UserNavigationTree extends Tree {
 		if (maxLevel != 0) {
 			this.maxLevel = maxLevel;
 			loadNodes();
-			userOption.setOption(this.getClass().getSimpleName(), maxLevelOpt, this.maxLevel);
+			userOption.setOption(this.getClass().getSimpleName(), maxLevelOpt,
+					this.maxLevel);
 		}
 	}
 
@@ -199,7 +188,8 @@ public class UserNavigationTree extends Tree {
 		if (sorted != this.sorted) {
 			this.sorted = sorted;
 			loadNodes();
-			userOption.setOption(this.getClass().getSimpleName(), sortedOpt, this.sorted);
+			userOption.setOption(this.getClass().getSimpleName(), sortedOpt,
+					this.sorted);
 		}
 	}
 

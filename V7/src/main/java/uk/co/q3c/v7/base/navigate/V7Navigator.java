@@ -21,43 +21,40 @@ import com.vaadin.server.Page.UriFragmentChangedListener;
  */
 public interface V7Navigator extends UriFragmentChangedListener {
 
-	void navigateTo(String navigationState);
+	public void navigateTo(String navigationState);
 
 	/**
 	 * A convenience method to look up the URI fragment for the {@link PageKey} and navigate to it
 	 * 
 	 * @param pageKey
 	 */
-	void navigateTo(PageKey pageKey);
+	public void navigateTo(PageKey pageKey);
 
-	String getNavigationState();
+	public String getCurrentUri();
 
-	List<String> getNavigationParams();
+	public void addViewChangeListener(V7ViewChangeListener listener);
 
-	void addViewChangeListener(V7ViewChangeListener listener);
-
-	void removeViewChangeListener(V7ViewChangeListener listener);
+	public void removeViewChangeListener(V7ViewChangeListener listener);
 
 	/**
 	 * A signal to the navigator that a login has been successful. The implementation defines which view should be
 	 * switched to, but typically the view is changed from the {@link LoginView} to the one the user was at before
 	 * requesting a log in, or to a "landing page" view.
 	 */
-	void loginSuccessful();
+	public void loginSuccessful();
 
 	/**
 	 * Removes any historical navigation state
 	 */
-	void clearHistory();
+	public void clearHistory();
 
-	V7View getCurrentView();
-
-	void navigateTo(SitemapNode node);
+	@Deprecated
+	public void navigateTo(SitemapNode node);
 
 	/**
 	 * Navigate to the error view. It is assumed that the view has already been set up with error information, usually
 	 * via the V7ErrorHandler
 	 */
-	void error();
+	public void error();
 
 }

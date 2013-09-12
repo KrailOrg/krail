@@ -31,7 +31,7 @@ public class Notifier {
 		super();
 		this.i18nValue = i18nValue;
 	}
-
+	
 	public void notify(I18NKey<?> captionKey, I18NKey<?> messageKey, Notification.Type messageType,
 			Object... messageArguments) {
 		String msg = i18nValue.message(messageKey, messageArguments);

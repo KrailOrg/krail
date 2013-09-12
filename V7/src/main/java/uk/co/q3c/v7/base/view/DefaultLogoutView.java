@@ -12,7 +12,9 @@
  */
 package uk.co.q3c.v7.base.view;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -38,7 +40,7 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 	}
 
 	@Override
-	protected void processParams(List<String> params) {
+	protected void processParams(LinkedHashMap<String, String> params) {
 
 	}
 

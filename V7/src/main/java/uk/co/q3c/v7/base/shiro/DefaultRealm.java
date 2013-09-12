@@ -18,21 +18,17 @@ import org.apache.shiro.realm.ldap.JndiLdapRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import uk.co.q3c.v7.base.navigate.Sitemap;
-import uk.co.q3c.v7.base.navigate.StandardPageKey;
 
 public class DefaultRealm extends AuthorizingRealm {
 
 	private final LoginAttemptLog loginAttemptLog;
 	private final Sitemap sitemap;
-	private final URIPermissionFactory permissionFactory;
 
 	@Inject
-	protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher, Sitemap sitemap,
-			URIPermissionFactory permissionFactory) {
+	protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher, Sitemap sitemap) {
 		super(matcher);
 		this.loginAttemptLog = loginAttemptLog;
 		this.sitemap = sitemap;
-		this.permissionFactory = permissionFactory;
 		setCachingEnabled(false);
 	}
 
@@ -90,10 +86,7 @@ public class DefaultRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-		String privatePermission = "uri:view:" + StandardPageKey.Private_Home.getUri() + ":*";
-		URIViewPermission publicPermission = permissionFactory.createViewPermission(StandardPageKey.Public_Home.getUri(), true);
-		info.addObjectPermission(publicPermission);
-		info.addStringPermission(privatePermission);
+		//no special permissions
 		return info;
 	}
 

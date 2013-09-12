@@ -16,6 +16,8 @@ import java.text.CollationKey;
 import java.text.Collator;
 import java.util.Locale;
 
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 
 import com.google.common.base.Objects;
@@ -122,8 +124,7 @@ public class SitemapNode {
 			this.viewClass = viewClass;
 			permissions.clear();
 			if (this.viewClass != null) {
-				permissions
-						.buildPermissionsFromViewAnnotations(this.viewClass);
+				permissions.buildPermissionsFromViewAnnotations(this.viewClass);
 			}
 		}
 	}
@@ -178,11 +179,16 @@ public class SitemapNode {
 		return getUri().equals(other.getUri());
 	}
 
-	public void checkPermissions(Subject subject) {
-		permissions.checkPermissions(subject);
-	}
-
 	public ViewPermissions getPermissions() {
 		return permissions;
 	}
+
+	public void checkPermissions(Subject subject) throws UnauthenticatedException, UnauthorizedException {
+		getPermissions().checkPermissions(subject);
+	}
+	
+	public boolean isPermitted(Subject subject) {
+		return getPermissions().isPermitted(subject);
+	}
+
 }

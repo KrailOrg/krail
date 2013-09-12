@@ -1,6 +1,7 @@
 package uk.co.q3c.v7.base.view;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -20,7 +21,7 @@ public class DefaultPrivateHomeView extends StandardPageViewBase implements Priv
 	}
 
 	@Override
-	protected void processParams(List<String> params) {
+	protected void processParams(Map<String, String> params) {
 	}
 
 }

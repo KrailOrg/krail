@@ -1,6 +1,8 @@
 package uk.co.q3c.v7.base.navigate;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Handles the decoding and encoding of a URI Fragment.
@@ -8,7 +10,7 @@ import java.util.List;
  * @author david
  * 
  */
-public interface URIFragmentHandler {
+public interface URIFragment {
 	/**
 	 * returns the "virtual page path" of the URIFragment. The path is assumed to finish as soon as a paired parameter
 	 * is found. No attempt is made to validate the actual structure of the path, so for example something like
@@ -18,13 +20,11 @@ public interface URIFragmentHandler {
 	 * 
 	 * @see #getPathSegments()
 	 */
-	public String virtualPage();
+	public String getVirtualPage();
 
-	public URIFragmentHandler setFragment(String fragment);
+	public void setFragment(String fragment);
 
-	public String fragment();
-
-	public List<String> parameterList();
+	public String getUri();
 
 	/**
 	 * Sets the value of the specified parameter. If this parameter already exists, its value is updated, otherwise the
@@ -34,33 +34,23 @@ public interface URIFragmentHandler {
 	 * @param value
 	 * @return
 	 */
-	public URIFragmentHandler setParameterValue(String paramName, String value);
+	public URIFragment setParameterValue(String paramName, String value);
 
-	public URIFragmentHandler removeParameter(String paramName);
+	public URIFragment removeParameter(String paramName);
 
-	void setVirtualPage(String pageName);
+	public void setVirtualPage(String pageName);
 
-	String parameterValue(String paramName);
+	public String getParameterValue(String paramName);
 
-	/**
-	 * 
-	 * @return
-	 */
-	boolean isUseBang();
+	public boolean isUseBang();
 
 	/**
 	 * If true, use "#!" (hashbang) after the base URI, if false use "#" (hash).
 	 * 
 	 * @param useBang
 	 */
-	void setUseBang(boolean useBang);
+	public void setUseBang(boolean useBang);
 
-	/**
-	 * Returns the virtual page path, but as an array of segments
-	 * 
-	 * @return
-	 * @see #virtualPage()
-	 */
-	String[] getPathSegments();
+	public LinkedHashMap<String, String> getParameters();
 
 }

@@ -27,7 +27,7 @@ public class ViewPermissions {
 		this.node = node;
 	}
 
-	public void checkPermissions(Subject subject) {
+	public void checkPermissions(Subject subject) throws UnauthenticatedException, UnauthorizedException {
 		assert publicView != null;
 		if (subject == null) {
 			throw new IllegalArgumentException("The subject can't be null");
@@ -45,6 +45,15 @@ public class ViewPermissions {
 			if (!subject.hasAllRoles(requiredRoles)) {
 				throw new UnauthorizedException(node.getUri());
 			}
+		}
+	}
+	
+	public boolean isPermitted(Subject subject) {
+		try {
+			checkPermissions(subject);
+			return true;
+		} catch (UnauthenticatedException | UnauthorizedException e) {
+			return false;
 		}
 	}
 

@@ -1,6 +1,8 @@
 package uk.co.q3c.v7.base.view;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -25,20 +27,10 @@ public abstract class VerticalViewBase extends VerticalLayout implements V7View 
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {
-		log.debug("entered view: " + this.getClass().getSimpleName()
-				+ " with uri: " + navigator.getNavigationState());
-		List<String> params = navigator.getNavigationParams();
-		processParams(params);
+		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri: "
+				+ event.getNewNavigationState().getFragment().getUri());
+		processParams(event.getNewNavigationState().getFragment().getParameters());
 	}
-
-//	/**
-//	 * typecasts and returns getUI()
-//	 * 
-//	 * @return
-//	 */
-//	public ScopedUI getScopedUI() {
-//		return (ScopedUI) getUI();
-//	}
 	
 	/**
 	 * typecasts and returns getUI()
@@ -51,7 +43,7 @@ public abstract class VerticalViewBase extends VerticalLayout implements V7View 
 		return (ScopedUI) super.getUI();
 	}
 
-	protected abstract void processParams(List<String> params);
+	protected abstract void processParams(LinkedHashMap<String, String> params);
 
 	@Override
 	public Component getUiComponent() {

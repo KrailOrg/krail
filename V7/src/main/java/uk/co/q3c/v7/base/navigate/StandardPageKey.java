@@ -19,6 +19,7 @@ import uk.co.q3c.v7.i18n.I18NKey;
 
 public enum StandardPageKey implements PageKey {
 	Root (""), // The root
+	Error ("error"), // The error page
 	Public_Home ("public"), // The home page for non-authenticated users
 	Private_Home ("private"), // The home page for authenticated users
 	Login (StandardPageKey.Public_Home,"login"), // the login page

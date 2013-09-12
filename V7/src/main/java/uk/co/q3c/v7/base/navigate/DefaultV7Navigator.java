@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
@@ -15,12 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
-import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
-import uk.co.q3c.v7.base.shiro.URIViewPermission;
-import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import uk.co.q3c.v7.base.ui.ScopedUI;
-import uk.co.q3c.v7.base.view.ErrorView;
+import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
@@ -29,7 +25,6 @@ import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
@@ -42,25 +37,29 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	private NavigationState previousNavigationState = null;
 	private NavigationState currentNavigationState = null;
 	private final List<V7ViewChangeListener> listeners = new LinkedList<V7ViewChangeListener>();
-	private final Provider<ErrorView> errorViewPro;
-	private final URIFragmentHandler uriHandler;
 	private final Map<String, Provider<V7View>> viewProvidersMap;
 
 	private final Provider<Subject> subjectProvider;
+	private UriFragmentFactory uriFragmentFactory;
 
 	@Inject
-	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro,
-			URIFragmentHandler uriHandler, Sitemap sitemap,
+	protected DefaultV7Navigator(Sitemap sitemap,
 			Map<String, Provider<V7View>> viewProMap,
-			V7SecurityManager securityManager,
-			Provider<Subject> securityContext) {
+			UriFragmentFactory uriFragmentFactory,
+			V7SecurityManager securityManager, Provider<Subject> securityContext) {
 		super();
-		this.errorViewPro = errorViewPro;
 		this.viewProvidersMap = viewProMap;
-		this.uriHandler = uriHandler;
 		this.sitemap = sitemap;
 		this.subjectProvider = securityContext;
+		this.uriFragmentFactory = uriFragmentFactory;
 		securityManager.addListener(this);
+	}
+
+	@Override
+	public void navigateTo(String uri) {
+		assert uri != null;
+
+		navigateTo(uriFragmentFactory.getUriFragment(uri));
 	}
 
 	/**
@@ -70,12 +69,10 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 * 
 	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#navigateTo(java.lang.String)
 	 */
-	@Override
-	public void navigateTo(String uri) {
+	public void navigateTo(URIFragment uriFragment) {
 
-		assert uri != null;
-		
-		log.debug("Navigating to uri: {}", uri);
+		log.debug("Navigating to uri: {}", uriFragment.getUri());
+
 		sitemapCheck();
 		if (sitemap.hasErrors()) {
 			throw new SiteMapException(
@@ -83,89 +80,75 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 							+ sitemap.getReport());
 		}
 
-		sitemapCheck();
-		uriHandler.setFragment(uri);
+		// check permissions
+		try {
+			sitemap.checkPermissions(uriFragment.getVirtualPage(),
+					subjectProvider.get());
+		} catch (UnauthenticatedException e) {
+			onUnauthenticatedException(e);
+			return;
+		} catch (UnauthorizedException e) {
+			// TODO handle
+			throw e;
+		}
 
 		// fragment needs to be revised if redirected
-		String revisedUri = checkRedirects(uri);
-		log.debug("fragment after redirect check is {}", revisedUri);
+		if (checkRedirects(uriFragment)) {
+			log.debug("fragment after redirect check is {}",
+					uriFragment.getUri());
 
-		String viewUriFragment = uriHandler.virtualPage();
+			// if redirected it need to begin the navigation again (this way i
+			// can check permissions and redirects on the new uri)
+			navigateTo(uriFragment);
+			return;
+		}
+
+		// no redirects, and the navigation is permitted
+		String viewUriFragment = uriFragment.getVirtualPage();
 		log.debug("page to look up View is {}", viewUriFragment);
 		Provider<V7View> provider = viewProvidersMap.get(viewUriFragment);
 		V7View view = null;
 		if (provider == null) {
-			String msg = "View not found for page '" + revisedUri + "'";
+			String msg = "View not found for page '" + uriFragment.getUri()
+					+ "'";
 			log.debug(msg);
 			throw new InvalidURIException(msg);
 		} else {
 			view = provider.get();
 		}
 
-		navigateTo(view, viewUriFragment, revisedUri);
+		navigateTo(new NavigationState(uriFragment, view));
 	}
 
 	/**
 	 * Checks {@code fragment} to see whether it has been redirected. If it has
-	 * the full fragment is returned, but modified for the redirected page. If
-	 * not, the {@code fragment} is returned unchanged.
+	 * the fragment will be modified for the redirected page.
 	 * 
-	 * @param fragment
-	 * @return
+	 * @param uriFragment
+	 * @return true if redirected, false otherwise
 	 */
-	private String checkRedirects(String fragment) {
-		String page = uriHandler.virtualPage();
+	private boolean checkRedirects(URIFragment uriFragment) {
+		String page = uriFragment.getVirtualPage();
 		String redirection = sitemap.getRedirectFor(page);
 		// if no redirect found, page is returned
-		if (redirection == page) {
-			return fragment;
+		if (redirection == null) {
+			return false;
 		} else {
-			String newFragment = fragment.replaceFirst(page, redirection);
-			uriHandler.setFragment(newFragment);
-			return newFragment;
+			// TODO support apache mod-rewrite like redirects : if one set a
+			// redirect for /foo -> /bar, then /foo/moo/a would be redirected to
+			// /bar/moo/a
+			uriFragment.setFragment(redirection);
+			return true;
 		}
 	}
-	
+
 	protected void navigateTo(NavigationState navigationState) {
-		navigateTo(navigationState.getView(), navigationState.getViewName(), navigationState.getUri());
+		changeView(navigationState.getFragment(), navigationState.getView());
 	}
 
-	/**
-	 * Navigates to a view, setting its parameters and calling listeners. If a
-	 * page is public then any user (even unauthenticated) can navigate to it.
-	 * If it is not public then permissions are checked, and if the user is not
-	 * authorised, a {@link AuthorizationException} is thrown. This would be
-	 * caught by the the implementation bound to
-	 * {@link UnauthorizedExceptionHandler}
-	 * 
-	 * @param view
-	 *            view to activate
-	 * @param viewName
-	 *            (optional) name of the view or null not to change the
-	 *            navigation state
-	 * @param uri
-	 *            parameters passed in the navigation state to the view. In this
-	 *            context, the parameters are all the parameters, which include
-	 *            the part which forms the pseudo URI. For example,
-	 *            private/transfers/id=23
-	 */
-	protected void navigateTo(V7View view, String viewName, String uri) {
-
-		try {
-			sitemap.checkPermissions(uri, subjectProvider.get());
-		} catch (UnauthenticatedException e) {
-			onUnauthenticatedException(e);
-			return;
-		} catch (UnauthorizedException e) {
-			throw e;
-		}
-
-		// is permitted, proceed
-		changeView(view, viewName, uri);
-	}
-	
 	protected void onUnauthenticatedException(UnauthenticatedException e) {
-		//reditect to login
+		log.trace("UnauthenticatedException");
+		// reditect to login
 		navigateTo(StandardPageKey.Login);
 	}
 
@@ -175,26 +158,24 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 * 
 	 * @param view
 	 *            view to activate
-	 * @param viewName
-	 *            (optional) name of the view or null not to change the
-	 *            navigation state
-	 * @param uri
-	 *            parameters passed in the navigation state to the view. In this
-	 *            context, the parameters are all the parameters, which include
-	 *            the part which forms the pseudo URI. For example,
-	 *            private/transfers/id=23
+	 * @param fragment
 	 */
-	private void changeView(V7View view, String viewName, String uri) {
-		V7ViewChangeEvent event = new V7ViewChangeEvent(this, currentNavigationState,
-				view, viewName, uri);
+	private void changeView(URIFragment fragment, V7View view) {
+		final NavigationState newNavigationState = new NavigationState(
+				fragment, view);
+
+		V7ViewChangeEvent event = new V7ViewChangeEvent(this,
+				currentNavigationState, newNavigationState);
 		if (!fireBeforeViewChange(event)) {
-			//aborted
+			// aborted
 			return;
 		}
-		getUI().changeView(currentNavigationState!=null?currentNavigationState.getView():null, view);
+		V7View currentView = currentNavigationState != null ? currentNavigationState
+				.getView() : null;
+		getUI().changeView(currentView, view);
 		view.enter(event);
 
-		setCurrentView(view, viewName, uri);
+		setCurrentNavigationState(newNavigationState);
 		fireAfterViewChange(event);
 	}
 
@@ -268,17 +249,12 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	@Override
 	public void uriFragmentChanged(UriFragmentChangedEvent event) {
 		String uri = event.getPage().getUriFragment();
-		navigateTo(uri!=null?uri:"");
+		navigateTo(uri != null ? uri : "");
 	}
 
 	@Override
-	public String getNavigationState() {
-		return uriHandler.fragment();
-	}
-
-	@Override
-	public List<String> getNavigationParams() {
-		return uriHandler.parameterList();
+	public String getCurrentUri() {
+		return getCurrentNavigationState().getFragment().getUri();
 	}
 
 	public ScopedUI getUI() {
@@ -300,41 +276,24 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 */
 	@Override
 	public void loginSuccessful() {
-		if (previousNavigationState != null) {
+		if (previousNavigationState != null
+				&& !(previousNavigationState.getView() instanceof LoginView)) {
 			navigateTo(previousNavigationState);
 		} else {
 			navigateTo(StandardPageKey.Private_Home);
 		}
 	}
 
-	@Override
-	public V7View getCurrentView() {
-		return currentNavigationState.getView();
+	protected NavigationState getCurrentNavigationState() {
+		return this.currentNavigationState;
 	}
 
-	public V7View getPreviousView() {
-		return previousNavigationState.getView();
-	}
-
-	protected void setCurrentView(V7View newView, String viewName,
-			String fragment) {
+	protected void setCurrentNavigationState(NavigationState newNavigationState) {
 		previousNavigationState = currentNavigationState;
-		currentNavigationState = new NavigationState(newView, viewName, fragment);
+		currentNavigationState = newNavigationState;
 
-		uriHandler.setFragment(fragment);
-		getUI().getPage().setUriFragment(fragment, false);
-	}
-
-	protected void setPreviousView(V7View previousView) {
-		this.previousNavigationState.setView(previousView);
-	}
-
-	public String getPreviousViewName() {
-		return previousNavigationState.getViewName();
-	}
-
-	public String getCurrentViewName() {
-		return currentNavigationState.getViewName();
+		getUI().getPage().setUriFragment(
+				currentNavigationState.getFragment().getUri(), false);
 	}
 
 	@Override
@@ -362,10 +321,6 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		}
 	}
 
-	public String getPreviousFragment() {
-		return previousNavigationState.getUri();
-	}
-
 	@Override
 	public void clearHistory() {
 		previousNavigationState = null;
@@ -375,18 +330,18 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	public void navigateTo(SitemapNode node) {
 		sitemapCheck();
 		node = sitemap.getNode(node);
-		
-		if(node == null){
-			throw new SiteMapException("The sitemap does not containt the node : "+ node);
+
+		if (node == null) {
+			throw new SiteMapException(
+					"The sitemap does not containt the node : " + node);
 		}
-		
+
 		String uri = node.getUri();
 		navigateTo(uri);
 	}
 
 	@Override
 	public void error() {
-		changeView(errorViewPro.get(), "ErrorView", "error");
+		navigateTo(StandardPageKey.Error);
 	}
-
 }

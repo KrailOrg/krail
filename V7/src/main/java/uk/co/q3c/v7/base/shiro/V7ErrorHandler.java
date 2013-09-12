@@ -17,6 +17,8 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.navigate.InvalidURIException;
 import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
@@ -36,6 +38,8 @@ import com.vaadin.server.ErrorEvent;
  */
 public class V7ErrorHandler extends DefaultErrorHandler {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(V7ErrorHandler.class);
+	
 	private final UnauthenticatedExceptionHandler authenticationHandler;
 	private final UnauthorizedExceptionHandler authorisationHandler;
 	private final InvalidURIExceptionHandler invalidUriHandler;
@@ -79,6 +83,8 @@ public class V7ErrorHandler extends DefaultErrorHandler {
 			return;
 		}
 
+		LOGGER.error("", originalError);
+		
 		errorView.setError(event.getThrowable());
 		navigator.error();
 
