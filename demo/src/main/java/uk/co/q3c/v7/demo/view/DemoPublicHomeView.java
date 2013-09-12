@@ -18,60 +18,13 @@ import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
-import uk.co.q3c.v7.base.view.ViewBase;
-import uk.co.q3c.v7.base.view.component.DefaultUserNavigationTree;
+import uk.co.q3c.v7.base.view.StandardPageViewBase;
 
-import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.HorizontalSplitPanel;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
-
-public class DemoPublicHomeView extends ViewBase implements PublicHomeView {
-
-	private HorizontalSplitPanel hlayout;
-	private final DefaultUserNavigationTree navtree;
-	private VerticalLayout vlayout;
-	private Label label;
-	private Button throwExceptionBtn;
+public class DemoPublicHomeView extends StandardPageViewBase implements PublicHomeView {
 
 	@Inject
-	public DemoPublicHomeView(V7Navigator navigator, DefaultUserNavigationTree navtree) {
+	public DemoPublicHomeView(V7Navigator navigator) {
 		super(navigator);
-		this.navtree = navtree;
-		navtree.setSizeFull();
-	}
-
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-
-	}
-
-	@Override
-	protected void buildView() {
-		hlayout = new HorizontalSplitPanel();
-		rootComponent = hlayout;
-		hlayout.setSplitPosition(200f, Unit.PIXELS);
-		vlayout = new VerticalLayout();
-
-		label = new Label(this.getClass().getName());
-		// TODO I18N
-		throwExceptionBtn = new Button("throw exception");
-		throwExceptionBtn.addClickListener(new ClickListener() {
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				throw new RuntimeException("demonstrating the error view");
-			}
-		});
-
-		vlayout.addComponent(label);
-		vlayout.addComponent(throwExceptionBtn);
-		hlayout.setFirstComponent(navtree);
-		hlayout.setSecondComponent(vlayout);
 	}
 
 	@Override
