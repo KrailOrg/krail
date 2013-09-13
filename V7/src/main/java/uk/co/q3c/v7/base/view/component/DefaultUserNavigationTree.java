@@ -83,6 +83,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		maxLevel = userOption.getOptionAsInt(this.getClass().getSimpleName(), maxLevelOpt, -1);
 		addValueChangeListener(this);
 		navigator.addViewChangeListener(this);
+		setId(this.getClass().getSimpleName());
 
 		loadNodes();
 

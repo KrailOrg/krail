@@ -34,7 +34,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.144s</div>
+<div class="counter">0.136s</div>
 <p>duration</p>
 </div>
 </td>
@@ -72,7 +72,7 @@
 </thead>
 <tr>
 <td class="success">fail1</td>
-<td>0.007s</td>
+<td>0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -87,27 +87,27 @@
 </tr>
 <tr>
 <td class="success">invalidPropertyName</td>
-<td>0.008s</td>
+<td>0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">invalidSectionName</td>
-<td>0.003s</td>
+<td>0.002s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">keyName</td>
-<td>0.001s</td>
+<td>0s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">mapIndentTooGreat</td>
-<td>0.008s</td>
+<td>0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">options</td>
-<td>0.013s</td>
+<td>0.012s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -117,7 +117,7 @@
 </tr>
 <tr>
 <td class="success">parse_partialMap</td>
-<td>0.010s</td>
+<td>0.011s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -142,7 +142,7 @@
 </tr>
 <tr>
 <td class="success">rootsChange</td>
-<td>0.012s</td>
+<td>0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -152,7 +152,7 @@
 </tr>
 <tr>
 <td class="success">viewNotFound</td>
-<td>0.012s</td>
+<td>0.011s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -169,8 +169,8 @@
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			07 Sep 2013 18:22:76
-end at:				07 Sep 2013 18:22:77
+start at:			13 Sep 2013 14:50:13
+end at:				13 Sep 2013 14:50:13
 run time:			7 ms
 
 pages defined:			13
@@ -194,9 +194,9 @@ missing enum declarations		5  (you could just paste these into your enum declara
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			07 Sep 2013 18:22:79
-end at:				07 Sep 2013 18:22:79
-run time:			5 ms
+start at:			13 Sep 2013 14:50:15
+end at:				13 Sep 2013 14:50:16
+run time:			6 ms
 
 pages defined:			13
 
@@ -216,6 +216,58 @@ indentation errors		1  (line indentation should be &lt;= 1 greater than the prec
 
 ================================================================= 
 
+-segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
+--segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
+--segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
+--segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
+
+-segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
+--segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
+--segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
+--segment=system-account, viewClass=uk.co.q3c.v7.base.view.SystemAccountView, labelKey=System_Account
+---segment=unlock-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView, labelKey=Unlock_Account
+---segment=refresh-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView, labelKey=Refresh_Account
+---segment=request-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountView, labelKey=Request_Account
+---segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
+---segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
+
+==================== SiteMap builder report ==================== 
+
+parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good.properties
+
+start at:			13 Sep 2013 14:50:19
+end at:				13 Sep 2013 14:50:19
+run time:			6 ms
+
+pages defined:			13
+
+redirects:			
+ -- :public
+
+view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews]
+
+I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKey
+
+parsing status:  PASSED
+
+================================================================= 
+
+-segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
+--segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
+--segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
+--segment=system-account, viewClass=uk.co.q3c.v7.base.view.SystemAccountView, labelKey=System_Account
+---segment=unlock-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView, labelKey=Unlock_Account
+---segment=refresh-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView, labelKey=Refresh_Account
+---segment=request-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountView, labelKey=Request_Account
+---segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
+---segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
+
+-segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
+--segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
+--segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
+--segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
+
+
 -segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
 --segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
 --segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
@@ -235,9 +287,9 @@ indentation errors		1  (line indentation should be &lt;= 1 greater than the prec
 
 parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good.properties
 
-start at:			07 Sep 2013 18:22:82
-end at:				07 Sep 2013 18:22:82
-run time:			5 ms
+start at:			13 Sep 2013 14:50:19
+end at:				13 Sep 2013 14:50:19
+run time:			6 ms
 
 pages defined:			13
 
@@ -252,22 +304,6 @@ parsing status:  PASSED
 
 ================================================================= 
 
--segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
---segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
---segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
---segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
-
--segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
---segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
---segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
---segment=system-account, viewClass=uk.co.q3c.v7.base.view.SystemAccountView, labelKey=System_Account
----segment=unlock-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView, labelKey=Unlock_Account
----segment=refresh-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView, labelKey=Refresh_Account
----segment=request-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountView, labelKey=Request_Account
----segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
----segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
-
-
 -segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
 --segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
 --segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
@@ -282,42 +318,6 @@ parsing status:  PASSED
 --segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
 --segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
 --segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
-
-==================== SiteMap builder report ==================== 
-
-parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good.properties
-
-start at:			07 Sep 2013 18:22:82
-end at:				07 Sep 2013 18:22:82
-run time:			5 ms
-
-pages defined:			13
-
-redirects:			
- -- :public
-
-view packages declared:		[fixture.testviews2, uk.co.q3c.v7.base.view.testviews]
-
-I18N Label class:		uk.co.q3c.v7.i18n.TestLabelKey
-
-parsing status:  PASSED
-
-================================================================= 
-
--segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
---segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
---segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
---segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
-
--segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
---segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
---segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
---segment=system-account, viewClass=uk.co.q3c.v7.base.view.SystemAccountView, labelKey=System_Account
----segment=unlock-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView, labelKey=Unlock_Account
----segment=refresh-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView, labelKey=Refresh_Account
----segment=request-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountView, labelKey=Request_Account
----segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
----segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
 
 # File format version 3.0
 # This section identifies all the packages which may contain views.  The most efficient use is to identify 
@@ -359,12 +359,12 @@ appendView=true
 #This section is optional, but can be used to change the default standard page mappings
 [standardPageMapping]
 
--segment=, viewClass=fixture.testviews2.WigglyHomeView, labelKey=Home
-
 -segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
 --segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
 --segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
 --segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
+
+-segment=, viewClass=fixture.testviews2.WigglyHomeView, labelKey=Home
 
 -segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
 --segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
@@ -380,8 +380,8 @@ appendView=true
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			07 Sep 2013 18:22:87
-end at:				07 Sep 2013 18:22:88
+start at:			13 Sep 2013 14:50:24
+end at:				13 Sep 2013 14:50:24
 run time:			5 ms
 
 pages defined:			14
@@ -400,9 +400,9 @@ parsing status:  PASSED
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			07 Sep 2013 18:22:88
-end at:				07 Sep 2013 18:22:89
-run time:			1 ms
+start at:			13 Sep 2013 14:50:25
+end at:				13 Sep 2013 14:50:25
+run time:			0 ms
 
 pages defined:			0
 
@@ -424,9 +424,9 @@ I18N Label class:		 has not been declared, you need to define it using the 'labe
 
 parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_fail1.properties
 
-start at:			07 Sep 2013 18:22:90
-end at:				07 Sep 2013 18:22:90
-run time:			5 ms
+start at:			13 Sep 2013 14:50:27
+end at:				13 Sep 2013 14:50:27
+run time:			4 ms
 
 pages defined:			12
 
@@ -444,9 +444,9 @@ parsing status:  PASSED
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			07 Sep 2013 18:22:91
-end at:				07 Sep 2013 18:22:92
-run time:			6 ms
+start at:			13 Sep 2013 14:50:28
+end at:				13 Sep 2013 14:50:29
+run time:			4 ms
 
 pages defined:			13
 
@@ -469,8 +469,8 @@ unrecognised options		1  (these have just been ignored, will do no harm)
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			07 Sep 2013 18:22:94
-end at:				07 Sep 2013 18:22:94
+start at:			13 Sep 2013 14:50:31
+end at:				13 Sep 2013 14:50:31
 run time:			5 ms
 
 pages defined:			13
@@ -494,9 +494,9 @@ missing enum declarations		5  (you could just paste these into your enum declara
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			07 Sep 2013 18:22:95
-end at:				07 Sep 2013 18:22:96
-run time:			5 ms
+start at:			13 Sep 2013 14:50:32
+end at:				13 Sep 2013 14:50:33
+run time:			4 ms
 
 pages defined:			13
 
@@ -559,8 +559,8 @@ appendView=true
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			07 Sep 2013 18:22:97
-end at:				07 Sep 2013 18:22:98
+start at:			13 Sep 2013 14:50:34
+end at:				13 Sep 2013 14:50:35
 run time:			8 ms
 
 pages defined:			13
@@ -587,9 +587,9 @@ viewless URIs		1  (these URIs have no view associated with them)
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			07 Sep 2013 18:22:99
-end at:				07 Sep 2013 18:22:99
-run time:			1 ms
+start at:			13 Sep 2013 14:50:36
+end at:				13 Sep 2013 14:50:36
+run time:			0 ms
 
 pages defined:			0
 
@@ -613,7 +613,7 @@ I18N Label class:		 has not been declared, you need to define it using the 'labe
 </div>
 <div id="footer">
 <p>Generated by 
-<a href="http://www.gradle.org">Gradle 1.7</a> at 07-Sep-2013 18:22:13</p>
+<a href="http://www.gradle.org">Gradle 1.7</a> at 13-Sep-2013 14:50:06</p>
 </div>
 </div>
 </body>
