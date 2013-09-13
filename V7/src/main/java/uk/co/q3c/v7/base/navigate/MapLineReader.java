@@ -17,6 +17,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapProvider;
+
 /**
  * Reads a line from the [map] section during the processing of sitemap.properties, and returns a {@link MapLineRecord}
  * of the constituent parts. Records syntax errors and other failures for the {@link SitemapProvider} to provide a

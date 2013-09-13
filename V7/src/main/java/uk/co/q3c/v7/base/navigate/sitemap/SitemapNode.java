@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.text.CollationKey;
 import java.text.Collator;
@@ -22,6 +22,7 @@ import org.apache.shiro.subject.Subject;
 
 import com.google.common.base.Objects;
 
+import uk.co.q3c.v7.base.navigate.ViewPermissions;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKey;
 

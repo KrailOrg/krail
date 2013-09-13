@@ -15,6 +15,7 @@ package uk.co.q3c.v7.base.navigate;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.i18n.I18NKey;
 
 public enum StandardPageKey implements PageKey {
