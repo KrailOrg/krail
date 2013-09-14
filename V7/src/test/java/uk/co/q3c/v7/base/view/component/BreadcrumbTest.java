@@ -77,6 +77,7 @@ public class BreadcrumbTest extends TestWithSitemap {
 
 		// when
 		breadcrumb = new DefaultBreadcrumb(navigator, converter, currentLocale);
+		breadcrumb.moveToNavigationState();
 		// then
 		assertThat(breadcrumb.getSteps().size()).isEqualTo(3);
 		assertThat(breadcrumb.getSteps().get(0).getCaption()).isEqualTo("home");
