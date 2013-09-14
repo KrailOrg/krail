@@ -53,7 +53,7 @@ public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener,
 
 	}
 
-	private void moveToNavigationState() {
+	protected void moveToNavigationState() {
 		List<SitemapNode> nodeChain = converter.nodeChainForUri(navigator.getNavigationState(), true);
 		int maxIndex = (nodeChain.size() > steps.size() ? nodeChain.size() : steps.size());
 		for (int i = 0; i < maxIndex; i++) {

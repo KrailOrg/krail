@@ -3,13 +3,14 @@
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
 
-configurations{
-	vaadin.version='7.1.0'
-	
+vaadin {
+	vaadin.version vaadinVersion
 }
+
+
 dependencies {
 
-
+	compile project (':V7')
             
 	
 	

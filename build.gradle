@@ -34,29 +34,11 @@ subprojects{
 	  testCompile 'org.mockito:mockito-all:1.9.0'
 	  testCompile 'junit:junit:4.+'
 	  testCompile 'org.reflections:reflections:0.9.9-RC1'
+	  testCompile 'org.easytesting:fest-assert:1.4'
+            
             
 	}
 }
 
 
-project(':views'){
-   dependencies{
-	compile project (':V7')
-   }
-}
 
-
-
-project(':demo'){
-   dependencies{
-	compile project (':V7')
-   }
-}
-
-
-
-project(':testApp'){
-	dependencies{
-		compile project (':V7')
-	   }
-}

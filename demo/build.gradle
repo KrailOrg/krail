@@ -24,7 +24,7 @@ repositories{
 
 dependencies { 
 	
-	
+	compile project (':V7')
 	testCompile 'com.vaadin:vaadin-testbench:3.1.1' 
 
         
