@@ -17,6 +17,10 @@ import javax.inject.Singleton;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.vaadin.server.VaadinSession;
 
 /**
  * A DI wrapper for {@link SecurityUtils#getSubject()}
@@ -26,10 +30,26 @@ import org.apache.shiro.subject.Subject;
  */
 @Singleton
 public class SubjectProvider implements Provider<Subject> {
+	private static Logger log = LoggerFactory.getLogger(SubjectProvider.class);
 
 	@Override
 	public Subject get() {
-		return SecurityUtils.getSubject();
-	}
+		VaadinSession session = VaadinSession.getCurrent();
 
+		// this may happen in background threads which are not using a session, or during testing
+		Subject subject = null;
+		if (session == null) {
+			log.debug("VaadinSession is null, creating a new Subject");
+			subject = new Subject.Builder().buildSubject();
+			return subject;
+		}
+
+		subject = session.getAttribute(Subject.class);
+		if (subject == null) {
+			log.debug("VaadinSession is valid, but does not have a stored Subject, creating a new Subject");
+			subject = new Subject.Builder().buildSubject();
+		}
+		return subject;
+
+	}
 }

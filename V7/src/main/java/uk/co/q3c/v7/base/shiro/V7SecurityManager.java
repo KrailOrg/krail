@@ -21,8 +21,13 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.vaadin.server.VaadinSession;
 
 public class V7SecurityManager extends DefaultWebSecurityManager {
+	private static Logger log = LoggerFactory.getLogger(V7SecurityManager.class);
 	private final List<LoginStatusListener> listeners = new ArrayList<>();
 
 	public V7SecurityManager() {
@@ -40,6 +45,7 @@ public class V7SecurityManager extends DefaultWebSecurityManager {
 	@Override
 	protected void onSuccessfulLogin(AuthenticationToken token, AuthenticationInfo info, Subject subject) {
 		super.onSuccessfulLogin(token, info, subject);
+		setSubject(subject);
 		fireListeners();
 	}
 
@@ -61,6 +67,24 @@ public class V7SecurityManager extends DefaultWebSecurityManager {
 		for (LoginStatusListener listener : listeners) {
 			listener.updateStatus();
 		}
+	}
+
+	private void setSubject(Subject subject) {
+		VaadinSession session = getVaadinSession();
+		log.debug("storing Subject instance in VaadinSession");
+		session.setAttribute(Subject.class, subject);
+	}
+
+	private VaadinSession getVaadinSession() {
+		VaadinSession session = VaadinSession.getCurrent();
+
+		// This should never happen, but just in case we'll check.
+		if (session == null) {
+			log.debug("session is null");
+			throw new IllegalStateException("Unable to locate VaadinSession to store Shiro Subject.");
+		}
+
+		return session;
 	}
 
 }
