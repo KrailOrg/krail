@@ -14,15 +14,13 @@ package uk.co.q3c.v7.base.shiro;
 
 import java.util.Collection;
 
-import javax.servlet.ServletContext;
-
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.config.ConfigurationException;
-import org.apache.shiro.guice.web.ShiroWebModule;
+import org.apache.shiro.guice.ShiroModule;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.mgt.WebSecurityManager;
 
 import uk.co.q3c.v7.base.config.IniModule;
 
@@ -36,14 +34,14 @@ import com.google.inject.binder.AnnotatedBindingBuilder;
  * @author David Sowerby 15 Jul 2013
  * 
  */
-public class DefaultShiroWebModule extends ShiroWebModule {
+public class DefaultShiroModule extends ShiroModule {
 
-	public DefaultShiroWebModule(ServletContext sc) {
-		super(sc);
+	public DefaultShiroModule() {
+		super();
 	}
 
 	@Override
-	protected void configureShiroWeb() {
+	protected void configureShiro() {
 
 		install(new FactoryModuleBuilder().build(URIPermissionFactory.class));
 		expose(URIPermissionFactory.class);
@@ -75,7 +73,7 @@ public class DefaultShiroWebModule extends ShiroWebModule {
 	}
 
 	@Override
-	protected void bindWebSecurityManager(AnnotatedBindingBuilder<? super WebSecurityManager> bind) {
+	protected void bindSecurityManager(AnnotatedBindingBuilder<? super SecurityManager> bind) {
 		try {
 			bind.toConstructor(V7SecurityManager.class.getConstructor(Collection.class)).asEagerSingleton();
 		} catch (NoSuchMethodException e) {

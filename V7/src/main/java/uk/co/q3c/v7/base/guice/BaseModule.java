@@ -12,8 +12,6 @@
  */
 package uk.co.q3c.v7.base.guice;
 
-import org.apache.shiro.guice.web.ShiroWebModule;
-
 import com.google.inject.servlet.ServletModule;
 
 public class BaseModule extends ServletModule {
@@ -21,7 +19,8 @@ public class BaseModule extends ServletModule {
 	@Override
 	protected void configureServlets() {
 		serve("/*").with(BaseServlet.class);
-		ShiroWebModule.bindGuiceFilter(binder());
+		// removed when switching to non-web setup to enable push support
+		// ShiroWebModule.bindGuiceFilter(binder());
 
 	}
 }

@@ -33,7 +33,7 @@ import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapProvider;
-import uk.co.q3c.v7.base.shiro.DefaultShiroWebModule;
+import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
 import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
 import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
@@ -102,7 +102,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
 
-		baseModules.add(shiroWebModule(ctx.get(), ini));
+		baseModules.add(shiroModule(ctx.get(), ini));
 		baseModules.add(shiroVaadinModule());
 		baseModules.add(new ShiroAopModule());
 		baseModules.add(userOptionsModule(ini));
@@ -153,16 +153,16 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Override this method if you have sub-classed {@link DefaultShiroWebModule} to provide bindings to your Shiro
-	 * related implementations (for example, {@link Realm} and {@link CredentialsMatcher}
+	 * Override this method if you have sub-classed {@link DefaultShiroModule} to provide bindings to your Shiro related
+	 * implementations (for example, {@link Realm} and {@link CredentialsMatcher}
 	 * 
 	 * @param servletContext
 	 * @param ini
 	 * @return
 	 */
 
-	protected Module shiroWebModule(ServletContext servletContext, V7Ini ini) {
-		return new DefaultShiroWebModule(servletContext);
+	protected Module shiroModule(ServletContext servletContext, V7Ini ini) {
+		return new DefaultShiroModule();
 	}
 
 	/**

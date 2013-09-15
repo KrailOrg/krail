@@ -20,16 +20,16 @@ import javax.inject.Inject;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.server.VaadinSession;
 
-public class V7SecurityManager extends DefaultWebSecurityManager {
+public class V7SecurityManager extends DefaultSecurityManager {
 	private static Logger log = LoggerFactory.getLogger(V7SecurityManager.class);
 	private final List<LoginStatusListener> listeners = new ArrayList<>();
 
