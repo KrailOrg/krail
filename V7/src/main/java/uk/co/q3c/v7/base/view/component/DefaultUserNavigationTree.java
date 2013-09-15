@@ -22,6 +22,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.CollationKeyOrder;
 import uk.co.q3c.v7.base.navigate.InsertionOrder;
@@ -83,7 +84,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		maxLevel = userOption.getOptionAsInt(this.getClass().getSimpleName(), maxLevelOpt, -1);
 		addValueChangeListener(this);
 		navigator.addViewChangeListener(this);
-		setId(this.getClass().getSimpleName());
+		setId(ID.getId(this));
 
 		loadNodes();
 

@@ -14,8 +14,6 @@ import com.vaadin.testbench.ScreenshotOnFailureRule;
 
 public class NavigationTest extends V7TestBenchTestCase {
 
-	private final StringBuffer verificationErrors = new StringBuffer();
-
 	@Rule
 	public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
 

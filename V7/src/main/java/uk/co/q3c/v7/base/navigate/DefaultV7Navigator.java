@@ -286,6 +286,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 */
 	@Override
 	public void loginSuccessful() {
+		log.debug("user logged in successfully, navigating to appropriate view");
 		if (previousView != null) {
 			navigateTo(previousView, previousViewName, previousFragment);
 		} else {

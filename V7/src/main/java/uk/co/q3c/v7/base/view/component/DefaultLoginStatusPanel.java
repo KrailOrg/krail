@@ -17,6 +17,7 @@ import javax.inject.Provider;
 
 import org.apache.shiro.subject.Subject;
 
+import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
@@ -67,7 +68,14 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 		hl.addComponent(usernameLabel);
 		hl.addComponent(login_logout_Button);
 		this.setContent(hl);
+		setIds();
 		updateStatus();
+	}
+
+	private void setIds() {
+		setId(ID.getId(this));
+		login_logout_Button.setId(ID.getId(this, login_logout_Button));
+		usernameLabel.setId(ID.getId(this, usernameLabel));
 	}
 
 	@Override

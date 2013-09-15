@@ -69,7 +69,9 @@ public class V7SecurityManager extends DefaultSecurityManager {
 	}
 
 	private void fireListeners() {
+		log.debug("firing login status listeners");
 		for (LoginStatusListener listener : listeners) {
+			log.debug("processing login status listener: " + listener);
 			listener.updateStatus();
 		}
 	}

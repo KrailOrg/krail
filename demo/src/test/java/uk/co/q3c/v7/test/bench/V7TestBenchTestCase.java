@@ -26,6 +26,7 @@ import com.vaadin.testbench.TestBenchTestCase;
 
 public class V7TestBenchTestCase extends TestBenchTestCase {
 	protected String baseUrl;
+	protected final StringBuffer verificationErrors = new StringBuffer();
 
 	@Before
 	public void defaultSetup() {

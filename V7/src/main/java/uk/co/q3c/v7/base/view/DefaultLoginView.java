@@ -16,6 +16,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
+import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
@@ -88,6 +89,16 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		this.setRowExpandRatio(0, 1);
 		this.setRowExpandRatio(2, 1);
 
+		setIds();
+
+	}
+
+	private void setIds() {
+		setId(ID.getId(this));
+		submitButton.setId(ID.getId(this, submitButton));
+		usernameBox.setId(ID.getId("username", this, usernameBox));
+		passwordBox.setId(ID.getId("password", this, passwordBox));
+		statusMsgLabel.setId(ID.getId("status", this, statusMsgLabel));
 	}
 
 	@Override
