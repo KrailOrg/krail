@@ -23,7 +23,6 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.mgt.WebSecurityManager;
 
 import uk.co.q3c.v7.base.config.IniModule;
-import uk.co.q3c.v7.base.view.component.SubjectProvider;
 
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.binder.AnnotatedBindingBuilder;

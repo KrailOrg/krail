@@ -24,6 +24,7 @@ import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 
 import com.mycila.testing.junit.MycilaJunitRunner;

@@ -19,7 +19,7 @@ import org.apache.shiro.subject.Subject;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapProvider;
 import uk.co.q3c.v7.base.navigate.TextReaderSitemapProvider;
-import uk.co.q3c.v7.base.view.component.SubjectProvider;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
 
 import com.google.inject.AbstractModule;
 
