@@ -19,7 +19,9 @@ import org.apache.shiro.subject.Subject;
 import uk.co.q3c.v7.base.navigate.Sitemap;
 import uk.co.q3c.v7.base.navigate.SitemapProvider;
 import uk.co.q3c.v7.base.navigate.TextReaderSitemapProvider;
+import uk.co.q3c.v7.base.shiro.DefaultVaadinSessionProvider;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
+import uk.co.q3c.v7.base.shiro.VaadinSessionProvider;
 
 import com.google.inject.AbstractModule;
 
@@ -31,10 +33,18 @@ public class IniModule extends AbstractModule {
 		bind(SitemapProvider.class).to(TextReaderSitemapProvider.class);
 		bind(Sitemap.class).toProvider(SitemapProvider.class).in(Singleton.class);
 		bindSubjectProvider();
+		bindVaadinSessionProvider();
 	}
 
 	protected void bindSubjectProvider() {
 		bind(Subject.class).toProvider(SubjectProvider.class);
+	}
+
+	/**
+	 * Override this to use a different implementation for a VaadinSessionProvider
+	 */
+	protected void bindVaadinSessionProvider() {
+		bind(VaadinSessionProvider.class).to(DefaultVaadinSessionProvider.class);
 	}
 
 }

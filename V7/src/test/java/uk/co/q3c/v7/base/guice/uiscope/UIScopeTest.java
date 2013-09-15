@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -24,10 +25,13 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.DefaultUnauthenticatedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.DefaultUnauthorizedExceptionHandler;
+import uk.co.q3c.v7.base.shiro.DefaultVaadinSessionProvider;
 import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.UnauthenticatedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.V7ErrorHandler;
+import uk.co.q3c.v7.base.shiro.VaadinSessionManager;
+import uk.co.q3c.v7.base.shiro.VaadinSessionProvider;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.BasicUIProvider;
 import uk.co.q3c.v7.base.ui.ScopedUI;
@@ -120,6 +124,9 @@ public class UIScopeTest {
 			bind(UserOption.class).to(DefaultUserOption.class);
 			bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
 			bind(InvalidURIExceptionHandler.class).to(DefaultInvalidURIExceptionHandler.class);
+			bind(VaadinSessionProvider.class).to(DefaultVaadinSessionProvider.class);
+			bind(SessionManager.class).to(VaadinSessionManager.class).asEagerSingleton();
+
 		}
 	}
 

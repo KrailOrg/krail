@@ -12,9 +12,11 @@ import org.mockito.Mock;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
+import uk.co.q3c.v7.base.shiro.DefaultVaadinSessionProvider;
 import uk.co.q3c.v7.base.shiro.ShiroIntegrationTestBase;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
+import uk.co.q3c.v7.base.shiro.VaadinSessionProvider;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 
@@ -257,6 +259,7 @@ public class StrictURIHandlerTest extends ShiroIntegrationTestBase {
 				bind(Subject.class).toProvider(SubjectProvider.class);
 				bind(URIPermissionFactory.class).to(DefaultURIPermissionFactory.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(VaadinSessionProvider.class).to(DefaultVaadinSessionProvider.class);
 
 			}
 

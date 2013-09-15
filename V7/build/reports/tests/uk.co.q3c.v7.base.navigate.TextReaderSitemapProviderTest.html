@@ -34,7 +34,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.130s</div>
+<div class="counter">0.134s</div>
 <p>duration</p>
 </div>
 </td>
@@ -72,7 +72,7 @@
 </thead>
 <tr>
 <td class="success">fail1</td>
-<td>0.005s</td>
+<td>0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -87,7 +87,7 @@
 </tr>
 <tr>
 <td class="success">invalidPropertyName</td>
-<td>0.006s</td>
+<td>0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -97,27 +97,27 @@
 </tr>
 <tr>
 <td class="success">keyName</td>
-<td>0s</td>
+<td>0.001s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">mapIndentTooGreat</td>
-<td>0.008s</td>
+<td>0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">options</td>
-<td>0.013s</td>
+<td>0.014s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">options_to_non_default</td>
-<td>0.005s</td>
+<td>0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">parse_partialMap</td>
-<td>0.011s</td>
+<td>0.010s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -142,12 +142,12 @@
 </tr>
 <tr>
 <td class="success">rootsChange</td>
-<td>0.009s</td>
+<td>0.010s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">sectionMissingClosingBracket</td>
-<td>0.001s</td>
+<td>0.002s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -157,7 +157,7 @@
 </tr>
 <tr>
 <td class="success">viewNotV7View</td>
-<td>0.007s</td>
+<td>0.006s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -169,8 +169,8 @@
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			15 Sep 2013 15:36:13
-end at:				15 Sep 2013 15:36:14
+start at:			15 Sep 2013 18:36:07
+end at:				15 Sep 2013 18:36:08
 run time:			8 ms
 
 pages defined:			13
@@ -194,9 +194,9 @@ missing enum declarations		5  (you could just paste these into your enum declara
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			15 Sep 2013 15:36:16
-end at:				15 Sep 2013 15:36:16
-run time:			5 ms
+start at:			15 Sep 2013 18:36:10
+end at:				15 Sep 2013 18:36:11
+run time:			6 ms
 
 pages defined:			13
 
@@ -235,8 +235,8 @@ indentation errors		1  (line indentation should be &lt;= 1 greater than the prec
 
 parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good.properties
 
-start at:			15 Sep 2013 15:36:19
-end at:				15 Sep 2013 15:36:20
+start at:			15 Sep 2013 18:36:14
+end at:				15 Sep 2013 18:36:14
 run time:			5 ms
 
 pages defined:			13
@@ -252,10 +252,21 @@ parsing status:  PASSED
 
 ================================================================= 
 
+-segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
+--segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
+--segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
+--segment=system-account, viewClass=uk.co.q3c.v7.base.view.SystemAccountView, labelKey=System_Account
+---segment=unlock-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView, labelKey=Unlock_Account
+---segment=refresh-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView, labelKey=Refresh_Account
+---segment=request-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountView, labelKey=Request_Account
+---segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
+---segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
+
 -segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
 --segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
 --segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
 --segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
+
 
 -segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
 --segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
@@ -267,28 +278,17 @@ parsing status:  PASSED
 ---segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
 ---segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
 
-
 -segment=private, viewClass=uk.co.q3c.v7.base.view.PrivateHomeView, labelKey=Private_Home
 --segment=transfers, viewClass=uk.co.q3c.v7.base.view.testviews.subview.TransferView, labelKey=Transfers
 --segment=money-in-out, viewClass=uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView, labelKey=MoneyInOut
 --segment=options, viewClass=fixture.testviews2.OptionsView, labelKey=Opt
-
--segment=public, viewClass=uk.co.q3c.v7.base.view.PublicHomeView, labelKey=Public_Home
---segment=login, viewClass=uk.co.q3c.v7.base.view.LoginView, labelKey=Login
---segment=logout, viewClass=uk.co.q3c.v7.base.view.LogoutView, labelKey=Logout
---segment=system-account, viewClass=uk.co.q3c.v7.base.view.SystemAccountView, labelKey=System_Account
----segment=unlock-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView, labelKey=Unlock_Account
----segment=refresh-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView, labelKey=Refresh_Account
----segment=request-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountView, labelKey=Request_Account
----segment=enable-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountEnableView, labelKey=Enable_Account
----segment=reset-account, viewClass=uk.co.q3c.v7.base.view.RequestSystemAccountResetView, labelKey=Reset_Account
 
 ==================== SiteMap builder report ==================== 
 
 parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good.properties
 
-start at:			15 Sep 2013 15:36:19
-end at:				15 Sep 2013 15:36:20
+start at:			15 Sep 2013 18:36:14
+end at:				15 Sep 2013 18:36:14
 run time:			5 ms
 
 pages defined:			13
@@ -380,8 +380,8 @@ appendView=true
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			15 Sep 2013 15:36:24
-end at:				15 Sep 2013 15:36:25
+start at:			15 Sep 2013 18:36:19
+end at:				15 Sep 2013 18:36:19
 run time:			5 ms
 
 pages defined:			14
@@ -400,9 +400,9 @@ parsing status:  PASSED
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			15 Sep 2013 15:36:25
-end at:				15 Sep 2013 15:36:25
-run time:			0 ms
+start at:			15 Sep 2013 18:36:20
+end at:				15 Sep 2013 18:36:20
+run time:			1 ms
 
 pages defined:			0
 
@@ -424,8 +424,8 @@ I18N Label class:		 has not been declared, you need to define it using the 'labe
 
 parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_fail1.properties
 
-start at:			15 Sep 2013 15:36:27
-end at:				15 Sep 2013 15:36:27
+start at:			15 Sep 2013 18:36:21
+end at:				15 Sep 2013 18:36:22
 run time:			5 ms
 
 pages defined:			12
@@ -444,9 +444,9 @@ parsing status:  PASSED
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			15 Sep 2013 15:36:28
-end at:				15 Sep 2013 15:36:28
-run time:			4 ms
+start at:			15 Sep 2013 18:36:22
+end at:				15 Sep 2013 18:36:23
+run time:			5 ms
 
 pages defined:			13
 
@@ -469,8 +469,8 @@ unrecognised options		1  (these have just been ignored, will do no harm)
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			15 Sep 2013 15:36:30
-end at:				15 Sep 2013 15:36:31
+start at:			15 Sep 2013 18:36:25
+end at:				15 Sep 2013 18:36:25
 run time:			5 ms
 
 pages defined:			13
@@ -494,8 +494,8 @@ missing enum declarations		5  (you could just paste these into your enum declara
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			15 Sep 2013 15:36:32
-end at:				15 Sep 2013 15:36:32
+start at:			15 Sep 2013 18:36:26
+end at:				15 Sep 2013 18:36:27
 run time:			5 ms
 
 pages defined:			13
@@ -559,8 +559,8 @@ appendView=true
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			15 Sep 2013 15:36:33
-end at:				15 Sep 2013 15:36:33
+start at:			15 Sep 2013 18:36:27
+end at:				15 Sep 2013 18:36:28
 run time:			5 ms
 
 pages defined:			13
@@ -587,8 +587,8 @@ viewless URIs		1  (these URIs have no view associated with them)
 
 parsing source from:		/home/david/temp/sitemap.properties
 
-start at:			15 Sep 2013 15:36:34
-end at:				15 Sep 2013 15:36:34
+start at:			15 Sep 2013 18:36:29
+end at:				15 Sep 2013 18:36:29
 run time:			0 ms
 
 pages defined:			0
@@ -613,7 +613,7 @@ I18N Label class:		 has not been declared, you need to define it using the 'labe
 </div>
 <div id="footer">
 <p>Generated by 
-<a href="http://www.gradle.org">Gradle 1.7</a> at 15-Sep-2013 15:36:15</p>
+<a href="http://www.gradle.org">Gradle 1.7</a> at 15-Sep-2013 18:36:43</p>
 </div>
 </div>
 </body>

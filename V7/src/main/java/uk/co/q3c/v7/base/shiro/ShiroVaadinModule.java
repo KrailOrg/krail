@@ -24,6 +24,7 @@ public class ShiroVaadinModule extends AbstractModule {
 		bindUnauthorisedHandler();
 		bindLoginExceptionsHandler();
 		bindInvalidURIHandler();
+
 	}
 
 	/**

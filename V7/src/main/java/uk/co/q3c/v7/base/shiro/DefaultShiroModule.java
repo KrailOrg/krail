@@ -18,7 +18,6 @@ import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.guice.ShiroModule;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 
@@ -85,7 +84,7 @@ public class DefaultShiroModule extends ShiroModule {
 
 	@Override
 	protected void bindSessionManager(AnnotatedBindingBuilder<SessionManager> bind) {
-		bind.to(DefaultSessionManager.class).asEagerSingleton();
+		bind.to(VaadinSessionManager.class).asEagerSingleton();
 	}
 
 }

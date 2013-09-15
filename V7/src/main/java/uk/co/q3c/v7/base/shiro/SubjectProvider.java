@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
@@ -31,25 +32,33 @@ import com.vaadin.server.VaadinSession;
 @Singleton
 public class SubjectProvider implements Provider<Subject> {
 	private static Logger log = LoggerFactory.getLogger(SubjectProvider.class);
+	private final VaadinSessionProvider sessionProvider;
+
+	@Inject
+	protected SubjectProvider(VaadinSessionProvider sessionProvider) {
+		super();
+		this.sessionProvider = sessionProvider;
+	}
 
 	@Override
 	public Subject get() {
-		VaadinSession session = VaadinSession.getCurrent();
-
-		// this may happen in background threads which are not using a session, or during testing
 		Subject subject = null;
-		if (session == null) {
-			log.debug("VaadinSession is null, creating a new Subject");
+		try {
+			VaadinSession session = sessionProvider.get();
+			subject = session.getAttribute(Subject.class);
+			if (subject == null) {
+				log.debug("VaadinSession is valid, but does not have a stored Subject, creating a new Subject");
+				subject = new Subject.Builder().buildSubject();
+			}
+			return subject;
+
+		} catch (IllegalStateException ise) {
+			// this may happen in background threads which are not using a session, or during testing
+			log.debug("There is no VaadinSession, creating a new Subject");
 			subject = new Subject.Builder().buildSubject();
 			return subject;
-		}
 
-		subject = session.getAttribute(Subject.class);
-		if (subject == null) {
-			log.debug("VaadinSession is valid, but does not have a stored Subject, creating a new Subject");
-			subject = new Subject.Builder().buildSubject();
 		}
-		return subject;
 
 	}
 }

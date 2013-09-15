@@ -32,6 +32,8 @@ import com.vaadin.server.VaadinSession;
 public class V7SecurityManager extends DefaultSecurityManager {
 	private static Logger log = LoggerFactory.getLogger(V7SecurityManager.class);
 	private final List<LoginStatusListener> listeners = new ArrayList<>();
+	@Inject
+	private VaadinSessionProvider sessionProvider;
 
 	public V7SecurityManager() {
 		super();
@@ -39,12 +41,11 @@ public class V7SecurityManager extends DefaultSecurityManager {
 
 	public V7SecurityManager(Collection<Realm> realms) {
 		super(realms);
-		// setSessionManager(new VaadinSessionManager());
 	}
 
-	public V7SecurityManager(Realm singleRealm) {
-		super(singleRealm);
-	}
+	// public V7SecurityManager(Realm singleRealm) {
+	// super(singleRealm);
+	// }
 
 	@Override
 	protected void onSuccessfulLogin(AuthenticationToken token, AuthenticationInfo info, Subject subject) {
@@ -74,27 +75,19 @@ public class V7SecurityManager extends DefaultSecurityManager {
 	}
 
 	private void setSubject(Subject subject) {
-		VaadinSession session = getVaadinSession();
+		VaadinSession session = sessionProvider.get();
 		log.debug("storing Subject instance in VaadinSession");
 		session.setAttribute(Subject.class, subject);
-	}
-
-	private VaadinSession getVaadinSession() {
-		VaadinSession session = VaadinSession.getCurrent();
-
-		// This may happen in background threads, or testing
-		if (session == null) {
-			log.debug("session is null");
-			throw new IllegalStateException("Unable to locate VaadinSession to store Shiro Subject.");
-		}
-
-		return session;
 	}
 
 	@Inject
 	@Override
 	public void setSessionManager(SessionManager sessionManager) {
 		super.setSessionManager(sessionManager);
+	}
+
+	public void setSessionProvider(VaadinSessionProvider sessionProvider) {
+		this.sessionProvider = sessionProvider;
 	}
 
 }

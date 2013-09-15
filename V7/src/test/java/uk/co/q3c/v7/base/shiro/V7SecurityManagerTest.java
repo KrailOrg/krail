@@ -33,6 +33,7 @@ import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
@@ -49,6 +50,12 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 	@Mock
 	BasicUI ui;
 
+	@Mock
+	VaadinSessionProvider vsp;
+
+	@Mock
+	VaadinSession vs;
+
 	@Override
 	@Before
 	public void setupShiro() {
@@ -61,7 +68,9 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 	public void listeners() {
 
 		// given
+		when(vsp.get()).thenReturn(vs);
 		V7SecurityManager securityManager = (V7SecurityManager) SecurityUtils.getSecurityManager();
+		securityManager.setSessionProvider(vsp);
 		securityManager.addListener(monitor1);
 		securityManager.addListener(monitor2);
 		UsernamePasswordToken token = new UsernamePasswordToken("xxx", "password");
