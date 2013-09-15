@@ -19,6 +19,8 @@ import javax.servlet.ServletContext;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.guice.web.ShiroWebModule;
+import org.apache.shiro.session.mgt.DefaultSessionManager;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.mgt.WebSecurityManager;
 
@@ -81,6 +83,11 @@ public class DefaultShiroWebModule extends ShiroWebModule {
 					"This really shouldn't happen.  Either something has changed in Shiro, or there's a bug in ShiroModule.",
 					e);
 		}
+	}
+
+	@Override
+	protected void bindSessionManager(AnnotatedBindingBuilder<SessionManager> bind) {
+		bind.to(DefaultSessionManager.class).asEagerSingleton();
 	}
 
 }

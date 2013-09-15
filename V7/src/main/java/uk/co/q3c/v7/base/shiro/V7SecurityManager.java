@@ -16,9 +16,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.slf4j.Logger;
@@ -36,6 +39,7 @@ public class V7SecurityManager extends DefaultWebSecurityManager {
 
 	public V7SecurityManager(Collection<Realm> realms) {
 		super(realms);
+		// setSessionManager(new VaadinSessionManager());
 	}
 
 	public V7SecurityManager(Realm singleRealm) {
@@ -78,13 +82,19 @@ public class V7SecurityManager extends DefaultWebSecurityManager {
 	private VaadinSession getVaadinSession() {
 		VaadinSession session = VaadinSession.getCurrent();
 
-		// This should never happen, but just in case we'll check.
+		// This may happen in background threads, or testing
 		if (session == null) {
 			log.debug("session is null");
 			throw new IllegalStateException("Unable to locate VaadinSession to store Shiro Subject.");
 		}
 
 		return session;
+	}
+
+	@Inject
+	@Override
+	public void setSessionManager(SessionManager sessionManager) {
+		super.setSessionManager(sessionManager);
 	}
 
 }
