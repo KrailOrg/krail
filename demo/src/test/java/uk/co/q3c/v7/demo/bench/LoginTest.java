@@ -44,7 +44,7 @@ public class LoginTest extends V7TestBenchTestCase {
 		passwordBox().clear();
 		passwordBox().sendKeys("password");
 		submitButton().click();
-		// then
+		// then correct url and status panel updated
 		verifyUrl("private");
 		assertThat(loginButtonText(), is("log out"));
 		assertThat(loginLabelText(), is("ds"));
