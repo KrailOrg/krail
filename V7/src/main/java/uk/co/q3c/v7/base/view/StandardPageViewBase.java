@@ -14,6 +14,7 @@ package uk.co.q3c.v7.base.view;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 
 import com.vaadin.ui.GridLayout;
@@ -23,12 +24,13 @@ public abstract class StandardPageViewBase extends ViewBase {
 
 	private Label label;
 
-	private GridLayout grid;
+	protected GridLayout grid;
 
 	@Inject
 	protected StandardPageViewBase(V7Navigator navigator) {
 		super(navigator);
 		buildView();
+		setIds();
 	}
 
 	@Override
@@ -52,6 +54,12 @@ public abstract class StandardPageViewBase extends ViewBase {
 
 		rootComponent = grid;
 
+	}
+
+	protected void setIds() {
+		rootComponent.setId(ID.getId(this.getClass().getSimpleName(), rootComponent));
+		grid.setId(ID.getId(this.getClass().getSimpleName(), grid));
+		label.setId(ID.getId(this.getClass().getSimpleName(), label));
 	}
 
 	public Label getLabel() {

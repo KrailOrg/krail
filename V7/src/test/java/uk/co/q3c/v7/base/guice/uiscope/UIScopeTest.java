@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.junit.Test;
@@ -22,14 +23,17 @@ import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.DefaultLoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.DefaultUnauthenticatedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.DefaultUnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.DefaultVaadinSessionProvider;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.UnauthenticatedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.V7ErrorHandler;
+import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import uk.co.q3c.v7.base.shiro.VaadinSessionManager;
 import uk.co.q3c.v7.base.shiro.VaadinSessionProvider;
 import uk.co.q3c.v7.base.ui.BasicUI;
@@ -126,6 +130,7 @@ public class UIScopeTest {
 			bind(InvalidURIExceptionHandler.class).to(DefaultInvalidURIExceptionHandler.class);
 			bind(VaadinSessionProvider.class).to(DefaultVaadinSessionProvider.class);
 			bind(SessionManager.class).to(VaadinSessionManager.class).asEagerSingleton();
+			bind(LoginStatusHandler.class).to(DefaultLoginStatusHandler.class);
 
 		}
 	}
@@ -144,7 +149,7 @@ public class UIScopeTest {
 	public void uiScope2() {
 
 		// given
-
+		SecurityUtils.setSecurityManager(new V7SecurityManager());
 		when(subject.isPermitted(anyString())).thenReturn(true);
 		when(subject.isPermitted(any(org.apache.shiro.authz.Permission.class))).thenReturn(true);
 		when(mockedSession.hasLock()).thenReturn(true);

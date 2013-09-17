@@ -13,11 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
 import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
-import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.V7View;
@@ -52,8 +52,9 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Inject
 	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler, Sitemap sitemap,
-			Map<String, Provider<V7View>> viewProMap, V7SecurityManager securityManager, Provider<Subject> subjectPro,
-			URIPermissionFactory uriPermissionFactory, SitemapURIConverter sitemapURIConverter) {
+			Map<String, Provider<V7View>> viewProMap, Provider<Subject> subjectPro,
+			URIPermissionFactory uriPermissionFactory, SitemapURIConverter sitemapURIConverter,
+			LoginStatusHandler loginHandler) {
 		super();
 		this.errorViewPro = errorViewPro;
 		this.viewProMap = viewProMap;
@@ -62,7 +63,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		this.subjectPro = subjectPro;
 		this.uriPermissionFactory = uriPermissionFactory;
 		this.sitemapURIConverter = sitemapURIConverter;
-		securityManager.addListener(this);
+		loginHandler.addListener(this);
 	}
 
 	/**
@@ -344,9 +345,8 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	@Override
-	public void updateStatus() {
-		Subject subject = subjectPro.get();
-		if (subject.isAuthenticated()) {
+	public void loginStatusChange(boolean authenticated, String name) {
+		if (authenticated) {
 			loginSuccessful();
 		}
 	}

@@ -15,7 +15,8 @@ package uk.co.q3c.v7.base.view.component;
 import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import org.apache.shiro.SecurityUtils;
+import javax.inject.Inject;
+
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,15 +25,17 @@ import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
-import uk.co.q3c.v7.base.shiro.V7SecurityManager;
+import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.ui.Button;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({ I18NModule.class })
 public class LoginStatusPanelTest {
 
 	LoginStatusPanel panel;
@@ -48,12 +51,18 @@ public class LoginStatusPanelTest {
 	@Mock
 	SubjectProvider subjectPro;
 
+	@Mock
+	LoginStatusHandler loginStatusHandler;
+
+	@Inject
+	Translate translate;
+
 	@Before
 	public void setup() {
-		V7SecurityManager securityManager = new V7SecurityManager();
-		SecurityUtils.setSecurityManager(securityManager);
+		// V7SecurityManager securityManager = new V7SecurityManager();
+		// SecurityUtils.setSecurityManager(securityManager);
 		when(subjectPro.get()).thenReturn(subject);
-		panel = new DefaultLoginStatusPanel(navigator, securityManager, subjectPro);
+		panel = new DefaultLoginStatusPanel(navigator, subjectPro, translate, loginStatusHandler);
 		loginoutBtn = ((DefaultLoginStatusPanel) panel).getLogin_logout_Button();
 	}
 
@@ -66,7 +75,7 @@ public class LoginStatusPanelTest {
 		when(subject.getPrincipal()).thenReturn(null);
 
 		// when
-		panel.updateStatus();
+		panel.loginStatusChange(false, "guest");
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log in");
 		assertThat(panel.getUserId()).isEqualTo("guest");
@@ -85,7 +94,7 @@ public class LoginStatusPanelTest {
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.getPrincipal()).thenReturn("userId");
 		// when
-		panel.updateStatus();
+		panel.loginStatusChange(false, "userId?");
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log in");
 		assertThat(panel.getUserId()).isEqualTo("userId?");
@@ -102,8 +111,9 @@ public class LoginStatusPanelTest {
 		when(subject.isRemembered()).thenReturn(false);
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.getPrincipal()).thenReturn("userId");
+		when(loginStatusHandler.subjectIsAuthenticated()).thenReturn(true);
 		// when
-		panel.updateStatus();
+		panel.loginStatusChange(true, "userId");
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log out");
 		assertThat(panel.getUserId()).isEqualTo("userId");

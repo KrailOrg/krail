@@ -12,7 +12,6 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-
 public interface LoginStatusListener {
-	void updateStatus();
+	void loginStatusChange(boolean status, String name);
 }

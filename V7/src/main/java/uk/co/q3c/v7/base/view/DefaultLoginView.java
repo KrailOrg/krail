@@ -20,6 +20,7 @@ import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -44,14 +45,16 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	private final Label statusMsgLabel;
 	private final LoginExceptionHandler loginExceptionHandler;
 	private final Provider<Subject> subjectProvider;
+	private final LoginStatusHandler loginStatusHandler;
 
 	@Inject
 	protected DefaultLoginView(V7Navigator navigator, LoginExceptionHandler loginExceptionHandler,
-			Provider<Subject> subjectProvider) {
+			Provider<Subject> subjectProvider, LoginStatusHandler loginStatusHandler) {
 		super();
 		this.navigator = navigator;
 		this.loginExceptionHandler = loginExceptionHandler;
 		this.subjectProvider = subjectProvider;
+		this.loginStatusHandler = loginStatusHandler;
 		this.setColumns(3);
 		this.setRows(3);
 		this.setSizeFull();
@@ -111,6 +114,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		UsernamePasswordToken token = new UsernamePasswordToken(usernameBox.getValue(), passwordBox.getValue());
 		try {
 			subjectProvider.get().login(token);
+			loginStatusHandler.initiateStatusChange();
 		} catch (UnknownAccountException uae) {
 			loginExceptionHandler.unknownAccount(this, token);
 		} catch (IncorrectCredentialsException ice) {

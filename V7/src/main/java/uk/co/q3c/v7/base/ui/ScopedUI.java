@@ -7,6 +7,7 @@ import uk.co.q3c.v7.base.config.V7ConfigurationException;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewHolder;
 import uk.co.q3c.v7.i18n.I18NKey;
@@ -16,6 +17,7 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
@@ -31,12 +33,15 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	private AbstractOrderedLayout screenLayout;
 	private final ConverterFactory converterFactory;
 	private V7View view;
+	private final LoginStatusHandler loginStatusHandler;
 
-	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory) {
+	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
+			LoginStatusHandler loginStatusHandler) {
 		super();
 		this.errorHandler = errorHandler;
 		this.navigator = navigator;
 		this.converterFactory = converterFactory;
+		this.loginStatusHandler = loginStatusHandler;
 		viewDisplayPanel = new Panel();
 		viewDisplayPanel.setSizeFull();
 	}
@@ -104,7 +109,8 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	@Override
 	protected void init(VaadinRequest request) {
 
-		getSession().setConverterFactory(converterFactory);
+		VaadinSession session = getSession();
+		session.setConverterFactory(converterFactory);
 
 		// page isn't available during injected construction
 		Page page = getPage();
@@ -159,5 +165,9 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	 * @return
 	 */
 	protected abstract String pageTitle();
+
+	public LoginStatusHandler getLoginStatusHandler() {
+		return loginStatusHandler;
+	}
 
 }

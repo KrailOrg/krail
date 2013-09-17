@@ -12,10 +12,12 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +56,7 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 	VaadinSessionProvider vsp;
 
 	@Mock
-	VaadinSession vs;
+	VaadinSession session;
 
 	@Override
 	@Before
@@ -65,27 +67,19 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 	}
 
 	@Test
-	public void listeners() {
+	public void login() {
 
 		// given
-		when(vsp.get()).thenReturn(vs);
+		when(vsp.get()).thenReturn(session);
 		V7SecurityManager securityManager = (V7SecurityManager) SecurityUtils.getSecurityManager();
+
 		securityManager.setSessionProvider(vsp);
-		securityManager.addListener(monitor1);
-		securityManager.addListener(monitor2);
 		UsernamePasswordToken token = new UsernamePasswordToken("xxx", "password");
 		// when
 		getSubject().login(token);
-		// then
-		// subject may get re-created, so cannot rely on the instance
-		verify(monitor1, times(1)).updateStatus();
-		verify(monitor2, times(1)).updateStatus();
+		// then stored in session
+		verify(session).setAttribute(eq(Subject.class), any(Subject.class));
 
-		// when
-		getSubject().logout();
-		// 1 already recorded, plus 1 for logout
-		verify(monitor1, times(2)).updateStatus();
-		verify(monitor2, times(2)).updateStatus();
 	}
 
 	protected ScopedUI createUI() {
@@ -108,6 +102,7 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 			protected void configure() {
 				bind(URIPermissionFactory.class).to(DefaultURIPermissionFactory.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(VaadinSessionProvider.class).toInstance(mock(VaadinSessionProvider.class));
 			}
 		};
 	}

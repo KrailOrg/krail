@@ -32,6 +32,8 @@ import uk.co.q3c.v7.base.navigate.SitemapURIConverter;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
+import uk.co.q3c.v7.base.shiro.LoginStatusListener;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.useropt.UserOption;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
@@ -50,7 +52,8 @@ import com.vaadin.ui.Tree;
  * @author David Sowerby 17 May 2013
  * 
  */
-public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener {
+public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener,
+		LoginStatusListener {
 	private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
 	private final CurrentLocale currentLocale;
 	private final Sitemap sitemap;
@@ -68,7 +71,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	@Inject
 	protected DefaultUserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator,
 			Provider<Subject> subjectPro, DefaultURIPermissionFactory uriPermissionFactory, UserOption userOption,
-			SitemapURIConverter sitemapURIConverter) {
+			SitemapURIConverter sitemapURIConverter, LoginStatusHandler loginStatusHandler) {
 		super();
 		this.sitemap = sitemap;
 		this.currentLocale = currentLocale;
@@ -85,7 +88,8 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		addValueChangeListener(this);
 		navigator.addViewChangeListener(this);
 		setId(ID.getId(this));
-
+		loginStatusHandler.addListener(this);
+		loginStatusChange(loginStatusHandler.subjectIsAuthenticated(), loginStatusHandler.subjectName());
 		loadNodes();
 
 	}
@@ -235,6 +239,11 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		if (selectedNode != null) {
 			this.select(selectedNode);
 		}
+	}
+
+	@Override
+	public void loginStatusChange(boolean status, String name) {
+
 	}
 
 }

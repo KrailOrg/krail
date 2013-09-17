@@ -64,4 +64,9 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	protected ElementLocator locator() {
 		return new ElementLocator(driver);
 	}
+
+	protected void navigateTo(String fragment) {
+		String url = url(fragment);
+		driver.get(url);
+	}
 }

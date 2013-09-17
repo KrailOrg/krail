@@ -16,7 +16,7 @@ import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
-import uk.co.q3c.v7.base.shiro.V7SecurityManager;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
@@ -114,7 +114,7 @@ public class DefaultV7NavigatorTest {
 	SitemapURIConverter sitemapURIConverter;
 
 	@Mock
-	V7SecurityManager securityManager;
+	LoginStatusHandler loginHandler;
 
 	@Mock
 	Provider<Subject> subjectPro;
@@ -136,8 +136,8 @@ public class DefaultV7NavigatorTest {
 		when(subjectPro.get()).thenReturn(subject);
 		when(sitemapURIConverter.pageIsPublic(anyString())).thenReturn(true);
 
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, securityManager, subjectPro,
-				uriPermissionFactory, sitemapURIConverter);
+		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, subjectPro,
+				uriPermissionFactory, sitemapURIConverter, loginHandler);
 		CurrentInstance.set(UI.class, scopedUI);
 	}
 

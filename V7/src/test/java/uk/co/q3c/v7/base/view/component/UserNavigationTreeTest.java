@@ -38,6 +38,7 @@ import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.ui.BasicUI;
@@ -84,6 +85,9 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 	@Mock
 	SitemapURIConverter sitemapUriConverter;
 
+	@Mock
+	LoginStatusHandler loginStatusHandler;
+
 	@Override
 	@Before
 	public void setup() {
@@ -106,7 +110,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(0);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter);
+				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(0);
 	}
@@ -120,7 +124,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter);
+				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(3);
 		assertThat(unt.getItemIds()).containsOnly(newNode1, newNode2, newNode3);
@@ -142,7 +146,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter);
+				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(6);
 		assertThat(unt.getItemIds()).containsOnly(newNode1, newNode2, newNode3, newNode4, newNode5, newNode6);
@@ -166,7 +170,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(2);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter);
+				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler);
 		// then
 		assertThat(unt.getMaxLevel()).isEqualTo(-1);
 		// when
@@ -194,7 +198,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter);
+				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("home");
@@ -208,7 +212,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(1);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter);
+				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler);
 		// then
 		assertThat(unt.isImmediate()).isTrue();
 
@@ -220,7 +224,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		// given
 		buildSitemap(2);
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter);
+				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler);
 		// when
 		unt.setValue(newNode2);
 		// then
@@ -236,7 +240,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter);
+				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("zu Hause");
@@ -260,7 +264,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		when(subject.isPermitted(publicPage)).thenReturn(false);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter);
+				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler);
 		// then
 		assertThat(unt.containsId(newNode1)).isTrue();
 		assertThat(unt.containsId(newNode2)).isFalse(); // logout
@@ -279,7 +283,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(3);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter);
+				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(1);
 
@@ -295,7 +299,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		// given
 		buildSitemap(4);
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, currentLocale, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter);
+				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler);
 		// when
 
 		// sorted is false by default, should be insertion order

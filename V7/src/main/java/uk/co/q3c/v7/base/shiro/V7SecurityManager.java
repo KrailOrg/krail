@@ -12,9 +12,7 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,7 +29,7 @@ import com.vaadin.server.VaadinSession;
 
 public class V7SecurityManager extends DefaultSecurityManager {
 	private static Logger log = LoggerFactory.getLogger(V7SecurityManager.class);
-	private final List<LoginStatusListener> listeners = new ArrayList<>();
+
 	@Inject
 	private VaadinSessionProvider sessionProvider;
 
@@ -43,45 +41,23 @@ public class V7SecurityManager extends DefaultSecurityManager {
 		super(realms);
 	}
 
-	// public V7SecurityManager(Realm singleRealm) {
-	// super(singleRealm);
-	// }
-
 	@Override
 	protected void onSuccessfulLogin(AuthenticationToken token, AuthenticationInfo info, Subject subject) {
 		super.onSuccessfulLogin(token, info, subject);
 		setSubject(subject);
-		fireListeners();
 	}
 
-	@Override
-	public void logout(Subject subject) {
-		super.logout(subject);
-		fireListeners();
-	}
-
-	public void addListener(LoginStatusListener listener) {
-		listeners.add(listener);
-	}
-
-	public void removeListener(LoginStatusListener listener) {
-		listeners.remove(listener);
-	}
-
-	private void fireListeners() {
-		log.debug("firing login status listeners");
-		for (LoginStatusListener listener : listeners) {
-			log.debug("processing login status listener: " + listener);
-			listener.updateStatus();
-		}
-	}
-
-	private void setSubject(Subject subject) {
+	protected void setSubject(Subject subject) {
 		VaadinSession session = sessionProvider.get();
 		log.debug("storing Subject instance in VaadinSession");
 		session.setAttribute(Subject.class, subject);
 	}
 
+	/**
+	 * Method injection is needed because the constructor has to complete
+	 * 
+	 * @see org.apache.shiro.mgt.SessionsSecurityManager#setSessionManager(org.apache.shiro.session.mgt.SessionManager)
+	 */
 	@Inject
 	@Override
 	public void setSessionManager(SessionManager sessionManager) {

@@ -26,12 +26,22 @@ public class LoginTest extends V7TestBenchTestCase {
 	}
 
 	@Test
-	public void testLogin() throws Exception {
+	public void login() throws Exception {
 		// given
+		navTree().index(0).expand().get().click(8, 7);
+		String startFragment = "public/system-account";
+		navigateTo(startFragment);
+
+		assertThat(navTreeSelection(), is("System Account"));
+
+		verifyUrl(startFragment);
+		// driver.get("http://google.com");
+		verifyUrl(startFragment);
+
 		// when
 		// then initial state
 		assertThat(loginButtonText(), is("log in"));
-		assertThat(loginLabelText(), is("guest"));
+		assertThat(loginLabelText(), is("Guest"));
 
 		// when LoginStatusPanel button clicked
 		loginButton().click();
@@ -45,7 +55,7 @@ public class LoginTest extends V7TestBenchTestCase {
 		passwordBox().sendKeys("password");
 		submitButton().click();
 		// then correct url and status panel updated
-		verifyUrl("private");
+		verifyUrl(startFragment);
 		assertThat(loginButtonText(), is("log out"));
 		assertThat(loginLabelText(), is("ds"));
 	}
