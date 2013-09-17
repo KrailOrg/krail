@@ -7,12 +7,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import uk.co.q3c.v7.base.view.DefaultLoginView;
+import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
 import uk.co.q3c.v7.test.bench.V7TestBenchTestCase;
 
-import com.vaadin.testbench.By;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextField;
 
 public class LoginTest extends V7TestBenchTestCase {
 
@@ -26,22 +32,19 @@ public class LoginTest extends V7TestBenchTestCase {
 	}
 
 	@Test
-	public void login() throws Exception {
+	public void testLogin() {
 		// given
+
 		navTree().index(0).expand().get().click(8, 7);
 		String startFragment = "public/system-account";
 		navigateTo(startFragment);
 
-		assertThat(navTreeSelection(), is("System Account"));
-
-		verifyUrl(startFragment);
-		// driver.get("http://google.com");
-		verifyUrl(startFragment);
+		pause(1000);
 
 		// when
 		// then initial state
-		assertThat(loginButtonText(), is("log in"));
-		assertThat(loginLabelText(), is("Guest"));
+		assertThat(loginButton().getText(), is("log in"));
+		assertThat(loginLabel().getText(), is("Guest"));
 
 		// when LoginStatusPanel button clicked
 		loginButton().click();
@@ -49,15 +52,11 @@ public class LoginTest extends V7TestBenchTestCase {
 		verifyUrl("public/login");
 
 		// when username and password entered
-		usernameBox().clear();
-		usernameBox().sendKeys("ds");
-		passwordBox().clear();
-		passwordBox().sendKeys("password");
-		submitButton().click();
+		login();
 		// then correct url and status panel updated
 		verifyUrl(startFragment);
-		assertThat(loginButtonText(), is("log out"));
-		assertThat(loginLabelText(), is("ds"));
+		assertThat(loginButton().getText(), is("log out"));
+		assertThat(loginLabel().getText(), is("ds"));
 	}
 
 	@After
@@ -69,31 +68,46 @@ public class LoginTest extends V7TestBenchTestCase {
 		}
 	}
 
+	public LoginTest open() {
+		navigateTo("public/login");
+		return this;
+	}
+
+	public void login() {
+		login("ds", "password");
+	}
+
+	public void login(String username, String password) {
+		usernameBox().clear();
+		usernameBox().sendKeys(username);
+		passwordBox().clear();
+		passwordBox().sendKeys(password);
+		submitButton().click();
+	}
+
 	protected WebElement loginButton() {
-		return driver.findElement(By.vaadin("ROOT::PID_SDefaultLoginStatusPanel-Button/domChild[0]/domChild[0]"));
+		return element(DefaultLoginStatusPanel.class, Button.class);
 	}
 
 	protected WebElement loginLabel() {
-		return driver.findElement(By.vaadin("ROOT::PID_SDefaultLoginStatusPanel-Label"));
-	}
-
-	protected String loginButtonText() {
-		return loginButton().getText();
-	}
-
-	protected String loginLabelText() {
-		return loginLabel().getText();
+		return element(DefaultLoginStatusPanel.class, Label.class);
 	}
 
 	protected WebElement usernameBox() {
-		return driver.findElement(By.vaadin("ROOT::PID_SDefaultLoginView-TextField-username"));
+		return element("username", DefaultLoginView.class, TextField.class);
 	}
 
 	protected WebElement passwordBox() {
-		return driver.findElement(By.vaadin("ROOT::PID_SDefaultLoginView-PasswordField-password"));
+		return element("password", DefaultLoginView.class, PasswordField.class);
 	}
 
 	protected WebElement submitButton() {
-		return driver.findElement(By.vaadin("ROOT::PID_SDefaultLoginView-Button"));
+		return element(DefaultLoginView.class, Button.class);
 	}
+
+	public void init(WebDriver driver, String baseUrl) {
+		this.setDriver(driver);
+		this.setBaseUrl(baseUrl);
+	}
+
 }

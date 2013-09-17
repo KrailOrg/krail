@@ -18,13 +18,20 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import uk.co.q3c.util.ID;
 
 import com.vaadin.testbench.By;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
 
 public class V7TestBenchTestCase extends TestBenchTestCase {
+	private static Logger log = LoggerFactory.getLogger(V7TestBenchTestCase.class);
+	protected final String rootIdStem = "ROOT::PID_S";
 	protected String baseUrl;
 	protected final StringBuffer verificationErrors = new StringBuffer();
 
@@ -54,8 +61,8 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 		return locator().id("DefaultUserNavigationTree");
 	}
 
-	protected String navTreeSelection() throws InterruptedException {
-		Thread.sleep(1000);
+	protected String navTreeSelection() {
+
 		String selectedNodeText = getDriver().findElement(
 				By.xpath("id('DefaultUserNavigationTree')//div[contains(@class, 'v-tree-node-selected')]")).getText();
 		return selectedNodeText;
@@ -68,5 +75,47 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	protected void navigateTo(String fragment) {
 		String url = url(fragment);
 		driver.get(url);
+	}
+
+	protected WebElement element(String qualifier, Class<?>... classes) {
+		String s = id(qualifier, classes);
+		WebElement findElement = driver.findElement(By.vaadin(s));
+		return findElement;
+	}
+
+	protected WebElement element(Class<?>... classes) {
+		return element(null, classes);
+	}
+
+	protected String id(Class<?>... components) {
+		return "ROOT::PID_S" + ID.getIdc(components);
+	}
+
+	protected String id(String qualifier, Class<?>... components) {
+		return "ROOT::PID_S" + ID.getIdc(qualifier, components);
+	}
+
+	protected void pause(int milliseconds) {
+		try {
+			Thread.sleep(milliseconds);
+		} catch (Exception e) {
+			log.error("Sleep was interrupted");
+		}
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	protected void navigateForward() {
+		driver.navigate().forward();
+	}
+
+	protected void navigateBack() {
+		driver.navigate().back();
 	}
 }

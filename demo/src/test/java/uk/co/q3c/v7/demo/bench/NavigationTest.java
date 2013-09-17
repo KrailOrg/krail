@@ -46,18 +46,19 @@ public class NavigationTest extends V7TestBenchTestCase {
 		verifyUrl("public/system-account/unlock-account");
 
 		// when
-		driver.navigate().back();
+		navigateBack();
 		// then
 		verifyUrl("public/system-account/request-account");
 
 		// when
-		driver.navigate().forward();
+		navigateForward();
 		// then
 		verifyUrl("public/system-account/unlock-account");
 
 		// when
 		navigateTo("public/system-account/request-account");
 		// then
+		pause(500);
 		assertThat(navTreeSelection(), is("Request Account"));
 		verifyUrl("public/system-account/request-account");
 
