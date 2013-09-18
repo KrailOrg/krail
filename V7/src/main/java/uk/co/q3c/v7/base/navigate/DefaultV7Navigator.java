@@ -281,6 +281,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	public void loginSuccessful() {
 		if (previousNavigationState != null
 				&& !(previousNavigationState.getView() instanceof LoginView)) {
+			assert previousNavigationState.getView().getUiComponent().getUI() == null : "the navigation state view should not be attached";
 			navigateTo(previousNavigationState);
 		} else {
 			navigateTo(StandardPageKey.Private_Home);
@@ -292,6 +293,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	protected void setCurrentNavigationState(NavigationState newNavigationState) {
+		assert newNavigationState.getView().getUiComponent().getUI() == UI.getCurrent() : "the navigation state view must belong to the current UI";
 		previousNavigationState = currentNavigationState;
 		currentNavigationState = newNavigationState;
 
