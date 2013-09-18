@@ -17,9 +17,12 @@ import javax.inject.Provider;
 
 import org.apache.shiro.subject.Subject;
 
+import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.shiro.V7SecurityManager;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
+import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -44,21 +47,24 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 	private final Label usernameLabel;
 	private final Button login_logout_Button;
 	private final V7Navigator navigator;
-	private boolean loggedIn;
 	private final Provider<Subject> subjectPro;
+	private final Translate translate;
+	private final LoginStatusHandler loginStatusHandler;
 
 	@Inject
-	protected DefaultLoginStatusPanel(V7Navigator navigator, V7SecurityManager securityManager,
-			Provider<Subject> subjectPro) {
+	protected DefaultLoginStatusPanel(V7Navigator navigator, Provider<Subject> subjectPro, Translate translate,
+			LoginStatusHandler loginStatusHandler) {
 		super();
 		this.navigator = navigator;
 		this.subjectPro = subjectPro;
+		this.translate = translate;
+		this.loginStatusHandler = loginStatusHandler;
+		loginStatusHandler.addListener(this);
 		// this.setWidth("200px");
 		// this.setHeight("100px");
 		setSizeFull();
 		addStyleName(ChameleonTheme.PANEL_BORDERLESS);
 		// register with the security manager to monitor status changes
-		securityManager.addListener(this);
 		usernameLabel = new Label();
 		login_logout_Button = new Button();
 		login_logout_Button.addClickListener(this);
@@ -67,27 +73,24 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 		hl.addComponent(usernameLabel);
 		hl.addComponent(login_logout_Button);
 		this.setContent(hl);
-		updateStatus();
+		setIds();
+
+		// initialise
+		loginStatusChange(loginStatusHandler.subjectIsAuthenticated(), loginStatusHandler.subjectName());
+
+	}
+
+	private void setIds() {
+		setId(ID.getId(this));
+		login_logout_Button.setId(ID.getId(this, login_logout_Button));
+		usernameLabel.setId(ID.getId(this, usernameLabel));
 	}
 
 	@Override
-	public void updateStatus() {
-		Subject subject = subjectPro.get();
-		if (subject.isAuthenticated()) {
-			loggedIn = true;
-			login_logout_Button.setCaption("log out");
-			usernameLabel.setValue(subject.getPrincipal().toString());
-			return;
-		}
-		if (subject.isRemembered()) {
-			loggedIn = false;
-			login_logout_Button.setCaption("log in");
-			usernameLabel.setValue(subject.getPrincipal().toString() + "?");
-			return;
-		}
-		loggedIn = false;
-		login_logout_Button.setCaption("log in");
-		usernameLabel.setValue("guest");
+	public void loginStatusChange(boolean authenticated, String name) {
+		String caption = (authenticated) ? translate.from(LabelKey.Log_Out) : translate.from(LabelKey.Log_In);
+		login_logout_Button.setCaption(caption.toLowerCase());
+		usernameLabel.setValue(name);
 	}
 
 	@Override
@@ -106,8 +109,11 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 
 	@Override
 	public void buttonClick(ClickEvent event) {
+		boolean loggedIn = loginStatusHandler.subjectIsAuthenticated();
 		if (loggedIn) {
+			subjectPro.get().logout();
 			navigator.navigateTo(StandardPageKey.Logout);
+			loginStatusHandler.initiateStatusChange();
 		} else {
 			navigator.navigateTo(StandardPageKey.Login);
 		}

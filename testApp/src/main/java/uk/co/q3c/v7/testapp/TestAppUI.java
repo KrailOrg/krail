@@ -3,6 +3,7 @@ package uk.co.q3c.v7.testapp;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 
 import com.vaadin.data.util.converter.ConverterFactory;
@@ -13,8 +14,9 @@ import com.vaadin.ui.AbstractOrderedLayout;
 public class TestAppUI extends ScopedUI {
 
 	@Inject
-	protected TestAppUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory) {
-		super(navigator, errorHandler, converterFactory);
+	protected TestAppUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
+			LoginStatusHandler loginStatusHandler) {
+		super(navigator, errorHandler, converterFactory, loginStatusHandler);
 	}
 
 	@Override

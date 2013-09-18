@@ -23,7 +23,16 @@ public class V7ShiroVaadinModule extends AbstractModule {
 		bindUnauthenticatedHandler();
 		bindUnauthorisedHandler();
 		bindLoginExceptionsHandler();
+		bindLoginStatusHandler();
 		bindInvalidURIHandler();
+
+	}
+
+	/**
+	 * Override this to bind your own implementation of {@link LoginStatusHandler}
+	 */
+	protected void bindLoginStatusHandler() {
+		bind(LoginStatusHandler.class).to(DefaultLoginStatusHandler.class);
 	}
 
 	/**

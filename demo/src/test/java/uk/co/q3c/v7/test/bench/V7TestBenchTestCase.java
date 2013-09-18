@@ -26,6 +26,7 @@ import com.vaadin.testbench.TestBenchTestCase;
 
 public class V7TestBenchTestCase extends TestBenchTestCase {
 	protected String baseUrl;
+	protected final StringBuffer verificationErrors = new StringBuffer();
 
 	@Before
 	public void defaultSetup() {
@@ -62,5 +63,10 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 
 	protected ElementLocator locator() {
 		return new ElementLocator(driver);
+	}
+
+	protected void navigateTo(String fragment) {
+		String url = url(fragment);
+		driver.get(url);
 	}
 }

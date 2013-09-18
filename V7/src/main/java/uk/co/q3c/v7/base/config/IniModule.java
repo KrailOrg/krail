@@ -14,9 +14,14 @@ package uk.co.q3c.v7.base.config;
 
 import javax.inject.Singleton;
 
+import org.apache.shiro.subject.Subject;
+
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapProvider;
 import uk.co.q3c.v7.base.navigate.sitemap.TextReaderSitemapProvider;
+import uk.co.q3c.v7.base.shiro.DefaultVaadinSessionProvider;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
+import uk.co.q3c.v7.base.shiro.VaadinSessionProvider;
 
 import com.google.inject.AbstractModule;
 
@@ -27,6 +32,7 @@ public class IniModule extends AbstractModule {
 		bindIni();
 		bindSitemapProvider();
 		bindSitemap();		
+		bindVaadinSessionProvider();
 	}
 	
 	/**
@@ -42,12 +48,19 @@ public class IniModule extends AbstractModule {
 	protected void bindSitemapProvider(){
 		bind(SitemapProvider.class).to(TextReaderSitemapProvider.class);
 	}
-	
+
 	/**
 	 * Override this to provide your own Sitemap
 	 */
 	protected void bindSitemap(){
 		bind(Sitemap.class).toProvider(SitemapProvider.class).in(Singleton.class);
+	}
+
+	/**
+	 * Override this to use a different implementation for a VaadinSessionProvider
+	 */
+	protected void bindVaadinSessionProvider() {
+		bind(VaadinSessionProvider.class).to(DefaultVaadinSessionProvider.class);
 	}
 
 }

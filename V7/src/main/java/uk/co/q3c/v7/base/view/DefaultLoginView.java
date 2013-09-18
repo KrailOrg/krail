@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ConcurrentAccessException;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -19,9 +18,11 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
+import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -45,14 +46,17 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	private final V7Navigator navigator;
 	private final Label statusMsgLabel;
 	private final LoginExceptionHandler loginExceptionHandler;
-        private final Provider<Subject> subjectPro;
+	private final Provider<Subject> subjectProvider;
+	private final LoginStatusHandler loginStatusHandler;
 
 	@Inject
-	protected DefaultLoginView(V7Navigator navigator, LoginExceptionHandler loginExceptionHandler, Provider<Subject> subjectPro) {
+	protected DefaultLoginView(V7Navigator navigator, LoginExceptionHandler loginExceptionHandler,
+			Provider<Subject> subjectProvider, LoginStatusHandler loginStatusHandler) {
 		super();
 		this.navigator = navigator;
 		this.loginExceptionHandler = loginExceptionHandler;
-		this.subjectPro = subjectPro;
+		this.subjectProvider = subjectProvider;
+		this.loginStatusHandler = loginStatusHandler;
 		this.setColumns(3);
 		this.setRows(3);
 		this.setSizeFull();
@@ -90,6 +94,16 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		this.setRowExpandRatio(0, 1);
 		this.setRowExpandRatio(2, 1);
 
+		setIds();
+
+	}
+
+	private void setIds() {
+		setId(ID.getId(this));
+		submitButton.setId(ID.getId(this, submitButton));
+		usernameBox.setId(ID.getId("username", this, usernameBox));
+		passwordBox.setId(ID.getId("password", this, passwordBox));
+		statusMsgLabel.setId(ID.getId("status", this, statusMsgLabel));
 	}
 
 	@Override
@@ -101,7 +115,8 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	public void buttonClick(ClickEvent event) {
 		UsernamePasswordToken token = new UsernamePasswordToken(usernameBox.getValue(), passwordBox.getValue());
 		try {
-		    subjectPro.get().login(token);
+			subjectProvider.get().login(token);
+			loginStatusHandler.initiateStatusChange();
 		} catch (UnknownAccountException uae) {
 			loginExceptionHandler.unknownAccount(this, token, uae);
 		} catch (IncorrectCredentialsException ice) {

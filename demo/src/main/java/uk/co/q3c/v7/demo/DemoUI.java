@@ -3,6 +3,7 @@ package uk.co.q3c.v7.demo;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
@@ -42,8 +43,9 @@ public class DemoUI extends ScopedUI {
 	@Inject
 	protected DemoUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
-			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageStatusPanel messageBar) {
-		super(navigator, errorHandler, converterFactory);
+			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageStatusPanel messageBar,
+			LoginStatusHandler loginStatusHandler) {
+		super(navigator, errorHandler, converterFactory, loginStatusHandler);
 		this.navTree = navTree;
 		this.breadcrumb = breadcrumb;
 		this.loginOut = loginOut;

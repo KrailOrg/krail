@@ -22,7 +22,6 @@ import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.config.IniModule;
-import uk.co.q3c.v7.base.view.component.SubjectProvider;
 
 import com.google.inject.binder.AnnotatedBindingBuilder;
 
@@ -89,6 +88,11 @@ public class DefaultShiroModule extends ShiroModule {
 	protected void bindCredentialsMatcher() {
 		bind(CredentialsMatcher.class).to(
 				AlwaysPasswordCredentialsMatcher.class);
+	}
+
+	@Override
+	protected void bindSessionManager(AnnotatedBindingBuilder<SessionManager> bind) {
+		bind.to(VaadinSessionManager.class).asEagerSingleton();
 	}
 
 }

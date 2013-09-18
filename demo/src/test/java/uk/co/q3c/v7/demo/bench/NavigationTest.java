@@ -14,8 +14,6 @@ import com.vaadin.testbench.ScreenshotOnFailureRule;
 
 public class NavigationTest extends V7TestBenchTestCase {
 
-	private final StringBuffer verificationErrors = new StringBuffer();
-
 	@Rule
 	public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
 
@@ -58,9 +56,10 @@ public class NavigationTest extends V7TestBenchTestCase {
 		verifyUrl("public/system-account/unlock-account");
 
 		// when
-		driver.navigate().to(url("public/system-account/request-account"));
+		navigateTo("public/system-account/request-account");
 		// then
 		assertThat(navTreeSelection(), is("Request Account"));
+		verifyUrl("public/system-account/request-account");
 
 	}
 

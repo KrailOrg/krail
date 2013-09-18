@@ -10,26 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.view.component;
+package uk.co.q3c.v7.base.shiro;
 
-import javax.inject.Provider;
-import javax.inject.Singleton;
-
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
+import com.vaadin.server.VaadinSession;
+
 /**
- * A DI wrapper for {@link SecurityUtils#getSubject()}
+ * The provides an interface for an implementation to wrap the static method of obtaining the current VaadinSession,
+ * mainly to enable mocking for tests. The current {@link Subject} is stored in the VaadinSession, so if a Subject is
+ * used in a background thread, some other means of storing it would be required
  * 
- * @author David Sowerby 15 Jul 2013
+ * @author David Sowerby 15 Sep 2013
  * 
  */
-@Singleton
-public class SubjectProvider implements Provider<Subject> {
+public interface VaadinSessionProvider {
 
-	@Override
-	public Subject get() {
-		return SecurityUtils.getSubject();
-	}
+	public abstract VaadinSession get();
 
 }

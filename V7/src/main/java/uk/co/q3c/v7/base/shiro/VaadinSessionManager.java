@@ -1,6 +1,20 @@
+/*
+ * Copyright (C) 2013 David Sowerby
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package uk.co.q3c.v7.base.shiro;
 
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionException;
@@ -30,105 +44,102 @@ public class VaadinSessionManager implements SessionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(VaadinSessionManager.class);
 
-    /**
+	/**
      * The session attribute name prefix used for storing the Shiro Session in the
      * VaadinSession.
-     */
-    private final static String SESSION_ATTRIBUTE_PREFIX = VaadinSessionManager.class.getName() + ".session.";
+	 */
+	private final static String SESSION_ATTRIBUTE_PREFIX = VaadinSessionManager.class.getName() + ".session.";
 
-    /**
+	/**
      * The session factory used to create new sessions. In the future, it may make
      * more sense to simply implement a {@link Session} that is a lightweight
      * wrapper on the {@link VaadinSession} rather than storing a {@link SimpleSession} in the {@link VaadinSession}.
      * However by using a
      * SimpleSession, the security information is contained in a neat bucket
      * inside the overall VaadinSession.
-     */
-    private SessionFactory sessionFactory;
+	 */
+	private final SessionFactory sessionFactory;
+	private final VaadinSessionProvider sessionProvider;
 
-    /**
-     * Constructs the VaadinSessionManager.
-     */
-    public VaadinSessionManager() {
-        sessionFactory = new SimpleSessionFactory();
-    }
+	/**
+	 * Constructs the VaadinSessionManager.
+	 */
 
-    /*
-     * (non-Javadoc)
-     * 
+	@Inject
+	protected VaadinSessionManager(VaadinSessionProvider sessionProvider) {
+		this.sessionProvider = sessionProvider;
+		sessionFactory = new SimpleSessionFactory();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
      * @see
      * org.apache.shiro.session.mgt.SessionManager#start(org.apache.shiro.session
      * .mgt.SessionContext)
-     */
-    @Override
-    public Session start(SessionContext context) {
+	 */
+	@Override
+	public Session start(SessionContext context) {
 
-        LOG.debug("starting Shiro session");
+        LOG.debug("starting VaadinSessionManager");
 
-        // Retrieve the VaadinSession for the current user.
-        VaadinSession vaadinSession = VaadinSession.getCurrent();
+		// Retrieve the VaadinSession for the current user.
+		VaadinSession vaadinSession = sessionProvider.get();
 
-        // Assuming security is used within a Vaadin application, there should
+		// Assuming security is used within a Vaadin application, there should
         // always be a VaadinSession available.
         if (vaadinSession == null) {
             throw new IllegalStateException("Unable to locate VaadinSession to store Shiro Session.");
         }
 
-        // Create a new security session using the session factory.
-        SimpleSession shiroSession = (SimpleSession) sessionFactory.createSession(context);
+		// Create a new security session using the session factory.
+		SimpleSession shiroSession = (SimpleSession) sessionFactory.createSession(context);
 
-        // Assign a unique ID to the session now because this session manager
-        // doesn't use a SessionDAO for persistence as it delegates to any
-        // VaadinSession configured persistence.
-        shiroSession.setId(UUID.randomUUID().toString());
+		// Assign a unique ID to the session now because this session manager
+		// doesn't use a SessionDAO for persistence as it delegates to any
+		// VaadinSession configured persistence.
+		shiroSession.setId(UUID.randomUUID().toString());
 
-        // Put the security session in the VaadinSession. We use the session's ID as
-        // part of the key just to be safe so we can double check that the security
-        // session matches when it is requested in getSession.
-        vaadinSession.setAttribute(SESSION_ATTRIBUTE_PREFIX + shiroSession.getId(), shiroSession);
+		// Put the security session in the VaadinSession. We use the session's ID as
+		// part of the key just to be safe so we can double check that the security
+		// session matches when it is requested in getSession.
+		vaadinSession.setAttribute(SESSION_ATTRIBUTE_PREFIX + shiroSession.getId(), shiroSession);
 
-        return shiroSession;
-    }
+		return shiroSession;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
+	/*
+	 * (non-Javadoc)
+	 * 
      * @see
      * org.apache.shiro.session.mgt.SessionManager#getSession(org.apache.shiro
      * .session.mgt.SessionKey)
-     */
-    @Override
-    public Session getSession(SessionKey key) throws SessionException {
+	 */
+	@Override
+	public Session getSession(SessionKey key) throws SessionException {
 
-        LOG.debug("getting Shiro session");
+		// Retrieve the VaadinSession for the current user.
+		VaadinSession vaadinSession = sessionProvider.get();
 
-        // Retrieve the VaadinSession for the current user.
-        VaadinSession vaadinSession = VaadinSession.getCurrent();
+		String attributeName = SESSION_ATTRIBUTE_PREFIX + key.getSessionId();
 
-        String attributeName = SESSION_ATTRIBUTE_PREFIX + key.getSessionId();
+		if (vaadinSession != null) {
+			// If we have a valid VaadinSession, try to get the Shiro Session.
+			SimpleSession shiroSession = (SimpleSession) vaadinSession.getAttribute(attributeName);
 
-        if (vaadinSession != null) {
-            // If we have a valid VaadinSession, try to get the Shiro Session.
-            SimpleSession shiroSession = (SimpleSession) vaadinSession.getAttribute(attributeName);
-            if (shiroSession != null) {
-                LOG.debug("Shiro session found");
-                // Make sure the Shiro Session hasn't been stopped or expired (i.e. the
-                // user logged out).
-                if (shiroSession.isValid()) {
-                    LOG.warn("Shiro session valid");
-                    return shiroSession;
-                }
-                else {
-                    LOG.debug("Shiro session invalid");
-                    // This is an invalid or expired session so we'll clean it up.
-                    vaadinSession.setAttribute(attributeName, null);
-                }
-            }
-            else {
-                LOG.debug("Shiro session not found");
-            }
-        }
-        LOG.debug("Vaadin session not found");
-        return null;
-    }
+			if (shiroSession != null) {
+
+				// Make sure the Shiro Session hasn't been stopped or expired (i.e. the
+				// user logged out).
+				if (shiroSession.isValid()) {
+					return shiroSession;
+				} else {
+					// This is an invalid or expired session so we'll clean it up.
+					vaadinSession.setAttribute(attributeName, null);
+				}
+			}
+		}
+
+		return null;
+	}
 }

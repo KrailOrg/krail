@@ -12,8 +12,6 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-
 public interface LoginStatusListener {
-	//TODO document
-	void updateStatus();
+	void loginStatusChange(Subject subject);
 }

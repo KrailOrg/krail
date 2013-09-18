@@ -13,11 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.SiteMapException;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
-import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.V7View;
@@ -49,13 +49,14 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	protected DefaultV7Navigator(Sitemap sitemap,
 			Map<String, Provider<V7View>> viewProMap,
 			UriFragmentFactory uriFragmentFactory,
-			V7SecurityManager securityManager, Provider<Subject> securityContext) {
+			Provider<Subject> securityContext,
+			LoginStatusHandler loginHandler) {
 		super();
 		this.viewProvidersMap = viewProMap;
 		this.sitemap = sitemap;
 		this.subjectProvider = securityContext;
 		this.uriFragmentFactory = uriFragmentFactory;
-		securityManager.addListener(this);
+		loginHandler.addListener(this);
 	}
 
 	@Override
@@ -284,6 +285,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 */
 	@Override
 	public void loginSuccessful() {
+		log.debug("user logged in successfully, navigating to appropriate view");
 		if (previousNavigationState != null
 				&& !(previousNavigationState.getView() instanceof LoginView)) {
 			assert previousNavigationState.getView().getRootComponent().getUI() == null : "the navigation state view should not be attached";
@@ -324,11 +326,13 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	@Override
-	public void updateStatus() {
-		Subject subject = subjectProvider.get();
+	public void loginStatusChange(Subject subject) {
 		if (subject.isAuthenticated()) {
 			loginSuccessful();
 		}
+	};
+	}
+
 	}
 
 	@Override
