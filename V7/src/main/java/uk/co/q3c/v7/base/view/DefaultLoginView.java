@@ -116,7 +116,6 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		UsernamePasswordToken token = new UsernamePasswordToken(usernameBox.getValue(), passwordBox.getValue());
 		try {
 			subjectProvider.get().login(token);
-			loginStatusHandler.initiateStatusChange();
 		} catch (UnknownAccountException uae) {
 			loginExceptionHandler.unknownAccount(this, token, uae);
 		} catch (IncorrectCredentialsException ice) {

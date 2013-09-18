@@ -4,13 +4,11 @@ import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
-import uk.co.q3c.v7.base.navigate.StrictURIFragment;
 import uk.co.q3c.v7.base.navigate.StrictUriFragmentFactory;
-import uk.co.q3c.v7.base.navigate.URIFragment;
 import uk.co.q3c.v7.base.navigate.UriFragmentFactory;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
-import uk.co.q3c.v7.base.shiro.VaadinSecurityContext;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 
 import com.google.inject.AbstractModule;
@@ -27,7 +25,7 @@ public abstract class V7UIModule extends AbstractModule {
 		MapBinder<String, UI> mapbinder = MapBinder.newMapBinder(binder(), String.class, UI.class);
 
 		bind(WebBrowser.class).toProvider(BrowserProvider.class);
-		bind(Subject.class).toProvider(VaadinSecurityContext.class);                
+		bind(Subject.class).toProvider(SubjectProvider.class);                
 		bindUIProvider();
 		addUIBindings(mapbinder);
 		bindNavigator();

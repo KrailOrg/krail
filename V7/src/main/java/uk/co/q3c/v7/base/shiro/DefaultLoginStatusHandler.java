@@ -14,7 +14,10 @@ package uk.co.q3c.v7.base.shiro;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 import javax.inject.Inject;
 
@@ -41,19 +44,12 @@ import com.vaadin.ui.UI;
  */
 @UIScoped
 public class DefaultLoginStatusHandler implements LoginStatusHandler {
-	private static Logger log = LoggerFactory.getLogger(DefaultLoginStatusHandler.class);
-	private final List<LoginStatusListener> listeners = new ArrayList<>();
-	private final VaadinSessionProvider sessionProvider;
-	private final SubjectProvider subjectProvider;
-	private final Translate translate;
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultLoginStatusHandler.class);
+	private final Set<LoginStatusListener> listeners =  Collections.newSetFromMap(new WeakHashMap<LoginStatusListener, Boolean>());
 
 	@Inject
-	protected DefaultLoginStatusHandler(VaadinSessionProvider sessionProvider, SubjectProvider subjectProvider,
-			Translate translate) {
+	protected DefaultLoginStatusHandler() {
 		super();
-		this.sessionProvider = sessionProvider;
-		this.subjectProvider = subjectProvider;
-		this.translate = translate;
 	}
 
 	@Override
@@ -66,48 +62,15 @@ public class DefaultLoginStatusHandler implements LoginStatusHandler {
 		listeners.remove(listener);
 	}
 
-	private void fireListeners(boolean authenticated, String name) {
-
-		log.debug("firing login status listeners");
+	@Override
+	public void fireStatusChange(LoginStatusEvent event) {
+		fireListeners(event);
+	}
+	
+	private void fireListeners(LoginStatusEvent event) {
+		LOGGER.debug("firing login status listeners");
 		for (LoginStatusListener listener : listeners) {
-			listener.loginStatusChange(authenticated, name);
+			listener.loginStatusChange(event);
 		}
-	}
-
-	@Override
-	public void initiateStatusChange() {
-
-		boolean authenticated = subjectIsAuthenticated();
-		String name = subjectName();
-
-		VaadinSession session = sessionProvider.get();
-		Collection<UI> uIs = session.getUIs();
-
-		for (UI ui : uIs) {
-			ScopedUI sui = (ScopedUI) ui;
-			sui.getLoginStatusHandler().respondToStatusChange(authenticated, name);
-		}
-	}
-
-	@Override
-	public void respondToStatusChange(boolean authenticated, String name) {
-		fireListeners(authenticated, name);
-	}
-
-	@Override
-	public boolean subjectIsAuthenticated() {
-		Subject subject = subjectProvider.get();
-		boolean authenticated = subject.isAuthenticated();
-		return authenticated;
-	}
-
-	@Override
-	public String subjectName() {
-		Subject subject = subjectProvider.get();
-		boolean authenticated = subject.isAuthenticated();
-		boolean remembered = subject.isRemembered();
-		String name = (authenticated) ? subject.getPrincipal().toString() : translate.from(LabelKey.Guest);
-		name = (remembered) ? subject.getPrincipal().toString() + "?" : name;
-		return name;
 	}
 }

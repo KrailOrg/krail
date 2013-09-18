@@ -21,8 +21,6 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vaadin.server.VaadinSession;
-
 /**
  * A DI wrapper for {@link SecurityUtils#getSubject()}
  * 
@@ -31,34 +29,25 @@ import com.vaadin.server.VaadinSession;
  */
 @Singleton
 public class SubjectProvider implements Provider<Subject> {
-	private static Logger log = LoggerFactory.getLogger(SubjectProvider.class);
-	private final VaadinSessionProvider sessionProvider;
+	private static final Logger LOG = LoggerFactory.getLogger(SubjectProvider.class);
+	
+	private final V7SecurityManager securityManager;
 
 	@Inject
-	protected SubjectProvider(VaadinSessionProvider sessionProvider) {
+	protected SubjectProvider(V7SecurityManager securityManager) {
 		super();
-		this.sessionProvider = sessionProvider;
+		this.securityManager = securityManager;
 	}
 
+	/**
+	 * @see V7SecurityManager#getSubject()
+	 */
+	public Subject getSubject() {
+		return securityManager.getSubject();
+	}
+	
 	@Override
 	public Subject get() {
-		Subject subject = null;
-		try {
-			VaadinSession session = sessionProvider.get();
-			subject = session.getAttribute(Subject.class);
-			if (subject == null) {
-				log.debug("VaadinSession is valid, but does not have a stored Subject, creating a new Subject");
-				subject = new Subject.Builder().buildSubject();
-			}
-			return subject;
-
-		} catch (IllegalStateException ise) {
-			// this may happen in background threads which are not using a session, or during testing
-			log.debug("There is no VaadinSession, creating a new Subject");
-			subject = new Subject.Builder().buildSubject();
-			return subject;
-
-		}
-
+		return this.securityManager.getSubject();
 	}
 }

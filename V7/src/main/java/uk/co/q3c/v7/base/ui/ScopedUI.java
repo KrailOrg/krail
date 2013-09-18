@@ -167,8 +167,4 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	 */
 	protected abstract String pageTitle();
 
-	public LoginStatusHandler getLoginStatusHandler() {
-		return loginStatusHandler;
-	}
-
 }

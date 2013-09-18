@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.shiro.LoginStatusEvent;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.SiteMapException;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
@@ -326,14 +327,11 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	@Override
-	public void loginStatusChange(Subject subject) {
-		if (subject.isAuthenticated()) {
+	public void loginStatusChange(LoginStatusEvent event) {
+		if (event.isSubjectAuthenticated()) {
 			loginSuccessful();
 		}
 	};
-	}
-
-	}
 
 	@Override
 	public void clearHistory() {

@@ -49,21 +49,7 @@ public class DefaultShiroModule extends ShiroModule {
 	@Override
 	protected void bindSecurityManager(
 			AnnotatedBindingBuilder<? super SecurityManager> bind) {
-		try {
-			bind.toConstructor(
-					V7SecurityManager.class.getConstructor(Collection.class))
-					.asEagerSingleton();
-		} catch (NoSuchMethodException e) {
-			throw new ConfigurationException(
-					"This really shouldn't happen.  Either something has changed in Shiro, or there's a bug in "
-							+ ShiroModule.class.getSimpleName(), e);
-		}
-	}
-
-	@Override
-	protected void bindSessionManager(
-			AnnotatedBindingBuilder<SessionManager> bind) {
-		bind.to(VaadinSessionManager.class);
+		bind.to(V7SecurityManager.class).asEagerSingleton();
 	}
 
 	/**
@@ -91,7 +77,8 @@ public class DefaultShiroModule extends ShiroModule {
 	}
 
 	@Override
-	protected void bindSessionManager(AnnotatedBindingBuilder<SessionManager> bind) {
+	protected void bindSessionManager(
+			AnnotatedBindingBuilder<SessionManager> bind) {
 		bind.to(VaadinSessionManager.class).asEagerSingleton();
 	}
 

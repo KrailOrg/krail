@@ -21,10 +21,11 @@ import uk.co.q3c.v7.base.view.LogoutView;
 import com.vaadin.ui.UI;
 
 /**
- * The implementation of this interface handles login and logout notifications and acts as a reference point for user
- * interface components and other {@link UI} related objects to monitor changes in the {@link Subject}'s authentication
- * status. Components which want to be notified of user login status changes (login or logout) should register
- * themselves as listeners.
+ * The implementation of this interface handles login and logout notifications
+ * and acts as a reference point for user interface components and other
+ * {@link UI} related objects to monitor changes in the {@link Subject}'s
+ * authentication status. Components which want to be notified of user login
+ * status changes (login or logout) should register themselves as listeners.
  * 
  * @author David Sowerby 16 Sep 2013
  * 
@@ -32,37 +33,12 @@ import com.vaadin.ui.UI;
 public interface LoginStatusHandler {
 
 	/**
-	 * Called by the component initiating the login / logout. This component -typically, but not necessarily, a
-	 * {@link LoginView} or {@link LogoutView} will be resident in a {@link ScopedUI}, and the instance of this
-	 * implementation (which must be UIScoped) then notifies other {@link ScopedUI} instances of the change.
+	 * Called by the V7SecurityManager after the login or logout.
 	 */
-	void initiateStatusChange();
-
-	/**
-	 * Called to respond to the change, where {@code authenticated} if the current Subject is authenticated, and
-	 * {@code name} is the user's name. If the user is not authenticated, {@code name} will be 'guest'
-	 * 
-	 * @param name
-	 * @param status
-	 */
-	void respondToStatusChange(boolean authenticated, String name);
-
-	/**
-	 * When a UI is first created, components may need to access the status to determine what they display. Although
-	 * that could be directly accessed from {@link SubjectProvider}, the listener will already have an instance of this
-	 * implementation.
-	 */
-	boolean subjectIsAuthenticated();
-
-	/**
-	 * When a UI is first created, components may need to the Subject's name. Although that could be directly accessed
-	 * from {@link SubjectProvider}, the listener will already have an instance of this implementation. Using this
-	 * method will also ensure a standard interpretation of 'guest'
-	 */
-	String subjectName();
-
-	public abstract void removeListener(LoginStatusListener listener);
+	public void fireStatusChange(LoginStatusEvent event);
 
 	public abstract void addListener(LoginStatusListener listener);
+
+	public abstract void removeListener(LoginStatusListener listener);
 
 }
