@@ -76,6 +76,11 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 		log.debug("Navigating to uri: {}", uriFragment.getUri());
 
+		if(uriFragment.getUri().equals(currentNavigationState.getFragment().getUri())){
+			log.debug("fragment unchanged, no navigation required");
+			return;
+		}
+
 		sitemapCheck();
 		if (sitemap.hasErrors()) {
 			throw new SiteMapException(
@@ -147,7 +152,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	protected void navigateTo(NavigationState navigationState) {
 		changeView(navigationState.getFragment(), navigationState.getView());
-	}
+		}
 
 	protected void onUnauthenticatedException(UnauthenticatedException e) {
 		log.trace("UnauthenticatedException");
@@ -281,7 +286,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	public void loginSuccessful() {
 		if (previousNavigationState != null
 				&& !(previousNavigationState.getView() instanceof LoginView)) {
-			assert previousNavigationState.getView().getUiComponent().getUI() == null : "the navigation state view should not be attached";
+			assert previousNavigationState.getView().getRootComponent().getUI() == null : "the navigation state view should not be attached";
 			navigateTo(previousNavigationState);
 		} else {
 			navigateTo(StandardPageKey.Private_Home);
@@ -293,7 +298,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	protected void setCurrentNavigationState(NavigationState newNavigationState) {
-		assert newNavigationState.getView().getUiComponent().getUI() == UI.getCurrent() : "the navigation state view must belong to the current UI";
+		assert newNavigationState.getView().getRootComponent().getUI() == UI.getCurrent() : "the navigation state view must belong to the current UI";
 		previousNavigationState = currentNavigationState;
 		currentNavigationState = newNavigationState;
 

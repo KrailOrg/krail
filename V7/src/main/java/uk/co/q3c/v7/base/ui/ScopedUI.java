@@ -81,7 +81,13 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	// TODO fromView serves no purpose
 	@Override
 	public void changeView(V7View fromView, V7View toView) {
-		Component content = toView.getUiComponent();
+		if (log.isDebugEnabled()) {
+			String from = (fromView == null) ? "null" : fromView.getClass().getSimpleName();
+			String to = (toView == null) ? "null" : toView.getClass().getSimpleName();
+			log.debug("changing view from " + from + " to " + to);
+		}
+
+		Component content = toView.getRootComponent();
 		content.setSizeFull();
 		viewDisplayPanel.setContent(content);
 		this.view = toView;
@@ -122,12 +128,13 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 			screenLayout = screenLayout();
 		}
 		screenLayout.setSizeFull();
-		if (screenLayout.getComponentIndex(getViewDisplayPanel()) < 0) {
+		if (viewDisplayPanel.getParent() == null) {
 			String msg = "Your implementation of ScopedUI.screenLayout() must include getViewDisplayPanel().  AS a minimum this could be 'return new VerticalLayout(getViewDisplayPanel())'";
 			log.error(msg);
 			throw new V7ConfigurationException(msg);
 		}
-		screenLayout.setExpandRatio(getViewDisplayPanel(), 1);
+		// screenLayout.setExpandRatio(getViewDisplayPanel(), 1);
+		viewDisplayPanel.setSizeFull();
 		setContent(screenLayout);
 	}
 

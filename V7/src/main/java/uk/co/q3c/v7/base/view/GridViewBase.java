@@ -39,7 +39,7 @@ public abstract class GridViewBase extends GridLayout implements V7View {
 	protected abstract void processParams(LinkedHashMap<String, String> map);
 
 	@Override
-	public Component getUiComponent() {
+	public Component getRootComponent() {
 		return this;
 	}
 

@@ -24,18 +24,18 @@ import com.vaadin.ui.Notification;
  * 
  */
 public class Notifier {
-	private final I18NValue i18nValue;
+	private final Translate i18nValue;
 
 	@Inject
-	protected Notifier(I18NValue i18nValue) {
+	protected Notifier(Translate i18nValue) {
 		super();
 		this.i18nValue = i18nValue;
 	}
 	
 	public void notify(I18NKey<?> captionKey, I18NKey<?> messageKey, Notification.Type messageType,
 			Object... messageArguments) {
-		String msg = i18nValue.message(messageKey, messageArguments);
-		String caption = i18nValue.message(captionKey);
+		String msg = i18nValue.from(messageKey, messageArguments);
+		String caption = i18nValue.from(captionKey);
 		Notification n = new Notification(caption, msg, messageType, false);
 		n.show(Page.getCurrent());
 	}

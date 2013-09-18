@@ -40,6 +40,7 @@ import uk.co.q3c.v7.base.shiro.VaadinSessionManager;
 import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
+import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
 import uk.co.q3c.v7.i18n.I18NModule;
 
 import com.google.inject.Guice;
@@ -86,7 +87,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		return injector;
 	}
-	
+
 	/**
 	 * Override this to provide your own IniModule
 	 */
@@ -120,11 +121,17 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		baseModules.add(standardViewModule());
 
+		baseModules.add(componentModule());
+
 		addAppModules(baseModules, ini);
 		return baseModules;
 	}
-	
-	private Module userOptionsModule(V7Ini ini) {
+
+	protected Module componentModule() {
+		return new DefaultComponentModule();
+	}
+
+	protected Module userOptionsModule(V7Ini ini) {
 		return new DefaultUserOptionModule(ini);
 	}
 

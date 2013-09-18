@@ -18,11 +18,13 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 
+@UIScoped
 public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 
 	@Inject
@@ -31,7 +33,7 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 	}
 
 	@Override
-	public Component getUiComponent() {
+	public Component getRootComponent() {
 		Panel p = new Panel("Logged out");
 		p.setSizeFull();
 		addComponent(p);

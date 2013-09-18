@@ -1,0 +1,37 @@
+
+apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
+
+
+configurations{ 
+ 
+	
+}
+
+vaadin {
+	
+	vaadin.version vaadinVersion
+	
+}
+
+
+repositories{
+		maven{
+			url "http://maven.vaadin.com/vaadin-addons"
+			
+		}
+}
+
+
+dependencies { 
+	
+	compile project (':V7')
+	testCompile 'com.vaadin:vaadin-testbench:3.1.1' 
+
+        
+	
+	
+}
+
+
+
+

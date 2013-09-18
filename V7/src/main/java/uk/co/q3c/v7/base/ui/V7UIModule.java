@@ -9,7 +9,7 @@ import uk.co.q3c.v7.base.navigate.StrictUriFragmentFactory;
 import uk.co.q3c.v7.base.navigate.URIFragment;
 import uk.co.q3c.v7.base.navigate.UriFragmentFactory;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.shiro.LoginStatusMonitor;
+import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
 import uk.co.q3c.v7.base.shiro.VaadinSecurityContext;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 
@@ -47,7 +47,7 @@ public abstract class V7UIModule extends AbstractModule {
 	 * Override to bind your choice of LoginStatusMonitor
 	 */
 	protected void bindLoginStatusMonitor() {
-		bind(LoginStatusMonitor.class).to(LoginStatusPanel.class);
+		bind(LoginStatusPanel.class).to(DefaultLoginStatusPanel.class);
 	}
 
 	/**

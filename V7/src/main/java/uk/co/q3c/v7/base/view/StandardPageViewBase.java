@@ -15,32 +15,25 @@ package uk.co.q3c.v7.base.view;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
-import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 
 public abstract class StandardPageViewBase extends ViewBase {
 
-	private HorizontalSplitPanel layout;
-	private final UserNavigationTree navtree;
 	private Label label;
 
 	private GridLayout grid;
 
 	@Inject
-	protected StandardPageViewBase(V7Navigator navigator, UserNavigationTree navtree) {
+	protected StandardPageViewBase(V7Navigator navigator) {
 		super(navigator);
-		this.navtree = navtree;
-		buildUI();
+		buildView();
 	}
 
 	@Override
-	protected void buildUI() {
-		layout = new HorizontalSplitPanel();
+	protected void buildView() {
+
 		label = new Label("This is the " + this.getClass().getSimpleName());
 		label.setHeight("100px");
 		grid = new GridLayout(3, 3);
@@ -56,15 +49,9 @@ public abstract class StandardPageViewBase extends ViewBase {
 		grid.setRowExpandRatio(2, 0.4f);
 
 		label.setSizeFull();
-		layout.setSplitPosition(200f, Unit.PIXELS);
-		layout.setFirstComponent(navtree);
-		layout.setSecondComponent(grid);
 
-	}
+		rootComponent = grid;
 
-	@Override
-	public Component getUiComponent() {
-		return layout;
 	}
 
 	public Label getLabel() {
