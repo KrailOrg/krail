@@ -18,7 +18,6 @@ import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIKeyProvider;
 
-import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.vaadin.server.UIClassSelectionEvent;
 import com.vaadin.ui.UI;
@@ -26,8 +25,8 @@ import com.vaadin.ui.UI;
 public class BasicUIProvider extends ScopedUIProvider {
 
 	@Inject
-	protected BasicUIProvider(Injector injector, Map<String, Provider<UI>> uiProMap, UIKeyProvider uiKeyProvider) {
-		super(injector, uiProMap, uiKeyProvider);
+	protected BasicUIProvider(Map<String, Provider<UI>> uiProMap, UIKeyProvider uiKeyProvider) {
+		super(uiProMap, uiKeyProvider);
 	}
 
 	@Override

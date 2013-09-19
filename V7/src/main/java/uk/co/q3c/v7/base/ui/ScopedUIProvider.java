@@ -35,15 +35,12 @@ public abstract class ScopedUIProvider extends UIProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScopedUIProvider.class);
 	private final UIKeyProvider uiKeyProvider;
 	private final Map<String, Provider<UI>> uiProMap;
-	private final Injector injector;
 
 	@Inject
-	protected ScopedUIProvider(Injector injector,
-			Map<String, Provider<UI>> uiProMap, UIKeyProvider uiKeyProvider) {
+	protected ScopedUIProvider(Map<String, Provider<UI>> uiProMap, UIKeyProvider uiKeyProvider) {
 		super();
 		this.uiKeyProvider = uiKeyProvider;
 		this.uiProMap = uiProMap;
-		this.injector = injector;
 	}
 
 	@Override
