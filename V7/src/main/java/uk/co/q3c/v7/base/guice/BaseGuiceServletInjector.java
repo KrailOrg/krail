@@ -49,7 +49,7 @@ import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
-	private static Logger log = LoggerFactory.getLogger(BaseGuiceServletInjector.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseGuiceServletInjector.class);
 
 	protected static Injector injector;
 
@@ -101,13 +101,13 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		List<Module> baseModules = new ArrayList<>();
 
 		if (ini.optionReadSiteMap()) {
-			log.debug("ini sitemap option is true, loading sitemap");
+			LOGGER.debug("ini sitemap option is true, loading sitemap");
 			Provider<Sitemap> sitemapPro = injector.getInstance(SitemapProvider.class);
 			Sitemap sitemap = sitemapPro.get();
 			baseModules.add(new ApplicationViewModule(sitemap));
 		} else {
 			// module for Views must be in addAppModules()
-			log.debug("ini sitemap option is false, not loading sitemap");
+			LOGGER.debug("ini sitemap option is false, not loading sitemap");
 		}
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
@@ -170,7 +170,6 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	 * @param ini
 	 * @return
 	 */
-
 	protected Module shiroModule(ServletContext servletContext, V7Ini ini) {
 		return new DefaultShiroModule();
 	}

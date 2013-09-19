@@ -29,7 +29,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapProvider;
  */
 
 public class MapLineReader {
-	private static Logger log = LoggerFactory.getLogger(MapLineReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MapLineReader.class);
 	public static final String NO_HYPHEN = "Line must start with hyphen(s) to indicate indent level, line ";
 	public static final String VIEW_FIRST = "View name must precede label key name at line ";
 	private int index = 0;

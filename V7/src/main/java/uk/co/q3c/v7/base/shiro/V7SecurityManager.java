@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.vaadin.server.VaadinSession;
 
 public class V7SecurityManager extends DefaultSecurityManager {
-	private static Logger log = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(V7SecurityManager.class);
 
 	private final VaadinSessionProvider sessionProvider;
@@ -50,7 +50,8 @@ public class V7SecurityManager extends DefaultSecurityManager {
 		super.onSuccessfulLogin(token, info, subject);
 		setSubject(subject);
 		// notify LoginListener
-		loginStatusHandler.get().fireStatusChange(new LoginStatusEvent(subject));
+		loginStatusHandlerProvider.get()
+				.fireStatusChange(new LoginStatusEvent(subject));
 	}
 
 	public Subject getSubject() {
@@ -63,7 +64,7 @@ public class V7SecurityManager extends DefaultSecurityManager {
 
 		Subject subject = session.getAttribute(Subject.class);
 		if (subject == null) {
-			log.debug("VaadinSession is valid, but does not have a stored Subject, creating a new Subject");
+			LOGGER.debug("VaadinSession is valid, but does not have a stored Subject, creating a new Subject");
 			subject = new Subject.Builder().buildSubject();
 		}
 		return subject;
@@ -71,7 +72,7 @@ public class V7SecurityManager extends DefaultSecurityManager {
 
 	protected void setSubject(Subject subject) {
 		VaadinSession session = sessionProvider.get();
-		log.debug("storing Subject instance in VaadinSession");
+		LOGGER.debug("storing Subject instance in VaadinSession");
 		session.setAttribute(Subject.class, subject);
 	}
 

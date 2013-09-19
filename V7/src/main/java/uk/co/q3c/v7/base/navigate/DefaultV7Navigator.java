@@ -34,7 +34,7 @@ import com.vaadin.util.CurrentInstance;
 
 @UIScoped
 public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
-	private static Logger log = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(DefaultV7Navigator.class);
 
 	private final Sitemap sitemap;
@@ -76,10 +76,10 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 */
 	public void navigateTo(URIFragment uriFragment) {
 
-		log.debug("Navigating to uri: {}", uriFragment.getUri());
+		LOGGER.debug("Navigating to uri: {}", uriFragment.getUri());
 
 		if(uriFragment.getUri().equals(currentNavigationState.getFragment().getUri())){
-			log.debug("fragment unchanged, no navigation required");
+			LOGGER.debug("fragment unchanged, no navigation required");
 			return;
 		}
 
@@ -104,7 +104,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 		// fragment needs to be revised if redirected
 		if (checkRedirects(uriFragment)) {
-			log.debug("fragment after redirect check is {}",
+			LOGGER.debug("fragment after redirect check is {}",
 					uriFragment.getUri());
 
 			// if redirected it need to begin the navigation again (this way i
@@ -115,13 +115,13 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 		// no redirects, and the navigation is permitted
 		String viewUriFragment = uriFragment.getVirtualPage();
-		log.debug("page to look up View is {}", viewUriFragment);
+		LOGGER.debug("page to look up View is {}", viewUriFragment);
 		Provider<V7View> provider = viewProvidersMap.get(viewUriFragment);
 		V7View view = null;
 		if (provider == null) {
 			String msg = "View not found for page '" + uriFragment.getUri()
 					+ "'";
-			log.debug(msg);
+			LOGGER.debug(msg);
 			throw new InvalidURIException(msg);
 		} else {
 			view = provider.get();
@@ -157,7 +157,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		}
 
 	protected void onUnauthenticatedException(UnauthenticatedException e) {
-		log.trace("UnauthenticatedException");
+		LOGGER.trace("UnauthenticatedException");
 		// reditect to login
 		navigateTo(StandardPageKey.Login);
 	}
@@ -286,7 +286,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 */
 	@Override
 	public void loginSuccessful() {
-		log.debug("user logged in successfully, navigating to appropriate view");
+		LOGGER.debug("user logged in successfully, navigating to appropriate view");
 		if (previousNavigationState != null
 				&& !(previousNavigationState.getView() instanceof LoginView)) {
 			assert previousNavigationState.getView().getRootComponent().getUI() == null : "the navigation state view should not be attached";

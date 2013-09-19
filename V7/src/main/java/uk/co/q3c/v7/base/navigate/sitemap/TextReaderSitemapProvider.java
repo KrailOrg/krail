@@ -50,7 +50,7 @@ import com.google.common.base.Strings;
 
 public class TextReaderSitemapProvider implements SitemapProvider {
 
-	private static Logger log = LoggerFactory.getLogger(TextReaderSitemapProvider.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TextReaderSitemapProvider.class);
 
 	private enum SectionName {
 		options,
@@ -152,7 +152,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	@Override
 	public void parse(String resourcePath) {
 		source = resourcePath;
-		log.info("Loading sitemap from {}", source);
+		LOGGER.info("Loading sitemap from {}", source);
 		InputStream is;
 		try {
 			is = ResourceUtils.getInputStreamForPath(resourcePath);
@@ -169,9 +169,9 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			processLines(lines);
 
 		} catch (Exception e) {
-			log.error("Unable to load site map ", e);
+			LOGGER.error("Unable to load site map ", e);
 			String report = (parsed) ? getReport().toString() : "failed to parse input, unable to generate report";
-			log.debug(report);
+			LOGGER.debug(report);
 		}
 
 	}
@@ -196,12 +196,12 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			checkViews();
 			sitemap.setErrors(errorSum());
 
-			log.info("Sitemap loaded successfully");
-			log.debug(sitemap.toString());
+			LOGGER.info("Sitemap loaded successfully");
+			LOGGER.debug(sitemap.toString());
 
 		} else {
-			log.warn("The site map source is missing these sections: {}", missingSections());
-			log.error("Site map failed to process, see previous log warnings for details");
+			LOGGER.warn("The site map source is missing these sections: {}", missingSections());
+			LOGGER.error("Site map failed to process, see previous log warnings for details");
 			sitemap.setErrors(errorSum());
 		}
 
@@ -372,15 +372,15 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 
 		source = file.getAbsolutePath();
 		sourceFile = file;
-		log.info("Loading sitemap from {}", source);
+		LOGGER.info("Loading sitemap from {}", source);
 		try {
 			List<String> lines = FileUtils.readLines(file);
 			processLines(lines);
 
 		} catch (Exception e) {
-			log.error("Unable to load site map", e);
+			LOGGER.error("Unable to load site map", e);
 			String report = (parsed) ? getReport().toString() : "failed to parse input, unable to generate report";
-			log.debug(report);
+			LOGGER.debug(report);
 		}
 	}
 
@@ -482,7 +482,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			}
 
 		} catch (Exception e) {
-			log.warn("unrecognised option '{}' in site map", key);
+			LOGGER.warn("unrecognised option '{}' in site map", key);
 			unrecognisedOptions.add(key);
 		}
 
@@ -511,15 +511,15 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 			if (!i18nClass.isAssignableFrom(requestedLabelKeysClass)) {
 				valid = false;
 				labelClassNotI18N = true;
-				log.warn(labelKeys + " does not implement I18NKeys");
+				LOGGER.warn(labelKeys + " does not implement I18NKeys");
 			}
 		} catch (ClassNotFoundException e) {
 			valid = false;
 			labelClassNonExistent = true;
-			log.warn(labelKeys + " does not exist on the classpath");
+			LOGGER.warn(labelKeys + " does not exist on the classpath");
 		}
 		if (!valid) {
-			log.warn(labelKeys + " is not a valid enum class for I18N labels");
+			LOGGER.warn(labelKeys + " is not a valid enum class for I18N labels");
 			this.labelClassNotI18N = true;
 		} else {
 			labelKeysClass = (Class<? extends Enum<?>>) requestedLabelKeysClass;
@@ -749,7 +749,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		}
 		if (strippedLine.startsWith("[")) {
 			if ((!strippedLine.endsWith("]"))) {
-				log.warn("section requires closing ']' at line " + linenum);
+				LOGGER.warn("section requires closing ']' at line " + linenum);
 			} else {
 				String sectionName = strippedLine.substring(1, strippedLine.length() - 1);
 
@@ -759,7 +759,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 					currentSection = key;
 					sections.put(key, section);
 				} catch (IllegalArgumentException iae) {
-					log.warn(
+					LOGGER.warn(
 							"Invalid section '{}' in site map file, this section has been ignored. Only sections {} are allowed.",
 							sectionName, getSections().toString());
 				}

@@ -29,7 +29,7 @@ import com.vaadin.util.CurrentInstance;
 
 public class UIScope implements Scope {
 
-	private static Logger log = LoggerFactory.getLogger(UIScope.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UIScope.class);
 
 	private static UIScope current;
 
@@ -37,7 +37,7 @@ public class UIScope implements Scope {
 
 	public UIScope() {
 		super();
-		log.debug("creating UIScope " + this);
+		LOGGER.debug("creating UIScope " + this);
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class UIScope implements Scope {
 			@Override
 			public T get() {
 				// get the scope cache for the current UI
-				log.debug("looking for a UIScoped instance of {}", key.getClass().getName());
+				LOGGER.debug("looking for a UIScoped instance of {}", key.getClass().getName());
 
 				// get the current UIKey. It should always be there, as it is created before the UI
 				UIKey uiKey = CurrentInstance.get(UIKey.class);
@@ -74,7 +74,7 @@ public class UIScope implements Scope {
 					}
 				}
 
-				log.debug("looking for cache for key: " + uiKey);
+				LOGGER.debug("looking for cache for key: " + uiKey);
 				Map<Key<?>, Object> scopedObjects = getScopedObjectMap(uiKey);
 				// this line should fail tests but having trouble setting up a decent test. TestBench needed?
 				// Map<Key<?>, Object> scopedObjects = getScopedObjectMap(CurrentInstance.get(UIKey.class));
@@ -85,14 +85,14 @@ public class UIScope implements Scope {
 				T current = (T) scopedObjects.get(key);
 
 				if (current != null) {
-					log.debug("returning existing instance of " + current.getClass().getSimpleName());
+					LOGGER.debug("returning existing instance of " + current.getClass().getSimpleName());
 					return current;
 				}
 
 				// or create the first instance and cache it
 				current = unscoped.get();
 				scopedObjects.put(key, current);
-				log.debug("new instance of " + current.getClass().getSimpleName() + " created, as none in cache");
+				LOGGER.debug("new instance of " + current.getClass().getSimpleName() + " created, as none in cache");
 				return current;
 			}
 		};
@@ -103,7 +103,7 @@ public class UIScope implements Scope {
 		// return an existing cache instance
 		if (cache.containsKey(uiKey)) {
 			Map<Key<?>, Object> scopedObjects = cache.get(uiKey);
-			log.debug("scope cache retrieved for UI key: " + uiKey);
+			LOGGER.debug("scope cache retrieved for UI key: " + uiKey);
 			return scopedObjects;
 		} else {
 
@@ -129,7 +129,7 @@ public class UIScope implements Scope {
 	private HashMap<Key<?>, Object> createCacheEntry(UIKey uiKey) {
 		HashMap<Key<?>, Object> uiEntry = new HashMap<Key<?>, Object>();
 		cache.put(uiKey, uiEntry);
-		log.debug("created a scope cache for UIScope with key: " + uiKey);
+		LOGGER.debug("created a scope cache for UIScope with key: " + uiKey);
 		return uiEntry;
 	}
 

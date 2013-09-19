@@ -42,7 +42,7 @@ import uk.co.q3c.v7.i18n.I18NKey;
  */
 @Singleton
 public class StandardPageBuilder {
-	private static Logger log = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(StandardPageBuilder.class);
 
 	private boolean generatePublicHomePage = true;
@@ -102,11 +102,11 @@ public class StandardPageBuilder {
 	 * @param key
 	 */
 	private void generatePage(StandardPageKey key) {
-		log.debug("generating page for {}", key);
+		LOGGER.debug("generating page for {}", key);
 		SitemapNode node = sitemap.addNode(key, defaultUri(key));
 		node.setLabelKey(key, currentLocale.getLocale());
 		node.setViewClass(viewClass(key));
-		log.debug("standard page added as node at URI " + node.getUri() + ", "
+		LOGGER.debug("standard page added as node at URI " + node.getUri() + ", "
 				+ node.toString());
 	}
 

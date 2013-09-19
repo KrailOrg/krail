@@ -16,7 +16,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
 public abstract class VerticalViewBase extends VerticalLayout implements V7View {
-	private static Logger log = LoggerFactory.getLogger(VerticalViewBase.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(VerticalViewBase.class);
 	private final V7Navigator navigator;
 
 	@Inject
@@ -27,7 +27,7 @@ public abstract class VerticalViewBase extends VerticalLayout implements V7View 
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {
-		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri: "
+		LOGGER.debug("entered view: " + this.getClass().getSimpleName() + " with uri: "
 				+ event.getNewNavigationState().getFragment().getUri());
 		processParams(event.getNewNavigationState().getFragment().getParameters());
 	}

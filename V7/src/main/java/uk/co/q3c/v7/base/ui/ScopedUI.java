@@ -25,7 +25,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
 public abstract class ScopedUI extends UI implements V7ViewHolder {
-	private static Logger log = LoggerFactory.getLogger(ScopedUI.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ScopedUI.class);
 	private UIKey instanceKey;
 	private UIScope uiScope;
 	private final Panel viewDisplayPanel;
@@ -86,10 +86,10 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	// TODO fromView serves no purpose
 	@Override
 	public void changeView(V7View fromView, V7View toView) {
-		if (log.isDebugEnabled()) {
+		if (LOGGER.isDebugEnabled()) {
 			String from = (fromView == null) ? "null" : fromView.getClass().getSimpleName();
 			String to = (toView == null) ? "null" : toView.getClass().getSimpleName();
-			log.debug("changing view from " + from + " to " + to);
+			LOGGER.debug("changing view from " + from + " to " + to);
 		}
 
 		Component content = toView.getRootComponent();
@@ -136,7 +136,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 		screenLayout.setSizeFull();
 		if (viewDisplayPanel.getParent() == null) {
 			String msg = "Your implementation of ScopedUI.screenLayout() must include getViewDisplayPanel().  AS a minimum this could be 'return new VerticalLayout(getViewDisplayPanel())'";
-			log.error(msg);
+			LOGGER.error(msg);
 			throw new V7ConfigurationException(msg);
 		}
 		// screenLayout.setExpandRatio(getViewDisplayPanel(), 1);

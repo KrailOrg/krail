@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  */
 @Singleton
 public class V7Ini extends Ini {
-	private static Logger log = LoggerFactory.getLogger(V7Ini.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(V7Ini.class);
 	public static final String DEFAULT_PATH = "classpath:V7.ini";
 
 	public V7Ini() {
@@ -36,7 +36,7 @@ public class V7Ini extends Ini {
 	protected Section checkSection(String sectionName) {
 		Section section = getSection(sectionName);
 		if (section == null) {
-			log.warn("The section {} is missing from V7.ini, using default values", sectionName);
+			LOGGER.warn("The section {} is missing from V7.ini, using default values", sectionName);
 			section = this.addSection(sectionName);
 		}
 		return section;
@@ -56,7 +56,7 @@ public class V7Ini extends Ini {
 		try {
 			super.loadFromPath(resourcePath);
 		} catch (ConfigurationException ce) {
-			log.warn("Unable to load V7.ini from {}, using defaults.", resourcePath);
+			LOGGER.warn("Unable to load V7.ini from {}, using defaults.", resourcePath);
 		} finally {
 			validate();
 		}
@@ -95,9 +95,9 @@ public class V7Ini extends Ini {
 			}
 			bw.close();
 		} catch (IOException e) {
-			log.error("error saving to ini file", e);
+			LOGGER.error("error saving to ini file", e);
 		}
-		log.info("Ini file saved: " + f.getAbsolutePath());
+		LOGGER.info("Ini file saved: " + f.getAbsolutePath());
 	}
 
 	public boolean optionReadSiteMap() {

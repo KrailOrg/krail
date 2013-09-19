@@ -33,7 +33,7 @@ import org.slf4j.helpers.MessageFormatter;
  * 
  */
 public class MessageFormat {
-	private static Logger log = LoggerFactory.getLogger(MessageFormat.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MessageFormat.class);
 
 	/**
 	 * This method uses {@link MessageFormatter} for speed and resilience, but acts as an intermediary and takes a
@@ -117,7 +117,7 @@ public class MessageFormat {
 	private static Object[] sortArguments(List<Integer> parameters, Object[] arguments, String pattern) {
 		if (parameters.size() != arguments.length) {
 			Object[] args = new Object[] { parameters.size(), arguments.length, pattern };
-			log.warn(
+			LOGGER.warn(
 					"Message pattern and arguments do not match, there are {} parameters in the pattern, and {} arguments. The pattern is: '{}'",
 					args);
 			throw new RuntimeException();

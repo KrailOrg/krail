@@ -28,7 +28,7 @@ import com.google.inject.multibindings.MapBinder;
  * 
  */
 public class ApplicationViewModule extends AbstractModule {
-	private static Logger log = LoggerFactory.getLogger(ApplicationViewModule.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationViewModule.class);
 	private final Sitemap sitemap;
 
 	protected ApplicationViewModule() {
@@ -60,7 +60,7 @@ public class ApplicationViewModule extends AbstractModule {
 	 */
 	protected void bindViews(MapBinder<String, V7View> mapbinder) {
 		if (sitemap == null) {
-			log.error(
+			LOGGER.error(
 					"Sitemap is null, but {}.bindViews is still in use.  Either override the bindViews method, or set the 'readSiteMap' property in the [options] section of V7.ini to 'true",
 					this.getClass().getName());
 		} else {

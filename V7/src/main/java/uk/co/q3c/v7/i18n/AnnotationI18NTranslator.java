@@ -59,7 +59,7 @@ import com.vaadin.ui.Table;
  * 
  */
 public class AnnotationI18NTranslator implements I18NTranslator {
-	private static Logger log = LoggerFactory.getLogger(AnnotationI18NTranslator.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationI18NTranslator.class);
 	private final CurrentLocale currentLocale;
 	private final Provider<I18NTranslator> translatorPro;
 	private final Map<Class<? extends Annotation>, Provider<? extends I18NAnnotationReader>> readers;
@@ -100,7 +100,7 @@ public class AnnotationI18NTranslator implements I18NTranslator {
 			I18NListener sub = (I18NListener) field.get(listener);
 			sub.localeChange(translatorPro.get());
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			log.error("Unable to process I18N sub-listener " + field.getName(), e);
+			LOGGER.error("Unable to process I18N sub-listener " + field.getName(), e);
 		}
 	}
 
@@ -145,7 +145,7 @@ public class AnnotationI18NTranslator implements I18NTranslator {
 			}
 			c.setLocale(currentLocale.getLocale());
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			log.error("Unable to set I18N caption or description for " + field.getName(), e);
+			LOGGER.error("Unable to set I18N caption or description for " + field.getName(), e);
 		}
 
 		// These components have a value. Usually I18N would only be used for Label values. If no key is provided
@@ -160,7 +160,7 @@ public class AnnotationI18NTranslator implements I18NTranslator {
 						c.setValue(valueValue);
 					}
 				} catch (Exception e) {
-					log.error("Unable to set I18N value for " + field.getName(), e);
+					LOGGER.error("Unable to set I18N value for " + field.getName(), e);
 
 				}
 			}
@@ -185,7 +185,7 @@ public class AnnotationI18NTranslator implements I18NTranslator {
 				table.setColumnHeaders(headerArray);
 
 			} catch (Exception e) {
-				log.error("Unable to set I18N table columns headers for " + field.getName(), e);
+				LOGGER.error("Unable to set I18N table columns headers for " + field.getName(), e);
 			}
 
 		}

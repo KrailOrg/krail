@@ -39,7 +39,7 @@ import com.google.common.collect.Lists;
 @Singleton
 public class DefaultUserOption implements UserOption {
 
-	private static Logger log = LoggerFactory.getLogger(DefaultUserOption.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultUserOption.class);
 	private final UserOptionStore userOptionStore;
 
 	@Inject
@@ -113,7 +113,7 @@ public class DefaultUserOption implements UserOption {
 			try {
 				return Integer.parseInt(optionValue);
 			} catch (Exception e) {
-				log.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
+				LOGGER.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
 				return defaultValue;
 			}
 		}
@@ -137,7 +137,7 @@ public class DefaultUserOption implements UserOption {
 			try {
 				return DateTime.parse(optionValue);
 			} catch (Exception e) {
-				log.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
+				LOGGER.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
 				return defaultValue;
 			}
 		}
@@ -152,7 +152,7 @@ public class DefaultUserOption implements UserOption {
 			try {
 				return Double.parseDouble(optionValue);
 			} catch (Exception e) {
-				log.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
+				LOGGER.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
 				return defaultValue;
 			}
 		}
@@ -167,7 +167,7 @@ public class DefaultUserOption implements UserOption {
 			try {
 				return Boolean.parseBoolean(optionValue);
 			} catch (Exception e) {
-				log.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
+				LOGGER.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
 				return defaultValue;
 			}
 		}

@@ -23,7 +23,7 @@ import com.vaadin.server.VaadinSession;
  * 
  */
 public class DefaultVaadinSessionProvider implements VaadinSessionProvider {
-	private static Logger log = LoggerFactory.getLogger(DefaultVaadinSessionProvider.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DefaultVaadinSessionProvider.class);
 
 	@Override
 	public VaadinSession get() {
@@ -32,7 +32,7 @@ public class DefaultVaadinSessionProvider implements VaadinSessionProvider {
 		// This may happen in background threads, or testing
 		if (session == null) {
 			String msg = "Vaaadin session not present.  If you are testing, use a Mock for this provider";
-			log.warn(msg);
+			LOG.warn(msg);
 			throw new IllegalStateException(msg);
 		}
 

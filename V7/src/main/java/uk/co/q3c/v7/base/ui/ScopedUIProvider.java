@@ -32,7 +32,7 @@ import com.vaadin.util.CurrentInstance;
  * 
  */
 public abstract class ScopedUIProvider extends UIProvider {
-	private static Logger log = LoggerFactory.getLogger(ScopedUIProvider.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ScopedUIProvider.class);
 	private final UIKeyProvider uiKeyProvider;
 	private final Map<String, Provider<UI>> uiProMap;
 	private final Injector injector;
@@ -68,7 +68,7 @@ public abstract class ScopedUIProvider extends UIProvider {
 		}
 		ScopedUI ui = (ScopedUI) uiProvider.get();
 		ui.setInstanceKey(uiKey);
-		log.debug("returning instance of " + ui.getClass().getName()
+		LOGGER.debug("returning instance of " + ui.getClass().getName()
 				+ " with key " + uiKey);
 		return ui;
 	}
