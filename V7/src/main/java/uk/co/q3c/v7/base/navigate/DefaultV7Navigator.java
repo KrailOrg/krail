@@ -78,7 +78,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 		LOGGER.debug("Navigating to uri: {}", uriFragment.getUri());
 
-		if(uriFragment.getUri().equals(currentNavigationState.getFragment().getUri())){
+		if(currentNavigationState != null && uriFragment.getUri().equals(currentNavigationState.getFragment().getUri())){
 			LOGGER.debug("fragment unchanged, no navigation required");
 			return;
 		}
