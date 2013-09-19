@@ -14,24 +14,14 @@ package uk.co.q3c.v7.base.shiro;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.WeakHashMap;
-
 import javax.inject.Inject;
 
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.ui.ScopedUI;
-import uk.co.q3c.v7.i18n.LabelKey;
-import uk.co.q3c.v7.i18n.Translate;
+import com.google.inject.servlet.SessionScoped;
 
-import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.UI;
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 
 /**
  * See {@link LoginStatusHandler} for description.
@@ -42,10 +32,10 @@ import com.vaadin.ui.UI;
  * @author David Sowerby 16 Sep 2013
  * 
  */
-@UIScoped
+@SessionScoped
 public class DefaultLoginStatusHandler implements LoginStatusHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultLoginStatusHandler.class);
-	private final Set<LoginStatusListener> listeners =  Collections.newSetFromMap(new WeakHashMap<LoginStatusListener, Boolean>());
+	private final Collection<LoginStatusListener> listeners =  new ArrayList<>();
 
 	@Inject
 	protected DefaultLoginStatusHandler() {
