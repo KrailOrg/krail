@@ -2,6 +2,7 @@ package uk.co.q3c.v7.base.shiro;
 
 import org.apache.shiro.subject.Subject;
 
+//TODO implement a way to cancel or influence the login process
 public class LoginStatusEvent {
 
 	private Subject subject;

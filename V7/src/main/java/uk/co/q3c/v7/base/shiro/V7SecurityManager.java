@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Singleton;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.LoginForm.LoginListener;
 
 @Singleton
 public class V7SecurityManager extends DefaultSecurityManager {
@@ -39,6 +41,8 @@ public class V7SecurityManager extends DefaultSecurityManager {
 	@Inject
 	private Provider<SessionLoginStatusHandler> loginStatusHandlerProvider;
 
+	private final Collection<LoginStatusListener> loginStatusListeners = new ArrayList<>(0);
+	
 	public V7SecurityManager() {
 		super();
 	}
@@ -52,9 +56,13 @@ public class V7SecurityManager extends DefaultSecurityManager {
 			AuthenticationInfo info, Subject subject) {
 		super.onSuccessfulLogin(token, info, subject);
 		setSubject(subject);
-		// notify LoginListener
+		
+		LoginStatusEvent event = new LoginStatusEvent(subject);
+		// notify global LoginListener
+		fireGlobalLoginStatusListeners(event);
+		// notify Session LoginListeners
 		loginStatusHandlerProvider.get()
-				.fireStatusChange(new LoginStatusEvent(subject));
+				.fireStatusChange(event);		
 	}
 
 	public Subject getSubject() {
@@ -88,5 +96,22 @@ public class V7SecurityManager extends DefaultSecurityManager {
 	@Override
 	public void setSessionManager(SessionManager sessionManager) {
 		super.setSessionManager(sessionManager);
+	}
+	
+	/**
+	 * Add a global {@link LoginStatusListener} that will be notified of the login/logout events of all sessions.
+	 */
+	public void addListener(LoginStatusListener listener) {
+		this.loginStatusListeners.add(listener);
+	}
+	
+	public boolean removeListener(LoginStatusListener listener) {
+		return this.loginStatusListeners.remove(listener);		
+	}
+	
+	private void fireGlobalLoginStatusListeners(LoginStatusEvent event) {
+		for(LoginStatusListener l : this.loginStatusListeners) {
+			l.loginStatusChange(event);
+		}
 	}
 }
