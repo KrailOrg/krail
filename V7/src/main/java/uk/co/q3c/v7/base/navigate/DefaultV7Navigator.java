@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.shiro.LoginStatusEvent;
-import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
+import uk.co.q3c.v7.base.shiro.SessionLoginStatusHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.SiteMapException;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
@@ -51,7 +51,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 			Map<String, Provider<V7View>> viewProMap,
 			UriFragmentFactory uriFragmentFactory,
 			Provider<Subject> securityContext,
-			LoginStatusHandler loginHandler) {
+			SessionLoginStatusHandler loginHandler) {
 		super();
 		this.viewProvidersMap = viewProMap;
 		this.sitemap = sitemap;

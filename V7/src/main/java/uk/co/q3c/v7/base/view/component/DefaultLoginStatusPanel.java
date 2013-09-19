@@ -21,7 +21,7 @@ import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusEvent;
-import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
+import uk.co.q3c.v7.base.shiro.SessionLoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
@@ -54,7 +54,7 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 
 	@Inject
 	protected DefaultLoginStatusPanel(V7Navigator navigator, Provider<Subject> subjectProvider, Translate translate,
-			LoginStatusHandler loginStatusHandler) {
+			SessionLoginStatusHandler loginStatusHandler) {
 		super();
 		this.navigator = navigator;
 		this.subjectPro = subjectProvider;

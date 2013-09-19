@@ -37,7 +37,7 @@ public class V7SecurityManager extends DefaultSecurityManager {
 	@Inject
 	private VaadinSessionProvider sessionProvider;
 	@Inject
-	private Provider<LoginStatusHandler> loginStatusHandlerProvider;
+	private Provider<SessionLoginStatusHandler> loginStatusHandlerProvider;
 
 	public V7SecurityManager() {
 		super();

@@ -8,6 +8,7 @@ import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.servlet.SessionScoped;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorHandler;
 
@@ -28,10 +29,10 @@ public class ShiroVaadinModule extends AbstractModule {
 	}
 
 	/**
-	 * Override this to bind your own implementation of {@link LoginStatusHandler}
+	 * Override this to bind your own implementation of {@link SessionLoginStatusHandler}
 	 */
 	protected void bindLoginStatusHandler() {
-		bind(LoginStatusHandler.class).to(DefaultLoginStatusHandler.class);
+		bind(SessionLoginStatusHandler.class).to(DefaultSessionLoginStatusHandler.class).in(SessionScoped.class);
 	}
 
 	/**

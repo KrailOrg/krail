@@ -22,7 +22,7 @@ import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
-import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
+import uk.co.q3c.v7.base.shiro.SessionLoginStatusHandler;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -47,11 +47,11 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	private final Label statusMsgLabel;
 	private final LoginExceptionHandler loginExceptionHandler;
 	private final Provider<Subject> subjectProvider;
-	private final LoginStatusHandler loginStatusHandler;
+	private final SessionLoginStatusHandler loginStatusHandler;
 
 	@Inject
 	protected DefaultLoginView(V7Navigator navigator, LoginExceptionHandler loginExceptionHandler,
-			Provider<Subject> subjectProvider, LoginStatusHandler loginStatusHandler) {
+			Provider<Subject> subjectProvider, SessionLoginStatusHandler loginStatusHandler) {
 		super();
 		this.navigator = navigator;
 		this.loginExceptionHandler = loginExceptionHandler;

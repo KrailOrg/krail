@@ -3,7 +3,6 @@ package uk.co.q3c.v7.base.ui;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.util.converter.ConverterFactory;
@@ -16,9 +15,8 @@ import com.vaadin.ui.VerticalLayout;
 public class BasicUI extends ScopedUI {
 
 	@Inject
-	protected BasicUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			LoginStatusHandler loginStatusHandler) {
-		super(navigator, errorHandler, converterFactory, loginStatusHandler);
+	protected BasicUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory) {
+		super(navigator, errorHandler, converterFactory);
 
 	}
 

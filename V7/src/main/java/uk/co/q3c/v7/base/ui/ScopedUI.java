@@ -7,8 +7,6 @@ import uk.co.q3c.v7.base.config.V7ConfigurationException;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
-import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewHolder;
 import uk.co.q3c.v7.i18n.I18NKey;
@@ -34,15 +32,12 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	private AbstractOrderedLayout screenLayout;
 	private final ConverterFactory converterFactory;
 	private V7View view;
-	private final LoginStatusHandler loginStatusHandler;
 
-	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			LoginStatusHandler loginStatusHandler) {
+	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory) {
 		super();
 		this.errorHandler = errorHandler;
 		this.navigator = navigator;
 		this.converterFactory = converterFactory;
-		this.loginStatusHandler = loginStatusHandler;
 		viewDisplayPanel = new Panel();
 		viewDisplayPanel.setSizeFull();
 	}

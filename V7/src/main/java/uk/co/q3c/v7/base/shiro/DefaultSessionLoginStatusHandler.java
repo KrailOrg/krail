@@ -24,7 +24,7 @@ import com.google.inject.servlet.SessionScoped;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 
 /**
- * See {@link LoginStatusHandler} for description.
+ * See {@link SessionLoginStatusHandler} for description.
  * <p>
  * There is generally no need to call {@link #removeListener(LoginStatusListener)} because instances of this class have
  * the same scope as the UI they belong to.
@@ -33,12 +33,12 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
  * 
  */
 @SessionScoped
-public class DefaultLoginStatusHandler implements LoginStatusHandler {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultLoginStatusHandler.class);
+public class DefaultSessionLoginStatusHandler implements SessionLoginStatusHandler {
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSessionLoginStatusHandler.class);
 	private final Collection<LoginStatusListener> listeners =  new ArrayList<>();
 
 	@Inject
-	protected DefaultLoginStatusHandler() {
+	protected DefaultSessionLoginStatusHandler() {
 		super();
 	}
 

@@ -14,10 +14,6 @@ package uk.co.q3c.v7.base.shiro;
 
 import org.apache.shiro.subject.Subject;
 
-import uk.co.q3c.v7.base.ui.ScopedUI;
-import uk.co.q3c.v7.base.view.LoginView;
-import uk.co.q3c.v7.base.view.LogoutView;
-
 import com.vaadin.ui.UI;
 
 /**
@@ -30,7 +26,7 @@ import com.vaadin.ui.UI;
  * @author David Sowerby 16 Sep 2013
  * 
  */
-public interface LoginStatusHandler {
+public interface SessionLoginStatusHandler {
 
 	/**
 	 * Called by the V7SecurityManager after the login or logout.
