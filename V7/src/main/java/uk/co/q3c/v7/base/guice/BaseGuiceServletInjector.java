@@ -34,9 +34,7 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapProvider;
 import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
-import uk.co.q3c.v7.base.shiro.V7ShiroVaadinModule;
-import uk.co.q3c.v7.base.shiro.V7SecurityManager;
-import uk.co.q3c.v7.base.shiro.VaadinSessionManager;
+import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
 import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
@@ -145,13 +143,13 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Override this method if you have sub-classed {@link V7ShiroVaadinModule} to provide your own bindings for Shiro
+	 * Override this method if you have sub-classed {@link ShiroVaadinModule} to provide your own bindings for Shiro
 	 * related exceptions.
 	 * 
 	 * @return
 	 */
 	protected Module shiroVaadinModule() {
-		return new V7ShiroVaadinModule();
+		return new ShiroVaadinModule();
 	}
 
 	/**
