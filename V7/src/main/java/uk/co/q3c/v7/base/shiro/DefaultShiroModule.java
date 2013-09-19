@@ -14,6 +14,7 @@ package uk.co.q3c.v7.base.shiro;
 
 import java.util.Collection;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.guice.ShiroModule;
@@ -46,12 +47,6 @@ public class DefaultShiroModule extends ShiroModule {
 		bindRealms();
 	}
 
-	@Override
-	protected void bindSecurityManager(
-			AnnotatedBindingBuilder<? super SecurityManager> bind) {
-		bind.to(V7SecurityManager.class).asEagerSingleton();
-	}
-
 	/**
 	 * Override this to bind your own Realm implementation(s). Multiple calls
 	 * can be made to bindRealm();
@@ -74,6 +69,20 @@ public class DefaultShiroModule extends ShiroModule {
 	protected void bindCredentialsMatcher() {
 		bind(CredentialsMatcher.class).to(
 				AlwaysPasswordCredentialsMatcher.class);
+	}
+
+	@Override
+	protected void bindSecurityManager(
+			AnnotatedBindingBuilder<? super SecurityManager> bind) {
+		try {
+			bind.toConstructor(
+					V7SecurityManager.class.getConstructor(Collection.class))
+					.asEagerSingleton();
+		} catch (NoSuchMethodException e) {
+			throw new ConfigurationException(
+					"This really shouldn't happen.  Either something has changed in Shiro, or there's a bug in ShiroModule.",
+					e);
+		}
 	}
 
 	@Override

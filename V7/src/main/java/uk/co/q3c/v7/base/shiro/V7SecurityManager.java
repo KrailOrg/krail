@@ -26,22 +26,25 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Singleton;
 import com.vaadin.server.VaadinSession;
 
+@Singleton
 public class V7SecurityManager extends DefaultSecurityManager {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(V7SecurityManager.class);
 
-	private final VaadinSessionProvider sessionProvider;
-	private final Provider<LoginStatusHandler> loginStatusHandler;
-
 	@Inject
-	public V7SecurityManager(Collection<Realm> realms,
-			VaadinSessionProvider sessionProvider,
-			Provider<LoginStatusHandler> loginStatusHandler) {
+	private VaadinSessionProvider sessionProvider;
+	@Inject
+	private Provider<LoginStatusHandler> loginStatusHandlerProvider;
+
+	public V7SecurityManager() {
+		super();
+	}
+
+	public V7SecurityManager(Collection<Realm> realms) {
 		super(realms);
-		this.sessionProvider = sessionProvider;
-		this.loginStatusHandler = loginStatusHandler;
 	}
 
 	@Override
