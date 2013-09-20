@@ -77,6 +77,7 @@ public class V7SecurityManager extends DefaultSecurityManager {
 		if (subject == null) {
 			LOGGER.debug("VaadinSession is valid, but does not have a stored Subject, creating a new Subject");
 			subject = new Subject.Builder().buildSubject();
+			setSubject(subject);
 		}
 		return subject;
 	}

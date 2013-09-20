@@ -87,6 +87,8 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 			LOGGER.debug("changing view from " + from + " to " + to);
 		}
 
+		assert toView.getRootComponent().getUI() == null;
+		
 		Component content = toView.getRootComponent();
 		content.setSizeFull();
 		viewDisplayPanel.setContent(content);
