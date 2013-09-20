@@ -1,6 +1,6 @@
 //master gradle build file
 
-project.ext.vaadinVersion='7.1.0'
+project.ext.vaadinVersion='7.1.5'
 
 allprojects{
         group = 'uk.co.q3c.v7'
