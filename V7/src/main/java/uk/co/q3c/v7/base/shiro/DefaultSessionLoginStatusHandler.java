@@ -12,16 +12,16 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.WeakHashMap;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.servlet.SessionScoped;
-
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 
 /**
  * See {@link SessionLoginStatusHandler} for description.
@@ -35,7 +35,7 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 @SessionScoped
 public class DefaultSessionLoginStatusHandler implements SessionLoginStatusHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSessionLoginStatusHandler.class);
-	private final Collection<LoginStatusListener> listeners =  new ArrayList<>();
+	private final Collection<LoginStatusListener> listeners =  Collections.newSetFromMap(new WeakHashMap<LoginStatusListener, Boolean>(0));
 
 	@Inject
 	protected DefaultSessionLoginStatusHandler() {
