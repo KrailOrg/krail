@@ -34,14 +34,14 @@ import com.vaadin.data.Property;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface DemoI18N {
-	DemoLabelKeys caption() default DemoLabelKeys._nullkey_;
+	DemoLabelKey caption() default DemoLabelKey._nullkey_;
 
-	DemoLabelKeys description() default DemoLabelKeys._nullkey_;
+	DemoLabelKey description() default DemoLabelKey._nullkey_;
 
 	/**
 	 * Usually only used with Vaadin Labels
 	 * 
 	 * @return
 	 */
-	DemoLabelKeys value() default DemoLabelKeys._nullkey_;
+	DemoLabelKey value() default DemoLabelKey._nullkey_;
 }

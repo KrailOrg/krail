@@ -26,19 +26,19 @@ import uk.co.q3c.v7.i18n.EnumResourceBundle;
  * @author David Sowerby 9 Feb 2013
  * 
  */
-public class DemoLabels extends EnumResourceBundle<DemoLabelKeys> {
+public class DemoLabels extends EnumResourceBundle<DemoLabelKey> {
 
-	private static final EnumMap<DemoLabelKeys, String> map = new EnumMap<DemoLabelKeys, String>(
-			DemoLabelKeys.class);
+	private static final EnumMap<DemoLabelKey, String> map = new EnumMap<DemoLabelKey, String>(
+			DemoLabelKey.class);
 
 	static {
-		map.put(DemoLabelKeys.Yes, "yes");
-		map.put(DemoLabelKeys.No, "no");
+		map.put(DemoLabelKey.Yes, "yes");
+		map.put(DemoLabelKey.No, "no");
 
 	}
 
 	@Override
-	public EnumMap<DemoLabelKeys, String> getMap() {
+	public EnumMap<DemoLabelKey, String> getMap() {
 		return map;
 	}
 

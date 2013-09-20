@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 import uk.co.q3c.v7.i18n.I18NKey;
 
-public enum DemoLabelKeys implements I18NKey<DemoLabels> {
+public enum DemoLabelKey implements I18NKey<DemoLabels> {
 
 	_nullkey_, Yes, No, View1, View2, Home, Private, Public, Reset_Account, Logout, Unlock_Account, Enable_Account, Login, Refresh_Account, Request_Account;
 
