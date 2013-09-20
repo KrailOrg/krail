@@ -17,6 +17,7 @@ import static org.fest.assertions.Assertions.*;
 import java.util.LinkedList;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -28,6 +29,7 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 
+@Ignore("https://github.com/davidsowerby/v7/issues/185")
 public class HorizontalViewLayoutTest {
 
 	HorizontalViewLayout hvl;

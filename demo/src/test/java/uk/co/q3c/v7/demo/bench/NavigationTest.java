@@ -34,14 +34,14 @@ public class NavigationTest extends V7TestBenchTestCase {
 		verifyUrl("public");
 
 		// when
-		navTree().index(0).expand().get().click(8, 7);
-		navTree().index(0, 1).expand().get().click(8, 10);
-		navTree().index(0, 1, 0).get().click(25, 13);
+		navTree().index(0).expand().get().click();
+		navTree().index(0, 1).expand().get().click();
+		navTree().index(0, 1, 0).get().click();
 		// then
 		verifyUrl("public/system-account/request-account");
 
 		// when
-		navTree().index(0, 1, 1).get().click(31, 11);
+		navTree().index(0, 1, 1).get().click();
 		// then
 		verifyUrl("public/system-account/unlock-account");
 

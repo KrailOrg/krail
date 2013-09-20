@@ -12,8 +12,6 @@
  */
 package uk.co.q3c.util;
 
-import com.vaadin.ui.Component;
-
 /**
  * Utility class used to standardise id setting (setId methods in Components).
  * 
@@ -25,22 +23,32 @@ public class ID {
 	/**
 	 * The qualifier is just a way of identifying one of several of the component in the same parent component. The
 	 * components list amounts to the notional hierarchy of components (it can be anything that makes sense in your
-	 * environment, this is just an identifier)
+	 * environment, this is just an identifier). Although it is generally instances of components you would use here,
+	 * you may wish to use other things (for example V7View implementations) which are not components in their own
+	 * right. Hence the method takes Object rather than Component parameters
 	 * 
 	 * @param qualifier
 	 * @param components
 	 * @return
 	 */
-	public static String getId(String qualifier, Component... components) {
+	public static String getId(String qualifier, Object... components) {
+		Class<?>[] classes = new Class<?>[components.length];
+		for (int i = 0; i < components.length; i++) {
+			classes[i] = components[i].getClass();
+		}
+		return getIdc(qualifier, classes);
+	}
+
+	public static String getIdc(String qualifier, Class<?>... componentClasses) {
 		StringBuilder buf = new StringBuilder();
 		boolean first = true;
-		for (Component c : components) {
+		for (Class<?> c : componentClasses) {
 			if (!first) {
 				buf.append("-");
 			} else {
 				first = false;
 			}
-			buf.append(c.getClass().getSimpleName());
+			buf.append(c.getSimpleName());
 		}
 		if (qualifier != null) {
 			buf.append("-");
@@ -49,8 +57,12 @@ public class ID {
 		return buf.toString();
 	}
 
-	public static String getId(Component... components) {
+	public static String getId(Object... components) {
 		return getId(null, components);
+	}
+
+	public static String getIdc(Class<?>... componentClasses) {
+		return getIdc(null, componentClasses);
 	}
 
 }

@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -37,6 +38,7 @@ import com.vaadin.ui.VerticalLayout;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
+@Ignore("https://github.com/davidsowerby/v7/issues/185")
 public class ApplicationViewLayout1Test {
 	@Mock
 	V7Navigator navigator;

@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 
 import com.vaadin.ui.Component;
@@ -33,7 +34,21 @@ public abstract class ViewBase implements V7View {
 	protected ViewBase(V7Navigator navigator) {
 		super();
 		this.navigator = navigator;
+		buildView();
+		setIds();
 
+	}
+
+	protected ViewBase() {
+		navigator = null;
+	}
+
+	/**
+	 * You only need to implement this method if you are using TestBench, or another testing tool which looks for debug
+	 * ids. If you do override it to add your own subclass ids, make sure you call super
+	 */
+	protected void setIds() {
+		rootComponent.setId(ID.getId(this, rootComponent));
 	}
 
 	/**

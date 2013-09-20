@@ -17,10 +17,8 @@ import static org.fest.assertions.Assertions.*;
 import java.util.LinkedList;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-
-import uk.co.q3c.v7.base.view.layout.VerticalViewLayout;
-import uk.co.q3c.v7.base.view.layout.ViewConfig;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractSplitPanel;
@@ -31,6 +29,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 
+@Ignore("https://github.com/davidsowerby/v7/issues/185")
 public class VerticalViewLayoutTest {
 
 	VerticalViewLayout vvl;

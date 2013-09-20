@@ -33,9 +33,9 @@ public class ElementLocator {
 		return (TestBenchElementCommands) webElement;
 	}
 
-	public TestBenchElementCommands get() {
+	public WebElement get() {
 		WebElement webElement = driver.findElement(By.vaadin(path.get()));
-		return (TestBenchElementCommands) webElement;
+		return webElement;
 	}
 
 	public ElementLocator id(String id) {

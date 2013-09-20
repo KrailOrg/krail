@@ -29,8 +29,7 @@ public abstract class StandardPageViewBase extends ViewBase {
 	@Inject
 	protected StandardPageViewBase(V7Navigator navigator) {
 		super(navigator);
-		buildView();
-		setIds();
+
 	}
 
 	@Override
@@ -56,8 +55,9 @@ public abstract class StandardPageViewBase extends ViewBase {
 
 	}
 
+	@Override
 	protected void setIds() {
-		rootComponent.setId(ID.getId(this.getClass().getSimpleName(), rootComponent));
+		super.setIds();
 		grid.setId(ID.getId(this.getClass().getSimpleName(), grid));
 		label.setId(ID.getId(this.getClass().getSimpleName(), label));
 	}

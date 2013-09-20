@@ -35,7 +35,7 @@ public class LoginTest extends V7TestBenchTestCase {
 	public void testLogin() {
 		// given
 
-		navTree().index(0).expand().get().click(8, 7);
+		navTree().index(0).expand().get().click();
 		String startFragment = "public/system-account";
 		navigateTo(startFragment);
 
@@ -70,6 +70,7 @@ public class LoginTest extends V7TestBenchTestCase {
 
 	public LoginTest open() {
 		navigateTo("public/login");
+		pause(100);
 		return this;
 	}
 

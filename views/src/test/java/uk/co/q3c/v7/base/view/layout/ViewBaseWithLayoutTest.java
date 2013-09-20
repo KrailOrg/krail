@@ -20,6 +20,7 @@ import java.util.List;
 import javax.inject.Provider;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -39,20 +40,10 @@ import com.vaadin.ui.Panel;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
+@Ignore(" https://github.com/davidsowerby/v7/issues/185")
 public class ViewBaseWithLayoutTest {
 
-	private Button button1;
-	private Button button2;
-	private Label label1;
-	private Label label2;
-
-	@Mock
-	Provider<ComponentWrapper> wrapperPro;
-
-	@Mock
-	Translate translate;
-
-	class TestViewBaseWithLayout extends ViewBaseWithLayout {
+	public class TestViewBaseWithLayout extends ViewBaseWithLayout {
 
 		protected TestViewBaseWithLayout(V7Navigator navigator) {
 			super(navigator, new VerticalViewLayout(), translate);
@@ -65,10 +56,10 @@ public class ViewBaseWithLayoutTest {
 			label1 = new Label();
 			label2 = new Label();
 
-			vbwl.add(button1);
-			vbwl.add(button2);
-			vbwl.add(label1);
-			vbwl.add(label2);
+			add(button1);
+			add(button2);
+			add(label1);
+			add(label2);
 
 		}
 
@@ -78,6 +69,17 @@ public class ViewBaseWithLayoutTest {
 		}
 
 	}
+
+	private Button button1;
+	private Button button2;
+	private Label label1;
+	private Label label2;
+
+	@Mock
+	Provider<ComponentWrapper> wrapperPro;
+
+	@Mock
+	Translate translate;
 
 	ViewBaseWithLayout vbwl;
 

@@ -22,18 +22,31 @@ public class DefaultApplicationHeader extends Panel implements ApplicationHeader
 	private Label label;
 	private HorizontalLayout layout;
 
+	// private ComboBox comboBox;
+
 	@Inject
 	protected DefaultApplicationHeader() {
 		super();
 		build();
+		setIds();
 	}
 
 	private void build() {
 		layout = new HorizontalLayout();
 		label = new Label("Application Header");
 		layout.addComponent(label);
+
+		// comboBox = new ComboBox();
+		// comboBox.addItem("one");
+		// comboBox.addItem("two");
+		// layout.addComponent(comboBox);
+
 		this.setContent(layout);
 
+	}
+
+	private void setIds() {
+		// comboBox.setId(ID.getId(this, comboBox));
 	}
 
 }
