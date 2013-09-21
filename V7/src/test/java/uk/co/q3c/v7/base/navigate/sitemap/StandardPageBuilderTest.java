@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.navigate.sitemap;
 
 import static org.fest.assertions.Assertions.*;
 
@@ -12,6 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.navigate.StandardPageBuilder;
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
@@ -36,9 +40,12 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 @GuiceContext({})
 public class StandardPageBuilderTest {
 
+	@Inject
 	private StandardPageBuilder builder;
 	private Sitemap sitemap;
 	private SitemapURIConverter converter;
+
+	@Inject
 	private URIFragmentHandler uriHandler;
 
 	@Inject
@@ -46,9 +53,7 @@ public class StandardPageBuilderTest {
 
 	@Before
 	public void setup() {
-		builder = new StandardPageBuilder(currentLocale);
 		sitemap = new Sitemap();
-		uriHandler = new StrictURIFragmentHandler();
 		converter = new SitemapURIConverter(sitemap, uriHandler);
 		builder.setSitemap(sitemap);
 	}
@@ -264,6 +269,7 @@ public class StandardPageBuilderTest {
 			@Override
 			protected void configure() {
 				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 			}
 
 		};

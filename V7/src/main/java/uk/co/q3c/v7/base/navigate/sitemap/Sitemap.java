@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +23,8 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
 
 import uk.co.q3c.util.BasicForest;
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 
 /**
  * Encapsulates the site layout. Individual "virtual pages" are represented by {@link SitemapNode} instances. This map

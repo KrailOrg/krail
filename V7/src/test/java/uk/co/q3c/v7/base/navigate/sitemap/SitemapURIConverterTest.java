@@ -10,27 +10,35 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.navigate.sitemap;
 
 import static org.fest.assertions.Assertions.*;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.view.component.TestWithSitemap;
 
+import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class SitemapURIConverterTest extends TestWithSitemap {
 
 	SitemapURIConverter converter;
-	private StrictURIFragmentHandler uriHandler;
+
+	@Inject
+	StrictURIFragmentHandler uriHandler;
 
 	// SitemapNode newNode1;
 	// SitemapNode newNode2;
@@ -43,7 +51,6 @@ public class SitemapURIConverterTest extends TestWithSitemap {
 	@Before
 	public void setup() {
 		super.setup();
-		uriHandler = new StrictURIFragmentHandler();
 		converter = new SitemapURIConverter(sitemap, uriHandler);
 	}
 
@@ -170,6 +177,18 @@ public class SitemapURIConverterTest extends TestWithSitemap {
 		assertThat(converter.pageIsPublic("public/logout/id=1")).isTrue();
 		assertThat(converter.pageIsPublic("private/wiggly/id=1")).isFalse();
 
+	}
+
+	@ModuleProvider
+	protected AbstractModule moduleProvider() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+			}
+
+		};
 	}
 
 }

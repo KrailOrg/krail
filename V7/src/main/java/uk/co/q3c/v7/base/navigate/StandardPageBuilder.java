@@ -11,6 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
+import uk.co.q3c.v7.base.navigate.sitemap.PageRecord;
+import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapProvider;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
@@ -28,7 +32,7 @@ import uk.co.q3c.v7.i18n.I18NKey;
 
 /**
  * Used during the process of building the {@link Sitemap}. Provides the logic for building standard pages using options
- * provided by the {@link SitemapProvider} and defaults from {@link StandardPageKeyTest}
+ * provided by the {@link SitemapProvider} and defaults from {@link StandardPageKey}
  * 
  * @author David Sowerby 28 June 2013
  * 

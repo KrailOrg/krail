@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import uk.co.q3c.v7.base.navigate.SitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 
 import com.vaadin.ui.Button;
 

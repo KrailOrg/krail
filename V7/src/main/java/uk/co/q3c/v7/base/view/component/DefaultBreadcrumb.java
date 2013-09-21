@@ -19,9 +19,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.SitemapNode;
-import uk.co.q3c.v7.base.navigate.SitemapURIConverter;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;

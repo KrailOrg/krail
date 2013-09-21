@@ -15,8 +15,8 @@ package uk.co.q3c.v7.base.view;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.navigate.Sitemap;
-import uk.co.q3c.v7.base.navigate.SitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;

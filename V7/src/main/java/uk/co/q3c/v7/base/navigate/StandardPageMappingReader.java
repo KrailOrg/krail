@@ -3,6 +3,8 @@ package uk.co.q3c.v7.base.navigate;
 import java.util.HashSet;
 import java.util.Set;
 
+import uk.co.q3c.v7.base.navigate.sitemap.PageRecord;
+
 /**
  * Splits the supplied line (originally from sitemap.properties, [standardPageMapping] section). Checks syntax and
  * records errors as necessary

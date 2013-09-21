@@ -14,6 +14,8 @@ package uk.co.q3c.v7.base.navigate;
 
 import java.util.Comparator;
 
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+
 /**
  * Comparator which can be used to sort SitemapNode by insertion order, based on {@link SitemapNode#getId()}
  */

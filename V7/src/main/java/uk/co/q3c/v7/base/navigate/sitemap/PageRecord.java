@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.navigate.sitemap;
 
 public class PageRecord {
 	private String StandardPageKeyName;

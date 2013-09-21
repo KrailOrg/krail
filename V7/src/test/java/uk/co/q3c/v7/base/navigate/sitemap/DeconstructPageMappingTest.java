@@ -1,9 +1,12 @@
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.navigate.sitemap;
 
 import static org.fest.assertions.Assertions.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import uk.co.q3c.v7.base.navigate.StandardPageMappingReader;
+import uk.co.q3c.v7.base.navigate.sitemap.PageRecord;
 
 public class DeconstructPageMappingTest {
 

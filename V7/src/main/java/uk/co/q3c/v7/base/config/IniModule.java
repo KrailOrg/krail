@@ -16,9 +16,9 @@ import javax.inject.Singleton;
 
 import org.apache.shiro.subject.Subject;
 
-import uk.co.q3c.v7.base.navigate.Sitemap;
-import uk.co.q3c.v7.base.navigate.SitemapProvider;
-import uk.co.q3c.v7.base.navigate.TextReaderSitemapProvider;
+import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapProvider;
+import uk.co.q3c.v7.base.navigate.sitemap.TextReaderSitemapProvider;
 import uk.co.q3c.v7.base.shiro.DefaultVaadinSessionProvider;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.VaadinSessionProvider;

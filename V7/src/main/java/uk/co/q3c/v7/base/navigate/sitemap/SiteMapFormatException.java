@@ -10,27 +10,27 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.navigate.sitemap;
 
-public class SiteMapException extends RuntimeException {
+public class SiteMapFormatException extends SiteMapException {
 
-	protected SiteMapException() {
+	public SiteMapFormatException() {
 		super();
 	}
 
-	protected SiteMapException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public SiteMapFormatException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
-	protected SiteMapException(String message, Throwable cause) {
+	public SiteMapFormatException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	protected SiteMapException(String message) {
+	public SiteMapFormatException(String message) {
 		super(message);
 	}
 
-	protected SiteMapException(Throwable cause) {
+	public SiteMapFormatException(Throwable cause) {
 		super(cause);
 	}
 

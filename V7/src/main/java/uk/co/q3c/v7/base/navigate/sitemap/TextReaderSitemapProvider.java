@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.io.File;
 import java.io.InputStream;
@@ -36,6 +36,10 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.navigate.LabelKeyForName;
+import uk.co.q3c.v7.base.navigate.StandardPageBuilder;
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.URITracker;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
@@ -1019,7 +1023,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	 * <li>sourceFile
 	 * <li>default (which is "classpath:sitemap.properties")
 	 * 
-	 * @see uk.co.q3c.v7.base.navigate.SitemapProvider#get()
+	 * @see uk.co.q3c.v7.base.navigate.sitemap.SitemapProvider#get()
 	 */
 
 	@Override
