@@ -18,6 +18,8 @@ import java.util.Locale;
 
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 /**
  * Represents a node in the site map (equivalent to a web site 'page'). It contains a URI segment (this is just one part
@@ -34,9 +36,9 @@ import uk.co.q3c.v7.i18n.I18NKey;
  * required.
  * <p>
  * To enable locale sensitive sorting of nodes - for example within a UserNavigationTree - a collation key from
- * {@link Collator} is added by the {@link #setLabelKey(I18NKey, Locale, Collator)} method. This means the collation
- * key generally created only once, is available for sorting as often as needed, and will only need to be updated when
- * if locale or labelKey changes. This approach also takes advantage of the improved performance of the collation key
+ * {@link Collator} is added by the {@link #setLabelKey(I18NKey, Locale, Collator)} method. This means the collation key
+ * generally created only once, is available for sorting as often as needed, and will only need to be updated when if
+ * locale or labelKey changes. This approach also takes advantage of the improved performance of the collation key
  * sorting (http://docs.oracle.com/javase/tutorial/i18n/text/perform.html)
  * <p>
  * Sorting by insertion order or collation key order is provided by
@@ -52,12 +54,14 @@ public class SitemapNode {
 	private I18NKey<?> labelKey;
 	private String label;
 	private CollationKey collationKey;
+	private Translate translate;
 
 	public SitemapNode(String uriSegment, Class<? extends V7View> viewClass, I18NKey<?> labelKey, Locale locale,
-			Collator collator) {
+			Collator collator, Translate translate) {
 		super();
 		this.uriSegment = uriSegment;
 		this.viewClass = viewClass;
+		this.translate = translate;
 		setLabelKey(labelKey, locale, collator);
 	}
 
@@ -78,15 +82,28 @@ public class SitemapNode {
 	}
 
 	/**
-	 * Sets the label key, but also requires the locale to enable translation for the label, and Collator for the
-	 * collation key
+	 * Sets {@link LabelKey} and {@link #label}, but also requires the locale to enable translation for the label (using
+	 * {@link #translate} field, and Collator for the collation key
 	 * 
 	 * @param labelKey
 	 * @param locale
 	 */
 	public void setLabelKey(I18NKey<?> labelKey, Locale locale, Collator collator) {
 		this.labelKey = labelKey;
-		label = labelKey.getValue(locale);
+		label = translate.from(labelKey, locale);
+		collationKey = collator.getCollationKey(label);
+	}
+
+	/**
+	 * Sets {@link LabelKey} and {@link #label}, using supplied {@code translate} for translation and Collator for the
+	 * collation key. CurrentLocale is assumed.
+	 * 
+	 * @param labelKey
+	 * @param locale
+	 */
+	public void setLabelKey(I18NKey<?> labelKey, Translate translate, Collator collator) {
+		this.labelKey = labelKey;
+		label = translate.from(labelKey);
 		collationKey = collator.getCollationKey(label);
 	}
 
@@ -153,6 +170,14 @@ public class SitemapNode {
 
 	public CollationKey getCollationKey() {
 		return collationKey;
+	}
+
+	public Translate getTranslate() {
+		return translate;
+	}
+
+	public void setTranslate(Translate translate) {
+		this.translate = translate;
 	}
 
 }

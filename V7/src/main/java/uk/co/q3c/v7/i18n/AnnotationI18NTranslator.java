@@ -63,13 +63,16 @@ public class AnnotationI18NTranslator implements I18NTranslator {
 	private final CurrentLocale currentLocale;
 	private final Provider<I18NTranslator> translatorPro;
 	private final Map<Class<? extends Annotation>, Provider<? extends I18NAnnotationReader>> readers;
+	private final Translate translate;
 
 	@Inject
-	protected AnnotationI18NTranslator(CurrentLocale currentLocale, Provider<I18NTranslator> translatorPro) {
+	protected AnnotationI18NTranslator(CurrentLocale currentLocale, Provider<I18NTranslator> translatorPro,
+			Translate translate) {
 		super();
 		this.currentLocale = currentLocale;
 		this.translatorPro = translatorPro;
 		this.readers = currentLocale.getI18NReaders();
+		this.translate = translate;
 
 	}
 
@@ -129,9 +132,8 @@ public class AnnotationI18NTranslator implements I18NTranslator {
 
 		// check for nulls. Nulls are used for caption and description so that content can be cleared.
 		// for value, this is not the case, as it may be a bad idea
-		String captionValue = captionKey.isNullKey() ? null : captionKey.getValue(currentLocale.getLocale());
-		String descriptionValue = descriptionKey.isNullKey() ? null : descriptionKey
-				.getValue(currentLocale.getLocale());
+		String captionValue = captionKey.isNullKey() ? null : translate.from(captionKey);
+		String descriptionValue = descriptionKey.isNullKey() ? null : translate.from(descriptionKey);
 
 		// set caption and description
 		field.setAccessible(true);
@@ -155,7 +157,7 @@ public class AnnotationI18NTranslator implements I18NTranslator {
 				try {
 					@SuppressWarnings("unchecked")
 					Property<String> c = (Property<String>) field.get(listener);
-					String valueValue = valueKey.isNullKey() ? null : valueKey.getValue(currentLocale.getLocale());
+					String valueValue = valueKey.isNullKey() ? null : translate.from(valueKey);
 					if (valueValue != null) {
 						c.setValue(valueValue);
 					}
@@ -175,7 +177,7 @@ public class AnnotationI18NTranslator implements I18NTranslator {
 				for (Object column : columns) {
 					if (column instanceof LabelKey) {
 						LabelKey columnid = (LabelKey) column;
-						String header = columnid.getValue(currentLocale.getLocale());
+						String header = translate.from(columnid);
 						headers.add(header);
 					} else {
 						headers.add(column.toString());

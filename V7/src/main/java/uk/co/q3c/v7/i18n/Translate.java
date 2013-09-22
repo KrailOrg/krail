@@ -35,7 +35,17 @@ public class Translate {
 		this.currentLocale = currentLocale;
 	}
 
-	public String from(Locale locale, I18NKey<?> key, Object... arguments) {
+	/**
+	 * Looks up key pattern from its associated, locale specific, map. If the key is not present in the map, the
+	 * enum.name() is returned. Before returning the enum.name(), underscores are replaced with spaces. If arguments are
+	 * supplied, these are applied to the pattern.
+	 * 
+	 * @param locale
+	 * @param key
+	 * @param arguments
+	 * @return
+	 */
+	public String from(I18NKey<?> key, Locale locale, Object... arguments) {
 		String pattern = key.getValue(locale);
 		if (pattern == null) {
 			return key.name().replace("_", " ");
@@ -47,11 +57,17 @@ public class Translate {
 		return result;
 	}
 
+	/**
+	 * Looks up key pattern from its associated map. The locale is assumed to be {@link CurrentLocale}. If the key is
+	 * not present in the map, the enum.name() is returned. Before returning the enum.name(), underscores are replaced
+	 * with spaces. If arguments are supplied, these are applied to the pattern.
+	 * 
+	 * @param key
+	 * @param arguments
+	 * @return
+	 */
 	public String from(I18NKey<?> key, Object... arguments) {
-		return from(currentLocale.getLocale(), key, arguments);
+		return from(key, currentLocale.getLocale(), arguments);
 	}
 
-	public String from(I18NKey<?> key) {
-		return from(currentLocale.getLocale(), key, (Object[]) null);
-	}
 }

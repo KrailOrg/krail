@@ -18,6 +18,12 @@ public interface I18NKey<E extends EnumResourceBundle<?>> {
 
 	E getBundle(Locale locale);
 
+	/**
+	 * Use {@link Translate} rather than call this method directly
+	 * 
+	 * @param locale
+	 * @return
+	 */
 	String getValue(Locale locale);
 
 	boolean isNullKey();

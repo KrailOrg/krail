@@ -10,7 +10,6 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewHolder;
-import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.vaadin.data.util.converter.ConverterFactory;
@@ -160,7 +159,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 
 	/**
 	 * Override to provide a title for your UI page This will appear in your browser tab. If this needs to be an I18N
-	 * title, use {@link Translate} or {@link I18NKey#getValue(java.util.Locale)} (see also the documentation at
+	 * title, use {@link Translate} (see also the documentation at
 	 * https://sites.google.com/site/q3cjava/internationalisation-i18n)
 	 * 
 	 * @return

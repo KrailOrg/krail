@@ -30,7 +30,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class AnnotationI18NInterpreterTest {
+public class AnnotationI18NTranslatorTest {
 
 	I18NTestClass testObject;
 

@@ -29,6 +29,7 @@ import uk.co.q3c.v7.base.view.SystemAccountView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 /**
  * Used during the process of building the {@link Sitemap}. Provides the logic for building standard pages using options
@@ -53,12 +54,14 @@ public class StandardPageBuilder {
 	private Set<String> standardPageErrors;
 	private final CurrentLocale currentLocale;
 	private final Collator collator;
+	private final Translate translate;
 
 	@Inject
-	protected StandardPageBuilder(CurrentLocale currentLocale) {
+	protected StandardPageBuilder(CurrentLocale currentLocale, Translate translate) {
 		super();
 		this.currentLocale = currentLocale;
 		this.collator = Collator.getInstance(currentLocale.getLocale());
+		this.translate = translate;
 	}
 
 	public void generateStandardPages() {
@@ -96,7 +99,7 @@ public class StandardPageBuilder {
 	private void generatePage(StandardPageKey key) {
 		log.debug("generating page for {}", key);
 		SitemapNode node = sitemap.append(defaultUri(key));
-		node.setLabelKey(key, currentLocale.getLocale(), collator);
+		node.setLabelKey(key, translate, collator);
 		node.setViewClass(viewClass(key));
 		node.setUriSegment(defaultSegment(key));
 		sitemap.getStandardPages().put(key, sitemap.uri(node));
@@ -253,7 +256,7 @@ public class StandardPageBuilder {
 					LabelKeyForName labelKeyForName = new LabelKeyForName(labelKeysClass);
 					I18NKey<?> labelKey = labelKeyForName.keyForName(pr.getLabelKeyName(), missingEnums);
 					SitemapNode node = sitemap.append(pr.getUri());
-					node.setLabelKey(labelKey, currentLocale.getLocale(), collator);
+					node.setLabelKey(labelKey, translate, collator);
 					node.setViewClass(viewClass(spk));
 					sitemap.getStandardPages().put(spk, sitemap.uri(node));
 				} catch (Exception e) {

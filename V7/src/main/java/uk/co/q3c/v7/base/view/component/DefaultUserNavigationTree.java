@@ -38,8 +38,8 @@ import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.useropt.UserOption;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
-import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
@@ -55,7 +55,6 @@ import com.vaadin.ui.Tree;
 public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener,
 		LoginStatusListener {
 	private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
-	private final CurrentLocale currentLocale;
 	private final Sitemap sitemap;
 	private int maxLevel;
 	private int level;
@@ -65,21 +64,22 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	private boolean sorted;
 	private final UserOption userOption;
 	private final SitemapURIConverter sitemapURIConverter;
+	private final Translate translate;
 	public static final String sortedOpt = "sorted";
 	public static final String maxLevelOpt = "maxLevel";
 
 	@Inject
-	protected DefaultUserNavigationTree(Sitemap sitemap, CurrentLocale currentLocale, V7Navigator navigator,
-			Provider<Subject> subjectPro, DefaultURIPermissionFactory uriPermissionFactory, UserOption userOption,
-			SitemapURIConverter sitemapURIConverter, LoginStatusHandler loginStatusHandler) {
+	protected DefaultUserNavigationTree(Sitemap sitemap, V7Navigator navigator, Provider<Subject> subjectPro,
+			DefaultURIPermissionFactory uriPermissionFactory, UserOption userOption,
+			SitemapURIConverter sitemapURIConverter, LoginStatusHandler loginStatusHandler, Translate translate) {
 		super();
 		this.sitemap = sitemap;
-		this.currentLocale = currentLocale;
 		this.navigator = navigator;
 		this.subjectPro = subjectPro;
 		this.uriPermissionFactory = uriPermissionFactory;
 		this.userOption = userOption;
 		this.sitemapURIConverter = sitemapURIConverter;
+		this.translate = translate;
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		// set user option
@@ -134,7 +134,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 			this.addItem(childNode);
 			I18NKey<?> key = childNode.getLabelKey();
 
-			String caption = key.getValue(currentLocale.getLocale());
+			String caption = translate.from(key);
 			this.setItemCaption(childNode, caption);
 			setParent(childNode, parentNode);
 

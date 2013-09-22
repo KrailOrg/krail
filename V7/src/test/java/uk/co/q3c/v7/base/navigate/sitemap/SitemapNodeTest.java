@@ -17,19 +17,35 @@ import static org.fest.assertions.Assertions.*;
 import java.text.Collator;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.view.PublicHomeView;
+import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.TestLabelKey;
+import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.AbstractModule;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
 public class SitemapNodeTest {
+
+	@Inject
+	Translate translate;
 
 	@Test
 	public void setLabelKey() {
 
 		// given
 		SitemapNode node = new SitemapNode();
+		node.setTranslate(translate);
 		Locale locale = Locale.UK;
 		Collator collator = Collator.getInstance(locale);
 		// when
@@ -46,6 +62,7 @@ public class SitemapNodeTest {
 
 		// given
 		SitemapNode node = new SitemapNode();
+		node.setTranslate(translate);
 		Locale locale = Locale.GERMAN;
 		Collator collator = Collator.getInstance(locale);
 		// when
@@ -65,7 +82,7 @@ public class SitemapNodeTest {
 		Collator collator = Collator.getInstance(locale);
 
 		// when
-		SitemapNode node = new SitemapNode("one", PublicHomeView.class, TestLabelKey.Yes, locale, collator);
+		SitemapNode node = new SitemapNode("one", PublicHomeView.class, TestLabelKey.Yes, locale, collator, translate);
 		// then
 		assertThat(node.getUriSegment()).isEqualTo("one");
 		assertThat(node.getViewClass()).isEqualTo(PublicHomeView.class);
@@ -83,13 +100,25 @@ public class SitemapNodeTest {
 		Collator collator = Collator.getInstance(locale);
 
 		// when
-		SitemapNode node = new SitemapNode("one", PublicHomeView.class, TestLabelKey.Yes, locale, collator);
+		SitemapNode node = new SitemapNode("one", PublicHomeView.class, TestLabelKey.Yes, locale, collator, translate);
 		// then
 		assertThat(node.getUriSegment()).isEqualTo("one");
 		assertThat(node.getViewClass()).isEqualTo(PublicHomeView.class);
 		assertThat(node.getLabel()).isEqualTo("Ja");
 		assertThat(node.getCollationKey()).isEqualTo(collator.getCollationKey("Ja"));
 
+	}
+
+	@ModuleProvider
+	protected AbstractModule moduleProvider() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+			}
+
+		};
 	}
 
 }

@@ -25,6 +25,8 @@ import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.view.component.TestWithSitemap;
+import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.I18NTranslator;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -179,6 +181,7 @@ public class SitemapURIConverterTest extends TestWithSitemap {
 
 	}
 
+	@Override
 	@ModuleProvider
 	protected AbstractModule moduleProvider() {
 		return new AbstractModule() {
@@ -186,6 +189,7 @@ public class SitemapURIConverterTest extends TestWithSitemap {
 			@Override
 			protected void configure() {
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
 			}
 
 		};

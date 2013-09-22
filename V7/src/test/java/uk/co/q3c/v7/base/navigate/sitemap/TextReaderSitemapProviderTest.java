@@ -30,9 +30,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
-import uk.co.q3c.v7.base.navigate.sitemap.SiteMapException;
-import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
@@ -393,6 +390,7 @@ public class TextReaderSitemapProviderTest {
 		reader.parse(modifiedFile);
 
 		// then
+		System.out.println(reader.getReport());
 		assertThat(reader.isLabelClassNonExistent()).isFalse();
 		assertThat(reader.isLabelClassNotI18N()).isFalse();
 		assertThat(reader.missingSections()).containsOnly();
@@ -407,7 +405,6 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getIndentationErrors()).containsOnly("transfers");
 		assertThat(reader.getSitemap().hasErrors()).isFalse();
 
-		System.out.println(reader.getReport());
 		System.out.println(reader.getSitemap().toString());
 	}
 

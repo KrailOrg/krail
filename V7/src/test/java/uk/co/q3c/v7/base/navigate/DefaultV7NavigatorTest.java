@@ -4,6 +4,8 @@ import static org.fest.assertions.Assertions.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.text.Collator;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.shiro.authz.AuthorizationException;
@@ -27,6 +29,8 @@ import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
+import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -124,6 +128,12 @@ public class DefaultV7NavigatorTest {
 
 	@Mock
 	Subject subject;
+
+	@Mock
+	Collator collator;
+
+	@Mock
+	Translate translate;
 
 	@Before
 	public void setup() {
@@ -304,7 +314,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view2";
-		SitemapNode node = new SitemapNode();
+		SitemapNode node = new SitemapNode(page, view2.getClass(), LabelKey.Cancel, Locale.UK, collator, translate);
 		when(sitemap.uri(node)).thenReturn(page);
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(viewProMap.get(page)).thenReturn(view2Pro);

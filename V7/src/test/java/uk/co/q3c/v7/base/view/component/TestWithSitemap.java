@@ -15,15 +15,33 @@ package uk.co.q3c.v7.base.view.component;
 import java.text.Collator;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import org.junit.Before;
+import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.view.PublicHomeView;
+import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.TestLabelKey;
+import uk.co.q3c.v7.i18n.Translate;
 
-public class TestWithSitemap {
+import com.google.inject.AbstractModule;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
+public abstract class TestWithSitemap {
+
+	@Inject
+	protected Translate translate;
 
 	protected Sitemap sitemap;
 
@@ -88,9 +106,23 @@ public class TestWithSitemap {
 
 	protected SitemapNode newNode(String urlSegment) {
 		SitemapNode node0 = new SitemapNode();
+		node0.setTranslate(translate);
 		node0.setLabelKey(TestLabelKey.Home, locale, collator);
 		node0.setUriSegment(urlSegment);
 		node0.setViewClass(PublicHomeView.class);
 		return node0;
+	}
+
+	@ModuleProvider
+	protected AbstractModule moduleProvider() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+			}
+
+		};
 	}
 }

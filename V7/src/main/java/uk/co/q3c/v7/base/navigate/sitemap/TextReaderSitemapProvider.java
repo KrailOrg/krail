@@ -43,6 +43,7 @@ import uk.co.q3c.v7.base.navigate.URITracker;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.common.base.Strings;
 
@@ -111,15 +112,16 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private File sourceFile;
 	private final StandardPageBuilder standardPageBuilder;
 	private LabelKeyForName lkfn;
-	private final CurrentLocale currentLocale;
 	private final Collator collator;
+	private final Translate translate;
 
 	@Inject
-	public TextReaderSitemapProvider(StandardPageBuilder standardPageBuilder, CurrentLocale currentLocale) {
+	public TextReaderSitemapProvider(StandardPageBuilder standardPageBuilder, CurrentLocale currentLocale,
+			Translate translate) {
 		super();
 		this.standardPageBuilder = standardPageBuilder;
-		this.currentLocale = currentLocale;
 		this.collator = Collator.getInstance(currentLocale.getLocale());
+		this.translate = translate;
 
 	}
 
@@ -662,7 +664,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		String keyName = keyName(labelKeyName, node);
 		// could be null if invalid label keys given
 		if (lkfn != null) {
-			node.setLabelKey(lkfn.keyForName(keyName, missingEnums), currentLocale.getLocale(), collator);
+			node.setLabelKey(lkfn.keyForName(keyName, missingEnums), translate, collator);
 		} else {
 			missingEnums.add(keyName);
 		}
@@ -725,13 +727,14 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 
 	}
 
-	private int lastIndent(String line) {
-		int index = 0;
-		while (line.charAt(index) == '-') {
-			index++;
-		}
-		return index;
-	}
+	//
+	// private int lastIndent(String line) {
+	// int index = 0;
+	// while (line.charAt(index) == '-') {
+	// index++;
+	// }
+	// return index;
+	// }
 
 	/**
 	 * process a line of text from the file into the appropriate section

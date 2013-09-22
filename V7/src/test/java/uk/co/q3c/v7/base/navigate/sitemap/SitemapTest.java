@@ -19,15 +19,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.junit.Test;
+import javax.inject.Inject;
 
-import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
+import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.TestLabelKey;
+import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.AbstractModule;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
 public class SitemapTest {
+
+	@Inject
+	Translate translate;
 
 	@Test
 	public void url() {
@@ -35,10 +49,13 @@ public class SitemapTest {
 		// given
 		Locale locale = Locale.UK;
 		Collator collator = Collator.getInstance(locale);
+
 		Sitemap map = new Sitemap();
-		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, TestLabelKey.Home, locale, collator);
-		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, TestLabelKey.Home, locale, collator);
-		SitemapNode child = new SitemapNode("login", LoginView.class, TestLabelKey.Login, locale, collator);
+		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, TestLabelKey.Home, locale, collator,
+				translate);
+		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, TestLabelKey.Home, locale, collator,
+				translate);
+		SitemapNode child = new SitemapNode("login", LoginView.class, TestLabelKey.Login, locale, collator, translate);
 		map.addChild(grandparent, parent);
 		map.addChild(parent, child);
 		// when
@@ -267,5 +284,17 @@ public class SitemapTest {
 		assertThat(sitemap.getPublicRoot()).isNull();
 		assertThat(sitemap.getPublicRootNode()).isNull();
 
+	}
+
+	@ModuleProvider
+	protected AbstractModule moduleProvider() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+			}
+
+		};
 	}
 }

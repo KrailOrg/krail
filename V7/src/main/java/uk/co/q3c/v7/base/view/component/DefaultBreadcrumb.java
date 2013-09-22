@@ -28,6 +28,7 @@ import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.I18NListener;
 import uk.co.q3c.v7.i18n.I18NTranslator;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -42,14 +43,17 @@ public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener,
 	private final SitemapURIConverter converter;
 	private final CurrentLocale currentLocale;
 	private final Collator collator;
+	private final Translate translate;
 
 	@Inject
-	protected DefaultBreadcrumb(V7Navigator navigator, SitemapURIConverter converter, CurrentLocale currentLocale) {
+	protected DefaultBreadcrumb(V7Navigator navigator, SitemapURIConverter converter, CurrentLocale currentLocale,
+			Translate translate) {
 		this.navigator = navigator;
 		navigator.addViewChangeListener(this);
 		this.converter = converter;
 		this.currentLocale = currentLocale;
 		this.collator = Collator.getInstance(currentLocale.getLocale());
+		this.translate = translate;
 
 	}
 
@@ -86,7 +90,7 @@ public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener,
 
 		step.setNode(sitemapNode);
 		I18NKey<?> key = step.getNode().getLabelKey();
-		sitemapNode.setLabelKey(key, currentLocale.getLocale(), collator);
+		sitemapNode.setLabelKey(key, translate, collator);
 
 		step.setVisible(true);
 		step.setNode(sitemapNode);
@@ -97,7 +101,7 @@ public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener,
 	public void localeChange(I18NTranslator translator) {
 		for (BreadcrumbStep step : steps) {
 			I18NKey<?> key = step.getNode().getLabelKey();
-			step.setCaption(key.getValue(translator.getLocale()));
+			step.setCaption(translate.from(key, translator.getLocale()));
 		}
 	}
 

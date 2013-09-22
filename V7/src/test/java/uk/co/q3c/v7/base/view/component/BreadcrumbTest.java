@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,11 +31,16 @@ import org.mockito.Mock;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
+import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.TestLabelKey;
+import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -49,6 +56,9 @@ public class BreadcrumbTest extends TestWithSitemap {
 
 	@Mock
 	CurrentLocale currentLocale;
+
+	@Inject
+	Translate translate;
 
 	SitemapNode newNode7;
 
@@ -76,7 +86,7 @@ public class BreadcrumbTest extends TestWithSitemap {
 		newNode2.setLabelKey(TestLabelKey.Opt, currentLocale.getLocale(), collator);
 
 		// when
-		breadcrumb = new DefaultBreadcrumb(navigator, converter, currentLocale);
+		breadcrumb = new DefaultBreadcrumb(navigator, converter, currentLocale, translate);
 		breadcrumb.moveToNavigationState();
 		// then
 		assertThat(breadcrumb.getSteps().size()).isEqualTo(3);
@@ -168,4 +178,16 @@ public class BreadcrumbTest extends TestWithSitemap {
 		verify(navigator).navigateTo(step.getNode());
 	}
 
+	@Override
+	@ModuleProvider
+	protected AbstractModule moduleProvider() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+			}
+
+		};
+	}
 }
