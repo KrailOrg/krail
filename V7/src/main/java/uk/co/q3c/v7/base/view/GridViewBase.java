@@ -1,6 +1,5 @@
 package uk.co.q3c.v7.base.view;
 
-import java.util.LinkedHashMap;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -28,7 +27,6 @@ public abstract class GridViewBase extends GridLayout implements V7View {
 	public void afterEnter(V7ViewChangeEvent event) {
 		LOGGER.debug("entered view: " + this.getClass().getSimpleName() + " with uri: "
 				+ event.getNewNavigationState().getFragment().getUri());
-		processParams(event.getNewNavigationState().getFragment().getParameters());
 	}
 
 	/**
@@ -40,8 +38,6 @@ public abstract class GridViewBase extends GridLayout implements V7View {
 	public ScopedUI getScopedUI() {
 		return (ScopedUI) getUI();
 	}
-
-	protected abstract void processParams(LinkedHashMap<String, String> map);
 
 	@Override
 	public Component getRootComponent() {

@@ -103,11 +103,6 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	}
 
 	@Override
-	protected void processParams(LinkedHashMap<String, String> params) {
-		// None to process for login
-	}
-
-	@Override
 	public void buttonClick(ClickEvent event) {
 		UsernamePasswordToken token = new UsernamePasswordToken(usernameBox.getValue(), passwordBox.getValue());
 		try {
