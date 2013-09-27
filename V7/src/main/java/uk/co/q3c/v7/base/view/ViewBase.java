@@ -46,7 +46,12 @@ public abstract class ViewBase implements V7View {
 	protected abstract void buildView();
 
 	@Override
-	public void enter(V7ViewChangeEvent event) {
+	public boolean beforeEnter(V7ViewChangeEvent event) {
+		return true;
+	}
+	
+	@Override
+	public void afterEnter(V7ViewChangeEvent event) {
 		LOGGER.debug("entered view: " + this.getClass().getSimpleName() + " with uri: "
 				+ event.getNewNavigationState().getFragment().getUri());
 		processParams(event.getNewNavigationState().getFragment().getParameters());

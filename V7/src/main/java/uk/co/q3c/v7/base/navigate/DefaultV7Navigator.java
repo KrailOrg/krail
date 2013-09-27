@@ -78,7 +78,9 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 		LOGGER.debug("Navigating to uri: {}", uriFragment.getUri());
 
-		if(currentNavigationState != null && uriFragment.getUri().equals(currentNavigationState.getFragment().getUri())){
+		if (currentNavigationState != null
+				&& uriFragment.getUri().equals(
+						currentNavigationState.getFragment().getUri())) {
 			LOGGER.debug("fragment unchanged, no navigation required");
 			return;
 		}
@@ -154,7 +156,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	protected void navigateTo(NavigationState navigationState) {
 		changeView(navigationState.getFragment(), navigationState.getView());
-		}
+	}
 
 	protected void onUnauthenticatedException(UnauthenticatedException e) {
 		LOGGER.trace("UnauthenticatedException");
@@ -180,10 +182,16 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 			// aborted
 			return;
 		}
+
+		boolean proceed = view.beforeEnter(event);
+		if (proceed == false) {
+			// aborted
+			return;
+		}
 		V7View currentView = currentNavigationState != null ? currentNavigationState
 				.getView() : null;
 		getUI().changeView(currentView, view);
-		view.enter(event);
+		view.afterEnter(event);
 
 		setCurrentNavigationState(newNavigationState);
 		fireAfterViewChange(event);
@@ -301,7 +309,9 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	protected void setCurrentNavigationState(NavigationState newNavigationState) {
-		assert newNavigationState.getView().getRootComponent().getUI() == UI.getCurrent() : "the navigation state view must belong to the current UI";
+		assert UI.getCurrent() != null;
+		assert newNavigationState.getView().getRootComponent().getUI() == UI
+				.getCurrent() : "the navigation state view must belong to the current UI";
 		previousNavigationState = currentNavigationState;
 		currentNavigationState = newNavigationState;
 

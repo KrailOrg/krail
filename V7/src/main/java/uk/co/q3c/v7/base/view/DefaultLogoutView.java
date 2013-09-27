@@ -47,7 +47,7 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 	}
 
 	@Override
-	public void enter(V7ViewChangeEvent event) {
+	public void afterEnter(V7ViewChangeEvent event) {
 		// TODO Auto-generated method stub
 
 	}

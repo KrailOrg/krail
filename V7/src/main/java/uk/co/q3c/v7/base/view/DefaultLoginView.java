@@ -43,20 +43,16 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	private final Label demoInfoLabel;
 	private final Label demoInfoLabel2;
 	private final Button submitButton;
-	private final V7Navigator navigator;
 	private final Label statusMsgLabel;
 	private final LoginExceptionHandler loginExceptionHandler;
 	private final Provider<Subject> subjectProvider;
-	private final SessionLoginStatusHandler loginStatusHandler;
 
 	@Inject
-	protected DefaultLoginView(V7Navigator navigator, LoginExceptionHandler loginExceptionHandler,
-			Provider<Subject> subjectProvider, SessionLoginStatusHandler loginStatusHandler) {
+	protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler,
+			Provider<Subject> subjectProvider) {
 		super();
-		this.navigator = navigator;
 		this.loginExceptionHandler = loginExceptionHandler;
 		this.subjectProvider = subjectProvider;
-		this.loginStatusHandler = loginStatusHandler;
 		this.setColumns(3);
 		this.setRows(3);
 		this.setSizeFull();
