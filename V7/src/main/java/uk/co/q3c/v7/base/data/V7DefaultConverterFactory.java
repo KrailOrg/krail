@@ -12,7 +12,6 @@
  */
 package uk.co.q3c.v7.base.data;
 
-import org.joda.money.Money;
 import org.joda.time.DateTime;
 
 import com.vaadin.data.util.converter.Converter;
@@ -27,10 +26,6 @@ public class V7DefaultConverterFactory extends DefaultConverterFactory {
 
 		if (modelType == DateTime.class) {
 			return (Converter<PRESENTATION, MODEL>) new DateTimeConverter();
-		}
-
-		if (modelType == Money.class) {
-			return (Converter<PRESENTATION, MODEL>) new MoneyConverter();
 		}
 
 		return super.createConverter(presentationType, modelType);

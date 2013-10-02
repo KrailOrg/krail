@@ -29,8 +29,6 @@ dependencies{
 	//Date Time
 	compile 'joda-time:joda-time:2.1'
 
-	//Money
-	compile 'org.joda:joda-money:0.8'
 
 	//Validation
 	compile 'org.apache.bval:bval-jsr303:0.5'
