@@ -1,4 +1,4 @@
-
+//build for V7 views sub-project
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
 
@@ -14,7 +14,7 @@ vaadin {
 }
 
 
-//this ensure that V7 is evaluated first so that the dependency on test code in V7 is availaable
+//this ensure that V7 is evaluated first so that the dependency on test code in V7 is available
 evaluationDependsOn(':V7')
 
 

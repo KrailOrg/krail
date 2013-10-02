@@ -1,0 +1,37 @@
+//build for V7 orient sub-project
+
+project.ext.set('orientVersion','1.4.0')
+project.ext.set('tinkerVersion', '2.3.0')
+
+
+dependencies{
+
+	compile project (':V7')
+	
+	//Date Time
+	compile 'joda-time:joda-time:2.1'
+
+	//Money
+	compile 'org.joda:joda-money:0.8'
+	
+//Persistence
+	//see http://code.google.com/p/orient/wiki/JavaAPI#Database_types and http://code.google.com/p/orient/wiki/GraphDatabaseTinkerpop
+
+	compile 'javax.persistence:persistence-api:1.0.2'
+	compile 'com.orientechnologies:orientdb-core:'+orientVersion
+	compile 'com.orientechnologies:orient-commons:'+orientVersion
+
+	compile 'com.orientechnologies:orientdb-client:'+orientVersion //needed for remote server
+	compile 'com.orientechnologies:orientdb-enterprise:'+orientVersion //needed for remote server
+
+
+	compile 'com.tinkerpop.blueprints:blueprints-core:'+tinkerVersion   //Graph Persistence
+	compile 'com.tinkerpop.blueprints:blueprints-orient-graph:'+tinkerVersion  //Graph Persistence
+
+
+	compile 'com.orientechnologies:orientdb-object:'+orientVersion//Object persistence
+
+
+
+
+}

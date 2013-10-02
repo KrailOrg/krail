@@ -20,7 +20,7 @@ import uk.co.q3c.v7.i18n.LabelKey;
 
 import com.vaadin.ui.TextField;
 
-public class TestBeanFieldSet extends EntityFieldSet<TestEntity> {
+public class TestBeanFieldSet extends BeanFieldSet<TestEntity> {
 
 	@I18N(caption = LabelKey.First_Name)
 	private TextField firstName;

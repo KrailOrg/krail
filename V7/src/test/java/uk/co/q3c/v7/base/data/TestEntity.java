@@ -15,9 +15,7 @@ package uk.co.q3c.v7.base.data;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import uk.co.q3c.v7.base.data.EntityBase;
-
-public class TestEntity extends EntityBase {
+public class TestEntity {
 	@NotNull
 	@Size(min = 2, max = 14)
 	private String firstName;

@@ -1,3 +1,5 @@
+//build for V7 testApp
+
 //apply plugin: 'war'
 //apply plugin: 'jetty'
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'

@@ -18,6 +18,10 @@ import org.slf4j.LoggerFactory;
  * defaults set or an exception raised if appropriate. <b>NOTE:</b>Only {@link #loadFromPath(String)} has been
  * overloaded; if you need to use any of the other load methods from {@link Ini}, you will need to call
  * {@link #validate()} after the load to provide defaults.
+ * <p>
+ * Note that the dbParams are defined by V7, but not actually used by V7. They are loaded from the Ini file during
+ * initialisation, and the resultant instance of this class is made available for user modules. They are there for
+ * developers to provide their own persistence layer. (see BaseGuiceServletInjector#getModules())
  * 
  */
 @Singleton
