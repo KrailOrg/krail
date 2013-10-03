@@ -7,7 +7,7 @@ V7 is a libary which provides a base application for Java / web development comb
 
 There are a number of sub-projects, each with a different status
 
-21st Sep 2013:  
+3rd October 2013:  
 
 ### V7
 
@@ -19,6 +19,10 @@ This library is usable, thought there are still some bugs and further developmen
 ### demo
 
 Very simple currently.  This sub-project is supported with tests run via Vaadin Testbench, which you won't be able to run unless you have TestBench.
+
+### orient
+
+In an early iteration of this project I included some persistence code using OrientDb.  That now seems inappropriate for the core library, but is worth keeping for later.
 
 ### testApp
 
