@@ -349,7 +349,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	@Override
-	public void loginStatusChange(boolean authenticated, String name) {
+	public void loginStatusChange(boolean authenticated, Subject subject) {
 		if (authenticated) {
 			loginSuccessful();
 		}

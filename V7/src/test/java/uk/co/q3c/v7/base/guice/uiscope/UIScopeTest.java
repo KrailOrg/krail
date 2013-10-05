@@ -24,11 +24,13 @@ import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.DefaultLoginStatusHandler;
+import uk.co.q3c.v7.base.shiro.DefaultSubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.DefaultUnauthenticatedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.DefaultUnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.DefaultVaadinSessionProvider;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
+import uk.co.q3c.v7.base.shiro.SubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.UnauthenticatedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
@@ -131,6 +133,7 @@ public class UIScopeTest {
 			bind(VaadinSessionProvider.class).to(DefaultVaadinSessionProvider.class);
 			bind(SessionManager.class).to(VaadinSessionManager.class).asEagerSingleton();
 			bind(LoginStatusHandler.class).to(DefaultLoginStatusHandler.class);
+			bind(SubjectIdentifier.class).to(DefaultSubjectIdentifier.class);
 
 		}
 	}

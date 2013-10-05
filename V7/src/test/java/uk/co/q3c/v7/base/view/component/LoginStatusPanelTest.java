@@ -25,7 +25,9 @@ import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.DefaultSubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
+import uk.co.q3c.v7.base.shiro.SubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.Translate;
@@ -54,6 +56,8 @@ public class LoginStatusPanelTest {
 	@Mock
 	LoginStatusHandler loginStatusHandler;
 
+	SubjectIdentifier subjectIdentifier;
+
 	@Inject
 	Translate translate;
 
@@ -62,7 +66,8 @@ public class LoginStatusPanelTest {
 		// V7SecurityManager securityManager = new V7SecurityManager();
 		// SecurityUtils.setSecurityManager(securityManager);
 		when(subjectPro.get()).thenReturn(subject);
-		panel = new DefaultLoginStatusPanel(navigator, subjectPro, translate, loginStatusHandler);
+		subjectIdentifier = new DefaultSubjectIdentifier(subjectPro, translate);
+		panel = new DefaultLoginStatusPanel(navigator, subjectPro, translate, loginStatusHandler, subjectIdentifier);
 		loginoutBtn = ((DefaultLoginStatusPanel) panel).getLogin_logout_Button();
 	}
 
@@ -75,10 +80,10 @@ public class LoginStatusPanelTest {
 		when(subject.getPrincipal()).thenReturn(null);
 
 		// when
-		panel.loginStatusChange(false, "guest");
+		panel.loginStatusChange(false, subject);
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log in");
-		assertThat(panel.getUserId()).isEqualTo("guest");
+		assertThat(panel.getUserId()).isEqualTo("Guest");
 
 		// when
 		loginoutBtn.click();
@@ -94,7 +99,7 @@ public class LoginStatusPanelTest {
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.getPrincipal()).thenReturn("userId");
 		// when
-		panel.loginStatusChange(false, "userId?");
+		panel.loginStatusChange(false, subject);
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log in");
 		assertThat(panel.getUserId()).isEqualTo("userId?");
@@ -113,7 +118,7 @@ public class LoginStatusPanelTest {
 		when(subject.getPrincipal()).thenReturn("userId");
 		when(loginStatusHandler.subjectIsAuthenticated()).thenReturn(true);
 		// when
-		panel.loginStatusChange(true, "userId");
+		panel.loginStatusChange(true, subject);
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log out");
 		assertThat(panel.getUserId()).isEqualTo("userId");

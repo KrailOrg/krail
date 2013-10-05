@@ -89,7 +89,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		navigator.addViewChangeListener(this);
 		setId(ID.getId(this));
 		loginStatusHandler.addListener(this);
-		loginStatusChange(loginStatusHandler.subjectIsAuthenticated(), loginStatusHandler.subjectName());
+		loginStatusChange(loginStatusHandler.subjectIsAuthenticated(), subjectPro.get());
 		loadNodes();
 
 	}
@@ -242,7 +242,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	}
 
 	@Override
-	public void loginStatusChange(boolean status, String name) {
+	public void loginStatusChange(boolean status, Subject subject) {
 
 	}
 

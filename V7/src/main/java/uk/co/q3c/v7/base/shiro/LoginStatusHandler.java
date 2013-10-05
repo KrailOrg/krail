@@ -39,13 +39,12 @@ public interface LoginStatusHandler {
 	void initiateStatusChange();
 
 	/**
-	 * Called to respond to the change, where {@code authenticated} if the current Subject is authenticated, and
-	 * {@code name} is the user's name. If the user is not authenticated, {@code name} will be 'guest'
+	 * Called to respond to a change in login status
 	 * 
 	 * @param name
 	 * @param status
 	 */
-	void respondToStatusChange(boolean authenticated, String name);
+	void respondToStatusChange();
 
 	/**
 	 * When a UI is first created, components may need to access the status to determine what they display. Although

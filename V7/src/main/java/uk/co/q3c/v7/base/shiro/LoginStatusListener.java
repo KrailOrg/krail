@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
+import org.apache.shiro.subject.Subject;
+
 public interface LoginStatusListener {
-	void loginStatusChange(boolean status, String name);
+	void loginStatusChange(boolean status, Subject subject);
 }

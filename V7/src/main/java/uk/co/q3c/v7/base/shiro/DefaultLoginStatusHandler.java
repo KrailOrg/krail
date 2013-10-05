@@ -24,8 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.ui.ScopedUI;
-import uk.co.q3c.v7.i18n.LabelKey;
-import uk.co.q3c.v7.i18n.Translate;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
@@ -44,16 +42,17 @@ public class DefaultLoginStatusHandler implements LoginStatusHandler {
 	private static Logger log = LoggerFactory.getLogger(DefaultLoginStatusHandler.class);
 	private final List<LoginStatusListener> listeners = new ArrayList<>();
 	private final VaadinSessionProvider sessionProvider;
+	private final SubjectIdentifier subjectIdentifier;
+
 	private final SubjectProvider subjectProvider;
-	private final Translate translate;
 
 	@Inject
-	protected DefaultLoginStatusHandler(VaadinSessionProvider sessionProvider, SubjectProvider subjectProvider,
-			Translate translate) {
+	protected DefaultLoginStatusHandler(VaadinSessionProvider sessionProvider, SubjectIdentifier subjectIdentifier,
+			SubjectProvider subjectProvider) {
 		super();
 		this.sessionProvider = sessionProvider;
+		this.subjectIdentifier = subjectIdentifier;
 		this.subjectProvider = subjectProvider;
-		this.translate = translate;
 	}
 
 	@Override
@@ -66,32 +65,29 @@ public class DefaultLoginStatusHandler implements LoginStatusHandler {
 		listeners.remove(listener);
 	}
 
-	private void fireListeners(boolean authenticated, String name) {
-
+	private void fireListeners() {
+		Subject subject = subjectProvider.get();
 		log.debug("firing login status listeners");
 		for (LoginStatusListener listener : listeners) {
-			listener.loginStatusChange(authenticated, name);
+			listener.loginStatusChange(subject.isAuthenticated(), subject);
 		}
 	}
 
 	@Override
 	public void initiateStatusChange() {
 
-		boolean authenticated = subjectIsAuthenticated();
-		String name = subjectName();
-
 		VaadinSession session = sessionProvider.get();
 		Collection<UI> uIs = session.getUIs();
 
 		for (UI ui : uIs) {
 			ScopedUI sui = (ScopedUI) ui;
-			sui.getLoginStatusHandler().respondToStatusChange(authenticated, name);
+			sui.getLoginStatusHandler().respondToStatusChange();
 		}
 	}
 
 	@Override
-	public void respondToStatusChange(boolean authenticated, String name) {
-		fireListeners(authenticated, name);
+	public void respondToStatusChange() {
+		fireListeners();
 	}
 
 	@Override
@@ -103,11 +99,6 @@ public class DefaultLoginStatusHandler implements LoginStatusHandler {
 
 	@Override
 	public String subjectName() {
-		Subject subject = subjectProvider.get();
-		boolean authenticated = subject.isAuthenticated();
-		boolean remembered = subject.isRemembered();
-		String name = (authenticated) ? subject.getPrincipal().toString() : translate.from(LabelKey.Guest);
-		name = (remembered) ? subject.getPrincipal().toString() + "?" : name;
-		return name;
+		return subjectIdentifier.subjectName();
 	}
 }

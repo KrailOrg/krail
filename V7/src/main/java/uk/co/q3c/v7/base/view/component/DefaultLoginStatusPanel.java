@@ -21,6 +21,7 @@ import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
+import uk.co.q3c.v7.base.shiro.SubjectIdentifier;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -50,15 +51,17 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 	private final Provider<Subject> subjectPro;
 	private final Translate translate;
 	private final LoginStatusHandler loginStatusHandler;
+	private final SubjectIdentifier subjectIdentifier;
 
 	@Inject
 	protected DefaultLoginStatusPanel(V7Navigator navigator, Provider<Subject> subjectPro, Translate translate,
-			LoginStatusHandler loginStatusHandler) {
+			LoginStatusHandler loginStatusHandler, SubjectIdentifier subjectIdentifier) {
 		super();
 		this.navigator = navigator;
 		this.subjectPro = subjectPro;
 		this.translate = translate;
 		this.loginStatusHandler = loginStatusHandler;
+		this.subjectIdentifier = subjectIdentifier;
 		loginStatusHandler.addListener(this);
 		// this.setWidth("200px");
 		// this.setHeight("100px");
@@ -76,7 +79,7 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 		setIds();
 
 		// initialise
-		loginStatusChange(loginStatusHandler.subjectIsAuthenticated(), loginStatusHandler.subjectName());
+		loginStatusChange(loginStatusHandler.subjectIsAuthenticated(), subjectPro.get());
 
 	}
 
@@ -87,10 +90,10 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 	}
 
 	@Override
-	public void loginStatusChange(boolean authenticated, String name) {
+	public void loginStatusChange(boolean authenticated, Subject subject) {
 		String caption = (authenticated) ? translate.from(LabelKey.Log_Out) : translate.from(LabelKey.Log_In);
 		login_logout_Button.setCaption(caption.toLowerCase());
-		usernameLabel.setValue(name);
+		usernameLabel.setValue(subjectIdentifier.subjectName());
 	}
 
 	@Override

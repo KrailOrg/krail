@@ -47,7 +47,16 @@ public class DefaultShiroModule extends ShiroModule {
 		bindCredentialsMatcher();
 		bindLoginAttemptLog();
 		bindRealms();
+		bindSubjectIdentifier();
+		expose(SubjectIdentifier.class);
 
+	}
+
+	/**
+	 * Override this to provide your own SubjectConverter implementation
+	 */
+	protected void bindSubjectIdentifier() {
+		bind(SubjectIdentifier.class).to(DefaultSubjectIdentifier.class);
 	}
 
 	/**
