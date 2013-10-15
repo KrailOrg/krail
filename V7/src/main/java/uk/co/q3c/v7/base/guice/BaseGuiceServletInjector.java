@@ -46,8 +46,10 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 
-public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(BaseGuiceServletInjector.class);
+public abstract class BaseGuiceServletInjector extends
+		GuiceServletContextListener {
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(BaseGuiceServletInjector.class);
 
 	protected static Injector injector;
 
@@ -90,10 +92,10 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	/**
 	 * Override this to provide your own IniModule
 	 */
-	protected IniModule createIniModule(){
+	protected IniModule createIniModule() {
 		return new IniModule();
 	}
-	
+
 	private List<Module> getModules() {
 		// ini load is handled by the provider
 		V7Ini ini = getInjector().getInstance(V7Ini.class);
@@ -145,8 +147,8 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Override this method if you have sub-classed {@link ShiroVaadinModule} to provide your own bindings for Shiro
-	 * related exceptions.
+	 * Override this method if you have sub-classed {@link ShiroVaadinModule} to
+	 * provide your own bindings for Shiro related exceptions.
 	 * 
 	 * @return
 	 */
@@ -155,16 +157,17 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Override this if you have sub-classed {@link StandardViewModule} to provide bindings to your own standard page
-	 * views
+	 * Override this if you have sub-classed {@link StandardViewModule} to
+	 * provide bindings to your own standard page views
 	 */
 	protected Module standardViewModule() {
 		return new StandardViewModule();
 	}
 
 	/**
-	 * Override this method if you have sub-classed {@link DefaultShiroModule} to provide bindings to your Shiro related
-	 * implementations (for example, {@link Realm} and {@link CredentialsMatcher}
+	 * Override this method if you have sub-classed {@link DefaultShiroModule}
+	 * to provide bindings to your Shiro related implementations (for example,
+	 * {@link Realm} and {@link CredentialsMatcher}
 	 * 
 	 * @param servletContext
 	 * @param ini
@@ -175,7 +178,8 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Add as many application specific Guice modules as you wish by overriding this method.
+	 * Add as many application specific Guice modules as you wish by overriding
+	 * this method.
 	 * 
 	 * @param baseModules
 	 * @param ini
