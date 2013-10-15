@@ -71,18 +71,19 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	 */
 	@Override
 	protected Injector getInjector() {
+		if (injector == null) {
+			injector = Guice
+					.createInjector(createIniModule(), new I18NModule());
 
-		injector = Guice.createInjector(createIniModule(), new I18NModule());
+			injector = injector.createChildInjector(getModules());
 
-		injector = injector.createChildInjector(getModules());
-
-		// The SecurityManager binding is in ShiroWebModule, and therefore
-		// DefaultShiroWebModule. By default the binding
-		// is to DefaultWebSecurityManager
-		SecurityManager securityManager = injector
-				.getInstance(SecurityManager.class);
-		SecurityUtils.setSecurityManager(securityManager);
-
+			// The SecurityManager binding is in ShiroWebModule, and therefore
+			// DefaultShiroWebModule. By default the binding
+			// is to DefaultWebSecurityManager
+			SecurityManager securityManager = injector
+					.getInstance(SecurityManager.class);
+			SecurityUtils.setSecurityManager(securityManager);
+		}
 		return injector;
 	}
 
@@ -95,12 +96,13 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	
 	private List<Module> getModules() {
 		// ini load is handled by the provider
-		V7Ini ini = injector.getInstance(V7Ini.class);
+		V7Ini ini = getInjector().getInstance(V7Ini.class);
 		List<Module> baseModules = new ArrayList<>();
 
 		if (ini.optionReadSiteMap()) {
 			LOGGER.debug("ini sitemap option is true, loading sitemap");
-			Provider<Sitemap> sitemapPro = injector.getInstance(SitemapProvider.class);
+			Provider<Sitemap> sitemapPro = getInjector()
+					.getInstance(SitemapProvider.class);
 			Sitemap sitemap = sitemapPro.get();
 			baseModules.add(new ApplicationViewModule(sitemap));
 		} else {
