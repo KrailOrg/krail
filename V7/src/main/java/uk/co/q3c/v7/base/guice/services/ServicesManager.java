@@ -80,7 +80,7 @@ public class ServicesManager {
 
 	void startService(Object service) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
-		LOGGER.trace("Starting service {} using instance {}", service.getClass().getSimpleName(), service);
+		LOGGER.info("Starting service {} using instance {}", service.getClass().getSimpleName(), service);
 		servicesRegistry.add(service);
 		Method start = getMethodAnnotatedWith(service.getClass(), Start.class);
 		if (start != null) {
@@ -90,7 +90,7 @@ public class ServicesManager {
 
 	void stopService(Object service) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
-		LOGGER.trace("Halting service {} on instance {}", service.getClass().getSimpleName(), service);
+		LOGGER.info("Halting service {} on instance {}", service.getClass().getSimpleName(), service);
 		Method stop = getMethodAnnotatedWith(service.getClass(), Stop.class);
 		if (stop != null) {
 			stop.invoke(service, null);
