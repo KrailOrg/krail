@@ -14,7 +14,7 @@ import uk.co.q3c.v7.base.guice.services.Start;
 import uk.co.q3c.v7.base.guice.services.Stop;
 
 @Singleton
-@Service(startAsSoonAsPossible=true)
+@Service
 public class V7QuartzService {
 
 	private static final Logger LOGGER = LoggerFactory

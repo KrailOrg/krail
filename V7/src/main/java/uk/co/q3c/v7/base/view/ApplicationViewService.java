@@ -9,7 +9,7 @@ import uk.co.q3c.v7.base.guice.services.Stop;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 
 @Singleton
-@Service(startAsSoonAsPossible=true)
+@Service
 public class ApplicationViewService {
 
 	// the sitemap will be created right after the injector, this way many

@@ -9,10 +9,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Service {
 	/**
-	 * Specify if the service should be started immediatly or only when the user
-	 * create an instance.
+	 * Specify if the service should be started immediatly (lazy=false) or only when the user
+	 * create an instance (lazy=true).
 	 */
-	boolean startAsSoonAsPossible() default false;
+	boolean lazy() default false;
 	
 	
 }

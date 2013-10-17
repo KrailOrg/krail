@@ -58,7 +58,7 @@ public class ServicesManager {
 		started = false;
 		for (Class<?> serviceType : servicesRegistry.getServicesTye()) {
 			Service service = serviceType.getAnnotation(Service.class);
-			if (service != null && service.startAsSoonAsPossible() == true) {
+			if (service != null && service.lazy() == false) {
 				LOGGER.trace("Starting service (startAsSoonAsPossible) {}", serviceType);
 				// create an instance if not already created
 				injector.getInstance(serviceType);
