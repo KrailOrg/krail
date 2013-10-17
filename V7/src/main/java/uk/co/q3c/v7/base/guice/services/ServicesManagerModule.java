@@ -1,15 +1,11 @@
-package uk.co.q3c.v7.base.guice;
+package uk.co.q3c.v7.base.guice.services;
 
 import java.lang.reflect.Method;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
-import uk.co.q3c.v7.base.guice.services.Service;
-import uk.co.q3c.v7.base.guice.services.ServicesRegistry;
 import uk.co.q3c.v7.base.guice.services.ServicesRegistry.Status;
-import uk.co.q3c.v7.base.guice.services.Start;
-import uk.co.q3c.v7.base.guice.services.Stop;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;

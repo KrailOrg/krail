@@ -26,6 +26,8 @@ import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.guice.services.ServicesManager;
+import uk.co.q3c.v7.base.guice.services.ServicesManagerModule;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.shiro.DefaultShiroModule;

@@ -17,7 +17,7 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.guice.ServicesManager;
+import uk.co.q3c.v7.base.guice.services.ServicesManager;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapProvider;
 import uk.co.q3c.v7.base.navigate.sitemap.TextReaderSitemapProvider;

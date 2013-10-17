@@ -2,7 +2,7 @@ package uk.co.q3c.v7.base.quartz;
 
 import org.nnsoft.guice.guartz.QuartzModule;
 
-import uk.co.q3c.v7.base.guice.ServicesManager;
+import uk.co.q3c.v7.base.guice.services.ServicesManager;
 
 public class V7QuartzModule extends QuartzModule {
 

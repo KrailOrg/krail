@@ -1,8 +1,6 @@
-package uk.co.q3c.v7.base.guice;
+package uk.co.q3c.v7.base.guice.services;
 
 import java.lang.reflect.InvocationTargetException;
-
-import uk.co.q3c.v7.base.guice.services.ServicesRegistry;
 
 import com.google.inject.Provider;
 import com.google.inject.Singleton;

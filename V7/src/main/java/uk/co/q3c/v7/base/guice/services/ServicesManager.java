@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.base.guice;
+package uk.co.q3c.v7.base.guice.services;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -8,11 +8,6 @@ import java.util.LinkedList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import uk.co.q3c.v7.base.guice.services.Service;
-import uk.co.q3c.v7.base.guice.services.ServicesRegistry;
-import uk.co.q3c.v7.base.guice.services.Start;
-import uk.co.q3c.v7.base.guice.services.Stop;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
