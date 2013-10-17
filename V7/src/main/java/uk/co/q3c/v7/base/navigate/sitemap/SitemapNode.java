@@ -12,15 +12,12 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import java.text.CollationKey;
 import java.text.Collator;
 import java.util.Locale;
 
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
-
-import com.google.common.base.Objects;
 
 import uk.co.q3c.v7.base.navigate.ViewPermissions;
 import uk.co.q3c.v7.base.view.V7View;
@@ -190,6 +187,10 @@ public class SitemapNode {
 	
 	public boolean isPermitted(Subject subject) {
 		return getPermissions().isPermitted(subject);
+	}
+
+	public V7View getView() {
+		return sitemap.getView(getViewClass());
 	}
 
 }

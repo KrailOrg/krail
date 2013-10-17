@@ -14,12 +14,10 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import javax.inject.Singleton;
 
@@ -30,11 +28,12 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.servicetag.UnauthorizedAccessException;
+import com.google.inject.Injector;
 
 import uk.co.q3c.util.BasicForest;
 import uk.co.q3c.v7.base.navigate.PageKey;
 import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.base.view.ViewsProvider;
 
 /**
  * Encapsulates the site layout. Individual "virtual pages" are represented by
@@ -84,6 +83,12 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	// Uses LinkedHashMap to retain insertion order
 	private final Map<String, String> uriRedirects = new LinkedHashMap<>();
 
+	private ViewsProvider viewsProvider;
+
+	public Sitemap(ViewsProvider viewsProvider) {
+		this.viewsProvider = viewsProvider;
+	}
+	
 	public SitemapNode addNode(String uri) {
 		return addNode(null, uri);
 	}
@@ -105,6 +110,11 @@ public class Sitemap extends BasicForest<SitemapNode> {
 			nodeKeys.put(key, node);
 		}
 		return node;
+	}
+
+	public SitemapNode getNode(String uri) {
+		// TODO use a cache to speed up the lookup
+		return findNodeByUri(uri, false);
 	}
 
 	private SitemapNode findNodeByUri(String uri, boolean createIfAbsent) {
@@ -277,5 +287,9 @@ public class Sitemap extends BasicForest<SitemapNode> {
 			nodeChain.clear();
 		}
 		return nodeChain;
+	}
+
+	public V7View getView(Class<? extends V7View> viewClass) {
+		return viewsProvider.get(viewClass);
 	}
 }

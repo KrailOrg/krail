@@ -13,16 +13,12 @@
 package uk.co.q3c.v7.base.shiro;
 
 import java.util.Collection;
-
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.guice.ShiroModule;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
-
-import uk.co.q3c.v7.base.config.IniModule;
 
 import com.google.inject.binder.AnnotatedBindingBuilder;
 
@@ -90,5 +86,4 @@ public class DefaultShiroModule extends ShiroModule {
 			AnnotatedBindingBuilder<SessionManager> bind) {
 		bind.to(VaadinSessionManager.class).asEagerSingleton();
 	}
-
 }

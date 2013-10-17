@@ -12,13 +12,11 @@
  */
 package uk.co.q3c.v7.base.useropt;
 
-import uk.co.q3c.v7.base.config.V7Ini;
-
 import com.google.inject.AbstractModule;
 
 public class DefaultUserOptionModule extends AbstractModule {
 
-	public DefaultUserOptionModule(V7Ini ini) {
+	public DefaultUserOptionModule() {
 	}
 
 	@Override

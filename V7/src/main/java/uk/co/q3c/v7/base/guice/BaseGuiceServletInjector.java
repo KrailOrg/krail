@@ -15,7 +15,6 @@ package uk.co.q3c.v7.base.guice;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Provider;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
@@ -27,15 +26,12 @@ import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.config.IniModule;
-import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
-import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapProvider;
 import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
 import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
 import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
+import uk.co.q3c.v7.base.vaadin.VaadinModule;
 import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
@@ -89,35 +85,33 @@ public abstract class BaseGuiceServletInjector extends
 		return injector;
 	}
 
-	/**
-	 * Override this to provide your own IniModule
-	 */
-	protected IniModule createIniModule() {
-		return new IniModule();
-	}
-
-	private List<Module> getModules() {
-		// ini load is handled by the provider
-		V7Ini ini = getInjector().getInstance(V7Ini.class);
+	private Iterable<Module> getModules() {
 		List<Module> baseModules = new ArrayList<>();
 
-		if (ini.optionReadSiteMap()) {
-			LOGGER.debug("ini sitemap option is true, loading sitemap");
-			Provider<Sitemap> sitemapPro = getInjector()
-					.getInstance(SitemapProvider.class);
-			Sitemap sitemap = sitemapPro.get();
-			baseModules.add(new ApplicationViewModule(sitemap));
-		} else {
-			// module for Views must be in addAppModules()
-			LOGGER.debug("ini sitemap option is false, not loading sitemap");
-		}
+		baseModules.add(new VaadinModule());
+		baseModules.add(new I18NModule());
+		baseModules.add(new ServicesManagerModule());
+		
+		baseModules.add(new ApplicationViewModule());
+		
+//		if (ini.optionReadSiteMap()) {
+//			LOGGER.debug("ini sitemap option is true, loading sitemap");
+//			Provider<Sitemap> sitemapPro = getInjector().getInstance(
+//					SitemapProvider.class);
+//			Sitemap sitemap = sitemapPro.get();
+//			
+//		} else {
+//			// module for Views must be in addAppModules()
+//			LOGGER.debug("ini sitemap option is false, not loading sitemap");
+//		}
+		
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
 
-		baseModules.add(shiroModule(ctx.get(), ini));
+		baseModules.add(shiroModule(ctx.get()));
 		baseModules.add(shiroVaadinModule());
 		baseModules.add(new ShiroAopModule());
-		baseModules.add(userOptionsModule(ini));
+		baseModules.add(userOptionsModule());
 
 		baseModules.add(baseModule());
 
@@ -125,7 +119,7 @@ public abstract class BaseGuiceServletInjector extends
 
 		baseModules.add(componentModule());
 
-		addAppModules(baseModules, ini);
+		addAppModules(baseModules);
 		return baseModules;
 	}
 
@@ -133,8 +127,8 @@ public abstract class BaseGuiceServletInjector extends
 		return new DefaultComponentModule();
 	}
 
-	protected Module userOptionsModule(V7Ini ini) {
-		return new DefaultUserOptionModule(ini);
+	protected Module userOptionsModule() {
+		return new DefaultUserOptionModule();
 	}
 
 	/**
@@ -173,7 +167,7 @@ public abstract class BaseGuiceServletInjector extends
 	 * @param ini
 	 * @return
 	 */
-	protected Module shiroModule(ServletContext servletContext, V7Ini ini) {
+	protected Module shiroModule(ServletContext servletContext) {
 		return new DefaultShiroModule();
 	}
 
@@ -184,7 +178,7 @@ public abstract class BaseGuiceServletInjector extends
 	 * @param baseModules
 	 * @param ini
 	 */
-	protected abstract void addAppModules(List<Module> baseModules, V7Ini ini);
+	protected abstract void addAppModules(List<Module> baseModules);
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
@@ -192,20 +186,20 @@ public abstract class BaseGuiceServletInjector extends
 		final ServletContext servletContext = servletContextEvent
 				.getServletContext();
 		ctx.set(servletContext);
+
+		initInjector();
+
 		super.contextInitialized(servletContextEvent);
+
+		getInjector().getInstance(ServicesManager.class).start();
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
-		// may need later for Quartz
-		// try {
-		// if (injector != null)
-		// injector.getInstance(Scheduler.class).shutdown();
-		// } catch (SchedulerException e) {
-		// e.printStackTrace();
-		// }
-		// injector.getInstance(PersistService.class).stop();
+		getInjector().getInstance(ServicesManager.class).stop();
+
 		super.contextDestroyed(servletContextEvent);
 		ctx.remove();
 	}
+
 }

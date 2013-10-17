@@ -41,19 +41,16 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	private NavigationState previousNavigationState = null;
 	private NavigationState currentNavigationState = null;
 	private final List<V7ViewChangeListener> listeners = new LinkedList<V7ViewChangeListener>();
-	private final Map<String, Provider<V7View>> viewProvidersMap;
 
 	private final Provider<Subject> subjectProvider;
 	private UriFragmentFactory uriFragmentFactory;
 
 	@Inject
 	protected DefaultV7Navigator(Sitemap sitemap,
-			Map<String, Provider<V7View>> viewProMap,
 			UriFragmentFactory uriFragmentFactory,
 			Provider<Subject> securityContext,
 			SessionLoginStatusHandler loginHandler) {
 		super();
-		this.viewProvidersMap = viewProMap;
 		this.sitemap = sitemap;
 		this.subjectProvider = securityContext;
 		this.uriFragmentFactory = uriFragmentFactory;
@@ -118,17 +115,14 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		// no redirects, and the navigation is permitted
 		String viewUriFragment = uriFragment.getVirtualPage();
 		LOGGER.debug("page to look up View is {}", viewUriFragment);
-		Provider<V7View> provider = viewProvidersMap.get(viewUriFragment);
-		V7View view = null;
-		if (provider == null) {
+		V7View view = sitemap.getNode(viewUriFragment).getView();
+		if (view == null) {
 			String msg = "View not found for page '" + uriFragment.getUri()
 					+ "'";
 			LOGGER.debug(msg);
 			throw new InvalidURIException(msg);
-		} else {
-			view = provider.get();
 		}
-
+		
 		navigateTo(new NavigationState(uriFragment, view));
 	}
 

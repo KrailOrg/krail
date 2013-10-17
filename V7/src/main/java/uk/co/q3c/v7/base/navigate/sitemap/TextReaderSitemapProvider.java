@@ -43,6 +43,7 @@ import uk.co.q3c.v7.base.navigate.StandardPageBuilder;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.URITracker;
 import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.base.view.ViewsProvider;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
 
@@ -114,13 +115,14 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 	private final StandardPageBuilder standardPageBuilder;
 	private LabelKeyForName lkfn;
 	private final CurrentLocale currentLocale;
+	private final ViewsProvider viewsProvider;
 
 	@Inject
-	public TextReaderSitemapProvider(StandardPageBuilder standardPageBuilder, CurrentLocale currentLocale) {
+	public TextReaderSitemapProvider(StandardPageBuilder standardPageBuilder, CurrentLocale currentLocale, ViewsProvider viewsProvider) {
 		super();
 		this.standardPageBuilder = standardPageBuilder;
 		this.currentLocale = currentLocale;
-
+		this.viewsProvider = viewsProvider;
 	}
 
 	private void init() {
@@ -140,7 +142,7 @@ public class TextReaderSitemapProvider implements SitemapProvider {
 		syntaxErrors = new HashSet<>();
 		standardPageErrors = new HashSet<>();
 
-		sitemap = new Sitemap();
+		sitemap = new Sitemap(viewsProvider);
 		standardPageBuilder.setSitemap(sitemap);
 		sections = new HashMap<>();
 		labelClassNotI18N = false;
