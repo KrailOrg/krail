@@ -57,11 +57,20 @@ public abstract class BaseGuiceServletInjector extends
 
 	protected BaseGuiceServletInjector() {
 		super();
-
 	}
 
 	protected ThreadLocal<ServletContext> createThreadLocalServletContext() {
 		return new ThreadLocal<ServletContext>();
+	}
+
+	protected void initInjector() {
+		injector = Guice.createInjector(getModules());
+
+		// The SecurityManager binding is in ShiroWebModule, and therefore
+		// DefaultShiroWebModule. By default the binding
+		// is to DefaultWebSecurityManager
+		// FIXME: the module should initialize this
+		SecurityUtils.setSecurityManager(injector.getInstance(SecurityManager.class));
 	}
 
 	/**
@@ -74,17 +83,8 @@ public abstract class BaseGuiceServletInjector extends
 	@Override
 	protected Injector getInjector() {
 		if (injector == null) {
-			injector = Guice
-					.createInjector(createIniModule(), new I18NModule());
-
-			injector = injector.createChildInjector(getModules());
-
-			// The SecurityManager binding is in ShiroWebModule, and therefore
-			// DefaultShiroWebModule. By default the binding
-			// is to DefaultWebSecurityManager
-			SecurityManager securityManager = injector
-					.getInstance(SecurityManager.class);
-			SecurityUtils.setSecurityManager(securityManager);
+			throw new IllegalStateException(
+					"The injector is not available, it may not yet been initialized.");
 		}
 		return injector;
 	}
