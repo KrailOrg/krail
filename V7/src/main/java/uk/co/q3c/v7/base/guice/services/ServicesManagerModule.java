@@ -1,119 +1,186 @@
 package uk.co.q3c.v7.base.guice.services;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.services.ServicesRegistry.Status;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matchers;
+import com.google.inject.spi.InjectionListener;
+import com.google.inject.spi.TypeEncounter;
+import com.google.inject.spi.TypeListener;
 
 public class ServicesManagerModule extends AbstractModule {
 
-	private class ServiceMatcher extends AbstractMatcher<TypeLiteral<?>> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServicesManagerModule.class);
+	
+	public class ServicesListener implements TypeListener {
+		private final ServicesManager servicesManager;
 
-		public ServiceMatcher() {
-			super();
+		public ServicesListener(ServicesManager servicesManager) {
+			this.servicesManager = servicesManager;
 		}
 
 		@Override
+		public <I> void hear(final TypeLiteral<I> type,
+				TypeEncounter<I> encounter) {
+			servicesManager.registerServiceType(type.getRawType());
+			encounter.register(new InjectionListener<Object>() {
+				@Override
+				public void afterInjection(Object injectee) {
+					servicesManager.registerService(injectee);
+				}
+			});
+		}
+
+	}
+
+	private class ServiceMatcher extends AbstractMatcher<TypeLiteral<?>> {
+		@Override
 		public boolean matches(TypeLiteral<?> t) {
-			boolean isService = t.getRawType().isAnnotationPresent(
-					Service.class);
-			boolean hasStart = false;
-			boolean hasStop = false;
+			return t.getRawType().isAnnotationPresent(Service.class);
+		}
+	}
 
-			for (final Method method : t.getRawType().getMethods()) {
-				if (method.isAnnotationPresent(Start.class)) {
-					if (hasStart == true) {
-						throw new IllegalStateException(
-								"There must be only one public method annotated with @Start");
-					}
-					if (method.getParameterTypes().length != 0
-							|| method.getReturnType() != Void.TYPE) {
-						throw new IllegalStateException(
-								"The method annotated with @Start should have no parameters and void return");
-					}
-					hasStart = true;
-				} else if (method.isAnnotationPresent(Stop.class)) {
-					if (hasStop == true) {
-						throw new IllegalStateException(
-								"There must be only one public method annotated with @Stop");
-					}
-					if (method.getParameterTypes().length != 0
-							|| method.getReturnType() == null) {
-						throw new IllegalStateException(
-								"The method annotated with @Stop should have no parameters and void return");
-					}
-					hasStop = true;
-				}
-			}
-			if (isService && hasStart == false && hasStop == false) {
-				throw new IllegalStateException(
-						"A Service must have at least a public method annotated with @Start or @Stop");
-			}
+	private class MethodAnnotatedWith extends AbstractMatcher<Method> {
+		private final Class<? extends Annotation> annotation;
 
-			if (isService || hasStart || hasStop) {
-				if (t.getRawType().isAnnotationPresent(Singleton.class)
-						|| t.getRawType().isAnnotationPresent(
-								javax.inject.Singleton.class)) {
-					return true;
-				} else {
-					throw new IllegalStateException(
-							"Only Singletons can be Services");
-				}
+		public MethodAnnotatedWith(Class<? extends Annotation> annotation) {
+			this.annotation = annotation;
+		}
+
+		@Override
+		public boolean matches(Method method) {
+			if (method.isAnnotationPresent(annotation)) {
+				return true;
 			} else {
+				Class<?> clazz = method.getDeclaringClass();
+				while (clazz != Object.class) {
+					clazz = clazz.getSuperclass();
+					try {
+						if (clazz.getMethod(method.getName(),
+								method.getParameterTypes())
+								.isAnnotationPresent(annotation)) {
+							return true;
+						}
+					} catch (NoSuchMethodException | SecurityException e) {
+						return false;
+					}
+				}
 				return false;
 			}
 		}
 	}
 
-	@Override
-	protected void configure() {
-		final ServicesRegistry registry = new ServicesRegistry();
-		bindListener(new ServiceMatcher(), new ServicesListener(
-				getProvider(ServicesManager.class), registry));
-		bindInterceptor(Matchers.any(), Matchers.annotatedWith(Start.class),
-				new MethodInterceptor() {
-					@Override
-					public Object invoke(MethodInvocation invocation)
-							throws Throwable {
-						Object result = null;
-						try {
-							result = invocation.proceed();
-						} catch (Throwable e) {
-							registry.updateServiceStatus(invocation.getThis(),
-									Status.FAILED);
-							throw e;
-						}
-						registry.updateServiceStatus(invocation.getThis(), Status.STARTED);
-						return result;
-					}
-				});
-		bindInterceptor(Matchers.any(), Matchers.annotatedWith(Stop.class),
-				new MethodInterceptor() {
-					@Override
-					public Object invoke(MethodInvocation invocation)
-							throws Throwable {
-						Object result = null;
-						try {
-							result = invocation.proceed();
-						} catch (Throwable e) {
-							registry.updateServiceStatus(invocation.getThis(),
-									Status.FAILED);
-							throw e;
-						}
-						registry.updateServiceStatus(invocation.getThis(), Status.HALTED);
-						return result;
-					}
-				});
-		bind(ServicesRegistry.class).toInstance(registry);
-		bind(ServicesManager.class);
+	private class ServiceMethodStartInterceptor implements MethodInterceptor {
+		private final ServicesManager servicesManager;
+
+		public ServiceMethodStartInterceptor(ServicesManager servicesManager) {
+			this.servicesManager = servicesManager;
+		}
+
+		@Override
+		public Object invoke(MethodInvocation invocation) throws Throwable {
+			Status status = servicesManager.getServiceData(invocation.getThis())
+					.getStatus();
+			switch (status) {
+			case INITIAL:
+			case HALTED:
+				Object result = null;
+				try {
+					result = invocation.proceed();
+					servicesManager.markAs(invocation.getThis(), Status.STARTED);
+					return result;
+				} catch (Throwable e) {
+					servicesManager.markAs(invocation.getThis(), Status.FAILED);
+					throw e;
+				}
+			default:
+				LOGGER.trace("The service {} is already started, start method will not be invoked any more", invocation.getThis());
+				return null;
+			}
+		}
 	}
 
+	private class ServiceMethodStopInterceptor implements MethodInterceptor {
+		private final ServicesManager servicesManager;
+
+		public ServiceMethodStopInterceptor(ServicesManager servicesManager) {
+			this.servicesManager = servicesManager;
+		}
+
+		@Override
+		public Object invoke(MethodInvocation invocation) throws Throwable {
+			Status status = servicesManager.getServiceData(invocation.getThis())
+					.getStatus();
+			switch (status) {
+			case STARTED:
+				Object result = null;
+				try {
+					result = invocation.proceed();
+					servicesManager.markAs(invocation.getThis(), Status.HALTED);
+					return result;
+				} catch (Throwable e) {
+					servicesManager.markAs(invocation.getThis(), Status.FAILED);
+					throw e;
+				}
+			default:
+				LOGGER.trace("The service {} is already halted, stop method will not be invoked any more", invocation.getThis());
+				return null;
+			}
+		}
+	}
+
+	private class FinalizeMethodMatcher extends AbstractMatcher<Method> {
+		@Override
+		public boolean matches(Method method) {
+			return method.getName().equals("finalize");
+		}
+	}
+
+	private class FinalizeMethodInterceptor implements MethodInterceptor {
+		private final ServicesManager servicesManager;
+
+		public FinalizeMethodInterceptor(ServicesManager servicesManager) {
+			this.servicesManager = servicesManager;
+		}
+
+		@Override
+		public Object invoke(MethodInvocation invocation) throws Throwable {
+			servicesManager.finalize(invocation.getThis());
+			return invocation.proceed();
+		}
+	}
+
+	private final ServicesManager servicesManager = new ServicesManager();
+
+	@Override
+	protected void configure() {
+		bindListener(new ServiceMatcher(),
+				new ServicesListener(servicesManager));
+		bindInterceptor(Matchers.annotatedWith(Service.class),
+				new MethodAnnotatedWith(Start.class),
+				new ServiceMethodStartInterceptor(servicesManager));
+		bindInterceptor(Matchers.annotatedWith(Service.class),
+				new MethodAnnotatedWith(Stop.class),
+				new ServiceMethodStopInterceptor(servicesManager));
+		bindInterceptor(Matchers.annotatedWith(Service.class),
+				new FinalizeMethodMatcher(), new FinalizeMethodInterceptor(
+						servicesManager));
+	}
+
+	@Provides
+	public ServicesManager getServicesManager() {
+		return servicesManager;
+	}
 }

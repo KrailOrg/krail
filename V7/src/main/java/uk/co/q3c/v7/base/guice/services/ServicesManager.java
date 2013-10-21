@@ -1,99 +1,150 @@
 package uk.co.q3c.v7.base.guice.services;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.LinkedList;
 
+import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.guice.services.ServicesRegistry.Status;
+
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
 @Singleton
 public class ServicesManager {
-	
-	public static Method getMethodAnnotatedWith(final Class<?> type, final Class<? extends Annotation> annotation) {
-	    Class<?> klass = type;
-	    assert annotation != null;
-	    while (klass != Object.class) { // need to iterated thought hierarchy in order to retrieve methods from above the current instance    
-	        for (final Method m : klass.getDeclaredMethods()) {
-	            if (m.isAnnotationPresent(annotation)) {
-	                 return m;
-	            }
-	        }
-	        // move to the upper class in the hierarchy in search for more methods
-	        klass = klass.getSuperclass();
-	    }
-	    return null;
-	}
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ServicesManager.class);
-	
-	private final Injector injector;
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ServicesManager.class);
+
+	private Status status = Status.INITIAL;
+
 	private final ServicesRegistry servicesRegistry;
 
-	private Boolean started = null;
-
 	@Inject
-	public ServicesManager(Injector injector, ServicesRegistry servicesRegistry) {
-		this.injector = injector;
-		this.servicesRegistry = servicesRegistry;
+	public ServicesManager() {
+		this.servicesRegistry = new ServicesRegistry();
 	}
 
+	public void registerServiceType(Class<?> serviceType) {
+		servicesRegistry.registerType(serviceType);
+	}
+
+	/**
+	 * Register the service to be managed by the ServiceManageger and
+	 * immediately start it if {@link #start()} has been already called.
+	 * 
+	 * @param service
+	 */
+	public void registerService(Object service) {
+		servicesRegistry.register(service);
+		if (status == Status.STARTED) {
+			startService(service);
+		}
+	}
+
+	/**
+	 * Start all registered services and those that will be added later
+	 */
 	public void start() {
+		assert status != Status.STARTED;
 		LOGGER.trace("start()");
-		if (started != null) {
-			if (started == false) {
-				throw new IllegalStateException(
-						"A recursive call has been detected while starting services");
-			} else {
-				throw new IllegalStateException(
-						"Services has been already started, cannot start again");
-			}
+
+		for (ServiceData data : servicesRegistry.getServices()) {
+			startService(data.getService());
 		}
-		started = false;
-		for (Class<?> serviceType : servicesRegistry.getServicesTye()) {
-			Service service = serviceType.getAnnotation(Service.class);
-			if (service != null && service.lazy() == false) {
-				LOGGER.trace("Starting service (startAsSoonAsPossible) {}", serviceType);
-				// create an instance if not already created
-				injector.getInstance(serviceType);
-			}
-		}
-		started = true;
+		// even if some services fail to start the overall status is STARTED
+		status = Status.STARTED;
 	}
 
+	/**
+	 * Stop all registered services
+	 */
 	public void stop() {
-		for (Object service : servicesRegistry.getServices()) {
-			try {
-				stopService(service);
-			} catch (IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e) {
-				throw new RuntimeException(e);
+		assert status != Status.HALTED;
+		for (ServiceData data : servicesRegistry.getServices()) {
+			if (data.getStatus() == Status.STARTED) {
+				stopService(data.getService());
 			}
 		}
+		status = Status.HALTED;
 	}
 
-	void startService(Object service) throws IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
-		LOGGER.info("Starting service {} using instance {}", service.getClass().getSimpleName(), service);
-		servicesRegistry.add(service);
-		Method start = getMethodAnnotatedWith(service.getClass(), Start.class);
+	/**
+	 * Start a single service
+	 * 
+	 * @param service
+	 * @return true if started or there is no start method, false if the stop
+	 *         method throws an exception
+	 */
+	boolean startService(Object service) {
+		LOGGER.info("Starting service {} using instance {}", service.getClass()
+				.getSimpleName(), service);
+		ServiceData data = servicesRegistry.register(service);
+		Method start = data.getStartMethod();
 		if (start != null) {
-			start.invoke(service, null);
+			try {
+				start.invoke(service, (Object[]) null);
+				assert data.getStatus() == Status.STARTED : data.getStatus();
+				return true;
+			} catch (Exception e) {
+				LOGGER.error(
+						"The start method of the service {} has trown an exception:",
+						service, e);
+				assert data.getStatus() == Status.FAILED : data.getStatus();
+				return false;
+			}
 		}
+		return true;
 	}
 
-	void stopService(Object service) throws IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
-		LOGGER.info("Halting service {} on instance {}", service.getClass().getSimpleName(), service);
-		Method stop = getMethodAnnotatedWith(service.getClass(), Stop.class);
-		if (stop != null) {
-			stop.invoke(service, null);
+	/**
+	 * Stop a single service
+	 * 
+	 * @param service
+	 * @return true if started or there is no stop method, false if the stop
+	 *         method throws an exception
+	 */
+	boolean stopService(Object service) {
+		LOGGER.info("Halting service {} on instance {}", service.getClass()
+				.getSimpleName(), service);
+
+		ServiceData data = servicesRegistry.getServiceData(service);
+		if (data == null) {
+			throw new IllegalStateException(
+					"Unable to stop a service that has not been started by te ServiceManager");
 		}
+		if (data.getStatus() != Status.STARTED) {
+			throw new RuntimeException("Unable to stop a service (" + service
+					+ ") that is not in STARTED status (actual status: "
+					+ data.getStatus() + ")");
+		}
+		Method stop = data.getStopMethod();
+		if (stop != null) {
+			try {
+				stop.invoke(service, (Object[]) null);
+				assert data.getStatus() == Status.HALTED : data.getStatus();
+				return true;
+			} catch (Exception e) {
+				LOGGER.error(
+						"The start method of the service {} has trown an exception:",
+						service, e);
+				assert data.getStatus() == Status.FAILED : data.getStatus();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	void markAs(Object service, Status status) {
+		servicesRegistry.getServiceData(service).setStatus(status);
+	}
+
+	void finalize(Object service) {
+		stopService(service);
+	}
+
+	public ServiceData getServiceData(Object service) {
+		return  servicesRegistry.getServiceData(service);
 	}
 }

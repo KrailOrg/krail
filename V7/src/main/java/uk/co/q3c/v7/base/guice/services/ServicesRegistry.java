@@ -1,52 +1,67 @@
 package uk.co.q3c.v7.base.guice.services;
 
-import java.util.HashMap;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.WeakHashMap;
 
 import com.google.inject.Singleton;
 
 @Singleton
 public class ServicesRegistry {
-	
+
 	public static enum Status {
-		INITIAL,
-		STARTED,
-		HALTED,
-		FAILED
-	}
-	
-	private final List<Class<?>> servicesType;
-	private final Map<Object, Status> services;
-	
-	public ServicesRegistry() {
-		super();
-		this.servicesType = new LinkedList<>();
-		this.services = new HashMap<>();
-	}
-	
-	public boolean add(Class<?> type) {
-		return this.servicesType.add(type);
-	}
-	
-	public Iterable<Class<?>> getServicesTye() {
-		return servicesType;
-	}
-	
-	public void add(Object service) {
-		this.services.put(service, Status.INITIAL);
-	}
-	
-	public void updateServiceStatus(Object service, Status status){
-		if(!services.containsKey(service)){
-			throw new IllegalStateException("The service is not registered");
-		}
-		services.put(service, status);
+		INITIAL, STARTED, HALTED, FAILED
 	}
 
-	public Set<Object> getServices() {
-		return services.keySet();
+	public static Method getMethodAnnotatedWith(final Class<?> type,
+			final Class<? extends Annotation> annotation) {
+		Class<?> klass = type;
+		assert annotation != null;
+		while (klass != Object.class) { // need to iterated thought hierarchy in
+										// order to retrieve methods from above
+										// the current instance
+			for (final Method m : klass.getDeclaredMethods()) {
+				if (m.isAnnotationPresent(annotation)) {
+					return m;
+				}
+			}
+			// move to the upper class in the hierarchy in search for more
+			// methods
+			klass = klass.getSuperclass();
+		}
+		return null;
+	}
+
+	private final List<Class<?>> servicesTypes;
+	private final Map<Object, ServiceData> services;
+
+	public ServicesRegistry() {
+		super();
+		this.servicesTypes = new LinkedList<>();
+		this.services = new WeakHashMap<>();
+	}
+
+	public void registerType(Class<?> type) {
+		this.servicesTypes.add(type);
+	}
+	
+	public ServiceData register(Object service) {
+		ServiceData data = new ServiceData(service, Status.INITIAL,
+				getMethodAnnotatedWith(service.getClass(), Start.class),
+				getMethodAnnotatedWith(service.getClass(), Stop.class));
+		this.services.put(service, data);
+		return data;
+	}
+
+	public Collection<ServiceData> getServices() {
+		return services.values();
+	}
+	
+	public ServiceData getServiceData(Object service) {
+		return services.get(service);
 	}
 }
