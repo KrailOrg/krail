@@ -80,19 +80,24 @@ public class ServicesManager {
 	boolean startService(Object service) {
 		LOGGER.info("Starting service {} using instance {}", service.getClass()
 				.getSimpleName(), service);
-		ServiceData data = servicesRegistry.register(service);
-		Method start = data.getStartMethod();
-		if (start != null) {
-			try {
-				start.invoke(service, (Object[]) null);
-				assert data.getStatus() == Status.STARTED : data.getStatus();
-				return true;
-			} catch (Exception e) {
-				LOGGER.error(
-						"The start method of the service {} has trown an exception:",
-						service, e);
-				assert data.getStatus() == Status.FAILED : data.getStatus();
-				return false;
+		ServiceData data = servicesRegistry.getServiceData(service);
+		if (data.getStatus() != Status.STARTED) {
+			Method start = data.getStartMethod();
+			if (start != null) {
+				try {
+					assert data.getStatus() != Status.STARTED : data
+							.getStatus();
+					start.invoke(service, (Object[]) null);
+					assert data.getStatus() == Status.STARTED : data
+							.getStatus();
+					return true;
+				} catch (Exception e) {
+					LOGGER.error(
+							"The start method of the service {} has trown an exception:",
+							service, e);
+					assert data.getStatus() == Status.FAILED : data.getStatus();
+					return false;
+				}
 			}
 		}
 		return true;
@@ -119,18 +124,21 @@ public class ServicesManager {
 					+ ") that is not in STARTED status (actual status: "
 					+ data.getStatus() + ")");
 		}
-		Method stop = data.getStopMethod();
-		if (stop != null) {
-			try {
-				stop.invoke(service, (Object[]) null);
-				assert data.getStatus() == Status.HALTED : data.getStatus();
-				return true;
-			} catch (Exception e) {
-				LOGGER.error(
-						"The start method of the service {} has trown an exception:",
-						service, e);
-				assert data.getStatus() == Status.FAILED : data.getStatus();
-				return false;
+		if (data.getStatus() == Status.STARTED) {
+			Method stop = data.getStopMethod();
+			if (stop != null) {
+				try {
+					assert data.getStatus() != Status.HALTED : data.getStatus();
+					stop.invoke(service, (Object[]) null);
+					assert data.getStatus() == Status.HALTED : data.getStatus();
+					return true;
+				} catch (Exception e) {
+					LOGGER.error(
+							"The start method of the service {} has trown an exception:",
+							service, e);
+					assert data.getStatus() == Status.FAILED : data.getStatus();
+					return false;
+				}
 			}
 		}
 		return true;
@@ -145,6 +153,6 @@ public class ServicesManager {
 	}
 
 	public ServiceData getServiceData(Object service) {
-		return  servicesRegistry.getServiceData(service);
+		return servicesRegistry.getServiceData(service);
 	}
 }
