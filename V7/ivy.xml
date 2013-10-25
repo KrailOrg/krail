@@ -51,6 +51,7 @@
 
 
 		<!-- Testing -->
+		<!-- 
 		<dependency org="org.easytesting" name="fest-assert" rev="1.4" conf="test->default" />
 		<dependency org="com.mycila" name="mycila-guice" rev="2.10.ga" conf="test->default" />
 		<dependency org="com.mycila.testing.plugins" name="mycila-testing-guice" rev="2.8" conf="test->default" />
@@ -58,6 +59,7 @@
 		<dependency org="org.mockito" name="mockito-all" rev="1.9.0" conf="test->default" />
 		<dependency org="junit" name="junit" rev="4.+" conf="test->default" />
 		<dependency org="com.googlecode.jmockit" name="jmockit" rev="1.0" conf="test->default" />
+		 -->
 
 
 		<!-- Date Time -->
