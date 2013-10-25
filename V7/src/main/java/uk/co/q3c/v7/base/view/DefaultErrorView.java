@@ -1,8 +1,5 @@
 package uk.co.q3c.v7.base.view;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.inject.Inject;
 
 import uk.co.q3c.util.StackTraceUtil;
@@ -29,11 +26,6 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 	@Inject
 	protected DefaultErrorView(V7Navigator navigator) {
 		super(navigator);
-
-	}
-
-	@Override
-	public void processParams(Map<String, String> params) {
 
 	}
 

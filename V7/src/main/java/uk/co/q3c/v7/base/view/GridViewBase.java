@@ -18,17 +18,6 @@ public abstract class GridViewBase extends GridLayout implements V7View {
 		super();
 	}
 
-	@Override
-	public boolean beforeEnter(V7ViewChangeEvent event) {
-		return true;
-	}
-	
-	@Override
-	public void afterEnter(V7ViewChangeEvent event) {
-		LOGGER.debug("entered view: " + this.getClass().getSimpleName() + " with uri: "
-				+ event.getNewNavigationState().getFragment().getUri());
-	}
-
 	/**
 	 * typecasts and returns getUI()
 	 * 

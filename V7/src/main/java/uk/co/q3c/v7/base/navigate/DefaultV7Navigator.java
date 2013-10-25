@@ -122,7 +122,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 			LOGGER.debug(msg);
 			throw new InvalidURIException(msg);
 		}
-		
+
 		navigateTo(new NavigationState(uriFragment, view));
 	}
 
@@ -172,20 +172,27 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 		V7ViewChangeEvent event = new V7ViewChangeEvent(this,
 				currentNavigationState, newNavigationState);
-		if (!fireBeforeViewChange(event)) {
+		fireBeforeViewChange(event);
+		if (event.isCancelled()) {
 			// aborted
 			return;
 		}
 
-		boolean proceed = view.beforeEnter(event);
-		if (proceed == false) {
-			// aborted
-			return;
+		if (view instanceof V7ViewChangeListener) {
+			((V7ViewChangeListener) view).beforeViewChange(event);
+			if (event.isCancelled()) {
+				// aborted
+				return;
+			}
 		}
+
 		V7View currentView = currentNavigationState != null ? currentNavigationState
 				.getView() : null;
 		getUI().changeView(currentView, view);
-		view.afterEnter(event);
+
+		if (view instanceof V7ViewChangeListener) {
+			((V7ViewChangeListener) view).afterViewChange(event);
+		}
 
 		setCurrentNavigationState(newNavigationState);
 		fireAfterViewChange(event);
@@ -207,13 +214,13 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 * @return true if the view change should be allowed, false to silently
 	 *         block the navigation operation
 	 */
-	protected boolean fireBeforeViewChange(V7ViewChangeEvent event) {
+	protected void fireBeforeViewChange(V7ViewChangeEvent event) {
 		for (V7ViewChangeListener l : listeners) {
-			if (!l.beforeViewChange(event)) {
-				return false;
+			l.beforeViewChange(event);
+			if (event.isCancelled()) {
+				return;
 			}
 		}
-		return true;
 	}
 
 	/**

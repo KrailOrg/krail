@@ -1,7 +1,5 @@
 package uk.co.q3c.v7.base.view;
 
-import java.util.LinkedHashMap;
-
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -24,20 +22,6 @@ public abstract class CssViewBase extends CssLayout implements V7View {
 		this.navigator = navigator;
 	}
 
-	@Override
-	public boolean beforeEnter(V7ViewChangeEvent event) {
-		return true;
-	}
-
-	@Override
-	public void afterEnter(V7ViewChangeEvent event) {
-		LOGGER.debug("entered view: " + this.getClass().getSimpleName()
-				+ " with uri: "
-				+ event.getNewNavigationState().getFragment().getUri());
-		processParams(event.getNewNavigationState().getFragment()
-				.getParameters());
-	}
-
 	/**
 	 * typecasts and returns getUI()
 	 * 
@@ -48,8 +32,6 @@ public abstract class CssViewBase extends CssLayout implements V7View {
 	public ScopedUI getUI() {
 		return (ScopedUI) super.getUI();
 	}
-
-	protected abstract void processParams(LinkedHashMap<String, String> params);
 
 	@Override
 	public Component getRootComponent() {

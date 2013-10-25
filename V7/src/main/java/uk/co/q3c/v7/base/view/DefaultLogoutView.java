@@ -12,10 +12,6 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
@@ -38,17 +34,6 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 		p.setSizeFull();
 		addComponent(p);
 		return this;
-
-	}
-
-	@Override
-	protected void processParams(LinkedHashMap<String, String> params) {
-
-	}
-
-	@Override
-	public void afterEnter(V7ViewChangeEvent event) {
-		// TODO Auto-generated method stub
 
 	}
 

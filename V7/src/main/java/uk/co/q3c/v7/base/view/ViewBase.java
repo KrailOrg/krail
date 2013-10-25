@@ -12,8 +12,6 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import java.util.Map;
-
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -44,26 +42,6 @@ public abstract class ViewBase implements V7View {
 	 * at the root of component hierarchy (the one which will be inserted into the Vaadin UI for display)
 	 */
 	protected abstract void buildView();
-
-	@Override
-	public boolean beforeEnter(V7ViewChangeEvent event) {
-		return true;
-	}
-	
-	@Override
-	public void afterEnter(V7ViewChangeEvent event) {
-		LOGGER.debug("entered view: " + this.getClass().getSimpleName() + " with uri: "
-				+ event.getNewNavigationState().getFragment().getUri());
-		processParams(event.getNewNavigationState().getFragment().getParameters());
-	}
-
-	/**
-	 * This method is called with the URI parameters separated from the "address" part of the URI, and is typically used
-	 * to set up the state of a view in response to the parameter values
-	 * 
-	 * @param params
-	 */
-	protected abstract void processParams(Map<String, String> params);
 
 	public V7Navigator getNavigator() {
 		return navigator;
