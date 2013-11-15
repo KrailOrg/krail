@@ -1,1 +1,11 @@
+/logs
 /bin
+/.gradle
+/.classpath
+/.project
+/.settings
+/.gradle
+/error-screenshots
+/build/*
+
+!/build/reports/tests/index.html

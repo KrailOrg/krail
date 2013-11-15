@@ -1,14 +1,11 @@
-/build/classes
-/build/dependency-cache
-/build/libs
-/build/test-results
-/build/tmp
 /logs
 /bin
 /.gradle
-/build
 /.classpath
 /.project
 /.settings
 /.gradle
 /error-screenshots
+/build/*
+
+!/build/reports/tests/index.html
