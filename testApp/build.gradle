@@ -6,7 +6,7 @@ apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
 
 vaadin {
-	vaadin.version vaadinVersion
+	version vaadinVersion
 }
 
 

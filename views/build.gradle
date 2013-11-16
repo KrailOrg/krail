@@ -9,7 +9,7 @@ configurations{
 
 vaadin {
 	
-	vaadin.version vaadinVersion
+	version vaadinVersion
 	
 }
 
