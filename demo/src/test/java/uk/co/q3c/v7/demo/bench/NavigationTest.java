@@ -6,7 +6,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -25,7 +24,6 @@ public class NavigationTest extends V7TestBenchTestCase {
 		driver.get(concatUrl(baseUrl, "/?restartApplication#public"));
 	}
 
-	@Ignore
 	@Test
 	public void navigateFromTree() throws InterruptedException {
 
