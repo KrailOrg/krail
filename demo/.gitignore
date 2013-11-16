@@ -6,6 +6,4 @@
 /.settings
 /.gradle
 /error-screenshots
-/build/*
-
-!/build/reports/tests/index.html
+/build
