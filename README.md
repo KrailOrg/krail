@@ -7,7 +7,7 @@ V7 is a libary which provides a base application for Java / web development comb
 
 There are a number of sub-projects, each with a different status
 
-3rd October 2013:  
+17th November 2013:  
 
 ### V7
 
@@ -34,8 +34,11 @@ Something which seemed like a good idea at the time, but is now parked. Will be 
 
 ##Project Build
 
-A Gradle multi-project structure is used.  If you are an Eclipse user you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files. There is a bug which causes an incorrect classpath file to be generated for the views sub-project only ([#181](https://github.com/davidsowerby/v7/issues/181)). 
+A Gradle multi-project structure is used.  If you are an Eclipse user you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files. There is a bug which causes an incorrect classpath file to be generated for the views sub-project only, but there is a workaround for it. ([#181](https://github.com/davidsowerby/v7/issues/181)). 
 
+##Limitations
+
+Does not work with a custom Widgetset (see [#207](https://github.com/davidsowerby/v7/issues/181)).
 
 
 ## Motivation
