@@ -2,8 +2,7 @@ package uk.co.q3c.v7.base.guice.services;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -14,7 +13,7 @@ import javax.inject.Singleton;
 public class ServicesRegistry {
 
 	public enum Status {
-		INITIAL, STARTED, HALTED, FAILED
+		INITIAL, STARTED, STOPPED, FAILED
 	}
 
 	public static Method getMethodAnnotatedWith(final Class<?> type, final Class<? extends Annotation> annotation) {
@@ -35,17 +34,11 @@ public class ServicesRegistry {
 		return null;
 	}
 
-	private final List<Class<?>> servicesTypes;
 	private final Map<Object, ServiceData> services;
 
 	public ServicesRegistry() {
 		super();
-		this.servicesTypes = new LinkedList<>();
 		this.services = new WeakHashMap<>();
-	}
-
-	public void registerType(Class<?> type) {
-		this.servicesTypes.add(type);
 	}
 
 	public ServiceData register(Object service) {
@@ -57,8 +50,13 @@ public class ServicesRegistry {
 		return data;
 	}
 
-	public Collection<ServiceData> getServices() {
-		return services.values();
+	/**
+	 * Returns a safe copy of the service objects
+	 * 
+	 * @return
+	 */
+	public List<ServiceData> getServices() {
+		return new ArrayList<ServiceData>(services.values());
 	}
 
 	public ServiceData getServiceData(Object service) {

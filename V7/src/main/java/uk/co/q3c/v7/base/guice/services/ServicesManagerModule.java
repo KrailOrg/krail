@@ -32,7 +32,6 @@ public class ServicesManagerModule extends AbstractModule {
 
 		@Override
 		public <I> void hear(final TypeLiteral<I> type, TypeEncounter<I> encounter) {
-			servicesManager.registerServiceType(type.getRawType());
 			encounter.register(new InjectionListener<Object>() {
 				@Override
 				public void afterInjection(Object injectee) {
@@ -91,7 +90,7 @@ public class ServicesManagerModule extends AbstractModule {
 			Status status = servicesManager.getServiceData(invocation.getThis()).getStatus();
 			switch (status) {
 			case INITIAL:
-			case HALTED:
+			case STOPPED:
 				Object result = null;
 				try {
 					result = invocation.proceed();
@@ -124,7 +123,7 @@ public class ServicesManagerModule extends AbstractModule {
 				Object result = null;
 				try {
 					result = invocation.proceed();
-					servicesManager.markAs(invocation.getThis(), Status.HALTED);
+					servicesManager.markAs(invocation.getThis(), Status.STOPPED);
 					return result;
 				} catch (Throwable e) {
 					servicesManager.markAs(invocation.getThis(), Status.FAILED);

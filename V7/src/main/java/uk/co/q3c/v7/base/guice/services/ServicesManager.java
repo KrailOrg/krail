@@ -24,12 +24,8 @@ public class ServicesManager {
 		this.servicesRegistry = new ServicesRegistry();
 	}
 
-	public void registerServiceType(Class<?> serviceType) {
-		servicesRegistry.registerType(serviceType);
-	}
-
 	/**
-	 * Register the service to be managed by the ServiceManageger and immediately start it if {@link #start()} has been
+	 * Register the service to be managed by the ServiceManager and immediately start it if {@link #start()} has been
 	 * already called.
 	 * 
 	 * @param service
@@ -59,13 +55,13 @@ public class ServicesManager {
 	 * Stop all registered services
 	 */
 	public void stop() {
-		assert status != Status.HALTED;
+		assert status != Status.STOPPED;
 		for (ServiceData data : servicesRegistry.getServices()) {
 			if (data.getStatus() == Status.STARTED) {
 				stopService(data.getService());
 			}
 		}
-		status = Status.HALTED;
+		status = Status.STOPPED;
 	}
 
 	/**
@@ -116,9 +112,9 @@ public class ServicesManager {
 			Method stop = data.getStopMethod();
 			if (stop != null) {
 				try {
-					assert data.getStatus() != Status.HALTED : data.getStatus();
+					assert data.getStatus() != Status.STOPPED : data.getStatus();
 					stop.invoke(service, (Object[]) null);
-					assert data.getStatus() == Status.HALTED : data.getStatus();
+					assert data.getStatus() == Status.STOPPED : data.getStatus();
 					return true;
 				} catch (Exception e) {
 					log.error("The start method of the service {} has trown an exception:", service, e);
@@ -140,5 +136,9 @@ public class ServicesManager {
 
 	public ServiceData getServiceData(Object service) {
 		return servicesRegistry.getServiceData(service);
+	}
+
+	public Status getStatus() {
+		return status;
 	}
 }
