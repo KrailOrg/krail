@@ -13,7 +13,7 @@ allprojects{
 
 subprojects{
         apply plugin: 'java'
-        apply plugin: 'eclipse'
+        apply plugin: 'eclipse-wtp'
         sourceCompatibility = 1.7
         targetCompatibility = 1.7
 

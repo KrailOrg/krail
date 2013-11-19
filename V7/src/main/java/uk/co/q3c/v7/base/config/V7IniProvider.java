@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.config;
 
-import javax.inject.Provider;
+import com.google.inject.Provider;
 
 public class V7IniProvider implements Provider<V7Ini> {
 

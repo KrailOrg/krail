@@ -3,7 +3,7 @@ package uk.co.q3c.v7.base.view;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
+import com.google.inject.Provider;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ConcurrentAccessException;

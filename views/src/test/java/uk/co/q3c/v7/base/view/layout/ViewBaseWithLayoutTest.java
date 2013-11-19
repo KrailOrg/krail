@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-import javax.inject.Provider;
+import com.google.inject.Provider;
 
 import org.junit.Before;
 import org.junit.Ignore;

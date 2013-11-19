@@ -1,8 +1,10 @@
 package uk.co.q3c.v7.base.guice.uiscope;
 
-import static org.fest.assertions.Assertions.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -105,8 +107,9 @@ public class UIScopeTest {
 
 		@Override
 		protected void configure() {
-			bind(UIProvider.class).to(BasicUIProvider.class);
+
 			MapBinder<String, UI> uiProviders = MapBinder.newMapBinder(binder(), String.class, UI.class);
+			bind(UIProvider.class).to(BasicUIProvider.class);
 			uiProviders.addBinding(BasicUI.class.getName()).to(BasicUI.class);
 			uibinder = new HashMap<>();
 			uibinder.put(BasicUI.class.getName(), uiProvider);

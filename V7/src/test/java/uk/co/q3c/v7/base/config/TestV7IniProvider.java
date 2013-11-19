@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.config;
 
-import javax.inject.Provider;
+import com.google.inject.Provider;
 
 import org.apache.shiro.config.Ini.Section;
 

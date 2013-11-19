@@ -12,9 +12,10 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 import javax.inject.Inject;
+import com.google.inject.Provider;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +34,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;

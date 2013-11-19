@@ -15,7 +15,7 @@ package uk.co.q3c.v7.base.guice;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Provider;
+import com.google.inject.Provider;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
+import uk.co.q3c.v7.base.guice.services.ServicesManager;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
@@ -70,7 +71,13 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	 */
 	@Override
 	protected Injector getInjector() {
+		if (injector == null) {
+			throw new IllegalStateException("The injector is not available, it may not yet been initialized.");
+		}
+		return injector;
+	}
 
+	protected void createInjector() {
 		injector = Guice.createInjector(new IniModule(), new I18NModule());
 
 		injector = injector.createChildInjector(getModules());
@@ -81,7 +88,6 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		SecurityManager securityManager = injector.getInstance(SecurityManager.class);
 		SecurityUtils.setSecurityManager(securityManager);
 
-		return injector;
 	}
 
 	private List<Module> getModules() {
@@ -178,19 +184,16 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		ctx = createThreadLocalServletContext();
 		final ServletContext servletContext = servletContextEvent.getServletContext();
 		ctx.set(servletContext);
+		createInjector();
 		super.contextInitialized(servletContextEvent);
+		log.info("Starting services");
+		getInjector().getInstance(ServicesManager.class).start();
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
-		// may need later for Quartz
-		// try {
-		// if (injector != null)
-		// injector.getInstance(Scheduler.class).shutdown();
-		// } catch (SchedulerException e) {
-		// e.printStackTrace();
-		// }
-		// injector.getInstance(PersistService.class).stop();
+		log.info("Stopping services");
+		getInjector().getInstance(ServicesManager.class).stop();
 		super.contextDestroyed(servletContextEvent);
 		ctx.remove();
 	}

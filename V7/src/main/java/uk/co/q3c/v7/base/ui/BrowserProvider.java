@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.ui;
 
-import javax.inject.Provider;
+import com.google.inject.Provider;
 
 import com.vaadin.server.Page;
 import com.vaadin.server.WebBrowser;

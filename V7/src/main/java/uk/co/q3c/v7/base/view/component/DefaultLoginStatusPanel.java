@@ -13,7 +13,7 @@
 package uk.co.q3c.v7.base.view.component;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
+import com.google.inject.Provider;
 
 import org.apache.shiro.subject.Subject;
 

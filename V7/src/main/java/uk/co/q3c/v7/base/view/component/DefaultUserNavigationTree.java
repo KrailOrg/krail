@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
+import com.google.inject.Provider;
 
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;

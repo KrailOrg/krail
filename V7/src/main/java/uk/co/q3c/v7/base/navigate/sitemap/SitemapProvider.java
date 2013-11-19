@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.io.File;
 
-import javax.inject.Provider;
+import com.google.inject.Provider;
 
 public interface SitemapProvider extends Provider<Sitemap> {
 

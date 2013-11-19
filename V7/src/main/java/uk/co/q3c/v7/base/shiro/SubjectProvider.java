@@ -13,7 +13,7 @@
 package uk.co.q3c.v7.base.shiro;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
+import com.google.inject.Provider;
 import javax.inject.Singleton;
 
 import org.apache.shiro.SecurityUtils;

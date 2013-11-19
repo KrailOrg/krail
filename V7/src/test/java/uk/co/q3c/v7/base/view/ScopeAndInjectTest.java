@@ -12,20 +12,27 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 
 import org.junit.Test;
 import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 
@@ -100,8 +107,72 @@ public class ScopeAndInjectTest {
 	}
 
 	/**
-	 * Looks for any classes using com.google.inject.Inject - they should be using javax.inecjt.Inject
+	 * Looks for any classes using com.google.inject.* where there is a javax equivalent. Convention for this project is
+	 * that if there is a javax equivalent, it should be used - using mixed types can cause assignment incompatibility.
 	 */
+
+	@Test
+	public void googleAnnotations() {
+
+		// given
+		// when
+		testForGoogleAnnotation(com.google.inject.Singleton.class);
+		testForGoogleAnnotation(com.google.inject.Inject.class);
+
+		// then
+
+		// report for test output
+
+	}
+
+	/**
+	 * Looks for use of javax.inject.Provider (should be com.google.inject.Provider). For the scope classes, however,
+	 * the Provider has to be of the Google type, and are therefore excluded from the check
+	 */
+	@Test
+	public void testForGoogleClasses() {
+		// given
+		List<Class<?>> targetTypes = new ArrayList<>();
+		targetTypes.add(javax.inject.Provider.class);
+
+		Reflections reflections = new Reflections(new ConfigurationBuilder().setScanners(
+				new SubTypesScanner(false /* don't exclude Object.class */), new ResourcesScanner()).setUrls(
+				ClasspathHelper.forPackage("uk.co.q3c")));
+
+		Set<Class<? extends Object>> allClasses = reflections.getSubTypesOf(Object.class);
+		// when
+		boolean failed = false;
+		for (Class<? extends Object> clazz : allClasses) {
+			Field[] declaredFields = clazz.getDeclaredFields();
+			for (Field field : declaredFields) {
+				if (targetTypes.contains(field.getType())) {
+					System.out.println("Found target type " + field.getType() + " in " + clazz.getName());
+					failed = true;
+				}
+				;
+			}
+		}
+
+		// then
+		assertThat("See console output if this fails", failed, is(false));
+	}
+
+	private void testForGoogleAnnotation(Class<? extends Annotation> annotation) {
+		Reflections reflections = new Reflections("");
+		Set<Class<?>> googleInjects = reflections.getTypesAnnotatedWith(annotation);
+		String outputMsg = "Testing for incorrect use of " + annotation.getName();
+		if (!googleInjects.isEmpty()) {
+			StringBuilder buf = new StringBuilder();
+			for (Class<?> clazz : googleInjects) {
+				buf.append(clazz.getName());
+				buf.append(";");
+			}
+			outputMsg = buf.toString();
+		}
+		assertThat(outputMsg, googleInjects.size(), is(0));
+
+	}
+
 	@Test
 	public void googleInject() {
 
@@ -122,7 +193,18 @@ public class ScopeAndInjectTest {
 				googleInjects.add(clazz);
 			}
 		}
-		assertThat(googleInjects.size(), is(0));
+
+		// report for test output
+		String outputMsg = "none found";
+		if (!googleInjects.isEmpty()) {
+			StringBuilder buf = new StringBuilder();
+			for (Class<?> clazz : googleInjects) {
+				buf.append(clazz.getName());
+				buf.append(";");
+			}
+			outputMsg = buf.toString();
+		}
+		assertThat(outputMsg, googleInjects.size(), is(0));
 	}
 
 	private boolean classHasGoogleInjectedConstructor(Class<?> clazz) {
