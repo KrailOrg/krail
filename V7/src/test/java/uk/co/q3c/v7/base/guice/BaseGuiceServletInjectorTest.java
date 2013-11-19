@@ -12,8 +12,9 @@
  */
 package uk.co.q3c.v7.base.guice;
 
-import static org.fest.assertions.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.when;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -26,13 +27,12 @@ import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 
-import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class GuiceServletInjectorTest {
+public class BaseGuiceServletInjectorTest {
 
 	BaseGuiceServletInjector out;
 
@@ -59,10 +59,26 @@ public class GuiceServletInjectorTest {
 		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
 		out.contextInitialized(servletContextEvent);
 		// when
-		Injector injector = out.getInjector();
+		out.getInjector();
 		// then
 		assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(V7SecurityManager.class);
 
+	}
+
+	/**
+	 * Context not initialised, injector not created
+	 */
+	@Test(expected = IllegalStateException.class)
+	public void notInitialised() {
+
+		// given
+		when(thread_local_servletContext.get()).thenReturn(servletContext);
+		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
+		// when
+		out.getInjector();
+		// then
+
+		fail("exception expected");
 	}
 
 }
