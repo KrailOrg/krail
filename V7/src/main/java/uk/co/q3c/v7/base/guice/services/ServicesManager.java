@@ -141,4 +141,9 @@ public class ServicesManager {
 	public Status getStatus() {
 		return status;
 	}
+
+	public ServicesRegistry getServicesRegistry() {
+		return servicesRegistry;
+	}
+
 }

@@ -175,4 +175,10 @@ public class ServicesManagerModule extends AbstractModule {
 	public ServicesManager getServicesManager() {
 		return servicesManager;
 	}
+
+	@Provides
+	public ServicesRegistry getServiceRegistry() {
+		return servicesManager.getServicesRegistry();
+	}
+
 }

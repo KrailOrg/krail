@@ -15,7 +15,6 @@ package uk.co.q3c.v7.base.guice;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.inject.Provider;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
@@ -30,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.guice.services.ServicesManager;
+import uk.co.q3c.v7.base.guice.services.ServicesManagerModule;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
@@ -45,6 +45,7 @@ import uk.co.q3c.v7.i18n.I18NModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.Provider;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
@@ -107,6 +108,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
+		baseModules.add(new ServicesManagerModule());
 
 		baseModules.add(shiroModule(ctx.get(), ini));
 		baseModules.add(shiroVaadinModule());

@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.guice.services.ServicesRegistry.Status;
 
+import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
@@ -21,6 +22,12 @@ public class ServiceRegistryTest {
 
 	@Inject
 	ServicesRegistry serviceRegistry;
+
+	@Inject
+	Provider<ServicesManager> servicesManagerProvider;
+
+	@Inject
+	ServicesManager servicesManager;
 
 	/**
 	 * correct
@@ -125,6 +132,13 @@ public class ServiceRegistryTest {
 		assertThat(serviceRegistry.getServices().size(), is(1));
 		TestServiceObject service = (TestServiceObject) serviceRegistry.getServices().get(0).getService();
 		assertThat(service, instanceOf(TestServiceObject.class));
+		assertThat(service.status, is(Status.INITIAL));
+
+		// when
+		servicesManagerProvider.get().start();
+		// then
+		assertThat(service.status, is(Status.STARTED));
+
 	}
 
 	@Test(expected = IllegalStateException.class)
