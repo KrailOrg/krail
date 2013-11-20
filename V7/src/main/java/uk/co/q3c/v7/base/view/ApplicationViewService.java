@@ -1,18 +1,15 @@
 package uk.co.q3c.v7.base.view;
 
 import javax.inject.Inject;
-import com.google.inject.Provider;
 import javax.inject.Singleton;
 
 import uk.co.q3c.v7.base.guice.services.Service;
-import uk.co.q3c.v7.base.guice.services.Start;
-import uk.co.q3c.v7.base.guice.services.Stop;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 
+import com.google.inject.Provider;
+
 @Singleton
-@Service
-// (startAsSoonAsPossible = true)
-public class ApplicationViewService {
+public class ApplicationViewService implements Service {
 
 	private final Provider<Sitemap> sitemapPro;
 
@@ -23,16 +20,27 @@ public class ApplicationViewService {
 		this.sitemapPro = sitemapPro;
 	}
 
-	@Start
-	public void start() throws Exception {
+	@Override
+	public void start() {
 		// the sitemap will be created right after the injector, this way many
 		// errors could be seen earlier than first use
 		sitemapPro.get();
 	}
 
-	@Stop
+	@Override
 	public void stop() {
 		;
+	}
+
+	@Override
+	public Status getStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return "Appplication View Service";
 	}
 
 }
