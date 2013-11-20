@@ -21,6 +21,9 @@ public class ServicesManager {
 
 	@Inject
 	public ServicesManager() {
+		// has to be created this way rather than by injection because this class is created using new() in the
+		// ServicesManagerModule. The ServicesRegistry can still be obtained by injection as there is a @Provides method
+		// in the ServicesManagerModule
 		this.servicesRegistry = new ServicesRegistry();
 	}
 
