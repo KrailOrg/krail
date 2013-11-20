@@ -17,22 +17,6 @@ public class ServiceData {
 		this.status = status;
 		this.startMethod = startMethod;
 		this.stopMethod = stopMethod;
-
-		if (this.startMethod == null) {
-			throw new IllegalStateException("A service must have a public method annotated with @Start");
-		}
-
-		if (this.stopMethod == null) {
-			throw new IllegalStateException("A service must have a public method annotated with @Stop");
-		}
-
-		if (this.startMethod.getReturnType() != Void.TYPE || this.startMethod.getParameterTypes().length != 0) {
-			throw new IllegalStateException("The method annotated with @Start must have no parameters and return void");
-		}
-
-		if (this.stopMethod.getReturnType() != Void.TYPE || this.stopMethod.getParameterTypes().length != 0) {
-			throw new IllegalStateException("The method annotated with @Stop must have no parameters and return void");
-		}
 	}
 
 	public Object getService() {

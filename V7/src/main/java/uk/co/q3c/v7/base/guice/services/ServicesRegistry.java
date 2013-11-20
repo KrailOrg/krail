@@ -44,10 +44,34 @@ public class ServicesRegistry {
 	public ServiceData register(Object service) {
 		Method startMethod = getMethodAnnotatedWith(service.getClass(), Start.class);
 		Method stopMethod = getMethodAnnotatedWith(service.getClass(), Stop.class);
+		validateService(service, startMethod, stopMethod);
 		Status status = Status.INITIAL;
 		ServiceData data = new ServiceData(service, status, startMethod, stopMethod);
 		this.services.put(service, data);
 		return data;
+	}
+
+	private void validateService(Object service, Method startMethod, Method stopMethod) {
+		Class<? extends Object> serviceClass = service.getClass();
+		if (!serviceClass.isAnnotationPresent(Service.class)) {
+			throw new IllegalStateException("A service class must be annotated with @Service");
+		}
+
+		if (startMethod == null) {
+			throw new IllegalStateException("A service must have a public method annotated with @Start");
+		}
+
+		if (stopMethod == null) {
+			throw new IllegalStateException("A service must have a public method annotated with @Stop");
+		}
+
+		if (startMethod.getReturnType() != Void.TYPE || startMethod.getParameterTypes().length != 0) {
+			throw new IllegalStateException("The method annotated with @Start must have no parameters and return void");
+		}
+
+		if (stopMethod.getReturnType() != Void.TYPE || stopMethod.getParameterTypes().length != 0) {
+			throw new IllegalStateException("The method annotated with @Stop must have no parameters and return void");
+		}
 	}
 
 	/**
