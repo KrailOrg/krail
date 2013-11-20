@@ -13,7 +13,12 @@
 package uk.co.q3c.v7.base.guice;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.servlet.ServletContext;
@@ -25,8 +30,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import uk.co.q3c.v7.base.guice.services.ServicesManager;
+import uk.co.q3c.v7.base.guice.services.ServicesRegistry;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 
+import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
@@ -34,10 +42,10 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 @GuiceContext({})
 public class BaseGuiceServletInjectorTest {
 
-	BaseGuiceServletInjector out;
+	TestGuiceServletInjector out;
 
 	@Mock
-	ThreadLocal<ServletContext> thread_local_servletContext;
+	ThreadLocal<ServletContext> ctx;
 
 	@Mock
 	ServletContextEvent servletContextEvent;
@@ -47,22 +55,30 @@ public class BaseGuiceServletInjectorTest {
 
 	@Before
 	public void setup() {
-		out = new TestGuiceServletInjector(thread_local_servletContext);
+		out = new TestGuiceServletInjector(ctx);
 
 	}
 
 	@Test
-	public void configure() {
+	public void startAndStop() {
 
 		// given
-		when(thread_local_servletContext.get()).thenReturn(servletContext);
+		when(ctx.get()).thenReturn(servletContext);
 		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
 		out.contextInitialized(servletContextEvent);
 		// when
-		out.getInjector();
+		Injector injector = out.getInjector();
 		// then
 		assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(V7SecurityManager.class);
+		assertThat(out.isAddAppModulesCalled(), is(true));
+		verify(ctx).set(servletContext);
+		assertThat(injector, is(not(nullValue())));
+		ServicesManager servicesManager = injector.getInstance(ServicesManager.class);
+		assertThat(servicesManager.getStatus(), is(ServicesRegistry.Status.STARTED));
 
+		// when
+		out.contextDestroyed(servletContextEvent);
+		assertThat(servicesManager.getStatus(), is(ServicesRegistry.Status.STOPPED));
 	}
 
 	/**
@@ -72,7 +88,7 @@ public class BaseGuiceServletInjectorTest {
 	public void notInitialised() {
 
 		// given
-		when(thread_local_servletContext.get()).thenReturn(servletContext);
+		when(ctx.get()).thenReturn(servletContext);
 		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
 		// when
 		out.getInjector();

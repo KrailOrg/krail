@@ -24,6 +24,7 @@ import fixture.TestUIModule;
 
 public class TestGuiceServletInjector extends BaseGuiceServletInjector {
 
+	private boolean addAppModulesCalled;
 	private final ThreadLocal<ServletContext> testctx;
 
 	protected TestGuiceServletInjector(ThreadLocal<ServletContext> testctx) {
@@ -33,12 +34,19 @@ public class TestGuiceServletInjector extends BaseGuiceServletInjector {
 
 	@Override
 	protected void addAppModules(List<Module> baseModules, V7Ini ini) {
+
 		baseModules.add(new TestUIModule());
+		baseModules.add(new DummyModule());
+		addAppModulesCalled = true;
 	}
 
 	@Override
 	protected ThreadLocal<ServletContext> createThreadLocalServletContext() {
 		return testctx;
+	}
+
+	public boolean isAddAppModulesCalled() {
+		return addAppModulesCalled;
 	}
 
 }
