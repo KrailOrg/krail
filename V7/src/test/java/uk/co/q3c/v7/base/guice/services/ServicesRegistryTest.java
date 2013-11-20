@@ -18,7 +18,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ ServicesManagerModule.class })
-public class ServiceRegistryTest {
+public class ServicesRegistryTest {
 
 	@Inject
 	ServicesRegistry serviceRegistry;
