@@ -21,21 +21,16 @@ public class ApplicationViewService implements Service {
 	}
 
 	@Override
-	public void start() {
+	public Status start() {
 		// the sitemap will be created right after the injector, this way many
 		// errors could be seen earlier than first use
 		sitemapPro.get();
+		return Status.STARTED;
 	}
 
 	@Override
-	public void stop() {
-		;
-	}
-
-	@Override
-	public Status getStatus() {
-		// TODO Auto-generated method stub
-		return null;
+	public Status stop() {
+		return Status.STOPPED;
 	}
 
 	@Override

@@ -1,7 +1,9 @@
 package uk.co.q3c.v7.base.guice.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,11 +20,11 @@ public class ServicesManager {
 
 	private Status status = Status.INITIAL;
 
-	private final List<Service> services;
+	private final Map<Service, ServiceStatus> services;
 
 	@Inject
 	public ServicesManager() {
-		this.services = new ArrayList<>();
+		this.services = new WeakHashMap<>();
 	}
 
 	/**
@@ -32,8 +34,9 @@ public class ServicesManager {
 	 * @param service
 	 */
 	public void registerService(Service service) {
-		services.add(service);
-		if (status == Status.STARTED) {
+		ServiceStatus status = new ServiceStatus();
+		services.put(service, status);
+		if (status.getStatus() == Status.STARTED) {
 			startService(service);
 		}
 	}
@@ -45,7 +48,7 @@ public class ServicesManager {
 		if (!(status == Status.STARTED)) {
 			log.debug("starting Services Manager and all registered services");
 
-			for (Service service : services) {
+			for (Service service : services.keySet()) {
 				startService(service);
 			}
 			// even if some services fail to start the overall status is STARTED
@@ -60,7 +63,7 @@ public class ServicesManager {
 		if (status == Status.STARTED) {
 			log.debug("stopping all registered services and Services Manager");
 
-			for (Service service : services) {
+			for (Service service : services.keySet()) {
 				stopService(service);
 			}
 
@@ -72,38 +75,33 @@ public class ServicesManager {
 	 * Start a single service
 	 * 
 	 * @param service
-	 * @return true if started, false if the start method throws an exception
+	 * @return true if and only if the resulting status is {@link Status#STARTED}
 	 */
 	boolean startService(Service service) {
-
-		log.info("Starting service {}", service.getName());
-		try {
-			service.start();
-			return true;
-		} catch (Exception e) {
-			log.error("The start method of the service {} has thrown an exception:", service.getName(), e);
-			return false;
-		}
-
+		checkNotNull(service);
+		log.info("starting service {}", service.getName());
+		service.start();
+		return getStatus(service) == Status.STARTED;
 	}
 
 	/**
 	 * Stop a single service
 	 * 
 	 * @param service
-	 * @return true if stopped, false if the stop method throws an exception
+	 * @return true if and only if the resulting status is {@link Status#STOPPED}
 	 */
 	boolean stopService(Service service) {
-		log.info("Stopping service {}", service.getName());
-		try {
-			service.stop();
-			return true;
-		} catch (Exception e) {
-			log.error("The stop method of the service {} has thrown an exception:", service.getName(), e);
-			return false;
-		}
+		checkNotNull(service);
+		log.info("stopping service {}", service.getName());
+		service.stop();
+		return getStatus(service) == Status.STOPPED;
 	}
 
+	/**
+	 * Get the status if this {@link ServicesManager}
+	 * 
+	 * @return
+	 */
 	public Status getStatus() {
 		return status;
 	}
@@ -113,6 +111,23 @@ public class ServicesManager {
 	 */
 	public void clear() {
 		services.clear();
+
+	}
+
+	/**
+	 * Get the status of {@code service}
+	 * 
+	 * @param service
+	 * @return
+	 */
+	public Status getStatus(Service service) {
+		return services.get(service).getStatus();
+	}
+
+	public void setStatus(Service service, Status status) {
+		ServiceStatus serviceStatus = services.get(service);
+		checkNotNull(serviceStatus);
+		serviceStatus.setStatus(status);
 
 	}
 

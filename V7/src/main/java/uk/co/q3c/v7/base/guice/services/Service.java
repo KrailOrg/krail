@@ -4,9 +4,9 @@ package uk.co.q3c.v7.base.guice.services;
  * Implement this interface to provide a service you want to manage through the {@link ServicesManager}. There is no
  * need to explicitly register the service with ServicesManager - this will happen automatically during system
  * initialisation (although services can also be added after the system starts). This interface is supported by AOP code
- * in the {@link ServicesManagerModule}.
- * <p>
- * Only one instance of a {@link Service} implementation is supported
+ * in the {@link ServicesManagerModule}. There is no need to retain status within the implementation, it can be accessed
+ * by calling {@link ServicesManager#getStatus(Service)}
+ * 
  * 
  * @author David Sowerby
  * 
@@ -14,24 +14,26 @@ package uk.co.q3c.v7.base.guice.services;
 public interface Service {
 
 	public enum Status {
-		INITIAL, STARTED, STOPPED, FAILED
+		INITIAL, STARTED, STOPPED, FAILED_TO_START, FAILED_TO_STOP, PARTIAL
 	}
 
 	/**
 	 * Implement this to start your service. There is no need to interact with the {@link ServicesManager} - that is
-	 * taken care of by AOP provided by the {@link ServicesManagerModule}.
+	 * taken care of by AOP provided by the {@link ServicesManagerModule}. The implementation should return a status
+	 * appropriate to the service being represented, and the AOP code will retain that status in the
+	 * {@link ServicesManager}. The AOP code will also catch any exceptions thrown and set the status to
+	 * {@link Status#FAILED_TO_START}
 	 */
-	void start();
+	Status start();
 
 	/**
 	 * Implement this to stop your service. There is no need to interact with the {@link ServicesManager} - that is
 	 * taken care of by AOP provided by the {@link ServicesManagerModule}. In some cases, there may not be any need to
-	 * explicitly stop a service, in which case the implementation can be left as an empty method (AOP code will of
-	 * course still be applied)
+	 * explicitly stop a service, in which case the implementation should simply return {@link Status#STOPPED}. The AOP
+	 * code will still be applied and update the {@link ServicesManager}. The AOP code will also catch any exceptions
+	 * thrown and set status to {@link Status#FAILED_TO_STOP}.
 	 */
-	void stop();
-
-	Status getStatus();
+	Status stop();
 
 	String getName();
 }

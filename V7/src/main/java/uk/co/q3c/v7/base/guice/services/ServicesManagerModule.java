@@ -1,5 +1,7 @@
 package uk.co.q3c.v7.base.guice.services;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.lang.reflect.Method;
 
 import org.aopalliance.intercept.MethodInterceptor;
@@ -47,54 +49,66 @@ public class ServicesManagerModule extends AbstractModule {
 
 	private class ServiceMethodStartInterceptor implements MethodInterceptor {
 
-		public ServiceMethodStartInterceptor() {
+		private final ServicesManager servicesManager;
+
+		public ServiceMethodStartInterceptor(ServicesManager servicesManager) {
+			this.servicesManager = servicesManager;
 		}
 
 		@Override
 		public Object invoke(MethodInvocation invocation) throws Throwable {
 			Service service = (Service) invocation.getThis();
 			log.debug("starting service '{}'", service.getName());
-			Status status = service.getStatus();
-			switch (status) {
-			case INITIAL:
-			case STOPPED:
-				Object result = null;
+			Status status = servicesManager.getStatus(service);
+			checkNotNull(status);
+			Status result = null;
+			if (status != Status.STARTED) {
 				try {
-					result = invocation.proceed();
-					return result;
+					result = (Status) invocation.proceed();
+					servicesManager.setStatus(service, result);
 				} catch (Throwable e) {
-					throw e;
+					result = Status.FAILED_TO_START;
+					servicesManager.setStatus(service, result);
+					log.warn("service '{}' failed to start correctly.  The exception reported was:", service.getName(),
+							e);
 				}
-			default:
-				log.debug("The service {} is already started, start request ignored", invocation.getThis());
-				return null;
+			} else {
+				log.debug("The service '{}' is already started, start request ignored", service.getName());
+				result = Status.STARTED;
 			}
+			return result;
 		}
 	}
 
 	private class ServiceMethodStopInterceptor implements MethodInterceptor {
 
-		public ServiceMethodStopInterceptor() {
+		private final ServicesManager servicesManager;
+
+		public ServiceMethodStopInterceptor(ServicesManager servicesManager) {
+			this.servicesManager = servicesManager;
 		}
 
 		@Override
 		public Object invoke(MethodInvocation invocation) throws Throwable {
 			Service service = (Service) invocation.getThis();
 			log.debug("stopping service '{}'", service.getName());
-			Status status = service.getStatus();
-			switch (status) {
-			case STARTED:
-				Object result = null;
+			Status status = servicesManager.getStatus(service);
+			Status result = null;
+			if (status != Status.STOPPED) {
 				try {
-					result = invocation.proceed();
-					return result;
-				} catch (Throwable e) {
-					throw e;
+					result = (Status) invocation.proceed();
+					servicesManager.setStatus(service, result);
+				} catch (Exception e) {
+					result = Status.FAILED_TO_STOP;
+					servicesManager.setStatus(service, result);
+					log.warn("service '{}' failed to stop correctly.  The exception reported was:", service.getName(),
+							e);
 				}
-			default:
-				log.debug("The service {} is already stopped, stop request ignored", invocation.getThis());
-				return null;
+			} else {
+				result = Status.STOPPED;
+				log.debug("The service '{}' is already stopped, stop request ignored", service.getName());
 			}
+			return result;
 		}
 	}
 
@@ -174,10 +188,10 @@ public class ServicesManagerModule extends AbstractModule {
 		bindListener(new ServiceInterfaceMatcher(), new ServicesListener(servicesManager));
 
 		bindInterceptor(Matchers.subclassesOf(Service.class), new InterfaceStartMethodMatcher(),
-				new ServiceMethodStartInterceptor());
+				new ServiceMethodStartInterceptor(servicesManager));
 
 		bindInterceptor(Matchers.subclassesOf(Service.class), new InterfaceStopMethodMatcher(),
-				new ServiceMethodStopInterceptor());
+				new ServiceMethodStopInterceptor(servicesManager));
 
 		bindInterceptor(Matchers.subclassesOf(Service.class), new FinalizeMethodMatcher(),
 				new FinalizeMethodInterceptor());
