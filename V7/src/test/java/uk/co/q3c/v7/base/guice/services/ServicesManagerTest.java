@@ -1,6 +1,7 @@
 package uk.co.q3c.v7.base.guice.services;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import javax.inject.Inject;
@@ -39,6 +40,9 @@ public class ServicesManagerTest {
 
 	@Inject
 	MockService_partial service_partial;
+
+	@Inject
+	MockService_manual_register service_manual_register;
 
 	@Inject
 	StrictURIFragmentHandler defnav;
@@ -130,6 +134,32 @@ public class ServicesManagerTest {
 
 	}
 
+	@NoAutoRegister
+	static class MockService_manual_register implements Service {
+		int startCalls = 0;
+		int stopCalls = 0;
+
+		@Override
+		public Status start() {
+			System.out.println("starting .........................................");
+			startCalls++;
+			return Status.STARTED;
+		}
+
+		@Override
+		public Status stop() {
+			System.out.println("stopping .........................................");
+			stopCalls++;
+			return Status.STOPPED;
+		}
+
+		@Override
+		public String getName() {
+			return "Test Service working OK";
+		}
+
+	}
+
 	@Before
 	public void setup() {
 
@@ -153,6 +183,8 @@ public class ServicesManagerTest {
 		assertThat(servicesManager.getStatus(service_fails_on_start), is(Service.Status.FAILED_TO_START));
 		assertThat(servicesManager.getStatus(service_fails_on_stop), is(Service.Status.STARTED));
 		assertThat(servicesManager.getStatus(service_partial), is(Service.Status.PARTIAL));
+
+		assertThat(servicesManager.getStatus(service_manual_register), is(nullValue()));
 		// when
 		servicesManager.stop();
 		// then
@@ -274,6 +306,33 @@ public class ServicesManagerTest {
 		servicesManager.stopService(service_ok);
 		// then
 		assertThat(service_ok.stopCalls, is(2));
+	}
+
+	@Test
+	public void manualRegistration_before_manager_start() {
+
+		// given
+		// when
+		servicesManager.registerService(service_manual_register);
+		// then (service manager has not been started)
+		assertThat(servicesManager.getStatus(service_manual_register), is(Service.Status.INITIAL));
+		// when
+		servicesManager.start();
+		// then
+		assertThat(servicesManager.getStatus(service_manual_register), is(Service.Status.STARTED));
+
+	}
+
+	@Test
+	public void manualRegistration_after_manager_start() {
+
+		// given
+		servicesManager.start();
+		// when
+		servicesManager.registerService(service_manual_register);
+		// then
+		assertThat(servicesManager.getStatus(service_manual_register), is(Service.Status.STARTED));
+
 	}
 
 }

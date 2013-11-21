@@ -24,6 +24,15 @@ public class ServicesManagerModule extends AbstractModule {
 
 	private static final Logger log = LoggerFactory.getLogger(ServicesManagerModule.class);
 
+	/**
+	 * This is constructed using the {@link Service} interface to identify services which should be automatically
+	 * registered with the {@link ServicesManager}. Any {@link Service} implementation will be registered, unless it has
+	 * been annotated with {@link NoAutoRegister} (the selection for this is actually done in
+	 * {@link ServiceInterfaceMatcher}
+	 * 
+	 * @author David Sowerby
+	 * 
+	 */
 	public class ServicesListener implements TypeListener {
 		private final ServicesManager servicesManager;
 
@@ -39,8 +48,10 @@ public class ServicesManagerModule extends AbstractModule {
 
 					// cast is safe - if not the matcher is wrong
 					Service service = (Service) injectee;
+
 					servicesManager.registerService(service);
 					log.debug("auto-registered service '{}'", service.getName());
+
 				}
 			});
 		}
@@ -137,7 +148,7 @@ public class ServicesManagerModule extends AbstractModule {
 	}
 
 	/**
-	 * Matches classes implementing {@link Service}
+	 * Matches classes implementing {@link Service}, but excludes those annotated with {@link NoAutoRegister}
 	 * 
 	 */
 	private class ServiceInterfaceMatcher extends AbstractMatcher<TypeLiteral<?>> {
@@ -147,7 +158,11 @@ public class ServicesManagerModule extends AbstractModule {
 			Class<?>[] interfaces = rawType.getInterfaces();
 			for (Class<?> intf : interfaces) {
 				if (intf.equals(Service.class)) {
-					return true;
+					if (rawType.isAnnotationPresent(NoAutoRegister.class)) {
+						return false;
+					} else {
+						return true;
+					}
 				}
 			}
 			return false;

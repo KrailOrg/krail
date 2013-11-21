@@ -34,9 +34,10 @@ public class ServicesManager {
 	 * @param service
 	 */
 	public void registerService(Service service) {
+		log.info("Manually registering service {}", service);
 		ServiceStatus status = new ServiceStatus();
 		services.put(service, status);
-		if (status.getStatus() == Status.STARTED) {
+		if (getStatus() == Status.STARTED) {
 			startService(service);
 		}
 	}
@@ -121,7 +122,11 @@ public class ServicesManager {
 	 * @return
 	 */
 	public Status getStatus(Service service) {
-		return services.get(service).getStatus();
+		ServiceStatus serviceStatus = services.get(service);
+		if (serviceStatus == null) {
+			return null;
+		}
+		return serviceStatus.getStatus();
 	}
 
 	public void setStatus(Service service, Status status) {

@@ -6,6 +6,9 @@ package uk.co.q3c.v7.base.guice.services;
  * initialisation (although services can also be added after the system starts). This interface is supported by AOP code
  * in the {@link ServicesManagerModule}. There is no need to retain status within the implementation, it can be accessed
  * by calling {@link ServicesManager#getStatus(Service)}
+ * <p>
+ * Although normally services are registered automatically, if you wish to prevent that, annotate the Service
+ * implementation class with {@link NoAutoRegister}
  * 
  * 
  * @author David Sowerby
