@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.util.BasicForest;
 import uk.co.q3c.v7.base.guice.services.Service.Status;
 
 @Singleton
@@ -21,6 +22,8 @@ public class ServicesManager {
 	private Status status = Status.INITIAL;
 
 	private final Map<Service, ServiceStatus> services;
+
+	private BasicForest<Class<? extends Service>> dependencyGraph;
 
 	@Inject
 	public ServicesManager() {

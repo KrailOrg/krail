@@ -52,6 +52,7 @@ public class ServicesManagerModule extends AbstractModule {
 					if (autoRegister) {
 						servicesManager.registerService(service);
 						log.debug("auto-registered service '{}'", service.getName());
+
 					}
 				}
 			});

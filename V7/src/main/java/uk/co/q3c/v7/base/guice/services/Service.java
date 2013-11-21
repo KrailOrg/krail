@@ -1,5 +1,7 @@
 package uk.co.q3c.v7.base.guice.services;
 
+import java.util.Set;
+
 /**
  * Implement this interface to provide a service you want to manage through the {@link ServicesManager}. There is no
  * need to explicitly register the service with ServicesManager - this will happen automatically during system
@@ -39,4 +41,14 @@ public interface Service {
 	Status stop();
 
 	String getName();
+
+	/**
+	 * Identifies other service which need to be running in order for this service to work. These can also be defined in
+	 * the {@link DependsOnServices} annotation, but this method is provided in case logic is needed to determine which
+	 * services are required. Use whichever suits you best, you can even declare dependencies in both and the results
+	 * will be merged.
+	 * 
+	 * @return
+	 */
+	Set<Class<? extends Service>> getDependencies();
 }

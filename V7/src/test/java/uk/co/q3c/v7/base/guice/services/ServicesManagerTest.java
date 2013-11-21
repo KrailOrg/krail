@@ -4,6 +4,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.inject.Inject;
 
 import org.junit.After;
@@ -66,6 +69,11 @@ public class ServicesManagerTest {
 		}
 
 		@Override
+		public Set<Class<? extends Service>> getDependencies() {
+			return new HashSet<Class<? extends Service>>();
+		}
+
+		@Override
 		public String getName() {
 			return "Test Service working OK";
 		}
@@ -91,6 +99,11 @@ public class ServicesManagerTest {
 			return "Test Service fails on start";
 		}
 
+		@Override
+		public Set<Class<? extends Service>> getDependencies() {
+			return new HashSet<Class<? extends Service>>();
+		}
+
 	}
 
 	static class MockService_fails_on_stop implements Service {
@@ -110,6 +123,11 @@ public class ServicesManagerTest {
 		@Override
 		public String getName() {
 			return "Test Service fails on stop";
+		}
+
+		@Override
+		public Set<Class<? extends Service>> getDependencies() {
+			return new HashSet<Class<? extends Service>>();
 		}
 	}
 
@@ -132,6 +150,10 @@ public class ServicesManagerTest {
 			return "Test Service fails on start";
 		}
 
+		@Override
+		public Set<Class<? extends Service>> getDependencies() {
+			return new HashSet<Class<? extends Service>>();
+		}
 	}
 
 	@NoAutoRegister
@@ -151,6 +173,11 @@ public class ServicesManagerTest {
 			System.out.println("stopping .........................................");
 			stopCalls++;
 			return Status.STOPPED;
+		}
+
+		@Override
+		public Set<Class<? extends Service>> getDependencies() {
+			return new HashSet<Class<? extends Service>>();
 		}
 
 		@Override

@@ -1,5 +1,8 @@
 package uk.co.q3c.v7.base.view;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -38,4 +41,8 @@ public class ApplicationViewService implements Service {
 		return "Appplication View Service";
 	}
 
+	@Override
+	public Set<Class<? extends Service>> getDependencies() {
+		return new HashSet<Class<? extends Service>>();
+	}
 }
