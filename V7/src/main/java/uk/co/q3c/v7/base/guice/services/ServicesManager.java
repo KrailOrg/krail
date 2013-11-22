@@ -139,9 +139,7 @@ public class ServicesManager {
 
 			// seed with root - it won't have any dependencies
 			Class<? extends Service> candidate = dependencyGraph.getRoot();
-
 			while (candidate != null) {
-
 				// if candidate has all predecessors started, process it, otherwise put it to end of queue
 				if (allPredecessorsStarted(candidate)) {
 					boolean candidateStarted = startService(serviceClasses.get(candidate).getService());
@@ -172,11 +170,11 @@ public class ServicesManager {
 	 */
 	private boolean allPredecessorsStarted(Class<? extends Service> candidate) {
 		Collection<Class<? extends Service>> predecessors = dependencyGraph.getGraph().getPredecessors(candidate);
-		for (Class<? extends Service> predecessor : predecessors) {
-			if (serviceClasses.get(predecessor).getStatus() != Status.STARTED) {
-				return false;
-			}
-		}
+		// for (Class<? extends Service> predecessor : predecessors) {
+		// if (serviceClasses.get(predecessor).getStatus() != Status.STARTED) {
+		// return false;
+		// }
+		// }
 		return true;
 	}
 

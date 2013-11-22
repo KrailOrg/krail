@@ -44,6 +44,23 @@ public class ServiceUtils {
 	}
 
 	/**
+	 * Extracts service ids of dependencies from the {@link DependsOnServices} annotation, and the
+	 * {@link Service#getDependencies()} method, and combines the two into one Set.
+	 * 
+	 * @param service
+	 * @return
+	 */
+	public static Set<String> extractDependenciesServiceIds(Service service) {
+		Set<Class<? extends Service>> dependencies = extractDependencies(service);
+		Set<String> dependencyIds = new HashSet<>();
+		for (Class<? extends Service> dependency : dependencies) {
+			String id = serviceId(dependency);
+			dependencyIds.add(id);
+		}
+		return dependencyIds;
+	}
+
+	/**
 	 * Retrieves and returns dependencies from the Service. If the service returns null, returns an empty Set;
 	 * 
 	 * @param service
@@ -59,18 +76,54 @@ public class ServiceUtils {
 
 	/**
 	 * Returns the dependencies specified by {@code Service} in a {@link DependsOnServices} annotation, or null if none
-	 * are specified
+	 * are specified. Annotation dependencies are inherited.
 	 * 
 	 * @param service
 	 * @return
 	 */
 	public static List<Class<? extends Service>> extractAnnotationDependencies(Service service) {
-		Class<? extends Service> clazz = service.getClass();
+		Class<?> clazz = unenhancedClass(service.getClass());
 		DependsOnServices annotation = clazz.getAnnotation(DependsOnServices.class);
 		if (annotation != null) {
 			List<Class<? extends Service>> dependencies = Arrays.asList(annotation.services());
 			return dependencies;
 		}
 		return null;
+	}
+
+	/**
+	 * Extracts an identifier for the service. This is used primarily because it has not yet been decided whether to
+	 * employ an explicitly declared service id, or use the class name. This makes it easier to change
+	 * 
+	 * @param service
+	 * @return
+	 */
+	public static String serviceId(Service service) {
+		return serviceId(service.getClass());
+	}
+
+	/**
+	 * Extracts an identifier for the service. This is used primarily because it has not yet been decided whether to
+	 * employ an explicitly declared service id, or use the class name. This makes it easier to change
+	 * 
+	 * @param service
+	 * @return
+	 */
+	public static String serviceId(Class<? extends Service> serviceClass) {
+		Class<?> clazz = unenhancedClass(serviceClass);
+		return clazz.getName();
+	}
+
+	/**
+	 * Returns the underlying class un-enhanced by Guice, needed to identify annotations
+	 * 
+	 * @param serviceClass
+	 */
+	public static Class<?> unenhancedClass(Class<? extends Service> serviceClass) {
+		Class<?> clazz = serviceClass;
+		while (clazz.getName().contains("EnhancerByGuice")) {
+			clazz = clazz.getSuperclass();
+		}
+		return clazz;
 	}
 }
