@@ -37,6 +37,11 @@ public class ApplicationViewService implements Service {
 	}
 
 	@Override
+	public String serviceId() {
+		return "Application View";
+	}
+
+	@Override
 	public String getName() {
 		return "Appplication View Service";
 	}

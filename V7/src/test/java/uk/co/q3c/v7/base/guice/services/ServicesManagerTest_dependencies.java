@@ -71,6 +71,11 @@ public class ServicesManagerTest_dependencies {
 		}
 
 		@Override
+		public String serviceId() {
+			return "service 0";
+		}
+
+		@Override
 		public String getName() {
 			return "Test Service working OK";
 		}
@@ -92,6 +97,11 @@ public class ServicesManagerTest_dependencies {
 		@Override
 		public Set<Class<? extends Service>> getDependencies() {
 			return new HashSet<Class<? extends Service>>();
+		}
+
+		@Override
+		public String serviceId() {
+			return "service 1";
 		}
 
 		@Override
@@ -117,6 +127,11 @@ public class ServicesManagerTest_dependencies {
 		@Override
 		public Set<Class<? extends Service>> getDependencies() {
 			return new HashSet<Class<? extends Service>>();
+		}
+
+		@Override
+		public String serviceId() {
+			return "service 2";
 		}
 
 		@Override
@@ -150,6 +165,11 @@ public class ServicesManagerTest_dependencies {
 			return "Test Service fails on start";
 		}
 
+		@Override
+		public String serviceId() {
+			return "service 3";
+		}
+
 	}
 
 	static class MockService_4 implements Service {
@@ -178,6 +198,11 @@ public class ServicesManagerTest_dependencies {
 			HashSet<Class<? extends Service>> deps = new HashSet<Class<? extends Service>>();
 			deps.add(MockService_2.class);
 			return deps;
+		}
+
+		@Override
+		public String serviceId() {
+			return "service 4";
 		}
 
 	}

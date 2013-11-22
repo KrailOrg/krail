@@ -74,6 +74,11 @@ public class ServicesManagerTest {
 		}
 
 		@Override
+		public String serviceId() {
+			return "ok";
+		}
+
+		@Override
 		public String getName() {
 			return "Test Service working OK";
 		}
@@ -97,6 +102,11 @@ public class ServicesManagerTest {
 		@Override
 		public String getName() {
 			return "Test Service fails on start";
+		}
+
+		@Override
+		public String serviceId() {
+			return "fails on start";
 		}
 
 		@Override
@@ -126,6 +136,11 @@ public class ServicesManagerTest {
 		}
 
 		@Override
+		public String serviceId() {
+			return "fails on stop";
+		}
+
+		@Override
 		public Set<Class<? extends Service>> getDependencies() {
 			return new HashSet<Class<? extends Service>>();
 		}
@@ -143,6 +158,11 @@ public class ServicesManagerTest {
 		public Status stop() {
 			System.out.println("stopping .........................................");
 			return Status.STOPPED;
+		}
+
+		@Override
+		public String serviceId() {
+			return "partial";
 		}
 
 		@Override
@@ -173,6 +193,11 @@ public class ServicesManagerTest {
 			System.out.println("stopping .........................................");
 			stopCalls++;
 			return Status.STOPPED;
+		}
+
+		@Override
+		public String serviceId() {
+			return "manual register";
 		}
 
 		@Override

@@ -51,4 +51,11 @@ public interface Service {
 	 * @return
 	 */
 	Set<Class<? extends Service>> getDependencies();
+
+	/**
+	 * Provides an identifier for the ServiceInstance, unique to the application
+	 * 
+	 * @return application unique identifier
+	 */
+	String serviceId();
 }

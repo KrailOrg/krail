@@ -9,6 +9,7 @@ public class ServiceStatus {
 	private Service.Status status = Status.INITIAL;
 	private DateTime startTime;
 	private DateTime stopTime;
+	private Service service;
 
 	public Service.Status getStatus() {
 		return status;
@@ -32,6 +33,14 @@ public class ServiceStatus {
 
 	public void setStopTime(DateTime stopTime) {
 		this.stopTime = stopTime;
+	}
+
+	public Service getService() {
+		return service;
+	}
+
+	public void setService(Service service) {
+		this.service = service;
 	}
 
 }
