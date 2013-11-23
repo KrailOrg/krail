@@ -12,8 +12,7 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
@@ -78,8 +77,8 @@ public class DefaultSubjectIdentifierTest {
 		// when
 
 		// then
-		assertThat(converter.subjectName(), is("Guest"));
-		assertThat(converter.subjectIdentifier(), is(nullValue()));
+		assertThat(converter.subjectName()).isEqualTo("Guest");
+		assertThat(converter.subjectIdentifier()).isNull();
 	}
 
 	@Test
@@ -92,9 +91,9 @@ public class DefaultSubjectIdentifierTest {
 		// when
 
 		// then
-		assertThat(converter.subjectName(), is("wiggly?"));
-		assertThat(converter.subjectIdentifier(), is(not(nullValue())));
-		assertThat(converter.subjectIdentifier(), is((Object) principal));
+		assertThat(converter.subjectName()).isEqualTo("wiggly?");
+		assertThat(converter.subjectIdentifier()).isNotNull();
+		assertThat(converter.subjectIdentifier()).isEqualTo(principal);
 	}
 
 	@Test
@@ -107,9 +106,9 @@ public class DefaultSubjectIdentifierTest {
 		// when
 
 		// then
-		assertThat(converter.subjectName(), is("wiggly"));
-		assertThat(converter.subjectIdentifier(), is(not(nullValue())));
-		assertThat(converter.subjectIdentifier(), is((Object) principal));
+		assertThat(converter.subjectName()).isEqualTo("wiggly");
+		assertThat(converter.subjectIdentifier()).isNotNull();
+		assertThat(converter.subjectIdentifier()).isEqualTo(principal);
 
 	}
 

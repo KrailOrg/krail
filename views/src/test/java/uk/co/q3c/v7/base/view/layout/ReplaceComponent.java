@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.view.layout;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 
@@ -34,14 +34,14 @@ public class ReplaceComponent {
 		vl.addComponent(label1);
 		vl.addComponent(label2);
 		// then
-		assertEquals(2, vl.getComponentCount());
+		assertThat(vl.getComponentCount()).isEqualTo(2);
 		// when
 		vl.replaceComponent(label2, label3);
 		// then
-		assertEquals(2, vl.getComponentCount());
+		assertThat(vl.getComponentCount()).isEqualTo(2);
 		// when
 		vl.replaceComponent(label1, label4);
 		// then
-		assertEquals(2, vl.getComponentCount());
+		assertThat(vl.getComponentCount()).isEqualTo(2);
 	}
 }

@@ -12,8 +12,7 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Locale;
 
@@ -38,17 +37,17 @@ public class TranslateTest {
 	public void test() {
 		Locale germanSwitzerland = new Locale("de", "CH");
 		// when
-		assertThat(translate.from(LabelKey.Cancel), is("Cancel"));
-		assertThat(translate.from(LabelKey.Ok), is("Ok"));
+		assertThat(translate.from(LabelKey.Cancel)).isEqualTo("Cancel");
+		assertThat(translate.from(LabelKey.Ok)).isEqualTo("Ok");
 		// then
-		assertThat(translate.from(LabelKey.Cancel, Locale.GERMAN), is("Stornieren"));
+		assertThat(translate.from(LabelKey.Cancel, Locale.GERMAN)).isEqualTo("Stornieren");
 		// Ok is not redefined in _de
-		assertThat(translate.from(LabelKey.Ok, Locale.GERMAN), is("Ok"));
+		assertThat(translate.from(LabelKey.Ok, Locale.GERMAN)).isEqualTo("Ok");
 
 		// this in inherited from Labels_de
-		assertThat(translate.from(LabelKey.Cancel, germanSwitzerland), is("Stornieren"));
+		assertThat(translate.from(LabelKey.Cancel, germanSwitzerland)).isEqualTo("Stornieren");
 		// this is inherited from Labels (2 levels of inheritance)
-		assertThat(translate.from(LabelKey.Ok, germanSwitzerland), is("Ok"));
+		assertThat(translate.from(LabelKey.Ok, germanSwitzerland)).isEqualTo("Ok");
 	}
 
 	@ModuleProvider

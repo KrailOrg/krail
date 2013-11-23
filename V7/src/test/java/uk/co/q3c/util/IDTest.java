@@ -12,8 +12,7 @@
  */
 package uk.co.q3c.util;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 
@@ -33,7 +32,7 @@ public class IDTest {
 		// when
 
 		// then
-		assertThat(ID.getId(Panel, button), is("Panel-Button"));
+		assertThat(ID.getId(Panel, button)).isEqualTo("Panel-Button");
 
 	}
 
@@ -45,7 +44,7 @@ public class IDTest {
 		// when
 
 		// then
-		assertThat(ID.getId(Panel), is("Panel"));
+		assertThat(ID.getId(Panel)).isEqualTo("Panel");
 
 	}
 
@@ -57,7 +56,7 @@ public class IDTest {
 		// when
 
 		// then
-		assertThat(ID.getId("user", Panel, button), is("Panel-Button-user"));
+		assertThat(ID.getId("user", Panel, button)).isEqualTo("Panel-Button-user");
 
 	}
 }

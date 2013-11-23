@@ -43,6 +43,12 @@ subprojects{
 	  testCompile 'junit:junit:4.+'
 	  testCompile 'org.reflections:reflections:0.9.9-RC1'
 	  testCompile 'org.easytesting:fest-assert:1.4'
+	testCompile 'org.assertj:assertj-core:1.5.0'
+	testCompile 'org.assertj:assertj-joda-time:1.1.0'
+	testCompile 'org.assertj:assertj-guava:1.0.0'
+            
+            
+            
             
             
 	}

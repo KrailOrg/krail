@@ -1,6 +1,6 @@
 package uk.co.q3c.v7.persist.orient.custom;
 
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Ignore;
 import org.junit.Test;

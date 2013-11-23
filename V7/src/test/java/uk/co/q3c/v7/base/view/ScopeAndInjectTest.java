@@ -12,8 +12,7 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -101,8 +100,8 @@ public class ScopeAndInjectTest {
 		}
 
 		// then
-		assertThat(noScope.size(), is(0));
-		assertThat(noInject.size(), is(0));
+		assertThat(noScope).isEmpty();
+		assertThat(noInject).isEmpty();
 
 	}
 
@@ -154,7 +153,7 @@ public class ScopeAndInjectTest {
 		}
 
 		// then
-		assertThat("See console output if this fails", failed, is(false));
+		assertThat(failed).isFalse().overridingErrorMessage("See console output if this fails");
 	}
 
 	private void testForGoogleAnnotation(Class<? extends Annotation> annotation) {
@@ -169,7 +168,7 @@ public class ScopeAndInjectTest {
 			}
 			outputMsg = buf.toString();
 		}
-		assertThat(outputMsg, googleInjects.size(), is(0));
+		assertThat(googleInjects).hasSize(0).overridingErrorMessage(outputMsg);
 
 	}
 
@@ -204,7 +203,7 @@ public class ScopeAndInjectTest {
 			}
 			outputMsg = buf.toString();
 		}
-		assertThat(outputMsg, googleInjects.size(), is(0));
+		assertThat(googleInjects).hasSize(0).overridingErrorMessage(outputMsg);
 	}
 
 	private boolean classHasGoogleInjectedConstructor(Class<?> clazz) {

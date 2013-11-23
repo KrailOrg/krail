@@ -1,8 +1,6 @@
 package uk.co.q3c.v7.demo.bench;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -60,7 +58,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 		navigateTo("public/system-account/request-account");
 		// then
 		pause(500);
-		assertThat(navTreeSelection(), is("Request Account"));
+		assertThat(navTreeSelection()).isEqualTo("Request Account");
 		verifyUrl("public/system-account/request-account");
 
 	}

@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.guice.services;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -52,15 +52,13 @@ public class ServicesManager {
 
 	private Status dependencyStatus = Status.INITIAL;
 
-	// private final Map<Service, ServiceStatus> services;
-	private final Map<Class<? extends Service>, ServiceStatus> serviceClasses;
+	private final Map<String, ServiceStatus> services;
 
-	private final DynamicDAG<Class<? extends Service>> dependencyGraph;
+	private final DynamicDAG<String> dependencyGraph;
 
 	@Inject
 	public ServicesManager() {
-		// this.services = new WeakHashMap<>();
-		this.serviceClasses = new WeakHashMap<>();
+		this.services = new WeakHashMap<>();
 		dependencyGraph = new DynamicDAG<>();
 	}
 
@@ -79,23 +77,22 @@ public class ServicesManager {
 	public void registerService(Service service) {
 		log.info("registering service {}", service);
 		// even without dependencies, needs to be in the graph
-		dependencyGraph.addNode(service.getClass());
+		dependencyGraph.addNode(ServiceUtils.serviceId(service));
 
 		// get dependencies and apply to graph
-		Set<Class<? extends Service>> dependencies = ServiceUtils.extractDependencies(service);
-		for (Class<? extends Service> dependency : dependencies) {
-			dependencyGraph.addChild(dependency, service.getClass());
+		Set<String> dependencies = ServiceUtils.extractDependenciesServiceIds(service);
+		for (String dependency : dependencies) {
+			dependencyGraph.addChild(dependency, ServiceUtils.serviceId(service));
 		}
 
 		// keep the service maps as well as the graph
-		Class<? extends Service> serviceClass = service.getClass();
-		if (serviceClasses.containsKey(serviceClass)) {
-			throw new ServiceRegistrationException("An instance of " + serviceClass.getName()
-					+ "has already been registered");
+		String serviceId = ServiceUtils.serviceId(service);
+		if (services.containsKey(serviceId)) {
+			throw new ServiceRegistrationException("An instance of " + serviceId + "has already been registered");
 		} else {
 			ServiceStatus status = new ServiceStatus();
 			status.setService(service);
-			serviceClasses.put(serviceClass, status);
+			services.put(ServiceUtils.serviceId(service), status);
 		}
 
 		// services.put(service, status);
@@ -107,42 +104,26 @@ public class ServicesManager {
 	}
 
 	/**
-	 * Returns the combined annotation and method based dependencies specified by {@code Service}, provided
-	 * {@code Service} is registered with this {@link ServicesManager}. You can achieve the same by using
-	 * {@link ServiceUtils#extractDependencies(Service)}, which would not require the {@code Service} to be registered.
-	 * 
-	 * @param service
-	 * @return
-	 */
-	public Collection<Class<? extends Service>> getDependencies(Service service) {
-		Class<? extends Service> serviceNode = dependencyGraph.getNode(service.getClass());
-		if (serviceNode == null) {
-			return null;
-		}
-		return dependencyGraph.getGraph().getPredecessors(serviceNode);
-	}
-
-	/**
 	 * Start all registered services in the order specified by {@link #dependencyGraph}. Returns a list of Service
 	 * classes in the order in which they were started. (This would return an empty list if an attempt was made to start
 	 * when already started)
 	 * 
 	 * @return
 	 */
-	public List<Class<? extends Service>> start() {
-		List<Class<? extends Service>> started = new ArrayList<>();
+	public List<String> start() {
+		List<String> started = new ArrayList<>();
 		if (!(dependencyStatus == Status.STARTED)) {
 			log.debug("starting Services Manager and all registered services");
 
-			Deque<Class<? extends Service>> waiting = new ArrayDeque<>(serviceClasses.keySet());
-			List<Class<? extends Service>> failed = new ArrayList<>();
+			Deque<String> waiting = new ArrayDeque<>(services.keySet());
+			List<String> failed = new ArrayList<>();
 
 			// seed with root - it won't have any dependencies
-			Class<? extends Service> candidate = dependencyGraph.getRoot();
+			String candidate = dependencyGraph.getRoot();
 			while (candidate != null) {
 				// if candidate has all predecessors started, process it, otherwise put it to end of queue
 				if (allPredecessorsStarted(candidate)) {
-					boolean candidateStarted = startService(serviceClasses.get(candidate).getService());
+					boolean candidateStarted = startService(services.get(candidate).getService());
 					if (candidateStarted) {
 						started.add(candidate);
 					} else {
@@ -168,13 +149,13 @@ public class ServicesManager {
 	 * @param candidate
 	 * @return
 	 */
-	private boolean allPredecessorsStarted(Class<? extends Service> candidate) {
-		Collection<Class<? extends Service>> predecessors = dependencyGraph.getGraph().getPredecessors(candidate);
-		// for (Class<? extends Service> predecessor : predecessors) {
-		// if (serviceClasses.get(predecessor).getStatus() != Status.STARTED) {
-		// return false;
-		// }
-		// }
+	private boolean allPredecessorsStarted(String candidate) {
+		Collection<String> predecessors = dependencyGraph.getGraph().getPredecessors(candidate);
+		for (String predecessor : predecessors) {
+			if (services.get(predecessor).getStatus() != Status.STARTED) {
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -182,21 +163,21 @@ public class ServicesManager {
 	 * Stop all registered services. Even if some services fail to stop correctly the overall status is STOPPED
 	 */
 	public void stop() {
-		List<Class<? extends Service>> stopped = new ArrayList<>();
+		List<String> stopped = new ArrayList<>();
 		if (dependencyStatus == Status.STARTED) {
 			log.debug("stopping all registered services and Services Manager");
 
-			Deque<Class<? extends Service>> waiting = new ArrayDeque<>(serviceClasses.keySet());
-			List<Class<? extends Service>> failed = new ArrayList<>();
+			Deque<String> waiting = new ArrayDeque<>(services.keySet());
+			List<String> failed = new ArrayList<>();
 
 			// seed with root - it won't have any dependencies
-			Class<? extends Service> candidate = dependencyGraph.getRoot();
+			String candidate = dependencyGraph.getRoot();
 
 			while (candidate != null) {
 
 				// if candidate has all predecessors started, process it, otherwise put it to end of queue
 				if (allSuccessorsStoppedOrFailedToStop(candidate)) {
-					boolean candidateStopped = stopService(serviceClasses.get(candidate).getService());
+					boolean candidateStopped = stopService(services.get(candidate).getService());
 					if (candidateStopped) {
 						stopped.add(candidate);
 					} else {
@@ -221,10 +202,10 @@ public class ServicesManager {
 	 * @param candidate
 	 * @return
 	 */
-	private boolean allSuccessorsStoppedOrFailedToStop(Class<? extends Service> candidate) {
-		Collection<Class<? extends Service>> successors = dependencyGraph.getGraph().getSuccessors(candidate);
-		for (Class<? extends Service> successor : successors) {
-			dependencyStatus = serviceClasses.get(successor).getStatus();
+	private boolean allSuccessorsStoppedOrFailedToStop(String candidate) {
+		Collection<String> successors = dependencyGraph.getGraph().getSuccessors(candidate);
+		for (String successor : successors) {
+			dependencyStatus = services.get(successor).getStatus();
 			if ((dependencyStatus != Status.STOPPED) && (dependencyStatus != Status.FAILED_TO_STOP)) {
 				return false;
 			}
@@ -271,7 +252,7 @@ public class ServicesManager {
 	 * Removes all services - use with care, this does NOT stop the services
 	 */
 	public void clear() {
-		serviceClasses.clear();
+		services.clear();
 
 	}
 
@@ -282,7 +263,7 @@ public class ServicesManager {
 	 * @return
 	 */
 	public Status getStatus(Service service) {
-		ServiceStatus serviceStatus = serviceClasses.get(service.getClass());
+		ServiceStatus serviceStatus = services.get(ServiceUtils.serviceId(service));
 		if (serviceStatus == null) {
 			return null;
 		}
@@ -290,7 +271,7 @@ public class ServicesManager {
 	}
 
 	public void setStatus(Service service, Status status) {
-		ServiceStatus serviceStatus = serviceClasses.get(service.getClass());
+		ServiceStatus serviceStatus = services.get(ServiceUtils.serviceId(service));
 		checkNotNull(serviceStatus);
 		serviceStatus.setStatus(status);
 

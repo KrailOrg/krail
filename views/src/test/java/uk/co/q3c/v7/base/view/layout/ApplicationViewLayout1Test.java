@@ -12,8 +12,7 @@
  */
 package uk.co.q3c.v7.base.view.layout;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
@@ -105,93 +104,93 @@ public class ApplicationViewLayout1Test {
 		// when
 		Component r = view.getRootComponent();
 		// then
-		assertThat(r, instanceOf(VerticalLayout.class));
+		assertThat(r).isInstanceOf(VerticalLayout.class);
 		VerticalLayout root = (VerticalLayout) r;
 
 		Component c = view.getLayout().orderedComponents().get(0);
 		HorizontalLayout row0 = (HorizontalLayout) c.getParent();
-		assertThat(row0.getComponentCount(), is(3));
-		assertThat(row0.getWidth(), is(100f));
-		assertThat(row0.getWidthUnits(), is(Unit.PERCENTAGE));
-		assertThat(row0.getHeight(), is(Sizeable.SIZE_UNDEFINED));
-		assertThat(row0.getHeightUnits(), is(Unit.PIXELS));
+		assertThat(row0.getComponentCount()).isEqualTo(3);
+		assertThat(row0.getWidth()).isEqualTo(100f);
+		assertThat(row0.getWidthUnits()).isEqualTo(Unit.PERCENTAGE);
+		assertThat(row0.getHeight()).isEqualTo(Sizeable.SIZE_UNDEFINED);
+		assertThat(row0.getHeightUnits()).isEqualTo(Unit.PIXELS);
 
-		assertThat(c, is((Object) logo));
-		assertThat(c.getCaption(), is("logo"));
-		assertThat(c.getWidth(), is(50f));
-		assertThat(c.getWidthUnits(), is(Unit.PIXELS));
-		assertThat(c.getHeight(), is(70f));
-		assertThat(c.getHeightUnits(), is(Unit.PIXELS));
+		assertThat(c).isEqualTo(logo);
+		assertThat(c.getCaption()).isEqualTo("logo");
+		assertThat(c.getWidth()).isEqualTo(50f);
+		assertThat(c.getWidthUnits()).isEqualTo(Unit.PIXELS);
+		assertThat(c.getHeight()).isEqualTo(70f);
+		assertThat(c.getHeightUnits()).isEqualTo(Unit.PIXELS);
 
 		c = row0.getComponent(1);
-		assertThat(c, is((Object) header));
-		assertThat(header.getWidth(), is(Sizeable.SIZE_UNDEFINED));
-		assertThat(header.getWidthUnits(), is(Unit.PIXELS));
-		assertThat(header.getHeight(), is(100f));
-		assertThat(header.getHeightUnits(), is(Unit.PERCENTAGE));
+		assertThat(c).isEqualTo(header);
+		assertThat(header.getWidth()).isEqualTo(Sizeable.SIZE_UNDEFINED);
+		assertThat(header.getWidthUnits()).isEqualTo(Unit.PIXELS);
+		assertThat(header.getHeight()).isEqualTo(100f);
+		assertThat(header.getHeightUnits()).isEqualTo(Unit.PERCENTAGE);
 
 		c = row0.getComponent(2);
-		assertThat(c, is((Object) loginOut));
-		assertThat(loginOut.getWidth(), is(100f));
-		assertThat(loginOut.getWidthUnits(), is(Unit.PIXELS));
-		assertThat(loginOut.getHeight(), is(100f));
-		assertThat(loginOut.getHeightUnits(), is(Unit.PERCENTAGE));
+		assertThat(c).isEqualTo(loginOut);
+		assertThat(loginOut.getWidth()).isEqualTo(100f);
+		assertThat(loginOut.getWidthUnits()).isEqualTo(Unit.PIXELS);
+		assertThat(loginOut.getHeight()).isEqualTo(100f);
+		assertThat(loginOut.getHeightUnits()).isEqualTo(Unit.PERCENTAGE);
 
 		c = root.getComponent(1);
-		assertThat(c, is((Object) menu));
-		assertThat(menu.getWidth(), is(100f));
-		assertThat(menu.getWidthUnits(), is(Unit.PERCENTAGE));
-		assertThat(menu.getHeight(), is(60f));
-		assertThat(menu.getHeightUnits(), is(Unit.PIXELS));
+		assertThat(c).isEqualTo(menu);
+		assertThat(menu.getWidth()).isEqualTo(100f);
+		assertThat(menu.getWidthUnits()).isEqualTo(Unit.PERCENTAGE);
+		assertThat(menu.getHeight()).isEqualTo(60f);
+		assertThat(menu.getHeightUnits()).isEqualTo(Unit.PIXELS);
 
 		c = root.getComponent(2);
-		assertThat(c, instanceOf(HorizontalSplitPanel.class));
+		assertThat(c).isInstanceOf(HorizontalSplitPanel.class);
 		HorizontalSplitPanel hsp = (HorizontalSplitPanel) c;
 
 		c = hsp.getFirstComponent();
-		assertThat(c, is((Object) nav));
-		assertThat(nav.getWidth(), is(100f));
-		assertThat(nav.getWidthUnits(), is(Unit.PERCENTAGE));
-		assertThat(nav.getHeight(), is(100f));
-		assertThat(nav.getHeightUnits(), is(Unit.PERCENTAGE));
+		assertThat(c).isEqualTo(nav);
+		assertThat(nav.getWidth()).isEqualTo(100f);
+		assertThat(nav.getWidthUnits()).isEqualTo(Unit.PERCENTAGE);
+		assertThat(nav.getHeight()).isEqualTo(100f);
+		assertThat(nav.getHeightUnits()).isEqualTo(Unit.PERCENTAGE);
 
 		c = hsp.getSecondComponent();
-		assertThat(c, instanceOf(VerticalLayout.class));
+		assertThat(c).isInstanceOf(VerticalLayout.class);
 
 		VerticalLayout vl = (VerticalLayout) c;
 		c = vl.getComponent(0);
-		assertThat(c, is((Object) breadcrumb));
-		assertThat(breadcrumb.getWidth(), is(100f));
-		assertThat(breadcrumb.getWidthUnits(), is(Unit.PERCENTAGE));
-		assertThat(breadcrumb.getHeight(), is(45f));
-		assertThat(breadcrumb.getHeightUnits(), is(Unit.PIXELS));
+		assertThat(c).isEqualTo(breadcrumb);
+		assertThat(breadcrumb.getWidth()).isEqualTo(100f);
+		assertThat(breadcrumb.getWidthUnits()).isEqualTo(Unit.PERCENTAGE);
+		assertThat(breadcrumb.getHeight()).isEqualTo(45f);
+		assertThat(breadcrumb.getHeightUnits()).isEqualTo(Unit.PIXELS);
 
 		c = vl.getComponent(1);
-		assertThat(c, is((Object) body));
-		assertThat(body.getWidth(), is(100f));
-		assertThat(body.getWidthUnits(), is(Unit.PERCENTAGE));
-		assertThat(body.getHeight(), is(100f));
-		assertThat(body.getHeightUnits(), is(Unit.PERCENTAGE));
+		assertThat(c).isEqualTo(body);
+		assertThat(body.getWidth()).isEqualTo(100f);
+		assertThat(body.getWidthUnits()).isEqualTo(Unit.PERCENTAGE);
+		assertThat(body.getHeight()).isEqualTo(100f);
+		assertThat(body.getHeightUnits()).isEqualTo(Unit.PERCENTAGE);
 
 		c = vl.getComponent(2);
-		assertThat(c, is((Object) subpage));
-		assertThat(subpage.getWidth(), is(100f));
-		assertThat(subpage.getWidthUnits(), is(Unit.PERCENTAGE));
-		assertThat(subpage.getHeight(), is(55f));
-		assertThat(subpage.getHeightUnits(), is(Unit.PIXELS));
+		assertThat(c).isEqualTo(subpage);
+		assertThat(subpage.getWidth()).isEqualTo(100f);
+		assertThat(subpage.getWidthUnits()).isEqualTo(Unit.PERCENTAGE);
+		assertThat(subpage.getHeight()).isEqualTo(55f);
+		assertThat(subpage.getHeightUnits()).isEqualTo(Unit.PIXELS);
 
 		c = root.getComponent(3);
-		assertThat(c, is((Object) messageBar));
+		assertThat(c).isEqualTo(messageBar);
 
-		assertThat(messageBar.getWidth(), is(100f));
-		assertThat(messageBar.getWidthUnits(), is(Unit.PERCENTAGE));
-		assertThat(messageBar.getHeight(), is(80f));
-		assertThat(messageBar.getHeightUnits(), is(Unit.PIXELS));
+		assertThat(messageBar.getWidth()).isEqualTo(100f);
+		assertThat(messageBar.getWidthUnits()).isEqualTo(Unit.PERCENTAGE);
+		assertThat(messageBar.getHeight()).isEqualTo(80f);
+		assertThat(messageBar.getHeightUnits()).isEqualTo(Unit.PIXELS);
 
 		// ordered the same way as diagram
 		Object[] contents = new Object[] { logo, header, loginOut, menu, nav, breadcrumb, body, subpage, messageBar };
 		for (int i = 0; i < contents.length; i++) {
-			assertThat(view.getLayout().orderedComponents().get(i), is(contents[i]));
+			assertThat(view.getLayout().orderedComponents().get(i)).isEqualTo(contents[i]);
 		}
 
 	}

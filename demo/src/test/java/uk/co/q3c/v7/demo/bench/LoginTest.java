@@ -1,8 +1,6 @@
 package uk.co.q3c.v7.demo.bench;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -44,8 +42,8 @@ public class LoginTest extends V7TestBenchTestCase {
 
 		// when
 		// then initial state
-		assertThat(loginButton().getText(), is("log in"));
-		assertThat(loginLabel().getText(), is("Guest"));
+		assertThat(loginButton().getText()).isEqualTo("log in");
+		assertThat(loginLabel().getText()).isEqualTo("Guest");
 
 		// when LoginStatusPanel button clicked
 		loginButton().click();
@@ -56,8 +54,8 @@ public class LoginTest extends V7TestBenchTestCase {
 		login();
 		// then correct url and status panel updated
 		verifyUrl(startFragment);
-		assertThat(loginButton().getText(), is("log out"));
-		assertThat(loginLabel().getText(), is("ds"));
+		assertThat(loginButton().getText()).isEqualTo("log out");
+		assertThat(loginLabel().getText()).isEqualTo("ds");
 	}
 
 	@After

@@ -36,7 +36,7 @@ dependencies {
 	testCompile project (':V7')
 	
 	//uses some code inherited from V7 subproject tests
-	testCompile project(':V7').sourceSets.test.runtimeClasspath
+//	testCompile project(':V7').sourceSets.test.runtimeClasspath
 
 	testCompile 'com.vaadin:vaadin-testbench:3.1.1' 
 

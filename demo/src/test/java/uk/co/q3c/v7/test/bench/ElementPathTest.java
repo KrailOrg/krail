@@ -12,8 +12,7 @@
  */
 package uk.co.q3c.v7.test.bench;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 
@@ -27,7 +26,7 @@ public class ElementPathTest {
 		// when
 		String actual = ElementPath.path().id("DefaultUserNavigationTree").index(0).expand().get();
 		// then
-		assertThat(actual, is(expected));
+		assertThat(actual).isEqualTo(expected);
 
 	}
 
@@ -39,7 +38,7 @@ public class ElementPathTest {
 		// when
 		String actual = ElementPath.path().id("DefaultUserNavigationTree").index(0, 1).expand().get();
 		// then
-		assertThat(actual, is(expected));
+		assertThat(actual).isEqualTo(expected);
 
 	}
 

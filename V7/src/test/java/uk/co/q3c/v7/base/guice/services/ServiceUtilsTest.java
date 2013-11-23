@@ -12,8 +12,7 @@
  */
 package uk.co.q3c.v7.base.guice.services;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -241,11 +240,11 @@ public class ServiceUtilsTest {
 		// when
 		String serviceId = ServiceUtils.serviceId(service_0);
 		// then
-		assertThat(serviceId, is("uk.co.q3c.v7.base.guice.services.ServiceUtilsTest$MockService_0"));
+		assertThat(serviceId).isEqualTo("uk.co.q3c.v7.base.guice.services.ServiceUtilsTest$MockService_0");
 		// when
 		serviceId = ServiceUtils.serviceId(service_0a);
 		// then
-		assertThat(serviceId, is("uk.co.q3c.v7.base.guice.services.ServiceUtilsTest$MockService_0A"));
+		assertThat(serviceId).isEqualTo("uk.co.q3c.v7.base.guice.services.ServiceUtilsTest$MockService_0A");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -257,16 +256,14 @@ public class ServiceUtilsTest {
 		// when
 
 		// then
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_0), is(nullValue()));
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_0a), is(nullValue()));
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_1), is(nullValue()));
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_2),
-				hasItems(MockService_1.class, MockService_0.class));
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_2a).size(), is(1));
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_2a).contains(MockService_2.class), is(true));
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_3).size(), is(1));
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_3).contains(MockService_1.class), is(true));
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_4), is(nullValue()));
+		assertThat(ServiceUtils.extractAnnotationDependencies(service_0)).isNull();
+		assertThat(ServiceUtils.extractAnnotationDependencies(service_0a)).isNull();
+		assertThat(ServiceUtils.extractAnnotationDependencies(service_1)).isNull();
+		assertThat(ServiceUtils.extractAnnotationDependencies(service_2)).containsOnly(MockService_1.class,
+				MockService_0.class);
+		assertThat(ServiceUtils.extractAnnotationDependencies(service_2a)).containsOnly(MockService_2.class);
+		assertThat(ServiceUtils.extractAnnotationDependencies(service_3)).containsOnly(MockService_1.class);
+		assertThat(ServiceUtils.extractAnnotationDependencies(service_4)).isNull();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -278,15 +275,13 @@ public class ServiceUtilsTest {
 		// when
 
 		// then
-		assertThat(ServiceUtils.extractDependencies(service_0).size(), is(0));
-		assertThat(ServiceUtils.extractDependencies(service_0a).size(), is(0));
-		assertThat(ServiceUtils.extractDependencies(service_1).size(), is(0));
-		assertThat(ServiceUtils.extractDependencies(service_2), hasItems(MockService_1.class, MockService_0.class));
-		assertThat(ServiceUtils.extractDependencies(service_2a).size(), is(1));
-		assertThat(ServiceUtils.extractDependencies(service_2a).contains(MockService_2.class), is(true));
-		assertThat(ServiceUtils.extractDependencies(service_3), hasItems(MockService_1.class, MockService_2.class));
-		assertThat(ServiceUtils.extractDependencies(service_4).size(), is(1));
-		assertThat(ServiceUtils.extractDependencies(service_4).contains(MockService_2.class), is(true));
+		assertThat(ServiceUtils.extractDependencies(service_0)).isEmpty();
+		assertThat(ServiceUtils.extractDependencies(service_0a)).isEmpty();
+		assertThat(ServiceUtils.extractDependencies(service_1)).isEmpty();
+		assertThat(ServiceUtils.extractDependencies(service_2)).containsOnly(MockService_1.class, MockService_0.class);
+		assertThat(ServiceUtils.extractDependencies(service_2a)).containsOnly(MockService_2.class);
+		assertThat(ServiceUtils.extractDependencies(service_3)).containsOnly(MockService_1.class, MockService_2.class);
+		assertThat(ServiceUtils.extractDependencies(service_4)).containsOnly(MockService_2.class);
 	}
 
 	@Test
@@ -297,18 +292,14 @@ public class ServiceUtilsTest {
 		// when
 
 		// then
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_0).size(), is(0));
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_0a).size(), is(0));
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_1).size(), is(0));
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_2),
-				hasItems(MockService_1.class.getName(), MockService_0.class.getName()));
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_2a).size(), is(1));
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_2a).contains(MockService_2.class.getName()),
-				is(true));
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_3),
-				hasItems(MockService_1.class.getName(), MockService_2.class.getName()));
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_4).size(), is(1));
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_4).contains(MockService_2.class.getName()),
-				is(true));
+		assertThat(ServiceUtils.extractDependenciesServiceIds(service_0)).isEmpty();
+		assertThat(ServiceUtils.extractDependenciesServiceIds(service_0a)).isEmpty();
+		assertThat(ServiceUtils.extractDependenciesServiceIds(service_1)).isEmpty();
+		assertThat(ServiceUtils.extractDependenciesServiceIds(service_2)).containsOnly(MockService_1.class.getName(),
+				MockService_0.class.getName());
+		assertThat(ServiceUtils.extractDependenciesServiceIds(service_2a)).containsOnly(MockService_2.class.getName());
+		assertThat(ServiceUtils.extractDependenciesServiceIds(service_3)).containsOnly(MockService_1.class.getName(),
+				MockService_2.class.getName());
+		assertThat(ServiceUtils.extractDependenciesServiceIds(service_4)).containsOnly(MockService_2.class.getName());
 	}
 }

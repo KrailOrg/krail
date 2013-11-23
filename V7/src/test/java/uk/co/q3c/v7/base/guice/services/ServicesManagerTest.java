@@ -1,8 +1,6 @@
 package uk.co.q3c.v7.base.guice.services;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -230,21 +228,21 @@ public class ServicesManagerTest {
 		// when
 		servicesManager.start();
 		// then
-		assertThat(servicesManager.getStatus(), is(Service.Status.STARTED));
-		assertThat(servicesManager.getStatus(service_ok), is(Service.Status.STARTED));
-		assertThat(servicesManager.getStatus(service_fails_on_start), is(Service.Status.FAILED_TO_START));
-		assertThat(servicesManager.getStatus(service_fails_on_stop), is(Service.Status.STARTED));
-		assertThat(servicesManager.getStatus(service_partial), is(Service.Status.PARTIAL));
+		assertThat(servicesManager.getStatus()).isEqualTo(Service.Status.STARTED);
+		assertThat(servicesManager.getStatus(service_ok)).isEqualTo(Service.Status.STARTED);
+		assertThat(servicesManager.getStatus(service_fails_on_start)).isEqualTo(Service.Status.FAILED_TO_START);
+		assertThat(servicesManager.getStatus(service_fails_on_stop)).isEqualTo(Service.Status.STARTED);
+		assertThat(servicesManager.getStatus(service_partial)).isEqualTo(Service.Status.PARTIAL);
 
-		assertThat(servicesManager.getStatus(service_manual_register), is(nullValue()));
+		assertThat(servicesManager.getStatus(service_manual_register)).isNull();
 		// when
 		servicesManager.stop();
 		// then
-		assertThat(servicesManager.getStatus(), is(Service.Status.STOPPED));
-		assertThat(servicesManager.getStatus(service_ok), is(Service.Status.STOPPED));
-		assertThat(servicesManager.getStatus(service_fails_on_start), is(Service.Status.STOPPED));
-		assertThat(servicesManager.getStatus(service_fails_on_stop), is(Service.Status.FAILED_TO_STOP));
-		assertThat(servicesManager.getStatus(service_partial), is(Service.Status.STOPPED));
+		assertThat(servicesManager.getStatus()).isEqualTo(Service.Status.STOPPED);
+		assertThat(servicesManager.getStatus(service_ok)).isEqualTo(Service.Status.STOPPED);
+		assertThat(servicesManager.getStatus(service_fails_on_start)).isEqualTo(Service.Status.STOPPED);
+		assertThat(servicesManager.getStatus(service_fails_on_stop)).isEqualTo(Service.Status.FAILED_TO_STOP);
+		assertThat(servicesManager.getStatus(service_partial)).isEqualTo(Service.Status.STOPPED);
 	}
 
 	@Test
@@ -258,11 +256,11 @@ public class ServicesManagerTest {
 		service_fails_on_stop.stop();
 		service_partial.stop();
 		// then
-		assertThat(servicesManager.getStatus(), is(Service.Status.STARTED));
-		assertThat(servicesManager.getStatus(service_ok), is(Service.Status.STOPPED));
-		assertThat(servicesManager.getStatus(service_fails_on_start), is(Service.Status.STOPPED));
-		assertThat(servicesManager.getStatus(service_fails_on_stop), is(Service.Status.FAILED_TO_STOP));
-		assertThat(servicesManager.getStatus(service_partial), is(Service.Status.STOPPED));
+		assertThat(servicesManager.getStatus()).isEqualTo(Service.Status.STARTED);
+		assertThat(servicesManager.getStatus(service_ok)).isEqualTo(Service.Status.STOPPED);
+		assertThat(servicesManager.getStatus(service_fails_on_start)).isEqualTo(Service.Status.STOPPED);
+		assertThat(servicesManager.getStatus(service_fails_on_stop)).isEqualTo(Service.Status.FAILED_TO_STOP);
+		assertThat(servicesManager.getStatus(service_partial)).isEqualTo(Service.Status.STOPPED);
 		// when
 		service_ok.start();
 		service_fails_on_start.start();
@@ -270,11 +268,11 @@ public class ServicesManagerTest {
 		service_partial.start();
 
 		// then
-		assertThat(servicesManager.getStatus(), is(Service.Status.STARTED));
-		assertThat(servicesManager.getStatus(service_ok), is(Service.Status.STARTED));
-		assertThat(servicesManager.getStatus(service_fails_on_start), is(Service.Status.FAILED_TO_START));
-		assertThat(servicesManager.getStatus(service_fails_on_stop), is(Service.Status.STARTED));
-		assertThat(servicesManager.getStatus(service_partial), is(Service.Status.PARTIAL));
+		assertThat(servicesManager.getStatus()).isEqualTo(Service.Status.STARTED);
+		assertThat(servicesManager.getStatus(service_ok)).isEqualTo(Service.Status.STARTED);
+		assertThat(servicesManager.getStatus(service_fails_on_start)).isEqualTo(Service.Status.FAILED_TO_START);
+		assertThat(servicesManager.getStatus(service_fails_on_stop)).isEqualTo(Service.Status.STARTED);
+		assertThat(servicesManager.getStatus(service_partial)).isEqualTo(Service.Status.PARTIAL);
 	}
 
 	@Test
@@ -289,15 +287,15 @@ public class ServicesManagerTest {
 		boolean rp = servicesManager.stopService(service_partial);
 
 		// then
-		assertThat(servicesManager.getStatus(), is(Service.Status.STARTED));
-		assertThat(servicesManager.getStatus(service_ok), is(Service.Status.STOPPED));
-		assertThat(servicesManager.getStatus(service_fails_on_start), is(Service.Status.STOPPED));
-		assertThat(servicesManager.getStatus(service_fails_on_stop), is(Service.Status.FAILED_TO_STOP));
-		assertThat(servicesManager.getStatus(service_partial), is(Service.Status.STOPPED));
-		assertThat(rok, is(true));
-		assertThat(rfos, is(true));
-		assertThat(rfostop, is(false));
-		assertThat(rp, is(true));
+		assertThat(servicesManager.getStatus()).isEqualTo(Service.Status.STARTED);
+		assertThat(servicesManager.getStatus(service_ok)).isEqualTo(Service.Status.STOPPED);
+		assertThat(servicesManager.getStatus(service_fails_on_start)).isEqualTo(Service.Status.STOPPED);
+		assertThat(servicesManager.getStatus(service_fails_on_stop)).isEqualTo(Service.Status.FAILED_TO_STOP);
+		assertThat(servicesManager.getStatus(service_partial)).isEqualTo(Service.Status.STOPPED);
+		assertThat(rok).isTrue();
+		assertThat(rfos).isTrue();
+		assertThat(rfostop).isFalse();
+		assertThat(rp).isTrue();
 
 		// when
 		rok = servicesManager.startService(service_ok);
@@ -305,16 +303,16 @@ public class ServicesManagerTest {
 		rfostop = servicesManager.startService(service_fails_on_stop);
 		rp = servicesManager.startService(service_partial);
 		// then
-		assertThat(servicesManager.getStatus(), is(Service.Status.STARTED));
-		assertThat(servicesManager.getStatus(service_ok), is(Service.Status.STARTED));
-		assertThat(servicesManager.getStatus(service_fails_on_start), is(Service.Status.FAILED_TO_START));
-		assertThat(servicesManager.getStatus(service_fails_on_stop), is(Service.Status.STARTED));
-		assertThat(servicesManager.getStatus(service_partial), is(Service.Status.PARTIAL));
+		assertThat(servicesManager.getStatus()).isEqualTo(Service.Status.STARTED);
+		assertThat(servicesManager.getStatus(service_ok)).isEqualTo(Service.Status.STARTED);
+		assertThat(servicesManager.getStatus(service_fails_on_start)).isEqualTo(Service.Status.FAILED_TO_START);
+		assertThat(servicesManager.getStatus(service_fails_on_stop)).isEqualTo(Service.Status.STARTED);
+		assertThat(servicesManager.getStatus(service_partial)).isEqualTo(Service.Status.PARTIAL);
 
-		assertThat(rok, is(true));
-		assertThat(rfos, is(false));
-		assertThat(rfostop, is(true));
-		assertThat(rp, is(false));
+		assertThat(rok).isTrue();
+		assertThat(rfos).isFalse();
+		assertThat(rfostop).isTrue();
+		assertThat(rp).isFalse();
 
 	}
 
@@ -328,36 +326,36 @@ public class ServicesManagerTest {
 		// when
 		servicesManager.start();
 		// then
-		assertThat(service_ok.startCalls, is(1));
+		assertThat(service_ok.startCalls).isEqualTo(1);
 		// when
 		service_ok.stop();
 		// then
-		assertThat(service_ok.stopCalls, is(1));
+		assertThat(service_ok.stopCalls).isEqualTo(1);
 		// when
 		service_ok.start();
 		// then
-		assertThat(service_ok.startCalls, is(2));
+		assertThat(service_ok.startCalls).isEqualTo(2);
 		// when (start when already started)
 		service_ok.start();
 		// then
-		assertThat(service_ok.startCalls, is(2));
+		assertThat(service_ok.startCalls).isEqualTo(2);
 		// when (start when already started)
 		servicesManager.startService(service_ok);
 		// then
-		assertThat(service_ok.startCalls, is(2));
+		assertThat(service_ok.startCalls).isEqualTo(2);
 
 		// when
 		service_ok.stop();
 		// then
-		assertThat(service_ok.stopCalls, is(2));
+		assertThat(service_ok.stopCalls).isEqualTo(2);
 		// when (stop when already stopped)
 		service_ok.stop();
 		// then
-		assertThat(service_ok.stopCalls, is(2));
+		assertThat(service_ok.stopCalls).isEqualTo(2);
 		// when (stop when already stopped)
 		servicesManager.stopService(service_ok);
 		// then
-		assertThat(service_ok.stopCalls, is(2));
+		assertThat(service_ok.stopCalls).isEqualTo(2);
 	}
 
 	@Test
@@ -367,11 +365,11 @@ public class ServicesManagerTest {
 		// when
 		servicesManager.registerService(service_manual_register);
 		// then (service manager has not been started)
-		assertThat(servicesManager.getStatus(service_manual_register), is(Service.Status.INITIAL));
+		assertThat(servicesManager.getStatus(service_manual_register)).isEqualTo(Service.Status.INITIAL);
 		// when
 		servicesManager.start();
 		// then
-		assertThat(servicesManager.getStatus(service_manual_register), is(Service.Status.STARTED));
+		assertThat(servicesManager.getStatus(service_manual_register)).isEqualTo(Service.Status.STARTED);
 
 	}
 
@@ -383,7 +381,7 @@ public class ServicesManagerTest {
 		// when
 		servicesManager.registerService(service_manual_register);
 		// then
-		assertThat(servicesManager.getStatus(service_manual_register), is(Service.Status.STARTED));
+		assertThat(servicesManager.getStatus(service_manual_register)).isEqualTo(Service.Status.STARTED);
 
 	}
 

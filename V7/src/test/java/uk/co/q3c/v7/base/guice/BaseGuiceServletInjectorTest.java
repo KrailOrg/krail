@@ -12,14 +12,8 @@
  */
 package uk.co.q3c.v7.base.guice;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -70,15 +64,15 @@ public class BaseGuiceServletInjectorTest {
 		Injector injector = out.getInjector();
 		// then
 		assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(V7SecurityManager.class);
-		assertThat(out.isAddAppModulesCalled(), is(true));
+		assertThat(out.isAddAppModulesCalled()).isEqualTo(true);
 		verify(ctx).set(servletContext);
-		assertThat(injector, is(not(nullValue())));
+		assertThat(injector).isNotNull();
 		ServicesManager servicesManager = injector.getInstance(ServicesManager.class);
-		assertThat(servicesManager.getStatus(), is(Service.Status.STARTED));
+		assertThat(servicesManager.getStatus()).isEqualTo(Service.Status.STARTED);
 
 		// when
 		out.contextDestroyed(servletContextEvent);
-		assertThat(servicesManager.getStatus(), is(Service.Status.STOPPED));
+		assertThat(servicesManager.getStatus()).isEqualTo(Service.Status.STOPPED);
 	}
 
 	/**

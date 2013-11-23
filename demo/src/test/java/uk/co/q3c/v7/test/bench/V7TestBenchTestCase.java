@@ -12,8 +12,7 @@
  */
 package uk.co.q3c.v7.test.bench;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Before;
 import org.openqa.selenium.Dimension;
@@ -54,7 +53,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	protected void verifyUrl(String fragment) {
 		String expected = rootUrl() + fragment;
 		String actual = driver.getCurrentUrl();
-		assertThat("expected fragment to be " + expected + " but was " + actual, actual, is(expected));
+		assertThat(actual).isEqualTo(expected);
 	}
 
 	protected ElementLocator navTree() {
