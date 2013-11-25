@@ -12,30 +12,34 @@
  */
 package uk.co.q3c.v7.base.guice.services;
 
+import org.joda.time.DateTime;
 
-/**
- * A utility class for {@link Service} implementations
- * 
- * @author David Sowerby
- * 
- */
-public class ServiceUtils {
+public class StatusChange {
+	private Service.Status fromStatus;
+	private Service.Status toStatus;
+	private DateTime dateTime;
 
-	/**
-	 * Returns the underlying class un-enhanced by Guice, needed to identify annotations
-	 * 
-	 * @param serviceClass
-	 */
-	public static Class<?> unenhancedClass(Class<?> serviceClass) {
-		Class<?> clazz = serviceClass;
-		while (clazz.getName().contains("EnhancerByGuice")) {
-			clazz = clazz.getSuperclass();
-		}
-		return clazz;
+	public Service.Status getFromStatus() {
+		return fromStatus;
 	}
 
-	public static Class<?> unenhancedClass(Service service) {
-		Class<?> serviceClass = service.getClass();
-		return unenhancedClass(serviceClass);
+	public void setFromStatus(Service.Status fromStatus) {
+		this.fromStatus = fromStatus;
+	}
+
+	public Service.Status getToStatus() {
+		return toStatus;
+	}
+
+	public void setToStatus(Service.Status toStatus) {
+		this.toStatus = toStatus;
+	}
+
+	public DateTime getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(DateTime dateTime) {
+		this.dateTime = dateTime;
 	}
 }

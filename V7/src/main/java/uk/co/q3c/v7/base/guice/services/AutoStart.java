@@ -6,14 +6,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to identify which Services the annotated class is dependent on. This enables the {@link ServicesManager}
- * to start and stop services in the right order
+ * Causes a 'predecessor' service to be automatically started when the class using it applies this annotation to the
+ * field which holds it.
  * 
  * @author David Sowerby
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface DependsOnServices {
-	Class<? extends Service>[] services() default {};
+@Target(ElementType.FIELD)
+public @interface AutoStart {
+	boolean auto() default true;
 }

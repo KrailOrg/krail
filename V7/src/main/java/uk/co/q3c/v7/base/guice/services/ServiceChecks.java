@@ -12,30 +12,17 @@
  */
 package uk.co.q3c.v7.base.guice.services;
 
-
-/**
- * A utility class for {@link Service} implementations
- * 
- * @author David Sowerby
- * 
- */
-public class ServiceUtils {
+public class ServiceChecks {
 
 	/**
-	 * Returns the underlying class un-enhanced by Guice, needed to identify annotations
+	 * Checks that {@code service} has been started, and throws a {@link ServiceStatusException} if it has not
 	 * 
-	 * @param serviceClass
+	 * @param service
 	 */
-	public static Class<?> unenhancedClass(Class<?> serviceClass) {
-		Class<?> clazz = serviceClass;
-		while (clazz.getName().contains("EnhancerByGuice")) {
-			clazz = clazz.getSuperclass();
+	public static void checkIsStarted(Service service) {
+		if (!(service.isStarted())) {
+			throw new ServiceStatusException("You cannot use the " + service.getName()
+					+ " service until it has been started");
 		}
-		return clazz;
-	}
-
-	public static Class<?> unenhancedClass(Service service) {
-		Class<?> serviceClass = service.getClass();
-		return unenhancedClass(serviceClass);
 	}
 }

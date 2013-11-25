@@ -1,18 +1,16 @@
 package uk.co.q3c.v7.base.view;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import uk.co.q3c.v7.base.guice.services.AbstractService;
 import uk.co.q3c.v7.base.guice.services.Service;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 
 import com.google.inject.Provider;
 
 @Singleton
-public class ApplicationViewService implements Service {
+public class ApplicationViewService extends AbstractService {
 
 	private final Provider<Sitemap> sitemapPro;
 
@@ -47,7 +45,9 @@ public class ApplicationViewService implements Service {
 	}
 
 	@Override
-	public Set<Class<? extends Service>> getDependencies() {
-		return new HashSet<Class<? extends Service>>();
+	public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
+		// TODO Auto-generated method stub
+
 	}
+
 }

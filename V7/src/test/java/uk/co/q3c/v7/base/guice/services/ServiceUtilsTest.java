@@ -12,14 +12,8 @@
  */
 package uk.co.q3c.v7.base.guice.services;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.inject.Inject;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -44,7 +38,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ ServicesManagerModule.class })
+@GuiceContext({ ServicesMonitorModule.class })
 public class ServiceUtilsTest {
 	@Inject
 	MockService_0 service_0;
@@ -67,7 +61,7 @@ public class ServiceUtilsTest {
 	@Inject
 	MockService_4 service_4;
 
-	static class MockService_0 implements Service {
+	static class MockService_0 extends AbstractService {
 		int startCalls = 0;
 		int stopCalls = 0;
 
@@ -84,11 +78,6 @@ public class ServiceUtilsTest {
 		}
 
 		@Override
-		public Set<Class<? extends Service>> getDependencies() {
-			return new HashSet<Class<? extends Service>>();
-		}
-
-		@Override
 		public String serviceId() {
 			return "service 0";
 		}
@@ -97,13 +86,20 @@ public class ServiceUtilsTest {
 		public String getName() {
 			return "Test Service working OK";
 		}
+
+		@Override
+		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	static class MockService_0A extends MockService_0 {
 
 	}
 
-	static class MockService_1 implements Service {
+	static class MockService_1 extends AbstractService {
 
 		@Override
 		public Status start() {
@@ -113,11 +109,6 @@ public class ServiceUtilsTest {
 		@Override
 		public Status stop() {
 			return Status.STOPPED;
-		}
-
-		@Override
-		public Set<Class<? extends Service>> getDependencies() {
-			return new HashSet<Class<? extends Service>>();
 		}
 
 		@Override
@@ -130,10 +121,15 @@ public class ServiceUtilsTest {
 			return "Test Service fails on start";
 		}
 
+		@Override
+		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
-	@DependsOnServices(services = { MockService_1.class, MockService_0.class })
-	static class MockService_2 implements Service {
+	static class MockService_2 extends AbstractService {
 
 		@Override
 		public Status start() {
@@ -143,11 +139,6 @@ public class ServiceUtilsTest {
 		@Override
 		public Status stop() {
 			return Status.STOPPED;
-		}
-
-		@Override
-		public Set<Class<? extends Service>> getDependencies() {
-			return new HashSet<Class<? extends Service>>();
 		}
 
 		@Override
@@ -159,14 +150,19 @@ public class ServiceUtilsTest {
 		public String getName() {
 			return "Test Service fails on stop";
 		}
+
+		@Override
+		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
-	@DependsOnServices(services = { MockService_2.class })
 	static class MockService_2A extends MockService_2 {
 	}
 
-	@DependsOnServices(services = { MockService_1.class })
-	static class MockService_3 implements Service {
+	static class MockService_3 extends AbstractService {
 
 		@Override
 		public Status start() {
@@ -176,13 +172,6 @@ public class ServiceUtilsTest {
 		@Override
 		public Status stop() {
 			return Status.STOPPED;
-		}
-
-		@Override
-		public Set<Class<? extends Service>> getDependencies() {
-			HashSet<Class<? extends Service>> deps = new HashSet<Class<? extends Service>>();
-			deps.add(MockService_2.class);
-			return deps;
 		}
 
 		@Override
@@ -195,9 +184,15 @@ public class ServiceUtilsTest {
 			return "service 3";
 		}
 
+		@Override
+		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
-	static class MockService_4 implements Service {
+	static class MockService_4 extends AbstractService {
 		int startCalls = 0;
 		int stopCalls = 0;
 
@@ -219,87 +214,16 @@ public class ServiceUtilsTest {
 		}
 
 		@Override
-		public Set<Class<? extends Service>> getDependencies() {
-			HashSet<Class<? extends Service>> deps = new HashSet<Class<? extends Service>>();
-			deps.add(MockService_2.class);
-			return deps;
-		}
-
-		@Override
 		public String serviceId() {
 			return "service 4";
 		}
 
+		@Override
+		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
-	@Test
-	public void serviceId() {
-
-		// given
-
-		// when
-		String serviceId = ServiceUtils.serviceId(service_0);
-		// then
-		assertThat(serviceId).isEqualTo("uk.co.q3c.v7.base.guice.services.ServiceUtilsTest$MockService_0");
-		// when
-		serviceId = ServiceUtils.serviceId(service_0a);
-		// then
-		assertThat(serviceId).isEqualTo("uk.co.q3c.v7.base.guice.services.ServiceUtilsTest$MockService_0A");
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void extractAnnotationDependencies() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_0)).isNull();
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_0a)).isNull();
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_1)).isNull();
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_2)).containsOnly(MockService_1.class,
-				MockService_0.class);
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_2a)).containsOnly(MockService_2.class);
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_3)).containsOnly(MockService_1.class);
-		assertThat(ServiceUtils.extractAnnotationDependencies(service_4)).isNull();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void extractDependencies() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(ServiceUtils.extractDependencies(service_0)).isEmpty();
-		assertThat(ServiceUtils.extractDependencies(service_0a)).isEmpty();
-		assertThat(ServiceUtils.extractDependencies(service_1)).isEmpty();
-		assertThat(ServiceUtils.extractDependencies(service_2)).containsOnly(MockService_1.class, MockService_0.class);
-		assertThat(ServiceUtils.extractDependencies(service_2a)).containsOnly(MockService_2.class);
-		assertThat(ServiceUtils.extractDependencies(service_3)).containsOnly(MockService_1.class, MockService_2.class);
-		assertThat(ServiceUtils.extractDependencies(service_4)).containsOnly(MockService_2.class);
-	}
-
-	@Test
-	public void extractDependenciesServiceIds() {
-
-		// given
-
-		// when
-
-		// then
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_0)).isEmpty();
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_0a)).isEmpty();
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_1)).isEmpty();
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_2)).containsOnly(MockService_1.class.getName(),
-				MockService_0.class.getName());
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_2a)).containsOnly(MockService_2.class.getName());
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_3)).containsOnly(MockService_1.class.getName(),
-				MockService_2.class.getName());
-		assertThat(ServiceUtils.extractDependenciesServiceIds(service_4)).containsOnly(MockService_2.class.getName());
-	}
 }

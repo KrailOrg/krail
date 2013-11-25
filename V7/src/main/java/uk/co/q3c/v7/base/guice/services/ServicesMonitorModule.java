@@ -12,15 +12,18 @@
  */
 package uk.co.q3c.v7.base.guice.services;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.util.ReflectionUtils;
 import uk.co.q3c.v7.base.guice.services.Service.Status;
 
 import com.google.inject.AbstractModule;
@@ -38,84 +41,121 @@ import com.google.inject.spi.TypeListener;
  * @author David Sowerby
  * 
  */
-public class ServicesManagerModule extends AbstractModule {
+public class ServicesMonitorModule extends AbstractModule {
 
-	private static final Logger log = LoggerFactory.getLogger(ServicesManagerModule.class);
+	private static final Logger log = LoggerFactory.getLogger(ServicesMonitorModule.class);
 
 	/**
-	 * This is constructed using the {@link Service} interface to identify services which should be automatically
-	 * registered with the {@link ServicesManager}. Any {@link Service} implementation will be registered, unless it has
-	 * been annotated with {@link NoAutoRegister}
+	 * This listener is constructed using the {@link Service} interface to identify service implementation instances..
+	 * All instances of {@link Service} implementations are registered with the {@link ServicesMonitor}
 	 * 
 	 * @author David Sowerby
 	 * 
 	 */
 	public class ServicesListener implements TypeListener {
-		private final ServicesManager servicesManager;
+		private final ServicesMonitor servicesManager;
 
-		public ServicesListener(ServicesManager servicesManager) {
+		public ServicesListener(ServicesMonitor servicesManager) {
 			this.servicesManager = servicesManager;
 		}
 
 		@Override
 		public <I> void hear(final TypeLiteral<I> type, TypeEncounter<I> encounter) {
-			encounter.register(new InjectionListener<Object>() {
+			InjectionListener<Object> listener = new InjectionListener<Object>() {
 				@Override
 				public void afterInjection(Object injectee) {
 
 					// cast is safe - if not, the matcher is wrong
 					Service service = (Service) injectee;
-					Class<? super I> rawType = type.getRawType();
-					boolean autoRegister = !rawType.isAnnotationPresent(NoAutoRegister.class);
-					if (autoRegister) {
-						servicesManager.registerService(service);
-						log.debug("auto-registered service '{}'", service.getName());
+					servicesManager.registerService(service);
+					log.debug("registered service '{}'", service.getName());
 
-					}
 				}
-			});
+			};
+			encounter.register(listener);
 		}
 
 	}
 
 	private class ServiceMethodStartInterceptor implements MethodInterceptor {
 
-		private final ServicesManager servicesManager;
+		private final ServicesMonitor servicesMonitor;
 
-		public ServiceMethodStartInterceptor(ServicesManager servicesManager) {
-			this.servicesManager = servicesManager;
+		public ServiceMethodStartInterceptor(ServicesMonitor servicesMonitor) {
+			this.servicesMonitor = servicesMonitor;
 		}
 
+		/**
+		 * The AOP code for all {@link Service#start()} methods. Looks for any fields in the 'this' which are annotated
+		 * with {@link AutoStart}, and starts them first before invoking its own start method.
+		 */
 		@Override
 		public Object invoke(MethodInvocation invocation) throws Throwable {
 			Service service = (Service) invocation.getThis();
-			log.debug("starting service '{}'", service.getName());
-			Status status = servicesManager.getStatus(service);
-			checkNotNull(status);
-			Status result = null;
-			if (status != Status.STARTED) {
-				try {
-					result = (Status) invocation.proceed();
-					servicesManager.setStatus(service, result);
-				} catch (Throwable e) {
-					result = Status.FAILED_TO_START;
-					servicesManager.setStatus(service, result);
-					log.warn("service '{}' failed to start correctly.  The exception reported was:", service.getName(),
-							e);
-				}
-			} else {
-				log.debug("The service '{}' is already started, start request ignored", service.getName());
-				result = Status.STARTED;
+			log.info("Start request received by {} ...", service.getName());
+			if (service.isStarted()) {
+				log.info("{} has already been started, no further action required", service.getName());
+				return Service.Status.STARTED;
 			}
+
+			// identify any predecessor Services which are annotated with @AutoStart
+			// get the 'real' (unenhanced) class
+			Class<?> clazz = ServiceUtils.unenhancedClass(service);
+
+			// start the @AutoStart dependencies
+			List<Status> dependencyStatuses = new ArrayList<>();
+			Field[] declaredFields = clazz.getDeclaredFields();
+
+			for (Field field : declaredFields) {
+				Class<?> fieldClass = field.getType();
+				// if it is a service field, add a listener to it
+				if (Service.class.isAssignableFrom(fieldClass)) {
+					field.setAccessible(true);
+					Service dependency = (Service) field.get(service);
+					dependency.addListener(service);
+					// if annotated with @AutoStart(true), start the dependency
+					AutoStart autoStart = field.getAnnotation(AutoStart.class);
+					if (autoStart != null) {
+						if (autoStart.auto()) {
+							Method startMethod = dependency.getClass().getMethod("start");
+							dependencyStatuses.add((Status) startMethod.invoke(dependency));
+						}
+					}
+
+				}
+			}
+
+			// If any dependency has failed to start, overall status is DEPENDENCY_FAILED
+			boolean dependencyFailed = false;
+			for (Status depStatus : dependencyStatuses) {
+				if (depStatus != Status.STARTED) {
+					dependencyFailed = true;
+					break;
+				}
+			}
+
+			// If no dependency failures call the Service implementation start method code for 'this'
+			Status result = null;
+			try {
+				if (dependencyFailed) {
+					service.setStatus(Status.DEPENDENCY_FAILED);
+				}
+				result = (Status) invocation.proceed();
+			} catch (Throwable e) {
+				result = Status.FAILED_TO_START;
+			}
+
+			service.setStatus(result);
+			log.info("starting {} service concluded with a status of {}", service.getName(), service.getStatus());
 			return result;
 		}
 	}
 
 	private class ServiceMethodStopInterceptor implements MethodInterceptor {
 
-		private final ServicesManager servicesManager;
+		private final ServicesMonitor servicesManager;
 
-		public ServiceMethodStopInterceptor(ServicesManager servicesManager) {
+		public ServiceMethodStopInterceptor(ServicesMonitor servicesManager) {
 			this.servicesManager = servicesManager;
 		}
 
@@ -123,15 +163,12 @@ public class ServicesManagerModule extends AbstractModule {
 		public Object invoke(MethodInvocation invocation) throws Throwable {
 			Service service = (Service) invocation.getThis();
 			log.debug("stopping service '{}'", service.getName());
-			Status status = servicesManager.getStatus(service);
 			Status result = null;
-			if (status != Status.STOPPED) {
+			if (service.getStatus() != Status.STOPPED) {
 				try {
 					result = (Status) invocation.proceed();
-					servicesManager.setStatus(service, result);
 				} catch (Exception e) {
 					result = Status.FAILED_TO_STOP;
-					servicesManager.setStatus(service, result);
 					log.warn("service '{}' failed to stop correctly.  The exception reported was:", service.getName(),
 							e);
 				}
@@ -139,6 +176,7 @@ public class ServicesManagerModule extends AbstractModule {
 				result = Status.STOPPED;
 				log.debug("The service '{}' is already stopped, stop request ignored", service.getName());
 			}
+			service.setStatus(result);
 			return result;
 		}
 	}
@@ -175,7 +213,8 @@ public class ServicesManagerModule extends AbstractModule {
 		@Override
 		public boolean matches(TypeLiteral<?> t) {
 			Class<?> rawType = t.getRawType();
-			Class<?>[] interfaces = rawType.getInterfaces();
+			Set<Class<?>> interfaces = ReflectionUtils.allInterfaces(rawType);
+
 			for (Class<?> intf : interfaces) {
 				if (intf.equals(Service.class)) {
 					return true;
@@ -211,7 +250,7 @@ public class ServicesManagerModule extends AbstractModule {
 	 * Needs to be created this way because it is inside the module, but note that the @Provides method at
 	 * getServicesManager() ensures that injection scope remains consistent
 	 */
-	private final ServicesManager servicesManager = new ServicesManager();
+	private final ServicesMonitor servicesManager = new ServicesMonitor();
 
 	@Override
 	protected void configure() {
@@ -230,7 +269,7 @@ public class ServicesManagerModule extends AbstractModule {
 	}
 
 	@Provides
-	public ServicesManager getServicesManager() {
+	public ServicesMonitor getServicesManager() {
 		return servicesManager;
 	}
 

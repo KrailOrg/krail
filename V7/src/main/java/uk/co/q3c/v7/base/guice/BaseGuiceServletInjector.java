@@ -28,8 +28,8 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.guice.services.ServicesManager;
-import uk.co.q3c.v7.base.guice.services.ServicesManagerModule;
+import uk.co.q3c.v7.base.guice.services.ServicesMonitor;
+import uk.co.q3c.v7.base.guice.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
@@ -108,7 +108,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
-		baseModules.add(new ServicesManagerModule());
+		baseModules.add(new ServicesMonitorModule());
 
 		baseModules.add(shiroModule(ctx.get(), ini));
 		baseModules.add(shiroVaadinModule());
@@ -188,14 +188,12 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		ctx.set(servletContext);
 		createInjector();
 		super.contextInitialized(servletContextEvent);
-		log.info("Starting services");
-		getInjector().getInstance(ServicesManager.class).start();
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		log.info("Stopping services");
-		getInjector().getInstance(ServicesManager.class).stop();
+		getInjector().getInstance(ServicesMonitor.class).stop();
 		super.contextDestroyed(servletContextEvent);
 		ctx.remove();
 	}

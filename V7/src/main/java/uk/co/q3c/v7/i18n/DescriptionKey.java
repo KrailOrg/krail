@@ -16,11 +16,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public enum DescriptionKey implements I18NKey<Descriptions> {
-	_nullkey_,
-	Confirm_Ok,
-	Last_Name,
-	No_Permission,
-	You_have_not_logged_in,
+	_nullkey_, Confirm_Ok, Last_Name, No_Permission, Service_not_Started, You_have_not_logged_in,
 	// Small_Font;
 	;
 	@Override

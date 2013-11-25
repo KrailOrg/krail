@@ -24,8 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.guice.services.Service;
-import uk.co.q3c.v7.base.guice.services.ServicesManager;
+import uk.co.q3c.v7.base.guice.services.ServicesMonitor;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 
 import com.google.inject.Injector;
@@ -67,12 +66,10 @@ public class BaseGuiceServletInjectorTest {
 		assertThat(out.isAddAppModulesCalled()).isEqualTo(true);
 		verify(ctx).set(servletContext);
 		assertThat(injector).isNotNull();
-		ServicesManager servicesManager = injector.getInstance(ServicesManager.class);
-		assertThat(servicesManager.getStatus()).isEqualTo(Service.Status.STARTED);
+		ServicesMonitor servicesManager = injector.getInstance(ServicesMonitor.class);
 
 		// when
 		out.contextDestroyed(servletContextEvent);
-		assertThat(servicesManager.getStatus()).isEqualTo(Service.Status.STOPPED);
 	}
 
 	/**
