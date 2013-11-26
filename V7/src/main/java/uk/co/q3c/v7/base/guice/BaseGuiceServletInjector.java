@@ -193,7 +193,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		log.info("Stopping services");
-		getInjector().getInstance(ServicesMonitor.class).stop();
+		getInjector().getInstance(ServicesMonitor.class).stopAllServices();
 		super.contextDestroyed(servletContextEvent);
 		ctx.remove();
 	}

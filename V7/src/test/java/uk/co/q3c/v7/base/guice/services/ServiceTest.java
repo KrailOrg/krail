@@ -18,6 +18,9 @@ import static org.assertj.jodatime.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,9 +29,7 @@ import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.services.Service.Status;
 
 import com.google.common.collect.ImmutableList;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.Singleton;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
@@ -285,15 +286,25 @@ public class ServiceTest {
 
 		// given
 		ServicesMonitor monitor = injector.getInstance(ServicesMonitor.class);
+		// when
 		serviced.start();
-		monitor.clearStatusLog();
+		// then
+		ServiceStatus status = monitor.getServiceStatus(serviced);
+		assertThat(status.getCurrentStatus()).isEqualTo(Status.STARTED);
+		assertThat(status.getLastStartTime()).isNotNull().isBeforeOrEqualTo(DateTime.now());
+		assertThat(status.getLastStopTime()).isNull();
+		assertThat(status.getStatusChangeTime()).isNotNull().isEqualTo(status.getLastStartTime());
+		assertThat(status.getPreviousStatus()).isEqualTo(Status.INITIAL);
+		DateTime startTime = status.getLastStartTime();
 		// when
 		serviced.stop();
 		// then
-		assertThat(monitor.getStatusLog()).hasSize(1);
-		assertThat(monitor.getStatusLog().getFirst().getFromStatus()).isEqualTo(Status.STARTED);
-		assertThat(monitor.getStatusLog().getFirst().getToStatus()).isEqualTo(Status.STOPPED);
-		assertThat(monitor.getStatusLog().getFirst().getDateTime()).isNotNull().isBefore(DateTime.now());
+		status = monitor.getServiceStatus(serviced);
+		assertThat(status.getCurrentStatus()).isEqualTo(Status.STOPPED);
+		assertThat(status.getLastStartTime()).isNotNull().isEqualTo(startTime); // shouldn't have changed
+		assertThat(status.getLastStopTime()).isNotNull().isBeforeOrEqualTo(DateTime.now()).isAfter(startTime);
+		assertThat(status.getStatusChangeTime()).isNotNull().isEqualTo(status.getLastStopTime());
+		assertThat(status.getPreviousStatus()).isEqualTo(Status.STARTED);
 	}
 
 	/**

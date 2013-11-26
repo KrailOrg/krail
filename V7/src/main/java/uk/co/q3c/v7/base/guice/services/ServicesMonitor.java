@@ -12,10 +12,7 @@
  */
 package uk.co.q3c.v7.base.guice.services;
 
-import java.util.Deque;
 import java.util.Map;
-import java.util.WeakHashMap;
-import java.util.concurrent.LinkedBlockingDeque;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -27,10 +24,15 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.guice.services.Service.Status;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.MapMaker;
 
 /**
- * Monitors instances of {@link Service} implementations, and keeps a history of status changes Acknowledgement:
- * developed from code contributed by https://github.com/lelmarir
+ * Monitors instances of {@link Service} implementations, and keeps a history of the most recent status changes (only
+ * the current status and the most recent change, see {@link ServiceStatus}).
+ * <p>
+ * There is also a {@link #stopAllServices()} method to stop all services if you really need it.
+ * <p>
+ * Acknowledgement: developed from code contributed by https://github.com/lelmarir
  */
 @Singleton
 public class ServicesMonitor implements ServiceStatusChangeListener {
@@ -39,11 +41,9 @@ public class ServicesMonitor implements ServiceStatusChangeListener {
 
 	private final Map<Service, ServiceStatus> services;
 
-	private final Deque<StatusChange> statusLog = new LinkedBlockingDeque<>();
-
 	@Inject
 	public ServicesMonitor() {
-		this.services = new WeakHashMap<>();
+		this.services = new MapMaker().weakKeys().makeMap();
 	}
 
 	/**
@@ -51,41 +51,63 @@ public class ServicesMonitor implements ServiceStatusChangeListener {
 	 * 
 	 * @param service
 	 */
-	public void registerService(Service service) {
+	synchronized public void registerService(Service service) {
 		ServiceStatus serviceStatus = new ServiceStatus();
 		services.put(service, serviceStatus);
 		service.addListener(this);
+		log.debug("registered service '{}'", service.getName());
 
-	}
-
-	@Override
-	public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
-		StatusChange statusChange = new StatusChange();
-		statusChange.setDateTime(DateTime.now());
-		statusChange.setFromStatus(fromStatus);
-		statusChange.setToStatus(toStatus);
-		statusLog.add(statusChange);
 	}
 
 	/**
-	 * Stop all registered services
+	 * Processes a change in Service status and records it in the {@link #services} map
 	 */
-	public void stop() {
-		// TODO Auto-generated method stub
+	@Override
+	synchronized public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
+
+		ServiceStatus status = services.get(service);
+		status.setPreviousStatus(fromStatus);
+		status.setCurrentStatus(toStatus);
+		status.setStatusChangeTime(DateTime.now());
+		if (toStatus == Status.STARTED) {
+			status.setLastStartTime(DateTime.now());
+		}
+		if (toStatus == Status.STOPPED) {
+			status.setLastStopTime(DateTime.now());
+		}
+		services.put(service, status);
+	}
+
+	/**
+	 * Stops all services. Are you sure you really want to do that?
+	 */
+	synchronized public void stopAllServices() {
+		log.info("Stopping all services");
+		for (Service service : services.keySet()) {
+			service.stop();
+		}
 
 	}
 
-	public ImmutableList<Service> getRegisteredServices() {
+	/**
+	 * Returns a safe copy of the registered services
+	 * 
+	 * @return
+	 */
+	synchronized public ImmutableList<Service> getRegisteredServices() {
 		return ImmutableList.copyOf(services.keySet());
 
 	}
 
-	public void clearStatusLog() {
-		statusLog.clear();
-	}
-
-	public Deque<StatusChange> getStatusLog() {
-		return statusLog;
+	/**
+	 * Retrieves the status 'record' from the {@link #services} map, or null if no entry exists in the map. Not
+	 * synchronised because the map is concurrent
+	 * 
+	 * @param service
+	 * @return
+	 */
+	public ServiceStatus getServiceStatus(Service service) {
+		return services.get(service);
 	}
 
 }

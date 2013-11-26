@@ -12,8 +12,11 @@
  */
 package uk.co.q3c.v7.base.guice.services;
 
+import static org.assertj.core.api.Assertions.*;
+
 import javax.inject.Inject;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -224,6 +227,18 @@ public class ServiceUtilsTest {
 
 		}
 
+	}
+
+	@Test
+	public void unenhancedService() {
+
+		// given
+
+		// when
+		// then
+		// this just validates the need for the test, AOP enhancing changes the class
+		assertThat(service_2a.getClass()).isNotEqualTo(MockService_2A.class);
+		assertThat(ServiceUtils.unenhancedClass(service_2a)).isEqualTo(MockService_2A.class);
 	}
 
 }

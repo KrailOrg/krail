@@ -68,7 +68,6 @@ public class ServicesMonitorModule extends AbstractModule {
 					// cast is safe - if not, the matcher is wrong
 					Service service = (Service) injectee;
 					servicesManager.registerService(service);
-					log.debug("registered service '{}'", service.getName());
 
 				}
 			};

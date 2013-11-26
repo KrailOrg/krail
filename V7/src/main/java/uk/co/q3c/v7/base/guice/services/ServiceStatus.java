@@ -2,37 +2,37 @@ package uk.co.q3c.v7.base.guice.services;
 
 import org.joda.time.DateTime;
 
-import uk.co.q3c.v7.base.guice.services.Service.Status;
-
 public class ServiceStatus {
 
-	private Service.Status status = Status.INITIAL;
-	private DateTime startTime;
-	private DateTime stopTime;
+	private Service.Status currentStatus;
+	private Service.Status previousStatus;
+	private DateTime lastStartTime;
+	private DateTime lastStopTime;
+	private DateTime statusChangeTime;
 	private Service service;
 
 	public Service.Status getStatus() {
-		return status;
+		return currentStatus;
 	}
 
 	public void setStatus(Service.Status status) {
-		this.status = status;
+		this.currentStatus = status;
 	}
 
 	public DateTime getStartTime() {
-		return startTime;
+		return lastStartTime;
 	}
 
 	public void setStartTime(DateTime startTime) {
-		this.startTime = startTime;
+		this.lastStartTime = startTime;
 	}
 
 	public DateTime getStopTime() {
-		return stopTime;
+		return lastStopTime;
 	}
 
 	public void setStopTime(DateTime stopTime) {
-		this.stopTime = stopTime;
+		this.lastStopTime = stopTime;
 	}
 
 	public Service getService() {
@@ -41,6 +41,46 @@ public class ServiceStatus {
 
 	public void setService(Service service) {
 		this.service = service;
+	}
+
+	public Service.Status getCurrentStatus() {
+		return currentStatus;
+	}
+
+	public void setCurrentStatus(Service.Status currentStatus) {
+		this.currentStatus = currentStatus;
+	}
+
+	public Service.Status getPreviousStatus() {
+		return previousStatus;
+	}
+
+	public void setPreviousStatus(Service.Status previousStatus) {
+		this.previousStatus = previousStatus;
+	}
+
+	public DateTime getLastStartTime() {
+		return lastStartTime;
+	}
+
+	public void setLastStartTime(DateTime lastStartTime) {
+		this.lastStartTime = lastStartTime;
+	}
+
+	public DateTime getLastStopTime() {
+		return lastStopTime;
+	}
+
+	public void setLastStopTime(DateTime lastStopTime) {
+		this.lastStopTime = lastStopTime;
+	}
+
+	public DateTime getStatusChangeTime() {
+		return statusChangeTime;
+	}
+
+	public void setStatusChangeTime(DateTime statusChangeTime) {
+		this.statusChangeTime = statusChangeTime;
 	}
 
 }
