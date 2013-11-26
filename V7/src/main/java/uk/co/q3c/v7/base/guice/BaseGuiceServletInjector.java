@@ -28,12 +28,12 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.guice.services.ServicesMonitor;
-import uk.co.q3c.v7.base.guice.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapProvider;
+import uk.co.q3c.v7.base.services.ServicesMonitor;
+import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
 import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
 import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;

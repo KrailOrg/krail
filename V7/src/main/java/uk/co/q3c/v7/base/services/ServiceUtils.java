@@ -10,14 +10,32 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.guice.services;
+package uk.co.q3c.v7.base.services;
+
 
 /**
- * Extends AbstractService to provide I18N support for name and description fields
+ * A utility class for {@link Service} implementations
  * 
  * @author David Sowerby
  * 
  */
-public abstract class AbstractServiceI18N extends AbstractService {
+public class ServiceUtils {
 
+	/**
+	 * Returns the underlying class un-enhanced by Guice, needed to identify annotations
+	 * 
+	 * @param serviceClass
+	 */
+	public static Class<?> unenhancedClass(Class<?> serviceClass) {
+		Class<?> clazz = serviceClass;
+		while (clazz.getName().contains("EnhancerByGuice")) {
+			clazz = clazz.getSuperclass();
+		}
+		return clazz;
+	}
+
+	public static Class<?> unenhancedClass(Service service) {
+		Class<?> serviceClass = service.getClass();
+		return unenhancedClass(serviceClass);
+	}
 }

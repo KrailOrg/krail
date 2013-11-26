@@ -10,32 +10,31 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.guice.services;
+package uk.co.q3c.v7.base.services;
 
-public class ServiceRegistrationException extends RuntimeException {
+public class ServiceStatusException extends RuntimeException {
 
-	public ServiceRegistrationException() {
+	public ServiceStatusException() {
 		super();
 
 	}
 
-	public ServiceRegistrationException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
+	public ServiceStatusException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 
 	}
 
-	public ServiceRegistrationException(String message, Throwable cause) {
+	public ServiceStatusException(String message, Throwable cause) {
 		super(message, cause);
 
 	}
 
-	public ServiceRegistrationException(String message) {
+	public ServiceStatusException(String message) {
 		super(message);
 
 	}
 
-	public ServiceRegistrationException(Throwable cause) {
+	public ServiceStatusException(Throwable cause) {
 		super(cause);
 
 	}

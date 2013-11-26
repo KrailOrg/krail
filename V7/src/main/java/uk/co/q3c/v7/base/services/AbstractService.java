@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.guice.services;
+package uk.co.q3c.v7.base.services;
 
 import java.util.ArrayList;
 import java.util.List;

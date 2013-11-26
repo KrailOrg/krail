@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.guice.services;
+package uk.co.q3c.v7.base.services;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -18,6 +18,11 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import uk.co.q3c.v7.base.services.AbstractService;
+import uk.co.q3c.v7.base.services.Service;
+import uk.co.q3c.v7.base.services.ServiceUtils;
+import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;

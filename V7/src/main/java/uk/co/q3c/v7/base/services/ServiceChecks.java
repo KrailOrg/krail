@@ -10,33 +10,19 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.guice.services;
+package uk.co.q3c.v7.base.services;
 
-public class ServiceStatusException extends RuntimeException {
+public class ServiceChecks {
 
-	public ServiceStatusException() {
-		super();
-
+	/**
+	 * Checks that {@code service} has been started, and throws a {@link ServiceStatusException} if it has not
+	 * 
+	 * @param service
+	 */
+	public static void checkIsStarted(Service service) {
+		if (!(service.isStarted())) {
+			throw new ServiceStatusException("You cannot use the " + service.getName()
+					+ " service until it has been started");
+		}
 	}
-
-	public ServiceStatusException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-
-	}
-
-	public ServiceStatusException(String message, Throwable cause) {
-		super(message, cause);
-
-	}
-
-	public ServiceStatusException(String message) {
-		super(message);
-
-	}
-
-	public ServiceStatusException(Throwable cause) {
-		super(cause);
-
-	}
-
 }

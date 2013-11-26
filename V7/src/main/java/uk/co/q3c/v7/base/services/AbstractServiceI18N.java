@@ -10,11 +10,14 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.guice.services;
+package uk.co.q3c.v7.base.services;
 
-import uk.co.q3c.v7.base.guice.services.Service.Status;
+/**
+ * Extends AbstractService to provide I18N support for name and description fields
+ * 
+ * @author David Sowerby
+ * 
+ */
+public abstract class AbstractServiceI18N extends AbstractService {
 
-public interface ServiceStatusChangeListener {
-
-	void serviceStatusChange(Service service, Status fromStatus, Status toStatus);
 }

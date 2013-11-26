@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.guice.services;
+package uk.co.q3c.v7.base.services;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.guice.services.Service.Status;
+import uk.co.q3c.v7.base.services.Service.Status;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MapMaker;

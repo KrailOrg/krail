@@ -1,4 +1,4 @@
-package uk.co.q3c.v7.base.guice.services;
+package uk.co.q3c.v7.base.services;
 
 import org.joda.time.DateTime;
 

@@ -3,9 +3,9 @@ package uk.co.q3c.v7.base.view;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import uk.co.q3c.v7.base.guice.services.AbstractService;
-import uk.co.q3c.v7.base.guice.services.Service;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
+import uk.co.q3c.v7.base.services.AbstractService;
+import uk.co.q3c.v7.base.services.Service;
 
 import com.google.inject.Provider;
 

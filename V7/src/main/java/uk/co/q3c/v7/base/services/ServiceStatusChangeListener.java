@@ -10,19 +10,11 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.guice.services;
+package uk.co.q3c.v7.base.services;
 
-public class ServiceChecks {
+import uk.co.q3c.v7.base.services.Service.Status;
 
-	/**
-	 * Checks that {@code service} has been started, and throws a {@link ServiceStatusException} if it has not
-	 * 
-	 * @param service
-	 */
-	public static void checkIsStarted(Service service) {
-		if (!(service.isStarted())) {
-			throw new ServiceStatusException("You cannot use the " + service.getName()
-					+ " service until it has been started");
-		}
-	}
+public interface ServiceStatusChangeListener {
+
+	void serviceStatusChange(Service service, Status fromStatus, Status toStatus);
 }
