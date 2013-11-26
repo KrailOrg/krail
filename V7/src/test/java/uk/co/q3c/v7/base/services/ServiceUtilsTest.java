@@ -19,11 +19,6 @@ import javax.inject.Inject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.services.AbstractService;
-import uk.co.q3c.v7.base.services.Service;
-import uk.co.q3c.v7.base.services.ServiceUtils;
-import uk.co.q3c.v7.base.services.ServicesMonitorModule;
-
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
@@ -86,7 +81,7 @@ public class ServiceUtilsTest {
 		}
 
 		@Override
-		public String serviceId() {
+		public String getDescription() {
 			return "service 0";
 		}
 
@@ -120,7 +115,7 @@ public class ServiceUtilsTest {
 		}
 
 		@Override
-		public String serviceId() {
+		public String getDescription() {
 			return "service 1";
 		}
 
@@ -150,7 +145,7 @@ public class ServiceUtilsTest {
 		}
 
 		@Override
-		public String serviceId() {
+		public String getDescription() {
 			return "service 2";
 		}
 
@@ -188,7 +183,7 @@ public class ServiceUtilsTest {
 		}
 
 		@Override
-		public String serviceId() {
+		public String getDescription() {
 			return "service 3";
 		}
 
@@ -222,7 +217,7 @@ public class ServiceUtilsTest {
 		}
 
 		@Override
-		public String serviceId() {
+		public String getDescription() {
 			return "service 4";
 		}
 

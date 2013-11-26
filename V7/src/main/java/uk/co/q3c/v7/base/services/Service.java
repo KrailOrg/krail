@@ -59,16 +59,33 @@ public interface Service extends ServiceStatusChangeListener {
 	 */
 	Status start();
 
+	/**
+	 * Stops the service. No other action is taken automatically apart form the {@link ServicesMonitor} recording the
+	 * change of status. If other Services are dependent and need to respond to this change of status, then the
+	 * dependent services should respond to the
+	 * {@link ServiceStatusChangeListener#serviceStatusChange(Service, Status, Status)}. Listeners are added in the AOP
+	 * code, so that Services dependent on another Service are notified of a change of status in their dependencies.
+	 * 
+	 * @return
+	 */
 	Status stop();
 
+	/**
+	 * The name for this service. The implementation may wish to include an instance identifier if it is not of
+	 * Singleton scope, but this is not essential; the name is not used for anything except as a label. You may also
+	 * choose to implement by sub-classing {@link AbstractServiceI18N}, which will handle I18N keys and translation
+	 * 
+	 * @return
+	 */
 	String getName();
 
 	/**
-	 * Provides an identifier for the ServiceInstance, unique to the application
+	 * The name description for this service. You may also choose to implement by sub-classing
+	 * {@link AbstractServiceI18N}, which will handle I18N keys and translation
 	 * 
-	 * @return application unique identifier
+	 * @return
 	 */
-	String serviceId();
+	String getDescription();
 
 	/**
 	 * returns the Status value for this service instance

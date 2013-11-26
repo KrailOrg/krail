@@ -26,13 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.services.AbstractService;
-import uk.co.q3c.v7.base.services.AutoStart;
-import uk.co.q3c.v7.base.services.Service;
-import uk.co.q3c.v7.base.services.ServiceStatus;
-import uk.co.q3c.v7.base.services.ServiceUtils;
-import uk.co.q3c.v7.base.services.ServicesMonitor;
-import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.services.Service.Status;
 
 import com.google.common.collect.ImmutableList;
@@ -68,7 +61,7 @@ public class ServiceTest {
 		}
 
 		@Override
-		public String serviceId() {
+		public String getDescription() {
 			return getName();
 		}
 

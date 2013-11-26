@@ -35,11 +35,6 @@ public class ApplicationViewService extends AbstractService {
 	}
 
 	@Override
-	public String serviceId() {
-		return "Application View";
-	}
-
-	@Override
 	public String getName() {
 		return "Appplication View Service";
 	}
@@ -48,6 +43,12 @@ public class ApplicationViewService extends AbstractService {
 	public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

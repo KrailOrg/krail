@@ -12,12 +12,58 @@
  */
 package uk.co.q3c.v7.base.services;
 
+import javax.inject.Inject;
+
+import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.Translate;
+
 /**
  * Extends AbstractService to provide I18N support for name and description fields
  * 
  * @author David Sowerby
  * 
  */
-public abstract class AbstractServiceI18N extends AbstractService {
+public abstract class AbstractServiceI18N extends AbstractService implements ServiceI18N {
+	private I18NKey<?> nameKey;
+	private I18NKey<?> descriptionKey;
+	private final Translate translate;
+
+	@Inject
+	protected AbstractServiceI18N(Translate translate) {
+		super();
+		this.nameKey = nameKey;
+		this.descriptionKey = descriptionKey;
+		this.translate = translate;
+	}
+
+	@Override
+	public I18NKey<?> getNameKey() {
+		return nameKey;
+	}
+
+	@Override
+	public I18NKey<?> getDescriptionKey() {
+		return descriptionKey;
+	}
+
+	@Override
+	public String getName() {
+		return translate.from(nameKey);
+	}
+
+	@Override
+	public String getDescription() {
+		return translate.from(descriptionKey);
+	}
+
+	@Override
+	public void setNameKey(I18NKey<?> nameKey) {
+		this.nameKey = nameKey;
+	}
+
+	@Override
+	public void setDescriptionKey(I18NKey<?> descriptionKey) {
+		this.descriptionKey = descriptionKey;
+	}
 
 }
