@@ -26,6 +26,7 @@ import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.base.config.IniModule;
 import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
@@ -79,8 +80,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	protected void createInjector() {
-		injector = Guice.createInjector(new IniModule(), new I18NModule());
-
+		injector = Guice.createInjector(new IniModule(), new I18NModule(), new ApplicationConfigurationModule());
 		injector = injector.createChildInjector(getModules());
 
 		// By default Shiro provides a binding to DefaultSecurityManager, but that is replaced by a binding to

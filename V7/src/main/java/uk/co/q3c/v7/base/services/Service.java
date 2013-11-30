@@ -57,7 +57,7 @@ public interface Service extends ServiceStatusChangeListener {
 	 * If an exception is thrown during this method, it is caught by the AOP Code, and the status set to
 	 * {@link Status#FAILED_TO_START}
 	 */
-	Status start();
+	Status start() throws Exception;
 
 	/**
 	 * Stops the service. No other action is taken automatically apart form the {@link ServicesMonitor} recording the

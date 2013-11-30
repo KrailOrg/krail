@@ -15,7 +15,12 @@ package uk.co.q3c.v7.base.config;
 import static org.fest.assertions.Assertions.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.HierarchicalINIConfiguration;
+import org.apache.commons.configuration.tree.DefaultConfigurationNode;
 import org.apache.shiro.config.Ini.Section;
 import org.junit.Before;
 import org.junit.Test;
@@ -147,6 +152,25 @@ public class V7IniTest {
 			assertThat(section.values().toString()).isEqualTo(ini2.get(section.getName()).values().toString());
 		}
 
+	}
+
+	@Test
+	public void iniconfig() throws ConfigurationException {
+
+		// given
+		HierarchicalINIConfiguration config = new HierarchicalINIConfiguration("/home/david/temp/test.ini");
+		DefaultConfigurationNode node = new DefaultConfigurationNode();
+		node.setName("node 1");
+		node.setValue("xx");
+		List<DefaultConfigurationNode> nodes = new ArrayList<>();
+		nodes.add(node);
+		DefaultConfigurationNode childNode = new DefaultConfigurationNode("baby", "boy");
+		node.addChild(childNode);
+		// when
+		// List<>
+		config.addNodes("section 1", nodes);
+		// then
+		config.save();
 	}
 
 	/**

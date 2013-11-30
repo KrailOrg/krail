@@ -18,9 +18,10 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 /**
- * A utility class to retrieve an I18N value from a key, and arguments. You can also get the value for the key (but
- * cannot use arguments) by using {@link I18NKey#getValue(Locale)}. This class simply provides a slightly neater syntax,
- * a method for expanding a pattern with parameters and defaults to {@link CurrentLocale}
+ * A utility class to retrieve an I18N value from a key, and expand its arguments if it has them. You can also get the
+ * value for the key (but cannot use arguments) by using {@link I18NKey#getValue(Locale)}. This class simply provides a
+ * slightly neater syntax, a method for expanding a pattern with parameters. Some methods also have a simpler signature
+ * by defaulting to {@link CurrentLocale}
  * 
  * @author David Sowerby 3 Aug 2013
  * 
