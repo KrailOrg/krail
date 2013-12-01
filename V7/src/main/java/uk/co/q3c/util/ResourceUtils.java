@@ -18,8 +18,8 @@ import com.vaadin.server.VaadinService;
 
 public class ResourceUtils {
 	/**
-	 * Returns the base directory path for the application if there is a VaadinService is running, or the root test
-	 * directory if not (this is to enable testing of course)
+	 * Returns the base directory path for the application if there is a VaadinService is running, or throws a
+	 * {@link IllegalStateException} if no service is running
 	 * 
 	 * @return
 	 */
@@ -29,8 +29,8 @@ public class ResourceUtils {
 	}
 
 	/**
-	 * Returns the base directory path for the application if there is a VaadinService is running, or the root test
-	 * directory if not (this is to enable testing of course)
+	 * Returns the base directory path for the application if there is a VaadinService is running, or throws a
+	 * {@link IllegalStateException} if no service is running
 	 * 
 	 * @return
 	 */
@@ -38,6 +38,6 @@ public class ResourceUtils {
 		if (VaadinService.getCurrent() != null) {
 			return VaadinService.getCurrent().getBaseDirectory();
 		}
-		return new File("src/test/java");
+		throw new IllegalStateException("There is no current VaadinService");
 	}
 }
