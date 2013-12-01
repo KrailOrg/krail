@@ -22,7 +22,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18NTranslator;
+import uk.co.q3c.v7.i18n.LabelKey;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -74,6 +76,21 @@ public class DefaultApplicationConfigurationServiceTest {
 		service.addConfiguration("rubbish.ini");
 		// then
 		service.start();
+
+	}
+
+	@Test
+	public void i18N() {
+
+		// given
+
+		// when
+
+		// then
+		assertThat(service.getNameKey()).isEqualTo(LabelKey.Application_Configuration_Service);
+		assertThat(service.getName()).isEqualTo("Application Configuration Service");
+		assertThat(service.getDescriptionKey()).isEqualTo(DescriptionKey.Application_Configuration_Service);
+		assertThat(service.getDescription()).isEqualTo("This service loads the application configuration from V7.ini");
 
 	}
 

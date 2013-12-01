@@ -36,6 +36,8 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 		map.put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok");
 		map.put(DescriptionKey.No_Permission, "You do not have permission for that action");
 		map.put(DescriptionKey.Service_not_Started, "You cannot use service {0} until it has been started");
+		map.put(DescriptionKey.Application_Configuration_Service,
+				"This service loads the application configuration from V7.ini");
 	}
 
 	@Override

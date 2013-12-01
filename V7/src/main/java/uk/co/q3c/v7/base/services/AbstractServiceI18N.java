@@ -31,8 +31,6 @@ public abstract class AbstractServiceI18N extends AbstractService implements Ser
 	@Inject
 	protected AbstractServiceI18N(Translate translate) {
 		super();
-		this.nameKey = nameKey;
-		this.descriptionKey = descriptionKey;
 		this.translate = translate;
 	}
 

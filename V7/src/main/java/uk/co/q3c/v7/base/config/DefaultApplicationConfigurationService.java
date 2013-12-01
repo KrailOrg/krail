@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.util.ResourceUtils;
 import uk.co.q3c.v7.base.services.AbstractServiceI18N;
 import uk.co.q3c.v7.base.services.Service;
+import uk.co.q3c.v7.i18n.DescriptionKey;
+import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 /**
@@ -62,11 +64,13 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 	}
 
 	/**
-	 * Override this method if you want to add other configuration files or replace the default. You will also then need
-	 * to change the Guice binding for {@link ApplicationConfigurationService}
+	 * Override this method if you want to change the configuration files to use, or change the name and description
+	 * keys. You will also then need to change the Guice binding for {@link ApplicationConfigurationService}
 	 */
 	protected void configure() {
 		addConfiguration("V7.ini");
+		setNameKey(LabelKey.Application_Configuration_Service);
+		setDescriptionKey(DescriptionKey.Application_Configuration_Service);
 	}
 
 	/**
@@ -93,16 +97,6 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 	@Override
 	public Status stop() {
 		return Status.STOPPED;
-	}
-
-	@Override
-	public String getName() {
-		return null;
-	}
-
-	@Override
-	public String getDescription() {
-		return null;
 	}
 
 	@Override
