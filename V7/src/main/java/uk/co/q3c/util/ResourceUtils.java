@@ -40,4 +40,23 @@ public class ResourceUtils {
 		}
 		throw new IllegalStateException("There is no current VaadinService");
 	}
+
+	/**
+	 * a convenience method equivalent to creating a {@link File} object using the System property 'user.home'
+	 * 
+	 * @return
+	 */
+	public static File userHomeDirectory() {
+		return new File(System.getProperty("user.home"));
+	}
+
+	/**
+	 * a convenience method creating a {@link File} object referencing {user.home}/temp
+	 * 
+	 * @return
+	 */
+	public static File userTempDirectory() {
+		return new File(userHomeDirectory(), "temp");
+	}
+
 }

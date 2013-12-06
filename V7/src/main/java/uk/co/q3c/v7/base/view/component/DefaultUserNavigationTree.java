@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
-import com.google.inject.Provider;
 
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -34,6 +33,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.useropt.UserOption;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
@@ -41,6 +41,7 @@ import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.Provider;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
 
@@ -59,7 +60,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	private int maxLevel;
 	private int level;
 	private final V7Navigator navigator;
-	private final Provider<Subject> subjectPro;
+	private final Provider<Subject> subjectProvider;
 	private final DefaultURIPermissionFactory uriPermissionFactory;
 	private boolean sorted;
 	private final UserOption userOption;
@@ -69,13 +70,13 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	public static final String maxLevelOpt = "maxLevel";
 
 	@Inject
-	protected DefaultUserNavigationTree(Sitemap sitemap, V7Navigator navigator, Provider<Subject> subjectPro,
+	protected DefaultUserNavigationTree(Sitemap sitemap, V7Navigator navigator, SubjectProvider subjectProvider,
 			DefaultURIPermissionFactory uriPermissionFactory, UserOption userOption,
 			SitemapURIConverter sitemapURIConverter, LoginStatusHandler loginStatusHandler, Translate translate) {
 		super();
 		this.sitemap = sitemap;
 		this.navigator = navigator;
-		this.subjectPro = subjectPro;
+		this.subjectProvider = subjectProvider;
 		this.uriPermissionFactory = uriPermissionFactory;
 		this.userOption = userOption;
 		this.sitemapURIConverter = sitemapURIConverter;
@@ -89,7 +90,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		navigator.addViewChangeListener(this);
 		setId(ID.getId(this));
 		loginStatusHandler.addListener(this);
-		loginStatusChange(loginStatusHandler.subjectIsAuthenticated(), subjectPro.get());
+		loginStatusChange(loginStatusHandler.subjectIsAuthenticated(), subjectProvider.get());
 		loadNodes();
 
 	}
@@ -129,7 +130,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		URIViewPermission pagePermissionRequired = uriPermissionFactory.createViewPermission(uri);
 
 		// if permitted, add it
-		if (publicBranch || subjectPro.get().isPermitted(pagePermissionRequired)) {
+		if (publicBranch || subjectProvider.get().isPermitted(pagePermissionRequired)) {
 			log.debug("user has permission to view URI {}", uri);
 			this.addItem(childNode);
 			I18NKey<?> key = childNode.getLabelKey();

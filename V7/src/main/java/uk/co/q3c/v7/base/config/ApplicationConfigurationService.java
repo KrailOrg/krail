@@ -17,7 +17,9 @@ import java.io.File;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 
-public interface ApplicationConfigurationService {
+import uk.co.q3c.v7.base.services.ServiceI18N;
+
+public interface ApplicationConfigurationService extends ServiceI18N {
 
 	/**
 	 * Returns a configuration combined from all those added using the {@link #addConfiguration(Configuration)} methods.

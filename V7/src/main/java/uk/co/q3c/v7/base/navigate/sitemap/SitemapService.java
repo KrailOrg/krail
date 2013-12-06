@@ -12,26 +12,8 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-public class SiteMapException extends RuntimeException {
+import uk.co.q3c.v7.base.services.ServiceI18N;
 
-	protected SiteMapException() {
-		super();
-	}
-
-	protected SiteMapException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	protected SiteMapException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public SiteMapException(String message) {
-		super(message);
-	}
-
-	protected SiteMapException(Throwable cause) {
-		super(cause);
-	}
+public interface SitemapService extends ServiceI18N {
 
 }

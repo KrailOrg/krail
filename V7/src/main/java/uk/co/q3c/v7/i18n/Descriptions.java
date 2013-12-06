@@ -38,6 +38,8 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 		map.put(DescriptionKey.Service_not_Started, "You cannot use service {0} until it has been started");
 		map.put(DescriptionKey.Application_Configuration_Service,
 				"This service loads the application configuration from V7.ini");
+		map.put(DescriptionKey.Sitemap_Service,
+				"This service creates the Sitemap using options from the application configuration");
 	}
 
 	@Override

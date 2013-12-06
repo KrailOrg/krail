@@ -69,7 +69,7 @@ import fixture.testviews2.OptionsView;
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class TextReaderSitemapProviderTest {
+public class DefaultSitemapFileReaderTest {
 	private static int COMMENT_LINES = 9;
 	private static int BLANK_LINES = 9;
 	private static int PAGE_COUNT = 13;
@@ -78,7 +78,7 @@ public class TextReaderSitemapProviderTest {
 	private static File modifiedFile;
 	private List<String> lines;
 	@Inject
-	TextReaderSitemapProvider reader;
+	DefaultSitemapFileReader reader;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -106,7 +106,7 @@ public class TextReaderSitemapProviderTest {
 		DateTime start = DateTime.now();
 		// when
 		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile);
+		reader.parse(propFile, true);
 		// then
 		assertThat(reader.getSitemap()).isNotNull();
 		assertThat(reader.getCommentLines()).isEqualTo(COMMENT_LINES);
@@ -151,14 +151,13 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getStartTime().getMillis()).isGreaterThanOrEqualTo(start.getMillis());
 		assertThat(reader.getEndTime().isAfter(reader.getStartTime())).isTrue();
 
-		assertThat(reader.getReport()).isNotNull();
-		assertThat(reader.getReport().toString()).isNotEmpty();
+		assertThat(reader.buildReport(new StringBuilder()).toString()).isNotEmpty();
 
 		for (StandardPageKey spk : StandardPageKey.values()) {
 			assertThat(reader.standardPageUri(spk)).overridingErrorMessage("not expecting null for " + spk.name())
 					.isNotNull();
 		}
-		System.out.println(reader.getReport().toString());
+		System.out.println(reader.buildReport(new StringBuilder()).toString());
 		assertThat(reader.getSitemap().hasErrors()).isFalse();
 
 		System.out.println(reader.getSitemap());
@@ -185,7 +184,7 @@ public class TextReaderSitemapProviderTest {
 		substitute("[viewPackages]", "[viewPackages");
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		// then
 
 		assertThat(reader.isLabelClassNonExistent()).isFalse();
@@ -201,7 +200,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
 		// assertThat(reader.getSitemap().hasErrors()).isTrue();
-		System.out.println(reader.getReport());
+		System.out.println(reader.buildReport(new StringBuilder()).toString());
 	}
 
 	@Test
@@ -210,7 +209,7 @@ public class TextReaderSitemapProviderTest {
 		insertAfter("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "randomProperty=23");
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		// then
 
 		assertThat(reader.isLabelClassNonExistent()).isFalse();
@@ -227,7 +226,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getIndentationErrors()).containsOnly();
 		// assertThat(reader.getSitemap().hasErrors()).isFalse();
 
-		System.out.println(reader.getReport());
+		System.out.println(reader.buildReport(new StringBuilder()).toString());
 
 	}
 
@@ -238,7 +237,7 @@ public class TextReaderSitemapProviderTest {
 		substitute("[options]", "[option]");
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		// then
 
 		assertThat(reader.missingSections()).containsOnly("options");
@@ -254,7 +253,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getIndentationErrors()).containsOnly();
 		assertThat(reader.getSitemap().hasErrors()).isTrue();
 
-		System.out.println(reader.getReport());
+		System.out.println(reader.buildReport(new StringBuilder()).toString());
 	}
 
 	/**
@@ -269,7 +268,7 @@ public class TextReaderSitemapProviderTest {
 		substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKey_Invalid");
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		// then
 
 		assertThat(reader.isLabelClassMissing()).isFalse();
@@ -286,7 +285,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
 		assertThat(reader.getSitemap().hasErrors()).isTrue();
-		System.out.println(reader.getReport());
+		System.out.println(reader.buildReport(new StringBuilder()).toString());
 	}
 
 	/**
@@ -300,7 +299,7 @@ public class TextReaderSitemapProviderTest {
 		substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKey2");
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		// then
 		assertThat(reader.isLabelClassMissing()).isFalse();
 		assertThat(reader.isLabelClassNonExistent()).isTrue();
@@ -318,7 +317,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getIndentationErrors()).containsOnly();
 		assertThat(reader.getSitemap().hasErrors()).isTrue();
 
-		System.out.println(reader.getReport());
+		System.out.println(reader.buildReport(new StringBuilder()).toString());
 
 	}
 
@@ -329,7 +328,7 @@ public class TextReaderSitemapProviderTest {
 		prepFile();
 		outputModifiedFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		// then
 
 		assertThat(reader.isLabelClassNonExistent()).isFalse();
@@ -345,7 +344,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly("subview.TransfersView");
 		assertThat(reader.getIndentationErrors()).containsOnly();
 		assertThat(reader.getSitemap().hasErrors()).isTrue();
-		System.out.println(reader.getReport());
+		System.out.println(reader.buildReport(new StringBuilder()).toString());
 
 	}
 
@@ -356,7 +355,7 @@ public class TextReaderSitemapProviderTest {
 				"--money-in-out : subview.NotV7 ~ MoneyInOut");
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 
 		// then
 		assertThat(reader.isLabelClassNonExistent()).isFalse();
@@ -372,7 +371,7 @@ public class TextReaderSitemapProviderTest {
 		assertThat(reader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(reader.getIndentationErrors()).containsOnly();
 		assertThat(reader.getSitemap().hasErrors()).isTrue();
-		System.out.println(reader.getReport());
+		System.out.println(reader.buildReport(new StringBuilder()).toString());
 
 	}
 
@@ -387,10 +386,10 @@ public class TextReaderSitemapProviderTest {
 		substitute("--transfers     : subview.Transfer", "----transfers     : subview.Transfer");
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 
 		// then
-		System.out.println(reader.getReport());
+		System.out.println(reader.buildReport(new StringBuilder()).toString());
 		assertThat(reader.isLabelClassNonExistent()).isFalse();
 		assertThat(reader.isLabelClassNotI18N()).isFalse();
 		assertThat(reader.missingSections()).containsOnly();
@@ -411,13 +410,13 @@ public class TextReaderSitemapProviderTest {
 	/**
 	 * Try to call report before parsing anything
 	 */
-	@Test(expected = SiteMapException.class)
+	@Test(expected = SitemapException.class)
 	public void reportBeforeParse() {
 
 		// given
 
 		// when
-		reader.getReport();
+		System.out.println(reader.buildReport(new StringBuilder()).toString());
 		// then
 
 	}
@@ -429,7 +428,7 @@ public class TextReaderSitemapProviderTest {
 		insertAfter("[redirects]", "wiggly : wiggly/home");
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		// then
 		assertThat(reader.getRedirectErrors()).containsOnly(
 				"'wiggly/home' cannot be a redirect target, it has not been defined as a page");
@@ -454,7 +453,7 @@ public class TextReaderSitemapProviderTest {
 
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		System.out.println(reader.getSitemap().toString());
 		// then
 
@@ -471,7 +470,7 @@ public class TextReaderSitemapProviderTest {
 		// given
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		// then
 		assertThat(reader.isAppendView()).isTrue();
 		assertThat(reader.isGeneratePublicHomePage()).isTrue();
@@ -491,7 +490,7 @@ public class TextReaderSitemapProviderTest {
 		prepFile();
 
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		// then defaults correct
 		assertThat(reader.isAppendView()).isTrue();
 		assertThat(reader.isGeneratePublicHomePage()).isTrue();
@@ -515,7 +514,7 @@ public class TextReaderSitemapProviderTest {
 		substitute("systemAccountRoot=public/system-account", "systemAccountRoot=public/sysaccount");
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		// then values correct
 		assertThat(reader.isAppendView()).isFalse();
 		assertThat(reader.isGeneratePublicHomePage()).isFalse();
@@ -533,7 +532,7 @@ public class TextReaderSitemapProviderTest {
 		insertAfter("       : public", "public: ");
 		prepFile();
 		// when
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 
 		// then
 		assertThat(reader.getRedirectErrors()).contains("'' cannot be both a redirect source and redirect target");
@@ -551,7 +550,7 @@ public class TextReaderSitemapProviderTest {
 		prepFile();
 		// when
 		outputModifiedFile();
-		reader.parse(modifiedFile);
+		reader.parse(modifiedFile, true);
 		// then
 		assertThat(reader.getSitemap().getPrivateRoot()).isEqualTo("secret");
 		assertThat(reader.getSitemap().getPublicRoot()).isEqualTo("open");
@@ -568,7 +567,7 @@ public class TextReaderSitemapProviderTest {
 
 		// when
 		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile);
+		reader.parse(propFile, true);
 
 		// then
 		System.out.println(reader.getSitemap().getReport());

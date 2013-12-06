@@ -1,10 +1,8 @@
 package uk.co.q3c.v7.base.guice.uiscope;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.fest.assertions.Assertions.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -52,7 +50,6 @@ import uk.co.q3c.v7.base.view.DefaultErrorView;
 import uk.co.q3c.v7.base.view.DefaultPublicHomeView;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 
@@ -86,8 +83,6 @@ public class UIScopeTest {
 	static Map<String, Provider<UI>> uibinder;
 	static Subject subject = mock(Subject.class);
 
-	static MapBinder<String, V7View> viewProMap;
-
 	UIProvider provider;
 
 	static class TestObject {
@@ -113,9 +108,6 @@ public class UIScopeTest {
 			uiProviders.addBinding(BasicUI.class.getName()).to(BasicUI.class);
 			uibinder = new HashMap<>();
 			uibinder.put(BasicUI.class.getName(), uiProvider);
-
-			viewProMap = MapBinder.newMapBinder(binder(), String.class, V7View.class);
-			viewProMap.addBinding("").to(PublicHomeView.class);
 
 			bind(PublicHomeView.class).to(DefaultPublicHomeView.class);
 			bind(V7Navigator.class).to(DefaultV7Navigator.class);
@@ -189,7 +181,7 @@ public class UIScopeTest {
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
 		when(mockedSession.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
 		ui.setSession(mockedSession);
-		ui.doInit(mockedRequest, 23);
+
 		return ui;
 	}
 

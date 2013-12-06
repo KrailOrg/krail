@@ -177,7 +177,7 @@ public class SitemapTest {
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
-		sitemap.getRedirects().put("home", "public/home");
+		sitemap.addRedirect("home", "public/home");
 		// when redirect exists
 		String page = sitemap.getRedirectFor("home");
 		// then

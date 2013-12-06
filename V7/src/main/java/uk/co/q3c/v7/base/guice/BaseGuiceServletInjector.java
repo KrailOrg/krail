@@ -27,18 +27,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
-import uk.co.q3c.v7.base.config.IniModule;
-import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
-import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapProvider;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapServiceModule;
 import uk.co.q3c.v7.base.services.ServicesMonitor;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
 import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
 import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
-import uk.co.q3c.v7.base.view.ApplicationViewModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
 import uk.co.q3c.v7.i18n.I18NModule;
@@ -46,7 +43,6 @@ import uk.co.q3c.v7.i18n.I18NModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.Provider;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
@@ -72,7 +68,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	 * @see com.google.inject.servlet.GuiceServletContextListener#getInjector()
 	 */
 	@Override
-	protected Injector getInjector() {
+	public Injector getInjector() {
 		if (injector == null) {
 			throw new IllegalStateException("The injector is not available, it may not yet been initialized.");
 		}
@@ -80,40 +76,39 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	protected void createInjector() {
-		injector = Guice.createInjector(new IniModule(), new I18NModule(), new ApplicationConfigurationModule());
-		injector = injector.createChildInjector(getModules());
+		injector = Guice.createInjector(getModules());
 
 		// By default Shiro provides a binding to DefaultSecurityManager, but that is replaced by a binding to
 		// V7SecurityManager in DefaultShiroModule#bindSecurityManager (or potentially to another security manager if
 		// the developer overrides that method)
 		SecurityManager securityManager = injector.getInstance(SecurityManager.class);
 		SecurityUtils.setSecurityManager(securityManager);
+		SitemapService sitemapService = injector.getInstance(SitemapService.class);
+		try {
+			sitemapService.start();
+		} catch (Exception e) {
+			String msg = "Sitemap service failed to start, application will have no pages";
+			log.error(msg);
+			throw new IllegalStateException(msg);
+		}
 
 	}
 
 	private List<Module> getModules() {
-		// ini load is handled by the provider
-		V7Ini ini = injector.getInstance(V7Ini.class);
 		List<Module> baseModules = new ArrayList<>();
 
-		if (ini.optionReadSiteMap()) {
-			log.debug("ini sitemap option is true, loading sitemap");
-			Provider<Sitemap> sitemapPro = injector.getInstance(SitemapProvider.class);
-			Sitemap sitemap = sitemapPro.get();
-			baseModules.add(new ApplicationViewModule(sitemap));
-		} else {
-			// module for Views must be in addAppModules()
-			log.debug("ini sitemap option is false, not loading sitemap");
-		}
+		baseModules.add(new I18NModule());
+		baseModules.add(new ApplicationConfigurationModule());
+		baseModules.add(new SitemapServiceModule());
 
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
 		baseModules.add(new ServicesMonitorModule());
 
-		baseModules.add(shiroModule(ctx.get(), ini));
+		baseModules.add(shiroModule(ctx.get()));
 		baseModules.add(shiroVaadinModule());
 		baseModules.add(new ShiroAopModule());
-		baseModules.add(userOptionsModule(ini));
+		baseModules.add(userOptionsModule());
 
 		baseModules.add(baseModule());
 
@@ -121,7 +116,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		baseModules.add(componentModule());
 
-		addAppModules(baseModules, ini);
+		addAppModules(baseModules);
 		return baseModules;
 	}
 
@@ -129,8 +124,8 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		return new DefaultComponentModule();
 	}
 
-	protected Module userOptionsModule(V7Ini ini) {
-		return new DefaultUserOptionModule(ini);
+	protected Module userOptionsModule() {
+		return new DefaultUserOptionModule();
 	}
 
 	/**
@@ -169,7 +164,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	 * @return
 	 */
 
-	protected Module shiroModule(ServletContext servletContext, V7Ini ini) {
+	protected Module shiroModule(ServletContext servletContext) {
 		return new DefaultShiroModule();
 	}
 
@@ -179,7 +174,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	 * @param baseModules
 	 * @param ini
 	 */
-	protected abstract void addAppModules(List<Module> baseModules, V7Ini ini);
+	protected abstract void addAppModules(List<Module> baseModules);
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {

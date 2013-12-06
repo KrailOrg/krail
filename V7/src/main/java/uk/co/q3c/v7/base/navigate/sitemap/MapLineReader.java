@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Reads a line from the [map] section during the processing of sitemap.properties, and returns a {@link MapLineRecord}
- * of the constituent parts. Records syntax errors and other failures for the {@link SitemapProvider} to provide a
+ * of the constituent parts. Records syntax errors and other failures for the {@link SitemapFileReader} to provide a
  * report
  * 
  * @author David Sowerby 5 Jul 2013

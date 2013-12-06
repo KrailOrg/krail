@@ -13,7 +13,6 @@
 package uk.co.q3c.v7.base.shiro;
 
 import javax.inject.Inject;
-import com.google.inject.Provider;
 import javax.inject.Singleton;
 
 import org.apache.shiro.SecurityUtils;
@@ -21,6 +20,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Provider;
 import com.vaadin.server.VaadinSession;
 
 /**

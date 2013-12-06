@@ -12,25 +12,25 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-public class SiteMapFormatException extends SitemapException {
+public class SitemapException extends RuntimeException {
 
-	public SiteMapFormatException() {
+	protected SitemapException() {
 		super();
 	}
 
-	public SiteMapFormatException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	protected SitemapException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
-	public SiteMapFormatException(String message, Throwable cause) {
+	protected SitemapException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public SiteMapFormatException(String message) {
+	public SitemapException(String message) {
 		super(message);
 	}
 
-	public SiteMapFormatException(Throwable cause) {
+	protected SitemapException(Throwable cause) {
 		super(cause);
 	}
 

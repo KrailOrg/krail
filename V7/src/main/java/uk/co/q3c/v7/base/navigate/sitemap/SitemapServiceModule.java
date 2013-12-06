@@ -12,26 +12,15 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-public class SiteMapFormatException extends SitemapException {
+import com.google.inject.AbstractModule;
 
-	public SiteMapFormatException() {
-		super();
-	}
+public class SitemapServiceModule extends AbstractModule {
 
-	public SiteMapFormatException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
+	@Override
+	protected void configure() {
+		bind(SitemapService.class).to(DefaultSitemapService.class);
+		bind(SitemapFileReader.class).to(DefaultSitemapFileReader.class);
 
-	public SiteMapFormatException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public SiteMapFormatException(String message) {
-		super(message);
-	}
-
-	public SiteMapFormatException(Throwable cause) {
-		super(cause);
 	}
 
 }

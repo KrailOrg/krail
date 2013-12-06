@@ -12,6 +12,9 @@
  */
 package uk.co.q3c.v7.base.config;
 
+import uk.co.q3c.v7.base.shiro.DefaultVaadinSessionProvider;
+import uk.co.q3c.v7.base.shiro.VaadinSessionProvider;
+
 import com.google.inject.AbstractModule;
 
 /**
@@ -25,6 +28,8 @@ public class ApplicationConfigurationModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bindApplicationConfigurationService();
+
+		bindVaadinSessionProvider();
 	}
 
 	/**
@@ -32,6 +37,13 @@ public class ApplicationConfigurationModule extends AbstractModule {
 	 */
 	protected void bindApplicationConfigurationService() {
 		bind(ApplicationConfigurationService.class).to(DefaultApplicationConfigurationService.class);
+	}
+
+	/**
+	 * Override this to use a different implementation for a VaadinSessionProvider
+	 */
+	protected void bindVaadinSessionProvider() {
+		bind(VaadinSessionProvider.class).to(DefaultVaadinSessionProvider.class);
 	}
 
 }

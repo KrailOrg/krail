@@ -15,11 +15,14 @@ package uk.co.q3c.v7.base.guice;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.io.File;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
 import org.apache.shiro.SecurityUtils;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -30,6 +33,7 @@ import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.server.VaadinService;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -52,6 +56,16 @@ public class BaseGuiceServletInjectorTest {
 
 	}
 
+	static File iniDir = new File("src/test/java");
+	static VaadinService vaadinService;
+
+	@BeforeClass
+	public static void setupClass() {
+		vaadinService = mock(VaadinService.class);
+		when(vaadinService.getBaseDirectory()).thenReturn(iniDir);
+		VaadinService.setCurrent(vaadinService);
+	}
+
 	@Test
 	public void startAndStop() {
 
@@ -66,10 +80,11 @@ public class BaseGuiceServletInjectorTest {
 		assertThat(out.isAddAppModulesCalled()).isEqualTo(true);
 		verify(ctx).set(servletContext);
 		assertThat(injector).isNotNull();
-		ServicesMonitor servicesManager = injector.getInstance(ServicesMonitor.class);
-
+		ServicesMonitor servicesMonitor = injector.getInstance(ServicesMonitor.class);
+		assertThat(servicesMonitor.getRegisteredServices()).hasSize(2);
 		// when
 		out.contextDestroyed(servletContextEvent);
+		// ## all services stopped
 	}
 
 	/**

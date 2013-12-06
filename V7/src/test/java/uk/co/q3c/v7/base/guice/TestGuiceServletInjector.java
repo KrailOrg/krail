@@ -16,8 +16,6 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
-import uk.co.q3c.v7.base.config.V7Ini;
-
 import com.google.inject.Module;
 
 import fixture.TestUIModule;
@@ -33,7 +31,7 @@ public class TestGuiceServletInjector extends BaseGuiceServletInjector {
 	}
 
 	@Override
-	protected void addAppModules(List<Module> baseModules, V7Ini ini) {
+	protected void addAppModules(List<Module> baseModules) {
 
 		baseModules.add(new TestUIModule());
 		baseModules.add(new DummyModule());

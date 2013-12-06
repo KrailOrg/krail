@@ -21,8 +21,6 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 
-import uk.co.q3c.v7.base.config.IniModule;
-
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.binder.AnnotatedBindingBuilder;
 
@@ -49,6 +47,7 @@ public class DefaultShiroModule extends ShiroModule {
 		bindRealms();
 		bindSubjectIdentifier();
 		expose(SubjectIdentifier.class);
+		bindSubjectProvider();
 
 	}
 
@@ -94,6 +93,10 @@ public class DefaultShiroModule extends ShiroModule {
 	@Override
 	protected void bindSessionManager(AnnotatedBindingBuilder<SessionManager> bind) {
 		bind.to(VaadinSessionManager.class).asEagerSingleton();
+	}
+
+	protected void bindSubjectProvider() {
+		bind(Subject.class).toProvider(SubjectProvider.class);
 	}
 
 }

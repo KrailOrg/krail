@@ -3,7 +3,6 @@ package uk.co.q3c.v7.base.view;
 import java.util.List;
 
 import javax.inject.Inject;
-import com.google.inject.Provider;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ConcurrentAccessException;
@@ -21,7 +20,9 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
 
+import com.google.inject.Provider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -49,7 +50,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 
 	@Inject
 	protected DefaultLoginView(V7Navigator navigator, LoginExceptionHandler loginExceptionHandler,
-			Provider<Subject> subjectProvider, LoginStatusHandler loginStatusHandler) {
+			SubjectProvider subjectProvider, LoginStatusHandler loginStatusHandler) {
 		super();
 		this.navigator = navigator;
 		this.loginExceptionHandler = loginExceptionHandler;

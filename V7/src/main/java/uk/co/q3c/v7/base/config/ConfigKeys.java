@@ -10,20 +10,11 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate.sitemap;
+package uk.co.q3c.v7.base.config;
 
-import java.io.File;
+public class ConfigKeys {
 
-import com.google.inject.Provider;
-
-public interface SitemapProvider extends Provider<Sitemap> {
-
-	public abstract Sitemap getSitemap();
-
-	public abstract void parse(File file);
-
-	public abstract void parse(String fileName);
-
-	public abstract StringBuilder getReport();
+	public static final String SOURCES_KEY = "sitemap.sources";
+	public static final String FILE_LOCATION = "sitemap.file location";
 
 }

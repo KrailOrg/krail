@@ -13,7 +13,6 @@
 package uk.co.q3c.v7.base.view.component;
 
 import javax.inject.Inject;
-import com.google.inject.Provider;
 
 import org.apache.shiro.subject.Subject;
 
@@ -22,9 +21,11 @@ import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.SubjectIdentifier;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.Provider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -48,17 +49,17 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 	private final Label usernameLabel;
 	private final Button login_logout_Button;
 	private final V7Navigator navigator;
-	private final Provider<Subject> subjectPro;
+	private final Provider<Subject> subjectProvider;
 	private final Translate translate;
 	private final LoginStatusHandler loginStatusHandler;
 	private final SubjectIdentifier subjectIdentifier;
 
 	@Inject
-	protected DefaultLoginStatusPanel(V7Navigator navigator, Provider<Subject> subjectPro, Translate translate,
+	protected DefaultLoginStatusPanel(V7Navigator navigator, SubjectProvider subjectProvider, Translate translate,
 			LoginStatusHandler loginStatusHandler, SubjectIdentifier subjectIdentifier) {
 		super();
 		this.navigator = navigator;
-		this.subjectPro = subjectPro;
+		this.subjectProvider = subjectProvider;
 		this.translate = translate;
 		this.loginStatusHandler = loginStatusHandler;
 		this.subjectIdentifier = subjectIdentifier;
@@ -79,7 +80,7 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 		setIds();
 
 		// initialise
-		loginStatusChange(loginStatusHandler.subjectIsAuthenticated(), subjectPro.get());
+		loginStatusChange(loginStatusHandler.subjectIsAuthenticated(), subjectProvider.get());
 
 	}
 
@@ -114,7 +115,7 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 	public void buttonClick(ClickEvent event) {
 		boolean loggedIn = loginStatusHandler.subjectIsAuthenticated();
 		if (loggedIn) {
-			subjectPro.get().logout();
+			subjectProvider.get().logout();
 			navigator.navigateTo(StandardPageKey.Logout);
 			loginStatusHandler.initiateStatusChange();
 		} else {

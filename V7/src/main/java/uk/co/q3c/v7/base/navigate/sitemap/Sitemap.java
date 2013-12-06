@@ -26,9 +26,11 @@ import uk.co.q3c.util.BasicForest;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 
+import com.google.common.collect.ImmutableMap;
+
 /**
  * Encapsulates the site layout. Individual "virtual pages" are represented by {@link SitemapNode} instances. This map
- * is usually built by an implementation of {@link SitemapProvider}, and is one of the fundamental building blocks of
+ * is usually built by an implementation of {@link SitemapFileReader}, and is one of the fundamental building blocks of
  * the application, as it maps out pages, URIs and Views.
  * <p>
  * <p>
@@ -189,8 +191,19 @@ public class Sitemap extends BasicForest<SitemapNode> {
 		return p;
 	}
 
-	public Map<String, String> getRedirects() {
-		return redirects;
+	/**
+	 * Safe copy of redirects
+	 * 
+	 * @return
+	 */
+	public ImmutableMap<String, String> getRedirects() {
+		return ImmutableMap.copyOf(redirects);
+
+	}
+
+	public Sitemap addRedirect(String fromPage, String toPage) {
+		redirects.put(fromPage, toPage);
+		return this;
 	}
 
 	/**

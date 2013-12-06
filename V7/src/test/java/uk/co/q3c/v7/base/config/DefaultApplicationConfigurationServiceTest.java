@@ -13,11 +13,15 @@
 package uk.co.q3c.v7.base.config;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.io.File;
 
 import javax.inject.Inject;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -39,7 +43,15 @@ public class DefaultApplicationConfigurationServiceTest {
 	@Inject
 	DefaultApplicationConfigurationService service;
 
-	VaadinService vs;
+	static File iniDir = new File("src/test/java");
+	static VaadinService vaadinService;
+
+	@BeforeClass
+	public static void setupClass() {
+		vaadinService = mock(VaadinService.class);
+		when(vaadinService.getBaseDirectory()).thenReturn(iniDir);
+		VaadinService.setCurrent(vaadinService);
+	}
 
 	@Test
 	public void load() throws ConfigurationException {

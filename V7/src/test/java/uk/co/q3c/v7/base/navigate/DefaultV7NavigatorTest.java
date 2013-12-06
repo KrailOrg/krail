@@ -1,12 +1,8 @@
 package uk.co.q3c.v7.base.navigate;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.fest.assertions.Assertions.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.text.Collator;
 import java.util.Locale;
@@ -26,6 +22,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
@@ -36,20 +33,51 @@ import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.Page;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class DefaultV7NavigatorTest {
+
+	static class View2 implements V7View {
+
+		@Override
+		public void enter(V7ViewChangeEvent event) {
+		}
+
+		@Override
+		public Component getRootComponent() {
+
+			return null;
+		}
+
+	}
+
+	static class View1 implements V7View {
+
+		@Override
+		public void enter(V7ViewChangeEvent event) {
+		}
+
+		@Override
+		public Component getRootComponent() {
+
+			return null;
+		}
+
+	}
+
 	DefaultV7Navigator navigator;
 
 	@Mock
-	Provider<ErrorView> errorViewPro;
+	Provider<ErrorView> errorViewProvider;
 
 	StrictURIFragmentHandler uriHandler;
 
@@ -75,22 +103,16 @@ public class DefaultV7NavigatorTest {
 	V7View previousView;
 
 	@Mock
-	Provider<V7View> view1Pro;
+	View1 view1;
 
 	@Mock
-	Provider<V7View> view2Pro;
-
-	@Mock
-	V7View view1;
-
-	@Mock
-	V7View view2;
+	View2 view2;
 
 	@Mock
 	V7View privateHomeView;
-	//
-	// // @Inject
-	// Injector injector;
+
+	@Mock
+	Injector injector;
 
 	@Mock
 	Page page;
@@ -113,7 +135,7 @@ public class DefaultV7NavigatorTest {
 	Provider<V7View> privateHomePro;
 
 	@Mock
-	Provider<V7Ini> iniPro;
+	Provider<V7Ini> iniProvider;
 
 	@Mock
 	Sitemap sitemap;
@@ -128,7 +150,7 @@ public class DefaultV7NavigatorTest {
 	LoginStatusHandler loginHandler;
 
 	@Mock
-	Provider<Subject> subjectPro;
+	SubjectProvider subjectProvider;
 
 	@Mock
 	Subject subject;
@@ -139,6 +161,11 @@ public class DefaultV7NavigatorTest {
 	@Mock
 	Translate translate;
 
+	// had some issues with mocking this - the getViewClass() method wouldn't play
+	// so resorted to old fashioned mocking
+	SitemapNode mockNode;
+	SitemapNode mockNode2;
+
 	@Before
 	public void setup() {
 		// ini = iniPro.get();
@@ -147,13 +174,19 @@ public class DefaultV7NavigatorTest {
 		// sitemap = new TextReaderSitemapProvider(new StandardPageBuilder()).get();
 
 		uriHandler = new StrictURIFragmentHandler();
+		mockNode = new SitemapNode();
+		mockNode2 = new SitemapNode();
 
 		when(scopedUI.getPage()).thenReturn(page);
-		when(errorViewPro.get()).thenReturn(errorView);
-		when(subjectPro.get()).thenReturn(subject);
+		when(errorViewProvider.get()).thenReturn(errorView);
+		when(subjectProvider.get()).thenReturn(subject);
 		when(sitemapURIConverter.pageIsPublic(anyString())).thenReturn(true);
+		when(injector.getInstance(LogoutView.class)).thenReturn(logoutView);
+		when(injector.getInstance(LoginView.class)).thenReturn(loginView);
+		when(injector.getInstance(View2.class)).thenReturn(view2);
+		when(injector.getInstance(View1.class)).thenReturn(view1);
 
-		navigator = new DefaultV7Navigator(errorViewPro, uriHandler, sitemap, viewProMap, subjectPro,
+		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemap, subjectProvider,
 				uriPermissionFactory, sitemapURIConverter, loginHandler);
 		CurrentInstance.set(UI.class, scopedUI);
 	}
@@ -165,8 +198,8 @@ public class DefaultV7NavigatorTest {
 		String page = "public/logout";
 		when(sitemap.standardPageURI(StandardPageKey.Logout)).thenReturn(page);
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(viewProMap.get(page)).thenReturn(logoutViewPro);
-		when(logoutViewPro.get()).thenReturn(logoutView);
+		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		mockNode.setViewClass(LogoutView.class);
 		// when
 		navigator.navigateTo(StandardPageKey.Logout);
 		// then
@@ -179,8 +212,8 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/login";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(viewProMap.get(page)).thenReturn(loginViewPro);
-		when(loginViewPro.get()).thenReturn(loginView);
+		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		mockNode.setViewClass(LoginView.class);
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -200,11 +233,11 @@ public class DefaultV7NavigatorTest {
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(sitemap.getRedirectFor(page2)).thenReturn(page2);
 
-		when(viewProMap.get(page)).thenReturn(view2Pro);
-		when(viewProMap.get(page2)).thenReturn(loginViewPro);
+		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		when(sitemapURIConverter.nodeForUri(page2, false)).thenReturn(mockNode2);
 
-		when(view2Pro.get()).thenReturn(view2);
-		when(loginViewPro.get()).thenReturn(loginView);
+		mockNode.setViewClass(View2.class);
+		mockNode2.setViewClass(LoginView.class);
 
 		when(sitemap.standardPageURI(StandardPageKey.Login)).thenReturn(page2);
 
@@ -223,15 +256,15 @@ public class DefaultV7NavigatorTest {
 		String page = "private";
 		when(sitemap.standardPageURI(StandardPageKey.Private_Home)).thenReturn(page);
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(viewProMap.get(page)).thenReturn(privateHomePro);
-		when(privateHomePro.get()).thenReturn(privateHomeView);
+		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		mockNode.setViewClass(View2.class);
 
 		navigator.setCurrentView(loginView, "xx", "yy");
 		navigator.setPreviousView(null);
 		// when
 		navigator.loginSuccessful();
 		// then
-		verify(scopedUI).changeView(loginView, privateHomeView);
+		verify(scopedUI).changeView(loginView, view2);
 
 	}
 
@@ -241,8 +274,8 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(viewProMap.get(page)).thenReturn(view2Pro);
-		when(view2Pro.get()).thenReturn(view2);
+		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		mockNode.setViewClass(View2.class);
 
 		// when
 		navigator.navigateTo(page);
@@ -258,8 +291,9 @@ public class DefaultV7NavigatorTest {
 		String page1 = "";
 		String fragment1 = page1 + "/id=2/age=5";
 		when(sitemap.getRedirectFor(page1)).thenReturn("public");
-		when(viewProMap.get("public")).thenReturn(view1Pro);
-		when(view1Pro.get()).thenReturn(view1);
+		when(sitemapURIConverter.nodeForUri("public/id=2/age=5", false)).thenReturn(mockNode);
+		mockNode.setViewClass(View1.class);
+
 		// when
 		navigator.navigateTo(fragment1);
 		// then
@@ -274,8 +308,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view3";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(viewProMap.get(page)).thenReturn(null);
-		when(view2Pro.get()).thenReturn(view2);
+
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -289,8 +322,8 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(viewProMap.get(page)).thenReturn(view2Pro);
-		when(view2Pro.get()).thenReturn(view2);
+		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		mockNode.setViewClass(View2.class);
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -303,11 +336,12 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view2";
+		String pageWithParams = "public/view2/id=1/age=2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(viewProMap.get(page)).thenReturn(view2Pro);
-		when(view2Pro.get()).thenReturn(view2);
+		when(sitemapURIConverter.nodeForUri(pageWithParams, false)).thenReturn(mockNode);
+		mockNode.setViewClass(View2.class);
 		// when
-		navigator.navigateTo("public/view2/id=1/age=2");
+		navigator.navigateTo(pageWithParams);
 		// then
 		assertThat(navigator.getNavigationParams()).containsOnly("id=1", "age=2");
 
@@ -318,14 +352,14 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view2";
-		SitemapNode node = new SitemapNode(page, view2.getClass(), LabelKey.Cancel, Locale.UK, collator, translate);
-		when(sitemap.uri(node)).thenReturn(page);
+		mockNode = new SitemapNode(page, view2.getClass(), LabelKey.Cancel, Locale.UK, collator, translate);
+		when(sitemap.uri(mockNode)).thenReturn(page);
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(viewProMap.get(page)).thenReturn(view2Pro);
-		when(view2Pro.get()).thenReturn(view2);
+		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		mockNode.setViewClass(View2.class);
 
 		// when
-		navigator.navigateTo(node);
+		navigator.navigateTo(mockNode);
 		// then
 		assertThat(navigator.getNavigationState()).isEqualTo(page);
 
@@ -338,14 +372,14 @@ public class DefaultV7NavigatorTest {
 		String page1 = "view1";
 		String fragment1 = page1 + "/id=1";
 		when(sitemap.getRedirectFor(page1)).thenReturn(page1);
-		when(viewProMap.get(page1)).thenReturn(view1Pro);
-		when(view1Pro.get()).thenReturn(view1);
+		when(sitemapURIConverter.nodeForUri(fragment1, false)).thenReturn(mockNode);
+		mockNode.setViewClass(View1.class);
 
 		String page2 = "view2";
 		String fragment2 = page2 + "/id=2";
 		when(sitemap.getRedirectFor(page2)).thenReturn(page2);
-		when(viewProMap.get(page2)).thenReturn(view2Pro);
-		when(view2Pro.get()).thenReturn(view2);
+		when(sitemapURIConverter.nodeForUri(fragment2, false)).thenReturn(mockNode2);
+		mockNode2.setViewClass(View2.class);
 
 		// when
 
@@ -405,8 +439,9 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(viewProMap.get(page)).thenReturn(view2Pro);
-		when(view2Pro.get()).thenReturn(view2);
+		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		mockNode.setViewClass(View2.class);
+
 		// need to return true, or first listener will block the second
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(true);
 		navigator.addViewChangeListener(listener1);
@@ -427,8 +462,8 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(viewProMap.get(page)).thenReturn(view2Pro);
-		when(view2Pro.get()).thenReturn(view2);
+		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		mockNode.setViewClass(View2.class);
 		// to block second and subsequent
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(false);
 		navigator.addViewChangeListener(listener1);
@@ -450,8 +485,8 @@ public class DefaultV7NavigatorTest {
 		String page2 = "private/transfers";
 
 		when(sitemap.getRedirectFor(page)).thenReturn(page2);
-		when(viewProMap.get(page2)).thenReturn(view2Pro);
-		when(view2Pro.get()).thenReturn(view2);
+		when(sitemapURIConverter.nodeForUri(page2, false)).thenReturn(mockNode);
+		mockNode.setViewClass(View2.class);
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -464,8 +499,8 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(viewProMap.get(page)).thenReturn(view2Pro);
-		when(view2Pro.get()).thenReturn(view2);
+		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		mockNode.setViewClass(View2.class);
 		when(sitemapURIConverter.pageIsPublic(anyString())).thenReturn(false);
 		// when
 		navigator.navigateTo(page);

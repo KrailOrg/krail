@@ -2,10 +2,8 @@ package uk.co.q3c.v7.base.navigate;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
-import com.google.inject.Provider;
 
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -14,12 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.sitemap.SiteMapException;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapException;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
@@ -29,6 +28,8 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 
+import com.google.inject.Injector;
+import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
@@ -44,29 +45,29 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	private String currentViewName = null;
 	private V7View currentView = null;
 	private final List<V7ViewChangeListener> listeners = new LinkedList<V7ViewChangeListener>();
-	private final Provider<ErrorView> errorViewPro;
+	private final Provider<ErrorView> errorViewProvider;
 	private final URIFragmentHandler uriHandler;
-	private final Map<String, Provider<V7View>> viewProMap;
 	private String previousFragment;
 	private String currentFragment;
 	private final Sitemap sitemap;
-	private final Provider<Subject> subjectPro;
+	private final Provider<Subject> subjectProvider;
 	private final URIPermissionFactory uriPermissionFactory;
 	private final SitemapURIConverter sitemapURIConverter;
+	private final Injector injector;
 
 	@Inject
-	protected DefaultV7Navigator(Provider<ErrorView> errorViewPro, URIFragmentHandler uriHandler, Sitemap sitemap,
-			Map<String, Provider<V7View>> viewProMap, Provider<Subject> subjectPro,
+	protected DefaultV7Navigator(Injector injector, Provider<ErrorView> errorViewProvider,
+			URIFragmentHandler uriHandler, Sitemap sitemap, SubjectProvider subjectProvider,
 			URIPermissionFactory uriPermissionFactory, SitemapURIConverter sitemapURIConverter,
 			LoginStatusHandler loginHandler) {
 		super();
-		this.errorViewPro = errorViewPro;
-		this.viewProMap = viewProMap;
+		this.errorViewProvider = errorViewProvider;
 		this.uriHandler = uriHandler;
 		this.sitemap = sitemap;
-		this.subjectPro = subjectPro;
+		this.subjectProvider = subjectProvider;
 		this.uriPermissionFactory = uriPermissionFactory;
 		this.sitemapURIConverter = sitemapURIConverter;
+		this.injector = injector;
 		loginHandler.addListener(this);
 	}
 
@@ -87,7 +88,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		}
 		sitemapCheck();
 		if (sitemap.hasErrors()) {
-			throw new SiteMapException("Unable to navigate, site map has errors\n" + sitemap.getReport());
+			throw new SitemapException("Unable to navigate, site map has errors\n" + sitemap.getReport());
 		}
 
 		// fragment needs to be revised if redirected
@@ -100,16 +101,16 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 		log.debug("fragment after redirect check is {}", revisedFragment);
 		String viewName = uriHandler.virtualPage();
-		log.debug("page to look up View is {}", viewName);
-		Provider<V7View> provider = viewProMap.get(viewName);
-		V7View view = null;
-		if (provider == null) {
+		log.debug("looking up View for page '{}'", viewName);
+
+		SitemapNode nodeForUri = sitemapURIConverter.nodeForUri(revisedFragment, false);
+		if (nodeForUri == null) {
 			String msg = "View not found for page '" + revisedFragment + "'";
 			log.debug(msg);
 			throw new InvalidURIException(msg);
-		} else {
-			view = provider.get();
 		}
+		Class<? extends V7View> viewClass = nodeForUri.getViewClass();
+		V7View view = injector.getInstance(viewClass);
 
 		navigateTo(view, viewName, revisedFragment);
 
@@ -162,7 +163,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 		// check permissions, raise exception if not allowed
 		URIViewPermission permission = uriPermissionFactory.createViewPermission(fragment);
-		if (subjectPro.get().isPermitted(permission)) {
+		if (subjectProvider.get().isPermitted(permission)) {
 			changeView(view, viewName, fragment);
 		} else {
 			throw new UnauthorizedException(fragment);
@@ -337,14 +338,14 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		sitemapCheck();
 		String page = sitemap.standardPageURI(pageKey);
 		if (page == null) {
-			throw new SiteMapException(pageKey + " cannot have a null path\n" + sitemap.getReport());
+			throw new SitemapException(pageKey + " cannot have a null path\n" + sitemap.getReport());
 		}
 		navigateTo(page);
 	}
 
 	private void sitemapCheck() {
 		if (sitemap == null) {
-			throw new SiteMapException("Sitemap has failed to load");
+			throw new SitemapException("Sitemap has failed to load");
 		}
 	}
 
@@ -375,7 +376,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Override
 	public void error() {
-		changeView(errorViewPro.get(), "ErrorView", "error");
+		changeView(errorViewProvider.get(), "ErrorView", "error");
 	}
 
 }
