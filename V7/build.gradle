@@ -50,6 +50,10 @@ dependencies{
 
 
 //	test.testLogging.showStandardStreams = true
+	
+	
+	//this test used to fail under Gradle, but is fixed as a result of moving to a service base approach for startup
+	// see https://github.com/davidsowerby/v7/issues/156
 //	test{ exclude '**/GuiceServletInjectorTest.class' }
 
 
