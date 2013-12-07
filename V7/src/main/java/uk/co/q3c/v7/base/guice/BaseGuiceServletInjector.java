@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapServiceModule;
 import uk.co.q3c.v7.base.services.ServicesMonitor;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
@@ -77,20 +76,13 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 	protected void createInjector() {
 		injector = Guice.createInjector(getModules());
+		log.debug("injector created");
 
 		// By default Shiro provides a binding to DefaultSecurityManager, but that is replaced by a binding to
 		// V7SecurityManager in DefaultShiroModule#bindSecurityManager (or potentially to another security manager if
 		// the developer overrides that method)
 		SecurityManager securityManager = injector.getInstance(SecurityManager.class);
 		SecurityUtils.setSecurityManager(securityManager);
-		SitemapService sitemapService = injector.getInstance(SitemapService.class);
-		try {
-			sitemapService.start();
-		} catch (Exception e) {
-			String msg = "Sitemap service failed to start, application will have no pages";
-			log.error(msg);
-			throw new IllegalStateException(msg);
-		}
 
 	}
 
@@ -183,6 +175,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		ctx.set(servletContext);
 		createInjector();
 		super.contextInitialized(servletContextEvent);
+
 	}
 
 	@Override

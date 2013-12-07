@@ -11,11 +11,15 @@ import java.util.Map;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import uk.co.q3c.util.ResourceUtils;
+import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
+import uk.co.q3c.v7.base.config.DefaultApplicationConfigurationService;
 import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
 import uk.co.q3c.v7.base.navigate.DefaultInvalidURIExceptionHandler;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
@@ -23,6 +27,11 @@ import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapFileReader;
+import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapService;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapFileReader;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
+import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.shiro.DefaultLoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.DefaultSubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
@@ -63,6 +72,7 @@ import com.vaadin.server.ClientConnector;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.UIProvider;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
@@ -129,6 +139,9 @@ public class UIScopeTest {
 			bind(SessionManager.class).to(VaadinSessionManager.class).asEagerSingleton();
 			bind(LoginStatusHandler.class).to(DefaultLoginStatusHandler.class);
 			bind(SubjectIdentifier.class).to(DefaultSubjectIdentifier.class);
+			bind(SitemapService.class).to(DefaultSitemapService.class);
+			bind(SitemapFileReader.class).to(DefaultSitemapFileReader.class);
+			bind(ApplicationConfigurationService.class).to(DefaultApplicationConfigurationService.class);
 
 		}
 	}
@@ -143,6 +156,15 @@ public class UIScopeTest {
 
 	}
 
+	static VaadinService vaadinService;
+
+	@BeforeClass
+	public static void setupClass() {
+		vaadinService = mock(VaadinService.class);
+		when(vaadinService.getBaseDirectory()).thenReturn(ResourceUtils.userTempDirectory());
+		VaadinService.setCurrent(vaadinService);
+	}
+
 	@Test
 	public void uiScope2() {
 
@@ -154,7 +176,7 @@ public class UIScopeTest {
 
 		// when
 
-		injector = Guice.createInjector(new TestModule(), new UIScopeModule());
+		injector = Guice.createInjector(new TestModule(), new UIScopeModule(), new ServicesMonitorModule());
 		provider = injector.getInstance(UIProvider.class);
 		createUI(BasicUI.class);
 		// navigator = injector.getInstance(V7Navigator.class);

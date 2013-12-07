@@ -167,4 +167,9 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 		return report;
 	}
 
+	@Override
+	public Sitemap getSitemap() {
+		return sitemap;
+	}
+
 }

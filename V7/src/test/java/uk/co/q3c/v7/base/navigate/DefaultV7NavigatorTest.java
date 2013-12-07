@@ -6,7 +6,6 @@ import static org.mockito.Mockito.*;
 
 import java.text.Collator;
 import java.util.Locale;
-import java.util.Map;
 
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.Subject;
@@ -16,9 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
 import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
@@ -82,15 +81,6 @@ public class DefaultV7NavigatorTest {
 	StrictURIFragmentHandler uriHandler;
 
 	@Mock
-	Map<String, Provider<V7View>> viewProMap;
-
-	@Mock
-	Provider<V7View> loginViewPro;
-
-	@Mock
-	Provider<V7View> logoutViewPro;
-
-	@Mock
 	ScopedUI scopedUI;
 
 	@Mock
@@ -129,16 +119,11 @@ public class DefaultV7NavigatorTest {
 	@Mock
 	V7ViewChangeListener listener3;
 
-	// V7Ini ini;
-
-	@Mock
-	Provider<V7View> privateHomePro;
-
-	@Mock
-	Provider<V7Ini> iniProvider;
-
 	@Mock
 	Sitemap sitemap;
+
+	@Mock
+	SitemapService sitemapService;
 
 	@Mock
 	DefaultURIPermissionFactory uriPermissionFactory;
@@ -177,6 +162,7 @@ public class DefaultV7NavigatorTest {
 		mockNode = new SitemapNode();
 		mockNode2 = new SitemapNode();
 
+		when(sitemapService.getSitemap()).thenReturn(sitemap);
 		when(scopedUI.getPage()).thenReturn(page);
 		when(errorViewProvider.get()).thenReturn(errorView);
 		when(subjectProvider.get()).thenReturn(subject);
@@ -186,7 +172,7 @@ public class DefaultV7NavigatorTest {
 		when(injector.getInstance(View2.class)).thenReturn(view2);
 		when(injector.getInstance(View1.class)).thenReturn(view1);
 
-		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemap, subjectProvider,
+		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemapService, subjectProvider,
 				uriPermissionFactory, sitemapURIConverter, loginHandler);
 		CurrentInstance.set(UI.class, scopedUI);
 	}

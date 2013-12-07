@@ -15,6 +15,7 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapException;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
@@ -57,17 +58,27 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Inject
 	protected DefaultV7Navigator(Injector injector, Provider<ErrorView> errorViewProvider,
-			URIFragmentHandler uriHandler, Sitemap sitemap, SubjectProvider subjectProvider,
+			URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider,
 			URIPermissionFactory uriPermissionFactory, SitemapURIConverter sitemapURIConverter,
 			LoginStatusHandler loginHandler) {
 		super();
 		this.errorViewProvider = errorViewProvider;
 		this.uriHandler = uriHandler;
-		this.sitemap = sitemap;
+
 		this.subjectProvider = subjectProvider;
 		this.uriPermissionFactory = uriPermissionFactory;
 		this.sitemapURIConverter = sitemapURIConverter;
 		this.injector = injector;
+
+		try {
+			sitemapService.start();
+			sitemap = sitemapService.getSitemap();
+		} catch (Exception e) {
+			String msg = "Sitemap service failed to start, application will have no pages";
+			log.error(msg);
+			throw new IllegalStateException(msg, e);
+		}
+
 		loginHandler.addListener(this);
 	}
 

@@ -142,6 +142,8 @@ public class ServicesMonitorModule extends AbstractModule {
 				result = (Status) invocation.proceed();
 			} catch (Throwable e) {
 				result = Status.FAILED_TO_START;
+				log.error("Service {} failed to start, with exception: {}", service.getName(), e.getMessage());
+
 			}
 
 			service.setStatus(result);
