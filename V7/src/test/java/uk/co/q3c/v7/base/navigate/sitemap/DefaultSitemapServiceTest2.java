@@ -35,13 +35,12 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 
 /**
- * This constructs {@link DefaultSitemapService} to allow the use of mocks. The other test suite,
- * {@link DefaultSitemapServiceTest}, injects the {@link DefaultSitemapService}.
+ * This uses a mock for the configuration service. The other test suite, {@link DefaultSitemapServiceTest}, injects all
+ * "standard" implementations
  * 
  * @author David Sowerby
  * 
  */
-
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ ServicesMonitorModule.class })
 public class DefaultSitemapServiceTest2 {

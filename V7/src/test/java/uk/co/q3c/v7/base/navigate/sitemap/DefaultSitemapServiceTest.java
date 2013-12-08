@@ -50,12 +50,13 @@ import com.vaadin.server.VaadinService;
 import fixture.TestConfigurationException;
 
 /**
- * This test injects the {@link DefaultSitemapService}. The other test suite, {@link DefaultSitemapServiceTest2}
- * constructs DefaultSitemapService to allow the use of mocks
+ * This test uses all standard implementations to inject into {@link DefaultSitemapService}. The other test suite,
+ * {@link DefaultSitemapServiceTest2} uses a mock for the configuration service
  * 
  * @author David Sowerby
  * 
  */
+
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ ServicesMonitorModule.class, ApplicationConfigurationModule.class })
 public class DefaultSitemapServiceTest {
