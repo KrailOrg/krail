@@ -78,10 +78,7 @@ public class ServicesMonitorModule extends AbstractModule {
 
 	private class ServiceMethodStartInterceptor implements MethodInterceptor {
 
-		private final ServicesMonitor servicesMonitor;
-
-		public ServiceMethodStartInterceptor(ServicesMonitor servicesMonitor) {
-			this.servicesMonitor = servicesMonitor;
+		public ServiceMethodStartInterceptor() {
 		}
 
 		/**
@@ -117,7 +114,12 @@ public class ServicesMonitorModule extends AbstractModule {
 					if (autoStart != null) {
 						if (autoStart.auto()) {
 							Method startMethod = dependency.getClass().getMethod("start");
-							dependencyStatuses.add((Status) startMethod.invoke(dependency));
+							try {
+								startMethod.invoke(dependency);
+							} catch (Exception e) {
+								dependency.setStatus(Status.FAILED_TO_START);
+							}
+							dependencyStatuses.add(dependency.getStatus());
 						}
 					}
 
@@ -143,7 +145,7 @@ public class ServicesMonitorModule extends AbstractModule {
 			} catch (Throwable e) {
 				result = Status.FAILED_TO_START;
 				log.error("Service {} failed to start, with exception: {}", service.getName(), e.getMessage());
-
+				throw e;
 			}
 
 			service.setStatus(result);
@@ -154,10 +156,7 @@ public class ServicesMonitorModule extends AbstractModule {
 
 	private class ServiceMethodStopInterceptor implements MethodInterceptor {
 
-		private final ServicesMonitor servicesManager;
-
-		public ServiceMethodStopInterceptor(ServicesMonitor servicesManager) {
-			this.servicesManager = servicesManager;
+		public ServiceMethodStopInterceptor() {
 		}
 
 		@Override
@@ -259,10 +258,10 @@ public class ServicesMonitorModule extends AbstractModule {
 		bindListener(new ServiceInterfaceMatcher(), new ServicesListener(servicesManager));
 
 		bindInterceptor(Matchers.subclassesOf(Service.class), new InterfaceStartMethodMatcher(),
-				new ServiceMethodStartInterceptor(servicesManager));
+				new ServiceMethodStartInterceptor());
 
 		bindInterceptor(Matchers.subclassesOf(Service.class), new InterfaceStopMethodMatcher(),
-				new ServiceMethodStopInterceptor(servicesManager));
+				new ServiceMethodStopInterceptor());
 
 		bindInterceptor(Matchers.subclassesOf(Service.class), new FinalizeMethodMatcher(),
 				new FinalizeMethodInterceptor());

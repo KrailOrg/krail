@@ -25,6 +25,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.services.Service.Status;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18NTranslator;
@@ -83,11 +84,11 @@ public class DefaultApplicationConfigurationServiceTest {
 	public void fileMissing() throws ConfigurationException {
 
 		// given
-
-		// when
 		service.addConfiguration("rubbish.ini");
-		// then
+		// when
 		service.start();
+		// then
+		assertThat(service.getStatus()).isEqualTo(Status.FAILED_TO_START);
 
 	}
 

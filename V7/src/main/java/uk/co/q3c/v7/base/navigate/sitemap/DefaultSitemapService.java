@@ -23,6 +23,7 @@ import org.apache.commons.configuration.CompositeConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.util.MessageFormat;
 import uk.co.q3c.util.ResourceUtils;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.ConfigKeys;
@@ -33,6 +34,7 @@ import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Provider;
 
 @Singleton
@@ -46,6 +48,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	private final Sitemap sitemap;
 	private StringBuilder report;
 	private CompositeConfiguration configuration;
+	private boolean loaded;
 
 	@Inject
 	protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate,
@@ -65,12 +68,18 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	@Override
 	public Status start() throws Exception {
 		if (getStatus().equals(Status.DEPENDENCY_FAILED)) {
-			log.error("Unable to start {}, because it depends on {}", getName(), configurationService.getName());
-			return Status.DEPENDENCY_FAILED;
+			String msg = MessageFormat.format("Unable to start {0}, because it depends on {1}", getName(),
+					configurationService.getName());
+			log.error(msg);
+			setStatus(Status.DEPENDENCY_FAILED);
+			throw new SitemapException(msg);
 		}
 		report = new StringBuilder();
 		configuration = configurationService.getConfiguration();
 		loadSources();
+		if (!loaded) {
+			throw new SitemapException("No valid sources found");
+		}
 		return Status.STARTED;
 	}
 
@@ -83,8 +92,10 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 		extractSourcesFromConfig();
 		boolean firstLoad = true;
 		for (String source : sources) {
-			loadSource(source, firstLoad);
-			firstLoad = false;
+			boolean sourceLoaded = loadSource(source, firstLoad);
+			if (sourceLoaded) {
+				firstLoad = false;
+			}
 		}
 	}
 
@@ -97,7 +108,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	 * @param source
 	 * @param firstLoad
 	 */
-	private void loadSource(String source, boolean firstLoad) {
+	private boolean loadSource(String source, boolean firstLoad) {
 
 		switch (source) {
 		case "file":
@@ -106,12 +117,14 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 					"sitemap.properties"));
 			sitemapFileReader.parse(sitemapFileLocation, firstLoad);
 			sitemapFileReader.buildReport(report);
-			break;
+			loaded = true;
+			return loaded;
 		case "module":
 			throw new RuntimeException("not yet implemented");
 		case "annotation":
 			throw new RuntimeException("not yet implemented");
 		}
+		return false;
 	}
 
 	public File absolutePathFor(String source) {
@@ -147,6 +160,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 
 	@Override
 	public Status stop() {
+		loaded = false;
 		return Status.STOPPED;
 	}
 
@@ -170,6 +184,14 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	@Override
 	public Sitemap getSitemap() {
 		return sitemap;
+	}
+
+	public boolean isLoaded() {
+		return loaded;
+	}
+
+	public ImmutableList<String> getSources() {
+		return ImmutableList.copyOf(sources);
 	}
 
 }

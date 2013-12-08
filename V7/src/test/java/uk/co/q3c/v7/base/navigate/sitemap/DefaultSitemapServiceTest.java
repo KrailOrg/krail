@@ -17,6 +17,8 @@ import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -47,6 +49,13 @@ import com.vaadin.server.VaadinService;
 
 import fixture.TestConfigurationException;
 
+/**
+ * This test injects the {@link DefaultSitemapService}. The other test suite, {@link DefaultSitemapServiceTest2}
+ * constructs DefaultSitemapService to allow the use of mocks
+ * 
+ * @author David Sowerby
+ * 
+ */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ ServicesMonitorModule.class, ApplicationConfigurationModule.class })
 public class DefaultSitemapServiceTest {
@@ -61,7 +70,7 @@ public class DefaultSitemapServiceTest {
 	}
 
 	@Inject
-	DefaultSitemapService sitemapService;
+	DefaultSitemapService service;
 
 	@Inject
 	ApplicationConfigurationService configService;
@@ -82,7 +91,7 @@ public class DefaultSitemapServiceTest {
 
 	@After
 	public void teardown() throws ConfigurationException {
-		sitemapService.stop();
+		service.stop();
 		configService.stop();
 		iniConfig.clear();
 		iniConfig.save();
@@ -94,11 +103,12 @@ public class DefaultSitemapServiceTest {
 		// given
 		copySitemapPropertiesToTemp();
 		// when
-		sitemapService.start();
+		service.start();
 		// then
-		assertThat(sitemapService.getReport()).isNotNull();
-		assertThat(sitemapService.isStarted()).isTrue();
+		assertThat(service.getReport()).isNotNull();
+		assertThat(service.isStarted()).isTrue();
 		assertThat(sitemap.getNodeCount()).isEqualTo(13);
+		assertThat(service.getSources()).containsOnly("file");
 	}
 
 	@Test
@@ -110,62 +120,80 @@ public class DefaultSitemapServiceTest {
 
 		// then
 
-		assertThat(sitemapService.getNameKey()).isEqualTo(LabelKey.Sitemap_Service);
-		assertThat(sitemapService.getDescriptionKey()).isEqualTo(DescriptionKey.Sitemap_Service);
-		assertThat(sitemapService.getName()).isEqualTo("Sitemap Service");
-		assertThat(sitemapService.getDescription()).isEqualTo(
+		assertThat(service.getNameKey()).isEqualTo(LabelKey.Sitemap_Service);
+		assertThat(service.getDescriptionKey()).isEqualTo(DescriptionKey.Sitemap_Service);
+		assertThat(service.getName()).isEqualTo("Sitemap Service");
+		assertThat(service.getDescription()).isEqualTo(
 				"This service creates the Sitemap using options from the application configuration");
 	}
 
-	@Test
-	public void dependencyFailed() {
+	public void sourcesPropertyMissing() throws Exception {
 
 		// given
+		iniConfig.clear();
+		iniConfig.save();
 
 		// when
-
+		service.start();
 		// then
-
-		fail("not written");
-	}
-
-	@Test
-	public void sourcesPropertyMissing() {
-
-		// given
-
-		// when
-
-		// then
-
-		fail("not written");
+		assertThat(service.getReport()).isNotNull();
+		assertThat(service.isStarted()).isTrue();
+		assertThat(sitemap.getNodeCount()).isEqualTo(13);
+		assertThat(service.getSources()).containsOnly("file");
 	}
 
 	/**
 	 * Key is there but value is not
+	 * 
+	 * @throws Exception
 	 */
-	@Test
-	public void sourcesPropertyEmpty() {
+	public void sourcesPropertyEmpty() throws Exception {
 
 		// given
+		List<String> sources = new ArrayList<>();
+		iniConfig.setDelimiterParsingDisabled(true);
+		iniConfig.setProperty(ConfigKeys.SOURCES_KEY, sources);
+		iniConfig.setDelimiterParsingDisabled(false);
+		iniConfig.save();
 
 		// when
-
+		service.start();
 		// then
-
-		fail("not written");
+		assertThat(service.getReport()).isNotNull();
+		assertThat(service.isStarted()).isTrue();
+		assertThat(sitemap.getNodeCount()).isEqualTo(13);
+		assertThat(service.getSources()).containsOnly("file");
 	}
 
 	@Test
-	public void invalidSource_butValidOnePresent() {
+	public void invalidSource_butValidOnePresent() throws Exception {
+		// given
+		List<String> sources = new ArrayList<>();
+		sources.add("wiggly");
+		sources.add("file");
+		iniConfig.setDelimiterParsingDisabled(true);
+		iniConfig.setProperty(ConfigKeys.SOURCES_KEY, sources);
+		iniConfig.setDelimiterParsingDisabled(false);
+		iniConfig.save();
+
+		// when
+		service.start();
+		// then
+		assertThat(service.getReport()).isNotNull();
+		assertThat(service.isStarted()).isTrue();
+		assertThat(sitemap.getNodeCount()).isEqualTo(13);
+	}
+
+	@Test
+	public void stop() {
 
 		// given
 
 		// when
 
 		// then
+		assertThat(service.isLoaded()).isFalse();
 
-		fail("not written");
 	}
 
 	@Test
@@ -177,21 +205,27 @@ public class DefaultSitemapServiceTest {
 
 		// then
 
-		assertThat(sitemapService.absolutePathFor("wiggly.ini")).isEqualTo(
+		assertThat(service.absolutePathFor("wiggly.ini")).isEqualTo(
 				new File(ResourceUtils.applicationBaseDirectory(), "wiggly.ini"));
-		assertThat(sitemapService.absolutePathFor("/wiggly.ini")).isEqualTo(new File("/wiggly.ini"));
+		assertThat(service.absolutePathFor("/wiggly.ini")).isEqualTo(new File("/wiggly.ini"));
 	}
 
-	@Test
-	public void invalidSource_noGoodOnes() {
+	@Test(expected = SitemapException.class)
+	public void invalidSource_noGoodOnes() throws Exception {
 
 		// given
+		List<String> sources = new ArrayList<>();
+		sources.add("wiggly");
+		sources.add("wobbly");
+		iniConfig.setDelimiterParsingDisabled(true);
+		iniConfig.setProperty(ConfigKeys.SOURCES_KEY, sources);
+		iniConfig.setDelimiterParsingDisabled(false);
+		iniConfig.save();
 
 		// when
-
+		service.start();
 		// then
 
-		fail("not written");
 	}
 
 	private void setConfig_FileOnly() throws ConfigurationException {
