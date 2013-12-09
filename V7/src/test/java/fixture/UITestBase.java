@@ -1,7 +1,6 @@
 package fixture;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import javax.inject.Inject;
 
@@ -13,8 +12,6 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import uk.co.q3c.v7.base.config.V7Ini;
-import uk.co.q3c.v7.base.config.V7IniProvider;
 import uk.co.q3c.v7.base.guice.BaseModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
@@ -86,11 +83,6 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	@Inject
 	protected Provider<V7Navigator> navigatorPro;
 
-	@Inject
-	protected V7IniProvider iniPro;
-
-	protected V7Ini ini;
-
 	protected static Class<? extends ScopedUI> uiClass;
 
 	@Before
@@ -146,7 +138,6 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 		ui.setSession(mockedSession);
 		ui.getV7Navigator().addViewChangeListener(this);
 		ui.doInit(mockedRequest, 23);
-		ini = iniPro.get();
 		return ui;
 	}
 

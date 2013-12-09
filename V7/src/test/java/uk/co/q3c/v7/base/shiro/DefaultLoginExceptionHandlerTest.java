@@ -1,8 +1,6 @@
 package uk.co.q3c.v7.base.shiro;
 
-import static org.mockito.Mockito.verify;
-
-import javax.inject.Inject;
+import static org.mockito.Mockito.*;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.junit.Before;
@@ -10,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.config.V7Ini;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
@@ -18,10 +15,8 @@ import uk.co.q3c.v7.base.view.LoginView;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
-import fixture.TestIniModule;
-
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ TestIniModule.class })
+@GuiceContext({})
 public class DefaultLoginExceptionHandlerTest {
 
 	// @Inject
@@ -32,9 +27,6 @@ public class DefaultLoginExceptionHandlerTest {
 
 	@Mock
 	V7Navigator navigator;
-
-	@Inject
-	V7Ini ini;
 
 	UsernamePasswordToken token;
 
