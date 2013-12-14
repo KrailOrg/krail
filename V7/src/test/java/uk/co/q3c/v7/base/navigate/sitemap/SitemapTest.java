@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -284,6 +284,30 @@ public class SitemapTest {
 		assertThat(sitemap.getPublicRoot()).isNull();
 		assertThat(sitemap.getPublicRootNode()).isNull();
 
+	}
+
+	@Test
+	public void duplicateURIoverwrites() {
+
+		// given
+
+		// when
+
+		// then
+
+		fail("not written");
+	}
+
+	@Test
+	public void uriMap() {
+
+		// given
+
+		// when
+
+		// then
+
+		fail("not written");
 	}
 
 	@ModuleProvider

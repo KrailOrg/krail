@@ -19,8 +19,12 @@ public class SitemapServiceModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(SitemapService.class).to(DefaultSitemapService.class);
-		bind(SitemapFileReader.class).to(DefaultSitemapFileReader.class);
+		bindLoaders();
 
+	}
+
+	protected void bindLoaders() {
+		bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
 	}
 
 }

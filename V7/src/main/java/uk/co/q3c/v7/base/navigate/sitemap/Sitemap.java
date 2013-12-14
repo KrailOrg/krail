@@ -18,38 +18,35 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
 
 import uk.co.q3c.util.BasicForest;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
-import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 
 import com.google.common.collect.ImmutableMap;
 
 /**
  * Encapsulates the site layout. Individual "virtual pages" are represented by {@link SitemapNode} instances. This map
- * is usually built by an implementation of {@link SitemapFileReader}, and is one of the fundamental building blocks of
+ * is built by one or more implementations of {@link SitemapLoader}, and is one of the fundamental building blocks of
  * the application, as it maps out pages, URIs and Views.
  * <p>
  * <p>
  * Because of it use as such a fundamental building block, an instance of this class has to be created early in the
- * application start up process. It is better therefore not to introduce dependencies into this class, otherwise the
- * design, and ordering of construction, of Guice modules starts to get complicated.
+ * application start up process. To avoid complex dependencies within modules, the building of the {@link Sitemap} is
+ * managed by the {@link SitemapService}
  * <p>
- * <p>
- * A potential solution for dependencies can be seen in {@link SitemapURIConverter}, which acts as an intermediary
- * between this class and {@link URIFragmentHandler} implementations, thus avoiding the creation of dependencies here.
- * <p>
- * <p>
- * Uses LinkedHashMap to hold the site map itself, to retain insertion order<br>
+ * Simple URI redirects can be added using {@link #addRedirect(String, String)}
+ * 
+ * @see SitemapURIConverter
  * 
  * @author David Sowerby 19 May 2013
  * 
  */
 @Singleton
-public class Sitemap extends BasicForest<SitemapNode> {
+public class Sitemap {
 
 	private String publicRoot = "public";
 	private String privateRoot = "private";
@@ -61,15 +58,31 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	private final Map<String, String> redirects = new LinkedHashMap<>();
 	private SitemapNode privateRootNode;
 	private SitemapNode publicRootNode;
+	private final BasicForest<SitemapNode> forest;
 
+	@Inject
+	public Sitemap() {
+		super();
+		forest = new BasicForest<>();
+	}
+
+	/**
+	 * Returns the full URI for {@code node}
+	 * 
+	 * @param node
+	 * @return
+	 */
 	public String uri(SitemapNode node) {
 		StringBuilder buf = new StringBuilder(node.getUriSegment());
 		prependParent(node, buf);
 		return buf.toString();
 	}
 
+	/**
+	 * Recursively prepends the parent URI segment of {@code node}, until the full URI has been built
+	 */
 	private void prependParent(SitemapNode node, StringBuilder buf) {
-		SitemapNode parentNode = getParent(node);
+		SitemapNode parentNode = forest.getParent(node);
 		if (parentNode != null) {
 			buf.insert(0, "/");
 			buf.insert(0, parentNode.getUriSegment());
@@ -96,12 +109,12 @@ public class Sitemap extends BasicForest<SitemapNode> {
 		}
 		SitemapNode node = null;
 		String[] segments = StringUtils.split(uri, "/");
-		List<SitemapNode> nodes = getRoots();
+		List<SitemapNode> nodes = forest.getRoots();
 		SitemapNode parentNode = null;
 		for (int i = 0; i < segments.length; i++) {
 			node = findNodeBySegment(nodes, segments[i], true);
 			addChild(parentNode, node);
-			nodes = getChildren(node);
+			nodes = forest.getChildren(node);
 			parentNode = node;
 		}
 
@@ -125,15 +138,13 @@ public class Sitemap extends BasicForest<SitemapNode> {
 		return foundNode;
 	}
 
-	@Override
 	public void addNode(SitemapNode node) {
 		if (node.getId() == 0) {
 			node.setId(nextNodeId());
 		}
-		super.addNode(node);
+		forest.addNode(node);
 	}
 
-	@Override
 	public void addChild(SitemapNode parentNode, SitemapNode childNode) {
 		// super allows null parent
 		if (parentNode != null) {
@@ -144,7 +155,7 @@ public class Sitemap extends BasicForest<SitemapNode> {
 		if (childNode.getId() == 0) {
 			childNode.setId(nextNodeId());
 		}
-		super.addChild(parentNode, childNode);
+		forest.addChild(parentNode, childNode);
 	}
 
 	public String standardPageURI(StandardPageKey pageKey) {
@@ -221,7 +232,7 @@ public class Sitemap extends BasicForest<SitemapNode> {
 		List<SitemapNode> nodeChain = new ArrayList<>();
 		int i = 0;
 		String currentSegment = null;
-		List<SitemapNode> nodes = getRoots();
+		List<SitemapNode> nodes = forest.getRoots();
 		boolean segmentNotFound = false;
 		SitemapNode node = null;
 		while ((i < segments.size()) && (!segmentNotFound)) {
@@ -229,7 +240,7 @@ public class Sitemap extends BasicForest<SitemapNode> {
 			node = findNodeBySegment(nodes, currentSegment, false);
 			if (node != null) {
 				nodeChain.add(node);
-				nodes = getChildren(node);
+				nodes = forest.getChildren(node);
 				i++;
 			} else {
 				segmentNotFound = true;
@@ -250,7 +261,7 @@ public class Sitemap extends BasicForest<SitemapNode> {
 	 */
 	public List<String> uris() {
 		List<String> list = new ArrayList<>();
-		for (SitemapNode node : getAllNodes()) {
+		for (SitemapNode node : forest.getAllNodes()) {
 			list.add(uri(node));
 		}
 		return list;
@@ -291,16 +302,92 @@ public class Sitemap extends BasicForest<SitemapNode> {
 
 	public SitemapNode getPrivateRootNode() {
 		if (this.privateRootNode == null) {
-			privateRootNode = findNodeBySegment(getRoots(), privateRoot, false);
+			privateRootNode = findNodeBySegment(forest.getRoots(), privateRoot, false);
 		}
 		return privateRootNode;
 	}
 
 	public SitemapNode getPublicRootNode() {
 		if (this.publicRootNode == null) {
-			publicRootNode = findNodeBySegment(getRoots(), publicRoot, false);
+			publicRootNode = findNodeBySegment(forest.getRoots(), publicRoot, false);
 		}
 		return publicRootNode;
+	}
+
+	/**
+	 * If a duplicate URI is received in any of the add methods:
+	 * <p>
+	 * If {@code overwrite} is true, the existing node is replaced in its entirety by a the new one. If
+	 * {@code overwrite} is false, then the new node is ignored and the current one left as it is.
+	 * 
+	 * @param overwrite
+	 */
+	public void duplicateURIoverwrites(boolean overwrite) {
+
+	}
+
+	public int getNodeCount() {
+		return forest.getNodeCount();
+	}
+
+	/**
+	 * Returns the parent of {@code node}. Will be null if {@code node} has no parent (that is, it is a root node)
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public SitemapNode getParent(SitemapNode node) {
+		return forest.getParent(node);
+	}
+
+	/**
+	 * Delegates to {@link BasicForest#getRoots()}
+	 * 
+	 * @return
+	 */
+	public List<SitemapNode> getRoots() {
+		return forest.getRoots();
+	}
+
+	/**
+	 * Delegates to {@link BasicForest#getRootFor(Object)}
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public SitemapNode getRootFor(SitemapNode node) {
+		return forest.getRootFor(node);
+	}
+
+	/**
+	 * Delegates to {@link BasicForest#getChildCount(Object)}
+	 * 
+	 * @param node
+	 * @return
+	 */
+
+	public int getChildCount(SitemapNode node) {
+		return forest.getChildCount(node);
+	}
+
+	/**
+	 * Delegates to {@link BasicForest#getAllNodes()}
+	 * 
+	 * @return
+	 */
+	public List<SitemapNode> getAllNodes() {
+		return forest.getAllNodes();
+	}
+
+	/**
+	 * Delegates to {@link BasicForest#getChildren(Object)}
+	 * 
+	 * @param newParentNode
+	 * @return
+	 */
+	public List<SitemapNode> getChildren(SitemapNode parentNode) {
+		return forest.getChildren(parentNode);
+
 	}
 
 }

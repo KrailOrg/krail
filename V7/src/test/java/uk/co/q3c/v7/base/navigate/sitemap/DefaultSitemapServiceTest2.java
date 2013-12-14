@@ -55,7 +55,7 @@ public class DefaultSitemapServiceTest2 {
 	Translate translate;
 
 	@Mock
-	Provider<SitemapFileReader> sitemapFileReaderProvider;
+	Provider<FileSitemapLoader> sitemapFileReaderProvider;
 
 	@Mock
 	Sitemap sitemap;
@@ -81,7 +81,7 @@ public class DefaultSitemapServiceTest2 {
 			protected void configure() {
 				bind(ApplicationConfigurationService.class).toInstance(configurationService);
 				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
-				bind(SitemapFileReader.class).to(DefaultSitemapFileReader.class);
+				bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
 			}
 
 		};

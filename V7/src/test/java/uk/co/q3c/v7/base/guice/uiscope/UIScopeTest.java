@@ -27,9 +27,9 @@ import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapFileReader;
+import uk.co.q3c.v7.base.navigate.sitemap.DefaultFileSitemapLoader;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapService;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapFileReader;
+import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapLoader;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.shiro.DefaultLoginStatusHandler;
@@ -140,7 +140,7 @@ public class UIScopeTest {
 			bind(LoginStatusHandler.class).to(DefaultLoginStatusHandler.class);
 			bind(SubjectIdentifier.class).to(DefaultSubjectIdentifier.class);
 			bind(SitemapService.class).to(DefaultSitemapService.class);
-			bind(SitemapFileReader.class).to(DefaultSitemapFileReader.class);
+			bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
 			bind(ApplicationConfigurationService.class).to(DefaultApplicationConfigurationService.class);
 
 		}

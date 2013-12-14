@@ -46,6 +46,12 @@ public class ServicesMonitorModule extends AbstractModule {
 	private static final Logger log = LoggerFactory.getLogger(ServicesMonitorModule.class);
 
 	/**
+	 * Needs to be created this way because it is inside the module, but note that the @Provides method at
+	 * getServicesManager() ensures that injection scope remains consistent
+	 */
+	private final ServicesMonitor servicesManager = new ServicesMonitor();
+
+	/**
 	 * This listener is constructed using the {@link Service} interface to identify service implementation instances..
 	 * All instances of {@link Service} implementations are registered with the {@link ServicesMonitor}
 	 * 
@@ -245,12 +251,6 @@ public class ServicesMonitorModule extends AbstractModule {
 			return method.getName().equals("stop");
 		}
 	}
-
-	/**
-	 * Needs to be created this way because it is inside the module, but note that the @Provides method at
-	 * getServicesManager() ensures that injection scope remains consistent
-	 */
-	private final ServicesMonitor servicesManager = new ServicesMonitor();
 
 	@Override
 	protected void configure() {

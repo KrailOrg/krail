@@ -14,7 +14,7 @@ import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
 import uk.co.q3c.v7.base.navigate.sitemap.PageRecord;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapFileReader;
+import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapLoader;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
@@ -33,7 +33,7 @@ import uk.co.q3c.v7.i18n.Translate;
 
 /**
  * Used during the process of building the {@link Sitemap}. Provides the logic for building standard pages using options
- * provided by the {@link SitemapFileReader} and defaults from {@link StandardPageKey}
+ * provided by the {@link FileSitemapLoader} and defaults from {@link StandardPageKey}
  * 
  * @author David Sowerby 28 June 2013
  * 

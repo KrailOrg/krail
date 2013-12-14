@@ -250,7 +250,7 @@ public class DefaultSitemapServiceTest {
 			@Override
 			protected void configure() {
 				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
-				bind(SitemapFileReader.class).to(DefaultSitemapFileReader.class);
+				bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
 			}
 
 		};

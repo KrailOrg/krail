@@ -15,12 +15,10 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import java.io.File;
 
 /**
- * Implementations must read a sitemap definition from a file, and constructs the Sitemap object from it. Depending on
- * the way the application has been configured, this may be only one of the ways in which the Sitemap is populated, as
- * there are similar implementations to populate the Sitemap from annotations and definitions in a Guice module - these
- * may be combined if the developer so wishes.
+ * Implementations off this interface take definitions of {@link Sitemap} entries from a file, and load them into the
+ * {@link Sitemap} when invoked by the {@link SitemapService}.
  */
-public interface SitemapFileReader {
+public interface FileSitemapLoader extends SitemapLoader {
 
 	/**
 	 * Parses {@code file}. If {@code firstLoad} is true, then no checks are made to see whether the {@link Sitemap}

@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapServiceModule;
 import uk.co.q3c.v7.base.services.ServicesMonitor;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
@@ -109,7 +110,17 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		baseModules.add(componentModule());
 
 		addAppModules(baseModules);
+		addSitemapModules(baseModules);
 		return baseModules;
+	}
+
+	/**
+	 * Modules used in the creation of the {@link Sitemap} do not actually need to be separated, this just makes a
+	 * convenient way of seeing them as a group
+	 * 
+	 * @param baseModules
+	 */
+	protected void addSitemapModules(List<Module> baseModules) {
 	}
 
 	protected Module componentModule() {

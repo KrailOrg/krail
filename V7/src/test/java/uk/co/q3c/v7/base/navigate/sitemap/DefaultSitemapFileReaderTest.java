@@ -78,7 +78,7 @@ public class DefaultSitemapFileReaderTest {
 	private static File modifiedFile;
 	private List<String> lines;
 	@Inject
-	DefaultSitemapFileReader reader;
+	DefaultFileSitemapLoader reader;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -141,7 +141,7 @@ public class DefaultSitemapFileReaderTest {
 
 		System.out.println(tree.toString());
 
-		Collection<SitemapNode> nodes = reader.getSitemap().getEntries();
+		Collection<SitemapNode> nodes = reader.getSitemap().getAllNodes();
 		for (SitemapNode node : nodes) {
 			validateNode(tree, node);
 		}

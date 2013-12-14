@@ -43,7 +43,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	private static Logger log = LoggerFactory.getLogger(DefaultSitemapService.class);
 	@AutoStart
 	private final ApplicationConfigurationService configurationService;
-	private final Provider<SitemapFileReader> sitemapFileReaderProvider;
+	private final Provider<FileSitemapLoader> sitemapFileReaderProvider;
 	private List<String> sources;
 	private final Sitemap sitemap;
 	private StringBuilder report;
@@ -52,7 +52,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 
 	@Inject
 	protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate,
-			Provider<SitemapFileReader> sitemapFileReaderProvider, Sitemap sitemap) {
+			Provider<FileSitemapLoader> sitemapFileReaderProvider, Sitemap sitemap) {
 		super(translate);
 		this.configurationService = configurationService;
 		this.sitemapFileReaderProvider = sitemapFileReaderProvider;
@@ -112,7 +112,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 
 		switch (source) {
 		case "file":
-			SitemapFileReader sitemapFileReader = sitemapFileReaderProvider.get();
+			FileSitemapLoader sitemapFileReader = sitemapFileReaderProvider.get();
 			File sitemapFileLocation = absolutePathFor(configuration.getString(ConfigKeys.FILE_LOCATION,
 					"sitemap.properties"));
 			sitemapFileReader.parse(sitemapFileLocation, firstLoad);

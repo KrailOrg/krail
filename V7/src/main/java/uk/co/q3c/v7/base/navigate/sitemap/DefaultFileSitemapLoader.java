@@ -44,9 +44,9 @@ import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.common.base.Strings;
 
-public class DefaultSitemapFileReader implements SitemapFileReader {
+public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
-	private static Logger log = LoggerFactory.getLogger(DefaultSitemapFileReader.class);
+	private static Logger log = LoggerFactory.getLogger(DefaultFileSitemapLoader.class);
 
 	private enum SectionName {
 		options, redirects, viewPackages, standardPageMapping, map;
@@ -100,7 +100,7 @@ public class DefaultSitemapFileReader implements SitemapFileReader {
 	private final Translate translate;
 
 	@Inject
-	public DefaultSitemapFileReader(StandardPageBuilder standardPageBuilder, CurrentLocale currentLocale,
+	public DefaultFileSitemapLoader(StandardPageBuilder standardPageBuilder, CurrentLocale currentLocale,
 			Translate translate, Sitemap sitemap) {
 		super();
 		this.standardPageBuilder = standardPageBuilder;
@@ -888,6 +888,18 @@ public class DefaultSitemapFileReader implements SitemapFileReader {
 	public Sitemap getSitemap() {
 
 		return sitemap;
+	}
+
+	@Override
+	public boolean load() {
+		
+		return false;
+	}
+
+	@Override
+	public boolean overwriteExisting() {
+		
+		return false;
 	}
 
 }

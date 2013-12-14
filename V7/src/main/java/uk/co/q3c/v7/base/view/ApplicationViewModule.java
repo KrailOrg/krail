@@ -65,7 +65,7 @@ public class ApplicationViewModule extends AbstractModule {
 					this.getClass().getName());
 		} else {
 
-			for (SitemapNode node : sitemap.getEntries()) {
+			for (SitemapNode node : sitemap.getAllNodes()) {
 				// use sitemap.url(node) to get the fully qualified url - the node itself only contains the url segment
 				// intermediate nodes will not have a view if they have been redirected
 				Class<? extends V7View> viewClass = node.getViewClass();
