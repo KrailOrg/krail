@@ -21,7 +21,6 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 
-import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.binder.AnnotatedBindingBuilder;
 
 /**
@@ -40,8 +39,6 @@ public class DefaultShiroModule extends ShiroModule {
 	@Override
 	protected void configureShiro() {
 
-		install(new FactoryModuleBuilder().build(URIPermissionFactory.class));
-		expose(URIPermissionFactory.class);
 		bindCredentialsMatcher();
 		bindLoginAttemptLog();
 		bindRealms();

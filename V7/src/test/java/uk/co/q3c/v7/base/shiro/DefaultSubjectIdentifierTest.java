@@ -118,7 +118,6 @@ public class DefaultSubjectIdentifierTest {
 
 			@Override
 			protected void configure() {
-				bind(URIPermissionFactory.class).to(DefaultURIPermissionFactory.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
 			}

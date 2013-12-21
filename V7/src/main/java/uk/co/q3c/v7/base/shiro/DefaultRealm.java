@@ -23,15 +23,12 @@ public class DefaultRealm extends AuthorizingRealm {
 
 	private final LoginAttemptLog loginAttemptLog;
 	private final Sitemap sitemap;
-	private final URIPermissionFactory permissionFactory;
 
 	@Inject
-	protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher, Sitemap sitemap,
-			URIPermissionFactory permissionFactory) {
+	protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher, Sitemap sitemap) {
 		super(matcher);
 		this.loginAttemptLog = loginAttemptLog;
 		this.sitemap = sitemap;
-		this.permissionFactory = permissionFactory;
 		setCachingEnabled(false);
 	}
 
@@ -89,9 +86,9 @@ public class DefaultRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-		String privatePermission = "uri:view:" + sitemap.getPrivateRoot() + ":*";
-		URIViewPermission publicPermission = permissionFactory.createViewPermission(sitemap.getPublicRoot(), true);
-		info.addObjectPermission(publicPermission);
+		// public pages do not get submitted for authorisation check, this very simplistic example gives permission
+		// for all pages which do get submitted for authorisation
+		String privatePermission = "uri:view:*:*";
 		info.addStringPermission(privatePermission);
 		return info;
 	}

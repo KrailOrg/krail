@@ -22,6 +22,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.services.Service.Status;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
@@ -82,6 +84,7 @@ public class DefaultSitemapServiceTest2 {
 				bind(ApplicationConfigurationService.class).toInstance(configurationService);
 				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
 				bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 			}
 
 		};

@@ -29,8 +29,6 @@ import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
-import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
@@ -61,25 +59,20 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	private int level;
 	private final V7Navigator navigator;
 	private final Provider<Subject> subjectProvider;
-	private final DefaultURIPermissionFactory uriPermissionFactory;
 	private boolean sorted;
 	private final UserOption userOption;
-	private final SitemapURIConverter sitemapURIConverter;
 	private final Translate translate;
 	public static final String sortedOpt = "sorted";
 	public static final String maxLevelOpt = "maxLevel";
 
 	@Inject
 	protected DefaultUserNavigationTree(Sitemap sitemap, V7Navigator navigator, SubjectProvider subjectProvider,
-			DefaultURIPermissionFactory uriPermissionFactory, UserOption userOption,
-			SitemapURIConverter sitemapURIConverter, LoginStatusHandler loginStatusHandler, Translate translate) {
+			UserOption userOption, LoginStatusHandler loginStatusHandler, Translate translate) {
 		super();
 		this.sitemap = sitemap;
 		this.navigator = navigator;
 		this.subjectProvider = subjectProvider;
-		this.uriPermissionFactory = uriPermissionFactory;
 		this.userOption = userOption;
-		this.sitemapURIConverter = sitemapURIConverter;
 		this.translate = translate;
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
@@ -113,7 +106,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 			level = 1;
 			// doesn't make sense to show the logout page
 			if (!node.getLabelKey().equals(StandardPageKey.Logout)) {
-				loadNode(null, node, node.equals(sitemap.getPublicRootNode()));
+				// loadNode(null, node, node.equals(sitemap.getPublicRootNode()));
 			}
 		}
 	}
@@ -127,7 +120,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	private void loadNode(SitemapNode parentNode, SitemapNode childNode, boolean publicBranch) {
 		// construct the permission
 		String uri = sitemap.uri(childNode);
-		URIViewPermission pagePermissionRequired = uriPermissionFactory.createViewPermission(uri);
+		URIViewPermission pagePermissionRequired = new URIViewPermission(navigator.getCurrentNavigationState());
 
 		// if permitted, add it
 		if (publicBranch || subjectProvider.get().isPermitted(pagePermissionRequired)) {
@@ -235,11 +228,8 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	 */
 	@Override
 	public void afterViewChange(V7ViewChangeEvent event) {
-		SitemapNode selectedNode = sitemapURIConverter.nodeForUri(navigator.getNavigationState(), false);
-		// shouldn't get null, but just in case
-		if (selectedNode != null) {
-			this.select(selectedNode);
-		}
+		SitemapNode selectedNode = navigator.getCurrentNode();
+		this.select(selectedNode);
 	}
 
 	@Override

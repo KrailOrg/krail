@@ -79,6 +79,12 @@ public class ApplicationViewLayout1Test {
 
 		}
 
+		@Override
+		public String viewName() {
+
+			return "TestView";
+		}
+
 	}
 
 	@Before

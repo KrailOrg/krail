@@ -13,14 +13,15 @@
 package uk.co.q3c.v7.base.shiro;
 
 import static org.fest.assertions.Assertions.*;
-import static org.mockito.Mockito.*;
+
+import javax.inject.Inject;
 
 import org.apache.shiro.authz.permission.WildcardPermission;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.NavigationState;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -29,18 +30,19 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 @GuiceContext({})
 public class URIViewPermissionTest {
 
-	@Mock
-	URIFragmentHandler uriHandler;
+	@Inject
+	StrictURIFragmentHandler uriHandler;
 
 	@Test
 	public void create() {
 
 		// given
+
 		String uri = "private/wiggly/id=1";
-		when(uriHandler.virtualPage()).thenReturn("private/wiggly");
+		NavigationState navigationState = uriHandler.navigationState(uri);
 
 		// when
-		URIViewPermission p = new URIViewPermission(uriHandler, uri);
+		URIViewPermission p = new URIViewPermission(navigationState);
 		// then
 		// for some reason parts are stored by WildcardPermission with [] around them
 		assertThat(p.toString()).isEqualTo("[uri]:[view]:[private]:[wiggly]");
@@ -53,10 +55,10 @@ public class URIViewPermissionTest {
 
 		// given
 		String uri = "private/wiggly/id=1";
-		when(uriHandler.virtualPage()).thenReturn("private/wiggly");
+		NavigationState navigationState = uriHandler.navigationState(uri);
 
 		// when
-		URIViewPermission p = new URIViewPermission(uriHandler, uri, true);
+		URIViewPermission p = new URIViewPermission(navigationState, true);
 		// then
 		// for some reason parts are stored by WildcardPermission with [] around them
 		assertThat(p).isEqualTo(new WildcardPermission("uri:view:private:wiggly:*"));

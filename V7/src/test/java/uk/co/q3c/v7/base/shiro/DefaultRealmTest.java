@@ -47,15 +47,12 @@ public class DefaultRealmTest {
 	CredentialsMatcher matcher = new AlwaysPasswordCredentialsMatcher();
 
 	@Mock
-	URIPermissionFactory permissionFactory;
-
-	@Mock
 	Sitemap sitemap;
 
 	@Before
 	public void setup() {
 		sitemap = mock(Sitemap.class);
-		realm = new DefaultRealm(attemptLog, matcher, sitemap, permissionFactory);
+		realm = new DefaultRealm(attemptLog, matcher, sitemap);
 	}
 
 	@Test
@@ -129,9 +126,8 @@ public class DefaultRealmTest {
 	public void uri() {
 
 		// given
-		URIViewPermission viewPermission = mock(URIViewPermission.class);
-		when(sitemap.getPrivateRoot()).thenReturn("private");
-		when(permissionFactory.createViewPermission("private", true)).thenReturn(viewPermission);
+		// when(sitemap.getPrivateRoot()).thenReturn("private");
+		// when(sitemap.getPublicRoot()).thenReturn("public");
 		PrincipalCollection pc = new SimplePrincipalCollection();
 		// when
 		AuthorizationInfo info = realm.getAuthorizationInfo(pc);

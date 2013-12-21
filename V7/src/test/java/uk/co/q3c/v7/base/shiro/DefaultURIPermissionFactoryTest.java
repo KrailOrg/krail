@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 
@@ -33,19 +34,19 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 public class DefaultURIPermissionFactoryTest {
 
 	@Inject
-	DefaultURIPermissionFactory factory;
+	URIFragmentHandler uriHandler;
 
 	@Before
 	public void setup() {
-
 	}
 
 	@Test
 	public void createPermission() {
 
 		// given
+		NavigationState navigationState = uriHandler.navigationState("private");
 		// when
-		URIViewPermission permission = factory.createViewPermission("private");
+		URIViewPermission permission = new URIViewPermission(navigationState);
 		// then
 		assertThat(permission.toString()).isEqualTo("[uri]:[view]:[private]");
 
@@ -55,12 +56,13 @@ public class DefaultURIPermissionFactoryTest {
 	public void createPermission_withWildcard() {
 
 		// given
+		NavigationState navigationState = uriHandler.navigationState("private");
 		// when
-		URIViewPermission permission = factory.createViewPermission("private", true);
+		URIViewPermission permission = new URIViewPermission(navigationState, true);
 		// then
 		assertThat(permission.toString()).isEqualTo("[uri]:[view]:[private]:[*]");
 		// when
-		permission = factory.createViewPermission("private", false);
+		permission = new URIViewPermission(navigationState);
 		// then
 		assertThat(permission.toString()).isEqualTo("[uri]:[view]:[private]");
 	}

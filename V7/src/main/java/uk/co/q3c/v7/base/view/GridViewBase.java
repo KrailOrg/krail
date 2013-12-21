@@ -22,9 +22,8 @@ public abstract class GridViewBase extends GridLayout implements V7View {
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {
-		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri: "
-				+ event.getNavigator().getNavigationState());
-		List<String> params = event.getNavigator().getNavigationParams();
+		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri: " + event.getNavigationState());
+		List<String> params = event.getNavigationState().getParameterList();
 		processParams(params);
 	}
 

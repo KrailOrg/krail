@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
@@ -28,19 +30,19 @@ import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultFileSitemapLoader;
-import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapService;
 import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapLoader;
+import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
+import uk.co.q3c.v7.base.services.AbstractServiceI18N;
+import uk.co.q3c.v7.base.services.Service;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.shiro.DefaultLoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.DefaultSubjectIdentifier;
-import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.DefaultUnauthenticatedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.DefaultUnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.DefaultVaadinSessionProvider;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.SubjectIdentifier;
-import uk.co.q3c.v7.base.shiro.URIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.UnauthenticatedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.shiro.V7ErrorHandler;
@@ -61,6 +63,8 @@ import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.I18NTranslator;
+import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -92,6 +96,38 @@ public class UIScopeTest {
 	UIKeyProvider uiKeyProvider = new UIKeyProvider();
 	static Map<String, Provider<UI>> uibinder;
 	static Subject subject = mock(Subject.class);
+
+	static class MockSitemapService extends AbstractServiceI18N implements SitemapService {
+
+		@Inject
+		protected MockSitemapService(Translate translate) {
+			super(translate);
+			setNameKey(LabelKey.Sitemap_Service);
+		}
+
+		@Override
+		public Status start() throws Exception {
+
+			return Status.STARTED;
+		}
+
+		@Override
+		public Status stop() {
+
+			return Status.STOPPED;
+		}
+
+		@Override
+		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
+		}
+
+		@Override
+		public Sitemap getSitemap() {
+
+			return mock(Sitemap.class);
+		}
+
+	}
 
 	UIProvider provider;
 
@@ -130,7 +166,6 @@ public class UIScopeTest {
 			bind(UnauthenticatedExceptionHandler.class).to(DefaultUnauthenticatedExceptionHandler.class);
 			bind(UnauthorizedExceptionHandler.class).to(DefaultUnauthorizedExceptionHandler.class);
 			bind(Subject.class).toProvider(MockSubjectProvider.class);
-			bind(URIPermissionFactory.class).to(DefaultURIPermissionFactory.class);
 			bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 			bind(UserOption.class).to(DefaultUserOption.class);
 			bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
@@ -139,7 +174,7 @@ public class UIScopeTest {
 			bind(SessionManager.class).to(VaadinSessionManager.class).asEagerSingleton();
 			bind(LoginStatusHandler.class).to(DefaultLoginStatusHandler.class);
 			bind(SubjectIdentifier.class).to(DefaultSubjectIdentifier.class);
-			bind(SitemapService.class).to(DefaultSitemapService.class);
+			bind(SitemapService.class).to(MockSitemapService.class);
 			bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
 			bind(ApplicationConfigurationService.class).to(DefaultApplicationConfigurationService.class);
 

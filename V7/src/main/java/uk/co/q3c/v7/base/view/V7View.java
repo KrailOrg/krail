@@ -1,6 +1,5 @@
 package uk.co.q3c.v7.base.view;
 
-
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Component;
 
@@ -19,10 +18,17 @@ public interface V7View {
 	public void enter(V7ViewChangeEvent event);
 
 	/**
-	 * To enable implementations to be able to implement this interface without descending from Component. If the
-	 * implementation does descend from Component, just return 'this'
+	 * To enable implementations to implement this interface without descending from Component. If the implementation
+	 * does descend from Component, just return 'this'
 	 * 
 	 * @return
 	 */
 	public Component getRootComponent();
+
+	/**
+	 * A name for the view, typically displayed in a title bar
+	 * 
+	 * @return
+	 */
+	public String viewName();
 }

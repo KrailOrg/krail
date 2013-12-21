@@ -350,13 +350,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 			case systemAccountRoot:
 				setSystemAccountRoot(value);
 				break;
-			case privateRoot:
-				sitemap.setPrivateRoot(value);
-				break;
 
-			case publicRoot:
-				sitemap.setPublicRoot(value);
-				break;
 			}
 
 		} catch (Exception e) {
@@ -892,13 +886,13 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 	@Override
 	public boolean load() {
-		
+
 		return false;
 	}
 
 	@Override
 	public boolean overwriteExisting() {
-		
+
 		return false;
 	}
 

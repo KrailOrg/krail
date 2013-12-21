@@ -55,6 +55,7 @@ public class SitemapNode {
 	private String label;
 	private CollationKey collationKey;
 	private Translate translate;
+	private boolean publicPage;
 
 	public SitemapNode(String uriSegment, Class<? extends V7View> viewClass, I18NKey<?> labelKey, Locale locale,
 			Collator collator, Translate translate) {
@@ -178,6 +179,14 @@ public class SitemapNode {
 
 	public void setTranslate(Translate translate) {
 		this.translate = translate;
+	}
+
+	public boolean isPublicPage() {
+		return publicPage;
+	}
+
+	public void setPublicPage(boolean publicPage) {
+		this.publicPage = publicPage;
 	}
 
 }

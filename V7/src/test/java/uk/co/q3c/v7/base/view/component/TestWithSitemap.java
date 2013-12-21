@@ -43,6 +43,9 @@ public abstract class TestWithSitemap {
 	@Inject
 	protected Translate translate;
 
+	@Inject
+	URIFragmentHandler uriHandler;
+
 	protected Sitemap sitemap;
 
 	protected SitemapNode newNode1;
@@ -57,7 +60,8 @@ public abstract class TestWithSitemap {
 
 	@Before
 	public void setup() {
-		sitemap = new Sitemap();
+		sitemap = new Sitemap(uriHandler);
+		;
 		collator = Collator.getInstance(locale);
 	}
 
@@ -98,8 +102,6 @@ public abstract class TestWithSitemap {
 			newNode4 = newNode("wiggly");
 			sitemap.addChild(newNode1, newNode2);
 			sitemap.addChild(newNode3, newNode4);
-			sitemap.setPrivateRoot("private");
-			sitemap.setPublicRoot("public");
 		}
 
 	}

@@ -20,8 +20,8 @@ import javax.inject.Inject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
@@ -40,25 +40,22 @@ public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener,
 
 	private final List<BreadcrumbStep> steps = new ArrayList<>();
 	private final V7Navigator navigator;
-	private final SitemapURIConverter converter;
-	private final CurrentLocale currentLocale;
+	private final Sitemap sitemap;
 	private final Collator collator;
 	private final Translate translate;
 
 	@Inject
-	protected DefaultBreadcrumb(V7Navigator navigator, SitemapURIConverter converter, CurrentLocale currentLocale,
-			Translate translate) {
+	protected DefaultBreadcrumb(V7Navigator navigator, Sitemap sitemap, CurrentLocale currentLocale, Translate translate) {
 		this.navigator = navigator;
 		navigator.addViewChangeListener(this);
-		this.converter = converter;
-		this.currentLocale = currentLocale;
+		this.sitemap = sitemap;
 		this.collator = Collator.getInstance(currentLocale.getLocale());
 		this.translate = translate;
 
 	}
 
 	protected void moveToNavigationState() {
-		List<SitemapNode> nodeChain = converter.nodeChainForUri(navigator.getNavigationState(), true);
+		List<SitemapNode> nodeChain = sitemap.nodeChainFor(navigator.getCurrentNode());
 		int maxIndex = (nodeChain.size() > steps.size() ? nodeChain.size() : steps.size());
 		for (int i = 0; i < maxIndex; i++) {
 			// nothing left in chain

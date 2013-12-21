@@ -38,12 +38,14 @@ public class DefaultInvalidURIExceptionHandlerTest {
 
 	DefaultInvalidURIExceptionHandler handler;
 
-	String navState = "public/wiggly/id=3";
+	NavigationState navState;
 
 	@Before
 	public void setup() {
-		when(navigator.getNavigationState()).thenReturn(navState);
+
 		handler = new DefaultInvalidURIExceptionHandler(navigator, notifier);
+		navState = new StrictURIFragmentHandler().navigationState("public/wiggly/id=3");
+		when(navigator.getCurrentNavigationState()).thenReturn(navState);
 	}
 
 	@Test
@@ -54,7 +56,7 @@ public class DefaultInvalidURIExceptionHandlerTest {
 		// when
 		handler.invoke();
 		// then
-		verify(notifier).notify(LabelKey.Invalid_Page, MessageKey.invalidURI, navState);
+		verify(notifier).notify(LabelKey.Invalid_Page, MessageKey.invalidURI, "public/wiggly/id=3");
 
 	}
 }

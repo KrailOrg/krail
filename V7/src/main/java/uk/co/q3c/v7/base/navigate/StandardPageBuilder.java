@@ -11,10 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
+import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapLoader;
 import uk.co.q3c.v7.base.navigate.sitemap.PageRecord;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
-import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapLoader;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
@@ -154,12 +154,12 @@ public class StandardPageBuilder {
 	public String defaultUri(StandardPageKey key) {
 		switch (key) {
 		case Private_Home:
-			return sitemap.getPrivateRoot();
+			return null;
 		case Public_Home:
-			return sitemap.getPublicRoot();
+			return null;
 		case Login:
 		case Logout:
-			return sitemap.getPublicRoot() + "/" + defaultSegment(key);
+			return null;
 
 		case Request_Account:
 		case Refresh_Account:
@@ -192,9 +192,9 @@ public class StandardPageBuilder {
 	public String defaultSegment(StandardPageKey key) {
 		switch (key) {
 		case Public_Home:
-			return sitemap.getPublicRoot();
+			return null;
 		case Private_Home:
-			return sitemap.getPrivateRoot();
+			return null;
 		default:
 			String s = key.name().toLowerCase().replace("_", "-");
 			return s;

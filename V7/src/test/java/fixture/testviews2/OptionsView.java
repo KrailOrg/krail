@@ -33,4 +33,10 @@ public class OptionsView implements V7View {
 		throw new RuntimeException("not yet implemented");
 	}
 
+	@Override
+	public String viewName() {
+
+		return getClass().getSimpleName();
+	}
+
 }

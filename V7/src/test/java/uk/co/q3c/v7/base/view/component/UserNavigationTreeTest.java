@@ -32,12 +32,11 @@ import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
-import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.URIViewPermission;
@@ -78,16 +77,11 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 	@Inject
 	Injector injector;
 
-	DefaultURIPermissionFactory uriPermissionFactory;
-
 	@Mock
 	BasicUI ui;
 
 	@Mock
 	UserOption userOption;
-
-	@Mock
-	SitemapURIConverter sitemapUriConverter;
 
 	@Mock
 	LoginStatusHandler loginStatusHandler;
@@ -103,7 +97,6 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 				userOption.getOptionAsInt(DefaultUserNavigationTree.class.getSimpleName(),
 						DefaultUserNavigationTree.maxLevelOpt, -1)).thenReturn(-1);
 		createUI();
-		uriPermissionFactory = injector.getInstance(DefaultURIPermissionFactory.class);
 	}
 
 	@Test
@@ -113,8 +106,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		currentLocale.setLocale(Locale.UK);
 		buildSitemap(0);
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler, translate);
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(0);
 	}
@@ -127,8 +120,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(1);
 
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler, translate);
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(3);
 		assertThat(unt.getItemIds()).containsOnly(newNode1, newNode2, newNode3);
@@ -149,8 +142,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(2);
 
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler, translate);
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(6);
 		assertThat(unt.getItemIds()).containsOnly(newNode1, newNode2, newNode3, newNode4, newNode5, newNode6);
@@ -173,8 +166,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		currentLocale.setLocale(Locale.UK);
 		buildSitemap(2);
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler, translate);
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
 		// then
 		assertThat(unt.getMaxLevel()).isEqualTo(-1);
 		// when
@@ -201,8 +194,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(1);
 
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler, translate);
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("home");
@@ -215,8 +208,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		// given
 		buildSitemap(1);
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler, translate);
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
 		// then
 		assertThat(unt.isImmediate()).isTrue();
 
@@ -227,8 +220,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		buildSitemap(2);
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler, translate);
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
 		// when
 		unt.setValue(newNode2);
 		// then
@@ -243,8 +236,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(1);
 
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler, translate);
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("zu Hause");
@@ -259,16 +252,18 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 
-		URIViewPermission privatePage = uriPermissionFactory.createViewPermission("private");
-		URIViewPermission publicPage = uriPermissionFactory.createViewPermission("public");
+		NavigationState privateNavState = uriHandler.navigationState("private");
+		NavigationState publicNavState = uriHandler.navigationState("public");
+		URIViewPermission privatePage = new URIViewPermission(privateNavState);
+		URIViewPermission publicPage = new URIViewPermission(publicNavState);
 		buildSitemap(4);
 
 		when(subject.isPermitted(privatePage)).thenReturn(false);
 		// represents the case where user not authenticated
 		when(subject.isPermitted(publicPage)).thenReturn(false);
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler, translate);
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
 		// then
 		assertThat(unt.containsId(newNode1)).isTrue();
 		assertThat(unt.containsId(newNode2)).isFalse(); // logout
@@ -286,8 +281,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		// given
 		buildSitemap(3);
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler, translate);
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(1);
 
@@ -302,8 +297,8 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		buildSitemap(4);
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro,
-				uriPermissionFactory, userOption, sitemapUriConverter, loginStatusHandler, translate);
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
 		// when
 
 		// sorted is false by default, should be insertion order
@@ -335,6 +330,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		return ui;
 	}
 
+	@Override
 	@ModuleProvider
 	protected AbstractModule moduleProvider() {
 		return new AbstractModule() {

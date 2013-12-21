@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
@@ -28,9 +28,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NTranslator;
@@ -52,10 +54,10 @@ public class BreadcrumbTest extends TestWithSitemap {
 	V7Navigator navigator;
 
 	@Mock
-	SitemapURIConverter converter;
+	CurrentLocale currentLocale;
 
 	@Mock
-	CurrentLocale currentLocale;
+	Sitemap sitemap;
 
 	@Inject
 	Translate translate;
@@ -80,13 +82,13 @@ public class BreadcrumbTest extends TestWithSitemap {
 		nodeChain.add(newNode1);
 		nodeChain.add(newNode2);
 		nodeChain.add(newNode3);
-		when(converter.nodeChainForUri(anyString(), eq(true))).thenReturn(nodeChain);
+		when(sitemap.nodeChainFor(any(SitemapNode.class))).thenReturn(nodeChain);
 		when(currentLocale.getLocale()).thenReturn(Locale.UK);
 		collator = Collator.getInstance(currentLocale.getLocale());
 		newNode2.setLabelKey(TestLabelKey.Opt, currentLocale.getLocale(), collator);
 
 		// when
-		breadcrumb = new DefaultBreadcrumb(navigator, converter, currentLocale, translate);
+		breadcrumb = new DefaultBreadcrumb(navigator, sitemap, currentLocale, translate);
 		breadcrumb.moveToNavigationState();
 		// then
 		assertThat(breadcrumb.getSteps().size()).isEqualTo(3);
@@ -186,6 +188,7 @@ public class BreadcrumbTest extends TestWithSitemap {
 			@Override
 			protected void configure() {
 				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 			}
 
 		};

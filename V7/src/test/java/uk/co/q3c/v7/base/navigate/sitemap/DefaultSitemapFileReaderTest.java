@@ -30,6 +30,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
@@ -541,24 +543,6 @@ public class DefaultSitemapFileReaderTest {
 	}
 
 	@Test
-	public void rootsChange() throws IOException {
-
-		// given
-		substitute("systemAccountRoot=public/system-account", "systemAccountRoot=open/sysaccount");
-		insertAfter("systemAccountRoot=open/sysaccount", "publicRoot=open");
-		insertAfter("publicRoot=open", "privateRoot=secret");
-		prepFile();
-		// when
-		outputModifiedFile();
-		reader.parse(modifiedFile, true);
-		// then
-		assertThat(reader.getSitemap().getPrivateRoot()).isEqualTo("secret");
-		assertThat(reader.getSitemap().getPublicRoot()).isEqualTo("open");
-		assertThat(reader.getSystemAccountUri()).isEqualTo("open/sysaccount");
-
-	}
-
-	@Test
 	public void fail1() {
 
 		// given
@@ -721,6 +705,7 @@ public class DefaultSitemapFileReaderTest {
 			@Override
 			protected void configure() {
 				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 			}
 
 		};

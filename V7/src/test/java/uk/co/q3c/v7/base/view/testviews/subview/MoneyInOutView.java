@@ -33,4 +33,10 @@ public class MoneyInOutView implements V7View {
 		throw new RuntimeException("not yet implemented");
 	}
 
+	@Override
+	public String viewName() {
+
+		return getClass().getSimpleName();
+	}
+
 }

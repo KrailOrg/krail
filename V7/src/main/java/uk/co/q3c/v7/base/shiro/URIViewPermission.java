@@ -14,29 +14,45 @@ package uk.co.q3c.v7.base.shiro;
 
 import org.apache.shiro.authz.permission.WildcardPermission;
 
-import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
-
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 
 public class URIViewPermission extends WildcardPermission {
 
-	@AssistedInject
-	public URIViewPermission(URIFragmentHandler uriHandler, @Assisted String uri) {
+	public URIViewPermission(NavigationState navigationState) {
 		super();
-		construct(uriHandler, uri, false);
+		construct(navigationState, false);
 	}
 
-	@AssistedInject
-	public URIViewPermission(URIFragmentHandler uriHandler, @Assisted String uri, @Assisted boolean appendWildcard) {
+	/**
+	 * Creates a Permission object from the uri fragment held in {@code navigationState}. The '/' characters are changed
+	 * to ':' to facilitate use of Shiro WildcardPermission
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public URIViewPermission(NavigationState navigationState, boolean appendWildcard) {
 		super();
-		construct(uriHandler, uri, appendWildcard);
+		construct(navigationState, appendWildcard);
 	}
 
-	protected void construct(URIFragmentHandler uriHandler, String uri, boolean appendWildcard) {
-		uriHandler.setFragment(uri);
+	/**
+	 * Creates a Permission object from the uri fragment held in {@code navigationState}. The '/' characters are changed
+	 * to ':' to facilitate use of Shiro WildcardPermission. If {@code appendWildCard} is true, a final ':*' is added.
+	 * The fill translation is, for example, for a URI of:<br>
+	 * <br>
+	 * <i>private/deptx/teamy/current projects</i> becomes a Shiro permission of <br>
+	 * <br>
+	 * <i>uri:view:private:deptx:teamy:current projects</i> with no wildcard, or <br>
+	 * <br>
+	 * <i>uri:view:private:deptx:teamy:current projects:*</i> with a wildcard
+	 * 
+	 * @param uri
+	 * @param appendWildcard
+	 * @return
+	 */
+	protected void construct(NavigationState navigationState, boolean appendWildcard) {
 		String prefix = "uri:view:";
-		String pagePerm = uriHandler.virtualPage().replace("/", ":");
+		String pagePerm = navigationState.getVirtualPage().replace("/", ":");
 
 		String permissionString = appendWildcard ? prefix + pagePerm + ":*" : prefix + pagePerm;
 		setParts(permissionString);

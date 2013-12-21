@@ -100,7 +100,6 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 
 			@Override
 			protected void configure() {
-				bind(URIPermissionFactory.class).to(DefaultURIPermissionFactory.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 				bind(VaadinSessionProvider.class).toInstance(mock(VaadinSessionProvider.class));
 			}

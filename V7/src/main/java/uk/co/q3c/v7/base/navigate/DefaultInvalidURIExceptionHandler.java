@@ -32,7 +32,8 @@ public class DefaultInvalidURIExceptionHandler implements InvalidURIExceptionHan
 
 	@Override
 	public void invoke() {
-		notifier.notify(LabelKey.Invalid_Page, MessageKey.invalidURI, navigator.getNavigationState());
+		notifier.notify(LabelKey.Invalid_Page, MessageKey.invalidURI, navigator.getCurrentNavigationState()
+				.getFragment());
 	}
 
 }

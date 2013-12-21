@@ -10,33 +10,18 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package fixture.testviews2;
+package uk.co.q3c.v7.base.navigate.sitemap;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
-
-import com.vaadin.ui.Component;
-
-@UIScoped
-public class View2 implements V7View {
-
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-		//
-		throw new RuntimeException("not yet implemented");
-	}
-
-	@Override
-	public Component getRootComponent() {
-		// return null;
-		throw new RuntimeException("not yet implemented");
-	}
-
-	@Override
-	public String viewName() {
-
-		return getClass().getSimpleName();
-	}
+/**
+ * Implementations off this interface take directly coded definitions of {@link Sitemap} entries, and load them into the
+ * {@link Sitemap} when invoked by the {@link SitemapService}.
+ * 
+ * 
+ * @see AnnotationSitemapLoader
+ * @see FileSitemapLoader
+ * @author David Sowerby
+ * 
+ */
+public interface DirectSitemapLoader extends SitemapLoader {
 
 }

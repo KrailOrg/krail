@@ -50,4 +50,10 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 
 	}
 
+	@Override
+	public String viewName() {
+
+		return getClass().getSimpleName();
+	}
+
 }

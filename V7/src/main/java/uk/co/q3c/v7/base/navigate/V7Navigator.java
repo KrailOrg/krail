@@ -31,7 +31,7 @@ public interface V7Navigator extends UriFragmentChangedListener {
 	 */
 	void navigateTo(StandardPageKey pageKey);
 
-	String getNavigationState();
+	NavigationState getCurrentNavigationState();
 
 	List<String> getNavigationParams();
 
@@ -53,12 +53,27 @@ public interface V7Navigator extends UriFragmentChangedListener {
 
 	V7View getCurrentView();
 
-	void navigateTo(SitemapNode node);
-
 	/**
 	 * Navigate to the error view. It is assumed that the view has already been set up with error information, usually
 	 * via the V7ErrorHandler
 	 */
 	void error();
+
+	/**
+	 * Navigates to the location represented by {@code navigationState}, which may include parameters
+	 * 
+	 * @param navigationState
+	 */
+	void navigateTo(NavigationState navigationState);
+
+	SitemapNode getCurrentNode();
+
+	/**
+	 * Navigates to the location represented by {@code node}. Because this is based on a {@link SitemapNode}, no
+	 * parameters are associated with this, and only navigates to the page associated with the node
+	 * 
+	 * @param node
+	 */
+	void navigateTo(SitemapNode node);
 
 }

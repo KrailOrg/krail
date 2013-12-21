@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -21,11 +23,13 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.commons.lang3.StringUtils;
-
 import uk.co.q3c.util.BasicForest;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -35,10 +39,13 @@ import com.google.common.collect.ImmutableMap;
  * <p>
  * <p>
  * Because of it use as such a fundamental building block, an instance of this class has to be created early in the
- * application start up process. To avoid complex dependencies within modules, the building of the {@link Sitemap} is
- * managed by the {@link SitemapService}
+ * application start up process. To avoid complex logic and dependencies within Guice modules, the building of the
+ * {@link Sitemap} is managed by the {@link SitemapService}
  * <p>
  * Simple URI redirects can be added using {@link #addRedirect(String, String)}
+ * <p>
+ * If a duplicate entry is received (that is, a second entry for the same URI), the later entry will overwrite the
+ * earlier entry
  * 
  * @see SitemapURIConverter
  * 
@@ -48,21 +55,20 @@ import com.google.common.collect.ImmutableMap;
 @Singleton
 public class Sitemap {
 
-	private String publicRoot = "public";
-	private String privateRoot = "private";
 	private int nextNodeId = 0;
 	private int errors = 0;
 	private final Map<StandardPageKey, String> standardPages = new HashMap<>();
 	private String report;
 	// Uses LinkedHashMap to retain insertion order
 	private final Map<String, String> redirects = new LinkedHashMap<>();
-	private SitemapNode privateRootNode;
-	private SitemapNode publicRootNode;
 	private final BasicForest<SitemapNode> forest;
+	private final Map<String, SitemapNode> uriMap = new LinkedHashMap<>();
+	private final URIFragmentHandler uriHandler;
 
 	@Inject
-	public Sitemap() {
+	public Sitemap(URIFragmentHandler uriHandler) {
 		super();
+		this.uriHandler = uriHandler;
 		forest = new BasicForest<>();
 	}
 
@@ -91,34 +97,62 @@ public class Sitemap {
 	}
 
 	/**
-	 * creates a SiteMapNode and appends it to the map according to the {@code uri} given, then returns it. If a node
-	 * already exists at that location it is returned. If there are gaps in the structure, nodes are created to fill
-	 * them (the same idea as forcing directory creation on a file path). An empty (not null) URI is allowed. This
-	 * represents the site base URI without any further qualification.
+	 * creates a SiteMapNode and appends it to the map according to the {@code navigationState} given, then returns it.
+	 * If a node already exists at that location it is returned. If there are gaps in the structure, nodes are created
+	 * to fill them (the same idea as forcing directory creation on a file path). An empty (not null) URI is allowed.
+	 * This represents the site base URI without any further qualification.
+	 * 
 	 * 
 	 * @param uri
 	 * @return
 	 */
-	public SitemapNode append(String uri) {
+	public SitemapNode append(NavigationState navigationState) {
 
-		if (uri.equals("")) {
-			SitemapNode node = new SitemapNode();
-			node.setUriSegment(uri);
-			addNode(node);
-			return node;
+		// if there is already a node for this navigation state, there is nothing to do, just return it
+		if (hasUri(navigationState)) {
+			return nodeFor(navigationState);
 		}
+
+		// take a copy to protect the parameter
+		NavigationState navState = uriHandler.navigationState(navigationState.getFragment());
+
+		// loop and remove the trailing segment each time until we find a matching node
+		// or run out of segments
+		List<String> segments = navState.getPathSegments();
 		SitemapNode node = null;
-		String[] segments = StringUtils.split(uri, "/");
-		List<SitemapNode> nodes = forest.getRoots();
+		while ((segments.size() > 0) && (node == null)) {
+			segments.remove(segments.size() - 1);
+			String path = Joiner.on("/").join(segments);
+			node = nodeFor(path);
+		}
+
+		// if we never found a matching node, we must be starting a new root, parent will be null
+		// and the start index will be 0
+		int startIndex = segments.size();
+
+		// reset the segments
+		segments = new ArrayList<>(navigationState.getPathSegments());
+
 		SitemapNode parentNode = null;
-		for (int i = 0; i < segments.length; i++) {
-			node = findNodeBySegment(nodes, segments[i], true);
-			addChild(parentNode, node);
-			nodes = forest.getChildren(node);
+
+		if (startIndex != 0) {
 			parentNode = node;
 		}
 
-		return node;
+		SitemapNode childNode = null;
+		for (int i = startIndex; i < segments.size(); i++) {
+			String segment = segments.get(i);
+			childNode = new SitemapNode();
+			childNode.setUriSegment(segment);
+			addChild(parentNode, childNode);
+			parentNode = childNode;
+		}
+
+		return childNode;
+	}
+
+	public SitemapNode append(String uri) {
+		return append(uriHandler.navigationState(uri));
 	}
 
 	private SitemapNode findNodeBySegment(List<SitemapNode> nodes, String segment, boolean createIfAbsent) {
@@ -138,28 +172,62 @@ public class Sitemap {
 		return foundNode;
 	}
 
-	public void addNode(SitemapNode node) {
-		if (node.getId() == 0) {
-			node.setId(nextNodeId());
+	/**
+	 * Adds the {@code childNode} to the {@code parentNode}. If either of the nodes do not currently exist in the
+	 * {@link Sitemap} they will be added to it.
+	 * <p>
+	 * The node id is set to {@link #nextNodeId()} for any node which is not already in the Sitemap
+	 * 
+	 * @param parentNode
+	 * @param childNode
+	 */
+	public void addChild(SitemapNode parentNode, SitemapNode childNode) {
+		checkNotNull(childNode);
+		if ((parentNode != null) && (!containsNode(parentNode))) {
+			forest.addNode(parentNode);
+			String newUri = uri(parentNode);
+			parentNode.setId(nextNodeId());
+			uriMap.put(newUri, parentNode);
 		}
-		forest.addNode(node);
+
+		// remove the child node - it may be moving from one parent to another
+		if (containsNode(childNode)) {
+			removeNode(childNode);
+		}
+
+		childNode.setId(nextNodeId());
+
+		// add it to structure first, otherwise the uri will be wrong
+		forest.addChild(parentNode, childNode);
+		uriMap.put(uri(childNode), childNode);
+
 	}
 
-	public void addChild(SitemapNode parentNode, SitemapNode childNode) {
-		// super allows null parent
-		if (parentNode != null) {
-			if (parentNode.getId() == 0) {
-				parentNode.setId(nextNodeId());
-			}
-		}
-		if (childNode.getId() == 0) {
-			childNode.setId(nextNodeId());
-		}
-		forest.addChild(parentNode, childNode);
+	/**
+	 * gets what would be the full URI for {@code childNode} if it were attached to {@code parentNode}, without actually
+	 * adding the node to the {@link Sitemap}
+	 * 
+	 * @param node
+	 * @return
+	 */
+	// private String provisionalUri(SitemapNode parentNode, SitemapNode childNode) {
+	// StringBuilder buf = new StringBuilder(childNode.getUriSegment());
+	// prependParent(parentNode, buf);
+	// return buf.toString();
+	// }
+
+	private void removeNode(SitemapNode node) {
+		String uri = uri(node);
+		forest.removeNode(node);
+		uriMap.remove(uri);
 	}
 
 	public String standardPageURI(StandardPageKey pageKey) {
 		return standardPages.get(pageKey);
+	}
+
+	public SitemapNode standardPageNode(StandardPageKey pageKey) {
+		return uriMap.get(standardPages.get(pageKey));
 	}
 
 	private int nextNodeId() {
@@ -200,6 +268,18 @@ public class Sitemap {
 			return page;
 		}
 		return p;
+	}
+
+	/**
+	 * If the virtual page represented by {@code navigationState} has been redirected, return the page it has been
+	 * redirected to, otherwise, just return the virtual page unchanged.
+	 * 
+	 * @param page
+	 * @return
+	 */
+	public String getRedirectFor(NavigationState navigationState) {
+		String virtualPage = navigationState.getVirtualPage();
+		return getRedirectFor(virtualPage);
 	}
 
 	/**
@@ -254,75 +334,38 @@ public class Sitemap {
 	}
 
 	/**
-	 * Returns a list of all the URIs contained in the sitemap. This is a fairly expensive call, as each URI has to be
-	 * built from the node structure.
+	 * Returns a safe copy of all the URIs contained in the sitemap.
 	 * 
 	 * @return
 	 */
-	public List<String> uris() {
-		List<String> list = new ArrayList<>();
-		for (SitemapNode node : forest.getAllNodes()) {
-			list.add(uri(node));
-		}
-		return list;
+	public ImmutableList<String> uris() {
+		return ImmutableList.copyOf(uriMap.keySet());
 	}
 
 	/**
-	 * Returns true if the sitemap contains {@code uri}. This is a fairly expensive call, as each URI has to be built
-	 * from the node structure, before this method can be evaluated
+	 * Returns true if the sitemap contains {@code uri}. Only the virtual page part of the URI is used, parameters are
+	 * ignored
 	 * 
 	 * @param uri
 	 * @return
 	 */
 	public boolean hasUri(String uri) {
-		List<String> list = uris();
-		return list.contains(uri);
+		NavigationState navigationState = uriHandler.navigationState(uri);
+		return hasUri(navigationState);
+	}
+
+	/**
+	 * Returns true if the sitemap contains the URI represented by virtual page part of {@code navigationState}.
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public boolean hasUri(NavigationState navigationState) {
+		return uriMap.keySet().contains(navigationState.getVirtualPage());
 	}
 
 	public void setErrors(int errorSum) {
 		errors = errorSum;
-
-	}
-
-	public String getPublicRoot() {
-		return publicRoot;
-	}
-
-	public void setPublicRoot(String publicRoot) {
-		this.publicRoot = publicRoot;
-	}
-
-	public String getPrivateRoot() {
-		return privateRoot;
-	}
-
-	public void setPrivateRoot(String privateRoot) {
-		this.privateRoot = privateRoot;
-	}
-
-	public SitemapNode getPrivateRootNode() {
-		if (this.privateRootNode == null) {
-			privateRootNode = findNodeBySegment(forest.getRoots(), privateRoot, false);
-		}
-		return privateRootNode;
-	}
-
-	public SitemapNode getPublicRootNode() {
-		if (this.publicRootNode == null) {
-			publicRootNode = findNodeBySegment(forest.getRoots(), publicRoot, false);
-		}
-		return publicRootNode;
-	}
-
-	/**
-	 * If a duplicate URI is received in any of the add methods:
-	 * <p>
-	 * If {@code overwrite} is true, the existing node is replaced in its entirety by a the new one. If
-	 * {@code overwrite} is false, then the new node is ignored and the current one left as it is.
-	 * 
-	 * @param overwrite
-	 */
-	public void duplicateURIoverwrites(boolean overwrite) {
 
 	}
 
@@ -388,6 +431,118 @@ public class Sitemap {
 	public List<SitemapNode> getChildren(SitemapNode parentNode) {
 		return forest.getChildren(parentNode);
 
+	}
+
+	/**
+	 * Delegates to {@link BasicForest#containsNode(Object)}
+	 * 
+	 * @param newParentNode
+	 * @return
+	 */
+	public boolean containsNode(SitemapNode node) {
+		return forest.containsNode(node);
+	}
+
+	/**
+	 * Returns the {@link SitemapNode} associated with {@code uri}, or null if none found
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public SitemapNode nodeFor(String uri) {
+		return uriMap.get(uriHandler.navigationState(uri).getVirtualPage());
+	}
+
+	/**
+	 * Returns the {@link SitemapNode} associated with {@code navigationState}, or null if none found
+	 * 
+	 * @param navigationState
+	 * @return
+	 */
+	public SitemapNode nodeFor(NavigationState navigationState) {
+		return uriMap.get(navigationState.getVirtualPage());
+	}
+
+	/**
+	 * Returns the {@link SitemapNode} associated with {@code uri}, or the closest available if one cannot be found for
+	 * the full URI. "Closest" means the node which matches the most segments of the URI. Returns null if no match at
+	 * all is found
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public SitemapNode nodeNearestFor(String uri) {
+		return nodeNearestFor(uriHandler.navigationState(uri));
+	}
+
+	/**
+	 * Returns the {@link SitemapNode} associated with {@code navigationState}, or the closest available if one cannot
+	 * be found for the full URI. "Closest" means the node which matches the most segments of the URI. Returns null if
+	 * no match at all is found
+	 * 
+	 * @param navigationState
+	 * @return
+	 */
+	public SitemapNode nodeNearestFor(NavigationState navigationState) {
+		List<String> segments = new ArrayList<>(navigationState.getPathSegments());
+		SitemapNode node = null;
+		Joiner joiner = Joiner.on("/");
+		while ((segments.size() > 0) && (node == null)) {
+			String path = joiner.join(segments);
+			node = uriMap.get(path);
+			segments.remove(segments.size() - 1);
+		}
+		return node;
+	}
+
+	/**
+	 * returns a list of {@link SitemapNode} matching the virtual page of the {@code navigationState} provided. Uses the
+	 * {@link URIFragmentHandler} to get URI path segments and {@link Sitemap} to obtain the node chain.
+	 * {@code allowPartialPath} determines how a partial match is handled (see
+	 * {@link Sitemap#nodeChainForSegments(List, boolean)} javadoc
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public List<SitemapNode> nodeChainForUri(String uri, boolean allowPartialPath) {
+		return nodeChainFor(uriHandler.navigationState(uri), allowPartialPath);
+	}
+
+	/**
+	 * Returns a list of nodes which form the chain from this {@code node} to its root in the {@link Sitemap}. The list
+	 * includes {@code node}
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public List<SitemapNode> nodeChainFor(SitemapNode node) {
+		List<SitemapNode> nodes = new ArrayList<>();
+		nodes.add(node);
+		SitemapNode parent = this.getParent(node);
+		while (parent != null) {
+			nodes.add(0, parent);
+			parent = this.getParent(parent);
+		}
+		return nodes;
+	}
+
+	/**
+	 * returns a list of {@link SitemapNode} matching the virtual page of the {@code navigationState} provided. Uses the
+	 * {@link URIFragmentHandler} to get URI path segments and {@link Sitemap} to obtain the node chain.
+	 * {@code allowPartialPath} determines how a partial match is handled (see
+	 * {@link Sitemap#nodeChainForSegments(List, boolean)} javadoc
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public List<SitemapNode> nodeChainFor(NavigationState navigationState, boolean allowPartialPath) {
+		List<String> segments = navigationState.getPathSegments();
+		List<SitemapNode> nodeChain = nodeChainForSegments(segments, allowPartialPath);
+		return nodeChain;
+	}
+
+	public void setStandardPage(StandardPageKey key, String uri) {
+		standardPages.put(key, uri);
 	}
 
 }

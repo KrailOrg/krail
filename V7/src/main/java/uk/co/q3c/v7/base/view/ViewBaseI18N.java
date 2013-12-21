@@ -10,30 +10,36 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.shiro;
+package uk.co.q3c.v7.base.view;
 
 import javax.inject.Inject;
 
-import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.Translate;
 
-public class DefaultURIPermissionFactory implements URIPermissionFactory {
+public abstract class ViewBaseI18N extends ViewBase {
 
-	private final URIFragmentHandler uriHandler;
+	private I18NKey<?> nameKey;
+	private final Translate translate;
 
 	@Inject
-	protected DefaultURIPermissionFactory(URIFragmentHandler uriHandler) {
-		super();
-		this.uriHandler = uriHandler;
+	protected ViewBaseI18N(V7Navigator navigator, Translate translate) {
+		super(navigator);
+		this.translate = translate;
+	}
+
+	public I18NKey<?> getNameKey() {
+		return nameKey;
+	}
+
+	public void setNameKey(I18NKey<?> nameKey) {
+		this.nameKey = nameKey;
 	}
 
 	@Override
-	public URIViewPermission createViewPermission(String uri) {
-		return new URIViewPermission(uriHandler, uri);
-	}
-
-	@Override
-	public URIViewPermission createViewPermission(String uri, boolean appendWildcard) {
-		return new URIViewPermission(uriHandler, uri, appendWildcard);
+	public String viewName() {
+		return translate.from(nameKey);
 	}
 
 }

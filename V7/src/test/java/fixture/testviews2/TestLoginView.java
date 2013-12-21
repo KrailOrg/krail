@@ -57,4 +57,10 @@ public class TestLoginView implements LoginView {
 	public void setStatusMessage(String invalidLogin) {
 
 	}
+
+	@Override
+	public String viewName() {
+
+		return getClass().getSimpleName();
+	}
 }

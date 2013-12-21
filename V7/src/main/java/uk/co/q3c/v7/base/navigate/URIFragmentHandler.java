@@ -1,7 +1,5 @@
 package uk.co.q3c.v7.base.navigate;
 
-import java.util.List;
-
 /**
  * Handles the decoding and encoding of a URI Fragment.
  * 
@@ -9,38 +7,6 @@ import java.util.List;
  * 
  */
 public interface URIFragmentHandler {
-	/**
-	 * returns the "virtual page path" of the URIFragment. The path is assumed to finish as soon as a paired parameter
-	 * is found. No attempt is made to validate the actual structure of the path, so for example something like
-	 * <code>view//subview/a=b</code> will return <code>view//subview</code>. An empty String is returned if
-	 * <code>navigationState</code> is null or empty. If <code>navigationState</code> contains only paired parameters,
-	 * an empty String is returned.
-	 * 
-	 * @see #getPathSegments()
-	 */
-	public String virtualPage();
-
-	public URIFragmentHandler setFragment(String fragment);
-
-	public String fragment();
-
-	public List<String> parameterList();
-
-	/**
-	 * Sets the value of the specified parameter. If this parameter already exists, its value is updated, otherwise the
-	 * parameter is added to the URI
-	 * 
-	 * @param paramName
-	 * @param value
-	 * @return
-	 */
-	public URIFragmentHandler setParameterValue(String paramName, String value);
-
-	public URIFragmentHandler removeParameter(String paramName);
-
-	void setVirtualPage(String pageName);
-
-	String parameterValue(String paramName);
 
 	/**
 	 * 
@@ -56,11 +22,27 @@ public interface URIFragmentHandler {
 	void setUseBang(boolean useBang);
 
 	/**
-	 * Returns the virtual page path, but as an array of segments
+	 * Returns a {@link NavigationState}, which is a representation of a URI fragment, broken down into its constituent
+	 * parts
 	 * 
 	 * @return
-	 * @see #virtualPage()
 	 */
-	String[] getPathSegments();
+
+	NavigationState navigationState(String fragment);
+
+	/**
+	 * Returns a URI fragment encoded from the {@code navigationState}
+	 * 
+	 * @param navigationState
+	 * @return
+	 */
+	String fragment(NavigationState navigationState);
+
+	/**
+	 * Updates the fragment part of the {@code navigationState} from its ccomponent parts
+	 * 
+	 * @param navigationState
+	 */
+	void updateFragment(NavigationState navigationState);
 
 }

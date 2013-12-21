@@ -43,7 +43,6 @@ public class StandardPageBuilderTest {
 	@Inject
 	private StandardPageBuilder builder;
 	private Sitemap sitemap;
-	private SitemapURIConverter converter;
 
 	@Inject
 	private URIFragmentHandler uriHandler;
@@ -53,8 +52,7 @@ public class StandardPageBuilderTest {
 
 	@Before
 	public void setup() {
-		sitemap = new Sitemap();
-		converter = new SitemapURIConverter(sitemap, uriHandler);
+		sitemap = new Sitemap(uriHandler);
 		builder.setSitemap(sitemap);
 	}
 
@@ -101,31 +99,6 @@ public class StandardPageBuilderTest {
 		assertThat(builder.defaultUri(StandardPageKey.Reset_Account)).isEqualTo("public/sysaccount/reset-account");
 		assertThat(builder.defaultUri(StandardPageKey.Request_Account)).isEqualTo("public/sysaccount/request-account");
 		assertThat(builder.defaultUri(StandardPageKey.Refresh_Account)).isEqualTo("public/sysaccount/refresh-account");
-
-	}
-
-	@Test
-	public void defaultUri_changePublicPrivateRoot() {
-
-		// given
-		sitemap.setPublicRoot("open");
-		sitemap.setPrivateRoot("secret");
-		builder.setSystemAccountRoot("open/system-account");
-		// when
-
-		// then
-		assertThat(builder.defaultUri(StandardPageKey.Public_Home)).isEqualTo("open");
-		assertThat(builder.defaultUri(StandardPageKey.Login)).isEqualTo("open/login");
-		assertThat(builder.defaultUri(StandardPageKey.Logout)).isEqualTo("open/logout");
-		assertThat(builder.defaultUri(StandardPageKey.Private_Home)).isEqualTo("secret");
-		assertThat(builder.defaultUri(StandardPageKey.System_Account)).isEqualTo("open/system-account");
-		assertThat(builder.defaultUri(StandardPageKey.Enable_Account)).isEqualTo("open/system-account/enable-account");
-		assertThat(builder.defaultUri(StandardPageKey.Unlock_Account)).isEqualTo("open/system-account/unlock-account");
-		assertThat(builder.defaultUri(StandardPageKey.Reset_Account)).isEqualTo("open/system-account/reset-account");
-		assertThat(builder.defaultUri(StandardPageKey.Request_Account))
-				.isEqualTo("open/system-account/request-account");
-		assertThat(builder.defaultUri(StandardPageKey.Refresh_Account))
-				.isEqualTo("open/system-account/refresh-account");
 
 	}
 
@@ -197,7 +170,7 @@ public class StandardPageBuilderTest {
 		// when
 		builder.setPageMappings(pageMappings);
 		Map<StandardPageKey, String> standardPages = builder.getSitemap().getStandardPages();
-		SitemapNode node = converter.nodeForUri("public", false);
+		SitemapNode node = sitemap.nodeFor("public");
 		// then
 		assertThat(node).isNotNull();
 		assertThat(standardPages.get(StandardPageKey.Public_Home)).isEqualTo("public");
@@ -219,7 +192,7 @@ public class StandardPageBuilderTest {
 		// when
 		builder.setPageMappings(pageMappings);
 		Map<StandardPageKey, String> standardPages = builder.getSitemap().getStandardPages();
-		SitemapNode node = converter.nodeForUri("wildly/different", false);
+		SitemapNode node = sitemap.nodeFor("wildly/different");
 		// then
 		assertThat(node).isNotNull();
 		assertThat(standardPages.get(StandardPageKey.Public_Home)).isEqualTo("wildly/different");
@@ -242,7 +215,7 @@ public class StandardPageBuilderTest {
 		// when
 		builder.setPageMappings(pageMappings);
 		Map<StandardPageKey, String> standardPages = builder.getSitemap().getStandardPages();
-		SitemapNode node = converter.nodeForUri("wildly/different", false);
+		SitemapNode node = sitemap.nodeFor("wildly/different");
 		// then
 		assertThat(node).isNotNull();
 		assertThat(standardPages.get(StandardPageKey.Public_Home)).isEqualTo("wildly/different");
@@ -251,7 +224,7 @@ public class StandardPageBuilderTest {
 		assertThat(node.getViewClass()).isEqualTo(builder.viewClass(StandardPageKey.Public_Home));
 		assertThat(builder.getSitemap().uri(node)).isEqualTo("wildly/different");
 
-		node = converter.nodeForUri("almost/different", false);
+		node = sitemap.nodeFor("almost/different");
 		// then
 		assertThat(node).isNotNull();
 		assertThat(standardPages.get(StandardPageKey.Private_Home)).isEqualTo("almost/different");

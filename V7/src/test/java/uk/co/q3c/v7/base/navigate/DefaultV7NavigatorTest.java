@@ -1,6 +1,6 @@
 package uk.co.q3c.v7.base.navigate;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
@@ -14,14 +14,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapURIConverter;
-import uk.co.q3c.v7.base.shiro.DefaultURIPermissionFactory;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
+import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
@@ -45,6 +46,27 @@ import com.vaadin.util.CurrentInstance;
 @GuiceContext({})
 public class DefaultV7NavigatorTest {
 
+	class MockNodeAnswer implements Answer<SitemapNode> {
+
+		@Override
+		public SitemapNode answer(InvocationOnMock invocation) throws Throwable {
+			Object[] arguments = invocation.getArguments();
+			NavigationState navigationState = (NavigationState) arguments[0];
+			switch (navigationState.getVirtualPage()) {
+			case "public/view1":
+				return mockNode;
+
+			case "public/view2":
+				return mockNode2;
+
+			case "public/login":
+				return mockNode2;
+			}
+			return null;
+		}
+
+	}
+
 	static class View2 implements V7View {
 
 		@Override
@@ -55,6 +77,11 @@ public class DefaultV7NavigatorTest {
 		public Component getRootComponent() {
 
 			return null;
+		}
+
+		@Override
+		public String viewName() {
+			return "view2";
 		}
 
 	}
@@ -69,6 +96,12 @@ public class DefaultV7NavigatorTest {
 		public Component getRootComponent() {
 
 			return null;
+		}
+
+		@Override
+		public String viewName() {
+
+			return "view1";
 		}
 
 	}
@@ -126,12 +159,6 @@ public class DefaultV7NavigatorTest {
 	SitemapService sitemapService;
 
 	@Mock
-	DefaultURIPermissionFactory uriPermissionFactory;
-
-	@Mock
-	SitemapURIConverter sitemapURIConverter;
-
-	@Mock
 	LoginStatusHandler loginHandler;
 
 	@Mock
@@ -166,14 +193,13 @@ public class DefaultV7NavigatorTest {
 		when(scopedUI.getPage()).thenReturn(page);
 		when(errorViewProvider.get()).thenReturn(errorView);
 		when(subjectProvider.get()).thenReturn(subject);
-		when(sitemapURIConverter.pageIsPublic(anyString())).thenReturn(true);
 		when(injector.getInstance(LogoutView.class)).thenReturn(logoutView);
 		when(injector.getInstance(LoginView.class)).thenReturn(loginView);
 		when(injector.getInstance(View2.class)).thenReturn(view2);
 		when(injector.getInstance(View1.class)).thenReturn(view1);
 
 		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemapService, subjectProvider,
-				uriPermissionFactory, sitemapURIConverter, loginHandler);
+				loginHandler);
 		CurrentInstance.set(UI.class, scopedUI);
 	}
 
@@ -184,13 +210,14 @@ public class DefaultV7NavigatorTest {
 		String page = "public/logout";
 		when(sitemap.standardPageURI(StandardPageKey.Logout)).thenReturn(page);
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
 		mockNode.setViewClass(LogoutView.class);
+		mockNode.setPublicPage(true);
 		// when
 		navigator.navigateTo(StandardPageKey.Logout);
 		// then
 		assertThat(navigator.getCurrentView()).isInstanceOf(LogoutView.class);
-		verify(scopedUI).changeView(null, logoutView);
+		verify(scopedUI).changeView(logoutView);
 	}
 
 	@Test
@@ -198,14 +225,15 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/login";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
+		mockNode.setPublicPage(true);
 		mockNode.setViewClass(LoginView.class);
 		// when
 		navigator.navigateTo(page);
 		// then
 
 		assertThat(navigator.getCurrentView()).isInstanceOf(LoginView.class);
-		verify(scopedUI).changeView(null, loginView);
+		verify(scopedUI).changeView(loginView);
 
 	}
 
@@ -219,11 +247,12 @@ public class DefaultV7NavigatorTest {
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(sitemap.getRedirectFor(page2)).thenReturn(page2);
 
-		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
-		when(sitemapURIConverter.nodeForUri(page2, false)).thenReturn(mockNode2);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenAnswer(new MockNodeAnswer());
 
 		mockNode.setViewClass(View2.class);
+		mockNode.setPublicPage(true);
 		mockNode2.setViewClass(LoginView.class);
+		mockNode2.setPublicPage(true);
 
 		when(sitemap.standardPageURI(StandardPageKey.Login)).thenReturn(page2);
 
@@ -232,25 +261,39 @@ public class DefaultV7NavigatorTest {
 		// when
 		navigator.loginSuccessful();
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo(page);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(page);
 	}
 
 	@Test
 	public void loginSuccessFul_noPreviousView() {
 
 		// given
-		String page = "private";
-		when(sitemap.standardPageURI(StandardPageKey.Private_Home)).thenReturn(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
-		mockNode.setViewClass(View2.class);
 
-		navigator.setCurrentView(loginView, "xx", "yy");
-		navigator.setPreviousView(null);
+		Sitemap sitemap = new Sitemap(uriHandler);
+		SitemapNode privateHomeNode = sitemap.append("private/home");
+		SitemapNode node2 = sitemap.append("public/home/view2");
+		SitemapNode loginNode = sitemap.append("public/login");
+		sitemap.setStandardPage(StandardPageKey.Login, "public/login");
+		sitemap.setStandardPage(StandardPageKey.Private_Home, "private/home");
+
+		when(sitemapService.getSitemap()).thenReturn(sitemap);
+		when(subject.isPermitted(any(URIViewPermission.class))).thenReturn(true);
+		node2.setPublicPage(true);
+		loginNode.setPublicPage(true);
+
+		privateHomeNode.setViewClass(View1.class);
+		node2.setViewClass(View2.class);
+		loginNode.setViewClass(LoginView.class);
+		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemapService, subjectProvider,
+				loginHandler);
+		CurrentInstance.set(UI.class, scopedUI);
 		// when
+		navigator.navigateTo(StandardPageKey.Login);
+		// // when
 		navigator.loginSuccessful();
-		// then
-		verify(scopedUI).changeView(loginView, view2);
+		// // then
+		verify(scopedUI).changeView(loginView);
+		assertThat(navigator.getCurrentView()).isEqualTo(view1);
 
 	}
 
@@ -260,7 +303,8 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
+		mockNode.setPublicPage(true);
 		mockNode.setViewClass(View2.class);
 
 		// when
@@ -277,13 +321,14 @@ public class DefaultV7NavigatorTest {
 		String page1 = "";
 		String fragment1 = page1 + "/id=2/age=5";
 		when(sitemap.getRedirectFor(page1)).thenReturn("public");
-		when(sitemapURIConverter.nodeForUri("public/id=2/age=5", false)).thenReturn(mockNode);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
+		mockNode.setPublicPage(true);
 		mockNode.setViewClass(View1.class);
 
 		// when
 		navigator.navigateTo(fragment1);
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo("public/id=2/age=5");
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo("public/age=5/id=2");
 
 	}
 
@@ -308,12 +353,13 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
+		mockNode.setPublicPage(true);
 		mockNode.setViewClass(View2.class);
 		// when
 		navigator.navigateTo(page);
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo(page);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(page);
 
 	}
 
@@ -324,8 +370,9 @@ public class DefaultV7NavigatorTest {
 		String page = "public/view2";
 		String pageWithParams = "public/view2/id=1/age=2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(sitemapURIConverter.nodeForUri(pageWithParams, false)).thenReturn(mockNode);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
 		mockNode.setViewClass(View2.class);
+		mockNode.setPublicPage(true);
 		// when
 		navigator.navigateTo(pageWithParams);
 		// then
@@ -341,13 +388,14 @@ public class DefaultV7NavigatorTest {
 		mockNode = new SitemapNode(page, view2.getClass(), LabelKey.Cancel, Locale.UK, collator, translate);
 		when(sitemap.uri(mockNode)).thenReturn(page);
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		when(sitemap.nodeFor(page)).thenReturn(mockNode);
+		mockNode.setPublicPage(true);
 		mockNode.setViewClass(View2.class);
 
 		// when
 		navigator.navigateTo(mockNode);
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo(page);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(page);
 
 	}
 
@@ -355,65 +403,59 @@ public class DefaultV7NavigatorTest {
 	public void currentAndPreviousViews_andClearHistory() {
 
 		// given
-		String page1 = "view1";
+		String page1 = "public/view1";
 		String fragment1 = page1 + "/id=1";
 		when(sitemap.getRedirectFor(page1)).thenReturn(page1);
-		when(sitemapURIConverter.nodeForUri(fragment1, false)).thenReturn(mockNode);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenAnswer(new MockNodeAnswer());
 		mockNode.setViewClass(View1.class);
+		mockNode.setPublicPage(true);
 
-		String page2 = "view2";
+		String page2 = "public/view2";
 		String fragment2 = page2 + "/id=2";
 		when(sitemap.getRedirectFor(page2)).thenReturn(page2);
-		when(sitemapURIConverter.nodeForUri(fragment2, false)).thenReturn(mockNode2);
+		when(sitemap.nodeFor(fragment2)).thenReturn(mockNode2);
 		mockNode2.setViewClass(View2.class);
+		mockNode2.setPublicPage(true);
 
 		// when
 
 		// then
 		// start position
 		assertThat(navigator.getCurrentView()).isNull();
-		assertThat(navigator.getCurrentViewName()).isNull();
-		assertThat(navigator.getNavigationState()).isNull();
+		assertThat(navigator.getCurrentNavigationState()).isNull();
 
 		assertThat(navigator.getPreviousView()).isNull();
-		assertThat(navigator.getPreviousViewName()).isNull();
-		assertThat(navigator.getPreviousFragment()).isNull();
+		assertThat(navigator.getPreviousNavigationState()).isNull();
 
 		// when
 		navigator.navigateTo(fragment1);
 
 		// then
 		assertThat(navigator.getCurrentView()).isEqualTo(view1);
-		assertThat(navigator.getCurrentViewName()).isEqualTo(page1);
-		assertThat(navigator.getNavigationState()).isEqualTo(fragment1);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment1);
 
 		assertThat(navigator.getPreviousView()).isNull();
-		assertThat(navigator.getPreviousViewName()).isNull();
-		assertThat(navigator.getPreviousFragment()).isNull();
+		assertThat(navigator.getPreviousNavigationState()).isNull();
 
 		// when
 		navigator.navigateTo(fragment2);
 
 		// then
 		assertThat(navigator.getCurrentView()).isEqualTo(view2);
-		assertThat(navigator.getCurrentViewName()).isEqualTo(page2);
-		assertThat(navigator.getNavigationState()).isEqualTo(fragment2);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment2);
 
 		assertThat(navigator.getPreviousView()).isEqualTo(view1);
-		assertThat(navigator.getPreviousViewName()).isEqualTo(page1);
-		assertThat(navigator.getPreviousFragment()).isEqualTo(fragment1);
+		assertThat(navigator.getPreviousNavigationState().getFragment()).isEqualTo(fragment1);
 
 		// when
 		navigator.clearHistory();
 
 		// then
 		assertThat(navigator.getCurrentView()).isEqualTo(view2);
-		assertThat(navigator.getCurrentViewName()).isEqualTo(page2);
-		assertThat(navigator.getNavigationState()).isEqualTo(fragment2);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment2);
 
 		assertThat(navigator.getPreviousView()).isNull();
-		assertThat(navigator.getPreviousViewName()).isNull();
-		assertThat(navigator.getPreviousFragment()).isNull();
+		assertThat(navigator.getPreviousNavigationState()).isNull();
 	}
 
 	/**
@@ -425,7 +467,8 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
+		mockNode.setPublicPage(true);
 		mockNode.setViewClass(View2.class);
 
 		// need to return true, or first listener will block the second
@@ -448,7 +491,8 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
+		mockNode.setPublicPage(true);
 		mockNode.setViewClass(View2.class);
 		// to block second and subsequent
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(false);
@@ -471,12 +515,13 @@ public class DefaultV7NavigatorTest {
 		String page2 = "private/transfers";
 
 		when(sitemap.getRedirectFor(page)).thenReturn(page2);
-		when(sitemapURIConverter.nodeForUri(page2, false)).thenReturn(mockNode);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
+		mockNode.setPublicPage(true);
 		mockNode.setViewClass(View2.class);
 		// when
 		navigator.navigateTo(page);
 		// then
-		assertThat(navigator.getNavigationState()).isEqualTo(page2);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(page2);
 	}
 
 	@Test(expected = AuthorizationException.class)
@@ -484,15 +529,32 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view2";
+		when(sitemap.nodeFor(any(NavigationState.class))).thenAnswer(new MockNodeAnswer());
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		when(sitemapURIConverter.nodeForUri(page, false)).thenReturn(mockNode);
-		mockNode.setViewClass(View2.class);
-		when(sitemapURIConverter.pageIsPublic(anyString())).thenReturn(false);
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPublicPage(false);
 		// when
 		navigator.navigateTo(page);
 		// then
 		Fail.fail("Exception was expected");
 
+	}
+
+	@Test
+	public void navigateToNavState() {
+
+		// given
+		String page = "public/view2";
+		NavigationState navigationState = uriHandler.navigationState(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPublicPage(true);
+
+		// when
+		navigator.navigateTo(navigationState);
+		// then
+		assertThat(navigator.getCurrentNavigationState()).isEqualTo(navigationState);
+		assertThat(navigator.getCurrentView()).isInstanceOf(View2.class);
 	}
 
 	@Test

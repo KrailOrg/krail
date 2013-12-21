@@ -49,8 +49,17 @@ public abstract class AbstractServiceI18N extends AbstractService implements Ser
 		return translate.from(nameKey);
 	}
 
+	/**
+	 * returns the translation for {@code #descriptionKey}, or an empty String if {@link #descriptionKey} is null - this
+	 * makes the descriptionKey optional
+	 * 
+	 * @see uk.co.q3c.v7.base.services.Service#getDescription()
+	 */
 	@Override
 	public String getDescription() {
+		if (descriptionKey == null) {
+			return "";
+		}
 		return translate.from(descriptionKey);
 	}
 

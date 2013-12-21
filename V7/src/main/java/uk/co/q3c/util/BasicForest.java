@@ -284,4 +284,8 @@ public class BasicForest<V> {
 		return nut;
 	}
 
+	public void removeNode(V node) {
+		graph.removeVertex(node);
+	}
+
 }

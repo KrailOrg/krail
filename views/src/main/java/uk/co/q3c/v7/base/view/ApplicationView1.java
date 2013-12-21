@@ -98,4 +98,9 @@ public class ApplicationView1 extends ViewBaseWithLayout {
 		body.processParams(params);
 	}
 
+	@Override
+	public String viewName() {
+		return "ApplicationView1";
+	}
+
 }

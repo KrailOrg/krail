@@ -170,4 +170,10 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		return passwordBox;
 	}
 
+	@Override
+	public String viewName() {
+
+		return getClass().getSimpleName();
+	}
+
 }
