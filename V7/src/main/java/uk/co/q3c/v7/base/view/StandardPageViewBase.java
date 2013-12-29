@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.V7Navigator;

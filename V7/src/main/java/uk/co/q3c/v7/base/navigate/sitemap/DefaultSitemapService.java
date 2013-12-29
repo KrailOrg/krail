@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.slf4j.Logger;

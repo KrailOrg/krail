@@ -21,9 +21,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 import com.google.common.collect.Maps;
 

@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 import static org.mockito.Mockito.*;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Test;

@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.services;
 
 import static org.assertj.core.api.Assertions.*;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;

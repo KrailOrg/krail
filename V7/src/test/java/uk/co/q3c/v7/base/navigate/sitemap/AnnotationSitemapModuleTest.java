@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Map;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

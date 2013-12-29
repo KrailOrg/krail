@@ -3,7 +3,7 @@ package uk.co.q3c.v7.base.navigate;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;

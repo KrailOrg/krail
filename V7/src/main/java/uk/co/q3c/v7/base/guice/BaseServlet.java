@@ -12,8 +12,8 @@
  */
 package uk.co.q3c.v7.base.guice;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import com.vaadin.server.ServiceException;
 import com.vaadin.server.SessionInitEvent;

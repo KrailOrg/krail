@@ -16,7 +16,7 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;

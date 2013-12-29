@@ -1,6 +1,6 @@
 package uk.co.q3c.v7.base.guice.threadscope;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScoped;
 

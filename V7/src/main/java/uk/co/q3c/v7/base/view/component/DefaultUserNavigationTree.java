@@ -15,7 +15,7 @@ package uk.co.q3c.v7.base.view.component;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;

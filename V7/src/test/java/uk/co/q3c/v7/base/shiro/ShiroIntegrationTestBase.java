@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.shiro;
 
 import static org.mockito.Mockito.when;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;

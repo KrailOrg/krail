@@ -18,8 +18,8 @@ import static org.assertj.jodatime.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import org.joda.time.DateTime;
 import org.junit.Before;

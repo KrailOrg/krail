@@ -15,7 +15,7 @@ package uk.co.q3c.v7.base.useropt;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.inject.Singleton;
+import com.google.inject.Singleton;
 
 /**
  * A volatile storage mechanism for {@link UserOption} implementations. The option values are simply stored in a map and

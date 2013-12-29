@@ -14,7 +14,7 @@ package uk.co.q3c.v7.demo.view;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.PublicHomeView;

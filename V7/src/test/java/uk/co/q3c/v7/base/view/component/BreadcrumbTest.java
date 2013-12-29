@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;

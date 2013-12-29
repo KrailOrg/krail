@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.mgt.SessionManager;

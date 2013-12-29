@@ -2,7 +2,7 @@ package uk.co.q3c.v7.base.shiro;
 
 import java.io.Serializable;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.LabelKey;

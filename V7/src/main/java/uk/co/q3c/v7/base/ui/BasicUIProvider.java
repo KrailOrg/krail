@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.ui;
 
 import java.util.Map;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIKeyProvider;

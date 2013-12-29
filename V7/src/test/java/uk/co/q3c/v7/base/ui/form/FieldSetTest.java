@@ -16,7 +16,7 @@ import static org.fest.assertions.Assertions.*;
 
 import java.util.Locale;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
 import org.fest.assertions.Fail;

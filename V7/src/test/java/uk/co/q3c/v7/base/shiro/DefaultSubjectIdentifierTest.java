@@ -15,7 +15,7 @@ package uk.co.q3c.v7.base.shiro;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;

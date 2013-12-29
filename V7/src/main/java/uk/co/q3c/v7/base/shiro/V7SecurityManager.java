@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.shiro;
 
 import java.util.Collection;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

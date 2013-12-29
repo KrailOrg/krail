@@ -15,7 +15,7 @@ package uk.co.q3c.v7.base.view.component;
 import java.text.Collator;
 import java.util.Locale;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;

@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.Subject;

@@ -24,8 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.junit.Test;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
@@ -34,6 +32,8 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+
+import com.google.inject.Inject;
 
 /**
  * Checks for correct use of UIScope and Inject annotations
@@ -46,10 +46,6 @@ public class ScopeAndInjectTest {
 	 * All implementations of V7View should be have a scope of {@link UIScoped} to avoid issues when navigating and
 	 * going back to existing pages.
 	 * <p>
-	 * They should also have an injected constructor. V7 standardises on the javax.Inject rather than the
-	 * com.google.inject.Inject, and this test will identify any implementations which do not have a constructor with a
-	 * javax.Inject annotation (it will also accept a no-args public constructor as Guice will accept that)
-	 * 
 	 * 
 	 */
 	@Test
@@ -106,8 +102,8 @@ public class ScopeAndInjectTest {
 	}
 
 	/**
-	 * Looks for any classes using com.google.inject.* where there is a javax equivalent. Convention for this project is
-	 * that if there is a javax equivalent, it should be used - using mixed types can cause assignment incompatibility.
+	 * Looks for any classes using javax.inject.* instead of the com.google.inject.* equivalent. Convention for this
+	 * project is to use the Google annotations. Using mixed types can cause assignment incompatibility.
 	 */
 
 	@Test
@@ -115,8 +111,8 @@ public class ScopeAndInjectTest {
 
 		// given
 		// when
-		testForGoogleAnnotation(com.google.inject.Singleton.class);
-		testForGoogleAnnotation(com.google.inject.Inject.class);
+		testForJavaxAnnotation(javax.inject.Singleton.class);
+		testForJavaxAnnotation(javax.inject.Inject.class);
 
 		// then
 
@@ -156,7 +152,7 @@ public class ScopeAndInjectTest {
 		assertThat(failed).isFalse().overridingErrorMessage("See console output if this fails");
 	}
 
-	private void testForGoogleAnnotation(Class<? extends Annotation> annotation) {
+	private void testForJavaxAnnotation(Class<? extends Annotation> annotation) {
 		Reflections reflections = new Reflections("");
 		Set<Class<?>> googleInjects = reflections.getTypesAnnotatedWith(annotation);
 		String outputMsg = "Testing for incorrect use of " + annotation.getName();
@@ -172,6 +168,11 @@ public class ScopeAndInjectTest {
 
 	}
 
+	/**
+	 * All View classes should have an injected constructor. V7 standardises on the com.google.inject.Inject rather than
+	 * the javax.inject.Inject, and this test will identify any implementations which do not have a constructor with a
+	 * Google Inject annotation (it will also accept a no-args public constructor as Guice will accept that)
+	 */
 	@Test
 	public void googleInject() {
 
@@ -184,32 +185,32 @@ public class ScopeAndInjectTest {
 		// Set<Constructor> googleInjects = reflections.getConstructorsAnnotatedWith(com.google.inject.Inject.class);
 		// Use a big hammer instead
 		Set<Class<?>> allClasses = reflections.getSubTypesOf(Object.class);
-		Set<Class<?>> googleInjects = new HashSet<>();
+		Set<Class<?>> javaxInjects = new HashSet<>();
 		// then
 		for (Class<? extends Object> clazz : allClasses) {
 
-			if (classHasGoogleInjectedConstructor(clazz)) {
-				googleInjects.add(clazz);
+			if (classHasJavaxInjectedConstructor(clazz)) {
+				javaxInjects.add(clazz);
 			}
 		}
 
 		// report for test output
 		String outputMsg = "none found";
-		if (!googleInjects.isEmpty()) {
+		if (!javaxInjects.isEmpty()) {
 			StringBuilder buf = new StringBuilder();
-			for (Class<?> clazz : googleInjects) {
+			for (Class<?> clazz : javaxInjects) {
 				buf.append(clazz.getName());
 				buf.append(";");
 			}
 			outputMsg = buf.toString();
 		}
-		assertThat(googleInjects).hasSize(0).overridingErrorMessage(outputMsg);
+		assertThat(javaxInjects).hasSize(0).overridingErrorMessage(outputMsg);
 	}
 
-	private boolean classHasGoogleInjectedConstructor(Class<?> clazz) {
+	private boolean classHasJavaxInjectedConstructor(Class<?> clazz) {
 		Constructor<?>[] constructors = clazz.getDeclaredConstructors();
 		for (Constructor<?> constructor : constructors) {
-			if (constructor.getAnnotation(com.google.inject.Inject.class) != null) {
+			if (constructor.getAnnotation(javax.inject.Inject.class) != null) {
 				return true;
 			}
 		}

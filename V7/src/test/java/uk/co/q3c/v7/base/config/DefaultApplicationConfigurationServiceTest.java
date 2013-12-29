@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.File;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;

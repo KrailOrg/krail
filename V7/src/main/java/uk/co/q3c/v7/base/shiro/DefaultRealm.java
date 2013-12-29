@@ -1,6 +1,6 @@
 package uk.co.q3c.v7.base.shiro;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;

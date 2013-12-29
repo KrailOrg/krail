@@ -15,7 +15,7 @@ package uk.co.q3c.v7.i18n;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 /**
  * A utility class to retrieve an I18N value from a key, and expand its arguments if it has them. You can also get the

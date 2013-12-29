@@ -14,7 +14,7 @@ package uk.co.q3c.v7.i18n;
 
 import static org.fest.assertions.Assertions.*;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -2,7 +2,7 @@ package fixture;
 
 import static org.mockito.Mockito.*;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.junit.After;
 import org.junit.Before;

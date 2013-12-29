@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.authz.UnauthenticatedException;

@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.services;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;

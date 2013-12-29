@@ -2,7 +2,7 @@ package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

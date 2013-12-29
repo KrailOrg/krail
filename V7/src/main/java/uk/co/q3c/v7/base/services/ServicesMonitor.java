@@ -14,8 +14,8 @@ package uk.co.q3c.v7.base.services;
 
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
