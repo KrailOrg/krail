@@ -19,12 +19,15 @@ public class DirectSitemapEntry {
 	private boolean publicPage;
 	private Class<? extends V7View> viewClass;
 	private I18NKey<?> labelKey;
+	private String permission;
 
-	protected DirectSitemapEntry(Class<? extends V7View> viewClass, I18NKey<?> labelKey, boolean publicPage) {
+	protected DirectSitemapEntry(Class<? extends V7View> viewClass, I18NKey<?> labelKey, boolean publicPage,
+			String permission) {
 		super();
 		this.publicPage = publicPage;
 		this.viewClass = viewClass;
 		this.labelKey = labelKey;
+		this.permission = permission;
 	}
 
 	public boolean isPublicPage() {
@@ -49,6 +52,14 @@ public class DirectSitemapEntry {
 
 	public void setLabelKey(I18NKey<?> labelKey) {
 		this.labelKey = labelKey;
+	}
+
+	public String getPermission() {
+		return permission;
+	}
+
+	public void setPermission(String permission) {
+		this.permission = permission;
 	}
 
 }

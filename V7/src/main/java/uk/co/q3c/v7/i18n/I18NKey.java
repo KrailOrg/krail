@@ -29,4 +29,5 @@ public interface I18NKey<E extends EnumResourceBundle<?>> {
 	boolean isNullKey();
 
 	String name();
+
 }

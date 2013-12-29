@@ -12,18 +12,25 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import uk.co.q3c.v7.i18n.I18NKey;
+import com.google.inject.multibindings.MapBinder;
 
-public class AnnotationSitemapEntry {
+/**
+ * Used to ensure that the {@link MapBinder} in {@link FileSitemapModule} has a unique signature.
+ * 
+ * @author David Sowerby
+ * 
+ */
+public class SitemapFile {
 
-	private I18NKey<?> labelSample;
+	private final String filePath;
 
-	public I18NKey<?> getLabelSample() {
-		return labelSample;
+	public SitemapFile(String filePath) {
+		super();
+		this.filePath = filePath;
 	}
 
-	public void setLabelSample(I18NKey<?> labelSample) {
-		this.labelSample = labelSample;
+	public String getFilePath() {
+		return filePath;
 	}
 
 }

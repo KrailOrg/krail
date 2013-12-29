@@ -12,18 +12,15 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import uk.co.q3c.v7.i18n.I18NKey;
+import static org.junit.Assert.*;
 
-public class AnnotationSitemapEntry {
+import org.junit.Test;
 
-	private I18NKey<?> labelSample;
+public class SystemAccountManagementPagesTest {
 
-	public I18NKey<?> getLabelSample() {
-		return labelSample;
-	}
-
-	public void setLabelSample(I18NKey<?> labelSample) {
-		this.labelSample = labelSample;
+	@Test
+	public void test() {
+		fail("Not yet implemented");
 	}
 
 }

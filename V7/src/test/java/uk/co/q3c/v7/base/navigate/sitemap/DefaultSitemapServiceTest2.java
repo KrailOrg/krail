@@ -85,6 +85,8 @@ public class DefaultSitemapServiceTest2 {
 				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
 				bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(AnnotationSitemapLoader.class).to(DefaultAnnotationSitemapLoader.class);
+				bind(DirectSitemapLoader.class).to(DefaultDirectSitemapLoader.class);
 			}
 
 		};

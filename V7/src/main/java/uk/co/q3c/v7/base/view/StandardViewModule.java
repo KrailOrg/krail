@@ -19,7 +19,7 @@ import com.google.inject.AbstractModule;
  * Maps standard views (Login, Logout and Error Views) to their implementations. These can all be overridden if
  * required.
  * 
- * @see ApplicationViewModule
+ * @see V7DirectSitemapModule
  * @author David Sowerby 9 Jan 2013
  * 
  */

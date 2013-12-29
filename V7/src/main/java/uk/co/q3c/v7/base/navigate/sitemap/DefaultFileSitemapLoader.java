@@ -44,6 +44,12 @@ import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.common.base.Strings;
 
+/**
+ * Loads the {@link Sitemap} with the entries contained in the files defined by subclasses of {@link FileSitemapModule}
+ * 
+ * @author David Sowerby
+ * 
+ */
 public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 	private static Logger log = LoggerFactory.getLogger(DefaultFileSitemapLoader.class);
@@ -248,7 +254,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	}
 
 	@Override
-	public void parse(File file, boolean firstLoad) {
+	public void parse(File file) {
 
 		source = file.getAbsolutePath();
 		sourceFile = file;
@@ -886,13 +892,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 	@Override
 	public boolean load() {
-
-		return false;
-	}
-
-	@Override
-	public boolean overwriteExisting() {
-
 		return false;
 	}
 

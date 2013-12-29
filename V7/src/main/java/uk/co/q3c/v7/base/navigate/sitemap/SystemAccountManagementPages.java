@@ -12,18 +12,20 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import uk.co.q3c.v7.i18n.I18NKey;
+/**
+ * A set of pages to support user account management.
+ * 
+ * @author David Sowerby
+ * 
+ */
+public class SystemAccountManagementPages extends DirectSitemapModule {
 
-public class AnnotationSitemapEntry {
-
-	private I18NKey<?> labelSample;
-
-	public I18NKey<?> getLabelSample() {
-		return labelSample;
-	}
-
-	public void setLabelSample(I18NKey<?> labelSample) {
-		this.labelSample = labelSample;
+	/**
+	 * 
+	 @see uk.co.q3c.v7.base.navigate.sitemap.DirectSitemapModule#define()
+	 */
+	@Override
+	protected void define() {
 	}
 
 }

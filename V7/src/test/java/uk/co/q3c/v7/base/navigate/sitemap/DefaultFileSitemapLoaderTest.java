@@ -71,7 +71,7 @@ import fixture.testviews2.OptionsView;
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class DefaultSitemapFileReaderTest {
+public class DefaultFileSitemapLoaderTest {
 	private static int COMMENT_LINES = 9;
 	private static int BLANK_LINES = 9;
 	private static int PAGE_COUNT = 13;
@@ -108,7 +108,7 @@ public class DefaultSitemapFileReaderTest {
 		DateTime start = DateTime.now();
 		// when
 		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile, true);
+		reader.parse(propFile);
 		// then
 		assertThat(reader.getSitemap()).isNotNull();
 		assertThat(reader.getCommentLines()).isEqualTo(COMMENT_LINES);
@@ -186,7 +186,7 @@ public class DefaultSitemapFileReaderTest {
 		substitute("[viewPackages]", "[viewPackages");
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 		// then
 
 		assertThat(reader.isLabelClassNonExistent()).isFalse();
@@ -211,7 +211,7 @@ public class DefaultSitemapFileReaderTest {
 		insertAfter("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "randomProperty=23");
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 		// then
 
 		assertThat(reader.isLabelClassNonExistent()).isFalse();
@@ -239,7 +239,7 @@ public class DefaultSitemapFileReaderTest {
 		substitute("[options]", "[option]");
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 		// then
 
 		assertThat(reader.missingSections()).containsOnly("options");
@@ -270,7 +270,7 @@ public class DefaultSitemapFileReaderTest {
 		substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKey_Invalid");
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 		// then
 
 		assertThat(reader.isLabelClassMissing()).isFalse();
@@ -301,7 +301,7 @@ public class DefaultSitemapFileReaderTest {
 		substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKey2");
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 		// then
 		assertThat(reader.isLabelClassMissing()).isFalse();
 		assertThat(reader.isLabelClassNonExistent()).isTrue();
@@ -330,7 +330,7 @@ public class DefaultSitemapFileReaderTest {
 		prepFile();
 		outputModifiedFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 		// then
 
 		assertThat(reader.isLabelClassNonExistent()).isFalse();
@@ -357,7 +357,7 @@ public class DefaultSitemapFileReaderTest {
 				"--money-in-out : subview.NotV7 ~ MoneyInOut");
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 
 		// then
 		assertThat(reader.isLabelClassNonExistent()).isFalse();
@@ -388,7 +388,7 @@ public class DefaultSitemapFileReaderTest {
 		substitute("--transfers     : subview.Transfer", "----transfers     : subview.Transfer");
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 
 		// then
 		System.out.println(reader.buildReport(new StringBuilder()).toString());
@@ -430,7 +430,7 @@ public class DefaultSitemapFileReaderTest {
 		insertAfter("[redirects]", "wiggly : wiggly/home");
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 		// then
 		assertThat(reader.getRedirectErrors()).containsOnly(
 				"'wiggly/home' cannot be a redirect target, it has not been defined as a page");
@@ -455,7 +455,7 @@ public class DefaultSitemapFileReaderTest {
 
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 		System.out.println(reader.getSitemap().toString());
 		// then
 
@@ -472,7 +472,7 @@ public class DefaultSitemapFileReaderTest {
 		// given
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 		// then
 		assertThat(reader.isAppendView()).isTrue();
 		assertThat(reader.isGeneratePublicHomePage()).isTrue();
@@ -492,7 +492,7 @@ public class DefaultSitemapFileReaderTest {
 		prepFile();
 
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 		// then defaults correct
 		assertThat(reader.isAppendView()).isTrue();
 		assertThat(reader.isGeneratePublicHomePage()).isTrue();
@@ -516,7 +516,7 @@ public class DefaultSitemapFileReaderTest {
 		substitute("systemAccountRoot=public/system-account", "systemAccountRoot=public/sysaccount");
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 		// then values correct
 		assertThat(reader.isAppendView()).isFalse();
 		assertThat(reader.isGeneratePublicHomePage()).isFalse();
@@ -534,7 +534,7 @@ public class DefaultSitemapFileReaderTest {
 		insertAfter("       : public", "public: ");
 		prepFile();
 		// when
-		reader.parse(modifiedFile, true);
+		reader.parse(modifiedFile);
 
 		// then
 		assertThat(reader.getRedirectErrors()).contains("'' cannot be both a redirect source and redirect target");
@@ -551,7 +551,7 @@ public class DefaultSitemapFileReaderTest {
 
 		// when
 		assertThat(propFile.exists()).isTrue();
-		reader.parse(propFile, true);
+		reader.parse(propFile);
 
 		// then
 		System.out.println(reader.getSitemap().getReport());

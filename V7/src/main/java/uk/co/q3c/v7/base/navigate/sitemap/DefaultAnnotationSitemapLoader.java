@@ -13,25 +13,28 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.text.Collator;
-import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.Inject;
+
 @SuppressWarnings("rawtypes")
 public class DefaultAnnotationSitemapLoader implements AnnotationSitemapLoader {
-
-	private String reflectionRoot;
+	private static Logger log = LoggerFactory.getLogger(DefaultAnnotationSitemapLoader.class);
 	private final Sitemap sitemap;
-	private List<Class<? extends Enum>> labelKeys;
 	private final Translate translate;
 	private final CurrentLocale currentLocale;
+	private Map<String, AnnotationSitemapEntry> sources;
 
 	@Inject
 	protected DefaultAnnotationSitemapLoader(Sitemap sitemap, Translate translate, CurrentLocale currentLocale) {
@@ -39,74 +42,66 @@ public class DefaultAnnotationSitemapLoader implements AnnotationSitemapLoader {
 		this.sitemap = sitemap;
 		this.translate = translate;
 		this.currentLocale = currentLocale;
-
-	}
-
-	@Override
-	public boolean load() {
-		if (reflectionRoot == null) {
-			throw new IllegalStateException("reflectionRoot must be set before loading");
-		}
-		if (labelKeys.isEmpty()) {
-			throw new IllegalStateException("at least one labels keys class must be added before loading");
-		}
-		Collator collator = Collator.getInstance(currentLocale.getLocale());
-		Reflections reflections = new Reflections(reflectionRoot);
-		Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(View.class);
-		for (Class<?> clazz : annotated) {
-			View annotation = clazz.getAnnotation(View.class);
-			I18NKey<?> key = keyFromName(annotation.labelKeyName());
-			SitemapNode node = sitemap.append(annotation.uri());
-			node.setViewClass(annotation.viewClass());
-			node.setTranslate(translate);
-			node.setLabelKey(key, currentLocale.getLocale(), collator);
-			node.setPublicPage(annotation.isPublic());
-		}
-
-		return true;
-	}
-
-	@SuppressWarnings("unchecked")
-	private I18NKey<?> keyFromName(String labelKeyName) {
-		boolean found = false;
-		I18NKey<?> result = null;
-		while (!found) {
-			for (Class<? extends Enum> enumClass : labelKeys) {
-				try {
-					Enum labelKey = Enum.valueOf(enumClass, labelKeyName);
-					return (I18NKey<?>) labelKey;
-				} catch (IllegalArgumentException iae) {
-					// don't need to do anything, just have not found a match
-				}
-			}
-
-		}
-		return result;
 	}
 
 	/**
-	 * An annotation cannot contain an enum parameter, so the label key is held as a String. That String (the
-	 * {@code labelKeyName} parameter) must then be looked up from an implementation of {@link I18NKey}. Multiple
-	 * labelKeyClass's can be added; the first one to find a match will be returned, or null if no match found.
+	 * Scans for {@link View} annotations, starting from {@link #reflectionRoot}. Annotations cannot hold enum
+	 * parameters, so the enum name has to be converted from the labelKeyName parameter of the {@link View} annotation.
+	 * In order to do that one or more enum classes must be added to {@link #labelKeyClasses}
 	 * 
-	 * @param labelKeyClass
+	 * @see uk.co.q3c.v7.base.navigate.sitemap.SitemapLoader#load()
 	 */
-	public void addLabelKeyClass(Class<? extends Enum> labelKeyClass) {
-		labelKeys.add(labelKeyClass);
-	}
-
+	@SuppressWarnings("unchecked")
 	@Override
-	public boolean overwriteExisting() {
+	public boolean load() {
+		Collator collator = Collator.getInstance(currentLocale.getLocale());
+		for (Entry<String, AnnotationSitemapEntry> entry : sources.entrySet()) {
+			log.debug("scanning {} for View annotations", entry.getKey());
+			Reflections reflections = new Reflections(entry.getKey());
+			Set<Class<?>> types = reflections.getTypesAnnotatedWith(View.class);
+			log.debug("{} annotated Views found", types.size());
+			for (Class<?> clazz : types) {
+				Class<? extends V7View> viewClass = null;
+				if (clazz.isAssignableFrom(V7View.class)) {
+					viewClass = (Class<? extends V7View>) clazz;
+					View annotation = viewClass.getAnnotation(View.class);
+					SitemapNode node = sitemap.append(annotation.uri());
+					node.setViewClass(viewClass);
+					node.setTranslate(translate);
+					node.setPublicPage(annotation.isPublic());
+					node.addPermission(annotation.permission());
+
+					I18NKey<?> key = keyFromName(annotation.labelKeyName(), entry.getValue().getLabelSample());
+					node.setLabelKey(key, currentLocale.getLocale(), collator);
+
+				}
+
+			}
+		}
 
 		return false;
 	}
 
-	public String getReflectionRoot() {
-		return reflectionRoot;
+	/**
+	 * Returns an {@link I18NKey} enum constant from {@code labelKeyName} using {@code labelKeyClass}.
+	 * 
+	 * @param labelKeyName
+	 * @param labelKeyClass
+	 * @return an {@link I18NKey} enum constant from {@code labelKeyName} using {@code labelKeyClass}.
+	 * @exception IllegalArgumentException
+	 *                if <code>labelKeyClass</code> does not contain a constant of <code>labelKeyName</code>
+	 */
+	private I18NKey<?> keyFromName(String labelKeyName, I18NKey sampleKey) {
+
+		Enum<?> enumSample = (Enum) sampleKey;
+		Enum<?> labelKey = Enum.valueOf(enumSample.getDeclaringClass(), labelKeyName);
+		return (I18NKey<?>) labelKey;
+
 	}
 
-	public void setReflectionRoot(String reflectionRoot) {
-		this.reflectionRoot = reflectionRoot;
+	@Inject(optional = true)
+	protected void setAnnotations(Map<String, AnnotationSitemapEntry> sources) {
+		this.sources = sources;
 	}
 
 }

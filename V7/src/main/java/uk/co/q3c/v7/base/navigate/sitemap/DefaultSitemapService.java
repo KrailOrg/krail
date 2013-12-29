@@ -16,7 +16,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.commons.configuration.CompositeConfiguration;
@@ -35,6 +34,7 @@ import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 @Singleton
@@ -43,19 +43,25 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	private static Logger log = LoggerFactory.getLogger(DefaultSitemapService.class);
 	@AutoStart
 	private final ApplicationConfigurationService configurationService;
-	private final Provider<FileSitemapLoader> sitemapFileReaderProvider;
+	private final Provider<FileSitemapLoader> fileSitemapLoaderProvider;
 	private List<String> sources;
 	private final Sitemap sitemap;
 	private StringBuilder report;
 	private CompositeConfiguration configuration;
 	private boolean loaded;
+	private final Provider<DirectSitemapLoader> directSitemapLoaderProvider;
+	private final Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider;
 
 	@Inject
 	protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate,
-			Provider<FileSitemapLoader> sitemapFileReaderProvider, Sitemap sitemap) {
+			Provider<FileSitemapLoader> fileSitemapLoaderProvider,
+			Provider<DirectSitemapLoader> directSitemapLoaderProvider,
+			Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, Sitemap sitemap) {
 		super(translate);
 		this.configurationService = configurationService;
-		this.sitemapFileReaderProvider = sitemapFileReaderProvider;
+		this.annotationSitemapLoaderProvider = annotationSitemapLoaderProvider;
+		this.directSitemapLoaderProvider = directSitemapLoaderProvider;
+		this.fileSitemapLoaderProvider = fileSitemapLoaderProvider;
 		this.sitemap = sitemap;
 		configure();
 	}
@@ -90,41 +96,30 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	 */
 	private void loadSources() {
 		extractSourcesFromConfig();
-		boolean firstLoad = true;
 		for (String source : sources) {
-			boolean sourceLoaded = loadSource(source, firstLoad);
-			if (sourceLoaded) {
-				firstLoad = false;
-			}
+			loadSource(source);
 		}
 	}
 
 	/**
-	 * Loads the Sitemap with from the specified {@code source}. If {@code firstLoad} is true, then this is the first
-	 * source to be loaded, so no check is made to see whether a URI has already been defined. Subsequent calls will
-	 * have {@code firstLoad} set to false, and a check is made for each URI defined by the source, and if that URI is
-	 * already in the Sitemap, the one from the source is ignored.
+	 * Loads the Sitemap with all sources of the specified {@code source type}.
 	 * 
-	 * @param source
-	 * @param firstLoad
+	 * @param sourceType
 	 */
-	private boolean loadSource(String source, boolean firstLoad) {
+	private void loadSource(String sourceType) {
 
-		switch (source) {
+		switch (sourceType) {
 		case "file":
-			FileSitemapLoader sitemapFileReader = sitemapFileReaderProvider.get();
-			File sitemapFileLocation = absolutePathFor(configuration.getString(ConfigKeys.FILE_LOCATION,
-					"sitemap.properties"));
-			sitemapFileReader.parse(sitemapFileLocation, firstLoad);
-			sitemapFileReader.buildReport(report);
-			loaded = true;
-			return loaded;
-		case "module":
-			throw new RuntimeException("not yet implemented");
+			FileSitemapLoader fileSitemapLoader = fileSitemapLoaderProvider.get();
+			fileSitemapLoader.load();
+			return;
+		case "direct":
+			directSitemapLoaderProvider.get().load();
+			return;
 		case "annotation":
-			throw new RuntimeException("not yet implemented");
+			annotationSitemapLoaderProvider.get().load();
+			return;
 		}
-		return false;
 	}
 
 	public File absolutePathFor(String source) {
@@ -144,8 +139,9 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	private void extractSourcesFromConfig() {
 		List<String> defaultValues = new ArrayList<>();
 		defaultValues.add("file");
-
-		List<Object> list = configuration.getList(ConfigKeys.SOURCES_KEY, defaultValues);
+		defaultValues.add("direct");
+		defaultValues.add("annotation");
+		List<Object> list = configuration.getList(ConfigKeys.SITEMAP_SOURCES_KEY, defaultValues);
 		sources = new ArrayList<>();
 		for (Object o : list) {
 			sources.add(o.toString().toLowerCase());

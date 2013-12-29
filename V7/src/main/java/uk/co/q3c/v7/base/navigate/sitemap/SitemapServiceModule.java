@@ -25,6 +25,8 @@ public class SitemapServiceModule extends AbstractModule {
 
 	protected void bindLoaders() {
 		bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
+		bind(AnnotationSitemapLoader.class).to(DefaultAnnotationSitemapLoader.class);
+		bind(DirectSitemapLoader.class).to(DefaultDirectSitemapLoader.class);
 	}
 
 }

@@ -14,7 +14,11 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.text.CollationKey;
 import java.text.Collator;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
 
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKey;
@@ -56,6 +60,7 @@ public class SitemapNode {
 	private CollationKey collationKey;
 	private Translate translate;
 	private boolean publicPage;
+	private final Set<String> permissions = new HashSet<>();
 
 	public SitemapNode(String uriSegment, Class<? extends V7View> viewClass, I18NKey<?> labelKey, Locale locale,
 			Collator collator, Translate translate) {
@@ -189,4 +194,9 @@ public class SitemapNode {
 		this.publicPage = publicPage;
 	}
 
+	public void addPermission(String permission) {
+		if (StringUtils.isNotEmpty(permission)) {
+			permissions.add(permission);
+		}
+	}
 }

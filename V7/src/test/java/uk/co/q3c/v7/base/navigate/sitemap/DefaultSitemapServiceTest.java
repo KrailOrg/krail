@@ -35,7 +35,11 @@ import uk.co.q3c.util.ResourceUtils;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.ConfigKeys;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModuleBase;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
+import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18NTranslator;
@@ -58,8 +62,17 @@ import fixture.TestConfigurationException;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ ServicesMonitorModule.class, ApplicationConfigurationModule.class })
+@GuiceContext({ ServicesMonitorModule.class, ApplicationConfigurationModule.class, TestDirectSitemapModuleBase.class })
 public class DefaultSitemapServiceTest {
+
+	public static class TestDirectSitemapModuleBase extends DirectSitemapModule {
+
+		@Override
+		protected void define() {
+			addEntry("direct/a", PublicHomeView.class, LabelKey.Home, true, null);
+		}
+
+	}
 
 	static VaadinService vaadinService;
 
@@ -153,7 +166,7 @@ public class DefaultSitemapServiceTest {
 		// given
 		List<String> sources = new ArrayList<>();
 		iniConfig.setDelimiterParsingDisabled(true);
-		iniConfig.setProperty(ConfigKeys.SOURCES_KEY, sources);
+		iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES_KEY, sources);
 		iniConfig.setDelimiterParsingDisabled(false);
 		iniConfig.save();
 
@@ -173,7 +186,7 @@ public class DefaultSitemapServiceTest {
 		sources.add("wiggly");
 		sources.add("file");
 		iniConfig.setDelimiterParsingDisabled(true);
-		iniConfig.setProperty(ConfigKeys.SOURCES_KEY, sources);
+		iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES_KEY, sources);
 		iniConfig.setDelimiterParsingDisabled(false);
 		iniConfig.save();
 
@@ -219,7 +232,7 @@ public class DefaultSitemapServiceTest {
 		sources.add("wiggly");
 		sources.add("wobbly");
 		iniConfig.setDelimiterParsingDisabled(true);
-		iniConfig.setProperty(ConfigKeys.SOURCES_KEY, sources);
+		iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES_KEY, sources);
 		iniConfig.setDelimiterParsingDisabled(false);
 		iniConfig.save();
 
@@ -231,14 +244,14 @@ public class DefaultSitemapServiceTest {
 
 	private void setConfig_FileOnly() throws ConfigurationException {
 		iniConfig.setDelimiterParsingDisabled(true);
-		iniConfig.addProperty(ConfigKeys.SOURCES_KEY, new String[] { "file" });
+		iniConfig.addProperty(ConfigKeys.SITEMAP_SOURCES_KEY, new String[] { "file" });
 		iniConfig.save();
 		iniConfig.setDelimiterParsingDisabled(false);
 	}
 
 	private void setConfigAll_File_Module_Annotation() throws ConfigurationException {
 		iniConfig.setDelimiterParsingDisabled(true);
-		iniConfig.addProperty(ConfigKeys.SOURCES_KEY, new String[] { "file,module,annotation" });
+		iniConfig.addProperty(ConfigKeys.SITEMAP_SOURCES_KEY, new String[] { "file,module,annotation" });
 		iniConfig.save();
 		iniConfig.setDelimiterParsingDisabled(false);
 	}
@@ -251,6 +264,9 @@ public class DefaultSitemapServiceTest {
 			protected void configure() {
 				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
 				bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
+				bind(AnnotationSitemapLoader.class).to(DefaultAnnotationSitemapLoader.class);
+				bind(DirectSitemapLoader.class).to(DefaultDirectSitemapLoader.class);
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 			}
 
 		};

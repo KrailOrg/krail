@@ -15,21 +15,19 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import java.io.File;
 
 /**
- * Implementations off this interface take definitions of {@link Sitemap} entries from a file, and load them into the
- * {@link Sitemap} when invoked by the {@link SitemapService}.
+ * Implementations of this interface take definitions of {@link Sitemap} entries from a file, and load them into the
+ * {@link Sitemap} when invoked by the {@link SitemapService}. See
+ * https://sites.google.com/site/q3cjava/sitemap?pli=1#TOC-The-File-Loader for a description of the file format
  */
 public interface FileSitemapLoader extends SitemapLoader {
 
 	/**
-	 * Parses {@code file}. If {@code firstLoad} is true, then no checks are made to see whether the {@link Sitemap}
-	 * already contains a URI already - in other words, this is the first sitemap source to be loaded. If
-	 * {@code firstLoad} is false, then before any URI to {@link SitemapNode} mapping is added, the implementation must
-	 * check to see whether the URI exists already - if it does exist, then this source must be ignored for that URI.
+	 * Loads {@code file}, parses it and applies the entries to the {@link Sitemap}
 	 * 
 	 * @param file
-	 * @param firstLoad
+	 *            the file to load.
 	 */
-	public abstract void parse(File file, boolean firstLoad);
+	public abstract void parse(File file);
 
 	public abstract StringBuilder buildReport(StringBuilder report);
 

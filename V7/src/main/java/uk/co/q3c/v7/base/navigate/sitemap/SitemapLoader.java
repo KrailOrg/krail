@@ -30,12 +30,4 @@ public interface SitemapLoader {
 	 */
 	boolean load();
 
-	/**
-	 * Returns true if the implementation will overwrite an existing URI with the content it provides, or false if the
-	 * implementation makes no change if a URI already exists in the {@link Sitemap}
-	 * 
-	 * @return
-	 */
-	boolean overwriteExisting();
-
 }

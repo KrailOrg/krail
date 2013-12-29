@@ -23,8 +23,9 @@ import uk.co.q3c.v7.base.view.V7View;
 
 /**
  * An annotation used to map a uri to a {@link V7View} implementation, the name of the key for an I18N label and a flag
- * to indicate whether or not this uri is "public" (does not require the user to be authorised). Used by a
- * {@link AnnotationSitemapLoader} implementation to define what the {@link Sitemap} should contain
+ * to indicate whether or not this uri is "public" (does not require the user to be authorised). Permission is the
+ * permission required in order to access this view. Used by a {@link AnnotationSitemapModule} to scan views for the
+ * {@link AnnotationSitemapLoader} to load into the {@link Sitemap}.
  * 
  * @author David Sowerby
  * 
@@ -36,9 +37,9 @@ public @interface View {
 
 	String uri();
 
-	Class<? extends V7View> viewClass();
-
 	boolean isPublic() default false;
 
 	String labelKeyName();
+
+	String permission() default "";
 }
