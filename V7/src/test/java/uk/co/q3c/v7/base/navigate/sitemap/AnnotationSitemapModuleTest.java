@@ -21,8 +21,8 @@ import javax.inject.Inject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.co.q3c.v7.base.navigate.sitemap.AnnotationsSitemapModuleTest.TestAnnotationsModule;
-import uk.co.q3c.v7.base.navigate.sitemap.AnnotationsSitemapModuleTest.TestAnnotationsModule1;
+import uk.co.q3c.v7.base.navigate.sitemap.AnnotationSitemapModuleTest.TestAnnotationsModule;
+import uk.co.q3c.v7.base.navigate.sitemap.AnnotationSitemapModuleTest.TestAnnotationsModule1;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.TestLabelKey;
@@ -34,7 +34,7 @@ import fixture.testviews2.TestAnnotatedView;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ TestAnnotationsModule.class, TestAnnotationsModule1.class })
-public class AnnotationsSitemapModuleTest {
+public class AnnotationSitemapModuleTest {
 
 	@Inject
 	TestAnnotatedView view2;

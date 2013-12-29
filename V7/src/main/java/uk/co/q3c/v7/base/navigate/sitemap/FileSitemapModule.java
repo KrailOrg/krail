@@ -53,6 +53,12 @@ public abstract class FileSitemapModule extends AbstractModule {
 	 */
 	protected abstract void define();
 
+	/**
+	 * Maps an arbitrary String key to a file name containing a Sitemap definition
+	 * 
+	 * @param key
+	 * @param file
+	 */
 	protected void addEntry(String key, SitemapFile file) {
 		mapBinder.addBinding(key).toInstance(file);
 	}
