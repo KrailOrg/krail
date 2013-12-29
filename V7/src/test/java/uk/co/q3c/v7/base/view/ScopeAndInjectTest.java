@@ -78,6 +78,10 @@ public class ScopeAndInjectTest {
 			}
 
 		}
+		// These are test classes which don't need to be UISCoped (and make test construction more difficult if they
+		// are)
+		noScope.remove(fixture.testviews2.TestAnnotatedView.class);
+		noScope.remove(fixture1.TestAnnotatedView.class);
 
 		if (noScope.size() > 0) {
 			System.out
@@ -96,6 +100,7 @@ public class ScopeAndInjectTest {
 		}
 
 		// then
+
 		assertThat(noScope).isEmpty();
 		assertThat(noInject).isEmpty();
 

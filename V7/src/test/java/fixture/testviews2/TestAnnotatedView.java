@@ -12,14 +12,19 @@
  */
 package fixture.testviews2;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.sitemap.View;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
 import com.vaadin.ui.Component;
 
-@UIScoped
+/**
+ * This is NOT UIScoped to avoid unnecessary complexity in setting up some of the tests - if you need a UIScoped test
+ * view you will need to create a different one
+ * 
+ * @author David Sowerby
+ * 
+ */
 @View(uri = "a/b", labelKeyName = "Transfers", isPublic = false, permission = "admin")
 public class TestAnnotatedView implements V7View {
 

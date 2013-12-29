@@ -12,15 +12,76 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.Map;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.navigate.sitemap.DirectSitemapModuleTest.TestDirectSitemapModule1;
+import uk.co.q3c.v7.base.navigate.sitemap.DirectSitemapModuleTest.TestDirectSitemapModule2;
+import uk.co.q3c.v7.base.view.LoginView;
+import uk.co.q3c.v7.base.view.PrivateHomeView;
+import uk.co.q3c.v7.base.view.PublicHomeView;
+import uk.co.q3c.v7.i18n.LabelKey;
+
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({ TestDirectSitemapModule1.class, TestDirectSitemapModule2.class })
 public class DirectSitemapModuleTest {
 
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+	@Inject
+	Map<String, DirectSitemapEntry> map;
+
+	public static class TestDirectSitemapModule1 extends DirectSitemapModule {
+
+		@Override
+		protected void define() {
+			addEntry("private/home", PrivateHomeView.class, LabelKey.Authorisation, false, "permission");
+		}
+
 	}
 
+	public static class TestDirectSitemapModule2 extends DirectSitemapModule {
+
+		@Override
+		protected void define() {
+			addEntry("public/home", PublicHomeView.class, LabelKey.Home, true, "permission");
+			addEntry("public/login", LoginView.class, LabelKey.Log_In, true, "permission");
+		}
+
+	}
+
+	@Test
+	public void addEntry() {
+
+		// given
+
+		// when
+
+		// then
+		assertThat(map).hasSize(3);
+		DirectSitemapEntry entry = map.get("private/home");
+		assertThat(entry.getViewClass()).isEqualTo(PrivateHomeView.class);
+		assertThat(entry.isPublicPage()).isFalse();
+		assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Authorisation);
+		assertThat(entry.getPermission()).isEqualTo("permission");
+
+		entry = map.get("public/home");
+		assertThat(entry.getViewClass()).isEqualTo(PublicHomeView.class);
+		assertThat(entry.isPublicPage()).isTrue();
+		assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Home);
+		assertThat(entry.getPermission()).isEqualTo("permission");
+
+		entry = map.get("public/login");
+		assertThat(entry.getViewClass()).isEqualTo(LoginView.class);
+		assertThat(entry.isPublicPage()).isTrue();
+		assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Log_In);
+		assertThat(entry.getPermission()).isEqualTo("permission");
+
+	}
 }

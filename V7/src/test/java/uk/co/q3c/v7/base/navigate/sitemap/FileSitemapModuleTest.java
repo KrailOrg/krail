@@ -19,27 +19,45 @@ import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapModuleTest.TestFileSitemapModule1;
+import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapModuleTest.TestFileSitemapModule2;
+
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({ TestFileSitemapModule1.class, TestFileSitemapModule2.class })
 public class FileSitemapModuleTest {
+
+	static String f1 = "/home/temp/app";
+	static String f2 = "/home/temp/lib1";
+	static String f3 = "/home/temp/lib2";
+
 	@Inject
 	Map<String, SitemapFile> sources;
 
-	public static class TestFileSitemapModule extends FileSitemapModule {
+	public static class TestFileSitemapModule1 extends FileSitemapModule {
 
 		@Override
 		protected void define() {
-			addEntry("app", new SitemapFile("/home/temp/a"));
+			addEntry("app", new SitemapFile(f1));
+		}
+
+	}
+
+	public static class TestFileSitemapModule2 extends FileSitemapModule {
+
+		@Override
+		protected void define() {
+			addEntry("lib1", new SitemapFile(f2));
+			addEntry("lib2", new SitemapFile(f3));
 		}
 
 	}
 
 	@Test
-	public void defeine() {
+	public void define() {
 
 		// given
 
@@ -47,6 +65,9 @@ public class FileSitemapModuleTest {
 
 		// then
 
-		fail("not written");
+		assertThat(sources).hasSize(3);
+		assertThat(sources.get("app").getFilePath()).isEqualTo(f1);
+		assertThat(sources.get("lib1").getFilePath()).isEqualTo(f2);
+		assertThat(sources.get("lib2").getFilePath()).isEqualTo(f3);
 	}
 }
