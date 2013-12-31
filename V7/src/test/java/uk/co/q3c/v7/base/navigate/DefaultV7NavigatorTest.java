@@ -273,8 +273,8 @@ public class DefaultV7NavigatorTest {
 		SitemapNode privateHomeNode = sitemap.append("private/home");
 		SitemapNode node2 = sitemap.append("public/home/view2");
 		SitemapNode loginNode = sitemap.append("public/login");
-		sitemap.setStandardPage(StandardPageKey.Login, "public/login");
-		sitemap.setStandardPage(StandardPageKey.Private_Home, "private/home");
+		sitemap.addStandardPage(StandardPageKey.Login, loginNode);
+		sitemap.addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
 
 		when(sitemapService.getSitemap()).thenReturn(sitemap);
 		when(subject.isPermitted(any(URIViewPermission.class))).thenReturn(true);

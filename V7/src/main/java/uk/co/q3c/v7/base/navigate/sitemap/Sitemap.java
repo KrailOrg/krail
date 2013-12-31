@@ -20,9 +20,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
 import uk.co.q3c.util.BasicForest;
 import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
@@ -31,6 +28,8 @@ import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * Encapsulates the site layout. Individual "virtual pages" are represented by {@link SitemapNode} instances. This map
@@ -57,7 +56,7 @@ public class Sitemap {
 
 	private int nextNodeId = 0;
 	private int errors = 0;
-	private final Map<StandardPageKey, String> standardPages = new HashMap<>();
+	private final Map<StandardPageKey, SitemapNode> standardPages = new HashMap<>();
 	private String report;
 	// Uses LinkedHashMap to retain insertion order
 	private final Map<String, String> redirects = new LinkedHashMap<>();
@@ -147,7 +146,10 @@ public class Sitemap {
 			addChild(parentNode, childNode);
 			parentNode = childNode;
 		}
-
+		if (childNode.getLabelKey() instanceof StandardPageKey) {
+			StandardPageKey spk = (StandardPageKey) childNode.getLabelKey();
+			standardPages.put(spk, childNode);
+		}
 		return childNode;
 	}
 
@@ -223,11 +225,11 @@ public class Sitemap {
 	}
 
 	public String standardPageURI(StandardPageKey pageKey) {
-		return standardPages.get(pageKey);
+		return uri(standardPages.get(pageKey));
 	}
 
 	public SitemapNode standardPageNode(StandardPageKey pageKey) {
-		return uriMap.get(standardPages.get(pageKey));
+		return standardPages.get(pageKey);
 	}
 
 	private int nextNodeId() {
@@ -235,8 +237,8 @@ public class Sitemap {
 		return nextNodeId;
 	}
 
-	public Map<StandardPageKey, String> getStandardPages() {
-		return standardPages;
+	public ImmutableMap<StandardPageKey, SitemapNode> getStandardPages() {
+		return ImmutableMap.copyOf(standardPages);
 	}
 
 	public boolean hasErrors() {
@@ -541,8 +543,13 @@ public class Sitemap {
 		return nodeChain;
 	}
 
-	public void setStandardPage(StandardPageKey key, String uri) {
-		standardPages.put(key, uri);
+	public void addStandardPage(StandardPageKey pageKey, SitemapNode node) {
+		standardPages.put(pageKey, node);
+	}
+
+	@Override
+	public String toString() {
+		return forest.toString();
 	}
 
 }

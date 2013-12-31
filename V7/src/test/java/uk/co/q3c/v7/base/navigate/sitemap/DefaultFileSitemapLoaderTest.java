@@ -12,14 +12,13 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.assertj.jodatime.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-
-import com.google.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
 import org.fest.assertions.Fail;
@@ -50,6 +49,7 @@ import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
@@ -155,10 +155,6 @@ public class DefaultFileSitemapLoaderTest {
 
 		assertThat(reader.buildReport(new StringBuilder()).toString()).isNotEmpty();
 
-		for (StandardPageKey spk : StandardPageKey.values()) {
-			assertThat(reader.standardPageUri(spk)).overridingErrorMessage("not expecting null for " + spk.name())
-					.isNotNull();
-		}
 		System.out.println(reader.buildReport(new StringBuilder()).toString());
 		assertThat(reader.getSitemap().hasErrors()).isFalse();
 
@@ -475,12 +471,7 @@ public class DefaultFileSitemapLoaderTest {
 		reader.parse(modifiedFile);
 		// then
 		assertThat(reader.isAppendView()).isTrue();
-		assertThat(reader.isGeneratePublicHomePage()).isTrue();
-		assertThat(reader.isGenerateAuthenticationPages()).isTrue();
-		assertThat(reader.isGenerateRequestAccount()).isTrue();
-		assertThat(reader.isGenerateRequestAccountReset()).isTrue();
 		assertThat(reader.getLabelKeys()).isEqualTo("uk.co.q3c.v7.i18n.TestLabelKey");
-		assertThat(reader.getSystemAccountUri()).isEqualTo("public/system-account");
 
 		// given properties not defined
 		deleteLine("appendView=true");
@@ -495,11 +486,6 @@ public class DefaultFileSitemapLoaderTest {
 		reader.parse(modifiedFile);
 		// then defaults correct
 		assertThat(reader.isAppendView()).isTrue();
-		assertThat(reader.isGeneratePublicHomePage()).isTrue();
-		assertThat(reader.isGenerateAuthenticationPages()).isTrue();
-		assertThat(reader.isGenerateRequestAccount()).isTrue();
-		assertThat(reader.isGenerateRequestAccountReset()).isTrue();
-		assertThat(reader.getSystemAccountUri()).isEqualTo("public/system-account");
 
 	}
 
@@ -519,11 +505,6 @@ public class DefaultFileSitemapLoaderTest {
 		reader.parse(modifiedFile);
 		// then values correct
 		assertThat(reader.isAppendView()).isFalse();
-		assertThat(reader.isGeneratePublicHomePage()).isFalse();
-		assertThat(reader.isGenerateAuthenticationPages()).isFalse();
-		assertThat(reader.isGenerateRequestAccount()).isFalse();
-		assertThat(reader.isGenerateRequestAccountReset()).isFalse();
-		assertThat(reader.getSystemAccountUri()).isEqualTo("public/sysaccount");
 
 	}
 

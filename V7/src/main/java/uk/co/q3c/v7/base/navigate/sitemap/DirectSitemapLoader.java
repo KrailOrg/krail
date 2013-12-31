@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
+
 /**
  * Implementations off this interface take directly coded definitions of {@link Sitemap} entries, and load them into the
  * {@link Sitemap} when invoked by the {@link SitemapService}.
@@ -23,5 +25,12 @@ package uk.co.q3c.v7.base.navigate.sitemap;
  * 
  */
 public interface DirectSitemapLoader extends SitemapLoader {
+	/**
+	 * DirectSitemapLoader is the only loader to process standard pages. See
+	 * https://sites.google.com/site/q3cjava/sitemap#TOC-Standard-Pages
+	 * 
+	 * @see StandardPageKey
+	 */
+	void loadStandardPages();
 
 }

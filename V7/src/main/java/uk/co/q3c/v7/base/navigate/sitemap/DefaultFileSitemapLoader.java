@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.google.inject.Inject;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
@@ -34,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.navigate.LabelKeyForName;
-import uk.co.q3c.v7.base.navigate.StandardPageBuilder;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.URITracker;
 import uk.co.q3c.v7.base.view.V7View;
@@ -43,6 +40,7 @@ import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.common.base.Strings;
+import com.google.inject.Inject;
 
 /**
  * Loads the {@link Sitemap} with the entries contained in the files defined by subclasses of {@link FileSitemapModule}
@@ -100,16 +98,13 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	private String labelClassName;
 
 	private File sourceFile;
-	private final StandardPageBuilder standardPageBuilder;
 	private LabelKeyForName lkfn;
 	private final Collator collator;
 	private final Translate translate;
 
 	@Inject
-	public DefaultFileSitemapLoader(StandardPageBuilder standardPageBuilder, CurrentLocale currentLocale,
-			Translate translate, Sitemap sitemap) {
+	public DefaultFileSitemapLoader(CurrentLocale currentLocale, Translate translate, Sitemap sitemap) {
 		super();
-		this.standardPageBuilder = standardPageBuilder;
 		this.collator = Collator.getInstance(currentLocale.getLocale());
 		this.translate = translate;
 		this.sitemap = sitemap;
@@ -133,7 +128,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		syntaxErrors = new HashSet<>();
 		standardPageErrors = new HashSet<>();
 
-		standardPageBuilder.setSitemap(sitemap);
 		sections = new HashMap<>();
 		labelClassNotI18N = false;
 		labelClassNonExistent = false;
@@ -153,8 +147,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		if (missingSections().size() == 0) {
 			processOptions();
 			processRedirects();
-			// processStandardPages();
-			generateStandardPages();
 			processMap();
 			validateRedirects();
 			checkLabelKeys();
@@ -242,17 +234,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 	}
 
-	/**
-	 * Generates the standard pages according to the settings of options. See
-	 * https://sites.google.com/site/q3cjava/sitemap#TOC-options-
-	 */
-	private void generateStandardPages() {
-		standardPageBuilder.setLabelKeysClass(labelKeysClass);
-		standardPageBuilder.setMissingEnums(missingEnums);
-		standardPageBuilder.setStandardPageErrors(standardPageErrors);
-		standardPageBuilder.generateStandardPages();
-	}
-
 	@Override
 	public void parse(File file) {
 
@@ -333,18 +314,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 			case appendView:
 				appendView = "true".equals(value);
 				break;
-			case generateAuthenticationPages:
-				standardPageBuilder.setGenerateAuthenticationPages("true".equals(value));
-				break;
-			case generatePublicHomePage:
-				standardPageBuilder.setGeneratePublicHomePage("true".equals(value));
-				break;
-			case generateRequestAccount:
-				standardPageBuilder.setGenerateRequestAccount("true".equals(value));
-				break;
-			case generateRequestAccountReset:
-				standardPageBuilder.setGenerateRequestAccountReset("true".equals(value));
-				break;
+
 			case labelKeys:
 				labelKeys = value;
 				if (!Strings.isNullOrEmpty(value)) {
@@ -353,9 +323,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 					validateLabelKeys();
 				}
 				break;
-			case systemAccountRoot:
-				setSystemAccountRoot(value);
-				break;
 
 			}
 
@@ -363,11 +330,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 			log.warn("unrecognised option '{}' in site map", key);
 			unrecognisedOptions.add(key);
 		}
-
-	}
-
-	private void setSystemAccountRoot(String systemAccountRoot) {
-		standardPageBuilder.setSystemAccountRoot(systemAccountRoot);
 
 	}
 
@@ -784,14 +746,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		return indentationErrors;
 	}
 
-	public String standardPageUri(StandardPageKey key) {
-		return standardPages().get(key);
-	}
-
-	public Map<StandardPageKey, String> standardPages() {
-		return sitemap.getStandardPages();
-	}
-
 	public Set<String> getMissingPages() {
 		return missingPages;
 	}
@@ -863,26 +817,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 	public Set<String> getInfoMessages() {
 		return infoMessages;
-	}
-
-	public boolean isGeneratePublicHomePage() {
-		return standardPageBuilder.isGeneratePublicHomePage();
-	}
-
-	public boolean isGenerateAuthenticationPages() {
-		return standardPageBuilder.isGenerateAuthenticationPages();
-	}
-
-	public boolean isGenerateRequestAccount() {
-		return standardPageBuilder.isGenerateRequestAccount();
-	}
-
-	public boolean isGenerateRequestAccountReset() {
-		return standardPageBuilder.isGenerateRequestAccountReset();
-	}
-
-	public String getSystemAccountUri() {
-		return standardPageBuilder.getSystemAccountRoot();
 	}
 
 	public Sitemap getSitemap() {

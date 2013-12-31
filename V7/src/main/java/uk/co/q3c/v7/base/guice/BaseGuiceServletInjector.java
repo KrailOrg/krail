@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.sitemap.DefaultStandardPagesModule;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapServiceModule;
 import uk.co.q3c.v7.base.services.ServicesMonitor;
@@ -105,7 +106,9 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		baseModules.add(baseModule());
 
-		baseModules.add(standardViewModule());
+		baseModules.add(standardPagesModule());
+
+		baseModules.add(standardViewsModule());
 
 		baseModules.add(componentModule());
 
@@ -151,10 +154,18 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
+	 * Override this if you have sub-classed {@link StandardPagesModule} to provide bindings to your own standard page
+	 * views
+	 */
+	protected Module standardPagesModule() {
+		return new DefaultStandardPagesModule();
+	}
+
+	/**
 	 * Override this if you have sub-classed {@link StandardViewModule} to provide bindings to your own standard page
 	 * views
 	 */
-	protected Module standardViewModule() {
+	protected Module standardViewsModule() {
 		return new StandardViewModule();
 	}
 
