@@ -25,7 +25,6 @@ import java.util.TreeSet;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
-import org.apache.shiro.io.ResourceUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +38,7 @@ import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
+import com.mycila.inject.internal.guava.collect.ImmutableMap;
 
 /**
  * Loads the {@link Sitemap} with the entries contained in the files defined by subclasses of {@link FileSitemapModule}
@@ -55,8 +55,10 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	}
 
 	private enum ValidOption {
-		appendView, labelKeys, generatePublicHomePage, generateAuthenticationPages, generateRequestAccount, generateRequestAccountReset, systemAccountRoot, publicRoot, privateRoot
+		appendView, labelKeys
 	}
+
+	private Map<String, SitemapFile> sources;
 
 	private final Sitemap sitemap;
 	private int commentLines;
@@ -83,7 +85,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 	private DateTime startTime;
 	private DateTime endTime;
-	private String source;
+	// private String source;
 	private boolean parsed = false;
 	private boolean labelClassNotI18N;
 	private boolean labelClassNonExistent;
@@ -96,12 +98,15 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	private final Translate translate;
 	private final String segmentSeparator = ";";
 
+	private final StringBuilder report;
+
 	@Inject
 	public DefaultFileSitemapLoader(CurrentLocale currentLocale, Translate translate, Sitemap sitemap) {
 		super();
 		this.collator = Collator.getInstance(currentLocale.getLocale());
 		this.translate = translate;
 		this.sitemap = sitemap;
+		report = new StringBuilder();
 
 	}
 
@@ -192,10 +197,9 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 	@Override
 	public void parse(File file) {
-
-		source = file.getAbsolutePath();
+		init();
 		sourceFile = file;
-		log.info("Loading sitemap from {}", source);
+		log.info("Loading sitemap from {}", file.getAbsolutePath());
 		try {
 			List<String> lines = FileUtils.readLines(file);
 			processLines(lines);
@@ -486,16 +490,15 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		return missingEnums;
 	}
 
-	@Override
-	public StringBuilder buildReport(StringBuilder report) {
+	protected StringBuilder buildReport() {
 		if (!parsed) {
 			throw new SitemapException("Sitemap file must be parsed before report is run");
 		}
 		String df = "dd MMM YYYY HH:mm:SS";
 
-		report.append("==================== Sitemap reader report ==================== \n\n");
+		report.append("------------------------------  " + sourceFile.getName() + "  ---------------------- \n\n");
 		report.append("parsing source from:\t\t");
-		report.append(source);
+		report.append(sourceFile.getAbsolutePath());
 		report.append("\n\n");
 
 		report.append("start at:\t\t\t");
@@ -589,7 +592,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 					"these have just been ignored, will do no harm");
 		}
 
-		report.append("================================================================= ");
 		return report;
 	}
 
@@ -695,20 +697,20 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		this.sourceFile = sourceFile;
 	}
 
-	public String getSource() {
-		return source;
-	}
+	// public String getSource() {
+	// return source;
+	// }
 
-	/**
-	 * Sets the source of the sitemap input. Must be in the format of
-	 * {@link ResourceUtils#getInputStreamForPath(String)}. See also {@link #setSourceFile(File)}, and {@link #get()}
-	 * for loading order.
-	 * 
-	 * @param source
-	 */
-	public void setSource(String source) {
-		this.source = source;
-	}
+	// /**
+	// * Sets the source of the sitemap input. Must be in the format of
+	// * {@link ResourceUtils#getInputStreamForPath(String)}. See also {@link #setSourceFile(File)}, and {@link #get()}
+	// * for loading order.
+	// *
+	// * @param source
+	// */
+	// public void setSource(String source) {
+	// this.source = source;
+	// }
 
 	public Set<String> getSyntaxErrors() {
 		return syntaxErrors;
@@ -725,7 +727,32 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 	@Override
 	public boolean load() {
-		return false;
+		if ((sources != null) && (!sources.isEmpty())) {
+			report.append("==================== Sitemap reader report ==================== \n\n");
+			for (SitemapFile source : sources.values()) {
+				parse(new File(source.getFilePath()));
+				buildReport();
+			}
+			report.append("================================================================= ");
+			return true;
+		} else {
+			log.info("No file based sources for the Sitemap identified, nothing to load");
+			return false;
+		}
+
+	}
+
+	public ImmutableMap<String, SitemapFile> getSources() {
+		return ImmutableMap.copyOf(sources);
+	}
+
+	@Inject(optional = true)
+	public void setSources(Map<String, SitemapFile> sources) {
+		this.sources = sources;
+	}
+
+	public StringBuilder getReport() {
+		return report;
 	}
 
 }

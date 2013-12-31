@@ -47,6 +47,7 @@ public class MapLineReader {
 		Iterator<String> iterator = attributes.iterator();
 		// split first column into indentation and uri segment
 		boolean indentOk = indentAndSegment(iterator.next(), lineIndex, syntaxErrors);
+
 		if (indentOk) {
 			String viewAttribute = (iterator.hasNext()) ? iterator.next() : "";
 			view(viewAttribute);

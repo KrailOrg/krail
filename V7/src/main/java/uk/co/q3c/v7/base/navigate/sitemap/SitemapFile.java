@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import java.io.File;
+
 import com.google.inject.multibindings.MapBinder;
 
 /**
@@ -27,6 +29,11 @@ public class SitemapFile {
 	public SitemapFile(String filePath) {
 		super();
 		this.filePath = filePath;
+	}
+
+	public SitemapFile(File propDir, String fileName) {
+		File f = new File(propDir, fileName);
+		filePath = f.getAbsolutePath();
 	}
 
 	public String getFilePath() {

@@ -12,21 +12,21 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import java.io.File;
+import static org.assertj.core.api.Assertions.*;
 
-/**
- * Implementations of this interface take definitions of {@link Sitemap} entries from a file, and load them into the
- * {@link Sitemap} when invoked by the {@link SitemapService}. See
- * https://sites.google.com/site/q3cjava/sitemap?pli=1#TOC-The-File-Loader for a description of the file format
- */
-public interface FileSitemapLoader extends SitemapLoader {
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-	/**
-	 * Loads {@code file}, parses it and applies the entries to the {@link Sitemap}
-	 * 
-	 * @param file
-	 *            the file to load.
-	 */
-	public abstract void parse(File file);
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
+public class SitemapCheckerTest {
+
+	@Test
+	public void test() {
+		fail("Not yet implemented");
+	}
 
 }

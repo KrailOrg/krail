@@ -12,21 +12,12 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import java.io.File;
-
 /**
- * Implementations of this interface take definitions of {@link Sitemap} entries from a file, and load them into the
- * {@link Sitemap} when invoked by the {@link SitemapService}. See
- * https://sites.google.com/site/q3cjava/sitemap?pli=1#TOC-The-File-Loader for a description of the file format
+ * Checks the Sitemap for inconsistencies after it has been loaded
+ * 
+ * @author David Sowerby
+ * 
  */
-public interface FileSitemapLoader extends SitemapLoader {
-
-	/**
-	 * Loads {@code file}, parses it and applies the entries to the {@link Sitemap}
-	 * 
-	 * @param file
-	 *            the file to load.
-	 */
-	public abstract void parse(File file);
+public class SitemapChecker {
 
 }

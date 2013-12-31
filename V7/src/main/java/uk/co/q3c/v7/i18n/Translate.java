@@ -47,6 +47,9 @@ public class Translate {
 	 * @return
 	 */
 	public String from(I18NKey<?> key, Locale locale, Object... arguments) {
+		if (key == null) {
+			return "key is null";
+		}
 		String pattern = key.getValue(locale);
 		if (pattern == null) {
 			return key.name().replace("_", " ");

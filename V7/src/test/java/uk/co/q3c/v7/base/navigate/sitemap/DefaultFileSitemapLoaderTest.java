@@ -30,6 +30,7 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.sitemap.DefaultFileSitemapLoaderTest.TestFileSitemapModule;
 import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
 import uk.co.q3c.v7.base.view.testviews.subview.NotV7View;
 import uk.co.q3c.v7.base.view.testviews.subview.TransferView;
@@ -60,10 +61,20 @@ import fixture.testviews2.OptionsView;
  * 
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({ TestFileSitemapModule.class })
 public class DefaultFileSitemapLoaderTest {
+
+	public static class TestFileSitemapModule extends FileSitemapModule {
+
+		@Override
+		protected void define() {
+			addEntry("a", new SitemapFile("src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good.properties"));
+		}
+
+	}
+
 	private static int COMMENT_LINES = 11;
-	private static int BLANK_LINES = 11;
+	private static int BLANK_LINES = 10;
 	private static int PAGE_COUNT = 4;
 	private static File propDir;
 	private File propFile;
@@ -93,12 +104,10 @@ public class DefaultFileSitemapLoaderTest {
 	public void parse_partialMap() throws IOException {
 
 		// given
-		String propFileName = "sitemap_good.properties";
-		propFile = new File(propDir, propFileName);
 		DateTime start = DateTime.now();
 		// when
 		assertThat(propFile.exists()).isTrue();
-		loader.parse(propFile);
+		loader.load();
 		// then
 		assertThat(loader.getSitemap()).isNotNull();
 		assertThat(loader.getCommentLines()).isEqualTo(COMMENT_LINES);
@@ -144,9 +153,7 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getStartTime().getMillis()).isGreaterThanOrEqualTo(start.getMillis());
 		assertThat(loader.getEndTime().isAfter(loader.getStartTime())).isTrue();
 
-		assertThat(loader.buildReport(new StringBuilder()).toString()).isNotEmpty();
-
-		System.out.println(loader.buildReport(new StringBuilder()).toString());
+		System.out.println(loader.getReport());
 		assertThat(loader.getSitemap().hasErrors()).isFalse();
 
 		System.out.println(loader.getSitemap());
@@ -188,7 +195,7 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(loader.getIndentationErrors()).containsOnly();
 		// assertThat(reader.getSitemap().hasErrors()).isTrue();
-		System.out.println(loader.buildReport(new StringBuilder()).toString());
+		System.out.println(loader.getReport());
 	}
 
 	@Test
@@ -213,7 +220,7 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getIndentationErrors()).containsOnly();
 		// assertThat(reader.getSitemap().hasErrors()).isFalse();
 
-		System.out.println(loader.buildReport(new StringBuilder()).toString());
+		System.out.println(loader.getReport());
 
 	}
 
@@ -239,7 +246,7 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getIndentationErrors()).containsOnly();
 		assertThat(loader.getSitemap().hasErrors()).isTrue();
 
-		System.out.println(loader.buildReport(new StringBuilder()).toString());
+		System.out.println(loader.getReport());
 	}
 
 	/**
@@ -270,7 +277,7 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(loader.getIndentationErrors()).containsOnly();
 		assertThat(loader.getSitemap().hasErrors()).isTrue();
-		System.out.println(loader.buildReport(new StringBuilder()).toString());
+		System.out.println(loader.getReport());
 	}
 
 	/**
@@ -301,14 +308,13 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getIndentationErrors()).containsOnly();
 		assertThat(loader.getSitemap().hasErrors()).isTrue();
 
-		System.out.println(loader.buildReport(new StringBuilder()).toString());
-
+		System.out.println(loader.getReport());
 	}
 
 	@Test
 	public void viewNotFound() throws IOException {
 
-		substituteIn(29, "subview.Transfer", "subview.Transfers");
+		substituteIn(28, "subview.Transfer", "subview.Transfers");
 		prepFile();
 		outputModifiedFile();
 		// when
@@ -327,14 +333,13 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getUndeclaredViewClasses()).containsOnly("subview.TransfersView");
 		assertThat(loader.getIndentationErrors()).containsOnly();
 		assertThat(loader.getSitemap().hasErrors()).isTrue();
-		System.out.println(loader.buildReport(new StringBuilder()).toString());
-
+		System.out.println(loader.getReport());
 	}
 
 	@Test
 	public void viewNotV7View() throws IOException {
 
-		substituteIn(30, "subview.MoneyInOut", "subview.NotV7");
+		substituteIn(29, "subview.MoneyInOut", "subview.NotV7");
 		prepFile();
 		// when
 		loader.parse(modifiedFile);
@@ -352,8 +357,7 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getUndeclaredViewClasses()).containsOnly();
 		assertThat(loader.getIndentationErrors()).containsOnly();
 		assertThat(loader.getSitemap().hasErrors()).isTrue();
-		System.out.println(loader.buildReport(new StringBuilder()).toString());
-
+		System.out.println(loader.getReport());
 	}
 
 	/**
@@ -364,13 +368,13 @@ public class DefaultFileSitemapLoaderTest {
 	@Test
 	public void mapIndentTooGreat() throws IOException {
 
-		substituteIn(29, "+-transfers", "+---transfers");
+		substituteIn(28, "+-transfers", "+---transfers");
 		prepFile();
 		// when
 		loader.parse(modifiedFile);
 
 		// then
-		System.out.println(loader.buildReport(new StringBuilder()).toString());
+		System.out.println(loader.getReport());
 		assertThat(loader.isLabelClassNonExistent()).isFalse();
 		assertThat(loader.isLabelClassNotI18N()).isFalse();
 		assertThat(loader.missingSections()).containsOnly();
@@ -385,20 +389,6 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getSitemap().hasErrors()).isFalse();
 
 		System.out.println(loader.getSitemap().toString());
-	}
-
-	/**
-	 * Try to call report before parsing anything
-	 */
-	@Test(expected = SitemapException.class)
-	public void reportBeforeParse() {
-
-		// given
-
-		// when
-		System.out.println(loader.buildReport(new StringBuilder()).toString());
-		// then
-
 	}
 
 	@Test
@@ -424,18 +414,6 @@ public class DefaultFileSitemapLoaderTest {
 	}
 
 	@Test
-	public void multipleInputFiles() {
-
-		// given
-
-		// when
-
-		// then
-
-		fail("not written");
-	}
-
-	@Test
 	public void options_to_non_default() throws IOException {
 
 		// given properties set to non-default
@@ -445,23 +423,6 @@ public class DefaultFileSitemapLoaderTest {
 		loader.parse(modifiedFile);
 		// then values correct
 		assertThat(loader.isAppendView()).isFalse();
-
-	}
-
-	@Test
-	public void fail1() {
-
-		// given
-		String propFileName = "sitemap_fail1.properties";
-		propFile = new File(propDir, propFileName);
-
-		// when
-		assertThat(propFile.exists()).isTrue();
-		loader.parse(propFile);
-
-		// then
-		System.out.println(loader.getSitemap().getReport());
-		assertThat(loader.getSitemap().hasErrors()).isFalse();
 
 	}
 
