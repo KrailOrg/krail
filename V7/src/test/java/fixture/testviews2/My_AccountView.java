@@ -10,28 +10,33 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.i18n;
+package fixture.testviews2;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
-public enum TestLabelKey implements I18NKey<TestLabels> {
+import com.vaadin.ui.Component;
 
-	_nullkey_, Home, My_Account, Transfers, Login, MoneyInOut, Private, Public, Opt, Yes, No, View1, View2;
+@UIScoped
+public class My_AccountView implements V7View {
 
 	@Override
-	public TestLabels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(TestLabels.class.getName(), locale);
-		return (TestLabels) bundle;
+	public void enter(V7ViewChangeEvent event) {
+		//
+		throw new RuntimeException("not yet implemented");
 	}
 
 	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
+	public Component getRootComponent() {
+		// return null;
+		throw new RuntimeException("not yet implemented");
 	}
 
 	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
+	public String viewName() {
+
+		return getClass().getSimpleName();
 	}
+
 }

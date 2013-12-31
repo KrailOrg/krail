@@ -18,6 +18,8 @@ public class MapLineRecord {
 	private String segment;
 	private String viewName;
 	private String keyName;
+	private boolean publicPage;
+	private String permission;
 
 	public int getIndentLevel() {
 		return indentLevel;
@@ -49,6 +51,22 @@ public class MapLineRecord {
 
 	public void setKeyName(String keyName) {
 		this.keyName = keyName;
+	}
+
+	public boolean isPublicPage() {
+		return publicPage;
+	}
+
+	public void setPublicPage(boolean publicPage) {
+		this.publicPage = publicPage;
+	}
+
+	public String getPermission() {
+		return permission;
+	}
+
+	public void setPermission(String permission) {
+		this.permission = permission;
 	}
 
 }

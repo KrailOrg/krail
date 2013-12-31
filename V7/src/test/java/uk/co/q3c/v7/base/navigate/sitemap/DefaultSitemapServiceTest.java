@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.io.FileUtils;
@@ -46,6 +44,7 @@ import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.LabelKey;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
@@ -62,7 +61,8 @@ import fixture.TestConfigurationException;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ ServicesMonitorModule.class, ApplicationConfigurationModule.class, TestDirectSitemapModuleBase.class })
+@GuiceContext({ ServicesMonitorModule.class, ApplicationConfigurationModule.class, TestDirectSitemapModuleBase.class,
+		DefaultStandardPagesModule.class })
 public class DefaultSitemapServiceTest {
 
 	public static class TestDirectSitemapModuleBase extends DirectSitemapModule {

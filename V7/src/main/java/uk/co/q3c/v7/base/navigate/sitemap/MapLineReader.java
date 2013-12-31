@@ -12,10 +12,13 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Splitter;
 
 /**
  * Reads a line from the [map] section during the processing of sitemap.properties, and returns a {@link MapLineRecord}
@@ -28,111 +31,78 @@ import org.slf4j.LoggerFactory;
 
 public class MapLineReader {
 	private static Logger log = LoggerFactory.getLogger(MapLineReader.class);
-	public static final String NO_HYPHEN = "Line must start with hyphen(s) to indicate indent level, line ";
-	public static final String VIEW_FIRST = "View name must precede label key name at line ";
-	private int index = 0;
+	public static final String NO_HYPHEN = "Line must start with '-' or '+' for private and public respectively, followed by 0..n '-' to indicate indent level, line ";
 	private String line;
 	private MapLineRecord lineRecord;
 
 	public MapLineRecord processLine(int lineIndex, String line, Set<String> syntaxErrors,
-			Set<String> indentationErrors, int currentIndent) {
-		index = 0;
+			Set<String> indentationErrors, int currentIndent, String attributeSeparator) {
+		log.debug("processing line {}", line);
 		this.line = line;
 		lineRecord = new MapLineRecord();
-		StringBuilder buf = new StringBuilder();
 
-		int keyIndex = line.indexOf('~');
-		int viewIndex = line.indexOf(':');
-
-		if ((keyIndex > 0) && (keyIndex < viewIndex)) {
-			syntaxErrors.add(VIEW_FIRST + lineIndex);
-			return lineRecord;
-		}
-
-		// leading spaces
-		spaces();
-
-		int indent = 0;
-		// hyphen indent
-		while (line.charAt(index) == '-') {
-			index++;
-			indent++;
-		}
-
-		lineRecord.setIndentLevel(indent);
-
-		// no hyphens at start, cannot establish indent level
-		if (indent == 0) {
-			syntaxErrors.add(NO_HYPHEN + lineIndex);
-			return lineRecord;
-		}
-
-		spaces();
-		// processing segment
-		while ((index < line.length() && (line.charAt(index) != ' ') && (line.charAt(index) != ':') && (line
-				.charAt(index) != '~'))) {
-			buf.append(line.charAt(index));
-			index++;
-		}
-		lineRecord.setSegment(buf.toString());
-
-		// has to be done here, because we don't know what the segment is until now
-		if (indent - currentIndent > 1) {
-			indentationErrors.add(lineRecord.getSegment());
-		}
-		spaces();
-
-		// may be segment only
-		if (index < line.length()) {
-			char c = line.charAt(index);
-			// processing view
-			if (c == ':') {
-				index++;
-				spaces();
-				buf = new StringBuilder();
-				while ((index < line.length()) && (line.charAt(index) != ' ') && (line.charAt(index) != '~')) {
-					buf.append(line.charAt(index));
-					index++;
-				}
-				lineRecord.setViewName(buf.toString());
-				spaces();
-
-				// may be no label key
-				if (index < line.length()) {
-					c = line.charAt(index);
-					if (c == '~') {
-						index++;
-						spaces();
-						label();
-					}
-				}
-
-			} else {
-				// processing label without view
-				if (c == '~') {
-					index++;
-					spaces();
-					label();
-				}
+		// split columns on segmentSeparator
+		Splitter splitter = Splitter.on(attributeSeparator).trimResults();
+		Iterable<String> attributes = splitter.split(line);
+		Iterator<String> iterator = attributes.iterator();
+		// split first column into indentation and uri segment
+		boolean indentOk = indentAndSegment(iterator.next(), lineIndex, syntaxErrors);
+		if (indentOk) {
+			String viewAttribute = (iterator.hasNext()) ? iterator.next() : "";
+			view(viewAttribute);
+			String labelKeyAttribute = (iterator.hasNext()) ? iterator.next() : "";
+			labelKey(labelKeyAttribute);
+			String permissionAttribute = (iterator.hasNext()) ? iterator.next() : "";
+			permission(permissionAttribute);
+			if (lineRecord.getIndentLevel() > currentIndent + 1) {
+				indentationErrors.add("'" + lineRecord.getSegment() + "' at line " + lineIndex);
 			}
 		}
 		return lineRecord;
 	}
 
-	private void spaces() {
-		// spaces
-		while ((index < line.length()) && (line.charAt(index) == ' ')) {
-			index++;
-		}
-	};
+	private void permission(String permissionAttribute) {
+		lineRecord.setPermission(permissionAttribute);
+	}
 
-	private void label() {
-		StringBuilder buf = new StringBuilder();
-		while ((index < line.length()) && (line.charAt(index) != ' ')) {
-			buf.append(line.charAt(index));
+	private void labelKey(String labelKeyAttribute) {
+		lineRecord.setKeyName(labelKeyAttribute);
+	}
+
+	private void view(String viewAttribute) {
+		lineRecord.setViewName(viewAttribute);
+	}
+
+	private boolean indentAndSegment(String s, int lineIndex, Set<String> syntaxErrors) {
+		if (s.isEmpty()) {
+			return false;
+		}
+		// trimmed by splitter, safe to assume index 0 unless empty
+		boolean indentFound = s.charAt(0) == '+' || s.charAt(0) == '-';
+
+		if (!indentFound) {
+			syntaxErrors.add(NO_HYPHEN + lineIndex);
+			return false;
+		}
+
+		lineRecord.setPublicPage(s.charAt(0) == '+');
+
+		int index = 0;
+		int indent = 0;
+		while (index < line.length()) {
+			char c = s.charAt(index);
+			if (c == '+' || c == '-') {
+				indent++;
+			} else {
+				break;
+			}
 			index++;
 		}
-		lineRecord.setKeyName(buf.toString());
+		String segment = s.substring(indent).trim();
+		lineRecord.setSegment(segment);
+		lineRecord.setIndentLevel(indent);
+		return true;
+
 	}
 
 }

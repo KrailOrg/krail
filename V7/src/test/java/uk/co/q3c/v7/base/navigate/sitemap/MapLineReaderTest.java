@@ -20,9 +20,6 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.q3c.v7.base.navigate.sitemap.MapLineReader;
-import uk.co.q3c.v7.base.navigate.sitemap.MapLineRecord;
-
 public class MapLineReaderTest {
 
 	private MapLineReader reader;
@@ -40,14 +37,28 @@ public class MapLineReaderTest {
 	public void full_correct_Line() {
 
 		// given
-		String line = "--  level2   : view  ~ key";
+		String line = "--  level2   ; view  ; key  ; permission";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1);
+		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
+		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.isPublicPage()).isFalse();
+
+		// given
+		line = "+-  level2   ; view  ; key  ; permission";
+		// when
+		result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		// then
+		assertThat(result.getIndentLevel()).isEqualTo(2);
+		assertThat(result.getSegment()).isEqualTo("level2");
+		assertThat(result.getViewName()).isEqualTo("view");
+		assertThat(result.getKeyName()).isEqualTo("key");
+		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.isPublicPage()).isTrue();
 
 	}
 
@@ -55,29 +66,67 @@ public class MapLineReaderTest {
 	public void full_correct_Line_leading_spaces() {
 
 		// given
-		String line = "  --  level2   : view  ~ key";
+		String line = "  --  level2   ; view  ; key  ; permission";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1);
+		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
+		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.isPublicPage()).isFalse();
 
 	}
 
 	@Test
-	public void correct_Line_no_view() {
+	public void allPlus() {
 
 		// given
-		String line = "--  level2    ~ key";
+		String line = "  ++  level2   ; view  ; key  ; permission";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1);
+		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
-		assertThat(result.getViewName()).isNull();
+		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
+		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.isPublicPage()).isTrue();
+
+	}
+
+	@Test
+	public void emptyViewOnly() {
+
+		// given
+		String line = "  ++  level2   ;   ; key  ; permission";
+		// when
+		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		// then
+		assertThat(result.getIndentLevel()).isEqualTo(2);
+		assertThat(result.getSegment()).isEqualTo("level2");
+		assertThat(result.getViewName()).isEmpty();
+		assertThat(result.getKeyName()).isEqualTo("key");
+		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.isPublicPage()).isTrue();
+
+	}
+
+	@Test
+	public void emptyKeyOnly() {
+
+		// given
+		String line = "  ++  level2   ; view  ;   ; permission";
+		// when
+		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		// then
+		assertThat(result.getIndentLevel()).isEqualTo(2);
+		assertThat(result.getSegment()).isEqualTo("level2");
+		assertThat(result.getViewName()).isEqualTo("view");
+		assertThat(result.getKeyName()).isEmpty();
+		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.isPublicPage()).isTrue();
 
 	}
 
@@ -85,14 +134,16 @@ public class MapLineReaderTest {
 	public void correct_Line_no_key() {
 
 		// given
-		String line = "--  level2   : view  ";
+		String line = "--  level2   ; view  ";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1);
+		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEqualTo("view");
-		assertThat(result.getKeyName()).isNull();
+		assertThat(result.getKeyName()).isEmpty();
+		assertThat(result.getPermission()).isEmpty();
+		assertThat(result.isPublicPage()).isFalse();
 
 	}
 
@@ -102,12 +153,14 @@ public class MapLineReaderTest {
 		// given
 		String line = " --  level2  ";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1);
+		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
-		assertThat(result.getViewName()).isNull();
-		assertThat(result.getKeyName()).isNull();
+		assertThat(result.getViewName()).isEmpty();
+		assertThat(result.getKeyName()).isEmpty();
+		assertThat(result.getPermission()).isEmpty();
+		assertThat(result.isPublicPage()).isFalse();
 
 	}
 
@@ -115,27 +168,11 @@ public class MapLineReaderTest {
 	public void invalid_no_hypen() {
 
 		// given
-		String line = "   level2   : view  ~ key";
+		String line = "   level2   ; view  ; key";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1);
+		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
 		// then
 		assertThat(syntaxErrors).contains(MapLineReader.NO_HYPHEN + "33");
-		assertThat(result.getIndentLevel()).isEqualTo(0);
-		assertThat(result.getSegment()).isNull();
-		assertThat(result.getViewName()).isNull();
-		assertThat(result.getKeyName()).isNull();
-
-	}
-
-	@Test
-	public void invalid_reversed_elements() {
-
-		// given
-		String line = "   level2  ~ key : view  ";
-		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1);
-		// then
-		assertThat(syntaxErrors).contains(MapLineReader.VIEW_FIRST + "33");
 		assertThat(result.getIndentLevel()).isEqualTo(0);
 		assertThat(result.getSegment()).isNull();
 		assertThat(result.getViewName()).isNull();
@@ -147,9 +184,9 @@ public class MapLineReaderTest {
 	public void reuse() {
 
 		// given
-		String line = "--  level2   : view  ~ key";
+		String line = "--  level2   ; view  ; key";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1);
+		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
@@ -157,9 +194,9 @@ public class MapLineReaderTest {
 		assertThat(result.getKeyName()).isEqualTo("key");
 
 		// given
-		line = "--  part2   : view2  ~ key2";
+		line = "--  part2   ; view2  ; key2";
 		// when
-		result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1);
+		result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("part2");

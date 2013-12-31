@@ -139,6 +139,21 @@ public class SitemapNode {
 		buf.append((viewClass == null) ? "null" : viewClass.getName());
 		buf.append(", labelKey=");
 		buf.append((labelKey == null) ? "null" : ((Enum<?>) labelKey).name());
+		buf.append(", permissions=");
+		if (permissions.isEmpty()) {
+			buf.append("none");
+		} else {
+			boolean first = true;
+			for (String permission : permissions) {
+				if (!first) {
+					buf.append(';');
+				}
+				buf.append('[');
+				buf.append(permission);
+				buf.append(']');
+				first = false;
+			}
+		}
 		return buf.toString();
 	}
 
@@ -198,5 +213,9 @@ public class SitemapNode {
 		if (StringUtils.isNotEmpty(permission)) {
 			permissions.add(permission);
 		}
+	}
+
+	public boolean hasPermissions() {
+		return !permissions.isEmpty();
 	}
 }

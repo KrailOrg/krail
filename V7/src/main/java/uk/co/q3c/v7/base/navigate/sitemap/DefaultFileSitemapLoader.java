@@ -15,7 +15,6 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import java.io.File;
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.navigate.LabelKeyForName;
-import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.URITracker;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.CurrentLocale;
@@ -53,7 +51,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	private static Logger log = LoggerFactory.getLogger(DefaultFileSitemapLoader.class);
 
 	private enum SectionName {
-		options, redirects, viewPackages, standardPageMapping, map;
+		options, viewPackages, map;
 	}
 
 	private enum ValidOption {
@@ -76,14 +74,9 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	private Set<String> invalidViewClasses;
 	private Set<String> undeclaredViewClasses;
 	private Set<String> indentationErrors;
-	private Set<String> missingPages;
 	private Set<String> propertyErrors;
-	private Set<String> duplicateURIs;
-	private Set<String> viewlessURIs;
 	private Set<String> unrecognisedOptions;
-	private Set<String> redirectErrors;
 	private Set<String> syntaxErrors;
-	private Set<String> standardPageErrors;
 
 	// messages to go in the report, for info only
 	private Set<String> infoMessages;
@@ -101,6 +94,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	private LabelKeyForName lkfn;
 	private final Collator collator;
 	private final Translate translate;
+	private final String segmentSeparator = ";";
 
 	@Inject
 	public DefaultFileSitemapLoader(CurrentLocale currentLocale, Translate translate, Sitemap sitemap) {
@@ -118,15 +112,10 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		invalidViewClasses = new HashSet<>();
 		undeclaredViewClasses = new HashSet<>();
 		indentationErrors = new HashSet<>();
-		missingPages = new HashSet<>();
 		propertyErrors = new HashSet<>();
-		viewlessURIs = new HashSet<>();
-		duplicateURIs = new HashSet<>();
 		unrecognisedOptions = new HashSet<>();
-		redirectErrors = new HashSet<>();
 		infoMessages = new HashSet<>();
 		syntaxErrors = new HashSet<>();
-		standardPageErrors = new HashSet<>();
 
 		sections = new HashMap<>();
 		labelClassNotI18N = false;
@@ -146,11 +135,8 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		// can only process if ALL required sections are present
 		if (missingSections().size() == 0) {
 			processOptions();
-			processRedirects();
 			processMap();
-			validateRedirects();
 			checkLabelKeys();
-			checkViews();
 			sitemap.setErrors(errorSum());
 
 			log.info("Sitemap loaded successfully");
@@ -173,9 +159,8 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	 */
 	private int errorSum() {
 		int c = missingSections().size() + missingEnums.size() + invalidViewClasses.size();
-		c += undeclaredViewClasses.size() + missingPages.size() + propertyErrors.size();
-		c += viewlessURIs.size() + duplicateURIs.size() + redirectErrors.size() + syntaxErrors.size()
-				+ standardPageErrors.size();
+		c += undeclaredViewClasses.size() + propertyErrors.size();
+		c += syntaxErrors.size();
 
 		if (getViewPackages() == null || getViewPackages().isEmpty()) {
 			c++;
@@ -197,41 +182,12 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		return c;
 	}
 
-	/**
-	 * Looks for any URIs without views and captures them in {@link #viewlessURIs} for reporting
-	 */
-	private void checkViews() {
-		for (SitemapNode node : sitemap.getAllNodes()) {
-			if (node.getViewClass() == null) {
-				viewlessURIs.add("uri: \"" + sitemap.uri(node) + "\"");
-			}
-		}
-
-	}
-
 	private void checkLabelKeys() {
 		for (SitemapNode node : sitemap.getAllNodes()) {
 			if (node.getLabelKey() == null) {
 				labelKeyForName(null, node);
 			}
 		}
-	}
-
-	/**
-	 * Ensure that redirection targets exist, and that no loops can be created
-	 */
-	private void validateRedirects() {
-		Collection<String> uris = sitemap.uris();
-		for (String target : getRedirects().values()) {
-			if (getRedirects().keySet().contains(target)) {
-				redirectErrors.add("'" + target + "' cannot be both a redirect source and redirect target");
-			}
-			if (!uris.contains(target)) {
-				redirectErrors.add("'" + target + "' cannot be a redirect target, it has not been defined as a page");
-
-			}
-		}
-
 	}
 
 	@Override
@@ -246,24 +202,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 		} catch (Exception e) {
 			log.error("Unable to load site map", e);
-		}
-	}
-
-	private void processRedirects() {
-		List<String> sectionLines = sections.get(SectionName.redirects);
-		for (String line : sectionLines) {
-			// if starts with ':' then f==""
-			// split the line on ':'
-
-			if (line.startsWith(":")) {
-				sitemap.addRedirect("", line.replace(":", "").trim());
-			} else {
-				String[] pair = null;
-				pair = StringUtils.split(line, ":");
-				String f = pair[0].trim();
-				String t = (pair.length > 1) ? pair[1].trim() : "";
-				sitemap.addRedirect(f, t);
-			}
 		}
 	}
 
@@ -379,17 +317,14 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		int currentIndent = 0;
 		for (String line : sectionLines) {
 			MapLineRecord lineRecord = reader.processLine(lineIndex, line, syntaxErrors, indentationErrors,
-					currentIndent);
+					currentIndent, segmentSeparator);
 			uriTracker.track(lineRecord.getIndentLevel(), lineRecord.getSegment());
 			SitemapNode node = sitemap.append(uriTracker.uri());
-			// if node is a standard page do not overwrite it
-			if (node.getLabelKey() instanceof StandardPageKey) {
-				// warning
-			} else {
-				node.setUriSegment(lineRecord.getSegment());
-				findView(node, lineRecord.getSegment(), lineRecord.getViewName());
-				labelKeyForName(lineRecord.getKeyName(), node);
-			}
+			node.setUriSegment(lineRecord.getSegment());
+			findView(node, lineRecord.getSegment(), lineRecord.getViewName());
+			labelKeyForName(lineRecord.getKeyName(), node);
+			node.addPermission(lineRecord.getPermission());
+			node.setPublicPage(lineRecord.isPublicPage());
 			currentIndent = lineRecord.getIndentLevel();
 			lineIndex++;
 		}
@@ -408,7 +343,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 	public String keyName(String labelKeyName, SitemapNode node) {
 		String keyName = labelKeyName;
-		if (keyName == null) {
+		if (Strings.isNullOrEmpty(keyName)) {
 			keyName = node.getUriSegment().replace("-", " ");
 			keyName = keyName.replace("_", " ");
 			keyName = WordUtils.capitalize(keyName);
@@ -431,9 +366,12 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	 */
 	@SuppressWarnings("unchecked")
 	private void findView(SitemapNode node, String segment, String viewName) {
+
 		// if view is null use the segment
-		if (viewName == null) {
-			viewName = StringUtils.capitalize(segment);
+		if (Strings.isNullOrEmpty(viewName)) {
+			String s = segment.replace("-", " ");
+			s = WordUtils.capitalize(s);
+			viewName = s.replace(" ", "_");
 		}
 
 		// user option whether to append 'View' or not
@@ -576,11 +514,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		report.append(getPagesDefined());
 		report.append("\n\n");
 
-		report.append("redirects:\t\t\t");
-		for (String entry : redirectEntries()) {
-			report.append("\n -- ");
-			report.append(entry);
-		}
 		report.append("\n\n");
 
 		if (getViewPackages() != null) {
@@ -634,7 +567,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 			}
 		}
 
-		reportChunk(report, missingPages, "missing pages", "these MUST be defined");
 		reportChunk(report, propertyErrors, "property errors", "should be key=value, spaces are ignored");
 		reportChunk(report, missingEnums, "missing enum declarations",
 				"you could just paste these into your enum declaration");
@@ -644,11 +576,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 		reportChunk(report, syntaxErrors, "syntax errors",
 				"these have been ignored, and the system may work, but you may not get the intended result", true);
-		reportChunk(report, redirectErrors, "redirect errors",
-				"Redirect(s) causing an inconsistency and must be fixed", true);
-		reportChunk(report, viewlessURIs, "viewless URIs", "these URIs have no view associated with them", true);
-		reportChunk(report, standardPageErrors, "standard page errors",
-				"incomplete or incorrect defintion of standard pages in [standardPageMapping]", true);
 
 		if (warningSum() > 0) {
 			report.append(" --------------- warnings ---------");
@@ -746,32 +673,8 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		return indentationErrors;
 	}
 
-	public Set<String> getMissingPages() {
-		return missingPages;
-	}
-
 	public Set<String> getPropertyErrors() {
 		return propertyErrors;
-	}
-
-	public Map<String, String> getRedirects() {
-		return sitemap.getRedirects();
-	}
-
-	public Set<String> getViewlessURIs() {
-		return viewlessURIs;
-	}
-
-	public Set<String> getDuplicateURIs() {
-		return duplicateURIs;
-	}
-
-	public Set<String> redirectEntries() {
-		Set<String> ss = new HashSet<>();
-		for (Map.Entry<String, String> entry : getRedirects().entrySet()) {
-			ss.add(entry.getKey() + ":" + entry.getValue());
-		}
-		return ss;
 	}
 
 	public boolean isLabelClassMissing() {
@@ -805,10 +708,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	 */
 	public void setSource(String source) {
 		this.source = source;
-	}
-
-	public Set<String> getRedirectErrors() {
-		return redirectErrors;
 	}
 
 	public Set<String> getSyntaxErrors() {
