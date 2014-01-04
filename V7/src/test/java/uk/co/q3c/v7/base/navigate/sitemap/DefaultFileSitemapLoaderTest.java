@@ -426,12 +426,26 @@ public class DefaultFileSitemapLoaderTest {
 
 	}
 
-	private void validateNode(Sitemap tree, SitemapNode node) {
-		String uri = tree.uri(node);
+	@Test
+	public void defaultPermissionIsPageURI() throws IOException {
+
+		// given
+		substituteIn(30, "wigglybeast", "");
+		prepFile();
+		// when
+		loader.parse(modifiedFile);
+		// then
+		Sitemap sitemap = loader.getSitemap();
+		SitemapNode node = sitemap.nodeFor("my-account/options");
+		assertThat(node.getPermissions()).contains("my-account/options");
+	}
+
+	private void validateNode(Sitemap sitemap, SitemapNode node) {
+		String uri = sitemap.uri(node);
 		switch (uri) {
 
 		case "my-account":
-			assertThat(tree.getChildCount(node)).isEqualTo(3);
+			assertThat(sitemap.getChildCount(node)).isEqualTo(3);
 			assertThat(node.getUriSegment()).isEqualTo("my-account");
 			assertThat(node.getViewClass()).isEqualTo(My_AccountView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.My_Account);
@@ -440,7 +454,7 @@ public class DefaultFileSitemapLoaderTest {
 			break;
 
 		case "my-account/transfers":
-			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("transfers");
 			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Transfers);
@@ -449,7 +463,7 @@ public class DefaultFileSitemapLoaderTest {
 			break;
 
 		case "my-account/money-in-out":
-			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("money-in-out");
 			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.MoneyInOut);
@@ -458,7 +472,7 @@ public class DefaultFileSitemapLoaderTest {
 			break;
 
 		case "my-account/options":
-			assertThat(tree.getChildCount(node)).isEqualTo(0);
+			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("options");
 			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Opt);

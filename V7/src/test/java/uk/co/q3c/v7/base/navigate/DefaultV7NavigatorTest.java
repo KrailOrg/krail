@@ -5,11 +5,11 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.text.Collator;
+import java.util.List;
 import java.util.Locale;
 
-import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
-import org.fest.assertions.Fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +22,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
-import uk.co.q3c.v7.base.shiro.URIViewPermission;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
@@ -212,7 +212,7 @@ public class DefaultV7NavigatorTest {
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
 		mockNode.setViewClass(LogoutView.class);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		// when
 		navigator.navigateTo(StandardPageKey.Logout);
 		// then
@@ -226,7 +226,7 @@ public class DefaultV7NavigatorTest {
 		String page = "public/login";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode.setViewClass(LoginView.class);
 		// when
 		navigator.navigateTo(page);
@@ -250,9 +250,9 @@ public class DefaultV7NavigatorTest {
 		when(sitemap.nodeFor(any(NavigationState.class))).thenAnswer(new MockNodeAnswer());
 
 		mockNode.setViewClass(View2.class);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode2.setViewClass(LoginView.class);
-		mockNode2.setPublicPage(true);
+		mockNode2.setPageAccessControl(PageAccessControl.PUBLIC);
 
 		when(sitemap.standardPageURI(StandardPageKey.Login)).thenReturn(page2);
 
@@ -277,11 +277,15 @@ public class DefaultV7NavigatorTest {
 		sitemap.addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
 
 		when(sitemapService.getSitemap()).thenReturn(sitemap);
-		when(subject.isPermitted(any(URIViewPermission.class))).thenReturn(true);
-		node2.setPublicPage(true);
-		loginNode.setPublicPage(true);
 
+		node2.setPageAccessControl(PageAccessControl.PUBLIC);
+		loginNode.setPageAccessControl(PageAccessControl.PUBLIC);
+
+		privateHomeNode.addPermissionOrRole("private/home");
 		privateHomeNode.setViewClass(View1.class);
+		privateHomeNode.setPageAccessControl(PageAccessControl.PERMISSION);
+		String[] permissions = privateHomeNode.getPermissions();
+		when(subject.isPermittedAll(permissions)).thenReturn(true);
 		node2.setViewClass(View2.class);
 		loginNode.setViewClass(LoginView.class);
 		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemapService, subjectProvider,
@@ -304,7 +308,7 @@ public class DefaultV7NavigatorTest {
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode.setViewClass(View2.class);
 
 		// when
@@ -322,7 +326,7 @@ public class DefaultV7NavigatorTest {
 		String fragment1 = page1 + "/id=2/age=5";
 		when(sitemap.getRedirectFor(page1)).thenReturn("public");
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode.setViewClass(View1.class);
 
 		// when
@@ -354,7 +358,7 @@ public class DefaultV7NavigatorTest {
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode.setViewClass(View2.class);
 		// when
 		navigator.navigateTo(page);
@@ -372,7 +376,7 @@ public class DefaultV7NavigatorTest {
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
 		mockNode.setViewClass(View2.class);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		// when
 		navigator.navigateTo(pageWithParams);
 		// then
@@ -389,7 +393,7 @@ public class DefaultV7NavigatorTest {
 		when(sitemap.uri(mockNode)).thenReturn(page);
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(page)).thenReturn(mockNode);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode.setViewClass(View2.class);
 
 		// when
@@ -408,14 +412,14 @@ public class DefaultV7NavigatorTest {
 		when(sitemap.getRedirectFor(page1)).thenReturn(page1);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenAnswer(new MockNodeAnswer());
 		mockNode.setViewClass(View1.class);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 
 		String page2 = "public/view2";
 		String fragment2 = page2 + "/id=2";
 		when(sitemap.getRedirectFor(page2)).thenReturn(page2);
 		when(sitemap.nodeFor(fragment2)).thenReturn(mockNode2);
 		mockNode2.setViewClass(View2.class);
-		mockNode2.setPublicPage(true);
+		mockNode2.setPageAccessControl(PageAccessControl.PUBLIC);
 
 		// when
 
@@ -468,7 +472,7 @@ public class DefaultV7NavigatorTest {
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode.setViewClass(View2.class);
 
 		// need to return true, or first listener will block the second
@@ -492,7 +496,7 @@ public class DefaultV7NavigatorTest {
 		String page = "public/view2";
 		when(sitemap.getRedirectFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode.setViewClass(View2.class);
 		// to block second and subsequent
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(false);
@@ -516,28 +520,12 @@ public class DefaultV7NavigatorTest {
 
 		when(sitemap.getRedirectFor(page)).thenReturn(page2);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
-		mockNode.setPublicPage(true);
+		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode.setViewClass(View2.class);
 		// when
 		navigator.navigateTo(page);
 		// then
 		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(page2);
-	}
-
-	@Test(expected = AuthorizationException.class)
-	public void privatePage() {
-
-		// given
-		String page = "public/view2";
-		when(sitemap.nodeFor(any(NavigationState.class))).thenAnswer(new MockNodeAnswer());
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
-		mockNode2.setViewClass(View2.class);
-		mockNode2.setPublicPage(false);
-		// when
-		navigator.navigateTo(page);
-		// then
-		Fail.fail("Exception was expected");
-
 	}
 
 	@Test
@@ -548,7 +536,7 @@ public class DefaultV7NavigatorTest {
 		NavigationState navigationState = uriHandler.navigationState(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		mockNode2.setViewClass(View2.class);
-		mockNode2.setPublicPage(true);
+		mockNode2.setPageAccessControl(PageAccessControl.PUBLIC);
 
 		// when
 		navigator.navigateTo(navigationState);
@@ -566,6 +554,247 @@ public class DefaultV7NavigatorTest {
 		navigator.error();
 		// then
 		assertThat(navigator.getCurrentView()).isInstanceOf(ErrorView.class);
+
+	}
+
+	@Test
+	public void UAC_Public() {
+
+		// given
+		// given
+		String page = "public/view2";
+		NavigationState navigationState = uriHandler.navigationState(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.PUBLIC);
+		// when
+		navigator.navigateTo(page);
+		// then
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(navigationState.getFragment());
+	}
+
+	@Test
+	public void UAC_User() {
+
+		// given authenticated
+		String page = "public/view2";
+		NavigationState navigationState = uriHandler.navigationState(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(true);
+		when(subject.isRemembered()).thenReturn(false);
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.USER);
+		// when
+		navigator.navigateTo(page);
+		// then
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(navigationState.getFragment());
+
+		// given remembered
+		page = "public/view2";
+		navigationState = uriHandler.navigationState(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(false);
+		when(subject.isRemembered()).thenReturn(true);
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.USER);
+		// when
+		navigator.navigateTo(page);
+		// then
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(navigationState.getFragment());
+	}
+
+	@Test(expected = UnauthorizedException.class)
+	public void UAC_User_fail() {
+
+		// given authenticated
+		String page = "public/view2";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(false);
+		when(subject.isRemembered()).thenReturn(false);
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.USER);
+		// when
+		navigator.navigateTo(page);
+		// then
+	}
+
+	@Test
+	public void UAC_Guest() {
+
+		// given authenticated
+		String page = "public/view2";
+		NavigationState navigationState = uriHandler.navigationState(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(false);
+		when(subject.isRemembered()).thenReturn(false);
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.GUEST);
+		// when
+		navigator.navigateTo(page);
+		// then
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(navigationState.getFragment());
+
+	}
+
+	@Test(expected = UnauthorizedException.class)
+	public void UAC_Guest_Fail_remembered() {
+
+		// given authenticated
+		String page = "public/view2";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(false);
+		when(subject.isRemembered()).thenReturn(true);
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.GUEST);
+		// when
+		navigator.navigateTo(page);
+		// then
+	}
+
+	@Test(expected = UnauthorizedException.class)
+	public void UAC_Guest_Fail_authenticated() {
+
+		// given authenticated
+		String page = "public/view2";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(true);
+		when(subject.isRemembered()).thenReturn(false);
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.GUEST);
+		// when
+		navigator.navigateTo(page);
+		// then
+	}
+
+	@Test
+	public void UAC_Authenticate() {
+
+		// given authenticated
+		String page = "public/view2";
+		NavigationState navigationState = uriHandler.navigationState(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(true);
+		when(subject.isRemembered()).thenReturn(false);
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.AUTHENTICATION);
+		// when
+		navigator.navigateTo(page);
+		// then
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(navigationState.getFragment());
+
+	}
+
+	@Test(expected = UnauthorizedException.class)
+	public void UAC_Authenticate_Fail() {
+
+		// given authenticated
+		String page = "public/view2";
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(false);
+		when(subject.isRemembered()).thenReturn(true);
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.AUTHENTICATION);
+		// when
+		navigator.navigateTo(page);
+		// then
+	}
+
+	@Test
+	public void UAC_Permission() {
+
+		String page = "public/view2";
+		NavigationState navigationState = uriHandler.navigationState(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(true);
+		when(subject.isRemembered()).thenReturn(false);
+
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.PERMISSION);
+		mockNode2.addPermissionOrRole(page);
+		String[] permissions = mockNode2.getPermissions();
+		when(subject.isPermittedAll(permissions)).thenReturn(true);
+		// when
+		navigator.navigateTo(page);
+		// then
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(navigationState.getFragment());
+	}
+
+	@Test(expected = UnauthorizedException.class)
+	public void UAC_Permission_Failed() {
+
+		String page = "public/view2";
+		NavigationState navigationState = uriHandler.navigationState(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(true);
+		when(subject.isRemembered()).thenReturn(false);
+
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.PERMISSION);
+		mockNode2.addPermissionOrRole(page);
+		String[] permissions = mockNode2.getPermissions();
+		when(subject.isPermittedAll(permissions)).thenReturn(false);
+		// when
+		navigator.navigateTo(page);
+		// then
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(navigationState.getFragment());
+	}
+
+	@Test
+	public void UAC_roles() {
+
+		// given
+		String page = "public/view2";
+		NavigationState navigationState = uriHandler.navigationState(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(true);
+		when(subject.isRemembered()).thenReturn(false);
+
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.ROLES);
+		mockNode2.addPermissionOrRole("admin");
+		mockNode2.addPermissionOrRole("beast");
+		List<String> permissions = mockNode2.getPermissionsList();
+		when(subject.hasAllRoles(permissions)).thenReturn(true);
+		// when
+		navigator.navigateTo(page);
+		// then
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(navigationState.getFragment());
+
+	}
+
+	@Test(expected = UnauthorizedException.class)
+	public void UAC_roles_failed() {
+
+		// given
+		String page = "public/view2";
+		NavigationState navigationState = uriHandler.navigationState(page);
+		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
+		when(subject.isAuthenticated()).thenReturn(true);
+		when(subject.isRemembered()).thenReturn(false);
+
+		mockNode2.setViewClass(View2.class);
+		mockNode2.setPageAccessControl(PageAccessControl.ROLES);
+		mockNode2.addPermissionOrRole("admin");
+		mockNode2.addPermissionOrRole("beast");
+		List<String> permissions = mockNode2.getPermissionsList();
+		when(subject.hasAllRoles(permissions)).thenReturn(false);
+		// when
+		navigator.navigateTo(page);
+		// then
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(navigationState.getFragment());
 
 	}
 }

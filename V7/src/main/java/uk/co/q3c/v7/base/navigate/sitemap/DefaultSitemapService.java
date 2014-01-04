@@ -16,8 +16,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.inject.Singleton;
-
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +34,7 @@ import uk.co.q3c.v7.i18n.Translate;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 
 @Singleton
 public class DefaultSitemapService extends AbstractServiceI18N implements SitemapService {
@@ -44,7 +43,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	@AutoStart
 	private final ApplicationConfigurationService configurationService;
 	private final Provider<FileSitemapLoader> fileSitemapLoaderProvider;
-	private List<String> sources;
+	private List<SitemapSourceType> sources;
 	private final Sitemap sitemap;
 	private StringBuilder report;
 	private CompositeConfiguration configuration;
@@ -96,7 +95,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	 */
 	private void loadSources() {
 		extractSourcesFromConfig();
-		for (String source : sources) {
+		for (SitemapSourceType source : sources) {
 			loadSource(source);
 		}
 	}
@@ -106,18 +105,21 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	 * 
 	 * @param sourceType
 	 */
-	private void loadSource(String sourceType) {
+	private void loadSource(SitemapSourceType sourceType) {
 
 		switch (sourceType) {
-		case "file":
+		case FILE:
 			FileSitemapLoader fileSitemapLoader = fileSitemapLoaderProvider.get();
 			fileSitemapLoader.load();
+			loaded = true;
 			return;
-		case "direct":
+		case DIRECT:
 			directSitemapLoaderProvider.get().load();
+			loaded = true;
 			return;
-		case "annotation":
+		case ANNOTATION:
 			annotationSitemapLoaderProvider.get().load();
+			loaded = true;
 			return;
 		}
 	}
@@ -138,13 +140,19 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	 */
 	private void extractSourcesFromConfig() {
 		List<String> defaultValues = new ArrayList<>();
-		defaultValues.add("file");
-		defaultValues.add("direct");
-		defaultValues.add("annotation");
+		defaultValues.add(SitemapSourceType.FILE.name());
+		defaultValues.add(SitemapSourceType.DIRECT.name());
+		defaultValues.add(SitemapSourceType.ANNOTATION.name());
 		List<Object> list = configuration.getList(ConfigKeys.SITEMAP_SOURCES_KEY, defaultValues);
 		sources = new ArrayList<>();
 		for (Object o : list) {
-			sources.add(o.toString().toLowerCase());
+			try {
+				SitemapSourceType source = SitemapSourceType.valueOf(o.toString().toUpperCase());
+				sources.add(source);
+			} catch (IllegalArgumentException iae) {
+				log.warn("A value of {} in {} is invalid", o.toString(), ConfigKeys.SITEMAP_SOURCES_KEY);
+
+			}
 		}
 
 		// this will only happen if there is a key with an empty value
@@ -186,7 +194,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 		return loaded;
 	}
 
-	public ImmutableList<String> getSources() {
+	public ImmutableList<SitemapSourceType> getSources() {
 		return ImmutableList.copyOf(sources);
 	}
 

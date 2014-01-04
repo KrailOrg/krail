@@ -13,6 +13,7 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
@@ -36,10 +37,11 @@ public class DefaultStandardPagesModule extends AbstractModule {
 	 * @see #addEntry(String, Class, I18NKey, boolean, String)
 	 */
 	protected void define() {
-		addEntry("public/home", PublicHomeView.class, StandardPageKey.Public_Home, true, null);
-		addEntry("public/login", LoginView.class, StandardPageKey.Login, true, null);
-		addEntry("public/logout", LogoutView.class, StandardPageKey.Logout, true, null);
-		addEntry("private/home", PrivateHomeView.class, StandardPageKey.Private_Home, true, null);
+		addEntry("public/home", PublicHomeView.class, StandardPageKey.Public_Home, PageAccessControl.PUBLIC, null);
+		addEntry("public/login", LoginView.class, StandardPageKey.Login, PageAccessControl.PUBLIC, null);
+		addEntry("public/logout", LogoutView.class, StandardPageKey.Logout, PageAccessControl.PUBLIC, null);
+		addEntry("private/home", PrivateHomeView.class, StandardPageKey.Private_Home, PageAccessControl.PERMISSION,
+				null);
 	};
 
 	@Override
@@ -60,15 +62,15 @@ public class DefaultStandardPagesModule extends AbstractModule {
 	 * @param pageKey
 	 *            the StandardPageKey for a localised label for the view. Also acts as a key to identify this page
 	 *            within the {@link Sitemap}
-	 * @param publicPage
-	 *            true if the page should be available to anyone, including unauthenticated users
+	 * @param pageAccessControl
+	 *            the type of access control to apply
 	 * @param permission
 	 *            the permission string for the page. May be null if no permissions are set
 	 */
-	protected void addEntry(String uri, Class<? extends V7View> viewClass, StandardPageKey pageKey, boolean publicPage,
-			String permission) {
+	protected void addEntry(String uri, Class<? extends V7View> viewClass, StandardPageKey pageKey,
+			PageAccessControl pageAccessControl, String permission) {
 
-		StandardPageSitemapEntry entry = new StandardPageSitemapEntry(viewClass, pageKey, publicPage, permission);
+		StandardPageSitemapEntry entry = new StandardPageSitemapEntry(viewClass, pageKey, pageAccessControl, permission);
 		mapBinder.addBinding(uri).toInstance(entry);
 
 	}

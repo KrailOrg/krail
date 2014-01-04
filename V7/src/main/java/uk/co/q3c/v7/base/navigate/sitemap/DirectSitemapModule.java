@@ -13,6 +13,7 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKey;
 
@@ -70,10 +71,10 @@ public abstract class DirectSitemapModule extends AbstractModule {
 	 * @param permission
 	 *            the permission string for the page. May be null if no permissions are set
 	 */
-	protected void addEntry(String uri, Class<? extends V7View> viewClass, I18NKey<?> labelKey, boolean publicPage,
-			String permission) {
+	protected void addEntry(String uri, Class<? extends V7View> viewClass, I18NKey<?> labelKey,
+			PageAccessControl pageAccessControl, String permission) {
 
-		DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, publicPage, permission);
+		DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, permission);
 		mapBinder.addBinding(uri).toInstance(entry);
 
 	}

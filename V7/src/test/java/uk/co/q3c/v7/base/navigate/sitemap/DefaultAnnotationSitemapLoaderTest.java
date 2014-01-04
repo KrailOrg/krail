@@ -21,6 +21,7 @@ import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.AnnotationsModule1;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.AnnotationsModule2;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
@@ -61,7 +62,7 @@ public class DefaultAnnotationSitemapLoaderTest {
 
 	}
 
-	@View(uri = "a", labelKeyName = "home", isPublic = true, permission = "demi-god")
+	@View(uri = "a", labelKeyName = "home", pageAccessControl = PageAccessControl.PERMISSION, permission = "demi-god")
 	static class View1 implements V7View {
 
 		@Override

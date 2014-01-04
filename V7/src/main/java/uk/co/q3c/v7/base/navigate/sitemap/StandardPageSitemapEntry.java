@@ -13,29 +13,22 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.V7View;
 
 public class StandardPageSitemapEntry {
-	private boolean publicPage;
+	private PageAccessControl pageAccessControl;
 	private Class<? extends V7View> viewClass;
 	private final StandardPageKey pageKey;
 	private String permission;
 
-	protected StandardPageSitemapEntry(Class<? extends V7View> viewClass, StandardPageKey pageKey, boolean publicPage,
-			String permission) {
+	protected StandardPageSitemapEntry(Class<? extends V7View> viewClass, StandardPageKey pageKey,
+			PageAccessControl pageAccessControl, String permission) {
 		super();
-		this.publicPage = publicPage;
+		this.pageAccessControl = pageAccessControl;
 		this.viewClass = viewClass;
 		this.pageKey = pageKey;
 		this.permission = permission;
-	}
-
-	public boolean isPublicPage() {
-		return publicPage;
-	}
-
-	public void setPublicPage(boolean publicPage) {
-		this.publicPage = publicPage;
 	}
 
 	public Class<? extends V7View> getViewClass() {
@@ -56,6 +49,14 @@ public class StandardPageSitemapEntry {
 
 	public StandardPageKey getPageKey() {
 		return pageKey;
+	}
+
+	public PageAccessControl getPageAccessControl() {
+		return pageAccessControl;
+	}
+
+	public void setPageAccessControl(PageAccessControl pageAccessControl) {
+		this.pageAccessControl = pageAccessControl;
 	}
 
 }

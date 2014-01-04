@@ -13,6 +13,7 @@
 package fixture.testviews2;
 
 import uk.co.q3c.v7.base.navigate.sitemap.View;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
@@ -25,7 +26,7 @@ import com.vaadin.ui.Component;
  * @author David Sowerby
  * 
  */
-@View(uri = "a/b", labelKeyName = "Transfers", isPublic = false, permission = "admin")
+@View(uri = "a/b", labelKeyName = "Transfers", pageAccessControl = PageAccessControl.PERMISSION, permission = "admin")
 public class TestAnnotatedView implements V7View {
 
 	@Override

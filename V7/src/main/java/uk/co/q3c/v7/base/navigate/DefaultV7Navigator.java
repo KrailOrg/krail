@@ -3,8 +3,6 @@ package uk.co.q3c.v7.base.navigate;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
@@ -19,7 +17,6 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
-import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
@@ -27,6 +24,7 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;
@@ -325,26 +323,47 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		Class<? extends V7View> viewClass = node.getViewClass();
 		V7View view = injector.getInstance(viewClass);
 
-		previousNode = currentNode;
-		previousNavigationState = currentNavigationState;
-
-		currentNode = node;
-		currentNavigationState = navigationState;
-
-		// if page is public don't check permissions as they will fail!
-		boolean publicPage = node.isPublicPage();
-		if (publicPage) {
-			changeView(view);
-			return;
+		boolean authorised = false;
+		Subject subject = subjectProvider.get();
+		switch (node.getPageAccessControl()) {
+		case AUTHENTICATION:
+			authorised = subject.isAuthenticated();
+			break;
+		case GUEST:
+			authorised = (!subject.isAuthenticated()) && (!subject.isRemembered());
+			break;
+		case PERMISSION:
+			authorised = subject.isPermittedAll(node.getPermissions());
+			break;
+		case PUBLIC:
+			authorised = true;
+			break;
+		case ROLES:
+			authorised = subject.hasAllRoles(node.getPermissionsList());
+			break;
+		case USER:
+			authorised = (subject.isAuthenticated()) || (subject.isRemembered());
+			break;
 		}
 
-		// check permissions, raise exception if not allowed
-		URIViewPermission permission = new URIViewPermission(navigationState);
-		if (subjectProvider.get().isPermitted(permission)) {
+		if (authorised) {
+			previousNode = currentNode;
+			previousNavigationState = currentNavigationState;
+
+			currentNode = node;
+			currentNavigationState = navigationState;
 			changeView(view);
 		} else {
 			throw new UnauthorizedException(navigationState.getVirtualPage());
 		}
+
+		// check permissions, raise exception if not allowed
+		// URIViewPermission permission = new URIViewPermission(navigationState);
+		// if (subjectProvider.get().isPermitted(permission)) {
+		//
+		// } else {
+		//
+		// }
 
 	}
 

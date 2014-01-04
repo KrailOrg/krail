@@ -35,8 +35,10 @@ import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.ConfigKeys;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
-import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModuleBase;
+import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
+import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestFileSitemapModule;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.DescriptionKey;
@@ -61,17 +63,25 @@ import fixture.TestConfigurationException;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ ServicesMonitorModule.class, ApplicationConfigurationModule.class, TestDirectSitemapModuleBase.class,
-		DefaultStandardPagesModule.class })
+@GuiceContext({ ServicesMonitorModule.class, ApplicationConfigurationModule.class, TestDirectSitemapModule.class,
+		TestFileSitemapModule.class, DefaultStandardPagesModule.class })
 public class DefaultSitemapServiceTest {
 
-	public static class TestDirectSitemapModuleBase extends DirectSitemapModule {
+	public static class TestDirectSitemapModule extends DirectSitemapModule {
 
 		@Override
 		protected void define() {
-			addEntry("direct/a", PublicHomeView.class, LabelKey.Home, true, null);
+			addEntry("direct/a", PublicHomeView.class, LabelKey.Home, PageAccessControl.PUBLIC, null);
 		}
 
+	}
+
+	public static class TestFileSitemapModule extends FileSitemapModule {
+
+		@Override
+		protected void define() {
+			addEntry("a", new SitemapFile("src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good.properties"));
+		}
 	}
 
 	static VaadinService vaadinService;
@@ -121,8 +131,9 @@ public class DefaultSitemapServiceTest {
 		// then
 		assertThat(service.getReport()).isNotNull();
 		assertThat(service.isStarted()).isTrue();
-		assertThat(sitemap.getNodeCount()).isEqualTo(13);
-		assertThat(service.getSources()).containsOnly("file");
+		assertThat(sitemap.getNodeCount()).isEqualTo(12);
+		assertThat(service.getSources()).containsOnly(SitemapSourceType.FILE, SitemapSourceType.DIRECT,
+				SitemapSourceType.ANNOTATION);
 	}
 
 	@Test
@@ -153,7 +164,7 @@ public class DefaultSitemapServiceTest {
 		assertThat(service.getReport()).isNotNull();
 		assertThat(service.isStarted()).isTrue();
 		assertThat(sitemap.getNodeCount()).isEqualTo(13);
-		assertThat(service.getSources()).containsOnly("file");
+		assertThat(service.getSources()).containsOnly(SitemapSourceType.FILE);
 	}
 
 	/**
@@ -176,7 +187,7 @@ public class DefaultSitemapServiceTest {
 		assertThat(service.getReport()).isNotNull();
 		assertThat(service.isStarted()).isTrue();
 		assertThat(sitemap.getNodeCount()).isEqualTo(13);
-		assertThat(service.getSources()).containsOnly("file");
+		assertThat(service.getSources()).containsOnly(SitemapSourceType.FILE);
 	}
 
 	@Test
@@ -195,7 +206,7 @@ public class DefaultSitemapServiceTest {
 		// then
 		assertThat(service.getReport()).isNotNull();
 		assertThat(service.isStarted()).isTrue();
-		assertThat(sitemap.getNodeCount()).isEqualTo(13);
+		assertThat(sitemap.getNodeCount()).isEqualTo(4);
 	}
 
 	@Test

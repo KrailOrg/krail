@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.navigate.sitemap.DirectSitemapModuleTest.TestDirectSitemapModule1;
 import uk.co.q3c.v7.base.navigate.sitemap.DirectSitemapModuleTest.TestDirectSitemapModule2;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
@@ -41,7 +42,8 @@ public class DirectSitemapModuleTest {
 
 		@Override
 		protected void define() {
-			addEntry("private/home", PrivateHomeView.class, LabelKey.Authorisation, false, "permission");
+			addEntry("private/home", PrivateHomeView.class, LabelKey.Authorisation, PageAccessControl.PERMISSION,
+					"permission");
 		}
 
 	}
@@ -50,8 +52,8 @@ public class DirectSitemapModuleTest {
 
 		@Override
 		protected void define() {
-			addEntry("public/home", PublicHomeView.class, LabelKey.Home, true, "permission");
-			addEntry("public/login", LoginView.class, LabelKey.Log_In, true, "permission");
+			addEntry("public/home", PublicHomeView.class, LabelKey.Home, PageAccessControl.PUBLIC, "permission");
+			addEntry("public/login", LoginView.class, LabelKey.Log_In, PageAccessControl.GUEST, "permission");
 		}
 
 	}
@@ -67,19 +69,19 @@ public class DirectSitemapModuleTest {
 		assertThat(map).hasSize(3);
 		DirectSitemapEntry entry = map.get("private/home");
 		assertThat(entry.getViewClass()).isEqualTo(PrivateHomeView.class);
-		assertThat(entry.isPublicPage()).isFalse();
+		assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 		assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Authorisation);
 		assertThat(entry.getPermission()).isEqualTo("permission");
 
 		entry = map.get("public/home");
 		assertThat(entry.getViewClass()).isEqualTo(PublicHomeView.class);
-		assertThat(entry.isPublicPage()).isTrue();
+		assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
 		assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Home);
 		assertThat(entry.getPermission()).isEqualTo("permission");
 
 		entry = map.get("public/login");
 		assertThat(entry.getViewClass()).isEqualTo(LoginView.class);
-		assertThat(entry.isPublicPage()).isTrue();
+		assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.GUEST);
 		assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Log_In);
 		assertThat(entry.getPermission()).isEqualTo("permission");
 

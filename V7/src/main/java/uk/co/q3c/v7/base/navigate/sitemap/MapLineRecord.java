@@ -12,14 +12,17 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
+
 public class MapLineRecord {
 
 	private int indentLevel;
 	private String segment;
 	private String viewName;
 	private String keyName;
-	private boolean publicPage;
 	private String permission;
+	private PageAccessControl pageAccessControl;
+	private boolean requiresPageURI = false;
 
 	public int getIndentLevel() {
 		return indentLevel;
@@ -53,20 +56,28 @@ public class MapLineRecord {
 		this.keyName = keyName;
 	}
 
-	public boolean isPublicPage() {
-		return publicPage;
-	}
-
-	public void setPublicPage(boolean publicPage) {
-		this.publicPage = publicPage;
-	}
-
 	public String getPermission() {
 		return permission;
 	}
 
 	public void setPermission(String permission) {
 		this.permission = permission;
+	}
+
+	public PageAccessControl getPageAccessControl() {
+		return pageAccessControl;
+	}
+
+	public void setPageAccessControl(PageAccessControl pageAccessControl) {
+		this.pageAccessControl = pageAccessControl;
+	}
+
+	public boolean isRequiresPageURI() {
+		return requiresPageURI;
+	}
+
+	public void setRequiresPageURI(boolean requiresPageURI) {
+		this.requiresPageURI = requiresPageURI;
 	}
 
 }

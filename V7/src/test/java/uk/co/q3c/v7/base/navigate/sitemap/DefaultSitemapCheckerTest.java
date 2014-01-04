@@ -12,15 +12,38 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.i18n.I18NKey;
+import static org.assertj.core.api.Assertions.*;
 
-public interface SitemapChecker {
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-	void check();
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
 
-	SitemapChecker replaceMissingViewWith(Class<? extends V7View> defaultView);
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
+public class DefaultSitemapCheckerTest {
 
-	SitemapChecker replaceMissingKeyWith(I18NKey<?> defaultKey);
+	DefaultSitemapChecker checker;
+
+	@Test
+	public void check() {
+
+		// given
+
+		// when
+
+		// then
+
+		fail("not written");
+	}
+
+	/**
+	 * 
+	 * @param index
+	 */
+	private void buildSitemap(int index) {
+
+	}
 
 }

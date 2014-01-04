@@ -23,6 +23,7 @@ import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultDirectSitemapLoaderTest.TestDirectSitemapModule_A;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultDirectSitemapLoaderTest.TestDirectSitemapModule_B;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.TestLabelKey;
@@ -63,7 +64,7 @@ public class DefaultDirectSitemapLoaderTest {
 
 		@Override
 		protected void define() {
-			addEntry(page1, View1.class, LabelKey.Authorisation, false, permission1);
+			addEntry(page1, View1.class, LabelKey.Authorisation, PageAccessControl.PERMISSION, permission1);
 		}
 
 	}
@@ -72,8 +73,8 @@ public class DefaultDirectSitemapLoaderTest {
 
 		@Override
 		protected void define() {
-			addEntry(page2, OptionsView.class, TestLabelKey.Opt, true, permission2);
-			addEntry(page3, View2.class, TestLabelKey.MoneyInOut, true, permission3);
+			addEntry(page2, OptionsView.class, TestLabelKey.Opt, PageAccessControl.PUBLIC, permission2);
+			addEntry(page3, View2.class, TestLabelKey.MoneyInOut, PageAccessControl.PUBLIC, permission3);
 		}
 
 	}

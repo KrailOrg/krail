@@ -18,6 +18,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
+
 import com.google.common.base.Splitter;
 
 /**
@@ -31,7 +33,8 @@ import com.google.common.base.Splitter;
 
 public class MapLineReader {
 	private static Logger log = LoggerFactory.getLogger(MapLineReader.class);
-	public static final String NO_HYPHEN = "Line must start with '-' or '+' for private and public respectively, followed by 0..n '-' to indicate indent level, line ";
+	private final String leadCharSet = "+-~#";
+	public static final String NO_HYPHEN = "Line must start with '-', '+', '~' or '#' depending on which access control you want, followed by 0..n '-' to indicate indent level, line ";
 	private String line;
 	private MapLineRecord lineRecord;
 
@@ -62,8 +65,28 @@ public class MapLineReader {
 		return lineRecord;
 	}
 
+	/**
+	 * see the documentataion at https://sites.google.com/site/q3cjava/sitemap#TOC-map- for description of use of
+	 * permissions attribute
+	 * 
+	 * @param permissionAttribute
+	 */
 	private void permission(String permissionAttribute) {
 		lineRecord.setPermission(permissionAttribute);
+
+		if (lineRecord.getPageAccessControl() == PageAccessControl.PERMISSION) {
+			if (permissionAttribute.startsWith("roles=")) {
+				lineRecord.setPageAccessControl(PageAccessControl.ROLES);
+			} else {
+				if (permissionAttribute.isEmpty()) {
+					lineRecord.setRequiresPageURI(true);
+				} else {
+					if (permissionAttribute.equals("*")) {
+						lineRecord.setPageAccessControl(PageAccessControl.AUTHENTICATION);
+					}
+				}
+			}
+		}
 	}
 
 	private void labelKey(String labelKeyAttribute) {
@@ -79,20 +102,36 @@ public class MapLineReader {
 			return false;
 		}
 		// trimmed by splitter, safe to assume index 0 unless empty
-		boolean indentFound = s.charAt(0) == '+' || s.charAt(0) == '-';
+		// any of the leading chars will do
+		char leadChar = s.charAt(0);
+		boolean indentFound = leadCharSet.indexOf(leadChar) >= 0;
 
 		if (!indentFound) {
 			syntaxErrors.add(NO_HYPHEN + lineIndex);
 			return false;
 		}
 
-		lineRecord.setPublicPage(s.charAt(0) == '+');
+		switch (leadChar) {
+		case '+':
+			lineRecord.setPageAccessControl(PageAccessControl.PUBLIC);
+			break;
+		case '-':
+			lineRecord.setPageAccessControl(PageAccessControl.PERMISSION);
+			break;
+		case '#':
+			lineRecord.setPageAccessControl(PageAccessControl.GUEST);
+			break;
+		case '~':
+			lineRecord.setPageAccessControl(PageAccessControl.USER);
+			break;
+
+		}
 
 		int index = 0;
 		int indent = 0;
 		while (index < line.length()) {
 			char c = s.charAt(index);
-			if (c == '+' || c == '-') {
+			if (leadCharSet.indexOf(c) >= 0) {
 				indent++;
 			} else {
 				break;

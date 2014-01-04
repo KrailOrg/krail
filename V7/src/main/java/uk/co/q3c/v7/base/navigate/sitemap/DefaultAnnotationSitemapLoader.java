@@ -55,31 +55,35 @@ public class DefaultAnnotationSitemapLoader implements AnnotationSitemapLoader {
 	@Override
 	public boolean load() {
 		Collator collator = Collator.getInstance(currentLocale.getLocale());
-		for (Entry<String, AnnotationSitemapEntry> entry : sources.entrySet()) {
-			log.debug("scanning {} for View annotations", entry.getKey());
-			Reflections reflections = new Reflections(entry.getKey());
-			Set<Class<?>> types = reflections.getTypesAnnotatedWith(View.class);
-			log.debug("{} annotated Views found", types.size());
-			for (Class<?> clazz : types) {
-				Class<? extends V7View> viewClass = null;
-				if (clazz.isAssignableFrom(V7View.class)) {
-					viewClass = (Class<? extends V7View>) clazz;
-					View annotation = viewClass.getAnnotation(View.class);
-					SitemapNode node = sitemap.append(annotation.uri());
-					node.setViewClass(viewClass);
-					node.setTranslate(translate);
-					node.setPublicPage(annotation.isPublic());
-					node.addPermission(annotation.permission());
+		if (sources != null) {
+			for (Entry<String, AnnotationSitemapEntry> entry : sources.entrySet()) {
+				log.debug("scanning {} for View annotations", entry.getKey());
+				Reflections reflections = new Reflections(entry.getKey());
+				Set<Class<?>> types = reflections.getTypesAnnotatedWith(View.class);
+				log.debug("{} annotated Views found", types.size());
+				for (Class<?> clazz : types) {
+					Class<? extends V7View> viewClass = null;
+					if (clazz.isAssignableFrom(V7View.class)) {
+						viewClass = (Class<? extends V7View>) clazz;
+						View annotation = viewClass.getAnnotation(View.class);
+						SitemapNode node = sitemap.append(annotation.uri());
+						node.setViewClass(viewClass);
+						node.setTranslate(translate);
+						node.setPageAccessControl(annotation.pageAccessControl());
+						node.addPermissionOrRole(annotation.permission());
 
-					I18NKey<?> key = keyFromName(annotation.labelKeyName(), entry.getValue().getLabelSample());
-					node.setLabelKey(key, currentLocale.getLocale(), collator);
+						I18NKey<?> key = keyFromName(annotation.labelKeyName(), entry.getValue().getLabelSample());
+						node.setLabelKey(key, currentLocale.getLocale(), collator);
+
+					}
 
 				}
-
 			}
+			return true;
+		} else {
+			log.info("No Annotations Sitemap sources to load");
+			return false;
 		}
-
-		return false;
 	}
 
 	/**

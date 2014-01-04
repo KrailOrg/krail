@@ -54,8 +54,8 @@ public class DefaultDirectSitemapLoader implements DirectSitemapLoader {
 				SitemapNode node = sitemap.append(entry.getKey());
 				DirectSitemapEntry value = entry.getValue();
 				node.setLabelKey(value.getLabelKey(), translate, collator);
-				node.setPublicPage(value.isPublicPage());
-				node.addPermission(value.getPermission());
+				node.setPageAccessControl(value.getPageAccessControl());
+				node.addPermissionOrRole(value.getPermission());
 				node.setTranslate(translate);
 				node.setViewClass(value.getViewClass());
 			}
@@ -83,8 +83,8 @@ public class DefaultDirectSitemapLoader implements DirectSitemapLoader {
 			SitemapNode node = sitemap.append(entry.getKey());
 			StandardPageSitemapEntry value = entry.getValue();
 			node.setLabelKey(value.getPageKey(), translate, collator);
-			node.setPublicPage(value.isPublicPage());
-			node.addPermission(value.getPermission());
+			node.setPageAccessControl(value.getPageAccessControl());
+			node.addPermissionOrRole(value.getPermission());
 			node.setTranslate(translate);
 			node.setViewClass(value.getViewClass());
 			sitemap.addStandardPage(entry.getValue().getPageKey(), node);

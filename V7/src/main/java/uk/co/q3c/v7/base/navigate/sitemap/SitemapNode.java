@@ -14,12 +14,16 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.text.CollationKey;
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
+import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.LabelKey;
@@ -41,11 +45,13 @@ import uk.co.q3c.v7.i18n.Translate;
  * <p>
  * To enable locale sensitive sorting of nodes - for example within a UserNavigationTree - a collation key from
  * {@link Collator} is added by the {@link #setLabelKey(I18NKey, Locale, Collator)} method. This means the collation key
- * generally created only once, is available for sorting as often as needed, and will only need to be updated when if
- * locale or labelKey changes. This approach also takes advantage of the improved performance of the collation key
- * sorting (http://docs.oracle.com/javase/tutorial/i18n/text/perform.html)
+ * is generally created only once, but is available for sorting as often as needed. The collation key will only need to
+ * be updated if locale or labelKey changes. This approach also takes advantage of the improved performance of the
+ * collation key sorting (http://docs.oracle.com/javase/tutorial/i18n/text/perform.html)
  * <p>
- * Sorting by insertion order or collation key order is provided by
+ * The type of user access control applied to the page is determined by {@link #pageAccessControl}. Note that these are
+ * mutually exclusive, so a page cannot require both roles and permissions. This control is applied by the
+ * {@link V7Navigator} during page changes, thereby disallowing access to an authorised page.
  * 
  * @author David Sowerby 6 May 2013
  * 
@@ -59,7 +65,11 @@ public class SitemapNode {
 	private String label;
 	private CollationKey collationKey;
 	private Translate translate;
-	private boolean publicPage;
+	private PageAccessControl pageAccessControl;
+	/**
+	 * Contains required permissions if {@link #pageAccessControl} is {@link PageAccessControl#PERMISSION} or required
+	 * roles if {@link #pageAccessControl} is {@link PageAccessControl#ROLES}
+	 */
 	private final Set<String> permissions = new HashSet<>();
 
 	public SitemapNode(String uriSegment, Class<? extends V7View> viewClass, I18NKey<?> labelKey, Locale locale,
@@ -202,20 +212,37 @@ public class SitemapNode {
 	}
 
 	public boolean isPublicPage() {
-		return publicPage;
+		return pageAccessControl == PageAccessControl.PUBLIC;
 	}
 
-	public void setPublicPage(boolean publicPage) {
-		this.publicPage = publicPage;
-	}
-
-	public void addPermission(String permission) {
-		if (StringUtils.isNotEmpty(permission)) {
-			permissions.add(permission);
+	/**
+	 * Adds a required permissions if {@link #pageAccessControl} is {@link PageAccessControl#PERMISSION} or a required
+	 * role if {@link #pageAccessControl} is {@link PageAccessControl#ROLES}
+	 */
+	public void addPermissionOrRole(String permissionOrRole) {
+		if (StringUtils.isNotEmpty(permissionOrRole)) {
+			permissions.add(permissionOrRole);
 		}
 	}
 
 	public boolean hasPermissions() {
 		return !permissions.isEmpty();
 	}
+
+	public PageAccessControl getPageAccessControl() {
+		return pageAccessControl;
+	}
+
+	public void setPageAccessControl(PageAccessControl pageAccessControl) {
+		this.pageAccessControl = pageAccessControl;
+	}
+
+	public String[] getPermissions() {
+		return permissions.toArray(new String[0]);
+	}
+
+	public List<String> getPermissionsList() {
+		return new ArrayList<>(permissions);
+	}
+
 }

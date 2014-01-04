@@ -19,6 +19,7 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.V7View;
 
 /**
@@ -37,7 +38,7 @@ public @interface View {
 
 	String uri();
 
-	boolean isPublic() default false;
+	PageAccessControl pageAccessControl() default PageAccessControl.PUBLIC;
 
 	String labelKeyName();
 

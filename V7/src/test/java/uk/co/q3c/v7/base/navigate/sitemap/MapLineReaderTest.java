@@ -12,13 +12,15 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 
 public class MapLineReaderTest {
 
@@ -46,7 +48,7 @@ public class MapLineReaderTest {
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
 		assertThat(result.getPermission()).isEqualTo("permission");
-		assertThat(result.isPublicPage()).isFalse();
+		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
 		// given
 		line = "+-  level2   ; view  ; key  ; permission";
@@ -58,7 +60,7 @@ public class MapLineReaderTest {
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
 		assertThat(result.getPermission()).isEqualTo("permission");
-		assertThat(result.isPublicPage()).isTrue();
+		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
 
 	}
 
@@ -75,7 +77,7 @@ public class MapLineReaderTest {
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
 		assertThat(result.getPermission()).isEqualTo("permission");
-		assertThat(result.isPublicPage()).isFalse();
+		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
 	}
 
@@ -92,7 +94,7 @@ public class MapLineReaderTest {
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
 		assertThat(result.getPermission()).isEqualTo("permission");
-		assertThat(result.isPublicPage()).isTrue();
+		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
 
 	}
 
@@ -109,7 +111,7 @@ public class MapLineReaderTest {
 		assertThat(result.getViewName()).isEmpty();
 		assertThat(result.getKeyName()).isEqualTo("key");
 		assertThat(result.getPermission()).isEqualTo("permission");
-		assertThat(result.isPublicPage()).isTrue();
+		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
 
 	}
 
@@ -126,8 +128,7 @@ public class MapLineReaderTest {
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEmpty();
 		assertThat(result.getPermission()).isEqualTo("permission");
-		assertThat(result.isPublicPage()).isTrue();
-
+		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
 	}
 
 	@Test
@@ -143,7 +144,7 @@ public class MapLineReaderTest {
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEmpty();
 		assertThat(result.getPermission()).isEmpty();
-		assertThat(result.isPublicPage()).isFalse();
+		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
 	}
 
@@ -159,8 +160,8 @@ public class MapLineReaderTest {
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEmpty();
 		assertThat(result.getKeyName()).isEmpty();
-		assertThat(result.getPermission()).isEmpty();
-		assertThat(result.isPublicPage()).isFalse();
+		assertThat(result.getPermission()).isEqualTo("");
+		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
 	}
 
@@ -177,14 +178,15 @@ public class MapLineReaderTest {
 		assertThat(result.getSegment()).isNull();
 		assertThat(result.getViewName()).isNull();
 		assertThat(result.getKeyName()).isNull();
+		assertThat(result.getPageAccessControl()).isNull();
 
 	}
 
 	@Test
-	public void reuse() {
+	public void user() {
 
 		// given
-		String line = "--  level2   ; view  ; key";
+		String line = "~-  level2   ; view  ; key";
 		// when
 		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
 		// then
@@ -192,16 +194,23 @@ public class MapLineReaderTest {
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
+		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.USER);
+
+	}
+
+	@Test
+	public void guest() {
 
 		// given
-		line = "--  part2   ; view2  ; key2";
+		String line = "#-  level2   ; view  ; key";
 		// when
-		result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
-		assertThat(result.getSegment()).isEqualTo("part2");
-		assertThat(result.getViewName()).isEqualTo("view2");
-		assertThat(result.getKeyName()).isEqualTo("key2");
+		assertThat(result.getSegment()).isEqualTo("level2");
+		assertThat(result.getViewName()).isEqualTo("view");
+		assertThat(result.getKeyName()).isEqualTo("key");
+		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.GUEST);
 
 	}
 }

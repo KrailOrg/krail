@@ -327,8 +327,11 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 			node.setUriSegment(lineRecord.getSegment());
 			findView(node, lineRecord.getSegment(), lineRecord.getViewName());
 			labelKeyForName(lineRecord.getKeyName(), node);
-			node.addPermission(lineRecord.getPermission());
-			node.setPublicPage(lineRecord.isPublicPage());
+			node.addPermissionOrRole(lineRecord.getPermission());
+			node.setPageAccessControl(lineRecord.getPageAccessControl());
+			if (lineRecord.isRequiresPageURI()) {
+				node.addPermissionOrRole(sitemap.uri(node));
+			}
 			currentIndent = lineRecord.getIndentLevel();
 			lineIndex++;
 		}
