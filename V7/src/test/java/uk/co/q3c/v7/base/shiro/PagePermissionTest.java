@@ -12,9 +12,7 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.fest.assertions.Assertions.*;
-
-import com.google.inject.Inject;
+import static org.assertj.core.api.Assertions.*;
 
 import org.apache.shiro.authz.permission.WildcardPermission;
 import org.junit.Test;
@@ -23,12 +21,13 @@ import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class URIViewPermissionTest {
+public class PagePermissionTest {
 
 	@Inject
 	StrictURIFragmentHandler uriHandler;
@@ -42,11 +41,11 @@ public class URIViewPermissionTest {
 		NavigationState navigationState = uriHandler.navigationState(uri);
 
 		// when
-		URIViewPermission p = new URIViewPermission(navigationState);
+		PagePermission p = new PagePermission(navigationState);
 		// then
 		// for some reason parts are stored by WildcardPermission with [] around them
-		assertThat(p.toString()).isEqualTo("[uri]:[view]:[private]:[wiggly]");
-		assertThat(p).isEqualTo(new WildcardPermission("uri:view:private:wiggly"));
+		assertThat(p.toString()).isEqualTo("[page]:[view]:[private]:[wiggly]");
+		assertThat(p).isEqualTo(new WildcardPermission("page:view:private:wiggly"));
 
 	}
 
@@ -58,11 +57,49 @@ public class URIViewPermissionTest {
 		NavigationState navigationState = uriHandler.navigationState(uri);
 
 		// when
-		URIViewPermission p = new URIViewPermission(navigationState, true);
+		PagePermission p = new PagePermission(navigationState, true);
 		// then
 		// for some reason parts are stored by WildcardPermission with [] around them
-		assertThat(p).isEqualTo(new WildcardPermission("uri:view:private:wiggly:*"));
+		assertThat(p).isEqualTo(new WildcardPermission("page:view:private:wiggly:*"));
 
+	}
+
+	@Test
+	public void createWithEditAndWildcard() {
+
+		// given
+		String uri = "private/wiggly/id=1";
+		NavigationState navigationState = uriHandler.navigationState(uri);
+		// when
+		PagePermission p = new PagePermission(navigationState, true, true);
+		// then
+		assertThat(p).isEqualTo(new WildcardPermission("page:edit:private:wiggly:*"));
+	}
+
+	@Test
+	public void createWithEdit() {
+
+		// given
+		String uri = "private/wiggly/id=1";
+		NavigationState navigationState = uriHandler.navigationState(uri);
+		// when
+		PagePermission p = new PagePermission(navigationState, false, true);
+		// then
+		assertThat(p).isEqualTo(new WildcardPermission("page:edit:private:wiggly"));
+	}
+
+	@Test
+	public void implies() {
+
+		// given
+		String uri = "private/wiggly/id=1";
+		NavigationState navigationState = uriHandler.navigationState(uri);
+		WildcardPermission wcp = new WildcardPermission("page:view:private:*");
+		// when
+		PagePermission p = new PagePermission(navigationState, true);
+		// then
+		assertThat(p.implies(wcp)).isFalse();
+		assertThat(wcp.implies(p)).isTrue();
 	}
 
 }

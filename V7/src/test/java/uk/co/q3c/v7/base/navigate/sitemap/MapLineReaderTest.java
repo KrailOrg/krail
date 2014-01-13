@@ -47,7 +47,7 @@ public class MapLineReaderTest {
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
-		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.getRoles()).isEqualTo("permission");
 		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
 		// given
@@ -59,7 +59,7 @@ public class MapLineReaderTest {
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
-		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.getRoles()).isEqualTo("permission");
 		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
 
 	}
@@ -76,7 +76,7 @@ public class MapLineReaderTest {
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
-		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.getRoles()).isEqualTo("permission");
 		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
 	}
@@ -93,7 +93,7 @@ public class MapLineReaderTest {
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEqualTo("key");
-		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.getRoles()).isEqualTo("permission");
 		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
 
 	}
@@ -110,7 +110,7 @@ public class MapLineReaderTest {
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEmpty();
 		assertThat(result.getKeyName()).isEqualTo("key");
-		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.getRoles()).isEqualTo("permission");
 		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
 
 	}
@@ -127,7 +127,7 @@ public class MapLineReaderTest {
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEmpty();
-		assertThat(result.getPermission()).isEqualTo("permission");
+		assertThat(result.getRoles()).isEqualTo("permission");
 		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
 	}
 
@@ -143,7 +143,7 @@ public class MapLineReaderTest {
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEqualTo("view");
 		assertThat(result.getKeyName()).isEmpty();
-		assertThat(result.getPermission()).isEmpty();
+		assertThat(result.getRoles()).isEmpty();
 		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
 	}
@@ -160,7 +160,7 @@ public class MapLineReaderTest {
 		assertThat(result.getSegment()).isEqualTo("level2");
 		assertThat(result.getViewName()).isEmpty();
 		assertThat(result.getKeyName()).isEmpty();
-		assertThat(result.getPermission()).isEqualTo("");
+		assertThat(result.getRoles()).isEqualTo("");
 		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
 	}

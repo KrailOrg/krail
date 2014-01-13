@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.view;
 
 /**
  * The View to use as a home page for authenticated users. The default binding
- * is to {@link DefaultRequestSystemAccountView}. The binding is in
+ * is to {@link DefaultRequestSystemAccountCreateView}. The binding is in
  * StandardViewModule. To bind this interface to your own implementation,
  * sub-class {@link StandardViewModule} and override the appropriate binding
  * method.
@@ -22,6 +22,6 @@ package uk.co.q3c.v7.base.view;
  * @author David Sowerby 1 Jan 2013
  * 
  */
-public interface RequestSystemAccountView extends V7View {
+public interface RequestSystemAccountCreateView extends V7View {
 
 }

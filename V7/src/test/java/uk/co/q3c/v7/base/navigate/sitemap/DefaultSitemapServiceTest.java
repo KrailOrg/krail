@@ -71,7 +71,7 @@ public class DefaultSitemapServiceTest {
 
 		@Override
 		protected void define() {
-			addEntry("direct/a", PublicHomeView.class, LabelKey.Home, PageAccessControl.PUBLIC, null);
+			addEntry("direct/a", PublicHomeView.class, LabelKey.Home, PageAccessControl.PUBLIC);
 		}
 
 	}

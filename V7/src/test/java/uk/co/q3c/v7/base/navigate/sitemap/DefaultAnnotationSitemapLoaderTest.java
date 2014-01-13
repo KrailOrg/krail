@@ -62,7 +62,7 @@ public class DefaultAnnotationSitemapLoaderTest {
 
 	}
 
-	@View(uri = "a", labelKeyName = "home", pageAccessControl = PageAccessControl.PERMISSION, permission = "demi-god")
+	@View(uri = "a", labelKeyName = "home", pageAccessControl = PageAccessControl.PERMISSION)
 	static class View1 implements V7View {
 
 		@Override

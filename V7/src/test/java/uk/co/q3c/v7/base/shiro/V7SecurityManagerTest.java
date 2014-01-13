@@ -30,6 +30,7 @@ import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
+import uk.co.q3c.v7.i18n.I18NModule;
 
 import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -40,7 +41,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ UIScopeModule.class })
+@GuiceContext({ UIScopeModule.class, I18NModule.class })
 public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 
 	@Mock

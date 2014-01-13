@@ -20,9 +20,8 @@ public class MapLineRecord {
 	private String segment;
 	private String viewName;
 	private String keyName;
-	private String permission;
+	private String roles;
 	private PageAccessControl pageAccessControl;
-	private boolean requiresPageURI = false;
 
 	public int getIndentLevel() {
 		return indentLevel;
@@ -56,12 +55,12 @@ public class MapLineRecord {
 		this.keyName = keyName;
 	}
 
-	public String getPermission() {
-		return permission;
+	public String getRoles() {
+		return roles;
 	}
 
-	public void setPermission(String permission) {
-		this.permission = permission;
+	public void setRoles(String permission) {
+		this.roles = permission;
 	}
 
 	public PageAccessControl getPageAccessControl() {
@@ -70,14 +69,6 @@ public class MapLineRecord {
 
 	public void setPageAccessControl(PageAccessControl pageAccessControl) {
 		this.pageAccessControl = pageAccessControl;
-	}
-
-	public boolean isRequiresPageURI() {
-		return requiresPageURI;
-	}
-
-	public void setRequiresPageURI(boolean requiresPageURI) {
-		this.requiresPageURI = requiresPageURI;
 	}
 
 }

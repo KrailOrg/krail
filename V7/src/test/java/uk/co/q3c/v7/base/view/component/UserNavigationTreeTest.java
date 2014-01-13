@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-
-import com.google.inject.Inject;
 
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.Subject;
@@ -38,8 +36,9 @@ import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
+import uk.co.q3c.v7.base.shiro.PagePermission;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
-import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.useropt.UserOption;
@@ -48,6 +47,7 @@ import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -86,6 +86,9 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 	@Mock
 	LoginStatusHandler loginStatusHandler;
 
+	@Mock
+	NavigationState navigationState;
+
 	@Override
 	@Before
 	public void setup() {
@@ -96,6 +99,9 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		when(
 				userOption.getOptionAsInt(DefaultUserNavigationTree.class.getSimpleName(),
 						DefaultUserNavigationTree.maxLevelOpt, -1)).thenReturn(-1);
+		when(navigationState.getVirtualPage()).thenReturn("private/wiggly");
+		when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
+		when(navigator.getCurrentNavigationState()).thenReturn(navigationState);
 		createUI();
 	}
 
@@ -124,7 +130,9 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 				loginStatusHandler, translate);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(3);
-		assertThat(unt.getItemIds()).containsOnly(newNode1, newNode2, newNode3);
+		@SuppressWarnings("unchecked")
+		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
+		assertThat(nodes).containsOnly(newNode1, newNode2, newNode3);
 		assertThat(unt.getParent(newNode2)).isEqualTo(newNode1);
 		assertThat(unt.getParent(newNode3)).isEqualTo(newNode2);
 		assertThat(unt.getParent(newNode1)).isEqualTo(null);
@@ -146,7 +154,9 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 				loginStatusHandler, translate);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(6);
-		assertThat(unt.getItemIds()).containsOnly(newNode1, newNode2, newNode3, newNode4, newNode5, newNode6);
+		@SuppressWarnings("unchecked")
+		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
+		assertThat(nodes).containsOnly(newNode1, newNode2, newNode3, newNode4, newNode5, newNode6);
 		assertThat(unt.getParent(newNode2)).isEqualTo(newNode1);
 		assertThat(unt.getParent(newNode3)).isEqualTo(newNode2);
 		assertThat(unt.getParent(newNode1)).isEqualTo(null);
@@ -173,7 +183,9 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		// when
 		unt.setMaxLevel(2);
 		// then
-		assertThat(unt.getItemIds()).containsOnly(newNode1, newNode2, newNode4, newNode5);
+		@SuppressWarnings("unchecked")
+		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
+		assertThat(nodes).containsOnly(newNode1, newNode2, newNode4, newNode5);
 		assertThat(unt.isLeaf(newNode1)).isFalse();
 		assertThat(unt.isLeaf(newNode2)).isTrue();
 
@@ -252,22 +264,28 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 
-		NavigationState privateNavState = uriHandler.navigationState("private");
-		NavigationState publicNavState = uriHandler.navigationState("public");
-		URIViewPermission privatePage = new URIViewPermission(privateNavState);
-		URIViewPermission publicPage = new URIViewPermission(publicNavState);
-		buildSitemap(4);
+		// set up the Sitemap with a mix of permitted and not permitted nodes
 
-		when(subject.isPermitted(privatePage)).thenReturn(false);
+		buildSitemap(4);
+		newNode1.setPageAccessControl(PageAccessControl.PUBLIC);
+		newNode2.setPageAccessControl(PageAccessControl.PUBLIC);
+		newNode3.setPageAccessControl(PageAccessControl.PERMISSION);
+		newNode4.setPageAccessControl(PageAccessControl.PERMISSION);
+
+		PagePermission p3 = sitemap.pagePermission(newNode3);
+		PagePermission p4 = sitemap.pagePermission(newNode4);
+
+		when(subject.isPermitted(p3)).thenReturn(true);
 		// represents the case where user not authenticated
-		when(subject.isPermitted(publicPage)).thenReturn(false);
+		when(subject.isPermitted(p4)).thenReturn(false);
+
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
 				loginStatusHandler, translate);
 		// then
 		assertThat(unt.containsId(newNode1)).isTrue();
-		assertThat(unt.containsId(newNode2)).isFalse(); // logout
-		assertThat(unt.containsId(newNode3)).isFalse();
+		assertThat(unt.containsId(newNode2)).isFalse(); // logout page is not shown in tree.
+		assertThat(unt.containsId(newNode3)).isTrue();
 		assertThat(unt.containsId(newNode4)).isFalse();
 
 	}

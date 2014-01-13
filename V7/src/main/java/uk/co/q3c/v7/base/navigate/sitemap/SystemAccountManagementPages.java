@@ -12,6 +12,15 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
+import uk.co.q3c.v7.base.view.RequestSystemAccountCreateView;
+import uk.co.q3c.v7.base.view.RequestSystemAccountEnableView;
+import uk.co.q3c.v7.base.view.RequestSystemAccountRefreshView;
+import uk.co.q3c.v7.base.view.RequestSystemAccountResetView;
+import uk.co.q3c.v7.base.view.RequestSystemAccountUnlockView;
+import uk.co.q3c.v7.base.view.SystemAccountView;
+import uk.co.q3c.v7.i18n.LabelKey;
+
 /**
  * A set of pages to support user account management.
  * 
@@ -26,6 +35,17 @@ public class SystemAccountManagementPages extends DirectSitemapModule {
 	 */
 	@Override
 	protected void define() {
-	}
+		addEntry("system-account", SystemAccountView.class, LabelKey.System_Account, PageAccessControl.PUBLIC);
+		addEntry("system-account/request-account", RequestSystemAccountCreateView.class, LabelKey.Request_Account,
+				PageAccessControl.PUBLIC);
+		addEntry("system-account/enable-account", RequestSystemAccountEnableView.class, LabelKey.Enable_Account,
+				PageAccessControl.PUBLIC);
+		addEntry("system-account/refresh-account", RequestSystemAccountRefreshView.class, LabelKey.Refresh_Account,
+				PageAccessControl.PUBLIC);
+		addEntry("system-account/reset-account", RequestSystemAccountResetView.class, LabelKey.Reset_Account,
+				PageAccessControl.PUBLIC);
+		addEntry("system-account/unlock-account", RequestSystemAccountUnlockView.class, LabelKey.Unlock_Account,
+				PageAccessControl.PUBLIC);
 
+	}
 }

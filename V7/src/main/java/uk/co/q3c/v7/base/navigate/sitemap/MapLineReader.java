@@ -57,7 +57,7 @@ public class MapLineReader {
 			String labelKeyAttribute = (iterator.hasNext()) ? iterator.next() : "";
 			labelKey(labelKeyAttribute);
 			String permissionAttribute = (iterator.hasNext()) ? iterator.next() : "";
-			permission(permissionAttribute);
+			roles(permissionAttribute);
 			if (lineRecord.getIndentLevel() > currentIndent + 1) {
 				indentationErrors.add("'" + lineRecord.getSegment() + "' at line " + lineIndex);
 			}
@@ -66,24 +66,21 @@ public class MapLineReader {
 	}
 
 	/**
-	 * see the documentataion at https://sites.google.com/site/q3cjava/sitemap#TOC-map- for description of use of
-	 * permissions attribute
+	 * see the documentation at https://sites.google.com/site/q3cjava/sitemap#TOC-map- for description of use of
+	 * rolesAttribute
 	 * 
-	 * @param permissionAttribute
+	 * @param rolesAttribute
 	 */
-	private void permission(String permissionAttribute) {
-		lineRecord.setPermission(permissionAttribute);
+	private void roles(String rolesAttribute) {
+		lineRecord.setRoles(rolesAttribute);
 
 		if (lineRecord.getPageAccessControl() == PageAccessControl.PERMISSION) {
-			if (permissionAttribute.startsWith("roles=")) {
+			if (rolesAttribute.startsWith("roles=")) {
 				lineRecord.setPageAccessControl(PageAccessControl.ROLES);
+				lineRecord.setRoles(rolesAttribute);
 			} else {
-				if (permissionAttribute.isEmpty()) {
-					lineRecord.setRequiresPageURI(true);
-				} else {
-					if (permissionAttribute.equals("*")) {
-						lineRecord.setPageAccessControl(PageAccessControl.AUTHENTICATION);
-					}
+				if (rolesAttribute.equals("*")) {
+					lineRecord.setPageAccessControl(PageAccessControl.AUTHENTICATION);
 				}
 			}
 		}

@@ -56,15 +56,11 @@ public class DefaultDirectSitemapLoaderTest {
 	static String page2 = "public/options";
 	static String page3 = "public/options/detail";
 
-	static String permission1 = "p1";
-	static String permission2 = "p2";
-	static String permission3 = "p3";
-
 	public static class TestDirectSitemapModule_A extends DirectSitemapModule {
 
 		@Override
 		protected void define() {
-			addEntry(page1, View1.class, LabelKey.Authorisation, PageAccessControl.PERMISSION, permission1);
+			addEntry(page1, View1.class, LabelKey.Authorisation, PageAccessControl.PERMISSION);
 		}
 
 	}
@@ -73,8 +69,8 @@ public class DefaultDirectSitemapLoaderTest {
 
 		@Override
 		protected void define() {
-			addEntry(page2, OptionsView.class, TestLabelKey.Opt, PageAccessControl.PUBLIC, permission2);
-			addEntry(page3, View2.class, TestLabelKey.MoneyInOut, PageAccessControl.PUBLIC, permission3);
+			addEntry(page2, OptionsView.class, TestLabelKey.Opt, PageAccessControl.PUBLIC);
+			addEntry(page3, View2.class, TestLabelKey.MoneyInOut, PageAccessControl.PUBLIC);
 		}
 
 	}

@@ -426,20 +426,6 @@ public class DefaultFileSitemapLoaderTest {
 
 	}
 
-	@Test
-	public void defaultPermissionIsPageURI() throws IOException {
-
-		// given
-		substituteIn(30, "wigglybeast", "");
-		prepFile();
-		// when
-		loader.parse(modifiedFile);
-		// then
-		Sitemap sitemap = loader.getSitemap();
-		SitemapNode node = sitemap.nodeFor("my-account/options");
-		assertThat(node.getPermissions()).contains("my-account/options");
-	}
-
 	private void validateNode(Sitemap sitemap, SitemapNode node) {
 		String uri = sitemap.uri(node);
 		switch (uri) {

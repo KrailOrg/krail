@@ -24,6 +24,8 @@ import uk.co.q3c.util.BasicForest;
 import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.shiro.PagePermission;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
@@ -63,11 +65,13 @@ public class Sitemap {
 	private final BasicForest<SitemapNode> forest;
 	private final Map<String, SitemapNode> uriMap = new LinkedHashMap<>();
 	private final URIFragmentHandler uriHandler;
+	private final Translate translate;
 
 	@Inject
-	public Sitemap(URIFragmentHandler uriHandler) {
+	public Sitemap(URIFragmentHandler uriHandler, Translate translate) {
 		super();
 		this.uriHandler = uriHandler;
+		this.translate = translate;
 		forest = new BasicForest<>();
 	}
 
@@ -143,6 +147,7 @@ public class Sitemap {
 			String segment = segments.get(i);
 			childNode = new SitemapNode();
 			childNode.setUriSegment(segment);
+			childNode.setTranslate(translate);
 			addChild(parentNode, childNode);
 			parentNode = childNode;
 		}
@@ -550,6 +555,26 @@ public class Sitemap {
 	@Override
 	public String toString() {
 		return forest.toString();
+	}
+
+	/**
+	 * Returns a {@link NavigationState} object representing the URI for the {@code node}
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public NavigationState navigationState(SitemapNode node) {
+		return uriHandler.navigationState(uri(node));
+	}
+
+	/**
+	 * Returns a {@link PagePermission} object for {@code node}
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public PagePermission pagePermission(SitemapNode node) {
+		return new PagePermission(navigationState(node));
 	}
 
 }

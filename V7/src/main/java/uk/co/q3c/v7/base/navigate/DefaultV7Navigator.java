@@ -16,6 +16,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
+import uk.co.q3c.v7.base.shiro.PagePermission;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.ui.ScopedUI;
@@ -333,13 +334,13 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 			authorised = (!subject.isAuthenticated()) && (!subject.isRemembered());
 			break;
 		case PERMISSION:
-			authorised = subject.isPermittedAll(node.getPermissions());
+			authorised = subject.isPermitted(new PagePermission(navigationState));
 			break;
 		case PUBLIC:
 			authorised = true;
 			break;
 		case ROLES:
-			authorised = subject.hasAllRoles(node.getPermissionsList());
+			authorised = subject.hasAllRoles(node.getRoles());
 			break;
 		case USER:
 			authorised = (subject.isAuthenticated()) || (subject.isRemembered());

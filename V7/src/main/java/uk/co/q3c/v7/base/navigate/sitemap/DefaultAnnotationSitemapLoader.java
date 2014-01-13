@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
+import com.mycila.inject.internal.guava.base.Splitter;
 
 @SuppressWarnings("rawtypes")
 public class DefaultAnnotationSitemapLoader implements AnnotationSitemapLoader {
@@ -70,8 +72,13 @@ public class DefaultAnnotationSitemapLoader implements AnnotationSitemapLoader {
 						node.setViewClass(viewClass);
 						node.setTranslate(translate);
 						node.setPageAccessControl(annotation.pageAccessControl());
-						node.addPermissionOrRole(annotation.permission());
-
+						if (StringUtils.isNotEmpty(annotation.roles())) {
+							Splitter splitter = Splitter.on(",").trimResults();
+							Iterable<String> roles = splitter.split(annotation.roles());
+							for (String role : roles) {
+								node.addRole(role);
+							}
+						}
 						I18NKey<?> key = keyFromName(annotation.labelKeyName(), entry.getValue().getLabelSample());
 						node.setLabelKey(key, currentLocale.getLocale(), collator);
 

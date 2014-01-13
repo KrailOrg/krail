@@ -34,6 +34,8 @@ import java.util.TreeMap;
  * <code>navigationState.setVirtualPage("another/newpage");<br>
  * navigationState.setFragment(uriFragmentHandler.fragment(navigationState));
  * </code>
+ * <p>
+ * A NavigationState 'a' is equal to NavigationState 'b' if a.getFragment.equals(b.getFragment())
  * 
  * @author David Sowerby
  * 
@@ -117,6 +119,31 @@ public class NavigationState implements Serializable {
 	@Override
 	public String toString() {
 		return fragment;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fragment == null) ? 0 : fragment.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NavigationState other = (NavigationState) obj;
+		if (fragment == null) {
+			if (other.fragment != null)
+				return false;
+		} else if (!fragment.equals(other.fragment))
+			return false;
+		return true;
 	}
 
 }

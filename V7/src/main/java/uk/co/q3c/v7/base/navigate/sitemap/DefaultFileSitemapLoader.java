@@ -38,6 +38,7 @@ import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
+import com.mycila.inject.internal.guava.base.Splitter;
 import com.mycila.inject.internal.guava.collect.ImmutableMap;
 
 /**
@@ -327,11 +328,13 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 			node.setUriSegment(lineRecord.getSegment());
 			findView(node, lineRecord.getSegment(), lineRecord.getViewName());
 			labelKeyForName(lineRecord.getKeyName(), node);
-			node.addPermissionOrRole(lineRecord.getPermission());
-			node.setPageAccessControl(lineRecord.getPageAccessControl());
-			if (lineRecord.isRequiresPageURI()) {
-				node.addPermissionOrRole(sitemap.uri(node));
+
+			Splitter splitter = Splitter.on(",").trimResults();
+			Iterable<String> roles = splitter.split(lineRecord.getRoles());
+			for (String role : roles) {
+				node.addRole(role);
 			}
+			node.setPageAccessControl(lineRecord.getPageAccessControl());
 			currentIndent = lineRecord.getIndentLevel();
 			lineIndex++;
 		}

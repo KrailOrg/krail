@@ -42,8 +42,7 @@ public class DirectSitemapModuleTest {
 
 		@Override
 		protected void define() {
-			addEntry("private/home", PrivateHomeView.class, LabelKey.Authorisation, PageAccessControl.PERMISSION,
-					"permission");
+			addEntry("private/home", PrivateHomeView.class, LabelKey.Authorisation, PageAccessControl.PERMISSION);
 		}
 
 	}
@@ -52,8 +51,8 @@ public class DirectSitemapModuleTest {
 
 		@Override
 		protected void define() {
-			addEntry("public/home", PublicHomeView.class, LabelKey.Home, PageAccessControl.PUBLIC, "permission");
-			addEntry("public/login", LoginView.class, LabelKey.Log_In, PageAccessControl.GUEST, "permission");
+			addEntry("public/home", PublicHomeView.class, LabelKey.Home, PageAccessControl.PUBLIC);
+			addEntry("public/login", LoginView.class, LabelKey.Log_In, PageAccessControl.GUEST);
 		}
 
 	}
@@ -71,19 +70,19 @@ public class DirectSitemapModuleTest {
 		assertThat(entry.getViewClass()).isEqualTo(PrivateHomeView.class);
 		assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 		assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Authorisation);
-		assertThat(entry.getPermission()).isEqualTo("permission");
+		assertThat(entry.getRoles()).isNullOrEmpty();
 
 		entry = map.get("public/home");
 		assertThat(entry.getViewClass()).isEqualTo(PublicHomeView.class);
 		assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
 		assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Home);
-		assertThat(entry.getPermission()).isEqualTo("permission");
+		assertThat(entry.getRoles()).isNullOrEmpty();
 
 		entry = map.get("public/login");
 		assertThat(entry.getViewClass()).isEqualTo(LoginView.class);
 		assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.GUEST);
 		assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Log_In);
-		assertThat(entry.getPermission()).isEqualTo("permission");
+		assertThat(entry.getRoles()).isNullOrEmpty();
 
 	}
 }

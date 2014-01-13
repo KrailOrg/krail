@@ -15,8 +15,6 @@ package uk.co.q3c.v7.base.view.component;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +29,15 @@ import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
+import uk.co.q3c.v7.base.shiro.PagePermission;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
-import uk.co.q3c.v7.base.shiro.URIViewPermission;
 import uk.co.q3c.v7.base.useropt.UserOption;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
@@ -106,7 +105,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 			level = 1;
 			// doesn't make sense to show the logout page
 			if (!node.getLabelKey().equals(StandardPageKey.Logout)) {
-				// loadNode(null, node, node.equals(sitemap.getPublicRootNode()));
+				loadNode(null, node);
 			}
 		}
 	}
@@ -117,13 +116,13 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	 * @param parentNode
 	 * @param childNode
 	 */
-	private void loadNode(SitemapNode parentNode, SitemapNode childNode, boolean publicBranch) {
+	private void loadNode(SitemapNode parentNode, SitemapNode childNode) {
 		// construct the permission
 		String uri = sitemap.uri(childNode);
-		URIViewPermission pagePermissionRequired = new URIViewPermission(navigator.getCurrentNavigationState());
+		PagePermission pagePermissionRequired = sitemap.pagePermission(childNode);
 
 		// if permitted, add it
-		if (publicBranch || subjectProvider.get().isPermitted(pagePermissionRequired)) {
+		if (subjectProvider.get().isPermitted(pagePermissionRequired)) {
 			log.debug("user has permission to view URI {}", uri);
 			this.addItem(childNode);
 			I18NKey<?> key = childNode.getLabelKey();
@@ -150,7 +149,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 				}
 				for (SitemapNode child : children) {
 					if (!child.getLabelKey().equals(StandardPageKey.Logout)) {
-						loadNode(newParentNode, child, publicBranch);
+						loadNode(newParentNode, child);
 					}
 				}
 

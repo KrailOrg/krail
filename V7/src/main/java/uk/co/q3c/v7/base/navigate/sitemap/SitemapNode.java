@@ -14,7 +14,6 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.text.CollationKey;
 import java.text.Collator;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -28,6 +27,8 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * Represents a node in the site map (equivalent to a web site 'page'). It contains a URI segment (this is just one part
@@ -67,10 +68,10 @@ public class SitemapNode {
 	private Translate translate;
 	private PageAccessControl pageAccessControl;
 	/**
-	 * Contains required permissions if {@link #pageAccessControl} is {@link PageAccessControl#PERMISSION} or required
-	 * roles if {@link #pageAccessControl} is {@link PageAccessControl#ROLES}
+	 * Contains roles required to access this page, but is not used unless {@link #pageAccessControl} is
+	 * {@link PageAccessControl#ROLES}
 	 */
-	private final Set<String> permissions = new HashSet<>();
+	private final Set<String> roles = new HashSet<>();
 
 	public SitemapNode(String uriSegment, Class<? extends V7View> viewClass, I18NKey<?> labelKey, Locale locale,
 			Collator collator, Translate translate) {
@@ -150,11 +151,11 @@ public class SitemapNode {
 		buf.append(", labelKey=");
 		buf.append((labelKey == null) ? "null" : ((Enum<?>) labelKey).name());
 		buf.append(", permissions=");
-		if (permissions.isEmpty()) {
+		if (roles.isEmpty()) {
 			buf.append("none");
 		} else {
 			boolean first = true;
-			for (String permission : permissions) {
+			for (String permission : roles) {
 				if (!first) {
 					buf.append(';');
 				}
@@ -216,17 +217,16 @@ public class SitemapNode {
 	}
 
 	/**
-	 * Adds a required permissions if {@link #pageAccessControl} is {@link PageAccessControl#PERMISSION} or a required
-	 * role if {@link #pageAccessControl} is {@link PageAccessControl#ROLES}
+	 * Adds a role. Only relevant if {@link #pageAccessControl} is {@link PageAccessControl#ROLES}
 	 */
-	public void addPermissionOrRole(String permissionOrRole) {
-		if (StringUtils.isNotEmpty(permissionOrRole)) {
-			permissions.add(permissionOrRole);
+	public void addRole(String role) {
+		if (StringUtils.isNotEmpty(role)) {
+			roles.add(role);
 		}
 	}
 
 	public boolean hasPermissions() {
-		return !permissions.isEmpty();
+		return !roles.isEmpty();
 	}
 
 	public PageAccessControl getPageAccessControl() {
@@ -235,14 +235,11 @@ public class SitemapNode {
 
 	public void setPageAccessControl(PageAccessControl pageAccessControl) {
 		this.pageAccessControl = pageAccessControl;
+
 	}
 
-	public String[] getPermissions() {
-		return permissions.toArray(new String[0]);
-	}
-
-	public List<String> getPermissionsList() {
-		return new ArrayList<>(permissions);
+	public List<String> getRoles() {
+		return ImmutableList.copyOf(roles);
 	}
 
 }

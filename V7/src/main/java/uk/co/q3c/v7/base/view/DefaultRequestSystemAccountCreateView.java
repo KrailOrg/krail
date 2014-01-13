@@ -8,10 +8,10 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 
 @UIScoped
-public class DefaultRequestSystemAccountView extends StandardPageViewBase implements RequestSystemAccountView {
+public class DefaultRequestSystemAccountCreateView extends StandardPageViewBase implements RequestSystemAccountCreateView {
 
 	@Inject
-	protected DefaultRequestSystemAccountView(V7Navigator navigator) {
+	protected DefaultRequestSystemAccountCreateView(V7Navigator navigator) {
 		super(navigator);
 	}
 

@@ -16,11 +16,11 @@ import org.apache.shiro.authz.permission.WildcardPermission;
 
 import uk.co.q3c.v7.base.navigate.NavigationState;
 
-public class URIViewPermission extends WildcardPermission {
+public class PagePermission extends WildcardPermission {
 
-	public URIViewPermission(NavigationState navigationState) {
+	public PagePermission(NavigationState navigationState) {
 		super();
-		construct(navigationState, false);
+		construct(navigationState, false, false);
 	}
 
 	/**
@@ -30,9 +30,14 @@ public class URIViewPermission extends WildcardPermission {
 	 * @param uri
 	 * @return
 	 */
-	public URIViewPermission(NavigationState navigationState, boolean appendWildcard) {
+	public PagePermission(NavigationState navigationState, boolean appendWildcard) {
 		super();
-		construct(navigationState, appendWildcard);
+		construct(navigationState, appendWildcard, false);
+	}
+
+	public PagePermission(NavigationState navigationState, boolean appendWildcard, boolean edit) {
+		super();
+		construct(navigationState, appendWildcard, edit);
 	}
 
 	/**
@@ -50,11 +55,14 @@ public class URIViewPermission extends WildcardPermission {
 	 * @param appendWildcard
 	 * @return
 	 */
-	protected void construct(NavigationState navigationState, boolean appendWildcard) {
-		String prefix = "uri:view:";
+	protected void construct(NavigationState navigationState, boolean appendWildcard, boolean edit) {
+		String action = edit ? "edit:" : "view:";
+		String prefix = "page:";
 		String pagePerm = navigationState.getVirtualPage().replace("/", ":");
+		String wildcard = appendWildcard ? ":*" : "";
 
-		String permissionString = appendWildcard ? prefix + pagePerm + ":*" : prefix + pagePerm;
+		String permissionString = prefix + action + pagePerm + wildcard;
 		setParts(permissionString);
 	}
+
 }

@@ -15,12 +15,41 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKey;
 
+/**
+ * Implementations check the Sitemap for inconsistencies, specifically:
+ * <ol>
+ * <li>nodes without a view class
+ * <li>nodes without a label key
+ * </ol>
+ * Optionally missing views or keys can be replaced with defaults by making calls to
+ * {@link #replaceMissingViewWith(Class)} and/or {@link #replaceMissingKeyWith(I18NKey)} before calling {@link #check()}
+ * 
+ * @author David Sowerby
+ * 
+ */
 public interface SitemapChecker {
 
+	/**
+	 * Throws a {@link SitemapException} if the check finishes with one or more nodes not having a view or a key. This
+	 * will also depend on whether {@link #replaceMissingKeyWith(I18NKey)} and/or {@link #replaceMissingViewWith(Class)}
+	 * have been called.
+	 */
 	void check();
 
+	/**
+	 * If a node has no view class defined, it has its view class set to {@code defaultView}
+	 * 
+	 * @param defaultView
+	 * @return
+	 */
 	SitemapChecker replaceMissingViewWith(Class<? extends V7View> defaultView);
 
+	/**
+	 * If a node has no label key defined, it has its label key set to {@code defaultKey}
+	 * 
+	 * @param defaultKey
+	 * @return
+	 */
 	SitemapChecker replaceMissingKeyWith(I18NKey<?> defaultKey);
 
 }

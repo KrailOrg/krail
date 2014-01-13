@@ -21,8 +21,9 @@ import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
-import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
+import uk.co.q3c.v7.base.shiro.PagePermission;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.LoginView;
@@ -269,7 +270,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 
-		Sitemap sitemap = new Sitemap(uriHandler);
+		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		SitemapNode privateHomeNode = sitemap.append("private/home");
 		SitemapNode node2 = sitemap.append("public/home/view2");
 		SitemapNode loginNode = sitemap.append("public/login");
@@ -281,11 +282,9 @@ public class DefaultV7NavigatorTest {
 		node2.setPageAccessControl(PageAccessControl.PUBLIC);
 		loginNode.setPageAccessControl(PageAccessControl.PUBLIC);
 
-		privateHomeNode.addPermissionOrRole("private/home");
 		privateHomeNode.setViewClass(View1.class);
 		privateHomeNode.setPageAccessControl(PageAccessControl.PERMISSION);
-		String[] permissions = privateHomeNode.getPermissions();
-		when(subject.isPermittedAll(permissions)).thenReturn(true);
+		when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
 		node2.setViewClass(View2.class);
 		loginNode.setViewClass(LoginView.class);
 		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemapService, subjectProvider,
@@ -720,9 +719,7 @@ public class DefaultV7NavigatorTest {
 
 		mockNode2.setViewClass(View2.class);
 		mockNode2.setPageAccessControl(PageAccessControl.PERMISSION);
-		mockNode2.addPermissionOrRole(page);
-		String[] permissions = mockNode2.getPermissions();
-		when(subject.isPermittedAll(permissions)).thenReturn(true);
+		when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -741,9 +738,7 @@ public class DefaultV7NavigatorTest {
 
 		mockNode2.setViewClass(View2.class);
 		mockNode2.setPageAccessControl(PageAccessControl.PERMISSION);
-		mockNode2.addPermissionOrRole(page);
-		String[] permissions = mockNode2.getPermissions();
-		when(subject.isPermittedAll(permissions)).thenReturn(false);
+		when(subject.isPermitted(any(PagePermission.class))).thenReturn(false);
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -763,9 +758,9 @@ public class DefaultV7NavigatorTest {
 
 		mockNode2.setViewClass(View2.class);
 		mockNode2.setPageAccessControl(PageAccessControl.ROLES);
-		mockNode2.addPermissionOrRole("admin");
-		mockNode2.addPermissionOrRole("beast");
-		List<String> permissions = mockNode2.getPermissionsList();
+		mockNode2.addRole("admin");
+		mockNode2.addRole("beast");
+		List<String> permissions = mockNode2.getRoles();
 		when(subject.hasAllRoles(permissions)).thenReturn(true);
 		// when
 		navigator.navigateTo(page);
@@ -787,9 +782,9 @@ public class DefaultV7NavigatorTest {
 
 		mockNode2.setViewClass(View2.class);
 		mockNode2.setPageAccessControl(PageAccessControl.ROLES);
-		mockNode2.addPermissionOrRole("admin");
-		mockNode2.addPermissionOrRole("beast");
-		List<String> permissions = mockNode2.getPermissionsList();
+		mockNode2.addRole("admin");
+		mockNode2.addRole("beast");
+		List<String> permissions = mockNode2.getRoles();
 		when(subject.hasAllRoles(permissions)).thenReturn(false);
 		// when
 		navigator.navigateTo(page);

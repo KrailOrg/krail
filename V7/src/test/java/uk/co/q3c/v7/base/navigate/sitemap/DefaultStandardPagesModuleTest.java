@@ -32,7 +32,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ DefaultStandardPagesModule.class, I18NModule.class })
-public class StandardPagesTest {
+public class DefaultStandardPagesModuleTest {
 
 	@Inject
 	Map<String, StandardPageSitemapEntry> map;

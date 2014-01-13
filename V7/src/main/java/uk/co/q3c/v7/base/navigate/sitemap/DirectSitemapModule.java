@@ -72,9 +72,9 @@ public abstract class DirectSitemapModule extends AbstractModule {
 	 *            the permission string for the page. May be null if no permissions are set
 	 */
 	protected void addEntry(String uri, Class<? extends V7View> viewClass, I18NKey<?> labelKey,
-			PageAccessControl pageAccessControl, String permission) {
+			PageAccessControl pageAccessControl) {
 
-		DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, permission);
+		DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl);
 		mapBinder.addBinding(uri).toInstance(entry);
 
 	}

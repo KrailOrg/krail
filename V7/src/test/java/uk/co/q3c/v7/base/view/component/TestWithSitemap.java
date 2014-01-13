@@ -15,8 +15,6 @@ package uk.co.q3c.v7.base.view.component;
 import java.text.Collator;
 import java.util.Locale;
 
-import com.google.inject.Inject;
-
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
@@ -32,6 +30,7 @@ import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
@@ -60,7 +59,7 @@ public abstract class TestWithSitemap {
 
 	@Before
 	public void setup() {
-		sitemap = new Sitemap(uriHandler);
+		sitemap = new Sitemap(uriHandler, translate);
 		;
 		collator = Collator.getInstance(locale);
 	}

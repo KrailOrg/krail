@@ -12,7 +12,13 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import java.text.Collator;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
 import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
 
 import com.google.inject.Inject;
@@ -31,11 +37,19 @@ import com.google.inject.Inject;
 public class DefaultSitemapChecker implements SitemapChecker {
 
 	private Sitemap sitemap;
+	private Class<? extends V7View> defaultView;
+	private I18NKey<?> defaultKey;
+	private final Set<String> missingViewClasses;
+	private final Set<String> missingLabelKeys;
+	private final CurrentLocale currentLocale;
 
 	@Inject
-	protected DefaultSitemapChecker(Sitemap sitemap) {
+	protected DefaultSitemapChecker(Sitemap sitemap, CurrentLocale currentLocale) {
 		super();
 		this.sitemap = sitemap;
+		this.currentLocale = currentLocale;
+		missingViewClasses = new HashSet<>();
+		missingLabelKeys = new HashSet<>();
 	}
 
 	public Sitemap getSitemap() {
@@ -48,18 +62,50 @@ public class DefaultSitemapChecker implements SitemapChecker {
 
 	@Override
 	public void check() {
+		Locale locale = currentLocale.getLocale();
+		Collator collator = Collator.getInstance(locale);
+		for (SitemapNode node : sitemap.getAllNodes()) {
+			if (node.getViewClass() == null) {
+				if (defaultView != null) {
+					node.setViewClass(defaultView);
+				} else {
+					missingViewClasses.add(sitemap.uri(node));
+				}
+			}
+
+			if (node.getLabelKey() == null) {
+				if (defaultKey != null) {
+					node.setLabelKey(defaultKey, locale, collator);
+				} else {
+					missingLabelKeys.add(sitemap.uri(node));
+				}
+			}
+		}
+		if (missingViewClasses.isEmpty() && missingLabelKeys.isEmpty()) {
+			return;
+		}
+		throw new SitemapException("Sitemap check failed");
 	}
 
 	@Override
 	public SitemapChecker replaceMissingViewWith(Class<? extends V7View> defaultView) {
-
-		return null;
+		this.defaultView = defaultView;
+		return this;
 	}
 
 	@Override
 	public SitemapChecker replaceMissingKeyWith(I18NKey<?> defaultKey) {
 
-		return null;
+		this.defaultKey = defaultKey;
+		return this;
+	}
+
+	public Set<String> getMissingViewClasses() {
+		return missingViewClasses;
+	}
+
+	public Set<String> getMissingLabelKeys() {
+		return missingLabelKeys;
 	}
 
 }

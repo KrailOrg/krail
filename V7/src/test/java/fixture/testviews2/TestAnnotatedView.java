@@ -26,7 +26,7 @@ import com.vaadin.ui.Component;
  * @author David Sowerby
  * 
  */
-@View(uri = "a/b", labelKeyName = "Transfers", pageAccessControl = PageAccessControl.PERMISSION, permission = "admin")
+@View(uri = "a/b", labelKeyName = "Transfers", pageAccessControl = PageAccessControl.PERMISSION)
 public class TestAnnotatedView implements V7View {
 
 	@Override
