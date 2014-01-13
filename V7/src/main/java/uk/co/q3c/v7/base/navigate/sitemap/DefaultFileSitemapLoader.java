@@ -36,9 +36,9 @@ import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
-import com.mycila.inject.internal.guava.base.Splitter;
 import com.mycila.inject.internal.guava.collect.ImmutableMap;
 
 /**

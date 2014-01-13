@@ -27,8 +27,8 @@ import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.common.base.Splitter;
 import com.google.inject.Inject;
-import com.mycila.inject.internal.guava.base.Splitter;
 
 @SuppressWarnings("rawtypes")
 public class DefaultAnnotationSitemapLoader implements AnnotationSitemapLoader {
