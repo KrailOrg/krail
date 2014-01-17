@@ -28,6 +28,7 @@ import com.google.inject.multibindings.MapBinder;
 public class DefaultStandardPagesModule extends AbstractModule {
 
 	private MapBinder<String, StandardPageSitemapEntry> mapBinder;
+	private MapBinder<String, RedirectEntry> redirectBinder;
 
 	/**
 	 * Override this method to define different {@link Sitemap} entries for Standard Pages. All of the views specified
@@ -37,18 +38,18 @@ public class DefaultStandardPagesModule extends AbstractModule {
 	 * @see #addEntry(String, Class, I18NKey, boolean, String)
 	 */
 	protected void define() {
-		addEntry("public/home", PublicHomeView.class, StandardPageKey.Public_Home, PageAccessControl.PUBLIC, null);
-		addEntry("public/login", LoginView.class, StandardPageKey.Login, PageAccessControl.PUBLIC, null);
-		addEntry("public/logout", LogoutView.class, StandardPageKey.Logout, PageAccessControl.PUBLIC, null);
+		addEntry("home", PublicHomeView.class, StandardPageKey.Public_Home, PageAccessControl.PUBLIC, null);
+		addEntry("login", LoginView.class, StandardPageKey.Login, PageAccessControl.PUBLIC, null);
+		addEntry("logout", LogoutView.class, StandardPageKey.Logout, PageAccessControl.PUBLIC, null);
 		addEntry("private/home", PrivateHomeView.class, StandardPageKey.Private_Home, PageAccessControl.PERMISSION,
 				null);
+		addRedirect("private", "private/home");
 	};
 
 	@Override
 	protected void configure() {
-		MapBinder<String, StandardPageSitemapEntry> mapBinder = MapBinder.newMapBinder(binder(), String.class,
-				StandardPageSitemapEntry.class);
-		this.mapBinder = mapBinder;
+		this.mapBinder = MapBinder.newMapBinder(binder(), String.class, StandardPageSitemapEntry.class);
+		redirectBinder = MapBinder.newMapBinder(binder(), String.class, RedirectEntry.class);
 		define();
 	}
 
@@ -73,6 +74,10 @@ public class DefaultStandardPagesModule extends AbstractModule {
 		StandardPageSitemapEntry entry = new StandardPageSitemapEntry(viewClass, pageKey, pageAccessControl, permission);
 		mapBinder.addBinding(uri).toInstance(entry);
 
+	}
+
+	protected void addRedirect(String fromURI, String toURI) {
+		redirectBinder.addBinding(fromURI).toInstance(new RedirectEntry(toURI));
 	}
 
 }

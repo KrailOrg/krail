@@ -52,7 +52,7 @@ public class DefaultStandardPagesModuleTest {
 		loader.load();
 		// then
 
-		assertThat(sitemap.hasUri("public/home")).isTrue();
+		assertThat(sitemap.hasUri("private/home")).isTrue();
 		assertThat(sitemap.standardPageNode(StandardPageKey.Public_Home)).isNotNull();
 		assertThat(sitemap.standardPageNode(StandardPageKey.Private_Home)).isNotNull();
 		assertThat(sitemap.standardPageNode(StandardPageKey.Login)).isNotNull();

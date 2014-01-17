@@ -12,30 +12,15 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import com.google.inject.AbstractModule;
+public class RedirectEntry {
+	private final String redirectTarget;
 
-public class SitemapServiceModule extends AbstractModule {
-
-	@Override
-	protected void configure() {
-		bindService();
-		bindLoaders();
-		bindChecker();
+	protected RedirectEntry(String redirectTarget) {
+		super();
+		this.redirectTarget = redirectTarget;
 	}
 
-	protected void bindService() {
-		bind(SitemapService.class).to(DefaultSitemapService.class);
+	public String getRedirectTarget() {
+		return redirectTarget;
 	}
-
-	protected void bindLoaders() {
-		bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
-		bind(AnnotationSitemapLoader.class).to(DefaultAnnotationSitemapLoader.class);
-		bind(DirectSitemapLoader.class).to(DefaultDirectSitemapLoader.class);
-	}
-
-	protected void bindChecker() {
-		bind(SitemapChecker.class).to(DefaultSitemapChecker.class);
-
-	}
-
 }

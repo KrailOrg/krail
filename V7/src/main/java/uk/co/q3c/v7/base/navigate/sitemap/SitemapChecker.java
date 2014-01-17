@@ -32,7 +32,8 @@ public interface SitemapChecker {
 	/**
 	 * Throws a {@link SitemapException} if the check finishes with one or more nodes not having a view or a key. This
 	 * will also depend on whether {@link #replaceMissingKeyWith(I18NKey)} and/or {@link #replaceMissingViewWith(Class)}
-	 * have been called.
+	 * have been called. If a redirect is in place for a node, then a check will not fail if a view class or label key
+	 * is missing
 	 */
 	void check();
 

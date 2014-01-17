@@ -67,11 +67,16 @@ import fixture.TestConfigurationException;
 		TestFileSitemapModule.class, DefaultStandardPagesModule.class })
 public class DefaultSitemapServiceTest {
 
+	private final int FILE_NODE_COUNT = 4;
+	private final int DIRECT_NODe_COUNT = 2;
+	private final int STANDARD_NODE_COUNT = 5;
+
 	public static class TestDirectSitemapModule extends DirectSitemapModule {
 
 		@Override
 		protected void define() {
 			addEntry("direct/a", PublicHomeView.class, LabelKey.Home, PageAccessControl.PUBLIC);
+			addRedirect("direct", "direct/a");
 		}
 
 	}
@@ -131,7 +136,7 @@ public class DefaultSitemapServiceTest {
 		// then
 		assertThat(service.getReport()).isNotNull();
 		assertThat(service.isStarted()).isTrue();
-		assertThat(sitemap.getNodeCount()).isEqualTo(12);
+		assertThat(sitemap.getNodeCount()).isEqualTo(STANDARD_NODE_COUNT + FILE_NODE_COUNT + DIRECT_NODe_COUNT);
 		assertThat(service.getSources()).containsOnly(SitemapSourceType.FILE, SitemapSourceType.DIRECT,
 				SitemapSourceType.ANNOTATION);
 	}
@@ -267,6 +272,13 @@ public class DefaultSitemapServiceTest {
 		iniConfig.setDelimiterParsingDisabled(false);
 	}
 
+	private void setConfig_File_Annotation() throws ConfigurationException {
+		iniConfig.setDelimiterParsingDisabled(true);
+		iniConfig.addProperty(ConfigKeys.SITEMAP_SOURCES_KEY, new String[] { "file,annotation" });
+		iniConfig.save();
+		iniConfig.setDelimiterParsingDisabled(false);
+	}
+
 	@ModuleProvider
 	protected AbstractModule module() {
 		return new AbstractModule() {
@@ -278,6 +290,7 @@ public class DefaultSitemapServiceTest {
 				bind(AnnotationSitemapLoader.class).to(DefaultAnnotationSitemapLoader.class);
 				bind(DirectSitemapLoader.class).to(DefaultDirectSitemapLoader.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(SitemapChecker.class).to(DefaultSitemapChecker.class);
 			}
 
 		};

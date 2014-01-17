@@ -38,12 +38,15 @@ import com.google.inject.multibindings.MapBinder;
 public abstract class DirectSitemapModule extends AbstractModule {
 
 	private MapBinder<String, DirectSitemapEntry> mapBinder;
+	private MapBinder<String, RedirectEntry> redirectBinder;
 
 	/**
 	 * Override this method to define {@link Sitemap} entries with one or more calls to {@link #addEntry}, something
 	 * like this:
 	 * <p>
 	 * addEntry("public/home", PublicHomeView.class, LabelKey.Home, false, "permission");
+	 * <p>
+	 * and redirects with {@link #addRedirect(String, String)}
 	 * 
 	 * @see #addEntry(String, Class, I18NKey, boolean, String)
 	 */
@@ -51,9 +54,8 @@ public abstract class DirectSitemapModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		MapBinder<String, DirectSitemapEntry> mapBinder = MapBinder.newMapBinder(binder(), String.class,
-				DirectSitemapEntry.class);
-		this.mapBinder = mapBinder;
+		this.mapBinder = MapBinder.newMapBinder(binder(), String.class, DirectSitemapEntry.class);
+		redirectBinder = MapBinder.newMapBinder(binder(), String.class, RedirectEntry.class);
 		define();
 	}
 
@@ -77,5 +79,9 @@ public abstract class DirectSitemapModule extends AbstractModule {
 		DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl);
 		mapBinder.addBinding(uri).toInstance(entry);
 
+	}
+
+	protected void addRedirect(String fromURI, String toURI) {
+		redirectBinder.addBinding(fromURI).toInstance(new RedirectEntry(toURI));
 	}
 }

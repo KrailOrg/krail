@@ -41,6 +41,8 @@ public class DefaultSitemapCheckerTest {
 	String uriNodeNoClass = "node/noclass";
 	String uriNodeNoKey = "node/nokey";
 
+	String uripublic_Node1 = "public/node1";
+
 	@Inject
 	DefaultSitemapChecker checker;
 
@@ -52,12 +54,41 @@ public class DefaultSitemapCheckerTest {
 	@Inject
 	CurrentLocale currentLocale;
 	private SitemapNode baseNode;
+	private SitemapNode node1;
 
 	@Test(expected = SitemapException.class)
 	public void checkOnly() {
 
 		// given
 		buildSitemap(0);
+		// when
+		checker.check();
+		// then
+
+	}
+
+	public void checkOnly_report() {
+
+		// given
+		buildSitemap(0);
+		// when
+		String report = null;
+		try {
+			checker.check();
+		} catch (SitemapException se) {
+			report = checker.getReport().toString();
+		}
+		// then
+		assertThat(report).contains("node/noclass");
+		assertThat(report).contains("node/nokey");
+		assertThat(report).contains("node/n");
+	}
+
+	@Test
+	public void redirect() {
+
+		// given
+		buildSitemap(1);
 		// when
 		checker.check();
 		// then
@@ -111,13 +142,21 @@ public class DefaultSitemapCheckerTest {
 	 */
 	private void buildSitemap(int index) {
 		Collator collator = Collator.getInstance(currentLocale.getLocale());
-		nodeNoClass = sitemap.append(uriNodeNoClass);
-		nodeNoClass.setLabelKey(TestLabelKey.No, currentLocale.getLocale(), collator);
+		switch (index) {
+		case 0:
 
-		nodeNoKey = sitemap.append(uriNodeNoKey);
-		nodeNoKey.setViewClass(View2.class);
-
-		baseNode = sitemap.nodeFor("node");
+			nodeNoClass = sitemap.append(uriNodeNoClass);
+			nodeNoClass.setLabelKey(TestLabelKey.No, currentLocale.getLocale(), collator);
+			nodeNoKey = sitemap.append(uriNodeNoKey);
+			nodeNoKey.setViewClass(View2.class);
+			baseNode = sitemap.nodeFor("node");
+			break;
+		case 1:
+			node1 = sitemap.append(uripublic_Node1);
+			node1.setLabelKey(TestLabelKey.No, currentLocale.getLocale(), collator);
+			node1.setViewClass(View2.class);
+			sitemap.addRedirect("public", uripublic_Node1);
+		}
 	}
 
 	@ModuleProvider

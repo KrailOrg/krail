@@ -17,6 +17,7 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,8 +39,8 @@ import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
-import com.mycila.inject.internal.guava.collect.ImmutableMap;
 
 /**
  * Loads the {@link Sitemap} with the entries contained in the files defined by subclasses of {@link FileSitemapModule}
@@ -52,7 +53,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	private static Logger log = LoggerFactory.getLogger(DefaultFileSitemapLoader.class);
 
 	private enum SectionName {
-		options, viewPackages, map;
+		options, viewPackages, map, redirects;
 	}
 
 	private enum ValidOption {
@@ -143,6 +144,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 			processOptions();
 			processMap();
 			checkLabelKeys();
+			processRedirects();
 			sitemap.setErrors(errorSum());
 
 			log.info("Sitemap loaded successfully");
@@ -156,6 +158,28 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 		endTime = DateTime.now();
 		parsed = true;
+	}
+
+	/**
+	 * The expected syntax of a redirect is <em> fromPage  :  toPage</em>
+	 * <p>
+	 * Lines which do not contain a ':' are ignored<br>
+	 * Lines containing multiple ':' will only process the first two segments, the rest is ignored
+	 */
+	private void processRedirects() {
+		List<String> sectionLines = sections.get(SectionName.redirects);
+		for (String redirect : sectionLines) {
+			if (redirect.contains(":")) {
+				Splitter splitter = Splitter.on(":").trimResults();
+				Iterable<String> split = splitter.split(redirect);
+				Iterator<String> iter = split.iterator();
+				String fromPage = iter.next();
+				String toPage = iter.next();
+				sitemap.addRedirect(fromPage, toPage);
+			} else {
+				log.info("Invalid redirect line '{}' ignored", redirect);
+			}
+		}
 	}
 
 	/**

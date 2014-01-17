@@ -73,8 +73,8 @@ public class DefaultFileSitemapLoaderTest {
 
 	}
 
-	private static int COMMENT_LINES = 11;
-	private static int BLANK_LINES = 10;
+	private static int COMMENT_LINES = 12;
+	private static int BLANK_LINES = 9;
 	private static int PAGE_COUNT = 4;
 	private static File propDir;
 	private File propFile;
@@ -112,7 +112,7 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getSitemap()).isNotNull();
 		assertThat(loader.getCommentLines()).isEqualTo(COMMENT_LINES);
 		assertThat(loader.getBlankLines()).isEqualTo(BLANK_LINES);
-		assertThat(loader.getSections()).containsOnly("viewPackages", "options", "map");
+		assertThat(loader.getSections()).containsOnly("viewPackages", "options", "map", "redirects");
 		assertThat(loader.isLabelClassMissing()).isFalse();
 		assertThat(loader.isLabelClassNonExistent()).isFalse();
 		assertThat(loader.isLabelClassNotI18N()).isFalse();
@@ -314,7 +314,7 @@ public class DefaultFileSitemapLoaderTest {
 	@Test
 	public void viewNotFound() throws IOException {
 
-		substituteIn(28, "subview.Transfer", "subview.Transfers");
+		substituteIn(29, "subview.Transfer", "subview.Transfers");
 		prepFile();
 		outputModifiedFile();
 		// when
@@ -339,7 +339,7 @@ public class DefaultFileSitemapLoaderTest {
 	@Test
 	public void viewNotV7View() throws IOException {
 
-		substituteIn(29, "subview.MoneyInOut", "subview.NotV7");
+		substituteIn(30, "subview.MoneyInOut", "subview.NotV7");
 		prepFile();
 		// when
 		loader.parse(modifiedFile);
@@ -368,7 +368,7 @@ public class DefaultFileSitemapLoaderTest {
 	@Test
 	public void mapIndentTooGreat() throws IOException {
 
-		substituteIn(28, "+-transfers", "+---transfers");
+		substituteIn(29, "+-transfers", "+---transfers");
 		prepFile();
 		// when
 		loader.parse(modifiedFile);

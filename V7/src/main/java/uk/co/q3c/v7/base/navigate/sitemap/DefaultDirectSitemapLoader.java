@@ -24,7 +24,7 @@ import com.google.inject.Inject;
 /**
  * If a Map<String, DirectSitemapEntry> binding has been created (using Guice modules sub-classed from
  * {@link DirectSitemapModule}), then {@link #pageMap} will be non-null. If so, its contents are transferred to the
- * {@link Sitemap}
+ * {@link Sitemap}. Also loads the standard pages.
  * 
  * @author David Sowerby
  * 
@@ -36,6 +36,7 @@ public class DefaultDirectSitemapLoader implements DirectSitemapLoader {
 	private final Sitemap sitemap;
 	private final CurrentLocale currentLocale;
 	private final Translate translate;
+	private Map<String, RedirectEntry> redirects;
 
 	@Inject
 	protected DefaultDirectSitemapLoader(Sitemap sitemap, Translate translate, CurrentLocale currentLocale,
@@ -59,10 +60,23 @@ public class DefaultDirectSitemapLoader implements DirectSitemapLoader {
 				node.setViewClass(value.getViewClass());
 			}
 			loadStandardPages();
+			processRedirects();
 			return true;
 		}
 		loadStandardPages();
+		processRedirects();
 		return false;
+	}
+
+	/**
+	 * Transfers directly defined URI redirects to the {@link Sitemap}
+	 */
+	protected void processRedirects() {
+		if (redirects != null) {
+			for (Entry<String, RedirectEntry> entry : redirects.entrySet()) {
+				sitemap.addRedirect(entry.getKey(), entry.getValue().getRedirectTarget());
+			}
+		}
 	}
 
 	/**
@@ -73,6 +87,16 @@ public class DefaultDirectSitemapLoader implements DirectSitemapLoader {
 	@Inject(optional = true)
 	protected void setMap(Map<String, DirectSitemapEntry> map) {
 		this.pageMap = map;
+	}
+
+	/**
+	 * Uses Method injection to enable use of optional parameter
+	 * 
+	 * @param map
+	 */
+	@Inject(optional = true)
+	protected void setRedirects(Map<String, RedirectEntry> redirects) {
+		this.redirects = redirects;
 	}
 
 	@Override

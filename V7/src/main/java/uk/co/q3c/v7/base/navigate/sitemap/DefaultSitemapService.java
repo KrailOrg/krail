@@ -50,18 +50,21 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	private boolean loaded;
 	private final Provider<DirectSitemapLoader> directSitemapLoaderProvider;
 	private final Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider;
+	private final SitemapChecker sitemapChecker;
 
 	@Inject
 	protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate,
 			Provider<FileSitemapLoader> fileSitemapLoaderProvider,
 			Provider<DirectSitemapLoader> directSitemapLoaderProvider,
-			Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, Sitemap sitemap) {
+			Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, Sitemap sitemap,
+			SitemapChecker sitemapChecker) {
 		super(translate);
 		this.configurationService = configurationService;
 		this.annotationSitemapLoaderProvider = annotationSitemapLoaderProvider;
 		this.directSitemapLoaderProvider = directSitemapLoaderProvider;
 		this.fileSitemapLoaderProvider = fileSitemapLoaderProvider;
 		this.sitemap = sitemap;
+		this.sitemapChecker = sitemapChecker;
 		configure();
 	}
 
@@ -98,6 +101,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 		for (SitemapSourceType source : sources) {
 			loadSource(source);
 		}
+		sitemapChecker.check();
 	}
 
 	/**

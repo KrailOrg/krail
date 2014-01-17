@@ -86,6 +86,7 @@ public class DefaultSitemapServiceTest2 {
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 				bind(AnnotationSitemapLoader.class).to(DefaultAnnotationSitemapLoader.class);
 				bind(DirectSitemapLoader.class).to(DefaultDirectSitemapLoader.class);
+				bind(SitemapChecker.class).to(DefaultSitemapChecker.class);
 			}
 
 		};

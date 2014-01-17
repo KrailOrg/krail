@@ -17,6 +17,9 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
@@ -35,13 +38,14 @@ import com.google.inject.Inject;
  * 
  */
 public class DefaultSitemapChecker implements SitemapChecker {
-
+	private static Logger log = LoggerFactory.getLogger(DefaultSitemapChecker.class);
 	private Sitemap sitemap;
 	private Class<? extends V7View> defaultView;
 	private I18NKey<?> defaultKey;
 	private final Set<String> missingViewClasses;
 	private final Set<String> missingLabelKeys;
 	private final CurrentLocale currentLocale;
+	private StringBuilder report;
 
 	@Inject
 	protected DefaultSitemapChecker(Sitemap sitemap, CurrentLocale currentLocale) {
@@ -60,31 +64,60 @@ public class DefaultSitemapChecker implements SitemapChecker {
 		this.sitemap = sitemap;
 	}
 
+	/**
+	 * @see uk.co.q3c.v7.base.navigate.sitemap.SitemapChecker#check()
+	 */
 	@Override
 	public void check() {
 		Locale locale = currentLocale.getLocale();
 		Collator collator = Collator.getInstance(locale);
 		for (SitemapNode node : sitemap.getAllNodes()) {
-			if (node.getViewClass() == null) {
-				if (defaultView != null) {
-					node.setViewClass(defaultView);
-				} else {
-					missingViewClasses.add(sitemap.uri(node));
-				}
-			}
+			String nodeUri = sitemap.uri(node);
+			// Don't fail if there is a redirect in place
+			if (!sitemap.getRedirects().containsKey(nodeUri)) {
 
-			if (node.getLabelKey() == null) {
-				if (defaultKey != null) {
-					node.setLabelKey(defaultKey, locale, collator);
-				} else {
-					missingLabelKeys.add(sitemap.uri(node));
+				if (node.getViewClass() == null) {
+					if (defaultView != null) {
+						node.setViewClass(defaultView);
+					} else {
+						missingViewClasses.add(nodeUri);
+					}
+				}
+
+				if (node.getLabelKey() == null) {
+					if (defaultKey != null) {
+						node.setLabelKey(defaultKey, locale, collator);
+					} else {
+						missingLabelKeys.add(nodeUri);
+					}
 				}
 			}
 		}
+		// if there are no missing keys or views, return
 		if (missingViewClasses.isEmpty() && missingLabelKeys.isEmpty()) {
 			return;
 		}
-		throw new SitemapException("Sitemap check failed");
+
+		report = new StringBuilder();
+		report.append("\n================ Sitemap Check ===============\n\n");
+		if (!missingViewClasses.isEmpty()) {
+			report.append("------------ URIs with missing Views -----------\n");
+			for (String view : missingViewClasses) {
+				report.append(view);
+				report.append("\n");
+			}
+		}
+		if (!missingLabelKeys.isEmpty()) {
+			report.append("--------- URIs with missing label keys -----------\n");
+			for (String key : missingLabelKeys) {
+				report.append(key);
+				report.append("\n");
+			}
+		}
+
+		log.info(report.toString());
+		// otherwise print a report and throw an exception
+		throw new SitemapException("Sitemap check failed, see log for failed items");
 	}
 
 	@Override
@@ -106,6 +139,10 @@ public class DefaultSitemapChecker implements SitemapChecker {
 
 	public Set<String> getMissingLabelKeys() {
 		return missingLabelKeys;
+	}
+
+	public StringBuilder getReport() {
+		return report;
 	}
 
 }
