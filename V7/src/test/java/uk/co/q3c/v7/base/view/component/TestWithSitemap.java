@@ -101,6 +101,21 @@ public abstract class TestWithSitemap {
 			newNode4 = newNode("wiggly");
 			sitemap.addChild(newNode1, newNode2);
 			sitemap.addChild(newNode3, newNode4);
+			break;
+
+		case 5: // one node has missing key
+			newNode4 = newNode("b");
+			newNode5 = newNode("b1");
+			newNode6 = newNode("b11");
+			sitemap.addChild(newNode4, newNode5);
+			sitemap.addChild(newNode5, newNode6);
+			newNode1 = new SitemapNode();
+			newNode1.setUriSegment("a");
+			newNode2 = newNode("a1");
+			newNode3 = newNode("a11");
+			sitemap.addChild(newNode1, newNode2);
+			sitemap.addChild(newNode2, newNode3);
+			break;
 		}
 
 	}

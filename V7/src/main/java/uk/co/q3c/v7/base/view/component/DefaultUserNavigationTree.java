@@ -91,6 +91,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 
 		this.removeAllItems();
 		List<SitemapNode> nodeList = sitemap.getRoots();
+		log.debug("The sitemap has {} roots", nodeList.size());
 
 		// which order, sorted or insertion?
 		if (sorted) {
@@ -104,7 +105,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		for (SitemapNode node : nodeList) {
 			level = 1;
 			// doesn't make sense to show the logout page
-			if (!node.getLabelKey().equals(StandardPageKey.Logout)) {
+			if ((node.getLabelKey() == null) || (!node.getLabelKey().equals(StandardPageKey.Logout))) {
 				loadNode(null, node);
 			}
 		}

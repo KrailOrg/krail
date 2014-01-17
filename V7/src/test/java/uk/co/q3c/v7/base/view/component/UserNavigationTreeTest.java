@@ -170,6 +170,33 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 	}
 
 	@Test
+	public void multiBranch_nullLabelKey() {
+
+		// given
+		currentLocale.setLocale(Locale.UK);
+		buildSitemap(5);
+
+		// when
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate);
+		// then
+		assertThat(unt.getItemIds().size()).isEqualTo(6);
+		@SuppressWarnings("unchecked")
+		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
+		assertThat(nodes).containsOnly(newNode1, newNode2, newNode3, newNode4, newNode5, newNode6);
+		assertThat(unt.getParent(newNode2)).isEqualTo(newNode1);
+		assertThat(unt.getParent(newNode3)).isEqualTo(newNode2);
+		assertThat(unt.getParent(newNode1)).isEqualTo(null);
+		assertThat(unt.getItemCaption(newNode1)).isEqualTo("key is null");
+		assertThat(unt.getItemCaption(newNode2)).isEqualTo("home");
+
+		assertThat(unt.getParent(newNode5)).isEqualTo(newNode4);
+		assertThat(unt.getParent(newNode6)).isEqualTo(newNode5);
+		assertThat(unt.getParent(newNode4)).isEqualTo(null);
+
+	}
+
+	@Test
 	public void setLevel() {
 
 		// given
