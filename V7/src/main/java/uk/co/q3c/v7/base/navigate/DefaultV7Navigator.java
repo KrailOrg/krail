@@ -115,21 +115,6 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	}
 
 	/**
-	 * 
-	 * 
-	 * @param view
-	 *            view to activate
-	 * @param viewKey
-	 *            (optional) name of the view or null not to change the navigation state
-	 * @param fragment
-	 *            parameters passed in the navigation state to the view. In this context, the parameters are all the
-	 *            parameters, which include the part which forms the pseudo URI. For example, private/transfers/id=23
-	 */
-	protected void navigateTo(V7View view, String viewKey) {
-
-	}
-
-	/**
 	 * Internal method activating a view, setting its parameters and calling listeners.
 	 * 
 	 * @param view
@@ -380,10 +365,10 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Override
 	public void navigateTo(NavigationState navigationState) {
+
+		String fragment = navigationState.getFragment();
 		// this is partly to stop unnecessary changes, but also to prevent UserNavigationTree and other navigation aware
 		// components from causing a loop by responding to a change of URI
-		String fragment = navigationState.getFragment();
-
 		if ((fragment != null) && (currentNavigationState != null)
 				&& (fragment.equals(currentNavigationState.getFragment()))) {
 			log.debug("fragment unchanged, no navigation required");
@@ -391,6 +376,12 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		}
 
 		sitemapCheck();
+
+		// https://sites.google.com/site/q3cjava/sitemap#emptyURI
+		if (navigationState.getVirtualPage().isEmpty()) {
+			navigationState.setVirtualPage(sitemap.standardPageURI(StandardPageKey.Public_Home));
+			uriHandler.updateFragment(navigationState);
+		}
 
 		// fragment needs to be revised if redirected
 		redirectIfNeeded(navigationState);

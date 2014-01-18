@@ -323,7 +323,9 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page1 = "";
 		String fragment1 = page1 + "/id=2/age=5";
-		when(sitemap.getRedirectFor(page1)).thenReturn("public");
+
+		when(sitemap.standardPageURI(StandardPageKey.Public_Home)).thenReturn("public");
+		when(sitemap.getRedirectFor("public")).thenReturn("public");
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode);
 		mockNode.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode.setViewClass(View1.class);
