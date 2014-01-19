@@ -101,7 +101,9 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 		for (SitemapSourceType source : sources) {
 			loadSource(source);
 		}
+		log.debug("Checking Sitemap");
 		sitemapChecker.check();
+		log.debug("Sitemap checked, no errors found");
 	}
 
 	/**
@@ -110,7 +112,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	 * @param sourceType
 	 */
 	private void loadSource(SitemapSourceType sourceType) {
-
+		log.debug("Loading Sitemap from {}", sourceType);
 		switch (sourceType) {
 		case FILE:
 			FileSitemapLoader fileSitemapLoader = fileSitemapLoaderProvider.get();

@@ -577,4 +577,14 @@ public class Sitemap {
 		return new PagePermission(navigationState(node));
 	}
 
+	/**
+	 * Returns a redirect for sourceNode if there is one, null if there is not
+	 * 
+	 * @return
+	 */
+	public SitemapNode redirectFor(SitemapNode sourceNode) {
+		String sourceUri = uri(sourceNode);
+		return nodeFor(redirects.get(sourceUri));
+	}
+
 }

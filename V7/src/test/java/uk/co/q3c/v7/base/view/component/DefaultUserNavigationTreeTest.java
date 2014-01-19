@@ -37,6 +37,7 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
+import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.PagePermission;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.ui.BasicUI;
@@ -57,7 +58,7 @@ import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, UIScopeModule.class })
-public class UserNavigationTreeTest extends TestWithSitemap {
+public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 	@Inject
 	CurrentLocale currentLocale;
@@ -89,6 +90,9 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 	@Mock
 	NavigationState navigationState;
 
+	@Inject
+	PageAccessController pageAccessController;
+
 	@Override
 	@Before
 	public void setup() {
@@ -113,7 +117,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(0);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(0);
 	}
@@ -127,7 +131,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(3);
 		@SuppressWarnings("unchecked")
@@ -151,7 +155,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(6);
 		@SuppressWarnings("unchecked")
@@ -178,7 +182,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(6);
 		@SuppressWarnings("unchecked")
@@ -197,6 +201,33 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 	}
 
 	@Test
+	public void multiBranch_oneRequiresPermission() {
+
+		// given
+		currentLocale.setLocale(Locale.UK);
+		buildSitemap(6);
+		when(subject.isPermitted(any(Permission.class))).thenReturn(false);
+
+		// when
+		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
+				loginStatusHandler, translate, pageAccessController);
+		// then
+		assertThat(unt.getItemIds().size()).isEqualTo(5);
+		@SuppressWarnings("unchecked")
+		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
+		assertThat(nodes).containsOnly(newNode1, newNode2, newNode3, newNode4, newNode5);
+		assertThat(unt.getParent(newNode2)).isEqualTo(newNode1);
+		assertThat(unt.getParent(newNode3)).isEqualTo(newNode2);
+		assertThat(unt.getParent(newNode1)).isEqualTo(null);
+		assertThat(unt.getItemCaption(newNode1)).isEqualTo("key is null");
+		assertThat(unt.getItemCaption(newNode2)).isEqualTo("home");
+
+		assertThat(unt.getParent(newNode5)).isEqualTo(newNode4);
+		assertThat(unt.getParent(newNode4)).isEqualTo(null);
+
+	}
+
+	@Test
 	public void setLevel() {
 
 		// given
@@ -204,7 +235,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(2);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 		// then
 		assertThat(unt.getMaxLevel()).isEqualTo(-1);
 		// when
@@ -234,7 +265,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("home");
@@ -248,7 +279,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(1);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 		// then
 		assertThat(unt.isImmediate()).isTrue();
 
@@ -260,7 +291,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		// given
 		buildSitemap(2);
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 		// when
 		unt.setValue(newNode2);
 		// then
@@ -276,7 +307,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("zu Hause");
@@ -306,14 +337,17 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		// represents the case where user not authenticated
 		when(subject.isPermitted(p4)).thenReturn(false);
 
+		System.out.println(sitemap.toString());
+
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 		// then
-		assertThat(unt.containsId(newNode1)).isTrue();
-		assertThat(unt.containsId(newNode2)).isFalse(); // logout page is not shown in tree.
-		assertThat(unt.containsId(newNode3)).isTrue();
-		assertThat(unt.containsId(newNode4)).isFalse();
+		@SuppressWarnings("unchecked")
+		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
+		// logout page is not shown in tree.
+		// newNode4 is not permitted
+		assertThat(nodes).containsOnly(newNode1, newNode3);
 
 	}
 
@@ -327,7 +361,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(3);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(1);
 
@@ -343,7 +377,7 @@ public class UserNavigationTreeTest extends TestWithSitemap {
 		// given
 		buildSitemap(4);
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				loginStatusHandler, translate);
+				loginStatusHandler, translate, pageAccessController);
 		// when
 
 		// sorted is false by default, should be insertion order

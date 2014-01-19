@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.TestLabelKey;
@@ -42,6 +43,7 @@ public class DefaultSitemapCheckerTest {
 	String uriNodeNoKey = "node/nokey";
 
 	String uripublic_Node1 = "public/node1";
+	String uripublic_Node11 = "public/node1/1";
 
 	@Inject
 	DefaultSitemapChecker checker;
@@ -55,6 +57,7 @@ public class DefaultSitemapCheckerTest {
 	CurrentLocale currentLocale;
 	private SitemapNode baseNode;
 	private SitemapNode node1;
+	private SitemapNode node11;
 
 	@Test(expected = SitemapException.class)
 	public void checkOnly() {
@@ -92,6 +95,31 @@ public class DefaultSitemapCheckerTest {
 		// when
 		checker.check();
 		// then
+		SitemapNode publicNode = sitemap.nodeFor("public");
+		assertThat(publicNode).isNotNull();
+		assertThat(publicNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+	}
+
+	@Test
+	public void redirect_multiLevel() {
+
+		// given
+		buildSitemap(2);
+		// when
+		checker.check();
+		// then
+		SitemapNode publicNode = sitemap.nodeFor("public");
+		SitemapNode n1 = sitemap.nodeFor(uripublic_Node1);
+		SitemapNode n11 = sitemap.nodeFor(uripublic_Node11);
+
+		assertThat(publicNode).isNotNull();
+		assertThat(publicNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+
+		assertThat(n1).isNotNull();
+		assertThat(n1.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+
+		assertThat(n11).isNotNull();
+		assertThat(n11.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
 	}
 
@@ -127,6 +155,7 @@ public class DefaultSitemapCheckerTest {
 		// then
 		assertThat(checker.getMissingLabelKeys()).isEmpty();
 		assertThat(checker.getMissingViewClasses()).isEmpty();
+		assertThat(checker.getMissingPageAccessControl()).isEmpty();
 		assertThat(baseNode.getLabelKey()).isEqualTo(TestLabelKey.Home);
 		assertThat(baseNode.getViewClass()).isEqualTo(View1.class);
 		assertThat(nodeNoClass.getLabelKey()).isEqualTo(TestLabelKey.No);
@@ -147,15 +176,32 @@ public class DefaultSitemapCheckerTest {
 
 			nodeNoClass = sitemap.append(uriNodeNoClass);
 			nodeNoClass.setLabelKey(TestLabelKey.No, currentLocale.getLocale(), collator);
+			nodeNoClass.setPageAccessControl(PageAccessControl.PUBLIC);
 			nodeNoKey = sitemap.append(uriNodeNoKey);
 			nodeNoKey.setViewClass(View2.class);
+			nodeNoKey.setPageAccessControl(PageAccessControl.PUBLIC);
 			baseNode = sitemap.nodeFor("node");
+			baseNode.setPageAccessControl(PageAccessControl.PUBLIC);
 			break;
 		case 1:
 			node1 = sitemap.append(uripublic_Node1);
 			node1.setLabelKey(TestLabelKey.No, currentLocale.getLocale(), collator);
 			node1.setViewClass(View2.class);
+			node1.setPageAccessControl(PageAccessControl.PERMISSION);
 			sitemap.addRedirect("public", uripublic_Node1);
+		case 2:
+			node1 = sitemap.append(uripublic_Node1);
+			node1.setLabelKey(TestLabelKey.No, currentLocale.getLocale(), collator);
+			node1.setViewClass(View2.class);
+
+			node11 = sitemap.append(uripublic_Node11);
+			node11.setLabelKey(TestLabelKey.No, currentLocale.getLocale(), collator);
+			node11.setViewClass(View2.class);
+			node11.setPageAccessControl(PageAccessControl.PERMISSION);
+
+			sitemap.addRedirect("public", uripublic_Node1);
+			sitemap.addRedirect(uripublic_Node1, uripublic_Node11);
+
 		}
 	}
 

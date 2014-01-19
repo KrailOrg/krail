@@ -29,7 +29,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
-import uk.co.q3c.v7.base.shiro.PagePermission;
+import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.useropt.UserOption;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
@@ -61,18 +61,21 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	private boolean sorted;
 	private final UserOption userOption;
 	private final Translate translate;
+	private final PageAccessController pageAccessController;
 	public static final String sortedOpt = "sorted";
 	public static final String maxLevelOpt = "maxLevel";
 
 	@Inject
 	protected DefaultUserNavigationTree(Sitemap sitemap, V7Navigator navigator, SubjectProvider subjectProvider,
-			UserOption userOption, LoginStatusHandler loginStatusHandler, Translate translate) {
+			UserOption userOption, LoginStatusHandler loginStatusHandler, Translate translate,
+			PageAccessController pageAccessController) {
 		super();
 		this.sitemap = sitemap;
 		this.navigator = navigator;
 		this.subjectProvider = subjectProvider;
 		this.userOption = userOption;
 		this.translate = translate;
+		this.pageAccessController = pageAccessController;
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		// set user option
@@ -112,18 +115,20 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	}
 
 	/**
-	 * Checks each node to ensure that the Subject has permission to view, and if so, adds it to this tree
+	 * Checks each node to ensure that the Subject has permission to view, and if so, adds it to this tree. Note that if
+	 * a node is redirected, its pageAccessControl attribute will have been modified to be the same as the redirect
+	 * target by
 	 * 
 	 * @param parentNode
 	 * @param childNode
 	 */
 	private void loadNode(SitemapNode parentNode, SitemapNode childNode) {
-		// construct the permission
-		String uri = sitemap.uri(childNode);
-		PagePermission pagePermissionRequired = sitemap.pagePermission(childNode);
 
+		String uri = sitemap.uri(childNode);
+		log.debug("loading node for uri '{}'", uri);
 		// if permitted, add it
-		if (subjectProvider.get().isPermitted(pagePermissionRequired)) {
+		Subject subject = subjectProvider.get();
+		if (pageAccessController.isAuthorised(subject, childNode)) {
 			log.debug("user has permission to view URI {}", uri);
 			this.addItem(childNode);
 			I18NKey<?> key = childNode.getLabelKey();

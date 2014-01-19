@@ -23,6 +23,7 @@ import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.I18NTranslator;
@@ -45,6 +46,7 @@ public abstract class TestWithSitemap {
 	@Inject
 	URIFragmentHandler uriHandler;
 
+	@Inject
 	protected Sitemap sitemap;
 
 	protected SitemapNode newNode1;
@@ -59,8 +61,7 @@ public abstract class TestWithSitemap {
 
 	@Before
 	public void setup() {
-		sitemap = new Sitemap(uriHandler, translate);
-		;
+
 		collator = Collator.getInstance(locale);
 	}
 
@@ -111,11 +112,42 @@ public abstract class TestWithSitemap {
 			sitemap.addChild(newNode5, newNode6);
 			newNode1 = new SitemapNode();
 			newNode1.setUriSegment("a");
+			newNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 			newNode2 = newNode("a1");
 			newNode3 = newNode("a11");
 			sitemap.addChild(newNode1, newNode2);
 			sitemap.addChild(newNode2, newNode3);
 			break;
+
+		case 6: // one node is private
+			newNode4 = newNode("b");
+			newNode5 = newNode("b1");
+			newNode6 = newNode("b11");
+			newNode6.setPageAccessControl(PageAccessControl.PERMISSION);
+			sitemap.addChild(newNode4, newNode5);
+			sitemap.addChild(newNode5, newNode6);
+			newNode1 = new SitemapNode();
+			newNode1.setUriSegment("a");
+			newNode1.setPageAccessControl(PageAccessControl.PUBLIC);
+			newNode2 = newNode("a1");
+			newNode3 = newNode("a11");
+			sitemap.addChild(newNode1, newNode2);
+			sitemap.addChild(newNode2, newNode3);
+			break;
+
+		case 7: // redirect has no page access control
+			newNode4 = newNode("b");
+			newNode4.setPageAccessControl(null);
+			newNode5 = newNode("b1");
+			newNode6 = newNode("b11");
+
+			String fromPage = sitemap.navigationState(newNode4).getVirtualPage();
+			String toPage = sitemap.navigationState(newNode5).getVirtualPage();
+			sitemap.addRedirect(fromPage, toPage);
+			sitemap.addChild(newNode4, newNode5);
+			sitemap.addChild(newNode5, newNode6);
+			break;
+
 		}
 
 	}
@@ -126,6 +158,7 @@ public abstract class TestWithSitemap {
 		node0.setLabelKey(TestLabelKey.Home, locale, collator);
 		node0.setUriSegment(urlSegment);
 		node0.setViewClass(PublicHomeView.class);
+		node0.setPageAccessControl(PageAccessControl.PUBLIC);
 		return node0;
 	}
 

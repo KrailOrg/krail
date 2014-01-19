@@ -16,7 +16,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusListener;
-import uk.co.q3c.v7.base.shiro.PagePermission;
+import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.ui.ScopedUI;
@@ -54,16 +54,19 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	private V7View previousView;
 
+	private final PageAccessController pageAccessController;
+
 	@Inject
 	protected DefaultV7Navigator(Injector injector, Provider<ErrorView> errorViewProvider,
 			URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider,
-			LoginStatusHandler loginHandler) {
+			LoginStatusHandler loginHandler, PageAccessController pageAccessController) {
 		super();
 		this.errorViewProvider = errorViewProvider;
 		this.uriHandler = uriHandler;
 
 		this.subjectProvider = subjectProvider;
 		this.injector = injector;
+		this.pageAccessController = pageAccessController;
 
 		try {
 			sitemapService.start();
@@ -291,10 +294,8 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	/**
 	 * Navigates to a the location represented by {@code node}, instantiating a View, and calling for the view to be
-	 * made current via {@link #changeView(V7View)}. If a page is public then any user (even unauthenticated) can
-	 * navigate to it. If it is not public then permissions are checked, and if the user is not authorised, a
-	 * {@link AuthorizationException} is thrown. This would be caught by the the implementation bound to
-	 * {@link UnauthorizedExceptionHandler}.
+	 * made current via {@link #changeView(V7View)}. If the user is not authorised, a {@link AuthorizationException} is
+	 * thrown. This would be caught by the the implementation bound to {@link UnauthorizedExceptionHandler}.
 	 * <p>
 	 * 
 	 * @param node
@@ -309,29 +310,8 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		Class<? extends V7View> viewClass = node.getViewClass();
 		V7View view = injector.getInstance(viewClass);
 
-		boolean authorised = false;
 		Subject subject = subjectProvider.get();
-		switch (node.getPageAccessControl()) {
-		case AUTHENTICATION:
-			authorised = subject.isAuthenticated();
-			break;
-		case GUEST:
-			authorised = (!subject.isAuthenticated()) && (!subject.isRemembered());
-			break;
-		case PERMISSION:
-			authorised = subject.isPermitted(new PagePermission(navigationState));
-			break;
-		case PUBLIC:
-			authorised = true;
-			break;
-		case ROLES:
-			authorised = subject.hasAllRoles(node.getRoles());
-			break;
-		case USER:
-			authorised = (subject.isAuthenticated()) || (subject.isRemembered());
-			break;
-		}
-
+		boolean authorised = pageAccessController.isAuthorised(subject, node);
 		if (authorised) {
 			previousNode = currentNode;
 			previousNavigationState = currentNavigationState;

@@ -31,7 +31,8 @@ import com.google.inject.Inject;
  * <ol>
  * <li>Missing views
  * <li>Missing enums
- * <li>public page "inside" a private page
+ * <li>Redirects from within the {@link Sitemap} have their pageAccessControl attribute set to the pageAccessControl of
+ * the redirect target.
  * </ol>
  * 
  * @author David Sowerby
@@ -44,6 +45,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
 	private I18NKey<?> defaultKey;
 	private final Set<String> missingViewClasses;
 	private final Set<String> missingLabelKeys;
+	private final Set<String> missingPageAccessControl;
 	private final CurrentLocale currentLocale;
 	private StringBuilder report;
 
@@ -54,6 +56,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
 		this.currentLocale = currentLocale;
 		missingViewClasses = new HashSet<>();
 		missingLabelKeys = new HashSet<>();
+		missingPageAccessControl = new HashSet<>();
 	}
 
 	public Sitemap getSitemap() {
@@ -73,6 +76,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
 		Collator collator = Collator.getInstance(locale);
 		for (SitemapNode node : sitemap.getAllNodes()) {
 			String nodeUri = sitemap.uri(node);
+			log.debug("Checking {}", nodeUri);
 			// Don't fail if there is a redirect in place
 			if (!sitemap.getRedirects().containsKey(nodeUri)) {
 
@@ -91,10 +95,26 @@ public class DefaultSitemapChecker implements SitemapChecker {
 						missingLabelKeys.add(nodeUri);
 					}
 				}
+
+				if (node.getPageAccessControl() == null) {
+					missingPageAccessControl.add(nodeUri);
+				}
+			} else {
+				// if redirected, take the accessControlPermission from the redirect target
+				// must allow for multiple levels of redirect
+				SitemapNode sourceNode = node;
+				SitemapNode targetNode = sitemap.nodeFor(sitemap.getRedirectFor(nodeUri));
+				while (targetNode != null) {
+					sourceNode = targetNode;
+					targetNode = sitemap.redirectFor(sourceNode);
+				}
+				node.setPageAccessControl(sourceNode.getPageAccessControl());
+
 			}
+
 		}
 		// if there are no missing keys or views, return
-		if (missingViewClasses.isEmpty() && missingLabelKeys.isEmpty()) {
+		if (missingViewClasses.isEmpty() && missingLabelKeys.isEmpty() && missingPageAccessControl.isEmpty()) {
 			return;
 		}
 
@@ -110,6 +130,13 @@ public class DefaultSitemapChecker implements SitemapChecker {
 		if (!missingLabelKeys.isEmpty()) {
 			report.append("--------- URIs with missing label keys -----------\n");
 			for (String key : missingLabelKeys) {
+				report.append(key);
+				report.append("\n");
+			}
+		}
+		if (!missingPageAccessControl.isEmpty()) {
+			report.append("--------- URIs with missing page access control -----------\n");
+			for (String key : missingPageAccessControl) {
 				report.append(key);
 				report.append("\n");
 			}
@@ -143,6 +170,10 @@ public class DefaultSitemapChecker implements SitemapChecker {
 
 	public StringBuilder getReport() {
 		return report;
+	}
+
+	public Set<String> getMissingPageAccessControl() {
+		return missingPageAccessControl;
 	}
 
 }

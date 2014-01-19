@@ -255,6 +255,23 @@ public class SitemapTest {
 		assertThat(sitemap.hasUri(navigationState3)).isFalse();
 	}
 
+	@Test
+	public void redirectFor() {
+
+		// given
+		Sitemap sitemap = new Sitemap(uriHandler, translate);
+		sitemap.append("public/home/view1");
+		sitemap.append("public/home/view2");
+		sitemap.append("private/home/wiggly");
+		sitemap.addRedirect("public/home/view1", "public/home/view2");
+		// when
+		SitemapNode node1 = sitemap.nodeFor("public/home/view1");
+		SitemapNode node2 = sitemap.nodeFor("public/home/view2");
+		// then
+		assertThat(sitemap.redirectFor(node1)).isEqualTo(node2);
+
+	}
+
 	/**
  * 
  */

@@ -35,9 +35,24 @@ public class PagePermission extends WildcardPermission {
 		construct(navigationState, appendWildcard, false);
 	}
 
+	public PagePermission(String virtualPage, boolean appendWildcard) {
+		super();
+		construct(virtualPage, appendWildcard, false);
+	}
+
+	public PagePermission(String virtualPage, boolean appendWildcard, boolean edit) {
+		super();
+		construct(virtualPage, appendWildcard, edit);
+	}
+
 	public PagePermission(NavigationState navigationState, boolean appendWildcard, boolean edit) {
 		super();
 		construct(navigationState, appendWildcard, edit);
+	}
+
+	public PagePermission(String virtualPage) {
+		super();
+		construct(virtualPage, false, false);
 	}
 
 	/**
@@ -56,13 +71,18 @@ public class PagePermission extends WildcardPermission {
 	 * @return
 	 */
 	protected void construct(NavigationState navigationState, boolean appendWildcard, boolean edit) {
+		construct(navigationState.getVirtualPage(), appendWildcard, edit);
+	}
+
+	private void construct(String virtualPage, boolean appendWildcard, boolean edit) {
 		String action = edit ? "edit:" : "view:";
 		String prefix = "page:";
-		String pagePerm = navigationState.getVirtualPage().replace("/", ":");
+		String pagePerm = virtualPage.replace("/", ":");
 		String wildcard = appendWildcard ? ":*" : "";
 
 		String permissionString = prefix + action + pagePerm + wildcard;
 		setParts(permissionString);
+
 	}
 
 }
