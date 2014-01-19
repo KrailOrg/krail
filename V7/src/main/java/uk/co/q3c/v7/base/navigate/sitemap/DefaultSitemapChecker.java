@@ -15,15 +15,20 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import java.text.Collator;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.util.CycleDetectedException;
+import uk.co.q3c.util.DynamicDAG;
+import uk.co.q3c.util.MessageFormat;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
 /**
@@ -46,6 +51,8 @@ public class DefaultSitemapChecker implements SitemapChecker {
 	private final Set<String> missingViewClasses;
 	private final Set<String> missingLabelKeys;
 	private final Set<String> missingPageAccessControl;
+	private final Set<String> redirectLoops;
+
 	private final CurrentLocale currentLocale;
 	private StringBuilder report;
 
@@ -57,6 +64,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
 		missingViewClasses = new HashSet<>();
 		missingLabelKeys = new HashSet<>();
 		missingPageAccessControl = new HashSet<>();
+		redirectLoops = new HashSet<>();
 	}
 
 	public Sitemap getSitemap() {
@@ -72,6 +80,8 @@ public class DefaultSitemapChecker implements SitemapChecker {
 	 */
 	@Override
 	public void check() {
+		// do this first, because a loop will cause the main check to fail
+		redirectCheck();
 		Locale locale = currentLocale.getLocale();
 		Collator collator = Collator.getInstance(locale);
 		for (SitemapNode node : sitemap.getAllNodes()) {
@@ -114,7 +124,8 @@ public class DefaultSitemapChecker implements SitemapChecker {
 
 		}
 		// if there are no missing keys or views, return
-		if (missingViewClasses.isEmpty() && missingLabelKeys.isEmpty() && missingPageAccessControl.isEmpty()) {
+		if (missingViewClasses.isEmpty() && missingLabelKeys.isEmpty() && missingPageAccessControl.isEmpty()
+				&& redirectLoops.isEmpty()) {
 			return;
 		}
 
@@ -142,9 +153,34 @@ public class DefaultSitemapChecker implements SitemapChecker {
 			}
 		}
 
+		if (!redirectLoops.isEmpty()) {
+			report.append("--------- redirect loops -----------\n");
+			for (String key : redirectLoops) {
+				report.append(key);
+				report.append("\n");
+			}
+		}
+
 		log.info(report.toString());
 		// otherwise print a report and throw an exception
 		throw new SitemapException("Sitemap check failed, see log for failed items");
+	}
+
+	private void redirectCheck() {
+		DynamicDAG<String> dag = new DynamicDAG<>();
+		ImmutableMap<String, String> redirectMap = sitemap.getRedirects();
+		for (Entry<String, String> entry : redirectMap.entrySet()) {
+			try {
+				dag.addChild(entry.getKey(), entry.getValue());
+			} catch (CycleDetectedException cde) {
+				String msg = MessageFormat.format("Redirecting {0} to {1} would cause a loop", entry.getKey(),
+						entry.getValue());
+				redirectLoops.add(msg);
+				// throw new CycleDetectedException(msg);
+			}
+
+		}
+
 	}
 
 	@Override

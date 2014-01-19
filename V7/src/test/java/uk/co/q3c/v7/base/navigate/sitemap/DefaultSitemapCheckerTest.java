@@ -164,6 +164,55 @@ public class DefaultSitemapCheckerTest {
 		assertThat(nodeNoKey.getViewClass()).isEqualTo(View2.class);
 	}
 
+	@Test(expected = SitemapException.class)
+	public void redirectLoop_immediate() {
+
+		// given
+
+		sitemap.addRedirect("p/1", "p/2");
+		sitemap.addRedirect("p/2", "p/1");
+
+		// when
+		checker.check();
+		// then
+
+	}
+
+	@Test(expected = SitemapException.class)
+	public void redirectLoop_longloop() {
+
+		// given
+
+		sitemap.addRedirect("p/1", "p/2");
+		sitemap.addRedirect("p/2", "p/3");
+		sitemap.addRedirect("p/3", "p/4");
+		sitemap.addRedirect("p/4", "p/1");
+		sitemap.addRedirect("a/1", "a/2");
+		sitemap.addRedirect("a/2", "a/1");
+
+		// when
+		checker.check();
+		// then
+
+	}
+
+	@Test(expected = SitemapException.class)
+	public void redirectLoop_longloop_two_errors() {
+
+		// given
+
+		sitemap.addRedirect("p/1", "p/2");
+		sitemap.addRedirect("p/2", "p/3");
+		sitemap.addRedirect("p/3", "p/4");
+		sitemap.addRedirect("p/4", "p/1");
+		sitemap.addRedirect("p/3", "p/2");
+
+		// when
+		checker.check();
+		// then
+
+	}
+
 	/**
 	 * the root node "node" will have nothing set except the segment
 	 * 
