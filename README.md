@@ -12,7 +12,7 @@ There are a number of sub-projects, each with a different status
 ### V7
 
 This is the base, or core, library.  Vaadin 7.1.10 is integrated with Guice 3.0 and Shiro 1.2.1.  It provides site navigation and the means to authenticate and authorise users. 
-Building an application is assisted by specifiying the site structure using a Sitemap; there is currently only one method for specifying the Sitemap, others are in early development. 
+Building an application is assisted by specifiying the site structure using a Sitemap.  There are 3 methods for specifying the Sitemap: using files(s), annotations, or directly coded in Guice modules (these can also be mixed)
 
 This library is usable, thought there are still some bugs and further developments needed.
 
