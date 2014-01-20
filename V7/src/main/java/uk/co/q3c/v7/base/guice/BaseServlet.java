@@ -12,9 +12,10 @@
  */
 package uk.co.q3c.v7.base.guice;
 
+import javax.servlet.annotation.WebServlet;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
 import com.vaadin.server.ServiceException;
 import com.vaadin.server.SessionInitEvent;
 import com.vaadin.server.SessionInitListener;
@@ -22,6 +23,7 @@ import com.vaadin.server.UIProvider;
 import com.vaadin.server.VaadinServlet;
 
 @Singleton
+@WebServlet(name = "V7 Application", urlPatterns = "/*")
 public class BaseServlet extends VaadinServlet implements SessionInitListener {
 
 	/**

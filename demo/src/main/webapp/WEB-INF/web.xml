@@ -22,14 +22,6 @@
 		<listener-class>uk.co.q3c.v7.demo.DemoGuiceServletInjector</listener-class>
 	</listener>
 
-	<servlet>
-		<servlet-name>V7 Application</servlet-name>
-		<servlet-class>uk.co.q3c.v7.base.guice.BaseServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>V7 Application</servlet-name>
-		<url-pattern>/*</url-pattern>
-	</servlet-mapping>
 
 
 
