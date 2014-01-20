@@ -7,11 +7,11 @@ V7 is a libary which provides a base application for Java / web development comb
 
 There are a number of sub-projects, each with a different status
 
-17th November 2013:  
+20th January 2014:  
 
 ### V7
 
-This is the base, or core, library.  Vaadin 7.1.8 is integrated with Guice 3.0 and Shiro 1.2.1.  It provides site navigation and the means to authenticate and authorise users. 
+This is the base, or core, library.  Vaadin 7.1.10 is integrated with Guice 3.0 and Shiro 1.2.1.  It provides site navigation and the means to authenticate and authorise users. 
 Building an application is assisted by specifiying the site structure using a Sitemap; there is currently only one method for specifying the Sitemap, others are in early development. 
 
 This library is usable, thought there are still some bugs and further developments needed.
