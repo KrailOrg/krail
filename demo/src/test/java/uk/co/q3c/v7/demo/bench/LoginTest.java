@@ -27,15 +27,15 @@ public class LoginTest extends V7TestBenchTestCase {
 	@Before
 	public void setUp() throws Exception {
 		baseUrl = "http://localhost:8080/";
-		driver.get(concatUrl(baseUrl, "/?restartApplication#public"));
+		driver.get(concatUrl(baseUrl, "/?restartApplication#"));
 	}
 
 	@Test
 	public void testLogin() {
 		// given
-
-		navTree().index(0).expand().get().click();
-		String startFragment = "public/system-account";
+		navTree().expand(0);
+		// navTree().index(0).expand().get().click();
+		String startFragment = "system-account";
 		navigateTo(startFragment);
 
 		pause(1000);
@@ -48,7 +48,7 @@ public class LoginTest extends V7TestBenchTestCase {
 		// when LoginStatusPanel button clicked
 		loginButton().click();
 		// then
-		verifyUrl("public/login");
+		verifyUrl("login");
 
 		// when username and password entered
 		login();

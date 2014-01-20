@@ -52,4 +52,9 @@ public class ElementLocator {
 		path.expand();
 		return this;
 	}
+
+	public ElementPath getPath() {
+		return path;
+	}
+
 }

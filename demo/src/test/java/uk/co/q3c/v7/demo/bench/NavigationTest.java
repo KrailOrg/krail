@@ -19,7 +19,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 	@Before
 	public void setUp() throws Exception {
 		baseUrl = "http://localhost:8080/";
-		driver.get(concatUrl(baseUrl, "/?restartApplication#public"));
+		driver.get(concatUrl(baseUrl, "/?restartApplication"));
 	}
 
 	@Test
@@ -30,36 +30,25 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// when
 
 		// then
-		verifyUrl("public");
+		verifyUrl("home");
+		// // when
+		navTree().select(0);
+		// // then
+		verifyUrl("system-account");
+		// // when
+		navTree().select(1);
+		// // then
+		verifyUrl("home");
+		// // when
+		navTree().select(2);
+		// // then
+		verifyUrl("login");
 
 		// when
-		navTree().index(0).expand().get().click();
-		navTree().index(0, 1).expand().get().click();
-		navTree().index(0, 1, 0).get().click();
+		navTree().expand(0);
+		navTree().select(0, 1);
 		// then
-		verifyUrl("public/system-account/request-account");
-
-		// when
-		navTree().index(0, 1, 1).get().click();
-		// then
-		verifyUrl("public/system-account/unlock-account");
-
-		// when
-		navigateBack();
-		// then
-		verifyUrl("public/system-account/request-account");
-
-		// when
-		navigateForward();
-		// then
-		verifyUrl("public/system-account/unlock-account");
-
-		// when
-		navigateTo("public/system-account/request-account");
-		// then
-		pause(500);
-		assertThat(navTreeSelection()).isEqualTo("Request Account");
-		verifyUrl("public/system-account/request-account");
+		verifyUrl("system-account/enable-account");
 
 	}
 

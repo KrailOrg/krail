@@ -56,8 +56,8 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 		assertThat(actual).isEqualTo(expected);
 	}
 
-	protected ElementLocator navTree() {
-		return locator().id("DefaultUserNavigationTree");
+	protected UITree navTree() {
+		return treeLocator().id("DefaultUserNavigationTree");
 	}
 
 	protected String navTreeSelection() {
@@ -65,6 +65,10 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 		String selectedNodeText = getDriver().findElement(
 				By.xpath("id('DefaultUserNavigationTree')//div[contains(@class, 'v-tree-node-selected')]")).getText();
 		return selectedNodeText;
+	}
+
+	protected UITree treeLocator() {
+		return new UITree(driver);
 	}
 
 	protected ElementLocator locator() {
