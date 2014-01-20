@@ -24,7 +24,7 @@ import com.google.inject.multibindings.MapBinder;
  * If you want to create Sitemap entries for your own code using a direct coding approach, you can either subclass this
  * module and provide the entries in the {@link #define} method, or just simply use this as an example and create your
  * own. The module then needs to be added to your subclass of {@link BaseGuiceServletInjector}. By convention, modules
- * relating to the Sitemap are added in the addSitempaModules() method.
+ * relating to the Sitemap are added in the addSitemapModules() method.
  * <p>
  * You can add any number of modules this way, but any duplicated map keys (the URI segments) will cause the map
  * injection to fail. There is an option to change this behaviour in MapBinder#permitDuplicates()
