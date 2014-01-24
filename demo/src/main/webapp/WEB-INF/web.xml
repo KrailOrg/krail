@@ -22,6 +22,20 @@
 		<listener-class>uk.co.q3c.v7.demo.DemoGuiceServletInjector</listener-class>
 	</listener>
 
+	<servlet>
+		<servlet-name>V7 Application</servlet-name>
+		<servlet-class>uk.co.q3c.v7.base.guice.BaseServlet</servlet-class>
+		  <init-param>
+    <description>Widget Set to Use</description>
+    <param-name>widgetset</param-name>
+    <param-value>uk.co.q3c.v7.demo.widgetset.V7demoWidgetset</param-value>
+ </init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>V7 Application</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
 
 
 
