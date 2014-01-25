@@ -22,7 +22,9 @@ import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.i18n.LabelKey;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -43,6 +45,9 @@ public class DefaultStandardPagesModuleTest {
 	@Inject
 	Sitemap sitemap;
 
+	@Inject
+	SitemapChecker sitemapChecker;
+
 	@Test
 	public void check() {
 
@@ -57,6 +62,15 @@ public class DefaultStandardPagesModuleTest {
 		assertThat(sitemap.standardPageNode(StandardPageKey.Private_Home)).isNotNull();
 		assertThat(sitemap.standardPageNode(StandardPageKey.Login)).isNotNull();
 		assertThat(sitemap.standardPageNode(StandardPageKey.Logout)).isNotNull();
+		SitemapNode privateNode = sitemap.nodeFor("private");
+		assertThat(privateNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+		// when
+		sitemapChecker.check();
+		// then
+		assertThat(privateNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+		assertThat(privateNode.getLabelKey()).isEqualTo(LabelKey.Private);
+		assertThat(privateNode.getViewClass()).isNull();
+		assertThat(privateNode.getRoles()).isNullOrEmpty();
 
 	}
 
@@ -67,6 +81,7 @@ public class DefaultStandardPagesModuleTest {
 			@Override
 			protected void configure() {
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(SitemapChecker.class).to(DefaultSitemapChecker.class);
 
 			}
 

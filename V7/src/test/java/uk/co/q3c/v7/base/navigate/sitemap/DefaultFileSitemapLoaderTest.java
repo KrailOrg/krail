@@ -436,7 +436,7 @@ public class DefaultFileSitemapLoaderTest {
 			assertThat(node.getViewClass()).isEqualTo(My_AccountView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.My_Account);
 			assertThat(node.isPublicPage()).isTrue();
-			assertThat(node.hasPermissions()).isFalse();
+			assertThat(node.hasRoles()).isFalse();
 			break;
 
 		case "my-account/transfers":
@@ -445,7 +445,7 @@ public class DefaultFileSitemapLoaderTest {
 			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Transfers);
 			assertThat(node.isPublicPage()).isTrue();
-			assertThat(node.hasPermissions()).isFalse();
+			assertThat(node.hasRoles()).isFalse();
 			break;
 
 		case "my-account/money-in-out":
@@ -454,7 +454,7 @@ public class DefaultFileSitemapLoaderTest {
 			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.MoneyInOut);
 			assertThat(node.isPublicPage()).isFalse();
-			assertThat(node.hasPermissions()).isTrue();
+			assertThat(node.hasRoles()).isTrue();
 			break;
 
 		case "my-account/options":
@@ -463,7 +463,7 @@ public class DefaultFileSitemapLoaderTest {
 			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Opt);
 			assertThat(node.isPublicPage()).isFalse();
-			assertThat(node.hasPermissions()).isTrue();
+			assertThat(node.hasRoles()).isTrue();
 			break;
 
 		default:

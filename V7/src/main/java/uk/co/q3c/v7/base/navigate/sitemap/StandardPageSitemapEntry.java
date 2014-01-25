@@ -15,89 +15,32 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.base.view.component.UserNavigationTree;
+import uk.co.q3c.v7.i18n.I18NKey;
 
 /**
  * A simple data class to hold an standard page entry for the Sitemap for use with a {@link DirectSitemapModule}. Note
  * that if {@link #pageAccessControl} is {@link PageAccessControl#ROLES}, then roles must be set to a non-empty value,
  * but there is no check for this until the SitemapChecker is invoked. This allows a of Sitemap errors to be captured at
  * once rather than one at a time.
+ * <p>
+ * The labelKey cannot be of type {@link StandardPageKey}, because there may be intermediate pages - for example
+ * 'private/home' may be assigned to the {@link StandardPageKey#Private_Home}, but the intermediate page 'private' needs
+ * a key to display in the {@link UserNavigationTree}. That key cannot be a {@link StandardPageKey}
  * 
  * @author David Sowerby
  * 
  */
-public class StandardPageSitemapEntry {
-	private PageAccessControl pageAccessControl;
-	private Class<? extends V7View> viewClass;
-	private StandardPageKey labelKey;
-	private String roles;
+public class StandardPageSitemapEntry extends DirectSitemapEntry {
 
-	/**
-	 * @throws PageAccessControlException
-	 *             is {@link #pageAccessControl} is {@link PageAccessControl#ROLES} as roles are required for this
-	 *             setting.
-	 * @param viewClass
-	 * @param labelKey
-	 * @param pageAccessControl
-	 */
-	public StandardPageSitemapEntry(Class<? extends V7View> viewClass, StandardPageKey labelKey,
-			PageAccessControl pageAccessControl) {
-		super();
-		this.pageAccessControl = pageAccessControl;
-		this.viewClass = viewClass;
-		this.labelKey = labelKey;
-	}
-
-	/**
-	 * Roles are only used if {@link #pageAccessControl} is {@link PageAccessControl#ROLES}, so if you don't need them
-	 * you can use the other constructor.
-	 * 
-	 * @throws PageAccessControlException
-	 *             is {@link #pageAccessControl} is {@link PageAccessControl#ROLES} and roles is null or empty
-	 * @param viewClass
-	 * @param labelKey
-	 * @param pageAccessControl
-	 * @param roles
-	 *            a comma separated list of roles
-	 */
-	public StandardPageSitemapEntry(Class<? extends V7View> viewClass, StandardPageKey labelKey,
+	protected StandardPageSitemapEntry(Class<? extends V7View> viewClass, I18NKey<?> labelKey,
 			PageAccessControl pageAccessControl, String roles) {
-		super();
-		this.pageAccessControl = pageAccessControl;
-		this.viewClass = viewClass;
-		this.labelKey = labelKey;
-		this.roles = roles;
+		super(viewClass, labelKey, pageAccessControl, roles);
 	}
 
-	public Class<? extends V7View> getViewClass() {
-		return viewClass;
-	}
-
-	public void setViewClass(Class<? extends V7View> viewClass) {
-		this.viewClass = viewClass;
-	}
-
-	public StandardPageKey getLabelKey() {
-		return labelKey;
-	}
-
-	public void setLabelKey(StandardPageKey labelKey) {
-		this.labelKey = labelKey;
-	}
-
-	public String getRoles() {
-		return roles;
-	}
-
-	public void setRoles(String roles) {
-		this.roles = roles;
-	}
-
-	public PageAccessControl getPageAccessControl() {
-		return pageAccessControl;
-	}
-
-	public void setPageAccessControl(PageAccessControl pageAccessControl) {
-		this.pageAccessControl = pageAccessControl;
+	protected StandardPageSitemapEntry(Class<? extends V7View> viewClass, I18NKey<?> labelKey,
+			PageAccessControl pageAccessControl) {
+		super(viewClass, labelKey, pageAccessControl);
 	}
 
 }

@@ -107,7 +107,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.getViewClass()).isEqualTo(My_AccountView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.My_Account);
 			assertThat(node.isPublicPage()).isTrue();
-			assertThat(node.hasPermissions()).isFalse();
+			assertThat(node.hasRoles()).isFalse();
 			break;
 
 		case "my-account/transfers":
@@ -116,7 +116,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Transfers);
 			assertThat(node.isPublicPage()).isTrue();
-			assertThat(node.hasPermissions()).isFalse();
+			assertThat(node.hasRoles()).isFalse();
 			break;
 
 		case "my-account/money-in-out":
@@ -125,7 +125,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.MoneyInOut);
 			assertThat(node.isPublicPage()).isFalse();
-			assertThat(node.hasPermissions()).isTrue();
+			assertThat(node.hasRoles()).isTrue();
 			break;
 
 		case "my-account/options":
@@ -134,7 +134,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Opt);
 			assertThat(node.isPublicPage()).isFalse();
-			assertThat(node.hasPermissions()).isTrue();
+			assertThat(node.hasRoles()).isTrue();
 			break;
 		case "information":
 			assertThat(sitemap.getChildCount(node)).isEqualTo(3);
@@ -142,7 +142,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.getViewClass()).isEqualTo(null);
 			assertThat(node.getLabelKey()).isEqualTo(null);
 			assertThat(node.isPublicPage()).isTrue();
-			assertThat(node.hasPermissions()).isFalse();
+			assertThat(node.hasRoles()).isFalse();
 			break;
 		case "information/offers":
 			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
@@ -150,7 +150,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.MoneyInOut);
 			assertThat(node.isPublicPage()).isFalse();
-			assertThat(node.hasPermissions()).isTrue();
+			assertThat(node.hasRoles()).isTrue();
 			break;
 		case "information/terms":
 			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
@@ -158,7 +158,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
 			assertThat(node.getLabelKey()).isEqualTo(null);
 			assertThat(node.isPublicPage()).isTrue();
-			assertThat(node.hasPermissions()).isFalse();
+			assertThat(node.hasRoles()).isFalse();
 			break;
 		case "information/services":
 			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
@@ -166,7 +166,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Opt);
 			assertThat(node.isPublicPage()).isFalse();
-			assertThat(node.hasPermissions()).isTrue();
+			assertThat(node.hasRoles()).isTrue();
 			break;
 
 		default:

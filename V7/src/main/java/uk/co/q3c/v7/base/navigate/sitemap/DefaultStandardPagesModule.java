@@ -21,6 +21,7 @@ import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.LabelKey;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
@@ -41,6 +42,7 @@ public class DefaultStandardPagesModule extends AbstractModule {
 		addEntry("home", PublicHomeView.class, StandardPageKey.Public_Home, PageAccessControl.PUBLIC, null);
 		addEntry("login", LoginView.class, StandardPageKey.Login, PageAccessControl.PUBLIC, null);
 		addEntry("logout", LogoutView.class, StandardPageKey.Logout, PageAccessControl.PUBLIC, null);
+		addEntry("private", null, LabelKey.Private, PageAccessControl.PERMISSION, null);
 		addEntry("private/home", PrivateHomeView.class, StandardPageKey.Private_Home, PageAccessControl.PERMISSION,
 				null);
 		addRedirect("private", "private/home");
@@ -68,7 +70,7 @@ public class DefaultStandardPagesModule extends AbstractModule {
 	 * @param permission
 	 *            the permission string for the page. May be null if no permissions are set
 	 */
-	protected void addEntry(String uri, Class<? extends V7View> viewClass, StandardPageKey pageKey,
+	protected void addEntry(String uri, Class<? extends V7View> viewClass, I18NKey<?> pageKey,
 			PageAccessControl pageAccessControl, String permission) {
 
 		StandardPageSitemapEntry entry = new StandardPageSitemapEntry(viewClass, pageKey, pageAccessControl, permission);

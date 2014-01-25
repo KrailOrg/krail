@@ -16,6 +16,7 @@ import java.text.Collator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -109,7 +110,9 @@ public class DefaultDirectSitemapLoader implements DirectSitemapLoader {
 			node.setPageAccessControl(value.getPageAccessControl());
 			node.setTranslate(translate);
 			node.setViewClass(value.getViewClass());
-			sitemap.addStandardPage(entry.getValue().getLabelKey(), node);
+			if (node.getLabelKey() instanceof StandardPageKey) {
+				sitemap.addStandardPage((StandardPageKey) entry.getValue().getLabelKey(), node);
+			}
 		}
 	}
 

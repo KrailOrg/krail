@@ -14,6 +14,7 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.text.Collator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -34,10 +35,12 @@ import com.google.inject.Inject;
 /**
  * Checks the Sitemap for inconsistencies after it has been loaded. The following are considered:
  * <ol>
- * <li>Missing views
- * <li>Missing enums
+ * <li>Missing views are not allowed unless the page is redirected
+ * <li>Missing enums (label keys) are not allowed unless the page is redirected
  * <li>Redirects from within the {@link Sitemap} have their pageAccessControl attribute set to the pageAccessControl of
  * the redirect target.
+ * <li>Redirects to a child (for example from 'private' to 'private/home' must have a label key
+ * 
  * </ol>
  * 
  * @author David Sowerby
@@ -87,7 +90,8 @@ public class DefaultSitemapChecker implements SitemapChecker {
 		for (SitemapNode node : sitemap.getAllNodes()) {
 			String nodeUri = sitemap.uri(node);
 			log.debug("Checking {}", nodeUri);
-			// Don't fail if there is a redirect in place
+
+			// If no redirect, must have a label key, pageAccessControl and view
 			if (!sitemap.getRedirects().containsKey(nodeUri)) {
 
 				if (node.getViewClass() == null) {
@@ -111,15 +115,19 @@ public class DefaultSitemapChecker implements SitemapChecker {
 				}
 			} else {
 				// if redirected, take the accessControlPermission from the redirect target
-				// must allow for multiple levels of redirect
-				SitemapNode sourceNode = node;
-				SitemapNode targetNode = sitemap.nodeFor(sitemap.getRedirectFor(nodeUri));
-				while (targetNode != null) {
-					sourceNode = targetNode;
-					targetNode = sitemap.redirectFor(sourceNode);
-				}
-				node.setPageAccessControl(sourceNode.getPageAccessControl());
+				// note: Sitemap allows for multiple levels of redirect
+				SitemapNode targetNode = sitemap.nodeFor(sitemap.getRedirectPageFor(nodeUri));
+				node.setPageAccessControl(targetNode.getPageAccessControl());
 
+				// if redirect is from parent to child, the parent must have a label key, or it cannot display, in a
+				// UserNavigationTree for example. Easiest way to check is to take the target node, get the chain
+				// of nodes 'above' it, then ensure they all have a label key
+				List<SitemapNode> nodeChainForTarget = sitemap.nodeChainFor(targetNode);
+				for (SitemapNode n : nodeChainForTarget) {
+					if (n.getLabelKey() == null) {
+						missingLabelKeys.add(sitemap.uri(n));
+					}
+				}
 			}
 
 		}

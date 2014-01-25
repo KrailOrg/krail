@@ -25,6 +25,7 @@ import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.TestLabelKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -47,6 +48,9 @@ public class DefaultSitemapCheckerTest {
 
 	@Inject
 	DefaultSitemapChecker checker;
+
+	@Inject
+	Translate translate;
 
 	@Inject
 	Sitemap sitemap;
@@ -91,11 +95,14 @@ public class DefaultSitemapCheckerTest {
 	public void redirect() {
 
 		// given
+		Collator collator = Collator.getInstance();
 		buildSitemap(1);
+		SitemapNode publicNode = sitemap.nodeFor("public");
+		publicNode.setLabelKey(TestLabelKey.Home, translate, collator);
 		// when
 		checker.check();
 		// then
-		SitemapNode publicNode = sitemap.nodeFor("public");
+
 		assertThat(publicNode).isNotNull();
 		assertThat(publicNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 	}
@@ -104,11 +111,14 @@ public class DefaultSitemapCheckerTest {
 	public void redirect_multiLevel() {
 
 		// given
+		Collator collator = Collator.getInstance();
 		buildSitemap(2);
+		SitemapNode publicNode = sitemap.nodeFor("public");
+		publicNode.setLabelKey(TestLabelKey.Public, translate, collator);
 		// when
 		checker.check();
 		// then
-		SitemapNode publicNode = sitemap.nodeFor("public");
+
 		SitemapNode n1 = sitemap.nodeFor(uripublic_Node1);
 		SitemapNode n11 = sitemap.nodeFor(uripublic_Node11);
 

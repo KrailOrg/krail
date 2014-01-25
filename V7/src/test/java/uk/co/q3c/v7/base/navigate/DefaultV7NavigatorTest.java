@@ -230,7 +230,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/logout";
 		when(sitemap.standardPageURI(StandardPageKey.Logout)).thenReturn(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
 		mockNode1.setViewClass(LogoutView.class);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
@@ -245,7 +245,7 @@ public class DefaultV7NavigatorTest {
 	public void login() {
 		// given
 		String page = "public/login";
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode1.setViewClass(LoginView.class);
@@ -330,7 +330,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view2";
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode1.setViewClass(View2.class);
@@ -350,7 +350,7 @@ public class DefaultV7NavigatorTest {
 		String fragment1 = page1 + "/id=2/age=5";
 
 		when(sitemap.standardPageURI(StandardPageKey.Public_Home)).thenReturn("public");
-		when(sitemap.getRedirectFor("public")).thenReturn("public");
+		when(sitemap.getRedirectPageFor("public")).thenReturn("public");
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode1.setViewClass(View1.class);
@@ -368,7 +368,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		// given
 		String page = "public/view3";
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 
 		// when
 		navigator.navigateTo(page);
@@ -382,7 +382,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view2";
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode1.setViewClass(View2.class);
@@ -399,7 +399,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		String pageWithParams = "public/view2/id=1/age=2";
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
 		mockNode1.setViewClass(View2.class);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
@@ -417,7 +417,7 @@ public class DefaultV7NavigatorTest {
 		String page = "public/view2";
 		mockNode1 = new SitemapNode(page, view2.getClass(), LabelKey.Cancel, Locale.UK, collator, translate);
 		when(sitemap.uri(mockNode1)).thenReturn(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(page)).thenReturn(mockNode1);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode1.setViewClass(View2.class);
@@ -435,14 +435,14 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page1 = "public/view1";
 		String fragment1 = page1 + "/id=1";
-		when(sitemap.getRedirectFor(page1)).thenReturn(page1);
+		when(sitemap.getRedirectPageFor(page1)).thenReturn(page1);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenAnswer(new MockNodeAnswer());
 		mockNode1.setViewClass(View1.class);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 
 		String page2 = "public/view2";
 		String fragment2 = page2 + "/id=2";
-		when(sitemap.getRedirectFor(page2)).thenReturn(page2);
+		when(sitemap.getRedirectPageFor(page2)).thenReturn(page2);
 		when(sitemap.nodeFor(fragment2)).thenReturn(mockNode2);
 		mockNode2.setViewClass(View2.class);
 		mockNode2.setPageAccessControl(PageAccessControl.PUBLIC);
@@ -496,7 +496,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view2";
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode1.setViewClass(View2.class);
@@ -520,7 +520,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view2";
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode1.setViewClass(View2.class);
@@ -544,7 +544,7 @@ public class DefaultV7NavigatorTest {
 		String page = "wiggly";
 		String page2 = "private/transfers";
 
-		when(sitemap.getRedirectFor(page)).thenReturn(page2);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page2);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode1.setViewClass(View2.class);
@@ -590,7 +590,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		NavigationState navigationState = uriHandler.navigationState(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		mockNode2.setViewClass(View2.class);
 		mockNode2.setPageAccessControl(PageAccessControl.PUBLIC);
@@ -606,7 +606,7 @@ public class DefaultV7NavigatorTest {
 		// given authenticated
 		String page = "public/view2";
 		NavigationState navigationState = uriHandler.navigationState(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -620,7 +620,7 @@ public class DefaultV7NavigatorTest {
 		// given remembered
 		page = "public/view2";
 		navigationState = uriHandler.navigationState(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(true);
@@ -637,7 +637,7 @@ public class DefaultV7NavigatorTest {
 
 		// given authenticated
 		String page = "public/view2";
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(false);
@@ -654,7 +654,7 @@ public class DefaultV7NavigatorTest {
 		// given authenticated
 		String page = "public/view2";
 		NavigationState navigationState = uriHandler.navigationState(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(false);
@@ -672,7 +672,7 @@ public class DefaultV7NavigatorTest {
 
 		// given authenticated
 		String page = "public/view2";
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(true);
@@ -688,7 +688,7 @@ public class DefaultV7NavigatorTest {
 
 		// given authenticated
 		String page = "public/view2";
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -705,7 +705,7 @@ public class DefaultV7NavigatorTest {
 		// given authenticated
 		String page = "public/view2";
 		NavigationState navigationState = uriHandler.navigationState(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -723,7 +723,7 @@ public class DefaultV7NavigatorTest {
 
 		// given authenticated
 		String page = "public/view2";
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(true);
@@ -739,7 +739,7 @@ public class DefaultV7NavigatorTest {
 
 		String page = "public/view2";
 		NavigationState navigationState = uriHandler.navigationState(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -758,7 +758,7 @@ public class DefaultV7NavigatorTest {
 
 		String page = "public/view2";
 		NavigationState navigationState = uriHandler.navigationState(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -778,7 +778,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		NavigationState navigationState = uriHandler.navigationState(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -802,7 +802,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		NavigationState navigationState = uriHandler.navigationState(page);
-		when(sitemap.getRedirectFor(page)).thenReturn(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);

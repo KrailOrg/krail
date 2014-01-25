@@ -133,7 +133,7 @@ public class DefaultRealmTest {
 		AuthorizationInfo info = realm.getAuthorizationInfo(pc);
 		// then
 		assertThat(info).isNotNull();
-		assertThat(info.getStringPermissions().contains("uri:view:private:*"));
+		assertThat(info.getStringPermissions().contains("page:view:private:*"));
 
 	}
 

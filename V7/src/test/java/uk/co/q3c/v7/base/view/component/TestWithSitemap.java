@@ -128,9 +128,12 @@ public abstract class TestWithSitemap {
 			sitemap.addChild(newNode5, newNode6);
 			newNode1 = new SitemapNode();
 			newNode1.setUriSegment("a");
+			newNode1.setLabelKey(TestLabelKey.Yes, translate, collator);
 			newNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 			newNode2 = newNode("a1");
+			newNode2.setLabelKey(TestLabelKey.Home, translate, collator);
 			newNode3 = newNode("a11");
+			newNode3.setLabelKey(TestLabelKey.Yes, translate, collator);
 			sitemap.addChild(newNode1, newNode2);
 			sitemap.addChild(newNode2, newNode3);
 			break;

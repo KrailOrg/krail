@@ -195,11 +195,11 @@ public class SitemapTest {
 		sitemap.append("private/home/wiggly");
 		sitemap.addRedirect("home", "public/home");
 		// when redirect exists
-		String page = sitemap.getRedirectFor("home");
+		String page = sitemap.getRedirectPageFor("home");
 		// then
 		assertThat(page).isEqualTo("public/home");
 		// when redirect does not exist
-		page = sitemap.getRedirectFor("wiggly");
+		page = sitemap.getRedirectPageFor("wiggly");
 		assertThat(page).isEqualTo("wiggly");
 	}
 
@@ -268,7 +268,7 @@ public class SitemapTest {
 		SitemapNode node1 = sitemap.nodeFor("public/home/view1");
 		SitemapNode node2 = sitemap.nodeFor("public/home/view2");
 		// then
-		assertThat(sitemap.redirectFor(node1)).isEqualTo(node2);
+		assertThat(sitemap.getRedirectNodeFor(node1)).isEqualTo(node2);
 
 	}
 
@@ -340,6 +340,23 @@ public class SitemapTest {
 
 		assertThat(node1).isEqualTo(node3);
 		assertThat(node1).isEqualTo(node2);
+	}
+
+	@Test
+	public void multiLevelRedirect() {
+
+		// given
+		Sitemap sitemap = new Sitemap(uriHandler, translate);
+		sitemap.append("public/home/view1");
+		sitemap.append("public/home/view2");
+		sitemap.append("public/home/view3");
+		sitemap.append("public/home/view4");
+		sitemap.addRedirect("public/home/view1", "public/home/view2");
+		sitemap.addRedirect("public/home/view2", "public/home/view3");
+		// when
+
+		// then
+		assertThat(sitemap.getRedirectPageFor("public/home/view1")).isEqualTo("public/home/view3");
 	}
 
 	@ModuleProvider

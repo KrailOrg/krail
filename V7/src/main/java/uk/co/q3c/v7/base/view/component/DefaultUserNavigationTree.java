@@ -107,27 +107,39 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 
 		for (SitemapNode node : nodeList) {
 			level = 1;
-			// doesn't make sense to show the logout page
-			if ((node.getLabelKey() == null) || (!node.getLabelKey().equals(StandardPageKey.Logout))) {
-				loadNode(null, node);
-			}
+			loadNode(null, node);
 		}
 	}
 
 	/**
 	 * Checks each node to ensure that the Subject has permission to view, and if so, adds it to this tree. Note that if
 	 * a node is redirected, its pageAccessControl attribute will have been modified to be the same as the redirect
-	 * target by
+	 * target by the SitemapChecker.
+	 * <p>
+	 * Nodes which have a null label key are ignored, as they cannot be displayed. The logout page is never loaded. The
+	 * login page is only shown if the user has not logged in.
 	 * 
 	 * @param parentNode
 	 * @param childNode
 	 */
 	private void loadNode(SitemapNode parentNode, SitemapNode childNode) {
-
+		if (childNode.getLabelKey() == null) {
+			return;
+		}
+		if (childNode.equals(sitemap.standardPageNode(StandardPageKey.Logout))) {
+			return;
+		}
 		String uri = sitemap.uri(childNode);
 		log.debug("loading node for uri '{}'", uri);
-		// if permitted, add it
+
 		Subject subject = subjectProvider.get();
+		if (subject.isAuthenticated()) {
+			if (childNode.equals(sitemap.standardPageNode(StandardPageKey.Login))) {
+				return;
+			}
+		}
+
+		// if permitted, add it
 		if (pageAccessController.isAuthorised(subject, childNode)) {
 			log.debug("user has permission to view URI {}", uri);
 			this.addItem(childNode);
@@ -239,7 +251,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 
 	@Override
 	public void loginStatusChange(boolean status, Subject subject) {
-
+		loadNodes();
 	}
 
 }

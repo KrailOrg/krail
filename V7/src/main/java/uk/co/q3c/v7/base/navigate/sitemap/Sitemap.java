@@ -264,29 +264,36 @@ public class Sitemap {
 
 	/**
 	 * If the {@code page} has been redirected, return the page it has been redirected to, otherwise, just return
-	 * {@code page}
+	 * {@code page}. Allows for multiple levels of redirect
 	 * 
 	 * @param page
 	 * @return
 	 */
-	public String getRedirectFor(String page) {
+	public String getRedirectPageFor(String page) {
+
 		String p = redirects.get(page);
 		if (p == null) {
 			return page;
 		}
-		return p;
+		String p1 = null;
+		while (p != null) {
+			p1 = p;
+			p = redirects.get(p1);
+		}
+
+		return p1;
 	}
 
 	/**
 	 * If the virtual page represented by {@code navigationState} has been redirected, return the page it has been
-	 * redirected to, otherwise, just return the virtual page unchanged.
+	 * redirected to, otherwise, just return the virtual page unchanged. Allows for multiple levels of redirect.
 	 * 
 	 * @param page
 	 * @return
 	 */
-	public String getRedirectFor(NavigationState navigationState) {
+	public String getRedirectPageFor(NavigationState navigationState) {
 		String virtualPage = navigationState.getVirtualPage();
-		return getRedirectFor(virtualPage);
+		return getRedirectPageFor(virtualPage);
 	}
 
 	/**
@@ -578,13 +585,15 @@ public class Sitemap {
 	}
 
 	/**
-	 * Returns a redirect for sourceNode if there is one, null if there is not
+	 * Returns a redirect for sourceNode if there is one, null if there is not. Allows for multiple levels of redirect
 	 * 
 	 * @return
 	 */
-	public SitemapNode redirectFor(SitemapNode sourceNode) {
+	public SitemapNode getRedirectNodeFor(SitemapNode sourceNode) {
 		String sourceUri = uri(sourceNode);
-		return nodeFor(redirects.get(sourceUri));
+
+		String redirectPageFor = getRedirectPageFor(sourceUri);
+		return nodeFor(redirectPageFor);
 	}
 
 }

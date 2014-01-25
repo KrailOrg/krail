@@ -1,7 +1,5 @@
 package uk.co.q3c.v7.base.shiro;
 
-import com.google.inject.Inject;
-
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -18,6 +16,8 @@ import org.apache.shiro.realm.ldap.JndiLdapRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
+
+import com.google.inject.Inject;
 
 public class DefaultRealm extends AuthorizingRealm {
 
@@ -78,7 +78,8 @@ public class DefaultRealm extends AuthorizingRealm {
 	 * <br>
 	 * You can provide your own Realm implementation by overriding {@link DefaultShiroModule#bindRealms()}<br>
 	 * <br>
-	 * Authorises all users to access the private pages of the {@link Sitemap}
+	 * Authorises all users to access the private pages of the {@link Sitemap} (that is, all the pages in the 'private'
+	 * branch)
 	 * 
 	 * @see org.apache.shiro.realm.AuthorizingRealm#doGetAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection)
 	 */
@@ -86,9 +87,9 @@ public class DefaultRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-		// public pages do not get submitted for authorisation check, this very simplistic example gives permission
-		// for all pages which do get submitted for authorisation
-		String privatePermission = "uri:view:*:*";
+		// this very simplistic example gives permission for all pages which do get submitted for authorisation
+		// and are in the 'private' branch
+		String privatePermission = "page:view:private:*";
 		info.addStringPermission(privatePermission);
 		return info;
 	}

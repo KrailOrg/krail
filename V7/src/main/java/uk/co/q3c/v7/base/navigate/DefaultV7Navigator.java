@@ -106,7 +106,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		sitemapCheck();
 
 		String page = navigationState.getVirtualPage();
-		String redirection = sitemap.getRedirectFor(page);
+		String redirection = sitemap.getRedirectPageFor(page);
 		// if no redirect found, page is returned
 		if (redirection == page) {
 			return navigationState;
