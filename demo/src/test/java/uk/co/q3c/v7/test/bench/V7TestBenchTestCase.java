@@ -23,10 +23,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
+import uk.co.q3c.v7.base.view.DefaultLoginView;
+import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
 
 import com.vaadin.testbench.By;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextField;
 
 public class V7TestBenchTestCase extends TestBenchTestCase {
 	private static Logger log = LoggerFactory.getLogger(V7TestBenchTestCase.class);
@@ -56,6 +62,12 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 		assertThat(actual).isEqualTo(expected);
 	}
 
+	protected void verifyNotUrl(String fragment) {
+		String expected = rootUrl() + fragment;
+		String actual = driver.getCurrentUrl();
+		assertThat(actual).isNotEqualTo(expected);
+	}
+
 	protected UITree navTree() {
 		return treeLocator().id("DefaultUserNavigationTree");
 	}
@@ -78,6 +90,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	protected void navigateTo(String fragment) {
 		String url = url(fragment);
 		driver.get(url);
+		pause(100);
 	}
 
 	protected WebElement element(String qualifier, Class<?>... classes) {
@@ -120,5 +133,49 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 
 	protected void navigateBack() {
 		driver.navigate().back();
+	}
+
+	protected WebElement loginButton() {
+		return element(DefaultLoginStatusPanel.class, Button.class);
+	}
+
+	public void fillLoginForm() {
+		fillLoginForm("ds", "password");
+	}
+
+	public void fillLoginForm(String username, String password) {
+		usernameBox().clear();
+		usernameBox().sendKeys(username);
+		passwordBox().clear();
+		passwordBox().sendKeys(password);
+		submitButton().click();
+	}
+
+	public void login() {
+		loginButton().click();
+		fillLoginForm();
+	}
+
+	protected WebElement loginLabel() {
+		return element(DefaultLoginStatusPanel.class, Label.class);
+	}
+
+	protected WebElement usernameBox() {
+		return element("username", DefaultLoginView.class, TextField.class);
+	}
+
+	protected WebElement passwordBox() {
+		return element("password", DefaultLoginView.class, PasswordField.class);
+	}
+
+	protected WebElement submitButton() {
+		return element(DefaultLoginView.class, Button.class);
+	}
+
+	/**
+	 * This does assume that you are already logged in!
+	 */
+	protected void logout() {
+		loginButton().click();
 	}
 }

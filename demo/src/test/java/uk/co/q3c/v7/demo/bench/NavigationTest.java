@@ -52,6 +52,26 @@ public class NavigationTest extends V7TestBenchTestCase {
 
 	}
 
+	@Test
+	public void authorisationFailure() {
+
+		// given
+
+		// when
+		navigateTo("private/home");
+		// then
+		verifyNotUrl("private/home");
+		navigateTo("system-account");
+		// when
+		login();
+		// then
+		verifyUrl("system-account");
+		// when
+		navigateTo("private/home");
+		// then
+		verifyUrl("private/home");
+	}
+
 	@After
 	public void tearDown() throws Exception {
 		String verificationErrorString = verificationErrors.toString();
