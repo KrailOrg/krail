@@ -230,15 +230,15 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	/**
 	 * When a user has successfully logged in, they are routed back to the page they were on before going to the login
-	 * page. If they have gone straight to the login page (maybe they bookmarked it), they will be routed to the
-	 * 'authenticated landing page' instead (see
+	 * page. If they have gone straight to the login page (maybe they bookmarked it), or they were on the logout page,
+	 * they will be routed to the 'private home page' (the StandardPage for StandardPageKey_Private_Home)
 	 * 
 	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#loginSuccessful()
 	 */
 	@Override
 	public void loginSuccessful() {
 		log.debug("user logged in successfully, navigating to appropriate view");
-		if (previousNode != null) {
+		if (previousNode != null && previousNode != sitemap.standardPageNode(StandardPageKey.Logout)) {
 			navigateTo(previousNavigationState);
 		} else {
 			navigateTo(StandardPageKey.Private_Home);

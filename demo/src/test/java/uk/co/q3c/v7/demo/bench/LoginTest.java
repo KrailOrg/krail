@@ -58,6 +58,21 @@ public class LoginTest extends V7TestBenchTestCase {
 		assertThat(loginLabel().getText()).isEqualTo("ds");
 	}
 
+	@Test
+	public void loginFromLogout() {
+
+		// given
+		loginButton().click();
+		login();
+		loginButton().click();
+		verifyUrl("logout");
+		// when
+		loginButton().click();
+		login();
+		// then
+		verifyUrl("private/home");
+	}
+
 	@After
 	public void tearDown() throws Exception {
 		String verificationErrorString = verificationErrors.toString();
