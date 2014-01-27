@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -54,16 +53,18 @@ public class NavigationTest extends V7TestBenchTestCase {
 
 	}
 
-	@Ignore("Testing with notifications not working")
+	// @Ignore("Testing with notifications not working")
+	/**
+	 * The notification does not actually appear when the test is run, but does if you step through the test in debug
+	 * (although that breaks the test!)
+	 */
 	@Test
 	public void authorisationFailure() {
 
 		// given
-
 		// when
+
 		navigateTo("private/home");
-		testBenchElement(navTree().getLocator().get()).closeNotification();
-		pause(5000);
 		// then
 		verifyNotUrl("private/home");
 		navigateTo("system-account");
@@ -76,6 +77,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 		navigateTo("private/home");
 		// then
 		verifyUrl("private/home");
+
 	}
 
 	@Test

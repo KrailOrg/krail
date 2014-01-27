@@ -4,11 +4,12 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
+import uk.co.q3c.v7.test.bench.ElementLocator;
 import uk.co.q3c.v7.test.bench.V7TestBenchTestCase;
 
 import com.vaadin.testbench.ScreenshotOnFailureRule;
@@ -65,17 +66,29 @@ public class LoginTest extends V7TestBenchTestCase {
 		verifyUrl("private/home");
 	}
 
-	@Ignore("Testing with notifications not working")
+	//
 	@Test
 	public void authenticationFailure() {
 
 		// given
 
 		// when
+		loginButton().click();
+		pause(100);
+		usernameBox().clear();
+		usernameBox().sendKeys("ds");
+		passwordBox().clear();
+		passwordBox().sendKeys("rubbsih");
 
+		submitButton().click();
+		// fillLoginForm("ds", "rubbish");
 		// then
-
-		fail("not written");
+		verifyUrl("login"); // has not moved
+		assertThat(navTreeSelection()).isEqualTo("Login");
+		WebElement label = new ElementLocator(driver).id("DefaultLoginView-Label-status").get();
+		assertThat(label).isNotNull();
+		String s = label.getText();
+		assertThat(s).isEqualTo("That username or password was not recognised");
 	}
 
 	@After

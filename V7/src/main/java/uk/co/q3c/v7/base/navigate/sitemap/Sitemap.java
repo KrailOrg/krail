@@ -82,6 +82,7 @@ public class Sitemap {
 	 * @return
 	 */
 	public String uri(SitemapNode node) {
+		checkNotNull(node);
 		StringBuilder buf = new StringBuilder(node.getUriSegment());
 		prependParent(node, buf);
 		return buf.toString();
@@ -230,7 +231,14 @@ public class Sitemap {
 	}
 
 	public String standardPageURI(StandardPageKey pageKey) {
-		return uri(standardPages.get(pageKey));
+		checkNotNull(pageKey);
+		SitemapNode sitemapNode = standardPages.get(pageKey);
+		if (sitemapNode != null) {
+			return uri(sitemapNode);
+		} else {
+			throw new SitemapException("No node found for StandardPageKey " + pageKey);
+		}
+
 	}
 
 	public SitemapNode standardPageNode(StandardPageKey pageKey) {
