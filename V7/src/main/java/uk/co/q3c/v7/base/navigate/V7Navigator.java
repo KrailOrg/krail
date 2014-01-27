@@ -3,6 +3,7 @@ package uk.co.q3c.v7.base.navigate;
 import java.util.List;
 
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.shiro.LoginStatusListener;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.V7View;
@@ -20,7 +21,7 @@ import com.vaadin.server.Page.UriFragmentChangedListener;
  * @author David Sowerby 20 Jan 2013
  * 
  */
-public interface V7Navigator extends UriFragmentChangedListener {
+public interface V7Navigator extends UriFragmentChangedListener, LoginStatusListener {
 
 	void navigateTo(String navigationState);
 

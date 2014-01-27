@@ -16,15 +16,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.ui.ScopedUI;
+import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
+import com.google.inject.Inject;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 
@@ -33,6 +34,10 @@ import com.vaadin.ui.UI;
  * <p>
  * There is generally no need to call {@link #removeListener(LoginStatusListener)} because instances of this class have
  * the same scope as the UI they belong to.
+ * <p>
+ * When the listeners are fired, the navigator is the last one to be notified of the login status change. This is to
+ * ensure that components such as the {@link UserNavigationTree} are updated with the correct content before attempting
+ * to navigate to a page which may not have been available before. See https://github.com/davidsowerby/v7/issues/225
  * 
  * @author David Sowerby 16 Sep 2013
  * 
@@ -45,14 +50,16 @@ public class DefaultLoginStatusHandler implements LoginStatusHandler {
 	private final SubjectIdentifier subjectIdentifier;
 
 	private final SubjectProvider subjectProvider;
+	private final V7Navigator navigator;
 
 	@Inject
 	protected DefaultLoginStatusHandler(VaadinSessionProvider sessionProvider, SubjectIdentifier subjectIdentifier,
-			SubjectProvider subjectProvider) {
+			SubjectProvider subjectProvider, V7Navigator navigator) {
 		super();
 		this.sessionProvider = sessionProvider;
 		this.subjectIdentifier = subjectIdentifier;
 		this.subjectProvider = subjectProvider;
+		this.navigator = navigator;
 	}
 
 	@Override
@@ -65,12 +72,16 @@ public class DefaultLoginStatusHandler implements LoginStatusHandler {
 		listeners.remove(listener);
 	}
 
+	/**
+	 * Fires each of the listeners, and then notifies the navigator (which must always be last)
+	 */
 	private void fireListeners() {
 		Subject subject = subjectProvider.get();
 		log.debug("firing login status listeners");
 		for (LoginStatusListener listener : listeners) {
 			listener.loginStatusChange(subject.isAuthenticated(), subject);
 		}
+		navigator.loginStatusChange(subject.isAuthenticated(), subject);
 	}
 
 	@Override

@@ -14,8 +14,6 @@ import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapException;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
-import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
-import uk.co.q3c.v7.base.shiro.LoginStatusListener;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
@@ -35,7 +33,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @UIScoped
-public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
+public class DefaultV7Navigator implements V7Navigator {
 
 	private static Logger log = LoggerFactory.getLogger(DefaultV7Navigator.class);
 
@@ -59,7 +57,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	@Inject
 	protected DefaultV7Navigator(Injector injector, Provider<ErrorView> errorViewProvider,
 			URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider,
-			LoginStatusHandler loginHandler, PageAccessController pageAccessController) {
+			PageAccessController pageAccessController) {
 		super();
 		this.errorViewProvider = errorViewProvider;
 		this.uriHandler = uriHandler;
@@ -77,7 +75,6 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 			throw new IllegalStateException(msg, e);
 		}
 
-		loginHandler.addListener(this);
 	}
 
 	/**
@@ -103,7 +100,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 	 * @return
 	 */
 	private NavigationState redirectIfNeeded(NavigationState navigationState) {
-		sitemapCheck();
+		// sitemapCheck();
 
 		String page = navigationState.getVirtualPage();
 		String redirection = sitemap.getRedirectPageFor(page);
@@ -252,7 +249,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 
 	@Override
 	public void navigateTo(StandardPageKey pageKey) {
-		sitemapCheck();
+		// sitemapCheck();
 		String page = sitemap.standardPageURI(pageKey);
 		if (page == null) {
 			throw new SitemapException(pageKey + " cannot have a null path\n" + sitemap.getReport());
@@ -260,14 +257,14 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 		navigateTo(page);
 	}
 
-	private void sitemapCheck() {
-		if (sitemap == null) {
-			throw new SitemapException("Sitemap has failed to load");
-		}
-		if (sitemap.hasErrors()) {
-			throw new SitemapException("Unable to navigate, site map has errors\n" + sitemap.getReport());
-		}
-	}
+	// private void sitemapCheck() {
+	// if (sitemap == null) {
+	// throw new SitemapException("Sitemap has failed to load");
+	// }
+	// if (sitemap.hasErrors()) {
+	// throw new SitemapException("Unable to navigate, site map has errors\n" + sitemap.getReport());
+	// }
+	// }
 
 	@Override
 	public void loginStatusChange(boolean authenticated, Subject subject) {
@@ -355,7 +352,7 @@ public class DefaultV7Navigator implements V7Navigator, LoginStatusListener {
 			return;
 		}
 
-		sitemapCheck();
+		// sitemapCheck();
 
 		// https://sites.google.com/site/q3cjava/sitemap#emptyURI
 		if (navigationState.getVirtualPage().isEmpty()) {

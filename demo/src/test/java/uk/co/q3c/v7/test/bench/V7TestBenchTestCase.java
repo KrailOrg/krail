@@ -73,10 +73,14 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	}
 
 	protected String navTreeSelection() {
-
-		String selectedNodeText = getDriver().findElement(
-				By.xpath("id('DefaultUserNavigationTree')//div[contains(@class, 'v-tree-node-selected')]")).getText();
-		return selectedNodeText;
+		try {
+			String selectedNodeText = getDriver().findElement(
+					By.xpath("id('DefaultUserNavigationTree')//div[contains(@class, 'v-tree-node-selected')]"))
+					.getText();
+			return selectedNodeText;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	protected UITree treeLocator() {
@@ -90,7 +94,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	protected void navigateTo(String fragment) {
 		String url = url(fragment);
 		driver.get(url);
-		pause(100);
+		pause(300);
 	}
 
 	protected WebElement element(String qualifier, Class<?>... classes) {
@@ -129,10 +133,12 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 
 	protected void navigateForward() {
 		driver.navigate().forward();
+		pause(200);
 	}
 
 	protected void navigateBack() {
 		driver.navigate().back();
+		pause(200);
 	}
 
 	protected WebElement loginButton() {
@@ -153,6 +159,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 
 	public void login() {
 		loginButton().click();
+		pause(100);
 		fillLoginForm();
 	}
 
@@ -177,5 +184,16 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	 */
 	protected void logout() {
 		loginButton().click();
+	}
+
+	protected String currentSelectionNavTree() {
+		String sysaccount = "system-account";
+		WebElement tree = navTree().getLocator().get();
+		// WebElement e1 = tree.findElement(By.vaadin(sysaccount));
+		// WebElement e2 = tree.findElement(By.id(sysaccount));
+		// WebElement e3 = tree.findElement(By.linkText(sysaccount));
+		// WebElement e4 = tree.findElement(By.name(sysaccount));
+		WebElement e5 = tree.findElement(By.partialLinkText(sysaccount));
+		return e5.getText();
 	}
 }

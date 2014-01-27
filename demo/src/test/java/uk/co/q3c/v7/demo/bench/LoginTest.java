@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -62,6 +63,19 @@ public class LoginTest extends V7TestBenchTestCase {
 		login();
 		// then
 		verifyUrl("private/home");
+	}
+
+	@Ignore("Testing with notifications not working")
+	@Test
+	public void authenticationFailure() {
+
+		// given
+
+		// when
+
+		// then
+
+		fail("not written");
 	}
 
 	@After

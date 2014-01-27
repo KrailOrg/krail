@@ -20,7 +20,6 @@ import org.mockito.stubbing.Answer;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
-import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.PagePermission;
@@ -169,9 +168,6 @@ public class DefaultV7NavigatorTest {
 	SitemapService sitemapService;
 
 	@Mock
-	LoginStatusHandler loginHandler;
-
-	@Mock
 	SubjectProvider subjectProvider;
 
 	@Mock
@@ -220,7 +216,7 @@ public class DefaultV7NavigatorTest {
 		when(sitemap.uri(mockNode1)).thenReturn(public_view1);
 
 		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemapService, subjectProvider,
-				loginHandler, pageAccessController);
+				pageAccessController);
 		CurrentInstance.set(UI.class, scopedUI);
 	}
 
@@ -278,7 +274,7 @@ public class DefaultV7NavigatorTest {
 		node2.setViewClass(View2.class);
 		loginNode.setViewClass(LoginView.class);
 		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemapService, subjectProvider,
-				loginHandler, pageAccessController);
+				pageAccessController);
 		CurrentInstance.set(UI.class, scopedUI);
 		// when
 		navigator.navigateTo("public/home/view2");
@@ -313,7 +309,7 @@ public class DefaultV7NavigatorTest {
 		node2.setViewClass(View2.class);
 		loginNode.setViewClass(LoginView.class);
 		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemapService, subjectProvider,
-				loginHandler, pageAccessController);
+				pageAccessController);
 		CurrentInstance.set(UI.class, scopedUI);
 		// when
 		navigator.navigateTo(StandardPageKey.Login);

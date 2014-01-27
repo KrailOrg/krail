@@ -61,4 +61,8 @@ public class UITree {
 		}
 	}
 
+	public ElementLocator getLocator() {
+		return locator;
+	}
+
 }

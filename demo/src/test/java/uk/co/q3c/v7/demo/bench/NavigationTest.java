@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -35,6 +36,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 		navTree().select(0);
 		// // then
 		verifyUrl("system-account");
+		assertThat(navTreeSelection()).isEqualTo("System Account");
 		// // when
 		navTree().select(1);
 		// // then
@@ -52,6 +54,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 
 	}
 
+	@Ignore("Testing with notifications not working")
 	@Test
 	public void authorisationFailure() {
 
@@ -59,17 +62,72 @@ public class NavigationTest extends V7TestBenchTestCase {
 
 		// when
 		navigateTo("private/home");
+		testBenchElement(navTree().getLocator().get()).closeNotification();
+		pause(5000);
 		// then
 		verifyNotUrl("private/home");
 		navigateTo("system-account");
 		// when
 		login();
+
 		// then
 		verifyUrl("system-account");
 		// when
 		navigateTo("private/home");
 		// then
 		verifyUrl("private/home");
+	}
+
+	@Test
+	public void redirectFromPrivate() {
+
+		// given
+		login();
+		logout();
+		login();
+		// when
+		navigateTo("private");
+		pause(500);
+		// then
+		verifyUrl("private/home");
+		assertThat(navTreeSelection()).isEqualTo("Private Home");
+
+	}
+
+	@Test
+	public void browserBackForward() {
+
+		// given
+
+		// when
+		navTree().select(0);
+		// then
+		verifyUrl("system-account");
+		assertThat(navTreeSelection()).isEqualTo("System Account");
+		// when
+		login();
+		// then
+		verifyUrl("system-account");
+		assertThat(navTreeSelection()).isEqualTo("System Account");
+		// when
+		navigateTo("private/home");
+		// then
+		verifyUrl("private/home");
+		assertThat(navTreeSelection()).isEqualTo("Private Home");
+		// when
+		navigateTo("system-account/enable-account");
+		// then
+		verifyUrl("system-account/enable-account");
+		assertThat(navTreeSelection()).isEqualTo("Enable Account");
+		// when
+		navigateBack();
+		// then
+		verifyUrl("private/home");
+		assertThat(navTreeSelection()).isEqualTo("Private Home");
+		// when
+		navigateForward();
+		verifyUrl("system-account/enable-account");
+		assertThat(navTreeSelection()).isEqualTo("Enable Account");
 	}
 
 	@After

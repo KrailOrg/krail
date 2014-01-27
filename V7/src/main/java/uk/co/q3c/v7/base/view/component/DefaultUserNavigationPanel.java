@@ -12,8 +12,9 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import com.google.inject.Inject;
+import uk.co.q3c.util.ID;
 
+import com.google.inject.Inject;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
@@ -26,6 +27,7 @@ public class DefaultUserNavigationPanel extends Panel implements UserNavigationP
 	protected DefaultUserNavigationPanel(UserNavigationTree tree) {
 		super();
 		this.tree = tree;
+		setId(ID.getId(this));
 		build();
 	}
 

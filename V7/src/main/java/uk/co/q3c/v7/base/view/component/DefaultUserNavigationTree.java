@@ -246,7 +246,14 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	@Override
 	public void afterViewChange(V7ViewChangeEvent event) {
 		SitemapNode selectedNode = navigator.getCurrentNode();
+		SitemapNode childNode = selectedNode;
+		SitemapNode parentNode = (SitemapNode) getParent(childNode);
+		while (parentNode != null) {
+			expandItem(parentNode);
+			parentNode = (SitemapNode) getParent(parentNode);
+		}
 		this.select(selectedNode);
+
 	}
 
 	@Override
