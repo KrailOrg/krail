@@ -25,6 +25,10 @@ repositories{
 
 dependencies { 
 	
+	//UI components
+	compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
+ 
+	
 	compile project (':V7')
 	testCompile 'com.vaadin:vaadin-testbench:3.1.2' 
 

@@ -14,13 +14,22 @@ package uk.co.q3c.v7.demo.view;
 
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.StandardPageViewBase;
 
+import com.google.inject.Inject;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+
+import de.steinwedel.messagebox.ButtonId;
+import de.steinwedel.messagebox.Icon;
+import de.steinwedel.messagebox.MessageBox;
+
 public class DemoPublicHomeView extends StandardPageViewBase implements PublicHomeView {
+
+	private Button button;
 
 	@Inject
 	public DemoPublicHomeView(V7Navigator navigator) {
@@ -31,4 +40,18 @@ public class DemoPublicHomeView extends StandardPageViewBase implements PublicHo
 	protected void processParams(List<String> params) {
 	}
 
+	@Override
+	protected void buildView() {
+		super.buildView();
+		button = new Button("Message box");
+		button.addClickListener(new ClickListener() {
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				MessageBox.showPlain(Icon.INFO, "Example 1", "Hello World!", ButtonId.OK);
+
+			}
+		});
+		grid.addComponent(button, 1, 2);
+	}
 }

@@ -14,6 +14,8 @@ package uk.co.q3c.v7.base.guice;
 
 import java.util.Properties;
 
+import uk.co.q3c.v7.base.ui.V7UIModule;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.vaadin.server.DeploymentConfiguration;
@@ -24,8 +26,6 @@ import com.vaadin.server.UIProvider;
 import com.vaadin.server.VaadinServlet;
 
 @Singleton
-// @WebServlet(name = "V7 Application", urlPatterns = "/*"), initParams = { @WebInitParam(name = "widgetset",
-// value = "uk.co.q3c.v7.demo.widgetset.V7demoWidgetset") })
 public class BaseServlet extends VaadinServlet implements SessionInitListener {
 
 	/**
@@ -33,6 +33,10 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 	 */
 	@Inject
 	private UIProvider basicProvider;
+
+	@Inject
+	@V7Widgetset
+	private String widgetset;
 
 	@Override
 	protected void servletInitialized() {
@@ -44,10 +48,31 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 		event.getSession().addUIProvider(basicProvider);
 	}
 
+	/**
+	 * This method captures the widgetset parameter from the application specific subclass of {@link V7UIModule}. If
+	 * V7UIModule#widgetset() is unchanged (that is, it returns 'default') then the default widgetset is used. For any
+	 * other value, the related widgetset must have been compiled - typically this means that the build definition will
+	 * also contain an entry for the widgetset. For example, using the Gradle Vaadin plugin, the build.gradle file would
+	 * contain an entry like this:<br>
+	 * <p>
+	 * 
+	 * <pre>
+	 * vaadin {<br>
+	 * version vaadinVersion<br>
+	 * widgetset "uk.co.q3c.v7.demo.widgetset.V7demoWidgetset"<br>
+	 * }
+	 * </pre>
+	 * <p>
+	 * 
+	 * @see https://github.com/johndevs/gradle-vaadin-plugin
+	 * @see com.vaadin.server.VaadinServlet#createDeploymentConfiguration(java.util.Properties)
+	 */
 	@Override
 	protected DeploymentConfiguration createDeploymentConfiguration(Properties initParameters) {
 
-		initParameters.setProperty("widgetset", "uk.co.q3c.v7.demo.widgetset.V7demoWidgetset");
+		if (!widgetset.equals("default")) {
+			initParameters.setProperty("widgetset", widgetset);
+		}
 		return super.createDeploymentConfiguration(initParameters);
 
 	}
