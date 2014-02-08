@@ -132,6 +132,20 @@ public class NavigationTest extends V7TestBenchTestCase {
 		assertThat(navTreeSelection()).isEqualTo("Enable Account");
 	}
 
+	@Test
+	public void breadcrumb_navigate() {
+
+		// given
+		pause(1000);
+		// when
+
+		// then
+		navigateTo("system-account/reset-account");
+		assertThat(breadcrumb(0)).isNotNull();
+		breadcrumb(0).get().click();
+		verifyUrl("system-account");
+	}
+
 	@After
 	public void tearDown() throws Exception {
 		String verificationErrorString = verificationErrors.toString();

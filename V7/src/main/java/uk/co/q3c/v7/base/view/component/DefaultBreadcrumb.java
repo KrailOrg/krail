@@ -12,12 +12,10 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.inject.Inject;
-
+import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
@@ -30,9 +28,11 @@ import uk.co.q3c.v7.i18n.I18NListener;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.Inject;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.themes.BaseTheme;
 
 @UIScoped
 public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener, V7ViewChangeListener,
@@ -41,7 +41,6 @@ public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener,
 	private final List<BreadcrumbStep> steps = new ArrayList<>();
 	private final V7Navigator navigator;
 	private final Sitemap sitemap;
-	private final Collator collator;
 	private final Translate translate;
 
 	@Inject
@@ -49,8 +48,10 @@ public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener,
 		this.navigator = navigator;
 		navigator.addViewChangeListener(this);
 		this.sitemap = sitemap;
-		this.collator = Collator.getInstance(currentLocale.getLocale());
 		this.translate = translate;
+		this.setSizeUndefined();
+		this.setSpacing(true);
+		ID.getId(this);
 
 	}
 
@@ -73,8 +74,12 @@ public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener,
 				} else {
 					// create step
 					step = new BreadcrumbStep();
+					step.addStyleName(BaseTheme.BUTTON_LINK);
 					step.addClickListener(this);
 					steps.add(step);
+					String id = ID.getIdIndex(steps.size() - 1, this, step);
+					step.setId(id);
+					this.addComponent(step);
 				}
 				setupStep(step, nodeChain.get(i));
 			}
@@ -83,14 +88,9 @@ public class DefaultBreadcrumb extends HorizontalLayout implements I18NListener,
 	}
 
 	private void setupStep(BreadcrumbStep step, SitemapNode sitemapNode) {
-		// TODO can label translate be removed? May be done in build of sitemap later
 
 		step.setNode(sitemapNode);
-		I18NKey<?> key = step.getNode().getLabelKey();
-		sitemapNode.setLabelKey(key, translate, collator);
-
 		step.setVisible(true);
-		step.setNode(sitemapNode);
 
 	}
 

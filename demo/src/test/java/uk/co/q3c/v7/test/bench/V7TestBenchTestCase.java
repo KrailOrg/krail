@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.view.DefaultLoginView;
+import uk.co.q3c.v7.base.view.component.BreadcrumbStep;
+import uk.co.q3c.v7.base.view.component.DefaultBreadcrumb;
 import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
 
 import com.vaadin.testbench.By;
@@ -36,7 +38,6 @@ import com.vaadin.ui.TextField;
 
 public class V7TestBenchTestCase extends TestBenchTestCase {
 	private static Logger log = LoggerFactory.getLogger(V7TestBenchTestCase.class);
-	protected final String rootIdStem = "ROOT::PID_S";
 	protected String baseUrl;
 	protected final StringBuffer verificationErrors = new StringBuffer();
 
@@ -71,6 +72,21 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	protected UITree navTree() {
 		return treeLocator().id("DefaultUserNavigationTree");
 	}
+
+	/**
+	 * Returns the ElementLocator for the breadcrumb button at index
+	 * 
+	 * @param index
+	 * @return
+	 */
+	protected ElementLocator breadcrumb(int index) {
+		String idIndex = ID.getIdcIndex(index, DefaultBreadcrumb.class, BreadcrumbStep.class);
+		return locator().id(idIndex);
+	}
+
+	// protected ElementLocator breadcrumbStep(int index) {
+	// return new ElementLocator(driver).get(new ElementPath("breadcrumb/Slot[0]/VButton[0]/domChild[0]/domChild[0]"));
+	// }
 
 	protected String navTreeSelection() {
 		try {

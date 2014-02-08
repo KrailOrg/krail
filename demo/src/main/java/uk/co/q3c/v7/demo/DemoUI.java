@@ -1,7 +1,5 @@
 package uk.co.q3c.v7.demo;
 
-import com.google.inject.Inject;
-
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.ui.ScopedUI;
@@ -14,6 +12,7 @@ import uk.co.q3c.v7.base.view.component.MessageStatusPanel;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
+import com.google.inject.Inject;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
@@ -103,7 +102,6 @@ public class DemoUI extends ScopedUI {
 
 		navTree.setSizeFull();
 		breadcrumb.setSizeUndefined();
-		breadcrumb.setWidth("100%");
 
 		menu.setSizeUndefined();
 		menu.setWidth("100%");

@@ -22,7 +22,7 @@ import com.vaadin.ui.Panel;
 public class IDTest {
 
 	Button button = new Button();
-	Panel Panel = new Panel();
+	Panel panel = new Panel();
 
 	@Test
 	public void getIdComponentArray() {
@@ -32,7 +32,7 @@ public class IDTest {
 		// when
 
 		// then
-		assertThat(ID.getId(Panel, button)).isEqualTo("Panel-Button");
+		assertThat(ID.getId(panel, button)).isEqualTo("Panel-Button");
 
 	}
 
@@ -44,7 +44,7 @@ public class IDTest {
 		// when
 
 		// then
-		assertThat(ID.getId(Panel)).isEqualTo("Panel");
+		assertThat(ID.getId(panel)).isEqualTo("Panel");
 
 	}
 
@@ -56,7 +56,9 @@ public class IDTest {
 		// when
 
 		// then
-		assertThat(ID.getId("user", Panel, button)).isEqualTo("Panel-Button-user");
+		assertThat(ID.getId("user", panel, button)).isEqualTo("Panel-Button-user");
+		assertThat(ID.getIdIndex(1, panel, button)).isEqualTo("Panel-Button-1");
 
 	}
+
 }

@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.inject.Inject;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +38,7 @@ import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
@@ -92,6 +91,7 @@ public class BreadcrumbTest extends TestWithSitemap {
 		breadcrumb.moveToNavigationState();
 		// then
 		assertThat(breadcrumb.getSteps().size()).isEqualTo(3);
+		assertThat(breadcrumb.getComponentCount()).isEqualTo(3);
 		assertThat(breadcrumb.getSteps().get(0).getCaption()).isEqualTo("home");
 		assertThat(breadcrumb.getSteps().get(1).getCaption()).isEqualTo("option");
 		assertThat(breadcrumb.getSteps().get(2).getCaption()).isEqualTo("home");
@@ -112,6 +112,7 @@ public class BreadcrumbTest extends TestWithSitemap {
 
 		// then
 		assertThat(breadcrumb.getSteps().size()).isEqualTo(3);
+		assertThat(breadcrumb.getComponentCount()).isEqualTo(3);
 		assertThat(breadcrumb.getSteps().get(0).getCaption()).isEqualTo("home");
 		assertThat(breadcrumb.getSteps().get(1).getCaption()).isEqualTo("option");
 		assertThat(breadcrumb.getSteps().get(2).getCaption()).isEqualTo("home");
@@ -132,6 +133,7 @@ public class BreadcrumbTest extends TestWithSitemap {
 
 		// then
 		assertThat(breadcrumb.getSteps().size()).isEqualTo(3);
+		assertThat(breadcrumb.getComponentCount()).isEqualTo(3);
 		assertThat(breadcrumb.getSteps().get(0).getCaption()).isEqualTo("home");
 		assertThat(breadcrumb.getSteps().get(1).getCaption()).isEqualTo("option");
 		assertThat(breadcrumb.getSteps().get(2).getCaption()).isEqualTo("home");
@@ -157,6 +159,7 @@ public class BreadcrumbTest extends TestWithSitemap {
 
 		// then
 		assertThat(breadcrumb.getSteps().size()).isEqualTo(4);
+		assertThat(breadcrumb.getComponentCount()).isEqualTo(4);
 		assertThat(breadcrumb.getSteps().get(0).getCaption()).isEqualTo("home");
 		assertThat(breadcrumb.getSteps().get(1).getCaption()).isEqualTo("option");
 		assertThat(breadcrumb.getSteps().get(2).getCaption()).isEqualTo("home");

@@ -39,6 +39,14 @@ public class ID {
 		return getIdc(qualifier, classes);
 	}
 
+	public static String getIdIndex(int qualifier, Object... components) {
+		return getId(Integer.toString(qualifier), components);
+	}
+
+	public static String getIdcIndex(int qualifier, Class<?>... componentClasses) {
+		return getIdc(Integer.toString(qualifier), componentClasses);
+	}
+
 	public static String getIdc(String qualifier, Class<?>... componentClasses) {
 		StringBuilder buf = new StringBuilder();
 		boolean first = true;
