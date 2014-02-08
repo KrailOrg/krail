@@ -13,7 +13,6 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.util.Iterator;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,12 +33,11 @@ import com.google.common.base.Splitter;
 public class MapLineReader {
 	private static Logger log = LoggerFactory.getLogger(MapLineReader.class);
 	private final String leadCharSet = "+-~#";
-	public static final String NO_HYPHEN = "Line must start with '-', '+', '~' or '#' depending on which access control you want, followed by 0..n '-' to indicate indent level, line ";
 	private String line;
 	private MapLineRecord lineRecord;
 
-	public MapLineRecord processLine(int lineIndex, String line, Set<String> syntaxErrors,
-			Set<String> indentationErrors, int currentIndent, String attributeSeparator) {
+	public MapLineRecord processLine(DefaultFileSitemapLoader loader, String source, int lineIndex, String line,
+			int currentIndent, String attributeSeparator) {
 		log.debug("processing line {}", line);
 		this.line = line;
 		lineRecord = new MapLineRecord();
@@ -49,7 +47,7 @@ public class MapLineReader {
 		Iterable<String> attributes = splitter.split(line);
 		Iterator<String> iterator = attributes.iterator();
 		// split first column into indentation and uri segment
-		boolean indentOk = indentAndSegment(iterator.next(), lineIndex, syntaxErrors);
+		boolean indentOk = indentAndSegment(loader, source, iterator.next(), lineIndex);
 
 		if (indentOk) {
 			String viewAttribute = (iterator.hasNext()) ? iterator.next() : "";
@@ -59,7 +57,8 @@ public class MapLineReader {
 			String permissionAttribute = (iterator.hasNext()) ? iterator.next() : "";
 			roles(permissionAttribute);
 			if (lineRecord.getIndentLevel() > currentIndent + 1) {
-				indentationErrors.add("'" + lineRecord.getSegment() + "' at line " + lineIndex);
+				loader.addWarning(source, FileSitemapLoader.LINE_FORMAT_INDENTATION_INCORRECT, lineRecord.getSegment(),
+						lineIndex);
 			}
 		}
 		return lineRecord;
@@ -94,7 +93,7 @@ public class MapLineReader {
 		lineRecord.setViewName(viewAttribute);
 	}
 
-	private boolean indentAndSegment(String s, int lineIndex, Set<String> syntaxErrors) {
+	private boolean indentAndSegment(DefaultFileSitemapLoader loader, String source, String s, int lineIndex) {
 		if (s.isEmpty()) {
 			return false;
 		}
@@ -104,7 +103,7 @@ public class MapLineReader {
 		boolean indentFound = leadCharSet.indexOf(leadChar) >= 0;
 
 		if (!indentFound) {
-			syntaxErrors.add(NO_HYPHEN + lineIndex);
+			loader.addError(source, FileSitemapLoader.LINE_FORMAT_MISSING_START_CHAR, lineIndex);
 			return false;
 		}
 

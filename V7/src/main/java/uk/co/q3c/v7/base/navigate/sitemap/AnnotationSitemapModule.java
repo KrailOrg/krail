@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import java.lang.ProcessBuilder.Redirect;
+
 import org.reflections.Reflections;
 
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
@@ -49,28 +51,31 @@ public abstract class AnnotationSitemapModule extends AbstractModule {
 
 	/**
 	 * 
-	 * Override this to provide the root or roots you want to scan for classes with a {@link View} annotation, each with
-	 * a 'sample' key from the I18NKey class you are using for the labels in the Views you are scanning.<br>
+	 * Override this to provide the root or roots you want to scan for classes with a {@link View} or
+	 * {@link RedirectFrom} annotation, each with a 'sample' key from the I18NKey class you are using for the labels in
+	 * the Views you are scanning.<br>
 	 * A sample is needed because Annotations cannot contain enum constants as parameters, so a label key name is used -
 	 * that name then needs to be looked from an I18NKey class, which is taken from the sample you provide here. It does
-	 * not matter what the sample is as long as it is a member of the I18NKey class you want to use.
+	 * not matter what the sample is as long as it is a member of the I18NKey class you want to use. This is only used
+	 * for the {@link View} annotation, the {@link Redirect} annotation does not use the key
 	 * <p>
-	 * V7 uses the {@link Reflections} utility to scan for the View annotation. When you add a package root in your
-	 * module, you are actually using the Reflections facility to scan from a package prefix. Note that this is a
-	 * literal prefix from the full class name. This means that a prefix of 'com.example.view' would scan both of these:
+	 * V7 uses the {@link Reflections} utility to scan for the annotations. When you add a package root in your module,
+	 * you are actually using the Reflections facility to scan from a package prefix. Note that this is a literal prefix
+	 * from the full class name. This means that a prefix of 'com.example.view' would scan both of these:
 	 * <p>
 	 * 
 	 * com.example.view<br>
 	 * com.example.views<br>
 	 * <br>
-	 * In essence, it is as though the prefix has a wildcard: com.example.view*
+	 * In essence, it is as though the prefix has a wildcard, in this example: com.example.view*
 	 * 
 	 * The full entry would be something like this:
 	 * <p>
-	 * addEntry"uk.co.q3c.v7.base.view",LabelKey.Home);
+	 * addEntry("uk.co.q3c.v7.base.view",LabelKey.Home);
 	 * <p>
 	 * which would scan all packages beginning with 'uk.co.q3c.v7.base.view', and the LabelKey class would be used to
 	 * lookup the label key names from the View annotations
+	 * <p>
 	 * 
 	 */
 	protected abstract void define();

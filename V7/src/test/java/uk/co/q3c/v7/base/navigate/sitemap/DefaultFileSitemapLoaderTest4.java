@@ -71,7 +71,6 @@ public class DefaultFileSitemapLoaderTest4 {
 
 		// then
 		assertThat(result).isFalse();
-		assertThat(loader.getSitemap().hasErrors()).isFalse();
 
 	}
 

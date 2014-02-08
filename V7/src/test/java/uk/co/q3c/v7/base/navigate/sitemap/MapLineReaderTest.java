@@ -13,26 +13,32 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
 import static org.assertj.core.api.Assertions.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
 
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
 public class MapLineReaderTest {
 
+	@Mock
+	DefaultFileSitemapLoader loader;
+
+	String source = "source";
+
 	private MapLineReader reader;
-	private Set<String> syntaxErrors;
-	private Set<String> indentationErrors;
 
 	@Before
 	public void setup() {
 		reader = new MapLineReader();
-		syntaxErrors = new HashSet<>();
-		indentationErrors = new HashSet<>();
 	}
 
 	@Test
@@ -41,7 +47,7 @@ public class MapLineReaderTest {
 		// given
 		String line = "--  level2   ; view  ; key  ; permission";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		MapLineRecord result = reader.processLine(loader, source, 33, line, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
@@ -53,7 +59,7 @@ public class MapLineReaderTest {
 		// given
 		line = "+-  level2   ; view  ; key  ; permission";
 		// when
-		result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		result = reader.processLine(loader, source, 33, line, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
@@ -70,7 +76,7 @@ public class MapLineReaderTest {
 		// given
 		String line = "  --  level2   ; view  ; key  ; permission";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		MapLineRecord result = reader.processLine(loader, source, 33, line, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
@@ -87,7 +93,7 @@ public class MapLineReaderTest {
 		// given
 		String line = "  ++  level2   ; view  ; key  ; permission";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		MapLineRecord result = reader.processLine(loader, source, 33, line, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
@@ -104,7 +110,7 @@ public class MapLineReaderTest {
 		// given
 		String line = "  ++  level2   ;   ; key  ; permission";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		MapLineRecord result = reader.processLine(loader, source, 33, line, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
@@ -121,7 +127,7 @@ public class MapLineReaderTest {
 		// given
 		String line = "  ++  level2   ; view  ;   ; permission";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		MapLineRecord result = reader.processLine(loader, source, 33, line, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
@@ -137,7 +143,7 @@ public class MapLineReaderTest {
 		// given
 		String line = "--  level2   ; view  ";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		MapLineRecord result = reader.processLine(loader, source, 33, line, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
@@ -154,7 +160,7 @@ public class MapLineReaderTest {
 		// given
 		String line = " --  level2  ";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		MapLineRecord result = reader.processLine(loader, source, 33, line, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
@@ -171,14 +177,14 @@ public class MapLineReaderTest {
 		// given
 		String line = "   level2   ; view  ; key";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		MapLineRecord result = reader.processLine(loader, source, 33, line, 1, ";");
 		// then
-		assertThat(syntaxErrors).contains(MapLineReader.NO_HYPHEN + "33");
 		assertThat(result.getIndentLevel()).isEqualTo(0);
 		assertThat(result.getSegment()).isNull();
 		assertThat(result.getViewName()).isNull();
 		assertThat(result.getKeyName()).isNull();
 		assertThat(result.getPageAccessControl()).isNull();
+		verify(loader).addError(source, FileSitemapLoader.LINE_FORMAT_MISSING_START_CHAR, 33);
 
 	}
 
@@ -188,7 +194,7 @@ public class MapLineReaderTest {
 		// given
 		String line = "~-  level2   ; view  ; key";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		MapLineRecord result = reader.processLine(loader, source, 33, line, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
@@ -204,7 +210,7 @@ public class MapLineReaderTest {
 		// given
 		String line = "#-  level2   ; view  ; key";
 		// when
-		MapLineRecord result = reader.processLine(33, line, syntaxErrors, indentationErrors, 1, ";");
+		MapLineRecord result = reader.processLine(loader, source, 33, line, 1, ";");
 		// then
 		assertThat(result.getIndentLevel()).isEqualTo(2);
 		assertThat(result.getSegment()).isEqualTo("level2");
@@ -212,5 +218,21 @@ public class MapLineReaderTest {
 		assertThat(result.getKeyName()).isEqualTo("key");
 		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.GUEST);
 
+	}
+
+	@Test
+	public void indentation_too_great() {
+
+		// given
+		String line = "~--  level2   ; view  ; key";
+		// when
+		MapLineRecord result = reader.processLine(loader, source, 33, line, 1, ";");
+		// then
+		assertThat(result.getIndentLevel()).isEqualTo(3);
+		assertThat(result.getSegment()).isEqualTo("level2");
+		assertThat(result.getViewName()).isEqualTo("view");
+		assertThat(result.getKeyName()).isEqualTo("key");
+		assertThat(result.getPageAccessControl()).isEqualTo(PageAccessControl.USER);
+		verify(loader).addWarning(source, FileSitemapLoader.LINE_FORMAT_INDENTATION_INCORRECT, result.getSegment(), 33);
 	}
 }

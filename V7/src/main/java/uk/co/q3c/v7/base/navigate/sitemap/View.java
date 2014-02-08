@@ -28,6 +28,8 @@ import uk.co.q3c.v7.base.view.V7View;
  * permission required in order to access this view. Used by a {@link AnnotationSitemapModule} to scan views for the
  * {@link AnnotationSitemapLoader} to load into the {@link Sitemap}. Roles must be defined if
  * {@link #pageAccessControl()} is {@link PageAccessControl#ROLES}, but is otherwise not used.
+ * <p>
+ * This annotation may be supplemented by a {@link RedirectFrom} annotation
  * 
  * @author David Sowerby
  * 

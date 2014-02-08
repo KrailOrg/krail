@@ -12,8 +12,13 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -43,6 +48,13 @@ public class DefaultAnnotationSitemapLoaderTest {
 	@Inject
 	DefaultAnnotationSitemapLoader loader;
 
+	List<SitemapLoader> loaders;
+
+	LoaderReportBuilder lrb;
+
+	@Inject
+	Sitemap sitemap;
+
 	public static class AnnotationsModule1 extends AnnotationSitemapModule {
 
 		@Override
@@ -62,7 +74,8 @@ public class DefaultAnnotationSitemapLoaderTest {
 
 	}
 
-	@View(uri = "a", labelKeyName = "home", pageAccessControl = PageAccessControl.PERMISSION)
+	@View(uri = "a", labelKeyName = "Home", pageAccessControl = PageAccessControl.PERMISSION)
+	@RedirectFrom(sourcePages = { "home/redirected", "home/splat" })
 	static class View1 implements V7View {
 
 		@Override
@@ -86,13 +99,30 @@ public class DefaultAnnotationSitemapLoaderTest {
 	@Inject
 	Map<String, AnnotationSitemapEntry> map;
 
+	@Before
+	public void setup() {
+		loaders = new ArrayList<>();
+		loaders.add(loader);
+	}
+
 	@Test
 	public void test() {
 		// given
 		// when
 		loader.load();
+		lrb = new LoaderReportBuilder(loaders);
+		System.out.println(lrb.getReport());
 		// then
-		// assertThat(loader.viewCount()).isEqualTo(3);
+		assertThat(loader.getErrorCount()).isEqualTo(2);
+		assertThat(sitemap.hasUri("a")).isTrue();
+		assertThat(sitemap.getRedirectPageFor("a")).isEqualTo("a");
+		assertThat(sitemap.getRedirectPageFor("home/redirected")).isEqualTo("a");
+		assertThat(sitemap.getRedirectPageFor("home/splat")).isEqualTo("a");
+		SitemapNode node = sitemap.nodeFor("a");
+		assertThat(node.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+		assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Home);
+		assertThat(node.getUriSegment()).isEqualTo("a");
+
 	}
 
 	@ModuleProvider

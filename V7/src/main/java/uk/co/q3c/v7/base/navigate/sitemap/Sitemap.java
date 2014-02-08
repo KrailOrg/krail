@@ -57,7 +57,6 @@ import com.google.inject.Singleton;
 public class Sitemap {
 
 	private int nextNodeId = 0;
-	private int errors = 0;
 	private final Map<StandardPageKey, SitemapNode> standardPages = new HashMap<>();
 	private String report;
 	// Uses LinkedHashMap to retain insertion order
@@ -254,14 +253,6 @@ public class Sitemap {
 		return ImmutableMap.copyOf(standardPages);
 	}
 
-	public boolean hasErrors() {
-		return errors > 0;
-	}
-
-	public int getErrors() {
-		return errors;
-	}
-
 	public void setReport(String report) {
 		this.report = report;
 	}
@@ -384,11 +375,6 @@ public class Sitemap {
 	 */
 	public boolean hasUri(NavigationState navigationState) {
 		return uriMap.keySet().contains(navigationState.getVirtualPage());
-	}
-
-	public void setErrors(int errorSum) {
-		errors = errorSum;
-
 	}
 
 	public int getNodeCount() {

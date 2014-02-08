@@ -12,7 +12,6 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import java.io.File;
 
 /**
  * Implementations of this interface take definitions of {@link Sitemap} entries from a file, and load them into the
@@ -21,12 +20,21 @@ import java.io.File;
  */
 public interface FileSitemapLoader extends SitemapLoader {
 
-	/**
-	 * Loads {@code file}, parses it and applies the entries to the {@link Sitemap}
-	 * 
-	 * @param file
-	 *            the file to load.
-	 */
-	public abstract void parse(File file);
+	static String VIEW_DOES_NOT_IMPLEMENT_V7VIEW = "{0} is not a valid V7View class";
+	static String VIEW_NOT_FOUND_IN_SPECIFIED_PACKAGES = "View class {0} has not been defined in any of the specified packages";
+	static String SECTION_NOT_VALID_FOR_SITEMAP = "Invalid section '{0}' in site map file, this section has been ignored. Only sections {1} are allowed.";
+	static String SECTION_MISSING = "The sitemap file is missing these sections: {0}";
+	static String REDIRECT_INVALID = "Invalid redirect line '{0}' ignored";
+	static String PROPERTY_MISSING_EQUALS = "Property must contain an '=' sign at line {0} in the {1} section";
+	static String PROPERTY_MISSING_KEY = "Property must have a key at line {0} in the {1} section";
+	static String PROPERTY_MISSING_VALUE = "Property {0}  cannot have an empty value";
+	static String PROPERTY_NAME_UNRECOGNISED = "unrecognised option '{0}' in site map";
+	static String LABELKEY_DOES_NOT_IMPLEMENT_I18N_KEY = "{0} does not implement I18NKey";
+	static String LABELKEY_NOT_IN_CLASSPATH = "{0} does not exist on the classpath";
+	static String LABELKEY_NOT_VALID_CLASS_FOR_I18N_LABELS = "{0} is not a valid class for I18N labels.  It must be an enum and implement I18NKey";
+	static String SECTION_MISSING_CLOSING = "section requires closing ']' at line {0}";
+	static String ENUM_MISSING = "The following enums are missing {0} from {1}";
+	static String LINE_FORMAT_INDENTATION_INCORRECT = "Indentation of '{0}' for line {1} is incorrect.  You may not get the structure you expect";
+	static String LINE_FORMAT_MISSING_START_CHAR = "Line must start with '-', '+', '~' or '#' depending on which access control you want, followed by 0..n '-' to indicate indent level, line ";
 
 }

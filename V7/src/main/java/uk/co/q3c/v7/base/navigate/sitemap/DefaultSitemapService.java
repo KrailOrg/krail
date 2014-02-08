@@ -51,6 +51,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	private final Provider<DirectSitemapLoader> directSitemapLoaderProvider;
 	private final Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider;
 	private final SitemapChecker sitemapChecker;
+	private List<SitemapLoader> loaders;
 
 	@Inject
 	protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate,
@@ -82,9 +83,11 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 			setStatus(Status.DEPENDENCY_FAILED);
 			throw new SitemapException(msg);
 		}
-		report = new StringBuilder();
 		configuration = configurationService.getConfiguration();
 		loadSources();
+		LoaderReportBuilder lrb = new LoaderReportBuilder(loaders);
+		report = lrb.getReport();
+		sitemap.setReport(report.toString());
 		if (!loaded) {
 			throw new SitemapException("No valid sources found");
 		}
@@ -98,6 +101,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	 */
 	private void loadSources() {
 		extractSourcesFromConfig();
+		loaders = new ArrayList<>();
 		for (SitemapSourceType source : sources) {
 			loadSource(source);
 		}
@@ -116,15 +120,20 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 		switch (sourceType) {
 		case FILE:
 			FileSitemapLoader fileSitemapLoader = fileSitemapLoaderProvider.get();
+			loaders.add(fileSitemapLoader);
 			fileSitemapLoader.load();
 			loaded = true;
 			return;
 		case DIRECT:
-			directSitemapLoaderProvider.get().load();
+			DirectSitemapLoader directSitemapLoader = directSitemapLoaderProvider.get();
+			loaders.add(directSitemapLoader);
+			directSitemapLoader.load();
 			loaded = true;
 			return;
 		case ANNOTATION:
-			annotationSitemapLoaderProvider.get().load();
+			AnnotationSitemapLoader annotationSitemapLoader = annotationSitemapLoaderProvider.get();
+			loaders.add(annotationSitemapLoader);
+			annotationSitemapLoader.load();
 			loaded = true;
 			return;
 		}

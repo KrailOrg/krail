@@ -30,8 +30,8 @@ import uk.co.q3c.v7.i18n.Translate;
 import com.google.common.base.Splitter;
 import com.google.inject.Inject;
 
-@SuppressWarnings("rawtypes")
-public class DefaultAnnotationSitemapLoader implements AnnotationSitemapLoader {
+public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements AnnotationSitemapLoader {
+
 	private static Logger log = LoggerFactory.getLogger(DefaultAnnotationSitemapLoader.class);
 	private final Sitemap sitemap;
 	private final Translate translate;
@@ -49,23 +49,40 @@ public class DefaultAnnotationSitemapLoader implements AnnotationSitemapLoader {
 	/**
 	 * Scans for {@link View} annotations, starting from {@link #reflectionRoot}. Annotations cannot hold enum
 	 * parameters, so the enum name has to be converted from the labelKeyName parameter of the {@link View} annotation.
-	 * In order to do that one or more enum classes must be added to {@link #labelKeyClasses}
+	 * In order to do that one or more enum classes must be added to {@link #labelKeyClasses}. If a class has the
+	 * {@link View} annotation, but does not implement {@link V7View}, then it is ignored.
+	 * <p>
+	 * <br>
+	 * Also scans for the {@link RedirectFrom} annotation, and populates the {@link Sitemap} redirects with the
+	 * appropriate entries. If a class is annotated with {@link RedirectFrom}, but does not implement {@link V7View},
+	 * then the annotation is ignored.
 	 * 
 	 * @see uk.co.q3c.v7.base.navigate.sitemap.SitemapLoader#load()
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean load() {
+		clearCounts();
 		Collator collator = Collator.getInstance(currentLocale.getLocale());
 		if (sources != null) {
+
 			for (Entry<String, AnnotationSitemapEntry> entry : sources.entrySet()) {
+				String source = entry.getKey();
 				log.debug("scanning {} for View annotations", entry.getKey());
 				Reflections reflections = new Reflections(entry.getKey());
-				Set<Class<?>> types = reflections.getTypesAnnotatedWith(View.class);
-				log.debug("{} annotated Views found", types.size());
-				for (Class<?> clazz : types) {
+
+				// find the View annotations
+				Set<Class<?>> typesWithView = reflections.getTypesAnnotatedWith(View.class);
+				log.debug("{} V7Views with View annotation found", typesWithView.size());
+
+				// find the RedirectFrom annotations
+				Set<Class<?>> typesWithRedirectFrom = reflections.getTypesAnnotatedWith(RedirectFrom.class);
+				log.debug("{} V7Views with RedirectFrom annotation found", typesWithRedirectFrom.size());
+
+				// process the View annotations
+				for (Class<?> clazz : typesWithView) {
 					Class<? extends V7View> viewClass = null;
-					if (clazz.isAssignableFrom(V7View.class)) {
+					if (V7View.class.isAssignableFrom(clazz)) {
 						viewClass = (Class<? extends V7View>) clazz;
 						View annotation = viewClass.getAnnotation(View.class);
 						SitemapNode node = sitemap.append(annotation.uri());
@@ -79,12 +96,40 @@ public class DefaultAnnotationSitemapLoader implements AnnotationSitemapLoader {
 								node.addRole(role);
 							}
 						}
-						I18NKey<?> key = keyFromName(annotation.labelKeyName(), entry.getValue().getLabelSample());
-						node.setLabelKey(key, currentLocale.getLocale(), collator);
+						I18NKey<?> keySample = entry.getValue().getLabelSample();
+						String keyName = annotation.labelKeyName();
+						try {
+							I18NKey<?> key = keyFromName(keyName, keySample);
+							node.setLabelKey(key, currentLocale.getLocale(), collator);
+						} catch (IllegalArgumentException iae) {
+							addError(source, AnnotationSitemapLoader.LABEL_NOT_VALID, clazz, keyName,
+									keySample.getClass());
+
+						}
 
 					}
-
 				}
+				// process the RedirectFrom annotations
+				for (Class<?> clazz : typesWithRedirectFrom) {
+					Class<? extends V7View> viewClass = null;
+					if (V7View.class.isAssignableFrom(clazz)) {
+						viewClass = (Class<? extends V7View>) clazz;
+						RedirectFrom redirectAnnotation = viewClass.getAnnotation(RedirectFrom.class);
+						View viewAnnotation = viewClass.getAnnotation(View.class);
+						if (viewAnnotation == null) {
+							// report this
+							addWarning(source, REDIRECT_FROM_IGNORED, clazz);
+
+						} else {
+							String[] sourcePages = redirectAnnotation.sourcePages();
+							String targetPage = viewAnnotation.uri();
+							for (String sourcePage : sourcePages) {
+								sitemap.addRedirect(sourcePage, targetPage);
+							}
+						}
+					}
+				}
+
 			}
 			return true;
 		} else {
@@ -102,9 +147,9 @@ public class DefaultAnnotationSitemapLoader implements AnnotationSitemapLoader {
 	 * @exception IllegalArgumentException
 	 *                if <code>labelKeyClass</code> does not contain a constant of <code>labelKeyName</code>
 	 */
-	private I18NKey<?> keyFromName(String labelKeyName, I18NKey sampleKey) {
+	private I18NKey<?> keyFromName(String labelKeyName, I18NKey<?> sampleKey) {
 
-		Enum<?> enumSample = (Enum) sampleKey;
+		Enum<?> enumSample = (Enum<?>) sampleKey;
 		Enum<?> labelKey = Enum.valueOf(enumSample.getDeclaringClass(), labelKeyName);
 		return (I18NKey<?>) labelKey;
 

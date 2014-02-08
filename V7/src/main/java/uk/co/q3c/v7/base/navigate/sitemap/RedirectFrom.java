@@ -12,18 +12,23 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * Implementations take the {@link Sitemap} definitions captured by the {@link SitemapAnnotationsModule}, then load them
- * into the {@link Sitemap} when invoked by the {@link SitemapService}.
+ * Used with a {@link View} annotation, to indicate that the annotated V7View (and therefore virtual page) is the
+ * redirection target from other (source) pages. This annotation is meaningful only when used with a View annotation,
+ * and is otherwise ignored
  * 
- * @see DirectSitemapLoader
- * @see FileSitemapLoader
  * @author David Sowerby
  * 
  */
-public interface AnnotationSitemapLoader extends SitemapLoader {
 
-	static String LABEL_NOT_VALID = "Annotation for View {0}.  {1} is not a valid key value for enum {2}";
-	static String REDIRECT_FROM_IGNORED = "The @RedirectFrom annotation for {0} has been ignored.  A @RedirectFrom must be accompanied by a @View";
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface RedirectFrom {
 
+	public String[] sourcePages();
 }

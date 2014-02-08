@@ -48,7 +48,7 @@ import com.google.inject.Inject;
  * @author David Sowerby
  * 
  */
-public class DefaultFileSitemapLoader implements FileSitemapLoader {
+public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileSitemapLoader {
 
 	private static Logger log = LoggerFactory.getLogger(DefaultFileSitemapLoader.class);
 
@@ -72,27 +72,12 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	private Class<? extends Enum<?>> labelKeysClass;
 	// options
 	private boolean appendView;
-	private String labelKeys;
+	private String labelKey;
 
 	private Set<String> missingEnums;
-	private Set<String> invalidViewClasses;
-	private Set<String> undeclaredViewClasses;
-	private Set<String> indentationErrors;
-	private Set<String> propertyErrors;
-	private Set<String> unrecognisedOptions;
-	private Set<String> syntaxErrors;
-
-	// messages to go in the report, for info only
-	private Set<String> infoMessages;
 
 	private DateTime startTime;
 	private DateTime endTime;
-	// private String source;
-	private boolean parsed = false;
-	private boolean labelClassNotI18N;
-	private boolean labelClassNonExistent;
-	private boolean labelClassMissing = true;
-	private String labelClassName;
 
 	private File sourceFile;
 	private LabelKeyForName lkfn;
@@ -100,15 +85,12 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	private final Translate translate;
 	private final String segmentSeparator = ";";
 
-	private final StringBuilder report;
-
 	@Inject
 	public DefaultFileSitemapLoader(CurrentLocale currentLocale, Translate translate, Sitemap sitemap) {
 		super();
 		this.collator = Collator.getInstance(currentLocale.getLocale());
 		this.translate = translate;
 		this.sitemap = sitemap;
-		report = new StringBuilder();
 
 	}
 
@@ -116,48 +98,29 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		startTime = DateTime.now();
 		endTime = null;
 		missingEnums = new HashSet<>();
-		invalidViewClasses = new HashSet<>();
-		undeclaredViewClasses = new HashSet<>();
-		indentationErrors = new HashSet<>();
-		propertyErrors = new HashSet<>();
-		unrecognisedOptions = new HashSet<>();
-		infoMessages = new HashSet<>();
-		syntaxErrors = new HashSet<>();
 
 		sections = new HashMap<>();
-		labelClassNotI18N = false;
-		labelClassNonExistent = false;
-		labelClassMissing = true;
-		parsed = false;
 	}
 
-	private void processLines(List<String> lines) {
+	private void processLines(String source, List<String> lines) {
 		init();
 		int i = 0;
 		for (String line : lines) {
-			divideIntoSections(line, i);
+			divideIntoSections(source, line, i);
 			i++;
 		}
 
 		// can only process if ALL required sections are present
 		if (missingSections().size() == 0) {
-			processOptions();
-			processMap();
+			processOptions(source);
+			processMap(source);
 			checkLabelKeys();
 			processRedirects();
-			sitemap.setErrors(errorSum());
-
-			log.info("Sitemap loaded successfully");
-			log.debug(sitemap.toString());
-
 		} else {
-			log.warn("The site map source is missing these sections: {}", missingSections());
-			log.error("Site map failed to process, see previous log warnings for details");
-			sitemap.setErrors(errorSum());
+			addError(source, SECTION_MISSING, missingSections());
 		}
 
 		endTime = DateTime.now();
-		parsed = true;
 	}
 
 	/**
@@ -177,39 +140,9 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 				String toPage = iter.next();
 				sitemap.addRedirect(fromPage, toPage);
 			} else {
-				log.info("Invalid redirect line '{}' ignored", redirect);
+				addInfo(REDIRECT_INVALID, redirect);
 			}
 		}
-	}
-
-	/**
-	 * indentation errors and + unrecognisedOptions are given as warnings rather than errors
-	 * 
-	 * @return
-	 */
-	private int errorSum() {
-		int c = missingSections().size() + missingEnums.size() + invalidViewClasses.size();
-		c += undeclaredViewClasses.size() + propertyErrors.size();
-		c += syntaxErrors.size();
-
-		if (getViewPackages() == null || getViewPackages().isEmpty()) {
-			c++;
-		}
-		if (labelClassNotI18N) {
-			c++;
-		}
-		if (labelClassNonExistent) {
-			c++;
-		}
-		if (labelClassMissing) {
-			c++;
-		}
-		return c;
-	}
-
-	private int warningSum() {
-		int c = unrecognisedOptions.size() + indentationErrors.size();
-		return c;
 	}
 
 	private void checkLabelKeys() {
@@ -220,28 +153,26 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		}
 	}
 
-	@Override
-	public void parse(File file) {
+	private void parse(File file) {
 		init();
 		sourceFile = file;
 		log.info("Loading sitemap from {}", file.getAbsolutePath());
 		try {
 			List<String> lines = FileUtils.readLines(file);
-			processLines(lines);
+			processLines(file.getAbsolutePath(), lines);
 
 		} catch (Exception e) {
 			log.error("Unable to load site map", e);
 		}
 	}
 
-	private void processOptions() {
+	private void processOptions(String source) {
 		List<String> sectionLines = sections.get(SectionName.options);
 		String sectionName = SectionName.options.name();
 		int i = 1;
 		for (String line : sectionLines) {
 			if (!line.contains("=")) {
-				propertyErrors.add("Property must contain an '=' sign at line " + i + " in the " + sectionName
-						+ " section");
+				addError(source, PROPERTY_MISSING_EQUALS, i, sectionName);
 			} else {
 				// split the line on '='
 				String[] pair = StringUtils.split(line, "=");
@@ -254,18 +185,18 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 				boolean valid = true;
 
 				if (Strings.isNullOrEmpty(key)) {
-					propertyErrors.add("Property must have a key at line " + i + " in the " + sectionName + " section");
+					addError(source, PROPERTY_MISSING_KEY, i, sectionName);
 					valid = false;
 				} else {
 					if (Strings.isNullOrEmpty(value)) {
-						propertyErrors.add("Property " + key + " cannot have an empty value");
+						addError(source, PROPERTY_MISSING_VALUE);
 						valid = false;
 					}
 				}
 
 				// process valid properties only
 				if (valid) {
-					setOption(key, value);
+					setOption(source, key, value);
 				}
 			}
 			// increment line count
@@ -273,7 +204,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		}
 	}
 
-	private void setOption(String key, String value) {
+	private void setOption(String source, String key, String value) {
 
 		try {
 			ValidOption k = ValidOption.valueOf(key);
@@ -283,30 +214,27 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 				break;
 
 			case labelKeys:
-				labelKeys = value;
+				labelKey = value;
 				if (!Strings.isNullOrEmpty(value)) {
-					labelClassMissing = false;
-					labelClassName = value;
-					validateLabelKeys();
+					validateLabelKeys(source);
 				}
 				break;
 
 			}
 
 		} catch (Exception e) {
-			log.warn("unrecognised option '{}' in site map", key);
-			unrecognisedOptions.add(key);
+			addWarning(source, PROPERTY_NAME_UNRECOGNISED, key);
 		}
 
 	}
 
 	@SuppressWarnings("unchecked")
-	private void validateLabelKeys() {
+	private void validateLabelKeys(String source) {
 		boolean valid = true;
 		Class<?> requestedLabelKeysClass = null;
 		try {
 
-			requestedLabelKeysClass = Class.forName(labelKeys);
+			requestedLabelKeysClass = Class.forName(labelKey);
 			// enum
 			if (!requestedLabelKeysClass.isEnum()) {
 				valid = false;
@@ -317,17 +245,14 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 			Class<I18NKey> i18nClass = I18NKey.class;
 			if (!i18nClass.isAssignableFrom(requestedLabelKeysClass)) {
 				valid = false;
-				labelClassNotI18N = true;
-				log.warn(labelKeys + " does not implement I18NKeys");
+				addError(source, LABELKEY_DOES_NOT_IMPLEMENT_I18N_KEY, labelKey);
 			}
 		} catch (ClassNotFoundException e) {
 			valid = false;
-			labelClassNonExistent = true;
-			log.warn(labelKeys + " does not exist on the classpath");
+			addError(source, LABELKEY_NOT_IN_CLASSPATH, labelKey);
 		}
 		if (!valid) {
-			log.warn(labelKeys + " is not a valid enum class for I18N labels");
-			this.labelClassNotI18N = true;
+			addError(source, LABELKEY_NOT_VALID_CLASS_FOR_I18N_LABELS, labelKey);
 		} else {
 			labelKeysClass = (Class<? extends Enum<?>>) requestedLabelKeysClass;
 			lkfn = new LabelKeyForName(labelKeysClass);
@@ -338,19 +263,19 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		return sections.get(SectionName.viewPackages);
 	}
 
-	private void processMap() {
+	private void processMap(String source) {
 		URITracker uriTracker = new URITracker();
 		MapLineReader reader = new MapLineReader();
 		List<String> sectionLines = sections.get(SectionName.map);
 		int lineIndex = 1;
 		int currentIndent = 0;
 		for (String line : sectionLines) {
-			MapLineRecord lineRecord = reader.processLine(lineIndex, line, syntaxErrors, indentationErrors,
-					currentIndent, segmentSeparator);
+			MapLineRecord lineRecord = reader.processLine(this, source, lineIndex, line, currentIndent,
+					segmentSeparator);
 			uriTracker.track(lineRecord.getIndentLevel(), lineRecord.getSegment());
 			SitemapNode node = sitemap.append(uriTracker.uri());
 			node.setUriSegment(lineRecord.getSegment());
-			findView(node, lineRecord.getSegment(), lineRecord.getViewName());
+			findView(source, node, lineRecord.getSegment(), lineRecord.getViewName());
 			labelKeyForName(lineRecord.getKeyName(), node);
 
 			Splitter splitter = Splitter.on(",").trimResults();
@@ -399,7 +324,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	 * @param viewName
 	 */
 	@SuppressWarnings("unchecked")
-	private void findView(SitemapNode node, String segment, String viewName) {
+	private void findView(String source, SitemapNode node, String segment, String viewName) {
 
 		// if view is null use the segment
 		if (Strings.isNullOrEmpty(viewName)) {
@@ -422,7 +347,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 					node.setViewClass((Class<V7View>) viewClass);
 					break;
 				} else {
-					invalidViewClasses.add(fullViewName);
+					addError(source, VIEW_DOES_NOT_IMPLEMENT_V7VIEW, fullViewName);
 				}
 			} catch (ClassNotFoundException e) {
 				// don't need to do anything
@@ -430,7 +355,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 		}
 		if (viewClass == null) {
-			undeclaredViewClasses.add(viewName);
+			addError(source, VIEW_NOT_FOUND_IN_SPECIFIED_PACKAGES, viewName);
 		}
 
 	}
@@ -449,7 +374,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	 * 
 	 * @param line
 	 */
-	private void divideIntoSections(String line, int linenum) {
+	private void divideIntoSections(String source, String line, int linenum) {
 		String strippedLine = StringUtils.deleteWhitespace(line);
 		if (strippedLine.startsWith("#")) {
 			commentLines++;
@@ -461,7 +386,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		}
 		if (strippedLine.startsWith("[")) {
 			if ((!strippedLine.endsWith("]"))) {
-				log.warn("section requires closing ']' at line " + linenum);
+				addWarning(source, SECTION_MISSING_CLOSING, linenum);
 			} else {
 				String sectionName = strippedLine.substring(1, strippedLine.length() - 1);
 
@@ -471,9 +396,7 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 					currentSection = key;
 					sections.put(key, section);
 				} catch (IllegalArgumentException iae) {
-					log.warn(
-							"Invalid section '{}' in site map file, this section has been ignored. Only sections {} are allowed.",
-							sectionName, getSections().toString());
+					addWarning(source, SECTION_NOT_VALID_FOR_SITEMAP, sectionName, getSections().toString());
 				}
 
 			}
@@ -503,8 +426,8 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		return sections;
 	}
 
-	public String getLabelKeys() {
-		return labelKeys;
+	public String getLabelKey() {
+		return labelKey;
 	}
 
 	public boolean isAppendView() {
@@ -518,140 +441,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 
 	public Set<String> getMissingEnums() {
 		return missingEnums;
-	}
-
-	protected StringBuilder buildReport() {
-		if (!parsed) {
-			throw new SitemapException("Sitemap file must be parsed before report is run");
-		}
-		String df = "dd MMM YYYY HH:mm:SS";
-
-		report.append("------------------------------  " + sourceFile.getName() + "  ---------------------- \n\n");
-		report.append("parsing source from:\t\t");
-		report.append(sourceFile.getAbsolutePath());
-		report.append("\n\n");
-
-		report.append("start at:\t\t\t");
-		report.append(startTime.toString(df));
-		report.append("\n");
-
-		report.append("end at:\t\t\t\t");
-		report.append(endTime.toString(df));
-		report.append("\n");
-
-		report.append("run time:\t\t\t");
-		report.append(runtime().toString());
-		report.append(" ms\n\n");
-
-		report.append("pages defined:\t\t\t");
-		report.append(getPagesDefined());
-		report.append("\n\n");
-
-		report.append("\n\n");
-
-		if (getViewPackages() != null) {
-			report.append("view packages declared:\t\t");
-			report.append(getViewPackages().toString());
-			report.append("\n\n");
-		}
-
-		if (!(labelClassMissing || labelClassNonExistent || labelClassNotI18N)) {
-			report.append("I18N Label class:\t\t");
-			report.append(labelClassName);
-			report.append("\n\n");
-		}
-
-		report.append("parsing status:  ");
-		if (sitemap.hasErrors()) {
-			report.append("FAILED");
-		} else {
-			report.append("PASSED");
-		}
-
-		report.append("\n\n");
-
-		if (sitemap.hasErrors()) {
-			report.append(" -------- errors --------\n\n");
-		}
-		reportChunk(report, missingSections(), "missing sections",
-				"if any section is missing, parsing will fail, and results will be indeterminate - correct this first");
-
-		if (getViewPackages() == null) {
-			report.append("No view packages declared - site map will not build without them\n\n");
-		}
-
-		if (labelClassMissing || labelClassNonExistent || labelClassNotI18N) {
-			report.append("I18N Label class:\t\t");
-			if (labelClassMissing) {
-				report.append(" has not been declared, you need to define it using the 'labelKeys=' property in [options]");
-				report.append("\n\n");
-			} else {
-				if (labelClassNonExistent) {
-					report.append(labelClassName);
-					report.append(" has been declared but does not exist on the classpath");
-					report.append("\n\n");
-				} else {
-					if (labelClassNotI18N) {
-						report.append(labelClassName);
-						report.append(" has been declared, is on the classpath, but does not implement I18NKeys, as it should");
-						report.append("\n\n");
-					}
-				}
-			}
-		}
-
-		reportChunk(report, propertyErrors, "property errors", "should be key=value, spaces are ignored");
-		reportChunk(report, missingEnums, "missing enum declarations",
-				"you could just paste these into your enum declaration");
-		reportChunk(report, invalidViewClasses, "invalid view classes", "invalid because they do not implement V7View");
-		reportChunk(report, undeclaredViewClasses, "undeclared view classes",
-				"these could not be found in the view packages declared in the [viewPackages] section");
-
-		reportChunk(report, syntaxErrors, "syntax errors",
-				"these have been ignored, and the system may work, but you may not get the intended result", true);
-
-		if (warningSum() > 0) {
-			report.append(" --------------- warnings ---------");
-			report.append("\n\n");
-			reportChunk(
-					report,
-					indentationErrors,
-					"indentation errors",
-					"line indentation should be <= 1 greater than the preceding line.  Parsing will still work but you may not get the intended result");
-			reportChunk(report, unrecognisedOptions, "unrecognised options",
-					"these have just been ignored, will do no harm");
-		}
-
-		return report;
-	}
-
-	private void reportChunk(StringBuilder report, Set<String> source, String name, String explain) {
-		reportChunk(report, source, name, explain, false);
-	}
-
-	private void reportChunk(StringBuilder report, Set<String> source, String name, String explain, boolean multiline) {
-		if (source.size() > 0) {
-			report.append(name);
-			report.append("\t\t");
-			report.append(source.size());
-			report.append("  (");
-			report.append(explain);
-			report.append(")\n");
-			if (source.size() > 0) {
-				if (multiline) {
-					for (String s : source) {
-						report.append("\t");
-						report.append(s);
-						report.append("\n");
-					}
-				} else {
-					report.append("  -- ");
-					report.append(source);
-					report.append("\n");
-				}
-			}
-			report.append("\n");
-		}
 	}
 
 	public int getPagesDefined() {
@@ -685,34 +474,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		return missing;
 	}
 
-	public Set<String> getInvalidViewClasses() {
-		return invalidViewClasses;
-	}
-
-	public Set<String> getUndeclaredViewClasses() {
-		return undeclaredViewClasses;
-	}
-
-	public boolean isLabelClassNotI18N() {
-		return labelClassNotI18N;
-	}
-
-	public boolean isLabelClassNonExistent() {
-		return labelClassNonExistent;
-	}
-
-	public Set<String> getIndentationErrors() {
-		return indentationErrors;
-	}
-
-	public Set<String> getPropertyErrors() {
-		return propertyErrors;
-	}
-
-	public boolean isLabelClassMissing() {
-		return labelClassMissing;
-	}
-
 	public File getSourceFile() {
 		return sourceFile;
 	}
@@ -727,29 +488,6 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		this.sourceFile = sourceFile;
 	}
 
-	// public String getSource() {
-	// return source;
-	// }
-
-	// /**
-	// * Sets the source of the sitemap input. Must be in the format of
-	// * {@link ResourceUtils#getInputStreamForPath(String)}. See also {@link #setSourceFile(File)}, and {@link #get()}
-	// * for loading order.
-	// *
-	// * @param source
-	// */
-	// public void setSource(String source) {
-	// this.source = source;
-	// }
-
-	public Set<String> getSyntaxErrors() {
-		return syntaxErrors;
-	}
-
-	public Set<String> getInfoMessages() {
-		return infoMessages;
-	}
-
 	public Sitemap getSitemap() {
 
 		return sitemap;
@@ -758,12 +496,24 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 	@Override
 	public boolean load() {
 		if ((sources != null) && (!sources.isEmpty())) {
-			report.append("==================== Sitemap reader report ==================== \n\n");
 			for (SitemapFile source : sources.values()) {
 				parse(new File(source.getFilePath()));
-				buildReport();
+				StringBuilder buf = new StringBuilder();
+				boolean first = true;
+				if (!missingEnums.isEmpty()) {
+					for (String e : missingEnums) {
+						if (!first) {
+							buf.append(',');
+						}
+						buf.append(e);
+						first = false;
+					}
+					if (labelKeysClass != null) {
+						addError(source.getFilePath(), ENUM_MISSING, buf.toString(), labelKeysClass.getName());
+					}
+
+				}
 			}
-			report.append("================================================================= ");
 			return true;
 		} else {
 			log.info("No file based sources for the Sitemap identified, nothing to load");
@@ -781,8 +531,27 @@ public class DefaultFileSitemapLoader implements FileSitemapLoader {
 		this.sources = sources;
 	}
 
-	public StringBuilder getReport() {
-		return report;
+	@Override
+	public void addError(String source, String msgPattern, Object... msgParams) {
+		super.addError(source, msgPattern, msgParams);
+	}
+
+	@Override
+	public void addWarning(String source, String msgPattern, Object... msgParams) {
+		super.addWarning(source, msgPattern, msgParams);
+	}
+
+	@Override
+	public void addInfo(String source, String msgPattern, Object... msgParams) {
+		super.addInfo(source, msgPattern, msgParams);
+	}
+
+	public List<String> getSourceNames() {
+		List<String> sourceNames = new ArrayList<>();
+		for (SitemapFile source : sources.values()) {
+			sourceNames.add(source.getFilePath());
+		}
+		return sourceNames;
 	}
 
 }

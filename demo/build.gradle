@@ -11,6 +11,7 @@ vaadin {
 	
 	version vaadinVersion
 	widgetset "uk.co.q3c.v7.demo.widgetset.V7demoWidgetset"
+	manageWidgetset=false
 	
 }
 

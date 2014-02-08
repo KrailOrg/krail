@@ -1,0 +1,59 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                Sitemap Report                                  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Summary
+	errors:	6
+	warns :	2
+	infos :	6
+
+============================ MockAnnotationLoader ==============================
+Summary
+	errors:	3
+	warns :	1
+	infos :	3
+
+----------------------------------- errors -------------------------------------
+Source: a
+	Pattern with no params
+Source: b
+	Pattern with 1 params
+	Pattern with 2 params, just as an example
+
+---------------------------------- warnings ------------------------------------
+Source: c
+	Pattern with 2 params, just as an example
+
+------------------------------------ infos -------------------------------------
+Source: a
+	Pattern with 1 params
+	Pattern with 1 params
+	Pattern with 2 params, just as an example
+
+
+============================== MockDirectLoader ================================
+Summary
+	errors:	3
+	warns :	1
+	infos :	3
+
+----------------------------------- errors -------------------------------------
+Source: a
+	Pattern with no params
+Source: b
+	Pattern with 1 params
+	Pattern with 2 params, just as an example
+
+---------------------------------- warnings ------------------------------------
+Source: c
+	Pattern with 2 params, just as an example
+
+------------------------------------ infos -------------------------------------
+Source: a
+	Pattern with 1 params
+	Pattern with 1 params
+	Pattern with 2 params, just as an example
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                             End of Sitemap Report                              
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

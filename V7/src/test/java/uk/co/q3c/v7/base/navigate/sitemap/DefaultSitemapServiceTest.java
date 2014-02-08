@@ -140,6 +140,7 @@ public class DefaultSitemapServiceTest {
 		assertThat(sitemap.getNodeCount()).isEqualTo(STANDARD_NODE_COUNT + FILE_NODE_COUNT + DIRECT_NODe_COUNT);
 		assertThat(service.getSources()).containsOnly(SitemapSourceType.FILE, SitemapSourceType.DIRECT,
 				SitemapSourceType.ANNOTATION);
+		assertThat(sitemap.getReport()).isNotEmpty();
 	}
 
 	@Test

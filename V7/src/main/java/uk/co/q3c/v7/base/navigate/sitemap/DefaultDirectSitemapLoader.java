@@ -30,7 +30,7 @@ import com.google.inject.Inject;
  * @author David Sowerby
  * 
  */
-public class DefaultDirectSitemapLoader implements DirectSitemapLoader {
+public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements DirectSitemapLoader {
 
 	private Map<String, DirectSitemapEntry> pageMap;
 	private final Map<String, StandardPageSitemapEntry> standardPageMap;

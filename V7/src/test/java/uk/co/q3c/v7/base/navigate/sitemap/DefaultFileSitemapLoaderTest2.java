@@ -15,6 +15,8 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.fest.assertions.Fail;
 import org.junit.Before;
@@ -51,6 +53,9 @@ import fixture.testviews2.OptionsView;
 @GuiceContext({ TestFileSitemapModule.class })
 public class DefaultFileSitemapLoaderTest2 {
 
+	List<SitemapLoader> loaders;
+	LoaderReportBuilder lrb;
+
 	public static class TestFileSitemapModule extends FileSitemapModule {
 
 		@Override
@@ -70,6 +75,8 @@ public class DefaultFileSitemapLoaderTest2 {
 
 	@Before
 	public void setup() throws IOException {
+		loaders = new ArrayList<>();
+		loaders.add(loader);
 	}
 
 	@Test
@@ -78,22 +85,20 @@ public class DefaultFileSitemapLoaderTest2 {
 		// given
 		// when
 		loader.load();
-		StringBuilder report = loader.getReport();
+		lrb = new LoaderReportBuilder(loaders);
+		loader.getSitemap().setReport(lrb.getReport().toString());
+		StringBuilder report = lrb.getReport();
+
 		// then
 
 		for (SitemapNode node : sitemap.getAllNodes()) {
 			validateNode(node);
 		}
 
-		System.out.println(report);
-
-		assertThat(report.toString())
-				.contains(
-						"parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good1.properties");
-		assertThat(report.toString())
-				.contains(
-						"parsing source from:		/home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good.properties");
-
+		// Note: this currently only works if there are errors
+		assertThat(report).contains("v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good1.properties");
+		assertThat(report).contains("uk/co/q3c/v7/base/navigate/sitemap_good1.properties");
+		System.out.println(report.toString());
 	}
 
 	private void validateNode(SitemapNode node) {

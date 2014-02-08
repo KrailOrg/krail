@@ -9,7 +9,7 @@ The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state
 
 There are a number of sub-projects, each with a different status
 
-1st February 2014:  
+7th February 2014:  
 
 ### V7
 
@@ -24,7 +24,8 @@ and provides I18N support.
 It provides site navigation and the means to authenticate and authorise users. 
 Building an application is assisted by specifiying the site structure using a Sitemap.  There are 3 methods for specifying the Sitemap: using files(s), annotations, or directly coded in Guice modules (these can also be mixed)
 
-This library is usable, thought there are still some bugs and further developments needed.
+This library is usable, thought there are still some bugs and further developments needed.  Vaadin push is not supported.
+
 
 ### demo
 
@@ -44,7 +45,7 @@ Something which seemed like a good idea at the time, but is now parked. Will be 
 
 ##Project Build
 
-A Gradle multi-project structure is used.  If you are an Eclipse user you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files. There is a bug which causes an incorrect classpath file to be generated for the views sub-project only, but there is a workaround for it. ([#181](https://github.com/davidsowerby/v7/issues/181)). 
+A Gradle multi-project structure is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).  If you are an Eclipse user you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files. There is a bug which causes an incorrect classpath file to be generated for the views sub-project only, but there is a workaround for it. ([#181](https://github.com/davidsowerby/v7/issues/181)). 
 
 ## Motivation
 Whenever I start a new application it feels like I cover the same ground - getting the basic application architecture in place first, and trying to get the various parts working together.  Of course, when I start looking for answers to integration questions, I find that there are many others out there asking the same questions.  So I thought I should build a basic reference application, using common OSS components, and use that as a start point for any applications I want to put together in future.  And since I am using only OSS components, it seems only fair that I should share the results with any one who wishes to use it.  With any luck, others will also find it useful.

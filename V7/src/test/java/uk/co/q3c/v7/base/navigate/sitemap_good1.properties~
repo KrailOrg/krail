@@ -10,7 +10,6 @@ uk.co.q3c.v7.base.view.testviews
 # The fully qualified name of the enum class to use for label keys
 labelKeys=uk.co.q3c.v7.i18n.TestLabelKey
 
-[redirects]
 
 
 # if true, 'View' is appended to all view names in the tree - just makes things a it more readable

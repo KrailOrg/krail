@@ -63,7 +63,6 @@ public class DefaultFileSitemapLoaderTest3 {
 
 		// then
 		assertThat(result).isFalse();
-		assertThat(loader.getSitemap().hasErrors()).isFalse();
 
 	}
 
