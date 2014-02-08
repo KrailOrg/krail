@@ -16,12 +16,18 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 
 import com.vaadin.ui.Button;
 
-public class BreadcrumbStep extends Button {
+/**
+ * Simply a Vaadin Button encapsulating a SitemapNode
+ * 
+ * @author David Sowerby
+ * 
+ */
+public class NavigationButton extends Button {
 
 	private SitemapNode node;
 	private String params;
 
-	protected BreadcrumbStep() {
+	protected NavigationButton() {
 		super();
 	}
 

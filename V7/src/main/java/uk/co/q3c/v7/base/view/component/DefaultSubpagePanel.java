@@ -12,29 +12,30 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import java.util.List;
+
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.Translate;
+
 import com.google.inject.Inject;
 
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-
-public class DefaultSubpagePanel extends Panel implements SubpagePanel {
-
-	private Label label;
-	private HorizontalLayout layout;
+@UIScoped
+public class DefaultSubpagePanel extends NavigationButtonPanel implements SubpagePanel {
 
 	@Inject
-	protected DefaultSubpagePanel() {
-		super();
-		build();
+	protected DefaultSubpagePanel(V7Navigator navigator, Sitemap sitemap, CurrentLocale currentLocale,
+			Translate translate) {
+		super(navigator, sitemap, currentLocale, translate);
 	}
 
-	private void build() {
-		layout = new HorizontalLayout();
-		label = new Label("Sub page panel");
-		layout.addComponent(label);
-		this.setContent(layout);
-
+	@Override
+	protected void moveToNavigationState() {
+		List<SitemapNode> subnodes = getSitemap().getChildren(getNavigator().getCurrentNode());
+		organiseButtons(subnodes);
 	}
 
 }

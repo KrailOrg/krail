@@ -138,12 +138,25 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// given
 		pause(1000);
 		// when
-
-		// then
 		navigateTo("system-account/reset-account");
 		assertThat(breadcrumb(0)).isNotNull();
 		breadcrumb(0).get().click();
+		// then
 		verifyUrl("system-account");
+	}
+
+	@Test
+	public void subpage_navigate() {
+
+		// given
+		pause(1000);
+		// when
+		navigateTo("system-account");
+		assertThat(subpagepanel(0)).isNotNull();
+		subpagepanel(0).get().click();
+		// then
+		verifyUrl("system-account/enable-account");
+
 	}
 
 	@After

@@ -90,19 +90,19 @@ public class BreadcrumbTest extends TestWithSitemap {
 		breadcrumb = new DefaultBreadcrumb(navigator, sitemap, currentLocale, translate);
 		breadcrumb.moveToNavigationState();
 		// then
-		assertThat(breadcrumb.getSteps().size()).isEqualTo(3);
+		assertThat(breadcrumb.getButtons().size()).isEqualTo(3);
 		assertThat(breadcrumb.getComponentCount()).isEqualTo(3);
-		assertThat(breadcrumb.getSteps().get(0).getCaption()).isEqualTo("home");
-		assertThat(breadcrumb.getSteps().get(1).getCaption()).isEqualTo("option");
-		assertThat(breadcrumb.getSteps().get(2).getCaption()).isEqualTo("home");
+		assertThat(breadcrumb.getButtons().get(0).getCaption()).isEqualTo("home");
+		assertThat(breadcrumb.getButtons().get(1).getCaption()).isEqualTo("option");
+		assertThat(breadcrumb.getButtons().get(2).getCaption()).isEqualTo("home");
 
-		assertThat(breadcrumb.getSteps().get(0).getNode()).isEqualTo(newNode1);
-		assertThat(breadcrumb.getSteps().get(1).getNode()).isEqualTo(newNode2);
-		assertThat(breadcrumb.getSteps().get(2).getNode()).isEqualTo(newNode3);
+		assertThat(breadcrumb.getButtons().get(0).getNode()).isEqualTo(newNode1);
+		assertThat(breadcrumb.getButtons().get(1).getNode()).isEqualTo(newNode2);
+		assertThat(breadcrumb.getButtons().get(2).getNode()).isEqualTo(newNode3);
 
-		assertThat(breadcrumb.getSteps().get(0).isVisible()).isTrue();
-		assertThat(breadcrumb.getSteps().get(1).isVisible()).isTrue();
-		assertThat(breadcrumb.getSteps().get(2).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(0).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(1).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(2).isVisible()).isTrue();
 
 		// given
 		nodeChain.remove(2);
@@ -111,19 +111,19 @@ public class BreadcrumbTest extends TestWithSitemap {
 		breadcrumb.afterViewChange(null);
 
 		// then
-		assertThat(breadcrumb.getSteps().size()).isEqualTo(3);
+		assertThat(breadcrumb.getButtons().size()).isEqualTo(3);
 		assertThat(breadcrumb.getComponentCount()).isEqualTo(3);
-		assertThat(breadcrumb.getSteps().get(0).getCaption()).isEqualTo("home");
-		assertThat(breadcrumb.getSteps().get(1).getCaption()).isEqualTo("option");
-		assertThat(breadcrumb.getSteps().get(2).getCaption()).isEqualTo("home");
+		assertThat(breadcrumb.getButtons().get(0).getCaption()).isEqualTo("home");
+		assertThat(breadcrumb.getButtons().get(1).getCaption()).isEqualTo("option");
+		assertThat(breadcrumb.getButtons().get(2).getCaption()).isEqualTo("home");
 
-		assertThat(breadcrumb.getSteps().get(0).getNode()).isEqualTo(newNode1);
-		assertThat(breadcrumb.getSteps().get(1).getNode()).isEqualTo(newNode2);
-		assertThat(breadcrumb.getSteps().get(2).getNode()).isEqualTo(newNode3);
+		assertThat(breadcrumb.getButtons().get(0).getNode()).isEqualTo(newNode1);
+		assertThat(breadcrumb.getButtons().get(1).getNode()).isEqualTo(newNode2);
+		assertThat(breadcrumb.getButtons().get(2).getNode()).isEqualTo(newNode3);
 
-		assertThat(breadcrumb.getSteps().get(0).isVisible()).isTrue();
-		assertThat(breadcrumb.getSteps().get(1).isVisible()).isTrue();
-		assertThat(breadcrumb.getSteps().get(2).isVisible()).isFalse();
+		assertThat(breadcrumb.getButtons().get(0).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(1).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(2).isVisible()).isFalse();
 
 		// given
 		nodeChain.add(newNode3);
@@ -132,19 +132,19 @@ public class BreadcrumbTest extends TestWithSitemap {
 		breadcrumb.afterViewChange(null);
 
 		// then
-		assertThat(breadcrumb.getSteps().size()).isEqualTo(3);
+		assertThat(breadcrumb.getButtons().size()).isEqualTo(3);
 		assertThat(breadcrumb.getComponentCount()).isEqualTo(3);
-		assertThat(breadcrumb.getSteps().get(0).getCaption()).isEqualTo("home");
-		assertThat(breadcrumb.getSteps().get(1).getCaption()).isEqualTo("option");
-		assertThat(breadcrumb.getSteps().get(2).getCaption()).isEqualTo("home");
+		assertThat(breadcrumb.getButtons().get(0).getCaption()).isEqualTo("home");
+		assertThat(breadcrumb.getButtons().get(1).getCaption()).isEqualTo("option");
+		assertThat(breadcrumb.getButtons().get(2).getCaption()).isEqualTo("home");
 
-		assertThat(breadcrumb.getSteps().get(0).getNode()).isEqualTo(newNode1);
-		assertThat(breadcrumb.getSteps().get(1).getNode()).isEqualTo(newNode2);
-		assertThat(breadcrumb.getSteps().get(2).getNode()).isEqualTo(newNode3);
+		assertThat(breadcrumb.getButtons().get(0).getNode()).isEqualTo(newNode1);
+		assertThat(breadcrumb.getButtons().get(1).getNode()).isEqualTo(newNode2);
+		assertThat(breadcrumb.getButtons().get(2).getNode()).isEqualTo(newNode3);
 
-		assertThat(breadcrumb.getSteps().get(0).isVisible()).isTrue();
-		assertThat(breadcrumb.getSteps().get(1).isVisible()).isTrue();
-		assertThat(breadcrumb.getSteps().get(2).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(0).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(1).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(2).isVisible()).isTrue();
 
 		// given
 		nodeChain.remove(2);
@@ -158,25 +158,25 @@ public class BreadcrumbTest extends TestWithSitemap {
 		breadcrumb.afterViewChange(null);
 
 		// then
-		assertThat(breadcrumb.getSteps().size()).isEqualTo(4);
+		assertThat(breadcrumb.getButtons().size()).isEqualTo(4);
 		assertThat(breadcrumb.getComponentCount()).isEqualTo(4);
-		assertThat(breadcrumb.getSteps().get(0).getCaption()).isEqualTo("home");
-		assertThat(breadcrumb.getSteps().get(1).getCaption()).isEqualTo("option");
-		assertThat(breadcrumb.getSteps().get(2).getCaption()).isEqualTo("home");
-		assertThat(breadcrumb.getSteps().get(3).getCaption()).isEqualTo("home");
+		assertThat(breadcrumb.getButtons().get(0).getCaption()).isEqualTo("home");
+		assertThat(breadcrumb.getButtons().get(1).getCaption()).isEqualTo("option");
+		assertThat(breadcrumb.getButtons().get(2).getCaption()).isEqualTo("home");
+		assertThat(breadcrumb.getButtons().get(3).getCaption()).isEqualTo("home");
 
-		assertThat(breadcrumb.getSteps().get(0).getNode()).isEqualTo(newNode1);
-		assertThat(breadcrumb.getSteps().get(1).getNode()).isEqualTo(newNode2);
-		assertThat(breadcrumb.getSteps().get(2).getNode()).isEqualTo(newNode3);
-		assertThat(breadcrumb.getSteps().get(3).getNode()).isEqualTo(newNode7);
+		assertThat(breadcrumb.getButtons().get(0).getNode()).isEqualTo(newNode1);
+		assertThat(breadcrumb.getButtons().get(1).getNode()).isEqualTo(newNode2);
+		assertThat(breadcrumb.getButtons().get(2).getNode()).isEqualTo(newNode3);
+		assertThat(breadcrumb.getButtons().get(3).getNode()).isEqualTo(newNode7);
 
-		assertThat(breadcrumb.getSteps().get(0).isVisible()).isTrue();
-		assertThat(breadcrumb.getSteps().get(1).isVisible()).isTrue();
-		assertThat(breadcrumb.getSteps().get(2).isVisible()).isTrue();
-		assertThat(breadcrumb.getSteps().get(3).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(0).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(1).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(2).isVisible()).isTrue();
+		assertThat(breadcrumb.getButtons().get(3).isVisible()).isTrue();
 
 		// given
-		BreadcrumbStep step = breadcrumb.getSteps().get(2);
+		NavigationButton step = breadcrumb.getButtons().get(2);
 		// when button clicked
 		step.click();
 		// then

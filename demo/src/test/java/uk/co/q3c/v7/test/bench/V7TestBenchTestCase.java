@@ -24,9 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.view.DefaultLoginView;
-import uk.co.q3c.v7.base.view.component.BreadcrumbStep;
 import uk.co.q3c.v7.base.view.component.DefaultBreadcrumb;
 import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
+import uk.co.q3c.v7.base.view.component.DefaultSubpagePanel;
+import uk.co.q3c.v7.base.view.component.NavigationButton;
 
 import com.vaadin.testbench.By;
 import com.vaadin.testbench.TestBench;
@@ -80,7 +81,12 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	 * @return
 	 */
 	protected ElementLocator breadcrumb(int index) {
-		String idIndex = ID.getIdcIndex(index, DefaultBreadcrumb.class, BreadcrumbStep.class);
+		String idIndex = ID.getIdcIndex(index, DefaultBreadcrumb.class, NavigationButton.class);
+		return locator().id(idIndex);
+	}
+
+	protected ElementLocator subpagepanel(int index) {
+		String idIndex = ID.getIdcIndex(index, DefaultSubpagePanel.class, NavigationButton.class);
 		return locator().id(idIndex);
 	}
 
