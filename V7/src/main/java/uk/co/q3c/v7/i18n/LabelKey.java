@@ -21,7 +21,35 @@ import java.util.ResourceBundle;
  * 
  */
 public enum LabelKey implements I18NKey<Labels> {
-	_nullkey_, Application_Configuration_Service, Authentication, Authorisation, Cancel, Enable_Account, First_Name, Guest, Home, Invalid_Page, Last_Name, Log_In, Log_Out, No, Ok, Private, Public, Refresh_Account, Request_Account, Reset_Account, Small, Sitemap_Service, System_Account, Unlock_Account, Yes;
+	_nullkey_,
+	Application_Configuration_Service,
+	Authentication,
+	Authorisation,
+	Cancel,
+	Enable_Account,
+	Error,
+	First_Name,
+	Guest,
+	Home,
+	Invalid_Page,
+	Last_Name,
+	Log_In,
+	Log_Out,
+	Message_Bar,
+	No,
+	Ok,
+	Private,
+	Public,
+	Refresh_Account,
+	Request_Account,
+	Reset_Account,
+	Small,
+	Sitemap_Service,
+	Splash,
+	System_Account,
+	Unlock_Account,
+	Warning,
+	Yes;
 
 	@Override
 	public Labels getBundle(Locale locale) {

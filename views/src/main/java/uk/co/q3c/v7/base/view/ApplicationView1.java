@@ -25,7 +25,7 @@ import uk.co.q3c.v7.base.view.component.Breadcrumb;
 import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
 import uk.co.q3c.v7.base.view.component.DefaultViewBody;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
-import uk.co.q3c.v7.base.view.component.MessageStatusPanel;
+import uk.co.q3c.v7.base.view.component.MessageBar;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 import uk.co.q3c.v7.base.view.component.ViewBody;
@@ -50,7 +50,7 @@ public class ApplicationView1 extends ViewBaseWithLayout {
 	private final LoginStatusPanel loginOut;
 	private final ApplicationMenu menu;
 	private final SubpagePanel subpage;
-	private final MessageStatusPanel messageBar;
+	private final MessageBar messageBar;
 	private final ApplicationLogo logo;
 	private final ApplicationHeader header;
 	private final ViewBody body;
@@ -58,7 +58,7 @@ public class ApplicationView1 extends ViewBaseWithLayout {
 	@Inject
 	protected ApplicationView1(V7Navigator navigator, ApplicationViewLayout1 viewLayout, Translate translate,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, LoginStatusPanel loginOut, ApplicationMenu menu,
-			SubpagePanel subpage, MessageStatusPanel messageBar, ApplicationLogo logo, ApplicationHeader header) {
+			SubpagePanel subpage, MessageBar messageBar, ApplicationLogo logo, ApplicationHeader header) {
 		super(navigator, viewLayout, translate);
 		this.navTree = navTree;
 		this.breadcrumb = breadcrumb;

@@ -20,11 +20,11 @@ import java.util.EnumMap;
  * <ol>
  * <li>{@link Labels} : short, usually one or two words, no parameters, generally used as captions
  * <li>{@link Descriptions} : longer, typically several words, no parameters, generally used in tooltips
- * <li>{@link Messages} : contains parameters Typically used for tooltips. For short labels {@link Labels} is used, and
- * for values containing parameters, Messages is used.
+ * <li>{@link Messages} : contains parameters, typically used for user messages.
  * 
  * 
- * @author David Sowerby 9 Feb 2013
+ * 
+ * @author David Sowerby 3 Aug 2013
  * 
  */
 public class Descriptions extends EnumResourceBundle<DescriptionKey> {
@@ -35,7 +35,6 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 		map.put(DescriptionKey.Last_Name, "the last name or family name");
 		map.put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok");
 		map.put(DescriptionKey.No_Permission, "You do not have permission for that action");
-		map.put(DescriptionKey.Service_not_Started, "You cannot use service {0} until it has been started");
 		map.put(DescriptionKey.Application_Configuration_Service,
 				"This service loads the application configuration from V7.ini");
 		map.put(DescriptionKey.Sitemap_Service,

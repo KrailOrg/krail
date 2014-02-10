@@ -10,30 +10,21 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.i18n;
+package uk.co.q3c.v7.base.notify;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+/**
+ * Implementations of this provide a means of notifying a user with a message, and are used in conjunction with
+ * {@link UserNotifier}. There are a set of sub-interfaces to identify the message as either an Error, Warning or
+ * Information message
+ * <p>
+ * The intended use of this, and its sub-interfaces, is via the {@link UserNotifier}, which enables I18N support and
+ * provides a configurable way of selecting notification methods.
+ * 
+ * @author David Sowerby
+ * 
+ */
+public interface UserNotification {
 
-public enum MessageKey implements I18NKey<Messages> {
-	_nullkey_, invalidURI, Service_not_Started
-
-	;
-
-	@Override
-	public Messages getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Messages.class.getName(), locale);
-		return (Messages) bundle;
-	}
-
-	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
-	}
-
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
-	}
+	public void message(String message);
 
 }

@@ -20,11 +20,11 @@ import java.util.EnumMap;
  * <ol>
  * <li>{@link Labels} : short, usually one or two words, no parameters, generally used as captions
  * <li>{@link Descriptions} : longer, typically several words, no parameters, generally used in tooltips
- * <li>{@link Messages} : contains parameters Typically used for tooltips. For short labels {@link Labels} is used, and
- * for values containing parameters, Messages is used.
+ * <li>{@link Messages} : contains parameters, typically used for user messages.
  * 
- * @see LabelKey
- * @author David Sowerby 9 Feb 2013
+ * 
+ * 
+ * @author David Sowerby 3 Aug 2013
  * 
  */
 public class Labels extends EnumResourceBundle<LabelKey> {

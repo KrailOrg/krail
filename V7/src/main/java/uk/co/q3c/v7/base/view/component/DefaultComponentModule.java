@@ -29,7 +29,7 @@ public class DefaultComponentModule extends AbstractModule {
 	}
 
 	private void bindMessageStatusPanel() {
-		bind(MessageStatusPanel.class).to(DefaultMessageStatusPanel.class);
+		bind(MessageBar.class).to(DefaultMessageBar.class);
 	}
 
 	private void bindApplicationHeader() {

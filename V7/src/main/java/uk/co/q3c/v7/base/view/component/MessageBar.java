@@ -14,6 +14,12 @@ package uk.co.q3c.v7.base.view.component;
 
 import com.vaadin.ui.Component;
 
-public interface MessageStatusPanel extends Component {
+public interface MessageBar extends Component {
+
+	void errorMessage(String message);
+
+	void warningMessage(String message);
+
+	void informationMessage(String message);
 
 }

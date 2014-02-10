@@ -10,31 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.view.component;
+package uk.co.q3c.v7.base.notify;
 
-import com.google.inject.Inject;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-
-public class DefaultMessageStatusPanel extends Panel implements MessageStatusPanel {
-
-	private Label label;
-	private HorizontalLayout layout;
-
-	@Inject
-	protected DefaultMessageStatusPanel() {
-		super();
-		build();
+/**
+ * Provides an error notification to a user using the Vaadin provided 'Splash' window
+ * 
+ * @author David Sowerby
+ * 
+ */
+public class VaadinErrorNotification implements ErrorNotification {
+	@Override
+	public void message(String message) {
+		Notification.show(message, Type.ERROR_MESSAGE);
 	}
-
-	private void build() {
-		layout = new HorizontalLayout();
-		label = new Label("Message bar");
-		layout.addComponent(label);
-		this.setContent(layout);
-
-	}
-
 }

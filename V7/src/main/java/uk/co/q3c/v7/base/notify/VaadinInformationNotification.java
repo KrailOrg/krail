@@ -10,30 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.i18n;
+package uk.co.q3c.v7.base.notify;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
-public enum MessageKey implements I18NKey<Messages> {
-	_nullkey_, invalidURI, Service_not_Started
-
-	;
-
-	@Override
-	public Messages getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Messages.class.getName(), locale);
-		return (Messages) bundle;
-	}
+/**
+ * Provides an information notification to a user using the Vaadin provided 'Splash' window
+ * 
+ * @author David Sowerby
+ * 
+ */
+public class VaadinInformationNotification implements InformationNotification {
 
 	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
-	}
-
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
+	public void message(String message) {
+		Notification.show(message, Type.HUMANIZED_MESSAGE);
 	}
 
 }

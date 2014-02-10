@@ -20,8 +20,8 @@ import java.util.EnumMap;
  * <ol>
  * <li>{@link Labels} : short, usually one or two words, no parameters, generally used as captions
  * <li>{@link Descriptions} : longer, typically several words, no parameters, generally used in tooltips
- * <li>{@link Messages} : contains parameters Typically used for tooltips. For short labels {@link Labels} is used, and
- * for values containing parameters, Messages is used.
+ * <li>{@link Messages} : contains parameters, typically used for user messages.
+ * 
  * 
  * 
  * @author David Sowerby 3 Aug 2013
@@ -33,6 +33,7 @@ public class Messages extends EnumResourceBundle<MessageKey> {
 	// TODO make map unmodifiable
 	static {
 		map.put(MessageKey.invalidURI, "{0} is not a valid page");
+		map.put(MessageKey.Service_not_Started, "You cannot use service {0} until it has been started");
 	}
 
 	@Override

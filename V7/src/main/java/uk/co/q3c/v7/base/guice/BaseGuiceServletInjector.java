@@ -32,6 +32,7 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultStandardPagesModule;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapServiceModule;
+import uk.co.q3c.v7.base.notify.DefaultUserNotificationModule;
 import uk.co.q3c.v7.base.services.ServicesMonitor;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
@@ -112,6 +113,8 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		baseModules.add(componentModule());
 
+		baseModules.add(userNotificationModule());
+
 		addAppModules(baseModules);
 		addSitemapModules(baseModules);
 		return baseModules;
@@ -180,6 +183,14 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 	protected Module shiroModule(ServletContext servletContext) {
 		return new DefaultShiroModule();
+	}
+
+	/**
+	 * Override this if you have sub-classed {@link DefaultUserNotificationModule} to provide bindings to your own
+	 * notifications implementations
+	 */
+	private Module userNotificationModule() {
+		return new DefaultUserNotificationModule();
 	}
 
 	/**

@@ -9,7 +9,7 @@ import uk.co.q3c.v7.base.view.component.ApplicationLogo;
 import uk.co.q3c.v7.base.view.component.ApplicationMenu;
 import uk.co.q3c.v7.base.view.component.Breadcrumb;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
-import uk.co.q3c.v7.base.view.component.MessageStatusPanel;
+import uk.co.q3c.v7.base.view.component.MessageBar;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
@@ -35,14 +35,14 @@ public class DefaultApplicationUI extends ScopedUI {
 	private final LoginStatusPanel loginOut;
 	private final ApplicationMenu menu;
 	private final SubpagePanel subpage;
-	private final MessageStatusPanel messageBar;
+	private final MessageBar messageBar;
 	private final ApplicationLogo logo;
 	private final ApplicationHeader header;
 
 	@Inject
 	protected DefaultApplicationUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
-			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageStatusPanel messageBar,
+			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
 			LoginStatusHandler loginStatusHandler) {
 		super(navigator, errorHandler, converterFactory, loginStatusHandler);
 		this.navTree = navTree;

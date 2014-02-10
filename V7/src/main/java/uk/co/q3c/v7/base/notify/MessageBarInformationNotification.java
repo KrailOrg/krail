@@ -10,30 +10,24 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.i18n;
+package uk.co.q3c.v7.base.notify;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import uk.co.q3c.v7.base.view.component.MessageBar;
 
-public enum MessageKey implements I18NKey<Messages> {
-	_nullkey_, invalidURI, Service_not_Started
+import com.google.inject.Inject;
 
-	;
+public class MessageBarInformationNotification implements InformationNotification {
 
-	@Override
-	public Messages getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Messages.class.getName(), locale);
-		return (Messages) bundle;
+	private final MessageBar messageBar;
+
+	@Inject
+	protected MessageBarInformationNotification(MessageBar messageBar) {
+		this.messageBar = messageBar;
 	}
 
 	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
-	}
-
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
+	public void message(String message) {
+		messageBar.informationMessage(message);
 	}
 
 }
