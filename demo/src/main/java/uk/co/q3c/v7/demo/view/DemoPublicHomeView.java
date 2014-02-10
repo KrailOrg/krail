@@ -14,26 +14,29 @@ package uk.co.q3c.v7.demo.view;
 
 import java.util.List;
 
+import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.StandardPageViewBase;
+import uk.co.q3c.v7.i18n.MessageKey;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
-import de.steinwedel.messagebox.ButtonId;
-import de.steinwedel.messagebox.Icon;
-import de.steinwedel.messagebox.MessageBox;
-
 public class DemoPublicHomeView extends StandardPageViewBase implements PublicHomeView {
 
-	private Button button;
+	private Button errorButton;
+	private final UserNotifier userNotifier;
+	private Button warnButton;
+	private Button infoButton;
 
 	@Inject
-	public DemoPublicHomeView(V7Navigator navigator) {
+	public DemoPublicHomeView(V7Navigator navigator, UserNotifier userNotifier) {
 		super(navigator);
+		this.userNotifier = userNotifier;
 	}
 
 	@Override
@@ -43,15 +46,37 @@ public class DemoPublicHomeView extends StandardPageViewBase implements PublicHo
 	@Override
 	protected void buildView() {
 		super.buildView();
-		button = new Button("Message box");
-		button.addClickListener(new ClickListener() {
+		errorButton = new Button("Fake an error");
+		errorButton.setId(ID.getId("error", this, errorButton));
+		errorButton.addClickListener(new ClickListener() {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				MessageBox.showPlain(Icon.INFO, "Example 1", "Hello World!", ButtonId.OK);
-
+				userNotifier.notifyError(MessageKey.Service_not_Started, "Fake Service");
 			}
 		});
-		grid.addComponent(button, 1, 2);
+		grid.addComponent(errorButton, 0, 2);
+
+		warnButton = new Button("Fake a warning");
+		warnButton.setId(ID.getId("warning", this, errorButton));
+		warnButton.addClickListener(new ClickListener() {
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				userNotifier.notifyWarning(MessageKey.Service_not_Started, "Fake Service");
+			}
+		});
+		grid.addComponent(warnButton, 1, 2);
+
+		infoButton = new Button("Fake user information");
+		infoButton.setId(ID.getId("information", this, errorButton));
+		infoButton.addClickListener(new ClickListener() {
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				userNotifier.notifyInformation(MessageKey.Service_not_Started, "Fake Service");
+			}
+		});
+		grid.addComponent(infoButton, 2, 2);
 	}
 }

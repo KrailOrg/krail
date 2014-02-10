@@ -32,6 +32,7 @@ import uk.co.q3c.v7.base.view.component.NavigationButton;
 import com.vaadin.testbench.By;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
+import com.vaadin.testbench.commands.TestBenchElementCommands;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
@@ -165,6 +166,15 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 
 	protected WebElement loginButton() {
 		return element(DefaultLoginStatusPanel.class, Button.class);
+	}
+
+	protected WebElement notification() {
+		WebElement notification = getDriver().findElement(By.className("v-Notification"));
+		return notification;
+	}
+
+	protected void closeNotification() {
+		((TestBenchElementCommands) notification()).closeNotification();
 	}
 
 	public void fillLoginForm() {

@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import uk.co.q3c.util.ID;
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -20,6 +22,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 
+@UIScoped
 public class DefaultMessageBar extends Panel implements MessageBar {
 
 	private Label label;
@@ -36,9 +39,10 @@ public class DefaultMessageBar extends Panel implements MessageBar {
 	private void build() {
 		layout = new HorizontalLayout();
 		label = new Label("Message bar");
+		label.setImmediate(true);
 		layout.addComponent(label);
 		this.setContent(layout);
-
+		label.setId(ID.getId(this, label));
 	}
 
 	@Override

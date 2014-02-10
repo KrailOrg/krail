@@ -45,7 +45,7 @@ public class DefaultUserNotificationModule extends AbstractModule {
 	@SuppressWarnings("rawtypes")
 	protected void bindErrorNotifications(MapBinder<I18NKey, ErrorNotification> errorNotificationBinder) {
 		errorNotificationBinder.addBinding(LabelKey.Splash).to(VaadinErrorNotification.class);
-		errorNotificationBinder.addBinding(LabelKey.Message_Bar).to(VaadinErrorNotification.class);
+		errorNotificationBinder.addBinding(LabelKey.Message_Bar).to(MessageBarErrorNotification.class);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class DefaultUserNotificationModule extends AbstractModule {
 	@SuppressWarnings("rawtypes")
 	protected void bindWarningNotifications(MapBinder<I18NKey, WarningNotification> warningNotificationBinder) {
 		warningNotificationBinder.addBinding(LabelKey.Splash).to(VaadinWarningNotification.class);
-		warningNotificationBinder.addBinding(LabelKey.Message_Bar).to(VaadinWarningNotification.class);
+		warningNotificationBinder.addBinding(LabelKey.Message_Bar).to(MessageBarWarningNotification.class);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class DefaultUserNotificationModule extends AbstractModule {
 	protected void bindInformationNotifications(
 			MapBinder<I18NKey, InformationNotification> informationNotificationBinder) {
 		informationNotificationBinder.addBinding(LabelKey.Splash).to(VaadinInformationNotification.class);
-		informationNotificationBinder.addBinding(LabelKey.Message_Bar).to(VaadinInformationNotification.class);
+		informationNotificationBinder.addBinding(LabelKey.Message_Bar).to(MessageBarInformationNotification.class);
 	}
 
 	/**
