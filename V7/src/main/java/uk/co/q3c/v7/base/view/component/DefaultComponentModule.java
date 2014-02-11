@@ -49,7 +49,7 @@ public class DefaultComponentModule extends AbstractModule {
 	}
 
 	private void bindApplicationMenu() {
-		bind(ApplicationMenu.class).to(DefaultApplicationMenu.class);
+		bind(ApplicationMenu.class).to(UserNavigationMenu.class);
 	}
 
 	private void bindBreadcrumb() {

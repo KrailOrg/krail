@@ -79,7 +79,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		// set user option
-		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, false);
+		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, true);
 		maxLevel = userOption.getOptionAsInt(this.getClass().getSimpleName(), maxLevelOpt, -1);
 		addValueChangeListener(this);
 		navigator.addViewChangeListener(this);

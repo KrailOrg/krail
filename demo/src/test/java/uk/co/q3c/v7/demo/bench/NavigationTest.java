@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import uk.co.q3c.v7.test.bench.V7TestBenchTestCase;
 
+import com.vaadin.testbench.By;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 
 public class NavigationTest extends V7TestBenchTestCase {
@@ -32,7 +33,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// then
 		verifyUrl("home");
 		// // when
-		navTree().select(0);
+		navTree().select(2);
 		// // then
 		verifyUrl("system-account");
 		assertThat(navTreeSelection()).isEqualTo("System Account");
@@ -41,13 +42,13 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// // then
 		verifyUrl("home");
 		// // when
-		navTree().select(2);
+		navTree().select(0);
 		// // then
 		verifyUrl("login");
 
 		// when
-		navTree().expand(0);
-		navTree().select(0, 1);
+		navTree().expand(2);
+		navTree().select(2, 0);
 		// then
 		verifyUrl("system-account/enable-account");
 
@@ -102,7 +103,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// given
 
 		// when
-		navTree().select(0);
+		navTree().select(2);
 		// then
 		verifyUrl("system-account");
 		assertThat(navTreeSelection()).isEqualTo("System Account");
@@ -155,6 +156,19 @@ public class NavigationTest extends V7TestBenchTestCase {
 		assertThat(subpagepanel(0)).isNotNull();
 		subpagepanel(0).get().click();
 		// then
+		verifyUrl("system-account/enable-account");
+
+	}
+
+	@Test
+	public void menuNavigate() {
+
+		// given
+		pause(1000);
+		// when
+		testBenchElement(driver.findElement(By.vaadin("ROOT::PID_SUserNavigationMenu#item1"))).click(43, 6);
+		testBenchElement(driver.findElement(By.vaadin("ROOT::Root/VOverlay[0]/VMenuBar[0]#item0"))).click(44, 8);
+		pause(500);
 		verifyUrl("system-account/enable-account");
 
 	}

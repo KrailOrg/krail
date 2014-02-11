@@ -12,17 +12,33 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import com.google.inject.Inject;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
 
-public class DefaultApplicationMenu extends MenuBar implements ApplicationMenu {
+public class NavigationCommand implements MenuBar.Command {
 
-	@Inject
-	protected DefaultApplicationMenu() {
-		super();
+	private final SitemapNode node;
+	private final V7Navigator navigator;
 
-		this.addItem("item 1", null, null).addItem("item 1", null, null);
+	public NavigationCommand(V7Navigator navigator, SitemapNode node) {
+		this.node = node;
+		this.navigator = navigator;
+	}
+
+	@Override
+	public void menuSelected(MenuItem selectedItem) {
+		navigator.navigateTo(node);
+	}
+
+	public SitemapNode getNode() {
+		return node;
+	}
+
+	public V7Navigator getNavigator() {
+		return navigator;
 	}
 
 }
