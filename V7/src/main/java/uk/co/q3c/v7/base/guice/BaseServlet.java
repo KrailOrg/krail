@@ -12,10 +12,13 @@
  */
 package uk.co.q3c.v7.base.guice;
 
+import java.util.Properties;
+
 import uk.co.q3c.v7.base.ui.V7UIModule;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.vaadin.server.DeploymentConfiguration;
 import com.vaadin.server.ServiceException;
 import com.vaadin.server.SessionInitEvent;
 import com.vaadin.server.SessionInitListener;
@@ -29,7 +32,7 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 	 * Cannot use constructor injection. Container expects servlet to have no-arg public constructor
 	 */
 	@Inject
-	private UIProvider basicProvider;
+	private UIProvider uiProvider;
 
 	@Override
 	protected void servletInitialized() {
@@ -38,7 +41,7 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 
 	@Override
 	public void sessionInit(SessionInitEvent event) throws ServiceException {
-		event.getSession().addUIProvider(basicProvider);
+		event.getSession().addUIProvider(uiProvider);
 	}
 
 	/**
@@ -60,15 +63,15 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 	 * @see https://github.com/johndevs/gradle-vaadin-plugin
 	 * @see com.vaadin.server.VaadinServlet#createDeploymentConfiguration(java.util.Properties)
 	 */
-	// @Override
-	// protected DeploymentConfiguration createDeploymentConfiguration(Properties initParameters) {
-	//
-	// if (!widgetset().equals("default")) {
-	// initParameters.setProperty("widgetset", widgetset());
-	// }
-	// return super.createDeploymentConfiguration(initParameters);
-	//
-	// }
+	@Override
+	protected DeploymentConfiguration createDeploymentConfiguration(Properties initParameters) {
+
+		if (!widgetset().equals("default")) {
+			initParameters.setProperty("widgetset", widgetset());
+		}
+		return super.createDeploymentConfiguration(initParameters);
+
+	}
 
 	protected String widgetset() {
 		return "default";
