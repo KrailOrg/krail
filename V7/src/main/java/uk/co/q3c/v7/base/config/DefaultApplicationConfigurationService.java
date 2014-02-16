@@ -17,9 +17,6 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -33,6 +30,9 @@ import uk.co.q3c.v7.base.services.Service;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * This service provides a mechanism which can be used to manage the whole application configuration. It uses the Apache
@@ -74,7 +74,12 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 	}
 
 	/**
+	 * If the V7.ini file does not exist, then a warning is logged, but no exception is thrown. This is because all
+	 * settings which could come from V7.ini have a valid default value. If a failure occurs during load, however, then
+	 * a ConfigurationException is thrown
+	 * 
 	 * @throws ConfigurationException
+	 *             if an error occurs while loading the file
 	 * 
 	 */
 	@Override
@@ -84,13 +89,16 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 		while (iter.hasNext()) {
 			File file = iter.next();
 			log.debug("adding configuration from {}", file.getAbsolutePath());
+
 			if (file.exists()) {
 				HierarchicalINIConfiguration config = new HierarchicalINIConfiguration(file);
 				configuration.addConfiguration(config);
 			} else {
-				throw new ConfigurationException("Configuration file " + file.getAbsolutePath() + " does not exist");
+				String msg = ("Configuration file " + file.getAbsolutePath() + " does not exist.  Default values will be used");
+				log.warn(msg);
 			}
 		}
+		log.info("Application Configuration Service started");
 		return Status.STARTED;
 	}
 
