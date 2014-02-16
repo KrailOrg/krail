@@ -1,7 +1,6 @@
 package uk.co.q3c.v7.base.ui;
 
 import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
-import uk.co.q3c.v7.base.guice.V7Widgetset;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -29,19 +28,6 @@ public abstract class V7UIModule extends AbstractModule {
 		bindURIHandler();
 		bindConverterFactory();
 		bindLoginStatusMonitor();
-		bind(String.class).annotatedWith(V7Widgetset.class).toInstance(widgetset());
-	}
-
-	/**
-	 * Override this with the package qualified name of the widgetset to use, for example
-	 * "uk.co.q3c.v7.demo.widgetset.V7demoWidgetset";
-	 * <p>
-	 * If the value returned from the method is "default", the default Vaadin widgetset is used.
-	 * 
-	 * @return
-	 */
-	protected String widgetset() {
-		return "default";
 	}
 
 	private void bindConverterFactory() {

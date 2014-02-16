@@ -46,6 +46,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
+import com.google.inject.servlet.ServletModule;
 
 public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
 	private static Logger log = LoggerFactory.getLogger(BaseGuiceServletInjector.class);
@@ -105,7 +106,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		baseModules.add(new ShiroAopModule());
 		baseModules.add(userOptionsModule());
 
-		baseModules.add(baseModule());
+		baseModules.add(servletModule());
 
 		baseModules.add(standardPagesModule());
 
@@ -138,11 +139,11 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Override this if you have sub-classed the {@link BaseServletModule}
+	 * Override this if you have provided your own {@link ServletModule}
 	 * 
 	 * @return
 	 */
-	protected Module baseModule() {
+	protected Module servletModule() {
 		return new BaseServletModule();
 	}
 

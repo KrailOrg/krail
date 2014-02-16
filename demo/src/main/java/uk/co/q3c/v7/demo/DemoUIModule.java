@@ -17,9 +17,4 @@ public class DemoUIModule extends V7UIModule {
 		mapbinder.addBinding(DemoUI.class.getName()).to(DemoUI.class);
 	}
 
-	@Override
-	protected String widgetset() {
-		return "uk.co.q3c.v7.demo.widgetset.V7demoWidgetset";
-	}
-
 }
