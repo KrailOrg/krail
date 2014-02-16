@@ -138,12 +138,12 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Override this if you have sub-classed the {@link BaseModule}
+	 * Override this if you have sub-classed the {@link BaseServletModule}
 	 * 
 	 * @return
 	 */
 	protected Module baseModule() {
-		return new BaseModule();
+		return new BaseServletModule();
 	}
 
 	/**

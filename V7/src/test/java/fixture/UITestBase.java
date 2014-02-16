@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import uk.co.q3c.v7.base.guice.BaseModule;
+import uk.co.q3c.v7.base.guice.BaseServletModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -51,7 +51,7 @@ import com.vaadin.util.CurrentInstance;
  * 
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ BaseModule.class })
+@GuiceContext({ BaseServletModule.class })
 public abstract class UITestBase extends ShiroIntegrationTestBase implements V7ViewChangeListener {
 	// this is static to ensure count remains unique across all method calls
 	private static int connectCount = 1;

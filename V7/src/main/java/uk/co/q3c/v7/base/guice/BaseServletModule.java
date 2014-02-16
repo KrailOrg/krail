@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.guice;
 
 import com.google.inject.servlet.ServletModule;
 
-public class BaseModule extends ServletModule {
+public class BaseServletModule extends ServletModule {
 
 	@Override
 	protected void configureServlets() {
