@@ -40,7 +40,7 @@ import com.vaadin.ui.TextField;
 
 public class V7TestBenchTestCase extends TestBenchTestCase {
 	private static Logger log = LoggerFactory.getLogger(V7TestBenchTestCase.class);
-	protected String baseUrl;
+	protected String baseUrl = "http://localhost:8080/V7demo/";;
 	protected final StringBuffer verificationErrors = new StringBuffer();
 
 	@Before
@@ -54,8 +54,8 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 		return rootUrl() + fragment;
 	}
 
-	private String rootUrl() {
-		String rootUrl = concatUrl(baseUrl, "/?restartApplication#");
+	protected String rootUrl() {
+		String rootUrl = concatUrl(baseUrl, "#");
 		return rootUrl;
 	}
 

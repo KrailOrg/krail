@@ -1,7 +1,10 @@
 //build for V7 demo sub-project
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
-
+war{
+	archiveName "V7demo.war"
+	destinationDir file("/home/david/temp")
+}
 
 vaadin {
 	

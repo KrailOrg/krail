@@ -21,7 +21,7 @@ public class LoginTest extends V7TestBenchTestCase {
 
 	@Before
 	public void setUp() throws Exception {
-		baseUrl = "http://localhost:8080/";
+		baseUrl = "http://localhost:8080/V7demo";
 		driver.get(concatUrl(baseUrl, "/?restartApplication#"));
 	}
 
