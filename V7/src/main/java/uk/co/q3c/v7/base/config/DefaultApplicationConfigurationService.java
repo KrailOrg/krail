@@ -133,7 +133,8 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 
 	@Override
 	public void addConfiguration(String configurationFileName) {
-		File f = new File(ResourceUtils.applicationBaseDirectory(), configurationFileName);
-		addConfiguration(f);
+		File f = new File(ResourceUtils.applicationBaseDirectory(), "WEB-INF");
+		File f1 = (new File(f, configurationFileName));
+		addConfiguration(f1);
 	}
 }
