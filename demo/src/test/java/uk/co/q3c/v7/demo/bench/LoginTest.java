@@ -27,6 +27,7 @@ public class LoginTest extends V7TestBenchTestCase {
 	@Test
 	public void testLogin() {
 		// given
+		pause(1000);
 		navTree().expand(0);
 		// navTree().index(0).expand().get().click();
 		String startFragment = "system-account";
