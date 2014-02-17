@@ -1,6 +1,9 @@
 //build for V7 demo sub-project
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
+ext.tomcatHome = "/home/david/tomcat/apache-tomcat-7.0.47"
+
+
 war{
 	archiveName "V7demo.war"
 	destinationDir file("/home/david/temp")
@@ -20,6 +23,18 @@ repositories{
 			url "http://maven.vaadin.com/vaadin-addons"
 			
 		}
+}
+
+task deployToTomcat(type: Copy) {
+	from war
+	into "${tomcatHome}/webapps"
+	//delay to allow tomcat to spin it up
+	sleep(30 * 1000)
+}
+
+
+test{
+	it.dependsOn ("deployToTomcat")
 }
 
 

@@ -13,6 +13,13 @@
 package uk.co.q3c.v7.test.bench;
 
 public class ElementPath {
+	private final String context;
+
+	protected ElementPath(String context) {
+		super();
+		this.context = context;
+	}
+
 	private final StringBuilder buf = new StringBuilder();
 
 	public ElementPath index(int... i) {
@@ -34,7 +41,11 @@ public class ElementPath {
 	}
 
 	public ElementPath id(String id) {
-		buf.append("ROOT::PID_S" + id);
+		if (context.isEmpty()) {
+			buf.append("ROOT::PID_S" + id);
+		} else {
+			buf.append(context + "::PID_S" + id);
+		}
 		return this;
 	}
 
@@ -42,7 +53,4 @@ public class ElementPath {
 		return buf.toString();
 	}
 
-	public static ElementPath path() {
-		return new ElementPath();
-	}
 }

@@ -40,7 +40,8 @@ import com.vaadin.ui.TextField;
 
 public class V7TestBenchTestCase extends TestBenchTestCase {
 	private static Logger log = LoggerFactory.getLogger(V7TestBenchTestCase.class);
-	protected String baseUrl = "http://localhost:8080/V7demo/";;
+	protected String baseUrl = "http://localhost:8080/";
+	protected String context = "V7demo";
 	protected final StringBuffer verificationErrors = new StringBuffer();
 
 	@Before
@@ -51,16 +52,45 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	}
 
 	protected String url(String fragment) {
-		return rootUrl() + fragment;
+		return rootUrl() + "/#" + fragment;
 	}
 
 	protected String rootUrl() {
-		String rootUrl = concatUrl(baseUrl, "#");
+		String rootUrl = buildUrl(baseUrl, context);
 		return rootUrl;
 	}
 
+	/**
+	 * @deprecated Use buildUrl() instead
+	 * 
+	 * @see com.vaadin.testbench.TestBenchTestCase#concatUrl(java.lang.String, java.lang.String)
+	 */
+	@Override
+	@Deprecated
+	protected String concatUrl(String baseUrl, String uri) {
+		return super.concatUrl(baseUrl, uri);
+	}
+
+	protected String buildUrl(String... segments) {
+		StringBuilder buf = new StringBuilder();
+		boolean firstSegment = true;
+		for (String segment : segments) {
+			if (!firstSegment) {
+				buf.append("/");
+			} else {
+				firstSegment = false;
+			}
+			buf.append(segment.replace("/", ""));
+		}
+		String result = buf.toString();
+		// slashes will have been removed
+		result = result.replace("http:", "http://");
+		result = result.replace("https:", "https://");
+		return result;
+	}
+
 	protected void verifyUrl(String fragment) {
-		String expected = rootUrl() + fragment;
+		String expected = rootUrl() + "/#" + fragment;
 		String actual = driver.getCurrentUrl();
 		assertThat(actual).isEqualTo(expected);
 	}
@@ -107,11 +137,11 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	}
 
 	protected UITree treeLocator() {
-		return new UITree(driver);
+		return new UITree(driver, context);
 	}
 
 	protected ElementLocator locator() {
-		return new ElementLocator(driver);
+		return new ElementLocator(driver, context);
 	}
 
 	protected void navigateTo(String fragment) {
@@ -131,11 +161,15 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	}
 
 	protected String id(Class<?>... components) {
-		return "ROOT::PID_S" + ID.getIdc(components);
+		ElementPath elementPath = new ElementPath(context);
+		ElementPath id = elementPath.id(ID.getIdc(components));
+		return id.get();
 	}
 
 	protected String id(String qualifier, Class<?>... components) {
-		return "ROOT::PID_S" + ID.getIdc(qualifier, components);
+		ElementPath elementPath = new ElementPath(context);
+		ElementPath id = elementPath.id(ID.getIdc(qualifier, components));
+		return id.get();
 	}
 
 	protected void pause(int milliseconds) {
@@ -172,6 +206,25 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 		WebElement notification = getDriver().findElement(By.className("v-Notification"));
 		return notification;
 	}
+
+	// Does not work
+	// protected WebElement waitForNotification(int limit) {
+	// int attempts = 0;
+	// boolean found = false;
+	// while ((!found) && attempts < limit) {
+	// try {
+	// WebElement notification = getDriver().findElement(By.className("v-Notification"));
+	// return notification;
+	// } catch (NoSuchElementException nse) {
+	// attempts++;
+	// pause(1000);
+	//
+	// }
+	//
+	// }
+	// throw new RuntimeException("Timed out - notification not found");
+	//
+	// }
 
 	protected void closeNotification() {
 		((TestBenchElementCommands) notification()).closeNotification();

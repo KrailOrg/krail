@@ -19,9 +19,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.base.notify.UserNotifier;
 import uk.co.q3c.v7.i18n.MessageKey;
-import uk.co.q3c.v7.i18n.Notifier;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -34,7 +33,7 @@ public class DefaultInvalidURIExceptionHandlerTest {
 	V7Navigator navigator;
 
 	@Mock
-	Notifier notifier;
+	UserNotifier notifier;
 
 	DefaultInvalidURIExceptionHandler handler;
 
@@ -56,7 +55,7 @@ public class DefaultInvalidURIExceptionHandlerTest {
 		// when
 		handler.invoke();
 		// then
-		verify(notifier).notify(LabelKey.Invalid_Page, MessageKey.invalidURI, "public/wiggly/id=3");
+		verify(notifier).notifyInformation(MessageKey.invalidURI, "public/wiggly/id=3");
 
 	}
 }

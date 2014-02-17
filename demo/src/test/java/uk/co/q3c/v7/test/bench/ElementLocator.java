@@ -20,12 +20,13 @@ import com.vaadin.testbench.commands.TestBenchElementCommands;
 
 public class ElementLocator {
 
-	private final ElementPath path = new ElementPath();
+	private final ElementPath path;
 
 	private final WebDriver driver;
 
-	public ElementLocator(WebDriver driver) {
+	public ElementLocator(WebDriver driver, String context) {
 		this.driver = driver;
+		path = new ElementPath(context);
 	}
 
 	public TestBenchElementCommands get(ElementPath path) {

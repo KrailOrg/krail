@@ -19,9 +19,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import uk.co.q3c.v7.base.notify.UserNotifier;
 import uk.co.q3c.v7.i18n.DescriptionKey;
-import uk.co.q3c.v7.i18n.LabelKey;
-import uk.co.q3c.v7.i18n.Notifier;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -32,7 +31,7 @@ import com.vaadin.ui.Notification;
 public class DefaultUnauthorisedExceptionHandlerTest {
 
 	@Mock
-	Notifier notifier;
+	UserNotifier notifier;
 
 	DefaultUnauthorizedExceptionHandler handler;
 
@@ -49,7 +48,7 @@ public class DefaultUnauthorisedExceptionHandlerTest {
 		// when
 		handler.invoke();
 		// then
-		verify(notifier).notify(LabelKey.Authorisation, DescriptionKey.No_Permission, Notification.Type.ERROR_MESSAGE);
+		verify(notifier).notifyError(DescriptionKey.No_Permission, Notification.Type.ERROR_MESSAGE);
 
 	}
 }

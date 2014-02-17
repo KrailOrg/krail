@@ -20,9 +20,9 @@ public class UITree {
 	private static Logger log = LoggerFactory.getLogger(UITree.class);
 	private final ElementLocator locator;
 
-	public UITree(WebDriver driver) {
+	public UITree(WebDriver driver, String context) {
 		super();
-		this.locator = new ElementLocator(driver);
+		this.locator = new ElementLocator(driver, context);
 	}
 
 	public UITree id(String id) {

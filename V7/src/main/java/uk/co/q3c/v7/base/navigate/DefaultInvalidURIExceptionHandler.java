@@ -12,19 +12,18 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
-import com.google.inject.Inject;
-
-import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.base.notify.UserNotifier;
 import uk.co.q3c.v7.i18n.MessageKey;
-import uk.co.q3c.v7.i18n.Notifier;
+
+import com.google.inject.Inject;
 
 public class DefaultInvalidURIExceptionHandler implements InvalidURIExceptionHandler {
 
 	private final V7Navigator navigator;
-	private final Notifier notifier;
+	private final UserNotifier notifier;
 
 	@Inject
-	protected DefaultInvalidURIExceptionHandler(V7Navigator navigator, Notifier notifier) {
+	protected DefaultInvalidURIExceptionHandler(V7Navigator navigator, UserNotifier notifier) {
 		super();
 		this.navigator = navigator;
 		this.notifier = notifier;
@@ -32,8 +31,7 @@ public class DefaultInvalidURIExceptionHandler implements InvalidURIExceptionHan
 
 	@Override
 	public void invoke() {
-		notifier.notify(LabelKey.Invalid_Page, MessageKey.invalidURI, navigator.getCurrentNavigationState()
-				.getFragment());
+		notifier.notifyInformation(MessageKey.invalidURI, navigator.getCurrentNavigationState().getFragment());
 	}
 
 }

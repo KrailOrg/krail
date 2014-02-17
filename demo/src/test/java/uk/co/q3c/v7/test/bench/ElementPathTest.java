@@ -22,9 +22,10 @@ public class ElementPathTest {
 	public void treeNode0Expand() {
 
 		// given
-		String expected = "ROOT::PID_SDefaultUserNavigationTree#n[0]/expand";
+		String expected = "V7demo::PID_SDefaultUserNavigationTree#n[0]/expand";
 		// when
-		String actual = ElementPath.path().id("DefaultUserNavigationTree").index(0).expand().get();
+		ElementPath path = new ElementPath("V7demo");
+		String actual = path.id("DefaultUserNavigationTree").index(0).expand().get();
 		// then
 		assertThat(actual).isEqualTo(expected);
 
@@ -34,9 +35,36 @@ public class ElementPathTest {
 	public void treeNode0_1Expand() {
 
 		// given
+		String expected = "V7demo::PID_SDefaultUserNavigationTree#n[0]/n[1]/expand";
+		// when
+		ElementPath path = new ElementPath("V7demo");
+		String actual = path.id("DefaultUserNavigationTree").index(0, 1).expand().get();
+		// then
+		assertThat(actual).isEqualTo(expected);
+
+	}
+
+	@Test
+	public void treeNode0Expand_nocontext() {
+
+		// given
+		String expected = "ROOT::PID_SDefaultUserNavigationTree#n[0]/expand";
+		// when
+		ElementPath path = new ElementPath("");
+		String actual = path.id("DefaultUserNavigationTree").index(0).expand().get();
+		// then
+		assertThat(actual).isEqualTo(expected);
+
+	}
+
+	@Test
+	public void treeNode0_1Expand_nocontext() {
+
+		// given
 		String expected = "ROOT::PID_SDefaultUserNavigationTree#n[0]/n[1]/expand";
 		// when
-		String actual = ElementPath.path().id("DefaultUserNavigationTree").index(0, 1).expand().get();
+		ElementPath path = new ElementPath("");
+		String actual = path.id("DefaultUserNavigationTree").index(0, 1).expand().get();
 		// then
 		assertThat(actual).isEqualTo(expected);
 

@@ -65,8 +65,14 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// when
 
 		navigateTo("private/home");
+
+		// pause(10000);
 		// then
-		verifyNotUrl("private/home");
+		// assertThat(notification()).isNotNull();
+		// assertThat(notification().getText()).isEqualTo("You are not authorised for that action");
+		// closeNotification();
+
+		verifyNotUrl("private/home"); // not a valid test, but maybe it should be
 		navigateTo("system-account");
 		// when
 		login();
@@ -100,7 +106,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 	public void browserBackForward() {
 
 		// given
-
+		pause(1000);
 		// when
 		navTree().select(2);
 		// then
@@ -165,8 +171,8 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// given
 		pause(1000);
 		// when
-		testBenchElement(driver.findElement(By.vaadin("ROOT::PID_SUserNavigationMenu#item1"))).click(43, 6);
-		testBenchElement(driver.findElement(By.vaadin("ROOT::Root/VOverlay[0]/VMenuBar[0]#item0"))).click(44, 8);
+		testBenchElement(driver.findElement(By.vaadin("V7demo::PID_SUserNavigationMenu#item1"))).click(43, 6);
+		testBenchElement(driver.findElement(By.vaadin("V7demo::Root/VOverlay[0]/VMenuBar[0]#item0"))).click(44, 8);
 		pause(500);
 		verifyUrl("system-account/enable-account");
 

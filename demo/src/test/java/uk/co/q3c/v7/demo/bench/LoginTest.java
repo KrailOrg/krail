@@ -21,8 +21,7 @@ public class LoginTest extends V7TestBenchTestCase {
 
 	@Before
 	public void setUp() throws Exception {
-		baseUrl = "http://localhost:8080/V7demo";
-		driver.get(concatUrl(baseUrl, "/?restartApplication#"));
+		driver.get(rootUrl());
 	}
 
 	@Test
@@ -85,7 +84,7 @@ public class LoginTest extends V7TestBenchTestCase {
 		// then
 		verifyUrl("login"); // has not moved
 		assertThat(navTreeSelection()).isEqualTo("Login");
-		WebElement label = new ElementLocator(driver).id("DefaultLoginView-Label-status").get();
+		WebElement label = new ElementLocator(driver, context).id("DefaultLoginView-Label-status").get();
 		assertThat(label).isNotNull();
 		String s = label.getText();
 		assertThat(s).isEqualTo("That username or password was not recognised");

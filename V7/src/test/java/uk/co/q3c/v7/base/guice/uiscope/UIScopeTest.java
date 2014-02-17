@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import com.google.inject.Inject;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
@@ -33,6 +31,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.DefaultFileSitemapLoader;
 import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapLoader;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
+import uk.co.q3c.v7.base.notify.DefaultUserNotificationModule;
 import uk.co.q3c.v7.base.services.AbstractServiceI18N;
 import uk.co.q3c.v7.base.services.Service;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
@@ -61,6 +60,7 @@ import uk.co.q3c.v7.base.view.DefaultErrorView;
 import uk.co.q3c.v7.base.view.DefaultPublicHomeView;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
+import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.LabelKey;
@@ -68,6 +68,7 @@ import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.multibindings.MapBinder;
@@ -211,7 +212,8 @@ public class UIScopeTest {
 
 		// when
 
-		injector = Guice.createInjector(new TestModule(), new UIScopeModule(), new ServicesMonitorModule());
+		injector = Guice.createInjector(new TestModule(), new UIScopeModule(), new ServicesMonitorModule(),
+				new DefaultUserNotificationModule(), new DefaultComponentModule());
 		provider = injector.getInstance(UIProvider.class);
 		createUI(BasicUI.class);
 		// navigator = injector.getInstance(V7Navigator.class);

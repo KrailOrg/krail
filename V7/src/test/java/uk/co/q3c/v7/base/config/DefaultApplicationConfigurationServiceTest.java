@@ -17,8 +17,6 @@ import static org.mockito.Mockito.*;
 
 import java.io.File;
 
-import com.google.inject.Inject;
-
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.junit.BeforeClass;
@@ -32,6 +30,7 @@ import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.LabelKey;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
@@ -80,7 +79,6 @@ public class DefaultApplicationConfigurationServiceTest {
 		assertThat(configuration.getString("dbUser")).isEqualTo("python");
 	}
 
-	@Test(expected = ConfigurationException.class)
 	public void fileMissing() throws ConfigurationException {
 
 		// given
@@ -88,7 +86,7 @@ public class DefaultApplicationConfigurationServiceTest {
 		// when
 		service.start();
 		// then
-		assertThat(service.getStatus()).isEqualTo(Status.FAILED_TO_START);
+		assertThat(service.getStatus()).isEqualTo(Status.STARTED);
 
 	}
 

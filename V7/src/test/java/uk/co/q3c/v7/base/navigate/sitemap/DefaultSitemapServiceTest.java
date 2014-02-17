@@ -30,9 +30,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.util.ResourceUtils;
-import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.ConfigKeys;
+import uk.co.q3c.v7.base.config.DefaultApplicationConfigurationService;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
@@ -44,6 +44,7 @@ import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -63,13 +64,33 @@ import fixture.TestConfigurationException;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ ServicesMonitorModule.class, ApplicationConfigurationModule.class, TestDirectSitemapModule.class,
-		TestFileSitemapModule.class, DefaultStandardPagesModule.class })
+@GuiceContext({ ServicesMonitorModule.class, TestDirectSitemapModule.class, TestFileSitemapModule.class,
+		DefaultStandardPagesModule.class })
 public class DefaultSitemapServiceTest {
 
 	private final int FILE_NODE_COUNT = 4;
 	private final int DIRECT_NODe_COUNT = 2;
 	private final int STANDARD_NODE_COUNT = 5;
+
+	/**
+	 * Overrides the default implementation so that we can use the temp folder to manipulate application config.
+	 * Wouldn't need to do this if we had an ApplicationConfiguration object see
+	 * https://github.com/davidsowerby/v7/issues/234
+	 * 
+	 * @author David Sowerby
+	 * 
+	 */
+	public static class TestApplicationConfigurationService extends DefaultApplicationConfigurationService {
+		@Inject
+		protected TestApplicationConfigurationService(Translate translate) {
+			super(translate);
+		}
+
+		@Override
+		protected File configurationDirectory() {
+			return ResourceUtils.userTempDirectory();
+		}
+	}
 
 	public static class TestDirectSitemapModule extends DirectSitemapModule {
 
@@ -293,6 +314,7 @@ public class DefaultSitemapServiceTest {
 				bind(DirectSitemapLoader.class).to(DefaultDirectSitemapLoader.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 				bind(SitemapChecker.class).to(DefaultSitemapChecker.class);
+				bind(ApplicationConfigurationService.class).to(TestApplicationConfigurationService.class);
 			}
 
 		};
