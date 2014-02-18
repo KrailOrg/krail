@@ -147,7 +147,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	protected void navigateTo(String fragment) {
 		String url = url(fragment);
 		driver.get(url);
-		pause(300);
+		pause(500);
 	}
 
 	protected WebElement element(String qualifier, Class<?>... classes) {
@@ -190,12 +190,12 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 
 	protected void navigateForward() {
 		driver.navigate().forward();
-		pause(200);
+		pause(500);
 	}
 
 	protected void navigateBack() {
 		driver.navigate().back();
-		pause(200);
+		pause(500);
 	}
 
 	protected WebElement loginButton() {

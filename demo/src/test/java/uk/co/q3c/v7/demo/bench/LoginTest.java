@@ -48,6 +48,7 @@ public class LoginTest extends V7TestBenchTestCase {
 		// when username and password entered
 		fillLoginForm();
 		// then correct url and status panel updated
+		pause(500);
 		verifyUrl(startFragment);
 		assertThat(loginButton().getText()).isEqualTo("log out");
 		assertThat(loginLabel().getText()).isEqualTo("ds");

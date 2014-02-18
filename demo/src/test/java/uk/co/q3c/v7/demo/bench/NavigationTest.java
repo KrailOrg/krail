@@ -95,7 +95,6 @@ public class NavigationTest extends V7TestBenchTestCase {
 		login();
 		// when
 		navigateTo("private");
-		pause(500);
 		// then
 		verifyUrl("private/home");
 		assertThat(navTreeSelection()).isEqualTo("Private Home");

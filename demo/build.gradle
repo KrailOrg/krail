@@ -26,15 +26,20 @@ repositories{
 }
 
 task deployToTomcat(type: Copy) {
+	it.dependsOn("war")
 	from war
 	into "${tomcatHome}/webapps"
-	//delay to allow tomcat to spin it up
-	sleep(30 * 1000)
 }
 
 
 test{
 	it.dependsOn ("deployToTomcat")
+
+	//delay to allow tomcat to spin it up
+	doFirst{
+		println("giving Tomcat time to deploy the application")
+		sleep(60 * 1000)
+	}
 }
 
 
