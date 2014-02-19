@@ -39,4 +39,8 @@ public class MoneyInOutView implements V7View {
 		return getClass().getSimpleName();
 	}
 
+	@Override
+	public void setIds() {
+	}
+
 }

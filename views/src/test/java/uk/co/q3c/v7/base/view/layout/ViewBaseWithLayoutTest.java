@@ -17,8 +17,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-import com.google.inject.Provider;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -30,6 +28,7 @@ import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout.ComponentWrapper;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.Sizeable.Unit;
@@ -47,10 +46,10 @@ public class ViewBaseWithLayoutTest {
 
 		protected TestViewBaseWithLayout(V7Navigator navigator) {
 			super(navigator, new VerticalViewLayout(), translate);
+			buildView();
 		}
 
-		@Override
-		protected void buildView() {
+		public void buildView() {
 			button1 = new Button();
 			button2 = new Button();
 			label1 = new Label();

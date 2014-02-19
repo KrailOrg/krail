@@ -39,4 +39,8 @@ public class View1 implements V7View {
 		return getClass().getSimpleName();
 	}
 
+	@Override
+	public void setIds() {
+	}
+
 }

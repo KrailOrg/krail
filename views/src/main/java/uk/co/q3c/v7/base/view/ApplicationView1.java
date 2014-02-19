@@ -14,8 +14,6 @@ package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
@@ -32,6 +30,8 @@ import uk.co.q3c.v7.base.view.component.ViewBody;
 import uk.co.q3c.v7.base.view.layout.ApplicationViewLayout1;
 import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout;
 import uk.co.q3c.v7.i18n.Translate;
+
+import com.google.inject.Inject;
 
 /**
  * This view provides the base for a fairly typical layout for an application. It is not expected that it will be used
@@ -69,6 +69,7 @@ public class ApplicationView1 extends ViewBaseWithLayout {
 		this.logo = logo;
 		this.header = header;
 		body = createBody();
+		buildView();
 	}
 
 	/**
@@ -80,7 +81,6 @@ public class ApplicationView1 extends ViewBaseWithLayout {
 		return new DefaultViewBody();
 	}
 
-	@Override
 	protected void buildView() {
 		add(logo).width(50).height(70);
 		add(header).widthUndefined().heightPercent(100);

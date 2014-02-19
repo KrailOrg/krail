@@ -39,4 +39,8 @@ public class WigglyHomeView implements V7View {
 		return "WigglyHomeView";
 	}
 
+	@Override
+	public void setIds() {
+	}
+
 }

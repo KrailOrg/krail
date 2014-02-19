@@ -14,11 +14,10 @@ package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 
+import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 
@@ -28,13 +27,12 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 	@Inject
 	protected DefaultLogoutView(V7Navigator navigator) {
 		super(navigator);
+		buildView();
 	}
 
 	@Override
 	public Component getRootComponent() {
-		Panel p = new Panel("Logged out");
-		p.setSizeFull();
-		addComponent(p);
+
 		return this;
 
 	}
@@ -54,6 +52,16 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 	public String viewName() {
 
 		return getClass().getSimpleName();
+	}
+
+	protected void buildView() {
+		Panel p = new Panel("Logged out");
+		p.setSizeFull();
+		addComponent(p);
+	}
+
+	@Override
+	public void setIds() {
 	}
 
 }

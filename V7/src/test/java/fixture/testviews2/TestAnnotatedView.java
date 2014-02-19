@@ -45,4 +45,8 @@ public class TestAnnotatedView implements V7View {
 		return "Test annotated view";
 	}
 
+	@Override
+	public void setIds() {
+	}
+
 }

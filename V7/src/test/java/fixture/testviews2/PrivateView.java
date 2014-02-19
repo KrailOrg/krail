@@ -39,4 +39,8 @@ public class PrivateView implements V7View {
 		return getClass().getSimpleName();
 	}
 
+	@Override
+	public void setIds() {
+	}
+
 }

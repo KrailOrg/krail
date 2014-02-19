@@ -32,12 +32,12 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// then
 		verifyUrl("home");
 		// // when
-		navTree().select(2);
+		navTree().select(3);
 		// // then
 		verifyUrl("system-account");
 		assertThat(navTreeSelection()).isEqualTo("System Account");
 		// // when
-		navTree().select(1);
+		navTree().select(2);
 		// // then
 		verifyUrl("home");
 		// // when
@@ -46,8 +46,8 @@ public class NavigationTest extends V7TestBenchTestCase {
 		verifyUrl("login");
 
 		// when
-		navTree().expand(2);
-		navTree().select(2, 0);
+		navTree().expand(3);
+		navTree().select(3, 0);
 		// then
 		verifyUrl("system-account/enable-account");
 
@@ -107,7 +107,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// given
 		pause(1000);
 		// when
-		navTree().select(2);
+		navTree().select(3);
 		// then
 		verifyUrl("system-account");
 		assertThat(navTreeSelection()).isEqualTo("System Account");
@@ -170,7 +170,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// given
 		pause(1000);
 		// when
-		testBenchElement(driver.findElement(By.vaadin("V7demo::PID_SUserNavigationMenu#item1"))).click(43, 6);
+		testBenchElement(driver.findElement(By.vaadin("V7demo::PID_SUserNavigationMenu#item2"))).click(43, 6);
 		testBenchElement(driver.findElement(By.vaadin("V7demo::Root/VOverlay[0]/VMenuBar[0]#item0"))).click(44, 8);
 		pause(500);
 		verifyUrl("system-account/enable-account");

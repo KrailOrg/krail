@@ -2,8 +2,6 @@ package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ConcurrentAccessException;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -17,11 +15,11 @@ import org.apache.shiro.subject.Subject;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -36,68 +34,29 @@ import com.vaadin.ui.themes.ChameleonTheme;
 // TODO i18N
 @UIScoped
 public class DefaultLoginView extends GridViewBase implements LoginView, ClickListener {
-	private final Label label;
-	private final TextField usernameBox;
-	private final PasswordField passwordBox;
-	private final Label demoInfoLabel;
-	private final Label demoInfoLabel2;
-	private final Button submitButton;
-	private final V7Navigator navigator;
-	private final Label statusMsgLabel;
+	private Label label;
+	private TextField usernameBox;
+	private PasswordField passwordBox;
+	private Label demoInfoLabel;
+	private Label demoInfoLabel2;
+	private Button submitButton;
+	private Label statusMsgLabel;
 	private final LoginExceptionHandler loginExceptionHandler;
 	private final Provider<Subject> subjectProvider;
 	private final LoginStatusHandler loginStatusHandler;
 
 	@Inject
-	protected DefaultLoginView(V7Navigator navigator, LoginExceptionHandler loginExceptionHandler,
-			SubjectProvider subjectProvider, LoginStatusHandler loginStatusHandler) {
+	protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider,
+			LoginStatusHandler loginStatusHandler) {
 		super();
-		this.navigator = navigator;
 		this.loginExceptionHandler = loginExceptionHandler;
 		this.subjectProvider = subjectProvider;
 		this.loginStatusHandler = loginStatusHandler;
-		this.setColumns(3);
-		this.setRows(3);
-		this.setSizeFull();
-		Panel centrePanel = new Panel("Log in"); // TODO i18N
-		centrePanel.addStyleName(ChameleonTheme.PANEL_BUBBLE);
-		centrePanel.setSizeUndefined();
-		VerticalLayout vl = new VerticalLayout();
-		centrePanel.setContent(vl);
-		vl.setSpacing(true);
-		vl.setSizeUndefined();
-		label = new Label("Please log in");
-		usernameBox = new TextField("user name");
-		passwordBox = new PasswordField("password");
-
-		demoInfoLabel = new Label("for this demo, enter any user name, and a password of 'password'");
-		demoInfoLabel2 = new Label("In a real application your Shiro Realm implementation defines how to authenticate");
-
-		submitButton = new Button("submit");
-		submitButton.addClickListener(this);
-
-		statusMsgLabel = new Label("Please enter your username and password");
-
-		vl.addComponent(label);
-		vl.addComponent(demoInfoLabel);
-		vl.addComponent(demoInfoLabel2);
-		vl.addComponent(usernameBox);
-		vl.addComponent(passwordBox);
-		vl.addComponent(submitButton);
-		vl.addComponent(statusMsgLabel);
-
-		this.addComponent(centrePanel, 1, 1);
-		this.setColumnExpandRatio(0, 1);
-		this.setColumnExpandRatio(2, 1);
-
-		this.setRowExpandRatio(0, 1);
-		this.setRowExpandRatio(2, 1);
-
-		setIds();
-
+		buildView();
 	}
 
-	private void setIds() {
+	@Override
+	public void setIds() {
 		setId(ID.getId(this));
 		submitButton.setId(ID.getId(this, submitButton));
 		usernameBox.setId(ID.getId("username", this, usernameBox));
@@ -174,6 +133,45 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	public String viewName() {
 
 		return getClass().getSimpleName();
+	}
+
+	protected void buildView() {
+		this.setColumns(3);
+		this.setRows(3);
+		this.setSizeFull();
+		Panel centrePanel = new Panel("Log in"); // TODO i18N
+		centrePanel.addStyleName(ChameleonTheme.PANEL_BUBBLE);
+		centrePanel.setSizeUndefined();
+		VerticalLayout vl = new VerticalLayout();
+		centrePanel.setContent(vl);
+		vl.setSpacing(true);
+		vl.setSizeUndefined();
+		label = new Label("Please log in");
+		usernameBox = new TextField("user name");
+		passwordBox = new PasswordField("password");
+
+		demoInfoLabel = new Label("for this demo, enter any user name, and a password of 'password'");
+		demoInfoLabel2 = new Label("In a real application your Shiro Realm implementation defines how to authenticate");
+
+		submitButton = new Button("submit");
+		submitButton.addClickListener(this);
+
+		statusMsgLabel = new Label("Please enter your username and password");
+
+		vl.addComponent(label);
+		vl.addComponent(demoInfoLabel);
+		vl.addComponent(demoInfoLabel2);
+		vl.addComponent(usernameBox);
+		vl.addComponent(passwordBox);
+		vl.addComponent(submitButton);
+		vl.addComponent(statusMsgLabel);
+
+		this.addComponent(centrePanel, 1, 1);
+		this.setColumnExpandRatio(0, 1);
+		this.setColumnExpandRatio(2, 1);
+
+		this.setRowExpandRatio(0, 1);
+		this.setRowExpandRatio(2, 1);
 	}
 
 }

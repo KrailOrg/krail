@@ -10,36 +10,30 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.view.testviews.subview;
+package uk.co.q3c.v7.demo.i18n;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import com.vaadin.ui.Component;
+import uk.co.q3c.v7.i18n.I18NKey;
 
-@UIScoped
-public class TransferView implements V7View {
+public enum DescriptionKey implements I18NKey<Descriptions> {
+	_nullkey_, Notifications
 
+	;
 	@Override
-	public void enter(V7ViewChangeEvent event) {
-		//
-		throw new RuntimeException("not yet implemented");
+	public Descriptions getBundle(Locale locale) {
+		ResourceBundle bundle = ResourceBundle.getBundle(Descriptions.class.getName(), locale);
+		return (Descriptions) bundle;
 	}
 
 	@Override
-	public Component getRootComponent() {
-		// return null;
-		throw new RuntimeException("not yet implemented");
+	public String getValue(Locale locale) {
+		return getBundle(locale).getValue(this);
 	}
 
 	@Override
-	public String viewName() {
-		return getClass().getSimpleName();
+	public boolean isNullKey() {
+		return this.equals(_nullkey_);
 	}
-
-	@Override
-	public void setIds() {
-	}
-
 }

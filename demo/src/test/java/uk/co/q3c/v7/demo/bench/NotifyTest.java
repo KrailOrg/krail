@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
 import uk.co.q3c.v7.base.view.component.DefaultMessageBar;
-import uk.co.q3c.v7.demo.view.DemoPublicHomeView;
+import uk.co.q3c.v7.demo.view.NotificationsView;
 import uk.co.q3c.v7.test.bench.V7TestBenchTestCase;
 
 import com.vaadin.testbench.ScreenshotOnFailureRule;
@@ -29,18 +29,20 @@ import com.vaadin.ui.Label;
 
 public class NotifyTest extends V7TestBenchTestCase {
 
+	private final String testPage = "notifications";
+
 	@Rule
 	public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
 
 	@Before
 	public void setUp() throws Exception {
-		driver.get(rootUrl());
 	}
 
 	@Test
 	public void defaultMessage() {
 
 		// given
+		navigateTo(testPage);
 		WebElement messageBar = element(DefaultMessageBar.class, Label.class);
 		// when
 
@@ -52,11 +54,14 @@ public class NotifyTest extends V7TestBenchTestCase {
 	public void notifyError() {
 
 		// given
-		WebElement messageBar = element(DefaultMessageBar.class, Label.class);
+		navigateTo(testPage);
+
 		// when
-		WebElement errorBtn = element("error", DemoPublicHomeView.class, Button.class);
+
+		WebElement errorBtn = element("error", NotificationsView.class, Button.class);
 		// then
 		errorBtn.click();
+		WebElement messageBar = element(DefaultMessageBar.class, Label.class);
 		assertThat(messageBar.getText()).isEqualTo(
 				"ERROR: You cannot use service Fake Service until it has been started");
 		assertThat(notification()).isNotNull();
@@ -68,7 +73,8 @@ public class NotifyTest extends V7TestBenchTestCase {
 	@Test
 	public void notifyWarning() {
 		// given
-		WebElement warningBtn = element("warning", DemoPublicHomeView.class, Button.class);
+		navigateTo(testPage);
+		WebElement warningBtn = element("warning", NotificationsView.class, Button.class);
 		WebElement messageBar = element(DefaultMessageBar.class, Label.class);
 		// when
 		warningBtn.click();
@@ -83,7 +89,8 @@ public class NotifyTest extends V7TestBenchTestCase {
 	@Test
 	public void notifyInformation() {
 		// given
-		WebElement informationBtn = element("information", DemoPublicHomeView.class, Button.class);
+		navigateTo(testPage);
+		WebElement informationBtn = element("information", NotificationsView.class, Button.class);
 		WebElement messageBar = element(DefaultMessageBar.class, Label.class);
 		// when
 		informationBtn.click();

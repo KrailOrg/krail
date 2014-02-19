@@ -31,4 +31,10 @@ public interface V7View {
 	 * @return
 	 */
 	public String viewName();
+
+	/**
+	 * Ids are used primarily for testing with Vaadin TestBench. If you are not using them, this can be an empty method
+	 */
+	public void setIds();
+
 }

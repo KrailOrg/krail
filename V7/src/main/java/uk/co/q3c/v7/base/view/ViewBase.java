@@ -14,14 +14,13 @@ package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 
+import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 
 public abstract class ViewBase implements V7View {
@@ -34,8 +33,6 @@ public abstract class ViewBase implements V7View {
 	protected ViewBase(V7Navigator navigator) {
 		super();
 		this.navigator = navigator;
-		buildView();
-		setIds();
 
 	}
 
@@ -47,18 +44,10 @@ public abstract class ViewBase implements V7View {
 	 * You only need to implement this method if you are using TestBench, or another testing tool which looks for debug
 	 * ids. If you do override it to add your own subclass ids, make sure you call super
 	 */
-	protected void setIds() {
+	@Override
+	public void setIds() {
 		rootComponent.setId(ID.getId(this, rootComponent));
 	}
-
-	/**
-	 * Implement this method to create and assemble the user interface components for the view. If you use sub-class
-	 * {@link ViewBaseWithLayout} there are some useful shorthand methods for creating and sizing components.
-	 * <p>
-	 * If you are sub-classing this class directly, this method must populate {@link #rootComponent} with the component
-	 * at the root of component hierarchy (the one which will be inserted into the Vaadin UI for display)
-	 */
-	protected abstract void buildView();
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {
@@ -82,9 +71,6 @@ public abstract class ViewBase implements V7View {
 
 	@Override
 	public Component getRootComponent() {
-		if (rootComponent == null) {
-			buildView();
-		}
 		return rootComponent;
 	}
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
 import uk.co.q3c.v7.base.navigate.sitemap.SystemAccountManagementPages;
+import uk.co.q3c.v7.demo.view.DemoPages;
 import uk.co.q3c.v7.demo.view.DemoViewModule;
 
 import com.google.inject.Module;
@@ -25,11 +26,7 @@ public class DemoGuiceServletInjector extends BaseGuiceServletInjector {
 	protected void addSitemapModules(List<Module> baseModules) {
 		super.addSitemapModules(baseModules);
 		baseModules.add(new SystemAccountManagementPages());
-	}
-
-	@Override
-	protected Module servletModule() {
-		return new DemoServletModule();
+		baseModules.add(new DemoPages());
 	}
 
 }

@@ -306,6 +306,7 @@ public class DefaultV7Navigator implements V7Navigator {
 		// get a view instance
 		Class<? extends V7View> viewClass = node.getViewClass();
 		V7View view = injector.getInstance(viewClass);
+		view.setIds();
 
 		Subject subject = subjectProvider.get();
 		boolean authorised = pageAccessController.isAuthorised(subject, node);

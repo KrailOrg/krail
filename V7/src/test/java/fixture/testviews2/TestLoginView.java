@@ -63,4 +63,8 @@ public class TestLoginView implements LoginView {
 
 		return getClass().getSimpleName();
 	}
+
+	@Override
+	public void setIds() {
+	}
 }

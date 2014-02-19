@@ -12,11 +12,10 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import com.google.inject.Inject;
-
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 
+import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 
@@ -29,10 +28,9 @@ public abstract class StandardPageViewBase extends ViewBase {
 	@Inject
 	protected StandardPageViewBase(V7Navigator navigator) {
 		super(navigator);
-
+		buildView();
 	}
 
-	@Override
 	protected void buildView() {
 
 		label = new Label("This is the " + this.getClass().getSimpleName());
@@ -56,7 +54,7 @@ public abstract class StandardPageViewBase extends ViewBase {
 	}
 
 	@Override
-	protected void setIds() {
+	public void setIds() {
 		super.setIds();
 		grid.setId(ID.getId(this.getClass().getSimpleName(), grid));
 		label.setId(ID.getId(this.getClass().getSimpleName(), label));

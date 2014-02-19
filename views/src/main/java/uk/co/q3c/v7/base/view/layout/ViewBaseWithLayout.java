@@ -14,13 +14,12 @@ package uk.co.q3c.v7.base.view.layout;
 
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.ViewBase;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.Inject;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractComponent;
@@ -275,11 +274,8 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 
 	@Override
 	public Component getRootComponent() {
-		if (rootComponent == null) {
-			buildView();
-			layout.assemble();
-			rootComponent = layout.getLayoutRoot();
-		}
+		layout.assemble();
+		rootComponent = layout.getLayoutRoot();
 		return rootComponent;
 	}
 

@@ -37,6 +37,7 @@ public enum LabelKey implements I18NKey<Labels> {
 	Log_Out,
 	Message_Bar,
 	No,
+	Notifications,
 	Ok,
 	Private,
 	Public,

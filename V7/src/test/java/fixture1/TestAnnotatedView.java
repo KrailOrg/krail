@@ -44,4 +44,8 @@ public class TestAnnotatedView implements V7View {
 		return "Test annotated view in fixture 1";
 	}
 
+	@Override
+	public void setIds() {
+	}
+
 }

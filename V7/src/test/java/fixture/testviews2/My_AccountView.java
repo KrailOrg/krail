@@ -39,4 +39,8 @@ public class My_AccountView implements V7View {
 		return getClass().getSimpleName();
 	}
 
+	@Override
+	public void setIds() {
+	}
+
 }

@@ -93,6 +93,10 @@ public class DefaultV7NavigatorTest {
 			return "view2";
 		}
 
+		@Override
+		public void setIds() {
+		}
+
 	}
 
 	static class View1 implements V7View {
@@ -111,6 +115,10 @@ public class DefaultV7NavigatorTest {
 		public String viewName() {
 
 			return "view1";
+		}
+
+		@Override
+		public void setIds() {
 		}
 
 	}

@@ -94,6 +94,10 @@ public class DefaultAnnotationSitemapLoaderTest {
 			return getClass().getSimpleName();
 		}
 
+		@Override
+		public void setIds() {
+		}
+
 	}
 
 	@Inject

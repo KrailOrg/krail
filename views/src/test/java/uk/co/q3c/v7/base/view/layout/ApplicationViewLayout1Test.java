@@ -59,9 +59,9 @@ public class ApplicationViewLayout1Test {
 
 		protected TestView(V7Navigator navigator, ViewLayout viewLayout, Translate translate) {
 			super(navigator, viewLayout, translate);
+			buildView();
 		}
 
-		@Override
 		protected void buildView() {
 			add(logo).width(50).height(70);
 			add(header).widthUndefined().heightPercent(100);
