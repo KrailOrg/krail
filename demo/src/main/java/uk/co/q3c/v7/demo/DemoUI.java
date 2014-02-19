@@ -13,6 +13,7 @@ import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
 import com.google.inject.Inject;
+import com.vaadin.annotations.Theme;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
@@ -26,7 +27,7 @@ import com.vaadin.ui.VerticalLayout;
  * @author David Sowerby
  * 
  */
-// @Theme("v7demo")
+@Theme("chameleon")
 public class DemoUI extends ScopedUI {
 
 	private VerticalLayout baseLayout;
