@@ -83,7 +83,7 @@ public class DefaultRealmTest {
 	public void passwordFail() {
 
 		// given
-		attemptLog.clearUnsuccessful("fred");
+		attemptLog.resetAttemptCount("fred");
 		// when
 		AuthenticationInfo info = realm.getAuthenticationInfo(token("fred", "rubbish"));
 		// then
@@ -95,7 +95,7 @@ public class DefaultRealmTest {
 	public void bombsAfter3Fails() {
 
 		// given
-
+		attemptLog.setMaximumAttempts(3);
 		// when
 		@SuppressWarnings("unused")
 		AuthenticationInfo info = realm.getAuthenticationInfo(token("fred", "rubbish"));

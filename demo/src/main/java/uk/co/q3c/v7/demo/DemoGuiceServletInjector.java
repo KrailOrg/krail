@@ -13,7 +13,6 @@ public class DemoGuiceServletInjector extends BaseGuiceServletInjector {
 
 	@Override
 	protected void addAppModules(List<Module> modules) {
-		modules.add(new DemoModule());
 		modules.add(new DemoUIModule());
 	}
 

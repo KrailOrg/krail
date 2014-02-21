@@ -17,19 +17,42 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.google.inject.Singleton;
-
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.joda.time.DateTime;
 
+import com.google.common.collect.ImmutableList;
+import com.google.inject.Singleton;
+
 @Singleton
 public class DefaultLoginAttemptLog implements LoginAttemptLog {
 
+	public enum LogOutcome {
+		PASS, FAIL, RESET
+	}
+
+	public class LogEntry {
+		public LogEntry(LogOutcome logOutcome) {
+			this.logOutcome = logOutcome;
+			dateTime = DateTime.now();
+		}
+
+		private final DateTime dateTime;
+		private final LogOutcome logOutcome;
+
+		public DateTime getDateTime() {
+			return dateTime;
+		}
+
+		public LogOutcome getLogOutcome() {
+			return logOutcome;
+		}
+	}
+
 	private int maxAttempts = 3;
-	private final Map<String, Integer> unsuccessful = new TreeMap<>();
-	private final Map<String, List<DateTime>> successful = new TreeMap<>();
-	private final Map<String, DateTime> latestSuccessful = new TreeMap<>();
+	private final Map<String, List<LogEntry>> history = new TreeMap<>();
+	private final Map<String, Integer> unsuccessfulAttempts = new TreeMap<>();
+	private final Map<String, DateTime> lastSuccessful = new TreeMap<>();
 
 	@Override
 	public void setMaximumAttempts(int maxAttempts) {
@@ -38,16 +61,26 @@ public class DefaultLoginAttemptLog implements LoginAttemptLog {
 
 	@Override
 	public void recordSuccessfulAttempt(UsernamePasswordToken upToken) {
-		String username = upToken.getUsername();
-		List<DateTime> list = successful.get(username);
+		LogEntry log = createLog(upToken, LogOutcome.PASS);
+		unsuccessfulAttempts.remove(upToken.getUsername());
+		lastSuccessful.put(upToken.getUsername(), log.dateTime);
+	}
+
+	private LogEntry createLog(String username, LogOutcome logOutcome) {
+		LogEntry logEntry = new LogEntry(logOutcome);
+		List<LogEntry> list = history.get(username);
 		if (list == null) {
 			list = new ArrayList<>();
-			successful.put(username, list);
+			history.put(username, list);
 
 		}
-		DateTime now = DateTime.now();
-		latestSuccessful.put(username, now);
-		list.add(now);
+		list.add(logEntry);
+		return logEntry;
+	}
+
+	private LogEntry createLog(UsernamePasswordToken upToken, LogOutcome logOutcome) {
+		String username = upToken.getUsername();
+		return createLog(username, logOutcome);
 	}
 
 	/**
@@ -58,43 +91,68 @@ public class DefaultLoginAttemptLog implements LoginAttemptLog {
 	 */
 	@Override
 	public void recordFailedAttempt(UsernamePasswordToken upToken) {
-		Integer record = unsuccessful.get(upToken.getUsername());
-		int count = 0;
-		if (record == null) {
-			count = 0;
-		} else {
-			count = record;
+		createLog(upToken, LogOutcome.FAIL);
+
+		Integer failedAttempts = unsuccessfulAttempts.get(upToken.getUsername());
+		if (failedAttempts == null) {
+			failedAttempts = 0;
 		}
-		count++;
-		if (count >= maxAttempts) {
+		unsuccessfulAttempts.put(upToken.getUsername(), new Integer(failedAttempts + 1));
+		int attemptsLeft = attemptsRemaining(upToken.getUsername());
+		if (attemptsLeft == 0) {
 			throw new ExcessiveAttemptsException("Login failed after maximum attempts");
 		}
-		unsuccessful.put(upToken.getUsername(), new Integer(count));
 	}
 
 	@Override
-	public int failedAttempts(String username) {
-		Integer record = unsuccessful.get(username);
-		if (record == null) {
-			return 0;
-		} else {
-			return record;
+	public void clearHistory(String username) {
+		history.remove(username);
+	}
+
+	@Override
+	public void resetAttemptCount(String username) {
+		unsuccessfulAttempts.remove(username);
+		createLog(username, LogOutcome.RESET);
+	}
+
+	@Override
+	public int attemptsRemaining(String username) {
+		Integer attemptsMade = unsuccessfulAttempts.get(username);
+		// no unsuccessful attempt has been made to login, there won't be an entry
+		if (attemptsMade == null) {
+			attemptsMade = 0;
 		}
+		return maxAttempts - attemptsMade;
+	}
+
+	@Override
+	public void clearHistory() {
+		history.clear();
+	}
+
+	@Override
+	public void resetAttemptCount() {
+		unsuccessfulAttempts.clear();
 	}
 
 	@Override
 	public DateTime dateOfLastSuccess(String username) {
-		return latestSuccessful.get(username);
+		return lastSuccessful.get(username);
 	}
 
 	@Override
-	public int successfulAttempts(String username) {
-		return successful.get(username).size();
+	public LogEntry latestLog(String username) {
+		List<LogEntry> list = history.get(username);
+		return list.get(list.size() - 1);
 	}
 
 	@Override
-	public void clearUnsuccessful(String username) {
-		unsuccessful.remove(username);
+	public ImmutableList<LogEntry> historyFor(String username) {
+		List<LogEntry> list = history.get(username);
+		if (list == null) {
+			list = new ArrayList<>();
+		}
+		return ImmutableList.copyOf(list);
 	}
 
 }

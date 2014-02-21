@@ -8,9 +8,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
+import uk.co.q3c.v7.i18n.DescriptionKey;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -32,7 +32,7 @@ public class DefaultLoginExceptionHandlerTest {
 
 	@Before
 	public void setup() {
-		handler = new DefaultLoginExceptionHandler(navigator);
+		handler = new DefaultLoginExceptionHandler();
 	}
 
 	@Test
@@ -42,7 +42,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.accountLocked(loginView, token);
 		// then
-		verify(navigator).navigateTo(StandardPageKey.Unlock_Account);
+		verify(loginView).setStatusMessage(DescriptionKey.Account_Locked);
 
 	}
 
@@ -53,7 +53,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.unknownAccount(loginView, token);
 		// then
-		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.invalidLogin);
+		verify(loginView).setStatusMessage(DescriptionKey.Unknown_Account);
 
 	}
 
@@ -64,7 +64,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.concurrentAccess(loginView, token);
 		// then
-		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.concurrent);
+		verify(loginView).setStatusMessage(DescriptionKey.Account_Already_In_Use);
 
 	}
 
@@ -75,7 +75,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.disabledAccount(loginView, token);
 		// then
-		verify(navigator).navigateTo(StandardPageKey.Enable_Account);
+		verify(loginView).setStatusMessage(DescriptionKey.Account_is_Disabled);
 	}
 
 	@Test
@@ -85,7 +85,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.excessiveAttempts(loginView, token);
 		// then
-		verify(navigator).navigateTo(StandardPageKey.Reset_Account);
+		verify(loginView).setStatusMessage(DescriptionKey.Too_Many_Login_Attempts);
 	}
 
 	@Test
@@ -95,7 +95,7 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.expiredCredentials(loginView, token);
 		// then
-		verify(navigator).navigateTo(StandardPageKey.Refresh_Account);
+		verify(loginView).setStatusMessage(DescriptionKey.Account_Expired);
 	}
 
 	@Test
@@ -105,6 +105,6 @@ public class DefaultLoginExceptionHandlerTest {
 		// when
 		handler.incorrectCredentials(loginView, token);
 		// then
-		verify(loginView).setStatusMessage(DefaultLoginExceptionHandler.invalidLogin);
+		verify(loginView).setStatusMessage(DescriptionKey.Invalid_Login);
 	}
 }

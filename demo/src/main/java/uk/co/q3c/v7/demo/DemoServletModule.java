@@ -19,8 +19,5 @@ public class DemoServletModule extends ServletModule {
 	@Override
 	protected void configureServlets() {
 		serve("/*").with(DemoServlet.class);
-		// removed when switching to non-web setup to enable push support
-		// ShiroWebModule.bindGuiceFilter(binder());
-
 	}
 }

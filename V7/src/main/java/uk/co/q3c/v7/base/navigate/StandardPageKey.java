@@ -22,13 +22,8 @@ public enum StandardPageKey implements I18NKey<StandardPageLabels> {
 	Public_Home, // The home page for non-authenticated users
 	Private_Home, // The home page for authenticated users
 	Login, // the login page
-	Logout, // the page to go to after logging out
-	Reset_Account, // page for the user to request an account reset
-	Unlock_Account, // the page to go to for the user to request their account be unlocked
-	Refresh_Account, // the page to go to for the user to refresh their account after credentials have expired
-	Request_Account, // the page to go to for the user to request an account (Equivalent to 'register')
-	Enable_Account, // the page to go to for the user to request that their account is enabled
-	System_Account // parent page for all above with Account in the name
+	Logout // the page to go to after logging out
+
 	;
 
 	@Override

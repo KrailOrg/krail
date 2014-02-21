@@ -12,58 +12,52 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import com.google.inject.Inject;
-
 import org.apache.shiro.authc.UsernamePasswordToken;
 
-import uk.co.q3c.v7.base.navigate.StandardPageKey;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
+import uk.co.q3c.v7.i18n.DescriptionKey;
+
+import com.google.inject.Inject;
 
 public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
-	// TODO i18N
-	private final V7Navigator navigator;
-	public static final String invalidLogin = "That username or password was not recognised";
-	public static final String concurrent = "This account is already in use.  You must log out of that session before you can log in again.";
 
 	@Inject
-	protected DefaultLoginExceptionHandler(V7Navigator navigator) {
-		this.navigator = navigator;
+	protected DefaultLoginExceptionHandler() {
 	}
 
 	@Override
 	public void unknownAccount(LoginView loginView, UsernamePasswordToken token) {
-		loginView.setStatusMessage(invalidLogin);
+		loginView.setStatusMessage(DescriptionKey.Unknown_Account);
 	}
 
 	@Override
 	public void incorrectCredentials(LoginView loginView, UsernamePasswordToken token) {
-		loginView.setStatusMessage(invalidLogin);
+		loginView.setStatusMessage(DescriptionKey.Invalid_Login);
 	}
 
 	@Override
 	public void expiredCredentials(LoginView loginView, UsernamePasswordToken token) {
-		navigator.navigateTo(StandardPageKey.Refresh_Account);
+		loginView.setStatusMessage(DescriptionKey.Account_Expired);
 	}
 
 	@Override
 	public void accountLocked(LoginView loginView, UsernamePasswordToken token) {
-		navigator.navigateTo(StandardPageKey.Unlock_Account);
+		loginView.setStatusMessage(DescriptionKey.Account_Locked);
 	}
 
 	@Override
 	public void excessiveAttempts(LoginView loginView, UsernamePasswordToken token) {
-		navigator.navigateTo(StandardPageKey.Reset_Account);
+		loginView.setStatusMessage(DescriptionKey.Too_Many_Login_Attempts);
 	}
 
 	@Override
 	public void concurrentAccess(LoginView loginView, UsernamePasswordToken token) {
-		loginView.setStatusMessage(concurrent);
+		loginView.setStatusMessage(DescriptionKey.Account_Already_In_Use);
 	}
 
 	@Override
 	public void disabledAccount(LoginView loginView, UsernamePasswordToken token) {
-		navigator.navigateTo(StandardPageKey.Enable_Account);
+		loginView.setStatusMessage(DescriptionKey.Account_is_Disabled);
 	}
 
 }

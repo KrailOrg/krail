@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.test.bench;
+package uk.co.q3c.v7.testapp.testbench;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -41,7 +41,7 @@ import com.vaadin.ui.TextField;
 public class V7TestBenchTestCase extends TestBenchTestCase {
 	private static Logger log = LoggerFactory.getLogger(V7TestBenchTestCase.class);
 	protected String baseUrl = "http://localhost:8080/";
-	protected String context = "V7demo";
+	protected String context = "testapp";
 	protected final StringBuffer verificationErrors = new StringBuffer();
 
 	@Before
@@ -151,6 +151,9 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	}
 
 	protected WebElement element(String qualifier, Class<?>... classes) {
+		if (classes == null || classes.length == 0) {
+			throw new RuntimeException("Id will fail with only a qualifier supplied.  Always use classes to define Id");
+		}
 		String s = id(qualifier, classes);
 		WebElement findElement = driver.findElement(By.vaadin(s));
 		return findElement;

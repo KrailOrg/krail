@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.demo.bench;
+package uk.co.q3c.v7.testApp.test;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -20,8 +20,8 @@ import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
 import uk.co.q3c.v7.base.view.component.DefaultMessageBar;
-import uk.co.q3c.v7.demo.view.NotificationsView;
-import uk.co.q3c.v7.test.bench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testapp.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testapp.view.NotificationsView;
 
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.ui.Button;

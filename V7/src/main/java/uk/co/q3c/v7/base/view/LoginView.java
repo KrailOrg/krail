@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.view;
 
+import uk.co.q3c.v7.i18n.I18NKey;
 
 import com.vaadin.ui.Button;
 
@@ -37,5 +38,7 @@ public interface LoginView extends V7View {
 	String getStatusMessage();
 
 	void setStatusMessage(String invalidLogin);
+
+	void setStatusMessage(I18NKey<?> messageKey);
 
 }

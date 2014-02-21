@@ -14,8 +14,6 @@ package uk.co.q3c.v7.base.guice;
 
 import java.util.Properties;
 
-import uk.co.q3c.v7.base.ui.V7UIModule;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.vaadin.server.DeploymentConfiguration;
@@ -45,12 +43,7 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 	}
 
 	/**
-	 * This method captures the widgetset parameter from the application specific subclass of {@link V7UIModule}. If
-	 * V7UIModule#widgetset() is unchanged (that is, it returns 'default') then the default widgetset is used. For any
-	 * other value, the related widgetset must have been compiled - typically this means that the build definition will
-	 * also contain an entry for the widgetset. For example, using the Gradle Vaadin plugin, the build.gradle file would
-	 * contain an entry like this:<br>
-	 * <p>
+	 * This method captures the parameters from appropriate methods and sets the servlet parameters accordingly.
 	 * 
 	 * <pre>
 	 * vaadin {<br>
@@ -68,13 +61,27 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 
 		if (!widgetset().equals("default")) {
 			initParameters.setProperty("widgetset", widgetset());
+			initParameters.setProperty("productionMode", Boolean.toString(productionMode()));
 		}
 		return super.createDeploymentConfiguration(initParameters);
 
 	}
 
+	/**
+	 * Returns the widgetset parameter for this servlet. If it is unchanged (that is, it returns 'default') then the
+	 * default widgetset is used. For any other value (as defined by a sub-class implementation), the related widgetset
+	 * must have been compiled - typically this means that the build definition will also contain an entry for the
+	 * widgetset. For example, using the Gradle Vaadin plugin, the build.gradle file would contain an entry like this:<br>
+	 * <p>
+	 * 
+	 * @return
+	 */
 	protected String widgetset() {
 		return "default";
+	}
+
+	protected boolean productionMode() {
+		return true;
 	}
 
 }

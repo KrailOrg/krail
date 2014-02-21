@@ -18,6 +18,8 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
+import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -44,14 +46,16 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	private final LoginExceptionHandler loginExceptionHandler;
 	private final Provider<Subject> subjectProvider;
 	private final LoginStatusHandler loginStatusHandler;
+	private final Translate translate;
 
 	@Inject
 	protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider,
-			LoginStatusHandler loginStatusHandler) {
+			LoginStatusHandler loginStatusHandler, Translate translate) {
 		super();
 		this.loginExceptionHandler = loginExceptionHandler;
 		this.subjectProvider = subjectProvider;
 		this.loginStatusHandler = loginStatusHandler;
+		this.translate = translate;
 		buildView();
 	}
 
@@ -172,6 +176,11 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 
 		this.setRowExpandRatio(0, 1);
 		this.setRowExpandRatio(2, 1);
+	}
+
+	@Override
+	public void setStatusMessage(I18NKey<?> messageKey) {
+		setStatusMessage(translate.from(messageKey));
 	}
 
 }

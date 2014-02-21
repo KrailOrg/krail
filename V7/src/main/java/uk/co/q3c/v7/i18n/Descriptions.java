@@ -39,6 +39,13 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 				"This service loads the application configuration from V7.ini");
 		map.put(DescriptionKey.Sitemap_Service,
 				"This service creates the Sitemap using options from the application configuration");
+		map.put(DescriptionKey.Invalid_Login, "That username or password was not recognised");
+		map.put(DescriptionKey.Account_Expired, "Your account has expired");
+		map.put(DescriptionKey.Account_Already_In_Use,
+				"This account is already in use.  You must log out of that session before you can log in again.");
+		map.put(DescriptionKey.Account_Locked, "Your account is locked");
+		map.put(DescriptionKey.Too_Many_Login_Attempts,
+				"Login has failed too many times, the account will need to be reset");
 	}
 
 	@Override

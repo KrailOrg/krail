@@ -1,19 +1,51 @@
-//build for V7 testApp
-
-//apply plugin: 'war'
-//apply plugin: 'jetty'
+//build for V7 test application
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
+ext.tomcatHome = "/home/david/tomcat/apache-tomcat-7.0.47"
+
+
+war{
+	archiveName "testapp.war"
+	destinationDir file("/home/david/temp")
+}
 
 vaadin {
+	
 	version vaadinVersion
+	serverPort 8001	
 }
 
 
-dependencies {
 
+
+task deployToTomcat(type: Copy) {
+	it.dependsOn("war")
+	from war
+	into "${tomcatHome}/webapps"
+}
+
+
+test{
+	it.dependsOn ("deployToTomcat")
+
+	//delay to allow tomcat to spin it up
+	doFirst{
+		println("giving Tomcat time to deploy the application")
+		sleep(30 * 1000)
+	}
+}
+
+
+dependencies { 
+	
+	//UI components
+	compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
+ 
+	
 	compile project (':V7')
-            
+	testCompile 'com.vaadin:vaadin-testbench:3.1.2' 
+
+        
 	
 	
 }

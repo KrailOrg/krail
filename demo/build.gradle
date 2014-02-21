@@ -38,7 +38,7 @@ test{
 	//delay to allow tomcat to spin it up
 	doFirst{
 		println("giving Tomcat time to deploy the application")
-		sleep(60 * 1000)
+		sleep(30 * 1000)
 	}
 }
 
@@ -50,6 +50,14 @@ dependencies {
  
 	
 	compile project (':V7')
+	compile project (':testApp')
+	
+	//uses some code inherited from V7 subproject tests
+	//see https://github.com/davidsowerby/v7/issues/181
+	testCompile project(":testApp").sourceSets.test.output
+
+	
+	
 	testCompile 'com.vaadin:vaadin-testbench:3.1.2' 
 
         

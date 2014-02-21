@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.*;
 
 import java.util.Locale;
 
@@ -34,7 +34,8 @@ public class StandardPageKeyTest {
 			assertThat(key.getValue(Locale.UK)).overridingErrorMessage(key.name()).isNotNull();
 
 		}
-		assertThat(StandardPageKey.Enable_Account.getValue(Locale.UK)).isEqualTo("Enable Account");
+		assertThat(StandardPageKey.Logout.getValue(Locale.UK)).isEqualTo("Logout");
+		assertThat(StandardPageKey.Login.getValue(Locale.UK)).isEqualTo("Login");
 		assertThat(StandardPageKey.Private_Home.getValue(Locale.UK)).isEqualTo("Private Home");
 		assertThat(StandardPageKey.Public_Home.getValue(Locale.UK)).isEqualTo("Public Home");
 	}

@@ -14,10 +14,6 @@ vaadin {
 }
 
 
-//this ensure that V7 is evaluated first so that the dependency on test code in V7 is available
-evaluationDependsOn(':V7')
-
-
 repositories{
 		maven{
 			url "http://maven.vaadin.com/vaadin-addons"
@@ -25,8 +21,10 @@ repositories{
 		}
 }
 
-
-
+eclipse{
+processTestResources{
+	exclude("resources/test")
+}}
 
 
 
@@ -36,13 +34,20 @@ dependencies {
 	testCompile project (':V7')
 	
 	//uses some code inherited from V7 subproject tests
-	testCompile project(':V7').sourceSets.test.runtimeClasspath
+	testCompile project(":V7").sourceSets.test.output
 
 	testCompile 'com.vaadin:vaadin-testbench:3.1.1' 
 
 	
-	
 }
+
+eclipse{
+	classpath{
+		configurations.each { item -> println "${item}" }
+	}
+}
+
+
 
 //test{ exclude '**/ViewBaseWithLayoutTest.class' }
 

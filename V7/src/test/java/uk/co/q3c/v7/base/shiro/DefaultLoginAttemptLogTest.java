@@ -12,9 +12,8 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.fest.assertions.Assertions.*;
-
-import com.google.inject.Inject;
+import static org.assertj.core.api.Assertions.*;
+import static org.assertj.jodatime.api.Assertions.*;
 
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -22,6 +21,10 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.shiro.DefaultLoginAttemptLog.LogEntry;
+import uk.co.q3c.v7.base.shiro.DefaultLoginAttemptLog.LogOutcome;
+
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
@@ -33,6 +36,7 @@ public class DefaultLoginAttemptLogTest {
 	DefaultLoginAttemptLog attemptLog;
 
 	String username = "anyone";
+	String username1 = "doctor who";
 
 	@Test
 	public void recordUnsuccessful() {
@@ -43,30 +47,15 @@ public class DefaultLoginAttemptLogTest {
 		// when
 		attemptLog.recordFailedAttempt(token);
 		// then
-		assertThat(attemptLog.failedAttempts(username)).isEqualTo(1);
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(2);
 		// when
 		attemptLog.recordFailedAttempt(token);
 		// then
-		assertThat(attemptLog.failedAttempts(username)).isEqualTo(2);
-
-	}
-
-	@Test
-	public void clearUnsuccessful() {
-
-		// given
-		attemptLog.setMaximumAttempts(3);
-		UsernamePasswordToken token = new UsernamePasswordToken(username, "anything");
-		attemptLog.recordFailedAttempt(token);
-		attemptLog.recordFailedAttempt(token);
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(1);
 		// when
-		attemptLog.clearUnsuccessful(username);
+		attemptLog.recordSuccessfulAttempt(token);
 		// then
-		assertThat(attemptLog.failedAttempts(username)).isEqualTo(0);
-		// when clear non-existent user
-		attemptLog.clearUnsuccessful("wiggly");
-		// then
-		assertThat(attemptLog.failedAttempts("wiggly")).isEqualTo(0);
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(3);
 
 	}
 
@@ -77,7 +66,6 @@ public class DefaultLoginAttemptLogTest {
 		attemptLog.setMaximumAttempts(3);
 		UsernamePasswordToken token = new UsernamePasswordToken(username, "anything");
 		// when
-		attemptLog.recordFailedAttempt(token);
 		attemptLog.recordFailedAttempt(token);
 		attemptLog.recordFailedAttempt(token);
 		attemptLog.recordFailedAttempt(token);
@@ -96,9 +84,152 @@ public class DefaultLoginAttemptLogTest {
 		// then
 		assertThat(attemptLog.dateOfLastSuccess(username)).isNotNull();
 		DateTime lastLogin = attemptLog.dateOfLastSuccess(username);
-		assertThat(attemptLog.successfulAttempts(username)).isEqualTo(1);
-		assertThat(DateTime.now().getMillis() - lastLogin.getMillis()).isLessThan(100);
+		assertThat(lastLogin).isEqualToIgnoringMillis(DateTime.now());
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(3);
+	}
 
+	@Test
+	public void history() {
+
+		// given
+		UsernamePasswordToken token = new UsernamePasswordToken(username, "anything");
+		UsernamePasswordToken token1 = new UsernamePasswordToken(username1, "anything");
+
+		// when
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token1);
+		attemptLog.recordFailedAttempt(token1);
+		attemptLog.recordSuccessfulAttempt(token);
+		// then
+
+		assertThat(attemptLog.historyFor(username)).hasSize(3);
+		assertThat(attemptLog.historyFor(username1)).hasSize(2);
+	}
+
+	@Test
+	public void clearHistoryForUser() {
+
+		// given
+		UsernamePasswordToken token = new UsernamePasswordToken(username, "anything");
+		UsernamePasswordToken token1 = new UsernamePasswordToken(username1, "anything");
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token1);
+		attemptLog.recordFailedAttempt(token1);
+		attemptLog.recordSuccessfulAttempt(token);
+
+		// when
+		attemptLog.clearHistory(username1);
+		// then
+
+		assertThat(attemptLog.historyFor(username)).hasSize(3);
+		assertThat(attemptLog.historyFor(username1)).hasSize(0);
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(3);
+		assertThat(attemptLog.attemptsRemaining(username1)).isEqualTo(1);
+
+	}
+
+	@Test
+	public void clearAllHistory() {
+
+		// given
+		UsernamePasswordToken token = new UsernamePasswordToken(username, "anything");
+		UsernamePasswordToken token1 = new UsernamePasswordToken(username1, "anything");
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token1);
+		attemptLog.recordFailedAttempt(token1);
+		attemptLog.recordSuccessfulAttempt(token);
+
+		// when
+		attemptLog.clearHistory();
+		// then
+
+		assertThat(attemptLog.historyFor(username)).hasSize(0);
+		assertThat(attemptLog.historyFor(username1)).hasSize(0);
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(3);
+		assertThat(attemptLog.attemptsRemaining(username1)).isEqualTo(1);
+	}
+
+	@Test
+	public void lastLogEntry() {
+
+		// given
+		UsernamePasswordToken token = new UsernamePasswordToken(username, "anything");
+		UsernamePasswordToken token1 = new UsernamePasswordToken(username1, "anything");
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token1);
+		attemptLog.recordFailedAttempt(token1);
+		attemptLog.recordSuccessfulAttempt(token);
+		// when
+		LogEntry log = attemptLog.latestLog(username);
+		LogEntry log1 = attemptLog.latestLog(username1);
+		// then
+		assertThat(log.getLogOutcome()).isEqualTo(LogOutcome.PASS);
+		assertThat(log1.getLogOutcome()).isEqualTo(LogOutcome.FAIL);
+		// when
+		attemptLog.resetAttemptCount(username);
+		log = attemptLog.latestLog(username);
+		// then
+		assertThat(log.getLogOutcome()).isEqualTo(LogOutcome.RESET);
+	}
+
+	@Test
+	public void changeMaxAttempts() {
+
+		// given
+		UsernamePasswordToken token = new UsernamePasswordToken(username, "anything");
+
+		// when
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token);
+		// then
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(1);
+		// when
+		attemptLog.setMaximumAttempts(10);
+		// then
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(8);
+	}
+
+	@Test
+	public void resetAttemptCountForUser() {
+
+		// given
+		UsernamePasswordToken token = new UsernamePasswordToken(username, "anything");
+
+		// when
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token);
+		// then
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(1);
+		// when
+		attemptLog.resetAttemptCount(username);
+		// then
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(3);
+	}
+
+	@Test
+	public void resetAttemptCountForAll() {
+
+		// given
+		UsernamePasswordToken token = new UsernamePasswordToken(username, "anything");
+		UsernamePasswordToken token1 = new UsernamePasswordToken(username1, "anything");
+
+		// when
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token);
+		attemptLog.recordFailedAttempt(token1);
+		attemptLog.recordFailedAttempt(token1);
+		// then
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(1);
+		assertThat(attemptLog.attemptsRemaining(username1)).isEqualTo(1);
+		// when
+		attemptLog.resetAttemptCount();
+		// then
+		assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(3);
+		assertThat(attemptLog.attemptsRemaining(username1)).isEqualTo(3);
 	}
 
 }

@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.test.bench;
+package uk.co.q3c.v7.testapp.testbench;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -22,9 +22,9 @@ public class ElementPathTest {
 	public void treeNode0Expand() {
 
 		// given
-		String expected = "V7demo::PID_SDefaultUserNavigationTree#n[0]/expand";
+		String expected = "testapp::PID_SDefaultUserNavigationTree#n[0]/expand";
 		// when
-		ElementPath path = new ElementPath("V7demo");
+		ElementPath path = new ElementPath("testapp");
 		String actual = path.id("DefaultUserNavigationTree").index(0).expand().get();
 		// then
 		assertThat(actual).isEqualTo(expected);
@@ -35,9 +35,9 @@ public class ElementPathTest {
 	public void treeNode0_1Expand() {
 
 		// given
-		String expected = "V7demo::PID_SDefaultUserNavigationTree#n[0]/n[1]/expand";
+		String expected = "testapp::PID_SDefaultUserNavigationTree#n[0]/n[1]/expand";
 		// when
-		ElementPath path = new ElementPath("V7demo");
+		ElementPath path = new ElementPath("testapp");
 		String actual = path.id("DefaultUserNavigationTree").index(0, 1).expand().get();
 		// then
 		assertThat(actual).isEqualTo(expected);

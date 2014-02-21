@@ -17,12 +17,20 @@ import java.util.ResourceBundle;
 
 public enum DescriptionKey implements I18NKey<Descriptions> {
 	_nullkey_,
+	Account_Already_In_Use,
+	Account_is_Disabled,
+	Account_Expired,
+	Account_Locked,
 	Application_Configuration_Service,
 	Confirm_Ok,
+	Invalid_Login,
 	Last_Name,
 	No_Permission,
 	Sitemap_Service,
+	Too_Many_Login_Attempts,
+	Unknown_Account,
 	You_have_not_logged_in,
+
 	// Small_Font;
 	;
 	@Override

@@ -7,10 +7,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
-import uk.co.q3c.v7.test.bench.ElementLocator;
-import uk.co.q3c.v7.test.bench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testapp.testbench.V7TestBenchTestCase;
 
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 
@@ -21,6 +19,7 @@ public class LoginTest extends V7TestBenchTestCase {
 
 	@Before
 	public void setUp() throws Exception {
+		context = "V7demo";
 		driver.get(rootUrl());
 	}
 
@@ -52,44 +51,6 @@ public class LoginTest extends V7TestBenchTestCase {
 		verifyUrl(startFragment);
 		assertThat(loginButton().getText()).isEqualTo("log out");
 		assertThat(loginLabel().getText()).isEqualTo("ds");
-	}
-
-	@Test
-	public void loginFromLogout() {
-
-		// given
-		login();
-		logout();
-		verifyUrl("logout");
-		// when
-		login();
-		// then
-		verifyUrl("private/home");
-	}
-
-	//
-	@Test
-	public void authenticationFailure() {
-
-		// given
-
-		// when
-		loginButton().click();
-		pause(100);
-		usernameBox().clear();
-		usernameBox().sendKeys("ds");
-		passwordBox().clear();
-		passwordBox().sendKeys("rubbsih");
-
-		submitButton().click();
-		// fillLoginForm("ds", "rubbish");
-		// then
-		verifyUrl("login"); // has not moved
-		assertThat(navTreeSelection()).isEqualTo("Login");
-		WebElement label = new ElementLocator(driver, context).id("DefaultLoginView-Label-status").get();
-		assertThat(label).isNotNull();
-		String s = label.getText();
-		assertThat(s).isEqualTo("That username or password was not recognised");
 	}
 
 	@After
