@@ -9,7 +9,7 @@ The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state
 
 There are a number of sub-projects, each with a different status
 
-7th February 2014:  
+20th February 2014:  
 
 ### V7
 
