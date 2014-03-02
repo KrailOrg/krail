@@ -28,7 +28,7 @@ public abstract class AbstractService implements Service {
 	private static Logger log = LoggerFactory.getLogger(AbstractService.class);
 	private final List<ServiceStatusChangeListener> statusChangeListeners = new ArrayList<>();
 
-	private Status status = Status.INITIAL;
+	protected Status status = Status.INITIAL;
 
 	@Override
 	public Status getStatus() {

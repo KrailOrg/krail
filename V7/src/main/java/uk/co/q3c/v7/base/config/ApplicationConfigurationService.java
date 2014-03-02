@@ -14,22 +14,9 @@ package uk.co.q3c.v7.base.config;
 
 import java.io.File;
 
-import org.apache.commons.configuration.CompositeConfiguration;
-import org.apache.commons.configuration.Configuration;
-
 import uk.co.q3c.v7.base.services.ServiceI18N;
 
 public interface ApplicationConfigurationService extends ServiceI18N {
-
-	/**
-	 * Returns a configuration combined from all those added using the {@link #addConfiguration(Configuration)} methods.
-	 * Will return null if the service has never been started, so the service start() method should be called before
-	 * calling this method
-	 * 
-	 * @return
-	 */
-
-	CompositeConfiguration getConfiguration();
 
 	/**
 	 * Adds a configuration file. Key value pairs in {@code configuration} will override any matching keys

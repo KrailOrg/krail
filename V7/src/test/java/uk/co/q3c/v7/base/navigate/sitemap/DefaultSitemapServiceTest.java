@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.util.ResourceUtils;
+import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.ConfigKeys;
 import uk.co.q3c.v7.base.config.DefaultApplicationConfigurationService;
@@ -44,7 +45,6 @@ import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.LabelKey;
-import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -69,28 +69,8 @@ import fixture.TestConfigurationException;
 public class DefaultSitemapServiceTest {
 
 	private final int FILE_NODE_COUNT = 4;
-	private final int DIRECT_NODe_COUNT = 2;
+	private final int DIRECT_NODE_COUNT = 2;
 	private final int STANDARD_NODE_COUNT = 5;
-
-	/**
-	 * Overrides the default implementation so that we can use the temp folder to manipulate application config.
-	 * Wouldn't need to do this if we had an ApplicationConfiguration object see
-	 * https://github.com/davidsowerby/v7/issues/234
-	 * 
-	 * @author David Sowerby
-	 * 
-	 */
-	public static class TestApplicationConfigurationService extends DefaultApplicationConfigurationService {
-		@Inject
-		protected TestApplicationConfigurationService(Translate translate) {
-			super(translate);
-		}
-
-		@Override
-		protected File configurationDirectory() {
-			return ResourceUtils.userTempDirectory();
-		}
-	}
 
 	public static class TestDirectSitemapModule extends DirectSitemapModule {
 
@@ -124,7 +104,7 @@ public class DefaultSitemapServiceTest {
 	DefaultSitemapService service;
 
 	@Inject
-	ApplicationConfigurationService configService;
+	ApplicationConfiguration applicationConfiguration;
 
 	@Inject
 	Sitemap sitemap;
@@ -134,7 +114,7 @@ public class DefaultSitemapServiceTest {
 	@Before
 	public void setup() throws ConfigurationException {
 
-		File inifile = new File(ResourceUtils.userTempDirectory(), "V7.ini");
+		File inifile = new File(ResourceUtils.userTempDirectory(), "WEB-INF/V7.ini");
 		iniConfig = new HierarchicalINIConfiguration(inifile);
 		iniConfig.clear();
 		iniConfig.save();
@@ -143,7 +123,6 @@ public class DefaultSitemapServiceTest {
 	@After
 	public void teardown() throws ConfigurationException {
 		service.stop();
-		configService.stop();
 		iniConfig.clear();
 		iniConfig.save();
 	}
@@ -158,8 +137,8 @@ public class DefaultSitemapServiceTest {
 		// then
 		assertThat(service.getReport()).isNotNull();
 		assertThat(service.isStarted()).isTrue();
-		assertThat(sitemap.getNodeCount()).isEqualTo(STANDARD_NODE_COUNT + FILE_NODE_COUNT + DIRECT_NODe_COUNT);
-		assertThat(service.getSources()).containsOnly(SitemapSourceType.FILE, SitemapSourceType.DIRECT,
+		assertThat(sitemap.getNodeCount()).isEqualTo(STANDARD_NODE_COUNT + FILE_NODE_COUNT + DIRECT_NODE_COUNT);
+		assertThat(service.getSourceTypes()).containsOnly(SitemapSourceType.FILE, SitemapSourceType.DIRECT,
 				SitemapSourceType.ANNOTATION);
 		assertThat(sitemap.getReport()).isNotEmpty();
 	}
@@ -192,7 +171,7 @@ public class DefaultSitemapServiceTest {
 		assertThat(service.getReport()).isNotNull();
 		assertThat(service.isStarted()).isTrue();
 		assertThat(sitemap.getNodeCount()).isEqualTo(13);
-		assertThat(service.getSources()).containsOnly(SitemapSourceType.FILE);
+		assertThat(service.getSourceTypes()).containsOnly(SitemapSourceType.FILE);
 	}
 
 	/**
@@ -215,7 +194,7 @@ public class DefaultSitemapServiceTest {
 		assertThat(service.getReport()).isNotNull();
 		assertThat(service.isStarted()).isTrue();
 		assertThat(sitemap.getNodeCount()).isEqualTo(13);
-		assertThat(service.getSources()).containsOnly(SitemapSourceType.FILE);
+		assertThat(service.getSourceTypes()).containsOnly(SitemapSourceType.FILE);
 	}
 
 	@Test
@@ -281,27 +260,6 @@ public class DefaultSitemapServiceTest {
 
 	}
 
-	private void setConfig_FileOnly() throws ConfigurationException {
-		iniConfig.setDelimiterParsingDisabled(true);
-		iniConfig.addProperty(ConfigKeys.SITEMAP_SOURCES_KEY, new String[] { "file" });
-		iniConfig.save();
-		iniConfig.setDelimiterParsingDisabled(false);
-	}
-
-	private void setConfigAll_File_Module_Annotation() throws ConfigurationException {
-		iniConfig.setDelimiterParsingDisabled(true);
-		iniConfig.addProperty(ConfigKeys.SITEMAP_SOURCES_KEY, new String[] { "file,module,annotation" });
-		iniConfig.save();
-		iniConfig.setDelimiterParsingDisabled(false);
-	}
-
-	private void setConfig_File_Annotation() throws ConfigurationException {
-		iniConfig.setDelimiterParsingDisabled(true);
-		iniConfig.addProperty(ConfigKeys.SITEMAP_SOURCES_KEY, new String[] { "file,annotation" });
-		iniConfig.save();
-		iniConfig.setDelimiterParsingDisabled(false);
-	}
-
 	@ModuleProvider
 	protected AbstractModule module() {
 		return new AbstractModule() {
@@ -314,7 +272,7 @@ public class DefaultSitemapServiceTest {
 				bind(DirectSitemapLoader.class).to(DefaultDirectSitemapLoader.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 				bind(SitemapChecker.class).to(DefaultSitemapChecker.class);
-				bind(ApplicationConfigurationService.class).to(TestApplicationConfigurationService.class);
+				bind(ApplicationConfigurationService.class).to(DefaultApplicationConfigurationService.class);
 			}
 
 		};

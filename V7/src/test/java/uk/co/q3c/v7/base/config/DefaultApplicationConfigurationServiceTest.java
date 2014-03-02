@@ -17,7 +17,6 @@ import static org.mockito.Mockito.*;
 
 import java.io.File;
 
-import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -46,6 +45,9 @@ public class DefaultApplicationConfigurationServiceTest {
 	static File iniDir = new File("src/test/java");
 	static VaadinService vaadinService;
 
+	@Inject
+	ApplicationConfiguration configuration;
+
 	@BeforeClass
 	public static void setupClass() {
 		vaadinService = mock(VaadinService.class);
@@ -56,9 +58,9 @@ public class DefaultApplicationConfigurationServiceTest {
 	@Test
 	public void load() throws ConfigurationException {
 		// given
+		configuration.clear();
 		// when
 		service.start();
-		CompositeConfiguration configuration = service.getConfiguration();
 		// then (one configuration is the in memory one added automatically)
 		assertThat(configuration.getNumberOfConfigurations()).isEqualTo(2);
 		assertThat(configuration.getBoolean("test")).isTrue();
@@ -73,21 +75,26 @@ public class DefaultApplicationConfigurationServiceTest {
 		service.stop();
 		service.start();
 		// then
-		configuration = service.getConfiguration();
 		assertThat(configuration.getNumberOfConfigurations()).isEqualTo(3);
 		assertThat(configuration.getBoolean("test")).isTrue();
 		assertThat(configuration.getString("dbUser")).isEqualTo("python");
 	}
 
+	@Test
 	public void fileMissing() throws ConfigurationException {
 
 		// given
 		service.addConfiguration("rubbish.ini");
 		// when
-		service.start();
+		Exception result = null;
+		try {
+			service.start();
+		} catch (Exception e) {
+			result = e;
+		}
 		// then
-		assertThat(service.getStatus()).isEqualTo(Status.STARTED);
-
+		assertThat(result).isInstanceOf(ConfigurationException.class);
+		assertThat(service.getStatus()).isEqualTo(Status.FAILED_TO_START);
 	}
 
 	@Test

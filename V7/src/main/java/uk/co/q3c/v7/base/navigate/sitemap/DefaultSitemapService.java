@@ -16,12 +16,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.configuration.CompositeConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.MessageFormat;
 import uk.co.q3c.util.ResourceUtils;
+import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.ConfigKeys;
 import uk.co.q3c.v7.base.services.AbstractServiceI18N;
@@ -43,10 +43,10 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	@AutoStart
 	private final ApplicationConfigurationService configurationService;
 	private final Provider<FileSitemapLoader> fileSitemapLoaderProvider;
-	private List<SitemapSourceType> sources;
+	private List<SitemapSourceType> sourceTypes;
 	private final Sitemap sitemap;
 	private StringBuilder report;
-	private CompositeConfiguration configuration;
+	private final ApplicationConfiguration configuration;
 	private boolean loaded;
 	private final Provider<DirectSitemapLoader> directSitemapLoaderProvider;
 	private final Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider;
@@ -58,7 +58,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 			Provider<FileSitemapLoader> fileSitemapLoaderProvider,
 			Provider<DirectSitemapLoader> directSitemapLoaderProvider,
 			Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, Sitemap sitemap,
-			SitemapChecker sitemapChecker) {
+			SitemapChecker sitemapChecker, ApplicationConfiguration configuration) {
 		super(translate);
 		this.configurationService = configurationService;
 		this.annotationSitemapLoaderProvider = annotationSitemapLoaderProvider;
@@ -66,6 +66,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 		this.fileSitemapLoaderProvider = fileSitemapLoaderProvider;
 		this.sitemap = sitemap;
 		this.sitemapChecker = sitemapChecker;
+		this.configuration = configuration;
 		configure();
 	}
 
@@ -83,7 +84,6 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 			setStatus(Status.DEPENDENCY_FAILED);
 			throw new SitemapException(msg);
 		}
-		configuration = configurationService.getConfiguration();
 		loadSources();
 		LoaderReportBuilder lrb = new LoaderReportBuilder(loaders);
 		report = lrb.getReport();
@@ -95,14 +95,14 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	}
 
 	/**
-	 * Loads the Sitemap from all the sources specified in {@link #sources}. The first call to
+	 * Loads the Sitemap from all the sources specified in {@link #sourceTypes}. The first call to
 	 * {@link #loadSource(String, boolean)} has {@code firstLoad} set to true. Subsequent calls have {@code firstLoad}
 	 * set to false
 	 */
 	private void loadSources() {
 		extractSourcesFromConfig();
 		loaders = new ArrayList<>();
-		for (SitemapSourceType source : sources) {
+		for (SitemapSourceType source : sourceTypes) {
 			loadSource(source);
 		}
 		log.debug("Checking Sitemap");
@@ -150,8 +150,8 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	}
 
 	/**
-	 * Extracts the sources from the application configuration service, and populates {@link #sources}. The default if
-	 * to load from file only
+	 * Extracts the source types from the {@link ApplicationConfiguration}, and populates {@link #sourceTypes}. The
+	 * default is to load from all source types (
 	 */
 	private void extractSourcesFromConfig() {
 		List<String> defaultValues = new ArrayList<>();
@@ -159,19 +159,19 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 		defaultValues.add(SitemapSourceType.DIRECT.name());
 		defaultValues.add(SitemapSourceType.ANNOTATION.name());
 		List<Object> list = configuration.getList(ConfigKeys.SITEMAP_SOURCES_KEY, defaultValues);
-		sources = new ArrayList<>();
+		sourceTypes = new ArrayList<>();
 		for (Object o : list) {
 			try {
 				SitemapSourceType source = SitemapSourceType.valueOf(o.toString().toUpperCase());
-				sources.add(source);
+				sourceTypes.add(source);
 			} catch (IllegalArgumentException iae) {
-				log.warn("A value of {} in {} is invalid", o.toString(), ConfigKeys.SITEMAP_SOURCES_KEY);
+				log.warn("'{}' is not a valid Sitemap source type", o.toString(), ConfigKeys.SITEMAP_SOURCES_KEY);
 
 			}
 		}
 
 		// this will only happen if there is a key with an empty value
-		if (sources.isEmpty()) {
+		if (sourceTypes.isEmpty()) {
 			throw new SitemapException("At least one sitemap source must be specified");
 		}
 
@@ -209,8 +209,8 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 		return loaded;
 	}
 
-	public ImmutableList<SitemapSourceType> getSources() {
-		return ImmutableList.copyOf(sources);
+	public ImmutableList<SitemapSourceType> getSourceTypes() {
+		return ImmutableList.copyOf(sourceTypes);
 	}
 
 }

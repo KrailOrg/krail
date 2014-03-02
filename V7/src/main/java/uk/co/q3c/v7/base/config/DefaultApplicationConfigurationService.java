@@ -43,6 +43,12 @@ import com.google.inject.Singleton;
  * key value pairs are stored in a file) but any of the Apache {@link Configuration} implementations could be used.
  * <p>
  * See the {@link Service} javadoc for more detail about Services
+ * <p>
+ * Once this service has been started, access the configuration by injecting {@link ApplicationConfiguration}. Note that
+ * the configuration can be legitimately empty if no configuration non-default settings are required, and all calls for
+ * configuration values provide a valid default.
+ * <p>
+ * When this service is stopped the {@link ApplicationConfiguration} is cleared.
  * 
  * @author David Sowerby
  * 
@@ -54,12 +60,13 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 	private static Logger log = LoggerFactory.getLogger(DefaultApplicationConfigurationService.class);
 
 	private final Deque<File> queue;
-	private CompositeConfiguration configuration;
+	private final ApplicationConfiguration configuration;
 
 	@Inject
-	protected DefaultApplicationConfigurationService(Translate translate) {
+	protected DefaultApplicationConfigurationService(Translate translate, ApplicationConfiguration configuration) {
 		super(translate);
 		this.queue = new ArrayDeque<>();
+		this.configuration = configuration;
 		configure();
 	}
 
@@ -74,17 +81,16 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 	}
 
 	/**
-	 * If the V7.ini file does not exist, then a warning is logged, but no exception is thrown. This is because all
-	 * settings which could come from V7.ini have a valid default value. If a failure occurs during load, however, then
-	 * a ConfigurationException is thrown
+	 * V7 provides a default value in code when it requests a value from the {@link ApplicationConfiguration} object -
+	 * it is therefore acceptable to have an empty configuration object. If, however, a configuration file is added as
+	 * an entry, but cannot be read, then a {@link ConfigurationException} is thrown. *
 	 * 
 	 * @throws ConfigurationException
-	 *             if an error occurs while loading the file
+	 *             if an error occurs while loading a file
 	 * 
 	 */
 	@Override
 	public Status start() throws ConfigurationException {
-		configuration = new CompositeConfiguration();
 		Iterator<File> iter = queue.iterator();
 		while (iter.hasNext()) {
 			File file = iter.next();
@@ -94,17 +100,27 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 				HierarchicalINIConfiguration config = new HierarchicalINIConfiguration(file);
 				configuration.addConfiguration(config);
 			} else {
-				String msg = ("Configuration file " + file.getAbsolutePath() + " does not exist.  Default values will be used");
-				log.warn(msg);
+				String msg = ("Configuration Service failed to start, configuration file " + file.getAbsolutePath() + " does not exist.");
+				status = Status.FAILED_TO_START;
+				log.error(msg);
+				throw new ConfigurationException(msg);
 			}
 		}
 		log.info("Application Configuration Service started");
-		return Status.STARTED;
+		status = Status.STARTED;
+		return status;
 	}
 
+	/**
+	 * Clears the {@link ApplicationConfiguration}, and sets the status of this service to Status.STOPPED
+	 * 
+	 * @see uk.co.q3c.v7.base.services.Service#stop()
+	 */
 	@Override
 	public Status stop() {
-		return Status.STOPPED;
+		configuration.clear();
+		status = Status.STOPPED;
+		return status;
 	}
 
 	@Override
@@ -114,21 +130,11 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 
 	/**
 	 * 
-	 @see uk.co.q3c.v7.base.config.ApplicationConfigurationService#getConfiguration()
-	 */
-	@Override
-	public CompositeConfiguration getConfiguration() {
-		return configuration;
-	}
-
-	/**
-	 * 
 	 @see uk.co.q3c.v7.base.config.ApplicationConfigurationService#addConfiguration(org.apache.commons.configuration.Configuration)
 	 */
 	@Override
 	public void addConfiguration(File configurationFile) {
 		queue.push(configurationFile);
-
 	}
 
 	@Override
