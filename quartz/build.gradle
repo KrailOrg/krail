@@ -1,0 +1,13 @@
+//build for V7 Quartz sub-project
+
+
+dependencies{
+
+	compile project (':V7')
+
+	//Quartz	
+	
+	<dependency org="org.quartz-scheduler" name="quartz" rev="2.2.1"/>
+	+		<dependency org="org.99soft.guice" name="guartz" rev="1.3"/>
+
+}
