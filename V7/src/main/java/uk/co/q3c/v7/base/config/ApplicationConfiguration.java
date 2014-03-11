@@ -12,21 +12,11 @@
  */
 package uk.co.q3c.v7.base.config;
 
-import org.apache.commons.configuration.CompositeConfiguration;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-/**
- * This class does nothing but extend {@link CompositeConfiguration} for type safety, and provide a Singleton scope for
- * it.
- * 
- * @author David Sowerby
- * 
- */
 @Singleton
-public class ApplicationConfiguration extends CompositeConfiguration {
-
+public class ApplicationConfiguration extends InheritingConfiguration {
 	@Inject
 	protected ApplicationConfiguration() {
 		super();

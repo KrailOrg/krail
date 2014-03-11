@@ -30,10 +30,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.util.ResourceUtils;
-import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.ConfigKeys;
 import uk.co.q3c.v7.base.config.DefaultApplicationConfigurationService;
+import uk.co.q3c.v7.base.config.InheritingConfiguration;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
@@ -104,7 +104,7 @@ public class DefaultSitemapServiceTest {
 	DefaultSitemapService service;
 
 	@Inject
-	ApplicationConfiguration applicationConfiguration;
+	InheritingConfiguration applicationConfiguration;
 
 	@Inject
 	Sitemap sitemap;
@@ -253,6 +253,7 @@ public class DefaultSitemapServiceTest {
 		iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES_KEY, sources);
 		iniConfig.setDelimiterParsingDisabled(false);
 		iniConfig.save();
+		System.out.println(iniConfig.getProperty(ConfigKeys.SITEMAP_SOURCES_KEY));
 
 		// when
 		service.start();

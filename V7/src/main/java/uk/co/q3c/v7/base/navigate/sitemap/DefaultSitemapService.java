@@ -24,6 +24,7 @@ import uk.co.q3c.util.ResourceUtils;
 import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.ConfigKeys;
+import uk.co.q3c.v7.base.config.InheritingConfiguration;
 import uk.co.q3c.v7.base.services.AbstractServiceI18N;
 import uk.co.q3c.v7.base.services.AutoStart;
 import uk.co.q3c.v7.base.services.Service;
@@ -150,7 +151,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	}
 
 	/**
-	 * Extracts the source types from the {@link ApplicationConfiguration}, and populates {@link #sourceTypes}. The
+	 * Extracts the source types from the {@link InheritingConfiguration}, and populates {@link #sourceTypes}. The
 	 * default is to load from all source types (
 	 */
 	private void extractSourcesFromConfig() {

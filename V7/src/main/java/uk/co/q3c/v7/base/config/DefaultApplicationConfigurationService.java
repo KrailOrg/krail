@@ -13,9 +13,9 @@
 package uk.co.q3c.v7.base.config;
 
 import java.io.File;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
@@ -44,11 +44,11 @@ import com.google.inject.Singleton;
  * <p>
  * See the {@link Service} javadoc for more detail about Services
  * <p>
- * Once this service has been started, access the configuration by injecting {@link ApplicationConfiguration}. Note that
+ * Once this service has been started, access the configuration by injecting {@link InheritingConfiguration}. Note that
  * the configuration can be legitimately empty if no configuration non-default settings are required, and all calls for
  * configuration values provide a valid default.
  * <p>
- * When this service is stopped the {@link ApplicationConfiguration} is cleared.
+ * When this service is stopped the {@link InheritingConfiguration} is cleared.
  * 
  * @author David Sowerby
  * 
@@ -59,13 +59,13 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 
 	private static Logger log = LoggerFactory.getLogger(DefaultApplicationConfigurationService.class);
 
-	private final Deque<File> queue;
+	private final List<File> fileList;
 	private final ApplicationConfiguration configuration;
 
 	@Inject
 	protected DefaultApplicationConfigurationService(Translate translate, ApplicationConfiguration configuration) {
 		super(translate);
-		this.queue = new ArrayDeque<>();
+		this.fileList = new ArrayList<>();
 		this.configuration = configuration;
 		configure();
 	}
@@ -81,9 +81,9 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 	}
 
 	/**
-	 * V7 provides a default value in code when it requests a value from the {@link ApplicationConfiguration} object -
-	 * it is therefore acceptable to have an empty configuration object. If, however, a configuration file is added as
-	 * an entry, but cannot be read, then a {@link ConfigurationException} is thrown. *
+	 * V7 provides a default value in code when it requests a value from the {@link InheritingConfiguration} object - it
+	 * is therefore acceptable to have an empty configuration object. If, however, a configuration file is added as an
+	 * entry, but cannot be read, then a {@link ConfigurationException} is thrown. *
 	 * 
 	 * @throws ConfigurationException
 	 *             if an error occurs while loading a file
@@ -91,7 +91,7 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 	 */
 	@Override
 	public Status start() throws ConfigurationException {
-		Iterator<File> iter = queue.iterator();
+		Iterator<File> iter = fileList.iterator();
 		while (iter.hasNext()) {
 			File file = iter.next();
 			log.debug("adding configuration from {}", file.getAbsolutePath());
@@ -112,7 +112,7 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 	}
 
 	/**
-	 * Clears the {@link ApplicationConfiguration}, and sets the status of this service to Status.STOPPED
+	 * Clears the {@link InheritingConfiguration}, and sets the status of this service to Status.STOPPED
 	 * 
 	 * @see uk.co.q3c.v7.base.services.Service#stop()
 	 */
@@ -134,7 +134,7 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 	 */
 	@Override
 	public void addConfiguration(File configurationFile) {
-		queue.push(configurationFile);
+		fileList.add(configurationFile);
 	}
 
 	@Override

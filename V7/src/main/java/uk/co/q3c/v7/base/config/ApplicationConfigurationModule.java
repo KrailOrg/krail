@@ -28,7 +28,6 @@ public class ApplicationConfigurationModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bindApplicationConfigurationService();
-
 		bindVaadinSessionProvider();
 	}
 
