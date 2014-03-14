@@ -15,20 +15,20 @@ package uk.co.q3c.v7.base.config;
 import uk.co.q3c.v7.base.shiro.DefaultVaadinSessionProvider;
 import uk.co.q3c.v7.base.shiro.VaadinSessionProvider;
 
-import com.google.inject.AbstractModule;
-
 /**
  * The Guice module used to configure the application configuration service
  * 
  * @author David Sowerby
  * 
  */
-public class ApplicationConfigurationModule extends AbstractModule {
+public class ApplicationConfigurationModule extends ConfigurationModuleBase {
 
 	@Override
 	protected void configure() {
+		super.configure();
 		bindApplicationConfigurationService();
 		bindVaadinSessionProvider();
+
 	}
 
 	/**
@@ -43,6 +43,11 @@ public class ApplicationConfigurationModule extends AbstractModule {
 	 */
 	protected void bindVaadinSessionProvider() {
 		bind(VaadinSessionProvider.class).to(DefaultVaadinSessionProvider.class);
+	}
+
+	@Override
+	protected void bindConfigs() {
+		addConfig("V7.ini", 0, true);
 	}
 
 }

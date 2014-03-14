@@ -10,10 +10,26 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.config;
+package uk.co.q3c.v7.quartz.job;
 
-import uk.co.q3c.v7.base.services.ServiceI18N;
+import org.quartz.Job;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.spi.JobFactory;
+import org.quartz.spi.TriggerFiredBundle;
 
-public interface ApplicationConfigurationService extends ServiceI18N {
+/**
+ * IMplements the Quartz {@link JobFactory} interface to utilise Guice for creating jobs
+ * 
+ * @author David Sowerby
+ * 
+ */
+public class GuiceJobFactory implements JobFactory {
+
+	@Override
+	public Job newJob(TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {
+
+		return null;
+	}
 
 }

@@ -13,9 +13,10 @@
 package uk.co.q3c.v7.base.config;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.io.FileNotFoundException;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
@@ -59,31 +60,31 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 
 	private static Logger log = LoggerFactory.getLogger(DefaultApplicationConfigurationService.class);
 
-	private final List<File> fileList;
 	private final ApplicationConfiguration configuration;
 
+	private final Map<Integer, IniFileConfig> iniFiles;
+
 	@Inject
-	protected DefaultApplicationConfigurationService(Translate translate, ApplicationConfiguration configuration) {
+	protected DefaultApplicationConfigurationService(Translate translate, ApplicationConfiguration configuration,
+			Map<Integer, IniFileConfig> iniFiles) {
 		super(translate);
-		this.fileList = new ArrayList<>();
 		this.configuration = configuration;
+		this.iniFiles = iniFiles;
 		configure();
 	}
 
 	/**
-	 * Override this method if you want to change the configuration files to use, or change the name and description
-	 * keys. You will also then need to change the Guice binding for {@link ApplicationConfigurationService}
+	 * Override this method if you want to change the name or description keys.
 	 */
 	protected void configure() {
-		addConfiguration("V7.ini");
 		setNameKey(LabelKey.Application_Configuration_Service);
 		setDescriptionKey(DescriptionKey.Application_Configuration_Service);
 	}
 
 	/**
-	 * V7 provides a default value in code when it requests a value from the {@link InheritingConfiguration} object - it
-	 * is therefore acceptable to have an empty configuration object. If, however, a configuration file is added as an
-	 * entry, but cannot be read, then a {@link ConfigurationException} is thrown. *
+	 * The {@link #iniFiles} map is processed in ascending key order. If a file does not exist or fails to load for any
+	 * reason, and it is not marked as optional in IniFileConfig, a {@link ConfigurationException} is thrown. If,
+	 * however, the file fails to load, and is optional, no exception is raised.
 	 * 
 	 * @throws ConfigurationException
 	 *             if an error occurs while loading a file
@@ -91,28 +92,37 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 	 */
 	@Override
 	public Status start() throws ConfigurationException {
-		Iterator<File> iter = fileList.iterator();
-		while (iter.hasNext()) {
-			File file = iter.next();
-			log.debug("adding configuration from {}", file.getAbsolutePath());
-
-			if (file.exists()) {
+		Set<Integer> keySorter = new TreeSet<>(iniFiles.keySet());
+		for (Integer k : keySorter) {
+			IniFileConfig iniConfig = iniFiles.get(k);
+			File file = new File(ResourceUtils.configurationDirectory(), iniConfig.getFilename());
+			try {
+				if (!file.exists()) {
+					throw new FileNotFoundException(file.getAbsolutePath());
+				}
 				HierarchicalINIConfiguration config = new HierarchicalINIConfiguration(file);
 				configuration.addConfiguration(config);
-			} else {
-				String msg = ("Configuration Service failed to start, configuration file " + file.getAbsolutePath() + " does not exist.");
-				status = Status.FAILED_TO_START;
-				log.error(msg);
-				throw new ConfigurationException(msg);
+				log.debug("adding configuration from {} at index {}", file.getAbsolutePath(), k);
+			} catch (Exception ce) {
+				if (!iniConfig.isOptional()) {
+					String msg = ("Configuration Service failed to start, unable to load required configuration file: " + file
+							.getAbsolutePath());
+					status = Status.FAILED_TO_START;
+					log.error(msg);
+					throw new ConfigurationException(ce);
+				} else {
+					log.info("Optional configuration file not found, but as it is optional, continuing without it");
+				}
 			}
 		}
+
 		log.info("Application Configuration Service started");
-		status = Status.STARTED;
+		setStatus(Status.STARTED);
 		return status;
 	}
 
 	/**
-	 * Clears the {@link InheritingConfiguration}, and sets the status of this service to Status.STOPPED
+	 * Clears the {@link ApplicationConfiguration}, and sets the status of this service to Status.STOPPED
 	 * 
 	 * @see uk.co.q3c.v7.base.services.Service#stop()
 	 */
@@ -128,23 +138,4 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 		// nothing to do
 	}
 
-	/**
-	 * 
-	 @see uk.co.q3c.v7.base.config.ApplicationConfigurationService#addConfiguration(org.apache.commons.configuration.Configuration)
-	 */
-	@Override
-	public void addConfiguration(File configurationFile) {
-		fileList.add(configurationFile);
-	}
-
-	@Override
-	public void addConfiguration(String configurationFileName) {
-		File f1 = (new File(configurationDirectory(), configurationFileName));
-		addConfiguration(f1);
-	}
-
-	protected File configurationDirectory() {
-		File f = new File(ResourceUtils.applicationBaseDirectory(), "WEB-INF");
-		return f;
-	}
 }

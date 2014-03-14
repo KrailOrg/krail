@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.util.ResourceUtils;
+import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.ConfigKeys;
 import uk.co.q3c.v7.base.config.DefaultApplicationConfigurationService;
@@ -65,7 +66,7 @@ import fixture.TestConfigurationException;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ ServicesMonitorModule.class, TestDirectSitemapModule.class, TestFileSitemapModule.class,
-		DefaultStandardPagesModule.class })
+		DefaultStandardPagesModule.class, ApplicationConfigurationModule.class })
 public class DefaultSitemapServiceTest {
 
 	private final int FILE_NODE_COUNT = 4;

@@ -59,4 +59,8 @@ public class ResourceUtils {
 		return new File(userHomeDirectory(), "temp");
 	}
 
+	public static File configurationDirectory() {
+		return new File(applicationBaseDirectory(), "WEB-INF");
+	}
+
 }

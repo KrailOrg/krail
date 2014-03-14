@@ -20,6 +20,7 @@ import org.mockito.stubbing.Answer;
 import uk.co.q3c.util.ResourceUtils;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.DefaultApplicationConfigurationService;
+import uk.co.q3c.v7.base.config.IniFileConfig;
 import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
 import uk.co.q3c.v7.base.navigate.DefaultInvalidURIExceptionHandler;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
@@ -178,6 +179,8 @@ public class UIScopeTest {
 			bind(SitemapService.class).to(MockSitemapService.class);
 			bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
 			bind(ApplicationConfigurationService.class).to(DefaultApplicationConfigurationService.class);
+			MapBinder<Integer, IniFileConfig> iniFileConfigs = MapBinder.newMapBinder(binder(), Integer.class,
+					IniFileConfig.class);
 
 		}
 	}
