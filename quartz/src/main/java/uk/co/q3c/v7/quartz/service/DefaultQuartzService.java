@@ -24,8 +24,8 @@ import org.quartz.SchedulerListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.config.InheritingConfiguration;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
+import uk.co.q3c.v7.base.config.InheritingConfiguration;
 import uk.co.q3c.v7.base.services.AbstractServiceI18N;
 import uk.co.q3c.v7.base.services.AutoStart;
 import uk.co.q3c.v7.base.services.Service;
@@ -63,7 +63,7 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 
 	@Override
 	public Status start() throws Exception {
-		constructSchedulers(schedulerConfigurations);
+		// constructSchedulers(schedulerConfigurations);
 		scheduleJobs();
 		attachJobListeners();
 		attachTriggerListeners();

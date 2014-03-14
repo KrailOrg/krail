@@ -21,19 +21,19 @@ import org.quartz.SchedulerException;
 
 import uk.co.q3c.v7.i18n.I18NModule;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class })
+@GuiceContext({ I18NModule.class, DefaultQuartzSchedulerModule.class })
 public class V7SchedulerFactoryTest {
 
 	@Inject
 	V7SchedulerFactory factory;
+
+	@Inject
+	V7SchedulerFactory factory2;
 
 	@Inject
 	SchedulerProvider provider;
@@ -54,27 +54,36 @@ public class V7SchedulerFactoryTest {
 	}
 
 	@Test
-	public void createWithConfig() {
+	public void createWithConfig() throws SchedulerException {
 
 		// given
-
+		SchedulerConfiguration config = new SchedulerConfiguration().name("first");
 		// when
-
+		V7Scheduler s1 = factory.createScheduler(config);
 		// then
-
-		fail("not written");
+		assertThat(s1).isInstanceOf(V7Scheduler.class);
+		assertThat(s1.getMetaData().getSchedulerName()).isEqualTo("first");
 	}
 
-	@ModuleProvider
-	protected AbstractModule moduleProvider() {
-		return new AbstractModule() {
+	@Test
+	public void createWithConfig_nullName() throws SchedulerException {
 
-			@Override
-			protected void configure() {
-				bind(V7SchedulerFactory.class).in(Singleton.class);
-				bind(Scheduler.class).toProvider(SchedulerProvider.class).in(Singleton.class);
-			}
+		// given
+		SchedulerConfiguration config = new SchedulerConfiguration();
+		// when
+		V7Scheduler s1 = factory.createScheduler(config);
+		// then
+		assertThat(s1).isInstanceOf(V7Scheduler.class);
+		assertThat(s1.getMetaData().getSchedulerName()).isEqualTo("QuartzScheduler");
 
-		};
+		// when second scheduler created
+		config.name("second instance");
+		V7Scheduler s2 = factory2.createScheduler(config);
+		// then
+		assertThat(s2).isInstanceOf(V7Scheduler.class);
+		assertThat(s2.getMetaData().getSchedulerName()).isEqualTo("second instance");
+		assertThat(s1).isNotEqualTo(s2);
+
 	}
+
 }

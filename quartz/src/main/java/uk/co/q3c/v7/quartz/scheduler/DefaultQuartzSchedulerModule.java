@@ -15,7 +15,6 @@ package uk.co.q3c.v7.quartz.scheduler;
 import static com.google.inject.multibindings.Multibinder.*;
 
 import org.quartz.Scheduler;
-import org.quartz.SchedulerFactory;
 import org.quartz.SchedulerListener;
 import org.quartz.TriggerListener;
 import org.quartz.ee.jmx.jboss.QuartzService;
@@ -46,7 +45,9 @@ public class DefaultQuartzSchedulerModule extends AbstractModule {
 		schedulerListeners = newSetBinder(binder(), SchedulerListener.class);
 		triggerListeners = newSetBinder(binder(), TriggerListener.class);
 
-		bind(SchedulerFactory.class).to(V7SchedulerFactory.class).in(Singleton.class);
+		bind(V7SchedulerFactory.class).to(DefaultV7SchedulerFactory.class);
+		bind(Scheduler.class).toProvider(SchedulerProvider.class).in(Singleton.class);
+
 	}
 
 }

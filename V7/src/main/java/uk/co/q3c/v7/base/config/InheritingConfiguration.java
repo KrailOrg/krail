@@ -14,6 +14,8 @@ package uk.co.q3c.v7.base.config;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.HierarchicalINIConfiguration;
+import org.apache.commons.configuration.SubnodeConfiguration;
 
 import com.google.inject.Inject;
 
@@ -73,7 +75,29 @@ public class InheritingConfiguration extends CompositeConfiguration {
 			}
 		}
 		return firstMatchingConfiguration;
+	}
 
+	/**
+	 * Returns a section specified by {@code sectionName}, or null if none exists. Sections are recognised only be
+	 * {@link HierarchicalINIConfiguration}, and any other type of configuration contained within this composite will be
+	 * ignored.
+	 * 
+	 * @param sectionName
+	 * @return
+	 */
+	public SubnodeConfiguration getSection(String sectionName) {
+
+		int c = getNumberOfConfigurations();
+		for (int i = c - 1; i >= 0; i--) {
+			Configuration cfg = getConfiguration(i);
+			if (cfg instanceof HierarchicalINIConfiguration) {
+				HierarchicalINIConfiguration config = (HierarchicalINIConfiguration) cfg;
+				if (config.getSections().contains(sectionName)) {
+					return config.getSection(sectionName);
+				}
+			}
+		}
+		return null;
 	}
 
 }

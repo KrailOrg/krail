@@ -17,8 +17,13 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 
+import uk.co.q3c.v7.base.config.ApplicationConfiguration;
+import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
+import uk.co.q3c.v7.base.config.InheritingConfiguration;
 import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -26,14 +31,38 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class })
+@GuiceContext({ I18NModule.class, ApplicationConfigurationModule.class, DefaultQuartzSchedulerModule.class })
 public class SchedulerProviderTest {
 
 	@Inject
 	Provider<Scheduler> provider;
 
+	@Inject
+	Translate translate;
+
+	@Inject
+	ApplicationConfiguration applicationConfiguration;
+
+	@Inject
+	Provider<InheritingConfiguration> inheritingConfigurationProvider;
+
 	@Test
-	public void get() {
+	public void getWhenThereIsOnlyOne() throws SchedulerException {
+
+		// given
+		SchedulerConfiguration config = new SchedulerConfiguration().name("first");
+		V7SchedulerFactory factory = new DefaultV7SchedulerFactory(translate, applicationConfiguration,
+				inheritingConfigurationProvider);
+		factory.createScheduler(config);
+		// when
+
+		// then
+
+		fail("not written");
+	}
+
+	@Test
+	public void getTheDefault() {
 
 		// given
 
@@ -46,6 +75,42 @@ public class SchedulerProviderTest {
 
 	@Test
 	public void getWithName() {
+
+		// given
+
+		// when
+
+		// then
+
+		fail("not written");
+	}
+
+	@Test
+	public void noSchedulersDefined() {
+
+		// given
+
+		// when
+
+		// then
+
+		fail("not written");
+	}
+
+	@Test
+	public void removeTheDefault() {
+
+		// given
+
+		// when
+
+		// then
+
+		fail("not written");
+	}
+
+	@Test
+	public void setInvalidDefault() {
 
 		// given
 

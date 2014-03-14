@@ -17,21 +17,26 @@ import java.util.Properties;
 import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
 
-import uk.co.q3c.v7.base.config.InheritingConfiguration;
+import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 
 /**
- * Provides configuration for the Quartz {@link Scheduler}. The configuration source may be taken from one of three
- * places. Please note the order of importance of these:
+ * Provides configuration for the {@link V7Scheduler} (a minor variation of the Quartz {@link Scheduler}). The
+ * configuration source may be taken from one of three places. Please note the order of importance of these:
  * <ol>
  * <li>coded in a Guice module
- * <li>taken from the 'quartz-schedulerName' section of {@link InheritingConfiguration} ... for example
- * [quartz-scheduler1]
- * <li>taken from a dedicated properties file with the name schedulerName.properties
+ * <li>taken from a section of {@link ApplicationConfiguration}. Specify the section name with
+ * {@link #configSectionName}
+ * <li>taken from a dedicated properties file. Specify the file name with {@link #propertyFileName(String)}
  * </ol>
  * The 2nd and 3rd options do not need to exist. If they do, they will each override the property values of the
- * preceding methods.
+ * preceding methods, where properties with the same key exist in more than one source.
  * <p>
+ * The logic for combining these sources is actually in the {@link DefaultV7SchedulerFactory}, and invoked only when
+ * services are being started. This helps to avoid having conditional logic in the Guice modules.
+ * <p>
+ * Sets the org.quartz.threadPool.threadCount to 1 as a default, as without it, the creation of a Scheduler will fail
  * 
+ * @see https://code.google.com/p/google-guice/wiki/AvoidConditionalLogicInModules
  * @see http://quartz-scheduler.org/documentation/quartz-2.x/configuration/
  * @see http://quartz-scheduler.org/documentation/quartz-1.x/cookbook/MultipleSchedulers
  * @author David Sowerby
@@ -39,7 +44,14 @@ import uk.co.q3c.v7.base.config.InheritingConfiguration;
  */
 public class SchedulerConfiguration {
 
-	private Properties properties;
+	private final Properties properties = new Properties();
+	private String propertyFileName;
+	private String configSectionName;
+
+	protected SchedulerConfiguration() {
+		super();
+		setProperty("org.quartz.threadPool.threadCount", Integer.toString(1));
+	}
 
 	public Properties getProperties() {
 		return properties;
@@ -54,4 +66,40 @@ public class SchedulerConfiguration {
 		properties.put(key, value);
 	}
 
+	public String getName() {
+		return properties.getProperty(StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME).toString();
+	}
+
+	/**
+	 * If you wish to use a specific property file to configure the scheduler, specify the name here. (option 2 in the
+	 * class javadoc). The path is assumed to be in from ResourceUtils#configurationDirectory()
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	public SchedulerConfiguration propertyFileName(String filename) {
+		this.propertyFileName = filename;
+		return this;
+	}
+
+	/**
+	 * If you wish to use a section of {@link ApplicationConfiguration} to configure the scheduler, specify the section
+	 * name here. (option 1 in the class javadoc). The path is assumed to be in from
+	 * ResourceUtils#configurationDirectory()
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	public SchedulerConfiguration useConfigSection(String sectionName) {
+		this.configSectionName = sectionName;
+		return this;
+	}
+
+	public String getPropertyFileName() {
+		return propertyFileName;
+	}
+
+	public String getConfigSectionName() {
+		return configSectionName;
+	}
 }

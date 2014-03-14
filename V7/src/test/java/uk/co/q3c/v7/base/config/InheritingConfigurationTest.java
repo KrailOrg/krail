@@ -19,6 +19,7 @@ import java.io.File;
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
+import org.apache.commons.configuration.SubnodeConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -28,7 +29,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class ApplicationConfigurationTest {
+public class InheritingConfigurationTest {
 
 	private HierarchicalINIConfiguration config1;
 	private HierarchicalINIConfiguration config2;
@@ -43,9 +44,10 @@ public class ApplicationConfigurationTest {
 		// given
 		config1 = config("config1.ini");
 		config2 = config("config2.ini");
+		String key1 = "a.k1";
+		// when
 		configuration.addConfiguration(config1);
 		configuration.addConfiguration(config2);
-		String key1 = "a.k1";
 
 		// then
 		assertThat(configuration.getNumberOfConfigurations()).isEqualTo(3);
@@ -67,6 +69,23 @@ public class ApplicationConfigurationTest {
 		assertThat(configuration.getSourceUsed(key1)).isEqualTo(configuration.getConfiguration(3));
 		assertThat(configuration.getSourceUsed(key1)).isInstanceOf(BaseConfiguration.class);
 
+	}
+
+	@Test
+	public void getSection() throws ConfigurationException {
+
+		// given
+		config1 = config("config1.ini");
+		config2 = config("config2.ini");
+		String key1 = "a";
+		// when
+		configuration.addConfiguration(config1);
+		configuration.addConfiguration(config2);
+		SubnodeConfiguration section = configuration.getSection(key1);
+		// then
+		assertThat(section).isNotNull();
+		assertThat(section.getString("k1")).isEqualTo("2-1");
+		assertThat(section.getString("k2")).isEqualTo("2-2");
 	}
 
 	private HierarchicalINIConfiguration config(String filename) throws ConfigurationException {
