@@ -19,7 +19,7 @@ import org.quartz.spi.JobFactory;
 import org.quartz.spi.TriggerFiredBundle;
 
 /**
- * IMplements the Quartz {@link JobFactory} interface to utilise Guice for creating jobs
+ * Implements the Quartz {@link JobFactory} interface to utilise Guice for creating jobs
  * 
  * @author David Sowerby
  * 

@@ -18,6 +18,7 @@ import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
 
 import uk.co.q3c.v7.base.config.ApplicationConfiguration;
+import uk.co.q3c.v7.quartz.service.DefaultQuartzService;
 
 /**
  * Provides configuration for the {@link V7Scheduler} (a minor variation of the Quartz {@link Scheduler}). The
@@ -47,6 +48,7 @@ public class SchedulerConfiguration {
 	private final Properties properties = new Properties();
 	private String propertyFileName;
 	private String configSectionName;
+	private boolean autoStart;
 
 	protected SchedulerConfiguration() {
 		super();
@@ -57,6 +59,15 @@ public class SchedulerConfiguration {
 		return properties;
 	}
 
+	/**
+	 * Set the name for the scheduler. Note that during the construction of the scheduler in
+	 * {@link DefaultQuartzService}, this is set to be the same as the key used to map this configuration in
+	 * {@link DefaultQuartzSchedulerModule}. This is to avoid naming confusion, between the map key and the name of the
+	 * scheduler itself.
+	 * 
+	 * @param instanceName
+	 * @return
+	 */
 	public SchedulerConfiguration name(String instanceName) {
 		setProperty(StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME, instanceName);
 		return this;
@@ -101,5 +112,21 @@ public class SchedulerConfiguration {
 
 	public String getConfigSectionName() {
 		return configSectionName;
+	}
+
+	/**
+	 * When true, the scheduler is started by the QuartzService. If false, the scheduler is created by the Quartz
+	 * service, but not started.
+	 * 
+	 * @param autoStart
+	 * @return
+	 */
+	public SchedulerConfiguration autoStart(boolean autoStart) {
+		this.autoStart = autoStart;
+		return this;
+	}
+
+	public boolean isAutoStart() {
+		return autoStart;
 	}
 }

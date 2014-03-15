@@ -14,12 +14,10 @@ package uk.co.q3c.v7.quartz.service;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
 
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
 import org.quartz.SchedulerListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +29,11 @@ import uk.co.q3c.v7.base.services.AutoStart;
 import uk.co.q3c.v7.base.services.Service;
 import uk.co.q3c.v7.i18n.Translate;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerConfiguration;
+import uk.co.q3c.v7.quartz.scheduler.V7Scheduler;
+import uk.co.q3c.v7.quartz.scheduler.V7SchedulerFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 @Singleton
@@ -45,30 +46,30 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 	private static Logger log = LoggerFactory.getLogger(DefaultQuartzService.class);
 
 	private final Map<String, SchedulerConfiguration> schedulerConfigurations;
-	private final SchedulerFactory schedulerFactory;
+	private final Provider<V7SchedulerFactory> factoryProvider;
 	private final InheritingConfiguration applicationConfiguration;
 
 	@Inject
 	public DefaultQuartzService(Translate translate, Map<String, SchedulerConfiguration> schedulerConfigurations,
-			Set<SchedulerListener> schedulerListeners, SchedulerFactory schedulerFactory,
+			Set<SchedulerListener> schedulerListeners, Provider<V7SchedulerFactory> factoryProvider,
 			ApplicationConfigurationService applicationConfigurationService,
 			InheritingConfiguration applicationConfiguration) {
 		super(translate);
 		this.schedulerConfigurations = schedulerConfigurations;
 		this.schedulerListeners = schedulerListeners;
-		this.schedulerFactory = schedulerFactory;
+		this.factoryProvider = factoryProvider;
 		this.applicationConfigurationService = applicationConfigurationService;
 		this.applicationConfiguration = applicationConfiguration;
 	}
 
 	@Override
 	public Status start() throws Exception {
-		// constructSchedulers(schedulerConfigurations);
-		scheduleJobs();
-		attachJobListeners();
-		attachTriggerListeners();
-		attachSchedulerListeners();
-		startScheduler();
+		constructSchedulers();
+		// scheduleJobs();
+		// attachJobListeners();
+		// attachTriggerListeners();
+		// attachSchedulerListeners();
+		// startScheduler();
 		return status;
 	}
 
@@ -95,20 +96,17 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 			SchedulerConfiguration configuration = configurationEntry.getValue();
 			// force the scheduler name to be the same as map key to avoid errors
 			configuration.name(configurationEntry.getKey());
-			// take what's been coded first (in a Guice module), then
-			// check application configuration for entries, merge if there is
-			Properties appConfigProperties = applicationConfiguration.getProperties("quartz-"
-					+ configurationEntry.getKey());
-			configuration.getProperties().putAll(appConfigProperties);
-			// check for a properties file, merge if there is
-
 			// create a factory
+			V7SchedulerFactory factory = factoryProvider.get();
+			try {
+				// the factory will combine scheduler configuration sources as needed
+				V7Scheduler scheduler = factory.createScheduler(configuration);
+				if (configuration.isAutoStart()) {
+					scheduler.start();
+				}
+			} catch (Exception e) {
+			}
 
-			// set the configuration
-
-			// create the scheduler
-
-			// start if auto-start
 		}
 	}
 
@@ -126,8 +124,8 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 	}
 
 	/**
-	 * Does nothing, this service is not dependent on other services, and therefore does not need to react to status
-	 * change in any other service.
+	 * Does nothing. Although this service requires the {@link ApplicationConfigurationService} to be started before
+	 * starting itself, it would not matter if the {@link ApplicationConfigurationService} stopped later.
 	 * 
 	 * @see uk.co.q3c.v7.base.services.ServiceStatusChangeListener#serviceStatusChange(uk.co.q3c.v7.base.services.Service,
 	 *      uk.co.q3c.v7.base.services.Service.Status, uk.co.q3c.v7.base.services.Service.Status)

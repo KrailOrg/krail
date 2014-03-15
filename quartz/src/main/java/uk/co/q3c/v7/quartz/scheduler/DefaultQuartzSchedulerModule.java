@@ -12,19 +12,10 @@
  */
 package uk.co.q3c.v7.quartz.scheduler;
 
-import static com.google.inject.multibindings.Multibinder.*;
-
 import org.quartz.Scheduler;
-import org.quartz.SchedulerListener;
-import org.quartz.TriggerListener;
 import org.quartz.ee.jmx.jboss.QuartzService;
 
 import uk.co.q3c.v7.quartz.job.QuartzJobModule;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Singleton;
-import com.google.inject.multibindings.MapBinder;
-import com.google.inject.multibindings.Multibinder;
 
 /**
  * Provides the configuration for the {@link QuartzService} to construct the Quartz {@link Scheduler}. To define jobs,
@@ -33,21 +24,22 @@ import com.google.inject.multibindings.Multibinder;
  * @author David Sowerby
  * 
  */
-public class DefaultQuartzSchedulerModule extends AbstractModule {
-
-	private Multibinder<SchedulerListener> schedulerListeners;
-	private Multibinder<TriggerListener> triggerListeners;
-
-	private MapBinder<String, SchedulerConfiguration> schedulerConfigurations;
+public class DefaultQuartzSchedulerModule extends QuartzSchedulerModuleBase {
 
 	@Override
 	protected void configure() {
-		schedulerListeners = newSetBinder(binder(), SchedulerListener.class);
-		triggerListeners = newSetBinder(binder(), TriggerListener.class);
+		super.configure();
+		bindSchedulerFactory();
 
+	}
+
+	protected void bindSchedulerFactory() {
 		bind(V7SchedulerFactory.class).to(DefaultV7SchedulerFactory.class);
-		bind(Scheduler.class).toProvider(SchedulerProvider.class).in(Singleton.class);
+	}
 
+	@Override
+	protected void addConfigurations() {
+		addConfiguration("default", true);
 	}
 
 }

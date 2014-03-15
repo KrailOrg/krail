@@ -12,12 +12,14 @@
  */
 package uk.co.q3c.v7.quartz.scheduler;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.impl.SchedulerRepository;
 
 import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
@@ -27,6 +29,7 @@ import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.ProvisionException;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
@@ -35,7 +38,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 public class SchedulerProviderTest {
 
 	@Inject
-	Provider<Scheduler> provider;
+	SchedulerProvider provider;
 
 	@Inject
 	Translate translate;
@@ -46,79 +49,149 @@ public class SchedulerProviderTest {
 	@Inject
 	Provider<InheritingConfiguration> inheritingConfigurationProvider;
 
+	private DefaultV7SchedulerFactory factory;
+
+	@Before
+	public void setup() {
+		factory = new DefaultV7SchedulerFactory(translate, applicationConfiguration, inheritingConfigurationProvider);
+		SchedulerRepository.getInstance().remove("first");
+		SchedulerRepository.getInstance().remove("second");
+		SchedulerRepository.getInstance().remove("third");
+	}
+
 	@Test
 	public void getWhenThereIsOnlyOne() throws SchedulerException {
 
 		// given
 		SchedulerConfiguration config = new SchedulerConfiguration().name("first");
-		V7SchedulerFactory factory = new DefaultV7SchedulerFactory(translate, applicationConfiguration,
-				inheritingConfigurationProvider);
 		factory.createScheduler(config);
 		// when
-
+		Scheduler s1 = provider.get();
+		Scheduler s2 = provider.get();
 		// then
-
-		fail("not written");
+		assertThat(s1).isNotNull();
+		assertThat(s1).isEqualTo(s2);
+		assertThat(s1.getSchedulerName()).isEqualTo("first");
 	}
 
 	@Test
-	public void getTheDefault() {
+	public void setDefaultByInstance() throws SchedulerException {
 
 		// given
-
+		SchedulerConfiguration config1 = new SchedulerConfiguration().name("first");
+		SchedulerConfiguration config2 = new SchedulerConfiguration().name("second");
 		// when
-
+		V7Scheduler s = factory.createScheduler(config1);
+		provider.setDefaultScheduler(s);
+		factory.createScheduler(config2);
 		// then
-
-		fail("not written");
+		Scheduler s1 = provider.get();
+		Scheduler s2 = provider.get();
+		assertThat(s1).isNotNull();
+		assertThat(s1).isEqualTo(s2);
+		assertThat(s1.getSchedulerName()).isEqualTo("first");
+		assertThat(provider.get("first")).isEqualTo(s1);
+		assertThat(provider.get("second")).isNotEqualTo(s1);
 	}
 
 	@Test
-	public void getWithName() {
+	public void setDefaultWithName() throws SchedulerException {
+		// given
+		SchedulerConfiguration config1 = new SchedulerConfiguration().name("first");
+		SchedulerConfiguration config2 = new SchedulerConfiguration().name("second");
+		// when
+		factory.createScheduler(config1);
+		provider.setDefaultScheduler("first");
+		V7Scheduler s02 = factory.createScheduler(config2);
+		// then
+		Scheduler s1 = provider.get();
+		Scheduler s2 = provider.get();
+		assertThat(s1).isNotNull();
+		assertThat(s1).isEqualTo(s2);
+		assertThat(s1.getSchedulerName()).isEqualTo("first");
+		assertThat(provider.get("first")).isEqualTo(s1);
+		assertThat(provider.get("second")).isNotEqualTo(s1);
+
+		// when
+		provider.setDefaultScheduler("second");
+		s1 = provider.get();
+		assertThat(s1).isEqualTo(s02);
+	}
+
+	@Test
+	public void getWithName() throws SchedulerException {
 
 		// given
-
+		SchedulerConfiguration config1 = new SchedulerConfiguration().name("first");
+		SchedulerConfiguration config2 = new SchedulerConfiguration().name("second");
 		// when
-
+		V7Scheduler s01 = factory.createScheduler(config1);
+		V7Scheduler s02 = factory.createScheduler(config2);
 		// then
+		V7Scheduler s1 = provider.get("first");
+		V7Scheduler s2 = provider.get("second");
 
-		fail("not written");
+		assertThat(s1).isEqualTo(s01);
+		assertThat(s2).isEqualTo(s02);
+
 	}
 
-	@Test
+	@Test()
+	public void getWithInvalidName() throws SchedulerException {
+
+		// given
+		SchedulerConfiguration config1 = new SchedulerConfiguration().name("first");
+		SchedulerConfiguration config2 = new SchedulerConfiguration().name("second");
+		// when
+		factory.createScheduler(config1);
+		factory.createScheduler(config2);
+		// then
+		V7Scheduler s1 = provider.get("third");
+		assertThat(s1).isNull();
+	}
+
+	@Test(expected = ProvisionException.class)
 	public void noSchedulersDefined() {
 
 		// given
 
 		// when
-
+		provider.get();
 		// then
 
-		fail("not written");
 	}
 
 	@Test
-	public void removeTheDefault() {
+	public void removeTheDefault() throws SchedulerException {
 
 		// given
+		SchedulerConfiguration config1 = new SchedulerConfiguration().name("first");
+		SchedulerConfiguration config2 = new SchedulerConfiguration().name("second");
+		SchedulerConfiguration config3 = new SchedulerConfiguration().name("third");
+		V7Scheduler s1 = factory.createScheduler(config1);
+		factory.createScheduler(config2);
+		factory.createScheduler(config3);
+		provider.setDefaultScheduler("first");
 
 		// when
-
+		SchedulerRepository.getInstance().remove("first");
 		// then
-
-		fail("not written");
+		assertThat(provider.get()).isNotNull();
+		assertThat(provider.get()).isNotEqualTo(s1);
+		assertThat(provider.get().getSchedulerName()).isEqualTo("second");
 	}
 
-	@Test
-	public void setInvalidDefault() {
+	@Test(expected = ProvisionException.class)
+	public void setInvalidDefault() throws SchedulerException {
 
 		// given
-
+		SchedulerConfiguration config1 = new SchedulerConfiguration().name("first");
+		SchedulerConfiguration config2 = new SchedulerConfiguration().name("second");
 		// when
+		factory.createScheduler(config1);
+		factory.createScheduler(config2);
+		provider.setDefaultScheduler("rubbish");
 
-		// then
-
-		fail("not written");
 	}
 
 }
