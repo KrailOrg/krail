@@ -16,8 +16,6 @@ import static com.google.inject.multibindings.Multibinder.*;
 
 import org.quartz.Scheduler;
 import org.quartz.SchedulerListener;
-import org.quartz.TriggerListener;
-import org.quartz.ee.jmx.jboss.QuartzService;
 
 import uk.co.q3c.v7.quartz.job.QuartzJobModule;
 
@@ -35,18 +33,27 @@ import com.google.inject.multibindings.Multibinder;
  */
 public abstract class QuartzSchedulerModuleBase extends AbstractModule {
 
-	private Multibinder<SchedulerListener> schedulerListeners;
-	private Multibinder<TriggerListener> triggerListeners;
+	private Multibinder<TriggerListenerEntry> triggerListeners;
 
 	private MapBinder<String, SchedulerConfiguration> schedulerConfigurations;
 
+	private Multibinder<SchedulerListenerEntry> schedulerListeners;
+
 	@Override
 	protected void configure() {
-		schedulerListeners = newSetBinder(binder(), SchedulerListener.class);
-		triggerListeners = newSetBinder(binder(), TriggerListener.class);
+
 		schedulerConfigurations = MapBinder.newMapBinder(binder(), String.class, SchedulerConfiguration.class);
+		schedulerListeners = newSetBinder(binder(), SchedulerListenerEntry.class);
+		triggerListeners = newSetBinder(binder(), TriggerListenerEntry.class);
+
 		addConfigurations();
+		addSchedulerListeners();
+		addTriggerListeners();
 	}
+
+	protected abstract void addSchedulerListeners();
+
+	protected abstract void addTriggerListeners();
 
 	protected abstract void addConfigurations();
 
@@ -63,6 +70,31 @@ public abstract class QuartzSchedulerModuleBase extends AbstractModule {
 		config.name(schedulerName).autoStart(autoStart);
 		schedulerConfigurations.addBinding(schedulerName).toInstance(config);
 		return config;
+	}
+
+	/**
+	 * Creates and adds an entry in {@link #schedulerListeners}. An instance of listenerClass is instantiated using a
+	 * Guice injector in the QuartzService
+	 * 
+	 * @param schedulerName
+	 * @param listenerClass
+	 */
+	protected void addSchedulerListener(String schedulerName, Class<? extends SchedulerListener> listenerClass) {
+		SchedulerListenerEntry entry = new SchedulerListenerEntry(schedulerName, listenerClass);
+		schedulerListeners.addBinding().toInstance(entry);
+	}
+
+	/**
+	 * Creates and adds an entry in {@link #triggerListeners}. An instance of listenerClass is instantiated using a
+	 * Guice injector in the {@link uk.co.q3c.v7.quartz.service.QuartzService}
+	 * 
+	 * @param schedulerName
+	 * @param listenerClass
+	 */
+	protected void addTriggerListener(String schedulerName, String triggerName,
+			Class<? extends V7TriggerListener> listenerClass) {
+		TriggerListenerEntry entry = new TriggerListenerEntry(schedulerName, triggerName, listenerClass);
+		triggerListeners.addBinding().toInstance(entry);
 	}
 
 }

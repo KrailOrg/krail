@@ -13,13 +13,15 @@
 package uk.co.q3c.v7.quartz.scheduler;
 
 import org.quartz.Scheduler;
-import org.quartz.ee.jmx.jboss.QuartzService;
 
 import uk.co.q3c.v7.quartz.job.QuartzJobModule;
 
 /**
- * Provides the configuration for the {@link QuartzService} to construct the Quartz {@link Scheduler}. To define jobs,
- * either use sub-classes of {@link QuartzJobModule}, or inject an instance of {@link Scheduler} and add jobs directly
+ * Provides the configuration for the {@link QuartzService} to construct the Quartz {@link Scheduler}. This module also
+ * defines the binding for the {@link V7SchedulerFactory}
+ * <p>
+ * To define jobs, either use sub-classes of {@link QuartzJobModule}, or obtain an instance of {@link V7Scheduler} from
+ * {@link SchedulerProvider} and add jobs directly
  * 
  * @author David Sowerby
  * 
@@ -40,6 +42,14 @@ public class DefaultQuartzSchedulerModule extends QuartzSchedulerModuleBase {
 	@Override
 	protected void addConfigurations() {
 		addConfiguration("default", true);
+	}
+
+	@Override
+	protected void addSchedulerListeners() {
+	}
+
+	@Override
+	protected void addTriggerListeners() {
 	}
 
 }

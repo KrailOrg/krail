@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerListener;
 import org.slf4j.Logger;
@@ -29,18 +28,22 @@ import uk.co.q3c.v7.base.services.AutoStart;
 import uk.co.q3c.v7.base.services.Service;
 import uk.co.q3c.v7.i18n.Translate;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerConfiguration;
+import uk.co.q3c.v7.quartz.scheduler.SchedulerListenerEntry;
+import uk.co.q3c.v7.quartz.scheduler.SchedulerProvider;
+import uk.co.q3c.v7.quartz.scheduler.TriggerListenerEntry;
 import uk.co.q3c.v7.quartz.scheduler.V7Scheduler;
 import uk.co.q3c.v7.quartz.scheduler.V7SchedulerFactory;
+import uk.co.q3c.v7.quartz.scheduler.V7TriggerListener;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 @Singleton
 public class DefaultQuartzService extends AbstractServiceI18N implements QuartzService {
 
-	private final Set<SchedulerListener> schedulerListeners;
-	private Scheduler scheduler;
+	private final Set<SchedulerListenerEntry> schedulerListeners;
 	@AutoStart
 	private final ApplicationConfigurationService applicationConfigurationService;
 	private static Logger log = LoggerFactory.getLogger(DefaultQuartzService.class);
@@ -48,18 +51,25 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 	private final Map<String, SchedulerConfiguration> schedulerConfigurations;
 	private final Provider<V7SchedulerFactory> factoryProvider;
 	private final InheritingConfiguration applicationConfiguration;
+	private final Set<TriggerListenerEntry> triggerListeners;
+	private final SchedulerProvider schedulerProvider;
+	private final Injector injector;
 
 	@Inject
 	public DefaultQuartzService(Translate translate, Map<String, SchedulerConfiguration> schedulerConfigurations,
-			Set<SchedulerListener> schedulerListeners, Provider<V7SchedulerFactory> factoryProvider,
+			Set<SchedulerListenerEntry> schedulerListeners, Set<TriggerListenerEntry> triggerListeners,
+			Provider<V7SchedulerFactory> factoryProvider,
 			ApplicationConfigurationService applicationConfigurationService,
-			InheritingConfiguration applicationConfiguration) {
+			InheritingConfiguration applicationConfiguration, SchedulerProvider schedulerProvider, Injector injector) {
 		super(translate);
 		this.schedulerConfigurations = schedulerConfigurations;
 		this.schedulerListeners = schedulerListeners;
 		this.factoryProvider = factoryProvider;
 		this.applicationConfigurationService = applicationConfigurationService;
 		this.applicationConfiguration = applicationConfiguration;
+		this.triggerListeners = triggerListeners;
+		this.schedulerProvider = schedulerProvider;
+		this.injector = injector;
 	}
 
 	@Override
@@ -67,22 +77,38 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 		constructSchedulers();
 		// scheduleJobs();
 		// attachJobListeners();
-		// attachTriggerListeners();
-		// attachSchedulerListeners();
-		// startScheduler();
+		attachTriggerListeners();
+		attachSchedulerListeners();
+		startSchedulers();
 		return status;
 	}
 
-	private void startScheduler() {
+	private void startSchedulers() throws SchedulerException {
+		for (Entry<String, SchedulerConfiguration> configurationEntry : schedulerConfigurations.entrySet()) {
+			SchedulerConfiguration configuration = configurationEntry.getValue();
+			if (configuration.isAutoStart()) {
+				V7Scheduler scheduler = schedulerProvider.get(configuration.getName());
+				scheduler.start();
+			}
+		}
+
 	}
 
 	private void attachSchedulerListeners() throws SchedulerException {
-		for (SchedulerListener listener : schedulerListeners) {
+		for (SchedulerListenerEntry entry : schedulerListeners) {
+			V7Scheduler scheduler = schedulerProvider.get(entry.getSchedulerName());
+			SchedulerListener listener = injector.getInstance(entry.getListenerClass());
 			scheduler.getListenerManager().addSchedulerListener(listener);
 		}
 	}
 
-	private void attachTriggerListeners() {
+	private void attachTriggerListeners() throws SchedulerException {
+		for (TriggerListenerEntry entry : triggerListeners) {
+			V7Scheduler scheduler = schedulerProvider.get(entry.getSchedulerName());
+			V7TriggerListener listener = injector.getInstance(entry.getListenerClass());
+			listener.setName(entry.getTriggerName());
+			scheduler.getListenerManager().addTriggerListener(listener);
+		}
 	}
 
 	private void attachJobListeners() {
@@ -91,22 +117,15 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 	private void scheduleJobs() {
 	}
 
-	protected void constructSchedulers() {
+	protected void constructSchedulers() throws SchedulerException {
 		for (Entry<String, SchedulerConfiguration> configurationEntry : schedulerConfigurations.entrySet()) {
 			SchedulerConfiguration configuration = configurationEntry.getValue();
 			// force the scheduler name to be the same as map key to avoid errors
 			configuration.name(configurationEntry.getKey());
 			// create a factory
 			V7SchedulerFactory factory = factoryProvider.get();
-			try {
-				// the factory will combine scheduler configuration sources as needed
-				V7Scheduler scheduler = factory.createScheduler(configuration);
-				if (configuration.isAutoStart()) {
-					scheduler.start();
-				}
-			} catch (Exception e) {
-			}
-
+			// the factory will combine scheduler configuration sources as needed
+			factory.createScheduler(configuration);
 		}
 	}
 

@@ -16,6 +16,9 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.quartz.SchedulerListener;
+import org.quartz.TriggerListener;
+import org.quartz.listeners.BroadcastSchedulerListener;
 
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.i18n.I18NModule;
@@ -23,6 +26,7 @@ import uk.co.q3c.v7.quartz.scheduler.DefaultQuartzSchedulerModule;
 import uk.co.q3c.v7.quartz.scheduler.QuartzSchedulerModuleBase;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerProvider;
 import uk.co.q3c.v7.quartz.scheduler.V7Scheduler;
+import uk.co.q3c.v7.quartz.scheduler.V7TriggerListenerSupport;
 import uk.co.q3c.v7.quartz.service.DefaultQuartzServiceTest2.TestSchedulerModule;
 
 import com.google.inject.Inject;
@@ -34,11 +38,25 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 		TestSchedulerModule.class })
 public class DefaultQuartzServiceTest2 {
 
+	public static class TestTriggerListener extends V7TriggerListenerSupport {
+
+	}
+
 	public static class TestSchedulerModule extends QuartzSchedulerModuleBase {
 
 		@Override
 		protected void addConfigurations() {
 			addConfiguration("test", false);
+		}
+
+		@Override
+		protected void addSchedulerListeners() {
+			addSchedulerListener("test", BroadcastSchedulerListener.class);
+		}
+
+		@Override
+		protected void addTriggerListeners() {
+			addTriggerListener("test", "splug", TestTriggerListener.class);
 		}
 
 	}
@@ -53,7 +71,6 @@ public class DefaultQuartzServiceTest2 {
 	public void secondScheduler() throws Exception {
 
 		// given
-		// given
 
 		// when
 		service.start();
@@ -66,6 +83,14 @@ public class DefaultQuartzServiceTest2 {
 		assertThat(testScheduler).isNotNull();
 		assertThat(testScheduler.isStarted()).isFalse();
 		assertThat(testScheduler.getMetaData().getSchedulerName()).isEqualTo("test");
+		assertThat(testScheduler.getListenerManager().getSchedulerListeners()).hasSize(1);
+		SchedulerListener schedulerListener = testScheduler.getListenerManager().getSchedulerListeners().get(0);
+		assertThat(schedulerListener).isInstanceOf(BroadcastSchedulerListener.class);
+
+		assertThat(testScheduler.getListenerManager().getTriggerListeners()).hasSize(1);
+		TriggerListener triggerListener = testScheduler.getListenerManager().getTriggerListeners().get(0);
+		assertThat(triggerListener).isInstanceOf(TestTriggerListener.class);
+		assertThat(triggerListener.getName()).isEqualTo("splug");
 	}
 
 }

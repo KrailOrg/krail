@@ -54,6 +54,7 @@ public class SchedulerProviderTest {
 	@Before
 	public void setup() {
 		factory = new DefaultV7SchedulerFactory(translate, applicationConfiguration, inheritingConfigurationProvider);
+		SchedulerRepository.getInstance().remove("default");
 		SchedulerRepository.getInstance().remove("first");
 		SchedulerRepository.getInstance().remove("second");
 		SchedulerRepository.getInstance().remove("third");
