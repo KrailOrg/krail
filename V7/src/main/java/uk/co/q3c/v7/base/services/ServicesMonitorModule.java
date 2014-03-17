@@ -88,8 +88,17 @@ public class ServicesMonitorModule extends AbstractModule {
 		}
 
 		/**
-		 * The AOP code for all {@link Service#start()} methods. Looks for any fields in the 'this' which are annotated
-		 * with {@link AutoStart}, and starts them first before invoking its own start method.
+		 * The AOP code for all {@link Service#start()} methods. Take note of this code when developing your own start
+		 * methods, to avoid duplication (and possibly confusion). This code does the following:
+		 * <ol>
+		 * <li>Checks to see whether this service has already been started, and exits without doing anything if it has
+		 * <li>Looks for any fields in the 'this' which are annotated with {@link AutoStart}, and starts them first.
+		 * This may cause a dependency chain, if those services in turn have auto start dependencies.
+		 * <li>If a dependency service fails to start, the status of this service is set to
+		 * {@link Status#DEPENDENCY_FAILED}, but the body of the method is still invoked - it is up to the developer to
+		 * decide what to do when a dependency fails.
+		 * <li>If an exception is thrown when the main body of the method is invoked, status is set to
+		 * {@link Status#FAILED_TO_START} and the exception re-thrown
 		 */
 		@Override
 		public Object invoke(MethodInvocation invocation) throws Throwable {
