@@ -65,8 +65,8 @@ public interface Service extends ServiceStatusChangeListener {
 	Status start() throws Exception;
 
 	/**
-	 * Stops the service. No other action is taken automatically apart form the {@link ServicesMonitor} recording the
-	 * change of status. If other Services are dependent and need to respond to this change of status, then the
+	 * Stops the service. No other action is taken automatically, except that the {@link ServicesMonitor} records all
+	 * changes of status. If other Services are dependent and need to respond to this change of status, then the
 	 * dependent services should respond to the
 	 * {@link ServiceStatusChangeListener#serviceStatusChange(Service, Status, Status)}. Listeners are added in the AOP
 	 * code, so that Services dependent on another Service are notified of a change of status in their dependencies.
