@@ -45,17 +45,22 @@ public interface Service extends ServiceStatusChangeListener {
 	 * intercepts (before the implementations's code is executed) and checks for any {@link Service} fields annotated
 	 * with {@link AutoStart}, and if it finds them, calls their start methods.
 	 * <p>
+	 * The AOP code also adds listeners to any auto-started services, so that a change to a service status can be
+	 * responded to (typically when a dependency service stops).
+	 * <p>
 	 * If any {@link AutoStart} dependencies fail to start up successfully, default behaviour is to attempt to start all
-	 * other fields annotated with {@link AutoStart}, set a status of {@link Status#DEPENDENCY_FAILED}. Control is then
-	 * passed to the implementation's start() method, and the implementation must then decide how to respond. This means
-	 * that if you are using {@link AutoStart}, your code should first check the status, as presumably a different
+	 * other fields annotated with {@link AutoStart}, and set a status of {@link Status#DEPENDENCY_FAILED}. Control is
+	 * then passed to the implementation's start() method, and the implementation must then decide how to respond. This
+	 * means that if you are using {@link AutoStart}, your code should first check the status, as presumably a different
 	 * action will be needed if a dependency has failed to start.
 	 * <p>
 	 * Once a Service is in a Started state, any subsequent calls to this method are ignored, so a call to this method
 	 * may be made without needing to check first whether it is already started
 	 * <p>
-	 * If an exception is thrown during this method, it is caught by the AOP Code, and the status set to
-	 * {@link Status#FAILED_TO_START}
+	 * If an exception is thrown during this method, it is caught by the AOP Code, the status set to
+	 * {@link Status#FAILED_TO_START} and the exception is re-thrown.
+	 * <p>
+	 * The {@link ServicesMonitor} records all the changes of status.
 	 */
 	Status start() throws Exception;
 
