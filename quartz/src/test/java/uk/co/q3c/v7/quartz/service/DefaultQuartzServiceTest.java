@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.quartz.job.DefaultQuartzJobModule;
 import uk.co.q3c.v7.quartz.scheduler.DefaultQuartzSchedulerModule;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerProvider;
 import uk.co.q3c.v7.quartz.scheduler.V7Scheduler;
@@ -28,7 +29,8 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, DefaultQuartzSchedulerModule.class, ApplicationConfigurationModule.class })
+@GuiceContext({ I18NModule.class, DefaultQuartzSchedulerModule.class, ApplicationConfigurationModule.class,
+		DefaultQuartzJobModule.class })
 public class DefaultQuartzServiceTest {
 
 	@Inject

@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 import uk.co.q3c.v7.base.config.InheritingConfiguration;
 import uk.co.q3c.v7.i18n.Translate;
+import uk.co.q3c.v7.quartz.service.QuartzService;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -75,7 +76,8 @@ public class DefaultV7SchedulerFactory extends StdSchedulerFactory implements V7
 	 * {@link DefaultV7SchedulerFactory}.
 	 * <p>
 	 * Note that this method (delegated to {@link #composeConfiguration(SchedulerConfiguration)}) also provides the
-	 * logic to combined potential configuration sources as described in the javadoc for {@link SchedulerConfiguration}
+	 * logic to combined potential configuration sources as described in the javadoc for {@link SchedulerConfiguration}.
+	 * The dependency on the ApplicationConfigurationService being started is managed through the {@link QuartzService}
 	 * 
 	 * @see uk.co.q3c.v7.quartz.scheduler.V7SchedulerFactory#createScheduler(uk.co.q3c.v7.quartz.scheduler.SchedulerConfiguration)
 	 */
@@ -84,6 +86,7 @@ public class DefaultV7SchedulerFactory extends StdSchedulerFactory implements V7
 		Properties properties = composeConfiguration(configuration);
 		initialize(properties);
 		Scheduler scheduler = getScheduler();
+		log.debug("Scheduler '{}' created", scheduler.getMetaData().getSchedulerName());
 		return (V7Scheduler) scheduler;
 	}
 

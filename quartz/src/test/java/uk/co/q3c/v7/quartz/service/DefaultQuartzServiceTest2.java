@@ -13,20 +13,31 @@
 package uk.co.q3c.v7.quartz.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.quartz.JobBuilder.*;
+import static org.quartz.SimpleScheduleBuilder.*;
+import static org.quartz.TriggerBuilder.*;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.quartz.JobBuilder;
+import org.quartz.JobKey;
 import org.quartz.SchedulerListener;
+import org.quartz.SimpleScheduleBuilder;
+import org.quartz.SimpleTrigger;
+import org.quartz.TriggerBuilder;
 import org.quartz.TriggerListener;
 import org.quartz.listeners.BroadcastSchedulerListener;
 
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.quartz.job.QuartzJobModule;
 import uk.co.q3c.v7.quartz.scheduler.DefaultQuartzSchedulerModule;
 import uk.co.q3c.v7.quartz.scheduler.QuartzSchedulerModuleBase;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerProvider;
 import uk.co.q3c.v7.quartz.scheduler.V7Scheduler;
 import uk.co.q3c.v7.quartz.scheduler.V7TriggerListenerSupport;
+import uk.co.q3c.v7.quartz.service.DefaultQuartzServiceTest2.TestJobModule;
 import uk.co.q3c.v7.quartz.service.DefaultQuartzServiceTest2.TestSchedulerModule;
 
 import com.google.inject.Inject;
@@ -35,8 +46,10 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, DefaultQuartzSchedulerModule.class, ApplicationConfigurationModule.class,
-		TestSchedulerModule.class })
+		TestSchedulerModule.class, TestJobModule.class })
 public class DefaultQuartzServiceTest2 {
+
+	static JobKey jobKey = new JobKey("wiggly", "blob");
 
 	public static class TestTriggerListener extends V7TriggerListenerSupport {
 
@@ -58,6 +71,18 @@ public class DefaultQuartzServiceTest2 {
 		protected void addTriggerListeners() {
 			addTriggerListener("test", "splug", TestTriggerListener.class);
 		}
+	}
+
+	public static class TestJobModule extends QuartzJobModule {
+
+		@Override
+		protected void addJobs() {
+			JobBuilder jobBuilder = newJob().ofType(TestJob.class).withIdentity(jobKey);
+			simpleSchedule();
+			TriggerBuilder<SimpleTrigger> triggerBuilder = newTrigger().startNow().withSchedule(
+					SimpleScheduleBuilder.repeatSecondlyForTotalCount(5, 1));
+			addJob("test", jobBuilder, triggerBuilder);
+		}
 
 	}
 
@@ -66,6 +91,14 @@ public class DefaultQuartzServiceTest2 {
 
 	@Inject
 	SchedulerProvider provider;
+
+	@Inject
+	TestJobMonitor monitor;
+
+	@Before
+	public void setup() {
+
+	}
 
 	@Test
 	public void secondScheduler() throws Exception {
@@ -93,4 +126,17 @@ public class DefaultQuartzServiceTest2 {
 		assertThat(triggerListener.getName()).isEqualTo("splug");
 	}
 
+	@Test
+	public void job() throws Exception {
+
+		// given
+		V7Scheduler testScheduler = provider.get("test");
+		testScheduler.deleteJob(jobKey);
+		// when
+		service.start();
+		testScheduler.start();
+		Thread.sleep(1500);
+		// then
+		assertThat(monitor.getEntry("Job")).isEqualTo("fired");
+	}
 }

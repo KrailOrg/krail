@@ -10,22 +10,26 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.quartz.job;
+package uk.co.q3c.v7.quartz.service;
 
-import org.nnsoft.guice.guartz.QuartzModule;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
-import uk.co.q3c.v7.quartz.service.DefaultQuartzService;
-import uk.co.q3c.v7.quartz.service.QuartzService;
+import com.google.inject.Inject;
 
-public class DefaultQuartzModule extends QuartzModule {
+public class TestJob implements Job {
+
+	private final TestJobMonitor monitor;
+
+	@Inject
+	public TestJob(TestJobMonitor monitor) {
+		this.monitor = monitor;
+	}
 
 	@Override
-	protected void schedule() {
-		configureScheduler().withManualStart();
-		bindQuartzService();
+	public void execute(JobExecutionContext context) throws JobExecutionException {
+		monitor.add("Job", "fired");
 	}
 
-	protected void bindQuartzService() {
-		bind(QuartzService.class).to(DefaultQuartzService.class);
-	}
 }

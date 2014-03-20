@@ -18,6 +18,9 @@ import org.quartz.SchedulerException;
 import org.quartz.spi.JobFactory;
 import org.quartz.spi.TriggerFiredBundle;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+
 /**
  * Implements the Quartz {@link JobFactory} interface to utilise Guice for creating jobs
  * 
@@ -26,10 +29,19 @@ import org.quartz.spi.TriggerFiredBundle;
  */
 public class GuiceJobFactory implements JobFactory {
 
+	private final Injector injector;
+
+	@Inject
+	protected GuiceJobFactory(Injector injector) {
+		super();
+		this.injector = injector;
+	}
+
 	@Override
 	public Job newJob(TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {
 
-		return null;
+		Job job = injector.getInstance(bundle.getJobDetail().getJobClass());
+		return job;
 	}
 
 }

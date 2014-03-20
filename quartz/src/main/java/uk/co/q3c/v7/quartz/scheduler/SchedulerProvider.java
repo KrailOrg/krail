@@ -17,6 +17,8 @@ import java.util.Iterator;
 
 import org.quartz.Scheduler;
 import org.quartz.impl.SchedulerRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
@@ -30,6 +32,7 @@ import com.google.inject.ProvisionException;
  * 
  */
 public class SchedulerProvider {
+	private static Logger log = LoggerFactory.getLogger(SchedulerProvider.class);
 	private String defaultSchedulerName;
 
 	@Inject
@@ -42,6 +45,7 @@ public class SchedulerProvider {
 	 * @see com.google.inject.Provider#get()
 	 */
 	public V7Scheduler get() {
+		log.debug("Getting default scheduler,defaultSchedulerName='{}'", defaultSchedulerName);
 		Collection<Scheduler> schedulers = SchedulerRepository.getInstance().lookupAll();
 		Scheduler defaultScheduler;
 		// make sure the default has not been removed from the repo

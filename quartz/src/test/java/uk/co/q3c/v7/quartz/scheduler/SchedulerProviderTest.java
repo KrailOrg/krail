@@ -14,6 +14,10 @@ package uk.co.q3c.v7.quartz.scheduler;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,12 +56,22 @@ public class SchedulerProviderTest {
 	private DefaultV7SchedulerFactory factory;
 
 	@Before
-	public void setup() {
+	public void setup() throws SchedulerException, InterruptedException {
 		factory = new DefaultV7SchedulerFactory(translate, applicationConfiguration, inheritingConfigurationProvider);
-		SchedulerRepository.getInstance().remove("default");
-		SchedulerRepository.getInstance().remove("first");
-		SchedulerRepository.getInstance().remove("second");
-		SchedulerRepository.getInstance().remove("third");
+		clearSchedulerRepo();
+	}
+
+	private void clearSchedulerRepo() throws SchedulerException, InterruptedException {
+		Collection<Scheduler> lookupAll = SchedulerRepository.getInstance().lookupAll();
+		List<String> names = new ArrayList<>();
+		for (Scheduler scheduler : lookupAll) {
+			names.add(scheduler.getSchedulerName());
+		}
+		for (String name : names) {
+			System.out.println("removing " + name);
+			SchedulerRepository.getInstance().remove(name);
+		}
+
 	}
 
 	@Test
