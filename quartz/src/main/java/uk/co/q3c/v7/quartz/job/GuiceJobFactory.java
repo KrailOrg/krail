@@ -13,6 +13,7 @@
 package uk.co.q3c.v7.quartz.job;
 
 import org.quartz.Job;
+import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.spi.JobFactory;
@@ -39,9 +40,13 @@ public class GuiceJobFactory implements JobFactory {
 
 	@Override
 	public Job newJob(TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {
-
 		Job job = injector.getInstance(bundle.getJobDetail().getJobClass());
 		return job;
+	}
+
+	public JobListener newJobListener(JobListenerEntry entry) {
+		JobListener listener = injector.getInstance(entry.getListenerClass());
+		return listener;
 	}
 
 }

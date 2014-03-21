@@ -82,6 +82,7 @@ public class DefaultQuartzServiceTest2 {
 			TriggerBuilder<SimpleTrigger> triggerBuilder = newTrigger().startNow().withSchedule(
 					SimpleScheduleBuilder.repeatSecondlyForTotalCount(5, 1));
 			addJob("test", jobBuilder, triggerBuilder);
+			addJobListener("test", TestJobListener.class, jobKey);
 		}
 
 	}
@@ -138,5 +139,7 @@ public class DefaultQuartzServiceTest2 {
 		Thread.sleep(1500);
 		// then
 		assertThat(monitor.getEntry("Job")).isEqualTo("fired");
+		assertThat(monitor.getEntry("Listener")).isEqualTo("was executed");
+
 	}
 }

@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.quartz.JobListener;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerListener;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import uk.co.q3c.v7.base.services.Service;
 import uk.co.q3c.v7.i18n.Translate;
 import uk.co.q3c.v7.quartz.job.GuiceJobFactory;
 import uk.co.q3c.v7.quartz.job.JobEntry;
+import uk.co.q3c.v7.quartz.job.JobListenerEntry;
 import uk.co.q3c.v7.quartz.scheduler.DefaultQuartzSchedulerModule;
 import uk.co.q3c.v7.quartz.scheduler.DefaultV7SchedulerFactory;
 import uk.co.q3c.v7.quartz.scheduler.QuartzSchedulerModuleBase;
@@ -66,6 +68,7 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 
 	private final Map<String, SchedulerConfiguration> schedulerConfigurations;
 	private final Set<JobEntry> jobs;
+	private final Set<JobListenerEntry> jobListeners;
 	private final Provider<V7SchedulerFactory> factoryProvider;
 	private final Set<TriggerListenerEntry> triggerListeners;
 	private final SchedulerProvider schedulerProvider;
@@ -77,7 +80,7 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 			Set<SchedulerListenerEntry> schedulerListeners, Set<TriggerListenerEntry> triggerListeners,
 			Provider<V7SchedulerFactory> factoryProvider,
 			ApplicationConfigurationService applicationConfigurationService, SchedulerProvider schedulerProvider,
-			Injector injector, GuiceJobFactory jobFactory, Set<JobEntry> jobs) {
+			Injector injector, GuiceJobFactory jobFactory, Set<JobEntry> jobs, Set<JobListenerEntry> jobListeners) {
 		super(translate);
 		this.schedulerConfigurations = schedulerConfigurations;
 		this.schedulerListeners = schedulerListeners;
@@ -88,6 +91,7 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 		this.injector = injector;
 		this.jobFactory = jobFactory;
 		this.jobs = jobs;
+		this.jobListeners = jobListeners;
 	}
 
 	@Override
@@ -96,6 +100,7 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 		attachTriggerListeners();
 		attachSchedulerListeners();
 		scheduleJobs();
+		attachJobListeners();
 		startSchedulers();
 		setStatus(Status.STARTED);
 		return status;
@@ -156,6 +161,21 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 					scheduler.scheduleJob(jobEntry.getJobBuilder().build(), jobEntry.getTriggerBuilder().build());
 				}
 			}
+		}
+	}
+
+	private void attachJobListeners() throws SchedulerException {
+		for (Entry<String, SchedulerConfiguration> configurationEntry : schedulerConfigurations.entrySet()) {
+			SchedulerConfiguration configuration = configurationEntry.getValue();
+			String schedulerName = configuration.getName();
+			V7Scheduler scheduler = schedulerProvider.get(schedulerName);
+			for (JobListenerEntry entry : jobListeners) {
+				if (entry.getSchedulerName().equals(schedulerName)) {
+					JobListener listener = jobFactory.newJobListener(entry);
+					scheduler.getListenerManager().addJobListener(listener, entry.getJobMatchers());
+				}
+			}
+
 		}
 	}
 

@@ -14,8 +14,12 @@ package uk.co.q3c.v7.quartz.job;
 
 import static com.google.inject.multibindings.Multibinder.*;
 
+import java.util.List;
+
 import org.quartz.JobBuilder;
+import org.quartz.JobKey;
 import org.quartz.JobListener;
+import org.quartz.Matcher;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
@@ -41,10 +45,12 @@ import com.google.inject.multibindings.Multibinder;
 public abstract class QuartzJobModule extends AbstractModule {
 
 	private Multibinder<JobEntry> jobs;
+	private Multibinder<JobListenerEntry> jobListeners;
 
 	@Override
 	protected void configure() {
 		jobs = newSetBinder(binder(), JobEntry.class);
+		jobListeners = newSetBinder(binder(), JobListenerEntry.class);
 		addJobs();
 
 	}
@@ -69,5 +75,25 @@ public abstract class QuartzJobModule extends AbstractModule {
 	protected void addJob(String schedulerName, JobBuilder jobBuilder, TriggerBuilder<? extends Trigger> triggerBuilder) {
 		JobEntry entry = new JobEntry(schedulerName, jobBuilder, triggerBuilder);
 		jobs.addBinding().toInstance(entry);
+	}
+
+	protected void addJobListener(String schedulerName, Class<? extends JobListener> listenerClass, JobKey jobKey) {
+		JobListenerEntry entry = new JobListenerEntry(schedulerName, listenerClass);
+		entry.listenTo(jobKey);
+		jobListeners.addBinding().toInstance(entry);
+	}
+
+	protected void addJobListener(String schedulerName, Class<? extends JobListener> listenerClass,
+			Matcher<JobKey> matcher) {
+		JobListenerEntry entry = new JobListenerEntry(schedulerName, listenerClass);
+		entry.listenTo(matcher);
+		jobListeners.addBinding().toInstance(entry);
+	}
+
+	protected void addJobListener(String schedulerName, Class<? extends JobListener> listenerClass,
+			List<Matcher<JobKey>> matchers) {
+		JobListenerEntry entry = new JobListenerEntry(schedulerName, listenerClass);
+		entry.listenTo(matchers);
+		jobListeners.addBinding().toInstance(entry);
 	}
 }
