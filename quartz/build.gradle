@@ -9,7 +9,7 @@ dependencies{
 	//Quartz	
 	
 	compile 'org.quartz-scheduler:quartz:2.2.1'
-	compile 'org.99soft.guice:guartz:1.3'
+
 
 	
 }
