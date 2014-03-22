@@ -15,15 +15,15 @@ package uk.co.q3c.v7.quartz.service;
 import org.quartz.Scheduler;
 
 import uk.co.q3c.v7.base.services.Service;
-import uk.co.q3c.v7.quartz.job.QuartzJobModule;
-import uk.co.q3c.v7.quartz.scheduler.DefaultQuartzSchedulerModule;
+import uk.co.q3c.v7.quartz.job.JobModuleBase;
+import uk.co.q3c.v7.quartz.scheduler.DefaultSchedulerModule;
 
 /**
  * Helps provide a separation between the configuration and instantiation of Quartz, in line with the Guice best
  * practice describe here: https://code.google.com/p/google-guice/wiki/ModulesShouldBeFastAndSideEffectFree
  * <p>
  * The implementation of this interface takes care of creating the Quartz scheduler, using the configuration specified
- * by {@link DefaultQuartzSchedulerModule} or a sub-class, and schedules jobs as defined by sub-classes of {@link QuartzJobModule}
+ * by {@link DefaultSchedulerModule} or a sub-class, and schedules jobs as defined by sub-classes of {@link JobModuleBase}
  * <p>
  * Further control of the Quartz scheduler can be achieved in any part of your code by injecting the {@link Scheduler},
  * and manipulating it as required.

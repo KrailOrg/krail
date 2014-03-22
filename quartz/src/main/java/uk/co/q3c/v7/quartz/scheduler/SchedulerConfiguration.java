@@ -62,7 +62,7 @@ public class SchedulerConfiguration {
 	/**
 	 * Set the name for the scheduler. Note that during the construction of the scheduler in
 	 * {@link DefaultQuartzService}, this is set to be the same as the key used to map this configuration in
-	 * {@link DefaultQuartzSchedulerModule}. This is to avoid naming confusion, between the map key and the name of the
+	 * {@link DefaultSchedulerModule}. This is to avoid naming confusion, between the map key and the name of the
 	 * scheduler itself.
 	 * 
 	 * @param instanceName

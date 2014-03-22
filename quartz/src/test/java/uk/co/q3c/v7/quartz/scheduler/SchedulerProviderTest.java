@@ -38,7 +38,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, ApplicationConfigurationModule.class, DefaultQuartzSchedulerModule.class })
+@GuiceContext({ I18NModule.class, ApplicationConfigurationModule.class, DefaultSchedulerModule.class })
 public class SchedulerProviderTest {
 
 	@Inject

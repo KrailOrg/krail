@@ -26,7 +26,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, DefaultQuartzSchedulerModule.class })
+@GuiceContext({ I18NModule.class, DefaultSchedulerModule.class })
 public class V7SchedulerFactoryTest {
 
 	@Inject

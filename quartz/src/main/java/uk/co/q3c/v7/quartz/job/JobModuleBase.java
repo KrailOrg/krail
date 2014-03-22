@@ -42,7 +42,7 @@ import com.google.inject.multibindings.Multibinder;
  * @author David Sowerby
  * 
  */
-public abstract class QuartzJobModule extends AbstractModule {
+public abstract class JobModuleBase extends AbstractModule {
 
 	private Multibinder<JobEntry> jobs;
 	private Multibinder<JobListenerEntry> jobListeners;

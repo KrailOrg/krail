@@ -27,12 +27,12 @@ import uk.co.q3c.v7.base.services.AbstractServiceI18N;
 import uk.co.q3c.v7.base.services.AutoStart;
 import uk.co.q3c.v7.base.services.Service;
 import uk.co.q3c.v7.i18n.Translate;
-import uk.co.q3c.v7.quartz.job.GuiceJobFactory;
+import uk.co.q3c.v7.quartz.job.V7JobFactory;
 import uk.co.q3c.v7.quartz.job.JobEntry;
 import uk.co.q3c.v7.quartz.job.JobListenerEntry;
-import uk.co.q3c.v7.quartz.scheduler.DefaultQuartzSchedulerModule;
+import uk.co.q3c.v7.quartz.scheduler.DefaultSchedulerModule;
 import uk.co.q3c.v7.quartz.scheduler.DefaultV7SchedulerFactory;
-import uk.co.q3c.v7.quartz.scheduler.QuartzSchedulerModuleBase;
+import uk.co.q3c.v7.quartz.scheduler.SchedulerModuleBase;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerConfiguration;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerListenerEntry;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerProvider;
@@ -52,8 +52,8 @@ import com.google.inject.Singleton;
  * {@link DefaultV7SchedulerFactory} may need the ApplicationConfiguration object
  * <p>
  * 
- * @see QuartzSchedulerModuleBase
- * @see DefaultQuartzSchedulerModule
+ * @see SchedulerModuleBase
+ * @see DefaultSchedulerModule
  * 
  * @author David Sowerby
  * 
@@ -73,14 +73,14 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 	private final Set<TriggerListenerEntry> triggerListeners;
 	private final SchedulerProvider schedulerProvider;
 	private final Injector injector;
-	private final GuiceJobFactory jobFactory;
+	private final V7JobFactory jobFactory;
 
 	@Inject
 	public DefaultQuartzService(Translate translate, Map<String, SchedulerConfiguration> schedulerConfigurations,
 			Set<SchedulerListenerEntry> schedulerListeners, Set<TriggerListenerEntry> triggerListeners,
 			Provider<V7SchedulerFactory> factoryProvider,
 			ApplicationConfigurationService applicationConfigurationService, SchedulerProvider schedulerProvider,
-			Injector injector, GuiceJobFactory jobFactory, Set<JobEntry> jobs, Set<JobListenerEntry> jobListeners) {
+			Injector injector, V7JobFactory jobFactory, Set<JobEntry> jobs, Set<JobListenerEntry> jobListeners) {
 		super(translate);
 		this.schedulerConfigurations = schedulerConfigurations;
 		this.schedulerListeners = schedulerListeners;

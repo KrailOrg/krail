@@ -14,17 +14,17 @@ package uk.co.q3c.v7.quartz.job;
 
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
 
-public class DefaultQuartzJobModule extends QuartzJobModule {
+public class DefaultJobModule extends JobModuleBase {
 
 	/**
 	 * This default implementation deliberately does nothing,as it allows a working implementation with no jobs. To
-	 * provide jobs through Guice, provide your own sub-class of {@link QuartzJobModule} and specify the jobs using
+	 * provide jobs through Guice, provide your own sub-class of {@link JobModuleBase} and specify the jobs using
 	 * {@link #addJob(String, org.quartz.JobBuilder, org.quartz.TriggerBuilder)}
 	 * <p>
 	 * Your module will then need to be added to your sub-class of {@link BaseGuiceServletInjector}. This module can be
 	 * removed, as it would then serve no useful purpose.
 	 * 
-	 * @see uk.co.q3c.v7.quartz.job.QuartzJobModule#addJobs()
+	 * @see uk.co.q3c.v7.quartz.job.JobModuleBase#addJobs()
 	 */
 	@Override
 	protected void addJobs() {

@@ -17,7 +17,7 @@ import static com.google.inject.multibindings.Multibinder.*;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerListener;
 
-import uk.co.q3c.v7.quartz.job.QuartzJobModule;
+import uk.co.q3c.v7.quartz.job.JobModuleBase;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
@@ -26,12 +26,12 @@ import com.google.inject.multibindings.Multibinder;
 /**
  * Provides a base class for configuring the schedulers. {@link QuartzService} constructs the {@link V7Scheduler}s from
  * the configurations provided by sub-classes of this module. To define jobs, either use sub-classes of
- * {@link QuartzJobModule}, or inject an instance of {@link Scheduler} and add jobs directly
+ * {@link JobModuleBase}, or inject an instance of {@link Scheduler} and add jobs directly
  * 
  * @author David Sowerby
  * 
  */
-public abstract class QuartzSchedulerModuleBase extends AbstractModule {
+public abstract class SchedulerModuleBase extends AbstractModule {
 
 	private Multibinder<TriggerListenerEntry> triggerListeners;
 

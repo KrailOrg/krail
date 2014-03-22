@@ -28,12 +28,12 @@ import com.google.inject.Injector;
  * @author David Sowerby
  * 
  */
-public class GuiceJobFactory implements JobFactory {
+public class V7JobFactory implements JobFactory {
 
 	private final Injector injector;
 
 	@Inject
-	protected GuiceJobFactory(Injector injector) {
+	protected V7JobFactory(Injector injector) {
 		super();
 		this.injector = injector;
 	}

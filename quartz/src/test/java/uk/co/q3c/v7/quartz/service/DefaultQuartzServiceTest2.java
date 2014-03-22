@@ -31,9 +31,9 @@ import org.quartz.listeners.BroadcastSchedulerListener;
 
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.i18n.I18NModule;
-import uk.co.q3c.v7.quartz.job.QuartzJobModule;
-import uk.co.q3c.v7.quartz.scheduler.DefaultQuartzSchedulerModule;
-import uk.co.q3c.v7.quartz.scheduler.QuartzSchedulerModuleBase;
+import uk.co.q3c.v7.quartz.job.JobModuleBase;
+import uk.co.q3c.v7.quartz.scheduler.DefaultSchedulerModule;
+import uk.co.q3c.v7.quartz.scheduler.SchedulerModuleBase;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerProvider;
 import uk.co.q3c.v7.quartz.scheduler.V7Scheduler;
 import uk.co.q3c.v7.quartz.scheduler.V7TriggerListenerSupport;
@@ -45,7 +45,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, DefaultQuartzSchedulerModule.class, ApplicationConfigurationModule.class,
+@GuiceContext({ I18NModule.class, DefaultSchedulerModule.class, ApplicationConfigurationModule.class,
 		TestSchedulerModule.class, TestJobModule.class })
 public class DefaultQuartzServiceTest2 {
 
@@ -55,7 +55,7 @@ public class DefaultQuartzServiceTest2 {
 
 	}
 
-	public static class TestSchedulerModule extends QuartzSchedulerModuleBase {
+	public static class TestSchedulerModule extends SchedulerModuleBase {
 
 		@Override
 		protected void addConfigurations() {
@@ -73,7 +73,7 @@ public class DefaultQuartzServiceTest2 {
 		}
 	}
 
-	public static class TestJobModule extends QuartzJobModule {
+	public static class TestJobModule extends JobModuleBase {
 
 		@Override
 		protected void addJobs() {
