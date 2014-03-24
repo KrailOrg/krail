@@ -39,6 +39,7 @@ import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestFileSitemapModule;
+import uk.co.q3c.v7.base.services.ServiceException;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.PublicHomeView;
@@ -122,7 +123,7 @@ public class DefaultSitemapServiceTest {
 	}
 
 	@After
-	public void teardown() throws ConfigurationException {
+	public void teardown() throws Exception {
 		service.stop();
 		iniConfig.clear();
 		iniConfig.save();
@@ -243,7 +244,7 @@ public class DefaultSitemapServiceTest {
 		assertThat(service.absolutePathFor("/wiggly.ini")).isEqualTo(new File("/wiggly.ini"));
 	}
 
-	@Test(expected = SitemapException.class)
+	@Test(expected = ServiceException.class)
 	public void invalidSource_noGoodOnes() throws Exception {
 
 		// given

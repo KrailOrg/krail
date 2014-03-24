@@ -14,11 +14,10 @@ package uk.co.q3c.v7.base.services;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.google.inject.Inject;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
@@ -58,26 +57,18 @@ public class ServiceUtilsTest {
 	@Inject
 	MockService_2A service_2a;
 
-	@Inject
-	MockService_3 service_3;
-
-	@Inject
-	MockService_4 service_4;
-
 	static class MockService_0 extends AbstractService {
 		int startCalls = 0;
 		int stopCalls = 0;
 
 		@Override
-		public Status start() {
+		public void doStart() {
 			startCalls++;
-			return Status.STARTED;
 		}
 
 		@Override
-		public Status stop() {
+		public void doStop() {
 			stopCalls++;
-			return Status.STOPPED;
 		}
 
 		@Override
@@ -90,12 +81,6 @@ public class ServiceUtilsTest {
 			return "Test Service working OK";
 		}
 
-		@Override
-		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
-			// TODO Auto-generated method stub
-
-		}
-
 	}
 
 	static class MockService_0A extends MockService_0 {
@@ -105,13 +90,12 @@ public class ServiceUtilsTest {
 	static class MockService_1 extends AbstractService {
 
 		@Override
-		public Status start() {
-			return Status.STARTED;
+		public void doStart() throws Exception {
+			throw new Exception("Fails on start");
 		}
 
 		@Override
-		public Status stop() {
-			return Status.STOPPED;
+		public void doStop() {
 		}
 
 		@Override
@@ -124,24 +108,17 @@ public class ServiceUtilsTest {
 			return "Test Service fails on start";
 		}
 
-		@Override
-		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
-			// TODO Auto-generated method stub
-
-		}
-
 	}
 
 	static class MockService_2 extends AbstractService {
 
 		@Override
-		public Status start() {
-			return Status.STARTED;
+		public void doStart() {
 		}
 
 		@Override
-		public Status stop() {
-			return Status.STOPPED;
+		public void doStop() throws Exception {
+			throw new Exception("fails on stop");
 		}
 
 		@Override
@@ -154,79 +131,9 @@ public class ServiceUtilsTest {
 			return "Test Service fails on stop";
 		}
 
-		@Override
-		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
-			// TODO Auto-generated method stub
-
-		}
-
 	}
 
 	static class MockService_2A extends MockService_2 {
-	}
-
-	static class MockService_3 extends AbstractService {
-
-		@Override
-		public Status start() {
-			return Status.STARTED;
-		}
-
-		@Override
-		public Status stop() {
-			return Status.STOPPED;
-		}
-
-		@Override
-		public String getName() {
-			return "Test Service fails on start";
-		}
-
-		@Override
-		public String getDescription() {
-			return "service 3";
-		}
-
-		@Override
-		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
-
-	static class MockService_4 extends AbstractService {
-		int startCalls = 0;
-		int stopCalls = 0;
-
-		@Override
-		public Status start() {
-			startCalls++;
-			return Status.STARTED;
-		}
-
-		@Override
-		public Status stop() {
-			stopCalls++;
-			return Status.STOPPED;
-		}
-
-		@Override
-		public String getName() {
-			return "Test Service working OK";
-		}
-
-		@Override
-		public String getDescription() {
-			return "service 4";
-		}
-
-		@Override
-		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
-			// TODO Auto-generated method stub
-
-		}
-
 	}
 
 	@Test

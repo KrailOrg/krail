@@ -12,10 +12,7 @@
  */
 package uk.co.q3c.v7.base.services;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.aopalliance.intercept.MethodInterceptor;
@@ -24,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ReflectionUtils;
-import uk.co.q3c.v7.base.services.Service.Status;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -82,120 +78,6 @@ public class ServicesMonitorModule extends AbstractModule {
 
 	}
 
-	private class ServiceMethodStartInterceptor implements MethodInterceptor {
-
-		public ServiceMethodStartInterceptor() {
-		}
-
-		/**
-		 * The AOP code for all {@link Service#start()} methods. Take note of this code when developing your own start
-		 * methods, to avoid duplication (and possibly confusion). This code does the following:
-		 * <ol>
-		 * <li>Checks to see whether this service has already been started, and exits without doing anything if it has
-		 * <li>Looks for any fields in the 'this' which are annotated with {@link AutoStart}, and starts them first.
-		 * This may cause a dependency chain, if those services in turn have auto start dependencies.
-		 * <li>If a dependency service fails to start, the status of this service is set to
-		 * {@link Status#DEPENDENCY_FAILED}, but the body of the method is still invoked - it is up to the developer to
-		 * decide what to do when a dependency fails.
-		 * <li>If an exception is thrown when the main body of the method is invoked, status is set to
-		 * {@link Status#FAILED_TO_START} and the exception re-thrown
-		 */
-		@Override
-		public Object invoke(MethodInvocation invocation) throws Throwable {
-			Service service = (Service) invocation.getThis();
-			log.info("Start request received by {} ...", service.getName());
-			if (service.isStarted()) {
-				log.info("{} has already been started, no further action required", service.getName());
-				return Service.Status.STARTED;
-			}
-
-			// identify any predecessor Services which are annotated with @AutoStart
-			// get the 'real' (unenhanced) class
-			Class<?> clazz = ServiceUtils.unenhancedClass(service);
-
-			// start the @AutoStart dependencies
-			List<Status> dependencyStatuses = new ArrayList<>();
-			Field[] declaredFields = clazz.getDeclaredFields();
-
-			for (Field field : declaredFields) {
-				Class<?> fieldClass = field.getType();
-				// if it is a service field, add a listener to it
-				if (Service.class.isAssignableFrom(fieldClass)) {
-					field.setAccessible(true);
-					Service dependency = (Service) field.get(service);
-					dependency.addListener(service);
-					// if annotated with @AutoStart(true), start the dependency
-					AutoStart autoStart = field.getAnnotation(AutoStart.class);
-					if (autoStart != null) {
-						if (autoStart.auto()) {
-							Method startMethod = dependency.getClass().getMethod("start");
-							try {
-								startMethod.invoke(dependency);
-							} catch (Exception e) {
-								dependency.setStatus(Status.FAILED_TO_START);
-							}
-							dependencyStatuses.add(dependency.getStatus());
-						}
-					}
-
-				}
-			}
-
-			// If any dependency has failed to start, overall status is DEPENDENCY_FAILED
-			boolean dependencyFailed = false;
-			for (Status depStatus : dependencyStatuses) {
-				if (depStatus != Status.STARTED) {
-					dependencyFailed = true;
-					break;
-				}
-			}
-
-			// If no dependency failures call the Service implementation start method code for 'this'
-			Status result = null;
-			try {
-				if (dependencyFailed) {
-					service.setStatus(Status.DEPENDENCY_FAILED);
-				}
-				result = (Status) invocation.proceed();
-			} catch (Throwable e) {
-				result = Status.FAILED_TO_START;
-				log.error("Service {} failed to start, with exception: {}", service.getName(), e.getMessage());
-				throw e;
-			}
-
-			service.setStatus(result);
-			log.info("starting {} service concluded with a status of {}", service.getName(), service.getStatus());
-			return result;
-		}
-	}
-
-	private class ServiceMethodStopInterceptor implements MethodInterceptor {
-
-		public ServiceMethodStopInterceptor() {
-		}
-
-		@Override
-		public Object invoke(MethodInvocation invocation) throws Throwable {
-			Service service = (Service) invocation.getThis();
-			log.debug("stopping service '{}'", service.getName());
-			Status result = null;
-			if (service.getStatus() != Status.STOPPED) {
-				try {
-					result = (Status) invocation.proceed();
-				} catch (Exception e) {
-					result = Status.FAILED_TO_STOP;
-					log.warn("service '{}' failed to stop correctly.  The exception reported was:", service.getName(),
-							e);
-				}
-			} else {
-				result = Status.STOPPED;
-				log.debug("The service '{}' is already stopped, stop request ignored", service.getName());
-			}
-			service.setStatus(result);
-			return result;
-		}
-	}
-
 	private class FinalizeMethodMatcher extends AbstractMatcher<Method> {
 		@Override
 		public boolean matches(Method method) {
@@ -239,39 +121,10 @@ public class ServicesMonitorModule extends AbstractModule {
 		}
 	}
 
-	/**
-	 * Matches the {@link Service#start()} method
-	 * 
-	 */
-	private class InterfaceStartMethodMatcher extends AbstractMatcher<Method> {
-		@Override
-		public boolean matches(Method method) {
-			return method.getName().equals("start");
-		}
-	}
-
-	/**
-	 * Matches the {@link Service#stop()} method
-	 * 
-	 */
-	private class InterfaceStopMethodMatcher extends AbstractMatcher<Method> {
-		@Override
-		public boolean matches(Method method) {
-			return method.getName().equals("stop");
-		}
-	}
-
 	@Override
 	protected void configure() {
 
 		bindListener(new ServiceInterfaceMatcher(), new ServicesListener(servicesManager));
-
-		bindInterceptor(Matchers.subclassesOf(Service.class), new InterfaceStartMethodMatcher(),
-				new ServiceMethodStartInterceptor());
-
-		bindInterceptor(Matchers.subclassesOf(Service.class), new InterfaceStopMethodMatcher(),
-				new ServiceMethodStopInterceptor());
-
 		bindInterceptor(Matchers.subclassesOf(Service.class), new FinalizeMethodMatcher(),
 				new FinalizeMethodInterceptor());
 

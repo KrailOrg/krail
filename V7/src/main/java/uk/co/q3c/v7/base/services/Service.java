@@ -9,71 +9,52 @@ import com.google.inject.Provider;
  * https://code.google.com/p/google-guice/wiki/ModulesShouldBeFastAndSideEffectFree).
  * <p>
  * A {@link Service} can however be used for anything you feel appropriate, which could benefit from having a two stage
- * creation cycle - the initial construction of a class followed by the call of the {@link #start()} method.
+ * creation cycle - the initial configuration through Guice modules, followed by a controlled start to activate /
+ * consume resources.
  * <p>
  * The easiest way is to create an implementation is to sub-class either {@link AbstractService} or
- * {@link AbstractServiceI18N}.
+ * {@link AbstractServiceI18N}. Sub-classing one of these, combined with the {@link Dependency} annotation, will also
+ * provide some service management functionality (see the {@link AbstractService} javadoc.
  * <p>
  * When an instance of a {@link Service} implementation is created through Guice, it is automatically registered with
  * the {@link ServicesMonitor}. (This is done through a Guice listener in the {@link ServicesMonitorModule}).
+ * <p>
+ * The AOP code in the ServicesMonitorModule also intercepts the finalize() method, and calls the stop() method to
+ * ensure a service is stopped before being finalized.
  * <p>
  * A service should have the following characteristics:
  * <ol>
  * <li>All Services must be instantiated through Guice
  * <li>Other {@link Service} instances which your Service depends on, must be injected through the constructor
- * <li>The constructor must be lightweight and must not require that its dependencies are started.
- * <li>There are some limitations with injecting {@link Provider}s of services - see the {@link #start()} method javadoc
- * - but if the dependency's constructor is lightweight as it should be, it should also be unnecessary to inject a
- * Provider
+ * <li>The constructor must be lightweight and must not require that its dependencies are already started at the time of
+ * injection.
+ * <li>There are some limitations with injecting {@link Provider}s of services - but if the dependency's constructor is
+ * lightweight as it should be, it should also be unnecessary to inject a Provider
  * </ol>
- * <p>
- * Note that when a Service implementation is instantiated through Guice it is automatically registered with the
- * {@link ServicesMonitor}
- * <p>
+ * 
  * 
  * @author David Sowerby
  * 
  */
-public interface Service extends ServiceStatusChangeListener {
+public interface Service {
 
 	public enum Status {
-		INITIAL, STARTED, STOPPED, FAILED_TO_START, FAILED_TO_STOP, DEPENDENCY_FAILED
+		INITIAL, STARTED, FAILED, STOPPED, FAILED_TO_START, FAILED_TO_STOP, DEPENDENCY_FAILED
 	}
 
 	/**
-	 * Implement this to start your service. When this method is called, AOP code in the {@link ServicesMonitorModule}
-	 * intercepts (before the implementations's code is executed) and checks for any {@link Service} fields annotated
-	 * with {@link AutoStart}, and if it finds them, calls their start methods.
-	 * <p>
-	 * The AOP code also adds listeners to any auto-started services, so that a change to a service status can be
-	 * responded to (typically when a dependency service stops).
-	 * <p>
-	 * If any {@link AutoStart} dependencies fail to start up successfully, default behaviour is to attempt to start all
-	 * other fields annotated with {@link AutoStart}, and set a status of {@link Status#DEPENDENCY_FAILED}. Control is
-	 * then passed to the implementation's start() method, and the implementation must then decide how to respond. This
-	 * means that if you are using {@link AutoStart}, your code should first check the status, as presumably a different
-	 * action will be needed if a dependency has failed to start.
-	 * <p>
-	 * Once a Service is in a Started state, any subsequent calls to this method are ignored, so a call to this method
-	 * may be made without needing to check first whether it is already started
-	 * <p>
-	 * If an exception is thrown during this method, it is caught by the AOP Code, the status set to
-	 * {@link Status#FAILED_TO_START} and the exception is re-thrown.
-	 * <p>
-	 * The {@link ServicesMonitor} records all the changes of status.
+	 * You will only need to implement this if you are not using a sub-class of {@link AbstractService}. When you do
+	 * sub-class {@link AbstractService}, override {@link AbstractService#doStart()}
+	 * 
 	 */
 	Status start() throws Exception;
 
 	/**
-	 * Stops the service. No other action is taken automatically, except that the {@link ServicesMonitor} records all
-	 * changes of status. If other Services are dependent and need to respond to this change of status, then the
-	 * dependent services should respond to the
-	 * {@link ServiceStatusChangeListener#serviceStatusChange(Service, Status, Status)}. Listeners are added in the AOP
-	 * code, so that Services dependent on another Service are notified of a change of status in their dependencies.
+	 * You will only need to implement this if you are not using a sub-class of {@link AbstractService}. When you do
+	 * sub-class {@link AbstractService}, override {@link AbstractService#doStop()}
 	 * 
-	 * @return
 	 */
-	Status stop();
+	Status stop() throws Exception;
 
 	/**
 	 * The name for this service. The implementation may wish to include an instance identifier if it is not of
@@ -106,10 +87,38 @@ public interface Service extends ServiceStatusChangeListener {
 	 */
 	boolean isStarted();
 
-	void setStatus(Status result);
+	/**
+	 * Adds a listener which will be notified when any change of service status occurs
+	 * 
+	 * @param listener
+	 */
+	void addChangeListener(ServiceChangeListener listener);
 
-	void addListener(ServiceStatusChangeListener listener);
+	void removeChangeListener(ServiceChangeListener listener);
 
-	void removeListener(ServiceStatusChangeListener listener);
+	/**
+	 * Adds a listener which will be notified when a service is stopped or fails. Specifically, this occurs when the
+	 * service changes state from {@link Status#STARTED} to {@link Status#FAILED}, {@link Status#DEPENDENCY_FAILED} or
+	 * {@link Status#STOPPED}
+	 */
+	void addStopListener(ServiceStopListener listener);
+
+	void removeStopListener(ServiceStopListener listener);
+
+	/**
+	 * Adds a listener which is notified when a service changes from any state to {@link Status#STARTED}
+	 * 
+	 * @param listener
+	 */
+	void addStartListener(ServiceStartListener listener);
+
+	void removeStartListener(ServiceStartListener listener);
+
+	/**
+	 * The service is in a stopped state (stopped, failed or dependency failed)
+	 * 
+	 * @return
+	 */
+	boolean isStopped();
 
 }

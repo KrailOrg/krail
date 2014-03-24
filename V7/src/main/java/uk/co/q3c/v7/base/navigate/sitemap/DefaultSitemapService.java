@@ -26,8 +26,7 @@ import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.ConfigKeys;
 import uk.co.q3c.v7.base.config.InheritingConfiguration;
 import uk.co.q3c.v7.base.services.AbstractServiceI18N;
-import uk.co.q3c.v7.base.services.AutoStart;
-import uk.co.q3c.v7.base.services.Service;
+import uk.co.q3c.v7.base.services.Dependency;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
@@ -41,7 +40,7 @@ import com.google.inject.Singleton;
 public class DefaultSitemapService extends AbstractServiceI18N implements SitemapService {
 
 	private static Logger log = LoggerFactory.getLogger(DefaultSitemapService.class);
-	@AutoStart
+	@Dependency
 	private final ApplicationConfigurationService configurationService;
 	private final Provider<FileSitemapLoader> fileSitemapLoaderProvider;
 	private List<SitemapSourceType> sourceTypes;
@@ -77,7 +76,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	}
 
 	@Override
-	public Status start() throws Exception {
+	protected void doStart() throws Exception {
 		if (getStatus().equals(Status.DEPENDENCY_FAILED)) {
 			String msg = MessageFormat.format("Unable to start {0}, because it depends on {1}", getName(),
 					configurationService.getName());
@@ -92,7 +91,6 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 		if (!loaded) {
 			throw new SitemapException("No valid sources found");
 		}
-		return Status.STARTED;
 	}
 
 	/**
@@ -179,22 +177,8 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	}
 
 	@Override
-	public Status stop() {
+	protected void doStop() {
 		loaded = false;
-		return Status.STOPPED;
-	}
-
-	/**
-	 * If the {@link #configurationService} stops after this service is started, it does not matter. The only values
-	 * used are used during the start up of this service, so if anything changes after that there is no reason to
-	 * respond.
-	 * 
-	 * @see uk.co.q3c.v7.base.services.ServiceStatusChangeListener#serviceStatusChange(uk.co.q3c.v7.base.services.Service,
-	 *      uk.co.q3c.v7.base.services.Service.Status, uk.co.q3c.v7.base.services.Service.Status)
-	 */
-	@Override
-	public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
-		// nothing to do
 	}
 
 	public StringBuilder getReport() {

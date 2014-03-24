@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation which causes a {@link ServiceStatusChangeListener} to be added to a field. Only applicable to a field of
+ * Annotation which causes a {@link ServiceChangeListener} to be added to a field. Only applicable to a field of
  * type {@link Service}
  * 
  * @author David Sowerby

@@ -13,7 +13,11 @@
 package uk.co.q3c.v7.quartz.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import java.io.File;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,6 +31,7 @@ import uk.co.q3c.v7.quartz.scheduler.V7Scheduler;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.server.VaadinService;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, DefaultSchedulerModule.class, ApplicationConfigurationModule.class,
@@ -38,6 +43,16 @@ public class DefaultQuartzServiceTest {
 
 	@Inject
 	SchedulerProvider provider;
+
+	static File iniDir = new File("src/test/java");
+	static VaadinService vaadinService;
+
+	@BeforeClass
+	public static void setupClass() {
+		vaadinService = mock(VaadinService.class);
+		when(vaadinService.getBaseDirectory()).thenReturn(iniDir);
+		VaadinService.setCurrent(vaadinService);
+	}
 
 	@Test
 	public void defaultSingleScheduler() throws Exception {

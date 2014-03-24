@@ -34,7 +34,6 @@ import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.notify.DefaultUserNotificationModule;
 import uk.co.q3c.v7.base.services.AbstractServiceI18N;
-import uk.co.q3c.v7.base.services.Service;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.shiro.DefaultLoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.DefaultSubjectIdentifier;
@@ -108,19 +107,13 @@ public class UIScopeTest {
 		}
 
 		@Override
-		public Status start() throws Exception {
+		public void doStart() throws Exception {
 
-			return Status.STARTED;
 		}
 
 		@Override
-		public Status stop() {
+		public void doStop() {
 
-			return Status.STOPPED;
-		}
-
-		@Override
-		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
 		}
 
 		@Override

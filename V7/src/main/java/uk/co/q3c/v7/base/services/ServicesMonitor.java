@@ -14,9 +14,6 @@ package uk.co.q3c.v7.base.services;
 
 import java.util.Map;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +22,8 @@ import uk.co.q3c.v7.base.services.Service.Status;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MapMaker;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * Monitors instances of {@link Service} implementations, and keeps a history of the most recent status changes (only
@@ -32,10 +31,12 @@ import com.google.common.collect.MapMaker;
  * <p>
  * There is also a {@link #stopAllServices()} method to stop all services if you really need it.
  * <p>
+ * Services are registered automatically by AOP code located in the {@link ServicesMonitorModule}
+ * <p>
  * Acknowledgement: developed from code contributed by https://github.com/lelmarir
  */
 @Singleton
-public class ServicesMonitor implements ServiceStatusChangeListener {
+public class ServicesMonitor implements ServiceChangeListener {
 
 	private static final Logger log = LoggerFactory.getLogger(ServicesMonitor.class);
 
@@ -54,7 +55,7 @@ public class ServicesMonitor implements ServiceStatusChangeListener {
 	synchronized public void registerService(Service service) {
 		ServiceStatus serviceStatus = new ServiceStatus();
 		services.put(service, serviceStatus);
-		service.addListener(this);
+		service.addChangeListener(this);
 		log.debug("registered service '{}'", service.getName());
 
 	}
@@ -69,10 +70,10 @@ public class ServicesMonitor implements ServiceStatusChangeListener {
 		status.setPreviousStatus(fromStatus);
 		status.setCurrentStatus(toStatus);
 		status.setStatusChangeTime(DateTime.now());
-		if (toStatus == Status.STARTED) {
+		if (service.isStarted()) {
 			status.setLastStartTime(DateTime.now());
 		}
-		if (toStatus == Status.STOPPED) {
+		if (service.isStopped()) {
 			status.setLastStopTime(DateTime.now());
 		}
 		services.put(service, status);
@@ -80,13 +81,15 @@ public class ServicesMonitor implements ServiceStatusChangeListener {
 
 	/**
 	 * Stops all services. Are you sure you really want to do that?
+	 * 
+	 * @throws Exception
 	 */
-	synchronized public void stopAllServices() {
+
+	synchronized public void stopAllServices() throws Exception {
 		log.info("Stopping all services");
 		for (Service service : services.keySet()) {
 			service.stop();
 		}
-
 	}
 
 	/**

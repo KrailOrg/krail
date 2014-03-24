@@ -14,8 +14,6 @@ package uk.co.q3c.v7.base.services;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.google.inject.Inject;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +22,7 @@ import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
@@ -38,19 +37,13 @@ public class AbstractServiceI18NTest {
 		}
 
 		@Override
-		public Status start() {
+		public void doStart() {
 
-			return null;
 		}
 
 		@Override
-		public Status stop() {
+		public void doStop() {
 
-			return null;
-		}
-
-		@Override
-		public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
 		}
 
 	}

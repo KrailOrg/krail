@@ -19,22 +19,19 @@ import java.util.Set;
 import org.quartz.JobListener;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.services.AbstractServiceI18N;
-import uk.co.q3c.v7.base.services.AutoStart;
-import uk.co.q3c.v7.base.services.Service;
+import uk.co.q3c.v7.base.services.Dependency;
 import uk.co.q3c.v7.i18n.Translate;
-import uk.co.q3c.v7.quartz.job.V7JobFactory;
 import uk.co.q3c.v7.quartz.job.JobEntry;
 import uk.co.q3c.v7.quartz.job.JobListenerEntry;
+import uk.co.q3c.v7.quartz.job.V7JobFactory;
 import uk.co.q3c.v7.quartz.scheduler.DefaultSchedulerModule;
 import uk.co.q3c.v7.quartz.scheduler.DefaultV7SchedulerFactory;
-import uk.co.q3c.v7.quartz.scheduler.SchedulerModuleBase;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerConfiguration;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerListenerEntry;
+import uk.co.q3c.v7.quartz.scheduler.SchedulerModuleBase;
 import uk.co.q3c.v7.quartz.scheduler.SchedulerProvider;
 import uk.co.q3c.v7.quartz.scheduler.TriggerListenerEntry;
 import uk.co.q3c.v7.quartz.scheduler.V7Scheduler;
@@ -62,9 +59,9 @@ import com.google.inject.Singleton;
 public class DefaultQuartzService extends AbstractServiceI18N implements QuartzService {
 
 	private final Set<SchedulerListenerEntry> schedulerListeners;
-	@AutoStart
+	// config only needed at the start
+	@Dependency(stopOnStop = false)
 	private final ApplicationConfigurationService applicationConfigurationService;
-	private static Logger log = LoggerFactory.getLogger(DefaultQuartzService.class);
 
 	private final Map<String, SchedulerConfiguration> schedulerConfigurations;
 	private final Set<JobEntry> jobs;
@@ -95,15 +92,13 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 	}
 
 	@Override
-	public Status start() throws Exception {
+	protected void doStart() throws Exception {
 		constructSchedulers();
 		attachTriggerListeners();
 		attachSchedulerListeners();
 		scheduleJobs();
 		attachJobListeners();
 		startSchedulers();
-		setStatus(Status.STARTED);
-		return status;
 	}
 
 	/**
@@ -197,28 +192,8 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
 	}
 
 	@Override
-	public Status stop() {
-		try {
-			setStatus(Status.STOPPED);
-			log.info("Quartz service stopped");
-			return status;
-		} catch (Exception e) {
-			setStatus(Status.FAILED_TO_STOP);
-			log.warn("Failed to stop the Quartz service", e);
-			return status;
-		}
-	}
-
-	/**
-	 * Does nothing. Although this service requires the {@link ApplicationConfigurationService} to be started before
-	 * starting itself, it would not matter if the {@link ApplicationConfigurationService} stopped later.
-	 * 
-	 * @see uk.co.q3c.v7.base.services.ServiceStatusChangeListener#serviceStatusChange(uk.co.q3c.v7.base.services.Service,
-	 *      uk.co.q3c.v7.base.services.Service.Status, uk.co.q3c.v7.base.services.Service.Status)
-	 */
-	@Override
-	public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
-
+	public void doStop() throws Exception {
+		setStatus(Status.STOPPED);
 	}
 
 }

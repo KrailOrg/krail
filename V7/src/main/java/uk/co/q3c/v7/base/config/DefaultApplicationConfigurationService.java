@@ -91,7 +91,7 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 	 * 
 	 */
 	@Override
-	public Status start() throws ConfigurationException {
+	protected void doStart() throws ConfigurationException {
 		Set<Integer> keySorter = new TreeSet<>(iniFiles.keySet());
 		for (Integer k : keySorter) {
 			IniFileConfig iniConfig = iniFiles.get(k);
@@ -117,25 +117,15 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 		}
 
 		log.info("Application Configuration Service started");
-		setStatus(Status.STARTED);
-		return status;
 	}
 
 	/**
-	 * Clears the {@link ApplicationConfiguration}, and sets the status of this service to Status.STOPPED
+	 * Clears the {@link ApplicationConfiguration}
 	 * 
-	 * @see uk.co.q3c.v7.base.services.Service#stop()
 	 */
 	@Override
-	public Status stop() {
+	protected void doStop() {
 		configuration.clear();
-		status = Status.STOPPED;
-		return status;
-	}
-
-	@Override
-	public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
-		// nothing to do
 	}
 
 }

@@ -12,9 +12,7 @@
  */
 package uk.co.q3c.v7.base.services;
 
-import uk.co.q3c.v7.base.services.Service.Status;
+public interface ServiceStartListener {
 
-public interface ServiceStatusChangeListener {
-
-	void serviceStatusChange(Service service, Status fromStatus, Status toStatus);
+	void dependencyServiceStarted(Service service) throws Exception;
 }

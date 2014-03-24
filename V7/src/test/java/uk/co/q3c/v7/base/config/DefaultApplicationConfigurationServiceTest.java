@@ -20,13 +20,13 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.services.Service.Status;
+import uk.co.q3c.v7.base.services.ServiceException;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18NTranslator;
@@ -72,7 +72,7 @@ public class DefaultApplicationConfigurationServiceTest {
 	}
 
 	@Test
-	public void loadOneFile() throws ConfigurationException {
+	public void loadOneFile() throws Exception {
 		// given
 		addConfig("V7.ini", 0, false);
 		// when
@@ -85,7 +85,7 @@ public class DefaultApplicationConfigurationServiceTest {
 	}
 
 	@Test
-	public void loadTwoFiles() throws ConfigurationException {
+	public void loadTwoFiles() throws Exception {
 		// given
 		addConfig("V7.ini", 0, false);
 		addConfig("test.V7.ini", 1, false);
@@ -99,7 +99,7 @@ public class DefaultApplicationConfigurationServiceTest {
 	}
 
 	@Test
-	public void stopStart() throws ConfigurationException {
+	public void stopStart() throws Exception {
 		// given
 		addConfig("V7.ini", 0, false);
 		addConfig("test.V7.ini", 1, false);
@@ -117,8 +117,8 @@ public class DefaultApplicationConfigurationServiceTest {
 		assertThat(configuration.getString("in memory")).isNull();
 	}
 
-	@Test(expected = ConfigurationException.class)
-	public void fileMissing_notOptional() throws ConfigurationException {
+	@Test(expected = ServiceException.class)
+	public void fileMissing_notOptional() throws Exception {
 
 		// given
 		addConfig("rubbish.ini", 0, false);
@@ -129,7 +129,7 @@ public class DefaultApplicationConfigurationServiceTest {
 	}
 
 	@Test
-	public void fileMissing_optional() throws ConfigurationException {
+	public void fileMissing_optional() throws Exception {
 
 		// given
 		addConfig("rubbish.ini", 0, true);

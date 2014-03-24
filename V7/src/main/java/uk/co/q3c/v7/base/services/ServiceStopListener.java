@@ -12,17 +12,8 @@
  */
 package uk.co.q3c.v7.base.services;
 
-public class ServiceChecks {
+public interface ServiceStopListener {
 
-	/**
-	 * Checks that {@code service} has been started, and throws a {@link ServiceStatusException} if it has not
-	 * 
-	 * @param service
-	 */
-	public static void checkIsStarted(Service service) {
-		if (!(service.isStarted())) {
-			throw new ServiceStatusException("You cannot use the " + service.getName()
-					+ " service until it has been started");
-		}
-	}
+	void dependencyServiceStopped(Service service) throws Exception;
+
 }
