@@ -12,12 +12,16 @@
  */
 package uk.co.q3c.v7.demo;
 
+import uk.co.q3c.v7.base.guice.BaseServletModule;
+
 import com.google.inject.servlet.ServletModule;
 
-public class DemoServletModule extends ServletModule {
+public class DemoServletModule extends BaseServletModule {
 
 	@Override
 	protected void configureServlets() {
 		serve("/*").with(DemoServlet.class);
 	}
+	
+	
 }

@@ -28,4 +28,9 @@ public class DemoGuiceServletInjector extends BaseGuiceServletInjector {
 		baseModules.add(new DemoPages());
 	}
 
+	@Override
+	protected Module servletModule() {
+		return new DemoServletModule();
+	}
+
 }

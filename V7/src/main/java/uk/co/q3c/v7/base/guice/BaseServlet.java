@@ -14,6 +14,9 @@ package uk.co.q3c.v7.base.guice;
 
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.vaadin.server.DeploymentConfiguration;
@@ -25,7 +28,7 @@ import com.vaadin.server.VaadinServlet;
 
 @Singleton
 public class BaseServlet extends VaadinServlet implements SessionInitListener {
-
+	private static Logger log = LoggerFactory.getLogger(BaseServlet.class);
 	/**
 	 * Cannot use constructor injection. Container expects servlet to have no-arg public constructor
 	 */
@@ -58,8 +61,10 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 	 */
 	@Override
 	protected DeploymentConfiguration createDeploymentConfiguration(Properties initParameters) {
+		log.debug("creating deployment configuration");
 
 		if (!widgetset().equals("default")) {
+			log.debug("Setting widgetset parameter to '{}'", widgetset());
 			initParameters.setProperty("widgetset", widgetset());
 			initParameters.setProperty("productionMode", Boolean.toString(productionMode()));
 		}
