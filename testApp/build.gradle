@@ -10,9 +10,9 @@ war{
 }
 
 vaadin {
-	
+	widgetset "uk.co.q3c.v7.testapp.widgetset.testAppWidgetset"
 	version vaadinVersion
-	serverPort 8001	
+	serverPort 8001
 }
 
 
@@ -36,18 +36,22 @@ test{
 }
 
 
-dependencies { 
-	
+dependencies {
+
 	//UI components
 	compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
- 
-	
-	compile project (':V7')
-	testCompile 'com.vaadin:vaadin-testbench:3.1.2' 
+	//	compile 'org.vaadin.hene.splitbutton:splitbutton:0.9.7'
+//	compile 'com.vaadin.addon:vaadin-calendar:2.0.0'
+	compile 'org.vaadin.addons:stepper:2.1.2'
 
-        
-	
-	
+
+
+	compile project (':V7')
+	testCompile 'com.vaadin:vaadin-testbench:3.1.2'
+
+
+
+
 }
 
 

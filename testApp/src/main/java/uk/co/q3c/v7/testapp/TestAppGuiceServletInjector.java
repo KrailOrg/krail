@@ -31,4 +31,9 @@ public class TestAppGuiceServletInjector extends BaseGuiceServletInjector {
 		baseModules.add(new TestAppPages());
 	}
 
+	@Override
+	protected Module servletModule() {
+		return new TestAppServletModule();
+	}
+
 }

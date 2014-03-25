@@ -30,7 +30,8 @@ import com.vaadin.server.VaadinServlet;
 public class BaseServlet extends VaadinServlet implements SessionInitListener {
 	private static Logger log = LoggerFactory.getLogger(BaseServlet.class);
 	/**
-	 * Cannot use constructor injection. Container expects servlet to have no-arg public constructor
+	 * Cannot use constructor injection. Container expects servlet to have
+	 * no-arg public constructor
 	 */
 	@Inject
 	private UIProvider uiProvider;
@@ -46,7 +47,8 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 	}
 
 	/**
-	 * This method captures the parameters from appropriate methods and sets the servlet parameters accordingly.
+	 * This method captures the parameters from appropriate methods and sets the
+	 * servlet parameters accordingly.
 	 * 
 	 * <pre>
 	 * vaadin {<br>
@@ -67,16 +69,21 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 			log.debug("Setting widgetset parameter to '{}'", widgetset());
 			initParameters.setProperty("widgetset", widgetset());
 			initParameters.setProperty("productionMode", Boolean.toString(productionMode()));
+		} else {
+			log.debug("Using default widgetset");
 		}
 		return super.createDeploymentConfiguration(initParameters);
 
 	}
 
 	/**
-	 * Returns the widgetset parameter for this servlet. If it is unchanged (that is, it returns 'default') then the
-	 * default widgetset is used. For any other value (as defined by a sub-class implementation), the related widgetset
-	 * must have been compiled - typically this means that the build definition will also contain an entry for the
-	 * widgetset. For example, using the Gradle Vaadin plugin, the build.gradle file would contain an entry like this:<br>
+	 * Returns the widgetset parameter for this servlet. If it is unchanged
+	 * (that is, it returns 'default') then the default widgetset is used. For
+	 * any other value (as defined by a sub-class implementation), the related
+	 * widgetset must have been compiled - typically this means that the build
+	 * definition will also contain an entry for the widgetset. For example,
+	 * using the Gradle Vaadin plugin, the build.gradle file would contain an
+	 * entry like this:<br>
 	 * <p>
 	 * 
 	 * @return

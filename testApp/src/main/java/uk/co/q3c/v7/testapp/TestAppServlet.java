@@ -19,4 +19,9 @@ import com.google.inject.Singleton;
 @Singleton
 public class TestAppServlet extends BaseServlet {
 
+	@Override
+	protected String widgetset() {
+		return "uk.co.q3c.v7.testapp.widgetset.testAppWidgetset";
+	}
+
 }

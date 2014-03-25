@@ -36,6 +36,7 @@ public enum LabelKey implements I18NKey<Labels> {
 	Log_In,
 	Log_Out,
 	Message_Bar,
+	Message_Box,
 	No,
 	Notifications,
 	Ok,
@@ -54,7 +55,8 @@ public enum LabelKey implements I18NKey<Labels> {
 
 	@Override
 	public Labels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Labels.class.getName(), locale);
+		ResourceBundle bundle = ResourceBundle.getBundle(
+				Labels.class.getName(), locale);
 		return (Labels) bundle;
 	}
 
