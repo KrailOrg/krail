@@ -10,18 +10,15 @@ war{
 }
 
 vaadin {
-	
-	version vaadinVersion
+
 	widgetset "uk.co.q3c.v7.demo.widgetset.V7demoWidgetset"
-	serverPort 8001	
+	version vaadinVersion
+	serverPort 8001
 }
 
 
 repositories{
-		maven{
-			url "http://maven.vaadin.com/vaadin-addons"
-			
-		}
+	maven{ url "http://maven.vaadin.com/vaadin-addons" }
 }
 
 task deployToTomcat(type: Copy) {
@@ -42,26 +39,24 @@ test{
 }
 
 
-dependencies { 
-	
+dependencies {
+
 	//UI components
 	compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
- 
-	
+
+
 	compile project (':V7')
-	compile project (':testApp')
-	
-	//uses some code inherited from V7 subproject tests
-	//see https://github.com/davidsowerby/v7/issues/181
-	testCompile project(":testApp").sourceSets.test.output
+	compile project (':testbench')
 
-	
-	
-	testCompile 'com.vaadin:vaadin-testbench:3.1.2' 
 
-        
-	
-	
+
+	//use testbench project test classes as a base
+	testCompile project(path: ':testbench', configuration: 'tests')
+	testCompile 'com.vaadin:vaadin-testbench:3.1.2'
+
+
+
+
 }
 
 

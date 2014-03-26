@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import uk.co.q3c.v7.testapp.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import com.vaadin.testbench.By;
 import com.vaadin.testbench.ScreenshotOnFailureRule;

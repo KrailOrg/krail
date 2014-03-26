@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.testApp.test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,8 +20,8 @@ import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
 import uk.co.q3c.v7.base.view.component.DefaultMessageBar;
-import uk.co.q3c.v7.testapp.testbench.V7TestBenchTestCase;
 import uk.co.q3c.v7.testapp.view.NotificationsView;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.ui.Button;

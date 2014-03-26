@@ -40,15 +40,14 @@ dependencies {
 
 	//UI components
 	compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
-	//	compile 'org.vaadin.hene.splitbutton:splitbutton:0.9.7'
-//	compile 'com.vaadin.addon:vaadin-calendar:2.0.0'
 	compile 'org.vaadin.addons:stepper:2.1.2'
-
-
-
 	compile project (':V7')
-	testCompile 'com.vaadin:vaadin-testbench:3.1.2'
 
+	
+		//use testbench project test classes as a base
+	testCompile project(path: ':testbench', configuration: 'tests')
+	testCompile 'com.vaadin:vaadin-testbench:3.1.2'
+	
 
 
 

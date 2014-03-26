@@ -1,0 +1,31 @@
+//Build file for testbench sub project
+apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
+
+
+vaadin {
+	
+	version vaadinVersion
+	serverPort 8001
+}
+
+dependencies {
+	compile 'org.assertj:assertj-core:1.5.0'
+	compile project(":V7")
+	compile 'com.vaadin:vaadin-testbench:3.1.2'
+
+}
+//see http://stackoverflow.com/questions/5144325/gradle-test-dependency
+//the testJar, configurations and artifacts closure enable tests in other projects to use these tests
+//see the demo project or testApp project fopr examples
+task testJar(type: Jar, dependsOn: testClasses) {
+	baseName = "test-${project.archivesBaseName}"
+	from sourceSets.test.output
+}
+
+configurations {
+	tests
+}
+
+artifacts {
+	tests testJar
+}

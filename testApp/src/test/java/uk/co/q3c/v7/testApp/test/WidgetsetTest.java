@@ -1,14 +1,16 @@
 package uk.co.q3c.v7.testApp.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebElement;
 import org.vaadin.risto.stepper.IntStepper;
 
-import uk.co.q3c.v7.testapp.testbench.V7TestBenchTestCase;
 import uk.co.q3c.v7.testapp.view.WidgetsetView;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -34,5 +36,15 @@ public class WidgetsetTest extends V7TestBenchTestCase {
 		// then
 		assertThat(stepper).isNotNull();
 		assertThat(stepper.isDisplayed()).isTrue();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		String verificationErrorString = verificationErrors.toString();
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+		// don't know why this is necessary in this test and no other?
+		driver.close();
 	}
 }

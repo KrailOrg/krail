@@ -1,6 +1,7 @@
 package uk.co.q3c.v7.testApp.test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import org.junit.After;
 import org.junit.Before;
@@ -10,7 +11,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import uk.co.q3c.v7.base.view.DefaultLoginView;
-import uk.co.q3c.v7.testapp.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.ui.Label;

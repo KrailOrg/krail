@@ -2,43 +2,31 @@
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
 
-configurations{ 
- 
-	
+configurations{
+
+
 }
 
-vaadin {
-	
-	version vaadinVersion
-	
-}
+vaadin { version vaadinVersion }
 
 
 repositories{
-		maven{
-			url "http://maven.vaadin.com/vaadin-addons"
-			
-		}
+	maven{ url "http://maven.vaadin.com/vaadin-addons" }
 }
 
 eclipse{
-processTestResources{
-	exclude("resources/test")
-}}
+	processTestResources{ exclude("resources/test") }}
 
 
 
-dependencies { 
-	
+dependencies {
+
 	compile project (':V7')
-	testCompile project (':V7')
-	
-	//uses some code inherited from V7 subproject tests
-	testCompile project(":V7").sourceSets.test.output
+	compile project(':testbench')
 
-	testCompile 'com.vaadin:vaadin-testbench:3.1.1' 
+	testCompile 'com.vaadin:vaadin-testbench:3.1.1'
 
-	
+
 }
 
 eclipse{

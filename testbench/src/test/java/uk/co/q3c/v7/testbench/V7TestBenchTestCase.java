@@ -10,9 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.testapp.testbench;
+package uk.co.q3c.v7.testbench;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.openqa.selenium.Dimension;
@@ -277,10 +277,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	protected String currentSelectionNavTree() {
 		String sysaccount = "system-account";
 		WebElement tree = navTree().getLocator().get();
-		// WebElement e1 = tree.findElement(By.vaadin(sysaccount));
-		// WebElement e2 = tree.findElement(By.id(sysaccount));
-		// WebElement e3 = tree.findElement(By.linkText(sysaccount));
-		// WebElement e4 = tree.findElement(By.name(sysaccount));
 		WebElement e5 = tree.findElement(By.partialLinkText(sysaccount));
 		return e5.getText();
 	}

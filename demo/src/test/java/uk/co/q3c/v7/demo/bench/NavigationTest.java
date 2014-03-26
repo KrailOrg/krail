@@ -1,13 +1,14 @@
 package uk.co.q3c.v7.demo.bench;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import uk.co.q3c.v7.testapp.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 

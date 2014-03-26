@@ -12,8 +12,8 @@
  */
 package uk.co.q3c.v7.base.view.layout;
 
-import static org.fest.assertions.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout.ComponentWrapper;
-import uk.co.q3c.v7.i18n.TestLabelKey;
+import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Provider;
@@ -168,9 +168,9 @@ public class ViewBaseWithLayoutTest {
 	public void i18n() {
 
 		// given
-		when(translate.from(TestLabelKey.No)).thenReturn("No");
+		when(translate.from(LabelKey.No)).thenReturn("No");
 		// when
-		vbwl.add(Button.class).caption(TestLabelKey.No);
+		vbwl.add(Button.class).caption(LabelKey.No);
 		// then
 		assertThat(vbwl.orderedComponents().get(0).getCaption()).isEqualTo("No");
 

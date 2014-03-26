@@ -9,7 +9,7 @@ The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state
 
 There are a number of sub-projects, each with a different status
 
-22nd March 2014:  
+26th March 2014:  
 
 ### V7
 
@@ -23,14 +23,14 @@ This is the base, or core, library.  Vaadin 7.1.11 is integrated with:
 and provides I18N support.
 
 It provides site navigation and the means to authenticate and authorise users. 
-Building an application is assisted by specifiying the site structure using a Sitemap.  There are 3 methods for specifying the Sitemap: using files(s), annotations, or directly coded in Guice modules (these can also be mixed)
+Building an application is assisted by specifying the site structure using a Sitemap.  There are 3 methods for specifying the Sitemap: using files(s), annotations, or directly coded in Guice modules (these can also be mixed)
 
 This library is usable, thought there are still some bugs and further developments needed.  Vaadin push is not supported.
 
 
 ### demo
 
-Very simple currently.  This sub-project is supported with tests run via Vaadin Testbench, which you won't be able to run unless you have TestBench.
+Very simple currently.  This sub-project is supported with tests run via Vaadin Testbench, which you won't be able to run unless you have TestBench (TestBench is a licenced product from Vaadin)
 
 ### testApp
 
@@ -40,6 +40,13 @@ Provides functional testing through the UI (using Vaadin TestBench)
 
 An integration with Quartz Scheduler, constructed as an optional V7 library.
 
+### testbench
+
+Some common base classes for use with TestBench testing
+
+### testUtils
+
+Currently empty but will contain some common test routines or supporting classes
 
 ### orient
 
