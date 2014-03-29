@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
@@ -145,12 +146,20 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	}
 
 	protected void navigateTo(String fragment) {
+		navigateTo(driver, fragment);
+	}
+
+	protected void navigateTo(WebDriver driver, String fragment) {
 		String url = url(fragment);
 		driver.get(url);
 		pause(500);
 	}
 
 	protected WebElement element(String qualifier, Class<?>... classes) {
+		return element(driver, qualifier, classes);
+	}
+
+	protected WebElement element(WebDriver driver, String qualifier, Class<?>... classes) {
 		if (classes == null || classes.length == 0) {
 			throw new RuntimeException("Id will fail with only a qualifier supplied.  Always use classes to define Id");
 		}
@@ -160,7 +169,11 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	}
 
 	protected WebElement element(Class<?>... classes) {
-		return element(null, classes);
+		return element(driver, classes);
+	}
+
+	protected WebElement element(WebDriver driver, Class<?>... classes) {
+		return element(driver, null, classes);
 	}
 
 	protected String id(Class<?>... components) {
@@ -272,6 +285,64 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	 */
 	protected void logout() {
 		loginButton().click();
+	}
+
+	protected void clickButton(WebDriver driver, String qualifier, Class<?>... classes) {
+		WebElement webElement = element(driver, qualifier, classes);
+		webElement.click();
+	}
+
+	protected void clickButton(String qualifier, Class<?>... classes) {
+		clickButton(driver, qualifier, classes);
+	}
+
+	protected String readTextArea(WebDriver driver, String qualifier, Class<?>... classes) {
+		WebElement webElement = element(driver, qualifier, classes);
+		return webElement.getAttribute("value");
+	}
+
+	protected String readTextArea(String qualifier, Class<?>... classes) {
+		return readTextArea(driver, qualifier, classes);
+	}
+
+	protected String readTextArea(WebDriver driver, Class<?>... classes) {
+		return readTextArea(driver, null, classes);
+	}
+
+	protected String readTextArea(Class<?>... classes) {
+		return readTextArea(driver, null, classes);
+	}
+
+	protected String readLabel(WebDriver driver, String qualifier, Class<?>... classes) {
+		WebElement webElement = element(driver, qualifier, classes);
+		return webElement.getText();
+	}
+
+	protected String readLabel(String qualifier, Class<?>... classes) {
+		return readLabel(driver, qualifier, classes);
+	}
+
+	protected String readLabel(WebDriver driver, Class<?>... classes) {
+		return readLabel(driver, null, classes);
+	}
+
+	protected String readLabel(Class<?>... classes) {
+		return readLabel(driver, null, classes);
+	}
+
+	protected void setTextField(String value, WebDriver driver, String qualifier, Class<?>... classes) {
+		WebElement webElement = element(driver, qualifier, classes);
+		webElement.sendKeys(value);
+	}
+
+	protected void setTextField(String value, String qualifier, Class<?>... classes) {
+		WebElement webElement = element(driver, qualifier, classes);
+		webElement.sendKeys(value);
+	}
+
+	protected void setTextField(String value, Class<?>... classes) {
+		WebElement webElement = element(driver, null, classes);
+		webElement.sendKeys(value);
 	}
 
 	protected String currentSelectionNavTree() {

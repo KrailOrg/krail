@@ -89,6 +89,9 @@ public class PushView extends ViewBaseGrid {
 	public void setIds() {
 		super.setIds();
 		grid.setId(ID.getId(this.getClass().getSimpleName(), grid));
-		sendButton.setId(ID.getId("popup", this, sendButton));
+		sendButton.setId(ID.getId("send", this, sendButton));
+		groupInput.setId(ID.getId("group", this, groupInput));
+		messageInput.setId(ID.getId("message", this, messageInput));
+		messageLog.setId(ID.getId(this, messageLog));
 	}
 }
