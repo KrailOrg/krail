@@ -1,8 +1,8 @@
 package uk.co.q3c.v7.base.ui;
 
-import com.google.inject.Inject;
-
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.push.Broadcaster;
+import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
@@ -13,6 +13,7 @@ import uk.co.q3c.v7.base.view.component.MessageBar;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 
+import com.google.inject.Inject;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
@@ -43,8 +44,8 @@ public class DefaultApplicationUI extends ScopedUI {
 	protected DefaultApplicationUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
-			LoginStatusHandler loginStatusHandler) {
-		super(navigator, errorHandler, converterFactory, loginStatusHandler);
+			LoginStatusHandler loginStatusHandler, Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
+		super(navigator, errorHandler, converterFactory, loginStatusHandler, broadcaster, pushMessageRouter);
 		this.navTree = navTree;
 		this.breadcrumb = breadcrumb;
 		this.loginOut = loginOut;
@@ -112,6 +113,12 @@ public class DefaultApplicationUI extends ScopedUI {
 
 		messageBar.setSizeUndefined();
 		messageBar.setWidth("100%");
+
+	}
+
+	@Override
+	protected void processBroadcastMessage(String group, String message) {
+		// TODO Auto-generated method stub
 
 	}
 

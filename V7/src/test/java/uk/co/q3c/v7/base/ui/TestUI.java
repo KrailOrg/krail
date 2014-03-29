@@ -1,11 +1,12 @@
 package uk.co.q3c.v7.base.ui;
 
-import com.google.inject.Inject;
-
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.push.Broadcaster;
+import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
 
+import com.google.inject.Inject;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
@@ -21,8 +22,8 @@ public class TestUI extends ScopedUI {
 
 	@Inject
 	public TestUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			LoginStatusHandler loginStatusHandler) {
-		super(navigator, errorHandler, converterFactory, loginStatusHandler);
+			LoginStatusHandler loginStatusHandler, Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
+		super(navigator, errorHandler, converterFactory, loginStatusHandler, broadcaster, pushMessageRouter);
 
 	}
 
@@ -42,6 +43,12 @@ public class TestUI extends ScopedUI {
 
 	public DefaultLoginStatusPanel getPanel1() {
 		return panel1;
+	}
+
+	@Override
+	protected void processBroadcastMessage(String group, String message) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

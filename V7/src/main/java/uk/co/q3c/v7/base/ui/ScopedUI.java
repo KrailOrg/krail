@@ -7,6 +7,9 @@ import uk.co.q3c.v7.base.config.V7ConfigurationException;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.push.Broadcaster;
+import uk.co.q3c.v7.base.push.Broadcaster.BroadcastListener;
+import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewHolder;
@@ -23,7 +26,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 
-public abstract class ScopedUI extends UI implements V7ViewHolder {
+public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastListener {
 	private static Logger log = LoggerFactory.getLogger(ScopedUI.class);
 	private UIKey instanceKey;
 	private UIScope uiScope;
@@ -34,16 +37,19 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 	private final ConverterFactory converterFactory;
 	private V7View view;
 	private final LoginStatusHandler loginStatusHandler;
+	private final PushMessageRouter pushMessageRouter;
 
 	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			LoginStatusHandler loginStatusHandler) {
+			LoginStatusHandler loginStatusHandler, Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
 		super();
 		this.errorHandler = errorHandler;
 		this.navigator = navigator;
 		this.converterFactory = converterFactory;
 		this.loginStatusHandler = loginStatusHandler;
+		this.pushMessageRouter = pushMessageRouter;
 		viewDisplayPanel = new Panel();
 		viewDisplayPanel.setSizeFull();
+		broadcaster.register(Broadcaster.ALL_MESSAGES, this);
 	}
 
 	public void setInstanceKey(UIKey instanceKey) {
@@ -166,6 +172,24 @@ public abstract class ScopedUI extends UI implements V7ViewHolder {
 
 	public LoginStatusHandler getLoginStatusHandler() {
 		return loginStatusHandler;
+	}
+
+	@Override
+	public void receiveBroadcast(final String group, final String message) {
+		access(new Runnable() {
+			@Override
+			public void run() {
+				// Show it somehow
+				log.debug("receiving message: {}", message);
+				processBroadcastMessage(group, message);
+
+			}
+		});
+
+	}
+
+	protected void processBroadcastMessage(String group, String message) {
+		pushMessageRouter.messageIn(group, message);
 	}
 
 }

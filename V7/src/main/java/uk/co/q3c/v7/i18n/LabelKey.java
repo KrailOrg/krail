@@ -25,6 +25,7 @@ public enum LabelKey implements I18NKey<Labels> {
 	Application_Configuration_Service,
 	Authentication,
 	Authorisation,
+	Broadcast_Messages,
 	Cancel,
 	Enable_Account,
 	Error,
@@ -42,6 +43,8 @@ public enum LabelKey implements I18NKey<Labels> {
 	Ok,
 	Private,
 	Public,
+	Pull,
+	Push,
 	Refresh_Account,
 	Request_Account,
 	Reset_Account,
@@ -55,8 +58,7 @@ public enum LabelKey implements I18NKey<Labels> {
 
 	@Override
 	public Labels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(
-				Labels.class.getName(), locale);
+		ResourceBundle bundle = ResourceBundle.getBundle(Labels.class.getName(), locale);
 		return (Labels) bundle;
 	}
 

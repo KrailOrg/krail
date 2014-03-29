@@ -12,6 +12,9 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.i18n.LabelKey;
@@ -24,7 +27,7 @@ import com.vaadin.ui.Panel;
 
 @UIScoped
 public class DefaultMessageBar extends Panel implements MessageBar {
-
+	private static Logger log = LoggerFactory.getLogger(DefaultMessageBar.class);
 	private Label label;
 	private HorizontalLayout layout;
 	private final Translate translate;
@@ -47,18 +50,21 @@ public class DefaultMessageBar extends Panel implements MessageBar {
 
 	@Override
 	public void errorMessage(String message) {
+		log.debug("Received error message '{}'", message);
 		String s = translate.from(LabelKey.Error).toUpperCase() + ": " + message;
 		label.setValue(s);
 	}
 
 	@Override
 	public void warningMessage(String message) {
+		log.debug("Received warning message '{}'", message);
 		String s = translate.from(LabelKey.Warning) + ": " + message;
 		label.setValue(s);
 	}
 
 	@Override
 	public void informationMessage(String message) {
+		log.debug("Received information message '{}'", message);
 		label.setValue(message);
 	}
 

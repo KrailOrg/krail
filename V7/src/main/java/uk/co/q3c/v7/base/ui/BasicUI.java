@@ -1,10 +1,11 @@
 package uk.co.q3c.v7.base.ui;
 
-import com.google.inject.Inject;
-
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.push.Broadcaster;
+import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 
+import com.google.inject.Inject;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
@@ -17,8 +18,8 @@ public class BasicUI extends ScopedUI {
 
 	@Inject
 	protected BasicUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			LoginStatusHandler loginStatusHandler) {
-		super(navigator, errorHandler, converterFactory, loginStatusHandler);
+			LoginStatusHandler loginStatusHandler, Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
+		super(navigator, errorHandler, converterFactory, loginStatusHandler, broadcaster, pushMessageRouter);
 
 	}
 
@@ -30,6 +31,12 @@ public class BasicUI extends ScopedUI {
 	@Override
 	protected String pageTitle() {
 		return "V7 base";
+	}
+
+	@Override
+	protected void processBroadcastMessage(String group, String message) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

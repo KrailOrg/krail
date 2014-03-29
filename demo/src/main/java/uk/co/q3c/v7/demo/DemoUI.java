@@ -1,6 +1,8 @@
 package uk.co.q3c.v7.demo;
 
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.push.Broadcaster;
+import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
@@ -44,8 +46,8 @@ public class DemoUI extends ScopedUI {
 	protected DemoUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
-			LoginStatusHandler loginStatusHandler) {
-		super(navigator, errorHandler, converterFactory, loginStatusHandler);
+			LoginStatusHandler loginStatusHandler, Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
+		super(navigator, errorHandler, converterFactory, loginStatusHandler, broadcaster, pushMessageRouter);
 		this.navTree = navTree;
 		this.breadcrumb = breadcrumb;
 		this.loginOut = loginOut;
@@ -112,6 +114,12 @@ public class DemoUI extends ScopedUI {
 
 		messageBar.setSizeUndefined();
 		messageBar.setWidth("100%");
+
+	}
+
+	@Override
+	protected void processBroadcastMessage(String group, String message) {
+		// TODO Auto-generated method stub
 
 	}
 
