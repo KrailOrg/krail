@@ -22,7 +22,7 @@ This is the base, or core, library.  Vaadin 7.1.11 is integrated with:
 
 It also supports:
 
-* Vaadin Server Push
+* Vaadin Server Push (with option to disable it)
 * I18N support
 
 It provides site navigation and the means to authenticate and authorise users. 
