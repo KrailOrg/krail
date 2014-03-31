@@ -94,7 +94,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		List<Module> baseModules = new ArrayList<>();
 
 		baseModules.add(new I18NModule());
-		baseModules.add(new ApplicationConfigurationModule());
+		baseModules.add(applicationConfigurationModule());
 		baseModules.add(new SitemapServiceModule());
 
 		baseModules.add(new ThreadScopeModule());
@@ -119,6 +119,10 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		addAppModules(baseModules);
 		addSitemapModules(baseModules);
 		return baseModules;
+	}
+
+	protected Module applicationConfigurationModule() {
+		return new ApplicationConfigurationModule();
 	}
 
 	/**
