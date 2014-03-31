@@ -14,6 +14,7 @@ package uk.co.q3c.v7.base.config;
 
 public class ConfigKeys {
 
-	public static final String SITEMAP_SOURCES_KEY = "sitemap.sources";
+	public static final String SITEMAP_SOURCES = "sitemap.sources";
+	public static final String NOTIFICATION_PUSH_ENABLED = "notification.pushEnabled";
 
 }

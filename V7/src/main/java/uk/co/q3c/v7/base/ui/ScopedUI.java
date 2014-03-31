@@ -1,3 +1,15 @@
+/*
+ * Copyright (C) 2014 David Sowerby
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package uk.co.q3c.v7.base.ui;
 
 import org.slf4j.Logger;
@@ -6,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.config.V7ConfigurationException;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.push.Broadcaster;
 import uk.co.q3c.v7.base.push.Broadcaster.BroadcastListener;
@@ -15,6 +28,7 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewHolder;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ErrorHandler;
@@ -25,6 +39,16 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
+
+/**
+ * The base class for all V7 UIs, it provides an essential part of the {@link UIScoped} mechanism. It also provides
+ * support for Vaadin Server Push (but only if you annotate your sub-class with {@link Push}), by capturing broadcast
+ * messages in {@link #processBroadcastMessage(String, String)} and passing them to the {@link PushMessageRouter}. For a
+ * full description of the V7 server push implementation see: https://sites.google.com/site/q3cjava/server-push
+ * 
+ * @author David Sowerby
+ * @date modified 31 Mar 2014
+ */
 
 public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastListener {
 	private static Logger log = LoggerFactory.getLogger(ScopedUI.class);
@@ -49,6 +73,10 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		this.pushMessageRouter = pushMessageRouter;
 		viewDisplayPanel = new Panel();
 		viewDisplayPanel.setSizeFull();
+		registerWithBroadcaster(broadcaster);
+	}
+
+	protected void registerWithBroadcaster(Broadcaster broadcaster) {
 		broadcaster.register(Broadcaster.ALL_MESSAGES, this);
 	}
 

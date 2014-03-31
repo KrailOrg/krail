@@ -29,6 +29,7 @@ import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import com.vaadin.testbench.TestBench;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
@@ -44,10 +45,10 @@ public class Push_Functional extends V7TestBenchTestCase {
 	}
 
 	/**
-	 * Passes messages between 2 browser instances, in both directions
+	 * Passes messages between 2 browser instances, in both directions, then disables push
 	 */
 	@Test
-	public void test() {
+	public void enabled() {
 		// given
 		navigateTo("notifications/push");
 		navigateTo(driver2, "notifications/push");
@@ -70,6 +71,25 @@ public class Push_Functional extends V7TestBenchTestCase {
 		assertThat(readTextArea(PushView.class, BroadcastMessageLog.class)).isEqualTo("b:b1\na:a1\n");
 		assertThat(readTextArea(driver2, PushView.class, BroadcastMessageLog.class)).isEqualTo("b:b1\na:a1\n");
 		assertThat(readLabel(DefaultMessageBar.class, Label.class)).isEqualTo("b:b1");
+
+	}
+
+	@Test
+	public void disabled() {
+		// given
+		navigateTo("notifications/push");
+		navigateTo(driver2, "notifications/push");
+		clickCheckBox(PushView.class, CheckBox.class);
+		pause(1000);
+		// when
+
+		setTextField("x", "group", PushView.class, TextField.class);
+		setTextField("x1", "message", PushView.class, TextField.class);
+		clickButton("send", PushView.class, Button.class);
+
+		// then message not processed
+		assertThat(readLabel(DefaultMessageBar.class, Label.class)).isEqualTo("Message bar");
+		// when
 	}
 
 	@After

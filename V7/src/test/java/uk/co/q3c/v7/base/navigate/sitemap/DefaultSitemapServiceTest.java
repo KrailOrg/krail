@@ -186,7 +186,7 @@ public class DefaultSitemapServiceTest {
 		// given
 		List<String> sources = new ArrayList<>();
 		iniConfig.setDelimiterParsingDisabled(true);
-		iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES_KEY, sources);
+		iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES, sources);
 		iniConfig.setDelimiterParsingDisabled(false);
 		iniConfig.save();
 
@@ -206,7 +206,7 @@ public class DefaultSitemapServiceTest {
 		sources.add("wiggly");
 		sources.add("file");
 		iniConfig.setDelimiterParsingDisabled(true);
-		iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES_KEY, sources);
+		iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES, sources);
 		iniConfig.setDelimiterParsingDisabled(false);
 		iniConfig.save();
 
@@ -252,10 +252,10 @@ public class DefaultSitemapServiceTest {
 		sources.add("wiggly");
 		sources.add("wobbly");
 		iniConfig.setDelimiterParsingDisabled(true);
-		iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES_KEY, sources);
+		iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES, sources);
 		iniConfig.setDelimiterParsingDisabled(false);
 		iniConfig.save();
-		System.out.println(iniConfig.getProperty(ConfigKeys.SITEMAP_SOURCES_KEY));
+		System.out.println(iniConfig.getProperty(ConfigKeys.SITEMAP_SOURCES));
 
 		// when
 		service.start();

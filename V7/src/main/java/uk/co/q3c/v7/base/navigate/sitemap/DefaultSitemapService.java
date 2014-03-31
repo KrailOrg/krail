@@ -157,14 +157,14 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 		defaultValues.add(SitemapSourceType.FILE.name());
 		defaultValues.add(SitemapSourceType.DIRECT.name());
 		defaultValues.add(SitemapSourceType.ANNOTATION.name());
-		List<Object> list = configuration.getList(ConfigKeys.SITEMAP_SOURCES_KEY, defaultValues);
+		List<Object> list = configuration.getList(ConfigKeys.SITEMAP_SOURCES, defaultValues);
 		sourceTypes = new ArrayList<>();
 		for (Object o : list) {
 			try {
 				SitemapSourceType source = SitemapSourceType.valueOf(o.toString().toUpperCase());
 				sourceTypes.add(source);
 			} catch (IllegalArgumentException iae) {
-				log.warn("'{}' is not a valid Sitemap source type", o.toString(), ConfigKeys.SITEMAP_SOURCES_KEY);
+				log.warn("'{}' is not a valid Sitemap source type", o.toString(), ConfigKeys.SITEMAP_SOURCES);
 
 			}
 		}

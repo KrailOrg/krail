@@ -10,6 +10,9 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.config.ApplicationConfiguration;
+import uk.co.q3c.v7.base.config.ConfigKeys;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -21,13 +24,15 @@ public class Broadcaster {
 	private final ExecutorService executorService;
 	private final Map<String, List<BroadcastListener>> groups = new HashMap<>();
 	private final List<BroadcastListener> allGroup = new ArrayList<>();
+	private final ApplicationConfiguration applicationConfiguration;
 
 	public interface BroadcastListener {
 		void receiveBroadcast(String group, String message);
 	}
 
 	@Inject
-	protected Broadcaster() {
+	protected Broadcaster(ApplicationConfiguration applicationConfiguration) {
+		this.applicationConfiguration = applicationConfiguration;
 		executorService = Executors.newSingleThreadExecutor();
 	}
 
@@ -75,24 +80,28 @@ public class Broadcaster {
 	 * @param message
 	 */
 	public synchronized void broadcast(final String group, final String message) {
-		log.debug("broadcasting message: {}", message);
-		List<BroadcastListener> listenerGroup = groups.get(group);
-		if (listenerGroup != null) {
-			for (final BroadcastListener listener : listenerGroup)
+		if (applicationConfiguration.getBoolean(ConfigKeys.NOTIFICATION_PUSH_ENABLED, true)) {
+			log.debug("broadcasting message: {}", message);
+			List<BroadcastListener> listenerGroup = groups.get(group);
+			if (listenerGroup != null) {
+				for (final BroadcastListener listener : listenerGroup)
+					executorService.execute(new Runnable() {
+						@Override
+						public void run() {
+							listener.receiveBroadcast(group, message);
+						}
+					});
+			}
+			for (final BroadcastListener listener : allGroup)
 				executorService.execute(new Runnable() {
 					@Override
 					public void run() {
 						listener.receiveBroadcast(group, message);
 					}
 				});
+		} else {
+			log.debug("server push is disabled, message not broadcast");
 		}
-		for (final BroadcastListener listener : allGroup)
-			executorService.execute(new Runnable() {
-				@Override
-				public void run() {
-					listener.receiveBroadcast(group, message);
-				}
-			});
 	}
 
 }

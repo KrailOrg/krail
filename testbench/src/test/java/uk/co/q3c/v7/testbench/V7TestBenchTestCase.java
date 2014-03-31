@@ -122,10 +122,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 		return locator().id(idIndex);
 	}
 
-	// protected ElementLocator breadcrumbStep(int index) {
-	// return new ElementLocator(driver).get(new ElementPath("breadcrumb/Slot[0]/VButton[0]/domChild[0]/domChild[0]"));
-	// }
-
 	protected String navTreeSelection() {
 		try {
 			String selectedNodeText = getDriver().findElement(
@@ -223,25 +219,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 		return notification;
 	}
 
-	// Does not work
-	// protected WebElement waitForNotification(int limit) {
-	// int attempts = 0;
-	// boolean found = false;
-	// while ((!found) && attempts < limit) {
-	// try {
-	// WebElement notification = getDriver().findElement(By.className("v-Notification"));
-	// return notification;
-	// } catch (NoSuchElementException nse) {
-	// attempts++;
-	// pause(1000);
-	//
-	// }
-	//
-	// }
-	// throw new RuntimeException("Timed out - notification not found");
-	//
-	// }
-
 	protected void closeNotification() {
 		((TestBenchElementCommands) notification()).closeNotification();
 	}
@@ -336,13 +313,25 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	}
 
 	protected void setTextField(String value, String qualifier, Class<?>... classes) {
-		WebElement webElement = element(driver, qualifier, classes);
-		webElement.sendKeys(value);
+		setTextField(value, driver, qualifier, classes);
 	}
 
 	protected void setTextField(String value, Class<?>... classes) {
-		WebElement webElement = element(driver, null, classes);
-		webElement.sendKeys(value);
+		setTextField(value, driver, null, classes);
+	}
+
+	protected void clickCheckBox(WebDriver driver, String qualifier, Class<?>... classes) {
+		String id = id(qualifier, classes) + "/domChild[0]";
+		WebElement element = driver.findElement(By.vaadin(id));
+		element.click();
+	}
+
+	protected void clickCheckBox(String qualifier, Class<?>... classes) {
+		clickCheckBox(driver, qualifier, classes);
+	}
+
+	protected void clickCheckBox(Class<?>... classes) {
+		clickCheckBox(driver, null, classes);
 	}
 
 	protected String currentSelectionNavTree() {

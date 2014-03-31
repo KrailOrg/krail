@@ -51,6 +51,10 @@ public abstract class ViewBaseGrid extends ViewBase {
 		rootComponent = grid;
 	}
 
+	protected void setTopCentreCell(Component component) {
+		grid.addComponent(component, 1, 1);
+	}
+
 	protected void setCentreCell(Component component) {
 		grid.addComponent(component, 1, 2);
 	}
