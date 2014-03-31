@@ -80,7 +80,7 @@ public class Broadcaster {
 	 * @param message
 	 */
 	public synchronized void broadcast(final String group, final String message) {
-		if (applicationConfiguration.getBoolean(ConfigKeys.NOTIFICATION_PUSH_ENABLED, true)) {
+		if (applicationConfiguration.getBoolean(ConfigKeys.SERVER_PUSH_ENABLED, true)) {
 			log.debug("broadcasting message: {}", message);
 			List<BroadcastListener> listenerGroup = groups.get(group);
 			if (listenerGroup != null) {

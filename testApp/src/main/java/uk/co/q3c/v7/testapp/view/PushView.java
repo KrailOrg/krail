@@ -90,7 +90,7 @@ public class PushView extends ViewBaseGrid {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				applicationConfiguration.setProperty(ConfigKeys.NOTIFICATION_PUSH_ENABLED, (boolean) event
+				applicationConfiguration.setProperty(ConfigKeys.SERVER_PUSH_ENABLED, (boolean) event
 						.getProperty().getValue());
 			}
 

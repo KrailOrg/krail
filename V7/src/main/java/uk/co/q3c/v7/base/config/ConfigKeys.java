@@ -12,9 +12,17 @@
  */
 package uk.co.q3c.v7.base.config;
 
+import org.apache.commons.configuration.HierarchicalINIConfiguration;
+
+/**
+ * Uses Strings rather than enum because we need the '.' for {@link HierarchicalINIConfiguration}
+ * 
+ * @author David Sowerby
+ * @date 31 Mar 2014
+ */
 public class ConfigKeys {
 
 	public static final String SITEMAP_SOURCES = "sitemap.sources";
-	public static final String NOTIFICATION_PUSH_ENABLED = "notification.pushEnabled";
+	public static final String SERVER_PUSH_ENABLED = "server.pushEnabled";
 
 }

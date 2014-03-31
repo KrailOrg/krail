@@ -9,7 +9,7 @@ The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state
 
 There are a number of sub-projects, each with a different status
 
-26th March 2014:  
+31st March 2014:  
 
 ### V7
 
@@ -20,12 +20,15 @@ This is the base, or core, library.  Vaadin 7.1.11 is integrated with:
 * Apache Commons Configuration
 * Quartz Scheduler (as an optional library)
 
-and provides I18N support.
+It also supports:
+
+* Vaadin Server Push
+* I18N support
 
 It provides site navigation and the means to authenticate and authorise users. 
 Building an application is assisted by specifying the site structure using a Sitemap.  There are 3 methods for specifying the Sitemap: using files(s), annotations, or directly coded in Guice modules (these can also be mixed)
 
-This library is usable, thought there are still some bugs and further developments needed.  Vaadin push is not supported.
+This library is usable, thought there are still some bugs and further developments needed.  Vaadin push is now supported.
 
 
 ### demo
@@ -34,7 +37,7 @@ Very simple currently.  This sub-project is supported with tests run via Vaadin 
 
 ### testApp
 
-Provides functional testing through the UI (using Vaadin TestBench)
+Provides functional testing through the UI (using Vaadin TestBench). TestBench is a licenced product from Vaadin
 
 ### quartz
 
