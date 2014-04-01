@@ -13,6 +13,8 @@ import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 import uk.co.q3c.v7.base.view.component.MessageBar;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
+import uk.co.q3c.v7.demo.i18n.DemoLabelKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 import com.vaadin.annotations.Theme;
@@ -41,12 +43,14 @@ public class DemoUI extends ScopedUI {
 	private final MessageBar messageBar;
 	private final ApplicationLogo logo;
 	private final ApplicationHeader header;
+	private final Translate translate;
 
 	@Inject
 	protected DemoUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
-			LoginStatusHandler loginStatusHandler, Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
+			LoginStatusHandler loginStatusHandler, Broadcaster broadcaster, PushMessageRouter pushMessageRouter,
+			Translate translate) {
 		super(navigator, errorHandler, converterFactory, loginStatusHandler, broadcaster, pushMessageRouter);
 		this.navTree = navTree;
 		this.breadcrumb = breadcrumb;
@@ -56,11 +60,12 @@ public class DemoUI extends ScopedUI {
 		this.messageBar = messageBar;
 		this.logo = logo;
 		this.header = header;
+		this.translate = translate;
 	}
 
 	@Override
 	protected String pageTitle() {
-		return "V7 Demo";
+		return translate.from(DemoLabelKey.V7_Demo);
 	}
 
 	@Override

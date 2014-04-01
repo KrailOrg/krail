@@ -19,12 +19,26 @@ import uk.co.q3c.v7.i18n.I18NKey;
 
 public enum DemoLabelKey implements I18NKey<DemoLabels> {
 
-	_nullkey_, Yes, No, View1, View2, Home, Private, Public, Reset_Account, Logout, Unlock_Account, Enable_Account, Login, Refresh_Account, Request_Account;
+	_nullkey_,
+	Yes,
+	No,
+	View1,
+	View2,
+	Home,
+	Private,
+	Public,
+	Reset_Account,
+	Logout,
+	Unlock_Account,
+	Enable_Account,
+	Login,
+	Refresh_Account,
+	Request_Account,
+	V7_Demo;
 
 	@Override
 	public DemoLabels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(
-				DemoLabels.class.getName(), locale);
+		ResourceBundle bundle = ResourceBundle.getBundle(DemoLabels.class.getName(), locale);
 		return (DemoLabels) bundle;
 	}
 
