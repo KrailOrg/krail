@@ -53,6 +53,7 @@ public enum LabelKey implements I18NKey<Labels> {
 	Splash,
 	System_Account,
 	Unlock_Account,
+	Unnamed,
 	Warning,
 	Yes;
 

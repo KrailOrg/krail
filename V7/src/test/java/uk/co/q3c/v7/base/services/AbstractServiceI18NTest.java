@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.services;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -70,4 +70,15 @@ public class AbstractServiceI18NTest {
 		// then
 		assertThat(service.getDescription()).isEqualTo("Private");
 	}
+
+	@Test
+	public void notNamed() {
+		// given
+
+		// when
+
+		// then
+		assertThat(service.getName()).isEqualTo("Unnamed");
+	}
+
 }

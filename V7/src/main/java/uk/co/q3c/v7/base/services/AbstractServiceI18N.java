@@ -12,10 +12,11 @@
  */
 package uk.co.q3c.v7.base.services;
 
-import com.google.inject.Inject;
-
 import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
+
+import com.google.inject.Inject;
 
 /**
  * Extends AbstractService to provide I18N support for name and description fields
@@ -24,7 +25,7 @@ import uk.co.q3c.v7.i18n.Translate;
  * 
  */
 public abstract class AbstractServiceI18N extends AbstractService implements ServiceI18N {
-	private I18NKey<?> nameKey;
+	private I18NKey<?> nameKey = LabelKey.Unnamed;
 	private I18NKey<?> descriptionKey;
 	private final Translate translate;
 
