@@ -191,8 +191,8 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 
 	/**
 	 * Override to provide a title for your UI page This will appear in your browser tab. If this needs to be an I18N
-	 * title, use {@link Translate} (see also the documentation at
-	 * https://sites.google.com/site/q3cjava/internationalisation-i18n)
+	 * title, inject {@link Translate} into your sub-class and use that to produce the title. (see also the
+	 * documentation at https://sites.google.com/site/q3cjava/internationalisation-i18n)
 	 * 
 	 * @return
 	 */
