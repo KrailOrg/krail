@@ -25,8 +25,8 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 	private boolean viewBuilt = false;
 
 	@Inject
-	protected DefaultErrorView(V7Navigator navigator) {
-		super(navigator);
+	protected DefaultErrorView() {
+		super();
 		buildView();
 	}
 

@@ -44,8 +44,8 @@ public class ViewBaseWithLayoutTest {
 
 	public class TestViewBaseWithLayout extends ViewBaseWithLayout {
 
-		protected TestViewBaseWithLayout(V7Navigator navigator) {
-			super(navigator, new VerticalViewLayout(), translate);
+		protected TestViewBaseWithLayout() {
+			super(new VerticalViewLayout(), translate);
 			buildView();
 		}
 
@@ -87,7 +87,7 @@ public class ViewBaseWithLayoutTest {
 
 	@Before
 	public void setup() {
-		vbwl = new TestViewBaseWithLayout(navigator);
+		vbwl = new TestViewBaseWithLayout();
 	}
 
 	@Test

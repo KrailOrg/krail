@@ -14,11 +14,12 @@ package uk.co.q3c.v7.testapp.view;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vaadin.risto.stepper.IntStepper;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.ViewBase;
 
 import com.google.inject.Inject;
@@ -37,7 +38,7 @@ import de.steinwedel.messagebox.MessageBox;
 
 @UIScoped
 public class WidgetsetView extends ViewBase {
-
+	private static Logger log = LoggerFactory.getLogger(WidgetsetView.class);
 	private Button popupButton;
 	protected GridLayout grid;
 	private Panel buttonPanel;
@@ -46,8 +47,9 @@ public class WidgetsetView extends ViewBase {
 	private IntStepper stepper;
 
 	@Inject
-	protected WidgetsetView(V7Navigator navigator) {
-		super(navigator);
+	protected WidgetsetView(SessionObject sessionObject) {
+		super();
+		log.debug("Constructor injecting with session object");
 		buildView();
 	}
 

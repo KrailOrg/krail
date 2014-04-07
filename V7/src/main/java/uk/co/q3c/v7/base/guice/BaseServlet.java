@@ -17,24 +17,26 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.vaadin.server.DeploymentConfiguration;
 import com.vaadin.server.ServiceException;
 import com.vaadin.server.SessionInitEvent;
 import com.vaadin.server.SessionInitListener;
-import com.vaadin.server.UIProvider;
 import com.vaadin.server.VaadinServlet;
 
 @Singleton
 public class BaseServlet extends VaadinServlet implements SessionInitListener {
 	private static Logger log = LoggerFactory.getLogger(BaseServlet.class);
-	/**
-	 * Cannot use constructor injection. Container expects servlet to have
-	 * no-arg public constructor
-	 */
+
+	private final ScopedUIProvider uiProvider;
+
 	@Inject
-	private UIProvider uiProvider;
+	public BaseServlet(ScopedUIProvider uiProvider) {
+		this.uiProvider = uiProvider;
+	}
 
 	@Override
 	protected void servletInitialized() {
@@ -47,8 +49,7 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 	}
 
 	/**
-	 * This method captures the parameters from appropriate methods and sets the
-	 * servlet parameters accordingly.
+	 * This method captures the parameters from appropriate methods and sets the servlet parameters accordingly.
 	 * 
 	 * <pre>
 	 * vaadin {<br>
@@ -68,22 +69,19 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 		if (!widgetset().equals("default")) {
 			log.debug("Setting widgetset parameter to '{}'", widgetset());
 			initParameters.setProperty("widgetset", widgetset());
-			initParameters.setProperty("productionMode", Boolean.toString(productionMode()));
 		} else {
 			log.debug("Using default widgetset");
 		}
+		initParameters.setProperty("productionMode", Boolean.toString(productionMode()));
 		return super.createDeploymentConfiguration(initParameters);
 
 	}
 
 	/**
-	 * Returns the widgetset parameter for this servlet. If it is unchanged
-	 * (that is, it returns 'default') then the default widgetset is used. For
-	 * any other value (as defined by a sub-class implementation), the related
-	 * widgetset must have been compiled - typically this means that the build
-	 * definition will also contain an entry for the widgetset. For example,
-	 * using the Gradle Vaadin plugin, the build.gradle file would contain an
-	 * entry like this:<br>
+	 * Returns the widgetset parameter for this servlet. If it is unchanged (that is, it returns 'default') then the
+	 * default widgetset is used. For any other value (as defined by a sub-class implementation), the related widgetset
+	 * must have been compiled - typically this means that the build definition will also contain an entry for the
+	 * widgetset. For example, using the Gradle Vaadin plugin, the build.gradle file would contain an entry like this:<br>
 	 * <p>
 	 * 
 	 * @return

@@ -2,23 +2,23 @@ package uk.co.q3c.v7.base.guice.uiscope;
 
 public class UIScopeException extends RuntimeException {
 
-	protected UIScopeException() {
+	public UIScopeException() {
 		super();
 	}
 
-	protected UIScopeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public UIScopeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
-	protected UIScopeException(String message, Throwable cause) {
+	public UIScopeException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	protected UIScopeException(String message) {
+	public UIScopeException(String message) {
 		super(message);
 	}
 
-	protected UIScopeException(Throwable cause) {
+	public UIScopeException(Throwable cause) {
 		super(cause);
 	}
 

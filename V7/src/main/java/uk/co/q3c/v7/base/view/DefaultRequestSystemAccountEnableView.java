@@ -2,17 +2,16 @@ package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
+
+import com.google.inject.Inject;
 
 @UIScoped
 public class DefaultRequestSystemAccountEnableView extends StandardPageViewBase implements
 		RequestSystemAccountEnableView {
 	@Inject
-	protected DefaultRequestSystemAccountEnableView(V7Navigator navigator) {
-		super(navigator);
+	protected DefaultRequestSystemAccountEnableView() {
+		super();
 	}
 
 	@Override

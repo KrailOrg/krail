@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
@@ -26,18 +25,12 @@ import com.vaadin.ui.Component;
 public abstract class ViewBase implements V7View {
 
 	private static Logger log = LoggerFactory.getLogger(ViewBase.class);
-	private final V7Navigator navigator;
 	protected Component rootComponent;
 
 	@Inject
-	protected ViewBase(V7Navigator navigator) {
-		super();
-		this.navigator = navigator;
-
-	}
-
 	protected ViewBase() {
-		navigator = null;
+		super();
+
 	}
 
 	/**
@@ -51,9 +44,8 @@ public abstract class ViewBase implements V7View {
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {
-		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri "
-				+ navigator.getCurrentNavigationState());
-		List<String> params = navigator.getNavigationParams();
+		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri " + event.getNavigationState());
+		List<String> params = event.getNavigationState().getParameterList();
 		processParams(params);
 	}
 
@@ -64,10 +56,6 @@ public abstract class ViewBase implements V7View {
 	 * @param params
 	 */
 	protected abstract void processParams(List<String> params);
-
-	public V7Navigator getNavigator() {
-		return navigator;
-	}
 
 	@Override
 	public Component getRootComponent() {

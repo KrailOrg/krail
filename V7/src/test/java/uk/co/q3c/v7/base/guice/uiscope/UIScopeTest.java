@@ -1,8 +1,10 @@
 package uk.co.q3c.v7.base.guice.uiscope;
 
-import static org.fest.assertions.Assertions.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -75,6 +77,7 @@ import com.google.inject.multibindings.MapBinder;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ClientConnector;
 import com.vaadin.server.ErrorHandler;
+import com.vaadin.server.UICreateEvent;
 import com.vaadin.server.UIProvider;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
@@ -224,17 +227,29 @@ public class UIScopeTest {
 	}
 
 	@SuppressWarnings("deprecation")
-	protected ScopedUI createUI(Class<? extends ScopedUI> clazz) {
-
+	protected ScopedUI createUI(final Class<? extends UI> clazz) {
 		String baseUri = "http://example.com";
-		CurrentInstance.set(UI.class, null);
-		CurrentInstance.set(UIKey.class, null);
-
-		ui = (ScopedUI) getUIProvider().createInstance(clazz);
-		ui.setLocale(Locale.UK);
-		CurrentInstance.set(UI.class, ui);
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
 		when(mockedSession.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
+
+		CurrentInstance.set(UI.class, null);
+		CurrentInstance.set(UIKey.class, null);
+		UICreateEvent event = mock(UICreateEvent.class);
+		when(event.getSource()).thenReturn(vaadinService);
+
+		Answer<Class<? extends UI>> answer = new Answer<Class<? extends UI>>() {
+
+			@Override
+			public Class<? extends UI> answer(InvocationOnMock invocation) throws Throwable {
+				return clazz;
+			}
+		};
+		when(event.getUIClass()).thenAnswer(answer);
+
+		ui = (ScopedUI) getUIProvider().createInstance(event);
+		ui.setLocale(Locale.UK);
+		CurrentInstance.set(UI.class, ui);
+
 		ui.setSession(mockedSession);
 
 		return ui;

@@ -16,7 +16,6 @@ import java.util.List;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.ViewBase;
 import uk.co.q3c.v7.demo.i18n.DescriptionKey;
@@ -46,8 +45,8 @@ public class NotificationsView extends ViewBase {
 	private Label infoArea;
 
 	@Inject
-	protected NotificationsView(V7Navigator navigator, UserNotifier userNotifier, Translate translate) {
-		super(navigator);
+	protected NotificationsView(UserNotifier userNotifier, Translate translate) {
+		super();
 		this.userNotifier = userNotifier;
 		this.translate = translate;
 		buildView();

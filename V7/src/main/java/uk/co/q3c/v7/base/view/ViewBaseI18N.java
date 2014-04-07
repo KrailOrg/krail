@@ -12,11 +12,10 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import com.google.inject.Inject;
-
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
+
+import com.google.inject.Inject;
 
 public abstract class ViewBaseI18N extends ViewBase {
 
@@ -24,8 +23,8 @@ public abstract class ViewBaseI18N extends ViewBase {
 	private final Translate translate;
 
 	@Inject
-	protected ViewBaseI18N(V7Navigator navigator, Translate translate) {
-		super(navigator);
+	protected ViewBaseI18N(Translate translate) {
+		super();
 		this.translate = translate;
 	}
 

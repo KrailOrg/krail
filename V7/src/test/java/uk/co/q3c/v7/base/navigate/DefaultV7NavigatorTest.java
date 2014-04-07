@@ -1,8 +1,11 @@
 package uk.co.q3c.v7.base.navigate;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.text.Collator;
 import java.util.List;
@@ -458,7 +461,6 @@ public class DefaultV7NavigatorTest {
 		assertThat(navigator.getCurrentView()).isNull();
 		assertThat(navigator.getCurrentNavigationState()).isNull();
 
-		assertThat(navigator.getPreviousView()).isNull();
 		assertThat(navigator.getPreviousNavigationState()).isNull();
 
 		// when
@@ -468,7 +470,6 @@ public class DefaultV7NavigatorTest {
 		assertThat(navigator.getCurrentView()).isEqualTo(view1);
 		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment1);
 
-		assertThat(navigator.getPreviousView()).isNull();
 		assertThat(navigator.getPreviousNavigationState()).isNull();
 
 		// when
@@ -478,7 +479,6 @@ public class DefaultV7NavigatorTest {
 		assertThat(navigator.getCurrentView()).isEqualTo(view2);
 		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment2);
 
-		assertThat(navigator.getPreviousView()).isEqualTo(view1);
 		assertThat(navigator.getPreviousNavigationState().getFragment()).isEqualTo(fragment1);
 
 		// when
@@ -488,7 +488,6 @@ public class DefaultV7NavigatorTest {
 		assertThat(navigator.getCurrentView()).isEqualTo(view2);
 		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment2);
 
-		assertThat(navigator.getPreviousView()).isNull();
 		assertThat(navigator.getPreviousNavigationState()).isNull();
 	}
 

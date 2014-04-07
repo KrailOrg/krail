@@ -13,7 +13,6 @@
 package uk.co.q3c.v7.base.view;
 
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
@@ -26,8 +25,8 @@ public abstract class StandardPageViewBase extends ViewBase {
 	protected GridLayout grid;
 
 	@Inject
-	protected StandardPageViewBase(V7Navigator navigator) {
-		super(navigator);
+	protected StandardPageViewBase() {
+		super();
 		buildView();
 	}
 

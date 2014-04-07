@@ -1,1 +1,1 @@
-include 'V7','views', 'demo', 'testApp', 'orient', 'quartz','testutil','testbench'
+include 'V7','views', 'demo', 'testApp', 'orient', 'quartz','testutil','testbench','V72'

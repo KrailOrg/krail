@@ -13,11 +13,18 @@
 package uk.co.q3c.v7.demo;
 
 import uk.co.q3c.v7.base.guice.BaseServlet;
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
 public class DemoServlet extends BaseServlet {
+
+	@Inject
+	public DemoServlet(ScopedUIProvider uiProvider) {
+		super(uiProvider);
+	}
 
 	@Override
 	protected String widgetset() {

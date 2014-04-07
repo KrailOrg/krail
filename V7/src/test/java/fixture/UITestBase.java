@@ -1,8 +1,7 @@
 package fixture;
 
-import static org.mockito.Mockito.*;
-
-import com.google.inject.Inject;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,12 +24,14 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.ClientConnector;
 import com.vaadin.server.ErrorHandler;
+import com.vaadin.server.UICreateEvent;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
@@ -128,10 +129,21 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	}
 
 	@SuppressWarnings("deprecation")
-	protected ScopedUI createUI(Class<? extends ScopedUI> clazz) {
+	protected ScopedUI createUI(final Class<? extends ScopedUI> clazz) {
 		CurrentInstance.set(UI.class, null);
 		CurrentInstance.set(UIKey.class, null);
-		ui = (ScopedUI) getUIProvider().createInstance(clazz);
+		UICreateEvent event = mock(UICreateEvent.class);
+		// when(event.getSource()).thenReturn(vaadinService);
+
+		Answer<Class<? extends ScopedUI>> answer = new Answer<Class<? extends ScopedUI>>() {
+
+			@Override
+			public Class<? extends ScopedUI> answer(InvocationOnMock invocation) throws Throwable {
+				return clazz;
+			}
+		};
+		when(event.getUIClass()).thenAnswer(answer);
+		ui = (ScopedUI) getUIProvider().createInstance(event);
 		CurrentInstance.set(UI.class, ui);
 		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
 		when(mockedSession.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());

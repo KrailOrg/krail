@@ -12,8 +12,10 @@
  */
 package uk.co.q3c.v7.base.guice;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 
@@ -40,8 +42,8 @@ public class BaseGuiceServletInjectorTest {
 
 	TestGuiceServletInjector out;
 
-	@Mock
-	ThreadLocal<ServletContext> ctx;
+	// @Mock
+	// ThreadLocal<ServletContext> ctx;
 
 	@Mock
 	ServletContextEvent servletContextEvent;
@@ -51,7 +53,7 @@ public class BaseGuiceServletInjectorTest {
 
 	@Before
 	public void setup() {
-		out = new TestGuiceServletInjector(ctx);
+		out = new TestGuiceServletInjector();
 
 	}
 
@@ -69,7 +71,7 @@ public class BaseGuiceServletInjectorTest {
 	public void startAndStop() {
 
 		// given
-		when(ctx.get()).thenReturn(servletContext);
+		// when(ctx.get()).thenReturn(servletContext);
 		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
 		out.contextInitialized(servletContextEvent);
 		// when
@@ -77,7 +79,7 @@ public class BaseGuiceServletInjectorTest {
 		// then
 		assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(V7SecurityManager.class);
 		assertThat(out.isAddAppModulesCalled()).isEqualTo(true);
-		verify(ctx).set(servletContext);
+		// verify(ctx).set(servletContext);
 		assertThat(injector).isNotNull();
 
 		// when
@@ -92,7 +94,7 @@ public class BaseGuiceServletInjectorTest {
 	public void notInitialised() {
 
 		// given
-		when(ctx.get()).thenReturn(servletContext);
+		// when(ctx.get()).thenReturn(servletContext);
 		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
 		// when
 		out.getInjector();

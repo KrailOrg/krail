@@ -55,13 +55,16 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	private UIKey instanceKey;
 	private UIScope uiScope;
 	private final Panel viewDisplayPanel;
-	private final V7Navigator navigator;
-	private final ErrorHandler errorHandler;
 	private AbstractOrderedLayout screenLayout;
+
+	private final ErrorHandler errorHandler;
+
 	private final ConverterFactory converterFactory;
 	private V7View view;
 	private final LoginStatusHandler loginStatusHandler;
 	private final PushMessageRouter pushMessageRouter;
+
+	private final V7Navigator navigator;
 
 	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			LoginStatusHandler loginStatusHandler, Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
@@ -71,8 +74,8 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		this.converterFactory = converterFactory;
 		this.loginStatusHandler = loginStatusHandler;
 		this.pushMessageRouter = pushMessageRouter;
+
 		viewDisplayPanel = new Panel();
-		viewDisplayPanel.setSizeFull();
 		registerWithBroadcaster(broadcaster);
 	}
 
@@ -80,7 +83,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		broadcaster.register(Broadcaster.ALL_MESSAGES, this);
 	}
 
-	public void setInstanceKey(UIKey instanceKey) {
+	protected void setInstanceKey(UIKey instanceKey) {
 		this.instanceKey = instanceKey;
 	}
 
@@ -88,12 +91,21 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		return instanceKey;
 	}
 
+	protected void setScope(UIScope uiScope) {
+		this.uiScope = uiScope;
+	}
+
 	@Override
 	public void detach() {
 		if (uiScope != null) {
-			uiScope.releaseScope(this.getInstanceKey());
+			uiScope.releaseScope(instanceKey);
 		}
 		super.detach();
+	}
+
+	@Override
+	public void setNavigator(Navigator navigator) {
+		throw new MethodReconfigured("UI.setNavigator() not available, use injection instead");
 	}
 
 	/**
@@ -112,25 +124,16 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	}
 
 	@Override
-	public void setNavigator(Navigator navigator) {
-		throw new MethodReconfigured("UI.setNavigator() not available, use injection instead");
-	}
-
-	@Override
 	public void changeView(V7View toView) {
 		if (log.isDebugEnabled()) {
 			String to = (toView == null) ? "null" : toView.getClass().getSimpleName();
-			log.debug("changing view from  to {}", to);
+			log.debug("changing view to {}", to);
 		}
 
 		Component content = toView.getRootComponent();
 		content.setSizeFull();
 		viewDisplayPanel.setContent(content);
 		this.view = toView;
-	}
-
-	public Panel getViewDisplayPanel() {
-		return viewDisplayPanel;
 	}
 
 	/**
@@ -147,14 +150,23 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		// page isn't available during injected construction
 		Page page = getPage();
 		page.addUriFragmentChangedListener(navigator);
+		navigator.setPage(page);
 		setErrorHandler(errorHandler);
 		page.setTitle(pageTitle());
 		doLayout();
 		// Navigate to the correct start point
 		String fragment = getPage().getUriFragment();
 		getV7Navigator().navigateTo(fragment);
-
 	}
+
+	/**
+	 * Override to provide a title for your UI page This will appear in your browser tab. If this needs to be an I18N
+	 * title, inject {@link Translate} into your sub-class and use that to produce the title. (see also the
+	 * documentation at https://sites.google.com/site/q3cjava/internationalisation-i18n)
+	 * 
+	 * @return
+	 */
+	protected abstract String pageTitle();
 
 	/**
 	 * Uses the {@link #screenLayout} defined by sub-class implementations of {@link #screenLayout()}, expands it to
@@ -170,7 +182,6 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 			log.error(msg);
 			throw new V7ConfigurationException(msg);
 		}
-		// screenLayout.setExpandRatio(getViewDisplayPanel(), 1);
 		viewDisplayPanel.setSizeFull();
 		setContent(screenLayout);
 	}
@@ -189,14 +200,9 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		return view;
 	}
 
-	/**
-	 * Override to provide a title for your UI page This will appear in your browser tab. If this needs to be an I18N
-	 * title, inject {@link Translate} into your sub-class and use that to produce the title. (see also the
-	 * documentation at https://sites.google.com/site/q3cjava/internationalisation-i18n)
-	 * 
-	 * @return
-	 */
-	protected abstract String pageTitle();
+	public Panel getViewDisplayPanel() {
+		return viewDisplayPanel;
+	}
 
 	public LoginStatusHandler getLoginStatusHandler() {
 		return loginStatusHandler;
@@ -213,7 +219,6 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 
 			}
 		});
-
 	}
 
 	protected void processBroadcastMessage(String group, String message) {

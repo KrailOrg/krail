@@ -37,8 +37,9 @@ import com.google.inject.multibindings.MapBinder;
  */
 public abstract class DirectSitemapModule extends AbstractModule {
 
-	private MapBinder<String, DirectSitemapEntry> mapBinder;
+	private MapBinder<String, DirectSitemapEntry> sitemapBinder;
 	private MapBinder<String, RedirectEntry> redirectBinder;
+	private MapBinder<String, V7View> viewMapping;
 
 	/**
 	 * Override this method to define {@link Sitemap} entries with one or more calls to {@link #addEntry}, something
@@ -54,8 +55,9 @@ public abstract class DirectSitemapModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		this.mapBinder = MapBinder.newMapBinder(binder(), String.class, DirectSitemapEntry.class);
+		this.sitemapBinder = MapBinder.newMapBinder(binder(), String.class, DirectSitemapEntry.class);
 		redirectBinder = MapBinder.newMapBinder(binder(), String.class, RedirectEntry.class);
+		viewMapping = MapBinder.newMapBinder(binder(), String.class, V7View.class);
 		define();
 	}
 
@@ -65,7 +67,8 @@ public abstract class DirectSitemapModule extends AbstractModule {
 	 * @param uri
 	 *            the URI for this page
 	 * @param viewClass
-	 *            the class of the V7View for this page
+	 *            the class of the V7View for this page. This can be null if a redirection will prevent it from actually
+	 *            being displayed, but it is up to the developer to ensure that the redirection is in place
 	 * @param labelKey
 	 *            the I18NKey for a localised label for the view
 	 * @param publicPage
@@ -74,11 +77,19 @@ public abstract class DirectSitemapModule extends AbstractModule {
 	 *            the permission string for the page. May be null if no permissions are set
 	 */
 	protected void addEntry(String uri, Class<? extends V7View> viewClass, I18NKey<?> labelKey,
+			PageAccessControl pageAccessControl, String permission) {
+
+		DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, permission);
+		sitemapBinder.addBinding(uri).toInstance(entry);
+		if (viewClass != null) {
+			viewMapping.addBinding(uri).to(viewClass);
+		}
+
+	}
+
+	protected void addEntry(String uri, Class<? extends V7View> viewClass, I18NKey<?> labelKey,
 			PageAccessControl pageAccessControl) {
-
-		DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl);
-		mapBinder.addBinding(uri).toInstance(entry);
-
+		addEntry(uri, viewClass, labelKey, pageAccessControl, null);
 	}
 
 	protected void addRedirect(String fromURI, String toURI) {

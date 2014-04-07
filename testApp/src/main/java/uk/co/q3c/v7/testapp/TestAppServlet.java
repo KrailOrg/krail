@@ -13,11 +13,18 @@
 package uk.co.q3c.v7.testapp;
 
 import uk.co.q3c.v7.base.guice.BaseServlet;
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
 public class TestAppServlet extends BaseServlet {
+
+	@Inject
+	public TestAppServlet(ScopedUIProvider uiProvider) {
+		super(uiProvider);
+	}
 
 	@Override
 	protected String widgetset() {

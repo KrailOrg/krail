@@ -9,4 +9,10 @@
 		<filter-name>guiceFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	<listener>
+		<listener-class>uk.co.q3c.v7.testapp.TestAppGuiceServletInjector</listener-class>
+	</listener>
+	<session-config>
+    <session-timeout>1000</session-timeout>
+  </session-config>
 </web-app>

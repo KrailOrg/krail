@@ -18,7 +18,6 @@ import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 import uk.co.q3c.v7.base.config.ConfigKeys;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.push.Broadcaster;
 import uk.co.q3c.v7.base.view.component.BroadcastMessageLog;
 
@@ -53,9 +52,9 @@ public class PushView extends ViewBaseGrid {
 	private final ApplicationConfiguration applicationConfiguration;
 
 	@Inject
-	protected PushView(V7Navigator navigator, Broadcaster broadcaster, BroadcastMessageLog messageLog,
+	protected PushView(Broadcaster broadcaster, BroadcastMessageLog messageLog,
 			ApplicationConfiguration applicationConfiguration) {
-		super(navigator);
+		super();
 		this.broadcaster = broadcaster;
 		this.messageLog = messageLog;
 		this.applicationConfiguration = applicationConfiguration;
@@ -90,8 +89,8 @@ public class PushView extends ViewBaseGrid {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				applicationConfiguration.setProperty(ConfigKeys.SERVER_PUSH_ENABLED, (boolean) event
-						.getProperty().getValue());
+				applicationConfiguration.setProperty(ConfigKeys.SERVER_PUSH_ENABLED, (boolean) event.getProperty()
+						.getValue());
 			}
 
 		});

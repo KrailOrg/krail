@@ -12,22 +12,10 @@
  */
 package uk.co.q3c.v7.base.ui;
 
-import java.util.Map;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
-import uk.co.q3c.v7.base.guice.uiscope.UIKeyProvider;
-
 import com.vaadin.server.UIClassSelectionEvent;
 import com.vaadin.ui.UI;
 
 public class BasicUIProvider extends ScopedUIProvider {
-
-	@Inject
-	protected BasicUIProvider(Map<String, Provider<UI>> uiProMap, UIKeyProvider uiKeyProvider) {
-		super(uiProMap, uiKeyProvider);
-	}
 
 	@Override
 	public Class<? extends UI> getUIClass(UIClassSelectionEvent event) {

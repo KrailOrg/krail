@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Map;
 
@@ -37,7 +37,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 public class DefaultStandardPagesModuleTest {
 
 	@Inject
-	Map<String, StandardPageSitemapEntry> map;
+	Map<String, DirectSitemapEntry> map;
 
 	@Inject
 	DefaultDirectSitemapLoader loader;

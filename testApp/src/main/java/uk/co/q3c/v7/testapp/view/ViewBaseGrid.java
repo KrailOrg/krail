@@ -12,7 +12,6 @@
  */
 package uk.co.q3c.v7.testapp.view;
 
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.ViewBase;
 
 import com.vaadin.ui.Component;
@@ -29,8 +28,8 @@ public abstract class ViewBaseGrid extends ViewBase {
 	protected GridLayout grid;
 	private int topMargin = 5;
 
-	protected ViewBaseGrid(V7Navigator navigator) {
-		super(navigator);
+	protected ViewBaseGrid() {
+		super();
 		setupGrid();
 	}
 

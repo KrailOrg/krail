@@ -40,9 +40,9 @@ public class PageAccessController {
 	}
 
 	public boolean isAuthorised(Subject subject, SitemapNode node) {
-		String virtualPage = sitemap.navigationState(node).getVirtualPage();
-		Preconditions.checkNotNull(subject, "subject");
 		Preconditions.checkNotNull(node, "node");
+		Preconditions.checkNotNull(subject, "subject");
+		String virtualPage = sitemap.navigationState(node).getVirtualPage();
 		Preconditions.checkNotNull(virtualPage, "virtualPage");
 		Preconditions.checkNotNull(node.getPageAccessControl(), "node.getPageAccessControl(), " + node.getUriSegment());
 		switch (node.getPageAccessControl()) {

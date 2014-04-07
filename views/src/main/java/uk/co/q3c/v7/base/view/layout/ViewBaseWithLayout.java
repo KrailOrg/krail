@@ -14,7 +14,6 @@ package uk.co.q3c.v7.base.view.layout;
 
 import java.util.List;
 
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.ViewBase;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
@@ -224,8 +223,8 @@ public abstract class ViewBaseWithLayout extends ViewBase implements ViewWithLay
 	}
 
 	@Inject
-	protected ViewBaseWithLayout(V7Navigator navigator, ViewLayout viewLayout, Translate translate) {
-		super(navigator);
+	protected ViewBaseWithLayout(ViewLayout viewLayout, Translate translate) {
+		super();
 		this.translate = translate;
 		this.layout = viewLayout;
 		this.config = layout.defaultConfig();

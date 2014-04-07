@@ -15,7 +15,6 @@ package uk.co.q3c.v7.base.view;
 import java.util.List;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
@@ -25,8 +24,8 @@ import com.vaadin.ui.Panel;
 public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 
 	@Inject
-	protected DefaultLogoutView(V7Navigator navigator) {
-		super(navigator);
+	protected DefaultLogoutView() {
+		super();
 		buildView();
 	}
 

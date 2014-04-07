@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.view.layout;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
@@ -57,8 +57,8 @@ public class ApplicationViewLayout1Test {
 
 	class TestView extends ViewBaseWithLayout {
 
-		protected TestView(V7Navigator navigator, ViewLayout viewLayout, Translate translate) {
-			super(navigator, viewLayout, translate);
+		protected TestView(ViewLayout viewLayout, Translate translate) {
+			super(viewLayout, translate);
 			buildView();
 		}
 
@@ -98,7 +98,7 @@ public class ApplicationViewLayout1Test {
 		body = new Panel("body");
 		subpage = new Panel("subpage");
 		viewLayout = new ApplicationViewLayout1();
-		view = new TestView(navigator, viewLayout, translate);
+		view = new TestView(viewLayout, translate);
 		loginOut = new Panel("loginOut");
 	}
 

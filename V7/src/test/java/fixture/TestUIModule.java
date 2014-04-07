@@ -13,11 +13,11 @@
 package fixture;
 
 import uk.co.q3c.v7.base.ui.BasicUIProvider;
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 import uk.co.q3c.v7.base.ui.TestUI;
 import uk.co.q3c.v7.base.ui.V7UIModule;
 
 import com.google.inject.multibindings.MapBinder;
-import com.vaadin.server.UIProvider;
 import com.vaadin.ui.UI;
 
 /**
@@ -36,7 +36,7 @@ public class TestUIModule extends V7UIModule {
 
 	@Override
 	protected void bindUIProvider() {
-		bind(UIProvider.class).to(BasicUIProvider.class);
+		bind(ScopedUIProvider.class).to(BasicUIProvider.class);
 	}
 
 }

@@ -15,7 +15,6 @@ package uk.co.q3c.v7.base.view;
 import java.util.List;
 
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
 import uk.co.q3c.v7.base.view.component.ApplicationMenu;
@@ -56,10 +55,10 @@ public class ApplicationView1 extends ViewBaseWithLayout {
 	private final ViewBody body;
 
 	@Inject
-	protected ApplicationView1(V7Navigator navigator, ApplicationViewLayout1 viewLayout, Translate translate,
-			UserNavigationTree navTree, Breadcrumb breadcrumb, LoginStatusPanel loginOut, ApplicationMenu menu,
-			SubpagePanel subpage, MessageBar messageBar, ApplicationLogo logo, ApplicationHeader header) {
-		super(navigator, viewLayout, translate);
+	protected ApplicationView1(ApplicationViewLayout1 viewLayout, Translate translate, UserNavigationTree navTree,
+			Breadcrumb breadcrumb, LoginStatusPanel loginOut, ApplicationMenu menu, SubpagePanel subpage,
+			MessageBar messageBar, ApplicationLogo logo, ApplicationHeader header) {
+		super(viewLayout, translate);
 		this.navTree = navTree;
 		this.breadcrumb = breadcrumb;
 		this.loginOut = loginOut;

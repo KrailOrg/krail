@@ -13,6 +13,7 @@ import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 import uk.co.q3c.v7.base.view.component.MessageBar;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
+import uk.co.q3c.v7.testapp.view.SessionObject;
 
 import com.google.inject.Inject;
 import com.vaadin.annotations.Push;
@@ -47,7 +48,8 @@ public class TestAppUI extends ScopedUI {
 	protected TestAppUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
-			LoginStatusHandler loginStatusHandler, Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
+			LoginStatusHandler loginStatusHandler, Broadcaster broadcaster, PushMessageRouter pushMessageRouter,
+			SessionObject sessionObject) {
 		super(navigator, errorHandler, converterFactory, loginStatusHandler, broadcaster, pushMessageRouter);
 		this.navTree = navTree;
 		this.breadcrumb = breadcrumb;

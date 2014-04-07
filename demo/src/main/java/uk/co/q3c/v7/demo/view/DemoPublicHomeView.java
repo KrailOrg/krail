@@ -14,7 +14,6 @@ package uk.co.q3c.v7.demo.view;
 
 import java.util.List;
 
-import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.StandardPageViewBase;
 
@@ -23,8 +22,8 @@ import com.google.inject.Inject;
 public class DemoPublicHomeView extends StandardPageViewBase implements PublicHomeView {
 
 	@Inject
-	public DemoPublicHomeView(V7Navigator navigator) {
-		super(navigator);
+	public DemoPublicHomeView() {
+		super();
 	}
 
 	@Override

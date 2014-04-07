@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import com.google.inject.Inject;
+
 /**
  * Represents a navigation state (basically a URI fragment, potentially with parameters) but with its component parts
  * already broken out by an implementation of {@link URIFragmentHandler}. It is used to remove the need to repeatedly
@@ -48,7 +50,8 @@ public class NavigationState implements Serializable {
 	// fragment is out of date
 	private boolean dirty;
 
-	protected NavigationState() {
+	@Inject
+	public NavigationState() {
 		super();
 	}
 

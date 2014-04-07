@@ -1,7 +1,22 @@
+/*
+ * Copyright (C) 2013 David Sowerby
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package uk.co.q3c.v7.base.navigate;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -18,52 +33,53 @@ import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.ui.ScopedUI;
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Page;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
-import com.vaadin.ui.UI;
-import com.vaadin.util.CurrentInstance;
 
 @UIScoped
 public class DefaultV7Navigator implements V7Navigator {
-
 	private static Logger log = LoggerFactory.getLogger(DefaultV7Navigator.class);
 
-	private final List<V7ViewChangeListener> listeners = new LinkedList<V7ViewChangeListener>();
+	private final List<V7ViewChangeListener> viewChangeListeners = new LinkedList<V7ViewChangeListener>();
 	private final Provider<ErrorView> errorViewProvider;
 	private final URIFragmentHandler uriHandler;
 
-	private final Sitemap sitemap;
-	private final Provider<Subject> subjectProvider;
-	private final Injector injector;
 	private NavigationState currentNavigationState;
 	private NavigationState previousNavigationState;
-	private SitemapNode previousNode;
-	private SitemapNode currentNode;
-	private V7View currentView = null;
 
-	private V7View previousView;
+	private final Sitemap sitemap;
+	private final Provider<Subject> subjectProvider;
+	private V7View currentView = null;
 
 	private final PageAccessController pageAccessController;
 
+	private final Map<String, Provider<V7View>> viewMapping;
+
+	private Page page;
+
+	private final ScopedUIProvider uiProvider;
+
 	@Inject
-	protected DefaultV7Navigator(Injector injector, Provider<ErrorView> errorViewProvider,
-			URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider,
-			PageAccessController pageAccessController) {
+	public DefaultV7Navigator(URIFragmentHandler uriHandler, Map<String, Provider<V7View>> viewMapping,
+			Provider<ErrorView> errorViewProvider, SitemapService sitemapService, SubjectProvider subjectProvider,
+			PageAccessController pageAccessController, ScopedUIProvider uiProvider) {
 		super();
 		this.errorViewProvider = errorViewProvider;
 		this.uriHandler = uriHandler;
+		this.viewMapping = viewMapping;
+		this.uiProvider = uiProvider;
 
 		this.subjectProvider = subjectProvider;
-		this.injector = injector;
 		this.pageAccessController = pageAccessController;
 
 		try {
@@ -74,7 +90,6 @@ public class DefaultV7Navigator implements V7Navigator {
 			log.error(msg);
 			throw new IllegalStateException(msg, e);
 		}
-
 	}
 
 	/**
@@ -86,6 +101,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	@Override
 	public void navigateTo(String fragment) {
 		log.debug("Navigating to fragment: {}", fragment);
+
 		// set up the navigation state
 		NavigationState navigationState = uriHandler.navigationState(fragment);
 		navigateTo(navigationState);
@@ -100,7 +116,6 @@ public class DefaultV7Navigator implements V7Navigator {
 	 * @return
 	 */
 	private NavigationState redirectIfNeeded(NavigationState navigationState) {
-		// sitemapCheck();
 
 		String page = navigationState.getVirtualPage();
 		String redirection = sitemap.getRedirectPageFor(page);
@@ -115,28 +130,79 @@ public class DefaultV7Navigator implements V7Navigator {
 	}
 
 	/**
-	 * Internal method activating a view, setting its parameters and calling listeners.
+	 * Navigates to a the location represented by {@code navigationState}. If the {@link Sitemap} holds a redirect for
+	 * the URI represented by {@code navigationState}, navigation will be directed to the redirect target. An
+	 * unrecognised URI will throw a {@link SitemapException}. If the view for the URI is found, the user's
+	 * authorisation is checked. If the user is not authorised, a {@link AuthorizationException} is thrown. This would
+	 * be caught by the the implementation bound to {@link UnauthorizedExceptionHandler}. If the user is authorised, the
+	 * View is instantiated, and made the current view in the UI via {@link ScopedUI#changeView(V7View)}.<br>
+	 * <br>
+	 * Events are fired before and after the view change, to the {@link #viewChangeListeners}. Listeners have the option
+	 * to block the view change by returning false (see {@link #fireBeforeViewChange(V7ViewChangeEvent)}
+	 * <p>
 	 * 
-	 * @param view
-	 *            view to activate
 	 * @param navigationState
-	 *            the object representing the navigation state which will be correct when the change of view is
-	 *            completed
-	 * 
+	 *            The navigationState to navigate to. May not be null.
 	 */
-	private void changeView(V7View view) {
-		V7ViewChangeEvent event = new V7ViewChangeEvent(view, currentNavigationState);
-		if (!fireBeforeViewChange(event)) {
+	@Override
+	public void navigateTo(NavigationState navigationState) {
+		checkNotNull(navigationState);
+		redirectIfNeeded(navigationState);
+
+		// this is partly to stop unnecessary changes, but also to prevent UserNavigationTree and other navigation aware
+		// components from causing a loop by responding to a change of URI
+		if (navigationState == currentNavigationState) {
+			log.debug("fragment unchanged, no navigation required");
 			return;
 		}
-		getUI().changeView(view);
-		view.enter(event);
 
-		previousView = currentView;
-		currentView = view;
+		// https://sites.google.com/site/q3cjava/sitemap#emptyURI
+		if (navigationState.getVirtualPage().isEmpty()) {
+			navigationState.setVirtualPage(sitemap.standardPageURI(StandardPageKey.Public_Home));
+			uriHandler.updateFragment(navigationState);
+		}
 
-		getUI().getPage().setUriFragment(sitemap.uri(currentNode), false);
-		fireAfterViewChange(event);
+		log.debug("obtaining view for '{}'", navigationState.getVirtualPage());
+		Provider<V7View> viewProvider = viewMapping.get(navigationState.getVirtualPage());
+
+		if (viewProvider == null) {
+			throw new SitemapException("URI not found: " + navigationState.getVirtualPage());
+		}
+
+		Subject subject = subjectProvider.get();
+		SitemapNode node = sitemap.nodeFor(navigationState);
+		checkNotNull(node, "no node found for " + navigationState);
+		boolean authorised = pageAccessController.isAuthorised(subject, node);
+		if (authorised) {
+			// need this in case the change is blocked by a listener
+			NavigationState previousPreviousNavigationState = previousNavigationState;
+			previousNavigationState = currentNavigationState;
+			currentNavigationState = navigationState;
+
+			V7View view = viewProvider.get();
+			view.setIds();
+
+			V7ViewChangeEvent event = new V7ViewChangeEvent(view, navigationState);
+			if (!fireBeforeViewChange(event)) {
+				currentNavigationState = previousNavigationState;
+				previousNavigationState = previousPreviousNavigationState;
+				return;
+			}
+
+			// make sure the page uri is updated if necessary, but do not fire any change events
+			// as we have already responded to the change
+			if (!navigationState.getFragment().equals(page.getUriFragment())) {
+				page.setUriFragment(navigationState.getFragment(), false);
+			}
+			ScopedUI ui = uiProvider.get();
+			ui.changeView(view);
+			view.enter(event);
+			currentView = view;
+			fireAfterViewChange(event);
+		} else {
+			throw new UnauthorizedException(navigationState.getVirtualPage());
+		}
+
 	}
 
 	/**
@@ -153,7 +219,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	 * @return true if the view change should be allowed, false to silently block the navigation operation
 	 */
 	protected boolean fireBeforeViewChange(V7ViewChangeEvent event) {
-		for (V7ViewChangeListener l : listeners) {
+		for (V7ViewChangeListener l : viewChangeListeners) {
 			if (!l.beforeViewChange(event)) {
 				return false;
 			}
@@ -170,7 +236,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	 *            view change event (not null)
 	 */
 	protected void fireAfterViewChange(V7ViewChangeEvent event) {
-		for (V7ViewChangeListener l : listeners) {
+		for (V7ViewChangeListener l : viewChangeListeners) {
 			l.afterViewChange(event);
 		}
 	}
@@ -187,7 +253,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	 */
 	@Override
 	public void addViewChangeListener(V7ViewChangeListener listener) {
-		listeners.add(listener);
+		viewChangeListeners.add(listener);
 	}
 
 	/**
@@ -198,12 +264,12 @@ public class DefaultV7Navigator implements V7Navigator {
 	 */
 	@Override
 	public void removeViewChangeListener(V7ViewChangeListener listener) {
-		listeners.remove(listener);
+		viewChangeListeners.remove(listener);
 	}
 
 	@Override
 	public void uriFragmentChanged(UriFragmentChangedEvent event) {
-		navigateTo(event.getPage().getUriFragment());
+		navigateTo(event.getUriFragment());
 	}
 
 	@Override
@@ -216,15 +282,6 @@ public class DefaultV7Navigator implements V7Navigator {
 		return currentNavigationState.getParameterList();
 	}
 
-	public ScopedUI getUI() {
-		/**
-		 * TODO This should be injected, with a UIScoped UI!
-		 */
-		UI ui = CurrentInstance.get(UI.class);
-		ScopedUI scopedUi = (ScopedUI) ui;
-		return scopedUi;
-	}
-
 	/**
 	 * When a user has successfully logged in, they are routed back to the page they were on before going to the login
 	 * page. If they have gone straight to the login page (maybe they bookmarked it), or they were on the logout page,
@@ -235,6 +292,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	@Override
 	public void loginSuccessful() {
 		log.debug("user logged in successfully, navigating to appropriate view");
+		SitemapNode previousNode = sitemap.nodeFor(previousNavigationState.getFragment());
 		if (previousNode != null && previousNode != sitemap.standardPageNode(StandardPageKey.Logout)) {
 			navigateTo(previousNavigationState);
 		} else {
@@ -249,22 +307,8 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	@Override
 	public void navigateTo(StandardPageKey pageKey) {
-		// sitemapCheck();
-		String page = sitemap.standardPageURI(pageKey);
-		if (page == null) {
-			throw new SitemapException(pageKey + " cannot have a null path\n" + sitemap.getReport());
-		}
-		navigateTo(page);
+		navigateTo(sitemap.standardPageURI(pageKey));
 	}
-
-	// private void sitemapCheck() {
-	// if (sitemap == null) {
-	// throw new SitemapException("Sitemap has failed to load");
-	// }
-	// if (sitemap.hasErrors()) {
-	// throw new SitemapException("Unable to navigate, site map has errors\n" + sitemap.getReport());
-	// }
-	// }
 
 	@Override
 	public void loginStatusChange(boolean authenticated, Subject subject) {
@@ -274,7 +318,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	}
 
 	/**
-	 * Returns the Sitemap node representing the previous position of the navigator
+	 * Returns the NavigationState representing the previous position of the navigator
 	 * 
 	 * @return
 	 */
@@ -284,113 +328,30 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	@Override
 	public void clearHistory() {
-		previousNode = null;
-		previousView = null;
 		previousNavigationState = null;
-	}
-
-	/**
-	 * Navigates to a the location represented by {@code node}, instantiating a View, and calling for the view to be
-	 * made current via {@link #changeView(V7View)}. If the user is not authorised, a {@link AuthorizationException} is
-	 * thrown. This would be caught by the the implementation bound to {@link UnauthorizedExceptionHandler}.
-	 * <p>
-	 * 
-	 * @param node
-	 *            The node to navigate to. The node is assumed to be valid, and no check is made for redirects. A node
-	 *            is not, however, a complete navigation reference, as it contains no parameters. These are provided by
-	 *            the {@link #navigationState}.
-	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#navigateTo(uk.co.q3c.v7.base.navigate.sitemap.SitemapNode)
-	 */
-
-	private void navigateTo(SitemapNode node, NavigationState navigationState) {
-		// get a view instance
-		Class<? extends V7View> viewClass = node.getViewClass();
-		V7View view = injector.getInstance(viewClass);
-		view.setIds();
-
-		Subject subject = subjectProvider.get();
-		boolean authorised = pageAccessController.isAuthorised(subject, node);
-		if (authorised) {
-			previousNode = currentNode;
-			previousNavigationState = currentNavigationState;
-
-			currentNode = node;
-			currentNavigationState = navigationState;
-			changeView(view);
-		} else {
-			throw new UnauthorizedException(navigationState.getVirtualPage());
-		}
-
-		// check permissions, raise exception if not allowed
-		// URIViewPermission permission = new URIViewPermission(navigationState);
-		// if (subjectProvider.get().isPermitted(permission)) {
-		//
-		// } else {
-		//
-		// }
-
-	}
-
-	/**
-	 * 
-	 @see uk.co.q3c.v7.base.navigate.V7Navigator#navigateTo(uk.co.q3c.v7.base.navigate.sitemap.SitemapNode)
-	 */
-	@Override
-	public void navigateTo(SitemapNode node) {
-		NavigationState navigationState = uriHandler.navigationState(sitemap.uri(node));
-		navigateTo(node, navigationState);
-	}
-
-	@Override
-	public void navigateTo(NavigationState navigationState) {
-
-		String fragment = navigationState.getFragment();
-		// this is partly to stop unnecessary changes, but also to prevent UserNavigationTree and other navigation aware
-		// components from causing a loop by responding to a change of URI
-		if ((fragment != null) && (currentNavigationState != null)
-				&& (fragment.equals(currentNavigationState.getFragment()))) {
-			log.debug("fragment unchanged, no navigation required");
-			return;
-		}
-
-		// sitemapCheck();
-
-		// https://sites.google.com/site/q3cjava/sitemap#emptyURI
-		if (navigationState.getVirtualPage().isEmpty()) {
-			navigationState.setVirtualPage(sitemap.standardPageURI(StandardPageKey.Public_Home));
-			uriHandler.updateFragment(navigationState);
-		}
-
-		// fragment needs to be revised if redirected
-		redirectIfNeeded(navigationState);
-
-		log.debug("fragment after redirect check is {}", navigationState.getFragment());
-		String viewKey = navigationState.getVirtualPage();
-		log.debug("looking up View for page '{}'", viewKey);
-
-		SitemapNode nodeForUri = sitemap.nodeFor(navigationState);
-		if (nodeForUri == null) {
-			String msg = "Sitemap node not found for page '" + navigationState.getVirtualPage() + "'";
-			log.debug(msg);
-			throw new InvalidURIException(msg);
-		}
-
-		navigateTo(nodeForUri, navigationState);
-
 	}
 
 	@Override
 	public void error() {
-		changeView(errorViewProvider.get());
+		uiProvider.get().changeView(errorViewProvider.get());
+	}
+
+	/**
+	 * Navigates to a the location represented by {@code node}
+	 */
+	@Override
+	public void navigateTo(SitemapNode node) {
+		navigateTo(sitemap.uri(node));
 	}
 
 	@Override
 	public SitemapNode getCurrentNode() {
-		return currentNode;
+		return sitemap.nodeFor(currentNavigationState);
 	}
 
-	public V7View getPreviousView() {
-		return previousView;
+	@Override
+	public void setPage(Page page) {
+		this.page = page;
 	}
 
 }

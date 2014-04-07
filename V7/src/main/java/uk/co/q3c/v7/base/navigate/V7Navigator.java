@@ -9,6 +9,7 @@ import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 
+import com.vaadin.server.Page;
 import com.vaadin.server.Page.UriFragmentChangedListener;
 
 /**
@@ -76,5 +77,12 @@ public interface V7Navigator extends UriFragmentChangedListener, LoginStatusList
 	 * @param node
 	 */
 	void navigateTo(SitemapNode node);
+
+	/**
+	 * Sets the {@link Page} this navigator is working with. Usually called during the init phase of the UI
+	 * 
+	 * @param page
+	 */
+	void setPage(Page page);
 
 }
