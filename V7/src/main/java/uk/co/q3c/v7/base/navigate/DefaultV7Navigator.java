@@ -65,8 +65,6 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	private final Map<String, Provider<V7View>> viewMapping;
 
-	private Page page;
-
 	private final ScopedUIProvider uiProvider;
 
 	@Inject
@@ -166,7 +164,7 @@ public class DefaultV7Navigator implements V7Navigator {
 		Provider<V7View> viewProvider = viewMapping.get(navigationState.getVirtualPage());
 
 		if (viewProvider == null) {
-			throw new SitemapException("URI not found: " + navigationState.getVirtualPage());
+			throw new InvalidURIException("URI not found: " + navigationState.getVirtualPage());
 		}
 
 		Subject subject = subjectProvider.get();
@@ -191,18 +189,24 @@ public class DefaultV7Navigator implements V7Navigator {
 
 			// make sure the page uri is updated if necessary, but do not fire any change events
 			// as we have already responded to the change
+			ScopedUI ui = uiProvider.get();
+			Page page = ui.getPage();
 			if (!navigationState.getFragment().equals(page.getUriFragment())) {
 				page.setUriFragment(navigationState.getFragment(), false);
 			}
-			ScopedUI ui = uiProvider.get();
-			ui.changeView(view);
-			view.enter(event);
-			currentView = view;
+			changeView(view, event);
 			fireAfterViewChange(event);
 		} else {
 			throw new UnauthorizedException(navigationState.getVirtualPage());
 		}
 
+	}
+
+	protected void changeView(V7View view, V7ViewChangeEvent event) {
+		ScopedUI ui = uiProvider.get();
+		ui.changeView(view);
+		view.enter(event);
+		currentView = view;
 	}
 
 	/**
@@ -292,7 +296,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	@Override
 	public void loginSuccessful() {
 		log.debug("user logged in successfully, navigating to appropriate view");
-		SitemapNode previousNode = sitemap.nodeFor(previousNavigationState.getFragment());
+		SitemapNode previousNode = sitemap.nodeFor(previousNavigationState);
 		if (previousNode != null && previousNode != sitemap.standardPageNode(StandardPageKey.Logout)) {
 			navigateTo(previousNavigationState);
 		} else {
@@ -333,7 +337,9 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	@Override
 	public void error() {
-		uiProvider.get().changeView(errorViewProvider.get());
+		NavigationState navigationState = uriHandler.navigationState("error");
+		V7ViewChangeEvent event = new V7ViewChangeEvent(errorViewProvider.get(), navigationState);
+		changeView(errorViewProvider.get(), event);
 	}
 
 	/**
@@ -347,11 +353,6 @@ public class DefaultV7Navigator implements V7Navigator {
 	@Override
 	public SitemapNode getCurrentNode() {
 		return sitemap.nodeFor(currentNavigationState);
-	}
-
-	@Override
-	public void setPage(Page page) {
-		this.page = page;
 	}
 
 }

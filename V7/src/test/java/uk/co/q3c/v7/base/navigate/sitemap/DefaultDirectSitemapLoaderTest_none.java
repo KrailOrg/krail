@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,13 +28,15 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 
 /**
- * No modules to load, but should not fail
+ * 
+ * No pages to load but should not fail
  * 
  * @author David Sowerby
  * 
  */
+
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, DefaultStandardPagesModule.class })
+@GuiceContext({ I18NModule.class })
 public class DefaultDirectSitemapLoaderTest_none {
 
 	@Inject
@@ -61,7 +63,6 @@ public class DefaultDirectSitemapLoaderTest_none {
 			@Override
 			protected void configure() {
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-
 			}
 
 		};

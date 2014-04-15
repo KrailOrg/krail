@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -287,7 +287,7 @@ public class Sitemap {
 	 * If the virtual page represented by {@code navigationState} has been redirected, return the page it has been
 	 * redirected to, otherwise, just return the virtual page unchanged. Allows for multiple levels of redirect.
 	 * 
-	 * @param page
+	 * @param browserPage
 	 * @return
 	 */
 	public String getRedirectPageFor(NavigationState navigationState) {
@@ -468,6 +468,9 @@ public class Sitemap {
 	 * @return
 	 */
 	public SitemapNode nodeFor(NavigationState navigationState) {
+		if (navigationState == null) {
+			return null;
+		}
 		return uriMap.get(navigationState.getVirtualPage());
 	}
 

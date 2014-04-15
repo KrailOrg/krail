@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import java.text.Collator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
@@ -20,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import uk.co.q3c.v7.base.navigate.sitemap.DirectSitemapModule;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
@@ -28,9 +30,8 @@ import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.PagePermission;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.ui.ScopedUI;
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 import uk.co.q3c.v7.base.view.ErrorView;
-import uk.co.q3c.v7.base.view.LoginView;
-import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
@@ -126,6 +127,102 @@ public class DefaultV7NavigatorTest {
 
 	}
 
+	static class LogoutView implements V7View {
+
+		@Override
+		public void enter(V7ViewChangeEvent event) {
+		}
+
+		@Override
+		public Component getRootComponent() {
+
+			return null;
+		}
+
+		@Override
+		public String viewName() {
+
+			return "logout";
+		}
+
+		@Override
+		public void setIds() {
+		}
+
+	}
+
+	static class LoginView implements V7View {
+
+		@Override
+		public void enter(V7ViewChangeEvent event) {
+		}
+
+		@Override
+		public Component getRootComponent() {
+
+			return null;
+		}
+
+		@Override
+		public String viewName() {
+
+			return "login";
+		}
+
+		@Override
+		public void setIds() {
+		}
+
+	}
+
+	static class PrivateHomeView implements V7View {
+
+		@Override
+		public void enter(V7ViewChangeEvent event) {
+		}
+
+		@Override
+		public Component getRootComponent() {
+
+			return null;
+		}
+
+		@Override
+		public String viewName() {
+
+			return "private home";
+		}
+
+		@Override
+		public void setIds() {
+		}
+
+	}
+
+	static class PublicHomeView implements V7View {
+
+		@Override
+		public void enter(V7ViewChangeEvent event) {
+		}
+
+		@Override
+		public Component getRootComponent() {
+
+			return null;
+		}
+
+		@Override
+		public String viewName() {
+
+			return "public home";
+		}
+
+		@Override
+		public void setIds() {
+		}
+
+	}
+
 	DefaultV7Navigator navigator;
 
 	@Mock
@@ -133,14 +230,11 @@ public class DefaultV7NavigatorTest {
 
 	StrictURIFragmentHandler uriHandler;
 
+	@Inject
+	Map<String, Provider<V7View>> viewMapping;
+
 	@Mock
 	ScopedUI scopedUI;
-
-	@Mock
-	LoginView loginView;
-
-	@Mock
-	LogoutView logoutView;
 
 	@Mock
 	V7View previousView;
@@ -158,7 +252,7 @@ public class DefaultV7NavigatorTest {
 	Injector injector;
 
 	@Mock
-	Page page;
+	Page browserPage;
 
 	@Mock
 	ErrorView errorView;
@@ -193,6 +287,9 @@ public class DefaultV7NavigatorTest {
 	@Inject
 	PageAccessController pageAccessController;
 
+	@Mock
+	ScopedUIProvider uiProvider;
+
 	// had some issues with mocking this - the getViewClass() method wouldn't play
 	// so resorted to old fashioned mocking
 	SitemapNode mockNode1;
@@ -217,17 +314,17 @@ public class DefaultV7NavigatorTest {
 		loginNode.setPageAccessControl(PageAccessControl.PUBLIC);
 
 		when(sitemapService.getSitemap()).thenReturn(sitemap);
-		when(scopedUI.getPage()).thenReturn(page);
+		when(uiProvider.get()).thenReturn(scopedUI);
+		when(scopedUI.getPage()).thenReturn(browserPage);
 		when(errorViewProvider.get()).thenReturn(errorView);
 		when(subjectProvider.get()).thenReturn(subject);
-		when(injector.getInstance(LogoutView.class)).thenReturn(logoutView);
-		when(injector.getInstance(LoginView.class)).thenReturn(loginView);
 		when(injector.getInstance(View2.class)).thenReturn(view2);
 		when(injector.getInstance(View1.class)).thenReturn(view1);
 		when(sitemap.uri(mockNode1)).thenReturn(public_view1);
 
-		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemapService, subjectProvider,
-				pageAccessController);
+		navigator = new DefaultV7Navigator(uriHandler, viewMapping, errorViewProvider, sitemapService, subjectProvider,
+				pageAccessController, uiProvider);
+
 		CurrentInstance.set(UI.class, scopedUI);
 	}
 
@@ -245,7 +342,7 @@ public class DefaultV7NavigatorTest {
 		navigator.navigateTo(StandardPageKey.Logout);
 		// then
 		assertThat(navigator.getCurrentView()).isInstanceOf(LogoutView.class);
-		verify(scopedUI).changeView(logoutView);
+		verify(scopedUI).changeView(any(LogoutView.class));
 	}
 
 	@Test
@@ -261,7 +358,7 @@ public class DefaultV7NavigatorTest {
 		// then
 
 		assertThat(navigator.getCurrentView()).isInstanceOf(LoginView.class);
-		verify(scopedUI).changeView(loginView);
+		verify(scopedUI).changeView(any(LoginView.class));
 
 	}
 
@@ -269,7 +366,7 @@ public class DefaultV7NavigatorTest {
 	public void loginSuccessFul_toPreviousView() {
 		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		SitemapNode privateHomeNode = sitemap.append("private/home");
-		SitemapNode node2 = sitemap.append("public/home/view2");
+		SitemapNode node2 = sitemap.append("public/view2");
 		SitemapNode loginNode = sitemap.append("public/login");
 		sitemap.addStandardPage(StandardPageKey.Login, loginNode);
 		sitemap.addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
@@ -282,19 +379,21 @@ public class DefaultV7NavigatorTest {
 		privateHomeNode.setViewClass(View1.class);
 		privateHomeNode.setPageAccessControl(PageAccessControl.PERMISSION);
 		when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
+
 		node2.setViewClass(View2.class);
 		loginNode.setViewClass(LoginView.class);
-		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemapService, subjectProvider,
-				pageAccessController);
+		navigator = new DefaultV7Navigator(uriHandler, viewMapping, errorViewProvider, sitemapService, subjectProvider,
+				pageAccessController, uiProvider);
+
 		CurrentInstance.set(UI.class, scopedUI);
 		// when
-		navigator.navigateTo("public/home/view2");
+		navigator.navigateTo("public/view2");
 		navigator.navigateTo(StandardPageKey.Login);
+		assertThat(navigator.getCurrentView()).isInstanceOf(LoginView.class);
 		// // when
 		navigator.loginSuccessful();
 		// // then
-		verify(scopedUI).changeView(loginView);
-		assertThat(navigator.getCurrentView()).isEqualTo(view2);
+		assertThat(navigator.getCurrentView()).isInstanceOf(View2.class);
 	}
 
 	@Test
@@ -319,16 +418,19 @@ public class DefaultV7NavigatorTest {
 		when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
 		node2.setViewClass(View2.class);
 		loginNode.setViewClass(LoginView.class);
-		navigator = new DefaultV7Navigator(injector, errorViewProvider, uriHandler, sitemapService, subjectProvider,
-				pageAccessController);
+		navigator = new DefaultV7Navigator(uriHandler, viewMapping, errorViewProvider, sitemapService, subjectProvider,
+				pageAccessController, uiProvider);
+
 		CurrentInstance.set(UI.class, scopedUI);
 		// when
 		navigator.navigateTo(StandardPageKey.Login);
+		assertThat(navigator.getCurrentView()).isInstanceOf(LoginView.class);
+		verify(scopedUI).changeView(any(V7View.class));
 		// // when
 		navigator.loginSuccessful();
 		// // then
-		verify(scopedUI).changeView(loginView);
-		assertThat(navigator.getCurrentView()).isEqualTo(view1);
+		verify(scopedUI, times(2)).changeView(any(V7View.class));
+		assertThat(navigator.getCurrentView()).isInstanceOf(PrivateHomeView.class);
 
 	}
 
@@ -345,7 +447,7 @@ public class DefaultV7NavigatorTest {
 		// when
 		navigator.navigateTo(page);
 		// then
-		assertThat(navigator.getCurrentView()).isEqualTo(view2);
+		assertThat(navigator.getCurrentView()).isInstanceOf(View2.class);
 
 	}
 
@@ -356,8 +458,8 @@ public class DefaultV7NavigatorTest {
 		String page1 = "";
 		String fragment1 = page1 + "/id=2/age=5";
 
-		when(sitemap.standardPageURI(StandardPageKey.Public_Home)).thenReturn("public");
-		when(sitemap.getRedirectPageFor("public")).thenReturn("public");
+		when(sitemap.standardPageURI(StandardPageKey.Public_Home)).thenReturn("public/home");
+		when(sitemap.getRedirectPageFor("")).thenReturn("public/home");
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode1.setViewClass(View1.class);
@@ -365,7 +467,7 @@ public class DefaultV7NavigatorTest {
 		// when
 		navigator.navigateTo(fragment1);
 		// then
-		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo("public/age=5/id=2");
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo("public/home/age=5/id=2");
 
 	}
 
@@ -425,7 +527,8 @@ public class DefaultV7NavigatorTest {
 		mockNode1 = new SitemapNode(page, view2.getClass(), LabelKey.Cancel, Locale.UK, collator, translate);
 		when(sitemap.uri(mockNode1)).thenReturn(page);
 		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
-		when(sitemap.nodeFor(page)).thenReturn(mockNode1);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
+		when(browserPage.getUriFragment()).thenReturn("wiggly");
 		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
 		mockNode1.setViewClass(View2.class);
 
@@ -467,7 +570,7 @@ public class DefaultV7NavigatorTest {
 		navigator.navigateTo(fragment1);
 
 		// then
-		assertThat(navigator.getCurrentView()).isEqualTo(view1);
+		assertThat(navigator.getCurrentView()).isInstanceOf(View1.class);
 		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment1);
 
 		assertThat(navigator.getPreviousNavigationState()).isNull();
@@ -476,7 +579,7 @@ public class DefaultV7NavigatorTest {
 		navigator.navigateTo(fragment2);
 
 		// then
-		assertThat(navigator.getCurrentView()).isEqualTo(view2);
+		assertThat(navigator.getCurrentView()).isInstanceOf(View2.class);
 		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment2);
 
 		assertThat(navigator.getPreviousNavigationState().getFragment()).isEqualTo(fragment1);
@@ -485,7 +588,7 @@ public class DefaultV7NavigatorTest {
 		navigator.clearHistory();
 
 		// then
-		assertThat(navigator.getCurrentView()).isEqualTo(view2);
+		assertThat(navigator.getCurrentView()).isInstanceOf(View2.class);
 		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment2);
 
 		assertThat(navigator.getPreviousNavigationState()).isNull();
@@ -563,6 +666,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "public/view2";
 		NavigationState navigationState = uriHandler.navigationState(page);
+		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
 		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode2);
 		mockNode2.setViewClass(View2.class);
 		mockNode2.setPageAccessControl(PageAccessControl.PUBLIC);
@@ -833,5 +937,24 @@ public class DefaultV7NavigatorTest {
 			}
 
 		};
+	}
+
+	@ModuleProvider
+	protected AbstractModule moduleProvider2() {
+		return new DirectSitemapModule() {
+
+			@Override
+			protected void define() {
+				addEntry("public/view1", View1.class, LabelKey.Yes, PageAccessControl.PUBLIC);
+				addEntry("public/view2", View2.class, LabelKey.Yes, PageAccessControl.PUBLIC);
+				addEntry("public/logout", LogoutView.class, LabelKey.Yes, PageAccessControl.PUBLIC);
+				addEntry("public/login", LoginView.class, LabelKey.Yes, PageAccessControl.PUBLIC);
+				addEntry("private/home", PrivateHomeView.class, LabelKey.Yes, PageAccessControl.PUBLIC);
+				addEntry("public/home", PublicHomeView.class, LabelKey.Yes, PageAccessControl.PUBLIC);
+				addEntry("private/transfers", View1.class, LabelKey.Yes, PageAccessControl.PUBLIC);
+
+			}
+		};
+
 	}
 }

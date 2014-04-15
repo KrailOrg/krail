@@ -150,7 +150,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		// page isn't available during injected construction
 		Page page = getPage();
 		page.addUriFragmentChangedListener(navigator);
-		navigator.setPage(page);
+
 		setErrorHandler(errorHandler);
 		page.setTitle(pageTitle());
 		doLayout();

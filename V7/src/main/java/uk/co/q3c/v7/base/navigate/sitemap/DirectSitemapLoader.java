@@ -18,6 +18,11 @@ import uk.co.q3c.v7.base.navigate.StandardPageKey;
  * Implementations off this interface take directly coded definitions of {@link Sitemap} entries, and load them into the
  * {@link Sitemap} when invoked by the {@link SitemapService}.
  * 
+ * DirectSitemapLoader is usually used to load standard pages by including the Guice module
+ * {@link DefaultStandardPagesModule}. See https://sites.google.com/site/q3cjava/sitemap#TOC-Standard-Pages
+ * 
+ * @see StandardPageKey
+ * 
  * 
  * @see AnnotationSitemapLoader
  * @see FileSitemapLoader
@@ -25,12 +30,5 @@ import uk.co.q3c.v7.base.navigate.StandardPageKey;
  * 
  */
 public interface DirectSitemapLoader extends SitemapLoader {
-	/**
-	 * DirectSitemapLoader is the only loader to process standard pages. See
-	 * https://sites.google.com/site/q3cjava/sitemap#TOC-Standard-Pages
-	 * 
-	 * @see StandardPageKey
-	 */
-	void loadStandardPages();
 
 }

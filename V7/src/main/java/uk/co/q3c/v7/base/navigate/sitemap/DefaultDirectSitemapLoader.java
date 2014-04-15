@@ -33,7 +33,6 @@ import com.google.inject.Inject;
 public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements DirectSitemapLoader {
 
 	private Map<String, DirectSitemapEntry> pageMap;
-	// private final Map<String, StandardPageSitemapEntry> standardPageMap;
 	private final Sitemap sitemap;
 	private final CurrentLocale currentLocale;
 	private final Translate translate;
@@ -44,7 +43,6 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
 		this.sitemap = sitemap;
 		this.currentLocale = currentLocale;
 		this.translate = translate;
-		// this.standardPageMap = standardPageMap;
 	}
 
 	@Override
@@ -62,11 +60,9 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
 					sitemap.addStandardPage((StandardPageKey) entry.getValue().getLabelKey(), node);
 				}
 			}
-			// loadStandardPages();
 			processRedirects();
 			return true;
 		}
-		loadStandardPages();
 		processRedirects();
 		return false;
 	}
@@ -100,20 +96,6 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
 	@Inject(optional = true)
 	protected void setRedirects(Map<String, RedirectEntry> redirects) {
 		this.redirects = redirects;
-	}
-
-	@Override
-	public void loadStandardPages() {
-		// Collator collator = Collator.getInstance(currentLocale.getLocale());
-		// for (Entry<String, StandardPageSitemapEntry> entry : standardPageMap.entrySet()) {
-		// SitemapNode node = sitemap.append(entry.getKey());
-		// StandardPageSitemapEntry value = entry.getValue();
-		// node.setLabelKey(value.getLabelKey(), translate, collator);
-		// node.setPageAccessControl(value.getPageAccessControl());
-		// node.setTranslate(translate);
-		// node.setViewClass(value.getViewClass());
-
-		// }
 	}
 
 }

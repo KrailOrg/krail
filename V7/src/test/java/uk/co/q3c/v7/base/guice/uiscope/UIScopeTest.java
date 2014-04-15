@@ -62,6 +62,7 @@ import uk.co.q3c.v7.base.view.DefaultErrorView;
 import uk.co.q3c.v7.base.view.DefaultPublicHomeView;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
+import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.I18NTranslator;
@@ -144,6 +145,7 @@ public class UIScopeTest {
 
 	static class TestModule extends AbstractModule {
 
+		@SuppressWarnings("unused")
 		@Override
 		protected void configure() {
 
@@ -177,6 +179,8 @@ public class UIScopeTest {
 			bind(ApplicationConfigurationService.class).to(DefaultApplicationConfigurationService.class);
 			MapBinder<Integer, IniFileConfig> iniFileConfigs = MapBinder.newMapBinder(binder(), Integer.class,
 					IniFileConfig.class);
+			MapBinder<String, V7View> viewMapping = MapBinder.newMapBinder(binder(), String.class, V7View.class);
+			bind(ScopedUIProvider.class).to(BasicUIProvider.class);
 
 		}
 	}
