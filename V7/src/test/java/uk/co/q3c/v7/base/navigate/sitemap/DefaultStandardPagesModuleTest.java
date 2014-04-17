@@ -19,10 +19,22 @@ import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
+import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.notify.DefaultUserNotificationModule;
+import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
+import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
+import uk.co.q3c.v7.base.ui.BasicUIProvider;
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
+import uk.co.q3c.v7.base.view.StandardViewModule;
+import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.LabelKey;
 
@@ -33,7 +45,10 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ DefaultStandardPagesModule.class, I18NModule.class })
+@GuiceContext({ DefaultStandardPagesModule.class, UIScopeModule.class, StandardViewModule.class,
+		ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class, DefaultUserNotificationModule.class,
+		ApplicationConfigurationModule.class, DefaultUserOptionModule.class, DefaultShiroModule.class,
+		DefaultComponentModule.class })
 public class DefaultStandardPagesModuleTest {
 
 	@Inject
@@ -80,8 +95,9 @@ public class DefaultStandardPagesModuleTest {
 
 			@Override
 			protected void configure() {
+				bind(V7Navigator.class).to(DefaultV7Navigator.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(SitemapChecker.class).to(DefaultSitemapChecker.class);
+				bind(ScopedUIProvider.class).to(BasicUIProvider.class);
 
 			}
 

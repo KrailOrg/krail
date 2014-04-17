@@ -1,6 +1,7 @@
 package uk.co.q3c.v7.base.ui;
 
 import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -54,7 +55,7 @@ public abstract class V7UIModule extends AbstractModule {
 	}
 
 	protected void bindNavigator() {
-		bind(V7Navigator.class).to(DefaultV7Navigator.class);
+		bind(V7Navigator.class).to(DefaultV7Navigator.class).in(UIScoped.class);
 	}
 
 	/**

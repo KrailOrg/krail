@@ -15,7 +15,6 @@ package uk.co.q3c.v7.testapp.view;
 import java.util.List;
 
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.ViewBase;
 import uk.co.q3c.v7.i18n.MessageKey;
@@ -32,7 +31,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
-@UIScoped
 public class NotificationsView extends ViewBase {
 	private final UserNotifier userNotifier;
 	private final Translate translate;

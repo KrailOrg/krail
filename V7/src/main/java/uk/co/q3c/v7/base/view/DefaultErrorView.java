@@ -3,7 +3,6 @@ package uk.co.q3c.v7.base.view;
 import java.util.List;
 
 import uk.co.q3c.util.StackTraceUtil;
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.V7ErrorHandler;
 
@@ -17,7 +16,6 @@ import com.vaadin.ui.TextArea;
  * @author David Sowerby 4 Aug 2013
  * 
  */
-@UIScoped
 public class DefaultErrorView extends ViewBase implements ErrorView {
 
 	private Throwable error;

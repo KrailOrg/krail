@@ -17,7 +17,6 @@ import java.util.List;
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 import uk.co.q3c.v7.base.config.ConfigKeys;
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.push.Broadcaster;
 import uk.co.q3c.v7.base.view.component.BroadcastMessageLog;
 
@@ -34,7 +33,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
-@UIScoped
 public class PushView extends ViewBaseGrid {
 
 	private Button sendButton;

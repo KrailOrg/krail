@@ -12,9 +12,10 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
 import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
@@ -34,8 +35,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ChameleonTheme;
 
 // TODO i18N
-@UIScoped
 public class DefaultLoginView extends GridViewBase implements LoginView, ClickListener {
+	private static Logger log = LoggerFactory.getLogger(DefaultLoginView.class);
 	private Label label;
 	private TextField usernameBox;
 	private PasswordField passwordBox;
@@ -78,6 +79,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		UsernamePasswordToken token = new UsernamePasswordToken(usernameBox.getValue(), passwordBox.getValue());
 		try {
 			subjectProvider.get().login(token);
+			log.debug("login successful");
 			loginStatusHandler.initiateStatusChange();
 		} catch (UnknownAccountException uae) {
 			loginExceptionHandler.unknownAccount(this, token);

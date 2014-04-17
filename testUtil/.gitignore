@@ -1,1 +1,9 @@
+/logs
 /bin
+/.gradle
+/.classpath
+/.project
+/.settings
+/.gradle
+/error-screenshots
+/build

@@ -24,7 +24,6 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapException;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
@@ -46,7 +45,6 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
 
-@UIScoped
 public class DefaultV7Navigator implements V7Navigator {
 	private static Logger log = LoggerFactory.getLogger(DefaultV7Navigator.class);
 
@@ -316,6 +314,7 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	@Override
 	public void loginStatusChange(boolean authenticated, Subject subject) {
+		log.debug("login status change");
 		if (authenticated) {
 			loginSuccessful();
 		}

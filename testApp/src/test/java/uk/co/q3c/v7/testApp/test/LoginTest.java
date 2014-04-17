@@ -13,6 +13,7 @@ import org.openqa.selenium.WebElement;
 import uk.co.q3c.v7.base.view.DefaultLoginView;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
+import com.vaadin.testbench.By;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.ui.Label;
 
@@ -24,6 +25,35 @@ public class LoginTest extends V7TestBenchTestCase {
 	@Before
 	public void setUp() throws Exception {
 		driver.get(rootUrl());
+	}
+
+	@Test
+	public void login2() {
+		// given
+		String startFragment = "system-account";
+		navigateTo(startFragment);
+		// when
+		driver.get(concatUrl(baseUrl, "/testapp/#login"));
+		pause(1000);
+		testBenchElement(driver.findElement(By.vaadin("testapp::PID_SDefaultUserNavigationTree#n[0]"))).click(29, 7);
+		pause(1000);
+		testBenchElement(driver.findElement(By.vaadin("testapp::PID_SDefaultLoginView-TextField-username"))).click(48,
+				16);
+		pause(1000);
+		driver.findElement(By.vaadin("testapp::PID_SDefaultLoginView-TextField-username")).clear();
+		pause(1000);
+		driver.findElement(By.vaadin("testapp::PID_SDefaultLoginView-TextField-username")).sendKeys("ds");
+		testBenchElement(driver.findElement(By.vaadin("testapp::PID_SDefaultLoginView-PasswordField-password"))).click(
+				54, 5);
+		pause(1000);
+		driver.findElement(By.vaadin("testapp::PID_SDefaultLoginView-PasswordField-password")).clear();
+		pause(1000);
+		driver.findElement(By.vaadin("testapp::PID_SDefaultLoginView-PasswordField-password")).sendKeys("password");
+		pause(1000);
+		driver.findElement(By.vaadin("testapp::PID_SDefaultLoginView-Button/domChild[0]/domChild[0]")).click();
+		// then
+		pause(500);
+		verifyUrl(startFragment);
 	}
 
 	@Test
@@ -48,9 +78,9 @@ public class LoginTest extends V7TestBenchTestCase {
 		verifyUrl("login");
 
 		// when username and password entered
-		fillLoginForm();
+		fillLoginForm("ds", "password");
 		// then correct url and status panel updated
-		pause(500);
+		pause(1500);
 		verifyUrl(startFragment);
 		assertThat(loginButton().getText()).isEqualTo("log out");
 		assertThat(loginLabel().getText()).isEqualTo("ds");

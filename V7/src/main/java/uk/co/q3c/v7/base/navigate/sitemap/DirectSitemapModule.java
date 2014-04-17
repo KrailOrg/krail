@@ -13,6 +13,7 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKey;
@@ -39,7 +40,7 @@ public abstract class DirectSitemapModule extends AbstractModule {
 
 	private MapBinder<String, DirectSitemapEntry> sitemapBinder;
 	private MapBinder<String, RedirectEntry> redirectBinder;
-	private MapBinder<String, V7View> viewMapping;
+	protected MapBinder<String, V7View> viewMapping;
 
 	/**
 	 * Override this method to define {@link Sitemap} entries with one or more calls to {@link #addEntry}, something
@@ -81,15 +82,19 @@ public abstract class DirectSitemapModule extends AbstractModule {
 
 		DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, permission);
 		sitemapBinder.addBinding(uri).toInstance(entry);
-		if (viewClass != null) {
-			viewMapping.addBinding(uri).to(viewClass);
-		}
+		bindView(uri, viewClass);
 
 	}
 
 	protected void addEntry(String uri, Class<? extends V7View> viewClass, I18NKey<?> labelKey,
 			PageAccessControl pageAccessControl) {
 		addEntry(uri, viewClass, labelKey, pageAccessControl, null);
+	}
+
+	protected void bindView(String uri, Class<? extends V7View> viewClass) {
+		if (viewClass != null) {
+			viewMapping.addBinding(uri).to(viewClass).in(UIScoped.class);
+		}
 	}
 
 	protected void addRedirect(String fromURI, String toURI) {

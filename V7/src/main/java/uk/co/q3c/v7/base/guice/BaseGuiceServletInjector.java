@@ -52,16 +52,10 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 	protected static Injector injector;
 
-	// private ThreadLocal<ServletContext> ctx;
-
 	protected BaseGuiceServletInjector() {
 		super();
 
 	}
-
-	// protected ThreadLocal<ServletContext> createThreadLocalServletContext() {
-	// return new ThreadLocal<ServletContext>();
-	// }
 
 	/**
 	 * Module instances for the base should be added in {@link #getModules()}. Module instance for the app using V7
@@ -73,7 +67,6 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	public Injector getInjector() {
 		if (injector == null) {
 			createInjector();
-			// throw new IllegalStateException("The injector is not available, it may not yet been initialized.");
 		}
 		return injector;
 	}
@@ -206,16 +199,6 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	 */
 	protected abstract void addAppModules(List<Module> baseModules);
 
-	// @Override
-	// public void contextInitialized(ServletContextEvent servletContextEvent) {
-	// ctx = createThreadLocalServletContext();
-	// final ServletContext servletContext = servletContextEvent.getServletContext();
-	// ctx.set(servletContext);
-	// createInjector();
-	// super.contextInitialized(servletContextEvent);
-	//
-	// }
-
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		log.info("Stopping services");
@@ -225,6 +208,5 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 			log.error("Exception while stopping services", e);
 		}
 		super.contextDestroyed(servletContextEvent);
-		// ctx.remove();
 	}
 }

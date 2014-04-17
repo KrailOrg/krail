@@ -954,6 +954,14 @@ public class DefaultV7NavigatorTest {
 				addEntry("private/transfers", View1.class, LabelKey.Yes, PageAccessControl.PUBLIC);
 
 			}
+
+			/**
+			 * Overrides binding to UIScope
+			 */
+			@Override
+			protected void bindView(String uri, Class<? extends V7View> viewClass) {
+				viewMapping.addBinding(uri).to(viewClass);
+			}
 		};
 
 	}

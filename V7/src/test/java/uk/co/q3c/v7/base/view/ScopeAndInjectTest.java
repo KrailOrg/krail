@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -58,7 +58,7 @@ public class ScopeAndInjectTest {
 		Set<Class<? extends V7View>> concreteTypes = new HashSet<>();
 
 		Set<Class<? extends V7View>> noInject = new HashSet<>();
-		Set<Class<? extends V7View>> noScope = new HashSet<>();
+		// Set<Class<? extends V7View>> noScope = new HashSet<>();
 
 		// when
 		// remove interfaces, abstract classes and inner classes
@@ -70,9 +70,9 @@ public class ScopeAndInjectTest {
 		}
 
 		for (Class<? extends V7View> clazz : concreteTypes) {
-			if (!clazz.isAnnotationPresent(UIScoped.class)) {
-				noScope.add(clazz);
-			}
+			// if (!clazz.isAnnotationPresent(UIScoped.class)) {
+			// noScope.add(clazz);
+			// }
 			if (!hasConstructorWithInject(clazz)) {
 				noInject.add(clazz);
 			}
@@ -80,16 +80,16 @@ public class ScopeAndInjectTest {
 		}
 		// These are test classes which don't need to be UISCoped (and make test construction more difficult if they
 		// are)
-		noScope.remove(fixture.testviews2.TestAnnotatedView.class);
-		noScope.remove(fixture1.TestAnnotatedView.class);
+		// noScope.remove(fixture.testviews2.TestAnnotatedView.class);
+		// noScope.remove(fixture1.TestAnnotatedView.class);
 
-		if (noScope.size() > 0) {
-			System.out
-					.println("\n\n-------- The following V7View implementations are missing @UIScoped annotation -------------\n");
-			for (Class<? extends V7View> clazz : noScope) {
-				System.out.println(clazz.getName());
-			}
-		}
+		// if (noScope.size() > 0) {
+		// System.out
+		// .println("\n\n-------- The following V7View implementations are missing @UIScoped annotation -------------\n");
+		// for (Class<? extends V7View> clazz : noScope) {
+		// System.out.println(clazz.getName());
+		// }
+		// }
 
 		if (noInject.size() > 0) {
 			System.out
@@ -101,7 +101,7 @@ public class ScopeAndInjectTest {
 
 		// then
 
-		assertThat(noScope).isEmpty();
+		// assertThat(noScope).isEmpty();
 		assertThat(noInject).isEmpty();
 
 	}

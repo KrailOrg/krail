@@ -50,7 +50,7 @@ dependencies{
 	compile "javax.servlet:javax.servlet-api:3.+"
 
 
-//	test.testLogging.showStandardStreams = true
+	testCompile project(path: ':testUtil', configuration: 'tests')
 	
 	
 	//this test used to fail under Gradle, but is fixed as a result of moving to a service base approach for startup

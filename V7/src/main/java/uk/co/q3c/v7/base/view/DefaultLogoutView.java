@@ -14,13 +14,10 @@ package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 
-@UIScoped
 public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 
 	@Inject

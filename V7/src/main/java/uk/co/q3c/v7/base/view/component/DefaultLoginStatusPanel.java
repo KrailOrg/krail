@@ -12,9 +12,9 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import com.google.inject.Inject;
-
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
@@ -25,6 +25,7 @@ import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -45,7 +46,7 @@ import com.vaadin.ui.themes.ChameleonTheme;
  */
 // TODO I18N
 public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, ClickListener {
-
+	private static Logger log = LoggerFactory.getLogger(DefaultLoginStatusPanel.class);
 	private final Label usernameLabel;
 	private final Button login_logout_Button;
 	private final V7Navigator navigator;
@@ -92,6 +93,7 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 
 	@Override
 	public void loginStatusChange(boolean authenticated, Subject subject) {
+		log.debug("login status change");
 		String caption = (authenticated) ? translate.from(LabelKey.Log_Out) : translate.from(LabelKey.Log_In);
 		login_logout_Button.setCaption(caption.toLowerCase());
 		usernameLabel.setValue(subjectIdentifier.subjectName());

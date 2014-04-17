@@ -3,7 +3,6 @@ package org.vaadin.addons.guice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
@@ -19,7 +18,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-@UIScoped
 public class ViewA extends VerticalLayout implements V7View {
 	private static Logger log = LoggerFactory.getLogger(ViewA.class);
 	// private final SessionScopedBean bean;

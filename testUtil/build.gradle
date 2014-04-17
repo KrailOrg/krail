@@ -1,0 +1,19 @@
+//build for testutil
+apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
+
+
+//see http://stackoverflow.com/questions/5144325/gradle-test-dependency
+//the testJar, configurations and artifacts closure enable tests in other projects to use these tests
+//see the demo project or testApp project fopr examples
+task testJar(type: Jar, dependsOn: testClasses) {
+	baseName = "test-${project.archivesBaseName}"
+	from sourceSets.test.output
+}
+
+configurations {
+	tests
+}
+
+artifacts {
+	tests testJar
+}

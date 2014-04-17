@@ -12,8 +12,9 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,21 +32,28 @@ import org.junit.runner.RunWith;
 
 import uk.co.q3c.util.ResourceUtils;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
-import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.ConfigKeys;
-import uk.co.q3c.v7.base.config.DefaultApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.InheritingConfiguration;
+import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestFileSitemapModule;
+import uk.co.q3c.v7.base.notify.DefaultUserNotificationModule;
 import uk.co.q3c.v7.base.services.ServiceException;
-import uk.co.q3c.v7.base.services.ServicesMonitorModule;
+import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
+import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
+import uk.co.q3c.v7.base.ui.BasicUIProvider;
+import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.base.view.StandardViewModule;
+import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
 import uk.co.q3c.v7.i18n.DescriptionKey;
-import uk.co.q3c.v7.i18n.I18NTranslator;
+import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.LabelKey;
 
 import com.google.inject.AbstractModule;
@@ -66,8 +74,10 @@ import fixture.TestConfigurationException;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ ServicesMonitorModule.class, TestDirectSitemapModule.class, TestFileSitemapModule.class,
-		DefaultStandardPagesModule.class, ApplicationConfigurationModule.class })
+@GuiceContext({ TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class,
+		StandardViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class,
+		DefaultUserNotificationModule.class, ApplicationConfigurationModule.class, DefaultUserOptionModule.class,
+		DefaultShiroModule.class, DefaultComponentModule.class, DefaultStandardPagesModule.class })
 public class DefaultSitemapServiceTest {
 
 	private final int FILE_NODE_COUNT = 4;
@@ -143,6 +153,7 @@ public class DefaultSitemapServiceTest {
 		assertThat(service.getSourceTypes()).containsOnly(SitemapSourceType.FILE, SitemapSourceType.DIRECT,
 				SitemapSourceType.ANNOTATION);
 		assertThat(sitemap.getReport()).isNotEmpty();
+		System.out.println(sitemap.getReport());
 	}
 
 	@Test
@@ -269,13 +280,9 @@ public class DefaultSitemapServiceTest {
 
 			@Override
 			protected void configure() {
-				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
-				bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
-				bind(AnnotationSitemapLoader.class).to(DefaultAnnotationSitemapLoader.class);
-				bind(DirectSitemapLoader.class).to(DefaultDirectSitemapLoader.class);
+				bind(V7Navigator.class).to(DefaultV7Navigator.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(SitemapChecker.class).to(DefaultSitemapChecker.class);
-				bind(ApplicationConfigurationService.class).to(DefaultApplicationConfigurationService.class);
+				bind(ScopedUIProvider.class).to(BasicUIProvider.class);
 			}
 
 		};

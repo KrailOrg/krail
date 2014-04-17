@@ -258,6 +258,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 
 	@Override
 	public void loginStatusChange(boolean status, Subject subject) {
+		log.debug("login status has changed");
 		loadNodes();
 	}
 

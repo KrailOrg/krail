@@ -232,7 +232,9 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 		usernameBox().sendKeys(username);
 		passwordBox().clear();
 		passwordBox().sendKeys(password);
-		submitButton().click();
+		pause(1000);
+		clickButton(null, DefaultLoginView.class, Button.class);
+		pause(1000);
 	}
 
 	public void login() {
@@ -265,8 +267,10 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	}
 
 	protected void clickButton(WebDriver driver, String qualifier, Class<?>... classes) {
-		WebElement webElement = element(driver, qualifier, classes);
-		webElement.click();
+		String id = id(qualifier, classes);
+		WebElement element = driver.findElement(By.vaadin(id));
+		pause(1000);
+		element.click();
 	}
 
 	protected void clickButton(String qualifier, Class<?>... classes) {

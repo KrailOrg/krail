@@ -77,7 +77,7 @@ public class DefaultLoginStatusHandler implements LoginStatusHandler {
 	 */
 	private void fireListeners() {
 		Subject subject = subjectProvider.get();
-		log.debug("firing login status listeners");
+		log.debug("firing login status change listeners");
 		for (LoginStatusListener listener : listeners) {
 			listener.loginStatusChange(subject.isAuthenticated(), subject);
 		}
@@ -86,7 +86,7 @@ public class DefaultLoginStatusHandler implements LoginStatusHandler {
 
 	@Override
 	public void initiateStatusChange() {
-
+		log.debug("starting login status change");
 		VaadinSession session = sessionProvider.get();
 		Collection<UI> uIs = session.getUIs();
 

@@ -47,10 +47,10 @@ public class ServicesMonitor implements ServiceChangeListener {
 		this.services = new MapMaker().weakKeys().makeMap();
 	}
 
-	/**
-	 * Registers the service so status can be tracked, and attaches a listener to the service to monitor status changes.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param service
+	 * @see uk.co.q3c.v7.base.services.ServicesMonitor#registerService(uk.co.q3c.v7.base.services.Service)
 	 */
 	synchronized public void registerService(Service service) {
 		ServiceStatus serviceStatus = new ServiceStatus();
@@ -60,9 +60,6 @@ public class ServicesMonitor implements ServiceChangeListener {
 
 	}
 
-	/**
-	 * Processes a change in Service status and records it in the {@link #services} map
-	 */
 	@Override
 	synchronized public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
 
@@ -79,12 +76,6 @@ public class ServicesMonitor implements ServiceChangeListener {
 		services.put(service, status);
 	}
 
-	/**
-	 * Stops all services. Are you sure you really want to do that?
-	 * 
-	 * @throws Exception
-	 */
-
 	synchronized public void stopAllServices() throws Exception {
 		log.info("Stopping all services");
 		for (Service service : services.keySet()) {
@@ -92,23 +83,11 @@ public class ServicesMonitor implements ServiceChangeListener {
 		}
 	}
 
-	/**
-	 * Returns a safe copy of the registered services
-	 * 
-	 * @return
-	 */
 	synchronized public ImmutableList<Service> getRegisteredServices() {
 		return ImmutableList.copyOf(services.keySet());
 
 	}
 
-	/**
-	 * Retrieves the status 'record' from the {@link #services} map, or null if no entry exists in the map. Not
-	 * synchronised because the map is concurrent
-	 * 
-	 * @param service
-	 * @return
-	 */
 	public ServiceStatus getServiceStatus(Service service) {
 		return services.get(service);
 	}

@@ -14,7 +14,6 @@ package uk.co.q3c.v7.base.view;
 
 import java.util.List;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
 import uk.co.q3c.v7.base.view.component.ApplicationMenu;
@@ -41,7 +40,6 @@ import com.google.inject.Inject;
  * @author David Sowerby 29 Aug 2013
  * 
  */
-@UIScoped
 public class ApplicationView1 extends ViewBaseWithLayout {
 
 	private final UserNavigationTree navTree;

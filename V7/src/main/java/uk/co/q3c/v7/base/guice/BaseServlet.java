@@ -91,7 +91,7 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 	}
 
 	protected boolean productionMode() {
-		return true;
+		return false;
 	}
 
 }

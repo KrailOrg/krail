@@ -22,11 +22,8 @@ public class TestGuiceServletInjector extends BaseGuiceServletInjector {
 
 	private boolean addAppModulesCalled;
 
-	// private final ThreadLocal<ServletContext> testctx;
-
 	protected TestGuiceServletInjector() {
 		super();
-		// this.testctx = testctx;
 	}
 
 	@Override
@@ -36,11 +33,6 @@ public class TestGuiceServletInjector extends BaseGuiceServletInjector {
 		baseModules.add(new DummyModule());
 		addAppModulesCalled = true;
 	}
-
-	// @Override
-	// protected ThreadLocal<ServletContext> createThreadLocalServletContext() {
-	// return testctx;
-	// }
 
 	public boolean isAddAppModulesCalled() {
 		return addAppModulesCalled;

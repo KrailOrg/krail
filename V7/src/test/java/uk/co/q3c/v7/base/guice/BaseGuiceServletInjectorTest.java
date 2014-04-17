@@ -13,8 +13,8 @@
 package uk.co.q3c.v7.base.guice;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -23,14 +23,19 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
 import org.apache.shiro.SecurityUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import uk.co.q3c.v7.base.services.Service;
+import uk.co.q3c.v7.base.services.ServicesMonitor;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
+import uk.co.q3c.v7.testutil.LogMonitor;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -40,16 +45,19 @@ import com.vaadin.server.VaadinService;
 @GuiceContext({})
 public class BaseGuiceServletInjectorTest {
 
-	TestGuiceServletInjector out;
+	@Inject
+	LogMonitor logMonitor;
 
-	// @Mock
-	// ThreadLocal<ServletContext> ctx;
+	TestGuiceServletInjector out;
 
 	@Mock
 	ServletContextEvent servletContextEvent;
 
 	@Mock
 	ServletContext servletContext;
+
+	@Mock
+	Service service;
 
 	@Before
 	public void setup() {
@@ -68,10 +76,9 @@ public class BaseGuiceServletInjectorTest {
 	}
 
 	@Test
-	public void startAndStop() {
+	public void startAndStop() throws Exception {
 
 		// given
-		// when(ctx.get()).thenReturn(servletContext);
 		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
 		out.contextInitialized(servletContextEvent);
 		// when
@@ -79,28 +86,24 @@ public class BaseGuiceServletInjectorTest {
 		// then
 		assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(V7SecurityManager.class);
 		assertThat(out.isAddAppModulesCalled()).isEqualTo(true);
-		// verify(ctx).set(servletContext);
 		assertThat(injector).isNotNull();
+
+		// given
+		ServicesMonitor servicesMonitor = injector.getInstance(ServicesMonitor.class);
+		servicesMonitor.registerService(service);
 
 		// when
 		out.contextDestroyed(servletContextEvent);
-		// ## all services stopped
+
+		// then
+		verify(service).stop(); // services stopped
+		assertThat(logMonitor.infoLogs()).contains("Stopping all services");
+
 	}
 
-	/**
-	 * Context not initialised, injector not created
-	 */
-	@Test(expected = IllegalStateException.class)
-	public void notInitialised() {
-
-		// given
-		// when(ctx.get()).thenReturn(servletContext);
-		when(servletContextEvent.getServletContext()).thenReturn(servletContext);
-		// when
-		out.getInjector();
-		// then
-
-		fail("exception expected");
+	@After
+	public void teardown() {
+		logMonitor.close();
 	}
 
 }

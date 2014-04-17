@@ -38,6 +38,9 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 /**
+ * THIS IS NOT IN USE - AND PROBABLY WON'T WORK. I HAVE KEPT IT ONLY BECAUSE THERE MAY BE SOME USEFUL IDEAS IN HERE
+ * 
+ * 
  * Extend this class to test anything related to a Vaadin UI (or in the case of V7, as {@link ScopedUI}. Note that the
  * {@link UIScope} is not prepared until the {@link #uiSetup()} method is called, so subclasses must use providers if
  * they want to inject UIScoped objects - otherwise the injection happens before the UIScope context is ready.
@@ -149,7 +152,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 		when(mockedSession.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
 		ui.setSession(mockedSession);
 		ui.getV7Navigator().addViewChangeListener(this);
-		ui.doInit(mockedRequest, 23);
+		// ui.doInit(mockedRequest, 23);
 		return ui;
 	}
 

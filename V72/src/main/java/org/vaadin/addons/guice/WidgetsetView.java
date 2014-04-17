@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.vaadin.risto.stepper.IntStepper;
 
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.view.ViewBase;
 
 import com.google.inject.Inject;
@@ -36,7 +35,6 @@ import de.steinwedel.messagebox.ButtonId;
 import de.steinwedel.messagebox.Icon;
 import de.steinwedel.messagebox.MessageBox;
 
-@UIScoped
 public class WidgetsetView extends ViewBase {
 	private static Logger log = LoggerFactory.getLogger(WidgetsetView.class);
 	private Button popupButton;
