@@ -335,10 +335,12 @@ public class DefaultV7Navigator implements V7Navigator {
 	}
 
 	@Override
-	public void error() {
+	public void error(Throwable error) {
 		NavigationState navigationState = uriHandler.navigationState("error");
 		V7ViewChangeEvent event = new V7ViewChangeEvent(errorViewProvider.get(), navigationState);
-		changeView(errorViewProvider.get(), event);
+		ErrorView errorView = errorViewProvider.get();
+		errorView.setError(error);
+		changeView(errorView, event);
 	}
 
 	/**

@@ -57,8 +57,10 @@ public interface V7Navigator extends UriFragmentChangedListener, LoginStatusList
 	/**
 	 * Navigate to the error view. It is assumed that the view has already been set up with error information, usually
 	 * via the V7ErrorHandler
+	 * 
+	 * @param throwable
 	 */
-	void error();
+	void error(Throwable throwable);
 
 	/**
 	 * Navigates to the location represented by {@code navigationState}, which may include parameters

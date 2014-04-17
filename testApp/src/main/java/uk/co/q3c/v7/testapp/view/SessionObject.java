@@ -15,10 +15,11 @@ package uk.co.q3c.v7.testapp.view;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.servlet.SessionScoped;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 
-@SessionScoped
+import com.google.inject.Inject;
+
+@VaadinSessionScoped
 public class SessionObject {
 	private static Logger log = LoggerFactory.getLogger(SessionObject.class);
 	private final String sessionData = "starting the session";

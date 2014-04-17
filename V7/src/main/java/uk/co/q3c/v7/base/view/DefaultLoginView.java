@@ -24,6 +24,7 @@ import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -79,6 +80,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		UsernamePasswordToken token = new UsernamePasswordToken(usernameBox.getValue(), passwordBox.getValue());
 		try {
 			subjectProvider.get().login(token);
+			VaadinSession current = VaadinSession.getCurrent();
 			log.debug("login successful");
 			loginStatusHandler.initiateStatusChange();
 		} catch (UnknownAccountException uae) {

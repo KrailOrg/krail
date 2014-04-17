@@ -684,7 +684,7 @@ public class DefaultV7NavigatorTest {
 		// given
 
 		// when
-		navigator.error();
+		navigator.error(new NullPointerException("test"));
 		// then
 		assertThat(navigator.getCurrentView()).isInstanceOf(ErrorView.class);
 

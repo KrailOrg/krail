@@ -12,8 +12,6 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import com.google.inject.Inject;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -21,8 +19,8 @@ import org.apache.shiro.authz.UnauthorizedException;
 import uk.co.q3c.v7.base.navigate.InvalidURIException;
 import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.view.ErrorView;
 
+import com.google.inject.Inject;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorEvent;
 
@@ -39,18 +37,16 @@ public class V7ErrorHandler extends DefaultErrorHandler {
 	private final UnauthenticatedExceptionHandler authenticationHandler;
 	private final UnauthorizedExceptionHandler authorisationHandler;
 	private final InvalidURIExceptionHandler invalidUriHandler;
-	private final ErrorView errorView;
 	private final V7Navigator navigator;
 
 	@Inject
 	protected V7ErrorHandler(UnauthenticatedExceptionHandler authenticationHandler,
 			UnauthorizedExceptionHandler authorisationHandler, InvalidURIExceptionHandler invalidUriHandler,
-			ErrorView errorView, V7Navigator navigator) {
+			V7Navigator navigator) {
 		super();
 		this.authenticationHandler = authenticationHandler;
 		this.authorisationHandler = authorisationHandler;
 		this.invalidUriHandler = invalidUriHandler;
-		this.errorView = errorView;
 		this.navigator = navigator;
 	}
 
@@ -79,8 +75,7 @@ public class V7ErrorHandler extends DefaultErrorHandler {
 			return;
 		}
 
-		errorView.setError(event.getThrowable());
-		navigator.error();
+		navigator.error(event.getThrowable());
 
 	}
 

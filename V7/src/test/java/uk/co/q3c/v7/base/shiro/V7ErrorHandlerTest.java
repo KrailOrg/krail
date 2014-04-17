@@ -12,7 +12,9 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -24,7 +26,6 @@ import org.mockito.Mock;
 import uk.co.q3c.v7.base.navigate.InvalidURIException;
 import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.view.ErrorView;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -41,8 +42,7 @@ public class V7ErrorHandlerTest {
 	UnauthorizedExceptionHandler authorisationHandler;
 	@Mock
 	InvalidURIExceptionHandler invalidUriHandler;
-	@Mock
-	ErrorView errorView;
+
 	@Mock
 	V7Navigator navigator;
 
@@ -51,8 +51,7 @@ public class V7ErrorHandlerTest {
 
 	@Before
 	public void setup() {
-		handler = new V7ErrorHandler(authenticationHandler, authorisationHandler, invalidUriHandler, errorView,
-				navigator);
+		handler = new V7ErrorHandler(authenticationHandler, authorisationHandler, invalidUriHandler, navigator);
 	}
 
 	@Test
@@ -106,7 +105,7 @@ public class V7ErrorHandlerTest {
 		handler.error(event);
 		// then check default has been called
 		// not a great check but the only I can use with static methods
-		verify(navigator).error();
+		verify(navigator).error(exception);
 
 	}
 

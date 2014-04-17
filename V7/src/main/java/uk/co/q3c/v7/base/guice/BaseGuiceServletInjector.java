@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultStandardPagesModule;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapServiceModule;
@@ -92,6 +93,8 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());
+		baseModules.add(new VaadinSessionScopeModule());
+
 		baseModules.add(new ServicesMonitorModule());
 
 		baseModules.add(shiroModule());
