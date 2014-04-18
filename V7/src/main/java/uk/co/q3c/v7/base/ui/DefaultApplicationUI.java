@@ -3,7 +3,6 @@ package uk.co.q3c.v7.base.ui;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.push.Broadcaster;
 import uk.co.q3c.v7.base.push.PushMessageRouter;
-import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
 import uk.co.q3c.v7.base.view.component.ApplicationMenu;
@@ -44,8 +43,8 @@ public class DefaultApplicationUI extends ScopedUI {
 	protected DefaultApplicationUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
-			LoginStatusHandler loginStatusHandler, Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
-		super(navigator, errorHandler, converterFactory, loginStatusHandler, broadcaster, pushMessageRouter);
+			Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
+		super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter);
 		this.navTree = navTree;
 		this.breadcrumb = breadcrumb;
 		this.loginOut = loginOut;

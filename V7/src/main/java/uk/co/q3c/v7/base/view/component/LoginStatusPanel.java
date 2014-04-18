@@ -12,11 +12,9 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import uk.co.q3c.v7.base.shiro.LoginStatusListener;
-
 import com.vaadin.ui.Component;
 
-public interface LoginStatusPanel extends Component, LoginStatusListener {
+public interface LoginStatusPanel extends Component {
 
 	String getActionLabel();
 

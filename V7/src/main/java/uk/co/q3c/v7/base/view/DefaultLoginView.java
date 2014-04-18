@@ -17,14 +17,12 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
-import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -47,16 +45,14 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	private Label statusMsgLabel;
 	private final LoginExceptionHandler loginExceptionHandler;
 	private final Provider<Subject> subjectProvider;
-	private final LoginStatusHandler loginStatusHandler;
 	private final Translate translate;
 
 	@Inject
 	protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider,
-			LoginStatusHandler loginStatusHandler, Translate translate) {
+			Translate translate) {
 		super();
 		this.loginExceptionHandler = loginExceptionHandler;
 		this.subjectProvider = subjectProvider;
-		this.loginStatusHandler = loginStatusHandler;
 		this.translate = translate;
 		buildView();
 	}
@@ -80,9 +76,6 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		UsernamePasswordToken token = new UsernamePasswordToken(usernameBox.getValue(), passwordBox.getValue());
 		try {
 			subjectProvider.get().login(token);
-			VaadinSession current = VaadinSession.getCurrent();
-			log.debug("login successful");
-			loginStatusHandler.initiateStatusChange();
 		} catch (UnknownAccountException uae) {
 			loginExceptionHandler.unknownAccount(this, token);
 		} catch (IncorrectCredentialsException ice) {

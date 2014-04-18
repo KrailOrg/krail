@@ -32,11 +32,11 @@ import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+import uk.co.q3c.v7.base.view.DefaultViewFactory;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
-import uk.co.q3c.v7.base.view.DefaultViewFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -307,14 +307,6 @@ public class DefaultV7Navigator implements V7Navigator {
 	@Override
 	public void navigateTo(StandardPageKey pageKey) {
 		navigateTo(sitemap.standardPageURI(pageKey));
-	}
-
-	@Override
-	public void loginStatusChange(boolean authenticated, Subject subject) {
-		log.debug("login status change");
-		if (authenticated) {
-			loginSuccessful();
-		}
 	}
 
 	/**

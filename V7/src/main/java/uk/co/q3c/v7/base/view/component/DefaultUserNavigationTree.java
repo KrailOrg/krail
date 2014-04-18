@@ -27,8 +27,6 @@ import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
-import uk.co.q3c.v7.base.shiro.LoginStatusHandler;
-import uk.co.q3c.v7.base.shiro.LoginStatusListener;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.useropt.UserOption;
@@ -50,8 +48,7 @@ import com.vaadin.ui.Tree;
  * @author David Sowerby 17 May 2013
  * 
  */
-public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener,
-		LoginStatusListener {
+public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener {
 	private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
 	private final Sitemap sitemap;
 	private int maxLevel;
@@ -67,8 +64,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 
 	@Inject
 	protected DefaultUserNavigationTree(Sitemap sitemap, V7Navigator navigator, SubjectProvider subjectProvider,
-			UserOption userOption, LoginStatusHandler loginStatusHandler, Translate translate,
-			PageAccessController pageAccessController) {
+			UserOption userOption, Translate translate, PageAccessController pageAccessController) {
 		super();
 		this.sitemap = sitemap;
 		this.navigator = navigator;
@@ -84,8 +80,6 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		addValueChangeListener(this);
 		navigator.addViewChangeListener(this);
 		setId(ID.getId(this));
-		loginStatusHandler.addListener(this);
-		loginStatusChange(loginStatusHandler.subjectIsAuthenticated(), subjectProvider.get());
 		loadNodes();
 
 	}
@@ -256,10 +250,10 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 
 	}
 
-	@Override
-	public void loginStatusChange(boolean status, Subject subject) {
-		log.debug("login status has changed");
-		loadNodes();
-	}
+	// @Override
+	// public void loginStatusChange(boolean status, Subject subject) {
+	// log.debug("login status has changed");
+	// loadNodes();
+	// }
 
 }
