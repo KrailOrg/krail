@@ -34,9 +34,7 @@ import uk.co.q3c.v7.i18n.Translate;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.Singleton;
 
-@Singleton
 public class DefaultSitemapService extends AbstractServiceI18N implements SitemapService {
 
 	private static Logger log = LoggerFactory.getLogger(DefaultSitemapService.class);

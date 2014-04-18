@@ -12,12 +12,15 @@
  */
 package uk.co.q3c.v7.base.view;
 
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
+
 import com.google.inject.AbstractModule;
 
 /**
  * 
  * Maps standard views (Login, Logout and Error Views) to their implementations. These can all be overridden if
- * required.
+ * required. Note that the ViewFactory implementation binds V7View instances to UIScoped, so there is no need to
+ * annotate the classes, or bind the scope within these module bindings.
  * 
  * @see V7DirectSitemapModule
  * @author David Sowerby 9 Jan 2013
@@ -40,7 +43,12 @@ public class StandardViewModule extends AbstractModule {
 		bindRequestSystemAccountUnlockView();
 		bindRequestSystemAccountRefreshView();
 		bindSystemAccountView();
+		bindViewFactory();
 
+	}
+
+	protected void bindViewFactory() {
+		bind(ViewFactory.class).to(DefaultViewFactory.class);
 	}
 
 	/**
@@ -98,7 +106,7 @@ public class StandardViewModule extends AbstractModule {
 	 * Override this to provide your own public home {@link V7View}
 	 */
 	protected void bindPublicHomeView() {
-		bind(PublicHomeView.class).to(DefaultPublicHomeView.class);
+		bind(PublicHomeView.class).to(DefaultPublicHomeView.class).in(UIScoped.class);
 
 	}
 

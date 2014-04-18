@@ -108,7 +108,6 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 
 	@Override
 	public void afterViewChange(V7ViewChangeEvent event) {
-		currentView = event.getNewView();
 	}
 
 	/**

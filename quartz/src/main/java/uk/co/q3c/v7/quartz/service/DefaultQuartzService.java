@@ -41,7 +41,6 @@ import uk.co.q3c.v7.quartz.scheduler.V7TriggerListener;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
-import com.google.inject.Singleton;
 
 /**
  * Creates schedulers and attaches listeners and jobs to those schedulers, as defined in the associated Guice modules.
@@ -55,7 +54,6 @@ import com.google.inject.Singleton;
  * @author David Sowerby
  * 
  */
-@Singleton
 public class DefaultQuartzService extends AbstractServiceI18N implements QuartzService {
 
 	private final Set<SchedulerListenerEntry> schedulerListeners;

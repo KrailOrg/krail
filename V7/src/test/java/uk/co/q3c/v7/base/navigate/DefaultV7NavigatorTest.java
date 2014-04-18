@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import java.text.Collator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
@@ -31,6 +30,8 @@ import uk.co.q3c.v7.base.shiro.PagePermission;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+import uk.co.q3c.v7.base.view.DefaultErrorView;
+import uk.co.q3c.v7.base.view.DefaultViewFactory;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
@@ -230,9 +231,6 @@ public class DefaultV7NavigatorTest {
 
 	StrictURIFragmentHandler uriHandler;
 
-	@Inject
-	Map<String, Provider<V7View>> viewMapping;
-
 	@Mock
 	ScopedUI scopedUI;
 
@@ -290,6 +288,9 @@ public class DefaultV7NavigatorTest {
 	@Mock
 	ScopedUIProvider uiProvider;
 
+	@Inject
+	DefaultViewFactory viewFactory;
+
 	// had some issues with mocking this - the getViewClass() method wouldn't play
 	// so resorted to old fashioned mocking
 	SitemapNode mockNode1;
@@ -322,8 +323,8 @@ public class DefaultV7NavigatorTest {
 		when(injector.getInstance(View1.class)).thenReturn(view1);
 		when(sitemap.uri(mockNode1)).thenReturn(public_view1);
 
-		navigator = new DefaultV7Navigator(uriHandler, viewMapping, errorViewProvider, sitemapService, subjectProvider,
-				pageAccessController, uiProvider);
+		navigator = new DefaultV7Navigator(uriHandler, sitemapService, subjectProvider, pageAccessController,
+				uiProvider, viewFactory);
 
 		CurrentInstance.set(UI.class, scopedUI);
 	}
@@ -382,8 +383,8 @@ public class DefaultV7NavigatorTest {
 
 		node2.setViewClass(View2.class);
 		loginNode.setViewClass(LoginView.class);
-		navigator = new DefaultV7Navigator(uriHandler, viewMapping, errorViewProvider, sitemapService, subjectProvider,
-				pageAccessController, uiProvider);
+		navigator = new DefaultV7Navigator(uriHandler, sitemapService, subjectProvider, pageAccessController,
+				uiProvider, viewFactory);
 
 		CurrentInstance.set(UI.class, scopedUI);
 		// when
@@ -413,13 +414,13 @@ public class DefaultV7NavigatorTest {
 		node2.setPageAccessControl(PageAccessControl.PUBLIC);
 		loginNode.setPageAccessControl(PageAccessControl.PUBLIC);
 
-		privateHomeNode.setViewClass(View1.class);
+		privateHomeNode.setViewClass(PrivateHomeView.class);
 		privateHomeNode.setPageAccessControl(PageAccessControl.PERMISSION);
 		when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
 		node2.setViewClass(View2.class);
 		loginNode.setViewClass(LoginView.class);
-		navigator = new DefaultV7Navigator(uriHandler, viewMapping, errorViewProvider, sitemapService, subjectProvider,
-				pageAccessController, uiProvider);
+		navigator = new DefaultV7Navigator(uriHandler, sitemapService, subjectProvider, pageAccessController,
+				uiProvider, viewFactory);
 
 		CurrentInstance.set(UI.class, scopedUI);
 		// when
@@ -934,6 +935,7 @@ public class DefaultV7NavigatorTest {
 			@Override
 			protected void configure() {
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(ErrorView.class).to(DefaultErrorView.class);
 			}
 
 		};
@@ -955,13 +957,6 @@ public class DefaultV7NavigatorTest {
 
 			}
 
-			/**
-			 * Overrides binding to UIScope
-			 */
-			@Override
-			protected void bindView(String uri, Class<? extends V7View> viewClass) {
-				viewMapping.addBinding(uri).to(viewClass);
-			}
 		};
 
 	}

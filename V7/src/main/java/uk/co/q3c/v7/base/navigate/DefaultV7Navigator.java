@@ -16,7 +16,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -37,6 +36,7 @@ import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
+import uk.co.q3c.v7.base.view.DefaultViewFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -49,7 +49,6 @@ public class DefaultV7Navigator implements V7Navigator {
 	private static Logger log = LoggerFactory.getLogger(DefaultV7Navigator.class);
 
 	private final List<V7ViewChangeListener> viewChangeListeners = new LinkedList<V7ViewChangeListener>();
-	private final Provider<ErrorView> errorViewProvider;
 	private final URIFragmentHandler uriHandler;
 
 	private NavigationState currentNavigationState;
@@ -61,22 +60,21 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	private final PageAccessController pageAccessController;
 
-	private final Map<String, Provider<V7View>> viewMapping;
-
 	private final ScopedUIProvider uiProvider;
 
+	private final DefaultViewFactory viewFactory;
+
 	@Inject
-	public DefaultV7Navigator(URIFragmentHandler uriHandler, Map<String, Provider<V7View>> viewMapping,
-			Provider<ErrorView> errorViewProvider, SitemapService sitemapService, SubjectProvider subjectProvider,
-			PageAccessController pageAccessController, ScopedUIProvider uiProvider) {
+	public DefaultV7Navigator(URIFragmentHandler uriHandler, SitemapService sitemapService,
+			SubjectProvider subjectProvider, PageAccessController pageAccessController, ScopedUIProvider uiProvider,
+			DefaultViewFactory viewFactory) {
 		super();
-		this.errorViewProvider = errorViewProvider;
 		this.uriHandler = uriHandler;
-		this.viewMapping = viewMapping;
 		this.uiProvider = uiProvider;
 
 		this.subjectProvider = subjectProvider;
 		this.pageAccessController = pageAccessController;
+		this.viewFactory = viewFactory;
 
 		try {
 			sitemapService.start();
@@ -159,26 +157,22 @@ public class DefaultV7Navigator implements V7Navigator {
 		}
 
 		log.debug("obtaining view for '{}'", navigationState.getVirtualPage());
-		Provider<V7View> viewProvider = viewMapping.get(navigationState.getVirtualPage());
 
-		if (viewProvider == null) {
+		SitemapNode node = sitemap.nodeFor(navigationState);
+		if (node == null) {
 			throw new InvalidURIException("URI not found: " + navigationState.getVirtualPage());
 		}
 
 		Subject subject = subjectProvider.get();
-		SitemapNode node = sitemap.nodeFor(navigationState);
-		checkNotNull(node, "no node found for " + navigationState);
 		boolean authorised = pageAccessController.isAuthorised(subject, node);
 		if (authorised) {
+
 			// need this in case the change is blocked by a listener
 			NavigationState previousPreviousNavigationState = previousNavigationState;
 			previousNavigationState = currentNavigationState;
 			currentNavigationState = navigationState;
 
-			V7View view = viewProvider.get();
-			view.setIds();
-
-			V7ViewChangeEvent event = new V7ViewChangeEvent(view, navigationState);
+			V7ViewChangeEvent event = new V7ViewChangeEvent(navigationState);
 			if (!fireBeforeViewChange(event)) {
 				currentNavigationState = previousNavigationState;
 				previousNavigationState = previousPreviousNavigationState;
@@ -192,7 +186,10 @@ public class DefaultV7Navigator implements V7Navigator {
 			if (!navigationState.getFragment().equals(page.getUriFragment())) {
 				page.setUriFragment(navigationState.getFragment(), false);
 			}
+			// now change the view
+			V7View view = viewFactory.get(node.getViewClass());
 			changeView(view, event);
+			// and tell listeners its changed
 			fireAfterViewChange(event);
 		} else {
 			throw new UnauthorizedException(navigationState.getVirtualPage());
@@ -337,10 +334,9 @@ public class DefaultV7Navigator implements V7Navigator {
 	@Override
 	public void error(Throwable error) {
 		NavigationState navigationState = uriHandler.navigationState("error");
-		V7ViewChangeEvent event = new V7ViewChangeEvent(errorViewProvider.get(), navigationState);
-		ErrorView errorView = errorViewProvider.get();
-		errorView.setError(error);
-		changeView(errorView, event);
+		V7ViewChangeEvent event = new V7ViewChangeEvent(navigationState);
+		V7View view = viewFactory.get(ErrorView.class);
+		changeView(view, event);
 	}
 
 	/**
