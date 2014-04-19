@@ -37,7 +37,7 @@ import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
 import uk.co.q3c.v7.base.shiro.StandardShiroModule;
 import uk.co.q3c.v7.base.user.UserModule;
-import uk.co.q3c.v7.base.view.StandardViewModule;
+import uk.co.q3c.v7.base.view.ViewModule;
 import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.i18n.I18NModule;
 
@@ -103,7 +103,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		baseModules.add(standardPagesModule());
 
-		baseModules.add(standardViewsModule());
+		baseModules.add(viewModule());
 
 		baseModules.add(componentModule());
 
@@ -159,11 +159,11 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Override this if you have sub-classed {@link StandardViewModule} to provide bindings to your own standard page
+	 * Override this if you have sub-classed {@link ViewModule} to provide bindings to your own standard page
 	 * views
 	 */
-	protected Module standardViewsModule() {
-		return new StandardViewModule();
+	protected Module viewModule() {
+		return new ViewModule();
 	}
 
 	/**

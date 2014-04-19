@@ -13,9 +13,9 @@
 package uk.co.q3c.v7.testapp.view;
 
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.base.view.StandardViewModule;
+import uk.co.q3c.v7.base.view.ViewModule;
 
-public class TestAppViewModule extends StandardViewModule {
+public class TestAppViewModule extends ViewModule {
 
 	@Override
 	protected void bindPublicHomeView() {

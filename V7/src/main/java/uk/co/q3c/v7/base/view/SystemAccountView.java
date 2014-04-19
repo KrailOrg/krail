@@ -15,7 +15,7 @@ package uk.co.q3c.v7.base.view;
 /**
  * The View to use as a parent page for all system account related pages. The default binding is to
  * {@link DefaultSystemAccountView}. The binding is in StandardViewModule. To bind this interface to your own
- * implementation, sub-class {@link StandardViewModule} and override the appropriate binding method.
+ * implementation, sub-class {@link ViewModule} and override the appropriate binding method.
  * 
  * @author David Sowerby 1 Jan 2013
  * 

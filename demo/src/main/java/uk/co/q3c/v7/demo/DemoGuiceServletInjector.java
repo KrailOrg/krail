@@ -17,7 +17,7 @@ public class DemoGuiceServletInjector extends BaseGuiceServletInjector {
 	}
 
 	@Override
-	protected Module standardViewsModule() {
+	protected Module viewModule() {
 		return new DemoViewModule();
 	}
 

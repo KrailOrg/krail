@@ -37,7 +37,7 @@ import uk.co.q3c.v7.base.user.UserModule;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.base.view.StandardViewModule;
+import uk.co.q3c.v7.base.view.ViewModule;
 import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.LabelKey;
@@ -50,7 +50,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ TestDirectSitemapModule1.class, TestDirectSitemapModule2.class, UIScopeModule.class,
-		StandardViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class,
+		ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class,
 		UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class,
 		StandardComponentModule.class, VaadinSessionScopeModule.class })
 public class DirectSitemapModuleTest {

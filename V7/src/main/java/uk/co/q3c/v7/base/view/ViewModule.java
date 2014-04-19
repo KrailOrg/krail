@@ -26,7 +26,7 @@ import com.google.inject.AbstractModule;
  * @author David Sowerby 9 Jan 2013
  * 
  */
-public class StandardViewModule extends AbstractModule {
+public class ViewModule extends AbstractModule {
 
 	@Override
 	protected void configure() {

@@ -1,7 +1,7 @@
 package uk.co.q3c.v7.base.view;
 
 /**
- * Interface for ErrorViews. Binding to implementation can be changed in {@link StandardViewModule}
+ * Interface for ErrorViews. Binding to implementation can be changed in {@link ViewModule}
  * 
  * @author david
  * 

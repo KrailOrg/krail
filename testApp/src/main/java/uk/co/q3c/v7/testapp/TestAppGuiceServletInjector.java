@@ -18,7 +18,7 @@ public class TestAppGuiceServletInjector extends BaseGuiceServletInjector {
 	}
 
 	@Override
-	protected Module standardViewsModule() {
+	protected Module viewModule() {
 		return new TestAppViewModule();
 	}
 

@@ -18,7 +18,7 @@ import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.LogoutView;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.base.view.StandardViewModule;
+import uk.co.q3c.v7.base.view.ViewModule;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.LabelKey;
 
@@ -30,7 +30,7 @@ public class StandardPagesModule extends DirectSitemapModule {
 	/**
 	 * Override this method to define different {@link Sitemap} entries for Standard Pages. All of the views specified
 	 * here are interfaces, so if you only want to change the View implementation you can change the binding in
-	 * {@link StandardViewModule}
+	 * {@link ViewModule}
 	 * 
 	 * @see #addEntry(String, Class, I18NKey, boolean, String)
 	 */

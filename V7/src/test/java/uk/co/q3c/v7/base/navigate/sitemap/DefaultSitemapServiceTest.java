@@ -50,7 +50,7 @@ import uk.co.q3c.v7.base.ui.BasicUIProvider;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 import uk.co.q3c.v7.base.user.UserModule;
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.base.view.StandardViewModule;
+import uk.co.q3c.v7.base.view.ViewModule;
 import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18NModule;
@@ -75,7 +75,7 @@ import fixture.TestConfigurationException;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class,
-		StandardViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class,
+		ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class,
 		UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class,
 		StandardComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class })
 public class DefaultSitemapServiceTest {
