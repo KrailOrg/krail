@@ -11,6 +11,8 @@ import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 import uk.co.q3c.v7.base.view.component.MessageBar;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
+import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 import com.vaadin.data.util.converter.ConverterFactory;
@@ -43,8 +45,9 @@ public class DefaultApplicationUI extends ScopedUI {
 	protected DefaultApplicationUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
-			Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
-		super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter);
+			Broadcaster broadcaster, PushMessageRouter pushMessageRouter,
+			@SuppressWarnings("rawtypes") @ApplicationTitle I18NKey applicationTitleKey, Translate translate) {
+		super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitleKey, translate);
 		this.navTree = navTree;
 		this.breadcrumb = breadcrumb;
 		this.loginOut = loginOut;
@@ -53,11 +56,6 @@ public class DefaultApplicationUI extends ScopedUI {
 		this.messageBar = messageBar;
 		this.logo = logo;
 		this.header = header;
-	}
-
-	@Override
-	protected String pageTitle() {
-		return "V7 Demo";
 	}
 
 	@Override
@@ -115,14 +113,40 @@ public class DefaultApplicationUI extends ScopedUI {
 
 	}
 
-	@Override
-	protected void processBroadcastMessage(String group, String message) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public MessageBar getMessageBar() {
 		return messageBar;
+	}
+
+	public VerticalLayout getBaseLayout() {
+		return baseLayout;
+	}
+
+	public UserNavigationTree getNavTree() {
+		return navTree;
+	}
+
+	public Breadcrumb getBreadcrumb() {
+		return breadcrumb;
+	}
+
+	public LoginStatusPanel getLoginOut() {
+		return loginOut;
+	}
+
+	public ApplicationMenu getMenu() {
+		return menu;
+	}
+
+	public SubpagePanel getSubpage() {
+		return subpage;
+	}
+
+	public ApplicationLogo getLogo() {
+		return logo;
+	}
+
+	public ApplicationHeader getHeader() {
+		return header;
 	}
 
 }

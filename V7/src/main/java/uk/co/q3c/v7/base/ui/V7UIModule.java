@@ -8,6 +8,8 @@ import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
+import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.LabelKey;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
@@ -19,6 +21,7 @@ public abstract class V7UIModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		bindApplicationTitle();
 		MapBinder<String, UI> mapbinder = MapBinder.newMapBinder(binder(), String.class, UI.class);
 
 		bind(WebBrowser.class).toProvider(BrowserProvider.class);
@@ -29,6 +32,15 @@ public abstract class V7UIModule extends AbstractModule {
 		bindURIHandler();
 		bindConverterFactory();
 		bindLoginStatusMonitor();
+
+	}
+
+	/**
+	 * override this method to provide the I18Nkey which defines your application title (which appears in your browser
+	 * tab)
+	 */
+	protected void bindApplicationTitle() {
+		bind(I18NKey.class).annotatedWith(ApplicationTitle.class).toInstance(LabelKey.V7);
 	}
 
 	private void bindConverterFactory() {

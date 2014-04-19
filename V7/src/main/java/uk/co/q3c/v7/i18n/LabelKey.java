@@ -54,8 +54,9 @@ public enum LabelKey implements I18NKey<Labels> {
 	System_Account,
 	Unlock_Account,
 	Unnamed,
+	V7,
 	Warning,
-	Yes;
+	Yes, ;
 
 	@Override
 	public Labels getBundle(Locale locale) {

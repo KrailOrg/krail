@@ -25,6 +25,7 @@ import uk.co.q3c.v7.base.push.Broadcaster.BroadcastListener;
 import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewHolder;
+import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.vaadin.annotations.Push;
@@ -63,14 +64,19 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	private final PushMessageRouter pushMessageRouter;
 
 	private final V7Navigator navigator;
+	private final I18NKey<?> applicationTitleKey;
+	private final Translate translate;
 
 	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			Broadcaster broadcaster, PushMessageRouter pushMessageRouter) {
+			Broadcaster broadcaster, PushMessageRouter pushMessageRouter,
+			@ApplicationTitle I18NKey applicationTitleKey, Translate translate) {
 		super();
 		this.errorHandler = errorHandler;
 		this.navigator = navigator;
 		this.converterFactory = converterFactory;
 		this.pushMessageRouter = pushMessageRouter;
+		this.applicationTitleKey = applicationTitleKey;
+		this.translate = translate;
 
 		viewDisplayPanel = new Panel();
 		registerWithBroadcaster(broadcaster);
@@ -157,13 +163,14 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	}
 
 	/**
-	 * Override to provide a title for your UI page This will appear in your browser tab. If this needs to be an I18N
-	 * title, inject {@link Translate} into your sub-class and use that to produce the title. (see also the
-	 * documentation at https://sites.google.com/site/q3cjava/internationalisation-i18n)
+	 * Provides a locale sensitive title for your application (which appears in the browser tab). The title is defined
+	 * by the {@link #applicationTitleKey}, which should be specified in your sub-class of {@link V7UIModule}
 	 * 
 	 * @return
 	 */
-	protected abstract String pageTitle();
+	protected String pageTitle() {
+		return translate.from(applicationTitleKey);
+	}
 
 	/**
 	 * Uses the {@link #screenLayout} defined by sub-class implementations of {@link #screenLayout()}, expands it to
