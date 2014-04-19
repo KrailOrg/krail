@@ -10,24 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.notify;
+package uk.co.q3c.v7.base.user.notify;
 
-import uk.co.q3c.v7.base.view.component.MessageBar;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
-import com.google.inject.Inject;
-
-public class MessageBarWarningNotification implements WarningNotification {
-
-	private final MessageBar messageBar;
-
-	@Inject
-	protected MessageBarWarningNotification(MessageBar messageBar) {
-		this.messageBar = messageBar;
-	}
+/**
+ * Provides an information notification to a user using the Vaadin provided 'Splash' window
+ * 
+ * @author David Sowerby
+ * 
+ */
+public class VaadinInformationNotification implements InformationNotification {
 
 	@Override
 	public void message(String message) {
-		messageBar.warningMessage(message);
+		Notification.show(message, Type.HUMANIZED_MESSAGE);
 	}
 
 }

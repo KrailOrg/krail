@@ -12,6 +12,11 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 /**
@@ -40,11 +44,11 @@ public class PageAccessController {
 	}
 
 	public boolean isAuthorised(Subject subject, SitemapNode node) {
-		Preconditions.checkNotNull(node, "node");
-		Preconditions.checkNotNull(subject, "subject");
+		checkNotNull(node, "node");
+		checkNotNull(subject, "subject");
 		String virtualPage = sitemap.navigationState(node).getVirtualPage();
-		Preconditions.checkNotNull(virtualPage, "virtualPage");
-		Preconditions.checkNotNull(node.getPageAccessControl(), "node.getPageAccessControl(), " + node.getUriSegment());
+		checkNotNull(virtualPage, "virtualPage");
+		checkNotNull(node.getPageAccessControl(), "node.getPageAccessControl(), " + node.getUriSegment());
 		switch (node.getPageAccessControl()) {
 		case AUTHENTICATION:
 			return subject.isAuthenticated();
@@ -60,5 +64,20 @@ public class PageAccessController {
 			return (subject.isAuthenticated()) || (subject.isRemembered());
 		}
 		return false;
+	}
+
+	public List<SitemapNode> authorisedChildNodes(Subject subject, SitemapNode parentNode) {
+		checkNotNull(subject);
+		if (parentNode == null) {
+			return new ArrayList<>();
+		}
+		List<SitemapNode> subnodes = sitemap.getChildren(parentNode);
+		ArrayList<SitemapNode> authorisedSubNodes = new ArrayList<SitemapNode>();
+		for (SitemapNode node : subnodes) {
+			if (isAuthorised(subject, node)) {
+				authorisedSubNodes.add(node);
+			}
+		}
+		return authorisedSubNodes;
 	}
 }

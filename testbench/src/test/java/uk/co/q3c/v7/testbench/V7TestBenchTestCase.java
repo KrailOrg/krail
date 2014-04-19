@@ -232,9 +232,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 		usernameBox().sendKeys(username);
 		passwordBox().clear();
 		passwordBox().sendKeys(password);
-		pause(1000);
 		clickButton(null, DefaultLoginView.class, Button.class);
-		pause(1000);
 	}
 
 	public void login() {

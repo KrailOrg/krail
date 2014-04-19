@@ -18,6 +18,7 @@ import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NListener;
@@ -31,9 +32,11 @@ public class DefaultBreadcrumb extends NavigationButtonPanel implements I18NList
 		Button.ClickListener, Breadcrumb {
 
 	@Inject
-	protected DefaultBreadcrumb(V7Navigator navigator, Sitemap sitemap, CurrentLocale currentLocale, Translate translate) {
-		super(navigator, sitemap, currentLocale, translate);
-
+	protected DefaultBreadcrumb(V7Navigator navigator, Sitemap sitemap, CurrentLocale currentLocale,
+			Translate translate, UserOption userOption) {
+		super(navigator, sitemap, currentLocale, translate, userOption);
+		// breadcrumb order should not be sorted
+		usesSort = false;
 	}
 
 	@Override

@@ -43,7 +43,8 @@ import uk.co.q3c.v7.base.shiro.PagePermission;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
-import uk.co.q3c.v7.base.useropt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.Translate;
@@ -88,6 +89,9 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 	@Mock
 	NavigationState navigationState;
 
+	@Mock
+	UserStatus userStatus;
+
 	@Inject
 	PageAccessController pageAccessController;
 
@@ -115,7 +119,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(0);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(0);
 	}
@@ -129,7 +133,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(3);
 		@SuppressWarnings("unchecked")
@@ -153,7 +157,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(6);
 		@SuppressWarnings("unchecked")
@@ -183,7 +187,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(3);
 		@SuppressWarnings("unchecked")
@@ -206,7 +210,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 		// then
 		// assertThat(unt.getItemIds().size()).isEqualTo(5);
 		@SuppressWarnings("unchecked")
@@ -231,7 +235,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(2);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 		// then
 		assertThat(unt.getMaxLevel()).isEqualTo(-1);
 		// when
@@ -261,7 +265,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("home");
@@ -275,7 +279,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(1);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 		// then
 		assertThat(unt.isImmediate()).isTrue();
 
@@ -287,7 +291,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 		// given
 		buildSitemap(2);
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 		// when
 		unt.setValue(newNode2);
 		// then
@@ -303,7 +307,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 
 		// then
 		assertThat(unt.getItemCaption(newNode1)).isEqualTo("zu Hause");
@@ -337,7 +341,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 		// then
 		@SuppressWarnings("unchecked")
 		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
@@ -357,7 +361,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 		buildSitemap(3);
 		// when
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(1);
 
@@ -373,7 +377,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 		// given
 		buildSitemap(4);
 		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController);
+				translate, pageAccessController, userStatus);
 		// when
 
 		// sorted is false by default, should be insertion order

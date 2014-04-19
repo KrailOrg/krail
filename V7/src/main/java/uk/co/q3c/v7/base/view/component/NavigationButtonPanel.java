@@ -15,10 +15,15 @@ package uk.co.q3c.v7.base.view.component;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.navigate.sitemap.NodeSorter;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
@@ -35,32 +40,44 @@ import com.vaadin.ui.themes.BaseTheme;
 
 public abstract class NavigationButtonPanel extends HorizontalLayout implements I18NListener, V7ViewChangeListener,
 		Button.ClickListener, Breadcrumb {
-
+	private static Logger log = LoggerFactory.getLogger(NavigationButtonPanel.class);
 	private final List<NavigationButton> buttons = new ArrayList<>();
 	private final V7Navigator navigator;
 	private final Sitemap sitemap;
 	private final Translate translate;
 
+	public static final String sortedOpt = "sorted";
+	protected boolean usesSort = true;
+	private final UserOption userOption;
+
 	@Inject
 	protected NavigationButtonPanel(V7Navigator navigator, Sitemap sitemap, CurrentLocale currentLocale,
-			Translate translate) {
+			Translate translate, UserOption userOption) {
 		this.navigator = navigator;
 		navigator.addViewChangeListener(this);
 		this.sitemap = sitemap;
 		this.translate = translate;
 		this.setSizeUndefined();
+		this.setWidth("100%");
 		this.setSpacing(true);
+		this.userOption = userOption;
 		ID.getId(this);
 
 	}
 
 	protected abstract void moveToNavigationState();
 
-	protected void organiseButtons(List<SitemapNode> nodes) {
-		int maxIndex = (nodes.size() > buttons.size() ? nodes.size() : buttons.size());
+	protected void organiseButtons(List<SitemapNode> nodeList) {
+		if (usesSort) {
+			boolean sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, true);
+			// which order, sorted or insertion?
+			new NodeSorter(nodeList, sorted).sort();
+
+		}
+		int maxIndex = (nodeList.size() > buttons.size() ? nodeList.size() : buttons.size());
 		for (int i = 0; i < maxIndex; i++) {
 			// nothing left in chain
-			if (i + 1 > nodes.size()) {
+			if (i + 1 > nodeList.size()) {
 				// but buttons still exist
 				if (i < buttons.size()) {
 					buttons.get(i).setVisible(false);
@@ -74,7 +91,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 				} else {
 					button = createButton();
 				}
-				setupButton(button, nodes.get(i));
+				setupButton(button, nodeList.get(i));
 			}
 
 		}

@@ -35,23 +35,23 @@ import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.base.config.ConfigKeys;
 import uk.co.q3c.v7.base.config.InheritingConfiguration;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultSitemapServiceTest.TestFileSitemapModule;
-import uk.co.q3c.v7.base.notify.DefaultUserNotificationModule;
 import uk.co.q3c.v7.base.services.ServiceException;
-import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
+import uk.co.q3c.v7.base.shiro.StandardShiroModule;
 import uk.co.q3c.v7.base.ui.BasicUIProvider;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
-import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
+import uk.co.q3c.v7.base.user.UserModule;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.StandardViewModule;
-import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
+import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.LabelKey;
@@ -76,8 +76,8 @@ import fixture.TestConfigurationException;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class,
 		StandardViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class,
-		DefaultUserNotificationModule.class, ApplicationConfigurationModule.class, DefaultUserOptionModule.class,
-		DefaultShiroModule.class, DefaultComponentModule.class, DefaultStandardPagesModule.class })
+		UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class,
+		StandardComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class })
 public class DefaultSitemapServiceTest {
 
 	private final int FILE_NODE_COUNT = 4;

@@ -32,6 +32,7 @@ import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.base.view.DefaultViewFactory;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.V7View;
@@ -45,6 +46,14 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
 
+/**
+ * There is no need to register as a listener with {@link UserStatus}, the navigator is always called after all
+ * other listeners - this is so that navigation components are set up before the navigator moves to a page (which might
+ * not be displayed in a navigation component if it is not up to date)
+ * 
+ * @author David Sowerby
+ * @date 18 Apr 2014
+ */
 public class DefaultV7Navigator implements V7Navigator {
 	private static Logger log = LoggerFactory.getLogger(DefaultV7Navigator.class);
 
@@ -143,8 +152,9 @@ public class DefaultV7Navigator implements V7Navigator {
 		checkNotNull(navigationState);
 		redirectIfNeeded(navigationState);
 
-		// this is partly to stop unnecessary changes, but also to prevent UserNavigationTree and other navigation aware
-		// components from causing a loop by responding to a change of URI
+		// stop unnecessary changes, but also to prevent navigation aware
+		// components from causing a loop by responding to a change of URI (they should suppress events when they do,
+		// but may not)
 		if (navigationState == currentNavigationState) {
 			log.debug("fragment unchanged, no navigation required");
 			return;
@@ -173,6 +183,7 @@ public class DefaultV7Navigator implements V7Navigator {
 			currentNavigationState = navigationState;
 
 			V7ViewChangeEvent event = new V7ViewChangeEvent(navigationState);
+			// if change is blocked revert to previous state
 			if (!fireBeforeViewChange(event)) {
 				currentNavigationState = previousNavigationState;
 				previousNavigationState = previousPreviousNavigationState;
@@ -281,24 +292,6 @@ public class DefaultV7Navigator implements V7Navigator {
 		return currentNavigationState.getParameterList();
 	}
 
-	/**
-	 * When a user has successfully logged in, they are routed back to the page they were on before going to the login
-	 * page. If they have gone straight to the login page (maybe they bookmarked it), or they were on the logout page,
-	 * they will be routed to the 'private home page' (the StandardPage for StandardPageKey_Private_Home)
-	 * 
-	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#loginSuccessful()
-	 */
-	@Override
-	public void loginSuccessful() {
-		log.debug("user logged in successfully, navigating to appropriate view");
-		SitemapNode previousNode = sitemap.nodeFor(previousNavigationState);
-		if (previousNode != null && previousNode != sitemap.standardPageNode(StandardPageKey.Logout)) {
-			navigateTo(previousNavigationState);
-		} else {
-			navigateTo(StandardPageKey.Private_Home);
-		}
-	}
-
 	@Override
 	public V7View getCurrentView() {
 		return currentView;
@@ -342,6 +335,30 @@ public class DefaultV7Navigator implements V7Navigator {
 	@Override
 	public SitemapNode getCurrentNode() {
 		return sitemap.nodeFor(currentNavigationState);
+	}
+
+	/**
+	 * When a user has successfully logged in, they are routed back to the page they were on before going to the login
+	 * page. If they have gone straight to the login page (maybe they bookmarked it), or they were on the logout page,
+	 * they will be routed to the 'private home page' (the StandardPage for StandardPageKey_Private_Home)
+	 * 
+	 */
+	@Override
+	public void userStatusChanged() {
+		log.debug("user logged in successfully, navigating to appropriate view");
+
+		if (subjectProvider.get().isAuthenticated()) {
+			// they have logged in
+			SitemapNode previousNode = sitemap.nodeFor(previousNavigationState);
+			if (previousNode != null && previousNode != sitemap.standardPageNode(StandardPageKey.Logout)) {
+				navigateTo(previousNavigationState);
+			} else {
+				navigateTo(StandardPageKey.Private_Home);
+			}
+		} else {
+			// they have logged out
+			navigateTo(StandardPageKey.Logout);
+		}
 	}
 
 }

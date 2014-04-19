@@ -29,17 +29,16 @@ import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.co.q3c.v7.base.navigate.sitemap.DefaultStandardPagesModule;
+import uk.co.q3c.v7.base.navigate.sitemap.StandardPagesModule;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapServiceModule;
-import uk.co.q3c.v7.base.notify.DefaultUserNotificationModule;
 import uk.co.q3c.v7.base.services.ServicesMonitor;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
-import uk.co.q3c.v7.base.shiro.DefaultShiroModule;
+import uk.co.q3c.v7.base.shiro.StandardShiroModule;
 import uk.co.q3c.v7.base.shiro.ShiroVaadinModule;
-import uk.co.q3c.v7.base.useropt.DefaultUserOptionModule;
+import uk.co.q3c.v7.base.user.UserModule;
 import uk.co.q3c.v7.base.view.StandardViewModule;
-import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
+import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.i18n.I18NModule;
 
 import com.google.inject.Guice;
@@ -100,7 +99,6 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		baseModules.add(shiroModule());
 		baseModules.add(shiroVaadinModule());
 		baseModules.add(new ShiroAopModule());
-		baseModules.add(userOptionsModule());
 
 		baseModules.add(servletModule());
 
@@ -110,7 +108,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		baseModules.add(componentModule());
 
-		baseModules.add(userNotificationModule());
+		baseModules.add(userModule());
 
 		addAppModules(baseModules);
 		addSitemapModules(baseModules);
@@ -131,11 +129,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	protected Module componentModule() {
-		return new DefaultComponentModule();
-	}
-
-	protected Module userOptionsModule() {
-		return new DefaultUserOptionModule();
+		return new StandardComponentModule();
 	}
 
 	/**
@@ -162,7 +156,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	 * views
 	 */
 	protected Module standardPagesModule() {
-		return new DefaultStandardPagesModule();
+		return new StandardPagesModule();
 	}
 
 	/**
@@ -174,7 +168,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Override this method if you have sub-classed {@link DefaultShiroModule} to provide bindings to your Shiro related
+	 * Override this method if you have sub-classed {@link StandardShiroModule} to provide bindings to your Shiro related
 	 * implementations (for example, {@link Realm} and {@link CredentialsMatcher}
 	 * 
 	 * @param servletContext
@@ -183,15 +177,14 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	 */
 
 	protected Module shiroModule() {
-		return new DefaultShiroModule();
+		return new StandardShiroModule();
 	}
 
 	/**
-	 * Override this if you have sub-classed {@link DefaultUserNotificationModule} to provide bindings to your own
-	 * notifications implementations
+	 * Override this if you have sub-classed {@link UserModule} to provide bindings to your user related implementations
 	 */
-	private Module userNotificationModule() {
-		return new DefaultUserNotificationModule();
+	private Module userModule() {
+		return new UserModule();
 	}
 
 	/**

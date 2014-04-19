@@ -14,7 +14,7 @@ package uk.co.q3c.v7.base.view.component;
 
 import com.google.inject.AbstractModule;
 
-public class DefaultComponentModule extends AbstractModule {
+public class StandardComponentModule extends AbstractModule {
 
 	@Override
 	protected void configure() {

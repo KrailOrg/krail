@@ -10,15 +10,24 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.view.component;
+package uk.co.q3c.v7.base.user.notify;
 
-import uk.co.q3c.v7.base.user.status.UserStatusListener;
+import uk.co.q3c.v7.base.view.component.MessageBar;
 
-import com.vaadin.ui.Component;
+import com.google.inject.Inject;
 
-public interface LoginStatusPanel extends Component, UserStatusListener {
+public class MessageBarWarningNotification implements WarningNotification {
 
-	String getActionLabel();
+	private final MessageBar messageBar;
 
-	String getUserId();
+	@Inject
+	protected MessageBarWarningNotification(MessageBar messageBar) {
+		this.messageBar = messageBar;
+	}
+
+	@Override
+	public void message(String message) {
+		messageBar.warningMessage(message);
+	}
+
 }

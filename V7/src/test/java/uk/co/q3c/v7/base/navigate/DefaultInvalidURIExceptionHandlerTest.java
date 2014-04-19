@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.notify.UserNotifier;
+import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.i18n.MessageKey;
 
 import com.mycila.testing.junit.MycilaJunitRunner;

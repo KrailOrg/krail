@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.notify;
+package uk.co.q3c.v7.base.user.notify;
 
 import static org.mockito.Mockito.*;
 
@@ -20,6 +20,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import uk.co.q3c.v7.base.user.notify.DefaultUserNotifier;
+import uk.co.q3c.v7.base.user.notify.ErrorNotification;
+import uk.co.q3c.v7.base.user.notify.InformationNotification;
+import uk.co.q3c.v7.base.user.notify.WarningNotification;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.LabelKey;

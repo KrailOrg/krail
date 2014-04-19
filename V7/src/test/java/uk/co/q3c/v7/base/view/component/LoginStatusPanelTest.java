@@ -27,6 +27,7 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.DefaultSubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.SubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
+import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -39,7 +40,7 @@ import com.vaadin.ui.Button;
 @GuiceContext({ I18NModule.class })
 public class LoginStatusPanelTest {
 
-	LoginStatusPanel panel;
+	DefaultLoginStatusPanel panel;
 
 	@Mock
 	Subject subject;
@@ -50,7 +51,10 @@ public class LoginStatusPanelTest {
 	Button loginoutBtn;
 
 	@Mock
-	SubjectProvider subjectPro;
+	SubjectProvider subjectProvider;
+
+	@Mock
+	UserStatus userStatus;
 
 	SubjectIdentifier subjectIdentifier;
 
@@ -59,12 +63,12 @@ public class LoginStatusPanelTest {
 
 	@Before
 	public void setup() {
-		// V7SecurityManager securityManager = new V7SecurityManager();
-		// SecurityUtils.setSecurityManager(securityManager);
-		when(subjectPro.get()).thenReturn(subject);
-		subjectIdentifier = new DefaultSubjectIdentifier(subjectPro, translate);
-		// panel = new DefaultLoginStatusPanel(navigator, subjectPro, translate, loginStatusHandler, subjectIdentifier);
-		loginoutBtn = ((DefaultLoginStatusPanel) panel).getLogin_logout_Button();
+		when(subjectProvider.get()).thenReturn(subject);
+		subjectIdentifier = new DefaultSubjectIdentifier(subjectProvider, translate);
+
+		panel = new DefaultLoginStatusPanel(navigator, subjectProvider, translate, subjectIdentifier, userStatus);
+
+		loginoutBtn = panel.getLogin_logout_Button();
 	}
 
 	@Test
@@ -76,7 +80,7 @@ public class LoginStatusPanelTest {
 		when(subject.getPrincipal()).thenReturn(null);
 
 		// when
-		// panel.loginStatusChange(false, subject);
+		panel.userStatusChanged();
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log in");
 		assertThat(panel.getUserId()).isEqualTo("Guest");
@@ -95,7 +99,7 @@ public class LoginStatusPanelTest {
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.getPrincipal()).thenReturn("userId");
 		// when
-		// panel.loginStatusChange(false, subject);
+		panel.userStatusChanged();
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log in");
 		assertThat(panel.getUserId()).isEqualTo("userId?");
@@ -112,9 +116,8 @@ public class LoginStatusPanelTest {
 		when(subject.isRemembered()).thenReturn(false);
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.getPrincipal()).thenReturn("userId");
-		// when(loginStatusHandler.subjectIsAuthenticated()).thenReturn(true);
 		// when
-		// panel.loginStatusChange(true, subject);
+		panel.userStatusChanged();
 		// then
 		assertThat(panel.getActionLabel()).isEqualTo("log out");
 		assertThat(panel.getUserId()).isEqualTo("userId");

@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
-import uk.co.q3c.v7.base.notify.UserNotifier;
+import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.i18n.MessageKey;
 
 import com.google.inject.Inject;

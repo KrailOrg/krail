@@ -17,9 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
+import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.shiro.SubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
+import uk.co.q3c.v7.base.user.status.UserStatus;
+import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
@@ -50,20 +53,20 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 	private final Provider<Subject> subjectProvider;
 	private final Translate translate;
 	private final SubjectIdentifier subjectIdentifier;
+	private final UserStatus userStatus;
 
 	@Inject
 	protected DefaultLoginStatusPanel(V7Navigator navigator, SubjectProvider subjectProvider, Translate translate,
-			SubjectIdentifier subjectIdentifier) {
+			SubjectIdentifier subjectIdentifier, UserStatus userStatus) {
 		super();
 		this.navigator = navigator;
 		this.subjectProvider = subjectProvider;
 		this.translate = translate;
 		this.subjectIdentifier = subjectIdentifier;
-		// this.setWidth("200px");
-		// this.setHeight("100px");
+		this.userStatus = userStatus;
+		userStatus.addListener(this);
 		setSizeFull();
 		addStyleName(ChameleonTheme.PANEL_BORDERLESS);
-		// register with the security manager to monitor status changes
 		usernameLabel = new Label();
 		login_logout_Button = new Button();
 		login_logout_Button.addClickListener(this);
@@ -73,6 +76,7 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 		hl.addComponent(login_logout_Button);
 		this.setContent(hl);
 		setIds();
+		userStatusChanged();
 
 	}
 
@@ -81,14 +85,6 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 		login_logout_Button.setId(ID.getId(this, login_logout_Button));
 		usernameLabel.setId(ID.getId(this, usernameLabel));
 	}
-
-	// @Override
-	// public void loginStatusChange(boolean authenticated, Subject subject) {
-	// log.debug("login status change");
-	// String caption = (authenticated) ? translate.from(LabelKey.Log_Out) : translate.from(LabelKey.Log_In);
-	// login_logout_Button.setCaption(caption.toLowerCase());
-	// usernameLabel.setValue(subjectIdentifier.subjectName());
-	// }
 
 	@Override
 	public String getActionLabel() {
@@ -106,14 +102,24 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 
 	@Override
 	public void buttonClick(ClickEvent event) {
-		// boolean loggedIn = loginStatusHandler.subjectIsAuthenticated();
-		// if (loggedIn) {
-		// subjectProvider.get().logout();
-		// navigator.navigateTo(StandardPageKey.Logout);
-		// loginStatusHandler.initiateStatusChange();
-		// } else {
-		// navigator.navigateTo(StandardPageKey.Login);
-		// }
+		boolean authenticated = subjectProvider.get().isAuthenticated();
+		if (authenticated) {
+			subjectProvider.get().logout();
+			navigator.navigateTo(StandardPageKey.Logout);
+			userStatus.statusChanged();
+		} else {
+			navigator.navigateTo(StandardPageKey.Login);
+		}
+
+	}
+
+	@Override
+	public void userStatusChanged() {
+		log.debug("login status change");
+		boolean authenticated = subjectProvider.get().isAuthenticated();
+		String caption = (authenticated) ? translate.from(LabelKey.Log_Out) : translate.from(LabelKey.Log_In);
+		login_logout_Button.setCaption(caption.toLowerCase());
+		usernameLabel.setValue(subjectIdentifier.subjectName());
 
 	}
 

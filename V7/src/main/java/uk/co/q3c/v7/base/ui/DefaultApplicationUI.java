@@ -121,4 +121,8 @@ public class DefaultApplicationUI extends ScopedUI {
 
 	}
 
+	public MessageBar getMessageBar() {
+		return messageBar;
+	}
+
 }

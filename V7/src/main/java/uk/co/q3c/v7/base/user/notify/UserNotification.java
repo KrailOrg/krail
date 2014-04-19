@@ -10,20 +10,21 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.notify;
-
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
+package uk.co.q3c.v7.base.user.notify;
 
 /**
- * Provides an error notification to a user using the Vaadin provided 'Splash' window
+ * Implementations of this provide a means of notifying a user with a message, and are used in conjunction with
+ * {@link UserNotifier}. There are a set of sub-interfaces to identify the message as either an Error, Warning or
+ * Information message
+ * <p>
+ * The intended use of this, and its sub-interfaces, is via the {@link UserNotifier}, which enables I18N support and
+ * provides a configurable way of selecting notification methods.
  * 
  * @author David Sowerby
  * 
  */
-public class VaadinErrorNotification implements ErrorNotification {
-	@Override
-	public void message(String message) {
-		Notification.show(message, Type.ERROR_MESSAGE);
-	}
+public interface UserNotification {
+
+	public void message(String message);
+
 }

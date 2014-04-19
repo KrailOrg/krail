@@ -25,11 +25,14 @@ import uk.co.q3c.v7.base.navigate.CollationKeyOrder;
 import uk.co.q3c.v7.base.navigate.InsertionOrder;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.navigate.sitemap.NodeSorter;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
-import uk.co.q3c.v7.base.useropt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.status.UserStatus;
+import uk.co.q3c.v7.base.user.status.UserStatusListener;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.I18NKey;
@@ -48,7 +51,8 @@ import com.vaadin.ui.Tree;
  * @author David Sowerby 17 May 2013
  * 
  */
-public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener {
+public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener,
+		UserStatusListener {
 	private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
 	private final Sitemap sitemap;
 	private int maxLevel;
@@ -59,12 +63,13 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	private final UserOption userOption;
 	private final Translate translate;
 	private final PageAccessController pageAccessController;
+	private boolean suppressValueChangeEvents;
 	public static final String sortedOpt = "sorted";
 	public static final String maxLevelOpt = "maxLevel";
 
 	@Inject
 	protected DefaultUserNavigationTree(Sitemap sitemap, V7Navigator navigator, SubjectProvider subjectProvider,
-			UserOption userOption, Translate translate, PageAccessController pageAccessController) {
+			UserOption userOption, Translate translate, PageAccessController pageAccessController, UserStatus userStatus) {
 		super();
 		this.sitemap = sitemap;
 		this.navigator = navigator;
@@ -78,6 +83,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, true);
 		maxLevel = userOption.getOptionAsInt(this.getClass().getSimpleName(), maxLevelOpt, -1);
 		addValueChangeListener(this);
+		userStatus.addListener(this);
 		navigator.addViewChangeListener(this);
 		setId(ID.getId(this));
 		loadNodes();
@@ -91,13 +97,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		log.debug("The sitemap has {} roots", nodeList.size());
 
 		// which order, sorted or insertion?
-		if (sorted) {
-			log.debug("'sorted' is true, sorting by collation key");
-			Collections.sort(nodeList, new CollationKeyOrder());
-		} else {
-			log.debug("'sorted' is false, using insertion order");
-			Collections.sort(nodeList, new InsertionOrder());
-		}
+		new NodeSorter(nodeList, sorted).sort();
 
 		for (SitemapNode node : nodeList) {
 			level = 1;
@@ -205,9 +205,11 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 
 	@Override
 	public void valueChange(Property.ValueChangeEvent event) {
-		if (getValue() != null) {
-			String url = sitemap.uri((SitemapNode) getValue());
-			navigator.navigateTo(url);
+		if (!suppressValueChangeEvents) {
+			if (getValue() != null) {
+				String url = sitemap.uri((SitemapNode) getValue());
+				navigator.navigateTo(url);
+			}
 		}
 	}
 
@@ -246,14 +248,16 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 			expandItem(parentNode);
 			parentNode = (SitemapNode) getParent(parentNode);
 		}
+		suppressValueChangeEvents = true;
 		this.select(selectedNode);
+		suppressValueChangeEvents = false;
 
 	}
 
-	// @Override
-	// public void loginStatusChange(boolean status, Subject subject) {
-	// log.debug("login status has changed");
-	// loadNodes();
-	// }
+	@Override
+	public void userStatusChanged() {
+		log.debug("Reloading nodes to match new authentication status");
+		loadNodes();
+	}
 
 }

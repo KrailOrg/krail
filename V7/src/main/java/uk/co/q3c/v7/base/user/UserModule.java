@@ -10,15 +10,32 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.notify;
+package uk.co.q3c.v7.base.user;
 
+import uk.co.q3c.v7.base.user.notify.DefaultUserNotifier;
+import uk.co.q3c.v7.base.user.notify.ErrorNotification;
+import uk.co.q3c.v7.base.user.notify.InformationNotification;
+import uk.co.q3c.v7.base.user.notify.MessageBarErrorNotification;
+import uk.co.q3c.v7.base.user.notify.MessageBarInformationNotification;
+import uk.co.q3c.v7.base.user.notify.MessageBarWarningNotification;
+import uk.co.q3c.v7.base.user.notify.UserNotifier;
+import uk.co.q3c.v7.base.user.notify.VaadinErrorNotification;
+import uk.co.q3c.v7.base.user.notify.VaadinInformationNotification;
+import uk.co.q3c.v7.base.user.notify.VaadinWarningNotification;
+import uk.co.q3c.v7.base.user.notify.WarningNotification;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOptionStore;
+import uk.co.q3c.v7.base.user.status.DefaultUserStatus;
+import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.LabelKey;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 
-public class DefaultUserNotificationModule extends AbstractModule {
+public class UserModule extends AbstractModule {
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected void configure() {
@@ -33,6 +50,9 @@ public class DefaultUserNotificationModule extends AbstractModule {
 		bindErrorNotifications(errorNotificationBinder);
 		bindWarningNotifications(warningNotificationBinder);
 		bindInformationNotifications(informationNotificationBinder);
+		bindUserStatus();
+		bindUserOption();
+		bindUserOptionStore();
 	}
 
 	/**
@@ -82,4 +102,24 @@ public class DefaultUserNotificationModule extends AbstractModule {
 		bind(UserNotifier.class).to(DefaultUserNotifier.class);
 	}
 
+	protected void bindUserStatus() {
+		bind(UserStatus.class).to(DefaultUserStatus.class);
+	}
+
+	/**
+	 * Override this method to provide your own {@link UserOption} implementation. If all you want to do is change the
+	 * storage method, override {@link #bindUserOptionStore()} instead
+	 */
+	protected void bindUserOption() {
+		bind(UserOption.class).to(DefaultUserOption.class);
+	}
+
+	/**
+	 * Override this method to provide your own store implementation for user options. This is in effect a DAO
+	 * implementation
+	 */
+	protected void bindUserOptionStore() {
+		bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+
+	}
 }

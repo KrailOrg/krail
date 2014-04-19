@@ -160,6 +160,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 		navigateTo("system-account");
 		assertThat(subpagepanel(0)).isNotNull();
 		subpagepanel(0).get().click();
+		pause(500);
 		// then
 		verifyUrl("system-account/enable-account");
 

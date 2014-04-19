@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
+import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -46,14 +47,16 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 	private final LoginExceptionHandler loginExceptionHandler;
 	private final Provider<Subject> subjectProvider;
 	private final Translate translate;
+	private final UserStatus userStatus;
 
 	@Inject
 	protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider,
-			Translate translate) {
+			Translate translate, UserStatus userStatus) {
 		super();
 		this.loginExceptionHandler = loginExceptionHandler;
 		this.subjectProvider = subjectProvider;
 		this.translate = translate;
+		this.userStatus = userStatus;
 		buildView();
 	}
 
@@ -76,6 +79,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		UsernamePasswordToken token = new UsernamePasswordToken(usernameBox.getValue(), passwordBox.getValue());
 		try {
 			subjectProvider.get().login(token);
+			userStatus.statusChanged();
 		} catch (UnknownAccountException uae) {
 			loginExceptionHandler.unknownAccount(this, token);
 		} catch (IncorrectCredentialsException ice) {

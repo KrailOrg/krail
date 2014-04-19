@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.useropt;
+package uk.co.q3c.v7.base.user.opt;
 
 import static org.fest.assertions.Assertions.*;
 
@@ -22,6 +22,9 @@ import java.util.TreeMap;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+
+import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 
 public class DefaultUserOptionTest {
 

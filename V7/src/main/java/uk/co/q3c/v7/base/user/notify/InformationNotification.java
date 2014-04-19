@@ -10,21 +10,14 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.notify;
+package uk.co.q3c.v7.base.user.notify;
 
 /**
- * Implementations of this provide a means of notifying a user with a message, and are used in conjunction with
- * {@link UserNotifier}. There are a set of sub-interfaces to identify the message as either an Error, Warning or
- * Information message
- * <p>
- * The intended use of this, and its sub-interfaces, is via the {@link UserNotifier}, which enables I18N support and
- * provides a configurable way of selecting notification methods.
+ * Implementations provide a user with an information notification
  * 
  * @author David Sowerby
  * 
  */
-public interface UserNotification {
-
-	public void message(String message);
+public interface InformationNotification extends UserNotification {
 
 }

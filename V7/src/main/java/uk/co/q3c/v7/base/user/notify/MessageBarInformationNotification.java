@@ -10,14 +10,24 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.notify;
+package uk.co.q3c.v7.base.user.notify;
 
-/**
- * Implementations provide a user with an warning notification
- * 
- * @author David Sowerby
- * 
- */
-public interface WarningNotification extends UserNotification {
+import uk.co.q3c.v7.base.view.component.MessageBar;
+
+import com.google.inject.Inject;
+
+public class MessageBarInformationNotification implements InformationNotification {
+
+	private final MessageBar messageBar;
+
+	@Inject
+	protected MessageBarInformationNotification(MessageBar messageBar) {
+		this.messageBar = messageBar;
+	}
+
+	@Override
+	public void message(String message) {
+		messageBar.informationMessage(message);
+	}
 
 }

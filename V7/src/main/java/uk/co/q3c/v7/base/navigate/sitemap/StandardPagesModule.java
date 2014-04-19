@@ -22,7 +22,7 @@ import uk.co.q3c.v7.base.view.StandardViewModule;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.LabelKey;
 
-public class DefaultStandardPagesModule extends DirectSitemapModule {
+public class StandardPagesModule extends DirectSitemapModule {
 
 	// private MapBinder<String, StandardPageSitemapEntry> mapBinder;
 	// private MapBinder<String, RedirectEntry> redirectBinder;

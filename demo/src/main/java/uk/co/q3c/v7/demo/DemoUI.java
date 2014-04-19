@@ -113,7 +113,7 @@ public class DemoUI extends ScopedUI {
 		menu.setWidth("100%");
 
 		subpage.setSizeUndefined();
-		// subpage.setWidth("100%");
+		subpage.setHeight("80px");
 
 		messageBar.setSizeUndefined();
 		messageBar.setWidth("100%");

@@ -12,7 +12,6 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.shiro.subject.Subject;
@@ -20,20 +19,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.navigate.CollationKeyOrder;
-import uk.co.q3c.v7.base.navigate.InsertionOrder;
 import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.navigate.sitemap.NodeSorter;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
-import uk.co.q3c.v7.base.useropt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.status.UserStatus;
+import uk.co.q3c.v7.base.user.status.UserStatusListener;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.MenuBar;
 
-public class UserNavigationMenu extends MenuBar implements ApplicationMenu {
+public class UserNavigationMenu extends MenuBar implements ApplicationMenu, UserStatusListener {
 	private static Logger log = LoggerFactory.getLogger(UserNavigationMenu.class);
 	public static final String sortedOpt = "sorted";
 	private final Sitemap sitemap;
@@ -44,12 +44,13 @@ public class UserNavigationMenu extends MenuBar implements ApplicationMenu {
 
 	@Inject
 	protected UserNavigationMenu(Sitemap sitemap, V7Navigator navigator, UserOption userOption,
-			SubjectProvider subjectProvider, PageAccessController pageAccessController) {
+			SubjectProvider subjectProvider, PageAccessController pageAccessController, UserStatus userStatus) {
 		super();
 		this.sitemap = sitemap;
 		this.navigator = navigator;
 		this.subjectProvider = subjectProvider;
 		this.pageAccessController = pageAccessController;
+		userStatus.addListener(this);
 		setId(ID.getId(this));
 		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, true);
 		build();
@@ -60,13 +61,7 @@ public class UserNavigationMenu extends MenuBar implements ApplicationMenu {
 		List<SitemapNode> roots = sitemap.getRoots();
 
 		// which order, sorted or insertion?
-		if (sorted) {
-			log.debug("'sorted' is true, sorting by collation key");
-			Collections.sort(roots, new CollationKeyOrder());
-		} else {
-			log.debug("'sorted' is false, using insertion order");
-			Collections.sort(roots, new InsertionOrder());
-		}
+		new NodeSorter(roots, sorted).sort();
 
 		Subject subject = subjectProvider.get();
 		for (SitemapNode node : roots) {
@@ -86,8 +81,23 @@ public class UserNavigationMenu extends MenuBar implements ApplicationMenu {
 
 	}
 
+	/**
+	 * Checks each node to ensure that the Subject has permission to view, and if so, adds it to this menu. Note that if
+	 * a node is redirected, its pageAccessControl attribute will have been modified to be the same as the redirect
+	 * target by the SitemapChecker.
+	 * <p>
+	 * Nodes which have a null label key are ignored, as they cannot be displayed. The logout page is never shown. The
+	 * login page is only shown if the user has not logged in.
+	 * 
+	 * @param parentNode
+	 * @param childNode
+	 */
 	private void addSubItems(MenuItem item, SitemapNode node) {
 		List<SitemapNode> children = sitemap.getChildren(node);
+
+		// which order, sorted or insertion?
+		new NodeSorter(children, sorted).sort();
+
 		Subject subject = subjectProvider.get();
 
 		for (SitemapNode childNode : children) {
@@ -101,6 +111,11 @@ public class UserNavigationMenu extends MenuBar implements ApplicationMenu {
 				addSubItems(subItem, childNode);
 			}
 		}
+	}
+
+	@Override
+	public void userStatusChanged() {
+		build();
 	}
 
 }

@@ -12,9 +12,10 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NTranslator;
@@ -63,6 +65,9 @@ public class BreadcrumbTest extends TestWithSitemap {
 
 	SitemapNode newNode7;
 
+	@Mock
+	UserOption userOption;
+
 	Collator collator;
 
 	@Override
@@ -87,7 +92,7 @@ public class BreadcrumbTest extends TestWithSitemap {
 		newNode2.setLabelKey(TestLabelKey.Opt, currentLocale.getLocale(), collator);
 
 		// when
-		breadcrumb = new DefaultBreadcrumb(navigator, sitemap, currentLocale, translate);
+		breadcrumb = new DefaultBreadcrumb(navigator, sitemap, currentLocale, translate, userOption);
 		breadcrumb.moveToNavigationState();
 		// then
 		assertThat(breadcrumb.getButtons().size()).isEqualTo(3);

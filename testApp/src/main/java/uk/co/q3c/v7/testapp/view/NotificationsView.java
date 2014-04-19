@@ -15,7 +15,7 @@ package uk.co.q3c.v7.testapp.view;
 import java.util.List;
 
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.notify.UserNotifier;
+import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.ViewBase;
 import uk.co.q3c.v7.i18n.MessageKey;
 import uk.co.q3c.v7.i18n.Translate;

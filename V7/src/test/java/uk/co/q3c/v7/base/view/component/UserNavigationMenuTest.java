@@ -12,8 +12,8 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.text.Collator;
 import java.util.Locale;
@@ -33,7 +33,8 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
-import uk.co.q3c.v7.base.useropt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
@@ -75,6 +76,9 @@ public class UserNavigationMenuTest {
 	@Mock
 	V7Navigator navigator;
 
+	@Mock
+	UserStatus userStatus;
+
 	@Inject
 	Translate translate;
 
@@ -96,7 +100,8 @@ public class UserNavigationMenuTest {
 
 	@Before
 	public void setup() {
-		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController);
+		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController,
+				userStatus);
 		locale = currentLocale.getLocale();
 		collator = Collator.getInstance();
 		buildSitemap();
@@ -118,7 +123,8 @@ public class UserNavigationMenuTest {
 				userOption.getOptionAsBoolean(UserNavigationMenu.class.getSimpleName(), UserNavigationMenu.sortedOpt,
 						true)).thenReturn(true);
 		// when
-		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController);
+		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController,
+				userStatus);
 		// then
 		assertThat(menu.getItems()).hasSize(2);
 		MenuItem m0 = menu.getItems().get(0);
@@ -166,7 +172,8 @@ public class UserNavigationMenuTest {
 		SitemapNode logoutNode = newNode(StandardPageKey.Logout, "login");
 		sitemap.addChild(null, logoutNode);
 		// when
-		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController);
+		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController,
+				userStatus);
 		// then
 		assertThat(menu.getItems()).hasSize(2);
 	}
@@ -178,7 +185,8 @@ public class UserNavigationMenuTest {
 		privateChildNode2.setPageAccessControl(PageAccessControl.PERMISSION);
 		when(pageAccessController.isAuthorised(subject, privateChildNode2)).thenReturn(false);
 		// when
-		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController);
+		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController,
+				userStatus);
 		// then
 		assertThat(menu.getItems()).hasSize(2);
 		MenuItem m0 = menu.getItems().get(0);

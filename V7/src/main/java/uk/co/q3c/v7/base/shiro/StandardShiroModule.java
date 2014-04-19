@@ -24,15 +24,14 @@ import org.apache.shiro.subject.Subject;
 import com.google.inject.binder.AnnotatedBindingBuilder;
 
 /**
- * Bindings for Shiro. Logically, the binding for {@link Subject} to {@link SubjectProvider} should be here, but that
- * makes the injector creation complicated, so it resides in {@link IniModule}
+ * Bindings for Shiro and user related implementations
  * 
  * @author David Sowerby 15 Jul 2013
  * 
  */
-public class DefaultShiroModule extends ShiroModule {
+public class StandardShiroModule extends ShiroModule {
 
-	public DefaultShiroModule() {
+	public StandardShiroModule() {
 		super();
 	}
 
@@ -45,11 +44,10 @@ public class DefaultShiroModule extends ShiroModule {
 		bindSubjectIdentifier();
 		expose(SubjectIdentifier.class);
 		bindSubjectProvider();
-
 	}
 
 	/**
-	 * Override this to provide your own SubjectConverter implementation
+	 * Override this to provide your own {@link SubjectIdentifier} implementation
 	 */
 	protected void bindSubjectIdentifier() {
 		bind(SubjectIdentifier.class).to(DefaultSubjectIdentifier.class);

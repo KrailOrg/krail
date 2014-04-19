@@ -18,7 +18,7 @@ import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
 import uk.co.q3c.v7.base.view.component.ApplicationMenu;
 import uk.co.q3c.v7.base.view.component.Breadcrumb;
-import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
+import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.base.view.component.DefaultViewBody;
 import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 import uk.co.q3c.v7.base.view.component.MessageBar;
@@ -34,7 +34,7 @@ import com.google.inject.Inject;
 /**
  * This view provides the base for a fairly typical layout for an application. It is not expected that it will be used
  * directly, as the body needs to be defined by a sub-class. All the components in the view - except the body - can be
- * replaced by mapping their interfaces to different implementations in the {@link DefaultComponentModule}. The body
+ * replaced by mapping their interfaces to different implementations in the {@link StandardComponentModule}. The body
  * component is created by overriding the {@link #createBody()} method
  * 
  * @author David Sowerby 29 Aug 2013

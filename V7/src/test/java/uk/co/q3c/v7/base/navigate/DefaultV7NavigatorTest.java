@@ -296,6 +296,7 @@ public class DefaultV7NavigatorTest {
 	SitemapNode mockNode1;
 	SitemapNode mockNode2;
 	SitemapNode loginNode;
+	SitemapNode logoutNode;
 
 	@Before
 	public void setup() {
@@ -308,6 +309,13 @@ public class DefaultV7NavigatorTest {
 		mockNode1 = new SitemapNode();
 		mockNode2 = new SitemapNode();
 		loginNode = new SitemapNode();
+
+		logoutNode = new SitemapNode();
+		logoutNode.setViewClass(LogoutView.class);
+		logoutNode.setUriSegment("logout");
+		logoutNode.setPageAccessControl(PageAccessControl.PUBLIC);
+
+		when(sitemap.standardPageURI(StandardPageKey.Logout)).thenReturn("public/logout");
 
 		mockNode1.setUriSegment("view1");
 		mockNode2.setUriSegment("view2");
@@ -334,11 +342,8 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/logout";
-		when(sitemap.standardPageURI(StandardPageKey.Logout)).thenReturn(page);
 		when(sitemap.getRedirectPageFor(page)).thenReturn(page);
-		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(mockNode1);
-		mockNode1.setViewClass(LogoutView.class);
-		mockNode1.setPageAccessControl(PageAccessControl.PUBLIC);
+		when(sitemap.nodeFor(any(NavigationState.class))).thenReturn(logoutNode);
 		// when
 		navigator.navigateTo(StandardPageKey.Logout);
 		// then
@@ -371,6 +376,7 @@ public class DefaultV7NavigatorTest {
 		SitemapNode loginNode = sitemap.append("public/login");
 		sitemap.addStandardPage(StandardPageKey.Login, loginNode);
 		sitemap.addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
+		sitemap.addStandardPage(StandardPageKey.Logout, logoutNode);
 
 		when(sitemapService.getSitemap()).thenReturn(sitemap);
 
@@ -392,7 +398,8 @@ public class DefaultV7NavigatorTest {
 		navigator.navigateTo(StandardPageKey.Login);
 		assertThat(navigator.getCurrentView()).isInstanceOf(LoginView.class);
 		// // when
-		navigator.loginSuccessful();
+		when(subject.isAuthenticated()).thenReturn(true);
+		navigator.userStatusChanged();
 		// // then
 		assertThat(navigator.getCurrentView()).isInstanceOf(View2.class);
 	}
@@ -406,8 +413,10 @@ public class DefaultV7NavigatorTest {
 		SitemapNode privateHomeNode = sitemap.append("private/home");
 		SitemapNode node2 = sitemap.append("public/home/view2");
 		SitemapNode loginNode = sitemap.append("public/login");
+
 		sitemap.addStandardPage(StandardPageKey.Login, loginNode);
 		sitemap.addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
+		sitemap.addStandardPage(StandardPageKey.Logout, logoutNode);
 
 		when(sitemapService.getSitemap()).thenReturn(sitemap);
 
@@ -419,6 +428,7 @@ public class DefaultV7NavigatorTest {
 		when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
 		node2.setViewClass(View2.class);
 		loginNode.setViewClass(LoginView.class);
+
 		navigator = new DefaultV7Navigator(uriHandler, sitemapService, subjectProvider, pageAccessController,
 				uiProvider, viewFactory);
 
@@ -428,7 +438,8 @@ public class DefaultV7NavigatorTest {
 		assertThat(navigator.getCurrentView()).isInstanceOf(LoginView.class);
 		verify(scopedUI).changeView(any(V7View.class));
 		// // when
-		navigator.loginSuccessful();
+		when(subject.isAuthenticated()).thenReturn(true);
+		navigator.userStatusChanged();
 		// // then
 		verify(scopedUI, times(2)).changeView(any(V7View.class));
 		assertThat(navigator.getCurrentView()).isInstanceOf(PrivateHomeView.class);

@@ -24,6 +24,8 @@ import uk.co.q3c.v7.base.config.ApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.DefaultApplicationConfigurationService;
 import uk.co.q3c.v7.base.config.IniFileConfig;
 import uk.co.q3c.v7.base.data.V7DefaultConverterFactory;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScope;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 import uk.co.q3c.v7.base.navigate.DefaultInvalidURIExceptionHandler;
 import uk.co.q3c.v7.base.navigate.DefaultV7Navigator;
 import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
@@ -34,7 +36,6 @@ import uk.co.q3c.v7.base.navigate.sitemap.DefaultFileSitemapLoader;
 import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapLoader;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
-import uk.co.q3c.v7.base.notify.DefaultUserNotificationModule;
 import uk.co.q3c.v7.base.services.AbstractServiceI18N;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
 import uk.co.q3c.v7.base.shiro.DefaultSubjectIdentifier;
@@ -52,16 +53,17 @@ import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.BasicUIProvider;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
-import uk.co.q3c.v7.base.useropt.DefaultUserOption;
-import uk.co.q3c.v7.base.useropt.DefaultUserOptionStore;
-import uk.co.q3c.v7.base.useropt.UserOption;
-import uk.co.q3c.v7.base.useropt.UserOptionStore;
+import uk.co.q3c.v7.base.user.UserModule;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.base.view.DefaultErrorView;
 import uk.co.q3c.v7.base.view.DefaultPublicHomeView;
 import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.base.view.component.DefaultComponentModule;
+import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.LabelKey;
@@ -72,6 +74,7 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
+import com.google.inject.Scope;
 import com.google.inject.multibindings.MapBinder;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ClientConnector;
@@ -143,6 +146,8 @@ public class UIScopeTest {
 
 	static class TestModule extends AbstractModule {
 
+		private final Scope vaadinSessionScope = (Scope) mock(VaadinSessionScope.class);
+
 		@SuppressWarnings("unused")
 		@Override
 		protected void configure() {
@@ -178,6 +183,7 @@ public class UIScopeTest {
 					IniFileConfig.class);
 			MapBinder<String, V7View> viewMapping = MapBinder.newMapBinder(binder(), String.class, V7View.class);
 			bind(ScopedUIProvider.class).to(BasicUIProvider.class);
+			bindScope(VaadinSessionScoped.class, vaadinSessionScope);
 
 		}
 	}
@@ -213,7 +219,7 @@ public class UIScopeTest {
 		// when
 
 		injector = Guice.createInjector(new TestModule(), new UIScopeModule(), new ServicesMonitorModule(),
-				new DefaultUserNotificationModule(), new DefaultComponentModule());
+				new UserModule(), new StandardComponentModule());
 		provider = injector.getInstance(UIProvider.class);
 		createUI(BasicUI.class);
 		// navigator = injector.getInstance(V7Navigator.class);

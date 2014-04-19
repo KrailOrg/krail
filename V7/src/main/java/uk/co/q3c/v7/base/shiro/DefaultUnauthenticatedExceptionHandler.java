@@ -2,7 +2,7 @@ package uk.co.q3c.v7.base.shiro;
 
 import java.io.Serializable;
 
-import uk.co.q3c.v7.base.notify.UserNotifier;
+import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 
 import com.google.inject.Inject;
