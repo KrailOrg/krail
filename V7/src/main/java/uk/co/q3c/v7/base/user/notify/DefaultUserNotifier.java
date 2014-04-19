@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.user.notify;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import uk.co.q3c.v7.i18n.I18NKey;
@@ -20,7 +21,8 @@ import uk.co.q3c.v7.i18n.Translate;
 import com.google.inject.Inject;
 
 @SuppressWarnings("rawtypes")
-public class DefaultUserNotifier implements UserNotifier {
+public class DefaultUserNotifier implements UserNotifier, Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private final Map<I18NKey, ErrorNotification> errorNotifications;
 	private final Map<I18NKey, WarningNotification> warningNotifications;
