@@ -25,7 +25,6 @@ import uk.co.q3c.v7.base.push.Broadcaster.BroadcastListener;
 import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewHolder;
-import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.vaadin.annotations.Push;
@@ -64,18 +63,18 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	private final PushMessageRouter pushMessageRouter;
 
 	private final V7Navigator navigator;
-	private final I18NKey<?> applicationTitleKey;
+	private final ApplicationTitle applicationTitle;
 	private final Translate translate;
 
 	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			Broadcaster broadcaster, PushMessageRouter pushMessageRouter,
-			@ApplicationTitle I18NKey applicationTitleKey, Translate translate) {
+			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
+			Translate translate) {
 		super();
 		this.errorHandler = errorHandler;
 		this.navigator = navigator;
 		this.converterFactory = converterFactory;
 		this.pushMessageRouter = pushMessageRouter;
-		this.applicationTitleKey = applicationTitleKey;
+		this.applicationTitle = applicationTitle;
 		this.translate = translate;
 
 		viewDisplayPanel = new Panel();
@@ -164,12 +163,12 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 
 	/**
 	 * Provides a locale sensitive title for your application (which appears in the browser tab). The title is defined
-	 * by the {@link #applicationTitleKey}, which should be specified in your sub-class of {@link V7UIModule}
+	 * by the {@link #applicationTitle}, which should be specified in your sub-class of {@link V7UIModule}
 	 * 
 	 * @return
 	 */
 	protected String pageTitle() {
-		return translate.from(applicationTitleKey);
+		return translate.from(applicationTitle.getTitleKey());
 	}
 
 	/**

@@ -12,19 +12,25 @@
  */
 package uk.co.q3c.v7.base.ui;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import uk.co.q3c.v7.i18n.I18NKey;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+/**
+ * A wrapper to simplify binding to an interface applied to an enum (although a Guice binding can be made, the result
+ * has to carry a @SuppressWarning in UI constructors, which is messy)
+ * 
+ * @author David Sowerby
+ * @date 19 Apr 2014
+ */
+public class ApplicationTitle {
+	private final I18NKey<?> titleKey;
 
-import com.google.inject.BindingAnnotation;
+	public ApplicationTitle(I18NKey<?> titleKey) {
+		super();
+		this.titleKey = titleKey;
+	}
 
-@BindingAnnotation
-@Target({ FIELD, PARAMETER, METHOD })
-@Retention(RUNTIME)
-public @interface ApplicationTitle {
+	public I18NKey<?> getTitleKey() {
+		return titleKey;
+	}
 
 }

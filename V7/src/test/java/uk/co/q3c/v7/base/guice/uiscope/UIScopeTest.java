@@ -66,7 +66,6 @@ import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
-import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
@@ -153,7 +152,7 @@ public class UIScopeTest {
 		@SuppressWarnings("unused")
 		@Override
 		protected void configure() {
-			bind(I18NKey.class).annotatedWith(ApplicationTitle.class).toInstance(LabelKey.V7);
+			bind(ApplicationTitle.class).toInstance(new ApplicationTitle(LabelKey.V7));
 
 			MapBinder<String, UI> uiProviders = MapBinder.newMapBinder(binder(), String.class, UI.class);
 			bind(UIProvider.class).to(BasicUIProvider.class);

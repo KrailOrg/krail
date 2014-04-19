@@ -3,7 +3,6 @@ package uk.co.q3c.v7.base.ui;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.push.Broadcaster;
 import uk.co.q3c.v7.base.push.PushMessageRouter;
-import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
@@ -19,9 +18,9 @@ public class BasicUI extends ScopedUI {
 
 	@Inject
 	protected BasicUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			Broadcaster broadcaster, PushMessageRouter pushMessageRouter,
-			@SuppressWarnings("rawtypes") @ApplicationTitle I18NKey applicationTitleKey, Translate translate) {
-		super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitleKey, translate);
+			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
+			Translate translate) {
+		super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate);
 
 	}
 

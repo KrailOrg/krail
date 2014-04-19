@@ -1,9 +1,7 @@
 package uk.co.q3c.v7.testapp;
 
-import uk.co.q3c.v7.base.ui.ApplicationTitle;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 import uk.co.q3c.v7.base.ui.V7UIModule;
-import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.testapp.i18n.DemoLabelKey;
 
 import com.google.inject.multibindings.MapBinder;
@@ -21,8 +19,8 @@ public class TestAppUIModule extends V7UIModule {
 	}
 
 	@Override
-	protected void bindApplicationTitle() {
-		bind(I18NKey.class).annotatedWith(ApplicationTitle.class).toInstance(DemoLabelKey.V7_Test_Application);
+	protected DemoLabelKey applicationTitleKey() {
+		return DemoLabelKey.V7_Test_Application;
 	}
 
 }

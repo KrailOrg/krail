@@ -11,7 +11,6 @@ import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 import uk.co.q3c.v7.base.view.component.MessageBar;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
-import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
@@ -45,9 +44,9 @@ public class DefaultApplicationUI extends ScopedUI {
 	protected DefaultApplicationUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
-			Broadcaster broadcaster, PushMessageRouter pushMessageRouter,
-			@SuppressWarnings("rawtypes") @ApplicationTitle I18NKey applicationTitleKey, Translate translate) {
-		super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitleKey, translate);
+			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
+			Translate translate) {
+		super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate);
 		this.navTree = navTree;
 		this.breadcrumb = breadcrumb;
 		this.loginOut = loginOut;

@@ -35,12 +35,17 @@ public abstract class V7UIModule extends AbstractModule {
 
 	}
 
+	private void bindApplicationTitle() {
+		ApplicationTitle title = new ApplicationTitle(applicationTitleKey());
+		bind(ApplicationTitle.class).toInstance(title);
+	}
+
 	/**
 	 * override this method to provide the I18Nkey which defines your application title (which appears in your browser
 	 * tab)
 	 */
-	protected void bindApplicationTitle() {
-		bind(I18NKey.class).annotatedWith(ApplicationTitle.class).toInstance(LabelKey.V7);
+	protected I18NKey<?> applicationTitleKey() {
+		return LabelKey.V7;
 	}
 
 	private void bindConverterFactory() {
