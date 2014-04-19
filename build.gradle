@@ -1,6 +1,6 @@
 //master gradle build file
 
-project.ext.vaadinVersion = '7.1.11'
+project.ext.vaadinVersion = '7.1.13'
 project.ext.guiceVersion = '3.0'
 project.ext.shiroVersion = '1.2.1'
 
