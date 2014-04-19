@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.apache.shiro.authz.permission.WildcardPermission;
 import org.junit.Test;

@@ -60,11 +60,6 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/home/david/.gradle/caches/artifacts-26/filestore/org.easytesting/fest-assert/1.4/source/c4f4f784a5b3fd0bbb519ca5b109066b11cbb390/fest-assert-1.4-sources.jar" kind="lib" path="/home/david/.gradle/caches/artifacts-26/filestore/org.easytesting/fest-assert/1.4/jar/88ec2d3bbc35a2e9613f584b29e26adb1bc2c515/fest-assert-1.4.jar" exported="true">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
 	<classpathentry sourcepath="/home/david/.gradle/caches/artifacts-26/filestore/org.assertj/assertj-core/1.5.0/source/bbbaf414041cab4640cbe9213f3ca7fd8e6a1053/assertj-core-1.5.0-sources.jar" kind="lib" path="/home/david/.gradle/caches/artifacts-26/filestore/org.assertj/assertj-core/1.5.0/bundle/d486ec2f10fb7e8ff3b01c34d4fe5732851b1b7d/assertj-core-1.5.0.jar" exported="true">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
@@ -136,11 +131,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="/home/david/.gradle/caches/artifacts-26/filestore/org.hamcrest/hamcrest-core/1.3/source/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar" kind="lib" path="/home/david/.gradle/caches/artifacts-26/filestore/org.hamcrest/hamcrest-core/1.3/jar/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar" exported="true">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry sourcepath="/home/david/.gradle/caches/artifacts-26/filestore/org.easytesting/fest-util/1.1.6/source/3494b4ee34ac42be816e155a9e2897a88fcedea6/fest-util-1.1.6-sources.jar" kind="lib" path="/home/david/.gradle/caches/artifacts-26/filestore/org.easytesting/fest-util/1.1.6/jar/e785ee9c1f314bbf9e5a824b85143e440642557a/fest-util-1.1.6.jar" exported="true">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>

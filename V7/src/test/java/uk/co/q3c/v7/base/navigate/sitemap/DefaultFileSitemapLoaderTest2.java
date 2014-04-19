@@ -12,13 +12,13 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fest.assertions.Fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -175,7 +175,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			break;
 
 		default:
-			Fail.fail("unexpected uri: '" + uri + "'");
+			fail("unexpected uri: '" + uri + "'");
 		}
 	}
 

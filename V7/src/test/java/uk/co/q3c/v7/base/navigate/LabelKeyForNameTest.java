@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashSet;
 import java.util.Set;

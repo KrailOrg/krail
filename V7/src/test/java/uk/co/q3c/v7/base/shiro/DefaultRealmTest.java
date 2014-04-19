@@ -12,8 +12,8 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.fest.assertions.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -23,7 +23,6 @@ import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.fest.assertions.Fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -114,8 +113,6 @@ public class DefaultRealmTest {
 		// when
 		realm.getAuthenticationInfo(tk);
 		// then
-		// should not get this far
-		Fail.fail();
 
 	}
 

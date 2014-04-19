@@ -23,7 +23,6 @@ dependencies{
 
 
 	//Testing
-	testCompile 'org.easytesting:fest-assert:1.4'
 	testCompile 'com.googlecode.jmockit:jmockit:1.0'
 
 	//Date Time

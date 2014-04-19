@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.data;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Date;
 import java.util.Locale;

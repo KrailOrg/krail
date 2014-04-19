@@ -12,8 +12,9 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.assertj.jodatime.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.jodatime.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.fest.assertions.Fail;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -469,7 +469,7 @@ public class DefaultFileSitemapLoaderTest {
 			break;
 
 		default:
-			Fail.fail("unexpected uri: '" + uri + "'");
+			fail("unexpected uri: '" + uri + "'");
 		}
 	}
 

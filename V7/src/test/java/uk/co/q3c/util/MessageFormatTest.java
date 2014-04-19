@@ -12,11 +12,9 @@
  */
 package uk.co.q3c.util;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
-
-import uk.co.q3c.util.MessageFormat;
 
 public class MessageFormatTest {
 	@Test

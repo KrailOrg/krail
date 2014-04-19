@@ -1,6 +1,6 @@
 package uk.co.q3c.v7.base.guice.threadscope;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;

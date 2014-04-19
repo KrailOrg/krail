@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.user.opt;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
