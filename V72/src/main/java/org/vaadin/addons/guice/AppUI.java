@@ -21,7 +21,7 @@ public class AppUI extends ScopedUI {
 	@Inject
 	public AppUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter,
-			@ApplicationTitle I18NKey<?> applicationTitleKey, Translate translate) {
+			@SuppressWarnings("rawtypes") @ApplicationTitle I18NKey applicationTitleKey, Translate translate) {
 		super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitleKey, translate);
 
 	}

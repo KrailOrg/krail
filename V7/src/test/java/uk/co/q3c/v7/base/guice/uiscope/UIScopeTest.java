@@ -49,6 +49,7 @@ import uk.co.q3c.v7.base.shiro.V7ErrorHandler;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import uk.co.q3c.v7.base.shiro.VaadinSessionManager;
 import uk.co.q3c.v7.base.shiro.VaadinSessionProvider;
+import uk.co.q3c.v7.base.ui.ApplicationTitle;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.BasicUIProvider;
 import uk.co.q3c.v7.base.ui.ScopedUI;
@@ -65,6 +66,7 @@ import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.I18NTranslator;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
@@ -146,11 +148,12 @@ public class UIScopeTest {
 
 	static class TestModule extends AbstractModule {
 
-		private final Scope vaadinSessionScope = (Scope) mock(VaadinSessionScope.class);
+		private final Scope vaadinSessionScope = mock(VaadinSessionScope.class);
 
 		@SuppressWarnings("unused")
 		@Override
 		protected void configure() {
+			bind(I18NKey.class).annotatedWith(ApplicationTitle.class).toInstance(LabelKey.V7);
 
 			MapBinder<String, UI> uiProviders = MapBinder.newMapBinder(binder(), String.class, UI.class);
 			bind(UIProvider.class).to(BasicUIProvider.class);

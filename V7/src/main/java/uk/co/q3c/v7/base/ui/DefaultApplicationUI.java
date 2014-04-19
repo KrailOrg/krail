@@ -100,13 +100,11 @@ public class DefaultApplicationUI extends ScopedUI {
 
 		navTree.setSizeFull();
 		breadcrumb.setSizeUndefined();
-		breadcrumb.setWidth("100%");
 
 		menu.setSizeUndefined();
 		menu.setWidth("100%");
 
 		subpage.setSizeUndefined();
-		subpage.setWidth("100%");
 
 		messageBar.setSizeUndefined();
 		messageBar.setWidth("100%");

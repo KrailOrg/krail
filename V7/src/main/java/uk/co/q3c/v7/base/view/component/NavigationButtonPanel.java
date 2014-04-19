@@ -58,7 +58,6 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 		this.sitemap = sitemap;
 		this.translate = translate;
 		this.setSizeUndefined();
-		this.setWidth("100%");
 		this.setSpacing(true);
 		this.userOption = userOption;
 		ID.getId(this);

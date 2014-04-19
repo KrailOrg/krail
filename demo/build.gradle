@@ -41,6 +41,9 @@ test{
 
 dependencies {
 
+	//vaadin push
+	compile 'com.vaadin:vaadin-push:'+vaadinVersion
+	
 	//UI components
 	compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
 

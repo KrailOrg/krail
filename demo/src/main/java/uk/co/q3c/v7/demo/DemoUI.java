@@ -37,7 +37,7 @@ public class DemoUI extends DefaultApplicationUI {
 			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, Translate translate,
-			@ApplicationTitle I18NKey applicationTitleKey) {
+			@SuppressWarnings("rawtypes") @ApplicationTitle I18NKey applicationTitleKey) {
 		super(navigator, errorHandler, converterFactory, logo, header, loginOut, menu, navTree, breadcrumb, subpage,
 				messageBar, broadcaster, pushMessageRouter, applicationTitleKey, translate);
 
