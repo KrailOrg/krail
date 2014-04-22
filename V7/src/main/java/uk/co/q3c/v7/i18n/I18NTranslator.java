@@ -12,11 +12,10 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.Locale;
 
 /**
- * Implementers capture I18N key information and provide Vaadin components in the I18NListener with translated caption,
- * description and value. (Each of these is optional)
+ * Translate the captions, descriptions and values to the current Locale, depending on criteria set by the
+ * implementation (for example by the use of annotations)
  * 
  * @author David Sowerby 10 Feb 2013
  * 
@@ -24,19 +23,10 @@ import java.util.Locale;
 public interface I18NTranslator {
 
 	/**
-	 * Implementations must derive the correct language 'value' from an {@link I18NKey} key, apply the value (and the
-	 * locale) to relevant Vaadin components. This call is cascaded to any of the <code>listener</code>properties which
-	 * also implement the {@link I18NListener} interface.
+	 * Translate the captions, descriptions and values of {@code target} to the current Locale
 	 * 
-	 * @param listener
+	 * @param target
 	 */
-	public abstract void translate(I18NListener listener);
-
-	/**
-	 * The Locale being used by this translator
-	 * 
-	 * @return
-	 */
-	public abstract Locale getLocale();
+	public abstract void translate(Object target);
 
 }

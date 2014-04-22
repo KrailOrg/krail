@@ -12,14 +12,15 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.user.status.UserStatus;
+import uk.co.q3c.v7.i18n.DescriptionKey;
+import uk.co.q3c.v7.i18n.I18N;
 import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
@@ -34,10 +35,10 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ChameleonTheme;
 
-// TODO i18N
 public class DefaultLoginView extends GridViewBase implements LoginView, ClickListener {
-	private static Logger log = LoggerFactory.getLogger(DefaultLoginView.class);
+	@I18N(value = DescriptionKey.Please_log_in)
 	private Label label;
+	@I18N(caption = LabelKey.User_Name, description = DescriptionKey.Enter_your_user_name)
 	private TextField usernameBox;
 	private PasswordField passwordBox;
 	private Label demoInfoLabel;
@@ -151,8 +152,8 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 		centrePanel.setContent(vl);
 		vl.setSpacing(true);
 		vl.setSizeUndefined();
-		label = new Label("Please log in");
-		usernameBox = new TextField("user name");
+		label = new Label();
+		usernameBox = new TextField();
 		passwordBox = new PasswordField("password");
 
 		demoInfoLabel = new Label("for this demo, enter any user name, and a password of 'password'");

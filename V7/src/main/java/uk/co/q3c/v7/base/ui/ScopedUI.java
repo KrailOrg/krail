@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.ui;
 
+import java.util.Locale;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,9 @@ import uk.co.q3c.v7.base.push.Broadcaster.BroadcastListener;
 import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewHolder;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.I18NTranslator;
+import uk.co.q3c.v7.i18n.LocaleChangeListener;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.vaadin.annotations.Push;
@@ -49,7 +54,7 @@ import com.vaadin.ui.UI;
  * @date modified 31 Mar 2014
  */
 
-public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastListener {
+public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastListener, LocaleChangeListener {
 	private static Logger log = LoggerFactory.getLogger(ScopedUI.class);
 	private UIKey instanceKey;
 	private UIScope uiScope;
@@ -65,10 +70,12 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	private final V7Navigator navigator;
 	private final ApplicationTitle applicationTitle;
 	private final Translate translate;
+	private final CurrentLocale currentLocale;
+	private final I18NTranslator translator;
 
 	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
-			Translate translate) {
+			Translate translate, CurrentLocale currentLocale, I18NTranslator translator) {
 		super();
 		this.errorHandler = errorHandler;
 		this.navigator = navigator;
@@ -76,9 +83,12 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		this.pushMessageRouter = pushMessageRouter;
 		this.applicationTitle = applicationTitle;
 		this.translate = translate;
+		this.currentLocale = currentLocale;
+		this.translator = translator;
 
 		viewDisplayPanel = new Panel();
 		registerWithBroadcaster(broadcaster);
+		currentLocale.addListener(this);
 	}
 
 	protected void registerWithBroadcaster(Broadcaster broadcaster) {
@@ -133,6 +143,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		}
 
 		Component content = toView.getRootComponent();
+		translator.translate(content);
 		content.setSizeFull();
 		viewDisplayPanel.setContent(content);
 		this.view = toView;
@@ -156,6 +167,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		setErrorHandler(errorHandler);
 		page.setTitle(pageTitle());
 		doLayout();
+		translator.translate(this);
 		// Navigate to the correct start point
 		String fragment = getPage().getUriFragment();
 		getV7Navigator().navigateTo(fragment);
@@ -222,6 +234,16 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 
 	protected void processBroadcastMessage(String group, String message) {
 		pushMessageRouter.messageIn(group, message);
+	}
+
+	/**
+	 * Responds to a locale change from {@link CurrentLocale} and updates the translation for this UI and the current
+	 * V7View
+	 */
+	@Override
+	public void localeChanged(Locale toLocale) {
+		translator.translate(this);
+		translator.translate(viewDisplayPanel.getContent());
 	}
 
 }

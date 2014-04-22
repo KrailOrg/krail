@@ -13,13 +13,11 @@
 package uk.co.q3c.v7.base.ui.form;
 
 import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
-import uk.co.q3c.v7.i18n.I18NListener;
-import uk.co.q3c.v7.i18n.I18NTranslator;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
 
-public class BeanFieldSet<T> implements I18NListener {
+public class BeanFieldSet<T> {
 	private BeanFieldGroup<T> fieldGroup;
 	private final AnnotationI18NTranslator translator;
 
@@ -49,11 +47,6 @@ public class BeanFieldSet<T> implements I18NListener {
 
 	public void setBean(T bean) {
 		setBeanItem(new BeanItem<T>(bean));
-	}
-
-	@Override
-	public void localeChange(I18NTranslator translator) {
-		translator.translate(this);
 	}
 
 }

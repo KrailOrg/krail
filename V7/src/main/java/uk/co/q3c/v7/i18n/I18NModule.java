@@ -12,13 +12,38 @@
  */
 package uk.co.q3c.v7.i18n;
 
+import java.lang.annotation.Annotation;
+
 import com.google.inject.AbstractModule;
+import com.google.inject.multibindings.MapBinder;
 
 public class I18NModule extends AbstractModule {
+	/**
+	 * Maps an I18N annotation class name to its associated reader.
+	 */
+	MapBinder<String, I18NAnnotationReader> registeredAnnotations;
 
 	@Override
 	protected void configure() {
+		registeredAnnotations = MapBinder.newMapBinder(binder(), String.class, I18NAnnotationReader.class);
+		registerAnnotation(I18N.class, I18NReader.class);
+		bindTranslator();
+		define();
+	}
+
+	/**
+	 * Override this to define more registered annotations.
+	 */
+	protected void define() {
+
+	}
+
+	protected void bindTranslator() {
 		bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
 	}
 
+	private void registerAnnotation(Class<? extends Annotation> i18Nclass, Class<I18NReader> readerClass) {
+		registeredAnnotations.addBinding(i18Nclass.getName()).to(readerClass);
+
+	}
 }

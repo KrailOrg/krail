@@ -41,4 +41,9 @@ public class I18NReader implements I18NAnnotationReader {
 		return ((I18N) annotation).value();
 	}
 
+	@Override
+	public String locale(Annotation annotation) {
+		return ((I18N) annotation).locale();
+	}
+
 }
