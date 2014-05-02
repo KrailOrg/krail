@@ -98,7 +98,6 @@ public class UIScopeTest {
 
 	private ScopedUI ui;
 	private Injector injector;
-	// private static V7Navigator navigator;
 	static Provider<UI> uiProvider;
 	protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
 	protected VaadinSession mockedSession = mock(VaadinSession.class);
@@ -150,7 +149,8 @@ public class UIScopeTest {
 
 	static class TestModule extends AbstractModule {
 
-		private final Scope vaadinSessionScope = mock(VaadinSessionScope.class);
+		// private final Scope vaadinSessionScope = mock(VaadinSessionScope.class);
+		private final Scope vaadinSessionScope = new VaadinSessionScope();
 		private Multibinder<String> registeredAnnotations;
 
 		@SuppressWarnings("unused")
@@ -260,7 +260,6 @@ public class UIScopeTest {
 			}
 		};
 		when(event.getUIClass()).thenAnswer(answer);
-
 		ui = (ScopedUI) getUIProvider().createInstance(event);
 		ui.setLocale(Locale.UK);
 		CurrentInstance.set(UI.class, ui);

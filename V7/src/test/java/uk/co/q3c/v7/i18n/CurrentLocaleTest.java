@@ -35,7 +35,6 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 public class CurrentLocaleTest implements LocaleChangeListener {
 
 	boolean listenerFired = false;
-	I18NProcessor translator = null;
 
 	@Inject
 	CurrentLocale currentLocale;
@@ -46,7 +45,6 @@ public class CurrentLocaleTest implements LocaleChangeListener {
 	@Before
 	public void setup() {
 		listenerFired = false;
-		translator = null;
 		currentLocale.addListener(this);
 	}
 
@@ -54,7 +52,7 @@ public class CurrentLocaleTest implements LocaleChangeListener {
 	public void defaultLocale() {
 
 		// given
-
+		currentLocale.setLocale(Locale.UK);
 		// when
 		Locale locale = currentLocale.getLocale();
 		// then
@@ -72,7 +70,6 @@ public class CurrentLocaleTest implements LocaleChangeListener {
 		currentLocale.setLocale(Locale.ENGLISH);
 		// then
 		assertThat(listenerFired).isTrue();
-		assertThat(translator).isNotNull();
 
 	}
 
@@ -82,7 +79,6 @@ public class CurrentLocaleTest implements LocaleChangeListener {
 		// given
 		currentLocale.setLocale(Locale.ENGLISH);
 		listenerFired = false;
-		translator = null;
 		// when
 		currentLocale.setLocale(Locale.ENGLISH);
 		// then

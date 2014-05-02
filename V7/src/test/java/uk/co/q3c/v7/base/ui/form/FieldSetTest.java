@@ -86,9 +86,10 @@ public class FieldSetTest {
 	public void i18N_default() {
 
 		// given
-
+		currentLocale.setLocale(Locale.UK);
 		// when
 		fieldSet.setBean(te);
+		translator.translate(fieldSet);
 		// then
 		assertThat(fieldSet.getFirstName().getCaption()).isEqualTo("First Name");
 		assertThat(fieldSet.getLastName().getCaption()).isEqualTo("Last Name");
@@ -103,6 +104,7 @@ public class FieldSetTest {
 		fieldSet.setBean(te);
 		// when
 		currentLocale.setLocale(Locale.GERMAN);
+		translator.translate(fieldSet);
 		// then
 		assertThat(fieldSet.getFirstName().getCaption()).isEqualTo("Vorname");
 		assertThat(fieldSet.getLastName().getCaption()).isEqualTo("Nachname");
