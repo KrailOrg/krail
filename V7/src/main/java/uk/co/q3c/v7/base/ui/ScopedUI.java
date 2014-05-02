@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2014 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -49,7 +49,7 @@ import com.vaadin.ui.UI;
  * support for Vaadin Server Push (but only if you annotate your sub-class with {@link Push}), by capturing broadcast
  * messages in {@link #processBroadcastMessage(String, String)} and passing them to the {@link PushMessageRouter}. For a
  * full description of the V7 server push implementation see: https://sites.google.com/site/q3cjava/server-push
- * 
+ *
  * @author David Sowerby
  * @date modified 31 Mar 2014
  */
@@ -70,7 +70,6 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	private final V7Navigator navigator;
 	private final ApplicationTitle applicationTitle;
 	private final Translate translate;
-	private final CurrentLocale currentLocale;
 	private final I18NProcessor translator;
 
 	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
@@ -83,7 +82,6 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		this.pushMessageRouter = pushMessageRouter;
 		this.applicationTitle = applicationTitle;
 		this.translate = translate;
-		this.currentLocale = currentLocale;
 		this.translator = translator;
 
 		viewDisplayPanel = new Panel();
@@ -122,7 +120,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 
 	/**
 	 * The Vaadin navigator has been replaced by the V7Navigator, use {@link #getV7Navigator()} instead.
-	 * 
+	 *
 	 * @see com.vaadin.ui.UI#getNavigator()
 	 */
 	@Override
@@ -151,7 +149,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 
 	/**
 	 * Make sure you call this from sub-class overrides
-	 * 
+	 *
 	 * @see com.vaadin.ui.UI#init(com.vaadin.server.VaadinRequest)
 	 */
 	@Override
@@ -176,7 +174,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	/**
 	 * Provides a locale sensitive title for your application (which appears in the browser tab). The title is defined
 	 * by the {@link #applicationTitle}, which should be specified in your sub-class of {@link V7UIModule}
-	 * 
+	 *
 	 * @return
 	 */
 	protected String pageTitle() {
@@ -206,7 +204,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	 * be provided by {@link #getViewDisplayPanel()}. The simplest example would be
 	 * {@code return new VerticalLayout(getViewDisplayPanel()}, which would set the View to take up all the available
 	 * screen space. {@link BasicUI} is an example of a UI which contains a header and footer bar.
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract AbstractOrderedLayout screenLayout();
