@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (C) 2013 David Sowerby
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -12,20 +12,21 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
- * Annotation for use with component containers or collections which contain object which require I18N translation
+ * Translate the captions, descriptions and values to the current Locale, depending on criteria set by the
+ * implementation (for example by the use of annotations)
  * 
- * @author David Sowerby
- * @date 19 Apr 2014
+ * @author David Sowerby 10 Feb 2013
+ * 
  */
+public interface I18NProcessor {
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface I18NContainer {
+	/**
+	 * Translate the captions, descriptions and values of {@code target} to the current Locale. This should only be
+	 * called with a {@code target} which is annotated with {@link I18N}, but no errors occur if it hasn't
+	 * 
+	 * @param target
+	 */
+	public abstract void translate(Object target);
 
 }

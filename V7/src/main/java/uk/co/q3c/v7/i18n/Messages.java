@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.EnumMap;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * The base for the resource bundle of {@link Messages}. The separation between them is arbitrary, but helps break down
@@ -29,15 +29,20 @@ import java.util.EnumMap;
  */
 public class Messages extends EnumResourceBundle<MessageKey> {
 
-	private static final EnumMap<MessageKey, String> map = new EnumMap<MessageKey, String>(MessageKey.class);
-	// TODO make map unmodifiable
+	private static final ImmutableMap<MessageKey, String> map;
 	static {
-		map.put(MessageKey.invalidURI, "{0} is not a valid page");
-		map.put(MessageKey.Service_not_Started, "You cannot use service {0} until it has been started");
+		map = new ImmutableMap.Builder<MessageKey, String>()
+// @formatter:off
+				
+			.put(MessageKey.invalidURI, "{0} is not a valid page")
+			.put(MessageKey.Service_not_Started, "You cannot use service {0} until it has been started")
+			.build();
+		
+// @formatter:on	
 	}
 
 	@Override
-	public EnumMap<MessageKey, String> getMap() {
+	public ImmutableMap<MessageKey, String> getMap() {
 		return map;
 	}
 

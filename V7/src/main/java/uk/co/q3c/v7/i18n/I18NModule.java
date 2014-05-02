@@ -12,38 +12,39 @@
  */
 package uk.co.q3c.v7.i18n;
 
+import static com.google.inject.multibindings.Multibinder.newSetBinder;
+
 import java.lang.annotation.Annotation;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.multibindings.MapBinder;
+import com.google.inject.multibindings.Multibinder;
 
 public class I18NModule extends AbstractModule {
-	/**
-	 * Maps an I18N annotation class name to its associated reader.
-	 */
-	MapBinder<String, I18NAnnotationReader> registeredAnnotations;
+
+	private Multibinder<String> registeredAnnotations;
 
 	@Override
 	protected void configure() {
-		registeredAnnotations = MapBinder.newMapBinder(binder(), String.class, I18NAnnotationReader.class);
-		registerAnnotation(I18N.class, I18NReader.class);
-		bindTranslator();
+		registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
+		registerAnnotation(I18N.class);
+		bindProcessor();
 		define();
 	}
 
 	/**
-	 * Override this to define more registered annotations.
+	 * Override this to define more registered annotations, by calling {@link #registerAnnotation(Class)}, or make a
+	 * copy of this module and use the same structure (multiple instances of {@link #registeredAnnotations} will be
+	 * merged by Guice}
 	 */
 	protected void define() {
 
 	}
 
-	protected void bindTranslator() {
-		bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+	protected void bindProcessor() {
+		bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
 	}
 
-	private void registerAnnotation(Class<? extends Annotation> i18Nclass, Class<I18NReader> readerClass) {
-		registeredAnnotations.addBinding(i18Nclass.getName()).to(readerClass);
-
+	private <T extends Annotation> void registerAnnotation(Class<T> i18Nclass) {
+		registeredAnnotations.addBinding().toInstance(i18Nclass.getName());
 	}
 }

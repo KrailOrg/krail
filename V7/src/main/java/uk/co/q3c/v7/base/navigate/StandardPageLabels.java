@@ -12,9 +12,9 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
-import java.util.EnumMap;
-
 import uk.co.q3c.v7.i18n.EnumResourceBundle;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely
@@ -27,19 +27,15 @@ import uk.co.q3c.v7.i18n.EnumResourceBundle;
  */
 public class StandardPageLabels extends EnumResourceBundle<StandardPageKey> {
 
-	private static final EnumMap<StandardPageKey, String> map = new EnumMap<StandardPageKey, String>(
-			StandardPageKey.class);
-
+	private static final ImmutableMap<StandardPageKey, String> map;
 	static {
-		// map not needed for base language as translation done in key
+		map = new ImmutableMap.Builder<StandardPageKey, String>().build();
+		// @formatter:off
+		// @formatter:on
 	}
 
 	@Override
-	public EnumMap<StandardPageKey, String> getMap() {
-		return map;
-	}
-
-	public static EnumMap<StandardPageKey, String> map() {
+	public ImmutableMap<StandardPageKey, String> getMap() {
 		return map;
 	}
 

@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.EnumMap;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely
@@ -25,19 +25,25 @@ import java.util.EnumMap;
  */
 public class TestLabels extends EnumResourceBundle<TestLabelKey> {
 
-	private static final EnumMap<TestLabelKey, String> map = new EnumMap<TestLabelKey, String>(TestLabelKey.class);
+	private static final ImmutableMap<TestLabelKey, String> map;
 
 	static {
-		map.put(TestLabelKey.Home, "home");
-		map.put(TestLabelKey.Transfers, "transfers");
-		map.put(TestLabelKey.Opt, "option");
-		map.put(TestLabelKey.Yes, "Yes");
-		map.put(TestLabelKey.No, "No");
 
+		map = new ImmutableMap.Builder<TestLabelKey, String>()
+// @formatter:off	
+
+			.put(TestLabelKey.Home, "home")
+			.put(TestLabelKey.Transfers, "transfers")
+			.put(TestLabelKey.Opt, "option")
+			.put(TestLabelKey.Yes, "Yes")
+			.put(TestLabelKey.No, "No")
+			.build();
+
+// @formatter:on
 	}
 
 	@Override
-	public EnumMap<TestLabelKey, String> getMap() {
+	public ImmutableMap<TestLabelKey, String> getMap() {
 		return map;
 	}
 

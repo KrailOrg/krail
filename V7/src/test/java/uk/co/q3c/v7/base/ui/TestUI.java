@@ -4,6 +4,8 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.push.Broadcaster;
 import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
@@ -23,8 +25,9 @@ public class TestUI extends ScopedUI {
 	@Inject
 	public TestUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
-			Translate translate) {
-		super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate);
+			Translate translate, CurrentLocale currentLocale, I18NProcessor translator) {
+		super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate,
+				currentLocale, translator);
 
 	}
 

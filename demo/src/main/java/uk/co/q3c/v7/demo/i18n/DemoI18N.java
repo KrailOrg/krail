@@ -17,14 +17,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import uk.co.q3c.v7.i18n.CurrentLocale;
+
 import com.vaadin.data.Property;
 
 /**
- * Annotation used for marking a Vaadin UI component in the demo app as needing
- * I18N translation. The parameters provide the keys for I18N lookup. All
- * parameters are optional, but the value parameter is relevant only for those
- * components which implement {@link Property}. Its value would be ignored
- * otherwise
+ * Annotation used for marking a Vaadin UI component in the demo app as needing I18N translation. The parameters provide
+ * the keys for I18N lookup. All parameters are optional, but the value parameter is relevant only for those components
+ * which implement {@link Property}. Its value would be ignored otherwise
  * 
  * @see https://sites.google.com/site/q3cjava/internationalisation-i18n
  * 
@@ -44,4 +44,12 @@ public @interface DemoI18N {
 	 * @return
 	 */
 	DemoLabelKey value() default DemoLabelKey._nullkey_;
+
+	/**
+	 * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional parameter
+	 * is specified, it will be used instead. This allows specific components to be fixed to display content in a
+	 * language different to the rest of the application.
+	 */
+
+	String locale() default "";
 }

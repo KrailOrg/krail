@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.sitemap.DirectSitemapModule;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
@@ -53,7 +54,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class })
+@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
 public class DefaultV7NavigatorTest {
 
 	private static final String public_view1 = "public/view1";

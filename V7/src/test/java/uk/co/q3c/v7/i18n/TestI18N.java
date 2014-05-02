@@ -42,4 +42,12 @@ public @interface TestI18N {
 	 * @return
 	 */
 	TestLabelKey value() default TestLabelKey._nullkey_;
+
+	/**
+	 * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional parameter
+	 * is specified, it will be used instead. This allows specific components to be fixed to display content in a
+	 * language different to the rest of the application.
+	 */
+
+	String locale() default "";
 }

@@ -19,7 +19,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import uk.co.q3c.v7.base.view.layout.DefaultViewConfig.Split;
-import uk.co.q3c.v7.i18n.I18NTranslator;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
@@ -39,11 +38,6 @@ public abstract class ViewLayoutBase implements ViewLayout {
 		super();
 		components = new ArrayList<>();
 
-	}
-
-	@Override
-	public void localeChange(I18NTranslator translator) {
-		translator.translate(this);
 	}
 
 	@Override

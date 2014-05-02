@@ -14,14 +14,16 @@ package uk.co.q3c.v7.i18n;
 
 import java.lang.annotation.Annotation;
 
-public interface I18NAnnotationReader {
+public interface I18NAnnotationReader<T extends Annotation> {
 
-	public I18NKey<?> caption(Annotation annotation);
+	public I18NKey<?> caption(T annotation);
 
-	public I18NKey<?> description(Annotation annotation);
+	public I18NKey<?> description(T annotation);
 
-	public I18NKey<?> value(Annotation annotation);
+	public I18NKey<?> value(T annotation);
 
-	public String locale(Annotation annotation);
+	public String locale(T annotation);
+
+	public I18NAnnotationReader<T> reader();
 
 }

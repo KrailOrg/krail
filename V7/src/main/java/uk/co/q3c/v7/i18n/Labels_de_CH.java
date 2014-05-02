@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.EnumMap;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * The base for the resource bundle of Labels specifically for Locale de_CH. Not currently populated as it is used only
@@ -24,14 +24,19 @@ import java.util.EnumMap;
  */
 public class Labels_de_CH extends Labels {
 
-	private static final EnumMap<LabelKey, String> map = new EnumMap<LabelKey, String>(LabelKey.class);
-	// TODO make map unmodifiable
+	private static final ImmutableMap<LabelKey, String> map;
 	static {
+		map = new ImmutableMap.Builder<LabelKey, String>()
+// @formatter:off
+				
+				.build();
+
+// @formatter:on
 
 	}
 
 	@Override
-	public EnumMap<LabelKey, String> getMap() {
+	public ImmutableMap<LabelKey, String> getMap() {
 		return map;
 	}
 

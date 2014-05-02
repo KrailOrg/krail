@@ -12,20 +12,24 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.EnumMap;
+import com.google.common.collect.ImmutableMap;
 
 public class Descriptions_de extends Descriptions {
 
-	private static final EnumMap<DescriptionKey, String> map = new EnumMap<DescriptionKey, String>(DescriptionKey.class);
-
+	private static ImmutableMap<DescriptionKey, String> map;
 	static {
-		map.put(DescriptionKey.Last_Name, "die Nachname oder der Familienname");
-		map.put(DescriptionKey.Confirm_Ok, "Bestätigen, dass dieser Wert in Ordnung ist");
+
+		map = new ImmutableMap.Builder<DescriptionKey, String>()
+				// @formatter:off
+				.put(DescriptionKey.Last_Name,"die Nachname oder der Familienname")
+				.put(DescriptionKey.Confirm_Ok, "Bestätigen, dass dieser Wert in Ordnung ist")
+				.build();
+				// @formatter:on
 
 	}
 
 	@Override
-	public EnumMap<DescriptionKey, String> getMap() {
+	public ImmutableMap<DescriptionKey, String> getMap() {
 		return map;
 	}
 

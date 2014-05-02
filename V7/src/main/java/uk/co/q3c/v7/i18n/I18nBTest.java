@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 David Sowerby
+ * Copyright (C) 2014 David Sowerby
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -10,30 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.testapp.i18n;
+package uk.co.q3c.v7.i18n;
 
-import java.util.EnumMap;
+import static org.junit.Assert.fail;
 
-/**
- * 
- * 
- * @author David Sowerby 9 Feb 2013
- * 
- */
-public class DemoLabels_de extends DemoLabels {
+import org.junit.Test;
 
-	private static final EnumMap<DemoLabelKey, String> map = new EnumMap<DemoLabelKey, String>(
-			DemoLabelKey.class);
-	// TODO make map unmodifiable
-	static {
-		map.put(DemoLabelKey.Yes, "ja");
-		map.put(DemoLabelKey.No, "nein");
+import com.vaadin.ui.TextField;
 
-	}
+public class I18nBTest {
 
-	@Override
-	public EnumMap<DemoLabelKey, String> getMap() {
-		return map;
+	@I18nB(captionClass = LabelKey.class, caption = "", description = "")
+	TextField tf;
+
+	@Test
+	public void test() {
+		fail("Not yet implemented");
 	}
 
 }

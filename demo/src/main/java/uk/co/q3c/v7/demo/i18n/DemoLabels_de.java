@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.demo.i18n;
 
-import java.util.EnumMap;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * 
@@ -22,17 +22,20 @@ import java.util.EnumMap;
  */
 public class DemoLabels_de extends DemoLabels {
 
-	private static final EnumMap<DemoLabelKey, String> map = new EnumMap<DemoLabelKey, String>(
-			DemoLabelKey.class);
-	// TODO make map unmodifiable
+	private static final ImmutableMap<DemoLabelKey, String> map;
 	static {
-		map.put(DemoLabelKey.Yes, "ja");
-		map.put(DemoLabelKey.No, "nein");
-
+		map = new ImmutableMap.Builder<DemoLabelKey, String>()
+// @formatter:off
+				
+		.put(DemoLabelKey.Yes, "ja")
+		.put(DemoLabelKey.No, "nein")
+		.build();
+		
+// @formatter:on
 	}
 
 	@Override
-	public EnumMap<DemoLabelKey, String> getMap() {
+	public ImmutableMap<DemoLabelKey, String> getMap() {
 		return map;
 	}
 

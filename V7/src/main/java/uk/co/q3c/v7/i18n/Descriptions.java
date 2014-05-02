@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.EnumMap;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * The base for the resource bundle of {@link Descriptions}. The separation between them is arbitrary, but helps break
@@ -29,27 +29,26 @@ import java.util.EnumMap;
  */
 public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 
-	private static final EnumMap<DescriptionKey, String> map = new EnumMap<DescriptionKey, String>(DescriptionKey.class);
-	// TODO make map unmodifiable
+	private static ImmutableMap<DescriptionKey, String> map;
 	static {
-		map.put(DescriptionKey.Last_Name, "the last name or family name");
-		map.put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok");
-		map.put(DescriptionKey.No_Permission, "You do not have permission for that action");
-		map.put(DescriptionKey.Application_Configuration_Service,
-				"This service loads the application configuration from V7.ini");
-		map.put(DescriptionKey.Sitemap_Service,
-				"This service creates the Sitemap using options from the application configuration");
-		map.put(DescriptionKey.Invalid_Login, "That username or password was not recognised");
-		map.put(DescriptionKey.Account_Expired, "Your account has expired");
-		map.put(DescriptionKey.Account_Already_In_Use,
-				"This account is already in use.  You must log out of that session before you can log in again.");
-		map.put(DescriptionKey.Account_Locked, "Your account is locked");
-		map.put(DescriptionKey.Too_Many_Login_Attempts,
-				"Login has failed too many times, the account will need to be reset");
+		map = new ImmutableMap.Builder<DescriptionKey, String>()
+				// @formatter:off
+				.put(DescriptionKey.Last_Name, "the last name or family name")
+				.put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok")
+				.put(DescriptionKey.No_Permission, "You do not have permission for that action")
+				.put(DescriptionKey.Application_Configuration_Service, "This service loads the application configuration from V7.ini")
+				.put(DescriptionKey.Sitemap_Service, "This service creates the Sitemap using options from the application configuration")
+				.put(DescriptionKey.Invalid_Login, "That username or password was not recognised")
+				.put(DescriptionKey.Account_Expired, "Your account has expired")
+				.put(DescriptionKey.Account_Already_In_Use, "This account is already in use.  You must log out of that session before you can log in again.")
+				.put(DescriptionKey.Account_Locked, "Your account is locked")
+				.put(DescriptionKey.Too_Many_Login_Attempts,"Login has failed too many times, the account will need to be reset")
+				.build();
+				// @formatter:on
 	}
 
 	@Override
-	public EnumMap<DescriptionKey, String> getMap() {
+	public ImmutableMap<DescriptionKey, String> getMap() {
 		return map;
 	}
 

@@ -36,7 +36,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ChameleonTheme;
 
 public class DefaultLoginView extends GridViewBase implements LoginView, ClickListener {
-	@I18N(value = DescriptionKey.Please_log_in)
+	@I18N(value = LabelKey.Authentication)
 	private Label label;
 	@I18N(caption = LabelKey.User_Name, description = DescriptionKey.Enter_your_user_name)
 	private TextField usernameBox;

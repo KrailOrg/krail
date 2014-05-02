@@ -24,10 +24,12 @@ import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.base.user.status.UserStatusListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.I18N;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 
+@I18N
 @UIScoped
 public class DefaultSubpagePanel extends NavigationButtonPanel implements SubpagePanel, UserStatusListener {
 

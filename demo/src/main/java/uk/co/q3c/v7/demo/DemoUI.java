@@ -13,6 +13,8 @@ import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
 import uk.co.q3c.v7.base.view.component.MessageBar;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
@@ -36,9 +38,9 @@ public class DemoUI extends DefaultApplicationUI {
 			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, Translate translate,
-			ApplicationTitle applicationTitle) {
+			ApplicationTitle applicationTitle, CurrentLocale currentLocale, I18NProcessor translator) {
 		super(navigator, errorHandler, converterFactory, logo, header, loginOut, menu, navTree, breadcrumb, subpage,
-				messageBar, broadcaster, pushMessageRouter, applicationTitle, translate);
+				messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
 
 	}
 

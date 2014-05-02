@@ -12,11 +12,11 @@
  */
 package uk.co.q3c.v7.demo.i18n;
 
-import java.util.EnumMap;
-
 import uk.co.q3c.v7.i18n.EnumResourceBundle;
 import uk.co.q3c.v7.i18n.Labels;
 import uk.co.q3c.v7.i18n.Messages;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * The base for the resource bundle of {@link Descriptions}. The separation between them is arbitrary, but helps break
@@ -33,10 +33,11 @@ import uk.co.q3c.v7.i18n.Messages;
  */
 public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 
-	private static final EnumMap<DescriptionKey, String> map = new EnumMap<DescriptionKey, String>(DescriptionKey.class);
-	// TODO make map unmodifiable
+	private static final ImmutableMap<DescriptionKey, String> map;
 	static {
-		map.put(DescriptionKey.Notifications,
+		map = new ImmutableMap.Builder<DescriptionKey, String>()
+// @formatter:off		
+		.put(DescriptionKey.Notifications,
 				"Vaadin provides "
 						+ "<a href=\"https://vaadin.com/en_GB/book/vaadin7/-/page/application.notifications.html\" target=\"\">notification</a>"
 						+ " 'splash' messages.  V7 adds to this by enabling the use of multiple"
@@ -46,11 +47,13 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 						+ "\nWhen you try the buttons below, note that the "
 						+ "message is presented through both the Vaadin notification and the message bar.  "
 						+ "For more detail see the "
-						+ "<a href=\"https://sites.google.com/site/q3cjava/notifications\" target=\"\">V7 documentation</a>");
+						+ "<a href=\"https://sites.google.com/site/q3cjava/notifications\" target=\"\">V7 documentation</a>")
+		.build();
+// @formatter:on
 	}
 
 	@Override
-	public EnumMap<DescriptionKey, String> getMap() {
+	public ImmutableMap<DescriptionKey, String> getMap() {
 		return map;
 	}
 }

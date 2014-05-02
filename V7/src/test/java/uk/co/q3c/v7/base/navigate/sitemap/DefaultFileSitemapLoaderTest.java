@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -30,6 +30,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultFileSitemapLoaderTest.TestFileSitemapModule;
@@ -38,8 +39,9 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapLoader.LoaderInfoEntry;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapLoader.LoaderWarningEntry;
 import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
 import uk.co.q3c.v7.base.view.testviews.subview.TransferView;
-import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
-import uk.co.q3c.v7.i18n.I18NTranslator;
+import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
+import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 
 import com.google.inject.AbstractModule;
@@ -60,12 +62,12 @@ import fixture.testviews2.OptionsView;
  * The sitemap.getReport() is useful for debugging.<br>
  * <br>
  * Sitemap.toString() will show the page structure
- * 
+ *
  * @author dsowerby
- * 
+ *
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ TestFileSitemapModule.class })
+@GuiceContext({ TestFileSitemapModule.class, I18NModule.class, VaadinSessionScopeModule.class })
 public class DefaultFileSitemapLoaderTest {
 
 	public static class TestFileSitemapModule extends FileSitemapModule {
@@ -107,7 +109,7 @@ public class DefaultFileSitemapLoaderTest {
 
 	/**
 	 * Map does not define every page, some are automatically added standard pages
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test
@@ -248,7 +250,7 @@ public class DefaultFileSitemapLoaderTest {
 
 	/**
 	 * Does not implement i18N
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test
@@ -278,7 +280,7 @@ public class DefaultFileSitemapLoaderTest {
 
 	/**
 	 * Does not exist
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test
@@ -358,7 +360,7 @@ public class DefaultFileSitemapLoaderTest {
 
 	/**
 	 * Tries to go out of structure by double indenting from previous
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test
@@ -530,7 +532,7 @@ public class DefaultFileSitemapLoaderTest {
 
 			@Override
 			protected void configure() {
-				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+				bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 			}
 

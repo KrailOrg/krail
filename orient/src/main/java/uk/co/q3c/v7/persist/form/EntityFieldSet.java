@@ -13,7 +13,7 @@
 package uk.co.q3c.v7.persist.form;
 
 import uk.co.q3c.v7.base.ui.form.BeanFieldSet;
-import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
 import uk.co.q3c.v7.persist.EntityBase;
 
 /**
@@ -25,7 +25,7 @@ import uk.co.q3c.v7.persist.EntityBase;
  */
 public class EntityFieldSet<T extends EntityBase> extends BeanFieldSet<T> {
 
-	protected EntityFieldSet(AnnotationI18NTranslator translator) {
+	protected EntityFieldSet(DefaultI18NProcessor translator) {
 		super(translator);
 	}
 

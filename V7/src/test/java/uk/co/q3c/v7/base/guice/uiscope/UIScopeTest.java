@@ -1,5 +1,6 @@
 package uk.co.q3c.v7.base.guice.uiscope;
 
+import static com.google.inject.multibindings.Multibinder.newSetBinder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -65,8 +66,9 @@ import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.component.StandardComponentModule;
-import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
-import uk.co.q3c.v7.i18n.I18NTranslator;
+import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
+import uk.co.q3c.v7.i18n.I18N;
+import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -77,6 +79,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 import com.google.inject.multibindings.MapBinder;
+import com.google.inject.multibindings.Multibinder;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ClientConnector;
 import com.vaadin.server.ErrorHandler;
@@ -148,10 +151,12 @@ public class UIScopeTest {
 	static class TestModule extends AbstractModule {
 
 		private final Scope vaadinSessionScope = mock(VaadinSessionScope.class);
+		private Multibinder<String> registeredAnnotations;
 
 		@SuppressWarnings("unused")
 		@Override
 		protected void configure() {
+			registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
 			bind(ApplicationTitle.class).toInstance(new ApplicationTitle(LabelKey.V7));
 
 			MapBinder<String, UI> uiProviders = MapBinder.newMapBinder(binder(), String.class, UI.class);
@@ -164,7 +169,7 @@ public class UIScopeTest {
 			bind(V7Navigator.class).to(DefaultV7Navigator.class);
 			bind(TestObject.class).in(UIScoped.class);
 			bind(ErrorView.class).to(DefaultErrorView.class);
-			bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+			bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
 			bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 			bind(ErrorHandler.class).to(V7ErrorHandler.class);
 			bind(ConverterFactory.class).to(V7DefaultConverterFactory.class);
@@ -186,6 +191,7 @@ public class UIScopeTest {
 			MapBinder<String, V7View> viewMapping = MapBinder.newMapBinder(binder(), String.class, V7View.class);
 			bind(ScopedUIProvider.class).to(BasicUIProvider.class);
 			bindScope(VaadinSessionScoped.class, vaadinSessionScope);
+			registeredAnnotations.addBinding().toInstance(I18N.class.getName());
 
 		}
 	}

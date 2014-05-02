@@ -12,26 +12,31 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.EnumMap;
+import com.google.common.collect.ImmutableMap;
 
 /**
- * 
  * 
  * @author David Sowerby 9 Feb 2013
  * 
  */
 public class TestLabels_de extends TestLabels {
 
-	private static final EnumMap<TestLabelKey, String> map = new EnumMap<TestLabelKey, String>(TestLabelKey.class);
-	// TODO make map unmodifiable
+	private static final ImmutableMap<TestLabelKey, String> map;
 	static {
-		map.put(TestLabelKey.Home, "zu Hause");
-		map.put(TestLabelKey.Yes, "Ja");
-		map.put(TestLabelKey.No, "Nein");
+
+		map = new ImmutableMap.Builder<TestLabelKey, String>()
+// @formatter:off	
+
+			.put(TestLabelKey.Home, "zu Hause")
+			.put(TestLabelKey.Yes, "Ja")
+			.put(TestLabelKey.No, "Nein")
+			.build();
+		
+// @formatter:on
 	}
 
 	@Override
-	public EnumMap<TestLabelKey, String> getMap() {
+	public ImmutableMap<TestLabelKey, String> getMap() {
 		return map;
 	}
 

@@ -19,7 +19,7 @@ import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.ViewBase;
 import uk.co.q3c.v7.i18n.MessageKey;
 import uk.co.q3c.v7.i18n.Translate;
-import uk.co.q3c.v7.testapp.i18n.DescriptionKey;
+import uk.co.q3c.v7.testapp.i18n.TestAppDescriptionKey;
 
 import com.google.inject.Inject;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -109,7 +109,7 @@ public class NotificationsView extends ViewBase {
 		infoArea = new Label();
 		infoArea.setContentMode(ContentMode.HTML);
 		infoArea.setSizeFull();
-		infoArea.setValue(translate.from(DescriptionKey.Notifications));
+		infoArea.setValue(translate.from(TestAppDescriptionKey.Notifications));
 		grid.addComponent(infoArea, 0, 1, 1, 1);
 	}
 

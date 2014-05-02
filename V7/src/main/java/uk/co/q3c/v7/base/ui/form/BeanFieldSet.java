@@ -12,16 +12,16 @@
  */
 package uk.co.q3c.v7.base.ui.form;
 
-import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
+import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItem;
 
 public class BeanFieldSet<T> {
 	private BeanFieldGroup<T> fieldGroup;
-	private final AnnotationI18NTranslator translator;
+	private final DefaultI18NProcessor translator;
 
-	protected BeanFieldSet(AnnotationI18NTranslator translator) {
+	protected BeanFieldSet(DefaultI18NProcessor translator) {
 		super();
 		this.translator = translator;
 	}

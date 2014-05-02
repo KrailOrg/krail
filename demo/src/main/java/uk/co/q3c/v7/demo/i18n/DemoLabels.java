@@ -12,14 +12,13 @@
  */
 package uk.co.q3c.v7.demo.i18n;
 
-import java.util.EnumMap;
-
 import uk.co.q3c.v7.i18n.EnumResourceBundle;
 
+import com.google.common.collect.ImmutableMap;
+
 /**
- * The base for the resource bundle of Labels. This is an arbitrary division of
- * i18N keys & values, but is loosely defined as containing those value which
- * are short, contain no parameters and are typically used for captions and
+ * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely
+ * defined as containing those value which are short, contain no parameters and are typically used for captions and
  * labels. They can of course be used anywhere.
  * 
  * 
@@ -28,17 +27,21 @@ import uk.co.q3c.v7.i18n.EnumResourceBundle;
  */
 public class DemoLabels extends EnumResourceBundle<DemoLabelKey> {
 
-	private static final EnumMap<DemoLabelKey, String> map = new EnumMap<DemoLabelKey, String>(
-			DemoLabelKey.class);
+	private static final ImmutableMap<DemoLabelKey, String> map;
 
 	static {
-		map.put(DemoLabelKey.Yes, "yes");
-		map.put(DemoLabelKey.No, "no");
+		map = new ImmutableMap.Builder<DemoLabelKey, String>()
+// @formatter:off
 
+			.put(DemoLabelKey.Yes, "yes")
+			.put(DemoLabelKey.No, "no")
+			.build();
+
+// @formatter:on
 	}
 
 	@Override
-	public EnumMap<DemoLabelKey, String> getMap() {
+	public ImmutableMap<DemoLabelKey, String> getMap() {
 		return map;
 	}
 

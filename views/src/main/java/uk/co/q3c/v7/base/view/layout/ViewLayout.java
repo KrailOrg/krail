@@ -16,21 +16,18 @@ import java.util.List;
 
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.layout.DefaultViewConfig.Split;
-import uk.co.q3c.v7.i18n.I18NListener;
 
 import com.vaadin.ui.Component;
 
 /**
  * A further level of abstraction from the standard Vaadin Layout components, the implementations of this interface
- * provide some common composite layouts, typical for web (and other) applications. They must also implement
- * {@link I18NListener}, so that I18N changes are propagated to components contained in the layout. The core V7 library
- * only provide one implementation, {@link VerticalViewLayout}, but it is expected that others will be added as a
- * separate library.
+ * provide some common composite layouts, typical for web (and other) applications. The core V7 library only provide one
+ * implementation, {@link VerticalViewLayout}, but it is expected that others will be added as a separate library.
  * 
  * @author David Sowerby 14 Aug 2013
  * 
  */
-public interface ViewLayout extends I18NListener {
+public interface ViewLayout {
 
 	/**
 	 * A safe copy of the components contained by this template

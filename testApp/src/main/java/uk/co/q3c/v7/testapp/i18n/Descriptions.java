@@ -12,11 +12,11 @@
  */
 package uk.co.q3c.v7.testapp.i18n;
 
-import java.util.EnumMap;
-
 import uk.co.q3c.v7.i18n.EnumResourceBundle;
 import uk.co.q3c.v7.i18n.Labels;
 import uk.co.q3c.v7.i18n.Messages;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * The base for the resource bundle of {@link Descriptions}. The separation between them is arbitrary, but helps break
@@ -31,13 +31,13 @@ import uk.co.q3c.v7.i18n.Messages;
  * @author David Sowerby 3 Aug 2013
  * 
  */
-public class Descriptions extends EnumResourceBundle<DescriptionKey> {
+public class Descriptions extends EnumResourceBundle<TestAppDescriptionKey> {
 
-	private static final EnumMap<DescriptionKey, String> map = new EnumMap<DescriptionKey, String>(DescriptionKey.class);
-	// TODO make map unmodifiable
+	private static final ImmutableMap<uk.co.q3c.v7.testapp.i18n.TestAppDescriptionKey, String> map;
 	static {
-		map.put(DescriptionKey.Notifications,
-				"Vaadin provides "
+		map = new ImmutableMap.Builder<TestAppDescriptionKey, String>()
+				// @formatter:off		
+			.put(TestAppDescriptionKey.Notifications,	"Vaadin provides "
 						+ "<a href=\"https://vaadin.com/en_GB/book/vaadin7/-/page/application.notifications.html\" target=\"\">notification</a>"
 						+ " 'splash' messages.  V7 adds to this by enabling the use of multiple"
 						+ " methods of notification, combined or selected for each of the message types - Error, "
@@ -46,11 +46,12 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 						+ "\nWhen you try the buttons below, note that the "
 						+ "message is presented through both the Vaadin notification and the message bar.  "
 						+ "For more detail see the "
-						+ "<a href=\"https://sites.google.com/site/q3cjava/notifications\" target=\"\">V7 documentation</a>");
+						+ "<a href=\"https://sites.google.com/site/q3cjava/notifications\" target=\"\">V7 documentation</a>")
+						.build();
 	}
 
 	@Override
-	public EnumMap<DescriptionKey, String> getMap() {
+	public ImmutableMap<uk.co.q3c.v7.testapp.i18n.TestAppDescriptionKey, String> getMap() {
 		return map;
 	}
 }

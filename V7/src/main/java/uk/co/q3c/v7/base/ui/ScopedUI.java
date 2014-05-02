@@ -28,7 +28,7 @@ import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewHolder;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NTranslator;
+import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.LocaleChangeListener;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -71,11 +71,11 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	private final ApplicationTitle applicationTitle;
 	private final Translate translate;
 	private final CurrentLocale currentLocale;
-	private final I18NTranslator translator;
+	private final I18NProcessor translator;
 
 	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
-			Translate translate, CurrentLocale currentLocale, I18NTranslator translator) {
+			Translate translate, CurrentLocale currentLocale, I18NProcessor translator) {
 		super();
 		this.errorHandler = errorHandler;
 		this.navigator = navigator;

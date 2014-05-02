@@ -14,9 +14,7 @@ package uk.co.q3c.v7.base.view.component;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Locale;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -28,8 +26,7 @@ import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
-import uk.co.q3c.v7.i18n.I18NListener;
-import uk.co.q3c.v7.i18n.I18NTranslator;
+import uk.co.q3c.v7.i18n.LocaleChangeListener;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
@@ -38,9 +35,8 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
-public abstract class NavigationButtonPanel extends HorizontalLayout implements I18NListener, V7ViewChangeListener,
-		Button.ClickListener, Breadcrumb {
-	private static Logger log = LoggerFactory.getLogger(NavigationButtonPanel.class);
+public abstract class NavigationButtonPanel extends HorizontalLayout implements V7ViewChangeListener,
+		LocaleChangeListener, Button.ClickListener, Breadcrumb {
 	private final List<NavigationButton> buttons = new ArrayList<>();
 	private final V7Navigator navigator;
 	private final Sitemap sitemap;
@@ -115,10 +111,10 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 	}
 
 	@Override
-	public void localeChange(I18NTranslator translator) {
+	public void localeChanged(Locale toLocale) {
 		for (NavigationButton button : buttons) {
 			I18NKey<?> key = button.getNode().getLabelKey();
-			button.setCaption(translate.from(key, translator.getLocale()));
+			button.setCaption(translate.from(key, toLocale));
 		}
 	}
 

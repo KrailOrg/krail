@@ -21,15 +21,14 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NListener;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
 
 @UIScoped
-public class DefaultBreadcrumb extends NavigationButtonPanel implements I18NListener, V7ViewChangeListener,
-		Button.ClickListener, Breadcrumb {
+public class DefaultBreadcrumb extends NavigationButtonPanel implements V7ViewChangeListener, Button.ClickListener,
+		Breadcrumb {
 
 	@Inject
 	protected DefaultBreadcrumb(V7Navigator navigator, Sitemap sitemap, CurrentLocale currentLocale,

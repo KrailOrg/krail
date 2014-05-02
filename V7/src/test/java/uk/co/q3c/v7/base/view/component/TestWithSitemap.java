@@ -25,8 +25,8 @@ import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.i18n.AnnotationI18NTranslator;
-import uk.co.q3c.v7.i18n.I18NTranslator;
+import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
+import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -172,7 +172,7 @@ public abstract class TestWithSitemap {
 			@Override
 			protected void configure() {
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(I18NTranslator.class).to(AnnotationI18NTranslator.class);
+				bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
 			}
 
 		};

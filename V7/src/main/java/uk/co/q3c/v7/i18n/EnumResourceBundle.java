@@ -12,9 +12,10 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
+
+import com.google.common.collect.ImmutableMap;
 
 public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBundle {
 
@@ -38,14 +39,13 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
 		}
 		@SuppressWarnings("unchecked")
 		EnumResourceBundle<E> enumparent = (EnumResourceBundle<E>) parent;
+		// returning null so that the enum name() can be used when there is no map entry
 		if (enumparent == null) {
 			return null;
-			// changed to returning null so that the enum name() can be used as default
-			// throw new MissingResourceException("resource not defined", this.getClass().getName(), key.name());
 		}
 		return enumparent.getValue(key);
 
 	}
 
-	public abstract EnumMap<E, String> getMap();
+	public abstract ImmutableMap<E, String> getMap();
 }

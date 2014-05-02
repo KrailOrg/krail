@@ -10,27 +10,34 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.demo.i18n;
+package uk.co.q3c.v7.testapp.i18n;
 
-import java.lang.annotation.Annotation;
+import com.google.common.collect.ImmutableMap;
 
-import uk.co.q3c.v7.i18n.I18NAnnotationReader;
-import uk.co.q3c.v7.i18n.I18NKey;
+/**
+ * 
+ * 
+ * @author David Sowerby 9 Feb 2013
+ * 
+ */
+public class TestAppLabels_de extends Labels {
 
-public class DemoI18Nreader implements I18NAnnotationReader {
+	private static final ImmutableMap<TestAppLabelKey, String> map;
 
-	@Override
-	public I18NKey<?> caption(Annotation annotation) {
-		return ((DemoI18N) annotation).caption();
+	static {
+		map = new ImmutableMap.Builder<TestAppLabelKey, String>()
+// @formatter:off	
+
+		.put(TestAppLabelKey.Yes, "ja")
+		.put(TestAppLabelKey.No, "nein")
+		.build();
+		
+// @formatter:on
 	}
 
 	@Override
-	public I18NKey<?> description(Annotation annotation) {
-		return ((DemoI18N) annotation).description();
+	public ImmutableMap<TestAppLabelKey, String> getMap() {
+		return map;
 	}
 
-	@Override
-	public I18NKey<?> value(Annotation annotation) {
-		return ((DemoI18N) annotation).value();
-	}
 }

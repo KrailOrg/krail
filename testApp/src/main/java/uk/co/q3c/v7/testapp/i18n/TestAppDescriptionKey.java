@@ -10,24 +10,30 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.i18n;
+package uk.co.q3c.v7.testapp.i18n;
 
-import java.lang.annotation.Annotation;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-public class TestI18Nreader implements I18NAnnotationReader {
+import uk.co.q3c.v7.i18n.I18NKey;
 
+public enum TestAppDescriptionKey implements I18NKey<Descriptions> {
+	_nullkey_, Notifications
+
+	;
 	@Override
-	public I18NKey<?> caption(Annotation annotation) {
-		return ((TestI18N) annotation).caption();
+	public Descriptions getBundle(Locale locale) {
+		ResourceBundle bundle = ResourceBundle.getBundle(Descriptions.class.getName(), locale);
+		return (Descriptions) bundle;
 	}
 
 	@Override
-	public I18NKey<?> description(Annotation annotation) {
-		return ((TestI18N) annotation).description();
+	public String getValue(Locale locale) {
+		return getBundle(locale).getValue(this);
 	}
 
 	@Override
-	public I18NKey<?> value(Annotation annotation) {
-		return ((TestI18N) annotation).value();
+	public boolean isNullKey() {
+		return this.equals(_nullkey_);
 	}
 }

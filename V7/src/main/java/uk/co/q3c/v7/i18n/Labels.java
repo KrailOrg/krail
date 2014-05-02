@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.EnumMap;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * The base for the resource bundle of {@link Labels}. The separation between them is arbitrary, but helps break down
@@ -29,14 +29,18 @@ import java.util.EnumMap;
  */
 public class Labels extends EnumResourceBundle<LabelKey> {
 
-	private static final EnumMap<LabelKey, String> map = new EnumMap<LabelKey, String>(LabelKey.class);
-	// TODO make map unmodifiable
+	private static final ImmutableMap<LabelKey, String> map;
 	static {
+		map = new ImmutableMap.Builder<LabelKey, String>()
+// @formatter:off	
 
+			.build();
+
+// @formatter:on
 	}
 
 	@Override
-	public EnumMap<LabelKey, String> getMap() {
+	public ImmutableMap<LabelKey, String> getMap() {
 		return map;
 	}
 
