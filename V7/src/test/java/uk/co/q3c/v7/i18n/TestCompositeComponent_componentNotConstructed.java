@@ -17,14 +17,14 @@ import com.vaadin.ui.Panel;
 
 /**
  * Deliberately does not construct the contained component to test handling of null
- * 
+ *
  * @author David Sowerby
  * @date 2 May 2014
  */
 @I18N(caption = LabelKey.Class)
 public class TestCompositeComponent_componentNotConstructed extends Panel {
 
-	@I18N(description = DescriptionKey.Confirm_Ok, value = LabelKey.Ok)
+	@I18N(description = DescriptionKey.Confirm_Ok)
 	private Label label;
 
 	public Label getLabel() {

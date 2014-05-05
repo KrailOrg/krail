@@ -20,6 +20,7 @@ import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18N;
 import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.I18NValue;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -36,7 +37,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ChameleonTheme;
 
 public class DefaultLoginView extends GridViewBase implements LoginView, ClickListener {
-	@I18N(value = LabelKey.Authentication)
+	@I18NValue(value = LabelKey.Authentication)
 	private Label label;
 	@I18N(caption = LabelKey.User_Name, description = DescriptionKey.Enter_your_user_name)
 	private TextField usernameBox;

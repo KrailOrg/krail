@@ -69,6 +69,7 @@ import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
 import uk.co.q3c.v7.i18n.I18N;
 import uk.co.q3c.v7.i18n.I18NProcessor;
+import uk.co.q3c.v7.i18n.I18NValue;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -152,11 +153,13 @@ public class UIScopeTest {
 		// private final Scope vaadinSessionScope = mock(VaadinSessionScope.class);
 		private final Scope vaadinSessionScope = new VaadinSessionScope();
 		private Multibinder<String> registeredAnnotations;
+		private Multibinder<String> registeredValueAnnotations;
 
 		@SuppressWarnings("unused")
 		@Override
 		protected void configure() {
 			registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
+			registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
 			bind(ApplicationTitle.class).toInstance(new ApplicationTitle(LabelKey.V7));
 
 			MapBinder<String, UI> uiProviders = MapBinder.newMapBinder(binder(), String.class, UI.class);
@@ -192,6 +195,7 @@ public class UIScopeTest {
 			bind(ScopedUIProvider.class).to(BasicUIProvider.class);
 			bindScope(VaadinSessionScoped.class, vaadinSessionScope);
 			registeredAnnotations.addBinding().toInstance(I18N.class.getName());
+			registeredValueAnnotations.addBinding().toInstance(I18NValue.class.getName());
 
 		}
 	}

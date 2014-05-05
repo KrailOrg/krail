@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 David Sowerby
+ * Copyright (C) 2014 David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -12,14 +12,8 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import com.vaadin.ui.Label;
 
-public class TestCompositeNonComponent {
-	@I18NValue(value = LabelKey.Cancel)
-	private final Label label = new Label();
+public class I18NTestClass3 {
 
-	public Label getLabel() {
-		return label;
-	}
-
+	private final TestCompositeComponent_componentNotConstructed ccs_unconstructed = new TestCompositeComponent_componentNotConstructed();
 }

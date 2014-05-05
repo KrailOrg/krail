@@ -23,7 +23,7 @@ import com.vaadin.ui.Panel;
 @I18N(caption = LabelKey.Class)
 public class TestCompositeComponent extends Panel {
 
-	@I18N(description = DescriptionKey.Confirm_Ok, value = LabelKey.Ok)
+	@I18N(description = DescriptionKey.Confirm_Ok)
 	private final Label label = new Label();
 
 	public Label getLabel() {

@@ -12,16 +12,17 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import com.vaadin.ui.TextField;
+import java.lang.annotation.Annotation;
+import java.util.Locale;
 
-public class I18nBTest {
+public interface I18NValueAnnotationReader<T extends Annotation> {
 
-	@I18NFlex(captionKeyClass = LabelKey.class, captionKeyName = "", descriptionKeyName = "", valueKeyName = "")
-	TextField tf;
+	public abstract String value();
 
-	// @Test
-	public void test() {
+	public abstract Locale locale();
 
-	}
+	public abstract T getAnnotation();
+
+	public abstract void setAnnotation(T annotation);
 
 }

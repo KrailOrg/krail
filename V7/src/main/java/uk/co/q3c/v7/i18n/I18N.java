@@ -40,13 +40,6 @@ public @interface I18N {
 	DescriptionKey description() default DescriptionKey._nullkey_;
 
 	/**
-	 * Usually only used with Vaadin Labels
-	 *
-	 * @return
-	 */
-	LabelKey value() default LabelKey._nullkey_;
-
-	/**
 	 * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional parameter
 	 * is specified, it will be used instead. This allows specific components to be fixed to display content in a
 	 * language different to the rest of the application. The format of the string should be as the IETF BCP 47 language

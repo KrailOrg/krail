@@ -16,19 +16,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.q3c.util.MessageFormat;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 
-import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.AbstractComponent;
@@ -64,17 +61,36 @@ import com.vaadin.ui.Table;
  */
 public class DefaultI18NProcessor implements I18NProcessor {
 	private static Logger log = LoggerFactory.getLogger(DefaultI18NProcessor.class);
-	private final CurrentLocale currentLocale;
 	private final Set<String> registeredAnnotations;
 	private final Translate translate;
+	private final I18NReader i18nReader;
+	private final I18NFlexReader i18nFlexReader;
+	private final Set<String> registeredValueAnnotations;
+	private final I18NValueReader i18nValueReader;
+	private final I18NValueFlexReader i18nValueFlexReader;
+
+	private class AnnotationPair {
+		Annotation capdAnnotation;
+		Annotation valueAnnotation;
+
+		public boolean isIncomplete() {
+			return capdAnnotation == null || valueAnnotation == null;
+		}
+	}
 
 	@Inject
 	protected DefaultI18NProcessor(CurrentLocale currentLocale, Translate translate,
-			@I18N Set<String> registeredAnnotations) {
+			@I18N Set<String> registeredAnnotations, @I18NValue Set<String> registeredValueAnnotations,
+			I18NReader i18nReader, I18NFlexReader i18nFlexReader, I18NValueReader i18nValueReader,
+			I18NValueFlexReader i18nValueFlexReader) {
 		super();
-		this.currentLocale = currentLocale;
 		this.translate = translate;
 		this.registeredAnnotations = registeredAnnotations;
+		this.i18nReader = i18nReader;
+		this.i18nFlexReader = i18nFlexReader;
+		this.registeredValueAnnotations = registeredValueAnnotations;
+		this.i18nValueReader = i18nValueReader;
+		this.i18nValueFlexReader = i18nValueFlexReader;
 	}
 
 	/**
@@ -94,21 +110,22 @@ public class DefaultI18NProcessor implements I18NProcessor {
 		for (Field field : fields) {
 
 			// Check field annotation first so that it overrides a class annotation
+			// Only look for class annotation if field doesn't have both
+			AnnotationPair annotationPair = null;
+			AnnotationPair fieldAnnotationPair = fieldAnnotation(field);
 
-			Annotation annotation = fieldAnnotation(field);
-
-			if (annotation == null) {
-				annotation = classAnnotation(target, field);
-				if (annotation != null) {
-					translate(target, field, annotation);
-				}
+			// if either the capd or value annotation is not present on the field we need to check the class for
+			// annotations
+			if (fieldAnnotationPair.isIncomplete()) {
+				AnnotationPair classAnnotationPair = classAnnotation(field);
+				annotationPair = mergeAnnotations(fieldAnnotationPair, classAnnotationPair);
 			} else {
-				log.debug("field '{}' has @{} annotation", field.getName(), annotation.annotationType());
-				translate(target, field, annotation);
+				annotationPair = fieldAnnotationPair;
 			}
 
-			if (annotation != null) {
-				// now drill down unless it is a native Vaadin component
+			// if there is a capd annotation translate and apply it, then drill down
+			if (annotationPair.capdAnnotation != null) {
+				translate(target, field, annotationPair.capdAnnotation);
 				try {
 					Object drillDown = field.get(target);
 					if (drillDown != null) {
@@ -120,41 +137,121 @@ public class DefaultI18NProcessor implements I18NProcessor {
 									field.getName(), field.getType());
 						}
 					} else {
-						log.warn("cannot drill down, object for field '{}' has not been constructed", field.getName());
+						String msg = MessageFormat.format(
+								"cannot drill down, object for field '{0}' has not been constructed", field.getName());
+						throw new I18NException(msg);
 					}
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (Exception e) {
+					throw new I18NException("failed to drill down into I18N component", e);
+				}
+			}
+
+			// if there is a value annotation translate and apply it (no drill down on value annotations)
+			if (annotationPair.valueAnnotation != null) {
+				translateValue(target, field, annotationPair.valueAnnotation);
+			}
+
+		}
+	}
+
+	private void translateValue(Object target, Field field, Annotation valueAnnotation) {
+		field.setAccessible(true);
+		// if it is a component, process the caption etc
+		if (AbstractComponent.class.isAssignableFrom(field.getType())) {
+			try {
+				AbstractComponent component = (AbstractComponent) field.get(target);
+				applyValueAnnotation(component, field, valueAnnotation);
+			} catch (Exception e) {
+				throw new I18NException("unable to apply value annotion to " + field.getName());
+			}
+		}
+
+	}
+
+	private void applyValueAnnotation(AbstractComponent component, Field field, Annotation annotation) {
+		checkNotNull(component);
+		checkNotNull(field);
+		checkNotNull(annotation);
+
+		I18NValueAnnotationReader<?> reader = (annotation instanceof I18NValueFlex) ? i18nValueFlexReader
+				: i18nValueReader;
+		if (annotation instanceof I18NValueFlex) {
+			i18nValueFlexReader.setAnnotation((I18NValueFlex) annotation);
+		} else {
+			i18nValueReader.setAnnotation(annotation);
+		}
+
+		// set caption and description
+		field.setAccessible(true);
+		try {
+			component.setLocale(reader.locale());
+			if (Property.class.isAssignableFrom(component.getClass())) {
+				@SuppressWarnings("unchecked")
+				Property<String> property = (Property<String>) component;
+				property.setValue(reader.value());
+				log.debug("value set to '{}'", property.getValue());
+			}
+
+		} catch (IllegalArgumentException e) {
+			String msg = MessageFormat.format("Unable to set I18N value for '{}'", field.getName());
+			throw new I18NException(msg, e);
+		}
+
+	}
+
+	/**
+	 * Merge the field and class annotations with the field annotations taking precedence
+	 *
+	 * @param fieldAnnotationPair
+	 * @param classAnnotationPair
+	 * @return
+	 */
+	private AnnotationPair mergeAnnotations(AnnotationPair fieldAnnotationPair, AnnotationPair classAnnotationPair) {
+		if (fieldAnnotationPair.capdAnnotation == null) {
+			fieldAnnotationPair.capdAnnotation = classAnnotationPair.capdAnnotation;
+		}
+		if (fieldAnnotationPair.valueAnnotation == null) {
+			fieldAnnotationPair.valueAnnotation = classAnnotationPair.valueAnnotation;
+		}
+		return fieldAnnotationPair;
+	}
+
+	private AnnotationPair fieldAnnotation(Field field) {
+		log.debug("checking field '{}' for annotations", field.getName());
+		Annotation[] annotations = field.getAnnotations();
+		return scanAnnotations(annotations);
+
+	}
+
+	private AnnotationPair scanAnnotations(Annotation[] annotations) {
+		AnnotationPair pair = new AnnotationPair();
+		boolean capdFound = false;
+		boolean valueFound = false;
+		for (Annotation annotation : annotations) {
+			String annotationClassName = annotation.annotationType().getName();
+			if (!capdFound) {
+				if (registeredAnnotations.contains(annotationClassName)) {
+					pair.capdAnnotation = annotation;
+					capdFound = true;
+				}
+			}
+			if (!valueFound) {
+				if (registeredValueAnnotations.contains(annotationClassName)) {
+					pair.valueAnnotation = annotation;
+					valueFound = true;
 				}
 			}
 		}
+
+		return pair;
 	}
 
-	private Annotation fieldAnnotation(Field field) {
-		log.debug("checking field '{}' for annotations", field.getName());
-		for (Annotation annotation : field.getAnnotations()) {
-			String annotationClassName = annotation.annotationType().getName();
-			if (registeredAnnotations.contains(annotationClassName)) {
-				return annotation;
-			}
-		}
-
-		return null;
-	}
-
-	private Annotation classAnnotation(Object target, Field field) {
+	private AnnotationPair classAnnotation(Field field) {
 		Class<?> clazz = field.getType();
 		log.debug("checking class '{}' of field '{}' for annotations", clazz.getName(), field.getName());
-		for (Annotation annotation : clazz.getAnnotations()) {
-			String annotationClassName = annotation.annotationType().getName();
-			if (registeredAnnotations.contains(annotationClassName)) {
-				return annotation;
-			}
-		}
-		return null;
+		Annotation[] annotations = clazz.getAnnotations();
+		return scanAnnotations(annotations);
+
 	}
 
 	public void translate(Object target, Field field, Annotation annotation) {
@@ -168,10 +265,14 @@ public class DefaultI18NProcessor implements I18NProcessor {
 				if (component != null) {
 					applyAnnotation(component, field, annotation);
 				} else {
-					log.warn("object for field '{}' has not been constructed, i18N cannot be applied", field.getName());
+					String msg = MessageFormat.format(
+							"object for field '{0}' has not been constructed, i18N cannot be applied", field.getName());
+					throw new I18NException(msg);
 				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				String msg = MessageFormat.format("unable to access field '{0}', i18N cannot be applied",
+						field.getName());
+				throw new I18NException(msg, e);
 			}
 		}
 
@@ -181,58 +282,47 @@ public class DefaultI18NProcessor implements I18NProcessor {
 		checkNotNull(component);
 		checkNotNull(field);
 		checkNotNull(annotation);
-		I18NKey<?> captionKey = (I18NKey<?>) annotationParam("caption", annotation);
-		I18NKey<?> descriptionKey = (I18NKey<?>) annotationParam("description", annotation);
-		I18NKey<?> valueKey = (I18NKey<?>) annotationParam("value", annotation);
-		String localeString = (String) annotationParam("locale", annotation);
 
-		Locale locale = null;
-		if (Strings.isNullOrEmpty(localeString)) {
-			locale = currentLocale.getLocale();
+		I18NAnnotationReader<?> reader = (annotation instanceof I18NFlex) ? i18nFlexReader : i18nReader;
+		if (annotation instanceof I18NFlex) {
+			i18nFlexReader.setAnnotation((I18NFlex) annotation);
 		} else {
-			locale = Locale.forLanguageTag(localeString);
+			i18nReader.setAnnotation(annotation);
 		}
-
-		// check for nulls. Nulls are used for caption and description so that content can be cleared.
-		// for value, this is not the case, as it may be a bad idea
-		String captionValue = captionKey.isNullKey() ? null : translate.from(captionKey, locale);
-		String descriptionValue = descriptionKey.isNullKey() ? null : translate.from(descriptionKey, locale);
 
 		// set caption and description
 		field.setAccessible(true);
 		try {
-			if (captionValue != null) {
-				component.setCaption(captionValue);
-				log.debug("caption set to '{}'", captionValue);
-			}
-			if (descriptionValue != null) {
-				component.setDescription(descriptionValue);
-				log.debug("description set to '{}'", descriptionValue);
-			}
-			component.setLocale(locale);
-			log.debug("locale set to '{}'", locale.toLanguageTag());
+
+			component.setLocale(reader.locale());
+			log.debug("locale set to '{}'", component.getLocale().toLanguageTag());
+
+			component.setCaption(reader.caption());
+			log.debug("caption set to '{}'", component.getCaption());
+
+			component.setDescription(reader.description());
+			log.debug("description set to '{}'", component.getDescription());
+
 		} catch (IllegalArgumentException e) {
-			log.error("Unable to set I18N caption or description for " + field.getName(), e);
+			String msg = MessageFormat.format("Unable to set I18N caption or description for '{}'", field.getName());
+			throw new I18NException(msg, e);
 		}
 
 		// These components have a value. Usually I18N would only be used for Label values. If no key is provided
 		// the component value is left unchanged
-		if (valueKey != null) {
-			if (Property.class.isAssignableFrom(field.getType())) {
-				try {
-					@SuppressWarnings("unchecked")
-					Property<String> c = (Property<String>) component;
-					String valueValue = valueKey.isNullKey() ? null : translate.from(valueKey, locale);
-					if (valueValue != null) {
-						c.setValue(valueValue);
-						log.debug("value set to '{}'", valueValue);
-					}
-				} catch (Exception e) {
-					log.error("Unable to set I18N value for " + field.getName(), e);
-
-				}
-			}
-		}
+		// if (reader.value() != null) {
+		// if (Property.class.isAssignableFrom(field.getType())) {
+		// try {
+		// @SuppressWarnings("unchecked")
+		// Property<String> c = (Property<String>) component;
+		// c.setValue(reader.value());
+		// log.debug("value set to '{}'", c.getValue());
+		// } catch (Exception e) {
+		// String msg = MessageFormat.format("Unable to set I18N value for ", field.getName());
+		// throw new I18NException(msg, e);
+		// }
+		// }
+		// }
 
 		// Table columns need special treatment
 		if (Table.class.isAssignableFrom(field.getType())) {
@@ -244,7 +334,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
 				for (Object column : columns) {
 					if (column instanceof LabelKey) {
 						LabelKey columnid = (LabelKey) column;
-						String header = translate.from(columnid, locale);
+						String header = translate.from(columnid, reader.locale());
 						headers.add(header);
 					} else {
 						headers.add(column.toString());
@@ -257,19 +347,6 @@ public class DefaultI18NProcessor implements I18NProcessor {
 				log.error("Unable to set I18N table columns headers for " + field.getName(), e);
 			}
 
-		}
-	}
-
-	private Object annotationParam(String methodName, Annotation annotation) {
-		try {
-			Method method = annotation.getClass().getDeclaredMethod(methodName);
-			Object paramValue = method.invoke(annotation);
-			return paramValue;
-		} catch (NoSuchMethodException e) {
-			log.warn("I18N annotation class {} must define a '{}()' method", annotation.getClass(), methodName);
-			return null;
-		} catch (IllegalAccessException | IllegalArgumentException | SecurityException | InvocationTargetException e) {
-			throw new RuntimeException(e);
 		}
 	}
 

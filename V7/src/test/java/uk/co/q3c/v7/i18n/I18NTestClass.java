@@ -21,7 +21,7 @@ public class I18NTestClass {
 	@I18N(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
 	private final Button buttonWithAnnotation;
 
-	@I18N(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok, value = LabelKey.Ok)
+	@I18N(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
 	private final Label label;
 
 	@I18N(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
@@ -33,7 +33,8 @@ public class I18NTestClass {
 	@I18N(caption = LabelKey.Field)
 	private final TestCompositeComponent ccs;
 
-	private final TestCompositeComponent_componentNotConstructed ccs_unconstructed;
+	// Class annotation
+	private final TestCompositeComponent ccc;
 
 	@I18N
 	private final TestCompositeNonComponent cnc;
@@ -44,12 +45,24 @@ public class I18NTestClass {
 	@I18N(caption = LabelKey.Yes, locale = "de-DE")
 	private final Button specificLocale;
 
+	@I18NFlex(captionKeyClass = TestLabelKey.class, captionKeyName = "Transfers", descriptionKeyClass = TestLabelKey.class, descriptionKeyName = "Home")
+	private final Button flex;
+
+	@I18NValue(value = LabelKey.Guest)
+	private final Label value;
+
+	@I18NValueFlex(valueKeyClass = TestLabelKey.class, valueKeyName = "Private")
+	private final Label flexValue;
+
+	@I18NValue(value = LabelKey.Yes, locale = "de-DE")
+	private final Label valueLocale;
+
+	@I18NValueFlex(valueKeyClass = TestLabelKey.class, valueKeyName = "Yes", locale = "de-DE")
+	private final Label flexValueLocale;
+
 	private final Button buttonWithoutAnnotation;
 	private final Integer integer;
 	private double dubble;
-	// keep this as null make sure nothing breaks;
-	@I18N(caption = LabelKey.Cancel)
-	private Button unconstructed;
 
 	protected I18NTestClass() {
 		super();
@@ -61,11 +74,16 @@ public class I18NTestClass {
 		table = new Table();
 		setupTableColumns();
 
-		ccs_unconstructed = new TestCompositeComponent_componentNotConstructed();
 		cnc = new TestCompositeNonComponent();
 		ccn = new TestCompositeComponentNested();
 		ccs = new TestCompositeComponent();
+		ccc = new TestCompositeComponent();
 		specificLocale = new Button();
+		flex = new Button();
+		value = new Label();
+		flexValue = new Label();
+		valueLocale = new Label();
+		flexValueLocale = new Label();
 	}
 
 	private void setupTableColumns() {
@@ -98,10 +116,6 @@ public class I18NTestClass {
 		return table;
 	}
 
-	public TestCompositeComponent_componentNotConstructed getCcs_unconstructed() {
-		return ccs_unconstructed;
-	}
-
 	public TestCompositeNonComponent getCnc() {
 		return cnc;
 	}
@@ -120,6 +134,30 @@ public class I18NTestClass {
 
 	public Button getSpecificLocale() {
 		return specificLocale;
+	}
+
+	public TestCompositeComponent getCcc() {
+		return ccc;
+	}
+
+	public Button getFlex() {
+		return flex;
+	}
+
+	public Label getValue() {
+		return value;
+	}
+
+	public Label getFlexValue() {
+		return flexValue;
+	}
+
+	public Label getValueLocale() {
+		return valueLocale;
+	}
+
+	public Label getFlexValueLocale() {
+		return flexValueLocale;
 	}
 
 }

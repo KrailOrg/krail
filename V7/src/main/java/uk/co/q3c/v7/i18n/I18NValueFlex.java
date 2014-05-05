@@ -23,15 +23,11 @@ import com.google.inject.BindingAnnotation;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.TYPE, ElementType.PARAMETER })
 @BindingAnnotation
-public @interface I18NFlex {
+public @interface I18NValueFlex {
 
-	Class<? extends Enum<?>> captionKeyClass() default LabelKey.class;
+	Class<? extends Enum<?>> valueKeyClass() default LabelKey.class;
 
-	Class<? extends Enum<?>> descriptionKeyClass() default DescriptionKey.class;
-
-	String captionKeyName() default "";
-
-	String descriptionKeyName() default "";
+	String valueKeyName() default "";
 
 	/**
 	 * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional parameter
@@ -39,6 +35,7 @@ public @interface I18NFlex {
 	 * language different to the rest of the application. The format of the string should be as the IETF BCP 47 language
 	 * tag string; see {@link Locale#toLanguageTag()}
 	 */
+
 	String locale() default "";
 
 }
