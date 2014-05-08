@@ -66,6 +66,8 @@ import uk.co.q3c.v7.base.view.ErrorView;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.component.StandardComponentModule;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.DefaultCurrentLocale;
 import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
 import uk.co.q3c.v7.i18n.I18N;
 import uk.co.q3c.v7.i18n.I18NProcessor;
@@ -189,6 +191,7 @@ public class UIScopeTest {
 			bind(SitemapService.class).to(MockSitemapService.class);
 			bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
 			bind(ApplicationConfigurationService.class).to(DefaultApplicationConfigurationService.class);
+			bind(CurrentLocale.class).to(DefaultCurrentLocale.class);
 			MapBinder<Integer, IniFileConfig> iniFileConfigs = MapBinder.newMapBinder(binder(), Integer.class,
 					IniFileConfig.class);
 			MapBinder<String, V7View> viewMapping = MapBinder.newMapBinder(binder(), String.class, V7View.class);

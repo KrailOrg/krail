@@ -29,7 +29,6 @@ import uk.co.q3c.v7.base.ui.ScopedUI;
 import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 /**
@@ -38,23 +37,10 @@ import com.vaadin.ui.Table;
  * and sets caption, description and value properties of the component.
  * <p>
  * <p>
- * All the annotation parameters are optional. If caption or description keys are not specified, then the caption or
- * description of the component is set to null. If the value key is not specified, the value of the component remains
- * unchanged.
- * <p>
- * The value parameter is only relevant to components which implement the {@link com.vaadin.data.Property} interface
- * (for example {@link Label}), and if a value key is specified for any other component, it is ignored
- * <p>
- * The annotations used are those registered in {@link I18NModule}. {@link I18N} is registered by default, but because
- * annotations cannot be extended, and have limitations strict limitations on parameter types, you will probably need to
- * define your own {@link I18N} equivalent annotations.
- * <p>
  * When a locale change occurs in {@link CurrentLocale}, {@link ScopedUI} updates itself and its current view. Other
  * views, which may have already been constructed, are updated as they become active.
- * <p>
- * Container / composite components may be annotated with {@link I18NContainer}, which then has each of its child
- * components passed to this class for translation. {@link I18NContainer} may be applied to a class or field - so if you
- * have a component probably the best way usually is to annotate the class so that it wil always be
+ *
+ * For a full description see https://sites.google.com/site/q3cjava/internationalisation-i18n
  *
  * @author David Sowerby 8 Feb 2013
  *

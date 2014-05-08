@@ -41,7 +41,7 @@ import com.vaadin.ui.Button;
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
 public class LoginStatusPanelTest {
 
-	DefaultLoginStatusPanel panel;
+	DefaultUserStatusPanel panel;
 
 	@Mock
 	Subject subject;
@@ -67,7 +67,7 @@ public class LoginStatusPanelTest {
 		when(subjectProvider.get()).thenReturn(subject);
 		subjectIdentifier = new DefaultSubjectIdentifier(subjectProvider, translate);
 
-		panel = new DefaultLoginStatusPanel(navigator, subjectProvider, translate, subjectIdentifier, userStatus);
+		panel = new DefaultUserStatusPanel(navigator, subjectProvider, translate, subjectIdentifier, userStatus);
 
 		loginoutBtn = panel.getLogin_logout_Button();
 	}

@@ -45,7 +45,7 @@ public class StandardComponentModule extends AbstractModule {
 	}
 
 	private void bindLoginStatusPanel() {
-		bind(LoginStatusPanel.class).to(DefaultLoginStatusPanel.class);
+		bind(UserStatusPanel.class).to(DefaultUserStatusPanel.class);
 	}
 
 	private void bindApplicationMenu() {

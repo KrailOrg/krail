@@ -33,7 +33,7 @@ import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
-import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
+import uk.co.q3c.v7.base.view.component.UserStatusPanel;
 import uk.co.q3c.v7.i18n.I18NModule;
 
 import com.google.inject.AbstractModule;
@@ -49,10 +49,10 @@ import com.vaadin.util.CurrentInstance;
 public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 
 	@Mock
-	LoginStatusPanel monitor1;
+	UserStatusPanel monitor1;
 
 	@Mock
-	LoginStatusPanel monitor2;
+	UserStatusPanel monitor2;
 
 	@Mock
 	BasicUI ui;

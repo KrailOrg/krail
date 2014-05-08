@@ -34,7 +34,15 @@ public class I18NModule extends AbstractModule {
 		registerValueAnnotation(I18NValueFlex.class);
 
 		bindProcessor();
+		bindCurrentLocale();
 		define();
+	}
+
+	/**
+	 * Override this method to provide your own implementation of {@link CurrentLocale}
+	 */
+	protected void bindCurrentLocale() {
+		bind(CurrentLocale.class).to(DefaultCurrentLocale.class);
 	}
 
 	/**
@@ -47,6 +55,9 @@ public class I18NModule extends AbstractModule {
 
 	}
 
+	/**
+	 * Override this method to provide your own implementation of {@link I18NProcessor}
+	 */
 	protected void bindProcessor() {
 		bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
 	}

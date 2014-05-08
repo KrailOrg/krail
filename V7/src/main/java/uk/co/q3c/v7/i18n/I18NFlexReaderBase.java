@@ -14,8 +14,8 @@ package uk.co.q3c.v7.i18n;
 
 import java.util.Locale;
 
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
-import com.mycila.inject.internal.guava.base.Strings;
 
 /**
  * returns translated parameter values for an {@link I18NFlex} annotation. If a parameter has either a null keyClass or

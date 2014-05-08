@@ -21,8 +21,8 @@ import java.util.Locale;
 
 import uk.co.q3c.util.MessageFormat;
 
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
-import com.mycila.inject.internal.guava.base.Strings;
 
 public abstract class I18NReaderBase {
 

@@ -71,6 +71,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	private final ApplicationTitle applicationTitle;
 	private final Translate translate;
 	private final I18NProcessor translator;
+	private final CurrentLocale currentLocale;
 
 	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
@@ -83,6 +84,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		this.applicationTitle = applicationTitle;
 		this.translate = translate;
 		this.translator = translator;
+		this.currentLocale = currentLocale;
 
 		viewDisplayPanel = new Panel();
 		registerWithBroadcaster(broadcaster);
@@ -148,7 +150,10 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	}
 
 	/**
-	 * Make sure you call this from sub-class overrides
+	 * Make sure you call this from sub-class overrides. The Vaadin Page is not available during the construction of
+	 * this class, but is available when this method is invoked. As a result, this method sets the navigator a listener
+	 * for URI changes and obtains the browser locale setting for initialising {@link CurrentLocale}. Both of these are
+	 * provided by the Vaadin Page.
 	 *
 	 * @see com.vaadin.ui.UI#init(com.vaadin.server.VaadinRequest)
 	 */
@@ -158,12 +163,15 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		VaadinSession session = getSession();
 		session.setConverterFactory(converterFactory);
 
-		// page isn't available during injected construction
+		// page isn't available during injected construction, so we have to do this here
 		Page page = getPage();
 		page.addUriFragmentChangedListener(navigator);
 
 		setErrorHandler(errorHandler);
 		page.setTitle(pageTitle());
+
+		// page isn't available during injected construction, and we need page to access the browser locale
+		currentLocale.init();
 		doLayout();
 		translator.translate(this);
 		// Navigate to the correct start point
@@ -222,7 +230,6 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		access(new Runnable() {
 			@Override
 			public void run() {
-				// Show it somehow
 				log.debug("receiving message: {}", message);
 				processBroadcastMessage(group, message);
 
@@ -230,6 +237,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		});
 	}
 
+	/** Distribute the message to listeners within this UIScope */
 	protected void processBroadcastMessage(String group, String message) {
 		pushMessageRouter.messageIn(group, message);
 	}

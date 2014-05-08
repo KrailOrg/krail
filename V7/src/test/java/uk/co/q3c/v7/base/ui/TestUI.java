@@ -3,7 +3,7 @@ package uk.co.q3c.v7.base.ui;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.push.Broadcaster;
 import uk.co.q3c.v7.base.push.PushMessageRouter;
-import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
+import uk.co.q3c.v7.base.view.component.DefaultUserStatusPanel;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.Translate;
@@ -17,10 +17,10 @@ import com.vaadin.ui.VerticalLayout;
 public class TestUI extends ScopedUI {
 
 	@Inject
-	private DefaultLoginStatusPanel panel1;
+	private DefaultUserStatusPanel panel1;
 
 	@Inject
-	private DefaultLoginStatusPanel panel2;
+	private DefaultUserStatusPanel panel2;
 
 	@Inject
 	public TestUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
@@ -31,7 +31,7 @@ public class TestUI extends ScopedUI {
 
 	}
 
-	public DefaultLoginStatusPanel getPanel2() {
+	public DefaultUserStatusPanel getPanel2() {
 		return panel2;
 	}
 
@@ -45,7 +45,7 @@ public class TestUI extends ScopedUI {
 		return "TestUI";
 	}
 
-	public DefaultLoginStatusPanel getPanel1() {
+	public DefaultUserStatusPanel getPanel1() {
 		return panel1;
 	}
 

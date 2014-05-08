@@ -45,8 +45,8 @@ import com.vaadin.ui.themes.ChameleonTheme;
  * 
  */
 // TODO I18N
-public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, ClickListener {
-	private static Logger log = LoggerFactory.getLogger(DefaultLoginStatusPanel.class);
+public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, ClickListener {
+	private static Logger log = LoggerFactory.getLogger(DefaultUserStatusPanel.class);
 	private final Label usernameLabel;
 	private final Button login_logout_Button;
 	private final V7Navigator navigator;
@@ -56,7 +56,7 @@ public class DefaultLoginStatusPanel extends Panel implements LoginStatusPanel, 
 	private final UserStatus userStatus;
 
 	@Inject
-	protected DefaultLoginStatusPanel(V7Navigator navigator, SubjectProvider subjectProvider, Translate translate,
+	protected DefaultUserStatusPanel(V7Navigator navigator, SubjectProvider subjectProvider, Translate translate,
 			SubjectIdentifier subjectIdentifier, UserStatus userStatus) {
 		super();
 		this.navigator = navigator;

@@ -7,7 +7,7 @@ import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
 import uk.co.q3c.v7.base.view.component.ApplicationMenu;
 import uk.co.q3c.v7.base.view.component.Breadcrumb;
-import uk.co.q3c.v7.base.view.component.LoginStatusPanel;
+import uk.co.q3c.v7.base.view.component.UserStatusPanel;
 import uk.co.q3c.v7.base.view.component.MessageBar;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
@@ -35,7 +35,7 @@ public class DefaultApplicationUI extends ScopedUI {
 	private VerticalLayout baseLayout;
 	private final UserNavigationTree navTree;
 	private final Breadcrumb breadcrumb;
-	private final LoginStatusPanel loginOut;
+	private final UserStatusPanel loginOut;
 	private final ApplicationMenu menu;
 	private final SubpagePanel subpage;
 	private final MessageBar messageBar;
@@ -44,7 +44,7 @@ public class DefaultApplicationUI extends ScopedUI {
 
 	@Inject
 	protected DefaultApplicationUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			ApplicationLogo logo, ApplicationHeader header, LoginStatusPanel loginOut, ApplicationMenu menu,
+			ApplicationLogo logo, ApplicationHeader header, UserStatusPanel loginOut, ApplicationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
 			Translate translate, CurrentLocale currentLocale, I18NProcessor translator) {
@@ -129,7 +129,7 @@ public class DefaultApplicationUI extends ScopedUI {
 		return breadcrumb;
 	}
 
-	public LoginStatusPanel getLoginOut() {
+	public UserStatusPanel getLoginOut() {
 		return loginOut;
 	}
 

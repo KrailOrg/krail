@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.view.DefaultLoginView;
 import uk.co.q3c.v7.base.view.component.DefaultBreadcrumb;
-import uk.co.q3c.v7.base.view.component.DefaultLoginStatusPanel;
+import uk.co.q3c.v7.base.view.component.DefaultUserStatusPanel;
 import uk.co.q3c.v7.base.view.component.DefaultSubpagePanel;
 import uk.co.q3c.v7.base.view.component.NavigationButton;
 
@@ -211,7 +211,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	}
 
 	protected WebElement loginButton() {
-		return element(DefaultLoginStatusPanel.class, Button.class);
+		return element(DefaultUserStatusPanel.class, Button.class);
 	}
 
 	protected WebElement notification() {
@@ -242,7 +242,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 	}
 
 	protected WebElement loginLabel() {
-		return element(DefaultLoginStatusPanel.class, Label.class);
+		return element(DefaultUserStatusPanel.class, Label.class);
 	}
 
 	protected WebElement usernameBox() {
