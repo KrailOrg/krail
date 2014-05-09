@@ -15,9 +15,6 @@ package uk.co.q3c.v7.i18n;
 import java.util.Locale;
 
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
-import uk.co.q3c.v7.base.ui.ScopedUI;
-
-import com.vaadin.server.Page;
 
 /**
  * Provides a reference to the currently selected Locale. {@link LocaleChangeListener}s can be added to listen for
@@ -39,14 +36,13 @@ public interface CurrentLocale {
 
 	public abstract Locale getLocale();
 
-	public abstract void setLocale(Locale locale);
+	public abstract void setLocale(Locale locale, boolean fireListeners);
 
 	/**
-	 * When UI is being constructed the Vaadin {@link Page} is not available - which also means that the browser
-	 * information cannot be retrieved. This method is called by {@link ScopedUI} during initialisation, so that the
-	 * user's browser can be used as a reference for the desired Locale. Does not fire change listeners, as this is part
-	 * of the initialisation process.
+	 * Equivalent to {@link #setLocale(Locale,true)}
+	 * 
+	 * @param locale
 	 */
-	void init();
+	public abstract void setLocale(Locale locale);
 
 }

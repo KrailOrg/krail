@@ -170,8 +170,8 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 		setErrorHandler(errorHandler);
 		page.setTitle(pageTitle());
 
-		// page isn't available during injected construction, and we need page to access the browser locale
-		currentLocale.init();
+		// We want to use the same default locale as Vaadin (held by the session and usually the browser locale)
+		currentLocale.setLocale(session.getLocale(), false);
 		doLayout();
 		translator.translate(this);
 		// Navigate to the correct start point

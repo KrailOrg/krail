@@ -20,11 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
-import uk.co.q3c.v7.base.ui.BrowserProvider;
-import uk.co.q3c.v7.base.ui.ScopedUI;
 
 import com.google.inject.Inject;
-import com.vaadin.server.Page;
 
 /**
  * When a CurrentLocale is instantiated it will take the browser locale as the default (at this point the user has not
@@ -39,25 +36,10 @@ public class DefaultCurrentLocale implements CurrentLocale {
 	private static Logger log = LoggerFactory.getLogger(DefaultCurrentLocale.class);
 	private Locale locale = Locale.UK;
 	private final List<LocaleChangeListener> listeners = new ArrayList<>();
-	private final BrowserProvider browserProvider;
 
 	@Inject
-	protected DefaultCurrentLocale(BrowserProvider browserProvider) {
+	protected DefaultCurrentLocale() {
 		super();
-		this.browserProvider = browserProvider;
-	}
-
-	/**
-	 * When UI is being constructed the Vaadin {@link Page} is not available - which also means that the browser
-	 * information cannot be retrieved. This method is called by {@link ScopedUI} during initialisation, so that the
-	 * user's browser can be used as a reference for the desired Locale. Does not fire change listeners, as this is part
-	 * of the initialisation process.
-	 */
-	@Override
-	public void init() {
-		Locale browserLocale = browserProvider.get().getLocale();
-		locale = browserLocale;
-		log.debug("CurrentLocale initialised to browser locale of '{}'", browserLocale);
 	}
 
 	@Override
@@ -67,10 +49,7 @@ public class DefaultCurrentLocale implements CurrentLocale {
 
 	@Override
 	public void setLocale(Locale locale) {
-		if (locale != this.locale) {
-			this.locale = locale;
-			fireListeners(locale);
-		}
+		setLocale(locale, true);
 	}
 
 	@Override
@@ -87,6 +66,18 @@ public class DefaultCurrentLocale implements CurrentLocale {
 		for (LocaleChangeListener listener : listeners) {
 			listener.localeChanged(locale);
 		}
+	}
+
+	@Override
+	public void setLocale(Locale locale, boolean fireListeners) {
+		if (locale != this.locale) {
+			this.locale = locale;
+			log.debug("CurrentLocale set to {}", locale);
+			if (fireListeners) {
+				fireListeners(locale);
+			}
+		}
+
 	}
 
 }
