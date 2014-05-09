@@ -74,6 +74,27 @@ public class CurrentLocaleTest implements LocaleChangeListener {
 	}
 
 	@Test
+	public void setLocaleNoFire() {
+		// given
+		listenerFired = false;
+		// when
+		currentLocale.setLocale(Locale.FRANCE, false);
+		// then
+		assertThat(listenerFired).isFalse();
+	}
+
+	@Test
+	public void setLocaleFire() {
+		// given
+		listenerFired = false;
+		currentLocale.setLocale(Locale.ENGLISH);
+		// when
+		currentLocale.setLocale(Locale.FRANCE, true);
+		// then
+		assertThat(listenerFired).isTrue();
+	}
+
+	@Test
 	public void changeButNoChange() {
 
 		// given
