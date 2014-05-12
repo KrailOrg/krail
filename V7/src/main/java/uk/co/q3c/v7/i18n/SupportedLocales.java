@@ -12,10 +12,19 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.Locale;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-public interface LocaleChangeListener {
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-	void localeChanged(Locale toLocale);
+import com.google.inject.BindingAnnotation;
+
+@BindingAnnotation
+@Target({ FIELD, PARAMETER, METHOD })
+@Retention(RUNTIME)
+public @interface SupportedLocales {
 
 }

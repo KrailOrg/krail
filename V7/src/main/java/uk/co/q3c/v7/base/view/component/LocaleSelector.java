@@ -10,12 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.i18n;
+package uk.co.q3c.v7.base.view.component;
 
-import java.util.Locale;
+import uk.co.q3c.v7.i18n.LocaleChangeListener;
 
-public interface LocaleChangeListener {
+import com.vaadin.ui.Component;
 
-	void localeChanged(Locale toLocale);
-
+public interface LocaleSelector extends LocaleChangeListener {
+	/**
+	 * returns the visual component used to display the current locale
+	 *
+	 * @return
+	 */
+	Component getComponent();
 }

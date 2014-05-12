@@ -15,6 +15,8 @@ package uk.co.q3c.v7.i18n;
 import static com.google.inject.multibindings.Multibinder.newSetBinder;
 
 import java.lang.annotation.Annotation;
+import java.util.List;
+import java.util.Locale;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
@@ -23,11 +25,13 @@ public class I18NModule extends AbstractModule {
 
 	private Multibinder<String> registeredAnnotations;
 	private Multibinder<String> registeredValueAnnotations;
+	private Multibinder<Locale> supportedLocales;
 
 	@Override
 	protected void configure() {
 		registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
 		registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
+		supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
 		registerAnnotation(I18N.class);
 		registerAnnotation(I18NFlex.class);
 		registerValueAnnotation(I18NValue.class);
@@ -35,6 +39,7 @@ public class I18NModule extends AbstractModule {
 
 		bindProcessor();
 		bindCurrentLocale();
+
 		define();
 	}
 
@@ -49,10 +54,12 @@ public class I18NModule extends AbstractModule {
 	 * Override this to define more registered annotations, or registered value annotations, by calling
 	 * {@link #registerAnnotation(Class)} or {@link #registerValueAnnotation(Class)}, or make a copy of this module and
 	 * use the same structure (multiple instances of the {@link #registeredAnnotations} and
-	 * {@link #registerValueAnnotation(Class)} will be merged by Guice}
+	 * {@link #registerValueAnnotation(Class)} will be merged by Guice}.
+	 * <p>
+	 * Here you should also defines the locales are supporting
 	 */
 	protected void define() {
-
+		addSupportedLocale(Locale.UK);
 	}
 
 	/**
@@ -69,4 +76,19 @@ public class I18NModule extends AbstractModule {
 	private <T extends Annotation> void registerValueAnnotation(Class<T> i18Nclass) {
 		registeredValueAnnotations.addBinding().toInstance(i18Nclass.getName());
 	}
+
+	protected void addSupportedLocale(String locale) {
+		addSupportedLocale(Locale.forLanguageTag(locale));
+	}
+
+	protected void addSupportedLocale(Locale locale) {
+		supportedLocales.addBinding().toInstance(locale);
+	}
+
+	protected void addSupportedLocale(List<String> locales) {
+		for (String locale : locales) {
+			addSupportedLocale(locale);
+		}
+	}
+
 }
