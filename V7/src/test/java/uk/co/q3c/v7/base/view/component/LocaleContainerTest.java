@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,7 +63,11 @@ public class LocaleContainerTest {
 		VaadinService.setCurrent(vaadinService);
 		when(vaadinService.getBaseDirectory()).thenReturn(new File("src/test/java"));
 		supportedLocales = new HashSet<>();
+	}
 
+	@After
+	public void teardown() {
+		logMonitor.close();
 	}
 
 	@Test
