@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -22,7 +22,6 @@ import java.util.Map;
 
 import uk.co.q3c.util.BasicForest;
 import uk.co.q3c.v7.base.navigate.NavigationState;
-import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.shiro.PagePermission;
 import uk.co.q3c.v7.i18n.Translate;
@@ -47,11 +46,11 @@ import com.google.inject.Singleton;
  * <p>
  * If a duplicate entry is received (that is, a second entry for the same URI), the later entry will overwrite the
  * earlier entry
- * 
+ *
  * @see SitemapURIConverter
- * 
+ *
  * @author David Sowerby 19 May 2013
- * 
+ *
  */
 @Singleton
 public class Sitemap {
@@ -76,7 +75,7 @@ public class Sitemap {
 
 	/**
 	 * Returns the full URI for {@code node}
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -104,8 +103,8 @@ public class Sitemap {
 	 * If a node already exists at that location it is returned. If there are gaps in the structure, nodes are created
 	 * to fill them (the same idea as forcing directory creation on a file path). An empty (not null) URI is allowed.
 	 * This represents the site base URI without any further qualification.
-	 * 
-	 * 
+	 *
+	 *
 	 * @param uri
 	 * @return
 	 */
@@ -184,7 +183,7 @@ public class Sitemap {
 	 * {@link Sitemap} they will be added to it.
 	 * <p>
 	 * The node id is set to {@link #nextNodeId()} for any node which is not already in the Sitemap
-	 * 
+	 *
 	 * @param parentNode
 	 * @param childNode
 	 */
@@ -213,7 +212,7 @@ public class Sitemap {
 	/**
 	 * gets what would be the full URI for {@code childNode} if it were attached to {@code parentNode}, without actually
 	 * adding the node to the {@link Sitemap}
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -264,7 +263,7 @@ public class Sitemap {
 	/**
 	 * If the {@code page} has been redirected, return the page it has been redirected to, otherwise, just return
 	 * {@code page}. Allows for multiple levels of redirect
-	 * 
+	 *
 	 * @param page
 	 * @return
 	 */
@@ -286,7 +285,7 @@ public class Sitemap {
 	/**
 	 * If the virtual page represented by {@code navigationState} has been redirected, return the page it has been
 	 * redirected to, otherwise, just return the virtual page unchanged. Allows for multiple levels of redirect.
-	 * 
+	 *
 	 * @param browserPage
 	 * @return
 	 */
@@ -297,7 +296,7 @@ public class Sitemap {
 
 	/**
 	 * Safe copy of redirects
-	 * 
+	 *
 	 * @return
 	 */
 	public ImmutableMap<String, String> getRedirects() {
@@ -316,7 +315,7 @@ public class Sitemap {
 	 * <ol>
 	 * <li>if {@code allowPartialPath} is true a list of nodes is returned correct to the longest path possible.
 	 * <li>if {@code allowPartialPath} is false an empty list is returned
-	 * 
+	 *
 	 * @param segments
 	 * @return
 	 */
@@ -348,7 +347,7 @@ public class Sitemap {
 
 	/**
 	 * Returns a safe copy of all the URIs contained in the sitemap.
-	 * 
+	 *
 	 * @return
 	 */
 	public ImmutableList<String> uris() {
@@ -358,7 +357,7 @@ public class Sitemap {
 	/**
 	 * Returns true if the sitemap contains {@code uri}. Only the virtual page part of the URI is used, parameters are
 	 * ignored
-	 * 
+	 *
 	 * @param uri
 	 * @return
 	 */
@@ -369,7 +368,7 @@ public class Sitemap {
 
 	/**
 	 * Returns true if the sitemap contains the URI represented by virtual page part of {@code navigationState}.
-	 * 
+	 *
 	 * @param uri
 	 * @return
 	 */
@@ -383,7 +382,7 @@ public class Sitemap {
 
 	/**
 	 * Returns the parent of {@code node}. Will be null if {@code node} has no parent (that is, it is a root node)
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -393,7 +392,7 @@ public class Sitemap {
 
 	/**
 	 * Delegates to {@link BasicForest#getRoots()}
-	 * 
+	 *
 	 * @return
 	 */
 	public List<SitemapNode> getRoots() {
@@ -402,7 +401,7 @@ public class Sitemap {
 
 	/**
 	 * Delegates to {@link BasicForest#getRootFor(Object)}
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -412,7 +411,7 @@ public class Sitemap {
 
 	/**
 	 * Delegates to {@link BasicForest#getChildCount(Object)}
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -423,7 +422,7 @@ public class Sitemap {
 
 	/**
 	 * Delegates to {@link BasicForest#getAllNodes()}
-	 * 
+	 *
 	 * @return
 	 */
 	public List<SitemapNode> getAllNodes() {
@@ -432,7 +431,7 @@ public class Sitemap {
 
 	/**
 	 * Delegates to {@link BasicForest#getChildren(Object)}
-	 * 
+	 *
 	 * @param newParentNode
 	 * @return
 	 */
@@ -443,7 +442,7 @@ public class Sitemap {
 
 	/**
 	 * Delegates to {@link BasicForest#containsNode(Object)}
-	 * 
+	 *
 	 * @param newParentNode
 	 * @return
 	 */
@@ -453,7 +452,7 @@ public class Sitemap {
 
 	/**
 	 * Returns the {@link SitemapNode} associated with {@code uri}, or null if none found
-	 * 
+	 *
 	 * @param uri
 	 * @return
 	 */
@@ -463,7 +462,7 @@ public class Sitemap {
 
 	/**
 	 * Returns the {@link SitemapNode} associated with {@code navigationState}, or null if none found
-	 * 
+	 *
 	 * @param navigationState
 	 * @return
 	 */
@@ -478,7 +477,7 @@ public class Sitemap {
 	 * Returns the {@link SitemapNode} associated with {@code uri}, or the closest available if one cannot be found for
 	 * the full URI. "Closest" means the node which matches the most segments of the URI. Returns null if no match at
 	 * all is found
-	 * 
+	 *
 	 * @param uri
 	 * @return
 	 */
@@ -490,7 +489,7 @@ public class Sitemap {
 	 * Returns the {@link SitemapNode} associated with {@code navigationState}, or the closest available if one cannot
 	 * be found for the full URI. "Closest" means the node which matches the most segments of the URI. Returns null if
 	 * no match at all is found
-	 * 
+	 *
 	 * @param navigationState
 	 * @return
 	 */
@@ -511,7 +510,7 @@ public class Sitemap {
 	 * {@link URIFragmentHandler} to get URI path segments and {@link Sitemap} to obtain the node chain.
 	 * {@code allowPartialPath} determines how a partial match is handled (see
 	 * {@link Sitemap#nodeChainForSegments(List, boolean)} javadoc
-	 * 
+	 *
 	 * @param uri
 	 * @return
 	 */
@@ -522,7 +521,7 @@ public class Sitemap {
 	/**
 	 * Returns a list of nodes which form the chain from this {@code node} to its root in the {@link Sitemap}. The list
 	 * includes {@code node}
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -542,7 +541,7 @@ public class Sitemap {
 	 * {@link URIFragmentHandler} to get URI path segments and {@link Sitemap} to obtain the node chain.
 	 * {@code allowPartialPath} determines how a partial match is handled (see
 	 * {@link Sitemap#nodeChainForSegments(List, boolean)} javadoc
-	 * 
+	 *
 	 * @param uri
 	 * @return
 	 */
@@ -563,7 +562,7 @@ public class Sitemap {
 
 	/**
 	 * Returns a {@link NavigationState} object representing the URI for the {@code node}
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -573,7 +572,7 @@ public class Sitemap {
 
 	/**
 	 * Returns a {@link PagePermission} object for {@code node}
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -583,7 +582,7 @@ public class Sitemap {
 
 	/**
 	 * Returns a redirect for sourceNode if there is one, null if there is not. Allows for multiple levels of redirect
-	 * 
+	 *
 	 * @return
 	 */
 	public SitemapNode getRedirectNodeFor(SitemapNode sourceNode) {

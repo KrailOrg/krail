@@ -1,16 +1,18 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
 package uk.co.q3c.v7.base.view.component;
+
+import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
 
 import com.google.inject.AbstractModule;
 
@@ -26,37 +28,78 @@ public class StandardComponentModule extends AbstractModule {
 		bindMessageStatusPanel();
 		bindApplicationLogo();
 		bindApplicationHeader();
+		bindLocaleSelector();
 	}
 
-	private void bindMessageStatusPanel() {
+	/**
+	 * Override this method to provide your own implementation of {@link LocaleSelector} in a sub-class of this module.
+	 * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+	 */
+	protected void bindLocaleSelector() {
+		bind(LocaleSelector.class).to(DefaultLocaleSelector.class);
+	}
+
+	/**
+	 * Override this method to provide your own implementation of {@link MessageBar} in a sub-class of this module. Your
+	 * module will then need to replace this module in {@link BaseGuiceServletInjector}
+	 */
+	protected void bindMessageStatusPanel() {
 		bind(MessageBar.class).to(DefaultMessageBar.class);
 	}
 
-	private void bindApplicationHeader() {
+	/**
+	 * Override this method to provide your own implementation of {@link ApplicationHeader} in a sub-class of this
+	 * module. Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+	 */
+	protected void bindApplicationHeader() {
 		bind(ApplicationHeader.class).to(DefaultApplicationHeader.class);
 	}
 
-	private void bindApplicationLogo() {
+	/**
+	 * Override this method to provide your own implementation of {@link ApplicationLogo} in a sub-class of this module.
+	 * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+	 */
+	protected void bindApplicationLogo() {
 		bind(ApplicationLogo.class).to(DefaultApplicationLogo.class);
 	}
 
-	private void bindSubpagePanel() {
+	/**
+	 * Override this method to provide your own implementation of {@link SubpagePanel} in a sub-class of this module.
+	 * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+	 */
+	protected void bindSubpagePanel() {
 		bind(SubpagePanel.class).to(DefaultSubpagePanel.class);
 	}
 
-	private void bindLoginStatusPanel() {
+	/**
+	 * Override this method to provide your own implementation of {@link UserStatusPanel} in a sub-class of this module.
+	 * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+	 */
+	protected void bindLoginStatusPanel() {
 		bind(UserStatusPanel.class).to(DefaultUserStatusPanel.class);
 	}
 
-	private void bindApplicationMenu() {
+	/**
+	 * Override this method to provide your own implementation of {@link ApplicationMenu} in a sub-class of this module.
+	 * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+	 */
+	protected void bindApplicationMenu() {
 		bind(ApplicationMenu.class).to(UserNavigationMenu.class);
 	}
 
-	private void bindBreadcrumb() {
+	/**
+	 * Override this method to provide your own implementation of {@link Breadcrumb} in a sub-class of this module. Your
+	 * module will then need to replace this module in {@link BaseGuiceServletInjector}
+	 */
+	protected void bindBreadcrumb() {
 		bind(Breadcrumb.class).to(DefaultBreadcrumb.class);
 	}
 
-	private void bindUserNavigationTree() {
+	/**
+	 * Override this method to provide your own implementation of {@link UserNavigationTree} in a sub-class of this
+	 * module. Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+	 */
+	protected void bindUserNavigationTree() {
 		bind(UserNavigationTree.class).to(DefaultUserNavigationTree.class);
 	}
 

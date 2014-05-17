@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -59,7 +59,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	/**
 	 * Module instances for the base should be added in {@link #getModules()}. Module instance for the app using V7
 	 * should be added to {@link AppModules#appModules()}
-	 * 
+	 *
 	 * @see com.google.inject.servlet.GuiceServletContextListener#getInjector()
 	 */
 	@Override
@@ -85,7 +85,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	private List<Module> getModules() {
 		List<Module> baseModules = new ArrayList<>();
 
-		baseModules.add(new I18NModule());
+		baseModules.add(i18NModule());
 		baseModules.add(applicationConfigurationModule());
 		baseModules.add(new SitemapServiceModule());
 
@@ -114,6 +114,10 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 		return baseModules;
 	}
 
+	protected Module i18NModule() {
+		return new I18NModule();
+	}
+
 	protected Module applicationConfigurationModule() {
 		return new ApplicationConfigurationModule();
 	}
@@ -121,7 +125,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	/**
 	 * Modules used in the creation of the {@link Sitemap} do not actually need to be separated, this just makes a
 	 * convenient way of seeing them as a group
-	 * 
+	 *
 	 * @param baseModules
 	 */
 	protected void addSitemapModules(List<Module> baseModules) {
@@ -133,7 +137,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 	/**
 	 * Override this if you have provided your own {@link ServletModule}
-	 * 
+	 *
 	 * @return
 	 */
 	protected Module servletModule() {
@@ -143,7 +147,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	/**
 	 * Override this method if you have sub-classed {@link ShiroVaadinModule} to provide your own bindings for Shiro
 	 * related exceptions.
-	 * 
+	 *
 	 * @return
 	 */
 	protected Module shiroVaadinModule() {
@@ -159,8 +163,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Override this if you have sub-classed {@link ViewModule} to provide bindings to your own standard page
-	 * views
+	 * Override this if you have sub-classed {@link ViewModule} to provide bindings to your own standard page views
 	 */
 	protected Module viewModule() {
 		return new ViewModule();
@@ -169,7 +172,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	/**
 	 * Override this method if you have sub-classed {@link StandardShiroModule} to provide bindings to your Shiro
 	 * related implementations (for example, {@link Realm} and {@link CredentialsMatcher}
-	 * 
+	 *
 	 * @param servletContext
 	 * @param ini
 	 * @return
@@ -188,7 +191,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 	/**
 	 * Add as many application specific Guice modules as you wish by overriding this method.
-	 * 
+	 *
 	 * @param baseModules
 	 * @param ini
 	 */

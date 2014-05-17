@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -27,6 +27,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapException;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
+import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
@@ -47,10 +48,10 @@ import com.vaadin.server.Page;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
 
 /**
- * There is no need to register as a listener with {@link UserStatus}, the navigator is always called after all
- * other listeners - this is so that navigation components are set up before the navigator moves to a page (which might
- * not be displayed in a navigation component if it is not up to date)
- * 
+ * There is no need to register as a listener with {@link UserStatus}, the navigator is always called after all other
+ * listeners - this is so that navigation components are set up before the navigator moves to a page (which might not be
+ * displayed in a navigation component if it is not up to date)
+ *
  * @author David Sowerby
  * @date 18 Apr 2014
  */
@@ -98,7 +99,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	/**
 	 * Takes a URI fragment, checks for any redirects defined by the {@link Sitemap}, then calls
 	 * {@link #navigateTo(V7View, String, String)} to change the view
-	 * 
+	 *
 	 * @see uk.co.q3c.v7.base.navigate.V7Navigator#navigateTo(java.lang.String)
 	 */
 	@Override
@@ -114,7 +115,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	 * Checks {@code fragment} to see whether the {@link Sitemap} defines this as a page which should be redirected. If
 	 * it is, the full fragment is returned, but modified for the redirected page. If not, the {@code fragment} is
 	 * returned unchanged.
-	 * 
+	 *
 	 * @param fragment
 	 * @return
 	 */
@@ -143,7 +144,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	 * Events are fired before and after the view change, to the {@link #viewChangeListeners}. Listeners have the option
 	 * to block the view change by returning false (see {@link #fireBeforeViewChange(V7ViewChangeEvent)}
 	 * <p>
-	 * 
+	 *
 	 * @param navigationState
 	 *            The navigationState to navigate to. May not be null.
 	 */
@@ -223,7 +224,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	 * <p>
 	 * The view change listeners may also e.g. open a warning or question dialog and save the parameters to re-initiate
 	 * the navigation operation upon user action.
-	 * 
+	 *
 	 * @param event
 	 *            view change event (not null, view change not yet performed)
 	 * @return true if the view change should be allowed, false to silently block the navigation operation
@@ -241,7 +242,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	 * Fires an event after the current view has changed.
 	 * <p>
 	 * Listeners are called in registration order.
-	 * 
+	 *
 	 * @param event
 	 *            view change event (not null)
 	 */
@@ -257,7 +258,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	 * Registered listeners are invoked in registration order before (
 	 * {@link ViewChangeListener#beforeViewChange(ViewChangeEvent) beforeViewChange()}) and after (
 	 * {@link ViewChangeListener#afterViewChange(ViewChangeEvent) afterViewChange()}) a view change occurs.
-	 * 
+	 *
 	 * @param listener
 	 *            Listener to invoke during a view change.
 	 */
@@ -268,7 +269,7 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	/**
 	 * Removes a view change listener.
-	 * 
+	 *
 	 * @param listener
 	 *            Listener to remove.
 	 */
@@ -304,7 +305,7 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	/**
 	 * Returns the NavigationState representing the previous position of the navigator
-	 * 
+	 *
 	 * @return
 	 */
 	public NavigationState getPreviousNavigationState() {
@@ -341,7 +342,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	 * When a user has successfully logged in, they are routed back to the page they were on before going to the login
 	 * page. If they have gone straight to the login page (maybe they bookmarked it), or they were on the logout page,
 	 * they will be routed to the 'private home page' (the StandardPage for StandardPageKey_Private_Home)
-	 * 
+	 *
 	 */
 	@Override
 	public void userStatusChanged() {

@@ -71,7 +71,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 	private final ApplicationTitle applicationTitle;
 	private final Translate translate;
 	private final I18NProcessor translator;
-	private final CurrentLocale currentLocale;
+	protected final CurrentLocale currentLocale;
 
 	protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,

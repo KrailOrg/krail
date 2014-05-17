@@ -5,14 +5,17 @@ import uk.co.q3c.v7.base.push.Broadcaster;
 import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.ui.ApplicationTitle;
 import uk.co.q3c.v7.base.ui.DefaultApplicationUI;
+import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
 import uk.co.q3c.v7.base.view.component.ApplicationMenu;
 import uk.co.q3c.v7.base.view.component.Breadcrumb;
-import uk.co.q3c.v7.base.view.component.UserStatusPanel;
+import uk.co.q3c.v7.base.view.component.LocaleSelector;
 import uk.co.q3c.v7.base.view.component.MessageBar;
+import uk.co.q3c.v7.base.view.component.OtherSelector;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
+import uk.co.q3c.v7.base.view.component.UserStatusPanel;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.Translate;
@@ -26,23 +29,25 @@ import com.vaadin.server.ErrorHandler;
 
 /**
  * The UI class used in this demo for the V7 application base
- * 
+ *
  * @author David Sowerby
- * 
+ *
  */
-@Theme("chameleon")
+@Theme("reindeer")
 @Push
 public class TestAppUI extends DefaultApplicationUI {
 
 	@Inject
 	protected TestAppUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			ApplicationLogo logo, ApplicationHeader header, UserStatusPanel loginOut, ApplicationMenu menu,
+			ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatus, ApplicationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, SessionObject sessionObject,
 			ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale,
-			I18NProcessor translator) {
-		super(navigator, errorHandler, converterFactory, logo, header, loginOut, menu, navTree, breadcrumb, subpage,
-				messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+			I18NProcessor translator, LocaleSelector localeSelector, OtherSelector otherSelector,
+			UserNotifier userNotifier) {
+		super(navigator, errorHandler, converterFactory, logo, header, userStatus, menu, navTree, breadcrumb, subpage,
+				messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
+				localeSelector, otherSelector, userNotifier);
 
 	}
 

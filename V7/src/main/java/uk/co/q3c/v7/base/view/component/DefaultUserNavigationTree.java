@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -14,6 +14,7 @@ package uk.co.q3c.v7.base.view.component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -23,11 +24,11 @@ import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.CollationKeyOrder;
 import uk.co.q3c.v7.base.navigate.InsertionOrder;
-import uk.co.q3c.v7.base.navigate.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.NodeSorter;
 import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.user.opt.UserOption;
@@ -35,7 +36,9 @@ import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.base.user.status.UserStatusListener;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
+import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.LocaleChangeListener;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
@@ -47,12 +50,12 @@ import com.vaadin.ui.Tree;
  * A navigation tree for users to find their way around the site. Uses {@link Sitemap} as the site structure. Although
  * this seems naturally to be a {@link UIScoped} class it is not currently possible to have a UIScoped Component (see
  * https://github.com/davidsowerby/v7/issues/177)
- * 
+ *
  * @author David Sowerby 17 May 2013
- * 
+ *
  */
 public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener,
-		UserStatusListener {
+		UserStatusListener, LocaleChangeListener {
 	private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
 	private final Sitemap sitemap;
 	private int maxLevel;
@@ -69,7 +72,8 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 
 	@Inject
 	protected DefaultUserNavigationTree(Sitemap sitemap, V7Navigator navigator, SubjectProvider subjectProvider,
-			UserOption userOption, Translate translate, PageAccessController pageAccessController, UserStatus userStatus) {
+			UserOption userOption, Translate translate, PageAccessController pageAccessController,
+			UserStatus userStatus, CurrentLocale currentLocale) {
 		super();
 		this.sitemap = sitemap;
 		this.navigator = navigator;
@@ -77,6 +81,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		this.userOption = userOption;
 		this.translate = translate;
 		this.pageAccessController = pageAccessController;
+		currentLocale.addListener(this);
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
 		// set user option
@@ -112,7 +117,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	 * <p>
 	 * Nodes which have a null label key are ignored, as they cannot be displayed. The logout page is never loaded. The
 	 * login page is only shown if the user has not logged in.
-	 * 
+	 *
 	 * @param parentNode
 	 * @param childNode
 	 */
@@ -177,7 +182,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	/**
 	 * Returns true if the {@code node} is a leaf as far as this {@link DefaultUserNavigationTree} is concerned. It may
 	 * be a leaf here, but not in the {@link #sitemap}, depending on the setting of {@link #maxLevel}
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -192,7 +197,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	/**
 	 * Set the maximum level or depth of the tree you want to be visible. 0 is not allowed, and is ignored. Set to < 0
 	 * if you want this tree to display the full {@link #sitemap}
-	 * 
+	 *
 	 * @param level
 	 */
 	public void setMaxLevel(int maxLevel) {
@@ -226,7 +231,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	}
 
 	/**
-	 * 
+	 *
 	 * @see uk.co.q3c.v7.base.view.V7ViewChangeListener#beforeViewChange(uk.co.q3c.v7.base.view.V7ViewChangeEvent)
 	 */
 	@Override
@@ -236,7 +241,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 
 	/**
 	 * After a navigation change, select the appropriate node.
-	 * 
+	 *
 	 * @see uk.co.q3c.v7.base.view.V7ViewChangeListener#afterViewChange(uk.co.q3c.v7.base.view.V7ViewChangeEvent)
 	 */
 	@Override
@@ -257,6 +262,15 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	@Override
 	public void userStatusChanged() {
 		log.debug("Reloading nodes to match new authentication status");
+		loadNodes();
+	}
+
+	/**
+	 * When the locale changes the nodes are re-loaded - this is to ensure that the sort order is honoured
+	 */
+	@Override
+	public void localeChanged(Locale toLocale) {
+		log.debug("Reloading nodes to for new locale of {}", toLocale);
 		loadNodes();
 	}
 

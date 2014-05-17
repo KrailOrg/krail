@@ -12,22 +12,31 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import com.google.common.collect.ImmutableMap;
 
 /**
- * Implementations off this interface take directly coded definitions of {@link Sitemap} entries, and load them into the
- * {@link Sitemap} when invoked by the {@link SitemapService}.
- *
- * DirectSitemapLoader is usually used to load standard pages by including the Guice module {@link StandardPagesModule}.
- * See https://sites.google.com/site/q3cjava/sitemap#TOC-Standard-Pages
- *
- * @see StandardPageKey
+ * The base for the resource bundle of Labels for Locale de. Entry is purely for testing
  *
  *
- * @see AnnotationSitemapLoader
- * @see FileSitemapLoader
- * @author David Sowerby
+ * @author David Sowerby 9 Feb 2013
  *
  */
-public interface DirectSitemapLoader extends SitemapLoader {
+public class StandardPageLabels_it extends StandardPageLabels {
+
+	private static final ImmutableMap<StandardPageKey, String> map;
+	static {
+		map = new ImmutableMap.Builder<StandardPageKey, String>()
+// @formatter:off
+
+			.put(StandardPageKey.Public_Home, "Public Pagina")
+			.build();
+
+// @formatter:on
+	}
+
+	@Override
+	public ImmutableMap<StandardPageKey, String> getMap() {
+		return map;
+	}
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
 import uk.co.q3c.v7.base.navigate.sitemap.SystemAccountManagementPages;
+import uk.co.q3c.v7.testapp.i18n.TestAppI18NModule;
 import uk.co.q3c.v7.testapp.view.TestAppPages;
 import uk.co.q3c.v7.testapp.view.TestAppViewModule;
 
@@ -32,6 +33,11 @@ public class TestAppGuiceServletInjector extends BaseGuiceServletInjector {
 	@Override
 	protected Module servletModule() {
 		return new TestAppServletModule();
+	}
+
+	@Override
+	protected Module i18NModule() {
+		return new TestAppI18NModule();
 	}
 
 }

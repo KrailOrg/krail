@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate.sitemap;
+package uk.co.q3c.v7.i18n;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,10 +20,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
-import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NModule;
-import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -31,7 +27,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
-public class StandardPageKeyTest {
+public class DescriptionKeyTest {
 
 	@Inject
 	CurrentLocale currentLocale;
@@ -45,7 +41,8 @@ public class StandardPageKeyTest {
 		// when
 		currentLocale.setLocale(Locale.UK);
 		// then
-		assertThat(translate.from(StandardPageKey.Public_Home)).isEqualTo("Public Home");
+		assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("the last name or family name");
+
 	}
 
 	@Test
@@ -54,7 +51,8 @@ public class StandardPageKeyTest {
 		// when
 		currentLocale.setLocale(Locale.GERMANY);
 		// then
-		assertThat(translate.from(StandardPageKey.Public_Home)).isEqualTo("Öffentliche Startseite");
+		assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("die Nachname oder der Familienname");
+
 	}
 
 	@Test
@@ -63,7 +61,6 @@ public class StandardPageKeyTest {
 		// when
 		currentLocale.setLocale(Locale.ITALY);
 		// then
-		assertThat(translate.from(StandardPageKey.Public_Home)).isEqualTo("Public Pagina");
+		assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("Public Pagina");
 	}
-
 }

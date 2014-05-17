@@ -56,7 +56,8 @@ public class I18NModule extends AbstractModule {
 	 * use the same structure (multiple instances of the {@link #registeredAnnotations} and
 	 * {@link #registerValueAnnotation(Class)} will be merged by Guice}.
 	 * <p>
-	 * Here you should also defines the locales are supporting
+	 * Here you should also define the locales your application supports, with calls to
+	 * {@link #addSupportedLocale(Locale)}
 	 */
 	protected void define() {
 		addSupportedLocale(Locale.UK);

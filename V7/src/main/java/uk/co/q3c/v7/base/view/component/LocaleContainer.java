@@ -16,6 +16,9 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.util.ResourceUtils;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.i18n.SupportedLocales;
@@ -27,6 +30,9 @@ import com.vaadin.server.FileResource;
 import com.vaadin.server.Resource;
 
 public class LocaleContainer extends IndexedContainer {
+
+	private static Logger log = LoggerFactory.getLogger(LocaleContainer.class);
+
 	public enum PropertyName {
 		NAME, FLAG
 	}
@@ -44,7 +50,7 @@ public class LocaleContainer extends IndexedContainer {
 	}
 
 	/**
-	 * Loads the container with text from {@link Locale#getDisplayName()}, and an icon for the coutry flag if there is
+	 * Loads the container with text from {@link Locale#getDisplayName()}, and an icon for the country flag if there is
 	 * one. If there is no image flag, the flag property is left as null.
 	 */
 	@SuppressWarnings("unchecked")
@@ -57,8 +63,7 @@ public class LocaleContainer extends IndexedContainer {
 		File iconsDir = new File(webInfDir, "icons");
 		File flagsDir = new File(iconsDir, "flags_iso");
 
-		Integer flagSize = userOption.getOptionAsInt(this.getClass().getSimpleName(), OPTION_LOCALE_FLAG_SIZE, 48);
-		File flagSizedDir = new File(flagsDir, flagSize.toString());
+		File flagSizedDir = new File(flagsDir, flagSize().toString());
 
 		for (Locale supportedLocale : supportedLocales) {
 			String id = supportedLocale.toLanguageTag();
@@ -72,12 +77,20 @@ public class LocaleContainer extends IndexedContainer {
 				if (file.exists()) {
 					FileResource resource = new FileResource(file);
 					item.getItemProperty(PropertyName.FLAG).setValue(resource);
+				} else {
+					log.debug("File {} for locale flag does not exist.", file.getAbsolutePath());
 				}
 
+			} else {
+				log.debug("{} directory for flags does not exist.", flagSizedDir.getAbsolutePath());
 			}
 		}
 
 		sort(new Object[] { PropertyName.NAME }, new boolean[] { true });
+	}
+
+	public Integer flagSize() {
+		return userOption.getOptionAsInt(this.getClass().getSimpleName(), OPTION_LOCALE_FLAG_SIZE, 32);
 	}
 
 }

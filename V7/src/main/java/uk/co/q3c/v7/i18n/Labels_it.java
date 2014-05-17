@@ -21,30 +21,30 @@ import com.google.common.collect.ImmutableMap;
  * @author David Sowerby 9 Feb 2013
  *
  */
-public class Labels_de extends Labels {
+public class Labels_it extends Labels {
 
 	private static final ImmutableMap<LabelKey, String> map;
 	static {
 		map = new ImmutableMap.Builder<LabelKey, String>()
 // @formatter:off
 
-			.put(LabelKey.Cancel, "Stornieren")
-			.put(LabelKey.Enable_Account,"Konto Aktivieren")
-			.put(LabelKey.Error,"Fehler")
-			.put(LabelKey.First_Name, "Vorname")
-			.put(LabelKey.Guest,"Gast")
-			.put(LabelKey.Last_Name, "Nachname")
-			.put(LabelKey.Log_In,"Einloggen")
-			.put(LabelKey.Message_Box,"Nachricht Feld")
-			.put(LabelKey.No,"Nein")
-			.put(LabelKey.Notifications, "Benachrichtigungen")
-			.put(LabelKey.Push, "Druck")
-			.put(LabelKey.Refresh_Account, "Aktualisieren Konto")
-			.put(LabelKey.Request_Account, "Konto Anfordern")
-			.put(LabelKey.Reset_Account, "Konto Zurücksetzen")
-			.put(LabelKey.System_Account,"Systemkonto")
-			.put(LabelKey.Small, "Klein")
-			.put(LabelKey.Yes, "Ja")
+			.put(LabelKey.Cancel, "Cancellare")
+			.put(LabelKey.Enable_Account, "Abilita Account")
+			.put(LabelKey.Error, "Errore")
+			.put(LabelKey.First_Name, "Nome")
+			.put(LabelKey.Guest,"Ospite")
+			.put(LabelKey.Last_Name, "Cognome")
+			.put(LabelKey.Log_In,"Log in")
+			.put(LabelKey.Message_Box,"Scatola di Messaggio")
+			.put(LabelKey.Notifications, "Notifiche")
+			.put(LabelKey.No,"No")
+			.put(LabelKey.Push, "Spinta")
+			.put(LabelKey.Refresh_Account, "Aggiorna Conto")
+			.put(LabelKey.Request_Account, "Richiesta Conto")
+			.put(LabelKey.Reset_Account, "Ripristina Conto")
+			.put(LabelKey.System_Account, "Conto di Sistema")
+			.put(LabelKey.Small, "Piccolo")
+			.put(LabelKey.Yes, "Sì")
 			.build();
 
 // @formatter:on

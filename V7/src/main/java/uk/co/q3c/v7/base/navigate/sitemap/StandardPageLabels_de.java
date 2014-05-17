@@ -1,37 +1,37 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate;
-
-import uk.co.q3c.v7.i18n.EnumResourceBundle;
+package uk.co.q3c.v7.base.navigate.sitemap;
 
 import com.google.common.collect.ImmutableMap;
 
 /**
- * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely
- * defined as containing those value which are short, contain no parameters and are typically used for captions and
- * labels. They can of course be used anywhere.
- * 
- * 
+ * The German language resource bundle for {@link StandardPageKey}
+ *
+ *
  * @author David Sowerby 9 Feb 2013
- * 
+ *
  */
-public class StandardPageLabels extends EnumResourceBundle<StandardPageKey> {
+public class StandardPageLabels_de extends StandardPageLabels {
 
 	private static final ImmutableMap<StandardPageKey, String> map;
 	static {
-		map = new ImmutableMap.Builder<StandardPageKey, String>().build();
-		// @formatter:off
-		// @formatter:on
+		map = new ImmutableMap.Builder<StandardPageKey, String>()
+// @formatter:off
+
+			.put(StandardPageKey.Public_Home, "Öffentliche Startseite")
+			.build();
+
+// @formatter:on
 	}
 
 	@Override
