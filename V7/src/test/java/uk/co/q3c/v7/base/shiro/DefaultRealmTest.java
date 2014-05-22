@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -46,11 +46,11 @@ public class DefaultRealmTest {
 	CredentialsMatcher matcher = new AlwaysPasswordCredentialsMatcher();
 
 	@Mock
-	Sitemap sitemap;
+	MasterSitemap sitemap;
 
 	@Before
 	public void setup() {
-		sitemap = mock(Sitemap.class);
+		sitemap = mock(MasterSitemap.class);
 		realm = new DefaultRealm(attemptLog, matcher, sitemap);
 	}
 

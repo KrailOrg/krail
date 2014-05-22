@@ -56,7 +56,7 @@ public class SystemAccountManagementPagesTest {
 	DefaultDirectSitemapLoader loader;
 
 	@Inject
-	Sitemap sitemap;
+	MasterSitemap sitemap;
 
 	@Test
 	public void check() {

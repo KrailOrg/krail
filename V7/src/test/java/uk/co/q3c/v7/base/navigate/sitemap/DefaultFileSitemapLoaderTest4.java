@@ -58,7 +58,7 @@ public class DefaultFileSitemapLoaderTest4 {
 	DefaultFileSitemapLoader loader;
 
 	@Inject
-	Sitemap sitemap;
+	MasterSitemap sitemap;
 
 	@Before
 	public void setup() throws IOException {

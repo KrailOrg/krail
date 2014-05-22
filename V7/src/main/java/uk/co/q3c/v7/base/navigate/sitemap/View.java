@@ -26,7 +26,7 @@ import uk.co.q3c.v7.base.view.V7View;
  * An annotation used to map a uri to a {@link V7View} implementation, the name of the key for an I18N label and a flag
  * to indicate whether or not this uri is "public" (does not require the user to be authorised). Permission is the
  * permission required in order to access this view. Used by a {@link AnnotationSitemapModule} to scan views for the
- * {@link AnnotationSitemapLoader} to load into the {@link Sitemap}. Roles must be defined if
+ * {@link AnnotationSitemapLoader} to load into the {@link MasterSitemap}. Roles must be defined if
  * {@link #pageAccessControl()} is {@link PageAccessControl#ROLES}, but is otherwise not used.
  * <p>
  * This annotation may be supplemented by a {@link RedirectFrom} annotation

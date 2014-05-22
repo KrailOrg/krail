@@ -28,9 +28,11 @@ import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
@@ -55,7 +57,7 @@ import com.vaadin.ui.MenuBar.MenuItem;
 public class UserNavigationMenuTest {
 
 	@Inject
-	Sitemap sitemap;
+	MasterSitemap masterSitemap;
 
 	@Mock
 	PageAccessController pageAccessController;
@@ -80,6 +82,8 @@ public class UserNavigationMenuTest {
 	@Mock
 	UserStatus userStatus;
 
+	UserSitemap userSitemap;
+
 	@Inject
 	Translate translate;
 
@@ -87,21 +91,21 @@ public class UserNavigationMenuTest {
 
 	Collator collator;
 
-	private SitemapNode privateHomeNode;
+	private MasterSitemapNode privateHomeNode;
 
-	private SitemapNode publicHomeNode;
+	private MasterSitemapNode publicHomeNode;
 
-	private SitemapNode privateChildNode1;
+	private MasterSitemapNode privateChildNode1;
 
-	private SitemapNode privateChildNode2;
+	private MasterSitemapNode privateChildNode2;
 
-	private SitemapNode publicChildNode1;
+	private MasterSitemapNode publicChildNode1;
 
-	private SitemapNode publicChildNode2;
+	private MasterSitemapNode publicChildNode2;
 
 	@Before
 	public void setup() {
-		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController, userStatus);
+		menu = createMenu();
 		locale = currentLocale.getLocale();
 		collator = Collator.getInstance();
 		buildSitemap();
@@ -123,7 +127,7 @@ public class UserNavigationMenuTest {
 				userOption.getOptionAsBoolean(UserNavigationMenu.class.getSimpleName(), UserNavigationMenu.sortedOpt,
 						true)).thenReturn(true);
 		// when
-		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController, userStatus);
+		menu = createMenu();
 		// then
 		assertThat(menu.getItems()).hasSize(2);
 		MenuItem m0 = menu.getItems().get(0);
@@ -166,12 +170,12 @@ public class UserNavigationMenuTest {
 
 		// given
 		buildSitemap();
-		SitemapNode loginNode = newNode(StandardPageKey.Login, "login");
-		sitemap.addChild(null, loginNode);
-		SitemapNode logoutNode = newNode(StandardPageKey.Logout, "login");
-		sitemap.addChild(null, logoutNode);
+		MasterSitemapNode loginNode = newNode(StandardPageKey.Login, "login");
+		masterSitemap.addChild(null, loginNode);
+		MasterSitemapNode logoutNode = newNode(StandardPageKey.Logout, "login");
+		masterSitemap.addChild(null, logoutNode);
 		// when
-		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController, userStatus);
+		menu = createMenu();
 		// then
 		assertThat(menu.getItems()).hasSize(2);
 	}
@@ -183,7 +187,7 @@ public class UserNavigationMenuTest {
 		privateChildNode2.setPageAccessControl(PageAccessControl.PERMISSION);
 		when(pageAccessController.isAuthorised(subject, privateChildNode2)).thenReturn(false);
 		// when
-		menu = new UserNavigationMenu(sitemap, navigator, userOption, subjectProvider, pageAccessController, userStatus);
+		menu = createMenu();
 		// then
 		assertThat(menu.getItems()).hasSize(2);
 		MenuItem m0 = menu.getItems().get(0);
@@ -201,24 +205,28 @@ public class UserNavigationMenuTest {
 
 		privateHomeNode = newNode(LabelKey.Private, "private");
 		publicHomeNode = newNode(LabelKey.Public, "public");
-		sitemap.addChild(null, privateHomeNode);
-		sitemap.addChild(null, publicHomeNode);
+		masterSitemap.addChild(null, privateHomeNode);
+		masterSitemap.addChild(null, publicHomeNode);
 
 		privateChildNode1 = newNode(LabelKey.Small, "small");
 		privateChildNode2 = newNode(LabelKey.Splash, "splash");
-		sitemap.addChild(privateHomeNode, privateChildNode1);
-		sitemap.addChild(privateHomeNode, privateChildNode2);
+		masterSitemap.addChild(privateHomeNode, privateChildNode1);
+		masterSitemap.addChild(privateHomeNode, privateChildNode2);
 
 		publicChildNode1 = newNode(LabelKey.Refresh_Account, "refresh-account");
 		publicChildNode2 = newNode(LabelKey.Enable_Account, "enable-account");
-		sitemap.addChild(publicHomeNode, publicChildNode1);
-		sitemap.addChild(publicHomeNode, publicChildNode2);
+		masterSitemap.addChild(publicHomeNode, publicChildNode1);
+		masterSitemap.addChild(publicHomeNode, publicChildNode2);
 	}
 
-	protected SitemapNode newNode(I18NKey<?> key, String urlSegment) {
-		SitemapNode node0 = new SitemapNode();
-		node0.setTranslate(translate);
-		node0.setLabelKey(key, locale, collator);
+	private UserNavigationMenu createMenu() {
+		return new UserNavigationMenu(userSitemap, navigator, userOption, subjectProvider, pageAccessController,
+				userStatus, currentLocale, translate);
+	}
+
+	protected MasterSitemapNode newNode(I18NKey<?> key, String urlSegment) {
+		MasterSitemapNode node0 = new MasterSitemapNode();
+		node0.setLabelKey(key);
 		node0.setUriSegment(urlSegment);
 		node0.setViewClass(PublicHomeView.class);
 		node0.setPageAccessControl(PageAccessControl.PUBLIC);

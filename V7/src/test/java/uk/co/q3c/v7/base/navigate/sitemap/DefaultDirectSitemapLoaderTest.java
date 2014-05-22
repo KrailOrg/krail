@@ -64,7 +64,7 @@ public class DefaultDirectSitemapLoaderTest {
 	DefaultDirectSitemapLoader loader;
 
 	@Inject
-	Sitemap sitemap;
+	MasterSitemap sitemap;
 
 	static String page1 = "private/page1";
 	static String page2 = "public/options";

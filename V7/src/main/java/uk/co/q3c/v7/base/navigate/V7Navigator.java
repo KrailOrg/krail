@@ -2,8 +2,10 @@ package uk.co.q3c.v7.base.navigate;
 
 import java.util.List;
 
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.user.status.UserStatusListener;
 import uk.co.q3c.v7.base.view.V7View;
@@ -12,11 +14,17 @@ import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import com.vaadin.server.Page.UriFragmentChangedListener;
 
 /**
- * Looks up the view for the supplied URI, and calls on {@link ScopedUI} to present that view. Listeners are notified
- * before and after a change of view occurs. The {@link #loginSuccessful()} method is called after a successful user
- * login - this allows the navigator to change views appropriate (according to the implementation). Typically this would
- * be to either return to the view where the user was before they went to the login page, or perhaps to a specified
- * landing page (Page here refers really to a V7View - a "virtual page"). <br>
+ * Uses the {@link UserSitemap} to control navigation from one 'page' to another, using a uri String, or a
+ * {@link StandardPageKey} or a {@link UserSitemapNode} to identify a page.<br>
+ * <br>
+ * Even though {@link UserSitemapNode} should have already been verified for authorisation, all page navigation is
+ * checked for authorisation. <br>
+ * <br>
+ * Looks up the view for the supplied URI, or {@link UserSitemapNode} and calls on {@link ScopedUI} to present that
+ * view. Listeners are notified before and after a change of view occurs. The {@link #loginSuccessful()} method is
+ * called after a successful user login - this allows the navigator to change views appropriately (according to the
+ * implementation). Typically this would be to either return to the view where the user was before they went to the
+ * login page, or perhaps to a specified landing page (Page here refers really to a V7View - a "virtual page"). <br>
  * <br>
  * The navigator must also respond to a change in user status (logged in or out) - logging out just navigates to the
  * logout page, while logging in applies some logic, see {@link #userStatusChanged()}
@@ -65,14 +73,14 @@ public interface V7Navigator extends UriFragmentChangedListener, UserStatusListe
 	 */
 	void navigateTo(NavigationState navigationState);
 
-	SitemapNode getCurrentNode();
+	UserSitemapNode getCurrentNode();
 
 	/**
-	 * Navigates to the location represented by {@code node}. Because this is based on a {@link SitemapNode}, no
+	 * Navigates to the location represented by {@code node}. Because this is based on a {@link MasterSitemapNode}, no
 	 * parameters are associated with this, and only navigates to the page associated with the node
 	 *
 	 * @param node
 	 */
-	void navigateTo(SitemapNode node);
+	void navigateTo(UserSitemapNode node);
 
 }

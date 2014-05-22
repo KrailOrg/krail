@@ -18,13 +18,10 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.shiro.authz.Permission;
-import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,18 +34,13 @@ import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
-import uk.co.q3c.v7.base.shiro.PageAccessControl;
-import uk.co.q3c.v7.base.shiro.PageAccessController;
+import uk.co.q3c.v7.base.navigate.sitemap.TestWithSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 import uk.co.q3c.v7.base.shiro.PagePermission;
-import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
-import uk.co.q3c.v7.base.user.opt.UserOption;
-import uk.co.q3c.v7.base.user.status.UserStatus;
-import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
 import uk.co.q3c.v7.i18n.I18NModule;
-import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -63,20 +55,8 @@ import com.vaadin.util.CurrentInstance;
 @GuiceContext({ I18NModule.class, UIScopeModule.class, VaadinSessionScopeModule.class })
 public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
-	@Inject
-	CurrentLocale currentLocale;
-
-	@Inject
-	Translate translate;
-
 	@Mock
 	V7Navigator navigator;
-
-	@Mock
-	SubjectProvider subjectPro;
-
-	@Mock
-	Subject subject;
 
 	@Inject
 	Injector injector;
@@ -85,27 +65,15 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 	BasicUI ui;
 
 	@Mock
-	UserOption userOption;
-
-	@Mock
 	NavigationState navigationState;
-
-	@Mock
-	UserStatus userStatus;
-
-	@Inject
-	PageAccessController pageAccessController;
 
 	@Override
 	@Before
 	public void setup() {
 		super.setup();
-		when(subjectPro.get()).thenReturn(subject);
 		when(subject.isPermitted(any(Permission.class))).thenReturn(true);
 		when(subject.isPermitted(anyString())).thenReturn(true);
-		when(
-				userOption.getOptionAsInt(DefaultUserNavigationTree.class.getSimpleName(),
-						DefaultUserNavigationTree.maxLevelOpt, -1)).thenReturn(-1);
+
 		when(navigationState.getVirtualPage()).thenReturn("private/wiggly");
 		when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
 		when(navigator.getCurrentNavigationState()).thenReturn(navigationState);
@@ -117,10 +85,10 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		currentLocale.setLocale(Locale.UK);
-		buildSitemap(0);
+		buildMasterSitemap(0);
+		createUserSitemap();
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
+		DefaultUserNavigationTree unt = newTree();
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(0);
 	}
@@ -130,22 +98,24 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		currentLocale.setLocale(Locale.UK);
-		buildSitemap(1);
+		buildMasterSitemap(1);
+		allowAllNodes();
+		createUserSitemap();
 
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
+		DefaultUserNavigationTree unt = newTree();
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(3);
 		@SuppressWarnings("unchecked")
-		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
-		assertThat(nodes).containsOnly(newNode1, newNode2, newNode3);
-		assertThat(unt.getParent(newNode2)).isEqualTo(newNode1);
-		assertThat(unt.getParent(newNode3)).isEqualTo(newNode2);
-		assertThat(unt.getParent(newNode1)).isEqualTo(null);
-		assertThat(unt.isLeaf(newNode1)).isFalse();
-		assertThat(unt.isLeaf(newNode2)).isFalse();
-		assertThat(unt.isLeaf(newNode3)).isTrue();
+		List<UserSitemapNode> nodes = (List<UserSitemapNode>) unt.getItemIds();
+		assertThat(nodes).containsOnly(userNode1, userNode2, userNode3);
+		assertThat(unt.getParent(userNode1)).isEqualTo(null);
+		assertThat(unt.getParent(userNode2)).isEqualTo(userNode1);
+		assertThat(unt.getParent(userNode3)).isEqualTo(userNode2);
+
+		assertThat(unt.isLeaf(userNode1)).isFalse();
+		assertThat(unt.isLeaf(userNode2)).isFalse();
+		assertThat(unt.isLeaf(userNode3)).isTrue();
 
 	}
 
@@ -154,25 +124,25 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		currentLocale.setLocale(Locale.UK);
-		buildSitemap(2);
-
+		buildMasterSitemap(2);
+		allowAllNodes();
+		createUserSitemap();
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
+		DefaultUserNavigationTree unt = newTree();
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(6);
 		@SuppressWarnings("unchecked")
-		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
-		assertThat(nodes).containsOnly(newNode1, newNode2, newNode3, newNode4, newNode5, newNode6);
-		assertThat(unt.getParent(newNode2)).isEqualTo(newNode1);
-		assertThat(unt.getParent(newNode3)).isEqualTo(newNode2);
-		assertThat(unt.getParent(newNode1)).isEqualTo(null);
-		assertThat(unt.getItemCaption(newNode1)).isEqualTo("home");
-		assertThat(unt.getItemCaption(newNode2)).isEqualTo("home");
+		List<UserSitemapNode> nodes = (List<UserSitemapNode>) unt.getItemIds();
+		assertThat(nodes).containsOnly(userNode1, userNode2, userNode3, userNode4, userNode5, userNode6);
+		assertThat(unt.getParent(userNode2)).isEqualTo(userNode1);
+		assertThat(unt.getParent(userNode3)).isEqualTo(userNode2);
+		assertThat(unt.getParent(userNode1)).isEqualTo(null);
+		assertThat(unt.getItemCaption(userNode1)).isEqualTo("home");
+		assertThat(unt.getItemCaption(userNode2)).isEqualTo("home");
 
-		assertThat(unt.getParent(newNode5)).isEqualTo(newNode4);
-		assertThat(unt.getParent(newNode6)).isEqualTo(newNode5);
-		assertThat(unt.getParent(newNode4)).isEqualTo(null);
+		assertThat(unt.getParent(userNode5)).isEqualTo(userNode4);
+		assertThat(unt.getParent(userNode6)).isEqualTo(userNode5);
+		assertThat(unt.getParent(userNode4)).isEqualTo(null);
 
 	}
 
@@ -184,20 +154,20 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		currentLocale.setLocale(Locale.UK);
-		buildSitemap(5);
-
+		buildMasterSitemap(5);
+		allowAllNodes();
+		createUserSitemap();
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
+		DefaultUserNavigationTree unt = newTree();
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(3);
 		@SuppressWarnings("unchecked")
-		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
-		assertThat(nodes).containsOnly(newNode4, newNode5, newNode6);
+		List<UserSitemapNode> nodes = (List<UserSitemapNode>) unt.getItemIds();
+		assertThat(nodes).containsOnly(userNode4, userNode5, userNode6);
 
-		assertThat(unt.getParent(newNode5)).isEqualTo(newNode4);
-		assertThat(unt.getParent(newNode6)).isEqualTo(newNode5);
-		assertThat(unt.getParent(newNode4)).isEqualTo(null);
+		assertThat(unt.getParent(userNode5)).isEqualTo(userNode4);
+		assertThat(unt.getParent(userNode6)).isEqualTo(userNode5);
+		assertThat(unt.getParent(userNode4)).isEqualTo(null);
 
 	}
 
@@ -206,25 +176,29 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		currentLocale.setLocale(Locale.UK);
-		buildSitemap(6);
-		when(subject.isPermitted(any(Permission.class))).thenReturn(false);
-
+		buildMasterSitemap(6);
+		when(pageAccessController.isAuthorised(subject, masterNode1)).thenReturn(true);
+		when(pageAccessController.isAuthorised(subject, masterNode2)).thenReturn(true);
+		when(pageAccessController.isAuthorised(subject, masterNode3)).thenReturn(true);
+		when(pageAccessController.isAuthorised(subject, masterNode4)).thenReturn(true);
+		when(pageAccessController.isAuthorised(subject, masterNode5)).thenReturn(true);
+		when(pageAccessController.isAuthorised(subject, masterNode6)).thenReturn(false);
+		createUserSitemap();
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
+		DefaultUserNavigationTree unt = newTree();
 		// then
 		// assertThat(unt.getItemIds().size()).isEqualTo(5);
 		@SuppressWarnings("unchecked")
-		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
-		assertThat(nodes).containsOnly(newNode1, newNode2, newNode3, newNode4, newNode5);
-		assertThat(unt.getParent(newNode2)).isEqualTo(newNode1);
-		assertThat(unt.getParent(newNode3)).isEqualTo(newNode2);
-		assertThat(unt.getParent(newNode1)).isEqualTo(null);
-		assertThat(unt.getItemCaption(newNode1)).isEqualTo("Yes");
-		assertThat(unt.getItemCaption(newNode2)).isEqualTo("home");
+		List<UserSitemapNode> nodes = (List<UserSitemapNode>) unt.getItemIds();
+		assertThat(nodes).containsOnly(userNode1, userNode2, userNode3, userNode4, userNode5);
+		assertThat(unt.getParent(userNode2)).isEqualTo(userNode1);
+		assertThat(unt.getParent(userNode3)).isEqualTo(userNode2);
+		assertThat(unt.getParent(userNode1)).isEqualTo(null);
+		assertThat(unt.getItemCaption(userNode1)).isEqualTo("Yes");
+		assertThat(unt.getItemCaption(userNode2)).isEqualTo("home");
 
-		assertThat(unt.getParent(newNode5)).isEqualTo(newNode4);
-		assertThat(unt.getParent(newNode4)).isEqualTo(null);
+		assertThat(unt.getParent(userNode5)).isEqualTo(userNode4);
+		assertThat(unt.getParent(userNode4)).isEqualTo(null);
 
 	}
 
@@ -233,27 +207,33 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		currentLocale.setLocale(Locale.UK);
-		buildSitemap(2);
+		buildMasterSitemap(2);
+		allowAllNodes();
+		createUserSitemap();
+		System.out.println(userSitemap);
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
+		DefaultUserNavigationTree unt = newTree();
 		// then
-		assertThat(unt.getMaxLevel()).isEqualTo(-1);
+		assertThat(unt.getMaxDepth()).isEqualTo(-1);
 		// when
-		unt.setMaxLevel(2);
+		unt.setMaxDepth(2);
 		// then
 		@SuppressWarnings("unchecked")
-		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
-		assertThat(nodes).containsOnly(newNode1, newNode2, newNode4, newNode5);
-		assertThat(unt.isLeaf(newNode1)).isFalse();
-		assertThat(unt.isLeaf(newNode2)).isTrue();
+		List<UserSitemapNode> nodes = (List<UserSitemapNode>) unt.getItemIds();
+		for (UserSitemapNode userNode : nodes) {
+			System.out.println(userNode.getMasterNode().getId());
+		}
+		assertThat(nodes).containsOnly(userNode1, userNode2, userNode4, userNode5);
+		assertThat(unt.isLeaf(userNode1)).isFalse();
+		assertThat(unt.isLeaf(userNode2)).isTrue();
 
 		// when
-		unt.setMaxLevel(0);
+		unt.setMaxDepth(0);
 		// then 0 not allowed
-		assertThat(unt.getMaxLevel()).isEqualTo(2);
-		verify(userOption).setOption(DefaultUserNavigationTree.class.getSimpleName(),
-				DefaultUserNavigationTree.maxLevelOpt, 2);
+		assertThat(unt.getMaxDepth()).isEqualTo(2);
+		assertThat(
+				userOption.getOptionAsInt(DefaultUserNavigationTree.class.getSimpleName(),
+						UserOptionProperty.MAX_DEPTH, 1000)).isEqualTo(2);
 
 	}
 
@@ -262,14 +242,15 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		currentLocale.setLocale(Locale.UK);
-		buildSitemap(1);
+		buildMasterSitemap(1);
+		allowAllNodes();
+		createUserSitemap();
 
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
+		DefaultUserNavigationTree unt = newTree();
 
 		// then
-		assertThat(unt.getItemCaption(newNode1)).isEqualTo("home");
+		assertThat(unt.getItemCaption(userNode1)).isEqualTo("home");
 
 	}
 
@@ -277,10 +258,11 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 	public void defaults() {
 
 		// given
-		buildSitemap(1);
+		buildMasterSitemap(1);
+		allowAllNodes();
+		createUserSitemap();
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
+		DefaultUserNavigationTree unt = newTree();
 		// then
 		assertThat(unt.isImmediate()).isTrue();
 
@@ -290,11 +272,12 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 	public void userSelection() {
 
 		// given
-		buildSitemap(2);
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
+		buildMasterSitemap(2);
+		allowAllNodes();
+		createUserSitemap();
+		DefaultUserNavigationTree unt = newTree();
 		// when
-		unt.setValue(newNode2);
+		unt.setValue(userNode2);
 		// then
 		verify(navigator).navigateTo("a/a1");
 	}
@@ -304,51 +287,15 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 
 		// given
 		currentLocale.setLocale(Locale.GERMAN);
-		buildSitemap(1);
-
+		buildMasterSitemap(1);
+		allowAllNodes();
+		createUserSitemap();
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
+		DefaultUserNavigationTree unt = newTree();
 
 		// then
-		assertThat(unt.getItemCaption(newNode1)).isEqualTo("zu Hause");
-
-	}
-
-	/**
-	 * https://github.com/davidsowerby/v7/issues/143
-	 */
-	@Test
-	public void contextAware() {
-
-		// given
-
-		// set up the Sitemap with a mix of permitted and not permitted nodes
-
-		buildSitemap(4);
-		newNode1.setPageAccessControl(PageAccessControl.PUBLIC);
-		newNode2.setPageAccessControl(PageAccessControl.PUBLIC);
-		newNode3.setPageAccessControl(PageAccessControl.PERMISSION);
-		newNode4.setPageAccessControl(PageAccessControl.PERMISSION);
-
-		PagePermission p3 = sitemap.pagePermission(newNode3);
-		PagePermission p4 = sitemap.pagePermission(newNode4);
-
-		when(subject.isPermitted(p3)).thenReturn(true);
-		// represents the case where user not authenticated
-		when(subject.isPermitted(p4)).thenReturn(false);
-
-		System.out.println(sitemap.toString());
-
-		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
-		// then
-		@SuppressWarnings("unchecked")
-		List<SitemapNode> nodes = (List<SitemapNode>) unt.getItemIds();
-		// logout page is not shown in tree.
-		// newNode4 is not permitted
-		assertThat(nodes).containsOnly(newNode1, newNode3);
+		assertThat(userNode1).isNotNull();
+		assertThat(unt.getItemCaption(userNode1)).isEqualTo("zu Hause");
 
 	}
 
@@ -359,47 +306,16 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 	public void excludeLogout() {
 
 		// given
-		buildSitemap(3);
+		buildMasterSitemap(3);
+		allowAllNodes();
+		createUserSitemap();
 		// when
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
+		DefaultUserNavigationTree unt = newTree();
 		// then
 		assertThat(unt.getItemIds().size()).isEqualTo(1);
 
 	}
 
-	/**
-	 * https://github.com/davidsowerby/v7/issues/133
-	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void presentationOrder() {
-
-		// given
-		buildSitemap(4);
-		DefaultUserNavigationTree unt = new DefaultUserNavigationTree(sitemap, navigator, subjectPro, userOption,
-				translate, pageAccessController, userStatus);
-		// when
-
-		// sorted is false by default, should be insertion order
-
-		// then
-		assertThat(unt.rootItemIds().size()).isEqualTo(2);
-		List<SitemapNode> roots = new ArrayList<SitemapNode>((Collection<? extends SitemapNode>) unt.rootItemIds());
-		assertThat(roots.get(0).getUriSegment()).isEqualTo("public");
-		assertThat(roots.get(1).getUriSegment()).isEqualTo("private");
-
-		unt.setSorted(true);
-
-		// then
-		roots = new ArrayList<SitemapNode>((Collection<? extends SitemapNode>) unt.rootItemIds());
-		assertThat(roots.get(0).getUriSegment()).isEqualTo("private");
-		assertThat(roots.get(1).getUriSegment()).isEqualTo("public");
-		verify(userOption).setOption(DefaultUserNavigationTree.class.getSimpleName(), "sorted", true);
-
-	}
-
-	// @SuppressWarnings("deprecation")
 	protected ScopedUI createUI() {
 		UIKey uiKey = new UIKey(3);
 		CurrentInstance.set(UI.class, null);
@@ -408,6 +324,20 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 		when(ui.getInstanceKey()).thenReturn(uiKey);
 
 		return ui;
+	}
+
+	private void allowAllNodes() {
+		when(pageAccessController.isAuthorised(subject, masterNode1)).thenReturn(true);
+		when(pageAccessController.isAuthorised(subject, masterNode2)).thenReturn(true);
+		when(pageAccessController.isAuthorised(subject, masterNode3)).thenReturn(true);
+		when(pageAccessController.isAuthorised(subject, masterNode4)).thenReturn(true);
+		when(pageAccessController.isAuthorised(subject, masterNode5)).thenReturn(true);
+		when(pageAccessController.isAuthorised(subject, masterNode6)).thenReturn(true);
+
+	}
+
+	private DefaultUserNavigationTree newTree() {
+		return new DefaultUserNavigationTree(userSitemap, navigator, userOption);
 	}
 
 	@Override

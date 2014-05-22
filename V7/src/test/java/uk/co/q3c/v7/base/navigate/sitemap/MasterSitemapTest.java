@@ -14,11 +14,10 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -32,7 +31,6 @@ import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.TestLabelKey;
-import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -42,27 +40,25 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
-public class SitemapTest {
-
-	@Inject
-	Translate translate;
+public class MasterSitemapTest {
 
 	@Inject
 	URIFragmentHandler uriHandler;
+
+	MasterSitemap sitemap;
+
+	@Before
+	public void setup() {
+		sitemap = new MasterSitemap(uriHandler);
+	}
 
 	@Test
 	public void url() {
 
 		// given
-		Locale locale = Locale.UK;
-		Collator collator = Collator.getInstance(locale);
-
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
-		SitemapNode grandparent = new SitemapNode("public", PublicHomeView.class, TestLabelKey.Home, locale, collator,
-				translate);
-		SitemapNode parent = new SitemapNode("home", PublicHomeView.class, TestLabelKey.Home, locale, collator,
-				translate);
-		SitemapNode child = new SitemapNode("login", LoginView.class, TestLabelKey.Login, locale, collator, translate);
+		MasterSitemapNode grandparent = new MasterSitemapNode("public", PublicHomeView.class, TestLabelKey.Home);
+		MasterSitemapNode parent = new MasterSitemapNode("home", PublicHomeView.class, TestLabelKey.Home);
+		MasterSitemapNode child = new MasterSitemapNode("login", LoginView.class, TestLabelKey.Login);
 		sitemap.addChild(grandparent, parent);
 		sitemap.addChild(parent, child);
 		// when
@@ -74,23 +70,11 @@ public class SitemapTest {
 	}
 
 	@Test
-	public void translateSet() {
-
-		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
-		// when
-		SitemapNode node = sitemap.append("public/home");
-		// then
-		assertThat(node.getTranslate()).isEqualTo(translate);
-	}
-
-	@Test
 	public void append() {
 
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		// when
-		SitemapNode node = sitemap.append("public/home");
+		MasterSitemapNode node = sitemap.append("public/home");
 		// then
 		assertThat(node).isNotNull();
 		assertThat(node.getUriSegment()).isEqualTo("home");
@@ -131,7 +115,6 @@ public class SitemapTest {
 	public void nodeChainForSegments() {
 
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
@@ -141,7 +124,7 @@ public class SitemapTest {
 		segments.add("view1");
 
 		// when
-		List<SitemapNode> result = sitemap.nodeChainForSegments(segments, true);
+		List<MasterSitemapNode> result = sitemap.nodeChainForSegments(segments, true);
 		// then
 		assertThat(result.size()).isEqualTo(3);
 		assertThat(result.get(0).getUriSegment()).isEqualTo("public");
@@ -169,7 +152,6 @@ public class SitemapTest {
 	public void nodeChainForSegments_partial() {
 
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
@@ -179,7 +161,7 @@ public class SitemapTest {
 		segments.add("viewx");
 
 		// when
-		List<SitemapNode> result = sitemap.nodeChainForSegments(segments, true);
+		List<MasterSitemapNode> result = sitemap.nodeChainForSegments(segments, true);
 		// then
 		assertThat(result.size()).isEqualTo(2);
 		assertThat(result.get(0).getUriSegment()).isEqualTo("public");
@@ -191,7 +173,6 @@ public class SitemapTest {
 	public void getRedirectFor() {
 
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
@@ -209,7 +190,6 @@ public class SitemapTest {
 	public void uris() {
 
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
@@ -226,7 +206,6 @@ public class SitemapTest {
 	public void hasUri() {
 
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
@@ -244,7 +223,6 @@ public class SitemapTest {
 	public void hasURINavState() {
 
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
@@ -261,13 +239,12 @@ public class SitemapTest {
 	public void redirectFor() {
 
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
 		sitemap.addRedirect("public/home/view1", "public/home/view2");
 		// when
-		SitemapNode node1 = sitemap.nodeFor("public/home/view1");
+		MasterSitemapNode node1 = sitemap.nodeFor("public/home/view1");
 		SitemapNode node2 = sitemap.nodeFor("public/home/view2");
 		// then
 		assertThat(sitemap.getRedirectNodeFor(node1)).isEqualTo(node2);
@@ -282,12 +259,11 @@ public class SitemapTest {
 	public void nodeFor_uri() {
 
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
 		// when
-		SitemapNode node1 = sitemap.nodeFor("public/home/view1");
+		MasterSitemapNode node1 = sitemap.nodeFor("public/home/view1");
 		SitemapNode node2 = sitemap.nodeFor("public/home/view2");
 		// then
 		assertThat(node1.getUriSegment()).isEqualTo("view1");
@@ -298,7 +274,6 @@ public class SitemapTest {
 	@Test
 	public void nodeFor_navState() {
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
@@ -312,13 +287,11 @@ public class SitemapTest {
 	@Test
 	public void nodeFor_emptyString() {
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
-		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
 		sitemap.append("");
 		// when
-		SitemapNode node1 = sitemap.nodeFor("");
+		MasterSitemapNode node1 = sitemap.nodeFor("");
 		// then
 		assertThat(node1.getUriSegment()).isEqualTo("");
 		assertThat(sitemap.getParent(node1)).isNull();
@@ -329,12 +302,11 @@ public class SitemapTest {
 	public void nodeNearestFor() {
 
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("private/home/wiggly");
 		// when
-		SitemapNode node1 = sitemap.nodeNearestFor(uriHandler.navigationState("public/home/view3"));
+		MasterSitemapNode node1 = sitemap.nodeNearestFor(uriHandler.navigationState("public/home/view3"));
 		SitemapNode node2 = sitemap.nodeNearestFor("public/home/view3");
 		SitemapNode node3 = sitemap.nodeNearestFor("public/home");
 
@@ -348,7 +320,6 @@ public class SitemapTest {
 	public void multiLevelRedirect() {
 
 		// given
-		Sitemap sitemap = new Sitemap(uriHandler, translate);
 		sitemap.append("public/home/view1");
 		sitemap.append("public/home/view2");
 		sitemap.append("public/home/view3");

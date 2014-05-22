@@ -143,14 +143,14 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getWarningCount()).isEqualTo(0);
 		assertThat(loader.getInfoCount()).isEqualTo(0);
 
-		Sitemap sitemap = loader.getSitemap();
-		List<SitemapNode> roots = sitemap.getRoots();
+		MasterSitemap sitemap = loader.getSitemap();
+		List<MasterSitemapNode> roots = sitemap.getRoots();
 		assertThat(roots.size()).isEqualTo(1);
 
 		System.out.println(sitemap.toString());
 
-		Collection<SitemapNode> nodes = loader.getSitemap().getAllNodes();
-		for (SitemapNode node : nodes) {
+		Collection<MasterSitemapNode> nodes = loader.getSitemap().getAllNodes();
+		for (MasterSitemapNode node : nodes) {
 			validateNode(sitemap, node);
 		}
 
@@ -166,7 +166,7 @@ public class DefaultFileSitemapLoaderTest {
 	public void keyName() {
 
 		// given
-		SitemapNode node = new SitemapNode();
+		MasterSitemapNode node = new MasterSitemapNode();
 		node.setUriSegment("reset-account");
 		// when
 		String keyName = loader.keyName(null, node);
@@ -430,7 +430,7 @@ public class DefaultFileSitemapLoaderTest {
 
 	}
 
-	private void validateNode(Sitemap sitemap, SitemapNode node) {
+	private void validateNode(MasterSitemap sitemap, MasterSitemapNode node) {
 		String uri = sitemap.uri(node);
 		switch (uri) {
 

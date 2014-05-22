@@ -16,6 +16,6 @@ import uk.co.q3c.v7.base.services.ServiceI18N;
 
 public interface SitemapService extends ServiceI18N {
 
-	Sitemap getSitemap();
+	MasterSitemap getSitemap();
 
 }

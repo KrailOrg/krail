@@ -1,41 +1,41 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
 package uk.co.q3c.v7.base.view.component;
 
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 
 import com.vaadin.ui.Button;
 
 /**
  * Simply a Vaadin Button encapsulating a SitemapNode
- * 
+ *
  * @author David Sowerby
- * 
+ *
  */
 public class NavigationButton extends Button {
 
-	private SitemapNode node;
+	private UserSitemapNode node;
 	private String params;
 
 	protected NavigationButton() {
 		super();
 	}
 
-	public SitemapNode getNode() {
+	public UserSitemapNode getNode() {
 		return node;
 	}
 
-	public void setNode(SitemapNode node) {
+	public void setNode(UserSitemapNode node) {
 		this.node = node;
 		this.setCaption(node.getLabel());
 	}

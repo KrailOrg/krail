@@ -119,7 +119,7 @@ public class DefaultSitemapServiceTest {
 	InheritingConfiguration applicationConfiguration;
 
 	@Inject
-	Sitemap sitemap;
+	MasterSitemap sitemap;
 
 	HierarchicalINIConfiguration iniConfig;
 

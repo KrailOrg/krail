@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -19,8 +19,8 @@ import java.util.Locale;
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.NodeSorter;
-import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
@@ -39,7 +39,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 		LocaleChangeListener, Button.ClickListener, Breadcrumb {
 	private final List<NavigationButton> buttons = new ArrayList<>();
 	private final V7Navigator navigator;
-	private final Sitemap sitemap;
+	private final UserSitemap sitemap;
 	private final Translate translate;
 
 	public static final String sortedOpt = "sorted";
@@ -47,7 +47,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 	private final UserOption userOption;
 
 	@Inject
-	protected NavigationButtonPanel(V7Navigator navigator, Sitemap sitemap, CurrentLocale currentLocale,
+	protected NavigationButtonPanel(V7Navigator navigator, UserSitemap sitemap, CurrentLocale currentLocale,
 			Translate translate, UserOption userOption) {
 		this.navigator = navigator;
 		navigator.addViewChangeListener(this);
@@ -62,7 +62,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 
 	protected abstract void moveToNavigationState();
 
-	protected void organiseButtons(List<SitemapNode> nodeList) {
+	protected void organiseButtons(List<UserSitemapNode> nodeList) {
 		if (usesSort) {
 			boolean sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, true);
 			// which order, sorted or insertion?
@@ -103,7 +103,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 		return button;
 	}
 
-	private void setupButton(NavigationButton button, SitemapNode sitemapNode) {
+	private void setupButton(NavigationButton button, UserSitemapNode sitemapNode) {
 
 		button.setNode(sitemapNode);
 		button.setVisible(true);
@@ -151,7 +151,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 		return navigator;
 	}
 
-	public Sitemap getSitemap() {
+	public UserSitemap getSitemap() {
 		return sitemap;
 	}
 

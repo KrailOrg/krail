@@ -1,18 +1,17 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import java.text.Collator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -23,9 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
-import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.common.base.Splitter;
 import com.google.inject.Inject;
@@ -33,17 +30,13 @@ import com.google.inject.Inject;
 public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements AnnotationSitemapLoader {
 
 	private static Logger log = LoggerFactory.getLogger(DefaultAnnotationSitemapLoader.class);
-	private final Sitemap sitemap;
-	private final Translate translate;
-	private final CurrentLocale currentLocale;
+	private final MasterSitemap sitemap;
 	private Map<String, AnnotationSitemapEntry> sources;
 
 	@Inject
-	protected DefaultAnnotationSitemapLoader(Sitemap sitemap, Translate translate, CurrentLocale currentLocale) {
+	protected DefaultAnnotationSitemapLoader(MasterSitemap sitemap) {
 		super();
 		this.sitemap = sitemap;
-		this.translate = translate;
-		this.currentLocale = currentLocale;
 	}
 
 	/**
@@ -53,17 +46,16 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
 	 * {@link View} annotation, but does not implement {@link V7View}, then it is ignored.
 	 * <p>
 	 * <br>
-	 * Also scans for the {@link RedirectFrom} annotation, and populates the {@link Sitemap} redirects with the
+	 * Also scans for the {@link RedirectFrom} annotation, and populates the {@link MasterSitemap} redirects with the
 	 * appropriate entries. If a class is annotated with {@link RedirectFrom}, but does not implement {@link V7View},
 	 * then the annotation is ignored.
-	 * 
+	 *
 	 * @see uk.co.q3c.v7.base.navigate.sitemap.SitemapLoader#load()
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean load() {
 		clearCounts();
-		Collator collator = Collator.getInstance(currentLocale.getLocale());
 		if (sources != null) {
 
 			for (Entry<String, AnnotationSitemapEntry> entry : sources.entrySet()) {
@@ -85,9 +77,8 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
 					if (V7View.class.isAssignableFrom(clazz)) {
 						viewClass = (Class<? extends V7View>) clazz;
 						View annotation = viewClass.getAnnotation(View.class);
-						SitemapNode node = sitemap.append(annotation.uri());
+						MasterSitemapNode node = sitemap.append(annotation.uri());
 						node.setViewClass(viewClass);
-						node.setTranslate(translate);
 						node.setPageAccessControl(annotation.pageAccessControl());
 						if (StringUtils.isNotEmpty(annotation.roles())) {
 							Splitter splitter = Splitter.on(",").trimResults();
@@ -100,7 +91,7 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
 						String keyName = annotation.labelKeyName();
 						try {
 							I18NKey<?> key = keyFromName(keyName, keySample);
-							node.setLabelKey(key, currentLocale.getLocale(), collator);
+							node.setLabelKey(key);
 						} catch (IllegalArgumentException iae) {
 							addError(source, AnnotationSitemapLoader.LABEL_NOT_VALID, clazz, keyName,
 									keySample.getClass());
@@ -140,7 +131,7 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
 
 	/**
 	 * Returns an {@link I18NKey} enum constant from {@code labelKeyName} using {@code labelKeyClass}.
-	 * 
+	 *
 	 * @param labelKeyName
 	 * @param labelKeyClass
 	 * @return an {@link I18NKey} enum constant from {@code labelKeyName} using {@code labelKeyClass}.

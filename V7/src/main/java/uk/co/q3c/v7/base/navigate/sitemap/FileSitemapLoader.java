@@ -14,8 +14,8 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 
 /**
- * Implementations of this interface take definitions of {@link Sitemap} entries from a file, and load them into the
- * {@link Sitemap} when invoked by the {@link SitemapService}. See
+ * Implementations of this interface take definitions of {@link MasterSitemap} entries from a file, and load them into the
+ * {@link MasterSitemap} when invoked by the {@link SitemapService}. See
  * https://sites.google.com/site/q3cjava/sitemap?pli=1#TOC-The-File-Loader for a description of the file format
  */
 public interface FileSitemapLoader extends SitemapLoader {

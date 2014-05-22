@@ -55,7 +55,7 @@ public class DefaultAnnotationSitemapLoaderTest {
 	LoaderReportBuilder lrb;
 
 	@Inject
-	Sitemap sitemap;
+	MasterSitemap sitemap;
 
 	public static class AnnotationsModule1 extends AnnotationSitemapModule {
 

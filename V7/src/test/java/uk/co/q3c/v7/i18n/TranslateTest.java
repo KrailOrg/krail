@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Locale;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -34,8 +35,18 @@ public class TranslateTest {
 	@Inject
 	Translate translate;
 
+	@Inject
+	CurrentLocale currentLocale;
+
+	@Before
+	public void setup() {
+		currentLocale.removeAllListeners();
+		currentLocale.setLocale(Locale.UK);
+	}
+
 	@Test
 	public void test() {
+
 		Locale germanSwitzerland = new Locale("de", "CH");
 		// when
 		assertThat(translate.from(LabelKey.Cancel)).isEqualTo("Cancel");

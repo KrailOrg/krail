@@ -6,14 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.google.inject.Inject;
-
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.inject.Inject;
 
 /**
- * 
+ *
  * This provides a more strict interpretation of the UriFragment than Vaadin does by default. It requires that the URI
  * structure is of the form:<br>
  * <br>
@@ -37,7 +36,7 @@ import com.google.common.base.Strings;
  * <br>
  * Optionally uses hash(#) or hashBang(#!). Some people get excited about hashbangs. Try Googling it<br>
  * <br>
- * 
+ *
  */
 public class StrictURIFragmentHandler implements URIFragmentHandler, Serializable {
 
@@ -70,6 +69,13 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
 
 		if (path.startsWith("!")) {
 			copyStart++;
+			if (path.charAt(1) == '/') {
+				copyStart++;
+			}
+		} else {
+			if (path.startsWith("/")) {
+				copyStart++;
+			}
 		}
 
 		if (path.endsWith("/")) {
@@ -117,7 +123,7 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
 	 * the path, so for example something like <code>view//subview/a=b</code> will result in a virtual page of
 	 * <code>view//subview</code>. If <code>uri</code> is null or empty, the uri is consider to be an empty String. If
 	 * <code>navigationState</code> contains only paired parameters, the virtual page is set to an empty string.
-	 * 
+	 *
 	 * @see uk.co.q3c.v7.base.navigate.URIFragmentHandler#virtualPage(java.lang.String)
 	 */
 	@Override
@@ -126,18 +132,11 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
 		if (uri == null) {
 			uri = "";
 		}
-		navigationState.setFragment(uri);
 
 		String fragment = stripBangAndTrailingSlash(uri);
-		List<String> pathSegments = new ArrayList<>();
-		// empty fragment is 'home'
-		if (Strings.isNullOrEmpty(fragment)) {
-			navigationState.setVirtualPage("");
-			pathSegments.add("");
-			navigationState.setPathSegments(pathSegments);
-			return navigationState;
-		}
+		navigationState.setFragment(uri);
 
+		List<String> pathSegments = new ArrayList<>();
 		// no parameters, everything is the virtual page path
 		// if (!fragment.contains("=")) {
 		// navigationState.setVirtualPage(fragment);
@@ -161,6 +160,7 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
 				}
 			}
 		}
+
 		navigationState.setPathSegments(pathSegments);
 
 		// join the virtual page path up again
@@ -172,7 +172,7 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
 
 	/**
 	 * Updates the fragment in {@code navigationState} from the component parts of {@code navigationState}
-	 * 
+	 *
 	 * @see uk.co.q3c.v7.base.navigate.URIFragmentHandler#updateFragment(uk.co.q3c.v7.base.navigate.NavigationState)
 	 */
 	@Override

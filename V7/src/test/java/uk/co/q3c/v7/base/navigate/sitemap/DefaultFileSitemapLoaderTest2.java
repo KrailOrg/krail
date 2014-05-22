@@ -73,7 +73,7 @@ public class DefaultFileSitemapLoaderTest2 {
 	DefaultFileSitemapLoader loader;
 
 	@Inject
-	Sitemap sitemap;
+	MasterSitemap sitemap;
 
 	@Before
 	public void setup() throws IOException {
@@ -93,7 +93,7 @@ public class DefaultFileSitemapLoaderTest2 {
 
 		// then
 
-		for (SitemapNode node : sitemap.getAllNodes()) {
+		for (MasterSitemapNode node : sitemap.getAllNodes()) {
 			validateNode(node);
 		}
 
@@ -103,7 +103,7 @@ public class DefaultFileSitemapLoaderTest2 {
 		System.out.println(report.toString());
 	}
 
-	private void validateNode(SitemapNode node) {
+	private void validateNode(MasterSitemapNode node) {
 		String uri = sitemap.uri(node);
 		System.out.println("validating " + uri);
 		switch (uri) {

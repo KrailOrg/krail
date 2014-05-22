@@ -27,7 +27,7 @@ public class StandardPagesModule extends DirectSitemapModule {
 	// private MapBinder<String, RedirectEntry> redirectBinder;
 
 	/**
-	 * Override this method to define different {@link Sitemap} entries for Standard Pages. All of the views specified
+	 * Override this method to define different {@link MasterSitemap} entries for Standard Pages. All of the views specified
 	 * here are interfaces, so if you only want to change the View implementation you can change the binding in
 	 * {@link ViewModule}
 	 *

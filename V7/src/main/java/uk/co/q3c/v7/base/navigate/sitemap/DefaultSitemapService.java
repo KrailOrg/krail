@@ -42,7 +42,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	private final ApplicationConfigurationService configurationService;
 	private final Provider<FileSitemapLoader> fileSitemapLoaderProvider;
 	private List<SitemapSourceType> sourceTypes;
-	private final Sitemap sitemap;
+	private final MasterSitemap sitemap;
 	private StringBuilder report;
 	private final ApplicationConfiguration configuration;
 	private boolean loaded;
@@ -55,7 +55,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate,
 			Provider<FileSitemapLoader> fileSitemapLoaderProvider,
 			Provider<DirectSitemapLoader> directSitemapLoaderProvider,
-			Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, Sitemap sitemap,
+			Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, MasterSitemap sitemap,
 			SitemapChecker sitemapChecker, ApplicationConfiguration configuration) {
 		super(translate);
 		this.configurationService = configurationService;
@@ -184,7 +184,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	}
 
 	@Override
-	public Sitemap getSitemap() {
+	public MasterSitemap getSitemap() {
 		return sitemap;
 	}
 

@@ -12,19 +12,15 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import java.text.Collator;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 
 /**
  * If a Map<String, DirectSitemapEntry> binding has been created (using Guice modules sub-classed from
  * {@link DirectSitemapModule}), then {@link #pageMap} will be non-null. If so, its contents are transferred to the
- * {@link Sitemap}. Also loads the standard pages.
+ * {@link MasterSitemap}. Also loads the standard pages.
  *
  * @author David Sowerby
  *
@@ -32,28 +28,22 @@ import com.google.inject.Inject;
 public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements DirectSitemapLoader {
 
 	private Map<String, DirectSitemapEntry> pageMap;
-	private final Sitemap sitemap;
-	private final CurrentLocale currentLocale;
-	private final Translate translate;
+	private final MasterSitemap sitemap;
 	private Map<String, RedirectEntry> redirects;
 
 	@Inject
-	protected DefaultDirectSitemapLoader(Sitemap sitemap, Translate translate, CurrentLocale currentLocale) {
+	protected DefaultDirectSitemapLoader(MasterSitemap sitemap) {
 		this.sitemap = sitemap;
-		this.currentLocale = currentLocale;
-		this.translate = translate;
 	}
 
 	@Override
 	public boolean load() {
 		if (pageMap != null) {
-			Collator collator = Collator.getInstance(currentLocale.getLocale());
 			for (Entry<String, DirectSitemapEntry> entry : pageMap.entrySet()) {
-				SitemapNode node = sitemap.append(entry.getKey());
+				MasterSitemapNode node = sitemap.append(entry.getKey());
 				DirectSitemapEntry value = entry.getValue();
-				node.setLabelKey(value.getLabelKey(), translate, collator);
+				node.setLabelKey(value.getLabelKey());
 				node.setPageAccessControl(value.getPageAccessControl());
-				node.setTranslate(translate);
 				node.setViewClass(value.getViewClass());
 				if (node.getLabelKey() instanceof StandardPageKey) {
 					sitemap.addStandardPage((StandardPageKey) entry.getValue().getLabelKey(), node);
@@ -67,7 +57,7 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
 	}
 
 	/**
-	 * Transfers directly defined URI redirects to the {@link Sitemap}
+	 * Transfers directly defined URI redirects to the {@link MasterSitemap}
 	 */
 	protected void processRedirects() {
 		if (redirects != null) {

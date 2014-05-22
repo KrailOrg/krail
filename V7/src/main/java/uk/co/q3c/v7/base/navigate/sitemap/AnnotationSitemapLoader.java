@@ -13,8 +13,8 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
 /**
- * Implementations take the {@link Sitemap} definitions captured by the {@link SitemapAnnotationsModule}, then load them
- * into the {@link Sitemap} when invoked by the {@link SitemapService}.
+ * Implementations take the {@link MasterSitemap} definitions captured by the {@link SitemapAnnotationsModule}, then load them
+ * into the {@link MasterSitemap} when invoked by the {@link SitemapService}.
  * 
  * @see DirectSitemapLoader
  * @see FileSitemapLoader

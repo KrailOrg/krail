@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -43,10 +43,11 @@ import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
 /**
- * Loads the {@link Sitemap} with the entries contained in the files defined by subclasses of {@link FileSitemapModule}
- * 
+ * Loads the {@link MasterSitemap} with the entries contained in the files defined by subclasses of
+ * {@link FileSitemapModule}
+ *
  * @author David Sowerby
- * 
+ *
  */
 public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileSitemapLoader {
 
@@ -62,7 +63,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
 
 	private Map<String, SitemapFile> sources;
 
-	private final Sitemap sitemap;
+	private final MasterSitemap sitemap;
 	private int commentLines;
 	private int blankLines;
 	private Map<SectionName, List<String>> sections;
@@ -86,7 +87,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
 	private final String segmentSeparator = ";";
 
 	@Inject
-	public DefaultFileSitemapLoader(CurrentLocale currentLocale, Translate translate, Sitemap sitemap) {
+	public DefaultFileSitemapLoader(CurrentLocale currentLocale, Translate translate, MasterSitemap sitemap) {
 		super();
 		this.collator = Collator.getInstance(currentLocale.getLocale());
 		this.translate = translate;
@@ -146,7 +147,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
 	}
 
 	private void checkLabelKeys() {
-		for (SitemapNode node : sitemap.getAllNodes()) {
+		for (MasterSitemapNode node : sitemap.getAllNodes()) {
 			if (node.getLabelKey() == null) {
 				labelKeyForName(null, node);
 			}
@@ -273,7 +274,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
 			MapLineRecord lineRecord = reader.processLine(this, source, lineIndex, line, currentIndent,
 					segmentSeparator);
 			uriTracker.track(lineRecord.getIndentLevel(), lineRecord.getSegment());
-			SitemapNode node = sitemap.append(uriTracker.uri());
+			MasterSitemapNode node = sitemap.append(uriTracker.uri());
 			node.setUriSegment(lineRecord.getSegment());
 			findView(source, node, lineRecord.getSegment(), lineRecord.getViewName());
 			labelKeyForName(lineRecord.getKeyName(), node);
@@ -289,12 +290,12 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
 		}
 	}
 
-	public void labelKeyForName(String labelKeyName, SitemapNode node) {
+	public void labelKeyForName(String labelKeyName, MasterSitemapNode node) {
 		// gets name from segment if necessary
 		String keyName = keyName(labelKeyName, node);
 		// could be null if invalid label keys given
 		if (lkfn != null) {
-			node.setLabelKey(lkfn.keyForName(keyName, missingEnums), translate, collator);
+			node.setLabelKey(lkfn.keyForName(keyName, missingEnums));
 		} else {
 			missingEnums.add(keyName);
 		}
@@ -318,13 +319,13 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
 	 * Updates the node with the required view. If {@link #appendView} is true the 'View' is appended to the
 	 * {@code viewName} before attempting to find its class declaration. If no class can be found, {@code viewName} is
 	 * added to {@link #undeclaredViewClasses}
-	 * 
+	 *
 	 * @param node
 	 * @param segment
 	 * @param viewName
 	 */
 	@SuppressWarnings("unchecked")
-	private void findView(String source, SitemapNode node, String segment, String viewName) {
+	private void findView(String source, MasterSitemapNode node, String segment, String viewName) {
 
 		// if view is null use the segment
 		if (Strings.isNullOrEmpty(viewName)) {
@@ -371,7 +372,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
 
 	/**
 	 * process a line of text from the file into the appropriate section
-	 * 
+	 *
 	 * @param line
 	 */
 	private void divideIntoSections(String source, String line, int linenum) {
@@ -479,16 +480,16 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
 	}
 
 	/**
-	 * 
+	 *
 	 * Sets the source of the sitemap input. See also {@link #setSource(String)} , and {@link #get()} for loading order.
-	 * 
+	 *
 	 * @param sourceFile
 	 */
 	public void setSourceFile(File sourceFile) {
 		this.sourceFile = sourceFile;
 	}
 
-	public Sitemap getSitemap() {
+	public MasterSitemap getSitemap() {
 
 		return sitemap;
 	}

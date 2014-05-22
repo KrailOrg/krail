@@ -16,11 +16,11 @@ import edu.uci.ics.jung.graph.Tree;
  * exposed through this wrapper, but you can access those via {@link #getGraph()}
  * <p>
  * The E (edge) parameter for the underlying graph is a simple Integer
- * 
+ *
  * @param <V>
  *            the type of object to be contained (the 'node'). Must implement equals
  */
-public class BasicForest<V> {
+public class BasicForest<V> implements TreeWrapper<V> {
 
 	private Forest<V, Integer> graph;
 	private int edgeCount = 0;
@@ -29,6 +29,7 @@ public class BasicForest<V> {
 		graph = new DelegateForest<V, Integer>();
 	}
 
+	@Override
 	public void addNode(V node) {
 		graph.addVertex(node);
 	}
@@ -40,10 +41,11 @@ public class BasicForest<V> {
 	/**
 	 * Adds a {@code childNode} to {@code parentNode}. Note that if {@code parentNode} is not already in the tree, it
 	 * will be added - which may mean that you no longer have a single root
-	 * 
+	 *
 	 * @param parentNode
 	 * @param childNode
 	 */
+	@Override
 	public void addChild(V parentNode, V childNode) {
 		if (parentNode == null) {
 			addNode(childNode);
@@ -69,7 +71,7 @@ public class BasicForest<V> {
 	 * First step is to identify where this branch should join the tree - this is the last node in the branch which is
 	 * already in the tree. The remainder of the branch is then appended to that node. If none of the nodes already
 	 * exist, the first node of the branch is taken as a root node (that is, it has no parent).
-	 * 
+	 *
 	 * @param branch
 	 * @return
 	 */
@@ -102,7 +104,7 @@ public class BasicForest<V> {
 
 	/**
 	 * Returns the node contained in the tree which matches (equals) the supplied {@code node}
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -117,6 +119,7 @@ public class BasicForest<V> {
 		return found;
 	}
 
+	@Override
 	public List<V> getChildren(V parentNode) {
 		return new ArrayList<V>(graph.getChildren(parentNode));
 
@@ -125,7 +128,7 @@ public class BasicForest<V> {
 	/**
 	 * Get all the nodes which are below the {@code parentNode},that is children, children's children etc. The returned
 	 * list includes the {@code parentNode}
-	 * 
+	 *
 	 * @param parentNode
 	 * @return
 	 */
@@ -144,7 +147,7 @@ public class BasicForest<V> {
 
 	/**
 	 * Finds all the leaves for the specified {@code parentNode}, that is, all those with no children;
-	 * 
+	 *
 	 * @param parentNode
 	 * @param leaves
 	 */
@@ -166,7 +169,7 @@ public class BasicForest<V> {
 	/**
 	 * Finds all the leaves for the whole tree, that is, all those with no children, from the root of the tree. Use
 	 * {@link #findLeaves(Object)} if you want leaves for a subset of the tree
-	 * 
+	 *
 	 * @param leaves
 	 * @see #findLeaves(Object)
 	 */
@@ -184,7 +187,7 @@ public class BasicForest<V> {
 
 	/**
 	 * Returns a list of all the entries in the tree
-	 * 
+	 *
 	 * @return
 	 */
 	public Collection<V> getEntries() {
@@ -199,9 +202,10 @@ public class BasicForest<V> {
 	/**
 	 * Returns a list of all the roots - the entry which is at the start of each chain or branch. For the tree to be a
 	 * tree, there should only be one of these
-	 * 
+	 *
 	 * @return
 	 */
+	@Override
 	public List<V> getRoots() {
 		Collection<Tree<V, Integer>> t = graph.getTrees();
 		List<V> branchRoots = new ArrayList<V>();
@@ -230,17 +234,19 @@ public class BasicForest<V> {
 		}
 	}
 
+	@Override
 	public int getChildCount(V parentNode) {
 		return graph.getChildCount(parentNode);
 	}
 
+	@Override
 	public boolean hasChildren(V parentNode) {
 		return getChildCount(parentNode) > 0;
 	}
 
 	/**
 	 * Assumes this is a genuine tree and that there is only one root, or just takes the first one
-	 * 
+	 *
 	 * @return
 	 */
 	public V getRoot() {
@@ -261,7 +267,7 @@ public class BasicForest<V> {
 
 	/**
 	 * Uses a list to return all vertices, but no ordering should be implied
-	 * 
+	 *
 	 * @return
 	 */
 	public List<V> getAllNodes() {
@@ -286,6 +292,14 @@ public class BasicForest<V> {
 
 	public void removeNode(V node) {
 		graph.removeVertex(node);
+	}
+
+	/**
+	 * Does nothing in this implementation of {@link TreeWrapper}
+	 */
+	@Override
+	public void setLeaf(V parentNode, boolean isLeaf) {
+
 	}
 
 }

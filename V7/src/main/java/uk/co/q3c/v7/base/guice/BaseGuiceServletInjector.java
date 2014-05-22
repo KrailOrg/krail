@@ -29,7 +29,7 @@ import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
 import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapServiceModule;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPagesModule;
 import uk.co.q3c.v7.base.services.ServicesMonitor;
@@ -123,7 +123,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 	}
 
 	/**
-	 * Modules used in the creation of the {@link Sitemap} do not actually need to be separated, this just makes a
+	 * Modules used in the creation of the {@link MasterSitemap} do not actually need to be separated, this just makes a
 	 * convenient way of seeing them as a group
 	 *
 	 * @param baseModules

@@ -40,9 +40,11 @@ public interface CurrentLocale {
 
 	/**
 	 * Equivalent to {@link #setLocale(Locale,true)}
-	 * 
+	 *
 	 * @param locale
 	 */
 	public abstract void setLocale(Locale locale);
+
+	public abstract void removeAllListeners();
 
 }

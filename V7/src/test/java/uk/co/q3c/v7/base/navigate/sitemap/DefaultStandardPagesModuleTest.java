@@ -56,7 +56,7 @@ public class DefaultStandardPagesModuleTest {
 	DefaultDirectSitemapLoader loader;
 
 	@Inject
-	Sitemap sitemap;
+	MasterSitemap sitemap;
 
 	@Inject
 	SitemapChecker sitemapChecker;

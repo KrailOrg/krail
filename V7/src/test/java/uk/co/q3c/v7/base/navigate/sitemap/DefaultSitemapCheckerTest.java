@@ -14,8 +14,6 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.text.Collator;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -54,15 +52,15 @@ public class DefaultSitemapCheckerTest {
 	Translate translate;
 
 	@Inject
-	Sitemap sitemap;
-	private SitemapNode nodeNoClass;
-	private SitemapNode nodeNoKey;
+	MasterSitemap sitemap;
+	private MasterSitemapNode nodeNoClass;
+	private MasterSitemapNode nodeNoKey;
 
 	@Inject
 	CurrentLocale currentLocale;
-	private SitemapNode baseNode;
-	private SitemapNode node1;
-	private SitemapNode node11;
+	private MasterSitemapNode baseNode;
+	private MasterSitemapNode node1;
+	private MasterSitemapNode node11;
 
 	@Test(expected = SitemapException.class)
 	public void checkOnly() {
@@ -96,10 +94,9 @@ public class DefaultSitemapCheckerTest {
 	public void redirect() {
 
 		// given
-		Collator collator = Collator.getInstance();
 		buildSitemap(1);
-		SitemapNode publicNode = sitemap.nodeFor("public");
-		publicNode.setLabelKey(TestLabelKey.Home, translate, collator);
+		MasterSitemapNode publicNode = sitemap.nodeFor("public");
+		publicNode.setLabelKey(TestLabelKey.Home);
 		// when
 		checker.check();
 		// then
@@ -112,16 +109,15 @@ public class DefaultSitemapCheckerTest {
 	public void redirect_multiLevel() {
 
 		// given
-		Collator collator = Collator.getInstance();
 		buildSitemap(2);
-		SitemapNode publicNode = sitemap.nodeFor("public");
-		publicNode.setLabelKey(TestLabelKey.Public, translate, collator);
+		MasterSitemapNode publicNode = sitemap.nodeFor("public");
+		publicNode.setLabelKey(TestLabelKey.Public);
 		// when
 		checker.check();
 		// then
 
-		SitemapNode n1 = sitemap.nodeFor(uripublic_Node1);
-		SitemapNode n11 = sitemap.nodeFor(uripublic_Node11);
+		MasterSitemapNode n1 = sitemap.nodeFor(uripublic_Node1);
+		MasterSitemapNode n11 = sitemap.nodeFor(uripublic_Node11);
 
 		assertThat(publicNode).isNotNull();
 		assertThat(publicNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
@@ -230,12 +226,11 @@ public class DefaultSitemapCheckerTest {
 	 * @param index
 	 */
 	private void buildSitemap(int index) {
-		Collator collator = Collator.getInstance(currentLocale.getLocale());
 		switch (index) {
 		case 0:
 
 			nodeNoClass = sitemap.append(uriNodeNoClass);
-			nodeNoClass.setLabelKey(TestLabelKey.No, currentLocale.getLocale(), collator);
+			nodeNoClass.setLabelKey(TestLabelKey.No);
 			nodeNoClass.setPageAccessControl(PageAccessControl.PUBLIC);
 			nodeNoKey = sitemap.append(uriNodeNoKey);
 			nodeNoKey.setViewClass(View2.class);
@@ -245,17 +240,17 @@ public class DefaultSitemapCheckerTest {
 			break;
 		case 1:
 			node1 = sitemap.append(uripublic_Node1);
-			node1.setLabelKey(TestLabelKey.No, currentLocale.getLocale(), collator);
+			node1.setLabelKey(TestLabelKey.No);
 			node1.setViewClass(View2.class);
 			node1.setPageAccessControl(PageAccessControl.PERMISSION);
 			sitemap.addRedirect("public", uripublic_Node1);
 		case 2:
 			node1 = sitemap.append(uripublic_Node1);
-			node1.setLabelKey(TestLabelKey.No, currentLocale.getLocale(), collator);
+			node1.setLabelKey(TestLabelKey.No);
 			node1.setViewClass(View2.class);
 
 			node11 = sitemap.append(uripublic_Node11);
-			node11.setLabelKey(TestLabelKey.No, currentLocale.getLocale(), collator);
+			node11.setLabelKey(TestLabelKey.No);
 			node11.setViewClass(View2.class);
 			node11.setPageAccessControl(PageAccessControl.PERMISSION);
 

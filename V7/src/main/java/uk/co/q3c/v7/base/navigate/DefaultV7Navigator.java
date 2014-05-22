@@ -28,6 +28,8 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapException;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.shiro.UnauthorizedExceptionHandler;
@@ -64,7 +66,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	private NavigationState currentNavigationState;
 	private NavigationState previousNavigationState;
 
-	private final Sitemap sitemap;
+	private final UserSitemap userSitemap;
 	private final Provider<Subject> subjectProvider;
 	private V7View currentView = null;
 
@@ -77,7 +79,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	@Inject
 	public DefaultV7Navigator(URIFragmentHandler uriHandler, SitemapService sitemapService,
 			SubjectProvider subjectProvider, PageAccessController pageAccessController, ScopedUIProvider uiProvider,
-			DefaultViewFactory viewFactory) {
+			DefaultViewFactory viewFactory, Provider<UserSitemap> userSitemapProvider) {
 		super();
 		this.uriHandler = uriHandler;
 		this.uiProvider = uiProvider;
@@ -88,7 +90,8 @@ public class DefaultV7Navigator implements V7Navigator {
 
 		try {
 			sitemapService.start();
-			sitemap = sitemapService.getSitemap();
+			// cannot create until MasterSitemap has loaded
+			userSitemap = userSitemapProvider.get();
 		} catch (Exception e) {
 			String msg = "Sitemap service failed to start, application will have no pages";
 			log.error(msg);
@@ -122,7 +125,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	private NavigationState redirectIfNeeded(NavigationState navigationState) {
 
 		String page = navigationState.getVirtualPage();
-		String redirection = sitemap.getRedirectPageFor(page);
+		String redirection = userSitemap.getRedirectPageFor(page);
 		// if no redirect found, page is returned
 		if (redirection == page) {
 			return navigationState;
@@ -163,13 +166,13 @@ public class DefaultV7Navigator implements V7Navigator {
 
 		// https://sites.google.com/site/q3cjava/sitemap#emptyURI
 		if (navigationState.getVirtualPage().isEmpty()) {
-			navigationState.setVirtualPage(sitemap.standardPageURI(StandardPageKey.Public_Home));
+			navigationState.setVirtualPage(userSitemap.standardPageURI(StandardPageKey.Public_Home));
 			uriHandler.updateFragment(navigationState);
 		}
 
 		log.debug("obtaining view for '{}'", navigationState.getVirtualPage());
 
-		SitemapNode node = sitemap.nodeFor(navigationState);
+		UserSitemapNode node = userSitemap.nodeFor(navigationState);
 		if (node == null) {
 			throw new InvalidURIException("URI not found: " + navigationState.getVirtualPage());
 		}
@@ -300,7 +303,7 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	@Override
 	public void navigateTo(StandardPageKey pageKey) {
-		navigateTo(sitemap.standardPageURI(pageKey));
+		navigateTo(userSitemap.standardPageURI(pageKey));
 	}
 
 	/**
@@ -329,19 +332,19 @@ public class DefaultV7Navigator implements V7Navigator {
 	 * Navigates to a the location represented by {@code node}
 	 */
 	@Override
-	public void navigateTo(SitemapNode node) {
-		navigateTo(sitemap.uri(node));
+	public void navigateTo(UserSitemapNode node) {
+		navigateTo(userSitemap.uri(node));
 	}
 
 	@Override
-	public SitemapNode getCurrentNode() {
-		return sitemap.nodeFor(currentNavigationState);
+	public UserSitemapNode getCurrentNode() {
+		return userSitemap.nodeFor(currentNavigationState);
 	}
 
 	/**
 	 * When a user has successfully logged in, they are routed back to the page they were on before going to the login
 	 * page. If they have gone straight to the login page (maybe they bookmarked it), or they were on the logout page,
-	 * they will be routed to the 'private home page' (the StandardPage for StandardPageKey_Private_Home)
+	 * they will be routed to the 'private home page' (the StandardPage for {@link StandardPageKey#Private_Home})
 	 *
 	 */
 	@Override
@@ -350,8 +353,8 @@ public class DefaultV7Navigator implements V7Navigator {
 
 		if (subjectProvider.get().isAuthenticated()) {
 			// they have logged in
-			SitemapNode previousNode = sitemap.nodeFor(previousNavigationState);
-			if (previousNode != null && previousNode != sitemap.standardPageNode(StandardPageKey.Logout)) {
+			SitemapNode previousNode = userSitemap.nodeFor(previousNavigationState);
+			if (previousNode != null && previousNode != userSitemap.standardPageNode(StandardPageKey.Logout)) {
 				navigateTo(previousNavigationState);
 			} else {
 				navigateTo(StandardPageKey.Private_Home);

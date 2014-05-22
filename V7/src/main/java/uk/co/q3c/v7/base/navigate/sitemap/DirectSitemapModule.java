@@ -41,7 +41,7 @@ public abstract class DirectSitemapModule extends AbstractModule {
 	private MapBinder<String, RedirectEntry> redirectBinder;
 
 	/**
-	 * Override this method to define {@link Sitemap} entries with one or more calls to {@link #addEntry}, something
+	 * Override this method to define {@link MasterSitemap} entries with one or more calls to {@link #addEntry}, something
 	 * like this:
 	 * <p>
 	 * addEntry("public/home", PublicHomeView.class, LabelKey.Home, false, "permission");
@@ -60,7 +60,7 @@ public abstract class DirectSitemapModule extends AbstractModule {
 	}
 
 	/**
-	 * Adds an entry to be place in the {@link Sitemap} by the {@link DirectSitemapLoader}.
+	 * Adds an entry to be place in the {@link MasterSitemap} by the {@link DirectSitemapLoader}.
 	 * 
 	 * @param uri
 	 *            the URI for this page

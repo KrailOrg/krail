@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Locale;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -34,6 +35,12 @@ public class DescriptionKeyTest {
 
 	@Inject
 	Translate translate;
+
+	@Before
+	public void setup() {
+		currentLocale.removeAllListeners();
+		currentLocale.setLocale(Locale.UK);
+	}
 
 	@Test
 	public void locale_en() {
@@ -61,6 +68,6 @@ public class DescriptionKeyTest {
 		// when
 		currentLocale.setLocale(Locale.ITALY);
 		// then
-		assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("Public Pagina");
+		assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("il cognome o il nome di famiglia");
 	}
 }

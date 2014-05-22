@@ -15,17 +15,17 @@ import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.realm.ldap.JndiLdapRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
 
 import com.google.inject.Inject;
 
 public class DefaultRealm extends AuthorizingRealm {
 
 	private final LoginAttemptLog loginAttemptLog;
-	private final Sitemap sitemap;
+	private final MasterSitemap sitemap;
 
 	@Inject
-	protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher, Sitemap sitemap) {
+	protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher, MasterSitemap sitemap) {
 		super(matcher);
 		this.loginAttemptLog = loginAttemptLog;
 		this.sitemap = sitemap;
@@ -42,7 +42,7 @@ public class DefaultRealm extends AuthorizingRealm {
 	 * long as they have a password of 'password'! <br>
 	 * <br>
 	 * It does however demonstrate the use of {@link LoginAttemptLog} to track login attempts Authorises all users to
-	 * access the private pages of the {@link Sitemap}
+	 * access the private pages of the {@link MasterSitemap}
 	 * 
 	 * @see org.apache.shiro.realm.AuthorizingRealm#doGetAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection)
 	 */
@@ -78,7 +78,7 @@ public class DefaultRealm extends AuthorizingRealm {
 	 * <br>
 	 * You can provide your own Realm implementation by overriding {@link StandardShiroModule#bindRealms()}<br>
 	 * <br>
-	 * Authorises all users to access the private pages of the {@link Sitemap} (that is, all the pages in the 'private'
+	 * Authorises all users to access the private pages of the {@link MasterSitemap} (that is, all the pages in the 'private'
 	 * branch)
 	 * 
 	 * @see org.apache.shiro.realm.AuthorizingRealm#doGetAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection)

@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -17,24 +17,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * A set of user options. Although not mandatory, typically the option group and option are the simple class name and
  * field of the object (respectively) requiring the option value. <br>
  * <br>
  * The {@link UserOptionStore} is injected to enable use of different storage methods.
- * 
+ *
  * @author David Sowerby 15 Jul 2013
- * 
+ *
  */
 @Singleton
 public class DefaultUserOption implements UserOption {
@@ -43,7 +42,7 @@ public class DefaultUserOption implements UserOption {
 	private final UserOptionStore userOptionStore;
 
 	@Inject
-	protected DefaultUserOption(UserOptionStore userOptionStore) {
+	public DefaultUserOption(UserOptionStore userOptionStore) {
 		super();
 		this.userOptionStore = userOptionStore;
 	}
@@ -197,6 +196,56 @@ public class DefaultUserOption implements UserOption {
 			ArrayList<String> list = Lists.newArrayList(entries);
 			return list;
 		}
+	}
+
+	@Override
+	public void setOption(String optionGroup, UserOptionProperty option, int value) {
+		setOption(optionGroup, option.name(), value);
+	}
+
+	@Override
+	public void setOption(String optionGroup, UserOptionProperty option, String value) {
+		setOption(optionGroup, option.name(), value);
+	}
+
+	@Override
+	public void setOption(String optionGroup, UserOptionProperty option, DateTime value) {
+		setOption(optionGroup, option.name(), value);
+	}
+
+	@Override
+	public void setOption(String optionGroup, UserOptionProperty option, double value) {
+		setOption(optionGroup, option.name(), value);
+	}
+
+	@Override
+	public void setOption(String optionGroup, UserOptionProperty option, boolean value) {
+		setOption(optionGroup, option.name(), value);
+	}
+
+	@Override
+	public int getOptionAsInt(String optionGroup, UserOptionProperty option, int defaultValue) {
+		return getOptionAsInt(optionGroup, option.name(), defaultValue);
+	}
+
+	@Override
+	public String getOptionAsString(String optionGroup, UserOptionProperty option, String defaultValue) {
+		return getOptionAsString(optionGroup, option.name(), defaultValue);
+	}
+
+	@Override
+	public DateTime getOptionAsDateTime(String optionGroup, UserOptionProperty option, DateTime defaultValue) {
+		return getOptionAsDateTime(optionGroup, option.name(), defaultValue);
+	}
+
+	@Override
+	public double getOptionAsDouble(String optionGroup, UserOptionProperty option, double defaultValue) {
+		return getOptionAsDouble(optionGroup, option.name(), defaultValue);
+	}
+
+	@Override
+	public boolean getOptionAsBoolean(String optionGroup, UserOptionProperty option, boolean defaultValue) {
+		return getOptionAsBoolean(optionGroup, option.name(), defaultValue);
 	}
 
 }

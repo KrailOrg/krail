@@ -2,10 +2,10 @@ package uk.co.q3c.v7.base.navigate;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import com.google.inject.Inject;
 
@@ -38,14 +38,14 @@ import com.google.inject.Inject;
  * </code>
  * <p>
  * A NavigationState 'a' is equal to NavigationState 'b' if a.getFragment.equals(b.getFragment())
- * 
+ *
  * @author David Sowerby
- * 
+ *
  */
 public class NavigationState implements Serializable {
 	private String fragment;
 	private String virtualPage;
-	private final Map<String, String> parameters = new TreeMap<String, String>();
+	private final Map<String, String> parameters = new LinkedHashMap<String, String>();
 	private List<String> pathSegments;
 	// fragment is out of date
 	private boolean dirty;

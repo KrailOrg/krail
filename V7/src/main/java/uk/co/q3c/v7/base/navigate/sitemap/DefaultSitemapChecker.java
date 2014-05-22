@@ -1,21 +1,19 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import java.text.Collator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -37,18 +35,18 @@ import com.google.inject.Inject;
  * <ol>
  * <li>Missing views are not allowed unless the page is redirected
  * <li>Missing enums (label keys) are not allowed unless the page is redirected
- * <li>Redirects from within the {@link Sitemap} have their pageAccessControl attribute set to the pageAccessControl of
- * the redirect target.
+ * <li>Redirects from within the {@link MasterSitemap} have their pageAccessControl attribute set to the
+ * pageAccessControl of the redirect target.
  * <li>Redirects to a child (for example from 'private' to 'private/home' must have a label key
- * 
+ *
  * </ol>
- * 
+ *
  * @author David Sowerby
- * 
+ *
  */
 public class DefaultSitemapChecker implements SitemapChecker {
 	private static Logger log = LoggerFactory.getLogger(DefaultSitemapChecker.class);
-	private Sitemap sitemap;
+	private MasterSitemap sitemap;
 	private Class<? extends V7View> defaultView;
 	private I18NKey<?> defaultKey;
 	private final Set<String> missingViewClasses;
@@ -60,7 +58,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
 	private StringBuilder report;
 
 	@Inject
-	protected DefaultSitemapChecker(Sitemap sitemap, CurrentLocale currentLocale) {
+	protected DefaultSitemapChecker(MasterSitemap sitemap, CurrentLocale currentLocale) {
 		super();
 		this.sitemap = sitemap;
 		this.currentLocale = currentLocale;
@@ -70,11 +68,11 @@ public class DefaultSitemapChecker implements SitemapChecker {
 		redirectLoops = new HashSet<>();
 	}
 
-	public Sitemap getSitemap() {
+	public MasterSitemap getSitemap() {
 		return sitemap;
 	}
 
-	public void setSitemap(Sitemap sitemap) {
+	public void setSitemap(MasterSitemap sitemap) {
 		this.sitemap = sitemap;
 	}
 
@@ -85,9 +83,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
 	public void check() {
 		// do this first, because a loop will cause the main check to fail
 		redirectCheck();
-		Locale locale = currentLocale.getLocale();
-		Collator collator = Collator.getInstance(locale);
-		for (SitemapNode node : sitemap.getAllNodes()) {
+		for (MasterSitemapNode node : sitemap.getAllNodes()) {
 			String nodeUri = sitemap.uri(node);
 			log.debug("Checking {}", nodeUri);
 
@@ -104,7 +100,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
 
 				if (node.getLabelKey() == null) {
 					if (defaultKey != null) {
-						node.setLabelKey(defaultKey, locale, collator);
+						node.setLabelKey(defaultKey);
 					} else {
 						missingLabelKeys.add(nodeUri);
 					}
@@ -116,14 +112,14 @@ public class DefaultSitemapChecker implements SitemapChecker {
 			} else {
 				// if redirected, take the accessControlPermission from the redirect target
 				// note: Sitemap allows for multiple levels of redirect
-				SitemapNode targetNode = sitemap.nodeFor(sitemap.getRedirectPageFor(nodeUri));
+				MasterSitemapNode targetNode = sitemap.nodeFor(sitemap.getRedirectPageFor(nodeUri));
 				node.setPageAccessControl(targetNode.getPageAccessControl());
 
 				// if redirect is from parent to child, the parent must have a label key, or it cannot display, in a
 				// UserNavigationTree for example. Easiest way to check is to take the target node, get the chain
 				// of nodes 'above' it, then ensure they all have a label key
-				List<SitemapNode> nodeChainForTarget = sitemap.nodeChainFor(targetNode);
-				for (SitemapNode n : nodeChainForTarget) {
+				List<MasterSitemapNode> nodeChainForTarget = sitemap.nodeChainFor(targetNode);
+				for (MasterSitemapNode n : nodeChainForTarget) {
 					if (n.getLabelKey() == null) {
 						missingLabelKeys.add(sitemap.uri(n));
 					}

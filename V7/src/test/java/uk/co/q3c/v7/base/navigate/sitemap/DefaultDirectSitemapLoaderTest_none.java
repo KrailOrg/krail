@@ -44,7 +44,7 @@ public class DefaultDirectSitemapLoaderTest_none {
 	DefaultDirectSitemapLoader loader;
 
 	@Inject
-	Sitemap sitemap;
+	MasterSitemap sitemap;
 
 	@Test
 	public void load() {

@@ -80,4 +80,10 @@ public class DefaultCurrentLocale implements CurrentLocale {
 
 	}
 
+	@Override
+	public void removeAllListeners() {
+		listeners.clear();
+
+	}
+
 }

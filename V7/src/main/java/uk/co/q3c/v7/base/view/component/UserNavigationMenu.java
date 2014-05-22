@@ -15,16 +15,14 @@ package uk.co.q3c.v7.base.view.component;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.navigate.sitemap.NodeSorter;
-import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.user.opt.UserOption;
@@ -40,7 +38,7 @@ import com.vaadin.ui.MenuBar;
 public class UserNavigationMenu extends MenuBar implements ApplicationMenu, UserStatusListener, LocaleChangeListener {
 	private static Logger log = LoggerFactory.getLogger(UserNavigationMenu.class);
 	public static final String sortedOpt = "sorted";
-	private final Sitemap sitemap;
+	private final UserSitemap userSitemap;
 	private final V7Navigator navigator;
 	private final SubjectProvider subjectProvider;
 	private final PageAccessController pageAccessController;
@@ -49,11 +47,11 @@ public class UserNavigationMenu extends MenuBar implements ApplicationMenu, User
 	private final Translate translate;
 
 	@Inject
-	protected UserNavigationMenu(Sitemap sitemap, V7Navigator navigator, UserOption userOption,
+	protected UserNavigationMenu(UserSitemap sitemap, V7Navigator navigator, UserOption userOption,
 			SubjectProvider subjectProvider, PageAccessController pageAccessController, UserStatus userStatus,
 			CurrentLocale currentLocale, Translate translate) {
 		super();
-		this.sitemap = sitemap;
+		this.userSitemap = sitemap;
 		this.navigator = navigator;
 		this.subjectProvider = subjectProvider;
 		this.pageAccessController = pageAccessController;
@@ -68,26 +66,19 @@ public class UserNavigationMenu extends MenuBar implements ApplicationMenu, User
 
 	private void build() {
 		this.removeItems();
-		List<SitemapNode> roots = sitemap.getRoots();
+		List<UserSitemapNode> roots = userSitemap.getRoots();
 
-		// which order, sorted or insertion?
-		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, true);
-		new NodeSorter(roots, sorted).sort();
+		for (UserSitemapNode node : roots) {
+			if (node.getLabelKey() != StandardPageKey.Login && node.getLabelKey() != StandardPageKey.Logout) {
 
-		Subject subject = subjectProvider.get();
-		for (SitemapNode node : roots) {
-			if (pageAccessController.isAuthorised(subject, node)) {
-				if (node.getLabelKey() != StandardPageKey.Login && node.getLabelKey() != StandardPageKey.Logout) {
-
-					Command command = null;
-					// we only attach a command if this is the last item in the chain
-					if (sitemap.getChildCount(node) == 0) {
-						command = new NavigationCommand(navigator, node);
-					}
-					String caption = translate.from(node.getLabelKey());
-					MenuItem item = this.addItem(caption, command);
-					addSubItems(item, node);
+				Command command = null;
+				// we only attach a command if this is the last item in the chain
+				if (userSitemap.getChildCount(node) == 0) {
+					command = new NavigationCommand(navigator, node);
 				}
+				String caption = translate.from(node.getLabelKey());
+				MenuItem item = this.addItem(caption, command);
+				addSubItems(item, node);
 			}
 		}
 
@@ -104,25 +95,18 @@ public class UserNavigationMenu extends MenuBar implements ApplicationMenu, User
 	 * @param parentNode
 	 * @param childNode
 	 */
-	private void addSubItems(MenuItem item, SitemapNode node) {
-		List<SitemapNode> children = sitemap.getChildren(node);
+	private void addSubItems(MenuItem item, UserSitemapNode node) {
+		List<UserSitemapNode> children = userSitemap.getChildren(node);
 
-		// which order, sorted or insertion?
-		new NodeSorter(children, sorted).sort();
-
-		Subject subject = subjectProvider.get();
-
-		for (SitemapNode childNode : children) {
-			if (pageAccessController.isAuthorised(subject, childNode)) {
-				Command command = null;
-				// we only attach a command if this is the last item in the chain
-				if (sitemap.getChildCount(childNode) == 0) {
-					command = new NavigationCommand(navigator, childNode);
-				}
-				String caption = translate.from(childNode.getLabelKey());
-				MenuItem subItem = item.addItem(caption, command);
-				addSubItems(subItem, childNode);
+		for (UserSitemapNode childNode : children) {
+			Command command = null;
+			// we only attach a command if this is the last item in the chain
+			if (userSitemap.getChildCount(childNode) == 0) {
+				command = new NavigationCommand(navigator, childNode);
 			}
+			String caption = translate.from(childNode.getLabelKey());
+			MenuItem subItem = item.addItem(caption, command);
+			addSubItems(subItem, childNode);
 		}
 	}
 
