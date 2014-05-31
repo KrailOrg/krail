@@ -33,6 +33,7 @@ public class Labels_de extends Labels {
 			.put(LabelKey.Error,"Fehler")
 			.put(LabelKey.First_Name, "Vorname")
 			.put(LabelKey.Guest,"Gast")
+			.put(LabelKey.Home_Page, "Startseite")
 			.put(LabelKey.Last_Name, "Nachname")
 			.put(LabelKey.Log_In,"Einloggen")
 			.put(LabelKey.Message_Box,"Nachricht Feld")

@@ -45,7 +45,7 @@ public class AnnotationSitemapModuleTest {
 
 		@Override
 		protected void define() {
-			addEntry("uk.co.q3c.v7.base.navigate", LabelKey.Home);
+			addEntry("uk.co.q3c.v7.base.navigate", LabelKey.Home_Page);
 			addEntry("fixture", DescriptionKey.Confirm_Ok);
 		}
 
@@ -70,7 +70,7 @@ public class AnnotationSitemapModuleTest {
 		// then
 
 		assertThat(sitemapEntries).hasSize(3);
-		assertThat(sitemapEntries.get("uk.co.q3c.v7.base.navigate").getLabelSample()).isEqualTo(LabelKey.Home);
+		assertThat(sitemapEntries.get("uk.co.q3c.v7.base.navigate").getLabelSample()).isEqualTo(LabelKey.Home_Page);
 		assertThat(sitemapEntries.get("fixture").getLabelSample()).isEqualTo(DescriptionKey.Confirm_Ok);
 		assertThat(sitemapEntries.get("fixture1").getLabelSample()).isEqualTo(TestLabelKey.Login);
 	}

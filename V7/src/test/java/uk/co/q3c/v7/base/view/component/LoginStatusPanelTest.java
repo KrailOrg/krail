@@ -16,6 +16,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Locale;
+
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +31,7 @@ import uk.co.q3c.v7.base.shiro.DefaultSubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.SubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.user.status.UserStatus;
+import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -62,8 +65,12 @@ public class LoginStatusPanelTest {
 	@Inject
 	Translate translate;
 
+	@Inject
+	CurrentLocale currentLocale;
+
 	@Before
 	public void setup() {
+		currentLocale.setLocale(Locale.UK);
 		when(subjectProvider.get()).thenReturn(subject);
 		subjectIdentifier = new DefaultSubjectIdentifier(subjectProvider, translate);
 

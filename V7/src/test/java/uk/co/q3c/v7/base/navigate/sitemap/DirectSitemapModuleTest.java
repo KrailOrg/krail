@@ -71,7 +71,7 @@ public class DirectSitemapModuleTest {
 
 		@Override
 		protected void define() {
-			addEntry("public/home", PublicHomeView.class, LabelKey.Home, PageAccessControl.PUBLIC);
+			addEntry("public/home", PublicHomeView.class, LabelKey.Home_Page, PageAccessControl.PUBLIC);
 			addEntry("public/login", LoginView.class, LabelKey.Log_In, PageAccessControl.GUEST);
 		}
 
@@ -95,7 +95,7 @@ public class DirectSitemapModuleTest {
 		entry = map.get("public/home");
 		assertThat(entry.getViewClass()).isEqualTo(PublicHomeView.class);
 		assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
-		assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Home);
+		assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Home_Page);
 		assertThat(entry.getRoles()).isNullOrEmpty();
 
 		entry = map.get("public/login");

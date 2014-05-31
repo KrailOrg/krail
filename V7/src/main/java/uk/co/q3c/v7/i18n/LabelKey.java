@@ -33,7 +33,7 @@ public enum LabelKey implements I18NKey<Labels> {
 	Field,
 	First_Name,
 	Guest,
-	Home,
+	Home_Page,
 	Invalid_Page,
 	Last_Name,
 	Log_In,
