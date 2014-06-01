@@ -115,17 +115,18 @@ public class DefaultV7NavigatorTest {
 		when(scopedUI.getPage()).thenReturn(browserPage);
 		when(errorViewProvider.get()).thenReturn(errorView);
 		when(subjectProvider.get()).thenReturn(subject);
+		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
 
 		CurrentInstance.set(UI.class, scopedUI);
+		userSitemap.createNodeSet(1);
+		navigator = createNavigator();
 	}
 
 	@Test
 	public void logout() {
 
 		// given
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
+
 		// when
 		navigator.navigateTo(StandardPageKey.Logout);
 		// then
@@ -136,9 +137,6 @@ public class DefaultV7NavigatorTest {
 	@Test
 	public void login() {
 		// given
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 		// when
 		navigator.navigateTo(userSitemap.loginURI);
 		// then
@@ -150,11 +148,7 @@ public class DefaultV7NavigatorTest {
 	public void loginSuccessFul_toPreviousView() {
 
 		// given
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
-		CurrentInstance.set(UI.class, scopedUI);
 		// when
 		navigator.navigateTo(userSitemap.public2URI);
 		navigator.navigateTo(StandardPageKey.Login);
@@ -170,11 +164,7 @@ public class DefaultV7NavigatorTest {
 	public void loginSuccessFul_noPreviousView() {
 
 		// given
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
-		CurrentInstance.set(UI.class, scopedUI);
 		// when
 		navigator.navigateTo(StandardPageKey.Login);
 		assertThat(navigator.getCurrentView()).isInstanceOf(TestLoginView.class);
@@ -192,9 +182,6 @@ public class DefaultV7NavigatorTest {
 	public void navigateTo() {
 
 		// given
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 		// when
 		navigator.navigateTo(userSitemap.public2URI);
 		// then
@@ -209,11 +196,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page1 = "";
 		String fragment1 = page1 + "/id=2/age=5";
-
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
 		userSitemap.setNodeFor("public/home/id=2/age=5", userSitemap.publicHomeNode);
-		navigator = createNavigator();
 
 		// when
 		navigator.navigateTo(fragment1);
@@ -227,10 +210,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view3";
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
 		userSitemap.addRedirect(page);
-		navigator = createNavigator();
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -241,10 +221,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view3";
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
 		userSitemap.addRedirect(page);
-		navigator = createNavigator();
 		// when
 		try {
 			navigator.navigateTo(page);
@@ -259,9 +236,6 @@ public class DefaultV7NavigatorTest {
 	public void getNavigationState() {
 
 		// given
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 		// when
 		navigator.navigateTo(userSitemap.public2URI);
 		// then
@@ -275,11 +249,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page1 = "public/2";
 		String fragment1 = page1 + "/id=2/age=5";
-
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
 		userSitemap.setNodeFor("public/2/id=2/age=5", userSitemap.publicHomeNode);
-		navigator = createNavigator();
 		// when
 		navigator.navigateTo(fragment1);
 		// then
@@ -291,9 +261,6 @@ public class DefaultV7NavigatorTest {
 	public void navigateToNode() {
 
 		// given
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 		// when
 		navigator.navigateTo(userSitemap.public1Node);
 		// then
@@ -305,11 +272,8 @@ public class DefaultV7NavigatorTest {
 	public void currentAndPreviousViews_andClearHistory() {
 
 		// given
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
 		userSitemap.setNodeFor("public/1/id=1", userSitemap.public1Node);
 		userSitemap.setNodeFor("public/2/id=2", userSitemap.public2Node);
-		navigator = createNavigator();
 
 		String page1 = userSitemap.public1URI;
 		String fragment1 = page1 + "/id=1";
@@ -362,9 +326,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		// need to return true, or first listener will block the second
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(true);
@@ -385,9 +346,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		// to block second and subsequent
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(false);
@@ -408,11 +366,8 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = "wiggly";
 		String page2 = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		userSitemap.addRedirect(page, page2);
-		navigator = createNavigator();
 
+		userSitemap.addRedirect(page, page2);
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -425,9 +380,6 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page = userSitemap.public2URI;
 		NavigationState navigationState = uriHandler.navigationState(page);
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		// when
 		navigator.navigateTo(navigationState);
@@ -440,9 +392,6 @@ public class DefaultV7NavigatorTest {
 	public void error() {
 
 		// given
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 		// when
 		navigator.error(new NullPointerException("test"));
 		// then
@@ -455,9 +404,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -472,9 +418,6 @@ public class DefaultV7NavigatorTest {
 
 		// given authenticated
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -500,9 +443,6 @@ public class DefaultV7NavigatorTest {
 	public void UAC_User_fail() {
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(false);
@@ -518,9 +458,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(false);
@@ -537,9 +474,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(true);
@@ -554,9 +488,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -571,9 +502,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -589,9 +517,6 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Authenticate_Fail() {
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(false);
@@ -606,9 +531,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -626,9 +548,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -644,9 +563,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
@@ -667,9 +583,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = userSitemap.public2URI;
-		userSitemap.createNodeSet(1);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
-		navigator = createNavigator();
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);

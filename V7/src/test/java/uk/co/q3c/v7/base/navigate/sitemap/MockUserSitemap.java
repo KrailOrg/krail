@@ -15,7 +15,10 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.text.CollationKey;
+import java.text.Collator;
 import java.util.Arrays;
+import java.util.List;
 
 import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -27,6 +30,7 @@ import uk.co.q3c.v7.i18n.TestLabelKey;
 
 import com.google.inject.Inject;
 
+import fixture.testviews2.OptionsView;
 import fixture.testviews2.TestLoginView;
 import fixture.testviews2.TestLogoutView;
 import fixture.testviews2.TestPrivateHomeView;
@@ -72,7 +76,27 @@ public class MockUserSitemap {
 	public Class<? extends V7View> public1ViewClass = View1.class;
 	public Class<? extends V7View> public2ViewClass = View2.class;
 	public Class<? extends V7View> private1ViewClass = View1.class;
-	public Class<? extends V7View> privateViewClass = View2.class;
+	public Class<? extends V7View> private2ViewClass = View2.class;
+
+	public UserSitemapNode aNode;
+	public String aURI = "public/a";
+	public Class<? extends V7View> aViewClass = View1.class;
+	public UserSitemapNode a1Node;
+	public String a1URI = "public/a/a1";
+	public Class<? extends V7View> a1ViewClass = View2.class;
+	public UserSitemapNode a11Node;
+	public String a11URI = "public/a/a1/a11";
+	public Class<? extends V7View> a11ViewClass = OptionsView.class;
+
+	public UserSitemapNode bNode;
+	public String bURI = "private/b";
+	public Class<? extends V7View> bViewClass = View1.class;
+	public UserSitemapNode b1Node;
+	public String b1URI = "private/b/b1";
+	public Class<? extends V7View> b1ViewClass = View2.class;
+	public UserSitemapNode b11Node;
+	public String b11URI = "private/b/b1/b11";
+	public Class<? extends V7View> b11ViewClass = OptionsView.class;
 
 	private final URIFragmentHandler uriHandler;
 
@@ -119,13 +143,16 @@ public class MockUserSitemap {
 			I18NKey<?> labelKey, String label, PageAccessControl pageAccessControl, String... roles) {
 
 		// not used yet, but may be needed
-		// Collator collator = Collator.getInstance();
-		// collationKey = collator.getCollationKey(label);
+		Collator collator = Collator.getInstance();
+		CollationKey collationKey = collator.getCollationKey(label);
 
 		MasterSitemapNode masterNode = new MasterSitemapNode(uriSegment, viewClass, labelKey);
 		UserSitemapNode node = new UserSitemapNode(masterNode);
 		masterNode.setPageAccessControl(pageAccessControl);
 		masterNode.setRoles(Arrays.asList(roles));
+
+		node.setCollationKey(collationKey);
+		node.setLabel(label);
 
 		createPage(fullURI, node);
 
@@ -136,17 +163,53 @@ public class MockUserSitemap {
 
 		switch (index) {
 		case 1:
-			public1Node = createNode(public1URI, "1", View1.class, TestLabelKey.View1, "View 1",
+			public1Node = createNode(public1URI, "1", public1ViewClass, TestLabelKey.View1, "View 1",
 					PageAccessControl.PUBLIC);
-			private1Node = createNode(private1URI, "1", View1.class, TestLabelKey.View1, "View 1",
+			private1Node = createNode(private1URI, "1", private1ViewClass, TestLabelKey.View1, "View 1",
 					PageAccessControl.PERMISSION);
-			public2Node = createNode(public2URI, "2", View2.class, TestLabelKey.View2, "View 2",
+			public2Node = createNode(public2URI, "2", public2ViewClass, TestLabelKey.View2, "View 2",
 					PageAccessControl.PUBLIC);
-			private2Node = createNode(private2URI, "2", View2.class, TestLabelKey.View2, "View 2",
+			private2Node = createNode(private2URI, "2", private2ViewClass, TestLabelKey.View2, "View 2",
 					PageAccessControl.PERMISSION);
+			break;
+		case 2:
+			aNode = createNode(aURI, "a", aViewClass, TestLabelKey.View1, "View 1", PageAccessControl.PUBLIC);
+			a1Node = createNode(a1URI, "a1", a1ViewClass, TestLabelKey.View2, "View 2", PageAccessControl.PUBLIC);
+			a11Node = createNode(a11URI, "a11", a11ViewClass, TestLabelKey.Opt, "Opt", PageAccessControl.PUBLIC);
+
+			addChild(aNode, a1Node);
+			addChild(a1Node, a11Node);
+
+			List<UserSitemapNode> aChain = Arrays.asList(new UserSitemapNode[] { aNode });
+			List<UserSitemapNode> a1Chain = Arrays.asList(new UserSitemapNode[] { aNode, a1Node });
+			List<UserSitemapNode> a11Chain = Arrays.asList(new UserSitemapNode[] { aNode, a1Node, a11Node });
+
+			when(userSitemap.nodeChainFor(aNode)).thenReturn(aChain);
+			when(userSitemap.nodeChainFor(a1Node)).thenReturn(a1Chain);
+			when(userSitemap.nodeChainFor(a11Node)).thenReturn(a11Chain);
+
+			bNode = createNode(bURI, "b", bViewClass, TestLabelKey.View1, "View 1", PageAccessControl.PUBLIC);
+			b1Node = createNode(b1URI, "b1", b1ViewClass, TestLabelKey.View2, "View 2", PageAccessControl.PUBLIC);
+			b11Node = createNode(b11URI, "b11", b1ViewClass, TestLabelKey.Opt, "OPt", PageAccessControl.PUBLIC);
+
+			addChild(bNode, b1Node);
+			addChild(b1Node, b11Node);
+
+			List<UserSitemapNode> bChain = Arrays.asList(new UserSitemapNode[] { bNode });
+			List<UserSitemapNode> b1Chain = Arrays.asList(new UserSitemapNode[] { bNode, b1Node });
+			List<UserSitemapNode> b11Chain = Arrays.asList(new UserSitemapNode[] { bNode, b1Node, b11Node });
+
+			when(userSitemap.nodeChainFor(bNode)).thenReturn(bChain);
+			when(userSitemap.nodeChainFor(b1Node)).thenReturn(b1Chain);
+			when(userSitemap.nodeChainFor(b11Node)).thenReturn(b11Chain);
 		}
 		createStandardPages();
 		addRedirect("");
+	}
+
+	private void addChild(UserSitemapNode parentNode, UserSitemapNode childNode) {
+		when(userSitemap.getParent(childNode)).thenReturn(parentNode);
+
 	}
 
 	/**
