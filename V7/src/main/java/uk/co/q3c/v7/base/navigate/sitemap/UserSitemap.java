@@ -21,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.BasicForest;
+import uk.co.q3c.util.SourceTreeWrapper_BasicForest;
+import uk.co.q3c.util.TargetTreeWrapper_BasicForest;
 import uk.co.q3c.util.TreeCopier;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -31,7 +33,6 @@ import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.LocaleChangeListener;
 import uk.co.q3c.v7.i18n.Translate;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
 /**
@@ -47,7 +48,7 @@ import com.google.inject.Inject;
 public class UserSitemap extends Sitemap<UserSitemapNode> implements LocaleChangeListener, UserStatusListener {
 	private static Logger log = LoggerFactory.getLogger(UserSitemap.class);
 
-	private final MasterSitemap masterSitemap;
+	private final Sitemap<MasterSitemapNode> masterSitemap;
 
 	private final UserOption userOption;
 
@@ -55,16 +56,20 @@ public class UserSitemap extends Sitemap<UserSitemapNode> implements LocaleChang
 
 	private final Translate translate;
 
-	private final UserSitemapNodeCreator nodeCreator;
+	private final UserSitemapNodeModifier nodeModifier;
+
+	private final UserSitemapCopyExtension copyExtension;
 
 	@Inject
 	public UserSitemap(MasterSitemap masterSitemap, UserOption userOption, Translate translate,
-			URIFragmentHandler uriHandler, CurrentLocale currentLocale, UserSitemapNodeCreator nodeCreator) {
+			URIFragmentHandler uriHandler, CurrentLocale currentLocale, UserSitemapNodeModifier nodeModifier,
+			UserSitemapCopyExtension copyExtension) {
 		super(uriHandler);
 		this.masterSitemap = masterSitemap;
 		this.userOption = userOption;
 		this.translate = translate;
-		this.nodeCreator = nodeCreator;
+		this.nodeModifier = nodeModifier;
+		this.copyExtension = copyExtension;
 		currentLocale.addListener(this);
 		build();
 	}
@@ -107,7 +112,6 @@ public class UserSitemap extends Sitemap<UserSitemapNode> implements LocaleChang
 		forest = new BasicForest<>();
 		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), UserOptionProperty.SORTED, true);
 		loadNodes();
-		loadStandardPages();
 		buildUriMap();
 		loadRedirects();
 	}
@@ -120,17 +124,17 @@ public class UserSitemap extends Sitemap<UserSitemapNode> implements LocaleChang
 
 	}
 
-	private void loadStandardPages() {
-		ImmutableMap<StandardPageKey, MasterSitemapNode> masterStdPages = masterSitemap.getStandardPages();
-		for (StandardPageKey key : masterStdPages.keySet()) {
-			MasterSitemapNode masterNode = masterSitemap.getStandardPages().get(key);
-			UserSitemapNode userNode = nodeCreator.create(masterNode);
-			if (userNode != null) {
-				standardPages.put(key, userNode);
-			}
-		}
-
-	}
+	// private void loadStandardPages() {
+	// ImmutableMap<StandardPageKey, MasterSitemapNode> masterStdPages = masterSitemap.getStandardPages();
+	// for (StandardPageKey key : masterStdPages.keySet()) {
+	// MasterSitemapNode masterNode = masterSitemap.getStandardPages().get(key);
+	// UserSitemapNode userNode = nodeCreator.create(masterNode);
+	// if (userNode != null) {
+	// standardPages.put(key, userNode);
+	// }
+	// }
+	//
+	// }
 
 	/**
 	 * Copies the redirects from the {@link MasterSitemap},. but only adds it to this {@link UserSitemap} if the target
@@ -147,10 +151,17 @@ public class UserSitemap extends Sitemap<UserSitemapNode> implements LocaleChang
 
 	}
 
+	/**
+	 * Loads nodes from {@link MasterSitemap}, including standard pages, using {@link TreeCopier}.
+	 */
 	private void loadNodes() {
-		TreeCopier<MasterSitemapNode, UserSitemapNode> copier = new TreeCopier<>(masterSitemap.getForest(),
-				this.getForest());
-		copier.setNodeCreator(nodeCreator);
+		TargetTreeWrapper_BasicForest<MasterSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_BasicForest<>(
+				getForest());
+		target.setNodeModifier(nodeModifier);
+		SourceTreeWrapper_BasicForest<MasterSitemapNode, UserSitemapNode> source = new SourceTreeWrapper_BasicForest<>(
+				masterSitemap.getForest());
+		TreeCopier<MasterSitemapNode, UserSitemapNode> copier = new TreeCopier<>(source, target);
+		copier.setExtension(copyExtension);
 		copier.copy();
 
 	}

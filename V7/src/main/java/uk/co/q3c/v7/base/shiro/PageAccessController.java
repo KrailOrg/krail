@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemapNode;
@@ -35,7 +33,6 @@ import com.google.inject.Inject;
  */
 public class PageAccessController {
 
-	private static Logger log = LoggerFactory.getLogger(PageAccessController.class);
 	private final MasterSitemap sitemap;
 
 	@Inject

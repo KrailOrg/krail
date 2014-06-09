@@ -73,7 +73,7 @@ public class DefaultFileSitemapLoaderTest2 {
 	DefaultFileSitemapLoader loader;
 
 	@Inject
-	MasterSitemap sitemap;
+	MasterSitemap masterSitemap;
 
 	@Before
 	public void setup() throws IOException {
@@ -93,7 +93,7 @@ public class DefaultFileSitemapLoaderTest2 {
 
 		// then
 
-		for (MasterSitemapNode node : sitemap.getAllNodes()) {
+		for (MasterSitemapNode node : masterSitemap.getAllNodes()) {
 			validateNode(node);
 		}
 
@@ -104,12 +104,12 @@ public class DefaultFileSitemapLoaderTest2 {
 	}
 
 	private void validateNode(MasterSitemapNode node) {
-		String uri = sitemap.uri(node);
+		String uri = masterSitemap.uri(node);
 		System.out.println("validating " + uri);
 		switch (uri) {
 
 		case "my-account":
-			assertThat(sitemap.getChildCount(node)).isEqualTo(3);
+			assertThat(masterSitemap.getChildCount(node)).isEqualTo(3);
 			assertThat(node.getUriSegment()).isEqualTo("my-account");
 			assertThat(node.getViewClass()).isEqualTo(My_AccountView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.My_Account);
@@ -118,7 +118,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			break;
 
 		case "my-account/transfers":
-			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
+			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("transfers");
 			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Transfers);
@@ -127,7 +127,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			break;
 
 		case "my-account/money-in-out":
-			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
+			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("money-in-out");
 			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.MoneyInOut);
@@ -136,7 +136,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			break;
 
 		case "my-account/options":
-			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
+			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("options");
 			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Opt);
@@ -144,7 +144,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.hasRoles()).isTrue();
 			break;
 		case "information":
-			assertThat(sitemap.getChildCount(node)).isEqualTo(3);
+			assertThat(masterSitemap.getChildCount(node)).isEqualTo(3);
 			assertThat(node.getUriSegment()).isEqualTo("information");
 			assertThat(node.getViewClass()).isEqualTo(null);
 			assertThat(node.getLabelKey()).isEqualTo(null);
@@ -152,7 +152,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.hasRoles()).isFalse();
 			break;
 		case "information/offers":
-			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
+			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("offers");
 			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.MoneyInOut);
@@ -160,7 +160,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.hasRoles()).isTrue();
 			break;
 		case "information/terms":
-			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
+			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("terms");
 			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
 			assertThat(node.getLabelKey()).isEqualTo(null);
@@ -168,7 +168,7 @@ public class DefaultFileSitemapLoaderTest2 {
 			assertThat(node.hasRoles()).isFalse();
 			break;
 		case "information/services":
-			assertThat(sitemap.getChildCount(node)).isEqualTo(0);
+			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
 			assertThat(node.getUriSegment()).isEqualTo("services");
 			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
 			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Opt);

@@ -143,7 +143,7 @@ public class DefaultFileSitemapLoaderTest {
 		assertThat(loader.getWarningCount()).isEqualTo(0);
 		assertThat(loader.getInfoCount()).isEqualTo(0);
 
-		MasterSitemap sitemap = loader.getSitemap();
+		Sitemap<MasterSitemapNode> sitemap = loader.getSitemap();
 		List<MasterSitemapNode> roots = sitemap.getRoots();
 		assertThat(roots.size()).isEqualTo(1);
 
@@ -430,7 +430,7 @@ public class DefaultFileSitemapLoaderTest {
 
 	}
 
-	private void validateNode(MasterSitemap sitemap, MasterSitemapNode node) {
+	private void validateNode(Sitemap<MasterSitemapNode> sitemap, MasterSitemapNode node) {
 		String uri = sitemap.uri(node);
 		switch (uri) {
 

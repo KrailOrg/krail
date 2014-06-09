@@ -184,7 +184,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 	}
 
 	@Override
-	public MasterSitemap getSitemap() {
+	public Sitemap<MasterSitemapNode> getSitemap() {
 		return sitemap;
 	}
 

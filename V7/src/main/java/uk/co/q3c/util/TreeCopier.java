@@ -12,39 +12,47 @@
  */
 package uk.co.q3c.util;
 
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Copies source tree to target tree, to a depth specified by {@link #setMaxDepth(int)}. Trees must implement
- * {@link TreeWrapper}, but this allows different tree implementations to be copied. Note that nodes are NOT cloned, the
- * copy is by reference. Sort order of the target nodes can be set using {@link #setSortComparator(Comparator)}. If a
- * target node is of a different type to the source node, {@link #setNodeCreator(NodeCreator)} with an implementation to
- * make the conversion. The default is simply returns a reference to the source node;
+ * {@link SourceTreeWrapper}, but this allows different tree implementations to be copied. Note that nodes are NOT
+ * cloned, the copy is by reference. Sort order of the target nodes can be set using
+ * {@link #setSortComparator(Comparator)}. If a target node is of a different type to the source node,
+ * {@link #setNodeModifier(NodeModifier)} with an implementation to make the conversion. The default is simply returns a
+ * reference to the source node;
  *
  * @author David Sowerby
  * @date 27 May 2014
  * @param <S>
+ *            source node type
  * @param <T>
+ *            target node type
  */
 public class TreeCopier<S, T> {
 
 	private static Logger log = LoggerFactory.getLogger(TreeCopier.class);
 
-	private final TreeWrapper<S> source;
-	private final TreeWrapper<T> target;
+	private final SourceTreeWrapper<S> source;
+	private final TargetTreeWrapper<S, T> target;
+	// We need this to keep a lookup - the target list is sorted before being
+	private final Map<S, T> nodeMap = new HashMap<>();
 	private int maxDepth = Integer.MAX_VALUE;
 	private boolean limitedDepth = false;
 	private Comparator<T> sortComparator;
-	private NodeCreator<S, T> nodeCreator;
 	private final LinkedList<TreeCopierFilter<S>> sourceFilters = new LinkedList<>();
+	private TreeCopierExtension<S, T> extension;
 
-	public TreeCopier(TreeWrapper<S> source, TreeWrapper<T> target) {
+	public TreeCopier(SourceTreeWrapper<S> source, TargetTreeWrapper<S, T> target) {
 		super();
 		this.source = source;
 		this.target = target;
@@ -86,38 +94,38 @@ public class TreeCopier<S, T> {
 		this.limitedDepth = limitedDepth;
 	}
 
-	public TreeWrapper<?> getSource() {
-		return source;
-	}
-
-	public TreeWrapper<?> getTarget() {
-		return target;
-	}
-
 	public void copy() {
 		loadNodeList(null, source.getRoots(), 1);
+		if (extension != null) {
+			extension.invoke(source, target, nodeMap);
+		}
 	}
 
 	private void loadNodeList(T parentNode, List<S> sourceNodeList, int level) {
-		List<T> targetNodeList = new LinkedList<>();
-		for (S node : sourceNodeList) {
-			if (passesFilter(node)) {
-				T targetNode = nodeCreator.create(node);
+
+		// create the source nodes using target.addNode for this set of children
+		// these are sorted according to sortComparator
+		SortedMap<T, S> targetNodeMap = new TreeMap<>(sortComparator);
+		for (S sourceNode : sourceNodeList) {
+			if (passesFilter(sourceNode)) {
+				T targetNode = target.addNode(parentNode, sourceNode);
 				if (targetNode != null) {
-					targetNodeList.add(targetNode);
+					targetNodeMap.put(targetNode, sourceNode);
+					// we need an easy way to get from source node to source node
+					// especially for the extension (if there is one)
+					nodeMap.put(sourceNode, targetNode);
 				}
 			}
 		}
 		// sort the list into the order determined by the comparator
-		if (sortComparator != null) {
-			log.debug("sorting list of nodes, using comparator");
-			Collections.sort(targetNodeList, sortComparator);
-		}
+		// if (sortComparator != null) {
+		// log.debug("sorting list of nodes, using comparator");
+		// Collections.sort(targetNodeMap, sortComparator);
+		// }
 
-		// then add them to the forest
-		for (T childNode : targetNodeList) {
-			target.addChild(parentNode, childNode);
-			List<S> subNodeList = source.getChildren(nodeCreator.sourceNodeFor(childNode));
+		// now they are sorted, drill down each, and add to the forest
+		for (T childNode : targetNodeMap.keySet()) {
+			List<S> subNodeList = source.getChildren(targetNodeMap.get(childNode));
 			// drill down to next level
 			if (subNodeList.size() > 0) {
 				if (!isLimitedDepth() || level < maxDepth) {
@@ -150,12 +158,12 @@ public class TreeCopier<S, T> {
 		this.sortComparator = sortComparator;
 	}
 
-	public NodeCreator<S, T> getNodeCreator() {
-		return nodeCreator;
+	public TreeCopierExtension<S, T> getExtension() {
+		return extension;
 	}
 
-	public void setNodeCreator(NodeCreator<S, T> nodeCreator) {
-		this.nodeCreator = nodeCreator;
+	public void setExtension(TreeCopierExtension<S, T> extension) {
+		this.extension = extension;
 	}
 
 }

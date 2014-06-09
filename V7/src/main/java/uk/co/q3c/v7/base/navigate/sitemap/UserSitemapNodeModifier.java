@@ -18,7 +18,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.util.NodeCreator;
+import uk.co.q3c.util.NodeModifier;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
@@ -27,8 +27,8 @@ import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 
-public class UserSitemapNodeCreator implements NodeCreator<MasterSitemapNode, UserSitemapNode> {
-	private static Logger log = LoggerFactory.getLogger(UserSitemapNodeCreator.class);
+public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, UserSitemapNode> {
+	private static Logger log = LoggerFactory.getLogger(UserSitemapNodeModifier.class);
 
 	private final Subject subject;
 	private final MasterSitemap masterSitemap;
@@ -37,7 +37,7 @@ public class UserSitemapNodeCreator implements NodeCreator<MasterSitemapNode, Us
 	private final Translate translate;
 
 	@Inject
-	public UserSitemapNodeCreator(SubjectProvider subjectProvider, CurrentLocale currentLocale,
+	public UserSitemapNodeModifier(SubjectProvider subjectProvider, CurrentLocale currentLocale,
 			MasterSitemap masterSitemap, PageAccessController pageAccessController, Translate translate) {
 		super();
 		this.subject = subjectProvider.get();
@@ -66,7 +66,7 @@ public class UserSitemapNodeCreator implements NodeCreator<MasterSitemapNode, Us
 	 * @return
 	 */
 	@Override
-	public UserSitemapNode create(MasterSitemapNode masterNode) {
+	public UserSitemapNode create(UserSitemapNode parentUserNode, MasterSitemapNode masterNode) {
 
 		log.debug("creating a node for master node {}", masterNode);
 		// if there is no labelKey (usually when page is redirected), cannot be shown
@@ -101,6 +101,23 @@ public class UserSitemapNodeCreator implements NodeCreator<MasterSitemapNode, Us
 	@Override
 	public MasterSitemapNode sourceNodeFor(UserSitemapNode target) {
 		return target.getMasterNode();
+	}
+
+	/**
+	 * Not used in this implementation
+	 */
+	@Override
+	public void setLeaf(UserSitemapNode targetNode, boolean isLeaf) {
+
+	}
+
+	/**
+	 * Not used in this implementation
+	 */
+
+	@Override
+	public void setCaption(UserSitemapNode targetNode, String caption) {
+
 	}
 
 }

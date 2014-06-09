@@ -36,6 +36,8 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultFileSitemapLoader;
 import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapLoader;
 import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.services.AbstractServiceI18N;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
@@ -129,7 +131,7 @@ public class UIScopeTest {
 		}
 
 		@Override
-		public MasterSitemap getSitemap() {
+		public Sitemap<MasterSitemapNode> getSitemap() {
 
 			return mock(MasterSitemap.class);
 		}

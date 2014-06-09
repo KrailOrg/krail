@@ -20,7 +20,7 @@ import edu.uci.ics.jung.graph.Tree;
  * @param <V>
  *            the type of object to be contained (the 'node'). Must implement equals
  */
-public class BasicForest<V> implements TreeWrapper<V> {
+public class BasicForest<V> {
 
 	private Forest<V, Integer> graph;
 	private int edgeCount = 0;
@@ -29,7 +29,6 @@ public class BasicForest<V> implements TreeWrapper<V> {
 		graph = new DelegateForest<V, Integer>();
 	}
 
-	@Override
 	public void addNode(V node) {
 		graph.addVertex(node);
 	}
@@ -45,7 +44,6 @@ public class BasicForest<V> implements TreeWrapper<V> {
 	 * @param parentNode
 	 * @param childNode
 	 */
-	@Override
 	public void addChild(V parentNode, V childNode) {
 		if (parentNode == null) {
 			addNode(childNode);
@@ -119,7 +117,6 @@ public class BasicForest<V> implements TreeWrapper<V> {
 		return found;
 	}
 
-	@Override
 	public List<V> getChildren(V parentNode) {
 		return new ArrayList<V>(graph.getChildren(parentNode));
 
@@ -205,7 +202,6 @@ public class BasicForest<V> implements TreeWrapper<V> {
 	 *
 	 * @return
 	 */
-	@Override
 	public List<V> getRoots() {
 		Collection<Tree<V, Integer>> t = graph.getTrees();
 		List<V> branchRoots = new ArrayList<V>();
@@ -234,12 +230,10 @@ public class BasicForest<V> implements TreeWrapper<V> {
 		}
 	}
 
-	@Override
 	public int getChildCount(V parentNode) {
 		return graph.getChildCount(parentNode);
 	}
 
-	@Override
 	public boolean hasChildren(V parentNode) {
 		return getChildCount(parentNode) > 0;
 	}
@@ -292,14 +286,6 @@ public class BasicForest<V> implements TreeWrapper<V> {
 
 	public void removeNode(V node) {
 		graph.removeVertex(node);
-	}
-
-	/**
-	 * Does nothing in this implementation of {@link TreeWrapper}
-	 */
-	@Override
-	public void setLeaf(V parentNode, boolean isLeaf) {
-
 	}
 
 }

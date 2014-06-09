@@ -140,10 +140,6 @@ public class MasterSitemap extends Sitemap<MasterSitemapNode> {
 		return report;
 	}
 
-	public void addStandardPage(StandardPageKey pageKey, MasterSitemapNode node) {
-		standardPages.put(pageKey, node);
-	}
-
 	@Override
 	protected void setId(MasterSitemapNode node) {
 		node.setId(nextNodeId());

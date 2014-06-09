@@ -21,31 +21,37 @@ import com.vaadin.ui.Tree;
  * common interface for utility operations such as copying a tree from, for example, a {@link BasicForest} to a Vaadin
  * Tree<br>
  * <br>
- * {@link BasicForest} already implements this interface <br>
- * <br>
- * Parameter 'V' it the node type
+ *
+ * Parameter 'N' it the node type
  *
  * @author David Sowerby
  * @date 26 May 2014
  */
-public interface TreeWrapper<V> {
+public interface SourceTreeWrapper<N> {
 
-	public abstract boolean hasChildren(V parentNode);
+	// public abstract boolean hasChildren(N parentNode);
 
-	public abstract int getChildCount(V parentNode);
+	// public abstract int getChildCount(N parentNode);
 
-	public abstract List<V> getRoots();
-
-	public abstract List<V> getChildren(V parentNode);
-
-	public abstract void addNode(V node);
-
-	public abstract void addChild(V parentNode, V childNode);
+	public abstract List<N> getRoots();
 
 	/**
-	 * Mark this node as not having any children. Not used by all implementations
+	 * Returns an empty list of there are no children. Implementations must not return null
+	 *
+	 * @param parentNode
+	 * @return
+	 */
+	public abstract List<N> getChildren(N parentNode);
+
+	// public abstract void addNode(N parentNode, N childNode);
+
+	/**
+	 * Called by {@link TreeCopier} to offer the chance to mark this node as not having any children. Not used by all
+	 * implementations
 	 *
 	 * @param isLeaf
 	 */
-	public abstract void setLeaf(V parentNode, boolean isLeaf);
+	// public abstract void setLeaf(N parentNode, boolean isLeaf);
+
+	// public boolean hasParent(N childNode);
 }

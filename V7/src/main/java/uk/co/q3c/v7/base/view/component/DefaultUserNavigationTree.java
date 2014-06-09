@@ -12,16 +12,15 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import uk.co.q3c.util.DefaultNodeCreator;
 import uk.co.q3c.util.ID;
+import uk.co.q3c.util.SourceTreeWrapper_BasicForest;
+import uk.co.q3c.util.TargetTreeWrapper_VaadinTree;
 import uk.co.q3c.util.TreeCopier;
-import uk.co.q3c.util.VaadinTreeWrapper;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
-import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNodeCaption;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
@@ -70,12 +69,13 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	private void loadNodes() {
 		int maxDepth = userOption.getOptionAsInt(this.getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, 1000);
 		this.removeAllItems();
-		VaadinTreeWrapper<UserSitemapNode> vtw = new VaadinTreeWrapper<>(this);
-		UserSitemapNodeCaption nodeCaption = new UserSitemapNodeCaption();
-		vtw.setItemCaption(nodeCaption);
-		TreeCopier<UserSitemapNode, UserSitemapNode> copier = new TreeCopier<>(userSitemap.getForest(), vtw);
+
+		SourceTreeWrapper_BasicForest<UserSitemapNode, UserSitemapNode> source = new SourceTreeWrapper_BasicForest<>(
+				userSitemap.getForest());
+		TargetTreeWrapper_VaadinTree<UserSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_VaadinTree<>(this);
+
+		TreeCopier<UserSitemapNode, UserSitemapNode> copier = new TreeCopier<>(source, target);
 		copier.setMaxDepth(maxDepth);
-		copier.setNodeCreator(new DefaultNodeCreator<UserSitemapNode>());
 		copier.addSourceFilter(new LogoutPageFilter());
 		copier.copy();
 	}

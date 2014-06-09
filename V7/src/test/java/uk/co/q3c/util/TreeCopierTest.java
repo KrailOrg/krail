@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Comparator;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.vaadin.ui.Tree;
@@ -47,15 +48,6 @@ public class TreeCopierTest {
 
 	}
 
-	class NodeTypeACaption implements VaadinTreeItemCaption<NodeTypeA> {
-
-		@Override
-		public String caption(NodeTypeA node) {
-			return node.ref;
-		}
-
-	}
-
 	class SourceFilter implements TreeCopierFilter<NodeTypeA> {
 
 		@Override
@@ -73,15 +65,27 @@ public class TreeCopierTest {
 	private NodeTypeA nodeB11;
 	private NodeTypeA nodeA2;
 	private NodeTypeA nodeA3;
+	private TreeCopier<NodeTypeA, NodeTypeA> copier;
+	private Tree vaadinTree;
+	private TargetTreeWrapper<NodeTypeA, NodeTypeA> target;
+	private SourceTreeWrapper<NodeTypeA> source;
+	private BasicForest<NodeTypeA> forest;
+
+	@Before
+	public void setup() {
+		forest = new BasicForest<>();
+		source = new SourceTreeWrapper_BasicForest<>(forest);
+
+		vaadinTree = new Tree();
+		target = new TargetTreeWrapper_VaadinTree<>(vaadinTree);
+		copier = new TreeCopier<>(source, target);
+		target.setNodeModifier(new DefaultNodeModifier<NodeTypeA, NodeTypeA>());
+	}
 
 	@Test
 	public void copySameNodeTypes_emptySource() {
 		// given
-		BasicForest<NodeTypeA> source = new BasicForest<>();
-		Tree vaadinTree = new Tree();
-		VaadinTreeWrapper<NodeTypeA> target = new VaadinTreeWrapper<>(vaadinTree);
-		TreeCopier<NodeTypeA, NodeTypeA> copier = new TreeCopier<>(source, target);
-		copier.setNodeCreator(new DefaultNodeCreator<NodeTypeA>());
+
 		// when
 		copier.copy();
 		// then
@@ -91,11 +95,6 @@ public class TreeCopierTest {
 	@Test
 	public void copySameNodeTypes_populatedSource() {
 		// given
-		BasicForest<NodeTypeA> source = new BasicForest<>();
-		Tree vaadinTree = new Tree();
-		VaadinTreeWrapper<NodeTypeA> target = new VaadinTreeWrapper<>(vaadinTree);
-		TreeCopier<NodeTypeA, NodeTypeA> copier = new TreeCopier<>(source, target);
-		copier.setNodeCreator(new DefaultNodeCreator<NodeTypeA>());
 		populateSource(source);
 		// when
 		copier.copy();
@@ -112,11 +111,12 @@ public class TreeCopierTest {
 	@Test
 	public void copySameNodeTypes_limitDepth() {
 		// given
-		BasicForest<NodeTypeA> source = new BasicForest<>();
+		BasicForest<NodeTypeA> forest = new BasicForest<>();
+		SourceTreeWrapper_BasicForest<NodeTypeA, NodeTypeA> source = new SourceTreeWrapper_BasicForest<>(forest);
 		Tree vaadinTree = new Tree();
-		VaadinTreeWrapper<NodeTypeA> target = new VaadinTreeWrapper<>(vaadinTree);
+		TargetTreeWrapper_VaadinTree<NodeTypeA, NodeTypeA> target = new TargetTreeWrapper_VaadinTree<>(vaadinTree);
 		TreeCopier<NodeTypeA, NodeTypeA> copier = new TreeCopier<>(source, target);
-		copier.setNodeCreator(new DefaultNodeCreator<NodeTypeA>());
+		target.setNodeModifier(new DefaultNodeModifier<NodeTypeA, NodeTypeA>());
 		populateSource(source);
 		copier.setMaxDepth(2);
 		// when
@@ -145,60 +145,51 @@ public class TreeCopierTest {
 	@Test
 	public void sorted() {
 		// given
-		BasicForest<NodeTypeA> source = new BasicForest<>();
-		Tree vaadinTree = new Tree();
-		VaadinTreeWrapper<NodeTypeA> target = new VaadinTreeWrapper<>(vaadinTree);
-		TreeCopier<NodeTypeA, NodeTypeA> copier = new TreeCopier<>(source, target);
-		copier.setNodeCreator(new DefaultNodeCreator<NodeTypeA>());
+
 		populateSource2(source);
 		copier.setSortComparator(new Sorter());
 		// when
 		copier.copy();
 		// then
-		List<NodeTypeA> nodes = target.getChildren(nodeA);
+		@SuppressWarnings("unchecked")
+		List<NodeTypeA> nodes = (List<NodeTypeA>) vaadinTree.getChildren(nodeA);
 		assertThat(nodes).containsExactly(nodeA1, nodeA3, nodeA2);
 	}
 
 	@Test
 	public void vaadinTree_to_BasicForest() {
 		// given
-		BasicForest<NodeTypeA> target = new BasicForest<>();
-		Tree vaadinTree = new Tree();
-		VaadinTreeWrapper<NodeTypeA> source = new VaadinTreeWrapper<>(vaadinTree);
-		TreeCopier<NodeTypeA, NodeTypeA> copier = new TreeCopier<>(source, target);
-		copier.setNodeCreator(new DefaultNodeCreator<NodeTypeA>());
+
 		populateSource(source);
 		copier.setMaxDepth(2);
 		// when
 		copier.copy();
 		// then
-		assertThat(target.getAllNodes()).isNotEmpty();
-		assertThat(target.getAllNodes()).containsOnly(nodeA, nodeA1, nodeB, nodeB1);
-		assertThat(target.getParent(nodeA1)).isEqualTo(nodeA);
-		assertThat(target.getParent(nodeB1)).isEqualTo(nodeB);
+		@SuppressWarnings("unchecked")
+		List<NodeTypeA> nodes = (List<NodeTypeA>) vaadinTree.getItemIds();
+		assertThat(nodes).isNotEmpty();
+		assertThat(nodes).containsOnly(nodeA, nodeA1, nodeB, nodeB1);
+		assertThat(vaadinTree.getParent(nodeA1)).isEqualTo(nodeA);
+		assertThat(vaadinTree.getParent(nodeB1)).isEqualTo(nodeB);
 
 		// given
-		target.clear();
+		vaadinTree.removeAllItems();
 		copier.setLimitedDepth(false);
 		// when
 		copier.copy();
 		// then
-		assertThat(target.getAllNodes()).hasSize(6);
-		assertThat(target.getParent(nodeA1)).isEqualTo(nodeA);
-		assertThat(target.getParent(nodeA11)).isEqualTo(nodeA1);
-		assertThat(target.getParent(nodeB1)).isEqualTo(nodeB);
-		assertThat(target.getParent(nodeB11)).isEqualTo(nodeB1);
+		@SuppressWarnings("unchecked")
+		List<NodeTypeA> nodes2 = (List<NodeTypeA>) vaadinTree.getItemIds();
+		assertThat(nodes2).hasSize(6);
+		assertThat(vaadinTree.getParent(nodeA1)).isEqualTo(nodeA);
+		assertThat(vaadinTree.getParent(nodeA11)).isEqualTo(nodeA1);
+		assertThat(vaadinTree.getParent(nodeB1)).isEqualTo(nodeB);
+		assertThat(vaadinTree.getParent(nodeB11)).isEqualTo(nodeB1);
 	}
 
 	@Test
 	public void sourceFilter() {
 		// given
-		BasicForest<NodeTypeA> source = new BasicForest<>();
-		Tree vaadinTree = new Tree();
-		VaadinTreeWrapper<NodeTypeA> target = new VaadinTreeWrapper<>(vaadinTree);
-		TreeCopier<NodeTypeA, NodeTypeA> copier = new TreeCopier<>(source, target);
-		copier.setNodeCreator(new DefaultNodeCreator<NodeTypeA>());
-		copier.addSourceFilter(new SourceFilter());
 		populateSource(source);
 		// when
 		copier.copy();
@@ -208,17 +199,17 @@ public class TreeCopierTest {
 		assertThat(result).containsOnly(nodeA, nodeA1, nodeA11, nodeB, nodeB1);
 	}
 
-	private void populateSource2(TreeWrapper<NodeTypeA> source) {
+	private void populateSource2(SourceTreeWrapper<NodeTypeA> source) {
 		populateSource(source);
 		nodeA2 = new NodeTypeA("z");
 		nodeA3 = new NodeTypeA("v");
 
-		source.addChild(nodeA, nodeA2);
-		source.addChild(nodeA, nodeA3);
+		forest.addChild(nodeA, nodeA2);
+		forest.addChild(nodeA, nodeA3);
 
 	}
 
-	private void populateSource(TreeWrapper<NodeTypeA> source) {
+	private void populateSource(SourceTreeWrapper<NodeTypeA> source) {
 		nodeA = new NodeTypeA("a");
 		nodeA1 = new NodeTypeA("a1");
 		nodeA11 = new NodeTypeA("a11");
@@ -226,10 +217,10 @@ public class TreeCopierTest {
 		nodeB1 = new NodeTypeA("b1");
 		nodeB11 = new NodeTypeA("b11");
 
-		source.addChild(nodeA, nodeA1);
-		source.addChild(nodeA1, nodeA11);
-		source.addChild(nodeB, nodeB1);
-		source.addChild(nodeB1, nodeB11);
+		forest.addChild(nodeA, nodeA1);
+		forest.addChild(nodeA1, nodeA11);
+		forest.addChild(nodeB, nodeB1);
+		forest.addChild(nodeB1, nodeB11);
 
 	}
 

@@ -30,6 +30,7 @@ import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.MockUserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
@@ -83,6 +84,9 @@ public class UserNavigationMenuTest {
 	UserStatus userStatus;
 
 	UserSitemap userSitemap;
+
+	@Inject
+	MockUserSitemap mus;
 
 	@Inject
 	Translate translate;

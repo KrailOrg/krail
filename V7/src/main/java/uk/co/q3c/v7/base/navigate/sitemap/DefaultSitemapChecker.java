@@ -54,14 +54,12 @@ public class DefaultSitemapChecker implements SitemapChecker {
 	private final Set<String> missingPageAccessControl;
 	private final Set<String> redirectLoops;
 
-	private final CurrentLocale currentLocale;
 	private StringBuilder report;
 
 	@Inject
 	protected DefaultSitemapChecker(MasterSitemap sitemap, CurrentLocale currentLocale) {
 		super();
 		this.sitemap = sitemap;
-		this.currentLocale = currentLocale;
 		missingViewClasses = new HashSet<>();
 		missingLabelKeys = new HashSet<>();
 		missingPageAccessControl = new HashSet<>();

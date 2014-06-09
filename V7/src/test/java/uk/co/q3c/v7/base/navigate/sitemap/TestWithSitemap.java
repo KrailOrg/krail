@@ -71,6 +71,9 @@ public abstract class TestWithSitemap {
 	@Mock
 	protected PageAccessController pageAccessController;
 
+	@Mock
+	protected UserSitemapCopyExtension extension;
+
 	protected MasterSitemapNode masterNode1;
 	protected MasterSitemapNode masterNode2;
 	protected MasterSitemapNode masterNode3;
@@ -230,9 +233,10 @@ public abstract class TestWithSitemap {
 	 * needed before calling this method
 	 */
 	protected void createUserSitemap() {
-		UserSitemapNodeCreator nodeCreator = new UserSitemapNodeCreator(subjectProvider, currentLocale, masterSitemap,
-				pageAccessController, translate);
-		userSitemap = new UserSitemap(masterSitemap, userOption, translate, uriHandler, currentLocale, nodeCreator);
+		UserSitemapNodeModifier nodeCreator = new UserSitemapNodeModifier(subjectProvider, currentLocale,
+				masterSitemap, pageAccessController, translate);
+		userSitemap = new UserSitemap(masterSitemap, userOption, translate, uriHandler, currentLocale, nodeCreator,
+				extension);
 
 		userNode1 = userSitemap.userNodeFor(masterNode1);
 		userNode2 = userSitemap.userNodeFor(masterNode2);

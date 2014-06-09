@@ -22,13 +22,11 @@ import com.google.inject.Inject;
 public class DefaultRealm extends AuthorizingRealm {
 
 	private final LoginAttemptLog loginAttemptLog;
-	private final MasterSitemap sitemap;
 
 	@Inject
-	protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher, MasterSitemap sitemap) {
+	protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher) {
 		super(matcher);
 		this.loginAttemptLog = loginAttemptLog;
-		this.sitemap = sitemap;
 		setCachingEnabled(false);
 	}
 
@@ -43,7 +41,7 @@ public class DefaultRealm extends AuthorizingRealm {
 	 * <br>
 	 * It does however demonstrate the use of {@link LoginAttemptLog} to track login attempts Authorises all users to
 	 * access the private pages of the {@link MasterSitemap}
-	 * 
+	 *
 	 * @see org.apache.shiro.realm.AuthorizingRealm#doGetAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection)
 	 */
 
@@ -78,9 +76,9 @@ public class DefaultRealm extends AuthorizingRealm {
 	 * <br>
 	 * You can provide your own Realm implementation by overriding {@link StandardShiroModule#bindRealms()}<br>
 	 * <br>
-	 * Authorises all users to access the private pages of the {@link MasterSitemap} (that is, all the pages in the 'private'
-	 * branch)
-	 * 
+	 * Authorises all users to access the private pages of the {@link MasterSitemap} (that is, all the pages in the
+	 * 'private' branch)
+	 *
 	 * @see org.apache.shiro.realm.AuthorizingRealm#doGetAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection)
 	 */
 
@@ -101,7 +99,7 @@ public class DefaultRealm extends AuthorizingRealm {
 
 	/**
 	 * This has been made public to enable testing
-	 * 
+	 *
 	 * @see org.apache.shiro.realm.AuthorizingRealm#getAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection)
 	 */
 	@Override

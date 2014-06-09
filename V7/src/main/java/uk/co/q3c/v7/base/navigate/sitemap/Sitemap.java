@@ -494,4 +494,8 @@ public abstract class Sitemap<T extends SitemapNode> {
 		return forest;
 	}
 
+	public void addStandardPage(StandardPageKey pageKey, T node) {
+		standardPages.put(pageKey, node);
+	}
+
 }

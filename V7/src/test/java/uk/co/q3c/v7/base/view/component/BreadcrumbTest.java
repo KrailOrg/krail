@@ -27,9 +27,9 @@ import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.MockUserSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.Sitemap;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
@@ -54,7 +54,7 @@ public class BreadcrumbTest {
 	CurrentLocale currentLocale;
 
 	@Mock
-	MasterSitemap sitemap;
+	Sitemap<MasterSitemapNode> sitemap;
 
 	@Inject
 	Translate translate;

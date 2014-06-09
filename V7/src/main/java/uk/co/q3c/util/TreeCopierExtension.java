@@ -12,7 +12,20 @@
  */
 package uk.co.q3c.util;
 
-public interface VaadinTreeItemCaption<T> {
+import java.util.Map;
 
-	public String caption(T node);
+/**
+ * Extends the functionality of {@link TreeCopier}, enabling further transformations to be carried out after the copy.
+ * has completed. {@link #invoke(SourceTreeWrapper, TargetTreeWrapper, Map)} is called by {@link TreeCopier} when the
+ * main copy has completed.
+ *
+ * @author David Sowerby
+ * @date 9 Jun 2014
+ * @param <S>
+ * @param <T>
+ */
+public interface TreeCopierExtension<S, T> {
+
+	public void invoke(SourceTreeWrapper<S> source, TargetTreeWrapper<S, T> target, Map<S, T> nodeMap);
+
 }
