@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.util;
 
+import java.util.Comparator;
+
 import com.vaadin.ui.Tree;
 
 /**
@@ -27,42 +29,43 @@ import com.vaadin.ui.Tree;
  */
 public interface TargetTreeWrapper<S, T> {
 
-	// public abstract boolean hasChildren(N parentNode);
-
-	// public abstract int getChildCount(N parentNode);
-
-	// public abstract List<N> getRoots();
-
-	/**
-	 * Returns an empty list if there are no children. Implementations must not return null
-	 *
-	 * @param parentNode
-	 * @return
-	 */
-	// public abstract List<N> getChildren(N parentNode);
-
 	/**
 	 * Creates a new target node based on {@code sourceChildNode}, and adds to to the {@code parentNode}. Returns the
-	 * new child target node
+	 * new child target node. Delegates to {@link NodeModifier#create(Object, Object)} if one is provided.
 	 *
 	 * @param parentNode
 	 *            the parent target node which will be the parent of the created target node. This can be null, if the
 	 *            new target node is to be a root.
 	 * @param sourceChildNode
 	 *            the source node on which the new target node is to be based. Cannot be null.
-	 * @return the new child target node. Can be null, in which case {@link TreeCopier} will ignore it.
+	 * @return the new child target node. Can be null, in which case {@link TreeCopy} will ignore it. However, if you
+	 *         want to omit certain source nodes, it may be better to use a {@link TreeCopyFilter}
 	 */
-	public T addNode(T parentNode, S sourceChildNode);
+	public T createNode(T parentNode, S sourceChildNode);
 
 	/**
-	 * Called by {@link TreeCopier} to offer the chance to mark this node as not having any children. Not used by all
+	 * Called by {@link TreeCopy} to offer the chance to mark this node as not having any children. Not used by all
 	 * implementations
 	 *
 	 * @param isLeaf
 	 */
 	public abstract void setLeaf(T node, boolean isLeaf);
 
-	public abstract void setCaptionReader(TreeNodeCaption<S> captionReader);
+	public abstract void setCaptionReader(CaptionReader<S> captionReader);
+
+	CaptionReader<S> getCaptionReader();
 
 	void setNodeModifier(NodeModifier<S, T> nodeModifier);
+
+	NodeModifier<S, T> getNodeModifier();
+
+	/**
+	 * Sorts the children of {@code parentNode}. {@code parentNode} can not be null, {@code comparator} may be null
+	 *
+	 * @param parentNode
+	 */
+	public void sort(T parentNode, Comparator<T> comparator);
+
+	void addChild(T parentNode, T childNode);
+
 }

@@ -20,6 +20,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.util.BasicForest;
 import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -30,13 +33,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 public abstract class Sitemap<T extends SitemapNode> {
-
+	private static Logger log = LoggerFactory.getLogger(Sitemap.class);
 	protected BasicForest<T> forest;
 	protected final URIFragmentHandler uriHandler;
 	protected final Map<String, T> uriMap = new LinkedHashMap<>();
 	protected final Map<StandardPageKey, T> standardPages = new HashMap<>();
 	// Uses LinkedHashMap to retain insertion order
 	protected final Map<String, String> redirects = new LinkedHashMap<>();
+	private boolean loaded;
 
 	protected Sitemap(URIFragmentHandler uriHandler) {
 		super();
@@ -496,6 +500,22 @@ public abstract class Sitemap<T extends SitemapNode> {
 
 	public void addStandardPage(StandardPageKey pageKey, T node) {
 		standardPages.put(pageKey, node);
+	}
+
+	public void clear() {
+		forest.clear();
+		standardPages.clear();
+		redirects.clear();
+		loaded = false;
+		log.debug("sitemap cleared");
+	}
+
+	public boolean isLoaded() {
+		return loaded;
+	}
+
+	public void setLoaded(boolean loaded) {
+		this.loaded = loaded;
 	}
 
 }

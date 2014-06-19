@@ -12,42 +12,29 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import uk.co.q3c.util.DefaultNodeModifier;
+import uk.co.q3c.util.SourceTreeWrapper;
 import uk.co.q3c.util.SourceTreeWrapper_BasicForest;
-import uk.co.q3c.util.TargetTreeWrapper_MenuBar;
+import uk.co.q3c.util.TargetTreeWrapper_VaadinTree;
 import uk.co.q3c.util.TreeCopy;
 import uk.co.q3c.util.UserSitemapNodeCaption;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 
-import com.google.inject.Inject;
-import com.vaadin.ui.MenuBar;
+public class UserNavigationTreeBuilder {
 
-public class UserNavigationMenu2 extends MenuBar implements ApplicationMenu {
-
+	private final TreeCopy<UserSitemapNode, UserSitemapNode> treeCopy;
 	private final UserSitemap userSitemap;
-	private final int maxDepth = 1000;
 
-	@Inject
-	protected UserNavigationMenu2(UserSitemap userSitemap) {
-		super();
+	protected UserNavigationTreeBuilder(UserSitemap userSitemap, UserNavigationTree userNavigationTree) {
 		this.userSitemap = userSitemap;
-		loadNodes();
-	}
+		userNavigationTree.clear();
 
-	private void loadNodes() {
-		this.removeItems();
-		SourceTreeWrapper_BasicForest<UserSitemapNode> source = new SourceTreeWrapper_BasicForest<>(
-				userSitemap.getForest());
-		TargetTreeWrapper_MenuBar<UserSitemapNode> target = new TargetTreeWrapper_MenuBar<>(this);
-		UserSitemapNodeCaption nodeCaptionReader = new UserSitemapNodeCaption();
-		target.setCaptionReader(nodeCaptionReader);
-		target.setNodeModifier(new DefaultNodeModifier<UserSitemapNode, MenuItem>());
-
-		TreeCopy<UserSitemapNode, MenuItem> copy = new TreeCopy<>(source, target);
+		SourceTreeWrapper<UserSitemapNode> source = new SourceTreeWrapper_BasicForest<>(userSitemap.getForest());
+		TargetTreeWrapper_VaadinTree<UserSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_VaadinTree<>(
+				userNavigationTree.getTree());
+		target.setCaptionReader(new UserSitemapNodeCaption());
+		TreeCopy<UserSitemapNode, UserSitemapNode> copy = new TreeCopy<>(source, target);
 		copy.setMaxDepth(maxDepth);
-
 		copy.addSourceFilter(new LogoutPageFilter());
-		copy.copy();
 	}
 }

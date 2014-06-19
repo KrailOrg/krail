@@ -75,10 +75,11 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
 		}
 
 		// never show the logout page
-		if (masterNode.equals(masterSitemap.standardPageNode(StandardPageKey.Logout))) {
-			log.debug("Logout node is never shown, returning null");
-			return null;
-		}
+		// done by filter
+		// if (masterNode.equals(masterSitemap.standardPageNode(StandardPageKey.Logout))) {
+		// log.debug("Logout node is never shown, returning null");
+		// return null;
+		// }
 		// if the subject is already authenticated, don't show the login page
 		if (subject.isAuthenticated()) {
 			if (masterNode.equals(masterSitemap.standardPageNode(StandardPageKey.Login))) {
@@ -118,6 +119,11 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
 	@Override
 	public void setCaption(UserSitemapNode targetNode, String caption) {
 
+	}
+
+	@Override
+	public boolean attachOnCreate() {
+		return false;
 	}
 
 }

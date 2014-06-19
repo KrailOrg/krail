@@ -22,7 +22,7 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.Translate;
 
-public class UserSitemapNode implements SitemapNode {
+public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode> {
 
 	private final MasterSitemapNode masterNode;
 	private String label;
@@ -93,6 +93,11 @@ public class UserSitemapNode implements SitemapNode {
 	@Override
 	public String toString() {
 		return label;
+	}
+
+	@Override
+	public int compareTo(UserSitemapNode otherNode) {
+		return label.compareTo(otherNode.label);
 	}
 
 }

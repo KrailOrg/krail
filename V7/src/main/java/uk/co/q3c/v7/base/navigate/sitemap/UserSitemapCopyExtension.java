@@ -13,22 +13,24 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import uk.co.q3c.util.SourceTreeWrapper;
 import uk.co.q3c.util.TargetTreeWrapper;
-import uk.co.q3c.util.TreeCopierExtension;
+import uk.co.q3c.util.TreeCopy;
+import uk.co.q3c.util.TreeCopyExtension;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
 /**
- * Post processing for the copy process from {@link MasterSitemap} to {@link UserSitemap}. Copies the standard key nodes
- * from the master, translating to {@link UserSitemapNode}
+ * Post processing for the {@link TreeCopy} process from {@link MasterSitemap} to {@link UserSitemap}. Copies the
+ * standard key nodes from the master, translating to {@link UserSitemapNode}
  *
  * @author David Sowerby
  * @date 9 Jun 2014
  */
-public class UserSitemapCopyExtension implements TreeCopierExtension<MasterSitemapNode, UserSitemapNode> {
+public class UserSitemapCopyExtension implements TreeCopyExtension<MasterSitemapNode, UserSitemapNode> {
 
 	private final MasterSitemap masterSitemap;
 	private final UserSitemap userSitemap;
@@ -44,6 +46,13 @@ public class UserSitemapCopyExtension implements TreeCopierExtension<MasterSitem
 			TargetTreeWrapper<MasterSitemapNode, UserSitemapNode> target,
 			Map<MasterSitemapNode, UserSitemapNode> nodeMap) {
 
+		userSitemap.buildUriMap();
+		copyStandardPages(nodeMap);
+		loadRedirects();
+
+	}
+
+	private void copyStandardPages(Map<MasterSitemapNode, UserSitemapNode> nodeMap) {
 		ImmutableMap<StandardPageKey, MasterSitemapNode> sourcePages = masterSitemap.getStandardPages();
 
 		for (StandardPageKey spk : sourcePages.keySet()) {
@@ -52,6 +61,19 @@ public class UserSitemapCopyExtension implements TreeCopierExtension<MasterSitem
 			userSitemap.addStandardPage(spk, userNode);
 		}
 
+	}
+
+	/**
+	 * Copies the redirects from the {@link MasterSitemap},. but only adds it to this {@link UserSitemap} if the target
+	 * exists in this sitemap.
+	 */
+	private void loadRedirects() {
+		for (Entry<String, String> entry : masterSitemap.getRedirects().entrySet()) {
+			// only add the entry of the target exists
+			if (userSitemap.hasUri(entry.getValue())) {
+				userSitemap.addRedirect(entry.getKey(), entry.getValue());
+			}
+		}
 	}
 
 }

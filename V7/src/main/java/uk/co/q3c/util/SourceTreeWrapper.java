@@ -46,7 +46,7 @@ public interface SourceTreeWrapper<N> {
 	// public abstract void addNode(N parentNode, N childNode);
 
 	/**
-	 * Called by {@link TreeCopier} to offer the chance to mark this node as not having any children. Not used by all
+	 * Called by {@link TreeCopy} to offer the chance to mark this node as not having any children. Not used by all
 	 * implementations
 	 *
 	 * @param isLeaf

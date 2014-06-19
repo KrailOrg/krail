@@ -14,8 +14,8 @@ package uk.co.q3c.util;
 
 /**
  * A default implementation for {@link NodeModifier} which assumes that the source and target nodes are the same type.
- * This would be used by {@link TreeCopier} where the nodes in the target tree are just references to nodes in the
- * source tree.
+ * This would be used by {@link TreeCopy} where the nodes in the target tree are just references to nodes in the source
+ * tree.
  *
  * @author David Sowerby
  * @date 27 May 2014
@@ -40,14 +40,20 @@ public class DefaultNodeModifier<S, T> implements NodeModifier<S, T> {
 	 */
 	@Override
 	public void setLeaf(T targetNode, boolean isLeaf) {
-		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Does nothing by default
+	 */
+	@Override
+	public void setCaption(T targetNode, String caption) {
 
 	}
 
 	@Override
-	public void setCaption(T targetNode, String caption) {
-		// TODO Auto-generated method stub
-
+	public boolean attachOnCreate() {
+		return false;
 	}
 
 }

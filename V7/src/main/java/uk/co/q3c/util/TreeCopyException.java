@@ -12,6 +12,26 @@
  */
 package uk.co.q3c.util;
 
-public interface TreeNodeCaption<S> {
-	String getCaption(S sourceNode);
+public class TreeCopyException extends RuntimeException {
+
+	public TreeCopyException() {
+		super();
+	}
+
+	public TreeCopyException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public TreeCopyException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public TreeCopyException(String message) {
+		super(message);
+	}
+
+	public TreeCopyException(Throwable cause) {
+		super(cause);
+	}
+
 }

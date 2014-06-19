@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2013 David Sowerby
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -52,9 +52,9 @@ import fixture.testviews2.View2;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class,
-		ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class,
-		UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class,
-		StandardComponentModule.class, VaadinSessionScopeModule.class })
+		ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class, UserModule.class,
+		ApplicationConfigurationModule.class, StandardShiroModule.class, StandardComponentModule.class,
+		VaadinSessionScopeModule.class })
 public class DefaultDirectSitemapLoaderTest {
 
 	@Inject
@@ -64,7 +64,7 @@ public class DefaultDirectSitemapLoaderTest {
 	DefaultDirectSitemapLoader loader;
 
 	@Inject
-	Sitemap<MasterSitemapNode> sitemap;
+	MasterSitemap sitemap;
 
 	static String page1 = "private/page1";
 	static String page2 = "public/options";

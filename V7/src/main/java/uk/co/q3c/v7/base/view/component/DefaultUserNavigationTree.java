@@ -13,9 +13,6 @@
 package uk.co.q3c.v7.base.view.component;
 
 import uk.co.q3c.util.ID;
-import uk.co.q3c.util.SourceTreeWrapper_BasicForest;
-import uk.co.q3c.util.TargetTreeWrapper_VaadinTree;
-import uk.co.q3c.util.TreeCopier;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
@@ -58,26 +55,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		addValueChangeListener(this);
 		navigator.addViewChangeListener(this);
 		setId(ID.getId(this));
-		loadNodes();
 
-	}
-
-	/**
-	 * Loads all the nodes from the {@link #userSitemap}. The {@link #userSitemap} only contains authorised pages, so
-	 * there is no need to check for authorisation.
-	 */
-	private void loadNodes() {
-		int maxDepth = userOption.getOptionAsInt(this.getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, 1000);
-		this.removeAllItems();
-
-		SourceTreeWrapper_BasicForest<UserSitemapNode, UserSitemapNode> source = new SourceTreeWrapper_BasicForest<>(
-				userSitemap.getForest());
-		TargetTreeWrapper_VaadinTree<UserSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_VaadinTree<>(this);
-
-		TreeCopier<UserSitemapNode, UserSitemapNode> copier = new TreeCopier<>(source, target);
-		copier.setMaxDepth(maxDepth);
-		copier.addSourceFilter(new LogoutPageFilter());
-		copier.copy();
 	}
 
 	/**
@@ -91,6 +69,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		return !areChildrenAllowed(node);
 	}
 
+	@Override
 	public int getMaxDepth() {
 		return userOption.getOptionAsInt(this.getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, -1);
 	}
@@ -104,7 +83,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	public void setMaxDepth(int maxDepth) {
 		if (maxDepth != 0) {
 			userOption.setOption(this.getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, maxDepth);
-			loadNodes();
+			// loadNodes();
 		}
 	}
 
@@ -147,4 +126,13 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 
 	}
 
+	@Override
+	public Tree getTree() {
+		return this;
+	}
+
+	@Override
+	public void clear() {
+		removeAllItems();
+	}
 }

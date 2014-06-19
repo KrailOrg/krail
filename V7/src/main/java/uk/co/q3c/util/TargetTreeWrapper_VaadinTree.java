@@ -14,59 +14,52 @@ package uk.co.q3c.util;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Comparator;
+
 import com.vaadin.ui.Tree;
 
-public class TargetTreeWrapper_VaadinTree<S, T> implements TargetTreeWrapper<S, T> {
+public class TargetTreeWrapper_VaadinTree<S, T> extends TargetTreeWrapperBase<S, T> {
 
-	private NodeModifier<S, T> nodeModifier;// = new DefaultNodeModifier<S, T>();
 	private final Tree tree;
-	private TreeNodeCaption<S> captionReader;
 
 	public TargetTreeWrapper_VaadinTree(Tree tree) {
 		super();
 		this.tree = tree;
 	}
 
-	public NodeModifier<S, T> getNodeModifier() {
-		return nodeModifier;
-	}
-
-	@Override
-	public void setNodeModifier(NodeModifier<S, T> nodeModifier) {
-		this.nodeModifier = nodeModifier;
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
-	public T addNode(T parentNode, S sourceChildNode) {
+	public T createNode(T parentNode, S sourceChildNode) {
 		checkNotNull(sourceChildNode);
+		checkNotNull(getCaptionReader(), "a caption reader is needed, so that tree item captions are set");
 		T newTargetNode = null;
-		if (nodeModifier == null) {
+		if (getNodeModifier() == null) {
 			newTargetNode = (T) sourceChildNode;
 		} else {
-			newTargetNode = nodeModifier.create(parentNode, sourceChildNode);
+			newTargetNode = getNodeModifier().create(parentNode, sourceChildNode);
 		}
-		tree.setItemCaption(newTargetNode, captionReader.getCaption(sourceChildNode));
+		tree.setItemCaption(newTargetNode, getCaptionReader().getCaption(sourceChildNode));
 		return newTargetNode;
 	}
 
+	/**
+	 * Not used in this implementation
+	 */
+	@Override
+	public void sort(T parentNode, Comparator<T> comparator) {
+
+	}
+
+	@Override
 	public void addChild(T parentNode, T childNode) {
+		tree.addItem(childNode);
+		if (parentNode != null) {
+			if (tree.getItem(parentNode) == null) {
+				tree.addItem(parentNode);
+			}
+		}
 		tree.setParent(childNode, parentNode);
-	}
 
-	@Override
-	public void setLeaf(T node, boolean isLeaf) {
-		nodeModifier.setLeaf(node, isLeaf);
-	}
-
-	@Override
-	public void setCaptionReader(TreeNodeCaption<S> captionReader) {
-		this.captionReader = captionReader;
-
-	}
-
-	public TreeNodeCaption<S> getCaptionReader() {
-		return captionReader;
 	}
 
 }

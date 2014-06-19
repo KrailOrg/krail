@@ -15,6 +15,8 @@ package uk.co.q3c.v7.base.shiro;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.Locale;
+
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +26,7 @@ import org.mockito.Mock;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -49,6 +52,9 @@ public class DefaultSubjectIdentifierTest {
 	}
 
 	@Inject
+	CurrentLocale currentLocale;
+
+	@Inject
 	private Translate translate;
 
 	@Mock
@@ -61,6 +67,7 @@ public class DefaultSubjectIdentifierTest {
 
 	@Before
 	public void setup() {
+		currentLocale.setLocale(Locale.UK);
 		converter = new DefaultSubjectIdentifier(subjectPro, translate);
 		when(subjectPro.get()).thenReturn(subject);
 		principal = new TestPrincipal();

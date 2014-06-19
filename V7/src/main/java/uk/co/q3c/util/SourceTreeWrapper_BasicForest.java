@@ -14,23 +14,24 @@ package uk.co.q3c.util;
 
 import java.util.List;
 
-public class SourceTreeWrapper_BasicForest<S, T> implements SourceTreeWrapper<S> {
+public class SourceTreeWrapper_BasicForest<S> implements SourceTreeWrapper<S> {
 
 	private final BasicForest<S> forest;
-	private NodeModifier<S, T> nodeModifier = new DefaultNodeModifier<S, T>();
+
+	// private NodeModifier<S, T> nodeModifier = new DefaultNodeModifier<S, T>();
 
 	public SourceTreeWrapper_BasicForest(BasicForest<S> forest) {
 		super();
 		this.forest = forest;
 	}
 
-	public NodeModifier<S, T> getNodeModifier() {
-		return nodeModifier;
-	}
+	// public NodeModifier<S, T> getNodeModifier() {
+	// return nodeModifier;
+	// }
 
-	public void setNodeModifier(NodeModifier<S, T> nodeModifier) {
-		this.nodeModifier = nodeModifier;
-	}
+	// public void setNodeModifier(NodeModifier<S, T> nodeModifier) {
+	// this.nodeModifier = nodeModifier;
+	// }
 
 	@Override
 	public List<S> getRoots() {

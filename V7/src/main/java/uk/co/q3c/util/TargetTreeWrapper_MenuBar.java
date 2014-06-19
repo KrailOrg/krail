@@ -14,53 +14,44 @@ package uk.co.q3c.util;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 
-public class TargetTreeWrapper_MenuBar<S> implements TargetTreeWrapper<S, MenuItem> {
+public class TargetTreeWrapper_MenuBar<S> extends TargetTreeWrapperBase<S, MenuItem> {
 
 	private final MenuBar menuBar;
-	private NodeModifier<S, MenuItem> nodeModifier;
-	private TreeNodeCaption<S> captionReader;
 
 	public TargetTreeWrapper_MenuBar(MenuBar menuBar) {
 		super();
 		this.menuBar = menuBar;
 	}
 
-	public NodeModifier<S, MenuItem> getNodeModifier() {
-		return nodeModifier;
-	}
-
 	@Override
-	public void setNodeModifier(NodeModifier<S, MenuItem> nodeModifier) {
-		this.nodeModifier = nodeModifier;
-	}
-
-	@Override
-	public MenuItem addNode(MenuItem parentNode, S sourceChildNode) {
+	public MenuItem createNode(MenuItem parentNode, S sourceChildNode) {
 		checkNotNull(sourceChildNode);
-		checkNotNull(captionReader);
+		checkNotNull(getCaptionReader(), "This implementation requires a caption reader");
 		MenuItem newTargetNode = null;
 		if (parentNode == null) {
-			newTargetNode = menuBar.addItem(captionReader.getCaption(sourceChildNode), null);
+			newTargetNode = menuBar.addItem(getCaptionReader().getCaption(sourceChildNode), null);
 		} else {
-			newTargetNode = parentNode.addItem(captionReader.getCaption(sourceChildNode), null);
+			newTargetNode = parentNode.addItem(getCaptionReader().getCaption(sourceChildNode), null);
 		}
 		return newTargetNode;
 	}
 
-	/**
-	 * For the MenuBar, a leaf item should contain a command
-	 */
 	@Override
-	public void setLeaf(MenuItem node, boolean isLeaf) {
-		nodeModifier.setLeaf(node, isLeaf);
+	public void sort(MenuItem parentNode, Comparator<MenuItem> comparator) {
+		Collections.sort(parentNode.getChildren(), comparator);
+
 	}
 
 	@Override
-	public void setCaptionReader(TreeNodeCaption<S> captionReader) {
-		this.captionReader = captionReader;
+	public void addChild(MenuItem parentNode, MenuItem childNode) {
+		throw new TreeCopyException("addNode cannot be used with this implementation, node is added during creation");
+
 	}
 
 }

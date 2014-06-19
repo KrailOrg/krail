@@ -12,20 +12,30 @@
  */
 package uk.co.q3c.util;
 
-import java.util.Map;
+import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Extends the functionality of {@link TreeCopier}, enabling further transformations to be carried out after the copy.
- * has completed. {@link #invoke(SourceTreeWrapper, TargetTreeWrapper, Map)} is called by {@link TreeCopier} when the
- * main copy has completed.
- *
- * @author David Sowerby
- * @date 9 Jun 2014
- * @param <S>
- * @param <T>
- */
-public interface TreeCopierExtension<S, T> {
+import java.util.Collections;
 
-	public void invoke(SourceTreeWrapper<S> source, TargetTreeWrapper<S, T> target, Map<S, T> nodeMap);
+import org.junit.Test;
 
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
+
+public class MenuItemComparatorTest {
+
+	@Test
+	public void mi() {
+		// given
+
+		// when
+		MenuBar bar = new MenuBar();
+		MenuItem c = bar.addItem("c", null);
+		MenuItem a = bar.addItem("a", null);
+		MenuItem b = bar.addItem("b", null);
+
+		Collections.sort(bar.getItems(), new MenuItemComparator());
+		// then
+		assertThat(bar.getItems()).containsExactly(a, b, c);
+
+	}
 }

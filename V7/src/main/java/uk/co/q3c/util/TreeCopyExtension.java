@@ -10,17 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.view.component;
+package uk.co.q3c.util;
 
-import uk.co.q3c.util.TreeCopyFilter;
-import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
-import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
+import java.util.Map;
 
-public class LogoutPageFilter implements TreeCopyFilter<UserSitemapNode> {
+/**
+ * Extends the functionality of {@link TreeCopy}, enabling further transformations to be carried out after the copy.
+ * has completed. {@link #invoke(SourceTreeWrapper, TargetTreeWrapper, Map)} is called by {@link TreeCopy} when the
+ * main copy has completed.
+ *
+ * @author David Sowerby
+ * @date 9 Jun 2014
+ * @param <S>
+ * @param <T>
+ */
+public interface TreeCopyExtension<S, T> {
 
-	@Override
-	public boolean accept(UserSitemapNode node) {
-		return !node.getLabelKey().equals(StandardPageKey.Logout);
-	}
+	public void invoke(SourceTreeWrapper<S> source, TargetTreeWrapper<S, T> target, Map<S, T> nodeMap);
 
 }

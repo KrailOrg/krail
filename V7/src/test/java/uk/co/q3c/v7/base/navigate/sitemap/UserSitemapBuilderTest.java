@@ -17,12 +17,16 @@ import static org.mockito.Mockito.when;
 
 import java.util.Locale;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapBuilderTest.TestVaadinSessionScopeModule;
+import uk.co.q3c.v7.base.shiro.VaadinSessionProvider;
 import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
 import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
@@ -33,10 +37,31 @@ import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.server.VaadinSession;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
-public class UserSitemapTest extends TestWithSitemap {
+@GuiceContext({ I18NModule.class, TestVaadinSessionScopeModule.class })
+public class UserSitemapBuilderTest extends TestWithSitemap {
+
+	@Mock
+	VaadinSessionProvider mockVaadinSessionProvider;
+
+	@Mock
+	VaadinSession vaadinSession;
+
+	// Overrides the VaadinSeesionProvider so we can use a mock
+	public static class TestVaadinSessionScopeModule extends VaadinSessionScopeModule {
+		@Override
+		protected void bindVaadinSessionProvider() {
+		}
+	}
+
+	@Override
+	@Before
+	public void setup() {
+		super.setup();
+		when(mockVaadinSessionProvider.get()).thenReturn(vaadinSession);
+	}
 
 	@Test
 	public void pageNotAuthorised() {
@@ -109,7 +134,7 @@ public class UserSitemapTest extends TestWithSitemap {
 		// when
 		when(pageAccessController.isAuthorised(subject, masterNode2)).thenReturn(true);
 		masterSitemap.addRedirect("bb", "2");
-		userSitemap.userStatusChanged();
+		userSitemapBuilder.userStatusChanged();
 		// then
 		assertThat(userSitemap.uriMap.keySet()).containsOnly("1", "1/3", "2");
 		assertThat(userSitemap.getRedirects().keySet()).containsOnly("a", "bb");
@@ -130,10 +155,12 @@ public class UserSitemapTest extends TestWithSitemap {
 		// when
 		createUserSitemap();
 		// then
-		assertThat(userSitemap.standardPageNode(StandardPageKey.Login)).isNotNull();
-		assertThat(userSitemap.standardPageNode(StandardPageKey.Logout)).isNull(); // never shown
+		// never shown but needs to be in userSitemap to navigate to
+		assertThat(userSitemap.standardPageNode(StandardPageKey.Logout)).isNotNull();
 		assertThat(userSitemap.standardPageNode(StandardPageKey.Private_Home)).isNull();
 		assertThat(userSitemap.standardPageNode(StandardPageKey.Public_Home)).isNotNull();
+		assertThat(userSitemap.standardPageNode(StandardPageKey.Login)).isNotNull();
+
 	}
 
 	@Test
@@ -174,6 +201,19 @@ public class UserSitemapTest extends TestWithSitemap {
 				bind(UserOption.class).to(DefaultUserOption.class);
 				bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+
+			}
+
+		};
+	}
+
+	@ModuleProvider
+	protected AbstractModule moduleProvider2() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(VaadinSessionProvider.class).toInstance(mockVaadinSessionProvider);
 			}
 
 		};

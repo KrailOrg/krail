@@ -111,6 +111,13 @@ public class NavigationState implements Serializable {
 		dirty = true;
 	}
 
+	/**
+	 * Parameter order is maintained, so if the value of an existing parameter is changed, the parameter will remain in
+	 * its original position
+	 * 
+	 * @param key
+	 * @param value
+	 */
 	public void setParameterValue(String key, String value) {
 		addParameter(key, value);
 	}

@@ -14,6 +14,7 @@ package uk.co.q3c.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -22,7 +23,25 @@ import org.junit.Test;
 
 import com.vaadin.ui.Tree;
 
-public class TreeCopierTest {
+public class TreeCopyTest {
+
+	class NodeTypeAComparator implements Comparator<NodeTypeA> {
+
+		@Override
+		public int compare(NodeTypeA o1, NodeTypeA o2) {
+			return o1.ref.compareTo(o2.ref);
+		}
+
+	}
+
+	class TestCaptionReader implements CaptionReader<NodeTypeA> {
+
+		@Override
+		public String getCaption(NodeTypeA sourceNode) {
+			return sourceNode.ref;
+		}
+
+	}
 
 	class NodeTypeA {
 		String ref;
@@ -48,7 +67,7 @@ public class TreeCopierTest {
 
 	}
 
-	class SourceFilter implements TreeCopierFilter<NodeTypeA> {
+	class SourceFilter implements TreeCopyFilter<NodeTypeA> {
 
 		@Override
 		public boolean accept(NodeTypeA node) {
@@ -65,7 +84,7 @@ public class TreeCopierTest {
 	private NodeTypeA nodeB11;
 	private NodeTypeA nodeA2;
 	private NodeTypeA nodeA3;
-	private TreeCopier<NodeTypeA, NodeTypeA> copier;
+	private TreeCopy<NodeTypeA, NodeTypeA> copy;
 	private Tree vaadinTree;
 	private TargetTreeWrapper<NodeTypeA, NodeTypeA> target;
 	private SourceTreeWrapper<NodeTypeA> source;
@@ -78,8 +97,11 @@ public class TreeCopierTest {
 
 		vaadinTree = new Tree();
 		target = new TargetTreeWrapper_VaadinTree<>(vaadinTree);
-		copier = new TreeCopier<>(source, target);
+		copy = new TreeCopy<>(source, target);
+		copy.setTargetSortComparator(new NodeTypeAComparator());
 		target.setNodeModifier(new DefaultNodeModifier<NodeTypeA, NodeTypeA>());
+		target.setCaptionReader(new TestCaptionReader());
+
 	}
 
 	@Test
@@ -87,7 +109,7 @@ public class TreeCopierTest {
 		// given
 
 		// when
-		copier.copy();
+		copy.copy();
 		// then
 		assertThat(vaadinTree.getItemIds()).isEmpty();
 	}
@@ -97,7 +119,7 @@ public class TreeCopierTest {
 		// given
 		populateSource(source);
 		// when
-		copier.copy();
+		copy.copy();
 		// then
 		assertThat(vaadinTree.getItemIds()).isNotEmpty();
 		assertThat(vaadinTree.getItemIds()).hasSize(6);
@@ -111,16 +133,10 @@ public class TreeCopierTest {
 	@Test
 	public void copySameNodeTypes_limitDepth() {
 		// given
-		BasicForest<NodeTypeA> forest = new BasicForest<>();
-		SourceTreeWrapper_BasicForest<NodeTypeA, NodeTypeA> source = new SourceTreeWrapper_BasicForest<>(forest);
-		Tree vaadinTree = new Tree();
-		TargetTreeWrapper_VaadinTree<NodeTypeA, NodeTypeA> target = new TargetTreeWrapper_VaadinTree<>(vaadinTree);
-		TreeCopier<NodeTypeA, NodeTypeA> copier = new TreeCopier<>(source, target);
-		target.setNodeModifier(new DefaultNodeModifier<NodeTypeA, NodeTypeA>());
 		populateSource(source);
-		copier.setMaxDepth(2);
+		copy.setMaxDepth(2);
 		// when
-		copier.copy();
+		copy.copy();
 		// then
 		assertThat(vaadinTree.getItemIds()).isNotEmpty();
 		@SuppressWarnings("unchecked")
@@ -131,9 +147,9 @@ public class TreeCopierTest {
 
 		// given
 		vaadinTree.removeAllItems();
-		copier.setLimitedDepth(false);
+		copy.setLimitedDepth(false);
 		// when
-		copier.copy();
+		copy.copy();
 		// then
 		assertThat(vaadinTree.getItemIds()).hasSize(6);
 		assertThat(vaadinTree.getParent(nodeA1)).isEqualTo(nodeA);
@@ -147,12 +163,12 @@ public class TreeCopierTest {
 		// given
 
 		populateSource2(source);
-		copier.setSortComparator(new Sorter());
+		copy.setSourceSortComparator(new Sorter());
 		// when
-		copier.copy();
+		copy.copy();
 		// then
 		@SuppressWarnings("unchecked")
-		List<NodeTypeA> nodes = (List<NodeTypeA>) vaadinTree.getChildren(nodeA);
+		Collection<NodeTypeA> nodes = (Collection<NodeTypeA>) vaadinTree.getChildren(nodeA);
 		assertThat(nodes).containsExactly(nodeA1, nodeA3, nodeA2);
 	}
 
@@ -161,9 +177,9 @@ public class TreeCopierTest {
 		// given
 
 		populateSource(source);
-		copier.setMaxDepth(2);
+		copy.setMaxDepth(2);
 		// when
-		copier.copy();
+		copy.copy();
 		// then
 		@SuppressWarnings("unchecked")
 		List<NodeTypeA> nodes = (List<NodeTypeA>) vaadinTree.getItemIds();
@@ -174,9 +190,9 @@ public class TreeCopierTest {
 
 		// given
 		vaadinTree.removeAllItems();
-		copier.setLimitedDepth(false);
+		copy.setLimitedDepth(false);
 		// when
-		copier.copy();
+		copy.copy();
 		// then
 		@SuppressWarnings("unchecked")
 		List<NodeTypeA> nodes2 = (List<NodeTypeA>) vaadinTree.getItemIds();
@@ -191,8 +207,9 @@ public class TreeCopierTest {
 	public void sourceFilter() {
 		// given
 		populateSource(source);
+		copy.addSourceFilter(new SourceFilter());
 		// when
-		copier.copy();
+		copy.copy();
 		// then
 		@SuppressWarnings("unchecked")
 		List<NodeTypeA> result = (List<NodeTypeA>) vaadinTree.getItemIds();

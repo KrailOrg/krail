@@ -1,14 +1,13 @@
 package uk.co.q3c.v7.base.navigate;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-
-import com.google.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 
@@ -169,8 +168,8 @@ public class StrictURIFragmentHandlerTest {
 		navigationState.setParameterValue("id", "111"); // new
 		uriHandler.setUseBang(false);
 		// then
-		assertThat(navigationState.getParameterList()).containsOnly("a=23", "year=1970", "id=111");
-		assertThat(uriHandler.fragment(navigationState)).isEqualTo("view1/a=23/id=111/year=1970");
+		assertThat(navigationState.getParameterList()).containsExactly("a=23", "year=1970", "id=111");
+		assertThat(uriHandler.fragment(navigationState)).isEqualTo("view1/a=23/year=1970/id=111");
 
 	}
 

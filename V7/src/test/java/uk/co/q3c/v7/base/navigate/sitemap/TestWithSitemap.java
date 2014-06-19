@@ -71,8 +71,7 @@ public abstract class TestWithSitemap {
 	@Mock
 	protected PageAccessController pageAccessController;
 
-	@Mock
-	protected UserSitemapCopyExtension extension;
+	protected UserSitemapBuilder userSitemapBuilder;
 
 	protected MasterSitemapNode masterNode1;
 	protected MasterSitemapNode masterNode2;
@@ -233,10 +232,12 @@ public abstract class TestWithSitemap {
 	 * needed before calling this method
 	 */
 	protected void createUserSitemap() {
-		UserSitemapNodeModifier nodeCreator = new UserSitemapNodeModifier(subjectProvider, currentLocale,
+		userSitemap = new UserSitemap(userOption, translate, uriHandler, currentLocale);
+		UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
 				masterSitemap, pageAccessController, translate);
-		userSitemap = new UserSitemap(masterSitemap, userOption, translate, uriHandler, currentLocale, nodeCreator,
-				extension);
+		UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(masterSitemap, userSitemap);
+		userSitemapBuilder = new UserSitemapBuilder(masterSitemap, userSitemap, nodeModifier, copyExtension, userOption);
+		userSitemapBuilder.build();
 
 		userNode1 = userSitemap.userNodeFor(masterNode1);
 		userNode2 = userSitemap.userNodeFor(masterNode2);
@@ -260,6 +261,10 @@ public abstract class TestWithSitemap {
 		masterSitemap.addStandardPage(StandardPageKey.Logout, logoutNode);
 		masterSitemap.addStandardPage(StandardPageKey.Public_Home, publicHomeNode);
 		masterSitemap.addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
+		masterSitemap.addChild(masterSitemap.nodeFor("public"), publicHomeNode);
+		masterSitemap.addChild(masterSitemap.nodeFor("private"), privateHomeNode);
+		masterSitemap.addChild(null, loginNode);
+		masterSitemap.addChild(null, logoutNode);
 	}
 
 	@ModuleProvider

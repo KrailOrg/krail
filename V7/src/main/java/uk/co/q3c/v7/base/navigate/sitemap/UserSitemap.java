@@ -15,15 +15,11 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import java.text.Collator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.BasicForest;
-import uk.co.q3c.util.SourceTreeWrapper_BasicForest;
-import uk.co.q3c.util.TargetTreeWrapper_BasicForest;
-import uk.co.q3c.util.TreeCopier;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.user.opt.UserOption;
@@ -45,10 +41,8 @@ import com.google.inject.Inject;
  * @date 17 May 2014
  */
 @VaadinSessionScoped
-public class UserSitemap extends Sitemap<UserSitemapNode> implements LocaleChangeListener, UserStatusListener {
+public class UserSitemap extends Sitemap<UserSitemapNode> implements LocaleChangeListener {
 	private static Logger log = LoggerFactory.getLogger(UserSitemap.class);
-
-	private final Sitemap<MasterSitemapNode> masterSitemap;
 
 	private final UserOption userOption;
 
@@ -56,31 +50,24 @@ public class UserSitemap extends Sitemap<UserSitemapNode> implements LocaleChang
 
 	private final Translate translate;
 
-	private final UserSitemapNodeModifier nodeModifier;
-
-	private final UserSitemapCopyExtension copyExtension;
-
 	@Inject
-	public UserSitemap(MasterSitemap masterSitemap, UserOption userOption, Translate translate,
-			URIFragmentHandler uriHandler, CurrentLocale currentLocale, UserSitemapNodeModifier nodeModifier,
-			UserSitemapCopyExtension copyExtension) {
+	public UserSitemap(UserOption userOption, Translate translate, URIFragmentHandler uriHandler,
+			CurrentLocale currentLocale) {
 		super(uriHandler);
-		this.masterSitemap = masterSitemap;
 		this.userOption = userOption;
 		this.translate = translate;
-		this.nodeModifier = nodeModifier;
-		this.copyExtension = copyExtension;
 		currentLocale.addListener(this);
-		build();
+
 	}
 
 	/**
 	 * Iterates through contained nodes and resets the label and collation key properties to reflect a change in
 	 * {@link CurrentLocale}. There is no need to reload all the nodes, no change of page authorisation is dealt with
-	 * her - that is handled by {@link UserStatusListener#userStatusChanged()}
+	 * here - that is handled by {@link UserStatusListener#userStatusChanged()}
 	 */
 	@Override
 	public synchronized void localeChanged(Locale locale) {
+		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), UserOptionProperty.SORTED, true);
 		log.debug("responding to locale change to {}", locale);
 		BasicForest<UserSitemapNode> oldForest = forest;
 		forest = new BasicForest<>();
@@ -107,68 +94,12 @@ public class UserSitemap extends Sitemap<UserSitemapNode> implements LocaleChang
 		}
 	}
 
-	private void build() {
-		log.debug("building or rebuilding the map");
-		forest = new BasicForest<>();
-		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), UserOptionProperty.SORTED, true);
-		loadNodes();
-		buildUriMap();
-		loadRedirects();
-	}
-
-	private void buildUriMap() {
+	public synchronized void buildUriMap() {
 		uriMap.clear();
 		for (UserSitemapNode node : forest.getAllNodes()) {
 			uriMap.put(uri(node), node);
 		}
 
-	}
-
-	// private void loadStandardPages() {
-	// ImmutableMap<StandardPageKey, MasterSitemapNode> masterStdPages = masterSitemap.getStandardPages();
-	// for (StandardPageKey key : masterStdPages.keySet()) {
-	// MasterSitemapNode masterNode = masterSitemap.getStandardPages().get(key);
-	// UserSitemapNode userNode = nodeCreator.create(masterNode);
-	// if (userNode != null) {
-	// standardPages.put(key, userNode);
-	// }
-	// }
-	//
-	// }
-
-	/**
-	 * Copies the redirects from the {@link MasterSitemap},. but only adds it to this {@link UserSitemap} if the target
-	 * exists in this sitemap.
-	 */
-	private void loadRedirects() {
-		redirects.clear();
-		for (Entry<String, String> entry : masterSitemap.getRedirects().entrySet()) {
-			// only add the entry of the target exists
-			if (hasUri(entry.getValue())) {
-				redirects.put(entry.getKey(), entry.getValue());
-			}
-		}
-
-	}
-
-	/**
-	 * Loads nodes from {@link MasterSitemap}, including standard pages, using {@link TreeCopier}.
-	 */
-	private void loadNodes() {
-		TargetTreeWrapper_BasicForest<MasterSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_BasicForest<>(
-				getForest());
-		target.setNodeModifier(nodeModifier);
-		SourceTreeWrapper_BasicForest<MasterSitemapNode, UserSitemapNode> source = new SourceTreeWrapper_BasicForest<>(
-				masterSitemap.getForest());
-		TreeCopier<MasterSitemapNode, UserSitemapNode> copier = new TreeCopier<>(source, target);
-		copier.setExtension(copyExtension);
-		copier.copy();
-
-	}
-
-	@Override
-	public synchronized void userStatusChanged() {
-		build();
 	}
 
 	/**
@@ -179,7 +110,7 @@ public class UserSitemap extends Sitemap<UserSitemapNode> implements LocaleChang
 	 * @param masterNode
 	 * @return
 	 */
-	public UserSitemapNode userNodeFor(SitemapNode masterNode) {
+	public synchronized UserSitemapNode userNodeFor(SitemapNode masterNode) {
 		for (UserSitemapNode candidate : getAllNodes()) {
 			if (candidate.getMasterNode() == masterNode) {
 				return candidate;
@@ -203,4 +134,11 @@ public class UserSitemap extends Sitemap<UserSitemapNode> implements LocaleChang
 	protected void setId(UserSitemapNode node) {
 
 	}
+
+	@Override
+	public synchronized void setLoaded(boolean loaded) {
+		super.setLoaded(loaded);
+		buildUriMap();
+	}
+
 }

@@ -14,53 +14,41 @@ package uk.co.q3c.util;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class TargetTreeWrapper_BasicForest<S, T> implements TargetTreeWrapper<S, T> {
+import java.util.Comparator;
+
+public class TargetTreeWrapper_BasicForest<S, T> extends TargetTreeWrapperBase<S, T> {
 
 	private final BasicForest<T> forest;
-	private NodeModifier<S, T> nodeModifier;// = new DefaultNodeModifier<S, T>();
 
 	public TargetTreeWrapper_BasicForest(BasicForest<T> forest) {
 		super();
 		this.forest = forest;
 	}
 
-	public NodeModifier<S, T> getNodeModifier() {
-		return nodeModifier;
-	}
-
-	@Override
-	public void setNodeModifier(NodeModifier<S, T> nodeModifier) {
-		this.nodeModifier = nodeModifier;
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
-	public T addNode(T parentNode, S sourceChildNode) {
+	public T createNode(T parentNode, S sourceChildNode) {
 		checkNotNull(sourceChildNode);
 		T newTargetNode = null;
-		if (nodeModifier == null) {
+		if (getNodeModifier() == null) {
 			newTargetNode = (T) sourceChildNode;
 		} else {
-			newTargetNode = nodeModifier.create(parentNode, sourceChildNode);
+			newTargetNode = getNodeModifier().create(parentNode, sourceChildNode);
 		}
 		return newTargetNode;
-	}
-
-	public void addChild(T parentNode, T childNode) {
-		forest.addChild(parentNode, childNode);
-	}
-
-	@Override
-	public void setLeaf(T node, boolean isLeaf) {
-		nodeModifier.setLeaf(node, isLeaf);
 	}
 
 	/**
 	 * Not used in this implementation
 	 */
 	@Override
-	public void setCaptionReader(TreeNodeCaption<S> captionreader) {
+	public void sort(T parentNode, Comparator<T> comparator) {
 
+	}
+
+	@Override
+	public void addChild(T parentNode, T childNode) {
+		forest.addChild(parentNode, childNode);
 	}
 
 }

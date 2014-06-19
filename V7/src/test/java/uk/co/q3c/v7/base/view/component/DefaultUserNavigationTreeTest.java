@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.shiro.authz.Permission;
+import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,12 +35,14 @@ import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.navigate.sitemap.TestWithSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.MockUserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 import uk.co.q3c.v7.base.shiro.PagePermission;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
+import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 
 import com.google.inject.AbstractModule;
@@ -53,7 +56,19 @@ import com.vaadin.util.CurrentInstance;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, UIScopeModule.class, VaadinSessionScopeModule.class })
-public class DefaultUserNavigationTreeTest extends TestWithSitemap {
+public class DefaultUserNavigationTreeTest {
+
+	@Inject
+	MockUserSitemap userSitemap;
+
+	@Mock
+	Subject subject;
+
+	@Mock
+	SubjectProvider subjectProvider;
+
+	@Inject
+	CurrentLocale currentLocale;
 
 	@Mock
 	V7Navigator navigator;
@@ -67,10 +82,11 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 	@Mock
 	NavigationState navigationState;
 
-	@Override
 	@Before
 	public void setup() {
-		super.setup();
+		currentLocale.setLocale(Locale.UK);
+		when(subjectProvider.get()).thenReturn(subject);
+		userSitemap.createNodeSet(2);
 		when(subject.isPermitted(any(Permission.class))).thenReturn(true);
 		when(subject.isPermitted(anyString())).thenReturn(true);
 
@@ -84,9 +100,7 @@ public class DefaultUserNavigationTreeTest extends TestWithSitemap {
 	public void emptySitemap() {
 
 		// given
-		currentLocale.setLocale(Locale.UK);
-		buildMasterSitemap(0);
-		createUserSitemap();
+
 		// when
 		DefaultUserNavigationTree unt = newTree();
 		// then

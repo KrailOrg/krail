@@ -14,7 +14,7 @@ package uk.co.q3c.util;
 
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 
-public class UserSitemapNodeCaption implements TreeNodeCaption<UserSitemapNode> {
+public class UserSitemapNodeCaption implements CaptionReader<UserSitemapNode> {
 
 	@Override
 	public String getCaption(UserSitemapNode sourceNode) {
