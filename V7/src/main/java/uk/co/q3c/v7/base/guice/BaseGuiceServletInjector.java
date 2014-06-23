@@ -30,7 +30,7 @@ import uk.co.q3c.v7.base.guice.threadscope.ThreadScopeModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapServiceModule;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapModule;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPagesModule;
 import uk.co.q3c.v7.base.services.ServicesMonitor;
 import uk.co.q3c.v7.base.services.ServicesMonitorModule;
@@ -87,7 +87,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
 		baseModules.add(i18NModule());
 		baseModules.add(applicationConfigurationModule());
-		baseModules.add(new SitemapServiceModule());
+		baseModules.add(new SitemapModule());
 
 		baseModules.add(new ThreadScopeModule());
 		baseModules.add(new UIScopeModule());

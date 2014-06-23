@@ -38,16 +38,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
-public class MasterSitemapTest {
+public class DefaultMasterSitemapTest {
 
 	@Inject
 	URIFragmentHandler uriHandler;
 
-	MasterSitemap sitemap;
+	DefaultMasterSitemap sitemap;
 
 	@Before
 	public void setup() {
-		sitemap = new MasterSitemap(uriHandler);
+		sitemap = new DefaultMasterSitemap(uriHandler);
 	}
 
 	@Test

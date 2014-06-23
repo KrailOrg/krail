@@ -72,7 +72,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class,
-		ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class,
+		ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class,
 		UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class,
 		StandardComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class })
 public class DefaultSitemapServiceTest {

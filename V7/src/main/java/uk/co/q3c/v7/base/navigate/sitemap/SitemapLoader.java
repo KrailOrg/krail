@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * A common interface for all implementations loading the Sitemap from whatever source - file, annotations, or direct
  * coding. The order in which they are loaded is determined by the order in which the bindings are made in the
- * {@link SitemapServiceModule}. If there are duplicate URI entries between loaders, the handling of them will be
+ * {@link SitemapModule}. If there are duplicate URI entries between loaders, the handling of them will be
  * determined by the {@link MasterSitemap}
  * 
  * @author David Sowerby

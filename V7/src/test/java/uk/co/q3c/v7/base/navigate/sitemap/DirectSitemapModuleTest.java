@@ -48,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ TestDirectSitemapModule1.class, TestDirectSitemapModule2.class, UIScopeModule.class,
-		ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class,
+		ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class,
 		UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class,
 		StandardComponentModule.class, VaadinSessionScopeModule.class })
 public class DirectSitemapModuleTest {

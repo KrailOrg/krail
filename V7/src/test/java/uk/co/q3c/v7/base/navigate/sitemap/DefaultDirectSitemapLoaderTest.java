@@ -49,7 +49,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class,
-		ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapServiceModule.class, UserModule.class,
+		ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class,
 		ApplicationConfigurationModule.class, StandardShiroModule.class, StandardComponentModule.class,
 		VaadinSessionScopeModule.class })
 public class DefaultDirectSitemapLoaderTest {

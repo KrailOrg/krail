@@ -12,25 +12,38 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import com.google.inject.Inject;
-import fixture.testviews2.*;
-import uk.co.q3c.v7.base.navigate.NavigationState;
-import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
-import uk.co.q3c.v7.base.shiro.PageAccessControl;
-import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.i18n.I18NKey;
-import uk.co.q3c.v7.i18n.LabelKey;
-import uk.co.q3c.v7.i18n.TestLabelKey;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.text.CollationKey;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import uk.co.q3c.util.BasicForest;
+import uk.co.q3c.v7.base.navigate.NavigationState;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
+import uk.co.q3c.v7.base.shiro.PagePermission;
+import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.i18n.TestLabelKey;
 
-public class MockUserSitemap {
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.inject.Inject;
+
+import fixture.testviews2.OptionsView;
+import fixture.testviews2.TestLoginView;
+import fixture.testviews2.TestLogoutView;
+import fixture.testviews2.TestPrivateHomeView;
+import fixture.testviews2.TestPublicHomeView;
+import fixture.testviews2.View1;
+import fixture.testviews2.View2;
+
+public class MockUserSitemap implements UserSitemap {
 
 	public final UserSitemap userSitemap;
 
@@ -94,7 +107,7 @@ public class MockUserSitemap {
 
 	@Inject
 	protected MockUserSitemap(URIFragmentHandler uriHandler) {
-		userSitemap = mock(UserSitemap.class);
+		userSitemap = mock(DefaultUserSitemap.class);
 		this.uriHandler = uriHandler;
 	}
 
@@ -199,7 +212,8 @@ public class MockUserSitemap {
 		addRedirect("");
 	}
 
-	private void addChild(UserSitemapNode parentNode, UserSitemapNode childNode) {
+	@Override
+	public void addChild(UserSitemapNode parentNode, UserSitemapNode childNode) {
 		when(userSitemap.getParent(childNode)).thenReturn(parentNode);
 
 	}
@@ -221,12 +235,250 @@ public class MockUserSitemap {
 	/**
 	 * If a page is not fully defined, you will still need to mock the redirect check - usually just by setting 'from'
 	 * and 'to' to be the same (the short-hand version for that is {@link #addRedirect(String)}
+	 * 
+	 * @return
 	 */
-	public void addRedirect(String fromPage, String toPage) {
+	@Override
+	public Sitemap<UserSitemapNode> addRedirect(String fromPage, String toPage) {
 		when(userSitemap.getRedirectPageFor(fromPage)).thenReturn(toPage);
+		return this;
 	}
 
 	public void addRedirect(String fromPage) {
 		addRedirect(fromPage, fromPage);
+	}
+
+	@Override
+	public void setLoaded(boolean loaded) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean isLoaded() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void addStandardPage(StandardPageKey pageKey, UserSitemapNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public BasicForest<UserSitemapNode> getForest() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getRedirectPageFor(NavigationState navigationState) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<UserSitemapNode> nodeChainFor(UserSitemapNode node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<UserSitemapNode> nodeChainForUri(String uri, boolean allowPartialPath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getNodeCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public ImmutableList<String> uris() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ImmutableMap<String, String> getRedirects() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getRedirectPageFor(String page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserSitemapNode getRedirectNodeFor(UserSitemapNode sourceNode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<UserSitemapNode> nodeChainFor(NavigationState navigationState, boolean allowPartialPath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserSitemapNode nodeFor(NavigationState navigationState) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserSitemapNode nodeFor(String uri) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<UserSitemapNode> getChildren(UserSitemapNode parentNode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<UserSitemapNode> nodeChainForSegments(List<String> segments, boolean allowPartialPath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ImmutableMap<StandardPageKey, UserSitemapNode> getStandardPages() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserSitemapNode standardPageNode(StandardPageKey pageKey) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String standardPageURI(StandardPageKey pageKey) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserSitemapNode nodeNearestFor(String uri) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserSitemapNode nodeNearestFor(NavigationState navigationState) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeNode(UserSitemapNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void addNode(UserSitemapNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public PagePermission pagePermission(UserSitemapNode node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public NavigationState navigationState(UserSitemapNode node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasUri(NavigationState navigationState) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean hasUri(String uri) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public UserSitemapNode getParent(UserSitemapNode childNode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getChildCount(UserSitemapNode node) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<UserSitemapNode> getRoots() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<UserSitemapNode> getAllNodes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String uri(UserSitemapNode node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean containsNode(UserSitemapNode node) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public UserSitemapNode getRootFor(UserSitemapNode node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<String, UserSitemapNode> getUriMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserSitemapNode userNodeFor(SitemapNode masterNode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void buildUriMap() {
+		// TODO Auto-generated method stub
+
 	}
 }

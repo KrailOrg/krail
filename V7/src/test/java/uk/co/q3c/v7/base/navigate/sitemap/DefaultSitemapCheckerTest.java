@@ -12,15 +12,11 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.testviews2.View1;
-import fixture.testviews2.View2;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -30,7 +26,14 @@ import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+
+import fixture.testviews2.View1;
+import fixture.testviews2.View2;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
@@ -49,7 +52,7 @@ public class DefaultSitemapCheckerTest {
 	Translate translate;
 
 	@Inject
-	MasterSitemap sitemap;
+	DefaultMasterSitemap sitemap;
 	private MasterSitemapNode nodeNoClass;
 	private MasterSitemapNode nodeNoKey;
 

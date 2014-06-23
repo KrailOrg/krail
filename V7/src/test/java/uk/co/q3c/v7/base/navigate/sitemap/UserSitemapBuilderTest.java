@@ -12,15 +12,16 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import com.google.inject.AbstractModule;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
-import com.vaadin.server.VaadinSession;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+import java.util.Locale;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -32,10 +33,11 @@ import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.i18n.I18NModule;
 
-import java.util.Locale;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import com.google.inject.AbstractModule;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.server.VaadinSession;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, TestVaadinSessionScopeModule.class })
@@ -114,7 +116,7 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
 		// when
 
 		// then
-		assertThat(userSitemap.uriMap.keySet()).containsOnly("1", "1/3");
+		assertThat(userSitemap.getUriMap().keySet()).containsOnly("1", "1/3");
 	}
 
 	private boolean userSitemapContains(SitemapNode masterNode) {
@@ -134,7 +136,7 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
 		masterSitemap.addRedirect("bb", "2");
 		userSitemapBuilder.userStatusChanged();
 		// then
-		assertThat(userSitemap.uriMap.keySet()).containsOnly("1", "1/3", "2");
+		assertThat(userSitemap.getUriMap().keySet()).containsOnly("1", "1/3", "2");
 		assertThat(userSitemap.getRedirects().keySet()).containsOnly("a", "bb");
 	}
 
@@ -165,7 +167,7 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
 	public void translationAndLocaleChange() {
 		// given
 		buildMasterSitemap(8);
-        currentLocale.setLocale(Locale.UK);
+		currentLocale.setLocale(Locale.UK);
 		when(pageAccessController.isAuthorised(subject, masterNode1)).thenReturn(true);
 		when(pageAccessController.isAuthorised(subject, masterNode2)).thenReturn(false);
 		when(pageAccessController.isAuthorised(subject, masterNode3)).thenReturn(true);
@@ -213,6 +215,8 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
 			@Override
 			protected void configure() {
 				bind(VaadinSessionProvider.class).toInstance(mockVaadinSessionProvider);
+				bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+				bind(UserSitemap.class).to(DefaultUserSitemap.class);
 			}
 
 		};

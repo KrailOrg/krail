@@ -14,13 +14,25 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 import com.google.inject.AbstractModule;
 
-public class SitemapServiceModule extends AbstractModule {
+public class SitemapModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		bindMasterSitemap();
+		bindUserSitemap();
 		bindService();
 		bindLoaders();
 		bindChecker();
+	}
+
+	private void bindMasterSitemap() {
+		bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+
+	}
+
+	private void bindUserSitemap() {
+		bind(UserSitemap.class).to(DefaultUserSitemap.class);
+
 	}
 
 	protected void bindService() {
