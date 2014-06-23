@@ -12,46 +12,35 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.text.Collator;
-import java.util.Locale;
-
-import org.apache.shiro.subject.Subject;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
-import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
-import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemapNode;
-import uk.co.q3c.v7.base.navigate.sitemap.MockUserSitemap;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
-import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
-import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
-import uk.co.q3c.v7.base.shiro.PageAccessControl;
-import uk.co.q3c.v7.base.shiro.PageAccessController;
-import uk.co.q3c.v7.base.shiro.SubjectProvider;
-import uk.co.q3c.v7.base.user.opt.UserOption;
-import uk.co.q3c.v7.base.user.status.UserStatus;
-import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NKey;
-import uk.co.q3c.v7.i18n.I18NModule;
-import uk.co.q3c.v7.i18n.LabelKey;
-import uk.co.q3c.v7.i18n.Translate;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.ui.MenuBar.MenuItem;
+import org.apache.shiro.subject.Subject;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.navigate.sitemap.*;
+import uk.co.q3c.v7.base.shiro.PageAccessControl;
+import uk.co.q3c.v7.base.shiro.PageAccessController;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.status.UserStatus;
+import uk.co.q3c.v7.base.view.PublicHomeView;
+import uk.co.q3c.v7.i18n.*;
+
+import java.text.Collator;
+import java.util.Locale;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })

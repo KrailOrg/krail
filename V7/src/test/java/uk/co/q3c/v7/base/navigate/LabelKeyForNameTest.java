@@ -12,14 +12,13 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
-import static org.assertj.core.api.Assertions.*;
+import org.junit.Test;
+import uk.co.q3c.v7.i18n.LabelKey;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Test;
-
-import uk.co.q3c.v7.i18n.LabelKey;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LabelKeyForNameTest {
 

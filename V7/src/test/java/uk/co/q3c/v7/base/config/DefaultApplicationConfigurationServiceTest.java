@@ -12,36 +12,29 @@
  */
 package uk.co.q3c.v7.base.config;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.co.q3c.v7.base.services.Service.Status;
-import uk.co.q3c.v7.base.services.ServiceException;
-import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
-import uk.co.q3c.v7.i18n.DescriptionKey;
-import uk.co.q3c.v7.i18n.I18NModule;
-import uk.co.q3c.v7.i18n.I18NProcessor;
-import uk.co.q3c.v7.i18n.LabelKey;
-import uk.co.q3c.v7.i18n.Translate;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinService;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.co.q3c.v7.base.services.Service.Status;
+import uk.co.q3c.v7.base.services.ServiceException;
+import uk.co.q3c.v7.i18n.*;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })

@@ -12,18 +12,16 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.assertj.core.api.Assertions.*;
-
-import org.apache.shiro.authz.permission.WildcardPermission;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import uk.co.q3c.v7.base.navigate.NavigationState;
-import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
-
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import org.apache.shiro.authz.permission.WildcardPermission;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import uk.co.q3c.v7.base.navigate.NavigationState;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})

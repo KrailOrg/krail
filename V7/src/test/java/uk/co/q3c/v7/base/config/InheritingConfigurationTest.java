@@ -12,7 +12,7 @@
  */
 package uk.co.q3c.v7.base.config;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 
@@ -22,6 +22,8 @@ import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import util.TestUtils;
 
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -89,9 +91,10 @@ public class InheritingConfigurationTest {
 	}
 
 	private HierarchicalINIConfiguration config(String filename) throws ConfigurationException {
-		File root = new File(".");
+		File root = TestUtils.projectRootV7();
 		File dir = new File(root, "src/test/java/uk/co/q3c/v7/base/config");
 		File file = new File(dir, filename);
+		System.out.println(file.getAbsolutePath());
 		HierarchicalINIConfiguration config = new HierarchicalINIConfiguration(file);
 		return config;
 	}

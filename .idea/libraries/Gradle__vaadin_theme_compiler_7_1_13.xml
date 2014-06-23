@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: vaadin-theme-compiler-7.1.13">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-theme-compiler/7.1.13/3420c2d868c3d4c77d2496db64e003d7ca5db59d/vaadin-theme-compiler-7.1.13.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-theme-compiler/7.1.13/12c9310225a64244a52c9645ad935b846ce6938c/vaadin-theme-compiler-7.1.13-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

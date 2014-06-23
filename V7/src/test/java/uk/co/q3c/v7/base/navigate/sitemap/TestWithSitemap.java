@@ -12,16 +12,15 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.mockito.Mockito.when;
-
-import java.text.Collator;
-import java.util.Locale;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
@@ -31,18 +30,12 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
 import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
-import uk.co.q3c.v7.i18n.I18NProcessor;
-import uk.co.q3c.v7.i18n.LabelKey;
-import uk.co.q3c.v7.i18n.TestLabelKey;
-import uk.co.q3c.v7.i18n.Translate;
+import uk.co.q3c.v7.i18n.*;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
+import java.text.Collator;
+import java.util.Locale;
+
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -99,6 +92,9 @@ public abstract class TestWithSitemap {
 	@Before
 	public void setup() {
 		userOption = new DefaultUserOption(new DefaultUserOptionStore());
+        currentLocale.setLocale(Locale.UK
+        );
+        currentLocale.removeAllListeners();
 		collator = Collator.getInstance(locale);
 		when(subjectProvider.get()).thenReturn(subject);
 

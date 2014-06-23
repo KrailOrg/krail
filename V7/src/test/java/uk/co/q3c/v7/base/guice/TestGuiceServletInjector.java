@@ -12,11 +12,10 @@
  */
 package uk.co.q3c.v7.base.guice;
 
-import java.util.List;
-
 import com.google.inject.Module;
-
 import fixture.TestUIModule;
+
+import java.util.List;
 
 public class TestGuiceServletInjector extends BaseGuiceServletInjector {
 

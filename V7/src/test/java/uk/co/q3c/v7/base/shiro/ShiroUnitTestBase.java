@@ -12,13 +12,14 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import org.apache.shiro.subject.Subject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Very slightly modified version of the example from the Shiro documentation, http://shiro.apache.org/testing.html

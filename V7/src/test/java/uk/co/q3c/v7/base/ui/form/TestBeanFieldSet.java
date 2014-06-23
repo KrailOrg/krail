@@ -12,13 +12,12 @@
  */
 package uk.co.q3c.v7.base.ui.form;
 
+import com.vaadin.ui.TextField;
 import uk.co.q3c.v7.base.data.TestEntity;
 import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18N;
 import uk.co.q3c.v7.i18n.LabelKey;
-
-import com.vaadin.ui.TextField;
 
 public class TestBeanFieldSet extends BeanFieldSet<TestEntity> {
 

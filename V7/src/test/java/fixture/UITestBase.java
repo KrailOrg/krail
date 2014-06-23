@@ -1,8 +1,13 @@
 package fixture;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Provider;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.server.*;
+import com.vaadin.ui.UI;
+import com.vaadin.util.CurrentInstance;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -10,7 +15,6 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
 import uk.co.q3c.v7.base.guice.BaseServletModule;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
@@ -24,18 +28,8 @@ import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Provider;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.server.ClientConnector;
-import com.vaadin.server.ErrorHandler;
-import com.vaadin.server.UICreateEvent;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.UI;
-import com.vaadin.util.CurrentInstance;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * THIS IS NOT IN USE - AND PROBABLY WON'T WORK. I HAVE KEPT IT ONLY BECAUSE THERE MAY BE SOME USEFUL IDEAS IN HERE

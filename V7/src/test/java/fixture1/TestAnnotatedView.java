@@ -12,11 +12,10 @@
  */
 package fixture1;
 
+import com.vaadin.ui.Component;
 import uk.co.q3c.v7.base.navigate.sitemap.View;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
-
-import com.vaadin.ui.Component;
 
 /**
  * This is NOT UIScoped to avoid unnecessary complexity in setting up some of the tests - if you need a UIScoped test

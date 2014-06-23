@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: jung-graph-impl-2.0.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.jung/jung-graph-impl/2.0.1/37e4cbe198ca7ffd2238ebfee8c5d84d6d79e1c2/jung-graph-impl-2.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.jung/jung-graph-impl/2.0.1/6eaa5925da4cd168e963a6457f2cb6d506a71f17/jung-graph-impl-2.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

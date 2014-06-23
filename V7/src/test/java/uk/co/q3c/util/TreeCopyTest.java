@@ -12,16 +12,15 @@
  */
 package uk.co.q3c.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.vaadin.ui.Tree;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.vaadin.ui.Tree;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TreeCopyTest {
 

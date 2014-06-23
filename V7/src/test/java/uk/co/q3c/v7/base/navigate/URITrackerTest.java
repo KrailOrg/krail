@@ -12,9 +12,9 @@
  */
 package uk.co.q3c.v7.base.navigate;
 
-import static org.assertj.core.api.Assertions.*;
-
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class URITrackerTest {
 

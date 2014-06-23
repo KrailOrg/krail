@@ -12,14 +12,14 @@
  */
 package uk.co.q3c.v7.base.data;
 
-import static org.assertj.core.api.Assertions.*;
+import org.joda.time.DateTime;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Date;
 import java.util.Locale;
 
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DateTimeConverterTest {
 

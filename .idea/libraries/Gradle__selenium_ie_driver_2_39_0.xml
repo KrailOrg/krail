@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: selenium-ie-driver-2.39.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.seleniumhq.selenium/selenium-ie-driver/2.39.0/e3e6d8bfcf7720c3c79eaddae45f9a65a20bad51/selenium-ie-driver-2.39.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.seleniumhq.selenium/selenium-ie-driver/2.39.0/9401508e05c237cae122f6f4356e35e43ec0e9d0/selenium-ie-driver-2.39.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

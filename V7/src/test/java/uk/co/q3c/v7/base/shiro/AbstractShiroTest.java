@@ -21,8 +21,6 @@ import org.apache.shiro.util.LifecycleUtils;
 import org.apache.shiro.util.ThreadState;
 import org.junit.AfterClass;
 
-import uk.co.q3c.v7.base.shiro.V7SecurityManager;
-
 /**
  * Abstract test case enabling Shiro in test environments.
  */

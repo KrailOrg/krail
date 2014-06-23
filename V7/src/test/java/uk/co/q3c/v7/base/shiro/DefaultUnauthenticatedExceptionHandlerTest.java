@@ -12,19 +12,17 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.mockito.Mockito.*;
-
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.ui.Notification;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
 import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.ui.Notification;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})

@@ -12,12 +12,11 @@
  */
 package uk.co.q3c.util;
 
-import static org.assertj.core.api.Assertions.*;
-
-import org.junit.Test;
-
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Panel;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class IDTest {
 

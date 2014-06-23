@@ -12,11 +12,13 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import com.google.inject.AbstractModule;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.UI;
+import com.vaadin.util.CurrentInstance;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -24,7 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
@@ -35,13 +36,10 @@ import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.component.UserStatusPanel;
 import uk.co.q3c.v7.i18n.I18NModule;
 
-import com.google.inject.AbstractModule;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
-import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.UI;
-import com.vaadin.util.CurrentInstance;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ UIScopeModule.class, I18NModule.class, VaadinSessionScopeModule.class })

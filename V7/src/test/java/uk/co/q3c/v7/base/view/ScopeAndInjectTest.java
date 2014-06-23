@@ -12,7 +12,14 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.google.inject.Inject;
+import org.junit.Test;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -24,16 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Test;
-import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
-
-import com.google.inject.Inject;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Checks for correct use of UIScope and Inject annotations

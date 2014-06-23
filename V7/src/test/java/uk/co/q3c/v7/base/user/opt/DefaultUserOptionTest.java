@@ -12,16 +12,16 @@
  */
 package uk.co.q3c.v7.base.user.opt;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.joda.time.DateTime;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DefaultUserOptionTest {
 

@@ -22,7 +22,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 
 public class UserNavigationTreeBuilder {
 
-	private final TreeCopy<UserSitemapNode, UserSitemapNode> treeCopy;
+	private  TreeCopy<UserSitemapNode, UserSitemapNode> treeCopy;
 	private final UserSitemap userSitemap;
 
 	protected UserNavigationTreeBuilder(UserSitemap userSitemap, UserNavigationTree userNavigationTree) {
@@ -33,8 +33,8 @@ public class UserNavigationTreeBuilder {
 		TargetTreeWrapper_VaadinTree<UserSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_VaadinTree<>(
 				userNavigationTree.getTree());
 		target.setCaptionReader(new UserSitemapNodeCaption());
-		TreeCopy<UserSitemapNode, UserSitemapNode> copy = new TreeCopy<>(source, target);
-		copy.setMaxDepth(maxDepth);
-		copy.addSourceFilter(new LogoutPageFilter());
+        treeCopy = new TreeCopy<>(source, target);
+//		copy.setMaxDepth(maxDepth);
+        treeCopy.addSourceFilter(new LogoutPageFilter());
 	}
 }

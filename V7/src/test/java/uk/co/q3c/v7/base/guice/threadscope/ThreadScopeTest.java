@@ -1,21 +1,18 @@
 package uk.co.q3c.v7.base.guice.threadscope;
 
-import static org.assertj.core.api.Assertions.*;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import com.google.inject.Inject;
-
-import junit.framework.TestCase;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.google.inject.Injector;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ ThreadScopeModule.class })

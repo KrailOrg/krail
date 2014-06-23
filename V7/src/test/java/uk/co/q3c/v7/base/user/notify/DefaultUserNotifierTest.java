@@ -12,27 +12,21 @@
  */
 package uk.co.q3c.v7.base.user.notify;
 
-import static org.mockito.Mockito.verify;
-
-import java.util.Map;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.co.q3c.v7.i18n.I18NKey;
-import uk.co.q3c.v7.i18n.I18NModule;
-import uk.co.q3c.v7.i18n.LabelKey;
-import uk.co.q3c.v7.i18n.MessageKey;
-import uk.co.q3c.v7.i18n.Translate;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.multibindings.MapBinder;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.co.q3c.v7.i18n.*;
+
+import java.util.Map;
+
+import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })

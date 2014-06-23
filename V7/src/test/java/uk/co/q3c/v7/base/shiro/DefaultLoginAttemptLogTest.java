@@ -12,21 +12,19 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.assertj.jodatime.api.Assertions.*;
-
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import uk.co.q3c.v7.base.shiro.DefaultLoginAttemptLog.LogEntry;
 import uk.co.q3c.v7.base.shiro.DefaultLoginAttemptLog.LogOutcome;
 
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.jodatime.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})

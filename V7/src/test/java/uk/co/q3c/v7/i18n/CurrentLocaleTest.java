@@ -12,23 +12,21 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.lang.annotation.Annotation;
-import java.util.Locale;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+
+import java.lang.annotation.Annotation;
+import java.util.Locale;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
@@ -45,6 +43,7 @@ public class CurrentLocaleTest implements LocaleChangeListener {
 	@Before
 	public void setup() {
 		listenerFired = false;
+        currentLocale.removeAllListeners();
 		currentLocale.addListener(this);
 	}
 

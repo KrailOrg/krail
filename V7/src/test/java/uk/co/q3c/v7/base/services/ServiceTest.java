@@ -12,25 +12,23 @@
  */
 package uk.co.q3c.v7.base.services;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.assertj.jodatime.api.Assertions.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import uk.co.q3c.v7.base.services.Service.Status;
-
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import org.joda.time.DateTime;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import uk.co.q3c.v7.base.services.Service.Status;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.jodatime.api.Assertions.assertThat;
 
 /**
  * Combined testing for all the Service components - almost functional testing

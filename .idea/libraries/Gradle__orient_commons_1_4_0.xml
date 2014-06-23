@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: orient-commons-1.4.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.orientechnologies/orient-commons/1.4.0/6ff536c7eba5b340fcdf119df295de1b328cf666/orient-commons-1.4.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.orientechnologies/orient-commons/1.4.0/101b0c2bf7347aa06a8c7b1a29da8d388f409115/orient-commons-1.4.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

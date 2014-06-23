@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: jung-api-2.0.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.jung/jung-api/2.0.1/843d5ccb44dd310ed0e36cb9b776baa0391515a2/jung-api-2.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.jung/jung-api/2.0.1/1f78ba8327cca424da56a4439253b8ceccf873ff/jung-api-2.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

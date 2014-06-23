@@ -12,12 +12,12 @@
  */
 package uk.co.q3c.v7.i18n;
 
+import com.vaadin.data.Property;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.vaadin.data.Property;
 
 /**
  * Annotation used for marking a Vaadin UI component in the demo app as needing I18N translation. The parameters provide

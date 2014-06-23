@@ -1,5 +1,10 @@
 package uk.co.q3c.v7.base.ui;
 
+import com.google.inject.Inject;
+import com.vaadin.data.util.converter.ConverterFactory;
+import com.vaadin.server.ErrorHandler;
+import com.vaadin.ui.AbstractOrderedLayout;
+import com.vaadin.ui.VerticalLayout;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.push.Broadcaster;
 import uk.co.q3c.v7.base.push.PushMessageRouter;
@@ -7,12 +12,6 @@ import uk.co.q3c.v7.base.view.component.DefaultUserStatusPanel;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.Translate;
-
-import com.google.inject.Inject;
-import com.vaadin.data.util.converter.ConverterFactory;
-import com.vaadin.server.ErrorHandler;
-import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.VerticalLayout;
 
 public class TestUI extends ScopedUI {
 

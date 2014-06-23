@@ -1,19 +1,17 @@
 package uk.co.q3c.v7.base.shiro;
 
-import static org.mockito.Mockito.*;
-
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})

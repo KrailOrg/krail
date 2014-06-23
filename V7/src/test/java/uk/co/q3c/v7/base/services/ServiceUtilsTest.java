@@ -12,14 +12,13 @@
  */
 package uk.co.q3c.v7.base.services;
 
-import static org.assertj.core.api.Assertions.*;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Dependency graph:

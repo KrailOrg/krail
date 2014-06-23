@@ -29,7 +29,7 @@ import com.google.inject.Inject;
 
 /**
  * Uses an in-memory appender to to capture log output during testing. Be sure to call {@link #close()} in your teardown
- * method ...
+ * method, or it will eat up your memory.
  *
  * 
  * @author David Sowerby
@@ -87,7 +87,6 @@ public class LogMonitor {
 
 		@Override
 		public ErrorHandler getErrorHandler() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 

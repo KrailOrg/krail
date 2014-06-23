@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.util.ResourceUtils;
 import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
 import uk.co.q3c.v7.i18n.SupportedLocales;
 
 import com.google.inject.Inject;
@@ -37,7 +38,6 @@ public class LocaleContainer extends IndexedContainer {
 		NAME, FLAG
 	}
 
-	public final static String OPTION_LOCALE_FLAG_SIZE = "localeFlagSize";
 	private final Set<Locale> supportedLocales;
 	private final UserOption userOption;
 
@@ -90,7 +90,7 @@ public class LocaleContainer extends IndexedContainer {
 	}
 
 	public Integer flagSize() {
-		return userOption.getOptionAsInt(this.getClass().getSimpleName(), OPTION_LOCALE_FLAG_SIZE, 32);
+		return userOption.getOptionAsInt(this.getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH.OPTION_LOCALE_FLAG_SIZE, 32);
 	}
 
 }

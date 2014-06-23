@@ -12,9 +12,9 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.fail;
 
 public class DefaultSubpagePanelTest {
 

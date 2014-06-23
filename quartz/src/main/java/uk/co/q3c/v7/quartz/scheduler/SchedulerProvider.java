@@ -24,7 +24,7 @@ import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
 
 /**
- * Inject this class to acess all active schedulers. This is a wrapper class for {@link SchedulerRepository}, with the
+ * Inject this class to access all active schedulers. This is a wrapper class for {@link SchedulerRepository}, with the
  * addition of a default scheduler.
  * 
  * @see http://quartz-scheduler.org/documentation/quartz-1.x/cookbook/MultipleSchedulers

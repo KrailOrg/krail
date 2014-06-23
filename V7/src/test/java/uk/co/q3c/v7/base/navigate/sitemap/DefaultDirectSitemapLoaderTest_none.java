@@ -12,21 +12,19 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
-import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
-import uk.co.q3c.v7.i18n.I18NModule;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.i18n.I18NModule;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  *

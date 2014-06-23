@@ -12,25 +12,6 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-
-import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
-import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
-import uk.co.q3c.v7.base.user.opt.UserOptionStore;
-import uk.co.q3c.v7.testutil.LogMonitor;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -40,6 +21,26 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
+import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
+import uk.co.q3c.v7.base.user.opt.UserOptionStore;
+import uk.co.q3c.v7.testutil.LogMonitor;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -60,9 +61,16 @@ public class LocaleContainerTest {
 
 	@Before
 	public void setup() {
+        //IDEA uses a different project path to Eclipse (IDEA runs from the root project, 'v7')
+        //task to improve this hack at https://github.com/davidsowerby/v7/issues/253
+        Path currentRelativePath = Paths.get("");
+        String s = currentRelativePath.toAbsolutePath().toString();
+        String baseDir=(s.endsWith("V7")) ? "src/test/java" : "V7/src/test/java";
+
 		VaadinService.setCurrent(vaadinService);
-		when(vaadinService.getBaseDirectory()).thenReturn(new File("src/test/java"));
-		supportedLocales = new HashSet<>();
+		when(vaadinService.getBaseDirectory()).thenReturn(new File(baseDir));
+        supportedLocales = new HashSet<>();
+
 	}
 
 	@After
@@ -74,6 +82,7 @@ public class LocaleContainerTest {
 	public void fillContainer_success() {
 		// given
 		supportedLocales.add(Locale.GERMANY);
+        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.OPTION_LOCALE_FLAG_SIZE,48);
 		// when
 		container = new LocaleContainer(supportedLocales, userOption);
 		// then
@@ -98,7 +107,7 @@ public class LocaleContainerTest {
 	@Test
 	public void fillContainer_no_flag_directory() {
 		supportedLocales.add(Locale.GERMANY);
-		userOption.setOption(LocaleContainer.class.getSimpleName(), LocaleContainer.OPTION_LOCALE_FLAG_SIZE, 47);
+        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.OPTION_LOCALE_FLAG_SIZE,47);
 		// when
 		container = new LocaleContainer(supportedLocales, userOption);
 
@@ -117,7 +126,7 @@ public class LocaleContainerTest {
 	@Test
 	public void fillContainer_missingFlag() {
 		supportedLocales.add(Locale.CANADA);
-		userOption.setOption(LocaleContainer.class.getSimpleName(), LocaleContainer.OPTION_LOCALE_FLAG_SIZE, 48);
+        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.OPTION_LOCALE_FLAG_SIZE,48);
 		// when
 		container = new LocaleContainer(supportedLocales, userOption);
 

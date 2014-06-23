@@ -12,18 +12,16 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })

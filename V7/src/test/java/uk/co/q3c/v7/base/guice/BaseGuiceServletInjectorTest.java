@@ -12,16 +12,11 @@
  */
 package uk.co.q3c.v7.base.guice;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.server.VaadinService;
 import org.apache.shiro.SecurityUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -29,17 +24,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
 import uk.co.q3c.v7.base.services.Service;
 import uk.co.q3c.v7.base.services.ServicesMonitor;
 import uk.co.q3c.v7.base.shiro.V7SecurityManager;
 import uk.co.q3c.v7.testutil.LogMonitor;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.server.VaadinService;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import java.io.File;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})

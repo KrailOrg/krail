@@ -12,10 +12,9 @@
  */
 package uk.co.q3c.v7.base.view.testviews.subview;
 
+import com.vaadin.ui.Component;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
-
-import com.vaadin.ui.Component;
 
 public class TransferView implements V7View {
 

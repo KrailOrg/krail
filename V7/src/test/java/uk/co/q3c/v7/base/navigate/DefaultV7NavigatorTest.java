@@ -1,21 +1,22 @@
 package uk.co.q3c.v7.base.navigate;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.server.Page;
+import com.vaadin.ui.UI;
+import com.vaadin.util.CurrentInstance;
+import fixture.testviews2.TestLoginView;
+import fixture.testviews2.View2;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.sitemap.MockUserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
@@ -28,28 +29,14 @@ import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 import uk.co.q3c.v7.base.user.opt.UserOption;
-import uk.co.q3c.v7.base.view.DefaultErrorView;
-import uk.co.q3c.v7.base.view.DefaultViewFactory;
-import uk.co.q3c.v7.base.view.ErrorView;
-import uk.co.q3c.v7.base.view.LoginView;
-import uk.co.q3c.v7.base.view.LogoutView;
-import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
-import uk.co.q3c.v7.base.view.V7ViewChangeListener;
+import uk.co.q3c.v7.base.view.*;
 import uk.co.q3c.v7.i18n.I18NModule;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
-import com.vaadin.server.Page;
-import com.vaadin.ui.UI;
-import com.vaadin.util.CurrentInstance;
+import java.util.List;
 
-import fixture.testviews2.TestLoginView;
-import fixture.testviews2.View2;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })

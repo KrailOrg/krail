@@ -12,14 +12,8 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.text.CollationKey;
-import java.text.Collator;
-import java.util.Arrays;
-import java.util.List;
-
+import com.google.inject.Inject;
+import fixture.testviews2.*;
 import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
@@ -28,15 +22,13 @@ import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 
-import com.google.inject.Inject;
+import java.text.CollationKey;
+import java.text.Collator;
+import java.util.Arrays;
+import java.util.List;
 
-import fixture.testviews2.OptionsView;
-import fixture.testviews2.TestLoginView;
-import fixture.testviews2.TestLogoutView;
-import fixture.testviews2.TestPrivateHomeView;
-import fixture.testviews2.TestPublicHomeView;
-import fixture.testviews2.View1;
-import fixture.testviews2.View2;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MockUserSitemap {
 

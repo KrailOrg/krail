@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: concurrent-1.3.4">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/concurrent/concurrent/1.3.4/1cf394c2a388199db550cda311174a4c6a7d117c/concurrent-1.3.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/concurrent/concurrent/1.3.4/7d346fa001db7f4dfec2d97a2e17091dc4d77a1d/concurrent-1.3.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

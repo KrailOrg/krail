@@ -12,19 +12,17 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.Map;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapModuleTest.TestFileSitemapModule1;
-import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapModuleTest.TestFileSitemapModule2;
-
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapModuleTest.TestFileSitemapModule1;
+import uk.co.q3c.v7.base.navigate.sitemap.FileSitemapModuleTest.TestFileSitemapModule2;
+
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ TestFileSitemapModule1.class, TestFileSitemapModule2.class })

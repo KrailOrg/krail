@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: guice-assistedinject-3.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-assistedinject/3.0/544449ddb19f088dcde44f055d30a08835a954a7/guice-assistedinject-3.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-assistedinject/3.0/b2d47c8583a01b6748d68f7d1786496685b94784/guice-assistedinject-3.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

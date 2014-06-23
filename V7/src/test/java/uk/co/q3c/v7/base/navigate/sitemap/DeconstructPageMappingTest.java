@@ -1,12 +1,10 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import uk.co.q3c.v7.base.navigate.StandardPageMappingReader;
-import uk.co.q3c.v7.base.navigate.sitemap.PageRecord;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeconstructPageMappingTest {
 

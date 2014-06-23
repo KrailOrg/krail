@@ -12,14 +12,13 @@
  */
 package uk.co.q3c.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
+import org.junit.Test;
 
 import java.util.Collections;
 
-import org.junit.Test;
-
-import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.MenuBar.MenuItem;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MenuItemComparatorTest {
 

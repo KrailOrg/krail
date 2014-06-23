@@ -12,24 +12,21 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.Map;
-
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import fixture.testviews2.TestAnnotatedView;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import uk.co.q3c.v7.base.navigate.sitemap.AnnotationSitemapModuleTest.TestAnnotationsModule;
 import uk.co.q3c.v7.base.navigate.sitemap.AnnotationSitemapModuleTest.TestAnnotationsModule1;
 import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
+import java.util.Map;
 
-import fixture.testviews2.TestAnnotatedView;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ TestAnnotationsModule.class, TestAnnotationsModule1.class })

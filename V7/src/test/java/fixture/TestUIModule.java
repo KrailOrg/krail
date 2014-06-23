@@ -12,13 +12,12 @@
  */
 package fixture;
 
+import com.google.inject.multibindings.MapBinder;
+import com.vaadin.ui.UI;
 import uk.co.q3c.v7.base.ui.BasicUIProvider;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
 import uk.co.q3c.v7.base.ui.TestUI;
 import uk.co.q3c.v7.base.ui.V7UIModule;
-
-import com.google.inject.multibindings.MapBinder;
-import com.vaadin.ui.UI;
 
 /**
  * Extends the default UIModule to provide instances of TestUI
