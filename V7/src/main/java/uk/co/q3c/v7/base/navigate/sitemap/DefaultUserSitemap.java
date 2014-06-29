@@ -13,17 +13,16 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.text.Collator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.util.BasicForest;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.user.opt.UserOption;
-import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
 import uk.co.q3c.v7.base.user.status.UserStatusListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.LocaleChangeListener;
@@ -51,14 +50,16 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
 
 	private final Translate translate;
 
+	private final List<UserSitemapChangeListener> changeListeners;
+
 	@Inject
 	public DefaultUserSitemap(UserOption userOption, Translate translate, URIFragmentHandler uriHandler,
 			CurrentLocale currentLocale) {
 		super(uriHandler);
 		this.userOption = userOption;
 		this.translate = translate;
+		changeListeners = new LinkedList<>();
 		currentLocale.addListener(this);
-
 	}
 
 	/**
@@ -68,30 +69,20 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
 	 */
 	@Override
 	public synchronized void localeChanged(Locale locale) {
-		sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), UserOptionProperty.SORTED, true);
 		log.debug("responding to locale change to {}", locale);
-		BasicForest<UserSitemapNode> oldForest = forest;
-		forest = new BasicForest<>();
-		List<UserSitemapNode> nodeList = oldForest.getRoots();
+		List<UserSitemapNode> nodeList = getAllNodes();
 		Collator collator = translate.collator();
-		translate(oldForest, collator, nodeList);
-	}
-
-	private void translate(BasicForest<UserSitemapNode> oldForest, Collator collator, List<UserSitemapNode> nodeList) {
-
 		for (UserSitemapNode userNode : nodeList) {
 			userNode.setLabel(translate.from(userNode.getMasterNode().getLabelKey()));
 			userNode.setCollationKey(collator.getCollationKey(userNode.getLabel()));
 		}
-		// sort the list into the required order, determined by 'sorted'
-		new NodeSorter(nodeList, sorted).sort();
 
-		// then add them to the forest
-		for (UserSitemapNode userNode : nodeList) {
-			forest.addNode(userNode);
-			List<UserSitemapNode> subNodeList = oldForest.getChildren(userNode);
-			// drill down to next level
-			translate(oldForest, collator, subNodeList);
+		fireLabelsChanged();
+	}
+
+	private void fireLabelsChanged() {
+		for (UserSitemapChangeListener listener : changeListeners) {
+			listener.labelsChanged();
 		}
 	}
 
@@ -142,6 +133,28 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
 	public synchronized void setLoaded(boolean loaded) {
 		super.setLoaded(loaded);
 		buildUriMap();
+	}
+
+	public void addChangeListener(UserSitemapChangeListener listener) {
+		changeListeners.add(listener);
+	}
+
+	public void removeChangeListener(UserSitemapChangeListener listener) {
+		changeListeners.remove(listener);
+	}
+
+	public Translate getTranslate() {
+		return translate;
+	}
+
+	@Override
+	public void addListener(UserSitemapChangeListener listener) {
+		changeListeners.add(listener);
+	}
+
+	@Override
+	public void removeListener(UserSitemapChangeListener listener) {
+		changeListeners.remove(listener);
 	}
 
 }

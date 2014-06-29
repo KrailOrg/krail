@@ -21,6 +21,10 @@ import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.TestLabelKey;
@@ -32,8 +36,8 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 
-import fixture.testviews2.View1;
-import fixture.testviews2.View2;
+import fixture.testviews2.ViewA;
+import fixture.testviews2.ViewA1;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
@@ -136,7 +140,7 @@ public class DefaultSitemapCheckerTest {
 		// given
 		buildSitemap(0);
 		// when
-		checker.replaceMissingViewWith(View1.class).check();
+		checker.replaceMissingViewWith(ViewA.class).check();
 		// then
 
 	}
@@ -158,17 +162,17 @@ public class DefaultSitemapCheckerTest {
 		// given
 		buildSitemap(0);
 		// when
-		checker.replaceMissingViewWith(View1.class).replaceMissingKeyWith(TestLabelKey.Home).check();
+		checker.replaceMissingViewWith(ViewA.class).replaceMissingKeyWith(TestLabelKey.Home).check();
 		// then
 		assertThat(checker.getMissingLabelKeys()).isEmpty();
 		assertThat(checker.getMissingViewClasses()).isEmpty();
 		assertThat(checker.getMissingPageAccessControl()).isEmpty();
 		assertThat(baseNode.getLabelKey()).isEqualTo(TestLabelKey.Home);
-		assertThat(baseNode.getViewClass()).isEqualTo(View1.class);
+		assertThat(baseNode.getViewClass()).isEqualTo(ViewA.class);
 		assertThat(nodeNoClass.getLabelKey()).isEqualTo(TestLabelKey.No);
-		assertThat(nodeNoClass.getViewClass()).isEqualTo(View1.class);
+		assertThat(nodeNoClass.getViewClass()).isEqualTo(ViewA.class);
 		assertThat(nodeNoKey.getLabelKey()).isEqualTo(TestLabelKey.Home);
-		assertThat(nodeNoKey.getViewClass()).isEqualTo(View2.class);
+		assertThat(nodeNoKey.getViewClass()).isEqualTo(ViewA1.class);
 	}
 
 	@Test(expected = SitemapException.class)
@@ -233,7 +237,7 @@ public class DefaultSitemapCheckerTest {
 			nodeNoClass.setLabelKey(TestLabelKey.No);
 			nodeNoClass.setPageAccessControl(PageAccessControl.PUBLIC);
 			nodeNoKey = sitemap.append(uriNodeNoKey);
-			nodeNoKey.setViewClass(View2.class);
+			nodeNoKey.setViewClass(ViewA1.class);
 			nodeNoKey.setPageAccessControl(PageAccessControl.PUBLIC);
 			baseNode = sitemap.nodeFor("node");
 			baseNode.setPageAccessControl(PageAccessControl.PUBLIC);
@@ -241,17 +245,17 @@ public class DefaultSitemapCheckerTest {
 		case 1:
 			node1 = sitemap.append(uripublic_Node1);
 			node1.setLabelKey(TestLabelKey.No);
-			node1.setViewClass(View2.class);
+			node1.setViewClass(ViewA1.class);
 			node1.setPageAccessControl(PageAccessControl.PERMISSION);
 			sitemap.addRedirect("public", uripublic_Node1);
 		case 2:
 			node1 = sitemap.append(uripublic_Node1);
 			node1.setLabelKey(TestLabelKey.No);
-			node1.setViewClass(View2.class);
+			node1.setViewClass(ViewA1.class);
 
 			node11 = sitemap.append(uripublic_Node11);
 			node11.setLabelKey(TestLabelKey.No);
-			node11.setViewClass(View2.class);
+			node11.setViewClass(ViewA1.class);
 			node11.setPageAccessControl(PageAccessControl.PERMISSION);
 
 			sitemap.addRedirect("public", uripublic_Node1);
@@ -267,6 +271,10 @@ public class DefaultSitemapCheckerTest {
 			@Override
 			protected void configure() {
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+				bind(UserSitemap.class).to(DefaultUserSitemap.class);
+				bind(UserOption.class).to(DefaultUserOption.class);
+				bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
 			}
 
 		};

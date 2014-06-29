@@ -13,10 +13,13 @@
 package fixture.testviews2;
 
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
-public class View2 implements V7View {
+public class ViewB implements V7View {
+
+	private final Label label = new Label("not used");
 
 	@Override
 	public void enter(V7ViewChangeEvent event) {
@@ -24,8 +27,7 @@ public class View2 implements V7View {
 
 	@Override
 	public Component getRootComponent() {
-		// return null;
-		throw new RuntimeException("not yet implemented");
+		return label;
 	}
 
 	@Override

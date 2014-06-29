@@ -12,8 +12,6 @@
  */
 package uk.co.q3c.util;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Comparator;
 
 public class TargetTreeWrapper_BasicForest<S, T> extends TargetTreeWrapperBase<S, T> {
@@ -25,25 +23,12 @@ public class TargetTreeWrapper_BasicForest<S, T> extends TargetTreeWrapperBase<S
 		this.forest = forest;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public T createNode(T parentNode, S sourceChildNode) {
-		checkNotNull(sourceChildNode);
-		T newTargetNode = null;
-		if (getNodeModifier() == null) {
-			newTargetNode = (T) sourceChildNode;
-		} else {
-			newTargetNode = getNodeModifier().create(parentNode, sourceChildNode);
-		}
-		return newTargetNode;
-	}
-
 	/**
 	 * Not used in this implementation
 	 */
 	@Override
-	public void sort(T parentNode, Comparator<T> comparator) {
-
+	public void sortChildren(T parentNode, Comparator<T> comparator) {
+		throw new TreeCopyException("This implementation does not support sorting after nodes have been added");
 	}
 
 	@Override

@@ -18,8 +18,8 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.testviews2.OptionsView;
-import fixture.testviews2.View1;
-import fixture.testviews2.View2;
+import fixture.testviews2.ViewA;
+import fixture.testviews2.ViewA1;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.config.ApplicationConfigurationModule;
@@ -71,7 +71,7 @@ public class DefaultDirectSitemapLoaderTest {
 
 		@Override
 		protected void define() {
-			addEntry(page1, View1.class, LabelKey.Authorisation, PageAccessControl.PERMISSION);
+			addEntry(page1, ViewA.class, LabelKey.Authorisation, PageAccessControl.PERMISSION);
 		}
 
 	}
@@ -81,7 +81,7 @@ public class DefaultDirectSitemapLoaderTest {
 		@Override
 		protected void define() {
 			addEntry(page2, OptionsView.class, TestLabelKey.Opt, PageAccessControl.PUBLIC);
-			addEntry(page3, View2.class, TestLabelKey.MoneyInOut, PageAccessControl.PUBLIC);
+			addEntry(page3, ViewA1.class, TestLabelKey.MoneyInOut, PageAccessControl.PUBLIC);
 		}
 
 	}

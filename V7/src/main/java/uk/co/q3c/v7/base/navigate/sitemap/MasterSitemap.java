@@ -1,11 +1,6 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import uk.co.q3c.v7.base.navigate.NavigationState;
-
-import com.google.common.base.Joiner;
 
 public interface MasterSitemap extends Sitemap<MasterSitemapNode> {
 

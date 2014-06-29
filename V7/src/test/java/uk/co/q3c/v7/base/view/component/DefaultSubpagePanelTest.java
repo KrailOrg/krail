@@ -12,15 +12,59 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
-import static org.junit.Assert.fail;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.Translate;
 
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+
+import fixture.ReferenceUserSitemap;
+
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
 public class DefaultSubpagePanelTest {
 
+	DefaultSubpagePanel panel;
+
+	@Inject
+	ReferenceUserSitemap userSitemap;
+
+	@Mock
+	V7Navigator navigator;
+
+	@Mock
+	CurrentLocale currentLocale;
+
+	@Mock
+	Translate translate;
+
+	@Mock
+	UserOption userOption;
+
+	@Before
+	public void setup() {
+		panel = new DefaultSubpagePanel(navigator, userSitemap, currentLocale, translate, userOption);
+	}
+
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void t() {
+
+		// given
+
+		// when
+
+		// then
+		assertThat(true).isEqualTo(false);
 	}
 
 }

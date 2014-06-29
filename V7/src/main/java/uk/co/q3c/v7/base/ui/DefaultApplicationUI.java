@@ -6,7 +6,7 @@ import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
-import uk.co.q3c.v7.base.view.component.ApplicationMenu;
+import uk.co.q3c.v7.base.view.component.UserNavigationMenu;
 import uk.co.q3c.v7.base.view.component.Breadcrumb;
 import uk.co.q3c.v7.base.view.component.LocaleSelector;
 import uk.co.q3c.v7.base.view.component.MessageBar;
@@ -43,7 +43,7 @@ public class DefaultApplicationUI extends ScopedUI {
 	private final UserNavigationTree navTree;
 	private final Breadcrumb breadcrumb;
 	private final UserStatusPanel userStatus;
-	private final ApplicationMenu menu;
+	private final UserNavigationMenu menu;
 	private final SubpagePanel subpage;
 	private final MessageBar messageBar;
 	private final ApplicationLogo logo;
@@ -55,7 +55,7 @@ public class DefaultApplicationUI extends ScopedUI {
 
 	@Inject
 	protected DefaultApplicationUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel, ApplicationMenu menu,
+			ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel, UserNavigationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
 			Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector,
@@ -155,7 +155,7 @@ public class DefaultApplicationUI extends ScopedUI {
 		return userStatus;
 	}
 
-	public ApplicationMenu getMenu() {
+	public UserNavigationMenu getMenu() {
 		return menu;
 	}
 

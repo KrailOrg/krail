@@ -17,7 +17,7 @@ import com.vaadin.ui.Label;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
-public class View1 implements V7View {
+public class ViewA implements V7View {
 
 	private final Label label = new Label("not used");
 

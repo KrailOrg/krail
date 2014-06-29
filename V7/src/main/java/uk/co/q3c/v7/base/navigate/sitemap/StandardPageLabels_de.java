@@ -26,12 +26,12 @@ public class StandardPageLabels_de extends StandardPageLabels {
 	private static final ImmutableMap<StandardPageKey, String> map;
 	static {
 		map = new ImmutableMap.Builder<StandardPageKey, String>()
-// @formatter:off
+				// @formatter:off
 
-			.put(StandardPageKey.Public_Home, "Öffentliche Startseite")
-			.build();
+				.put(StandardPageKey.Public_Home, "Öffentliche Startseite").put(StandardPageKey.Login, "DE_Login")
+				.build();
 
-// @formatter:on
+		// @formatter:on
 	}
 
 	@Override

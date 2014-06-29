@@ -12,19 +12,25 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOptionStore;
+import uk.co.q3c.v7.i18n.I18NModule;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
-import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
-import uk.co.q3c.v7.i18n.I18NModule;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  *
@@ -62,6 +68,11 @@ public class DefaultDirectSitemapLoaderTest_none {
 			@Override
 			protected void configure() {
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+				bind(UserSitemap.class).to(DefaultUserSitemap.class);
+				bind(UserOption.class).to(DefaultUserOption.class);
+				bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
 			}
 
 		};

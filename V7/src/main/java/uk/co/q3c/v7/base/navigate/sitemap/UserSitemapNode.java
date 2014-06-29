@@ -100,4 +100,8 @@ public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode>
 		return label.compareTo(otherNode.label);
 	}
 
+	public int getPositionIndex() {
+		return masterNode.getPositionIndex();
+	}
+
 }

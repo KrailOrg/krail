@@ -12,15 +12,44 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import uk.co.q3c.v7.base.navigate.sitemap.comparator.UserSitemapSorters;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Tree;
 
-public interface UserNavigationTree extends Component {
+public interface UserNavigationTree extends Component, UserSitemapSorters {
 
+	/**
+	 * Returns the Vaadin {@link Tree}
+	 * 
+	 * @return
+	 */
 	Tree getTree();
 
 	void clear();
 
 	int getMaxDepth();
+
+	/**
+	 * Populate the tree with the entries from the UserSitemap
+	 */
+	void build();
+
+	/**
+	 * Set the maximum level or depth of the tree you want to be visible. A value of <=0 is ignored. This value is
+	 * stored in {@link UserOption}, and the tree is rebuilt.
+	 *
+	 * @param level
+	 */
+	void setMaxDepth(int maxDepth);
+
+	/**
+	 * Set the maximum level or depth of the tree you want to be visible. A value of <=0 is ignored. This value is
+	 * stored in {@link UserOption}. If {@code rebuild} is true, the tree is rebuilt.
+	 *
+	 * @param level
+	 */
+	void setMaxDepth(int maxDepth, boolean rebuild);
 
 }

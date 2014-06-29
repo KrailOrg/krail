@@ -25,14 +25,12 @@ public class TestLabels_de extends TestLabels {
 	static {
 
 		map = new ImmutableMap.Builder<TestLabelKey, String>()
-// @formatter:off	
+				// @formatter:off
 
-			.put(TestLabelKey.Home, "zu Hause")
-			.put(TestLabelKey.Yes, "Ja")
-			.put(TestLabelKey.No, "Nein")
-			.build();
-		
-// @formatter:on
+				.put(TestLabelKey.Home, "zu Hause").put(TestLabelKey.Yes, "Ja").put(TestLabelKey.No, "Nein")
+				.put(TestLabelKey.ViewA, "DE_ViewA").put(TestLabelKey.ViewB, "DE_ViewB").build();
+
+		// @formatter:on
 	}
 
 	@Override

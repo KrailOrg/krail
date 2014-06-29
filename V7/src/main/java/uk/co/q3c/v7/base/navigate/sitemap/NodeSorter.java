@@ -18,8 +18,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.q3c.v7.base.navigate.CollationKeyOrder;
-import uk.co.q3c.v7.base.navigate.InsertionOrder;
+import uk.co.q3c.v7.base.navigate.sitemap.comparator.AlphabeticAscending;
+import uk.co.q3c.v7.base.navigate.sitemap.comparator.InsertionOrderAscending;
 
 public class NodeSorter {
 	private static Logger log = LoggerFactory.getLogger(NodeSorter.class);
@@ -34,10 +34,10 @@ public class NodeSorter {
 	public void sort() {
 		if (sorted) {
 			log.debug("'sorted' is true, sorting by collation key");
-			Collections.sort(nodeList, new CollationKeyOrder());
+			Collections.sort(nodeList, new AlphabeticAscending());
 		} else {
 			log.debug("'sorted' is false, using insertion order");
-			Collections.sort(nodeList, new InsertionOrder());
+			Collections.sort(nodeList, new InsertionOrderAscending());
 		}
 
 	}

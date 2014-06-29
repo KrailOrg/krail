@@ -26,29 +26,19 @@ public class Labels_de extends Labels {
 	private static final ImmutableMap<LabelKey, String> map;
 	static {
 		map = new ImmutableMap.Builder<LabelKey, String>()
-// @formatter:off
+				// @formatter:off
 
-			.put(LabelKey.Cancel, "Stornieren")
-			.put(LabelKey.Enable_Account,"Konto Aktivieren")
-			.put(LabelKey.Error,"Fehler")
-			.put(LabelKey.First_Name, "Vorname")
-			.put(LabelKey.Guest,"Gast")
-			.put(LabelKey.Home_Page, "Startseite")
-			.put(LabelKey.Last_Name, "Nachname")
-			.put(LabelKey.Log_In,"Einloggen")
-			.put(LabelKey.Message_Box,"Nachricht Feld")
-			.put(LabelKey.No,"Nein")
-			.put(LabelKey.Notifications, "Benachrichtigungen")
-			.put(LabelKey.Push, "Druck")
-			.put(LabelKey.Refresh_Account, "Aktualisieren Konto")
-			.put(LabelKey.Request_Account, "Konto Anfordern")
-			.put(LabelKey.Reset_Account, "Konto Zurücksetzen")
-			.put(LabelKey.System_Account,"Systemkonto")
-			.put(LabelKey.Small, "Klein")
-			.put(LabelKey.Yes, "Ja")
-			.build();
+				.put(LabelKey.Cancel, "Stornieren").put(LabelKey.Enable_Account, "Konto Aktivieren")
+				.put(LabelKey.Error, "Fehler").put(LabelKey.First_Name, "Vorname").put(LabelKey.Guest, "Gast")
+				.put(LabelKey.Home_Page, "Startseite").put(LabelKey.Last_Name, "Nachname")
+				.put(LabelKey.Log_In, "Einloggen").put(LabelKey.Message_Box, "Nachricht Feld").put(LabelKey.No, "Nein")
+				.put(LabelKey.Notifications, "Benachrichtigungen").put(LabelKey.Private, "Privat")
+				.put(LabelKey.Public, "Öffentlichkeit").put(LabelKey.Push, "Druck")
+				.put(LabelKey.Refresh_Account, "Aktualisieren Konto").put(LabelKey.Request_Account, "Konto Anfordern")
+				.put(LabelKey.Reset_Account, "Konto Zurücksetzen").put(LabelKey.System_Account, "Systemkonto")
+				.put(LabelKey.Small, "Klein").put(LabelKey.Yes, "Ja").build();
 
-// @formatter:on
+		// @formatter:on
 	}
 
 	@Override

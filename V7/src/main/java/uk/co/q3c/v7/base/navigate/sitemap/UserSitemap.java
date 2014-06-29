@@ -6,4 +6,8 @@ public interface UserSitemap extends Sitemap<UserSitemapNode> {
 
 	public abstract void buildUriMap();
 
+	void addListener(UserSitemapChangeListener listener);
+
+	void removeListener(UserSitemapChangeListener listener);
+
 }

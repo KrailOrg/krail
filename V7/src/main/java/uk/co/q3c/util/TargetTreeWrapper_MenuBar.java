@@ -12,15 +12,9 @@
  */
 package uk.co.q3c.util;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.Collections;
-import java.util.Comparator;
-
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.MenuBar.MenuItem;
 
-public class TargetTreeWrapper_MenuBar<S> extends TargetTreeWrapperBase<S, MenuItem> {
+public class TargetTreeWrapper_MenuBar<S, T> extends TargetTreeWrapperBase<S, T> {
 
 	private final MenuBar menuBar;
 
@@ -30,26 +24,7 @@ public class TargetTreeWrapper_MenuBar<S> extends TargetTreeWrapperBase<S, MenuI
 	}
 
 	@Override
-	public MenuItem createNode(MenuItem parentNode, S sourceChildNode) {
-		checkNotNull(sourceChildNode);
-		checkNotNull(getCaptionReader(), "This implementation requires a caption reader");
-		MenuItem newTargetNode = null;
-		if (parentNode == null) {
-			newTargetNode = menuBar.addItem(getCaptionReader().getCaption(sourceChildNode), null);
-		} else {
-			newTargetNode = parentNode.addItem(getCaptionReader().getCaption(sourceChildNode), null);
-		}
-		return newTargetNode;
-	}
-
-	@Override
-	public void sort(MenuItem parentNode, Comparator<MenuItem> comparator) {
-		Collections.sort(parentNode.getChildren(), comparator);
-
-	}
-
-	@Override
-	public void addChild(MenuItem parentNode, MenuItem childNode) {
+	public void addChild(T parentNode, T childNode) {
 		throw new TreeCopyException("addNode cannot be used with this implementation, node is added during creation");
 
 	}

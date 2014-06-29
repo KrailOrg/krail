@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 public enum TestLabelKey implements I18NKey<TestLabels> {
 
-	_nullkey_, Home, My_Account, Transfers, Login, MoneyInOut, Private, Public, Opt, Yes, No, View1, View2;
+	_nullkey_, Home, My_Account, Transfers, Login, MoneyInOut, Private, Public, Opt, Yes, No, View1, View2, ViewA, ViewA1, ViewA11, ViewB, ViewB1, ViewB11;
 
 	@Override
 	public TestLabels getBundle(Locale locale) {

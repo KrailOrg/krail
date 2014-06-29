@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.util;
 
+import java.util.Comparator;
+
 /**
  * A default implementation for {@link NodeModifier} which assumes that the source and target nodes are the same type.
  * This would be used by {@link TreeCopy} where the nodes in the target tree are just references to nodes in the source
@@ -54,6 +56,12 @@ public class DefaultNodeModifier<S, T> implements NodeModifier<S, T> {
 	@Override
 	public boolean attachOnCreate() {
 		return false;
+	}
+
+	@Override
+	public void sortChildren(T parentNode, Comparator<T> comparator) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

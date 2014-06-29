@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.util;
 
+import java.util.Comparator;
+
 import com.vaadin.ui.MenuBar.MenuItem;
 
 /**
@@ -74,5 +76,13 @@ public interface NodeModifier<S, T> {
 	 * @param caption
 	 */
 	void setCaption(T targetNode, String caption);
+
+	/**
+	 * Sort the children of the {@code targetNode} using {@code comparator}
+	 * 
+	 * @param parentNode
+	 * @param comparator
+	 */
+	void sortChildren(T parentNode, Comparator<T> comparator);
 
 }

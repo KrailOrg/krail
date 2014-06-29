@@ -19,7 +19,6 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 import uk.co.q3c.v7.base.user.opt.UserOption;
-import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.base.user.status.UserStatusListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18N;
@@ -35,10 +34,9 @@ public class DefaultSubpagePanel extends NavigationButtonPanel implements Subpag
 
 	@Inject
 	protected DefaultSubpagePanel(V7Navigator navigator, UserSitemap userSitemap, CurrentLocale currentLocale,
-			Translate translate, UserStatus userStatus, UserOption userOption) {
+			Translate translate, UserOption userOption) {
 		super(navigator, userSitemap, currentLocale, translate, userOption);
 		this.userSitemap = userSitemap;
-		userStatus.addListener(this);
 		userStatusChanged();
 	}
 

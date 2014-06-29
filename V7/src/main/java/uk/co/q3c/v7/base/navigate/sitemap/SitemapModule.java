@@ -12,6 +12,9 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
+import uk.co.q3c.v7.base.navigate.sitemap.comparator.DefaultUserSitemapSorters;
+import uk.co.q3c.v7.base.navigate.sitemap.comparator.UserSitemapSorters;
+
 import com.google.inject.AbstractModule;
 
 public class SitemapModule extends AbstractModule {
@@ -27,12 +30,11 @@ public class SitemapModule extends AbstractModule {
 
 	private void bindMasterSitemap() {
 		bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
-
 	}
 
 	private void bindUserSitemap() {
 		bind(UserSitemap.class).to(DefaultUserSitemap.class);
-
+		bind(UserSitemapSorters.class).to(DefaultUserSitemapSorters.class);
 	}
 
 	protected void bindService() {

@@ -1,24 +1,25 @@
 package uk.co.q3c.v7.base.navigate;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
-import com.vaadin.server.Page;
-import com.vaadin.ui.UI;
-import com.vaadin.util.CurrentInstance;
-import fixture.testviews2.TestLoginView;
-import fixture.testviews2.View2;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.co.q3c.v7.base.navigate.sitemap.MockUserSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.DefaultMasterSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.DefaultUserSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
@@ -28,15 +29,33 @@ import uk.co.q3c.v7.base.shiro.PagePermission;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.ui.ScopedUIProvider;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
-import uk.co.q3c.v7.base.view.*;
+import uk.co.q3c.v7.base.user.opt.UserOptionStore;
+import uk.co.q3c.v7.base.view.DefaultErrorView;
+import uk.co.q3c.v7.base.view.DefaultViewFactory;
+import uk.co.q3c.v7.base.view.ErrorView;
+import uk.co.q3c.v7.base.view.LoginView;
+import uk.co.q3c.v7.base.view.LogoutView;
+import uk.co.q3c.v7.base.view.V7View;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
+import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.I18NModule;
 
-import java.util.List;
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.server.Page;
+import com.vaadin.ui.UI;
+import com.vaadin.util.CurrentInstance;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import fixture.ReferenceUserSitemap;
+import fixture.testviews2.TestLoginView;
+import fixture.testviews2.ViewA1;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
@@ -93,19 +112,18 @@ public class DefaultV7NavigatorTest {
 	private UserOption userOption;
 
 	@Inject
-	private MockUserSitemap userSitemap;
+	private ReferenceUserSitemap userSitemap;
 
 	@Before
 	public void setup() {
-
+		userSitemap.populate();
 		when(uiProvider.get()).thenReturn(scopedUI);
 		when(scopedUI.getPage()).thenReturn(browserPage);
 		when(errorViewProvider.get()).thenReturn(errorView);
 		when(subjectProvider.get()).thenReturn(subject);
-		when(userSitemapProvider.get()).thenReturn(userSitemap.userSitemap);
+		when(userSitemapProvider.get()).thenReturn(userSitemap);
 
 		CurrentInstance.set(UI.class, scopedUI);
-		userSitemap.createNodeSet(1);
 		navigator = createNavigator();
 	}
 
@@ -137,14 +155,14 @@ public class DefaultV7NavigatorTest {
 		// given
 
 		// when
-		navigator.navigateTo(userSitemap.public2URI);
+		navigator.navigateTo(userSitemap.a1URI);
 		navigator.navigateTo(StandardPageKey.Login);
 		assertThat(navigator.getCurrentView()).isInstanceOf(TestLoginView.class);
 		// // when
 		when(subject.isAuthenticated()).thenReturn(true);
 		navigator.userStatusChanged();
 		// // then
-		assertThat(navigator.getCurrentView()).isInstanceOf(View2.class);
+		assertThat(navigator.getCurrentView()).isInstanceOf(ViewA1.class);
 	}
 
 	@Test
@@ -170,11 +188,11 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		// when
-		navigator.navigateTo(userSitemap.public2URI);
+		navigator.navigateTo(userSitemap.a11URI);
 		// then
-		assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.public2ViewClass);
-		assertThat(navigator.getCurrentNode()).isEqualTo(userSitemap.public2Node);
-		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.public2URI);
+		assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a11ViewClass);
+		assertThat(navigator.getCurrentNode()).isEqualTo(userSitemap.a11Node);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.a11URI);
 	}
 
 	@Test
@@ -183,7 +201,6 @@ public class DefaultV7NavigatorTest {
 		// given
 		String page1 = "";
 		String fragment1 = page1 + "/id=2/age=5";
-		userSitemap.setNodeFor("public/home/id=2/age=5", userSitemap.publicHomeNode);
 
 		// when
 		navigator.navigateTo(fragment1);
@@ -197,7 +214,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view3";
-		userSitemap.addRedirect(page);
+
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -208,7 +225,6 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "public/view3";
-		userSitemap.addRedirect(page);
 		// when
 		try {
 			navigator.navigateTo(page);
@@ -224,9 +240,9 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		// when
-		navigator.navigateTo(userSitemap.public2URI);
+		navigator.navigateTo(userSitemap.a1URI);
 		// then
-		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.public2URI);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.a1URI);
 
 	}
 
@@ -234,9 +250,8 @@ public class DefaultV7NavigatorTest {
 	public void getNavigationParams() {
 
 		// given
-		String page1 = "public/2";
+		String page1 = userSitemap.a1URI;
 		String fragment1 = page1 + "/id=2/age=5";
-		userSitemap.setNodeFor("public/2/id=2/age=5", userSitemap.publicHomeNode);
 		// when
 		navigator.navigateTo(fragment1);
 		// then
@@ -249,9 +264,9 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		// when
-		navigator.navigateTo(userSitemap.public1Node);
+		navigator.navigateTo(userSitemap.a11Node);
 		// then
-		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.public1URI);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.a11URI);
 
 	}
 
@@ -259,13 +274,11 @@ public class DefaultV7NavigatorTest {
 	public void currentAndPreviousViews_andClearHistory() {
 
 		// given
-		userSitemap.setNodeFor("public/1/id=1", userSitemap.public1Node);
-		userSitemap.setNodeFor("public/2/id=2", userSitemap.public2Node);
 
-		String page1 = userSitemap.public1URI;
+		String page1 = userSitemap.a1URI;
 		String fragment1 = page1 + "/id=1";
 
-		String page2 = userSitemap.public2URI;
+		String page2 = userSitemap.a11URI;
 		String fragment2 = page2 + "/id=2";
 
 		// when
@@ -281,7 +294,7 @@ public class DefaultV7NavigatorTest {
 		navigator.navigateTo(fragment1);
 
 		// then
-		assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.public1ViewClass);
+		assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a1ViewClass);
 		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment1);
 
 		assertThat(navigator.getPreviousNavigationState()).isNull();
@@ -290,7 +303,7 @@ public class DefaultV7NavigatorTest {
 		navigator.navigateTo(fragment2);
 
 		// then
-		assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.public2ViewClass);
+		assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a11ViewClass);
 		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment2);
 
 		assertThat(navigator.getPreviousNavigationState().getFragment()).isEqualTo(fragment1);
@@ -299,7 +312,7 @@ public class DefaultV7NavigatorTest {
 		navigator.clearHistory();
 
 		// then
-		assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.public2ViewClass);
+		assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a11ViewClass);
 		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(fragment2);
 
 		assertThat(navigator.getPreviousNavigationState()).isNull();
@@ -312,7 +325,7 @@ public class DefaultV7NavigatorTest {
 	public void listeners_allRespond() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a11URI;
 
 		// need to return true, or first listener will block the second
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(true);
@@ -332,7 +345,7 @@ public class DefaultV7NavigatorTest {
 	public void listener_blocked() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a11URI;
 
 		// to block second and subsequent
 		when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(false);
@@ -352,7 +365,7 @@ public class DefaultV7NavigatorTest {
 
 		// given
 		String page = "wiggly";
-		String page2 = userSitemap.public2URI;
+		String page2 = userSitemap.a1URI;
 
 		userSitemap.addRedirect(page, page2);
 		// when
@@ -365,14 +378,14 @@ public class DefaultV7NavigatorTest {
 	public void navigateToNavState() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 		NavigationState navigationState = uriHandler.navigationState(page);
 
 		// when
 		navigator.navigateTo(navigationState);
 		// then
 		assertThat(navigator.getCurrentNavigationState()).isEqualTo(navigationState);
-		assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.public2ViewClass);
+		assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a1ViewClass);
 	}
 
 	@Test
@@ -390,11 +403,11 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Public() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 		// when
 		navigator.navigateTo(page);
 		// then
-		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.public2URI);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.a1URI);
 	}
 
 	/**
@@ -404,36 +417,36 @@ public class DefaultV7NavigatorTest {
 	public void UAC_User() {
 
 		// given authenticated
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
-		userSitemap.public2Node.getMasterNode().setPageAccessControl(PageAccessControl.USER);
+		userSitemap.a1Node.getMasterNode().setPageAccessControl(PageAccessControl.USER);
 		// when
 		navigator.navigateTo(page);
 		// then
-		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.public2URI);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.a1URI);
 
 		// given remembered
-		page = userSitemap.public1URI;
+		page = userSitemap.a11URI;
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(true);
-		userSitemap.public1Node.getMasterNode().setPageAccessControl(PageAccessControl.USER);
+		userSitemap.a11Node.getMasterNode().setPageAccessControl(PageAccessControl.USER);
 		// when
 		navigator.navigateTo(page);
 		// then
-		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.public1URI);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.a11URI);
 
 	}
 
 	@Test(expected = UnauthorizedException.class)
 	public void UAC_User_fail() {
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(false);
-		userSitemap.public2Node.getMasterNode().setPageAccessControl(PageAccessControl.USER);
+		userSitemap.a1Node.getMasterNode().setPageAccessControl(PageAccessControl.USER);
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -444,15 +457,15 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Guest() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(false);
-		userSitemap.public2Node.getMasterNode().setPageAccessControl(PageAccessControl.GUEST);
+		userSitemap.a1Node.getMasterNode().setPageAccessControl(PageAccessControl.GUEST);
 		// when
 		navigator.navigateTo(page);
 		// then
-		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.public2URI);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.a1URI);
 
 	}
 
@@ -460,11 +473,11 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Guest_Fail_remembered() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(true);
-		userSitemap.public2Node.getMasterNode().setPageAccessControl(PageAccessControl.GUEST);
+		userSitemap.a1Node.getMasterNode().setPageAccessControl(PageAccessControl.GUEST);
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -474,11 +487,11 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Guest_Fail_authenticated() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
-		userSitemap.public2Node.getMasterNode().setPageAccessControl(PageAccessControl.GUEST);
+		userSitemap.a1Node.getMasterNode().setPageAccessControl(PageAccessControl.GUEST);
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -488,26 +501,26 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Authenticate() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
-		userSitemap.public2Node.getMasterNode().setPageAccessControl(PageAccessControl.AUTHENTICATION);
+		userSitemap.a1Node.getMasterNode().setPageAccessControl(PageAccessControl.AUTHENTICATION);
 		// when
 		navigator.navigateTo(page);
 		// then
-		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.public2URI);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.a1URI);
 
 	}
 
 	@Test(expected = UnauthorizedException.class)
 	public void UAC_Authenticate_Fail() {
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(false);
 		when(subject.isRemembered()).thenReturn(false);
-		userSitemap.public2Node.getMasterNode().setPageAccessControl(PageAccessControl.AUTHENTICATION);
+		userSitemap.a1Node.getMasterNode().setPageAccessControl(PageAccessControl.AUTHENTICATION);
 		// when
 		navigator.navigateTo(page);
 		// then
@@ -517,16 +530,16 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Permission() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
-		userSitemap.public2Node.getMasterNode().setPageAccessControl(PageAccessControl.PERMISSION);
+		userSitemap.a1Node.getMasterNode().setPageAccessControl(PageAccessControl.PERMISSION);
 		when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
 		// when
 		navigator.navigateTo(page);
 		// then
-		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.public2URI);
+		assertThat(navigator.getCurrentNavigationState().getFragment()).isEqualTo(userSitemap.a1URI);
 
 	}
 
@@ -534,11 +547,11 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Permission_Failed() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
-		userSitemap.public2Node.getMasterNode().setPageAccessControl(PageAccessControl.PERMISSION);
+		userSitemap.a1Node.getMasterNode().setPageAccessControl(PageAccessControl.PERMISSION);
 		when(subject.isPermitted(any(PagePermission.class))).thenReturn(false);
 		// when
 		navigator.navigateTo(page);
@@ -549,14 +562,14 @@ public class DefaultV7NavigatorTest {
 	public void UAC_roles() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
-		userSitemap.public2Node.getMasterNode().setPageAccessControl(PageAccessControl.ROLES);
-		userSitemap.public2Node.getMasterNode().addRole("admin");
-		userSitemap.public2Node.getMasterNode().addRole("beast");
-		List<String> permissions = userSitemap.public2Node.getMasterNode().getRoles();
+		userSitemap.a1Node.getMasterNode().setPageAccessControl(PageAccessControl.ROLES);
+		userSitemap.a1Node.getMasterNode().addRole("admin");
+		userSitemap.a1Node.getMasterNode().addRole("beast");
+		List<String> permissions = userSitemap.a1Node.getMasterNode().getRoles();
 		when(subject.hasAllRoles(permissions)).thenReturn(true);
 		// when
 		navigator.navigateTo(page);
@@ -569,14 +582,14 @@ public class DefaultV7NavigatorTest {
 	public void UAC_roles_failed() {
 
 		// given
-		String page = userSitemap.public2URI;
+		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
 		when(subject.isRemembered()).thenReturn(false);
-		userSitemap.public2Node.getMasterNode().setPageAccessControl(PageAccessControl.ROLES);
-		userSitemap.public2Node.getMasterNode().addRole("admin");
-		userSitemap.public2Node.getMasterNode().addRole("beast");
-		List<String> permissions = userSitemap.public2Node.getMasterNode().getRoles();
+		userSitemap.a1Node.getMasterNode().setPageAccessControl(PageAccessControl.ROLES);
+		userSitemap.a1Node.getMasterNode().addRole("admin");
+		userSitemap.a1Node.getMasterNode().addRole("beast");
+		List<String> permissions = userSitemap.a1Node.getMasterNode().getRoles();
 		when(subject.hasAllRoles(permissions)).thenReturn(false);
 		// when
 		navigator.navigateTo(page);
@@ -593,6 +606,11 @@ public class DefaultV7NavigatorTest {
 			protected void configure() {
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 				bind(ErrorView.class).to(DefaultErrorView.class);
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+				bind(UserSitemap.class).to(DefaultUserSitemap.class);
+				bind(UserOption.class).to(DefaultUserOption.class);
+				bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
 			}
 
 		};

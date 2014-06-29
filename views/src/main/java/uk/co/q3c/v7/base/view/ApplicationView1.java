@@ -16,7 +16,7 @@ import java.util.List;
 
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
-import uk.co.q3c.v7.base.view.component.ApplicationMenu;
+import uk.co.q3c.v7.base.view.component.UserNavigationMenu;
 import uk.co.q3c.v7.base.view.component.Breadcrumb;
 import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.base.view.component.DefaultViewBody;
@@ -45,7 +45,7 @@ public class ApplicationView1 extends ViewBaseWithLayout {
 	private final UserNavigationTree navTree;
 	private final Breadcrumb breadcrumb;
 	private final UserStatusPanel loginOut;
-	private final ApplicationMenu menu;
+	private final UserNavigationMenu menu;
 	private final SubpagePanel subpage;
 	private final MessageBar messageBar;
 	private final ApplicationLogo logo;
@@ -54,7 +54,7 @@ public class ApplicationView1 extends ViewBaseWithLayout {
 
 	@Inject
 	protected ApplicationView1(ApplicationViewLayout1 viewLayout, Translate translate, UserNavigationTree navTree,
-			Breadcrumb breadcrumb, UserStatusPanel loginOut, ApplicationMenu menu, SubpagePanel subpage,
+			Breadcrumb breadcrumb, UserStatusPanel loginOut, UserNavigationMenu menu, SubpagePanel subpage,
 			MessageBar messageBar, ApplicationLogo logo, ApplicationHeader header) {
 		super(viewLayout, translate);
 		this.navTree = navTree;

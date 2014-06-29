@@ -12,12 +12,20 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import java.util.Comparator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapChangeListener;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
+import uk.co.q3c.v7.base.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
@@ -37,25 +45,37 @@ import com.vaadin.ui.Tree;
  * @author David Sowerby 17 May 2013
  *
  */
-public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener {
+public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener,
+		UserSitemapChangeListener {
+	private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
 	private final UserSitemap userSitemap;
 	private final V7Navigator navigator;
 	private final UserOption userOption;
 	private boolean suppressValueChangeEvents;
+	private final UserNavigationTreeBuilder builder;
+	private final UserSitemapSorters sorters;
 
 	@Inject
-	protected DefaultUserNavigationTree(UserSitemap userSitemap, V7Navigator navigator, UserOption userOption) {
+	protected DefaultUserNavigationTree(UserSitemap userSitemap, V7Navigator navigator, UserOption userOption,
+			UserNavigationTreeBuilder builder, UserSitemapSorters sorters) {
 		super();
 		this.userSitemap = userSitemap;
 		this.navigator = navigator;
 		this.userOption = userOption;
+		this.builder = builder;
+		this.sorters = sorters;
+		builder.setUserNavigationTree(this);
 		setImmediate(true);
 		setItemCaptionMode(ItemCaptionMode.EXPLICIT);
-		// set user option
+		userSitemap.addListener(this);
 		addValueChangeListener(this);
 		navigator.addViewChangeListener(this);
 		setId(ID.getId(this));
 
+	}
+
+	public UserNavigationTreeBuilder getBuilder() {
+		return builder;
 	}
 
 	/**
@@ -71,19 +91,27 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 
 	@Override
 	public int getMaxDepth() {
-		return userOption.getOptionAsInt(this.getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, -1);
+		return userOption.getOptionAsInt(this.getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, 10);
 	}
 
 	/**
-	 * Set the maximum level or depth of the tree you want to be visible. 0 is not allowed, and is ignored. Set to < 0
-	 * if you want this tree to display the full {@link #userSitemap}
-	 *
-	 * @param level
+	 * See {@link UserNavigationTree#setMaxDepth(int)}
 	 */
+	@Override
 	public void setMaxDepth(int maxDepth) {
-		if (maxDepth != 0) {
+		setMaxDepth(maxDepth, true);
+	}
+
+	/**
+	 * See {@link UserNavigationTree#setMaxDepth(int, boolean)}
+	 */
+	@Override
+	public void setMaxDepth(int maxDepth, boolean rebuild) {
+		if (maxDepth > 0) {
 			userOption.setOption(this.getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, maxDepth);
-			// loadNodes();
+			build();
+		} else {
+			log.debug("Attempt to set max depth value to {}, but has been ignored.  It must be greater than 0. ");
 		}
 	}
 
@@ -135,4 +163,48 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	public void clear() {
 		removeAllItems();
 	}
+
+	/**
+	 * See {@link UserNavigationTree#build()}
+	 */
+	@Override
+	public void build() {
+		clear();
+		builder.build();
+	}
+
+	/**
+	 * Although only {@link UserSitemap} labels (and therefore captions) have changed, the tree may need to be re-sorted
+	 * to reflect the change in language, so it is easier just to rebuild the tree
+	 */
+	@Override
+	public void labelsChanged() {
+		build();
+	}
+
+	/**
+	 * {@link UserSitemap} structure has changed, we need to rebuild
+	 */
+	@Override
+	public void structureChanged() {
+		build();
+	}
+
+	@Override
+	public void setSortAscending(boolean ascending) {
+		sorters.setSortAscending(ascending);
+		build();
+	}
+
+	@Override
+	public void setSortType(SortType sortType) {
+		sorters.setSortType(sortType);
+		build();
+	}
+
+	@Override
+	public Comparator<UserSitemapNode> getSortComparator() {
+		return sorters.getSortComparator();
+	}
+
 }

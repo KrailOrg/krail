@@ -15,7 +15,7 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import fixture.testviews2.View1;
+import fixture.testviews2.ViewA;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
@@ -44,7 +44,7 @@ public class UserSitemapNodeTest {
 	@Test
 	public void translate() {
 		// given
-		MasterSitemapNode masterNode = new MasterSitemapNode("a", View1.class, LabelKey.Home_Page);
+		MasterSitemapNode masterNode = new MasterSitemapNode("a", ViewA.class, LabelKey.Home_Page);
 		userNode = new UserSitemapNode(masterNode);
 		currentLocale.setLocale(Locale.GERMANY);
 		Collator collator = Collator.getInstance(Locale.GERMANY);

@@ -83,6 +83,7 @@ public class TreeCopy<S, T> {
 	private Comparator<S> sourceSortComparator;
 	private final LinkedList<TreeCopyFilter<S>> sourceFilters = new LinkedList<>();
 	private TreeCopyExtension<S, T> extension;
+	private boolean sorted = true;
 
 	public TreeCopy(SourceTreeWrapper<S> source, TargetTreeWrapper<S, T> target) {
 		super();
@@ -143,7 +144,9 @@ public class TreeCopy<S, T> {
 		// will fit most cases, but occasionally a target node may use a different sort key
 		case SORT_SOURCE_NODES:
 			log.debug("sorting list of source nodes, using comparator");
-			Collections.sort(sourceNodeList, sourceSortComparator);
+			if (sorted) {
+				Collections.sort(sourceNodeList, sourceSortComparator);
+			}
 			targetToSourceNodeMap = createTargetNodes(parentNode, sourceNodeList, sortOption);
 
 			addNodesToTarget(parentNode, targetToSourceNodeMap);
@@ -162,8 +165,12 @@ public class TreeCopy<S, T> {
 		case SORT_TARGET_NODES_AFTER_ADD:
 			targetToSourceNodeMap = createTargetNodes(parentNode, sourceNodeList, sortOption);
 			addNodesToTarget(parentNode, targetToSourceNodeMap);
+			if (sorted) {
+				log.debug("sorting child target nodes after they have been added to target parent node");
+				target.sortChildren(parentNode, targetSortComparator);
+			}
 			drillDown(targetToSourceNodeMap, level);
-			target.sort(parentNode, targetSortComparator);
+
 			break;
 		}
 
@@ -238,13 +245,20 @@ public class TreeCopy<S, T> {
 		switch (sortOption) {
 
 		case SORT_SOURCE_NODES:
-			// nodes has already been sorted, so using LinkedHashMap to keep current order
+			// nodes has already been sorted (if required), so using LinkedHashMap to keep current order
 			targetToSourceNodeMap = new LinkedHashMap<>();
 			break;
 
 		case SORT_TARGET_NODES_BEFORE_ADD:
-			// use the TreeMap to sort
-			targetToSourceNodeMap = new TreeMap<>(targetSortComparator);
+			// use the TreeMap to sort if sorted is true
+
+			if (sorted) {
+				log.debug("using SortedMap with comparator to sort target nodes");
+				targetToSourceNodeMap = new TreeMap<>(targetSortComparator);
+			} else {
+				log.debug("sorting not required, use LinkedHashMap for target nodes");
+				targetToSourceNodeMap = new LinkedHashMap<>();
+			}
 			break;
 
 		case SORT_TARGET_NODES_AFTER_ADD:
@@ -314,6 +328,14 @@ public class TreeCopy<S, T> {
 
 	public void setSortOption(SortOption sortOption) {
 		this.sortOption = sortOption;
+	}
+
+	public void setSorted(boolean sorted) {
+		this.sorted = sorted;
+	}
+
+	public boolean isSorted() {
+		return sorted;
 	}
 
 }

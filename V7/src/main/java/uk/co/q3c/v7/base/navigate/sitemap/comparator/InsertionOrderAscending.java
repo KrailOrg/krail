@@ -10,22 +10,30 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.co.q3c.v7.base.navigate;
+package uk.co.q3c.v7.base.navigate.sitemap.comparator;
 
 import java.util.Comparator;
 
+import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
+import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.LabelKey;
 
 /**
- * Comparator which can be used to sort SitemapNode by collation key order, based on
- * {@link SitemapNode#getCollationKey()()}. This enables sorting by Locale sensitive labels, as the collation key is set
- * to reflect the current locale
+ * Comparator which can be used to sort SitemapNode by insertion order, based on {@link MasterSitemapNode#getId()}
  */
-public class CollationKeyOrder implements Comparator<UserSitemapNode> {
-
+public class InsertionOrderAscending implements Comparator<UserSitemapNode>, UserSitemapSorter {
+	/**
+	 *
+	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+	 */
 	@Override
 	public int compare(UserSitemapNode o1, UserSitemapNode o2) {
-		return o1.getCollationKey().compareTo(o2.getCollationKey());
+		return o1.getId() - o2.getId();
 	}
 
+	@Override
+	public I18NKey<?> nameKey() {
+		return LabelKey.Insertion_Order_Ascending;
+	}
 }

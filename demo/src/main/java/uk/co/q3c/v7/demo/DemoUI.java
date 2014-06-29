@@ -8,7 +8,7 @@ import uk.co.q3c.v7.base.ui.DefaultApplicationUI;
 import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
-import uk.co.q3c.v7.base.view.component.ApplicationMenu;
+import uk.co.q3c.v7.base.view.component.UserNavigationMenu;
 import uk.co.q3c.v7.base.view.component.Breadcrumb;
 import uk.co.q3c.v7.base.view.component.LocaleSelector;
 import uk.co.q3c.v7.base.view.component.MessageBar;
@@ -38,7 +38,7 @@ public class DemoUI extends DefaultApplicationUI {
 
 	@Inject
 	protected DemoUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-			ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatus, ApplicationMenu menu,
+			ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatus, UserNavigationMenu menu,
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, Translate translate,
 			ApplicationTitle applicationTitle, CurrentLocale currentLocale, I18NProcessor translator,

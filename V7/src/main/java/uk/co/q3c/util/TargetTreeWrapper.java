@@ -22,7 +22,8 @@ import com.vaadin.ui.Tree;
  * Tree<br>
  * <br>
  *
- * Parameter 'N' it the node type
+ * Parameter 'S' it the source node type<br>
+ * Parameter 'T' it the target node type<br>
  *
  * @author David Sowerby
  * @date 26 May 2014
@@ -30,8 +31,13 @@ import com.vaadin.ui.Tree;
 public interface TargetTreeWrapper<S, T> {
 
 	/**
-	 * Creates a new target node based on {@code sourceChildNode}, and adds to to the {@code parentNode}. Returns the
-	 * new child target node. Delegates to {@link NodeModifier#create(Object, Object)} if one is provided.
+	 * Creates a new target node based on {@code sourceChildNode}. It may also add the resultant target node as a child
+	 * of the {@code parentNode}. However, remember that if it does so, the
+	 * {@link TreeCopy#setSortOption(uk.co.q3c.util.TreeCopy.SortOption)} must be appropriately set. If the target tree
+	 * implementation does not support a sort after nodes have been added (and most do not) then the sort must have been
+	 * performed on the source nodes before they are added.
+	 * <p>
+	 * Returns the new child target node. Delegates to {@link NodeModifier#create(Object, Object)} if one is provided.
 	 *
 	 * @param parentNode
 	 *            the parent target node which will be the parent of the created target node. This can be null, if the
@@ -60,11 +66,12 @@ public interface TargetTreeWrapper<S, T> {
 	NodeModifier<S, T> getNodeModifier();
 
 	/**
-	 * Sorts the children of {@code parentNode}. {@code parentNode} can not be null, {@code comparator} may be null
+	 * Sorts the children of {@code parentNode}. {@code parentNode} can not be null, {@code comparator} may be null.
+	 * Throws a {@link TreeCopyException} if this method is not supported by the implementation
 	 *
 	 * @param parentNode
 	 */
-	public void sort(T parentNode, Comparator<T> comparator);
+	public void sortChildren(T parentNode, Comparator<T> comparator);
 
 	void addChild(T parentNode, T childNode);
 

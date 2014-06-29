@@ -22,6 +22,8 @@ import java.util.ResourceBundle;
  */
 public enum LabelKey implements I18NKey<Labels> {
 	_nullkey_,
+	Alphabetic_Ascending,
+	Alphabetic_Descending,
 	Application_Configuration_Service,
 	Authentication,
 	Authorisation,
@@ -35,6 +37,8 @@ public enum LabelKey implements I18NKey<Labels> {
 	Guest,
 	Home_Page,
 	Invalid_Page,
+	Insertion_Order_Ascending,
+	Insertion_Order_Descending,
 	Last_Name,
 	Log_In,
 	Log_Out,
@@ -44,6 +48,8 @@ public enum LabelKey implements I18NKey<Labels> {
 	No,
 	Notifications,
 	Ok,
+	Position_Index_Ascending,
+	Position_Index_Descending,
 	Private,
 	Public,
 	Pull,
@@ -60,7 +66,7 @@ public enum LabelKey implements I18NKey<Labels> {
 	User_Name,
 	V7,
 	Warning,
-	Yes, ;
+	Yes;
 
 	@Override
 	public Labels getBundle(Locale locale) {

@@ -12,8 +12,6 @@
  */
 package uk.co.q3c.util;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Comparator;
 
 import com.vaadin.ui.Tree;
@@ -25,29 +23,23 @@ public class TargetTreeWrapper_VaadinTree<S, T> extends TargetTreeWrapperBase<S,
 	public TargetTreeWrapper_VaadinTree(Tree tree) {
 		super();
 		this.tree = tree;
+		nodeModifier = new DefaultNodeModifier<S, T>();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public T createNode(T parentNode, S sourceChildNode) {
-		checkNotNull(sourceChildNode);
-		checkNotNull(getCaptionReader(), "a caption reader is needed, so that tree item captions are set");
-		T newTargetNode = null;
-		if (getNodeModifier() == null) {
-			newTargetNode = (T) sourceChildNode;
-		} else {
-			newTargetNode = getNodeModifier().create(parentNode, sourceChildNode);
-		}
+		T newTargetNode = super.createNode(parentNode, sourceChildNode);
 		tree.setItemCaption(newTargetNode, getCaptionReader().getCaption(sourceChildNode));
 		return newTargetNode;
 	}
 
 	/**
-	 * Not used in this implementation
+	 * Not supported in this implementation
 	 */
 	@Override
-	public void sort(T parentNode, Comparator<T> comparator) {
-
+	public void sortChildren(T parentNode, Comparator<T> comparator) {
+		throw new TreeCopyException(
+				"Sort cannot be performed after child target nodes added to parent in this implementation");
 	}
 
 	@Override

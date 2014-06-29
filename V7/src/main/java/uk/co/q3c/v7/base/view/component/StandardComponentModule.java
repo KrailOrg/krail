@@ -23,7 +23,7 @@ public class StandardComponentModule extends AbstractModule {
 		bindUserNavigationTree();
 		bindBreadcrumb();
 		bindLoginStatusPanel();
-		bindApplicationMenu();
+		bindNavigationMenu();
 		bindSubpagePanel();
 		bindMessageStatusPanel();
 		bindApplicationLogo();
@@ -80,11 +80,12 @@ public class StandardComponentModule extends AbstractModule {
 	}
 
 	/**
-	 * Override this method to provide your own implementation of {@link ApplicationMenu} in a sub-class of this module.
-	 * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+	 * Override this method to provide your own implementation of {@link UserNavigationMenu} in a sub-class of this
+	 * module. Your module will then need to replace this module in {@link BaseGuiceServletInjector}
 	 */
-	protected void bindApplicationMenu() {
-		bind(ApplicationMenu.class).to(UserNavigationMenu.class);
+	protected void bindNavigationMenu() {
+		bind(UserNavigationMenu.class).to(DefaultUserNavigationMenu.class);
+		bind(UserNavigationMenuBuilder.class).to(DefaultUserNavigationMenuBuilder.class);
 	}
 
 	/**
@@ -96,11 +97,13 @@ public class StandardComponentModule extends AbstractModule {
 	}
 
 	/**
-	 * Override this method to provide your own implementation of {@link UserNavigationTree} in a sub-class of this
-	 * module. Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+	 * Override this method to provide your own implementation of {@link UserNavigationTree}, and its associated
+	 * builder, in a sub-class of this module. Your module will then need to replace this module in
+	 * {@link BaseGuiceServletInjector}
 	 */
 	protected void bindUserNavigationTree() {
 		bind(UserNavigationTree.class).to(DefaultUserNavigationTree.class);
+		bind(UserNavigationTreeBuilder.class).to(DefaultUserNavigationTreeBuilder.class);
 	}
 
 }

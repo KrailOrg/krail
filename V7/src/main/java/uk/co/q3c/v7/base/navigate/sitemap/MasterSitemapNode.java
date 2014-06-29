@@ -58,6 +58,7 @@ import com.google.common.collect.ImmutableList;
 public class MasterSitemapNode implements SitemapNode {
 
 	private int id;
+	private int positionIndex;
 	private String uriSegment;
 	private Class<? extends V7View> viewClass;
 	private I18NKey<?> labelKey;
@@ -193,6 +194,14 @@ public class MasterSitemapNode implements SitemapNode {
 	public void setRoles(List<String> list) {
 		roles = new HashSet<>(list);
 
+	}
+
+	public int getPositionIndex() {
+		return positionIndex;
+	}
+
+	public void setPositionIndex(int positionIndex) {
+		this.positionIndex = positionIndex;
 	}
 
 }

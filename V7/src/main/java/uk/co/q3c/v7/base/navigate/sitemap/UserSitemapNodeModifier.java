@@ -13,6 +13,7 @@
 package uk.co.q3c.v7.base.navigate.sitemap;
 
 import java.text.Collator;
+import java.util.Comparator;
 
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -74,12 +75,6 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
 			return null;
 		}
 
-		// never show the logout page
-		// done by filter
-		// if (masterNode.equals(masterSitemap.standardPageNode(StandardPageKey.Logout))) {
-		// log.debug("Logout node is never shown, returning null");
-		// return null;
-		// }
 		// if the subject is already authenticated, don't show the login page
 		if (subject.isAuthenticated()) {
 			if (masterNode.equals(masterSitemap.standardPageNode(StandardPageKey.Login))) {
@@ -124,6 +119,14 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
 	@Override
 	public boolean attachOnCreate() {
 		return false;
+	}
+
+	/**
+	 * Not used in this implementation
+	 */
+	@Override
+	public void sortChildren(UserSitemapNode parentNode, Comparator<UserSitemapNode> comparator) {
+
 	}
 
 }

@@ -12,32 +12,9 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.testviews2.My_AccountView;
-import fixture.testviews2.OptionsView;
-import org.apache.commons.io.FileUtils;
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
-import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
-import uk.co.q3c.v7.base.navigate.sitemap.DefaultFileSitemapLoaderTest.TestFileSitemapModule;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapLoader.LoaderErrorEntry;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapLoader.LoaderInfoEntry;
-import uk.co.q3c.v7.base.navigate.sitemap.SitemapLoader.LoaderWarningEntry;
-import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
-import uk.co.q3c.v7.base.view.testviews.subview.TransferView;
-import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
-import uk.co.q3c.v7.i18n.I18NModule;
-import uk.co.q3c.v7.i18n.I18NProcessor;
-import uk.co.q3c.v7.i18n.TestLabelKey;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.jodatime.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,9 +23,39 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.assertj.jodatime.api.Assertions.assertThat;
+import org.apache.commons.io.FileUtils;
+import org.joda.time.DateTime;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
+import uk.co.q3c.v7.base.navigate.sitemap.DefaultFileSitemapLoaderTest.TestFileSitemapModule;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapLoader.LoaderErrorEntry;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapLoader.LoaderInfoEntry;
+import uk.co.q3c.v7.base.navigate.sitemap.SitemapLoader.LoaderWarningEntry;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
+import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOptionStore;
+import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
+import uk.co.q3c.v7.base.view.testviews.subview.TransferView;
+import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
+import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.i18n.I18NProcessor;
+import uk.co.q3c.v7.i18n.TestLabelKey;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+
+import fixture.testviews2.My_AccountView;
+import fixture.testviews2.OptionsView;
 
 /**
  * There are several things set up to help with testing. The sitemap.properties file can be modified using
@@ -531,6 +538,11 @@ public class DefaultFileSitemapLoaderTest {
 			protected void configure() {
 				bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+				bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+				bind(UserSitemap.class).to(DefaultUserSitemap.class);
+				bind(UserOption.class).to(DefaultUserOption.class);
+				bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
 			}
 
 		};
