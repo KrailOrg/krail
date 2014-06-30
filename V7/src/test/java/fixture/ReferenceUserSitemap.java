@@ -3,6 +3,8 @@ package fixture;
 import java.text.CollationKey;
 import java.text.Collator;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultUserSitemap;
@@ -190,4 +192,53 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
 		addChild(bNode, b1Node);
 		addChild(b1Node, b11Node);
 	}
+
+	public List<UserSitemapNode> publicSortedAlphaAscending() {
+		List<UserSitemapNode> list = new LinkedList<>();
+		list.add(loginNode);
+		list.add(publicHomeNode);
+		list.add(aNode);
+		return list;
+	}
+
+	public List<UserSitemapNode> publicSortedAlphaDescending() {
+		List<UserSitemapNode> list = new LinkedList<>();
+		list.add(aNode);
+		list.add(publicHomeNode);
+		list.add(loginNode);
+		return list;
+	}
+
+	public List<UserSitemapNode> publicSortedInsertionAscending() {
+		List<UserSitemapNode> list = new LinkedList<>();
+		list.add(loginNode);
+		list.add(publicHomeNode);
+		list.add(aNode);
+		return list;
+	}
+
+	public List<UserSitemapNode> publicSortedInsertionDescending() {
+		List<UserSitemapNode> list = new LinkedList<>();
+		list.add(aNode);
+		list.add(publicHomeNode);
+		list.add(loginNode);
+		return list;
+	}
+
+	public List<UserSitemapNode> publicSortedPositionAscending() {
+		List<UserSitemapNode> list = new LinkedList<>();
+		list.add(aNode);
+		list.add(publicHomeNode);
+		list.add(loginNode);
+		return list;
+	}
+
+	public List<UserSitemapNode> publicSortedPositionDescending() {
+		List<UserSitemapNode> list = new LinkedList<>();
+		list.add(loginNode);
+		list.add(publicHomeNode);
+		list.add(aNode);
+		return list;
+	}
+
 }

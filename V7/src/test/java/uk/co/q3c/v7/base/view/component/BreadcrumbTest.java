@@ -134,7 +134,7 @@ public class BreadcrumbTest {
 	}
 
 	private void createBreadcrumb() {
-		breadcrumb = new DefaultBreadcrumb(navigator, userSitemap, currentLocale, translate, userOption);
+		breadcrumb = new DefaultBreadcrumb(navigator, userSitemap);
 	}
 
 	@ModuleProvider

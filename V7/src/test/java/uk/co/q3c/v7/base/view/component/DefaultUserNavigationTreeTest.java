@@ -14,6 +14,7 @@ package uk.co.q3c.v7.base.view.component;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -151,6 +152,41 @@ public class DefaultUserNavigationTreeTest {
 	}
 
 	@Test
+	public void setMaxDepth_noRebuild() {
+
+		// given
+		userNavigationTree = newTree();
+
+		// when
+		userNavigationTree.setMaxDepth(2);
+		// then
+		assertThat(userNavigationTree.getMaxDepth()).isEqualTo(2);
+		// userOption has been set
+		int result = userOption.getOptionAsInt(DefaultUserNavigationTree.class.getSimpleName(),
+				UserOptionProperty.MAX_DEPTH, -1);
+		assertThat(result).isEqualTo(2);
+	}
+
+	@Test
+	public void requiresRebuild() {
+
+		// given
+		when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+		userNavigationTree = newTree();
+		userNavigationTree.build();
+		// when
+		userNavigationTree.setSortAscending(false);
+		// then build has happened
+		assertThat(userNavigationTree.isRebuildRequired()).isFalse();
+
+		// when
+		userNavigationTree.setSortAscending(true, false);
+		userNavigationTree.setSortType(SortType.INSERTION, false);
+		// then build has not happened
+		assertThat(userNavigationTree.isRebuildRequired()).isTrue();
+	}
+
+	@Test
 	public void localeChange() {
 
 		// given
@@ -161,7 +197,19 @@ public class DefaultUserNavigationTreeTest {
 		currentLocale.setLocale(Locale.GERMANY);
 		// then
 		assertThat(userNavigationTree.getItemCaption(userSitemap.aNode)).isEqualTo("DE_ViewA");
+	}
 
+	@Test
+	public void structureChange() {
+
+		// given
+		userNavigationTree = newTree();
+		userNavigationTree.build();
+		userNavigationTree.setSortAscending(false, false);
+		// when
+		userNavigationTree.structureChanged();
+		// then make sure build has been called
+		assertThat(userNavigationTree.isRebuildRequired()).isFalse();
 	}
 
 	@Test
@@ -174,6 +222,7 @@ public class DefaultUserNavigationTreeTest {
 		// then
 		assertThat(userNavigationTree.isImmediate()).isTrue();
 		assertThat(userNavigationTree.getMaxDepth()).isEqualTo(10);
+		assertThat(userNavigationTree.isRebuildRequired()).isTrue();
 
 	}
 
@@ -220,7 +269,7 @@ public class DefaultUserNavigationTreeTest {
 		assertThat(roots).containsExactly(userSitemap.privateNode, userSitemap.publicNode);
 		Collection<UserSitemapNode> children = (Collection<UserSitemapNode>) userNavigationTree.getTree().getChildren(
 				userSitemap.publicNode);
-		assertThat(children).containsExactly(userSitemap.loginNode, userSitemap.publicHomeNode, userSitemap.aNode);
+		assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedAlphaAscending());
 
 		// when
 		userNavigationTree.setSortAscending(false);
@@ -228,7 +277,7 @@ public class DefaultUserNavigationTreeTest {
 		roots = (Collection<UserSitemapNode>) userNavigationTree.getTree().rootItemIds();
 		assertThat(roots).containsExactly(userSitemap.publicNode, userSitemap.privateNode);
 		children = (Collection<UserSitemapNode>) userNavigationTree.getTree().getChildren(userSitemap.publicNode);
-		assertThat(children).containsExactly(userSitemap.aNode, userSitemap.publicHomeNode, userSitemap.loginNode);
+		assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedAlphaDescending());
 
 		// when
 		userNavigationTree.setSortAscending(true);
@@ -237,7 +286,7 @@ public class DefaultUserNavigationTreeTest {
 		roots = (Collection<UserSitemapNode>) userNavigationTree.getTree().rootItemIds();
 		assertThat(roots).containsExactly(userSitemap.privateNode, userSitemap.publicNode);
 		children = (Collection<UserSitemapNode>) userNavigationTree.getTree().getChildren(userSitemap.publicNode);
-		assertThat(children).containsExactly(userSitemap.loginNode, userSitemap.publicHomeNode, userSitemap.aNode);
+		assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedInsertionAscending());
 
 		// when
 		userNavigationTree.setSortAscending(false);
@@ -246,7 +295,7 @@ public class DefaultUserNavigationTreeTest {
 		roots = (Collection<UserSitemapNode>) userNavigationTree.getTree().rootItemIds();
 		assertThat(roots).containsExactly(userSitemap.privateNode, userSitemap.publicNode);
 		children = (Collection<UserSitemapNode>) userNavigationTree.getTree().getChildren(userSitemap.publicNode);
-		assertThat(children).containsExactly(userSitemap.loginNode, userSitemap.publicHomeNode, userSitemap.aNode);
+		assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedPositionDescending());
 
 		// when
 		userNavigationTree.setSortAscending(false);
@@ -255,7 +304,7 @@ public class DefaultUserNavigationTreeTest {
 		roots = (Collection<UserSitemapNode>) userNavigationTree.getTree().rootItemIds();
 		assertThat(roots).containsExactly(userSitemap.publicNode, userSitemap.privateNode);
 		children = (Collection<UserSitemapNode>) userNavigationTree.getTree().getChildren(userSitemap.publicNode);
-		assertThat(children).containsExactly(userSitemap.aNode, userSitemap.publicHomeNode, userSitemap.loginNode);
+		assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedInsertionDescending());
 
 		// when
 		userNavigationTree.setSortAscending(true);
@@ -264,7 +313,7 @@ public class DefaultUserNavigationTreeTest {
 		roots = (Collection<UserSitemapNode>) userNavigationTree.getTree().rootItemIds();
 		assertThat(roots).containsExactly(userSitemap.publicNode, userSitemap.privateNode);
 		children = (Collection<UserSitemapNode>) userNavigationTree.getTree().getChildren(userSitemap.publicNode);
-		assertThat(children).containsExactly(userSitemap.aNode, userSitemap.publicHomeNode, userSitemap.loginNode);
+		assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedPositionAscending());
 	}
 
 	private DefaultUserNavigationTree newTree() {

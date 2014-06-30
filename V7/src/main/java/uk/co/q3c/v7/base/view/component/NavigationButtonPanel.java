@@ -13,21 +13,18 @@
 package uk.co.q3c.v7.base.view.component;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 import uk.co.q3c.util.ID;
+import uk.co.q3c.util.NodeFilter;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.navigate.sitemap.NodeSorter;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
-import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
-import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NKey;
 import uk.co.q3c.v7.i18n.LocaleChangeListener;
-import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
@@ -36,43 +33,45 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
 public abstract class NavigationButtonPanel extends HorizontalLayout implements V7ViewChangeListener,
-		LocaleChangeListener, Button.ClickListener, Breadcrumb {
+		LocaleChangeListener, Button.ClickListener {
 	private final List<NavigationButton> buttons = new ArrayList<>();
+	private final LinkedList<NodeFilter<UserSitemapNode>> sourceFilters = new LinkedList<>();
 	private final V7Navigator navigator;
 	private final UserSitemap sitemap;
-	private final Translate translate;
 
-	public static final String sortedOpt = "sorted";
-	protected boolean usesSort = true;
-	private final UserOption userOption;
+	protected boolean rebuildRequired = true;
 
 	@Inject
-	protected NavigationButtonPanel(V7Navigator navigator, UserSitemap sitemap, CurrentLocale currentLocale,
-			Translate translate, UserOption userOption) {
+	protected NavigationButtonPanel(V7Navigator navigator, UserSitemap sitemap) {
 		this.navigator = navigator;
 		navigator.addViewChangeListener(this);
 		this.sitemap = sitemap;
-		this.translate = translate;
 		this.setSizeUndefined();
 		this.setSpacing(true);
-		this.userOption = userOption;
 		ID.getId(this);
 
 	}
 
-	protected abstract void moveToNavigationState();
+	protected abstract void build();
 
+	public void moveToNavigationState() {
+		rebuildRequired = true;
+		build();
+	};
+
+	/**
+	 * Displays buttons to represent the supplied nodes.
+	 * 
+	 * @param nodeList
+	 *            contains the list of buttons to display. It is assumed that these are in the right order
+	 */
 	protected void organiseButtons(List<UserSitemapNode> nodeList) {
-		if (usesSort) {
-			boolean sorted = userOption.getOptionAsBoolean(this.getClass().getSimpleName(), sortedOpt, true);
-			// which order, sorted or insertion?
-			new NodeSorter(nodeList, sorted).sort();
+		List<UserSitemapNode> filteredList = filteredList(nodeList);
 
-		}
-		int maxIndex = (nodeList.size() > buttons.size() ? nodeList.size() : buttons.size());
+		int maxIndex = (filteredList.size() > buttons.size() ? filteredList.size() : buttons.size());
 		for (int i = 0; i < maxIndex; i++) {
 			// nothing left in chain
-			if (i + 1 > nodeList.size()) {
+			if (i + 1 > filteredList.size()) {
 				// but buttons still exist
 				if (i < buttons.size()) {
 					buttons.get(i).setVisible(false);
@@ -86,7 +85,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 				} else {
 					button = createButton();
 				}
-				setupButton(button, nodeList.get(i));
+				setupButton(button, filteredList.get(i));
 			}
 
 		}
@@ -113,8 +112,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 	@Override
 	public void localeChanged(Locale toLocale) {
 		for (NavigationButton button : buttons) {
-			I18NKey<?> key = button.getNode().getLabelKey();
-			button.setCaption(translate.from(key, toLocale));
+			button.setCaption(button.getNode().getLabel());
 		}
 	}
 
@@ -126,7 +124,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 
 	@Override
 	public void afterViewChange(V7ViewChangeEvent event) {
-		moveToNavigationState();
+		build();
 	}
 
 	@Override
@@ -155,8 +153,34 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 		return sitemap;
 	}
 
-	public Translate getTranslate() {
-		return translate;
+	protected List<UserSitemapNode> filteredList(List<UserSitemapNode> list) {
+		List<UserSitemapNode> newList = new ArrayList<>();
+		for (UserSitemapNode node : list) {
+			boolean accept = true;
+			for (NodeFilter<UserSitemapNode> filter : sourceFilters) {
+				if (!filter.accept(node)) {
+					accept = false;
+					break;
+				}
+			}
+
+			if (accept) {
+				newList.add(node);
+			}
+		}
+		return newList;
+	}
+
+	public void addFilter(NodeFilter<UserSitemapNode> filter) {
+		sourceFilters.add(filter);
+	}
+
+	public void removeFilter(NodeFilter<UserSitemapNode> filter) {
+		sourceFilters.remove(filter);
+	}
+
+	public boolean isRebuildRequired() {
+		return rebuildRequired;
 	}
 
 }

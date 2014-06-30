@@ -12,16 +12,16 @@
  */
 package uk.co.q3c.v7.base.user.opt;
 
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.joda.time.DateTime;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DefaultUserOptionTest {
 
@@ -108,7 +108,6 @@ public class DefaultUserOptionTest {
 		// when
 		dfo.setOption("group", "map", map1);
 		// then
-		assertThat(dfo.getOptionAsString("group", "map", "x")).isEqualTo("a=1|b=2");
 		assertThat(dfo.getOptionAsMap("group", "map", map2)).isEqualTo(map1);
 		assertThat(dfo.getOptionAsMap("group", "non-existent map", map2)).isEqualTo(map2);
 
@@ -129,7 +128,6 @@ public class DefaultUserOptionTest {
 		// when
 		dfo.setOption("group", "list", list1);
 		// then
-		assertThat(dfo.getOptionAsString("group", "list", "x")).isEqualTo("a|b");
 		assertThat(dfo.getOptionAsList("group", "list", list2)).isEqualTo(list1);
 		assertThat(dfo.getOptionAsList("group", "non-existent lisdt", list2)).isEqualTo(list2);
 

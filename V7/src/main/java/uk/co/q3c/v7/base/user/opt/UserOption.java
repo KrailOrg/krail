@@ -34,15 +34,9 @@ import org.joda.time.DateTime;
  */
 public interface UserOption {
 
-	public void setOption(String optionGroup, String option, int value);
+	public void setOption(String optionGroup, String option, Object value);
 
-	public void setOption(String optionGroup, String option, String value);
-
-	public void setOption(String optionGroup, String option, DateTime value);
-
-	public void setOption(String optionGroup, String option, double value);
-
-	public void setOption(String optionGroup, String option, boolean value);
+	public void setOption(String optionGroup, UserOptionProperty option, Object value);
 
 	public int getOptionAsInt(String optionGroup, String option, int defaultValue);
 
@@ -54,15 +48,7 @@ public interface UserOption {
 
 	public boolean getOptionAsBoolean(String optionGroup, String option, boolean defaultValue);
 
-	public void setOption(String optionGroup, UserOptionProperty option, int value);
-
-	public void setOption(String optionGroup, UserOptionProperty option, String value);
-
-	public void setOption(String optionGroup, UserOptionProperty option, DateTime value);
-
-	public void setOption(String optionGroup, UserOptionProperty option, double value);
-
-	public void setOption(String optionGroup, UserOptionProperty option, boolean value);
+	public Enum<?> getOptionAsEnum(String optionGroup, String option, Enum<?> defaultValue);
 
 	public int getOptionAsInt(String optionGroup, UserOptionProperty option, int defaultValue);
 
@@ -73,5 +59,7 @@ public interface UserOption {
 	public double getOptionAsDouble(String optionGroup, UserOptionProperty option, double defaultValue);
 
 	public boolean getOptionAsBoolean(String optionGroup, UserOptionProperty option, boolean defaultValue);
+
+	public Enum<?> getOptionAsEnum(String optionGroup, UserOptionProperty option, Enum<?> defaultValue);
 
 }

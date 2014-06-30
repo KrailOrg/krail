@@ -28,11 +28,19 @@ import com.google.inject.Singleton;
 @Singleton
 public class DefaultUserOptionStore implements UserOptionStore {
 
-	private final Map<String, Map<String, String>> groupMap = new TreeMap<>();
+	private final Map<String, Map<String, Object>> groupMap = new TreeMap<>();
 
-	@Override
-	public Map<String, String> optionMap(String optionGroup, String option) {
-		Map<String, String> optionMap = groupMap.get(optionGroup);
+	/**
+	 * Used for setting option values, looks for the optionMap for the supplied group and option, and creates one if
+	 * none exists
+	 * 
+	 * @param optionGroup
+	 * @param option
+	 * @return
+	 */
+
+	private Map<String, Object> optionMap(String optionGroup) {
+		Map<String, Object> optionMap = groupMap.get(optionGroup);
 		if (optionMap == null) {
 			optionMap = new TreeMap<>();
 			groupMap.put(optionGroup, optionMap);
@@ -41,11 +49,51 @@ public class DefaultUserOptionStore implements UserOptionStore {
 	}
 
 	@Override
-	public String getOptionValue(String optionGroup, String option) {
-		Map<String, String> optionMap = groupMap.get(optionGroup);
+	public Object getOptionValue(String optionGroup, String option) {
+		Map<String, Object> optionMap = optionMap(optionGroup);
 		if (optionMap == null) {
 			return null;
 		}
 		return optionMap.get(option);
 	}
+
+	@Override
+	public void setOptionValue(String optionGroup, String option, Object value) {
+		Map<String, Object> optionMap = optionMap(optionGroup);
+		optionMap.put(option, value);
+	}
+
+	// Keep these - might be useful for a persistent store
+
+	// public void setOption(String optionGroup, String option, List<String> list) {
+	// StringBuilder buf = new StringBuilder();
+	// boolean first = true;
+	// for (String s : list) {
+	// if (!first) {
+	// buf.append("|");
+	// } else {
+	// first = false;
+	// }
+	// buf.append(s);
+	// }
+	//
+	// userOptionStore.optionMap(optionGroup, option).put(option, buf.toString());
+	// }
+	//
+	// public void setOption(String optionGroup, String option, Map<String, String> map) {
+	// StringBuilder buf = new StringBuilder();
+	// boolean first = true;
+	// for (Map.Entry<String, String> entry : map.entrySet()) {
+	// if (!first) {
+	// buf.append("|");
+	// } else {
+	// first = false;
+	// }
+	// buf.append(entry.getKey());
+	// buf.append("=");
+	// buf.append(entry.getValue());
+	// }
+	// userOptionStore.optionMap(optionGroup, option).put(option, buf.toString());
+	// }
+
 }

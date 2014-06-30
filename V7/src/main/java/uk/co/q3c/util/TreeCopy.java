@@ -81,7 +81,7 @@ public class TreeCopy<S, T> {
 	private boolean limitedDepth = false;
 	private Comparator<T> targetSortComparator;
 	private Comparator<S> sourceSortComparator;
-	private final LinkedList<TreeCopyFilter<S>> sourceFilters = new LinkedList<>();
+	private final LinkedList<NodeFilter<S>> sourceFilters = new LinkedList<>();
 	private TreeCopyExtension<S, T> extension;
 	private boolean sorted = true;
 
@@ -95,11 +95,11 @@ public class TreeCopy<S, T> {
 		return maxDepth;
 	}
 
-	public void addSourceFilter(TreeCopyFilter<S> filter) {
+	public void addSourceFilter(NodeFilter<S> filter) {
 		sourceFilters.add(filter);
 	}
 
-	public void removeSourceFilter(TreeCopyFilter<S> filter) {
+	public void removeSourceFilter(NodeFilter<S> filter) {
 		sourceFilters.remove(filter);
 	}
 
@@ -289,7 +289,7 @@ public class TreeCopy<S, T> {
 
 	private boolean passesFilter(S node) {
 		boolean accept = true;
-		for (TreeCopyFilter<S> filter : sourceFilters) {
+		for (NodeFilter<S> filter : sourceFilters) {
 			if (!filter.accept(node)) {
 				accept = false;
 				break;

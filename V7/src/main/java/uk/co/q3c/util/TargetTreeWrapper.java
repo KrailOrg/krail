@@ -45,7 +45,7 @@ public interface TargetTreeWrapper<S, T> {
 	 * @param sourceChildNode
 	 *            the source node on which the new target node is to be based. Cannot be null.
 	 * @return the new child target node. Can be null, in which case {@link TreeCopy} will ignore it. However, if you
-	 *         want to omit certain source nodes, it may be better to use a {@link TreeCopyFilter}
+	 *         want to omit certain source nodes, it may be better to use a {@link NodeFilter}
 	 */
 	public T createNode(T parentNode, S sourceChildNode);
 

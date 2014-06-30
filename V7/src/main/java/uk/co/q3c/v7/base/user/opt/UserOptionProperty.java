@@ -19,6 +19,6 @@ package uk.co.q3c.v7.base.user.opt;
  * @date 17 May 2014
  */
 public enum UserOptionProperty {
-	MAX_DEPTH, OPTION_LOCALE_FLAG_SIZE
+	MAX_DEPTH, OPTION_LOCALE_FLAG_SIZE, SORT_ASCENDING, SORT_TYPE
 
 }

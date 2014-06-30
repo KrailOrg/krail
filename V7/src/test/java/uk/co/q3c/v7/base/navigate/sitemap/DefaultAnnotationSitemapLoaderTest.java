@@ -143,7 +143,6 @@ public class DefaultAnnotationSitemapLoaderTest {
 			protected void configure() {
 				bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
 				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
 				bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
 				bind(UserSitemap.class).to(DefaultUserSitemap.class);
 				bind(UserOption.class).to(DefaultUserOption.class);

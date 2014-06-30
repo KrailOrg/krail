@@ -13,13 +13,14 @@
 package uk.co.q3c.util;
 
 /**
- * Pass implementations of this filter to {@link TreeCopy} to filter out source nodes
+ * Pass implementations of this filter to {@link TreeCopy} to filter out source nodes - also used by some navigation
+ * components
  * 
  * @author David Sowerby
  * @date 13 Jun 2014
  * @param <T>
  */
-public interface TreeCopyFilter<S> {
+public interface NodeFilter<S> {
 
 	public boolean accept(S node);
 }

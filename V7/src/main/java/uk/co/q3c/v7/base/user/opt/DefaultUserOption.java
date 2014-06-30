@@ -12,17 +12,13 @@
  */
 package uk.co.q3c.v7.base.user.opt;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -48,179 +44,71 @@ public class DefaultUserOption implements UserOption {
 	}
 
 	@Override
-	public void setOption(String optionGroup, String option, int value) {
-		userOptionStore.optionMap(optionGroup, option).put(option, Integer.toString(value));
-	}
-
-	@Override
-	public void setOption(String optionGroup, String option, String value) {
-		userOptionStore.optionMap(optionGroup, option).put(option, value);
-	}
-
-	@Override
-	public void setOption(String optionGroup, String option, DateTime value) {
-		userOptionStore.optionMap(optionGroup, option).put(option, value.toString());
-	}
-
-	@Override
-	public void setOption(String optionGroup, String option, double value) {
-		userOptionStore.optionMap(optionGroup, option).put(option, Double.toString(value));
-	}
-
-	@Override
-	public void setOption(String optionGroup, String option, boolean value) {
-		userOptionStore.optionMap(optionGroup, option).put(option, Boolean.toString(value));
-	}
-
-	public void setOption(String optionGroup, String option, List<String> list) {
-		StringBuilder buf = new StringBuilder();
-		boolean first = true;
-		for (String s : list) {
-			if (!first) {
-				buf.append("|");
-			} else {
-				first = false;
-			}
-			buf.append(s);
-		}
-
-		userOptionStore.optionMap(optionGroup, option).put(option, buf.toString());
-	}
-
-	public void setOption(String optionGroup, String option, Map<String, String> map) {
-		StringBuilder buf = new StringBuilder();
-		boolean first = true;
-		for (Map.Entry<String, String> entry : map.entrySet()) {
-			if (!first) {
-				buf.append("|");
-			} else {
-				first = false;
-			}
-			buf.append(entry.getKey());
-			buf.append("=");
-			buf.append(entry.getValue());
-		}
-		userOptionStore.optionMap(optionGroup, option).put(option, buf.toString());
+	public void setOption(String optionGroup, String option, Object value) {
+		userOptionStore.setOptionValue(optionGroup, option, value);
 	}
 
 	@Override
 	public int getOptionAsInt(String optionGroup, String option, int defaultValue) {
-		String optionValue = userOptionStore.getOptionValue(optionGroup, option);
+		Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
 		if (optionValue == null) {
 			return defaultValue;
-		} else {
-			try {
-				return Integer.parseInt(optionValue);
-			} catch (Exception e) {
-				log.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
-				return defaultValue;
-			}
 		}
+		return (int) optionValue;
 	}
 
 	@Override
 	public String getOptionAsString(String optionGroup, String option, String defaultValue) {
-		String optionValue = userOptionStore.getOptionValue(optionGroup, option);
+		Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
 		if (optionValue == null) {
 			return defaultValue;
 		}
-		return optionValue;
+		return (String) optionValue;
 	}
 
 	@Override
 	public DateTime getOptionAsDateTime(String optionGroup, String option, DateTime defaultValue) {
-		String optionValue = userOptionStore.getOptionValue(optionGroup, option);
+		Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
 		if (optionValue == null) {
 			return defaultValue;
-		} else {
-			try {
-				return DateTime.parse(optionValue);
-			} catch (Exception e) {
-				log.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
-				return defaultValue;
-			}
 		}
+		return (DateTime) optionValue;
 	}
 
 	@Override
 	public double getOptionAsDouble(String optionGroup, String option, double defaultValue) {
-		String optionValue = userOptionStore.getOptionValue(optionGroup, option);
+		Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
 		if (optionValue == null) {
 			return defaultValue;
-		} else {
-			try {
-				return Double.parseDouble(optionValue);
-			} catch (Exception e) {
-				log.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
-				return defaultValue;
-			}
 		}
+		return (double) optionValue;
 	}
 
 	@Override
 	public boolean getOptionAsBoolean(String optionGroup, String option, boolean defaultValue) {
-		String optionValue = userOptionStore.getOptionValue(optionGroup, option);
+		Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
 		if (optionValue == null) {
 			return defaultValue;
-		} else {
-			try {
-				return Boolean.parseBoolean(optionValue);
-			} catch (Exception e) {
-				log.warn("Invalid option value {} for " + optionGroup + "." + option, optionValue);
-				return defaultValue;
-			}
 		}
+		return (boolean) optionValue;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<String, String> getOptionAsMap(String optionGroup, String option, Map<String, String> defaultValue) {
-		String optionValue = userOptionStore.getOptionValue(optionGroup, option);
+		Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
 		if (optionValue == null) {
 			return defaultValue;
-		} else {
-			Map<String, String> map = new TreeMap<>();
-			Iterable<String> entries = Splitter.on("|").split(optionValue);
-			for (String entry : entries) {
-				String[] kv = entry.split("=");
-				map.put(kv[0], kv[1]);
-			}
-			return map;
 		}
+		return (Map<String, String>) optionValue;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<String> getOptionAsList(String optionGroup, String option, List<String> defaultValue) {
-		String optionValue = userOptionStore.getOptionValue(optionGroup, option);
+		Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
 		if (optionValue == null) {
 			return defaultValue;
-		} else {
-			Iterable<String> entries = Splitter.on("|").split(optionValue);
-			ArrayList<String> list = Lists.newArrayList(entries);
-			return list;
 		}
-	}
-
-	@Override
-	public void setOption(String optionGroup, UserOptionProperty option, int value) {
-		setOption(optionGroup, option.name(), value);
-	}
-
-	@Override
-	public void setOption(String optionGroup, UserOptionProperty option, String value) {
-		setOption(optionGroup, option.name(), value);
-	}
-
-	@Override
-	public void setOption(String optionGroup, UserOptionProperty option, DateTime value) {
-		setOption(optionGroup, option.name(), value);
-	}
-
-	@Override
-	public void setOption(String optionGroup, UserOptionProperty option, double value) {
-		setOption(optionGroup, option.name(), value);
-	}
-
-	@Override
-	public void setOption(String optionGroup, UserOptionProperty option, boolean value) {
-		setOption(optionGroup, option.name(), value);
+		return (List<String>) optionValue;
 	}
 
 	@Override
@@ -246,6 +134,29 @@ public class DefaultUserOption implements UserOption {
 	@Override
 	public boolean getOptionAsBoolean(String optionGroup, UserOptionProperty option, boolean defaultValue) {
 		return getOptionAsBoolean(optionGroup, option.name(), defaultValue);
+	}
+
+	@Override
+	public Enum<?> getOptionAsEnum(String optionGroup, String option, Enum<?> defaultValue) {
+		Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
+		if (optionValue == null) {
+			return defaultValue;
+		}
+		return (Enum<?>) optionValue;
+	}
+
+	@Override
+	public Enum<?> getOptionAsEnum(String optionGroup, UserOptionProperty option, Enum<?> defaultValue) {
+		Object optionValue = userOptionStore.getOptionValue(optionGroup, option.name());
+		if (optionValue == null) {
+			return defaultValue;
+		}
+		return (Enum<?>) optionValue;
+	}
+
+	@Override
+	public void setOption(String optionGroup, UserOptionProperty option, Object value) {
+		setOption(optionGroup, option.name(), value);
 	}
 
 }

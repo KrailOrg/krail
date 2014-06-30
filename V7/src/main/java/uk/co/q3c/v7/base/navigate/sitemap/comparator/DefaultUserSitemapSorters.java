@@ -80,4 +80,5 @@ public class DefaultUserSitemapSorters implements UserSitemapSorters {
 	public Comparator<UserSitemapNode> getSortComparator() {
 		return selectedComparator;
 	}
+
 }

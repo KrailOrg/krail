@@ -66,7 +66,7 @@ public class TreeCopyTest {
 
 	}
 
-	class SourceFilter implements TreeCopyFilter<NodeTypeA> {
+	class SourceFilter implements NodeFilter<NodeTypeA> {
 
 		@Override
 		public boolean accept(NodeTypeA node) {

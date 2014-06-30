@@ -54,6 +54,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	private boolean suppressValueChangeEvents;
 	private final UserNavigationTreeBuilder builder;
 	private final UserSitemapSorters sorters;
+	private boolean rebuildRequired = true;
 
 	@Inject
 	protected DefaultUserNavigationTree(UserSitemap userSitemap, V7Navigator navigator, UserOption userOption,
@@ -71,6 +72,14 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 		addValueChangeListener(this);
 		navigator.addViewChangeListener(this);
 		setId(ID.getId(this));
+		boolean ascending = userOption.getOptionAsBoolean(this.getClass().getSimpleName(),
+				UserOptionProperty.SORT_ASCENDING, true);
+
+		SortType sortType = (SortType) userOption.getOptionAsEnum(this.getClass().getSimpleName(),
+				UserOptionProperty.SORT_ASCENDING, SortType.ALPHA);
+
+		setSortAscending(ascending, false);
+		setSortType(sortType, false);
 
 	}
 
@@ -111,7 +120,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 			userOption.setOption(this.getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, maxDepth);
 			build();
 		} else {
-			log.debug("Attempt to set max depth value to {}, but has been ignored.  It must be greater than 0. ");
+			log.warn("Attempt to set max depth value to {}, but has been ignored.  It must be greater than 0. ");
 		}
 	}
 
@@ -169,8 +178,11 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	 */
 	@Override
 	public void build() {
-		clear();
-		builder.build();
+		if (rebuildRequired) {
+			clear();
+			builder.build();
+			rebuildRequired = false;
+		}
 	}
 
 	/**
@@ -179,6 +191,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	 */
 	@Override
 	public void labelsChanged() {
+		rebuildRequired = true;
 		build();
 	}
 
@@ -187,24 +200,51 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	 */
 	@Override
 	public void structureChanged() {
+		rebuildRequired = true;
 		build();
 	}
 
 	@Override
 	public void setSortAscending(boolean ascending) {
+		setSortAscending(ascending, true);
+	}
+
+	@Override
+	public void setSortAscending(boolean ascending, boolean rebuild) {
 		sorters.setSortAscending(ascending);
-		build();
+		userOption.setOption(this.getClass().getSimpleName(), UserOptionProperty.SORT_ASCENDING, ascending);
+		rebuildRequired = true;
+		if (rebuild) {
+			build();
+		}
 	}
 
 	@Override
 	public void setSortType(SortType sortType) {
+		setSortType(sortType, true);
+	}
+
+	@Override
+	public void setSortType(SortType sortType, boolean rebuild) {
 		sorters.setSortType(sortType);
-		build();
+		userOption.setOption(this.getClass().getSimpleName(), UserOptionProperty.SORT_TYPE, sortType);
+		rebuildRequired = true;
+		if (rebuild) {
+			build();
+		}
 	}
 
 	@Override
 	public Comparator<UserSitemapNode> getSortComparator() {
 		return sorters.getSortComparator();
+	}
+
+	public boolean isRebuildRequired() {
+		return rebuildRequired;
+	}
+
+	public void setRebuildRequired(boolean rebuildRequired) {
+		this.rebuildRequired = rebuildRequired;
 	}
 
 }

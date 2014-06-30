@@ -12,11 +12,11 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import uk.co.q3c.util.TreeCopyFilter;
+import uk.co.q3c.util.NodeFilter;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 
-public class LogoutPageFilter implements TreeCopyFilter<UserSitemapNode> {
+public class LogoutPageFilter implements NodeFilter<UserSitemapNode> {
 
 	@Override
 	public boolean accept(UserSitemapNode node) {

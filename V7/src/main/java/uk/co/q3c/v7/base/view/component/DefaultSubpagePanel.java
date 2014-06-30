@@ -12,43 +12,95 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapChangeListener;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
+import uk.co.q3c.v7.base.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
+import uk.co.q3c.v7.base.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.co.q3c.v7.base.user.opt.UserOption;
-import uk.co.q3c.v7.base.user.status.UserStatusListener;
-import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
 import uk.co.q3c.v7.i18n.I18N;
-import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 
 @I18N
-@UIScoped
-public class DefaultSubpagePanel extends NavigationButtonPanel implements SubpagePanel, UserStatusListener {
+public class DefaultSubpagePanel extends NavigationButtonPanel implements SubpagePanel, UserSitemapChangeListener {
 
 	private final UserSitemap userSitemap;
+	private final UserOption userOption;
+	private final UserSitemapSorters sorters;
 
 	@Inject
-	protected DefaultSubpagePanel(V7Navigator navigator, UserSitemap userSitemap, CurrentLocale currentLocale,
-			Translate translate, UserOption userOption) {
-		super(navigator, userSitemap, currentLocale, translate, userOption);
+	protected DefaultSubpagePanel(V7Navigator navigator, UserSitemap userSitemap, UserOption userOption,
+			UserSitemapSorters sorters) {
+		super(navigator, userSitemap);
 		this.userSitemap = userSitemap;
-		userStatusChanged();
+		this.userOption = userOption;
+		this.sorters = sorters;
+
 	}
 
 	@Override
-	protected void moveToNavigationState() {
-		List<UserSitemapNode> authorisedSubNodes = userSitemap.getChildren(getNavigator().getCurrentNode());
-		organiseButtons(authorisedSubNodes);
+	protected void build() {
+		if (rebuildRequired) {
+			List<UserSitemapNode> authorisedSubNodes = userSitemap.getChildren(getNavigator().getCurrentNode());
+			Collections.sort(authorisedSubNodes, getSortComparator());
+			organiseButtons(authorisedSubNodes);
+			rebuildRequired = false;
+		}
 	}
 
 	@Override
-	public void userStatusChanged() {
-		moveToNavigationState();
+	public void setSortAscending(boolean ascending) {
+		setSortAscending(ascending, true);
+	}
+
+	@Override
+	public void setSortAscending(boolean ascending, boolean rebuild) {
+		sorters.setSortAscending(ascending);
+		userOption.setOption(this.getClass().getSimpleName(), UserOptionProperty.SORT_ASCENDING, ascending);
+		rebuildRequired = true;
+		if (rebuild) {
+			build();
+		}
+	}
+
+	@Override
+	public void setSortType(SortType sortType) {
+		setSortType(sortType, true);
+	}
+
+	@Override
+	public void setSortType(SortType sortType, boolean rebuild) {
+		sorters.setSortType(sortType);
+		userOption.setOption(this.getClass().getSimpleName(), UserOptionProperty.SORT_TYPE, sortType);
+		rebuildRequired = true;
+		if (rebuild) {
+			build();
+		}
+	}
+
+	@Override
+	public Comparator<UserSitemapNode> getSortComparator() {
+		return sorters.getSortComparator();
+	}
+
+	@Override
+	public void labelsChanged() {
+		rebuildRequired = true;
+		build();
+
+	}
+
+	@Override
+	public void structureChanged() {
+		rebuildRequired = true;
+		build();
 
 	}
 

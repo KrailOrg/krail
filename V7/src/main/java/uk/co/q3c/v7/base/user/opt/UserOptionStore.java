@@ -12,19 +12,8 @@
  */
 package uk.co.q3c.v7.base.user.opt;
 
-import java.util.Map;
 
 public interface UserOptionStore {
-
-	/**
-	 * Used for setting option values, looks for the optionMap for the supplied group and option, and creates one if
-	 * none exists
-	 * 
-	 * @param optionGroup
-	 * @param option
-	 * @return
-	 */
-	Map<String, String> optionMap(String optionGroup, String option);
 
 	/**
 	 * Looks for the option value for the supplied group and option. Null is returned of there is no option for the
@@ -34,6 +23,8 @@ public interface UserOptionStore {
 	 * @param option
 	 * @return
 	 */
-	String getOptionValue(String optionGroup, String option);
+	Object getOptionValue(String optionGroup, String option);
+
+	void setOptionValue(String optionGroup, String option, Object value);
 
 }
