@@ -12,7 +12,6 @@ import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
-import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NKey;
@@ -90,9 +89,8 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
 	public Class<? extends V7View> publicHomeViewClass = TestPublicHomeView.class;
 
 	@Inject
-	public ReferenceUserSitemap(UserOption userOption, Translate translate, URIFragmentHandler uriHandler,
-			CurrentLocale currentLocale) {
-		super(userOption, translate, uriHandler, currentLocale);
+	public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler, CurrentLocale currentLocale) {
+		super(translate, uriHandler, currentLocale);
 
 	}
 

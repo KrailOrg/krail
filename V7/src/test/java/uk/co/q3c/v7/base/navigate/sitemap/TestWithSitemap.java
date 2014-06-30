@@ -28,7 +28,6 @@ import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
-import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.i18n.CurrentLocale;
@@ -66,8 +65,6 @@ public abstract class TestWithSitemap {
 	@Mock
 	protected Subject subject;
 
-	protected UserOption userOption;
-
 	@Mock
 	protected PageAccessController pageAccessController;
 
@@ -98,7 +95,7 @@ public abstract class TestWithSitemap {
 
 	@Before
 	public void setup() {
-		userOption = new DefaultUserOption(new DefaultUserOptionStore());
+		// userOption = new DefaultUserOption(new DefaultUserOptionStore());
 		currentLocale.setLocale(Locale.UK);
 		currentLocale.removeAllListeners();
 		collator = Collator.getInstance(locale);
@@ -234,11 +231,11 @@ public abstract class TestWithSitemap {
 	 * needed before calling this method
 	 */
 	protected void createUserSitemap() {
-		userSitemap = new DefaultUserSitemap(userOption, translate, uriHandler, currentLocale);
+		userSitemap = new DefaultUserSitemap(translate, uriHandler, currentLocale);
 		UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
 				masterSitemap, pageAccessController, translate);
 		UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(masterSitemap, userSitemap);
-		userSitemapBuilder = new UserSitemapBuilder(masterSitemap, userSitemap, nodeModifier, copyExtension, userOption);
+		userSitemapBuilder = new UserSitemapBuilder(masterSitemap, userSitemap, nodeModifier, copyExtension);
 		userSitemapBuilder.build();
 
 		userNode1 = userSitemap.userNodeFor(masterNode1);

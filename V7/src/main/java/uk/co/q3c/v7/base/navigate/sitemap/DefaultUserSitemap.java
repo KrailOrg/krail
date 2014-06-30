@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
-import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.status.UserStatusListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.LocaleChangeListener;
@@ -44,19 +43,13 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
 		LocaleChangeListener {
 	private static Logger log = LoggerFactory.getLogger(DefaultUserSitemap.class);
 
-	private final UserOption userOption;
-
-	private boolean sorted;
-
 	private final Translate translate;
 
 	private final List<UserSitemapChangeListener> changeListeners;
 
 	@Inject
-	public DefaultUserSitemap(UserOption userOption, Translate translate, URIFragmentHandler uriHandler,
-			CurrentLocale currentLocale) {
+	public DefaultUserSitemap(Translate translate, URIFragmentHandler uriHandler, CurrentLocale currentLocale) {
 		super(uriHandler);
-		this.userOption = userOption;
 		this.translate = translate;
 		changeListeners = new LinkedList<>();
 		currentLocale.addListener(this);

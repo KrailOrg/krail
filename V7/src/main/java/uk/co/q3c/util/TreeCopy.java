@@ -24,7 +24,6 @@ import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Tree;
 
@@ -37,7 +36,7 @@ import com.vaadin.ui.Tree;
  * <br>
  * {@link TargetTreeWrapper} implementations are provided for the Vaadin {@link Tree}, {@link MenuBar} and
  * {@link BasicForest} <br>
- * {@link SourceTree} implementations are provided for Vaadin {@link Tree} and {@link BasicForest} <br>
+ * {@link SourceTreeWrapper} implementations are provided for Vaadin {@link Tree} and {@link BasicForest} <br>
  * <br>
  * The way in which target nodes are constructed has a bearing on how a sort of nodes can be performed. For example,
  * linked node trees may require that a child is constructed from a parent or the sort field may be required at the time

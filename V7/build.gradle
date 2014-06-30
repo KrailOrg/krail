@@ -51,10 +51,12 @@ dependencies{
 
 	testCompile project(path: ':testUtil', configuration: 'tests')
 	
-	
-	//this test used to fail under Gradle, but is fixed as a result of moving to a service base approach for startup
-	// see https://github.com/davidsowerby/v7/issues/156
-//	test{ exclude '**/GuiceServletInjectorTest.class' }
+    // needed for Vaadin javadoc only
+    compile "javax.portlet:portlet-api:2.0"
+    compile "org.atmosphere:atmosphere-runtime:2.1.6"
+    
+
+
 
 
 
