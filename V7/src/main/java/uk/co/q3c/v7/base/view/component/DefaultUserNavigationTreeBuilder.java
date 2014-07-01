@@ -40,6 +40,7 @@ public class DefaultUserNavigationTreeBuilder implements UserNavigationTreeBuild
 		TreeCopy<UserSitemapNode, UserSitemapNode> treeCopy = new TreeCopy<>(source, target);
 		userNavigationTree.clear();
 		target.setCaptionReader(new UserSitemapNodeCaption());
+		target.setNodeModifier(new UserNavigationTreeNodeModifier(userNavigationTree));
 		treeCopy.setTargetSortComparator(userNavigationTree.getSortComparator());
 		treeCopy.setMaxDepth(userNavigationTree.getMaxDepth());
 		treeCopy.addSourceFilter(new LogoutPageFilter());

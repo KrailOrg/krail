@@ -83,4 +83,9 @@ public interface V7Navigator extends UriFragmentChangedListener, UserStatusListe
 	 */
 	void navigateTo(UserSitemapNode node);
 
+	/**
+	 * Initialises the navigator by preparing the {@link UserSitemap}
+	 */
+	void init();
+
 }

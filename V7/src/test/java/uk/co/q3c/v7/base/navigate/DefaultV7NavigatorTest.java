@@ -23,6 +23,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.MasterSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapBuilder;
 import uk.co.q3c.v7.base.shiro.PageAccessControl;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.PagePermission;
@@ -114,9 +115,13 @@ public class DefaultV7NavigatorTest {
 	@Inject
 	private ReferenceUserSitemap userSitemap;
 
+	@Mock
+	UserSitemapBuilder builder;
+
 	@Before
 	public void setup() {
 		userSitemap.populate();
+		when(builder.getUserSitemap()).thenReturn(userSitemap);
 		when(uiProvider.get()).thenReturn(scopedUI);
 		when(scopedUI.getPage()).thenReturn(browserPage);
 		when(errorViewProvider.get()).thenReturn(errorView);
@@ -124,14 +129,26 @@ public class DefaultV7NavigatorTest {
 		when(userSitemapProvider.get()).thenReturn(userSitemap);
 
 		CurrentInstance.set(UI.class, scopedUI);
+
+	}
+
+	@Test
+	public void init() throws Exception {
+
+		// given
+
+		// when
 		navigator = createNavigator();
+		// then
+		verify(sitemapService).start();
+		verify(builder).build();
 	}
 
 	@Test
 	public void logout() {
 
 		// given
-
+		navigator = createNavigator();
 		// when
 		navigator.navigateTo(StandardPageKey.Logout);
 		// then
@@ -142,6 +159,7 @@ public class DefaultV7NavigatorTest {
 	@Test
 	public void login() {
 		// given
+		navigator = createNavigator();
 		// when
 		navigator.navigateTo(userSitemap.loginURI);
 		// then
@@ -153,7 +171,7 @@ public class DefaultV7NavigatorTest {
 	public void loginSuccessFul_toPreviousView() {
 
 		// given
-
+		navigator = createNavigator();
 		// when
 		navigator.navigateTo(userSitemap.a1URI);
 		navigator.navigateTo(StandardPageKey.Login);
@@ -169,7 +187,7 @@ public class DefaultV7NavigatorTest {
 	public void loginSuccessFul_noPreviousView() {
 
 		// given
-
+		navigator = createNavigator();
 		// when
 		navigator.navigateTo(StandardPageKey.Login);
 		assertThat(navigator.getCurrentView()).isInstanceOf(TestLoginView.class);
@@ -187,6 +205,7 @@ public class DefaultV7NavigatorTest {
 	public void navigateTo() {
 
 		// given
+		navigator = createNavigator();
 		// when
 		navigator.navigateTo(userSitemap.a11URI);
 		// then
@@ -199,6 +218,7 @@ public class DefaultV7NavigatorTest {
 	public void navigateToEmptyPageWithParams() {
 
 		// given
+		navigator = createNavigator();
 		String page1 = "";
 		String fragment1 = page1 + "/id=2/age=5";
 
@@ -213,6 +233,7 @@ public class DefaultV7NavigatorTest {
 	public void navigateTo_invalidURI() {
 
 		// given
+		navigator = createNavigator();
 		String page = "public/view3";
 
 		// when
@@ -224,6 +245,7 @@ public class DefaultV7NavigatorTest {
 	public void navigateTo_invalidURI_checkView() {
 
 		// given
+		navigator = createNavigator();
 		String page = "public/view3";
 		// when
 		try {
@@ -239,6 +261,7 @@ public class DefaultV7NavigatorTest {
 	public void getNavigationState() {
 
 		// given
+		navigator = createNavigator();
 		// when
 		navigator.navigateTo(userSitemap.a1URI);
 		// then
@@ -250,6 +273,7 @@ public class DefaultV7NavigatorTest {
 	public void getNavigationParams() {
 
 		// given
+		navigator = createNavigator();
 		String page1 = userSitemap.a1URI;
 		String fragment1 = page1 + "/id=2/age=5";
 		// when
@@ -263,6 +287,7 @@ public class DefaultV7NavigatorTest {
 	public void navigateToNode() {
 
 		// given
+		navigator = createNavigator();
 		// when
 		navigator.navigateTo(userSitemap.a11Node);
 		// then
@@ -274,7 +299,7 @@ public class DefaultV7NavigatorTest {
 	public void currentAndPreviousViews_andClearHistory() {
 
 		// given
-
+		navigator = createNavigator();
 		String page1 = userSitemap.a1URI;
 		String fragment1 = page1 + "/id=1";
 
@@ -325,6 +350,7 @@ public class DefaultV7NavigatorTest {
 	public void listeners_allRespond() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a11URI;
 
 		// need to return true, or first listener will block the second
@@ -345,6 +371,7 @@ public class DefaultV7NavigatorTest {
 	public void listener_blocked() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a11URI;
 
 		// to block second and subsequent
@@ -364,6 +391,7 @@ public class DefaultV7NavigatorTest {
 	public void redirection() {
 
 		// given
+		navigator = createNavigator();
 		String page = "wiggly";
 		String page2 = userSitemap.a1URI;
 
@@ -378,6 +406,7 @@ public class DefaultV7NavigatorTest {
 	public void navigateToNavState() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 		NavigationState navigationState = uriHandler.navigationState(page);
 
@@ -392,6 +421,7 @@ public class DefaultV7NavigatorTest {
 	public void error() {
 
 		// given
+		navigator = createNavigator();
 		// when
 		navigator.error(new NullPointerException("test"));
 		// then
@@ -403,6 +433,7 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Public() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 		// when
 		navigator.navigateTo(page);
@@ -417,6 +448,7 @@ public class DefaultV7NavigatorTest {
 	public void UAC_User() {
 
 		// given authenticated
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
@@ -442,6 +474,7 @@ public class DefaultV7NavigatorTest {
 	@Test(expected = UnauthorizedException.class)
 	public void UAC_User_fail() {
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(false);
@@ -457,6 +490,7 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Guest() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(false);
@@ -473,6 +507,7 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Guest_Fail_remembered() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(false);
@@ -487,6 +522,7 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Guest_Fail_authenticated() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
@@ -501,6 +537,7 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Authenticate() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
@@ -516,6 +553,7 @@ public class DefaultV7NavigatorTest {
 	@Test(expected = UnauthorizedException.class)
 	public void UAC_Authenticate_Fail() {
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(false);
@@ -530,6 +568,7 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Permission() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
@@ -547,6 +586,7 @@ public class DefaultV7NavigatorTest {
 	public void UAC_Permission_Failed() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
@@ -562,6 +602,7 @@ public class DefaultV7NavigatorTest {
 	public void UAC_roles() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
@@ -582,6 +623,7 @@ public class DefaultV7NavigatorTest {
 	public void UAC_roles_failed() {
 
 		// given
+		navigator = createNavigator();
 		String page = userSitemap.a1URI;
 
 		when(subject.isAuthenticated()).thenReturn(true);
@@ -617,8 +659,10 @@ public class DefaultV7NavigatorTest {
 	}
 
 	private DefaultV7Navigator createNavigator() {
-		return new DefaultV7Navigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider,
-				viewFactory, userSitemapProvider);
+		navigator = new DefaultV7Navigator(uriHandler, sitemapService, subjectProvider, pageAccessController,
+				uiProvider, viewFactory, builder);
+		navigator.init();
+		return navigator;
 	}
 
 }

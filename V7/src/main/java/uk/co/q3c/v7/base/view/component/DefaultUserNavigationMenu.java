@@ -47,6 +47,7 @@ public class DefaultUserNavigationMenu extends MenuBar implements UserNavigation
 
 	@Override
 	public void build() {
+		log.debug("rebuilding");
 		clear();
 		builder.build();
 	}

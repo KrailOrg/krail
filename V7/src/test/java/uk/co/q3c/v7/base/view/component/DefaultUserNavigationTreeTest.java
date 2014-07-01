@@ -109,6 +109,8 @@ public class DefaultUserNavigationTreeTest {
 		assertThat(userNavigationTree.getParent(userSitemap.a11Node)).isEqualTo(userSitemap.a1Node);
 		assertThat(userNavigationTree.getItemCaption(userSitemap.a11Node)).isEqualTo("ViewA11");
 		assertThat(userNavigationTree.getItemCaption(userSitemap.publicHomeNode)).isEqualTo("Public Home");
+		assertThat(userNavigationTree.areChildrenAllowed(userSitemap.a11Node)).isFalse();
+		assertThat(userNavigationTree.areChildrenAllowed(userSitemap.a1Node)).isTrue();
 	}
 
 	@Test
@@ -314,6 +316,25 @@ public class DefaultUserNavigationTreeTest {
 		assertThat(roots).containsExactly(userSitemap.publicNode, userSitemap.privateNode);
 		children = (Collection<UserSitemapNode>) userNavigationTree.getTree().getChildren(userSitemap.publicNode);
 		assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedPositionAscending());
+	}
+
+	@Test
+	public void options() {
+
+		// given
+		userNavigationTree = newTree();
+		userNavigationTree.build();
+		// when
+		userNavigationTree.setSortAscending(true);
+		userNavigationTree.setSortType(SortType.INSERTION);
+		// then
+		assertThat(
+				userOption.getOptionAsBoolean(DefaultUserNavigationTree.class.getSimpleName(),
+						UserOptionProperty.SORT_ASCENDING, false)).isTrue();
+		assertThat(
+				userOption.getOptionAsEnum(DefaultUserNavigationTree.class.getSimpleName(),
+						UserOptionProperty.SORT_TYPE, SortType.ALPHA)).isEqualTo(SortType.INSERTION);
+
 	}
 
 	private DefaultUserNavigationTree newTree() {

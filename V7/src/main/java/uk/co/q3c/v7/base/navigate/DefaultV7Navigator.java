@@ -29,6 +29,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.SitemapNode;
 import uk.co.q3c.v7.base.navigate.sitemap.SitemapService;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
+import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapBuilder;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
@@ -66,7 +67,7 @@ public class DefaultV7Navigator implements V7Navigator {
 	private NavigationState currentNavigationState;
 	private NavigationState previousNavigationState;
 
-	private final UserSitemap userSitemap;
+	private UserSitemap userSitemap;
 	private final Provider<Subject> subjectProvider;
 	private V7View currentView = null;
 
@@ -76,22 +77,32 @@ public class DefaultV7Navigator implements V7Navigator {
 
 	private final DefaultViewFactory viewFactory;
 
+	private final SitemapService sitemapService;
+
+	private final UserSitemapBuilder userSitemapBuilder;
+
 	@Inject
 	public DefaultV7Navigator(URIFragmentHandler uriHandler, SitemapService sitemapService,
 			SubjectProvider subjectProvider, PageAccessController pageAccessController, ScopedUIProvider uiProvider,
-			DefaultViewFactory viewFactory, Provider<UserSitemap> userSitemapProvider) {
+			DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder) {
 		super();
 		this.uriHandler = uriHandler;
 		this.uiProvider = uiProvider;
-
+		this.sitemapService = sitemapService;
 		this.subjectProvider = subjectProvider;
 		this.pageAccessController = pageAccessController;
 		this.viewFactory = viewFactory;
+		this.userSitemapBuilder = userSitemapBuilder;
 
+	}
+
+	@Override
+	public void init() {
 		try {
 			sitemapService.start();
-			// cannot create until MasterSitemap has loaded
-			userSitemap = userSitemapProvider.get();
+			userSitemapBuilder.build();
+			userSitemap = userSitemapBuilder.getUserSitemap();
+
 		} catch (Exception e) {
 			String msg = "Sitemap service failed to start, application will have no pages";
 			log.error(msg);

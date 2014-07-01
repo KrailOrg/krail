@@ -57,4 +57,8 @@ public class UserSitemapBuilder implements UserStatusListener {
 
 	}
 
+	public UserSitemap getUserSitemap() {
+		return userSitemap;
+	}
+
 }

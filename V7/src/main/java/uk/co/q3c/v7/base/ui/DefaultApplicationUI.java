@@ -6,12 +6,12 @@ import uk.co.q3c.v7.base.push.PushMessageRouter;
 import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.component.ApplicationHeader;
 import uk.co.q3c.v7.base.view.component.ApplicationLogo;
-import uk.co.q3c.v7.base.view.component.UserNavigationMenu;
 import uk.co.q3c.v7.base.view.component.Breadcrumb;
 import uk.co.q3c.v7.base.view.component.LocaleSelector;
 import uk.co.q3c.v7.base.view.component.MessageBar;
 import uk.co.q3c.v7.base.view.component.OtherSelector;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
+import uk.co.q3c.v7.base.view.component.UserNavigationMenu;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 import uk.co.q3c.v7.base.view.component.UserStatusPanel;
 import uk.co.q3c.v7.i18n.CurrentLocale;
@@ -112,6 +112,8 @@ public class DefaultApplicationUI extends ScopedUI {
 			baseLayout.setExpandRatio(row2, 1f);
 
 		}
+		navTree.build();
+		menu.build();
 		return baseLayout;
 	}
 

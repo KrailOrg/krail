@@ -172,6 +172,9 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 
 		// We want to use the same default locale as Vaadin (held by the session and usually the browser locale)
 		currentLocale.setLocale(session.getLocale(), false);
+
+		// init navigator, which also loads the UserSitemap if not already loaded
+		getV7Navigator().init();
 		doLayout();
 		translator.translate(this);
 		// Navigate to the correct start point

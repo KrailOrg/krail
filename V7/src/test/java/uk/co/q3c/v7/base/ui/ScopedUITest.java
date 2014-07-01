@@ -12,15 +12,13 @@
  */
 package uk.co.q3c.v7.base.ui;
 
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.data.util.converter.ConverterFactory;
-import com.vaadin.navigator.Navigator;
-import com.vaadin.server.ClientConnector;
-import com.vaadin.server.ErrorHandler;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.Component;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Locale;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +27,7 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -39,10 +38,15 @@ import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.Translate;
 
-import java.util.Locale;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.data.util.converter.ConverterFactory;
+import com.vaadin.navigator.Navigator;
+import com.vaadin.server.ClientConnector;
+import com.vaadin.server.ErrorHandler;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.Component;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -155,8 +159,9 @@ public class ScopedUITest {
 		ui.init(request);
 		// then
 		verify(session).setConverterFactory(converterFactory);
-		InOrder inOrder = inOrder(currentLocale, translator, navigator);
+		InOrder inOrder = inOrder(currentLocale, navigator, translator, navigator);
 		inOrder.verify(currentLocale).setLocale(Locale.FRANCE, false);
+		inOrder.verify(navigator).init();
 		inOrder.verify(translator).translate(ui);
 		inOrder.verify(navigator).navigateTo("home");
 	}

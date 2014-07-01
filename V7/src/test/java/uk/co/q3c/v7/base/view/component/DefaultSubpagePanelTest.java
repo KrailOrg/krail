@@ -13,6 +13,7 @@
 package uk.co.q3c.v7.base.view.component;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.comparator.DefaultUserSitemapSorters.S
 import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
 import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
@@ -101,6 +103,23 @@ public class DefaultSubpagePanelTest {
 		expected.add(userSitemap.logoutNode); // not filtered
 		assertThat(nodes).containsAll(expected);
 		assertThat(nodes).hasSameSizeAs(expected);
+	}
+
+	@Test
+	public void options() {
+
+		// given
+		when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+		panel.moveToNavigationState();
+		// when
+		panel.setSortType(SortType.INSERTION);
+		panel.setSortAscending(true);
+		// then
+		verify(userOption)
+				.setOption(DefaultSubpagePanel.class.getSimpleName(), UserOptionProperty.SORT_ASCENDING, true);
+		verify(userOption).setOption(DefaultSubpagePanel.class.getSimpleName(), UserOptionProperty.SORT_TYPE,
+				SortType.INSERTION);
+
 	}
 
 	@Test

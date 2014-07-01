@@ -28,7 +28,8 @@ public class StandardPageLabels_de extends StandardPageLabels {
 		map = new ImmutableMap.Builder<StandardPageKey, String>()
 				// @formatter:off
 
-				.put(StandardPageKey.Public_Home, "Öffentliche Startseite").put(StandardPageKey.Login, "DE_Login")
+				.put(StandardPageKey.Public_Home, "Öffentliche Startseite")
+				.put(StandardPageKey.Login, "DE_Login")
 				.build();
 
 		// @formatter:on

@@ -76,7 +76,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 				UserOptionProperty.SORT_ASCENDING, true);
 
 		SortType sortType = (SortType) userOption.getOptionAsEnum(this.getClass().getSimpleName(),
-				UserOptionProperty.SORT_ASCENDING, SortType.ALPHA);
+				UserOptionProperty.SORT_TYPE, SortType.ALPHA);
 
 		setSortAscending(ascending, false);
 		setSortType(sortType, false);
@@ -179,9 +179,12 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	@Override
 	public void build() {
 		if (rebuildRequired) {
+			log.debug("rebuilding");
 			clear();
 			builder.build();
 			rebuildRequired = false;
+		} else {
+			log.debug("rebuild not required");
 		}
 	}
 
