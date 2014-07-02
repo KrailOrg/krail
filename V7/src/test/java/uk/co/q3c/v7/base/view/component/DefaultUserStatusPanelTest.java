@@ -12,15 +12,18 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.ui.Button;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Locale;
+
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
@@ -32,15 +35,14 @@ import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.Translate;
 
-import java.util.Locale;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.ui.Button;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
-public class LoginStatusPanelTest {
+public class DefaultUserStatusPanelTest {
 
 	DefaultUserStatusPanel panel;
 
@@ -72,7 +74,8 @@ public class LoginStatusPanelTest {
 		when(subjectProvider.get()).thenReturn(subject);
 		subjectIdentifier = new DefaultSubjectIdentifier(subjectProvider, translate);
 
-		panel = new DefaultUserStatusPanel(navigator, subjectProvider, translate, subjectIdentifier, userStatus);
+		panel = new DefaultUserStatusPanel(navigator, subjectProvider, translate, subjectIdentifier, userStatus,
+				currentLocale);
 
 		loginoutBtn = panel.getLogin_logout_Button();
 	}
@@ -94,7 +97,23 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).navigateTo(StandardPageKey.Login);
+		verify(navigator).navigateTo(StandardPageKey.Log_In);
+	}
+
+	@Test
+	public void localeChange() {
+
+		// given
+		when(subject.isRemembered()).thenReturn(false);
+		when(subject.isAuthenticated()).thenReturn(false);
+		when(subject.getPrincipal()).thenReturn(null);
+		panel.userStatusChanged();
+
+		// when
+		currentLocale.setLocale(Locale.GERMANY);
+		// then
+		assertThat(panel.getActionLabel()).isEqualTo("einloggen");
+		assertThat(panel.getUserId()).isEqualTo("Gast");
 	}
 
 	@Test
@@ -112,7 +131,7 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).navigateTo(StandardPageKey.Login);
+		verify(navigator).navigateTo(StandardPageKey.Log_In);
 	}
 
 	@Test
@@ -130,7 +149,7 @@ public class LoginStatusPanelTest {
 		// when
 		loginoutBtn.click();
 		// then
-		verify(navigator).navigateTo(StandardPageKey.Logout);
+		verify(navigator).navigateTo(StandardPageKey.Log_Out);
 	}
 
 }

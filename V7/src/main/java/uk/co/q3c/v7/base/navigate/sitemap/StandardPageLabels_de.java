@@ -29,7 +29,9 @@ public class StandardPageLabels_de extends StandardPageLabels {
 				// @formatter:off
 
 				.put(StandardPageKey.Public_Home, "Öffentliche Startseite")
-				.put(StandardPageKey.Login, "DE_Login")
+				.put(StandardPageKey.Log_In, "Einloggen")
+				.put(StandardPageKey.Log_Out, "Ausloggen")
+				.put(StandardPageKey.Private_Home, "Privat Startseite")
 				.build();
 
 		// @formatter:on

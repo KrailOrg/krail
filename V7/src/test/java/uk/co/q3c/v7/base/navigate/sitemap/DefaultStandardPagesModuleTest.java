@@ -71,8 +71,8 @@ public class DefaultStandardPagesModuleTest {
 		assertThat(sitemap.hasUri("private/home")).isTrue();
 		assertThat(sitemap.standardPageNode(StandardPageKey.Public_Home)).isNotNull();
 		assertThat(sitemap.standardPageNode(StandardPageKey.Private_Home)).isNotNull();
-		assertThat(sitemap.standardPageNode(StandardPageKey.Login)).isNotNull();
-		assertThat(sitemap.standardPageNode(StandardPageKey.Logout)).isNotNull();
+		assertThat(sitemap.standardPageNode(StandardPageKey.Log_In)).isNotNull();
+		assertThat(sitemap.standardPageNode(StandardPageKey.Log_Out)).isNotNull();
 		SitemapNode privateNode = sitemap.nodeFor("private");
 		assertThat(privateNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 		// when

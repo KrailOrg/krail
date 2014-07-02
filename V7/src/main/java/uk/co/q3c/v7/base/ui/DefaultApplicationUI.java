@@ -9,23 +9,18 @@ import uk.co.q3c.v7.base.view.component.ApplicationLogo;
 import uk.co.q3c.v7.base.view.component.Breadcrumb;
 import uk.co.q3c.v7.base.view.component.LocaleSelector;
 import uk.co.q3c.v7.base.view.component.MessageBar;
-import uk.co.q3c.v7.base.view.component.OtherSelector;
 import uk.co.q3c.v7.base.view.component.SubpagePanel;
 import uk.co.q3c.v7.base.view.component.UserNavigationMenu;
 import uk.co.q3c.v7.base.view.component.UserNavigationTree;
 import uk.co.q3c.v7.base.view.component.UserStatusPanel;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NProcessor;
-import uk.co.q3c.v7.i18n.MessageKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import com.google.inject.Inject;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
@@ -49,9 +44,6 @@ public class DefaultApplicationUI extends ScopedUI {
 	private final ApplicationLogo logo;
 	private final ApplicationHeader header;
 	private final LocaleSelector localeSelector;
-	private final OtherSelector otherSelector;
-	private Button refreshButton;
-	private final UserNotifier userNotifier;
 
 	@Inject
 	protected DefaultApplicationUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
@@ -59,7 +51,7 @@ public class DefaultApplicationUI extends ScopedUI {
 			UserNavigationTree navTree, Breadcrumb breadcrumb, SubpagePanel subpage, MessageBar messageBar,
 			Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
 			Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector,
-			OtherSelector otherSelector, UserNotifier userNotifier) {
+			UserNotifier userNotifier) {
 		super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate,
 				currentLocale, translator);
 		this.navTree = navTree;
@@ -71,27 +63,19 @@ public class DefaultApplicationUI extends ScopedUI {
 		this.logo = logo;
 		this.header = header;
 		this.localeSelector = localeSelector;
-		this.otherSelector = otherSelector;
-		this.userNotifier = userNotifier;
+		// this.userNotifier = userNotifier;
 	}
 
 	@Override
 	protected AbstractOrderedLayout screenLayout() {
 		if (baseLayout == null) {
-			refreshButton = new Button("refresh");
-			refreshButton.addClickListener(new ClickListener() {
-				@Override
-				public void buttonClick(ClickEvent event) {
-					userNotifier.notifyInformation(MessageKey.LocaleChange, currentLocale.getLocale().getDisplayName());
-				}
-			});
+
 			setSizes();
 
 			baseLayout = new VerticalLayout();
 			baseLayout.setSizeFull();
 
-			HorizontalLayout row0 = new HorizontalLayout(refreshButton, localeSelector.getComponent(), header,
-					otherSelector.getSample(), userStatus);
+			HorizontalLayout row0 = new HorizontalLayout(header, localeSelector.getComponent(), userStatus);
 			row0.setWidth("100%");
 			baseLayout.addComponent(row0);
 			baseLayout.addComponent(menu);

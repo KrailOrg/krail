@@ -55,7 +55,7 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
 		combo.setImmediate(true);
 		combo.setNullSelectionAllowed(false);
 
-		combo.setWidth(400 + "px");
+		combo.setWidth(200 + "px");
 
 		ID.getId(this, combo);
 		combo.setContainerDataSource(container);

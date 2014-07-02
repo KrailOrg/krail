@@ -36,8 +36,8 @@ public class StandardPagesModule extends DirectSitemapModule {
 	@Override
 	protected void define() {
 		addEntry("home", PublicHomeView.class, StandardPageKey.Public_Home, PageAccessControl.PUBLIC, null);
-		addEntry("login", LoginView.class, StandardPageKey.Login, PageAccessControl.PUBLIC, null);
-		addEntry("logout", LogoutView.class, StandardPageKey.Logout, PageAccessControl.PUBLIC, null);
+		addEntry("login", LoginView.class, StandardPageKey.Log_In, PageAccessControl.PUBLIC, null);
+		addEntry("logout", LogoutView.class, StandardPageKey.Log_Out, PageAccessControl.PUBLIC, null);
 		addEntry("private", null, LabelKey.Private, PageAccessControl.PERMISSION, null);
 		addEntry("private/home", PrivateHomeView.class, StandardPageKey.Private_Home, PageAccessControl.PERMISSION,
 				null);

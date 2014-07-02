@@ -134,14 +134,14 @@ public abstract class TestWithSitemap {
 			masterNode1 = newNode("public");
 			masterNode1.setLabelKey(StandardPageKey.Public_Home);
 			masterNode2 = newNode("logout");
-			masterNode2.setLabelKey(StandardPageKey.Logout);
+			masterNode2.setLabelKey(StandardPageKey.Log_Out);
 			masterSitemap.addChild(masterNode1, masterNode2);
 			break;
 		case 4:
 			masterNode1 = newNode("public");
 			masterNode1.setLabelKey(StandardPageKey.Public_Home);
 			masterNode2 = newNode("logout");
-			masterNode2.setLabelKey(StandardPageKey.Logout);
+			masterNode2.setLabelKey(StandardPageKey.Log_Out);
 			masterNode3 = newNode("private");
 			masterNode4 = newNode("wiggly");
 			masterSitemap.addChild(masterNode1, masterNode2);
@@ -249,15 +249,15 @@ public abstract class TestWithSitemap {
 	protected void buildStandardPages() {
 
 		loginNode = newNode("login");
-		loginNode.setLabelKey(StandardPageKey.Login);
+		loginNode.setLabelKey(StandardPageKey.Log_In);
 		logoutNode = newNode("logout");
-		loginNode.setLabelKey(StandardPageKey.Logout);
+		loginNode.setLabelKey(StandardPageKey.Log_Out);
 		publicHomeNode = newNode("public/home");
 		publicHomeNode.setLabelKey(StandardPageKey.Public_Home);
 		privateHomeNode = newNode("private/home");
 		privateHomeNode.setLabelKey(StandardPageKey.Private_Home);
-		masterSitemap.addStandardPage(StandardPageKey.Login, loginNode);
-		masterSitemap.addStandardPage(StandardPageKey.Logout, logoutNode);
+		masterSitemap.addStandardPage(StandardPageKey.Log_In, loginNode);
+		masterSitemap.addStandardPage(StandardPageKey.Log_Out, logoutNode);
 		masterSitemap.addStandardPage(StandardPageKey.Public_Home, publicHomeNode);
 		masterSitemap.addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
 		masterSitemap.addChild(masterSitemap.nodeFor("public"), publicHomeNode);

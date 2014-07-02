@@ -24,6 +24,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
+import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.LocaleChangeListener;
 
 import com.google.inject.Inject;
@@ -42,12 +43,13 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 	protected boolean rebuildRequired = true;
 
 	@Inject
-	protected NavigationButtonPanel(V7Navigator navigator, UserSitemap sitemap) {
+	protected NavigationButtonPanel(V7Navigator navigator, UserSitemap sitemap, CurrentLocale currentLocale) {
 		this.navigator = navigator;
 		navigator.addViewChangeListener(this);
 		this.sitemap = sitemap;
 		this.setSizeUndefined();
 		this.setSpacing(true);
+		currentLocale.addListener(this);
 		ID.getId(this);
 
 	}

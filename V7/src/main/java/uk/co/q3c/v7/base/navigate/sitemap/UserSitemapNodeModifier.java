@@ -77,7 +77,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
 
 		// if the subject is already authenticated, don't show the login page
 		if (subject.isAuthenticated()) {
-			if (masterNode.equals(masterSitemap.standardPageNode(StandardPageKey.Login))) {
+			if (masterNode.equals(masterSitemap.standardPageNode(StandardPageKey.Log_In))) {
 				log.debug("User has already authenticated, do not show the login node");
 				return null;
 			}

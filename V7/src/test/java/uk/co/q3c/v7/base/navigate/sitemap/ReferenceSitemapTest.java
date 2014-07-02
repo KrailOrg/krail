@@ -36,8 +36,9 @@ import fixture.ReferenceUserSitemap;
 @GuiceContext({ VaadinSessionScopeModule.class })
 public class ReferenceSitemapTest {
 
-	private static String[] expected = new String[] { "", "-Public", "--Logout", "--ViewA", "---ViewA1", "----ViewA11",
-			"--Login", "--Public Home", "", "-Private", "--Private Home", "--ViewB", "---ViewB1", "----ViewB11" };
+	private static String[] expected = new String[] { "", "-Public", "--Log Out", "--ViewA", "---ViewA1",
+			"----ViewA11", "--Log In", "--Public Home", "", "-Private", "--Private Home", "--ViewB", "---ViewB1",
+			"----ViewB11" };
 
 	@Inject
 	ReferenceUserSitemap userSitemap;

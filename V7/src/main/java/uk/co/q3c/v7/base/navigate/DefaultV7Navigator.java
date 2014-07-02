@@ -365,14 +365,14 @@ public class DefaultV7Navigator implements V7Navigator {
 		if (subjectProvider.get().isAuthenticated()) {
 			// they have logged in
 			SitemapNode previousNode = userSitemap.nodeFor(previousNavigationState);
-			if (previousNode != null && previousNode != userSitemap.standardPageNode(StandardPageKey.Logout)) {
+			if (previousNode != null && previousNode != userSitemap.standardPageNode(StandardPageKey.Log_Out)) {
 				navigateTo(previousNavigationState);
 			} else {
 				navigateTo(StandardPageKey.Private_Home);
 			}
 		} else {
 			// they have logged out
-			navigateTo(StandardPageKey.Logout);
+			navigateTo(StandardPageKey.Log_Out);
 		}
 	}
 

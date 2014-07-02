@@ -150,7 +150,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		navigator = createNavigator();
 		// when
-		navigator.navigateTo(StandardPageKey.Logout);
+		navigator.navigateTo(StandardPageKey.Log_Out);
 		// then
 		assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.logoutViewClass);
 		verify(scopedUI).changeView(any(LogoutView.class));
@@ -174,7 +174,7 @@ public class DefaultV7NavigatorTest {
 		navigator = createNavigator();
 		// when
 		navigator.navigateTo(userSitemap.a1URI);
-		navigator.navigateTo(StandardPageKey.Login);
+		navigator.navigateTo(StandardPageKey.Log_In);
 		assertThat(navigator.getCurrentView()).isInstanceOf(TestLoginView.class);
 		// // when
 		when(subject.isAuthenticated()).thenReturn(true);
@@ -189,7 +189,7 @@ public class DefaultV7NavigatorTest {
 		// given
 		navigator = createNavigator();
 		// when
-		navigator.navigateTo(StandardPageKey.Login);
+		navigator.navigateTo(StandardPageKey.Log_In);
 		assertThat(navigator.getCurrentView()).isInstanceOf(TestLoginView.class);
 		verify(scopedUI).changeView(any(V7View.class));
 		// // when

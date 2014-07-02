@@ -18,6 +18,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +37,7 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
-import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.DefaultCurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -60,8 +61,8 @@ public class DefaultSubpagePanelTest {
 	@Mock
 	V7Navigator navigator;
 
-	@Mock
-	CurrentLocale currentLocale;
+	@Inject
+	DefaultCurrentLocale currentLocale;
 
 	@Mock
 	Translate translate;
@@ -75,7 +76,7 @@ public class DefaultSubpagePanelTest {
 	@Before
 	public void setup() {
 		userSitemap.populate();
-		panel = new DefaultSubpagePanel(navigator, userSitemap, userOption, sorters);
+		panel = new DefaultSubpagePanel(navigator, userSitemap, userOption, sorters, currentLocale);
 	}
 
 	@Test
@@ -141,6 +142,25 @@ public class DefaultSubpagePanelTest {
 		nodes = nodesFromButtons(panel.getButtons());
 		assertThat(nodes).containsOnly(userSitemap.loginNode, userSitemap.aNode, userSitemap.publicHomeNode,
 				userSitemap.logoutNode);
+	}
+
+	@Test
+	public void localeChanged() {
+
+		// given
+		when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+		LogoutPageFilter filter = new LogoutPageFilter();
+		panel.addFilter(filter);
+
+		// when
+		panel.moveToNavigationState();
+		// then
+		assertThat(panel.getButtons().get(0).getCaption()).isEqualTo("Log In");
+
+		// when
+		currentLocale.setLocale(Locale.GERMANY);
+		// then
+		assertThat(panel.getButtons().get(0).getCaption()).isEqualTo("Einloggen");
 	}
 
 	@Test

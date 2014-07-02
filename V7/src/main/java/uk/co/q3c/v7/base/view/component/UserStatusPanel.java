@@ -13,10 +13,11 @@
 package uk.co.q3c.v7.base.view.component;
 
 import uk.co.q3c.v7.base.user.status.UserStatusListener;
+import uk.co.q3c.v7.i18n.LocaleChangeListener;
 
 import com.vaadin.ui.Component;
 
-public interface UserStatusPanel extends Component, UserStatusListener {
+public interface UserStatusPanel extends Component, UserStatusListener, LocaleChangeListener {
 
 	String getActionLabel();
 

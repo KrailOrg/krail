@@ -19,6 +19,7 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 import uk.co.q3c.v7.base.view.V7ViewChangeListener;
+import uk.co.q3c.v7.i18n.CurrentLocale;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
@@ -28,8 +29,8 @@ public class DefaultBreadcrumb extends NavigationButtonPanel implements V7ViewCh
 		Breadcrumb {
 
 	@Inject
-	protected DefaultBreadcrumb(V7Navigator navigator, UserSitemap sitemap) {
-		super(navigator, sitemap);
+	protected DefaultBreadcrumb(V7Navigator navigator, UserSitemap sitemap, CurrentLocale currentLocale) {
+		super(navigator, sitemap, currentLocale);
 	}
 
 	@Override

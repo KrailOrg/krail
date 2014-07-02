@@ -152,8 +152,8 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
 	 * Creates the nodes and pages for standard pages, including intermediate (public and private) pages.
 	 */
 	private void createStandardPages() {
-		loginNode = createNode(loginURI, "login", loginViewClass, StandardPageKey.Login, PageAccessControl.PUBLIC);
-		logoutNode = createNode(logoutURI, "logout", logoutViewClass, StandardPageKey.Logout, PageAccessControl.PUBLIC);
+		loginNode = createNode(loginURI, "login", loginViewClass, StandardPageKey.Log_In, PageAccessControl.PUBLIC);
+		logoutNode = createNode(logoutURI, "logout", logoutViewClass, StandardPageKey.Log_Out, PageAccessControl.PUBLIC);
 		privateHomeNode = createNode(privateHomeURI, "home", privateHomeViewClass, StandardPageKey.Private_Home,
 				PageAccessControl.PUBLIC);
 		publicHomeNode = createNode(publicHomeURI, "home", publicHomeViewClass, StandardPageKey.Public_Home,
@@ -167,8 +167,8 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
 		addChild(publicNode, logoutNode);
 		addChild(privateNode, privateHomeNode);
 
-		addStandardPage(StandardPageKey.Login, loginNode);
-		addStandardPage(StandardPageKey.Logout, logoutNode);
+		addStandardPage(StandardPageKey.Log_In, loginNode);
+		addStandardPage(StandardPageKey.Log_Out, logoutNode);
 		addStandardPage(StandardPageKey.Public_Home, publicHomeNode);
 		addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
 	}

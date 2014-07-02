@@ -100,10 +100,10 @@ public class DefaultUserNavigationMenuTest {
 
 		MenuItem pblic = childWithText("Public", null);
 		captions = menuCaptions(pblic);
-		assertThat(captions).containsOnly("Login", "Public Home", "ViewA");
+		assertThat(captions).containsOnly("Log In", "Public Home", "ViewA");
 		assertThat(pblic.getCommand()).isNull();
 
-		MenuItem login = childWithText("Login", pblic);
+		MenuItem login = childWithText("Log In", pblic);
 		captions = menuCaptions(login);
 		assertThat(captions).containsOnly();
 		assertThat(login.getCommand()).isNotNull();
@@ -170,10 +170,10 @@ public class DefaultUserNavigationMenuTest {
 
 		MenuItem pblic = childWithText("Public", null);
 		captions = menuCaptions(pblic);
-		assertThat(captions).containsOnly("Login", "Public Home", "ViewA");
+		assertThat(captions).containsOnly("Log In", "Public Home", "ViewA");
 		assertThat(pblic.getCommand()).isNull();
 
-		MenuItem login = childWithText("Login", pblic);
+		MenuItem login = childWithText("Log In", pblic);
 		captions = menuCaptions(login);
 		assertThat(captions).containsOnly();
 		assertThat(login.getCommand()).isNotNull();
@@ -286,7 +286,7 @@ public class DefaultUserNavigationMenuTest {
 		MenuItem pblic = childWithText("Public", null);
 		captions = menuCaptions(pblic);
 		// sorting is true by default
-		assertThat(captions).containsExactly("Login", "Public Home", "ViewA");
+		assertThat(captions).containsExactly("Log In", "Public Home", "ViewA");
 
 		// when
 		currentLocale.setLocale(Locale.GERMANY);
@@ -296,7 +296,7 @@ public class DefaultUserNavigationMenuTest {
 		pblic = childWithText("Öffentlichkeit", null);
 		captions = menuCaptions(pblic);
 		// sorting is true by default
-		assertThat(captions).containsExactly("DE_Login", "DE_ViewA", "Öffentliche Startseite");
+		assertThat(captions).containsExactly("DE_ViewA", "Einloggen", "Öffentliche Startseite");
 
 	}
 

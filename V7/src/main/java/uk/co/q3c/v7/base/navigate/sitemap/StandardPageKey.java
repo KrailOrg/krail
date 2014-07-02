@@ -25,8 +25,8 @@ import uk.co.q3c.v7.i18n.I18NKey;
 public enum StandardPageKey implements I18NKey<StandardPageLabels> {
 	Public_Home, // The home page for non-authenticated users
 	Private_Home, // The home page for authenticated users
-	Login, // the login page
-	Logout; // the page to go to after logging out
+	Log_In, // the login page
+	Log_Out; // the page to go to after logging out
 
 	@Override
 	public StandardPageLabels getBundle(Locale locale) {

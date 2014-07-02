@@ -24,6 +24,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.comparator.DefaultUserSitemapSorters.S
 import uk.co.q3c.v7.base.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
+import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18N;
 
 import com.google.inject.Inject;
@@ -37,8 +38,8 @@ public class DefaultSubpagePanel extends NavigationButtonPanel implements Subpag
 
 	@Inject
 	protected DefaultSubpagePanel(V7Navigator navigator, UserSitemap userSitemap, UserOption userOption,
-			UserSitemapSorters sorters) {
-		super(navigator, userSitemap);
+			UserSitemapSorters sorters, CurrentLocale currentLocale) {
+		super(navigator, userSitemap, currentLocale);
 		this.userSitemap = userSitemap;
 		this.userOption = userOption;
 		this.sorters = sorters;

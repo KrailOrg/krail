@@ -20,7 +20,7 @@ public class LogoutPageFilter implements NodeFilter<UserSitemapNode> {
 
 	@Override
 	public boolean accept(UserSitemapNode node) {
-		return !node.getLabelKey().equals(StandardPageKey.Logout);
+		return !node.getLabelKey().equals(StandardPageKey.Log_Out);
 	}
 
 }

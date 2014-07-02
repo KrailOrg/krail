@@ -17,6 +17,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.text.Collator;
+import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +55,7 @@ public class BreadcrumbTest {
 	@Mock
 	V7Navigator navigator;
 
-	@Mock
+	@Inject
 	CurrentLocale currentLocale;
 
 	@Mock
@@ -133,8 +134,27 @@ public class BreadcrumbTest {
 		verify(navigator).navigateTo(step.getNode());
 	}
 
+	@Test
+	public void localeChanged() {
+
+		// given
+		when(navigator.getCurrentNode()).thenReturn(userSitemap.a11Node);
+		LogoutPageFilter filter = new LogoutPageFilter();
+		breadcrumb.addFilter(filter);
+
+		// when
+		breadcrumb.moveToNavigationState();
+		// then
+		assertThat(breadcrumb.getButtons().get(0).getCaption()).isEqualTo("Public");
+
+		// when
+		currentLocale.setLocale(Locale.GERMANY);
+		// then
+		assertThat(breadcrumb.getButtons().get(0).getCaption()).isEqualTo("Öffentlichkeit");
+	}
+
 	private void createBreadcrumb() {
-		breadcrumb = new DefaultBreadcrumb(navigator, userSitemap);
+		breadcrumb = new DefaultBreadcrumb(navigator, userSitemap, currentLocale);
 	}
 
 	@ModuleProvider

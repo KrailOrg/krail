@@ -12,8 +12,10 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import uk.co.q3c.v7.i18n.LocaleChangeListener;
+
 import com.vaadin.ui.Component;
 
-public interface Breadcrumb extends Component {
+public interface Breadcrumb extends Component, LocaleChangeListener {
 	void moveToNavigationState();
 }

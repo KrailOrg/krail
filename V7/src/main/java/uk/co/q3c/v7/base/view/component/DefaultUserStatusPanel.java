@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import java.util.Locale;
+
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,7 @@ import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
 import uk.co.q3c.v7.base.shiro.SubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.user.status.UserStatus;
+import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -57,13 +60,14 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
 
 	@Inject
 	protected DefaultUserStatusPanel(V7Navigator navigator, SubjectProvider subjectProvider, Translate translate,
-			SubjectIdentifier subjectIdentifier, UserStatus userStatus) {
+			SubjectIdentifier subjectIdentifier, UserStatus userStatus, CurrentLocale currentLocale) {
 		super();
 		this.navigator = navigator;
 		this.subjectProvider = subjectProvider;
 		this.translate = translate;
 		this.subjectIdentifier = subjectIdentifier;
 		this.userStatus = userStatus;
+		currentLocale.addListener(this);
 		userStatus.addListener(this);
 		setSizeFull();
 		addStyleName(ChameleonTheme.PANEL_BORDERLESS);
@@ -105,10 +109,10 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
 		boolean authenticated = subjectProvider.get().isAuthenticated();
 		if (authenticated) {
 			subjectProvider.get().logout();
-			navigator.navigateTo(StandardPageKey.Logout);
+			navigator.navigateTo(StandardPageKey.Log_Out);
 			userStatus.statusChanged();
 		} else {
-			navigator.navigateTo(StandardPageKey.Login);
+			navigator.navigateTo(StandardPageKey.Log_In);
 		}
 
 	}
@@ -116,11 +120,21 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
 	@Override
 	public void userStatusChanged() {
 		log.debug("login status change");
+		build();
+
+	}
+
+	@Override
+	public void localeChanged(Locale locale) {
+		log.debug("locale change");
+		build();
+	}
+
+	private void build() {
 		boolean authenticated = subjectProvider.get().isAuthenticated();
 		String caption = (authenticated) ? translate.from(LabelKey.Log_Out) : translate.from(LabelKey.Log_In);
 		login_logout_Button.setCaption(caption.toLowerCase());
 		usernameLabel.setValue(subjectIdentifier.subjectName());
-
 	}
 
 }
