@@ -16,6 +16,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapChangeListener;
@@ -31,7 +34,7 @@ import com.google.inject.Inject;
 
 @I18N
 public class DefaultSubpagePanel extends NavigationButtonPanel implements SubpagePanel, UserSitemapChangeListener {
-
+	private static Logger log = LoggerFactory.getLogger(DefaultSubpagePanel.class);
 	private final UserSitemap userSitemap;
 	private final UserOption userOption;
 	private final UserSitemapSorters sorters;
@@ -49,10 +52,15 @@ public class DefaultSubpagePanel extends NavigationButtonPanel implements Subpag
 	@Override
 	protected void build() {
 		if (rebuildRequired) {
-			List<UserSitemapNode> authorisedSubNodes = userSitemap.getChildren(getNavigator().getCurrentNode());
+			log.debug("building");
+			UserSitemapNode currentNode = getNavigator().getCurrentNode();
+			log.debug("current node is '{}'", userSitemap.uri(currentNode));
+			List<UserSitemapNode> authorisedSubNodes = userSitemap.getChildren(currentNode);
 			Collections.sort(authorisedSubNodes, getSortComparator());
 			organiseButtons(authorisedSubNodes);
 			rebuildRequired = false;
+		} else {
+			log.debug("build not required");
 		}
 	}
 

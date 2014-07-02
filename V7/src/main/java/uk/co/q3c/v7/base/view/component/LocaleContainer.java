@@ -67,6 +67,7 @@ public class LocaleContainer extends IndexedContainer {
 
 		for (Locale supportedLocale : supportedLocales) {
 			String id = supportedLocale.toLanguageTag();
+			log.debug("Added supported locale with id: '{}'", id);
 			Item item = addItem(id);
 			item.getItemProperty(PropertyName.NAME).setValue(supportedLocale.getDisplayName());
 
@@ -90,7 +91,7 @@ public class LocaleContainer extends IndexedContainer {
 	}
 
 	public Integer flagSize() {
-		return userOption.getOptionAsInt(this.getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH.OPTION_LOCALE_FLAG_SIZE, 32);
+		return userOption.getOptionAsInt(this.getClass().getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 32);
 	}
 
 }

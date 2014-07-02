@@ -17,6 +17,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.util.ID;
 import uk.co.q3c.util.NodeFilter;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -35,6 +38,7 @@ import com.vaadin.ui.themes.BaseTheme;
 
 public abstract class NavigationButtonPanel extends HorizontalLayout implements V7ViewChangeListener,
 		LocaleChangeListener, Button.ClickListener {
+	private static Logger log = LoggerFactory.getLogger(NavigationButtonPanel.class);
 	private final List<NavigationButton> buttons = new ArrayList<>();
 	private final LinkedList<NodeFilter<UserSitemapNode>> sourceFilters = new LinkedList<>();
 	private final V7Navigator navigator;
@@ -57,6 +61,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 	protected abstract void build();
 
 	public void moveToNavigationState() {
+		log.debug("moving to navigation state");
 		rebuildRequired = true;
 		build();
 	};
@@ -68,8 +73,9 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 	 *            contains the list of buttons to display. It is assumed that these are in the right order
 	 */
 	protected void organiseButtons(List<UserSitemapNode> nodeList) {
+		log.debug("{} nodes to display before filtering", nodeList.size());
 		List<UserSitemapNode> filteredList = filteredList(nodeList);
-
+		log.debug("{} nodes to display after filtering", filteredList.size());
 		int maxIndex = (filteredList.size() > buttons.size() ? filteredList.size() : buttons.size());
 		for (int i = 0; i < maxIndex; i++) {
 			// nothing left in chain
@@ -126,6 +132,8 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 
 	@Override
 	public void afterViewChange(V7ViewChangeEvent event) {
+		log.debug("Responding to view change");
+		rebuildRequired = true;
 		build();
 	}
 

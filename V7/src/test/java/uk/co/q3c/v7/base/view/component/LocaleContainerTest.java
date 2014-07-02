@@ -82,7 +82,7 @@ public class LocaleContainerTest {
 	public void fillContainer_success() {
 		// given
 		supportedLocales.add(Locale.GERMANY);
-        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.OPTION_LOCALE_FLAG_SIZE,48);
+        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.LOCALE_FLAG_SIZE,48);
 		// when
 		container = new LocaleContainer(supportedLocales, userOption);
 		// then
@@ -107,7 +107,7 @@ public class LocaleContainerTest {
 	@Test
 	public void fillContainer_no_flag_directory() {
 		supportedLocales.add(Locale.GERMANY);
-        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.OPTION_LOCALE_FLAG_SIZE,47);
+        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.LOCALE_FLAG_SIZE,47);
 		// when
 		container = new LocaleContainer(supportedLocales, userOption);
 
@@ -126,7 +126,7 @@ public class LocaleContainerTest {
 	@Test
 	public void fillContainer_missingFlag() {
 		supportedLocales.add(Locale.CANADA);
-        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.OPTION_LOCALE_FLAG_SIZE,48);
+        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.LOCALE_FLAG_SIZE,48);
 		// when
 		container = new LocaleContainer(supportedLocales, userOption);
 

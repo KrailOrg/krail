@@ -12,6 +12,8 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import java.util.Locale;
+
 import uk.co.q3c.v7.i18n.LocaleChangeListener;
 
 import com.vaadin.ui.Component;
@@ -23,4 +25,6 @@ public interface LocaleSelector extends LocaleChangeListener {
 	 * @return
 	 */
 	Component getComponent();
+
+	Locale selectedLocale();
 }

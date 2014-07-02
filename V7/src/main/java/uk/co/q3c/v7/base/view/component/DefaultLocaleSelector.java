@@ -40,6 +40,7 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
 	private final CurrentLocale currentLocale;
 	private boolean respondToLocaleChange = true;
 	private final UserNotifier userNotifier;
+	private boolean initialising;
 
 	@Inject
 	protected DefaultLocaleSelector(CurrentLocale currentLocale, LocaleContainer container, UserNotifier userNotifier) {
@@ -68,13 +69,18 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
 		combo.setItemIconPropertyId(LocaleContainer.PropertyName.FLAG);
 
 		combo.addValueChangeListener(this);
+		initialising = true;
+		localeChanged(currentLocale.getLocale());
+		initialising = false;
 	}
 
 	@Override
 	public void localeChanged(Locale locale) {
-		log.debug("responding in change to new locale of {}", locale.getDisplayName());
 		if (respondToLocaleChange) {
-			combo.setValue(locale.getDisplayName());
+			log.debug("responding in change to new locale of {}", locale.getDisplayName());
+			combo.setValue(locale.toLanguageTag());
+		} else {
+			log.debug("response to locale change is disabled");
 		}
 	}
 
@@ -89,16 +95,33 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
 	 */
 	@Override
 	public void valueChange(ValueChangeEvent event) {
+		if (!initialising) {
+			Locale newLocale = selectedLocale();
+			// only process change if locale has really changed
+			if (newLocale != null && newLocale != currentLocale.getLocale()) {
+				log.debug("locale selection changed");
+				respondToLocaleChange = false;
+				currentLocale.setLocale(newLocale);
+				userNotifier.notifyInformation(MessageKey.LocaleChange, newLocale.getDisplayName(newLocale));
+				respondToLocaleChange = true;
+			}
+		} else {
+			log.debug("Initialising, combo value change ignored");
+		}
+	}
+
+	@Override
+	public Locale selectedLocale() {
 		String selectedId = (String) combo.getValue();
 		Locale newLocale = Locale.forLanguageTag(selectedId);
-		// only process change if locale has really changed
-		if (newLocale != null && newLocale != currentLocale.getLocale()) {
-			log.debug("locale selection changed");
-			respondToLocaleChange = false;
-			currentLocale.setLocale(newLocale);
-			userNotifier.notifyInformation(MessageKey.LocaleChange, newLocale.getDisplayName(newLocale));
-			respondToLocaleChange = true;
-		}
+		return newLocale;
+	}
 
+	public boolean isRespondToLocaleChange() {
+		return respondToLocaleChange;
+	}
+
+	public void setRespondToLocaleChange(boolean respondToLocaleChange) {
+		this.respondToLocaleChange = respondToLocaleChange;
 	}
 }

@@ -37,6 +37,7 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.i18n.DefaultCurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.Translate;
@@ -72,6 +73,9 @@ public class DefaultSubpagePanelTest {
 
 	@Inject
 	DefaultUserSitemapSorters sorters;
+
+	@Mock
+	V7ViewChangeEvent event;
 
 	@Before
 	public void setup() {
@@ -236,6 +240,20 @@ public class DefaultSubpagePanelTest {
 		panel.structureChanged();
 		// then make sure build has been called
 		assertThat(panel.isRebuildRequired()).isFalse();
+	}
+
+	@Test
+	public void afterViewChange() {
+
+		// given
+		when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+		LogoutPageFilter filter = new LogoutPageFilter();
+		panel.addFilter(filter);
+		panel.moveToNavigationState();
+		// when
+		panel.afterViewChange(event);
+		// then
+		assertThat(panel.rebuildRequired).isFalse();
 	}
 
 	/**

@@ -98,6 +98,7 @@ public class DefaultApplicationUI extends ScopedUI {
 		}
 		navTree.build();
 		menu.build();
+
 		return baseLayout;
 	}
 
