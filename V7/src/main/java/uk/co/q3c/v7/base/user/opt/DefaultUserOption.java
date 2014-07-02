@@ -159,4 +159,9 @@ public class DefaultUserOption implements UserOption {
 		setOption(optionGroup, option.name(), value);
 	}
 
+	@Override
+	public void clear() {
+		userOptionStore.clear();
+	}
+
 }

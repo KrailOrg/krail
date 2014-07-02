@@ -12,7 +12,6 @@
  */
 package uk.co.q3c.v7.base.user.opt;
 
-
 public interface UserOptionStore {
 
 	/**
@@ -26,5 +25,7 @@ public interface UserOptionStore {
 	Object getOptionValue(String optionGroup, String option);
 
 	void setOptionValue(String optionGroup, String option, Object value);
+
+	void clear();
 
 }

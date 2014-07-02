@@ -46,7 +46,8 @@ public class DefaultSubpagePanel extends NavigationButtonPanel implements Subpag
 		this.userSitemap = userSitemap;
 		this.userOption = userOption;
 		this.sorters = sorters;
-
+		sorters.setSortAscending(getSortAscending());
+		sorters.setSortType(getSortType());
 	}
 
 	@Override
@@ -113,4 +114,15 @@ public class DefaultSubpagePanel extends NavigationButtonPanel implements Subpag
 
 	}
 
+	public boolean getSortAscending() {
+		boolean ascending = userOption.getOptionAsBoolean(this.getClass().getSimpleName(),
+				UserOptionProperty.SORT_ASCENDING, true);
+		return ascending;
+	}
+
+	public SortType getSortType() {
+		SortType sortType = (SortType) userOption.getOptionAsEnum(this.getClass().getSimpleName(),
+				UserOptionProperty.SORT_TYPE, SortType.ALPHA);
+		return sortType;
+	}
 }

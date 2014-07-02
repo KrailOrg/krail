@@ -63,6 +63,11 @@ public class DefaultUserOptionStore implements UserOptionStore {
 		optionMap.put(option, value);
 	}
 
+	@Override
+	public void clear() {
+		groupMap.clear();
+	}
+
 	// Keep these - might be useful for a persistent store
 
 	// public void setOption(String optionGroup, String option, List<String> list) {

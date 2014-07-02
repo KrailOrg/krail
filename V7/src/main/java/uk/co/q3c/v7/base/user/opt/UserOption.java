@@ -62,4 +62,6 @@ public interface UserOption {
 
 	public Enum<?> getOptionAsEnum(String optionGroup, UserOptionProperty option, Enum<?> defaultValue);
 
+	public void clear();
+
 }
