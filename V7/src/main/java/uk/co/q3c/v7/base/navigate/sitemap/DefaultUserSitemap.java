@@ -126,6 +126,16 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
 	public synchronized void setLoaded(boolean loaded) {
 		super.setLoaded(loaded);
 		buildUriMap();
+		if (loaded) {
+			fireStructureChanged();
+		}
+	}
+
+	private void fireStructureChanged() {
+		for (UserSitemapChangeListener listener : changeListeners) {
+			listener.structureChanged();
+		}
+
 	}
 
 	public void addChangeListener(UserSitemapChangeListener listener) {

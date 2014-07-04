@@ -14,6 +14,9 @@ package uk.co.q3c.v7.base.view.component;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.v7.base.guice.uiscope.UIScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
@@ -27,6 +30,7 @@ import com.vaadin.ui.Button;
 @UIScoped
 public class DefaultBreadcrumb extends NavigationButtonPanel implements V7ViewChangeListener, Button.ClickListener,
 		Breadcrumb {
+	private static Logger log = LoggerFactory.getLogger(DefaultBreadcrumb.class);
 
 	@Inject
 	protected DefaultBreadcrumb(V7Navigator navigator, UserSitemap sitemap, CurrentLocale currentLocale) {
@@ -35,8 +39,8 @@ public class DefaultBreadcrumb extends NavigationButtonPanel implements V7ViewCh
 
 	@Override
 	protected void build() {
+		log.debug("building breadcrumb");
 		List<UserSitemapNode> nodeChain = getSitemap().nodeChainFor(getNavigator().getCurrentNode());
 		organiseButtons(nodeChain);
 	}
-
 }

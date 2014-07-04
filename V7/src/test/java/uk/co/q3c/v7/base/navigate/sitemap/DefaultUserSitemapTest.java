@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Locale;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,13 +28,24 @@ import fixture.ReferenceUserSitemap;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
-public class DefaultUserSitemapTest {
+public class DefaultUserSitemapTest implements UserSitemapChangeListener {
 
 	@Inject
 	ReferenceUserSitemap userSitemap;
 
 	@Inject
 	CurrentLocale currentLocale;
+
+	private boolean labelsChanged;
+
+	private boolean structureChanged;
+
+	@Before
+	public void setup() {
+		labelsChanged = false;
+		structureChanged = false;
+		userSitemap.addChangeListener(this);
+	}
 
 	@Test
 	public void localeChange() {
@@ -48,6 +60,23 @@ public class DefaultUserSitemapTest {
 		assertThat(userSitemap.publicNode.getLabel()).isEqualTo("Öffentlichkeit");
 		assertThat(userSitemap.privateNode.getLabel()).isEqualTo("Privat");
 		assertThat(userSitemap.getParent(userSitemap.a11Node)).isEqualTo(userSitemap.a1Node);
+		assertThat(labelsChanged).isTrue();
+	}
+
+	/**
+	 * Loaded is set by the builder, after selected content copied across from master sitemap. Should trigger structure
+	 * change events
+	 */
+	@Test
+	public void setLoaded() {
+
+		// given
+		currentLocale.setLocale(Locale.UK);
+		userSitemap.populate();
+		// when
+		userSitemap.setLoaded(true);
+		// then
+		assertThat(structureChanged).isTrue();
 	}
 
 	@ModuleProvider
@@ -63,5 +92,17 @@ public class DefaultUserSitemapTest {
 			}
 
 		};
+	}
+
+	@Override
+	public void labelsChanged() {
+		labelsChanged = true;
+
+	}
+
+	@Override
+	public void structureChanged() {
+		structureChanged = true;
+
 	}
 }

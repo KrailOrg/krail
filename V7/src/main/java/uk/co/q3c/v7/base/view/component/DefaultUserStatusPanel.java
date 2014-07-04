@@ -74,6 +74,7 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
 		usernameLabel = new Label();
 		login_logout_Button = new Button();
 		login_logout_Button.addClickListener(this);
+		login_logout_Button.setImmediate(true);
 		HorizontalLayout hl = new HorizontalLayout();
 		hl.setSpacing(true);
 		hl.addComponent(usernameLabel);
@@ -119,20 +120,22 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
 
 	@Override
 	public void userStatusChanged() {
-		log.debug("login status change");
+		log.debug("login status change, reset the user status panel");
 		build();
 
 	}
 
 	@Override
 	public void localeChanged(Locale locale) {
-		log.debug("locale change");
+		log.debug("locale change to {}", locale);
 		build();
 	}
 
 	private void build() {
+		log.debug("building");
 		boolean authenticated = subjectProvider.get().isAuthenticated();
 		String caption = (authenticated) ? translate.from(LabelKey.Log_Out) : translate.from(LabelKey.Log_In);
+		log.debug("Caption is '{}'", caption);
 		login_logout_Button.setCaption(caption.toLowerCase());
 		usernameLabel.setValue(subjectIdentifier.subjectName());
 	}

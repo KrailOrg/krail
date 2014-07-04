@@ -15,6 +15,9 @@ package uk.co.q3c.v7.base.user.status;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 
@@ -23,6 +26,7 @@ import com.google.inject.Inject;
 @VaadinSessionScoped
 public class DefaultUserStatus implements UserStatus {
 
+	private static Logger log = LoggerFactory.getLogger(DefaultUserStatus.class);
 	private final List<UserStatusListener> listeners;
 	private final V7Navigator navigator;
 
@@ -44,6 +48,7 @@ public class DefaultUserStatus implements UserStatus {
 	}
 
 	protected void fireListeners() {
+		log.debug("firing user status change listeners");
 		for (UserStatusListener listener : listeners) {
 			listener.userStatusChanged();
 		}
@@ -52,6 +57,7 @@ public class DefaultUserStatus implements UserStatus {
 	@Override
 	public void statusChanged() {
 		fireListeners();
+		log.debug("user status change listeners have been fired, now invoke the navigator");
 		navigator.userStatusChanged();
 	}
 }

@@ -60,11 +60,14 @@ public class LoginTest extends V7TestBenchTestCase {
 
 		// given
 		login();
+		pause(500);
 		logout();
+		pause(500);
 		verifyUrl("logout");
 		// when
 		login();
 		// then
+		pause(500);
 		verifyUrl("private/home");
 	}
 
@@ -73,8 +76,9 @@ public class LoginTest extends V7TestBenchTestCase {
 	 * excessive attempts instead of through invalid login. The only way to reset that through the UI at the moment is
 	 * to login successfully first (which resets the attempt count), logout, then use an invalid login.
 	 * 
-	 * @Test
+	 * 
 	 */
+	@Test
 	public void authenticationFailure() {
 
 		// given
@@ -86,7 +90,7 @@ public class LoginTest extends V7TestBenchTestCase {
 
 		// // then
 		verifyUrl("login"); // has not moved
-		assertThat(navTreeSelection()).isEqualTo("Login");
+		assertThat(navTreeSelection()).isEqualTo("Log In");
 		pause(1000);
 		WebElement label = element("status", DefaultLoginView.class, Label.class);
 		pause(1000);

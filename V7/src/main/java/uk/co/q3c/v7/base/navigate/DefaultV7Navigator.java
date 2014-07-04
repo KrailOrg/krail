@@ -51,6 +51,11 @@ import com.vaadin.server.Page;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
 
 /**
+ * The navigator is at the heart of navigation process, and provides navigation form a number of data types (for
+ * example, String, {@link NavigationState} and {@link UserSitemapNode}. Because the USerSitemap only holds pages
+ * authorised for the current Subject, there is not need to check for authorisation before navigating (there is still
+ * some old code in here which does, but that will be removed)
+ * <p>
  * There is no need to register as a listener with {@link UserStatus}, the navigator is always called after all other
  * listeners - this is so that navigation components are set up before the navigator moves to a page (which might not be
  * displayed in a navigation component if it is not up to date)
@@ -360,9 +365,9 @@ public class DefaultV7Navigator implements V7Navigator {
 	 */
 	@Override
 	public void userStatusChanged() {
-		log.debug("user logged in successfully, navigating to appropriate view");
-
+		log.debug("user status changed, navigate to appropriate place");
 		if (subjectProvider.get().isAuthenticated()) {
+			log.info("user logged in successfully, navigating to appropriate view");
 			// they have logged in
 			SitemapNode previousNode = userSitemap.nodeFor(previousNavigationState);
 			if (previousNode != null && previousNode != userSitemap.standardPageNode(StandardPageKey.Log_Out)) {
@@ -372,6 +377,8 @@ public class DefaultV7Navigator implements V7Navigator {
 			}
 		} else {
 			// they have logged out
+			log.info("logging out");
+			subjectProvider.get().logout();
 			navigateTo(StandardPageKey.Log_Out);
 		}
 	}

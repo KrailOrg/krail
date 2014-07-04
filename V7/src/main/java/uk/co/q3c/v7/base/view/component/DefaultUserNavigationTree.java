@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import java.util.Collection;
 import java.util.Comparator;
 
 import org.slf4j.Logger;
@@ -152,12 +153,15 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	public void afterViewChange(V7ViewChangeEvent event) {
 		UserSitemapNode selectedNode = navigator.getCurrentNode();
 		UserSitemapNode childNode = selectedNode;
+
 		UserSitemapNode parentNode = (UserSitemapNode) getParent(childNode);
+
 		while (parentNode != null) {
 			expandItem(parentNode);
 			parentNode = (UserSitemapNode) getParent(parentNode);
 		}
 		suppressValueChangeEvents = true;
+		log.debug("selecting node for uri '{}'", userSitemap.uri(selectedNode));
 		this.select(selectedNode);
 		suppressValueChangeEvents = false;
 
@@ -179,12 +183,21 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
 	@Override
 	public void build() {
 		if (rebuildRequired) {
-			log.debug("rebuilding");
+			log.debug("rebuilding user navigation tree");
 			clear();
 			builder.build();
 			rebuildRequired = false;
+			if (log.isDebugEnabled()) {
+				Collection<?> t = this.getItemIds();
+				String s = "";
+				for (Object o : t) {
+					String itemCaption = getItemCaption(o);
+					s = s + itemCaption + ",";
+				}
+				log.debug(s);
+			}
 		} else {
-			log.debug("rebuild not required");
+			log.debug("rebuild of user navigation tree is not required");
 		}
 	}
 

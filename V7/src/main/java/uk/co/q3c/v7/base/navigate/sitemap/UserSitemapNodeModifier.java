@@ -15,7 +15,6 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import java.text.Collator;
 import java.util.Comparator;
 
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +30,7 @@ import com.google.inject.Inject;
 public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, UserSitemapNode> {
 	private static Logger log = LoggerFactory.getLogger(UserSitemapNodeModifier.class);
 
-	private final Subject subject;
+	private final SubjectProvider subjectProvider;
 	private final MasterSitemap masterSitemap;
 	private final PageAccessController pageAccessController;
 	private final Collator collator;
@@ -41,7 +40,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
 	public UserSitemapNodeModifier(SubjectProvider subjectProvider, CurrentLocale currentLocale,
 			MasterSitemap masterSitemap, PageAccessController pageAccessController, Translate translate) {
 		super();
-		this.subject = subjectProvider.get();
+		this.subjectProvider = subjectProvider;
 		this.masterSitemap = masterSitemap;
 		this.pageAccessController = pageAccessController;
 		this.collator = Collator.getInstance(currentLocale.getLocale());
@@ -76,13 +75,13 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
 		}
 
 		// if the subject is already authenticated, don't show the login page
-		if (subject.isAuthenticated()) {
+		if (subjectProvider.get().isAuthenticated()) {
 			if (masterNode.equals(masterSitemap.standardPageNode(StandardPageKey.Log_In))) {
 				log.debug("User has already authenticated, do not show the login node");
 				return null;
 			}
 		}
-		if (pageAccessController.isAuthorised(subject, masterNode)) {
+		if (pageAccessController.isAuthorised(subjectProvider.get(), masterNode)) {
 			log.debug("User is authorised for page {}, creating a node for it");
 			UserSitemapNode userNode = new UserSitemapNode(masterNode);
 			userNode.setLabel(translate.from(masterNode.getLabelKey()));

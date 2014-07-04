@@ -29,6 +29,7 @@ import uk.co.q3c.v7.base.shiro.PageAccessController;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
 import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
@@ -67,6 +68,9 @@ public abstract class TestWithSitemap {
 
 	@Mock
 	protected PageAccessController pageAccessController;
+
+	@Mock
+	UserStatus userStatus;
 
 	protected UserSitemapBuilder userSitemapBuilder;
 
@@ -235,7 +239,7 @@ public abstract class TestWithSitemap {
 		UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
 				masterSitemap, pageAccessController, translate);
 		UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(masterSitemap, userSitemap);
-		userSitemapBuilder = new UserSitemapBuilder(masterSitemap, userSitemap, nodeModifier, copyExtension);
+		userSitemapBuilder = new UserSitemapBuilder(masterSitemap, userSitemap, nodeModifier, copyExtension, userStatus);
 		userSitemapBuilder.build();
 
 		userNode1 = userSitemap.userNodeFor(masterNode1);

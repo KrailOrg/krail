@@ -53,8 +53,13 @@ public class NavigationTest extends V7TestBenchTestCase {
 
 	}
 
+	/**
+	 * Originally this would have reported an unauthorised action. The introduction of the UserSitemap means that an
+	 * authorised page will apparently not exist, so an "invalid page" will be reported instead. In some ways that is
+	 * actually better as even the existence of the page is masked.
+	 */
 	@Test
-	public void authorisationFailure() {
+	public void navigateToUnauthorisedPage() {
 
 		// given
 		driver.get(rootUrl());
@@ -66,11 +71,10 @@ public class NavigationTest extends V7TestBenchTestCase {
 
 		// then
 		assertThat(notification()).isNotNull();
-		assertThat(notification().getText()).isEqualTo("You do not have permission for that action");
+		assertThat(notification().getText()).isEqualTo("home is not a valid page");
 		closeNotification();
 
-		verifyNotUrl("private/home"); // not a valid test, but maybe it should
-										// be
+		verifyNotUrl("private/home"); // not a valid test, but maybe it should be
 		navigateTo("system-account");
 		pause(1500);
 		// when
@@ -90,11 +94,14 @@ public class NavigationTest extends V7TestBenchTestCase {
 
 		// given
 		driver.get(rootUrl());
+		pause(1000);
 		login();
-		logout();
-		login();
+		pause(1000);
 		// when
+		navigateTo("widgetset");
+		pause(1000);
 		navigateTo("private");
+		pause(1000);
 		// then
 		verifyUrl("private/home");
 		assertThat(navTreeSelection()).isEqualTo("Private Home");
@@ -112,16 +119,12 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// then
 		verifyUrl("system-account");
 		assertThat(navTreeSelection()).isEqualTo("System Account");
+
 		// when
-		login();
+		navigateTo("notifications");
 		// then
-		verifyUrl("system-account");
-		assertThat(navTreeSelection()).isEqualTo("System Account");
-		// when
-		navigateTo("private/home");
-		// then
-		verifyUrl("private/home");
-		assertThat(navTreeSelection()).isEqualTo("Private Home");
+		verifyUrl("notifications");
+		assertThat(navTreeSelection()).isEqualTo("Notifications");
 		// when
 		navigateTo("system-account/enable-account");
 		// then
@@ -130,8 +133,8 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// when
 		navigateBack();
 		// then
-		verifyUrl("private/home");
-		assertThat(navTreeSelection()).isEqualTo("Private Home");
+		verifyUrl("notifications");
+		assertThat(navTreeSelection()).isEqualTo("Notifications");
 		// when
 		navigateForward();
 		verifyUrl("system-account/enable-account");

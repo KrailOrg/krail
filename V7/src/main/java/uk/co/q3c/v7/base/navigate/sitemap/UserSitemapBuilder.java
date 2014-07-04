@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.q3c.util.SourceTreeWrapper_BasicForest;
 import uk.co.q3c.util.TargetTreeWrapper_BasicForest;
 import uk.co.q3c.util.TreeCopy;
+import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.base.user.status.UserStatusListener;
 
 import com.google.inject.Inject;
@@ -29,7 +30,7 @@ public class UserSitemapBuilder implements UserStatusListener {
 
 	@Inject
 	protected UserSitemapBuilder(MasterSitemap masterSitemap, UserSitemap userSitemap,
-			UserSitemapNodeModifier nodeModifier, UserSitemapCopyExtension copyExtension) {
+			UserSitemapNodeModifier nodeModifier, UserSitemapCopyExtension copyExtension, UserStatus userStatus) {
 
 		this.userSitemap = userSitemap;
 		TargetTreeWrapper_BasicForest<MasterSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_BasicForest<>(
@@ -39,6 +40,7 @@ public class UserSitemapBuilder implements UserStatusListener {
 				masterSitemap.getForest());
 		treeCopy = new TreeCopy<>(source, target);
 		treeCopy.setExtension(copyExtension);
+		userStatus.addListener(this);
 
 	}
 
@@ -52,6 +54,7 @@ public class UserSitemapBuilder implements UserStatusListener {
 
 	@Override
 	public synchronized void userStatusChanged() {
+		log.debug("user status has changed, rebuild the userSitemap");
 		userSitemap.clear();
 		build();
 
