@@ -12,86 +12,83 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import java.io.File;
-import java.util.Locale;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import uk.co.q3c.util.ResourceUtils;
-import uk.co.q3c.v7.base.user.opt.UserOption;
-import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
-import uk.co.q3c.v7.i18n.SupportedLocales;
-
 import com.google.inject.Inject;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.co.q3c.util.ResourceUtils;
+import uk.co.q3c.v7.base.user.opt.UserOption;
+import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
+import uk.co.q3c.v7.i18n.SupportedLocales;
+
+import java.io.File;
+import java.util.Locale;
+import java.util.Set;
 
 public class LocaleContainer extends IndexedContainer {
 
-	private static Logger log = LoggerFactory.getLogger(LocaleContainer.class);
+    private static Logger log = LoggerFactory.getLogger(LocaleContainer.class);
+    private final Set<Locale> supportedLocales;
+    private final UserOption userOption;
 
-	public enum PropertyName {
-		NAME, FLAG
-	}
+    @Inject
+    protected LocaleContainer(@SupportedLocales Set<Locale> supportedLocales, UserOption userOption) {
+        super();
+        this.supportedLocales = supportedLocales;
+        this.userOption = userOption;
+        fillContainer();
+    }
 
-	private final Set<Locale> supportedLocales;
-	private final UserOption userOption;
+    /**
+     * Loads the container with text from {@link Locale#getDisplayName()}, and an icon for the country flag if there is
+     * one. If there is no image flag, the flag property is left as null.
+     */
+    @SuppressWarnings("unchecked")
+    private void fillContainer() {
 
-	@Inject
-	protected LocaleContainer(@SupportedLocales Set<Locale> supportedLocales, UserOption userOption) {
-		super();
-		this.supportedLocales = supportedLocales;
-		this.userOption = userOption;
-		fillContainer();
-	}
+        addContainerProperty(PropertyName.NAME, String.class, null);
+        addContainerProperty(PropertyName.FLAG, Resource.class, null);
 
-	/**
-	 * Loads the container with text from {@link Locale#getDisplayName()}, and an icon for the country flag if there is
-	 * one. If there is no image flag, the flag property is left as null.
-	 */
-	@SuppressWarnings("unchecked")
-	private void fillContainer() {
+        File webInfDir = ResourceUtils.configurationDirectory();
+        File iconsDir = new File(webInfDir, "icons");
+        File flagsDir = new File(iconsDir, "flags_iso");
 
-		addContainerProperty(PropertyName.NAME, String.class, null);
-		addContainerProperty(PropertyName.FLAG, Resource.class, null);
+        File flagSizedDir = new File(flagsDir, flagSize().toString());
 
-		File webInfDir = ResourceUtils.configurationDirectory();
-		File iconsDir = new File(webInfDir, "icons");
-		File flagsDir = new File(iconsDir, "flags_iso");
+        for (Locale supportedLocale : supportedLocales) {
+            String id = supportedLocale.toLanguageTag();
+            log.debug("Added supported locale with id: '{}'", id);
+            Item item = addItem(id);
+            item.getItemProperty(PropertyName.NAME).setValue(supportedLocale.getDisplayName());
 
-		File flagSizedDir = new File(flagsDir, flagSize().toString());
+            // if the directory is missing don't bother with file
+            if (flagSizedDir.exists()) {
+                String filename = supportedLocale.getCountry().toLowerCase() + ".png";
+                File file = new File(flagSizedDir, filename);
+                if (file.exists()) {
+                    FileResource resource = new FileResource(file);
+                    item.getItemProperty(PropertyName.FLAG).setValue(resource);
+                } else {
+                    log.warn("File {} for locale flag does not exist.", file.getAbsolutePath());
+                }
 
-		for (Locale supportedLocale : supportedLocales) {
-			String id = supportedLocale.toLanguageTag();
-			log.debug("Added supported locale with id: '{}'", id);
-			Item item = addItem(id);
-			item.getItemProperty(PropertyName.NAME).setValue(supportedLocale.getDisplayName());
+            } else {
+                log.warn("{} directory for flags does not exist.", flagSizedDir.getAbsolutePath());
+            }
+        }
 
-			// if the directory is missing don't bother with file
-			if (flagSizedDir.exists()) {
-				String filename = supportedLocale.getCountry().toLowerCase() + ".png";
-				File file = new File(flagSizedDir, filename);
-				if (file.exists()) {
-					FileResource resource = new FileResource(file);
-					item.getItemProperty(PropertyName.FLAG).setValue(resource);
-				} else {
-					log.debug("File {} for locale flag does not exist.", file.getAbsolutePath());
-				}
+        sort(new Object[]{PropertyName.NAME}, new boolean[]{true});
+    }
 
-			} else {
-				log.debug("{} directory for flags does not exist.", flagSizedDir.getAbsolutePath());
-			}
-		}
+    public Integer flagSize() {
+        return userOption.getOptionAsInt(this.getClass().getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 32);
+    }
 
-		sort(new Object[] { PropertyName.NAME }, new boolean[] { true });
-	}
-
-	public Integer flagSize() {
-		return userOption.getOptionAsInt(this.getClass().getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 32);
-	}
+    public enum PropertyName {
+        NAME, FLAG
+    }
 
 }

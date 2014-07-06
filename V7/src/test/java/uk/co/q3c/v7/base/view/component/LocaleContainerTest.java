@@ -31,10 +31,9 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.testutil.LogMonitor;
+import uk.co.q3c.v7.testutil.TestResource;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -42,121 +41,119 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class LocaleContainerTest {
 
-	@Mock
-	VaadinService vaadinService;
+    @Mock
+    VaadinService vaadinService;
 
-	@Inject
-	DefaultUserOption userOption;
+    @Inject
+    DefaultUserOption userOption;
 
-	@Inject
-	LogMonitor logMonitor;
+    @Inject
+    LogMonitor logMonitor;
 
-	LocaleContainer container;
+    LocaleContainer container;
 
-	private Set<Locale> supportedLocales;
+    private Set<Locale> supportedLocales;
 
-	@Before
-	public void setup() {
-        //IDEA uses a different project path to Eclipse (IDEA runs from the root project, 'v7')
-        //task to improve this hack at https://github.com/davidsowerby/v7/issues/253
-        Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-        String baseDir=(s.endsWith("V7")) ? "src/test/java" : "V7/src/test/java";
+    @Before
+    public void setup() {
 
-		VaadinService.setCurrent(vaadinService);
-		when(vaadinService.getBaseDirectory()).thenReturn(new File(baseDir));
+        File baseDir = TestResource.testJavaRootDir("V7");
+
+        VaadinService.setCurrent(vaadinService);
+        when(vaadinService.getBaseDirectory()).thenReturn(baseDir);
         supportedLocales = new HashSet<>();
 
-	}
+    }
 
-	@After
-	public void teardown() {
-		logMonitor.close();
-	}
+    @After
+    public void teardown() {
+        logMonitor.close();
+    }
 
-	@Test
-	public void fillContainer_success() {
-		// given
-		supportedLocales.add(Locale.GERMANY);
-        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.LOCALE_FLAG_SIZE,48);
-		// when
-		container = new LocaleContainer(supportedLocales, userOption);
-		// then
-		assertThat(container.getItemIds()).hasSameSizeAs(supportedLocales);
+    @Test
+    public void fillContainer_success() {
+        // given
+        supportedLocales.add(Locale.GERMANY);
+        userOption.setOption(LocaleContainer.class.getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 48);
+        // when
+        container = new LocaleContainer(supportedLocales, userOption);
+        // then
+        assertThat(container.getItemIds()).hasSameSizeAs(supportedLocales);
 
-		Item item = itemFor(Locale.GERMANY);
-		assertThat(item).isNotNull();
+        Item item = itemFor(Locale.GERMANY);
+        assertThat(item).isNotNull();
 
-		Property<?> property = item.getItemProperty(LocaleContainer.PropertyName.NAME);
-		assertThat(property).isNotNull();
-		assertThat(property.getValue()).isEqualTo(Locale.GERMANY.getDisplayName());
+        Property<?> property = item.getItemProperty(LocaleContainer.PropertyName.NAME);
+        assertThat(property).isNotNull();
+        assertThat(property.getValue()).isEqualTo(Locale.GERMANY.getDisplayName());
 
-		property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
-		assertThat(property).isNotNull();
-		assertThat(property.getValue()).isInstanceOf(FileResource.class);
-		FileResource flag = (FileResource) property.getValue();
-		assertThat(flag.getFilename()).isEqualTo("de.png");
-		assertThat(flag.getSourceFile().exists()).isEqualTo(true);
+        property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
+        assertThat(property).isNotNull();
+        assertThat(property.getValue()).isInstanceOf(FileResource.class);
+        FileResource flag = (FileResource) property.getValue();
+        assertThat(flag.getFilename()).isEqualTo("de.png");
+        assertThat(flag.getSourceFile().exists()).isEqualTo(true);
 
-	}
+    }
 
-	@Test
-	public void fillContainer_no_flag_directory() {
-		supportedLocales.add(Locale.GERMANY);
-        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.LOCALE_FLAG_SIZE,47);
-		// when
-		container = new LocaleContainer(supportedLocales, userOption);
+    @Test
+    public void fillContainer_no_flag_directory() {
+        supportedLocales.add(Locale.GERMANY);
+        userOption.setOption(LocaleContainer.class.getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 47);
+        // when
+        container = new LocaleContainer(supportedLocales, userOption);
 
-		// then
-		Item item = itemFor(Locale.GERMANY);
-		assertThat(item).isNotNull();
+        // then
+        Item item = itemFor(Locale.GERMANY);
+        assertThat(item).isNotNull();
 
-		Property<?> property = item.getItemProperty(LocaleContainer.PropertyName.NAME);
-		assertThat(property).isNotNull();
-		assertThat(property.getValue()).isEqualTo(Locale.GERMANY.getDisplayName());
+        Property<?> property = item.getItemProperty(LocaleContainer.PropertyName.NAME);
+        assertThat(property).isNotNull();
+        assertThat(property.getValue()).isEqualTo(Locale.GERMANY.getDisplayName());
 
-		property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
-		assertThat(property.getValue()).isNull();
-	}
+        property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
+        assertThat(property.getValue()).isNull();
+    }
 
-	@Test
-	public void fillContainer_missingFlag() {
-		supportedLocales.add(Locale.CANADA);
-        userOption.setOption(LocaleContainer.class.getSimpleName(),UserOptionProperty.LOCALE_FLAG_SIZE,48);
-		// when
-		container = new LocaleContainer(supportedLocales, userOption);
+    @Test
+    public void fillContainer_missingFlag() {
+        supportedLocales.add(Locale.CANADA);
+        userOption.setOption(LocaleContainer.class.getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 48);
+        // when
+        container = new LocaleContainer(supportedLocales, userOption);
 
-		// then
-		Item item = itemFor(Locale.CANADA);
-		assertThat(item).isNotNull();
+        // then
+        Item item = itemFor(Locale.CANADA);
+        assertThat(item).isNotNull();
 
-		Property<?> property = item.getItemProperty(LocaleContainer.PropertyName.NAME);
-		assertThat(property).isNotNull();
-		assertThat(property.getValue()).isEqualTo(Locale.CANADA.getDisplayName());
+        Property<?> property = item.getItemProperty(LocaleContainer.PropertyName.NAME);
+        assertThat(property).isNotNull();
+        assertThat(property.getValue()).isEqualTo(Locale.CANADA.getDisplayName());
 
-		property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
-		assertThat(property.getValue()).isNull();
-	}
+        property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
+        assertThat(property.getValue()).isNull();
+    }
 
-	private Item itemFor(Locale locale) {
-		Item item = container.getItem(locale.toLanguageTag());
-		return item;
-	}
+    private Item itemFor(Locale locale) {
+        Item item = container.getItem(locale.toLanguageTag());
+        return item;
+    }
 
-	@ModuleProvider
-	protected AbstractModule moduleProvider() {
-		return new AbstractModule() {
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
 
-			@Override
-			protected void configure() {
-				bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-			}
+            @Override
+            protected void configure() {
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
 
-		};
-	}
+        };
+    }
 
 }

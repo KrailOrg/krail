@@ -1,12 +1,12 @@
 //build for V7 test application
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
-ext.tomcatHome = "/home/dsowerby/tomcat 7"
+ext.tomcatHome = "/home/david/tomcat/apache-tomcat-7.0.47"
 
 
 war{
 	archiveName "testapp.war"
-	destinationDir file("/home/dsowerby/temp")
+    destinationDir file("/home/david/temp")
 }
 
 vaadin {

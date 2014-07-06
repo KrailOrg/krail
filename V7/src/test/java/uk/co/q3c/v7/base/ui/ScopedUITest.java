@@ -12,13 +12,15 @@
  */
 package uk.co.q3c.v7.base.ui;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Locale;
-
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.data.util.converter.ConverterFactory;
+import com.vaadin.navigator.Navigator;
+import com.vaadin.server.ClientConnector;
+import com.vaadin.server.ErrorHandler;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.Component;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +29,6 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -38,154 +39,147 @@ import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.Translate;
 
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.data.util.converter.ConverterFactory;
-import com.vaadin.navigator.Navigator;
-import com.vaadin.server.ClientConnector;
-import com.vaadin.server.ErrorHandler;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.Component;
+import java.util.Locale;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class ScopedUITest {
 
-	static int connectCount;
-	protected final String baseUri = "http://example.com";
+    static int connectCount;
+    protected final String baseUri = "http://example.com";
+    ScopedUI ui;
+    @Mock
+    V7Navigator navigator;
+    @Mock
+    ErrorHandler errorHandler;
+    @Mock
+    ConverterFactory converterFactory;
+    @Mock
+    Broadcaster broadcaster;
+    @Mock
+    PushMessageRouter pushMessageRouter;
+    @Mock
+    ApplicationTitle applicationTitle;
+    @Mock
+    Translate translate;
+    @Mock
+    CurrentLocale currentLocale;
+    @Mock
+    I18NProcessor translator;
+    @Mock
+    Navigator vaadinNavigator;
+    @Mock
+    VaadinRequest request;
+    @Mock
+    VaadinSession session;
+    @Mock
+    UIScope uiScope;
+    @Mock
+    UIKey instanceKey;
+    @Mock
+    V7View toView;
+    @Mock
+    Component viewContent;
 
-	public class ConnectorIdAnswer implements Answer<String> {
+    @Before
+    public void setup() {
+        ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+    }
 
-		@Override
-		public String answer(InvocationOnMock invocation) throws Throwable {
-			connectCount++;
-			return Integer.toString(connectCount);
-		}
+    @Test
+    public void asListener() {
+        // given
 
-	}
+        // when
 
-	ScopedUI ui;
-	@Mock
-	V7Navigator navigator;
+        // then
+        verify(currentLocale).addListener(ui);
+        verify(broadcaster).register(Broadcaster.ALL_MESSAGES, ui);
+    }
 
-	@Mock
-	ErrorHandler errorHandler;
-	@Mock
-	ConverterFactory converterFactory;
-	@Mock
-	Broadcaster broadcaster;
-	@Mock
-	PushMessageRouter pushMessageRouter;
-	@Mock
-	ApplicationTitle applicationTitle;
-	@Mock
-	Translate translate;
-	@Mock
-	CurrentLocale currentLocale;
-	@Mock
-	I18NProcessor translator;
+    @Test
+    public void detachNoScope() {
+        // given
+        prepAttach();
+        ui.attach();
+        // when
+        ui.detach();
+        // then
+        // no exception
+    }
 
-	@Mock
-	Navigator vaadinNavigator;
-	@Mock
-	VaadinRequest request;
-	@Mock
-	VaadinSession session;
-	@Mock
-	UIScope uiScope;
-	@Mock
-	UIKey instanceKey;
-	@Mock
-	V7View toView;
-	@Mock
-	Component viewContent;
+    @Test
+    public void detachScopeNotNull() {
+        // given
+        prepAttach();
+        ui.attach();
+        ui.setScope(uiScope);
+        ui.setInstanceKey(instanceKey);
+        // when
+        ui.detach();
+        // then
+        verify(uiScope).releaseScope(ui.getInstanceKey());
+    }
 
-	@Before
-	public void setup() {
-		ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle,
-				translate, currentLocale, translator);
-	}
+    @Test(expected = MethodReconfigured.class)
+    public void methodReconfigured() {
+        // given
 
-	@Test
-	public void asListener() {
-		// given
+        // when
+        ui.setNavigator(vaadinNavigator);
+        // then
+    }
 
-		// when
+    @Test
+    public void init() {
+        // given
+        prepAttach();
+        // when
+        ui.init(request);
+        // then
+        verify(session).setConverterFactory(converterFactory);
+        InOrder inOrder = inOrder(currentLocale, navigator, translator, navigator);
+        inOrder.verify(currentLocale).setLocale(Locale.FRANCE, false);
+        inOrder.verify(navigator).init();
+        inOrder.verify(translator).translate(ui);
+        inOrder.verify(navigator).navigateTo("home");
+    }
 
-		// then
-		verify(currentLocale).addListener(ui);
-		verify(broadcaster).register(Broadcaster.ALL_MESSAGES, ui);
-	}
+    @Test
+    public void changeView() {
+        // given
+        when(toView.getRootComponent()).thenReturn(viewContent);
+        // when
+        ui.changeView(toView);
+        // then
+        verify(toView).getRootComponent();
+        verify(translator).translate(viewContent);
+        verify(viewContent).setSizeFull();
+        assertThat(ui.getViewDisplayPanel().getContent()).isEqualTo(viewContent);
+    }
 
-	@Test
-	public void detachNoScope() {
-		// given
-		prepAttach();
-		ui.attach();
-		// when
-		ui.detach();
-		// then
-		// no exception
-	}
+    @SuppressWarnings("deprecation")
+    private void prepAttach() {
+        when(request.getParameter("v-loc")).thenReturn(baseUri + "/#home");
+        ui.getPage().init(request);
+        when(session.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
+        when(session.getLocale()).thenReturn(Locale.FRANCE);
 
-	@Test
-	public void detachScopeNotNull() {
-		// given
-		prepAttach();
-		ui.attach();
-		ui.setScope(uiScope);
-		ui.setInstanceKey(instanceKey);
-		// when
-		ui.detach();
-		// then
-		verify(uiScope).releaseScope(ui.getInstanceKey());
-	}
+        when(session.hasLock()).thenReturn(true);
+        ui.setSession(session);
+    }
 
-	@Test(expected = MethodReconfigured.class)
-	public void methodReconfigured() {
-		// given
+    public class ConnectorIdAnswer implements Answer<String> {
 
-		// when
-		ui.setNavigator(vaadinNavigator);
-		// then
-	}
+        @Override
+        public String answer(InvocationOnMock invocation) throws Throwable {
+            connectCount++;
+            return Integer.toString(connectCount);
+        }
 
-	@Test
-	public void init() {
-		// given
-		prepAttach();
-		// when
-		ui.init(request);
-		// then
-		verify(session).setConverterFactory(converterFactory);
-		InOrder inOrder = inOrder(currentLocale, navigator, translator, navigator);
-		inOrder.verify(currentLocale).setLocale(Locale.FRANCE, false);
-		inOrder.verify(navigator).init();
-		inOrder.verify(translator).translate(ui);
-		inOrder.verify(navigator).navigateTo("home");
-	}
-
-	@Test
-	public void changeView() {
-		// given
-		when(toView.getRootComponent()).thenReturn(viewContent);
-		// when
-		ui.changeView(toView);
-		// then
-		verify(toView).getRootComponent();
-		verify(translator).translate(viewContent);
-		verify(viewContent).setSizeFull();
-		assertThat(ui.getViewDisplayPanel().getContent()).isEqualTo(viewContent);
-	}
-
-	@SuppressWarnings("deprecation")
-	private void prepAttach() {
-		when(request.getParameter("v-loc")).thenReturn(baseUri + "/#home");
-		ui.getPage().init(request);
-		when(session.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
-		when(session.getLocale()).thenReturn(Locale.FRANCE);
-		ui.setSession(session);
-	}
+    }
 
 }

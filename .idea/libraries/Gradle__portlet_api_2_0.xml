@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: portlet-api-2.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.portlet/portlet-api/2.0/1cd72f2a37fcf8ab9893a9468d7ba71c85fe2653/portlet-api-2.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.portlet/portlet-api/2.0/aa3977c82050c29bb3577fc98c428d61ec187503/portlet-api-2.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

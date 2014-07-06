@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.services;
 
+
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -19,9 +20,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
+
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,55 +33,57 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
 public class AbstractServiceI18NTest {
 
-	static class TestService extends AbstractServiceI18N {
-		@Inject
-		protected TestService(Translate translate) {
-			super(translate);
-		}
+    @Inject
+    CurrentLocale currentLocale;
+    @Inject
+    TestService service;
 
-		@Override
-		public void doStart() {
+    @Before
+    public void setup() {
+        currentLocale.setLocale(Locale.UK);
+    }
 
-		}
+    @Test
+    public void name() {
 
-		@Override
-		public void doStop() {
+        // given
 
-		}
-
-	}
-
-	@Inject
-	TestService service;
-
-	@Before
-	public void setup() {
-
-	}
-
-	@Test
-	public void name() {
-
-		// given
-
-		// when
-		service.setNameKey(TestLabelKey.Home);
-		// then
-		assertThat(service.getName()).isEqualTo("home");
-		// when
-		service.setDescriptionKey(TestLabelKey.Private);
-		// then
-		assertThat(service.getDescription()).isEqualTo("Private");
-	}
+        // when
+        service.setNameKey(TestLabelKey.Home);
+        // then
+        assertThat(service.getName()).isEqualTo("home");
+        // when
+        service.setDescriptionKey(TestLabelKey.Private);
+        // then
+        assertThat(service.getDescription()).isEqualTo("Private");
+    }
 
 	@Test
-	public void notNamed() {
-		// given
+    public void notNamed() {
+        // given
 
 		// when
 
-		// then
-		assertThat(service.getName()).isEqualTo("Unnamed");
+        // then
+        assertThat(service.getName()).isEqualTo("Unnamed");
+    }
+
+    static class TestService extends AbstractServiceI18N {
+        @Inject
+        protected TestService(Translate translate) {
+            super(translate);
+        }
+
+        @Override
+        public void doStart() {
+
+        }
+
+        @Override
+        public void doStop() {
+
+        }
+
 	}
 
 }

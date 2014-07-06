@@ -1,17 +1,15 @@
 package uk.co.q3c.v7.testApp.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
+import com.vaadin.testbench.By;
+import com.vaadin.testbench.ScreenshotOnFailureRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
-import com.vaadin.testbench.By;
-import com.vaadin.testbench.ScreenshotOnFailureRule;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class NavigationTest extends V7TestBenchTestCase {
 
@@ -176,8 +174,9 @@ public class NavigationTest extends V7TestBenchTestCase {
 		driver.get(rootUrl());
 		pause(1000);
 		// when
-		testBenchElement(driver.findElement(By.vaadin("testapp::PID_SUserNavigationMenu#item3"))).click(43, 6);
-		testBenchElement(driver.findElement(By.vaadin("testapp::Root/VOverlay[0]/VMenuBar[0]#item0"))).click(44, 8);
+
+        testBenchElement(driver.findElement(By.vaadin("testapp::PID_SDefaultUserNavigationMenu#item4"))).click(43, 6);
+        testBenchElement(driver.findElement(By.vaadin("testapp::Root/VOverlay[0]/VMenuBar[0]#item0"))).click(44, 8);
 		pause(500);
 		verifyUrl("system-account/enable-account");
 

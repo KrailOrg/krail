@@ -12,17 +12,16 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import fixture.testviews2.My_AccountView;
+import fixture.testviews2.OptionsView;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -37,170 +36,167 @@ import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
 import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.TestLabelKey;
+import uk.co.q3c.v7.testutil.TestResource;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import fixture.testviews2.My_AccountView;
-import fixture.testviews2.OptionsView;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 /**
  * Tests {@link DefaultFileSitemapLoader} with multiple input files
  *
- *
- *
  * @author dsowerby
- *
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ TestFileSitemapModule.class, I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({TestFileSitemapModule.class, I18NModule.class, VaadinSessionScopeModule.class})
 public class DefaultFileSitemapLoaderTest2 {
 
-	List<SitemapLoader> loaders;
-	LoaderReportBuilder lrb;
+    List<SitemapLoader> loaders;
+    LoaderReportBuilder lrb;
+    @Inject
+    DefaultFileSitemapLoader loader;
+    @Inject
+    MasterSitemap masterSitemap;
 
-	public static class TestFileSitemapModule extends FileSitemapModule {
+    @Before
+    public void setup() throws IOException {
+        loaders = new ArrayList<>();
+        loaders.add(loader);
+    }
 
-		@Override
-		protected void define() {
-			addEntry("a", new SitemapFile("src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good.properties"));
-			addEntry("b", new SitemapFile("src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good1.properties"));
+    @Test
+    public void multipleInputFiles() {
 
-		}
+        // given
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap().setReport(lrb.getReport().toString());
+        StringBuilder report = lrb.getReport();
 
-	}
+        // then
 
-	@Inject
-	DefaultFileSitemapLoader loader;
+        for (MasterSitemapNode node : masterSitemap.getAllNodes()) {
+            validateNode(node);
+        }
 
-	@Inject
-	MasterSitemap masterSitemap;
+        // Note: this currently only works if there are errors
+        assertThat(report).contains("v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good1.properties");
+        assertThat(report).contains("uk/co/q3c/v7/base/navigate/sitemap_good1.properties");
+        System.out.println(report.toString());
+    }
 
-	@Before
-	public void setup() throws IOException {
-		loaders = new ArrayList<>();
-		loaders.add(loader);
-	}
+    private void validateNode(MasterSitemapNode node) {
+        String uri = masterSitemap.uri(node);
+        System.out.println("validating " + uri);
+        switch (uri) {
 
-	@Test
-	public void multipleInputFiles() {
+            case "my-account":
+                assertThat(masterSitemap.getChildCount(node)).isEqualTo(3);
+                assertThat(node.getUriSegment()).isEqualTo("my-account");
+                assertThat(node.getViewClass()).isEqualTo(My_AccountView.class);
+                assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.My_Account);
+                assertThat(node.isPublicPage()).isTrue();
+                assertThat(node.hasRoles()).isFalse();
+                break;
 
-		// given
-		// when
-		loader.load();
-		lrb = new LoaderReportBuilder(loaders);
-		loader.getSitemap().setReport(lrb.getReport().toString());
-		StringBuilder report = lrb.getReport();
+            case "my-account/transfers":
+                assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
+                assertThat(node.getUriSegment()).isEqualTo("transfers");
+                assertThat(node.getViewClass()).isEqualTo(TransferView.class);
+                assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Transfers);
+                assertThat(node.isPublicPage()).isTrue();
+                assertThat(node.hasRoles()).isFalse();
+                break;
 
-		// then
+            case "my-account/money-in-out":
+                assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
+                assertThat(node.getUriSegment()).isEqualTo("money-in-out");
+                assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
+                assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.MoneyInOut);
+                assertThat(node.isPublicPage()).isFalse();
+                assertThat(node.hasRoles()).isTrue();
+                break;
 
-		for (MasterSitemapNode node : masterSitemap.getAllNodes()) {
-			validateNode(node);
-		}
+            case "my-account/options":
+                assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
+                assertThat(node.getUriSegment()).isEqualTo("options");
+                assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
+                assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Opt);
+                assertThat(node.isPublicPage()).isFalse();
+                assertThat(node.hasRoles()).isTrue();
+                break;
+            case "information":
+                assertThat(masterSitemap.getChildCount(node)).isEqualTo(3);
+                assertThat(node.getUriSegment()).isEqualTo("information");
+                assertThat(node.getViewClass()).isEqualTo(null);
+                assertThat(node.getLabelKey()).isEqualTo(null);
+                assertThat(node.isPublicPage()).isTrue();
+                assertThat(node.hasRoles()).isFalse();
+                break;
+            case "information/offers":
+                assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
+                assertThat(node.getUriSegment()).isEqualTo("offers");
+                assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
+                assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.MoneyInOut);
+                assertThat(node.isPublicPage()).isFalse();
+                assertThat(node.hasRoles()).isTrue();
+                break;
+            case "information/terms":
+                assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
+                assertThat(node.getUriSegment()).isEqualTo("terms");
+                assertThat(node.getViewClass()).isEqualTo(TransferView.class);
+                assertThat(node.getLabelKey()).isEqualTo(null);
+                assertThat(node.isPublicPage()).isTrue();
+                assertThat(node.hasRoles()).isFalse();
+                break;
+            case "information/services":
+                assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
+                assertThat(node.getUriSegment()).isEqualTo("services");
+                assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
+                assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Opt);
+                assertThat(node.isPublicPage()).isFalse();
+                assertThat(node.hasRoles()).isTrue();
+                break;
 
-		// Note: this currently only works if there are errors
-		assertThat(report).contains("v7/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap_good1.properties");
-		assertThat(report).contains("uk/co/q3c/v7/base/navigate/sitemap_good1.properties");
-		System.out.println(report.toString());
-	}
+            default:
+                fail("unexpected uri: '" + uri + "'");
+        }
+    }
 
-	private void validateNode(MasterSitemapNode node) {
-		String uri = masterSitemap.uri(node);
-		System.out.println("validating " + uri);
-		switch (uri) {
+    @ModuleProvider
+    protected AbstractModule module() {
+        return new AbstractModule() {
 
-		case "my-account":
-			assertThat(masterSitemap.getChildCount(node)).isEqualTo(3);
-			assertThat(node.getUriSegment()).isEqualTo("my-account");
-			assertThat(node.getViewClass()).isEqualTo(My_AccountView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.My_Account);
-			assertThat(node.isPublicPage()).isTrue();
-			assertThat(node.hasRoles()).isFalse();
-			break;
+            @Override
+            protected void configure() {
+                bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+                bind(UserSitemap.class).to(DefaultUserSitemap.class);
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
 
-		case "my-account/transfers":
-			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
-			assertThat(node.getUriSegment()).isEqualTo("transfers");
-			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Transfers);
-			assertThat(node.isPublicPage()).isTrue();
-			assertThat(node.hasRoles()).isFalse();
-			break;
+        };
+    }
 
-		case "my-account/money-in-out":
-			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
-			assertThat(node.getUriSegment()).isEqualTo("money-in-out");
-			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.MoneyInOut);
-			assertThat(node.isPublicPage()).isFalse();
-			assertThat(node.hasRoles()).isTrue();
-			break;
+    public static class TestFileSitemapModule extends FileSitemapModule {
 
-		case "my-account/options":
-			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
-			assertThat(node.getUriSegment()).isEqualTo("options");
-			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Opt);
-			assertThat(node.isPublicPage()).isFalse();
-			assertThat(node.hasRoles()).isTrue();
-			break;
-		case "information":
-			assertThat(masterSitemap.getChildCount(node)).isEqualTo(3);
-			assertThat(node.getUriSegment()).isEqualTo("information");
-			assertThat(node.getViewClass()).isEqualTo(null);
-			assertThat(node.getLabelKey()).isEqualTo(null);
-			assertThat(node.isPublicPage()).isTrue();
-			assertThat(node.hasRoles()).isFalse();
-			break;
-		case "information/offers":
-			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
-			assertThat(node.getUriSegment()).isEqualTo("offers");
-			assertThat(node.getViewClass()).isEqualTo(MoneyInOutView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.MoneyInOut);
-			assertThat(node.isPublicPage()).isFalse();
-			assertThat(node.hasRoles()).isTrue();
-			break;
-		case "information/terms":
-			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
-			assertThat(node.getUriSegment()).isEqualTo("terms");
-			assertThat(node.getViewClass()).isEqualTo(TransferView.class);
-			assertThat(node.getLabelKey()).isEqualTo(null);
-			assertThat(node.isPublicPage()).isTrue();
-			assertThat(node.hasRoles()).isFalse();
-			break;
-		case "information/services":
-			assertThat(masterSitemap.getChildCount(node)).isEqualTo(0);
-			assertThat(node.getUriSegment()).isEqualTo("services");
-			assertThat(node.getViewClass()).isEqualTo(OptionsView.class);
-			assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Opt);
-			assertThat(node.isPublicPage()).isFalse();
-			assertThat(node.hasRoles()).isTrue();
-			break;
+        @Override
+        protected void define() {
+            File a = new File(TestResource.testJavaRootDir("V7"), "uk/co/q3c/v7/base/navigate/sitemap_good.properties");
+            File b = new File(TestResource.testJavaRootDir("V7"), "uk/co/q3c/v7/base/navigate/sitemap_good1.properties");
 
-		default:
-			fail("unexpected uri: '" + uri + "'");
-		}
-	}
+            addEntry("a", new SitemapFile(a.getAbsolutePath()));
+            addEntry("b", new SitemapFile(b.getAbsolutePath()));
+        }
 
-	@ModuleProvider
-	protected AbstractModule module() {
-		return new AbstractModule() {
-
-			@Override
-			protected void configure() {
-				bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
-				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
-				bind(UserSitemap.class).to(DefaultUserSitemap.class);
-				bind(UserOption.class).to(DefaultUserOption.class);
-				bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-			}
-
-		};
-	}
+    }
 
 }

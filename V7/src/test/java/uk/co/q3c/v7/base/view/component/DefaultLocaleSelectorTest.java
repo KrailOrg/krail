@@ -1,26 +1,24 @@
 package uk.co.q3c.v7.base.view.component;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.server.VaadinService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.I18NModule;
 
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.server.VaadinService;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
@@ -42,7 +40,8 @@ public class DefaultLocaleSelectorTest {
 
 	@Before
 	public void setup() {
-		VaadinService.setCurrent(vaadinService);
+        currentLocale.setLocale(Locale.UK);
+        VaadinService.setCurrent(vaadinService);
 		Set<Locale> supportedLocales = new HashSet<>();
 		supportedLocales.add(Locale.UK);
 		supportedLocales.add(Locale.GERMANY);

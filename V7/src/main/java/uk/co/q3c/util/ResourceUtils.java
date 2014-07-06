@@ -12,62 +12,62 @@
  */
 package uk.co.q3c.util;
 
-import java.io.File;
-
+import com.vaadin.server.VaadinService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vaadin.server.VaadinService;
+import java.io.File;
 
 public class ResourceUtils {
-	private static Logger log = LoggerFactory.getLogger(ResourceUtils.class);
+    private static Logger log = LoggerFactory.getLogger(ResourceUtils.class);
 
-	/**
-	 * Returns the base directory path for the application if there is a VaadinService is running, or throws a
-	 * {@link IllegalStateException} if no service is running
-	 *
-	 * @return
-	 */
-	public static String applicationBasePath() {
-		return applicationBaseDirectory().getAbsolutePath();
+    /**
+     * Returns the base directory path for the application if there is a VaadinService is running, or throws a {@link
+     * IllegalStateException} if no service is running
+     *
+     * @return
+     */
+    public static String applicationBasePath() {
+        return applicationBaseDirectory().getAbsolutePath();
 
-	}
+    }
 
-	/**
-	 * Returns the base directory path for the application if there is a VaadinService is running, or throws a
-	 * {@link IllegalStateException} if no service is running
-	 *
-	 * @return
-	 */
-	public static File applicationBaseDirectory() {
-		if (VaadinService.getCurrent() != null) {
-			File baseDir = VaadinService.getCurrent().getBaseDirectory();
-			log.info("Application base directory (from VaadinService) is {}", baseDir);
-			return baseDir;
-		}
-		throw new IllegalStateException("There is no current VaadinService");
-	}
+    /**
+     * Returns the base directory path for the application if there is a VaadinService is running, or throws a {@link
+     * IllegalStateException} if no service is running
+     *
+     * @return
+     */
+    public static File applicationBaseDirectory() {
+        if (VaadinService.getCurrent() != null) {
+            File baseDir = VaadinService.getCurrent().getBaseDirectory();
+            log.info("Application base directory (from VaadinService) is {}", baseDir);
+            return baseDir;
+        }
+        throw new IllegalStateException("There is no current VaadinService");
+    }
 
-	/**
-	 * a convenience method equivalent to creating a {@link File} object using the System property 'user.home'
-	 *
-	 * @return
-	 */
-	public static File userHomeDirectory() {
-		return new File(System.getProperty("user.home"));
-	}
+    /**
+     * a convenience method equivalent to creating a {@link File} object using the System property 'user.home'
+     *
+     * @return
+     */
+    public static File userHomeDirectory() {
+        return new File(System.getProperty("user.home"));
+    }
 
-	/**
-	 * a convenience method creating a {@link File} object referencing {user.home}/temp
-	 *
-	 * @return
-	 */
-	public static File userTempDirectory() {
-		return new File(userHomeDirectory(), "temp");
-	}
+    /**
+     * a convenience method creating a {@link File} object referencing {user.home}/temp
+     *
+     * @return
+     */
+    public static File userTempDirectory() {
+        return new File(userHomeDirectory(), "temp");
+    }
 
-	public static File configurationDirectory() {
-		return new File(applicationBaseDirectory(), "WEB-INF");
-	}
+    public static File configurationDirectory() {
+        return new File(applicationBaseDirectory(), "WEB-INF");
+
+    }
 
 }

@@ -1,278 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYSIS_IN_BACKGROUND" value="true" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="8c51d812-e01c-4a95-8979-ff32e1b01c84" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__aopalliance_1_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__asm_3_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__assertj_core_1_5_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__assertj_guava_1_0_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__assertj_joda_time_1_1_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__atmosphere_compat_jbossweb_1_0_18_vaadin3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__atmosphere_compat_tomcat7_1_0_18_vaadin3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__atmosphere_compat_tomcat_1_0_18_vaadin3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__atmosphere_runtime_1_0_18_vaadin3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__bcpkix_jdk15on_1_48.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__bcprov_jdk15on_1_48.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__blueprints_core_2_3_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__blueprints_orient_graph_2_3_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__bval_core_0_5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__bval_guice_0_5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__bval_jsr303_0_5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__c3p0_0_9_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__cglib_2_2_1_v20090111.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__cglib_nodep_2_1_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__collections_generic_4_01.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__colt_1_2_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_beanutils_1_8_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_beanutils_core_1_8_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_cli_1_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_codec_1_8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_collections_3_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_configuration_1_10.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_exec_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_io_2_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_jexl_2_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_lang3_3_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_lang_2_6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_logging_1_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_logging_1_1_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__concurrent_1_3_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__cssparser_0_9_11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__cssparser_0_9_5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__dom4j_1_6_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__guava_13_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__guava_15_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__guice_3_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__guice_assistedinject_3_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__guice_multibindings_3_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__guice_servlet_3_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__hamcrest_all_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__hamcrest_core_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__hamcrest_core_1_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__hibernate_jpa_2_0_api_1_0_0_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__htmlunit_2_13.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__htmlunit_core_js_2_13.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__httpclient_4_3_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__httpcore_4_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__httpmime_4_3_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jackson_annotations_2_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jackson_core_2_1_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jackson_databind_2_1_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jackson_datatype_json_org_2_1_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__javassist_3_16_1_GA.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__javax_inject_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__javax_servlet_api_3_1_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jcip_annotations_1_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jettison_1_3_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jetty_http_8_1_12_v20130726.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jetty_io_8_1_12_v20130726.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jetty_repacked_7_6_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jetty_util_8_1_12_v20130726.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jetty_websocket_8_1_12_v20130726.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jmockit_1_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jna_3_4_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jna_3_5_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__joda_money_0_8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__joda_time_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__json_20080701.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__json_20090211.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jsoup_1_6_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jung_algorithms_2_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jung_api_2_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jung_graph_impl_2_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jung_io_2_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jung_samples_2_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jung_visualization_2_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_4_10.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_4_11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__log4j_1_2_17.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__messagebox_2_0_6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__mockito_all_1_9_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__mockito_core_1_8_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__mx4j_tools_3_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__mycila_guice_2_10_ga.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__mycila_log_2_12.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__mycila_plugin_1_10.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__mycila_testing_api_2_8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__mycila_testing_guice_2_8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__mycila_testing_mockito_2_8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__nekohtml_1_9_19.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__netty_3_5_2_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__objenesis_1_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_apache_bval_bundle_0_5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__orient_commons_1_4_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__orientdb_client_1_4_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__orientdb_core_1_4_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__orientdb_enterprise_1_4_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__orientdb_nativeos_1_4_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__orientdb_object_1_4_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__persistence_api_1_0_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__phantomjsdriver_1_1_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__platform_3_4_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__platform_3_5_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__quartz_2_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__reflections_0_9_9_RC1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__sac_1_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_android_driver_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_api_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_chrome_driver_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_firefox_driver_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_htmlunit_driver_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_ie_driver_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_iphone_driver_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_java_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_remote_driver_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_safari_driver_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_server_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__selenium_support_2_39_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__serializer_2_7_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__servlet_api_2_5_6_1_9.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__shiro_core_1_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__shiro_guice_1_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__shiro_web_1_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__slf4j_api_1_6_6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__slf4j_log4j12_1_6_6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__snakeyaml_1_8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__snappy_0_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__snappy_java_1_0_5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__stax_api_1_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__stepper_2_1_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__vaadin_client_compiled_7_0_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__vaadin_push_7_1_13.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__vaadin_server_7_1_13.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__vaadin_shared_7_1_13.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__vaadin_shared_deps_1_0_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__vaadin_slf4j_jdk14_1_6_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__vaadin_testbench_3_1_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__vaadin_theme_compiler_7_1_13.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__vaadin_themes_7_0_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__validation_api_1_0_0_GA.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__webbit_0_4_14.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__wstx_asl_3_2_6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__xalan_2_7_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__xercesImpl_2_11_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__xml_apis_1_0_b2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__xml_apis_1_4_01.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Test Results - All_in_V7_(1).html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/V7/src/test/java/util/TestUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/UserNavigationTreeBuilderTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/V7/V7.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo/demo.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/orient/orient.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/quartz/quartz.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testApp/testApp.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testUtil/testUtil.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testbench/testbench.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/v7.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/views/views.iml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/util/MenuItemComparatorTest.java" afterPath="" />
+    <list default="true" id="8c51d812-e01c-4a95-8979-ff32e1b01c84" name="Default" comment="All existing functional tests pass, but a couple more needed.  All unit tests green.&#10;Closes #245, #253">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__atmosphere_runtime_2_1_6.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__portlet_api_2_0.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testUtil/src/test/java/uk/co/q3c/v7/testutil/TestResource.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Test Results - All_in_V7_(1).html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/testUtil/src/main/java/DummyClass.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/orient/.classpath" afterPath="$PROJECT_DIR$/orient/.classpath" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testUtil/.classpath" afterPath="$PROJECT_DIR$/testUtil/.classpath" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/AbstractServiceI18NTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/AbstractServiceI18NTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/AbstractShiroTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/AbstractShiroTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/AnnotationSitemapModuleTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/AnnotationSitemapModuleTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/guice/BaseGuiceServletInjectorTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/guice/BaseGuiceServletInjectorTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/BasicForestTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/BasicForestTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/BreadcrumbTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/BreadcrumbTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/CurrentLocaleTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/CurrentLocaleTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/data/DateTimeConverterTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/data/DateTimeConverterTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DeconstructPageMappingTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DeconstructPageMappingTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultAnnotationSitemapLoaderTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultAnnotationSitemapLoaderTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/DefaultApplicationConfigurationServiceTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/DefaultApplicationConfigurationServiceTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultDirectSitemapLoaderTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultDirectSitemapLoaderTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultDirectSitemapLoaderTest_none.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultDirectSitemapLoaderTest_none.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest2.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest3.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest3.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest4.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest4.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/DefaultI18NProcessorTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/DefaultI18NProcessorTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/DefaultInvalidURIExceptionHandlerTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/DefaultInvalidURIExceptionHandlerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultLoginAttemptLogTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultLoginAttemptLogTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultLoginExceptionHandlerTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultLoginExceptionHandlerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultRealmTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultRealmTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultSitemapCheckerTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultSitemapCheckerTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/DefaultLocaleSelectorTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/DefaultLocaleSelectorTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultSitemapServiceTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultSitemapServiceTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultStandardPagesModuleTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultStandardPagesModuleTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultSubjectIdentifierTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultSubjectIdentifierTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/DefaultSubpagePanelTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/DefaultSubpagePanelTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultUnauthenticatedExceptionHandlerTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultUnauthenticatedExceptionHandlerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultUnauthorisedExceptionHandlerTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/DefaultUnauthorisedExceptionHandlerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/DefaultUserNavigationTreeTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/DefaultUserNavigationTreeTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/user/notify/DefaultUserNotifierTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/user/notify/DefaultUserNotifierTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/user/opt/DefaultUserOptionTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/user/opt/DefaultUserOptionTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/DefaultV7NavigatorTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/DefaultV7NavigatorTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/DescriptionKeyTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/DescriptionKeyTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DirectSitemapModuleTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DirectSitemapModuleTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/form/FieldSetTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/form/FieldSetTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/FileSitemapModuleTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/FileSitemapModuleTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/I18NFlexReaderTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/I18NFlexReaderTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/I18NValueTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/I18NValueTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/IDTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/IDTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/InheritingConfigurationTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/InheritingConfigurationTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/LabelKeyForNameTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/LabelKeyForNameTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/LoaderReportBuilderTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/LoaderReportBuilderTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/LocaleContainer.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/LocaleContainer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/LocaleContainerTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/LocaleContainerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testUtil/src/test/java/uk/co/q3c/v7/testutil/LogMonitor.java" afterPath="$PROJECT_DIR$/testUtil/src/test/java/uk/co/q3c/v7/testutil/LogMonitor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/LoginStatusPanelTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/LoginStatusPanelTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/MapLineReaderTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/MapLineReaderTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/MasterSitemapNodeTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/MasterSitemapNodeTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/MasterSitemapTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/MasterSitemapTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/MessageFormatTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/MessageFormatTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/MockUserSitemap.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/MockUserSitemap.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/testviews/subview/MoneyInOutView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/testviews/subview/MoneyInOutView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/My_AccountView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/My_AccountView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/OptionsView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/OptionsView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/PagePermissionTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/PagePermissionTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/PrivateView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/PrivateView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/push/PushMessageRouterTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/push/PushMessageRouterTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/ReflectionUtilsTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/ReflectionUtilsTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/ResourceUtilsTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/ResourceUtilsTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/ScopeAndInjectTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/ScopeAndInjectTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java" afterPath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/util/ResourceUtils.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/util/ResourceUtils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/ScopedUITest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/ScopedUITest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/ServiceTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/ServiceTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/ServiceUtilsTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/ServiceUtilsTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/ShiroIntegrationTestBase.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/ShiroIntegrationTestBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/ShiroUnitTestBase.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/ShiroUnitTestBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/guice/threadscope/SomeClass.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/guice/threadscope/SomeClass.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/StandardPageKeyTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/StandardPageKeyTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/StrictURIFragmentHandlerTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/StrictURIFragmentHandlerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/SystemAccountManagementPagesTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/SystemAccountManagementPagesTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestAnnotatedView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestAnnotatedView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture1/TestAnnotatedView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture1/TestAnnotatedView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/form/TestBeanFieldSet.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/form/TestBeanFieldSet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/guice/TestGuiceServletInjector.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/guice/TestGuiceServletInjector.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/TestI18N.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/TestI18N.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestLoginView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestLoginView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestLogoutView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestLogoutView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestPrivateHomeView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestPrivateHomeView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestPublicHomeView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestPublicHomeView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/TestUI.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/TestUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/TestUIModule.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/TestUIModule.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/TestWithSitemap.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/TestWithSitemap.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/guice/threadscope/ThreadScopeTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/guice/threadscope/ThreadScopeTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/testviews/subview/TransferView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/testviews/subview/TransferView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/TranslateTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/TranslateTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/TreeCopyTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/TreeCopyTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/guice/uiscope/UIScopeTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/guice/uiscope/UIScopeTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/UITestBase.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/UITestBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/URIPermissionsTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/URIPermissionsTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/URITrackerTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/URITrackerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/UserNavigationMenuTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/UserNavigationMenuTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/UserNavigationTreeBuilder.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/UserNavigationTreeBuilder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/opt/UserOptionProperty.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/opt/UserOptionProperty.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/UserSitemapBuilderTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/UserSitemapBuilderTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/UserSitemapNodeTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/UserSitemapNodeTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/V7ErrorHandlerTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/V7ErrorHandlerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/V7SecurityManagerTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/shiro/V7SecurityManagerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/VaadinTreeWrapperTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/VaadinTreeWrapperTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/View1.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/View1.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/View2.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/View2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/WigglyHomeView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/WigglyHomeView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/V7.iml" afterPath="$PROJECT_DIR$/V7/V7.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml" afterPath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/build.gradle" afterPath="$PROJECT_DIR$/testApp/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testUtil/build.gradle" afterPath="$PROJECT_DIR$/testUtil/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testUtil/.settings/org.eclipse.jdt.core.prefs" afterPath="$PROJECT_DIR$/testUtil/.settings/org.eclipse.jdt.core.prefs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testUtil/testUtil.iml" afterPath="$PROJECT_DIR$/testUtil/testUtil.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="v7.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -296,75 +57,121 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="InheritingConfigurationTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/InheritingConfigurationTest.java">
+      <file leaf-file-name="build.gradle" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/testApp/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1230">
-              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.20766774" vertical-offset="0" max-vertical-offset="1005">
+              <caret line="13" column="9" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DefaultApplicationConfigurationServiceTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/DefaultApplicationConfigurationServiceTest.java">
+      <file leaf-file-name="NavigationTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="496" max-vertical-offset="2040">
-              <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1911" max-vertical-offset="2850">
+              <caret line="168" column="0" selection-start-line="168" selection-start-column="0" selection-end-line="168" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AbstractService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/services/AbstractService.java">
+      <file leaf-file-name="V7demoWidgetset.gwt.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1216" max-vertical-offset="3465">
-              <caret line="125" column="0" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
+              <caret line="2" column="9" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IniFileConfig.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/config/IniFileConfig.java">
+      <file leaf-file-name="build.gradle" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/demo/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.2222223" vertical-offset="0" max-vertical-offset="525">
-              <caret line="24" column="3" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="3" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1095">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ResourceUtils.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/util/ResourceUtils.java">
+      <file leaf-file-name="LogMonitor.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testUtil/src/test/java/uk/co/q3c/v7/testutil/LogMonitor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.14851485" vertical-offset="135" max-vertical-offset="855">
-              <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="8" max-vertical-offset="1605">
+              <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TestUtils.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/test/java/util/TestUtils.java">
+      <file leaf-file-name="ScopedUITest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/ScopedUITest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="159" max-vertical-offset="645">
-              <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2348" max-vertical-offset="2865">
+              <caret line="172" column="5" selection-start-line="172" selection-start-column="5" selection-end-line="172" selection-end-column="5" />
               <folding>
+                <element signature="e#0#5290#0" expanded="true" />
                 <element signature="imports" expanded="true" />
-                <element signature="e#650#651#0" expanded="true" />
-                <element signature="e#691#692#0" expanded="true" />
+                <marker date="1404680753975" expanded="true" signature="5093:5286" placeholder="{...}" />
+                <marker date="1404680753975" expanded="true" signature="5189:5279" placeholder="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="readme.txt" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/test/resources/readme.txt">
+      <file leaf-file-name="OrientCustomType_MoneyTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/orient/src/test/java/uk/co/q3c/v7/persist/orient/custom/OrientCustomType_MoneyTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="90">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="345">
+              <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#338#339#0" expanded="false" />
+                <element signature="e#372#373#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DefaultLocaleSelectorTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/DefaultLocaleSelectorTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="248" max-vertical-offset="1035">
+              <caret line="42" column="41" selection-start-line="42" selection-start-column="41" selection-end-line="42" selection-end-column="41" />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AbstractServiceI18NTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/AbstractServiceI18NTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="300" max-vertical-offset="1230">
+              <caret line="58" column="5" selection-start-line="58" selection-start-column="5" selection-end-line="58" selection-end-column="5" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1494#1495#0" expanded="true" />
+                <element signature="e#1811#1812#0" expanded="true" />
+                <marker date="1404680756151" expanded="true" signature="2019:2256" placeholder="{...}" />
+                <marker date="1404680756151" expanded="false" signature="2087:2102" placeholder=" { " />
+                <marker date="1404680756151" expanded="false" signature="2119:2129" placeholder=" }" />
+                <marker date="1404680756151" expanded="true" signature="2179:2191" placeholder="{...}" />
+                <marker date="1404680756151" expanded="true" signature="2240:2252" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AbstractClientConnector.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.1.13/78d9ce440e686f2a69489ab9b0d015dde3d9c56e/vaadin-server-7.1.13-sources.jar!/com/vaadin/server/AbstractClientConnector.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1148" max-vertical-offset="13890">
+              <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -384,7 +191,26 @@
     <option name="tasksExpandState">
       <map>
         <entry key="" value="true" />
+        <entry key="v7/" value="true" />
       </map>
+    </option>
+    <option name="recentTasks">
+      <list>
+        <ExternalTaskExecutionInfo>
+          <option name="executorId" value="Run" />
+          <option name="settings">
+            <ExternalSystemSettings>
+              <option name="externalProjectPath" value="$PROJECT_DIR$" />
+              <option name="externalSystemIdString" value="GRADLE" />
+              <option name="taskNames">
+                <list>
+                  <option value="deployToTomcat" />
+                </list>
+              </option>
+            </ExternalSystemSettings>
+          </option>
+        </ExternalTaskExecutionInfo>
+      </list>
     </option>
     <option name="availableProjects">
       <map>
@@ -2436,7 +2262,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="14033650936092" />
+        <entry key="$PROJECT_DIR$" value="13991695496628" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -2500,6 +2326,10 @@
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.reflections/reflections/0.9.9-RC1/b78b545f452a6b7d4fab2641dd0b0147a0f4fd5e/reflections-0.9.9-RC1.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.1.0/ab3976d4574c48d22dc1abf6a9e8bd0fdf928223/javax.servlet-api-3.1.0-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.1.0/3cd63d075497751784b2fa84be59432f4905bf7c/javax.servlet-api-3.1.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.portlet/portlet-api/2.0/aa3977c82050c29bb3577fc98c428d61ec187503/portlet-api-2.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.portlet/portlet-api/2.0/1cd72f2a37fcf8ab9893a9468d7ba71c85fe2653/portlet-api-2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.atmosphere/atmosphere-runtime/2.1.6/60f67baf87beba24d1b0cad42d5df7ca0ea6d74a/atmosphere-runtime-2.1.6-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.atmosphere/atmosphere-runtime/2.1.6/3e5802ac609260bb7efd26e8e11defe5cd43aff3/atmosphere-runtime-2.1.6.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.inject/javax.inject/1/a00123f261762a7c5e0ec916a2c7c8298d29c400/javax.inject-1-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.inject/javax.inject/1/6975da39a7040257bd51d21a231b76c915872d38/javax.inject-1.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/aopalliance/aopalliance/1.0/4a4b6d692e17846a9f3da036438a7ac491d3c814/aopalliance-1.0-sources.jar" />
@@ -3023,86 +2853,86 @@
               <option name="name" value="testbench" />
               <option name="projectBuildClasspath">
                 <list>
-                  <option value="$USER_HOME$/gradle-1.12/src/base-services-groovy" />
-                  <option value="$USER_HOME$/gradle-1.12/src/language-jvm" />
-                  <option value="$USER_HOME$/gradle-1.12/src/native" />
-                  <option value="$USER_HOME$/gradle-1.12/src/tooling-api" />
-                  <option value="$USER_HOME$/gradle-1.12/src/scala" />
-                  <option value="$USER_HOME$/gradle-1.12/src/code-quality" />
-                  <option value="$USER_HOME$/gradle-1.12/src/jetty" />
-                  <option value="$USER_HOME$/gradle-1.12/src/build-init" />
-                  <option value="$USER_HOME$/gradle-1.12/src/antlr" />
-                  <option value="$USER_HOME$/gradle-1.12/src/wrapper" />
+                  <option value="$USER_HOME$/gradle-1.12/src/ivy" />
+                  <option value="$USER_HOME$/gradle-1.12/src/internal-integ-testing" />
+                  <option value="$USER_HOME$/gradle-1.12/src/cli" />
                   <option value="$USER_HOME$/gradle-1.12/src/messaging" />
                   <option value="$USER_HOME$/gradle-1.12/src/signing" />
-                  <option value="$USER_HOME$/gradle-1.12/src/jacoco" />
-                  <option value="$USER_HOME$/gradle-1.12/src/cli" />
-                  <option value="$USER_HOME$/gradle-1.12/src/javascript" />
-                  <option value="$USER_HOME$/gradle-1.12/src/diagnostics" />
-                  <option value="$USER_HOME$/gradle-1.12/src/resources" />
                   <option value="$USER_HOME$/gradle-1.12/src/announce" />
+                  <option value="$USER_HOME$/gradle-1.12/src/code-quality" />
+                  <option value="$USER_HOME$/gradle-1.12/src/scala" />
+                  <option value="$USER_HOME$/gradle-1.12/src/javascript" />
                   <option value="$USER_HOME$/gradle-1.12/src/cpp" />
-                  <option value="$USER_HOME$/gradle-1.12/src/osgi" />
-                  <option value="$USER_HOME$/gradle-1.12/src/base-services" />
+                  <option value="$USER_HOME$/gradle-1.12/src/ear" />
+                  <option value="$USER_HOME$/gradle-1.12/src/diagnostics" />
+                  <option value="$USER_HOME$/gradle-1.12/src/native" />
+                  <option value="$USER_HOME$/gradle-1.12/src/antlr" />
+                  <option value="$USER_HOME$/gradle-1.12/src/launcher" />
+                  <option value="$USER_HOME$/gradle-1.12/src/base-services-groovy" />
+                  <option value="$USER_HOME$/gradle-1.12/src/wrapper" />
+                  <option value="$USER_HOME$/gradle-1.12/src/internal-testing" />
+                  <option value="$USER_HOME$/gradle-1.12/src/resources" />
                   <option value="$USER_HOME$/gradle-1.12/src/plugins" />
                   <option value="$USER_HOME$/gradle-1.12/src/ui" />
-                  <option value="$USER_HOME$/gradle-1.12/src/ide" />
-                  <option value="$USER_HOME$/gradle-1.12/src/launcher" />
-                  <option value="$USER_HOME$/gradle-1.12/src/open-api" />
-                  <option value="$USER_HOME$/gradle-1.12/src/maven" />
-                  <option value="$USER_HOME$/gradle-1.12/src/ivy" />
-                  <option value="$USER_HOME$/gradle-1.12/src/language-base" />
-                  <option value="$USER_HOME$/gradle-1.12/src/core-impl" />
-                  <option value="$USER_HOME$/gradle-1.12/src/internal-integ-testing" />
-                  <option value="$USER_HOME$/gradle-1.12/src/internal-testing" />
-                  <option value="$USER_HOME$/gradle-1.12/src/core" />
-                  <option value="$USER_HOME$/gradle-1.12/src/publish" />
-                  <option value="$USER_HOME$/gradle-1.12/src/sonar" />
                   <option value="$USER_HOME$/gradle-1.12/src/build-comparison" />
-                  <option value="$USER_HOME$/gradle-1.12/src/ear" />
+                  <option value="$USER_HOME$/gradle-1.12/src/jacoco" />
+                  <option value="$USER_HOME$/gradle-1.12/src/jetty" />
+                  <option value="$USER_HOME$/gradle-1.12/src/base-services" />
+                  <option value="$USER_HOME$/gradle-1.12/src/core-impl" />
+                  <option value="$USER_HOME$/gradle-1.12/src/sonar" />
+                  <option value="$USER_HOME$/gradle-1.12/src/build-init" />
+                  <option value="$USER_HOME$/gradle-1.12/src/publish" />
+                  <option value="$USER_HOME$/gradle-1.12/src/ide" />
+                  <option value="$USER_HOME$/gradle-1.12/src/osgi" />
+                  <option value="$USER_HOME$/gradle-1.12/src/open-api" />
+                  <option value="$USER_HOME$/gradle-1.12/src/tooling-api" />
+                  <option value="$USER_HOME$/gradle-1.12/src/language-jvm" />
+                  <option value="$USER_HOME$/gradle-1.12/src/language-base" />
+                  <option value="$USER_HOME$/gradle-1.12/src/core" />
                   <option value="$USER_HOME$/gradle-1.12/src/reporting" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/ant-launcher-1.9.3.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-launcher-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/src/maven" />
                   <option value="$USER_HOME$/gradle-1.12/lib/gradle-docs-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-messaging-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-base-services-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-cli-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-native-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-tooling-api-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-base-services-groovy-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-ui-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/ivy-2.2.0.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-open-api-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/ant-1.9.3.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-resources-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-core-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/groovy-all-1.8.6.jar" />
                   <option value="$USER_HOME$/gradle-1.12/lib/gradle-wrapper-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-antlr-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-diagnostics-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-ide-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-reporting-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-core-impl-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-announce-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-language-jvm-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-build-init-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-build-comparison-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-jetty-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-maven-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/ant-antlr-1.9.3.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-sonar-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-code-quality-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-publish-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-tooling-api-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/groovy-all-1.8.6.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-open-api-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-core-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/ant-1.9.3.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-cli-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-base-services-groovy-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-base-services-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-launcher-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/ivy-2.2.0.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-messaging-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-ui-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/ant-launcher-1.9.3.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-native-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/gradle-resources-1.12.jar" />
                   <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-jacoco-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-scala-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-cpp-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-maven-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-reporting-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-publish-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-plugins-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-diagnostics-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-language-base-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-antlr-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/ant-antlr-1.9.3.jar" />
                   <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-ear-1.12.jar" />
                   <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-ivy-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-language-jvm-1.12.jar" />
                   <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-javascript-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-language-base-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-signing-1.12.jar" />
-                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-plugins-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-core-impl-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-sonar-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-build-init-1.12.jar" />
                   <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-osgi-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-cpp-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-ide-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-jetty-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-build-comparison-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-signing-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-code-quality-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-announce-1.12.jar" />
+                  <option value="$USER_HOME$/gradle-1.12/lib/plugins/gradle-scala-1.12.jar" />
                   <option value="$PROJECT_DIR$/buildSrc/src/main/java" />
                   <option value="$PROJECT_DIR$/buildSrc/src/main/groovy" />
                 </list>
@@ -3126,19 +2956,35 @@
         <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/CurrentLocaleTest.java" />
         <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/BreadcrumbTest.java" />
         <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/UserNavigationTreeBuilderTest.java" />
-        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/LocaleContainer.java" />
-        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/LocaleContainerTest.java" />
         <option value="$PROJECT_DIR$/V7/src/test/java/TestUtils.java" />
         <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/InheritingConfigurationTest.java" />
         <option value="$PROJECT_DIR$/V7/src/test/java/util/TestUtils.java" />
+        <option value="$PROJECT_DIR$/.idea/workspace.xml" />
+        <option value="$PROJECT_DIR$/testUtil/src/main/java/DummyClass.java" />
+        <option value="$PROJECT_DIR$/testUtil/build.gradle" />
+        <option value="$PROJECT_DIR$/testUtil/src/main/java/TestResource.java" />
+        <option value="$PROJECT_DIR$/testUtil/src/test/java/uk/co/q3c/v7/testutil/TestResource.java" />
+        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/LocaleContainer.java" />
+        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/util/ResourceUtils.java" />
+        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/LocaleContainerTest.java" />
+        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/DefaultApplicationConfigurationServiceTest.java" />
+        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest.java" />
+        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest2.java" />
+        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultSitemapServiceTest.java" />
+        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/LoaderReportBuilderTest.java" />
+        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/ScopedUITest.java" />
+        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/DefaultLocaleSelectorTest.java" />
+        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/AbstractServiceI18NTest.java" />
+        <option value="$PROJECT_DIR$/testApp/build.gradle" />
+        <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
-    <option name="y" value="24" />
-    <option name="width" value="1301" />
-    <option name="height" value="744" />
+    <option name="x" value="64" />
+    <option name="y" value="-4" />
+    <option name="width" value="1857" />
+    <option name="height" value="1085" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -3147,12 +2993,40 @@
           <State>
             <id />
           </State>
-        </expanded-state>
-        <selected-state>
           <State>
-            <id>Abstraction issues</id>
+            <id>Android Lint</id>
           </State>
-        </selected-state>
+          <State>
+            <id>Code maturity issues</id>
+          </State>
+          <State>
+            <id>Groovy</id>
+          </State>
+          <State>
+            <id>Internationalization issues</id>
+          </State>
+          <State>
+            <id>JUnit issues</id>
+          </State>
+          <State>
+            <id>Javadoc issues</id>
+          </State>
+          <State>
+            <id>Naming ConventionsGroovy</id>
+          </State>
+          <State>
+            <id>Naming conventions</id>
+          </State>
+          <State>
+            <id>Performance issues</id>
+          </State>
+          <State>
+            <id>Probable bugs</id>
+          </State>
+          <State>
+            <id>Properties Files</id>
+          </State>
+        </expanded-state>
       </profile-state>
     </entry>
   </component>
@@ -3167,10 +3041,10 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
-    <option name="STATE" value="0" />
+    <option name="STATE" value="2" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator currentView="Scope" currentSubView="Tests" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -3182,6 +3056,138 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Tests">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="views">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="views">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src/test/java">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src/test">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="resources">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src/test">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="testUtil">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="testApp">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="quartz">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="quartz">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src/test/java">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="uk/co/q3c/v7/quartz">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="demo">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="demo">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+        <subPane subId="Changed Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -3210,84 +3216,32 @@
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="V7" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v7" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v7" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="V7" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v7" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v7" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="V7" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v7" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v7" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="V7" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
+              <option name="myItemId" value="demo" />
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="V7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -3297,32 +3251,31 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="recentsLimit" value="5" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="FullScreen" value="false" />
-    <property name="options.lastSelected" value="editing.templates" />
+    <property name="options.lastSelected" value="preferences.sourceCode.Java" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="dynamic.classpath" value="false" />
-    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
-    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.includeInheritedMembers" value="true" />
-    <property name="LayoutCode.rearrangeEntriesJava" value="true" />
+    <property name="SearchEverywhereHistoryKey" value="VaadinService&#9;PSI&#9;JAVA://com.vaadin.server.VaadinService&#10;LocaleContainerTest&#9;FILE&#9;file:///home/david/git/v7/V7/src/test/java/uk/co/q3c/v7/base/view/component/LocaleContainerTest.java" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateTestDialog.Recents.Supers">
-      <recent name="" />
-    </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="uk.co.q3c.v7.base.view.component" />
     </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="uk.co.q3c.v7.testutil" />
+    </key>
   </component>
-  <component name="RunManager" selected="JUnit.DefaultApplicationConfigurationServiceTest.loadOneFile">
-    <configuration default="false" name="All in V7 (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="V7" />
+  <component name="RunManager" selected="JUnit.All in demo">
+    <configuration default="false" name="All in quartz" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="quartz" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="" />
@@ -3343,56 +3296,8 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="InheritingConfigurationTest.override" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="V7" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.base.config" />
-      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.base.config.InheritingConfigurationTest" />
-      <option name="METHOD_NAME" value="override" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <ConfigurationWrapper RunnerId="Debug" />
-      <method />
-    </configuration>
-    <configuration default="false" name="InheritingConfigurationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="V7" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.base.config" />
-      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.base.config.InheritingConfigurationTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="All in V7" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="V7" />
+    <configuration default="false" name="All in views" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="views" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="" />
@@ -3413,14 +3318,33 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="DefaultApplicationConfigurationServiceTest.loadOneFile" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="V7" />
+    <configuration default="false" name="v7 [deployToTomcat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="deployToTomcat" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
+      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="All in testApp" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="testApp" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.base.config" />
-      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.base.config.DefaultApplicationConfigurationServiceTest" />
-      <option name="METHOD_NAME" value="loadOneFile" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="package" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -3431,18 +3355,45 @@
       </option>
       <envs />
       <patterns />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <ConfigurationWrapper RunnerId="Debug" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="All in demo" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="demo" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
       <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
+    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
+      <module name="" />
+      <setting name="path" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workDir" value="file://$PROJECT_DIR$" />
+      <setting name="debug" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
@@ -3474,6 +3425,34 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
+    <configuration default="true" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="externalProjectPath" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -3499,19 +3478,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -3569,19 +3535,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.All in V7 (1)" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.InheritingConfigurationTest.override" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.InheritingConfigurationTest" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.All in V7" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.DefaultApplicationConfigurationServiceTest.loadOneFile" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.All in quartz" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.All in views" />
+      <item index="2" class="java.lang.String" itemvalue="Gradle.v7 [deployToTomcat]" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.All in testApp" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.All in demo" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.DefaultApplicationConfigurationServiceTest.loadOneFile" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.All in V7" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.InheritingConfigurationTest" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.InheritingConfigurationTest.override" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.All in V7 (1)" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.All in demo" />
+        <item index="1" class="java.lang.String" itemvalue="Gradle.v7 [deployToTomcat]" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.All in testApp" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.All in quartz" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.All in views" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -3591,7 +3557,7 @@
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="SvnConfiguration">
-    <configuration />
+    <configuration>$USER_HOME$/.subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -3603,7 +3569,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1301" height="744" extended-state="6" />
+    <frame x="64" y="-4" width="1857" height="1085" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -3611,25 +3577,25 @@
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32988167" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32894737" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39940828" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32840237" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32793522" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.32991913" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" x="2052" y="269" width="612" height="611" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2490392" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3816568" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24851751" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39979756" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38157895" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -3647,22 +3613,15 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="All existing functional tests pass, but a couple more needed.  All unit tests green.&#10;Closes #245, #253" />
+    <option name="LAST_COMMIT_MESSAGE" value="All existing functional tests pass, but a couple more needed.  All unit tests green.&#10;Closes #245, #253" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/LocaleContainerTest.java</url>
-          <line>87</line>
-          <properties />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/LocaleContainer.java</url>
-          <line>67</line>
-          <properties />
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/InheritingConfigurationTest.java</url>
           <line>92</line>
@@ -3671,12 +3630,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/DefaultApplicationConfigurationServiceTest.java</url>
-          <line>166</line>
+          <line>164</line>
           <properties />
           <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="13" />
+      <option name="time" value="14" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -3684,292 +3643,10 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/testUtil/src/test/java/uk/co/q3c/v7/testutil/LogMonitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2340">
-          <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
-          <folding>
-            <element signature="e#2258#2259#0" expanded="false" />
-            <element signature="e#2278#2279#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/UserNavigationTreeBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="690">
-          <caret line="36" column="33" selection-start-line="36" selection-start-column="33" selection-end-line="36" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testUtil/src/test/java/uk/co/q3c/v7/testutil/LogMonitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2340">
-          <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
-          <folding>
-            <element signature="e#2258#2259#0" expanded="false" />
-            <element signature="e#2278#2279#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/UserNavigationTreeBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="39" max-vertical-offset="435">
-          <caret line="36" column="33" selection-start-line="36" selection-start-column="33" selection-end-line="36" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testUtil/src/test/java/uk/co/q3c/v7/testutil/LogMonitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="183" max-vertical-offset="1650">
-          <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
-          <folding>
-            <element signature="e#2258#2259#0" expanded="false" />
-            <element signature="e#2278#2279#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testUtil/src/test/java/uk/co/q3c/v7/testutil/LogMonitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1635">
-          <caret line="31" column="41" selection-start-line="31" selection-start-column="41" selection-end-line="31" selection-end-column="41" />
-          <folding>
-            <element signature="e#2258#2259#0" expanded="false" />
-            <element signature="e#2278#2279#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/MenuItemComparatorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/DefaultI18NProcessorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="220" max-vertical-offset="2400">
-          <caret line="49" column="43" selection-start-line="49" selection-start-column="43" selection-end-line="49" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/UserSitemapBuilderTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1665" max-vertical-offset="2670">
-          <caret line="169" column="18" selection-start-line="169" selection-start-column="18" selection-end-line="169" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/TestWithSitemap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="495" max-vertical-offset="3690">
-          <caret line="103" column="43" selection-start-line="103" selection-start-column="43" selection-end-line="103" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/CurrentLocaleTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="1470">
-          <caret line="47" column="43" selection-start-line="47" selection-start-column="43" selection-end-line="47" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/UserNavigationTreeBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5555556" vertical-offset="90" max-vertical-offset="435">
-          <caret line="22" column="32" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/BreadcrumbTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4525862" vertical-offset="330" max-vertical-offset="1905">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/DefaultUserNavigationTreeTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2401575" vertical-offset="270" max-vertical-offset="5310">
-          <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/UserNavigationTreeBuilderTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="436" max-vertical-offset="735">
-          <caret line="40" column="14" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-i386/jre/lib/rt.jar!/sun/reflect/NativeMethodAccessorImpl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1" max-vertical-offset="345">
-          <caret line="13" column="28" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-i386/jre/lib/rt.jar!/sun/reflect/DelegatingMethodAccessorImpl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
-          <caret line="11" column="28" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-i386/jre/lib/rt.jar!/java/lang/reflect/Method.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="801" max-vertical-offset="1395">
-          <caret line="62" column="28" selection-start-line="62" selection-start-column="28" selection-end-line="62" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/junit-4.11.jar!/org/junit/runners/model/FrameworkMethod.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="795">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-i386/jre/lib/rt.jar!/java/lang/ClassLoader.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1318" max-vertical-offset="3090">
-          <caret line="96" column="41" selection-start-line="96" selection-start-column="41" selection-end-line="96" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.6.6/bcd0e21b1572960cefd449f8a16efab5b6b8e644/slf4j-api-1.6.6-sources.jar!/org/slf4j/LoggerFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3646" max-vertical-offset="4305">
-          <caret line="280" column="0" selection-start-line="280" selection-start-column="0" selection-end-line="280" selection-end-column="0" />
-          <folding>
-            <element signature="e#10931#10932#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.1.13/78d9ce440e686f2a69489ab9b0d015dde3d9c56e/vaadin-server-7.1.13-sources.jar!/com/vaadin/data/util/AbstractContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="249" max-vertical-offset="4065">
-          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.1.13/78d9ce440e686f2a69489ab9b0d015dde3d9c56e/vaadin-server-7.1.13-sources.jar!/com/vaadin/data/util/AbstractInMemoryContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1303" max-vertical-offset="14460">
-          <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
-          <folding>
-            <element signature="e#4884#4892#0" expanded="false" />
-            <element signature="e#5174#5175#0" expanded="false" />
-            <element signature="e#5230#5231#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.1.13/78d9ce440e686f2a69489ab9b0d015dde3d9c56e/vaadin-server-7.1.13-sources.jar!/com/vaadin/data/util/IndexedContainer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="493" max-vertical-offset="16815">
           <caret line="72" column="0" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#38779#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#2376#2394#0" expanded="false" />
-            <element signature="e#2596#2625#0" expanded="false" />
-            <element signature="e#2756#2769#0" expanded="false" />
-            <element signature="e#4403#4404#0" expanded="false" />
-            <element signature="e#4473#4474#0" expanded="false" />
-            <element signature="e#4721#4722#0" expanded="false" />
-            <element signature="e#4765#4766#0" expanded="false" />
-            <element signature="e#12052#12068#0" expanded="false" />
-            <element signature="e#12861#12862#0" expanded="false" />
-            <element signature="e#12906#12907#0" expanded="false" />
-            <element signature="e#13281#13282#0" expanded="false" />
-            <element signature="e#13318#13319#0" expanded="false" />
-            <element signature="e#13509#13510#0" expanded="false" />
-            <element signature="e#13562#13563#0" expanded="false" />
-            <element signature="e#13690#13691#0" expanded="false" />
-            <element signature="e#13750#13751#0" expanded="false" />
-            <element signature="e#14026#14027#0" expanded="false" />
-            <element signature="e#14080#14081#0" expanded="false" />
-            <element signature="e#14204#14205#0" expanded="false" />
-            <element signature="e#14267#14268#0" expanded="false" />
-            <element signature="e#15335#15336#0" expanded="false" />
-            <element signature="e#15383#15384#0" expanded="false" />
-            <element signature="e#16040#16041#0" expanded="false" />
-            <element signature="e#16091#16092#0" expanded="false" />
-            <element signature="e#18581#18582#0" expanded="false" />
-            <element signature="e#18665#18666#0" expanded="false" />
-            <element signature="e#22685#22686#0" expanded="false" />
-            <element signature="e#22756#22757#0" expanded="false" />
-            <element signature="e#22827#22828#0" expanded="false" />
-            <element signature="e#22905#22906#0" expanded="false" />
-            <element signature="e#24111#24112#0" expanded="false" />
-            <element signature="e#24159#24160#0" expanded="false" />
-            <element signature="e#24965#24966#0" expanded="false" />
-            <element signature="e#25017#25018#0" expanded="false" />
-            <element signature="e#27741#27742#0" expanded="false" />
-            <element signature="e#27804#27805#0" expanded="false" />
-            <element signature="e#27965#27966#0" expanded="false" />
-            <element signature="e#28033#28034#0" expanded="false" />
-            <element signature="e#28204#28205#0" expanded="false" />
-            <element signature="e#28268#28269#0" expanded="false" />
-            <element signature="e#30956#30957#0" expanded="false" />
-            <element signature="e#31045#31046#0" expanded="false" />
-            <element signature="e#31522#31523#0" expanded="false" />
-            <element signature="e#31594#31595#0" expanded="false" />
-            <element signature="e#33101#33102#0" expanded="false" />
-            <element signature="e#33157#33158#0" expanded="false" />
-            <element signature="e#33852#33853#0" expanded="false" />
-            <element signature="e#33911#33912#0" expanded="false" />
-            <element signature="e#33957#33958#0" expanded="false" />
-            <element signature="e#34009#34010#0" expanded="false" />
-            <element signature="e#34230#34231#0" expanded="false" />
-            <element signature="e#34282#34283#0" expanded="false" />
-            <element signature="e#34491#34492#0" expanded="false" />
-            <element signature="e#34538#34539#0" expanded="false" />
-            <element signature="e#34593#34594#0" expanded="false" />
-            <element signature="e#34637#34638#0" expanded="false" />
-            <element signature="e#34707#34708#0" expanded="false" />
-            <element signature="e#34754#34755#0" expanded="false" />
-            <element signature="e#37896#37897#0" expanded="false" />
-            <element signature="e#37930#37931#0" expanded="false" />
-            <element signature="e#38005#38006#0" expanded="false" />
-            <element signature="e#38046#38047#0" expanded="false" />
-            <element signature="e#38159#38160#0" expanded="false" />
-            <element signature="e#38192#38193#0" expanded="false" />
-            <element signature="e#38262#38263#0" expanded="false" />
-            <element signature="e#38298#38299#0" expanded="false" />
-            <element signature="e#38481#38482#0" expanded="false" />
-            <element signature="e#38531#38532#0" expanded="false" />
-            <element signature="e#38725#38726#0" expanded="false" />
-            <element signature="e#38775#38776#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3977,31 +3654,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.40298507" vertical-offset="0" max-vertical-offset="335">
           <caret line="20" column="12" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-1.7.0-openjdk-i386/jre/lib/rt.jar!/java/nio/file/Path.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2209302" vertical-offset="0" max-vertical-offset="1035">
-          <caret line="29" column="12" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/LocaleContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="381" max-vertical-offset="1125">
-          <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/LocaleContainerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="138" max-vertical-offset="1800">
-          <caret line="66" column="84" selection-start-line="66" selection-start-column="84" selection-end-line="66" selection-end-column="84" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -4009,7 +3661,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -4017,11 +3668,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="159" max-vertical-offset="645">
           <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#650#651#0" expanded="true" />
-            <element signature="e#691#692#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -4033,42 +3679,392 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/DefaultApplicationConfigurationServiceTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="496" max-vertical-offset="2040">
-          <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/services/AbstractService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1216" max-vertical-offset="3465">
           <caret line="125" column="0" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Test Results - All_in_V7_(1).html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35422343" vertical-offset="12380" max-vertical-offset="51120">
-          <caret line="834" column="47" selection-start-line="834" selection-start-column="47" selection-end-line="834" selection-end-column="47" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/config/IniFileConfig.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.2222223" vertical-offset="0" max-vertical-offset="525">
+        <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="750">
           <caret line="24" column="3" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/.name">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="939">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="939">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/copyright/profiles_settings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="939">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/codeStyleSettings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="939">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/encodings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="939">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/gradle.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="939">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/uiDesigner.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1965">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="57405">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/settings.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="637">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="2100">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/compiler.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="930">
+          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1050">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testUtil/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.1.13/78d9ce440e686f2a69489ab9b0d015dde3d9c56e/vaadin-server-7.1.13-sources.jar!/com/vaadin/server/VaadinService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.025684932" vertical-offset="15" max-vertical-offset="25170">
+          <caret line="16" column="24" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/TreeCopyTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.12842466" vertical-offset="0" max-vertical-offset="3300">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/util/TreeCopy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33274022" vertical-offset="413" max-vertical-offset="4410">
+          <caret line="64" column="13" selection-start-line="64" selection-start-column="13" selection-end-line="64" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/TargetTreeWrapper_VaadinTreeTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1770">
+          <caret line="18" column="5" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/fixture/UITestBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7311321" vertical-offset="0" max-vertical-offset="2235">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/i18n/CurrentLocaleTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="585" max-vertical-offset="1470">
+          <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/DefaultV7NavigatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40408805" vertical-offset="178" max-vertical-offset="10035">
+          <caret line="29" column="47" selection-start-line="29" selection-start-column="47" selection-end-line="29" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject/guice/3.0/d117c4481f64955cb1862ed38cb568add2f5fe05/guice-3.0-sources.jar!/com/google/inject/AbstractModule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3321918" vertical-offset="466" max-vertical-offset="2895">
+          <caret line="68" column="26" selection-start-line="68" selection-start-column="26" selection-end-line="68" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testUtil/src/test/java/uk/co/q3c/v7/testutil/TestResource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-20.88889" vertical-offset="111" max-vertical-offset="825">
+          <caret line="45" column="91" selection-start-line="45" selection-start-column="91" selection-end-line="45" selection-end-column="91" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/LocaleContainerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1891" max-vertical-offset="2475">
+          <caret line="157" column="0" selection-start-line="157" selection-start-column="0" selection-end-line="157" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#5278#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#2231#2232#0" expanded="true" />
+            <element signature="e#2265#2266#0" expanded="true" />
+            <element signature="e#5078#5267#0" expanded="true" />
+            <element signature="e#5255#5256#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/LocaleContainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="316" max-vertical-offset="1140">
+          <caret line="61" column="52" selection-start-line="61" selection-start-column="52" selection-end-line="61" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar!/java/io/File.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5393836" vertical-offset="0" max-vertical-offset="2535">
+          <caret line="22" column="31" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/DefaultApplicationConfigurationServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35787672" vertical-offset="151" max-vertical-offset="2055">
+          <caret line="58" column="51" selection-start-line="58" selection-start-column="51" selection-end-line="58" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36301368" vertical-offset="463" max-vertical-offset="7950">
+          <caret line="102" column="92" selection-start-line="102" selection-start-column="8" selection-end-line="102" selection-end-column="92" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/sitemap/SitemapFile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1561" max-vertical-offset="7425">
+          <caret line="156" column="28" selection-start-line="156" selection-start-column="28" selection-end-line="156" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/util/ResourceUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.14851485" vertical-offset="135" max-vertical-offset="855">
-          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="226" max-vertical-offset="930">
+          <caret line="64" column="23" selection-start-line="64" selection-start-column="23" selection-end-line="64" selection-end-column="23" />
+          <folding>
+            <element signature="e#2196#2197#0" expanded="true" />
+            <element signature="e#2256#2257#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultFileSitemapLoaderTest2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="856" max-vertical-offset="3075">
+          <caret line="68" column="43" selection-start-line="68" selection-start-column="43" selection-end-line="68" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#8668#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultSitemapServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3188" max-vertical-offset="3780">
+          <caret line="295" column="0" selection-start-line="295" selection-start-column="0" selection-end-line="295" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/LoaderReportBuilderTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="435" max-vertical-offset="1545">
+          <caret line="79" column="5" selection-start-line="79" selection-start-column="5" selection-end-line="79" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.1.13/78d9ce440e686f2a69489ab9b0d015dde3d9c56e/vaadin-server-7.1.13-sources.jar!/com/vaadin/server/AbstractClientConnector.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1148" max-vertical-offset="13890">
+          <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/ScopedUITest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2348" max-vertical-offset="2865">
+          <caret line="172" column="5" selection-start-line="172" selection-start-column="5" selection-end-line="172" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#5290#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <marker date="1404680753975" expanded="true" signature="5093:5286" placeholder="{...}" />
+            <marker date="1404680753975" expanded="true" signature="5189:5279" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/orient/src/test/java/uk/co/q3c/v7/persist/orient/custom/OrientCustomType_MoneyTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="345">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#338#339#0" expanded="false" />
+            <element signature="e#372#373#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/DefaultLocaleSelectorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="248" max-vertical-offset="1035">
+          <caret line="42" column="41" selection-start-line="42" selection-start-column="41" selection-end-line="42" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/AbstractServiceI18NTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="300" max-vertical-offset="1230">
+          <caret line="58" column="5" selection-start-line="58" selection-start-column="5" selection-end-line="58" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1494#1495#0" expanded="true" />
+            <element signature="e#1811#1812#0" expanded="true" />
+            <marker date="1404680756151" expanded="true" signature="2019:2256" placeholder="{...}" />
+            <marker date="1404680756151" expanded="false" signature="2087:2102" placeholder=" { " />
+            <marker date="1404680756151" expanded="false" signature="2119:2129" placeholder=" }" />
+            <marker date="1404680756151" expanded="true" signature="2179:2191" placeholder="{...}" />
+            <marker date="1404680756151" expanded="true" signature="2240:2252" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testUtil/src/test/java/uk/co/q3c/v7/testutil/LogMonitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="8" max-vertical-offset="1605">
+          <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1095">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1911" max-vertical-offset="2850">
+          <caret line="168" column="0" selection-start-line="168" selection-start-column="0" selection-end-line="168" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
+          <caret line="2" column="9" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20766774" vertical-offset="0" max-vertical-offset="1005">
+          <caret line="13" column="9" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -4125,12 +4121,11 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>V7</last-edited>
+          <last-edited>demo</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
-                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>
@@ -4138,6 +4133,7 @@
       </state>
       <state key="ProjectJDKs.UI">
         <settings>
+          <last-edited>1.7</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
