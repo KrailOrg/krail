@@ -69,8 +69,8 @@ public class NavigationTest extends V7TestBenchTestCase {
 
 		// then
 		assertThat(notification()).isNotNull();
-		assertThat(notification().getText()).isEqualTo("home is not a valid page");
-		closeNotification();
+        assertThat(notification().getText()).isEqualTo("Info: home is not a valid page");
+        closeNotification();
 
 		verifyNotUrl("private/home"); // not a valid test, but maybe it should be
 		navigateTo("system-account");

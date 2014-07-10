@@ -60,6 +60,9 @@ public class LocaleTest extends V7TestBenchTestCase {
 
         //this is in a different order to navtree. See https://github.com/davidsowerby/v7/issues/257
         assertThat(items).containsExactly("Benachrichtigungen", "Einloggen", "Nachricht Feld", "Systemkonto", "Öffentliche Startseite");
+
+        assertThat(loginButton().getText()).isEqualTo("einloggen");
+        assertThat(loginLabel().getText()).isEqualTo("Gast");
     }
 
 }

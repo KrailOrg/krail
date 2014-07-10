@@ -54,7 +54,7 @@ public class LoginTest extends V7TestBenchTestCase {
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown2() throws Exception {
 		String verificationErrorString = verificationErrors.toString();
 		System.out.println(verificationErrorString);
 		if (!"".equals(verificationErrorString)) {

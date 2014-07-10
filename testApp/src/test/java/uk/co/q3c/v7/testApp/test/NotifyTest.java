@@ -12,20 +12,18 @@
  */
 package uk.co.q3c.v7.testApp.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.vaadin.testbench.ScreenshotOnFailureRule;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
-
 import uk.co.q3c.v7.base.view.component.DefaultMessageBar;
 import uk.co.q3c.v7.testapp.view.NotificationsView;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
-import com.vaadin.testbench.ScreenshotOnFailureRule;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class NotifyTest extends V7TestBenchTestCase {
 
@@ -65,8 +63,8 @@ public class NotifyTest extends V7TestBenchTestCase {
 		assertThat(messageBar.getText()).isEqualTo(
 				"ERROR: You cannot use service Fake Service until it has been started");
 		assertThat(notification()).isNotNull();
-		assertThat(notification().getText()).isEqualTo("You cannot use service Fake Service until it has been started");
-		closeNotification();
+        assertThat(notification().getText()).isEqualTo("Error: You cannot use service Fake Service until it has been started - close with ESC-key");
+        closeNotification();
 
 	}
 
@@ -82,8 +80,8 @@ public class NotifyTest extends V7TestBenchTestCase {
 		assertThat(messageBar.getText()).isEqualTo(
 				"Warning: You cannot use service Fake Service until it has been started");
 		assertThat(notification()).isNotNull();
-		assertThat(notification().getText()).isEqualTo("You cannot use service Fake Service until it has been started");
-		closeNotification();
+        assertThat(notification().getText()).isEqualTo("Warning: You cannot use service Fake Service until it has been started");
+        closeNotification();
 	}
 
 	@Test
@@ -97,7 +95,7 @@ public class NotifyTest extends V7TestBenchTestCase {
 		// then
 		assertThat(messageBar.getText()).isEqualTo("You cannot use service Fake Service until it has been started");
 		assertThat(notification()).isNotNull();
-		assertThat(notification().getText()).isEqualTo("You cannot use service Fake Service until it has been started");
-		closeNotification();
+        assertThat(notification().getText()).isEqualTo("Info: You cannot use service Fake Service until it has been started");
+        closeNotification();
 	}
 }

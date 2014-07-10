@@ -1,16 +1,14 @@
 package uk.co.q3c.v7.demo.bench;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
+import com.vaadin.testbench.ScreenshotOnFailureRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
-import com.vaadin.testbench.ScreenshotOnFailureRule;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class NavigationTest extends V7TestBenchTestCase {
 
@@ -54,8 +52,8 @@ public class NavigationTest extends V7TestBenchTestCase {
 	}
 
 	@After
-	public void tearDown() throws Exception {
-		String verificationErrorString = verificationErrors.toString();
+    public void tearDown2() throws Exception {
+        String verificationErrorString = verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
 			fail(verificationErrorString);
 		}

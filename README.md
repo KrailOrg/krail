@@ -9,11 +9,11 @@ The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state
 
 There are a number of sub-projects, each with a different status
 
-19th April 2014:  
+11th July 2014:
 
 ### V7
 
-This is the base, or core, library.  Vaadin 7.1.13 is integrated with:
+This is the base, or core, library.  Vaadin 7.2.4 is integrated with:
 
 * Guice 3.0, 
 * Shiro 1.2.1, 
