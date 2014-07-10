@@ -1,20 +1,18 @@
 package uk.co.q3c.v7.testApp.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
+import com.vaadin.testbench.ScreenshotOnFailureRule;
+import com.vaadin.ui.Label;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import uk.co.q3c.v7.base.view.DefaultLoginView;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
-import com.vaadin.testbench.ScreenshotOnFailureRule;
-import com.vaadin.ui.Label;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class LoginTest extends V7TestBenchTestCase {
 
@@ -101,8 +99,8 @@ public class LoginTest extends V7TestBenchTestCase {
 	}
 
 	@After
-	public void tearDown() throws Exception {
-		String verificationErrorString = verificationErrors.toString();
+    public void tearDown2() throws Exception {
+        String verificationErrorString = verificationErrors.toString();
 		System.out.println(verificationErrorString);
 		if (!"".equals(verificationErrorString)) {
 			fail(verificationErrorString);

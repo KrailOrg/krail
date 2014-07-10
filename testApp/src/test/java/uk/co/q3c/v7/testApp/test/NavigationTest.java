@@ -183,11 +183,12 @@ public class NavigationTest extends V7TestBenchTestCase {
 	}
 
 	@After
-	public void tearDown() throws Exception {
-		String verificationErrorString = verificationErrors.toString();
+    public void tearDown2() throws Exception {
+        String verificationErrorString = verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
 			fail(verificationErrorString);
 		}
 	}
+
 
 }
