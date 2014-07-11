@@ -4,16 +4,8 @@
     <option name="ANALYSIS_IN_BACKGROUND" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8c51d812-e01c-4a95-8979-ff32e1b01c84" name="Default" comment="Upgraded to">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LocaleTest.java" afterPath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LocaleTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/LoginTest.java" afterPath="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/LoginTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java" afterPath="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java" afterPath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java" afterPath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml" afterPath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/widgetset/testAppWidgetset.gwt.xml" afterPath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/widgetset/testAppWidgetset.gwt.xml" />
+    <list default="true" id="8c51d812-e01c-4a95-8979-ff32e1b01c84" name="Default" comment="Upgraded to Vaadin 7.2.4, closes #252">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="v7.iws" />
@@ -61,20 +53,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NotifyTest.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="NotifyTest.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="716" max-vertical-offset="1275">
-              <caret line="99" column="123" selection-start-line="99" selection-start-column="123" selection-end-line="99" selection-end-column="123" />
-              <folding />
+            <state vertical-scroll-proportion="-0.5433213" vertical-offset="301" max-vertical-offset="1440">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#3391#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.6976744" vertical-offset="585" max-vertical-offset="1350">
+            <state vertical-scroll-proportion="14.4" vertical-offset="585" max-vertical-offset="1350">
               <caret line="15" column="49" selection-start-line="15" selection-start-column="49" selection-end-line="15" selection-end-column="49" />
               <folding />
             </state>
@@ -134,9 +128,11 @@
       <file leaf-file-name="NavigationTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="315" max-vertical-offset="870">
-              <caret line="42" column="18" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="990">
+              <caret line="40" column="18" selection-start-line="40" selection-start-column="18" selection-end-line="40" selection-end-column="18" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -3222,7 +3218,7 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="editing.templates" />
+    <property name="options.lastSelected" value="copyright.profiles" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
@@ -3541,7 +3537,11 @@
       <created>1405020800819</created>
       <updated>1405020800819</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Upgraded to Vaadin 7.2.4, closes #252">
+      <created>1405034724748</created>
+      <updated>1405034724748</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -3574,6 +3574,9 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39979756" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
+  <component name="UpdateCopyrightCheckinHandler">
+    <option name="UPDATE_COPYRIGHT" value="true" />
+  </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
       <collection />
@@ -3593,7 +3596,8 @@
     </option>
     <MESSAGE value="All existing functional tests pass, but a couple more needed.  All unit tests green.&#10;Closes #245, #253" />
     <MESSAGE value="Locale switching tests added, for NavTree and NavMenu.  Difference is sort order noted, see #257" />
-    <option name="LAST_COMMIT_MESSAGE" value="Locale switching tests added, for NavTree and NavMenu.  Difference is sort order noted, see #257" />
+    <MESSAGE value="Upgraded to Vaadin 7.2.4, closes #252" />
+    <option name="LAST_COMMIT_MESSAGE" value="Upgraded to Vaadin 7.2.4, closes #252" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -3969,22 +3973,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/LoginTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="975">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="315" max-vertical-offset="870">
-          <caret line="42" column="18" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="746" max-vertical-offset="2865">
@@ -3993,19 +3981,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java">
+    <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="716" max-vertical-offset="1275">
-          <caret line="99" column="123" selection-start-line="99" selection-start-column="123" selection-end-line="99" selection-end-column="123" />
+        <state vertical-scroll-proportion="14.4" vertical-offset="585" max-vertical-offset="1350">
+          <caret line="15" column="49" selection-start-line="15" selection-start-column="49" selection-end-line="15" selection-end-column="49" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
+    <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.6976744" vertical-offset="585" max-vertical-offset="1350">
-          <caret line="15" column="49" selection-start-line="15" selection-start-column="49" selection-end-line="15" selection-end-column="49" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="990">
+          <caret line="40" column="18" selection-start-line="40" selection-start-column="18" selection-end-line="40" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/LoginTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="975">
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.5433213" vertical-offset="301" max-vertical-offset="1440">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#3391#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
