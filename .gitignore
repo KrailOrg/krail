@@ -12,4 +12,9 @@ build.gradle~
 /build
 /.settings
 README.md~
+.idea/workspace.xml
+.idea/tasks.xml
 
+
+
+.idea/libraries/
