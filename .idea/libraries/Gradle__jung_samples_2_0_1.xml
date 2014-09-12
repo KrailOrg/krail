@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: jung-samples-2.0.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.jung/jung-samples/2.0.1/f0ad034e65ba9b038a4e757b260f2cf6a57e3d45/jung-samples-2.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/net.sf.jung/jung-samples/2.0.1/f0ad034e65ba9b038a4e757b260f2cf6a57e3d45/jung-samples-2.0.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.jung/jung-samples/2.0.1/238bed26435a290d66d23741f3bdc22b4363d5ff/jung-samples-2.0.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/net.sf.jung/jung-samples/2.0.1/238bed26435a290d66d23741f3bdc22b4363d5ff/jung-samples-2.0.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

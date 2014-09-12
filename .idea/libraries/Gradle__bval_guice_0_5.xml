@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: bval-guice-0.5">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.bval/bval-guice/0.5/176e87f1d51986fc477e9823c415a149d1a6af41/bval-guice-0.5.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/org.apache.bval/bval-guice/0.5/176e87f1d51986fc477e9823c415a149d1a6af41/bval-guice-0.5.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.bval/bval-guice/0.5/41c57b46b66ad25e47b4332805d0104b2ea0618/bval-guice-0.5-sources.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/org.apache.bval/bval-guice/0.5/41c57b46b66ad25e47b4332805d0104b2ea0618/bval-guice-0.5-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

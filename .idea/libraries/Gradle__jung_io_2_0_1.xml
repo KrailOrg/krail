@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: jung-io-2.0.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.jung/jung-io/2.0.1/7689063eafe5f98a1b71b200824f51b751817558/jung-io-2.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/net.sf.jung/jung-io/2.0.1/7689063eafe5f98a1b71b200824f51b751817558/jung-io-2.0.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.jung/jung-io/2.0.1/6e81b70f11a5f74387ec1e7ba952923dfddcbf7a/jung-io-2.0.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/net.sf.jung/jung-io/2.0.1/6e81b70f11a5f74387ec1e7ba952923dfddcbf7a/jung-io-2.0.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

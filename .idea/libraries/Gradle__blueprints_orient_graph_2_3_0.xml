@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: blueprints-orient-graph-2.3.0">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.tinkerpop.blueprints/blueprints-orient-graph/2.3.0/ad6bfa7140c3916c79840d6e8e8166989b2c3b12/blueprints-orient-graph-2.3.0.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.tinkerpop.blueprints/blueprints-orient-graph/2.3.0/ad6bfa7140c3916c79840d6e8e8166989b2c3b12/blueprints-orient-graph-2.3.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.tinkerpop.blueprints/blueprints-orient-graph/2.3.0/8683ef5e11e2e56a7acc08b10a330514ff993346/blueprints-orient-graph-2.3.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.tinkerpop.blueprints/blueprints-orient-graph/2.3.0/8683ef5e11e2e56a7acc08b10a330514ff993346/blueprints-orient-graph-2.3.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

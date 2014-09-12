@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: assertj-joda-time-1.1.0">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.assertj/assertj-joda-time/1.1.0/a52405a012864cf6d77fb6220dab42f833b2b260/assertj-joda-time-1.1.0.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/org.assertj/assertj-joda-time/1.1.0/a52405a012864cf6d77fb6220dab42f833b2b260/assertj-joda-time-1.1.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.assertj/assertj-joda-time/1.1.0/dc13a8f137ecb065ac88c90a2a579ec559775c8c/assertj-joda-time-1.1.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/org.assertj/assertj-joda-time/1.1.0/dc13a8f137ecb065ac88c90a2a579ec559775c8c/assertj-joda-time-1.1.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

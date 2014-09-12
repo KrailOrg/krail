@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: mycila-testing-mockito-2.8">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mycila.testing.plugins/mycila-testing-mockito/2.8/2ac4bb5be16bca84c2a1e1ed957b82335db1ec77/mycila-testing-mockito-2.8.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.mycila.testing.plugins/mycila-testing-mockito/2.8/2ac4bb5be16bca84c2a1e1ed957b82335db1ec77/mycila-testing-mockito-2.8.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mycila.testing.plugins/mycila-testing-mockito/2.8/aebea492d105f3bb8dd9c6db3b7a8cc09879b370/mycila-testing-mockito-2.8-sources.jar!/" />
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.mycila.testing.plugins/mycila-testing-mockito/2.8/aebea492d105f3bb8dd9c6db3b7a8cc09879b370/mycila-testing-mockito-2.8-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
