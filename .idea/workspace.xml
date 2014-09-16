@@ -4,9 +4,8 @@
     <option name="ANALYSIS_IN_BACKGROUND" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8c51d812-e01c-4a95-8979-ff32e1b01c84" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/widgetset/testAppWidgetset.gwt.xml" afterPath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/widgetset/testAppWidgetset.gwt.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/main/webapp/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/testApp/src/main/webapp/WEB-INF/web.xml" />
+    <list default="true" id="8c51d812-e01c-4a95-8979-ff32e1b01c84" name="Default" comment="Added async=true to GuiceFilter in web.xml&#10;&#10;See this message in Tomcat log:&#10;&#10;WARNING: &#10;=================================================================&#10;Vaadin depends on Atmosphere 2.1.2.vaadin3 but version 2.1.6 was found.&#10;This might cause compatibility problems if push is used.&#10;=================================================================&#10;&#10;App loads ok, but takes a full minute or more to respond to a page change - once it gets there, it seems fine, and push works">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="v7.iws" />
@@ -76,24 +75,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider editor-type-id="MarkdownPreviewEditor">
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="9.384615" vertical-offset="454" max-vertical-offset="1350">
-              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.4360465" vertical-offset="0" max-vertical-offset="1425">
+              <caret line="15" column="2" selection-start-line="15" selection-start-column="2" selection-end-line="15" selection-end-column="2" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="web.xml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="web.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testApp/src/main/webapp/WEB-INF/web.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.17307693" vertical-offset="0" max-vertical-offset="520">
-              <caret line="6" column="47" selection-start-line="6" selection-start-column="47" selection-end-line="6" selection-end-column="47" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
+              <caret line="18" column="47" selection-start-line="18" selection-start-column="47" selection-end-line="18" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -114,16 +113,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="645" max-vertical-offset="1050">
               <caret line="43" column="54" selection-start-line="43" selection-start-column="54" selection-end-line="43" selection-end-column="54" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LocaleTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LocaleTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="315" max-vertical-offset="1110">
-              <caret line="21" column="24" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -3055,8 +3044,8 @@
         <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/testApp/src/main/webapp/WEB-INF/web.xml" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -3742,7 +3731,11 @@
       <created>1410894463983</created>
       <updated>1410894463983</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added async=true to GuiceFilter in web.xml&#10;&#10;See this message in Tomcat log:&#10;&#10;WARNING: &#10;=================================================================&#10;Vaadin depends on Atmosphere 2.1.2.vaadin3 but version 2.1.6 was found.&#10;This might cause compatibility problems if push is used.&#10;=================================================================&#10;&#10;App loads ok, but takes a full minute or more to respond to a page change - once it gets there, it seems fine, and push works">
+      <created>1410896526263</created>
+      <updated>1410896526263</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -3788,8 +3781,8 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2498621" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31439602" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.38019168" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31439602" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.38019168" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2498621" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2498621" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -3834,7 +3827,8 @@
     <MESSAGE value="Copyright profile" />
     <MESSAGE value="Cleaning up git for IDEA" />
     <MESSAGE value="Merged back from master" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merged back from master" />
+    <MESSAGE value="Added async=true to GuiceFilter in web.xml&#10;&#10;See this message in Tomcat log:&#10;&#10;WARNING: &#10;=================================================================&#10;Vaadin depends on Atmosphere 2.1.2.vaadin3 but version 2.1.6 was found.&#10;This might cause compatibility problems if push is used.&#10;=================================================================&#10;&#10;App loads ok, but takes a full minute or more to respond to a page change - once it gets there, it seems fine, and push works" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added async=true to GuiceFilter in web.xml&#10;&#10;See this message in Tomcat log:&#10;&#10;WARNING: &#10;=================================================================&#10;Vaadin depends on Atmosphere 2.1.2.vaadin3 but version 2.1.6 was found.&#10;This might cause compatibility problems if push is used.&#10;=================================================================&#10;&#10;App loads ok, but takes a full minute or more to respond to a page change - once it gets there, it seems fine, and push works" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -4211,6 +4205,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/main/webapp/WEB-INF/web.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
+          <caret line="18" column="47" selection-start-line="18" selection-start-column="47" selection-end-line="18" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="30" max-vertical-offset="1080">
@@ -4224,16 +4226,8 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="9.384615" vertical-offset="454" max-vertical-offset="1350">
-          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/src/main/webapp/WEB-INF/web.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17307693" vertical-offset="0" max-vertical-offset="520">
-          <caret line="6" column="47" selection-start-line="6" selection-start-column="47" selection-end-line="6" selection-end-column="47" />
+        <state vertical-scroll-proportion="0.4360465" vertical-offset="0" max-vertical-offset="1425">
+          <caret line="15" column="2" selection-start-line="15" selection-start-column="2" selection-end-line="15" selection-end-column="2" />
           <folding />
         </state>
       </provider>

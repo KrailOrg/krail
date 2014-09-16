@@ -5,11 +5,16 @@ V7 is a libary which provides a base application for Java / web development comb
 
 The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information.  
 
+##Limitations
+
+Fails on Tomcat 8
+
 ## Status
 
 There are a number of sub-projects, each with a different status
 
-12th September 2014:
+16th September 2014:
+
 
 ### V7
 
