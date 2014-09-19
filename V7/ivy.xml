@@ -4,14 +4,15 @@
 ]>
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-	<info organisation="uk.co.q3c" module="v7" branch="bonfiglioli" />
+	<info organisation="uk.co.q3c" branch="bonfiglioli" module="v7" />
 	<configurations>
 		<!-- The default configuration, which should be deployed to the server -->
 		<conf name="default" />
 		<conf name="test" visibility="private" />
 	</configurations>
 	<publications>
-		<artifact name="v7" type="jar" />
+		<artifact name="v7" type="jar" ext="jar"/>
+		<artifact name="v7-sources" type="source" ext="jar"/>
 	</publications>
 	<dependencies>
 		<!-- The core server part of Vaadin -->

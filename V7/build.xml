@@ -4,6 +4,7 @@
 
 	<loadproperties srcfile="build.properties" />
 	<property name="workdir" value="${artifacts}/work" />
+	<property name="builddir" value="${workdir}/build" />
 
 	<path id="classpath">
 		<fileset dir="${libraries}" erroronmissingdir="no">
@@ -13,12 +14,10 @@
 	</path>
 
 	<target name="clean">
-		<delete dir="${workdir}" />
 		<delete dir="${artifacts}" />
 	</target>
 
 	<target name="init">
-		<mkdir dir="${artifacts}" />
 		<mkdir dir="${workdir}" />
 	</target>
 
@@ -33,7 +32,9 @@
 	</target>
 
 	<target name="compile" depends="clean, init, resolve">
-		<javac destdir="${workdir}" debug="${compile.debug}" includeantruntime="no">
+		<delete dir="${builddir}" />
+		<mkdir dir="${builddir}" />
+		<javac destdir="${builddir}" debug="${compile.debug}" includeantruntime="no">
 			<src path="${sources}" />
 			<classpath refid="classpath" />
 		</javac>
@@ -54,12 +55,17 @@
 	</target>
 
 	<target name="pakage" depends="init, increment-build, version, git.revision" description="Packages everything in a JAR that has been deployed in ${workdir}">
-		<!-- include sources -->
-		<copy todir="${workdir}">
-			<fileset dir="${sources}" />
-		</copy>
+		<jar destfile="${artifacts}/${jarfilename}.jar" basedir="${builddir}" includes="**/*.*">
+			<manifest>
+				<!-- <attribute name="Built-By" value="${user.name}"/> -->
+				<section name="common">
+					<attribute name="git-commit" value="${repository.version}" />
+					<attribute name="version" value="${version}" />
+				</section>
+			</manifest>
+		</jar>
 
-		<jar destfile="${artifacts}/${jarfilename}" basedir="${workdir}" includes="**/*.*">
+		<jar destfile="${artifacts}/${jarfilename}-sources.jar" basedir="${sources}" includes="**/*.*">
 			<manifest>
 				<!-- <attribute name="Built-By" value="${user.name}"/> -->
 				<section name="common">
