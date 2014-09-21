@@ -12,19 +12,14 @@
  */
 package uk.co.q3c.v7.base.config;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.q3c.util.ResourceUtils;
 import uk.co.q3c.v7.base.services.AbstractServiceI18N;
 import uk.co.q3c.v7.base.services.Service;
@@ -32,8 +27,11 @@ import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * This service provides a mechanism which can be used to manage the whole application configuration. It uses the Apache
@@ -111,8 +109,9 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
 					log.error(msg);
 					throw new ConfigurationException(ce);
 				} else {
-					log.info("Optional configuration file not found, but as it is optional, continuing without it");
-				}
+                    log.info("Optional configuration file not found at {}, but as it is optional, continuing without it", file);
+
+                }
 			}
 		}
 

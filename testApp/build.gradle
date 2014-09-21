@@ -1,57 +1,64 @@
+/*
+ * Copyright (c) 2014 David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ */
+
 //build for V7 test application
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
-ext.tomcatHome = "/home/david/tomcat/apache-tomcat-7.0.47"
+ext.tomcatHome = "/home/david/tomcat7"
 
 
-war{
-	archiveName "testapp.war"
+war {
+    archiveName "testapp.war"
     destinationDir file("/home/david/temp")
 }
 
 vaadin {
-	widgetset "uk.co.q3c.v7.testapp.widgetset.testAppWidgetset"
-	version vaadinVersion
-	serverPort 8001
+    widgetset "uk.co.q3c.v7.testapp.widgetset.testAppWidgetset"
+    version vaadinVersion
+    serverPort 8001
 }
 
 
 
 
 task deployToTomcat(type: Copy) {
-	it.dependsOn("war")
-	from war
-	into "${tomcatHome}/webapps"
+    it.dependsOn("war")
+    from war
+    into "${tomcatHome}/webapps"
 }
 
 
-test{
-	it.dependsOn ("deployToTomcat")
+test {
+    it.dependsOn("deployToTomcat")
 
-	//delay to allow tomcat to spin it up
-	doFirst{
-		println("giving Tomcat time to deploy the application")
-		sleep(30 * 1000)
-	}
+    //delay to allow tomcat to spin it up
+    doFirst {
+        println("giving Tomcat time to deploy the application")
+        sleep(30 * 1000)
+    }
 }
 
 
 dependencies {
-	
-	//vaadin push
-	compile 'com.vaadin:vaadin-push:'+vaadinVersion
 
-	//UI components
-	compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
-	compile 'org.vaadin.addons:stepper:2.1.2'
-	compile project (':V7')
+    //vaadin push
+    compile 'com.vaadin:vaadin-push:' + vaadinVersion
 
-	
-		//use testbench project test classes as a base
-	testCompile project(path: ':testbench', configuration: 'tests')
-	testCompile 'com.vaadin:vaadin-testbench:3.1.2'
-	
+    //UI components
+    compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
+    compile 'org.vaadin.addons:stepper:2.1.2'
+    compile project(':V7')
 
+    //use testbench project test classes as a base
+    testCompile project(path: ':testbench', configuration: 'tests')
+    testCompile 'com.vaadin:vaadin-testbench:3.1.2'
 
 
 }

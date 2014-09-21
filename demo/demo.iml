@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="uk.co.q3c.v7" external.system.module.version="0.5" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
+    <facet type="gwt" name="GWT">
+      <configuration />
+    </facet>
     <facet type="web" name="Web Gradle : V7demo.war">
       <configuration>
         <descriptors>

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="uk.co.q3c.v7" external.system.module.version="0.5" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
+    <facet type="gwt" name="GWT">
+      <configuration />
+    </facet>
     <facet type="web" name="Web Gradle : testapp.war">
       <configuration>
         <descriptors>
@@ -37,7 +40,6 @@
     <orderEntry type="library" exported="" name="Gradle: slf4j-api-1.6.6" level="project" />
     <orderEntry type="library" exported="" name="Gradle: slf4j-log4j12-1.6.6" level="project" />
     <orderEntry type="library" exported="" name="Gradle: messagebox-2.0.6" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: stepper-2.1.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: javax.inject-1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: aopalliance-1.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: asm-3.1" level="project" />
@@ -121,6 +123,8 @@
     <orderEntry type="library" exported="" name="Gradle: vaadin-shared-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jsoup-1.6.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: vaadin-server-7.3.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: stepper-2.1.2" level="project" />
+    <orderEntry type="library" name="sass-stdlib" level="application" />
   </component>
 </module>
 
