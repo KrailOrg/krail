@@ -8,6 +8,8 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
+import org.gradle.api.tasks.Copy
+
 //build for V7 test application
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
@@ -25,14 +27,22 @@ vaadin {
     serverPort 8001
 }
 
-
-
-
-task deployToTomcat(type: Copy) {
+task copyTask(type: Copy) {
     it.dependsOn("war")
     from war
     into "${tomcatHome}/webapps"
 }
+
+//task copyTask(type: Copy) {
+//    from 'src/main/webapp'
+//    into 'build/explodedWar'
+//}
+
+//task deployToTomcat(type: Copy) {
+//    it.dependsOn("war")
+//    from war
+//   into "${tomcatHome}/webapps"
+//}
 
 
 test {
@@ -54,10 +64,12 @@ dependencies {
     //UI components
     compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
     compile 'org.vaadin.addons:stepper:2.1.2'
-    compile project(':V7')
 
-    //use testbench project test classes as a base
-    testCompile project(path: ':testbench', configuration: 'tests')
+    compile project(':V7')
+    compile project(':testbench')
+    compile project(':testUtil')
+
+
     testCompile 'com.vaadin:vaadin-testbench:3.1.2'
 
 

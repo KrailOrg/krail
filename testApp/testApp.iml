@@ -124,7 +124,6 @@
     <orderEntry type="library" exported="" name="Gradle: jsoup-1.6.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: vaadin-server-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: stepper-2.1.2" level="project" />
-    <orderEntry type="library" name="sass-stdlib" level="application" />
   </component>
 </module>
 

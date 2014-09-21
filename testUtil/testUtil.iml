@@ -61,7 +61,6 @@
     <orderEntry type="library" exported="" name="Gradle: json-0.0.20080701" level="project" />
     <orderEntry type="library" exported="" name="Gradle: vaadin-shared-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jsoup-1.6.3" level="project" />
-    <orderEntry type="library" name="sass-stdlib" level="application" />
   </component>
 </module>
 

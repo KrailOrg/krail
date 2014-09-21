@@ -31,11 +31,11 @@ repositories {
     maven { url "http://maven.vaadin.com/vaadin-addons" }
 }
 
-task deployToTomcat(type: Copy) {
-    it.dependsOn("war")
-    from war
-    into "${tomcatHome}/webapps"
-}
+//task deployToTomcat(type: Copy) {
+//    it.dependsOn("war")
+//    from war
+//   into "${tomcatHome}/webapps"
+//}
 
 
 test {
@@ -60,9 +60,9 @@ dependencies {
 
     compile project(':V7')
     compile project(':testbench')
+    compile project(':testUtil')
 
-    //use testbench project test classes as a base
-    testCompile project(path: ':testbench', configuration: 'tests')
+
     testCompile 'com.vaadin:vaadin-testbench:3.1.2'
 
 
