@@ -123,6 +123,7 @@
     <orderEntry type="library" exported="" name="Gradle: vaadin-shared-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jsoup-1.6.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: vaadin-server-7.3.0" level="project" />
+    <orderEntry type="module" module-name="testUtil" exported="" />
   </component>
 </module>
 

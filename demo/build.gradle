@@ -31,11 +31,11 @@ repositories {
     maven { url "http://maven.vaadin.com/vaadin-addons" }
 }
 
-//task deployToTomcat(type: Copy) {
-//    it.dependsOn("war")
-//    from war
-//   into "${tomcatHome}/webapps"
-//}
+task deployToTomcat(type: Copy) {
+    it.dependsOn("war")
+    from war
+    into "${tomcatHome}/webapps"
+}
 
 
 test {
