@@ -14,8 +14,14 @@ package uk.co.q3c.v7.base.ui.form;
 
 import com.google.inject.Inject;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.co.q3c.persist.dynamo.Entity;
+import uk.co.q3c.v7.base.data.CommitException;
 import uk.co.q3c.v7.i18n.I18NProcessor;
+
 
 /**
  * Wraps a {@link BeanFieldGroup} with methods to provide equivalent functionality, but using V7's I18N Framework to
@@ -23,9 +29,11 @@ import uk.co.q3c.v7.i18n.I18NProcessor;
  *
  * @param <T>
  */
-public class BeanFieldGroup_I18N<T> {
+public class BeanFieldGroup_I18N<T extends Entity> {
 
+    private static Logger log = LoggerFactory.getLogger(BeanFieldGroup_I18N.class);
     private final I18NProcessor i18NProcessor;
+    private T bean;
     private BeanFieldGroup<T> fieldGroup;
 
     @Inject
@@ -55,7 +63,24 @@ public class BeanFieldGroup_I18N<T> {
     }
 
     public void setBean(T bean) {
+        this.bean = bean;
         setBeanItem(new BeanItem<T>(bean));
+    }
+
+    /**
+     * Commits changes from the UI to the backing bean.
+     *
+     * @throws CommitException
+     *         if the commit fails
+     */
+    public void commit() throws CommitException {
+        try {
+            fieldGroup.commit();
+            bean.save();
+        } catch (FieldGroup.CommitException e) {
+            log.error("Unable to save changes", e);
+            throw new CommitException(e);
+        }
     }
 
 }

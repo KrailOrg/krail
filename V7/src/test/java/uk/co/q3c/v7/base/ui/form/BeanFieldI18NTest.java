@@ -122,4 +122,5 @@ public class BeanFieldI18NTest {
 
 	}
 
+
 }
