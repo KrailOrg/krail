@@ -12,14 +12,14 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import static com.google.inject.multibindings.Multibinder.newSetBinder;
+import com.google.inject.AbstractModule;
+import com.google.inject.multibindings.Multibinder;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.multibindings.Multibinder;
+import static com.google.inject.multibindings.Multibinder.newSetBinder;
 
 public class I18NModule extends AbstractModule {
 
@@ -63,33 +63,36 @@ public class I18NModule extends AbstractModule {
 		addSupportedLocale(Locale.UK);
 	}
 
-	/**
-	 * Override this method to provide your own implementation of {@link I18NProcessor}
-	 */
-	protected void bindProcessor() {
-		bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
-	}
+    protected void addSupportedLocale(Locale locale) {
+        supportedLocales.addBinding()
+                        .toInstance(locale);
+    }
 
-	private <T extends Annotation> void registerAnnotation(Class<T> i18Nclass) {
-		registeredAnnotations.addBinding().toInstance(i18Nclass.getName());
-	}
+    /**
+     * Override this method to provide your own implementation of {@link I18NProcessor}
+     */
+    protected void bindProcessor() {
+        bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
+    }
 
-	private <T extends Annotation> void registerValueAnnotation(Class<T> i18Nclass) {
-		registeredValueAnnotations.addBinding().toInstance(i18Nclass.getName());
-	}
+    protected <T extends Annotation> void registerAnnotation(Class<T> i18Nclass) {
+        registeredAnnotations.addBinding()
+                             .toInstance(i18Nclass.getName());
+    }
 
-	protected void addSupportedLocale(String locale) {
-		addSupportedLocale(Locale.forLanguageTag(locale));
-	}
+    protected <T extends Annotation> void registerValueAnnotation(Class<T> i18Nclass) {
+        registeredValueAnnotations.addBinding()
+                                  .toInstance(i18Nclass.getName());
+    }
 
-	protected void addSupportedLocale(Locale locale) {
-		supportedLocales.addBinding().toInstance(locale);
-	}
+    protected void addSupportedLocale(List<String> locales) {
+        for (String locale : locales) {
+            addSupportedLocale(locale);
+        }
+    }
 
-	protected void addSupportedLocale(List<String> locales) {
-		for (String locale : locales) {
-			addSupportedLocale(locale);
-		}
-	}
+    protected void addSupportedLocale(String locale) {
+        addSupportedLocale(Locale.forLanguageTag(locale));
+    }
 
 }
