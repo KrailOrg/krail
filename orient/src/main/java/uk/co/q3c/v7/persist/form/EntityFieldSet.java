@@ -12,18 +12,18 @@
  */
 package uk.co.q3c.v7.persist.form;
 
-import uk.co.q3c.v7.base.ui.form.BeanFieldSet;
+import uk.co.q3c.v7.base.ui.form.BeanFieldGroup_I18N;
 import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
 import uk.co.q3c.v7.persist.EntityBase;
 
 /**
- * A sub-class of {@link BeanFieldSet} with type safety for descendants of {@link EntityBase}
+ * A sub-class of {@link BeanFieldGroup_I18N} with type safety for descendants of {@link EntityBase}
  * 
  * @author David Sowerby 24 Mar 2013
  * 
  * @param <T>
  */
-public class EntityFieldSet<T extends EntityBase> extends BeanFieldSet<T> {
+public class EntityFieldSet<T extends EntityBase> extends BeanFieldGroup_I18N<T> {
 
 	protected EntityFieldSet(DefaultI18NProcessor translator) {
 		super(translator);

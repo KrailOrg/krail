@@ -19,15 +19,15 @@ import uk.co.q3c.v7.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.I18N;
 import uk.co.q3c.v7.i18n.LabelKey;
 
-public class TestBeanFieldSet extends BeanFieldSet<TestEntity> {
+public class TestBeanFieldGroupI18N extends BeanFieldGroup_I18N<TestEntity> {
 
 	@I18N(caption = LabelKey.First_Name)
 	private TextField firstName;
 	@I18N(caption = LabelKey.Last_Name, description = DescriptionKey.Last_Name)
 	private TextField lastName;
 
-	protected TestBeanFieldSet(DefaultI18NProcessor translator) {
-		super(translator);
+    protected TestBeanFieldGroupI18N(DefaultI18NProcessor translator) {
+        super(translator);
 	}
 
 	public TextField getFirstName() {

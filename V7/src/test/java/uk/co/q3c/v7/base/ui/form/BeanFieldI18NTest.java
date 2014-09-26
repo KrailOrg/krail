@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
-public class FieldSetTest {
+public class BeanFieldI18NTest {
 
 	@Inject
 	DefaultI18NProcessor translator;
@@ -39,13 +39,13 @@ public class FieldSetTest {
 	@Inject
 	CurrentLocale currentLocale;
 
-	TestBeanFieldSet fieldSet;
-	TestEntity te, te2;
+    TestBeanFieldGroupI18N fieldSet;
+    TestEntity te, te2;
 
 	@Before
 	public void setup() {
-		fieldSet = new TestBeanFieldSet(translator);
-		te = new TestEntity();
+        fieldSet = new TestBeanFieldGroupI18N(translator);
+        te = new TestEntity();
 		te.setFirstName("Mango");
 		te.setLastName("Chutney");
 
