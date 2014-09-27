@@ -15,14 +15,16 @@ package uk.co.q3c.v7.base.user.notify;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
+import java.io.Serializable;
+
 /**
  * Provides a warning notification to a user using the Vaadin provided 'Splash' window
  * 
  * @author David Sowerby
  * 
  */
-public class VaadinWarningNotification implements WarningNotification {
-	@Override
+public class VaadinWarningNotification implements WarningNotification, Serializable {
+    @Override
 	public void message(String message) {
 		Notification.show(message, Type.WARNING_MESSAGE);
 	}

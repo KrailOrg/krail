@@ -12,11 +12,12 @@
  */
 package uk.co.q3c.v7.base.user.notify;
 
+import com.google.inject.Inject;
 import uk.co.q3c.v7.base.view.component.MessageBar;
 
-import com.google.inject.Inject;
+import java.io.Serializable;
 
-public class MessageBarInformationNotification implements InformationNotification {
+public class MessageBarInformationNotification implements InformationNotification, Serializable {
 
 	private final MessageBar messageBar;
 

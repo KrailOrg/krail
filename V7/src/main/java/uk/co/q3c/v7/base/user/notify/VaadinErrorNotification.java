@@ -15,13 +15,17 @@ package uk.co.q3c.v7.base.user.notify;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
+import java.io.Serializable;
+
 /**
  * Provides an error notification to a user using the Vaadin provided 'Splash' window
  * 
  * @author David Sowerby
  * 
  */
-public class VaadinErrorNotification implements ErrorNotification {
+public class VaadinErrorNotification implements ErrorNotification, Serializable {
+
+
 	@Override
 	public void message(String message) {
 		Notification.show(message, Type.ERROR_MESSAGE);
