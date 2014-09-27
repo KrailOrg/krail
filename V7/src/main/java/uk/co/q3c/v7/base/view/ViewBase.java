@@ -12,59 +12,67 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import uk.co.q3c.util.ID;
-
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.co.q3c.util.ID;
+
+import java.util.List;
 
 public abstract class ViewBase implements V7View {
 
-	private static Logger log = LoggerFactory.getLogger(ViewBase.class);
-	protected Component rootComponent;
+    private static Logger log = LoggerFactory.getLogger(ViewBase.class);
+    protected Component rootComponent;
 
-	@Inject
-	protected ViewBase() {
-		super();
+    @Inject
+    protected ViewBase() {
+        super();
 
-	}
+    }
 
-	/**
-	 * You only need to implement this method if you are using TestBench, or another testing tool which looks for debug
-	 * ids. If you do override it to add your own subclass ids, make sure you call super
-	 */
-	@Override
-	public void setIds() {
-		rootComponent.setId(ID.getId(this, rootComponent));
-	}
+    /**
+     * Calls {@link #setIds() after the View has been constructed}
+     */
+    public void init() {
+        setIds();
+    }
 
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-		log.debug("entered view: " + this.getClass().getSimpleName() + " with uri " + event.getNavigationState());
-		List<String> params = event.getNavigationState().getParameterList();
-		processParams(params);
-	}
+    /**
+     * You only need to override / implement this method if you are using TestBench, or another testing tool which looks
+     * for debug
+     * ids. If you do override it to add your own subclass ids, make sure you call super
+     */
+    protected void setIds() {
+        getRootComponent().setId(ID.getId(this, getRootComponent()));
+    }
 
-	/**
-	 * This method is called with the URI parameters separated from the "address" part of the URI, and is typically used
-	 * to set up the state of a view in response to the parameter values
-	 * 
-	 * @param params
-	 */
-	protected abstract void processParams(List<String> params);
+    @Override
+    public Component getRootComponent() {
+        return rootComponent;
+    }
 
-	@Override
-	public Component getRootComponent() {
-		return rootComponent;
-	}
+    @Override
+    public void enter(V7ViewChangeEvent event) {
+        log.debug("entered view: " + this.getClass()
+                                         .getSimpleName() + " with uri " + event.getNavigationState());
+        List<String> params = event.getNavigationState()
+                                   .getParameterList();
+        processParams(params);
+    }
 
-	@Override
-	public String viewName() {
-		return getClass().getSimpleName();
-	}
+    /**
+     * This method is called with the URI parameters separated from the "address" part of the URI, and is typically
+     * used
+     * to set up the state of a view in response to the parameter values
+     *
+     * @param params
+     */
+    protected abstract void processParams(List<String> params);
+
+    @Override
+    public String viewName() {
+        return getClass().getSimpleName();
+    }
 
 }

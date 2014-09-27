@@ -21,31 +21,30 @@ import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 /**
  * This is NOT UIScoped to avoid unnecessary complexity in setting up some of the tests - if you need a UIScoped test
  * view you will need to create a different one
- * 
+ *
  * @author David Sowerby
- * 
  */
 @View(uri = "a/b", labelKeyName = "Transfers", pageAccessControl = PageAccessControl.PERMISSION)
 public class TestAnnotatedView implements V7View {
 
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-	}
+    @Override
+    public void enter(V7ViewChangeEvent event) {
+    }
 
-	@Override
-	public Component getRootComponent() {
+    @Override
+    public Component getRootComponent() {
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public String viewName() {
+    @Override
+    public String viewName() {
 
-		return "Test annotated view";
-	}
+        return "Test annotated view";
+    }
 
-	@Override
-	public void setIds() {
-	}
+    @Override
+    public void init() {
+    }
 
 }

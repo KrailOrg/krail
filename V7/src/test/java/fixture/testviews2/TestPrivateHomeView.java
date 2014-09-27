@@ -19,24 +19,24 @@ import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
 public class TestPrivateHomeView implements PrivateHomeView {
 
-	@Override
-	public void enter(V7ViewChangeEvent event) {
+    @Override
+    public void enter(V7ViewChangeEvent event) {
 
-	}
+    }
 
-	@Override
-	public Component getRootComponent() {
-		return new Label("not used");
-	}
+    @Override
+    public Component getRootComponent() {
+        return new Label("not used");
+    }
 
-	@Override
-	public String viewName() {
+    @Override
+    public String viewName() {
 
-		return getClass().getSimpleName();
-	}
+        return getClass().getSimpleName();
+    }
 
-	@Override
-	public void setIds() {
-	}
+    @Override
+    public void init() {
+    }
 
 }

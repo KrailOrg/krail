@@ -12,16 +12,15 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.ui.Component;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -34,121 +33,115 @@ import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
-import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
-import uk.co.q3c.v7.i18n.DescriptionKey;
-import uk.co.q3c.v7.i18n.I18NModule;
-import uk.co.q3c.v7.i18n.I18NProcessor;
-import uk.co.q3c.v7.i18n.TestLabelKey;
+import uk.co.q3c.v7.i18n.*;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
-import com.vaadin.ui.Component;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ AnnotationsModule1.class, AnnotationsModule2.class, I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, I18NModule.class, VaadinSessionScopeModule.class})
 public class DefaultAnnotationSitemapLoaderTest {
 
-	@Inject
-	DefaultAnnotationSitemapLoader loader;
+    @Inject
+    DefaultAnnotationSitemapLoader loader;
 
-	List<SitemapLoader> loaders;
+    List<SitemapLoader> loaders;
 
-	LoaderReportBuilder lrb;
+    LoaderReportBuilder lrb;
 
-	@Inject
-	MasterSitemap sitemap;
+    @Inject
+    MasterSitemap sitemap;
+    @Inject
+    Map<String, AnnotationSitemapEntry> map;
 
-	public static class AnnotationsModule1 extends AnnotationSitemapModule {
+    @Before
+    public void setup() {
+        loaders = new ArrayList<>();
+        loaders.add(loader);
+    }
 
-		@Override
-		protected void define() {
-			addEntry("fixture.", DescriptionKey.Confirm_Ok);
-			addEntry("uk.co.q3c.v7.base.navigate.sitemap", TestLabelKey.Login);
-		}
+    @Test
+    public void test() {
+        // given
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        System.out.println(lrb.getReport());
+        // then
+        assertThat(loader.getErrorCount()).isEqualTo(2);
+        assertThat(sitemap.hasUri("a")).isTrue();
+        assertThat(sitemap.getRedirectPageFor("a")).isEqualTo("a");
+        assertThat(sitemap.getRedirectPageFor("home/redirected")).isEqualTo("a");
+        assertThat(sitemap.getRedirectPageFor("home/splat")).isEqualTo("a");
+        SitemapNode node = sitemap.nodeFor("a");
+        assertThat(node.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+        assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Home);
+        assertThat(node.getUriSegment()).isEqualTo("a");
 
-	}
+    }
 
-	public static class AnnotationsModule2 extends AnnotationSitemapModule {
+    @ModuleProvider
+    protected AbstractModule module() {
+        return new AbstractModule() {
 
-		@Override
-		protected void define() {
-			addEntry("fixture1", TestLabelKey.Home);
-		}
+            @Override
+            protected void configure() {
+                bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+                bind(UserSitemap.class).to(DefaultUserSitemap.class);
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
 
-	}
+        };
+    }
 
-	@View(uri = "a", labelKeyName = "Home", pageAccessControl = PageAccessControl.PERMISSION)
-	@RedirectFrom(sourcePages = { "home/redirected", "home/splat" })
-	static class View1 implements V7View {
+    public static class AnnotationsModule1 extends AnnotationSitemapModule {
 
-		@Override
-		public void enter(V7ViewChangeEvent event) {
-		}
+        @Override
+        protected void define() {
+            addEntry("fixture.", DescriptionKey.Confirm_Ok);
+            addEntry("uk.co.q3c.v7.base.navigate.sitemap", TestLabelKey.Login);
+        }
 
-		@Override
-		public Component getRootComponent() {
+    }
 
-			return null;
-		}
+    public static class AnnotationsModule2 extends AnnotationSitemapModule {
 
-		@Override
-		public String viewName() {
+        @Override
+        protected void define() {
+            addEntry("fixture1", TestLabelKey.Home);
+        }
 
-			return getClass().getSimpleName();
-		}
+    }
 
-		@Override
-		public void setIds() {
-		}
+    @View(uri = "a", labelKeyName = "Home", pageAccessControl = PageAccessControl.PERMISSION)
+    @RedirectFrom(sourcePages = {"home/redirected", "home/splat"})
+    static class View1 implements V7View {
 
-	}
+        @Override
+        public void enter(V7ViewChangeEvent event) {
+        }
 
-	@Inject
-	Map<String, AnnotationSitemapEntry> map;
+        @Override
+        public Component getRootComponent() {
 
-	@Before
-	public void setup() {
-		loaders = new ArrayList<>();
-		loaders.add(loader);
-	}
+            return null;
+        }
 
-	@Test
-	public void test() {
-		// given
-		// when
-		loader.load();
-		lrb = new LoaderReportBuilder(loaders);
-		System.out.println(lrb.getReport());
-		// then
-		assertThat(loader.getErrorCount()).isEqualTo(2);
-		assertThat(sitemap.hasUri("a")).isTrue();
-		assertThat(sitemap.getRedirectPageFor("a")).isEqualTo("a");
-		assertThat(sitemap.getRedirectPageFor("home/redirected")).isEqualTo("a");
-		assertThat(sitemap.getRedirectPageFor("home/splat")).isEqualTo("a");
-		SitemapNode node = sitemap.nodeFor("a");
-		assertThat(node.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
-		assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Home);
-		assertThat(node.getUriSegment()).isEqualTo("a");
+        @Override
+        public String viewName() {
 
-	}
+            return getClass().getSimpleName();
+        }
 
-	@ModuleProvider
-	protected AbstractModule module() {
-		return new AbstractModule() {
+        @Override
+        public void init() {
+        }
 
-			@Override
-			protected void configure() {
-				bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
-				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
-				bind(UserSitemap.class).to(DefaultUserSitemap.class);
-				bind(UserOption.class).to(DefaultUserOption.class);
-				bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-			}
-
-		};
-	}
+    }
 }

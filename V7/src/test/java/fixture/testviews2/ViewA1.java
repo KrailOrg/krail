@@ -18,24 +18,24 @@ import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
 public class ViewA1 implements V7View {
 
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-	}
+    @Override
+    public void enter(V7ViewChangeEvent event) {
+    }
 
-	@Override
-	public Component getRootComponent() {
-		// return null;
-		throw new RuntimeException("not yet implemented");
-	}
+    @Override
+    public Component getRootComponent() {
+        // return null;
+        throw new RuntimeException("not yet implemented");
+    }
 
-	@Override
-	public String viewName() {
+    @Override
+    public String viewName() {
 
-		return getClass().getSimpleName();
-	}
+        return getClass().getSimpleName();
+    }
 
-	@Override
-	public void setIds() {
-	}
+    @Override
+    public void init() {
+    }
 
 }

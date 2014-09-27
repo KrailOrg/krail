@@ -12,36 +12,32 @@
  */
 package uk.co.q3c.v7.base.view;
 
+import com.google.inject.*;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
-
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Provider;
-import com.google.inject.TypeLiteral;
 
 public class DefaultViewFactory implements ViewFactory {
 
-	private final Injector injector;
+    private final Injector injector;
 
-	@Inject
-	protected DefaultViewFactory(Injector injector) {
-		super();
-		this.injector = injector;
-	}
+    @Inject
+    protected DefaultViewFactory(Injector injector) {
+        super();
+        this.injector = injector;
+    }
 
-	/* (non-Javadoc)
-	 * @see uk.co.q3c.v7.base.view.ViewFactory#get(java.lang.Class)
-	 */
-	@Override
-	public <T extends V7View> T get(Class<T> viewClass) {
-		TypeLiteral<T> typeLiteral = TypeLiteral.get(viewClass);
-		Key<T> key = Key.get(typeLiteral);
-		Provider<T> unscoped = injector.getProvider(key);
-		UIScope.getCurrent().scope(key, unscoped);
+    /* (non-Javadoc)
+     * @see uk.co.q3c.v7.base.view.ViewFactory#get(java.lang.Class)
+     */
+    @Override
+    public <T extends V7View> T get(Class<T> viewClass) {
+        TypeLiteral<T> typeLiteral = TypeLiteral.get(viewClass);
+        Key<T> key = Key.get(typeLiteral);
+        Provider<T> unscoped = injector.getProvider(key);
+        UIScope.getCurrent()
+               .scope(key, unscoped);
 
-		T view = injector.getInstance(key);
-		view.setIds();
-		return view;
-	}
+        T view = injector.getInstance(key);
+        view.init();
+        return view;
+    }
 }

@@ -18,25 +18,25 @@ import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
 public class TransferView implements V7View {
 
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-		//
-		throw new RuntimeException("not yet implemented");
-	}
+    @Override
+    public void enter(V7ViewChangeEvent event) {
+        //
+        throw new RuntimeException("not yet implemented");
+    }
 
-	@Override
-	public Component getRootComponent() {
-		// return null;
-		throw new RuntimeException("not yet implemented");
-	}
+    @Override
+    public Component getRootComponent() {
+        // return null;
+        throw new RuntimeException("not yet implemented");
+    }
 
-	@Override
-	public String viewName() {
-		return getClass().getSimpleName();
-	}
+    @Override
+    public String viewName() {
+        return getClass().getSimpleName();
+    }
 
-	@Override
-	public void setIds() {
-	}
+    @Override
+    public void init() {
+    }
 
 }

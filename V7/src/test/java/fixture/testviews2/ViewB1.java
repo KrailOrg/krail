@@ -19,25 +19,25 @@ import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
 public class ViewB1 implements V7View {
 
-	private final Label label = new Label("not used");
+    private final Label label = new Label("not used");
 
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-	}
+    @Override
+    public void enter(V7ViewChangeEvent event) {
+    }
 
-	@Override
-	public Component getRootComponent() {
-		return label;
-	}
+    @Override
+    public Component getRootComponent() {
+        return label;
+    }
 
-	@Override
-	public String viewName() {
+    @Override
+    public String viewName() {
 
-		return getClass().getSimpleName();
-	}
+        return getClass().getSimpleName();
+    }
 
-	@Override
-	public void setIds() {
-	}
+    @Override
+    public void init() {
+    }
 
 }

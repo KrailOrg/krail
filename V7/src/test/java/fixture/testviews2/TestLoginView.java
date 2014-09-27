@@ -21,52 +21,52 @@ import uk.co.q3c.v7.i18n.I18NKey;
 
 public class TestLoginView implements LoginView {
 
-	@Override
-	public void enter(V7ViewChangeEvent event) {
+    @Override
+    public void enter(V7ViewChangeEvent event) {
 
-	}
+    }
 
-	@Override
-	public Component getRootComponent() {
-		return new Label("not used");
-	}
+    @Override
+    public Component getRootComponent() {
+        return new Label("not used");
+    }
 
-	@Override
-	public void setUsername(String username) {
+    @Override
+    public void setUsername(String username) {
 
-	}
+    }
 
-	@Override
-	public void setPassword(String password) {
+    @Override
+    public void setPassword(String password) {
 
-	}
+    }
 
-	@Override
-	public Button getSubmitButton() {
-		return null;
-	}
+    @Override
+    public Button getSubmitButton() {
+        return null;
+    }
 
-	@Override
-	public String getStatusMessage() {
-		return null;
-	}
+    @Override
+    public String getStatusMessage() {
+        return null;
+    }
 
-	@Override
-	public void setStatusMessage(String invalidLogin) {
+    @Override
+    public void setStatusMessage(I18NKey<?> messageKey) {
+    }
 
-	}
+    @Override
+    public void setStatusMessage(String invalidLogin) {
 
-	@Override
-	public String viewName() {
+    }
 
-		return getClass().getSimpleName();
-	}
+    @Override
+    public String viewName() {
 
-	@Override
-	public void setIds() {
-	}
+        return getClass().getSimpleName();
+    }
 
-	@Override
-	public void setStatusMessage(I18NKey<?> messageKey) {
-	}
+    @Override
+    public void init() {
+    }
 }

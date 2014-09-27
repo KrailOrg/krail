@@ -12,48 +12,58 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import uk.co.q3c.util.SourceTreeWrapper;
-import uk.co.q3c.util.SourceTreeWrapper_BasicForest;
-import uk.co.q3c.util.TargetTreeWrapper_VaadinTree;
-import uk.co.q3c.util.TreeCopy;
-import uk.co.q3c.util.UserSitemapNodeCaption;
+import com.google.inject.Inject;
+import uk.co.q3c.util.*;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapNode;
 
-import com.google.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DefaultUserNavigationTreeBuilder implements UserNavigationTreeBuilder {
 
-	private final UserSitemap userSitemap;
-	private UserNavigationTree userNavigationTree;
+    private final UserSitemap userSitemap;
+    private UserNavigationTree userNavigationTree;
 
-	@Inject
-	protected DefaultUserNavigationTreeBuilder(UserSitemap userSitemap) {
-		this.userSitemap = userSitemap;
-	}
+    @Inject
+    protected DefaultUserNavigationTreeBuilder(UserSitemap userSitemap) {
+        this.userSitemap = userSitemap;
+    }
 
-	@Override
-	public void build() {
-		SourceTreeWrapper<UserSitemapNode> source = new SourceTreeWrapper_BasicForest<>(userSitemap.getForest());
-		TargetTreeWrapper_VaadinTree<UserSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_VaadinTree<>(
-				userNavigationTree.getTree());
-		TreeCopy<UserSitemapNode, UserSitemapNode> treeCopy = new TreeCopy<>(source, target);
-		userNavigationTree.clear();
-		target.setCaptionReader(new UserSitemapNodeCaption());
-		target.setNodeModifier(new UserNavigationTreeNodeModifier(userNavigationTree));
-		treeCopy.setTargetSortComparator(userNavigationTree.getSortComparator());
-		treeCopy.setMaxDepth(userNavigationTree.getMaxDepth());
-		treeCopy.addSourceFilter(new LogoutPageFilter());
-		treeCopy.copy();
-	}
+    @Override
+    public void build() {
+        SourceTreeWrapper<UserSitemapNode> source = new SourceTreeWrapper_BasicForest<>(userSitemap.getForest());
+        TargetTreeWrapper_VaadinTree<UserSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_VaadinTree<>
+                (userNavigationTree.getTree());
+        TreeCopy<UserSitemapNode, UserSitemapNode> treeCopy = new TreeCopy<>(source, target);
+        userNavigationTree.clear();
+        target.setCaptionReader(new UserSitemapNodeCaption());
+        target.setNodeModifier(new UserNavigationTreeNodeModifier(userNavigationTree));
+        treeCopy.setTargetSortComparator(userNavigationTree.getSortComparator());
+        treeCopy.setMaxDepth(userNavigationTree.getMaxDepth());
+        List<NodeFilter> filters = new ArrayList<>();
+        defineFilters(filters);
+        applyFilters(treeCopy, filters);
+        treeCopy.copy();
+    }
 
-	@Override
-	public UserNavigationTree getUserNavigationTree() {
-		return userNavigationTree;
-	}
+    protected void defineFilters(List<NodeFilter> filters) {
+        filters.add(new LogoutPageFilter());
+    }
 
-	@Override
-	public void setUserNavigationTree(UserNavigationTree userNavigationTree) {
-		this.userNavigationTree = userNavigationTree;
-	}
+    private void applyFilters(TreeCopy<UserSitemapNode, UserSitemapNode> treeCopy, List<NodeFilter> filters) {
+        for (NodeFilter filter : filters) {
+            treeCopy.addSourceFilter(filter);
+        }
+    }
+
+    @Override
+    public UserNavigationTree getUserNavigationTree() {
+        return userNavigationTree;
+    }
+
+    @Override
+    public void setUserNavigationTree(UserNavigationTree userNavigationTree) {
+        this.userNavigationTree = userNavigationTree;
+    }
 }

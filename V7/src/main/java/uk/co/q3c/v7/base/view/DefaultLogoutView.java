@@ -12,52 +12,49 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import java.util.List;
-
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 
+import java.util.List;
+
 public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 
-	@Inject
-	protected DefaultLogoutView() {
-		super();
-		buildView();
-	}
+    @Inject
+    protected DefaultLogoutView() {
+        super();
+        buildView();
+    }
 
-	@Override
-	public Component getRootComponent() {
+    protected void buildView() {
+        Panel p = new Panel("Logged out");
+        p.setSizeFull();
+        addComponent(p);
+    }
 
-		return this;
+    @Override
+    public Component getRootComponent() {
 
-	}
+        return this;
 
-	@Override
-	protected void processParams(List<String> params) {
+    }
 
-	}
+    @Override
+    protected void processParams(List<String> params) {
 
-	@Override
-	public void enter(V7ViewChangeEvent event) {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void enter(V7ViewChangeEvent event) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public String viewName() {
+    }
 
-		return getClass().getSimpleName();
-	}
+    @Override
+    public String viewName() {
 
-	protected void buildView() {
-		Panel p = new Panel("Logged out");
-		p.setSizeFull();
-		addComponent(p);
-	}
+        return getClass().getSimpleName();
+    }
 
-	@Override
-	public void setIds() {
-	}
 
 }
