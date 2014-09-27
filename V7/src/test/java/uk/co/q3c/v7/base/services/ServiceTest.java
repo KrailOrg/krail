@@ -257,15 +257,17 @@ public class ServiceTest {
         assertThat(status.getPreviousStatus()).isEqualTo(Status.INITIAL);
         DateTime startTime = status.getLastStartTime();
         // when
+
+        while (!startTime.isBeforeNow()) {
+            // test was failing randomly, I suspect because it runs too fast for a time difference to occur reliably.
+            // This loop is just to make sure there is enough time
+        }
         serviced.stop();
         // then
         status = monitor.getServiceStatus(serviced);
         assertThat(status.getCurrentStatus()).isEqualTo(Status.STOPPED);
         assertThat(status.getLastStartTime()).isNotNull()
                                              .isEqualTo(startTime); // shouldn't have changed
-
-        //one of these fails occasionally, I suspect because it runs too fast for a time difference to occur.
-        //This hasn't happened since I split the check into three steps, so I don;t know which is causing it
         assertThat(status.getLastStopTime()).isNotNull();
         assertThat(status.getLastStopTime()).isBeforeOrEqualTo(DateTime.now());
         assertThat(status.getLastStopTime()).isAfter(startTime);
