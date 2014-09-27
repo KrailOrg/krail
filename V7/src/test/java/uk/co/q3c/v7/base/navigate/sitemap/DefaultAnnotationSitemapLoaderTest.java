@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.AnnotationsModule1;
@@ -141,6 +142,16 @@ public class DefaultAnnotationSitemapLoaderTest {
 
         @Override
         public void init() {
+        }
+
+        /**
+         * Called immediately after construction of the view to enable setting up the view from URL parameters
+         *
+         * @param navigationState
+         */
+        @Override
+        public void prepareView(NavigationState navigationState) {
+
         }
 
     }

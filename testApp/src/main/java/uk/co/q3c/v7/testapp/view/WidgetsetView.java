@@ -24,9 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.risto.stepper.IntStepper;
 import uk.co.q3c.util.ID;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.view.ViewBase;
-
-import java.util.List;
 
 public class WidgetsetView extends ViewBase {
 	private static Logger log = LoggerFactory.getLogger(WidgetsetView.class);
@@ -43,9 +42,6 @@ public class WidgetsetView extends ViewBase {
 		log.debug("Constructor injecting with session object");
 	}
 
-	@Override
-	protected void processParams(List<String> params) {
-	}
 
     @Override
     protected Component buildView() {
@@ -89,11 +85,33 @@ public class WidgetsetView extends ViewBase {
         return grid;
     }
 
-	@Override
-	public void setIds() {
+    /**
+     * This method is called with the URI parameters separated from the "address" part of the URI, and is typically
+     * used
+     * to set up the state of a view in response to the parameter values
+     *
+     * @param navigationState
+     */
+    @Override
+    protected void processParams(NavigationState navigationState) {
+
+    }
+
+    @Override
+    public void setIds() {
 		super.setIds();
 		grid.setId(ID.getId(this.getClass().getSimpleName(), grid));
 		popupButton.setId(ID.getId("popup", this, popupButton));
 		stepper.setId(ID.getId(this, stepper));
 	}
+
+    /**
+     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     *
+     * @param navigationState
+     */
+    @Override
+    public void prepareView(NavigationState navigationState) {
+
+    }
 }

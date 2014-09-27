@@ -22,12 +22,11 @@ import com.vaadin.ui.themes.ChameleonTheme;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import uk.co.q3c.util.ID;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.i18n.*;
-
-import java.util.List;
 
 public class DefaultLoginView extends GridViewBase implements LoginView, ClickListener {
     private final LoginExceptionHandler loginExceptionHandler;
@@ -105,7 +104,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    protected void processParams(List<String> params) {
+    protected void processParams(NavigationState navigationState) {
         // None to process for login
     }
 
@@ -158,13 +157,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey<?> messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     @Override
-    public void setStatusMessage(I18NKey<?> messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     public TextField getUsernameBox() {
@@ -179,6 +178,16 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     public String viewName() {
 
         return getClass().getSimpleName();
+    }
+
+    /**
+     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     *
+     * @param navigationState
+     */
+    @Override
+    public void prepareView(NavigationState navigationState) {
+
     }
 
 }

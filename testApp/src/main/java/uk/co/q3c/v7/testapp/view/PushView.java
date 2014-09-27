@@ -22,10 +22,9 @@ import com.vaadin.ui.Button.ClickListener;
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 import uk.co.q3c.v7.base.config.ConfigKeys;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.push.Broadcaster;
 import uk.co.q3c.v7.base.view.component.BroadcastMessageLog;
-
-import java.util.List;
 
 public class PushView extends ViewBaseGrid {
 
@@ -48,9 +47,6 @@ public class PushView extends ViewBaseGrid {
 		this.applicationConfiguration = applicationConfiguration;
 	}
 
-	@Override
-	protected void processParams(List<String> params) {
-	}
 
     @Override
     protected Component buildView() {
@@ -98,8 +94,20 @@ public class PushView extends ViewBaseGrid {
         return null;
     }
 
-	@Override
-	public void setIds() {
+    /**
+     * This method is called with the URI parameters separated from the "address" part of the URI, and is typically
+     * used
+     * to set up the state of a view in response to the parameter values
+     *
+     * @param navigationState
+     */
+    @Override
+    protected void processParams(NavigationState navigationState) {
+
+    }
+
+    @Override
+    public void setIds() {
 		super.setIds();
         getGrid().setId(ID.getId(this.getClass()
                                      .getSimpleName(), getGrid()));
@@ -109,4 +117,14 @@ public class PushView extends ViewBaseGrid {
 		messageLog.setId(ID.getId(this, messageLog));
 		pushEnabled.setId(ID.getId(this, pushEnabled));
 	}
+
+    /**
+     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     *
+     * @param navigationState
+     */
+    @Override
+    public void prepareView(NavigationState navigationState) {
+
+    }
 }

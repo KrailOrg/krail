@@ -12,9 +12,8 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import java.util.List;
-
 import com.vaadin.ui.Panel;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 
 public class DefaultViewBody extends Panel implements ViewBody {
 
@@ -23,8 +22,8 @@ public class DefaultViewBody extends Panel implements ViewBody {
 	}
 
 	@Override
-	public void processParams(List<String> params) {
+    public void processParams(NavigationState navigationState) {
 
-	}
+    }
 
 }

@@ -13,12 +13,11 @@
 package uk.co.q3c.v7.base.view;
 
 import com.google.inject.Inject;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.view.component.*;
 import uk.co.q3c.v7.base.view.layout.ApplicationViewLayout1;
 import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout;
 import uk.co.q3c.v7.i18n.Translate;
-
-import java.util.List;
 
 /**
  * This view provides the base for a fairly typical layout for an application. It is not expected that it will be used
@@ -83,14 +82,25 @@ public class ApplicationView1 extends ViewBaseWithLayout {
         return null;
     }
 
+
     @Override
-    protected void processParams(List<String> params) {
-        body.processParams(params);
+    protected void processParams(NavigationState navigationState) {
+        body.processParams(navigationState);
     }
 
     @Override
     public String viewName() {
         return "ApplicationView1";
+    }
+
+    /**
+     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     *
+     * @param navigationState
+     */
+    @Override
+    public void prepareView(NavigationState navigationState) {
+
     }
 
 }

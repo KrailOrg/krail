@@ -12,12 +12,11 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import java.util.List;
-
 import com.vaadin.ui.Component;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 
 public interface ViewBody extends Component {
 
-	void processParams(List<String> params);
+    void processParams(NavigationState navigationState);
 
 }

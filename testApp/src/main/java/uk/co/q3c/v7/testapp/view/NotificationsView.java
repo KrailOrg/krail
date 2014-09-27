@@ -18,13 +18,12 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import uk.co.q3c.util.ID;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.ViewBase;
 import uk.co.q3c.v7.i18n.MessageKey;
 import uk.co.q3c.v7.i18n.Translate;
 import uk.co.q3c.v7.testapp.i18n.TestAppDescriptionKey;
-
-import java.util.List;
 
 public class NotificationsView extends ViewBase {
 	private final UserNotifier userNotifier;
@@ -43,9 +42,6 @@ public class NotificationsView extends ViewBase {
 		this.translate = translate;
 	}
 
-	@Override
-	protected void processParams(List<String> params) {
-	}
 
     @Override
     protected Component buildView() {
@@ -108,12 +104,34 @@ public class NotificationsView extends ViewBase {
         return grid;
     }
 
-	@Override
-	public void setIds() {
+    /**
+     * This method is called with the URI parameters separated from the "address" part of the URI, and is typically
+     * used
+     * to set up the state of a view in response to the parameter values
+     *
+     * @param navigationState
+     */
+    @Override
+    protected void processParams(NavigationState navigationState) {
+
+    }
+
+    @Override
+    public void setIds() {
 		super.setIds();
 		grid.setId(ID.getId(this.getClass().getSimpleName(), grid));
 		infoButton.setId(ID.getId("information", this, infoButton));
 		warnButton.setId(ID.getId("warning", this, warnButton));
 		errorButton.setId(ID.getId("error", this, errorButton));
 	}
+
+    /**
+     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     *
+     * @param navigationState
+     */
+    @Override
+    public void prepareView(NavigationState navigationState) {
+
+    }
 }

@@ -17,6 +17,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import uk.co.q3c.util.ID;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 
 public abstract class StandardPageViewBase extends ViewBase {
 
@@ -61,8 +62,22 @@ public abstract class StandardPageViewBase extends ViewBase {
                                  .getSimpleName(), label));
     }
 
+    /**
+     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     *
+     * @param navigationState
+     */
+    @Override
+    public void prepareView(NavigationState navigationState) {
+
+    }
+
     public Label getLabel() {
         return label;
+    }
+
+    @Override
+    protected void processParams(NavigationState navigationState) {
     }
 
 }

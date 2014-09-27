@@ -15,8 +15,7 @@ package uk.co.q3c.v7.base.view;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
-
-import java.util.List;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 
 public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 
@@ -36,11 +35,18 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 
 
     @Override
-    protected void processParams(List<String> params) {
+    protected void processParams(NavigationState navigationState) {
 
     }
 
 
+    /**
+     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     *
+     * @param navigationState
+     */
+    @Override
+    public void prepareView(NavigationState navigationState) {
 
-
+    }
 }

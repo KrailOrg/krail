@@ -17,8 +17,7 @@ import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.q3c.util.ID;
-
-import java.util.List;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 
 public abstract class ViewBase implements V7View {
 
@@ -68,9 +67,8 @@ public abstract class ViewBase implements V7View {
     public void enter(V7ViewChangeEvent event) {
         log.debug("entered view: " + this.getClass()
                                          .getSimpleName() + " with uri " + event.getNavigationState());
-        List<String> params = event.getNavigationState()
-                                   .getParameterList();
-        processParams(params);
+
+        processParams(event.getNavigationState());
     }
 
     /**
@@ -80,11 +78,12 @@ public abstract class ViewBase implements V7View {
      *
      * @param params
      */
-    protected abstract void processParams(List<String> params);
+    protected abstract void processParams(NavigationState navigationState);
 
     @Override
     public String viewName() {
         return getClass().getSimpleName();
     }
+
 
 }

@@ -22,10 +22,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.i18n.Translate;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -190,15 +189,33 @@ public class ApplicationViewLayout1Test {
             return null;
         }
 
+        /**
+         * This method is called with the URI parameters separated from the "address" part of the URI, and is typically
+         * used
+         * to set up the state of a view in response to the parameter values
+         *
+         * @param navigationState
+         */
         @Override
-        protected void processParams(List<String> params) {
+        protected void processParams(NavigationState navigationState) {
 
         }
+
 
         @Override
         public String viewName() {
 
             return "TestView";
+        }
+
+        /**
+         * Called immediately after construction of the view to enable setting up the view from URL parameters
+         *
+         * @param navigationState
+         */
+        @Override
+        public void prepareView(NavigationState navigationState) {
+
         }
 
     }

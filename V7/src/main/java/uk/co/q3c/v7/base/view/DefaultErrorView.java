@@ -1,11 +1,14 @@
 /*
  * Copyright (c) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+ * the specific language governing permissions and limitations under the License.
  */
 
 package uk.co.q3c.v7.base.view;
@@ -13,33 +16,29 @@ package uk.co.q3c.v7.base.view;
 import com.google.inject.Inject;
 import com.vaadin.ui.TextArea;
 import uk.co.q3c.util.StackTraceUtil;
-
-import java.util.List;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 
 /**
- *
- * 
  * @author David Sowerby 4 Aug 2013
- * 
  */
 
 public class DefaultErrorView extends ViewBase implements ErrorView {
 
-	private Throwable error;
-	private TextArea textArea;
-	private boolean viewBuilt = false;
+    private Throwable error;
+    private TextArea textArea;
+    private boolean viewBuilt = false;
 
-	@Inject
-	protected DefaultErrorView() {
-		super();
-	}
+    @Inject
+    protected DefaultErrorView() {
+        super();
+    }
 
-	@Override
-	public void processParams(List<String> params) {
+    @Override
+    public void processParams(NavigationState navigationState) {
 
-	}
+    }
 
-	public TextArea getTextArea() {
+    public TextArea getTextArea() {
         return textArea;
     }
 
@@ -58,7 +57,7 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
         textArea.setValue(s);
         textArea.setReadOnly(true);
 
-	}
+    }
 
     @Override
     protected TextArea buildView() {
@@ -68,4 +67,13 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
         return textArea;
     }
 
+    /**
+     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     *
+     * @param navigationState
+     */
+    @Override
+    public void prepareView(NavigationState navigationState) {
+
+    }
 }

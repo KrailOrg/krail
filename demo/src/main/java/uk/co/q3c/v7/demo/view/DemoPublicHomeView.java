@@ -12,12 +12,9 @@
  */
 package uk.co.q3c.v7.demo.view;
 
-import java.util.List;
-
+import com.google.inject.Inject;
 import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.StandardPageViewBase;
-
-import com.google.inject.Inject;
 
 public class DemoPublicHomeView extends StandardPageViewBase implements PublicHomeView {
 
@@ -26,8 +23,5 @@ public class DemoPublicHomeView extends StandardPageViewBase implements PublicHo
 		super();
 	}
 
-	@Override
-	protected void processParams(List<String> params) {
-	}
 
 }

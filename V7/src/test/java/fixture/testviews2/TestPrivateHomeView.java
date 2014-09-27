@@ -14,6 +14,7 @@ package fixture.testviews2;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
+import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.view.PrivateHomeView;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 
@@ -37,6 +38,16 @@ public class TestPrivateHomeView implements PrivateHomeView {
 
     @Override
     public void init() {
+    }
+
+    /**
+     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     *
+     * @param navigationState
+     */
+    @Override
+    public void prepareView(NavigationState navigationState) {
+
     }
 
 }
