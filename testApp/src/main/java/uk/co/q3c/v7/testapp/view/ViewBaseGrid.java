@@ -12,76 +12,80 @@
  */
 package uk.co.q3c.v7.testapp.view;
 
-import uk.co.q3c.v7.base.view.ViewBase;
-
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Panel;
+import uk.co.q3c.v7.base.view.ViewBase;
 
 /**
  * Creates a grid, 4 rows x 3 cols. The top row is just a spacer.
- * 
+ *
  * @author David Sowerby
- * 
  */
 public abstract class ViewBaseGrid extends ViewBase {
-	protected GridLayout grid;
-	private int topMargin = 5;
 
-	protected ViewBaseGrid() {
-		super();
-		setupGrid();
-	}
+    private GridLayout grid;
+    private int topMargin = 5;
 
-	private void setupGrid() {
-		grid = new GridLayout(3, 4);
-		Panel topMarginPanel = new Panel();
-		topMarginPanel.setHeight(topMargin + "px");
-		topMarginPanel.setWidth("100%");
+    protected ViewBaseGrid() {
+        super();
+    }
 
-		grid.setSizeFull();
-		grid.setColumnExpandRatio(0, 0.400f);
-		grid.setColumnExpandRatio(1, 0.20f);
-		grid.setColumnExpandRatio(2, 0.40f);
+    public GridLayout getGrid() {
+        return grid;
+    }
 
-		grid.setRowExpandRatio(1, 0.40f);
-		grid.setRowExpandRatio(2, 0.20f);
-		grid.setRowExpandRatio(3, 0.40f);
-		rootComponent = grid;
-	}
+    @Override
+    protected Component buildView() {
+        grid = new GridLayout(3, 4);
+        Panel topMarginPanel = new Panel();
+        topMarginPanel.setHeight(topMargin + "px");
+        topMarginPanel.setWidth("100%");
 
-	protected void setTopCentreCell(Component component) {
-		grid.addComponent(component, 1, 1);
-	}
+        grid.setSizeFull();
+        grid.setColumnExpandRatio(0, 0.400f);
+        grid.setColumnExpandRatio(1, 0.20f);
+        grid.setColumnExpandRatio(2, 0.40f);
 
-	protected void setCentreCell(Component component) {
-		grid.addComponent(component, 1, 2);
-	}
+        grid.setRowExpandRatio(1, 0.40f);
+        grid.setRowExpandRatio(2, 0.20f);
+        grid.setRowExpandRatio(3, 0.40f);
+        return grid;
+    }
 
-	protected void setTopLeftCell(Component component) {
-		grid.addComponent(component, 0, 1);
-	}
 
-	protected void setBottomCentreCell(Component component) {
-		grid.addComponent(component, 1, 3);
-	}
+    protected void setTopCentreCell(Component component) {
+        grid.addComponent(component, 1, 1);
+    }
 
-	/**
-	 * Get the top margin in pixels
-	 * 
-	 * @return
-	 */
-	public int getTopMargin() {
-		return topMargin;
-	}
+    protected void setCentreCell(Component component) {
+        grid.addComponent(component, 1, 2);
+    }
 
-	/**
-	 * Set the top margin in pixels
-	 * 
-	 * @return
-	 */
-	public void setTopMargin(int topMargin) {
-		this.topMargin = topMargin;
-	}
+    protected void setTopLeftCell(Component component) {
+        grid.addComponent(component, 0, 1);
+    }
+
+    protected void setBottomCentreCell(Component component) {
+        grid.addComponent(component, 1, 3);
+    }
+
+    /**
+     * Get the top margin in pixels
+     *
+     * @return
+     */
+    public int getTopMargin() {
+        return topMargin;
+    }
+
+    /**
+     * Set the top margin in pixels
+     *
+     * @return
+     */
+    public void setTopMargin(int topMargin) {
+        this.topMargin = topMargin;
+    }
 
 }

@@ -12,22 +12,6 @@
  */
 package uk.co.q3c.v7.base.view.layout;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-
-import uk.co.q3c.v7.base.navigate.V7Navigator;
-import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout.ComponentWrapper;
-import uk.co.q3c.v7.i18n.LabelKey;
-import uk.co.q3c.v7.i18n.Translate;
-
 import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -36,222 +20,317 @@ import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout.ComponentWrapper;
+import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.i18n.Translate;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 @Ignore(" https://github.com/davidsowerby/v7/issues/185")
 public class ViewBaseWithLayoutTest {
 
-	public class TestViewBaseWithLayout extends ViewBaseWithLayout {
+    @Mock
+    Provider<ComponentWrapper> wrapperPro;
+    @Mock
+    Translate translate;
+    ViewBaseWithLayout vbwl;
+    @Mock
+    V7Navigator navigator;
+    private Button button1;
+    private Button button2;
+    private Label label1;
+    private Label label2;
 
-		protected TestViewBaseWithLayout() {
-			super(new VerticalViewLayout(), translate);
-			buildView();
-		}
+    @Before
+    public void setup() {
+        vbwl = new TestViewBaseWithLayout();
+    }
 
-		public void buildView() {
-			button1 = new Button();
-			button2 = new Button();
-			label1 = new Label();
-			label2 = new Label();
+    @Test
+    public void addComponents() {
 
-			add(button1);
-			add(button2);
-			add(label1);
-			add(label2);
+        // given
 
-		}
+        // when force build and layout
+        vbwl.getRootComponent();
+        // then
+        assertThat(vbwl.orderedComponents()
+                       .size()).isEqualTo(4);
+        assertThat(vbwl.orderedComponents()
+                       .get(0)).isEqualTo(button1);
+        assertThat(vbwl.orderedComponents()
+                       .get(1)).isEqualTo(button2);
+        assertThat(vbwl.orderedComponents()
+                       .get(3)).isEqualTo(label2);
 
-		@Override
-		protected void processParams(List<String> params) {
-			System.out.println(params);
-		}
+    }
 
-	}
+    @Test
+    public void addClass() {
 
-	private Button button1;
-	private Button button2;
-	private Label label1;
-	private Label label2;
+        // given
 
-	@Mock
-	Provider<ComponentWrapper> wrapperPro;
+        // when
+        vbwl.add(Button.class)
+            .caption("wiggly")
+            .height(20)
+            .width(100)
+            .style("pretty");
+        vbwl.add(Label.class)
+            .caption("label")
+            .heightPercent(80)
+            .widthPercent(60);
+        vbwl.add(Panel.class)
+            .caption("panel")
+            .height("80pt")
+            .width("60em");
+        // then
+        assertThat(vbwl.orderedComponents()
+                       .size()).isEqualTo(3);
+        assertThat(vbwl.orderedComponents()
+                       .get(0)).isInstanceOf(Button.class);
+        assertThat(vbwl.orderedComponents()
+                       .get(0)
+                       .getCaption()).isEqualTo("wiggly");
+        assertThat(vbwl.orderedComponents()
+                       .get(0)
+                       .getHeight()).isEqualTo(20);
+        assertThat(vbwl.orderedComponents()
+                       .get(0)
+                       .getWidth()).isEqualTo(100);
+        assertThat(vbwl.orderedComponents()
+                       .get(0)
+                       .getStyleName()).isEqualTo("pretty");
 
-	@Mock
-	Translate translate;
+        assertThat(vbwl.orderedComponents()
+                       .get(1)).isInstanceOf(Label.class);
+        assertThat(vbwl.orderedComponents()
+                       .get(1)
+                       .getCaption()).isEqualTo("label");
+        assertThat(vbwl.orderedComponents()
+                       .get(1)
+                       .getHeight()).isEqualTo(80);
+        assertThat(vbwl.orderedComponents()
+                       .get(1)
+                       .getHeightUnits()).isEqualTo(Unit.PERCENTAGE);
+        assertThat(vbwl.orderedComponents()
+                       .get(1)
+                       .getWidth()).isEqualTo(60);
+        assertThat(vbwl.orderedComponents()
+                       .get(1)
+                       .getWidthUnits()).isEqualTo(Unit.PERCENTAGE);
 
-	ViewBaseWithLayout vbwl;
+        assertThat(vbwl.orderedComponents()
+                       .get(2)).isInstanceOf(Panel.class);
+        assertThat(vbwl.orderedComponents()
+                       .get(2)
+                       .getCaption()).isEqualTo("panel");
+        assertThat(vbwl.orderedComponents()
+                       .get(2)
+                       .getHeight()).isEqualTo(80);
+        assertThat(vbwl.orderedComponents()
+                       .get(2)
+                       .getHeightUnits()).isEqualTo(Unit.POINTS);
+        assertThat(vbwl.orderedComponents()
+                       .get(2)
+                       .getWidth()).isEqualTo(60);
+        assertThat(vbwl.orderedComponents()
+                       .get(2)
+                       .getWidthUnits()).isEqualTo(Unit.EM);
 
-	@Mock
-	V7Navigator navigator;
+    }
 
-	@Before
-	public void setup() {
-		vbwl = new TestViewBaseWithLayout();
-	}
+    @Test
+    public void addObject() {
 
-	@Test
-	public void addComponents() {
+        // given
 
-		// given
+        // when
+        vbwl.add(new Button())
+            .caption("wiggly");
+        // then
+        assertThat(vbwl.orderedComponents()
+                       .get(0)
+                       .getCaption()).isEqualTo("wiggly");
 
-		// when force build and layout
-		vbwl.getRootComponent();
-		// then
-		assertThat(vbwl.orderedComponents().size()).isEqualTo(4);
-		assertThat(vbwl.orderedComponents().get(0)).isEqualTo(button1);
-		assertThat(vbwl.orderedComponents().get(1)).isEqualTo(button2);
-		assertThat(vbwl.orderedComponents().get(3)).isEqualTo(label2);
+    }
 
-	}
+    @Test
+    public void style() {
 
-	@Test
-	public void addClass() {
+        // given
 
-		// given
+        // when
+        vbwl.add(Button.class)
+            .style("pretty1")
+            .style("pretty2");
+        vbwl.add(Label.class)
+            .style("pretty1")
+            .style("pretty2")
+            .setStyle("pretty3");
+        // then
+        assertThat(vbwl.orderedComponents()
+                       .get(0)
+                       .getStyleName()).isEqualTo("pretty1 pretty2");
+        assertThat(vbwl.orderedComponents()
+                       .get(1)
+                       .getStyleName()).isEqualTo("pretty3");
 
-		// when
-		vbwl.add(Button.class).caption("wiggly").height(20).width(100).style("pretty");
-		vbwl.add(Label.class).caption("label").heightPercent(80).widthPercent(60);
-		vbwl.add(Panel.class).caption("panel").height("80pt").width("60em");
-		// then
-		assertThat(vbwl.orderedComponents().size()).isEqualTo(3);
-		assertThat(vbwl.orderedComponents().get(0)).isInstanceOf(Button.class);
-		assertThat(vbwl.orderedComponents().get(0).getCaption()).isEqualTo("wiggly");
-		assertThat(vbwl.orderedComponents().get(0).getHeight()).isEqualTo(20);
-		assertThat(vbwl.orderedComponents().get(0).getWidth()).isEqualTo(100);
-		assertThat(vbwl.orderedComponents().get(0).getStyleName()).isEqualTo("pretty");
+    }
 
-		assertThat(vbwl.orderedComponents().get(1)).isInstanceOf(Label.class);
-		assertThat(vbwl.orderedComponents().get(1).getCaption()).isEqualTo("label");
-		assertThat(vbwl.orderedComponents().get(1).getHeight()).isEqualTo(80);
-		assertThat(vbwl.orderedComponents().get(1).getHeightUnits()).isEqualTo(Unit.PERCENTAGE);
-		assertThat(vbwl.orderedComponents().get(1).getWidth()).isEqualTo(60);
-		assertThat(vbwl.orderedComponents().get(1).getWidthUnits()).isEqualTo(Unit.PERCENTAGE);
+    @Test
+    public void i18n() {
 
-		assertThat(vbwl.orderedComponents().get(2)).isInstanceOf(Panel.class);
-		assertThat(vbwl.orderedComponents().get(2).getCaption()).isEqualTo("panel");
-		assertThat(vbwl.orderedComponents().get(2).getHeight()).isEqualTo(80);
-		assertThat(vbwl.orderedComponents().get(2).getHeightUnits()).isEqualTo(Unit.POINTS);
-		assertThat(vbwl.orderedComponents().get(2).getWidth()).isEqualTo(60);
-		assertThat(vbwl.orderedComponents().get(2).getWidthUnits()).isEqualTo(Unit.EM);
+        // given
+        when(translate.from(LabelKey.No)).thenReturn("No");
+        // when
+        vbwl.add(Button.class)
+            .caption(LabelKey.No);
+        // then
+        assertThat(vbwl.orderedComponents()
+                       .get(0)
+                       .getCaption()).isEqualTo("No");
 
-	}
+    }
 
-	@Test
-	public void addObject() {
+    @Test
+    public void id() {
 
-		// given
+        // given
 
-		// when
-		vbwl.add(new Button()).caption("wiggly");
-		// then
-		assertThat(vbwl.orderedComponents().get(0).getCaption()).isEqualTo("wiggly");
+        // when
+        vbwl.add(Button.class)
+            .id("id");
+        vbwl.add(new Button())
+            .id("id");
 
-	}
+        // then
+        assertThat(vbwl.orderedComponents()
+                       .get(0)
+                       .getId()).isEqualTo("id");
+        assertThat(vbwl.orderedComponents()
+                       .get(1)
+                       .getId()).isEqualTo("id");
 
-	@Test
-	public void style() {
+    }
 
-		// given
+    @Test
+    public void visible() {
 
-		// when
-		vbwl.add(Button.class).style("pretty1").style("pretty2");
-		vbwl.add(Label.class).style("pretty1").style("pretty2").setStyle("pretty3");
-		// then
-		assertThat(vbwl.orderedComponents().get(0).getStyleName()).isEqualTo("pretty1 pretty2");
-		assertThat(vbwl.orderedComponents().get(1).getStyleName()).isEqualTo("pretty3");
+        // given
 
-	}
+        // when
+        vbwl.add(Button.class)
+            .visible();
+        vbwl.add(new Button())
+            .notVisible();
+        // then
+        assertThat(vbwl.orderedComponents()
+                       .get(0)
+                       .isVisible()).isTrue();
+        assertThat(vbwl.orderedComponents()
+                       .get(1)
+                       .isVisible()).isFalse();
+    }
 
-	@Test
-	public void i18n() {
+    @Test
+    public void immediate() {
 
-		// given
-		when(translate.from(LabelKey.No)).thenReturn("No");
-		// when
-		vbwl.add(Button.class).caption(LabelKey.No);
-		// then
-		assertThat(vbwl.orderedComponents().get(0).getCaption()).isEqualTo("No");
+        // given
 
-	}
+        // when
+        vbwl.add(Button.class)
+            .immediate();
+        vbwl.add(new Button())
+            .notImmediate();
+        // then
+        assertThat(((AbstractComponent) vbwl.orderedComponents()
+                                            .get(0)).isImmediate()).isTrue();
+        assertThat(((AbstractComponent) vbwl.orderedComponents()
+                                            .get(1)).isImmediate()).isFalse();
+    }
 
-	@Test
-	public void id() {
+    @Test
+    public void enabled() {
 
-		// given
+        // given
 
-		// when
-		vbwl.add(Button.class).id("id");
-		vbwl.add(new Button()).id("id");
+        // when
+        vbwl.add(Button.class)
+            .enabled();
+        vbwl.add(new Button())
+            .disabled();
+        // then
+        assertThat(vbwl.orderedComponents()
+                       .get(0)
+                       .isEnabled()).isTrue();
+        assertThat(vbwl.orderedComponents()
+                       .get(1)
+                       .isEnabled()).isFalse();
+    }
 
-		// then
-		assertThat(vbwl.orderedComponents().get(0).getId()).isEqualTo("id");
-		assertThat(vbwl.orderedComponents().get(1).getId()).isEqualTo("id");
+    @Test
+    public void construct() {
 
-	}
+        // given
 
-	@Test
-	public void visible() {
+        // when
 
-		// given
+        // then
+        assertThat(vbwl.getConfig()).isNotNull();
 
-		// when
-		vbwl.add(Button.class).visible();
-		vbwl.add(new Button()).notVisible();
-		// then
-		assertThat(vbwl.orderedComponents().get(0).isVisible()).isTrue();
-		assertThat(vbwl.orderedComponents().get(1).isVisible()).isFalse();
-	}
+    }
 
-	@Test
-	public void immediate() {
+    @Test
+    public void configToLayout() {
 
-		// given
+        // given
+        DefaultViewConfig config = new DefaultViewConfig();
+        // when config set
+        vbwl.setConfig(config);
+        // then
+        assertThat(vbwl.getLayout()
+                       .getConfig()).isEqualTo(config);
 
-		// when
-		vbwl.add(Button.class).immediate();
-		vbwl.add(new Button()).notImmediate();
-		// then
-		assertThat(((AbstractComponent) vbwl.orderedComponents().get(0)).isImmediate()).isTrue();
-		assertThat(((AbstractComponent) vbwl.orderedComponents().get(1)).isImmediate()).isFalse();
-	}
+    }
 
-	@Test
-	public void enabled() {
+    public class TestViewBaseWithLayout extends ViewBaseWithLayout {
 
-		// given
+        protected TestViewBaseWithLayout() {
+            super(new VerticalViewLayout(), translate);
+            buildView();
+        }
 
-		// when
-		vbwl.add(Button.class).enabled();
-		vbwl.add(new Button()).disabled();
-		// then
-		assertThat(vbwl.orderedComponents().get(0).isEnabled()).isTrue();
-		assertThat(vbwl.orderedComponents().get(1).isEnabled()).isFalse();
-	}
+        public com.vaadin.ui.TextArea buildView() {
+            button1 = new Button();
+            button2 = new Button();
+            label1 = new Label();
+            label2 = new Label();
 
-	@Test
-	public void construct() {
+            add(button1);
+            add(button2);
+            add(label1);
+            add(label2);
 
-		// given
+            return null;
+        }
 
-		// when
+        @Override
+        protected void processParams(List<String> params) {
+            System.out.println(params);
+        }
 
-		// then
-		assertThat(vbwl.getConfig()).isNotNull();
-
-	}
-
-	@Test
-	public void configToLayout() {
-
-		// given
-		DefaultViewConfig config = new DefaultViewConfig();
-		// when config set
-		vbwl.setConfig(config);
-		// then
-		assertThat(vbwl.getLayout().getConfig()).isEqualTo(config);
-
-	}
+    }
 
 }

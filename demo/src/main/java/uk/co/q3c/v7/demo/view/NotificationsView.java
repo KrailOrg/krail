@@ -12,8 +12,11 @@
  */
 package uk.co.q3c.v7.demo.view;
 
-import java.util.List;
-
+import com.google.inject.Inject;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.*;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.ViewBase;
@@ -21,104 +24,97 @@ import uk.co.q3c.v7.demo.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.MessageKey;
 import uk.co.q3c.v7.i18n.Translate;
 
-import com.google.inject.Inject;
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
+import java.util.List;
 
 public class NotificationsView extends ViewBase {
-	private final UserNotifier userNotifier;
-	private final Translate translate;
+    private final UserNotifier userNotifier;
+    private final Translate translate;
+    protected GridLayout grid;
+    private Panel buttonPanel;
+    private Button errorButton;
+    private Label infoArea;
+    private Button infoButton;
+    private Button warnButton;
 
-	private Button errorButton;
-	private Button warnButton;
-	private Button infoButton;
-	protected GridLayout grid;
-	private Panel buttonPanel;
-	private Label infoArea;
+    @Inject
+    protected NotificationsView(UserNotifier userNotifier, Translate translate) {
+        super();
+        this.userNotifier = userNotifier;
+        this.translate = translate;
+        buildView();
+    }
 
-	@Inject
-	protected NotificationsView(UserNotifier userNotifier, Translate translate) {
-		super();
-		this.userNotifier = userNotifier;
-		this.translate = translate;
-		buildView();
-	}
+    private com.vaadin.ui.TextArea buildView() {
+        buttonPanel = new Panel();
+        VerticalLayout verticalLayout = new VerticalLayout();
+        buttonPanel.setContent(verticalLayout);
 
-	@Override
-	protected void processParams(List<String> params) {
-	}
+        grid = new GridLayout(3, 4);
 
-	private void buildView() {
-		buttonPanel = new Panel();
-		VerticalLayout verticalLayout = new VerticalLayout();
-		buttonPanel.setContent(verticalLayout);
+        grid.addComponent(buttonPanel, 1, 2);
+        grid.setSizeFull();
+        grid.setColumnExpandRatio(0, 0.400f);
+        grid.setColumnExpandRatio(1, 0.20f);
+        grid.setColumnExpandRatio(2, 0.40f);
 
-		grid = new GridLayout(3, 4);
+        grid.setRowExpandRatio(0, 0.05f);
+        grid.setRowExpandRatio(1, 0.15f);
+        grid.setRowExpandRatio(2, 0.4f);
+        grid.setRowExpandRatio(3, 0.15f);
+        rootComponent = grid;
 
-		grid.addComponent(buttonPanel, 1, 2);
-		grid.setSizeFull();
-		grid.setColumnExpandRatio(0, 0.400f);
-		grid.setColumnExpandRatio(1, 0.20f);
-		grid.setColumnExpandRatio(2, 0.40f);
+        errorButton = new Button("Fake an error");
+        errorButton.setWidth("100%");
+        errorButton.addClickListener(new ClickListener() {
 
-		grid.setRowExpandRatio(0, 0.05f);
-		grid.setRowExpandRatio(1, 0.15f);
-		grid.setRowExpandRatio(2, 0.4f);
-		grid.setRowExpandRatio(3, 0.15f);
-		rootComponent = grid;
+            @Override
+            public void buttonClick(ClickEvent event) {
+                userNotifier.notifyError(MessageKey.Service_not_Started, "Fake Service");
+            }
+        });
+        verticalLayout.addComponent(errorButton);
 
-		errorButton = new Button("Fake an error");
-		errorButton.setWidth("100%");
-		errorButton.addClickListener(new ClickListener() {
+        warnButton = new Button("Fake a warning");
+        warnButton.setWidth("100%");
+        warnButton.addClickListener(new ClickListener() {
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				userNotifier.notifyError(MessageKey.Service_not_Started, "Fake Service");
-			}
-		});
-		verticalLayout.addComponent(errorButton);
+            @Override
+            public void buttonClick(ClickEvent event) {
+                userNotifier.notifyWarning(MessageKey.Service_not_Started, "Fake Service");
+            }
+        });
+        verticalLayout.addComponent(warnButton);
 
-		warnButton = new Button("Fake a warning");
-		warnButton.setWidth("100%");
-		warnButton.addClickListener(new ClickListener() {
+        infoButton = new Button("Fake user information");
+        infoButton.setWidth("100%");
+        infoButton.addClickListener(new ClickListener() {
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				userNotifier.notifyWarning(MessageKey.Service_not_Started, "Fake Service");
-			}
-		});
-		verticalLayout.addComponent(warnButton);
+            @Override
+            public void buttonClick(ClickEvent event) {
+                userNotifier.notifyInformation(MessageKey.Service_not_Started, "Fake Service");
+            }
+        });
+        verticalLayout.addComponent(infoButton);
 
-		infoButton = new Button("Fake user information");
-		infoButton.setWidth("100%");
-		infoButton.addClickListener(new ClickListener() {
+        infoArea = new Label();
+        infoArea.setContentMode(ContentMode.HTML);
+        infoArea.setSizeFull();
+        infoArea.setValue(translate.from(DescriptionKey.Notifications));
+        grid.addComponent(infoArea, 0, 1, 1, 1);
+        return null;
+    }
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				userNotifier.notifyInformation(MessageKey.Service_not_Started, "Fake Service");
-			}
-		});
-		verticalLayout.addComponent(infoButton);
+    @Override
+    protected void processParams(List<String> params) {
+    }
 
-		infoArea = new Label();
-		infoArea.setContentMode(ContentMode.HTML);
-		infoArea.setSizeFull();
-		infoArea.setValue(translate.from(DescriptionKey.Notifications));
-		grid.addComponent(infoArea, 0, 1, 1, 1);
-	}
-
-	@Override
-	public void setIds() {
-		super.setIds();
-		grid.setId(ID.getId(this.getClass().getSimpleName(), grid));
-		infoButton.setId(ID.getId("information", this, infoButton));
-		warnButton.setId(ID.getId("warning", this, warnButton));
-		errorButton.setId(ID.getId("error", this, errorButton));
-	}
+    @Override
+    public void setIds() {
+        super.setIds();
+        grid.setId(ID.getId(this.getClass()
+                                .getSimpleName(), grid));
+        infoButton.setId(ID.getId("information", this, infoButton));
+        warnButton.setId(ID.getId("warning", this, warnButton));
+        errorButton.setId(ID.getId("error", this, errorButton));
+    }
 }

@@ -1,11 +1,14 @@
 /*
  * Copyright (c) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+ * the specific language governing permissions and limitations under the License.
  */
 
 package uk.co.q3c.v7.base.view;
@@ -49,13 +52,12 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         this.subjectProvider = subjectProvider;
         this.translate = translate;
         this.userStatus = userStatus;
-        buildView();
     }
 
-    protected void buildView() {
-        this.setColumns(3);
-        this.setRows(3);
-        this.setSizeFull();
+    protected Component buildView() {
+        getGridLayout().setColumns(3);
+        getGridLayout().setRows(3);
+        getGridLayout().setSizeFull();
         Panel centrePanel = new Panel("Log in"); // TODO i18N
         centrePanel.addStyleName(ChameleonTheme.PANEL_BUBBLE);
         centrePanel.setSizeUndefined();
@@ -83,17 +85,19 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         vl.addComponent(submitButton);
         vl.addComponent(statusMsgLabel);
 
-        this.addComponent(centrePanel, 1, 1);
-        this.setColumnExpandRatio(0, 1);
-        this.setColumnExpandRatio(2, 1);
+        getGridLayout().addComponent(centrePanel, 1, 1);
+        getGridLayout().setColumnExpandRatio(0, 1);
+        getGridLayout().setColumnExpandRatio(2, 1);
 
-        this.setRowExpandRatio(0, 1);
-        this.setRowExpandRatio(2, 1);
+        getGridLayout().setRowExpandRatio(0, 1);
+        getGridLayout().setRowExpandRatio(2, 1);
+
+        return getGridLayout();
     }
 
     @Override
-    public void init() {
-        setId(ID.getId(this));
+    protected void setIds() {
+        super.setIds();
         submitButton.setId(ID.getId(this, submitButton));
         usernameBox.setId(ID.getId("username", this, usernameBox));
         passwordBox.setId(ID.getId("password", this, passwordBox));
@@ -154,13 +158,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(I18NKey<?> messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey<?> messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     public TextField getUsernameBox() {

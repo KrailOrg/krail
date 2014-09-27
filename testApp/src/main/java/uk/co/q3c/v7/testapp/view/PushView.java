@@ -12,42 +12,32 @@
  */
 package uk.co.q3c.v7.testapp.view;
 
-import java.util.List;
-
+import com.google.inject.Inject;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.*;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 import uk.co.q3c.v7.base.config.ConfigKeys;
 import uk.co.q3c.v7.base.push.Broadcaster;
 import uk.co.q3c.v7.base.view.component.BroadcastMessageLog;
 
-import com.google.inject.Inject;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
+import java.util.List;
 
 public class PushView extends ViewBaseGrid {
 
-	private Button sendButton;
-	private CheckBox pushEnabled;
-
-	private Label infoArea;
-
-	private HorizontalLayout inputLayout;
-	private TextField groupInput;
+    private final Broadcaster broadcaster;
+    private final BroadcastMessageLog messageLog;
+    private final ApplicationConfiguration applicationConfiguration;
+    private TextField groupInput;
+    private Label infoArea;
+    private HorizontalLayout inputLayout;
 	private TextField messageInput;
-
-	private final Broadcaster broadcaster;
-
-	private final BroadcastMessageLog messageLog;
-	private final ApplicationConfiguration applicationConfiguration;
+    private CheckBox pushEnabled;
+    private Button sendButton;
 
 	@Inject
 	protected PushView(Broadcaster broadcaster, BroadcastMessageLog messageLog,
@@ -56,63 +46,64 @@ public class PushView extends ViewBaseGrid {
 		this.broadcaster = broadcaster;
 		this.messageLog = messageLog;
 		this.applicationConfiguration = applicationConfiguration;
-		buildView();
 	}
 
 	@Override
 	protected void processParams(List<String> params) {
 	}
 
-	@SuppressWarnings("serial")
-	private void buildView() {
+    @Override
+    protected Component buildView() {
+        super.buildView();
+        groupInput = new TextField("Group");
+        groupInput.setWidth("100px");
+        messageInput = new TextField("Message");
 
-		groupInput = new TextField("Group");
-		groupInput.setWidth("100px");
-		messageInput = new TextField("Message");
+        sendButton = new Button("Send message");
+        sendButton.addClickListener(new ClickListener() {
 
-		sendButton = new Button("Send message");
-		sendButton.addClickListener(new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                broadcaster.broadcast(groupInput.getValue(), messageInput.getValue());
+            }
+        });
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				broadcaster.broadcast(groupInput.getValue(), messageInput.getValue());
-			}
-		});
+        inputLayout = new HorizontalLayout(groupInput, messageInput, sendButton);
+        inputLayout.setComponentAlignment(sendButton, Alignment.BOTTOM_CENTER);
 
-		inputLayout = new HorizontalLayout(groupInput, messageInput, sendButton);
-		inputLayout.setComponentAlignment(sendButton, Alignment.BOTTOM_CENTER);
+        pushEnabled = new CheckBox("Push enabled");
+        pushEnabled.addValueChangeListener(new ValueChangeListener() {
 
-		pushEnabled = new CheckBox("Push enabled");
-		pushEnabled.addValueChangeListener(new ValueChangeListener() {
+            @Override
+            public void valueChange(ValueChangeEvent event) {
+                applicationConfiguration.setProperty(ConfigKeys.SERVER_PUSH_ENABLED, (boolean) event.getProperty()
+                                                                                                    .getValue());
+            }
 
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				applicationConfiguration.setProperty(ConfigKeys.SERVER_PUSH_ENABLED, (boolean) event.getProperty()
-						.getValue());
-			}
+        });
+        pushEnabled.setValue(true);
 
-		});
-		pushEnabled.setValue(true);
+        infoArea = new Label();
+        infoArea.setContentMode(ContentMode.HTML);
+        infoArea.setSizeFull();
+        infoArea.setValue("Test using multiple browser tabs or instances");
 
-		infoArea = new Label();
-		infoArea.setContentMode(ContentMode.HTML);
-		infoArea.setSizeFull();
-		infoArea.setValue("Test using multiple browser tabs or instances");
+        setTopCentreCell(pushEnabled);
+        setCentreCell(inputLayout);
+        setTopLeftCell(infoArea);
+        setBottomCentreCell(messageLog);
 
-		setTopCentreCell(pushEnabled);
-		setCentreCell(inputLayout);
-		setTopLeftCell(infoArea);
-		setBottomCentreCell(messageLog);
-
-		grid.setComponentAlignment(pushEnabled, Alignment.MIDDLE_CENTER);
-		grid.setComponentAlignment(inputLayout, Alignment.MIDDLE_CENTER);
-	}
+        getGrid().setComponentAlignment(pushEnabled, Alignment.MIDDLE_CENTER);
+        getGrid().setComponentAlignment(inputLayout, Alignment.MIDDLE_CENTER);
+        return null;
+    }
 
 	@Override
 	public void setIds() {
 		super.setIds();
-		grid.setId(ID.getId(this.getClass().getSimpleName(), grid));
-		sendButton.setId(ID.getId("send", this, sendButton));
+        getGrid().setId(ID.getId(this.getClass()
+                                     .getSimpleName(), getGrid()));
+        sendButton.setId(ID.getId("send", this, sendButton));
 		groupInput.setId(ID.getId("group", this, groupInput));
 		messageInput.setId(ID.getId("message", this, messageInput));
 		messageLog.setId(ID.getId(this, messageLog));

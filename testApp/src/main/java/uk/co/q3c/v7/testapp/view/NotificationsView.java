@@ -12,8 +12,11 @@
  */
 package uk.co.q3c.v7.testapp.view;
 
-import java.util.List;
-
+import com.google.inject.Inject;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.*;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.base.view.ViewBase;
@@ -21,41 +24,32 @@ import uk.co.q3c.v7.i18n.MessageKey;
 import uk.co.q3c.v7.i18n.Translate;
 import uk.co.q3c.v7.testapp.i18n.TestAppDescriptionKey;
 
-import com.google.inject.Inject;
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
+import java.util.List;
 
 public class NotificationsView extends ViewBase {
 	private final UserNotifier userNotifier;
 	private final Translate translate;
-
-	private Button errorButton;
-	private Button warnButton;
-	private Button infoButton;
-	protected GridLayout grid;
-	private Panel buttonPanel;
-	private Label infoArea;
+    protected GridLayout grid;
+    private Panel buttonPanel;
+    private Button errorButton;
+    private Label infoArea;
+    private Button infoButton;
+    private Button warnButton;
 
 	@Inject
 	protected NotificationsView(UserNotifier userNotifier, Translate translate) {
 		super();
 		this.userNotifier = userNotifier;
 		this.translate = translate;
-		buildView();
 	}
 
 	@Override
 	protected void processParams(List<String> params) {
 	}
 
-	private void buildView() {
-		buttonPanel = new Panel();
+    @Override
+    protected Component buildView() {
+        buttonPanel = new Panel();
 		VerticalLayout verticalLayout = new VerticalLayout();
 		buttonPanel.setContent(verticalLayout);
 
@@ -71,9 +65,9 @@ public class NotificationsView extends ViewBase {
 		grid.setRowExpandRatio(1, 0.15f);
 		grid.setRowExpandRatio(2, 0.4f);
 		grid.setRowExpandRatio(3, 0.15f);
-		rootComponent = grid;
 
-		errorButton = new Button("Fake an error");
+
+        errorButton = new Button("Fake an error");
 		errorButton.setWidth("100%");
 		errorButton.addClickListener(new ClickListener() {
 
@@ -111,7 +105,8 @@ public class NotificationsView extends ViewBase {
 		infoArea.setSizeFull();
 		infoArea.setValue(translate.from(TestAppDescriptionKey.Notifications));
 		grid.addComponent(infoArea, 0, 1, 1, 1);
-	}
+        return grid;
+    }
 
 	@Override
 	public void setIds() {

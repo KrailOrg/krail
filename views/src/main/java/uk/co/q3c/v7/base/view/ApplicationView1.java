@@ -12,92 +12,85 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import java.util.List;
-
-import uk.co.q3c.v7.base.view.component.ApplicationHeader;
-import uk.co.q3c.v7.base.view.component.ApplicationLogo;
-import uk.co.q3c.v7.base.view.component.UserNavigationMenu;
-import uk.co.q3c.v7.base.view.component.Breadcrumb;
-import uk.co.q3c.v7.base.view.component.StandardComponentModule;
-import uk.co.q3c.v7.base.view.component.DefaultViewBody;
-import uk.co.q3c.v7.base.view.component.UserStatusPanel;
-import uk.co.q3c.v7.base.view.component.MessageBar;
-import uk.co.q3c.v7.base.view.component.SubpagePanel;
-import uk.co.q3c.v7.base.view.component.UserNavigationTree;
-import uk.co.q3c.v7.base.view.component.ViewBody;
+import com.google.inject.Inject;
+import uk.co.q3c.v7.base.view.component.*;
 import uk.co.q3c.v7.base.view.layout.ApplicationViewLayout1;
 import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout;
 import uk.co.q3c.v7.i18n.Translate;
 
-import com.google.inject.Inject;
+import java.util.List;
 
 /**
  * This view provides the base for a fairly typical layout for an application. It is not expected that it will be used
  * directly, as the body needs to be defined by a sub-class. All the components in the view - except the body - can be
  * replaced by mapping their interfaces to different implementations in the {@link StandardComponentModule}. The body
  * component is created by overriding the {@link #createBody()} method
- * 
+ *
  * @author David Sowerby 29 Aug 2013
- * 
  */
 public class ApplicationView1 extends ViewBaseWithLayout {
 
-	private final UserNavigationTree navTree;
-	private final Breadcrumb breadcrumb;
-	private final UserStatusPanel loginOut;
-	private final UserNavigationMenu menu;
-	private final SubpagePanel subpage;
-	private final MessageBar messageBar;
-	private final ApplicationLogo logo;
-	private final ApplicationHeader header;
-	private final ViewBody body;
+    private final UserNavigationTree navTree;
+    private final Breadcrumb breadcrumb;
+    private final UserStatusPanel loginOut;
+    private final UserNavigationMenu menu;
+    private final SubpagePanel subpage;
+    private final MessageBar messageBar;
+    private final ApplicationLogo logo;
+    private final ApplicationHeader header;
+    private final ViewBody body;
 
-	@Inject
-	protected ApplicationView1(ApplicationViewLayout1 viewLayout, Translate translate, UserNavigationTree navTree,
-			Breadcrumb breadcrumb, UserStatusPanel loginOut, UserNavigationMenu menu, SubpagePanel subpage,
-			MessageBar messageBar, ApplicationLogo logo, ApplicationHeader header) {
-		super(viewLayout, translate);
-		this.navTree = navTree;
-		this.breadcrumb = breadcrumb;
-		this.loginOut = loginOut;
-		this.menu = menu;
-		this.subpage = subpage;
-		this.messageBar = messageBar;
-		this.logo = logo;
-		this.header = header;
-		body = createBody();
-		buildView();
-	}
+    @Inject
+    protected ApplicationView1(ApplicationViewLayout1 viewLayout, Translate translate, UserNavigationTree navTree,
+                               Breadcrumb breadcrumb, UserStatusPanel loginOut, UserNavigationMenu menu,
+                               SubpagePanel subpage, MessageBar messageBar, ApplicationLogo logo,
+                               ApplicationHeader header) {
+        super(viewLayout, translate);
+        this.navTree = navTree;
+        this.breadcrumb = breadcrumb;
+        this.loginOut = loginOut;
+        this.menu = menu;
+        this.subpage = subpage;
+        this.messageBar = messageBar;
+        this.logo = logo;
+        this.header = header;
+        body = createBody();
+        buildView();
+    }
 
-	/**
-	 * Override this to provide your own body component
-	 * 
-	 * @return
-	 */
-	protected ViewBody createBody() {
-		return new DefaultViewBody();
-	}
+    /**
+     * Override this to provide your own body component
+     *
+     * @return
+     */
+    protected ViewBody createBody() {
+        return new DefaultViewBody();
+    }
 
-	protected void buildView() {
-		add(logo).width(50).height(70);
-		add(header).widthUndefined().heightPercent(100);
-		add(loginOut).width(100).heightPercent(100);
-		add(menu).height(60);
-		add(navTree);
-		add(breadcrumb).height(45);
-		add(body).heightPercent(100);
-		add(subpage).height(55);
-		add(messageBar).height(80);
-	}
+    protected com.vaadin.ui.TextArea buildView() {
+        add(logo).width(50)
+                 .height(70);
+        add(header).widthUndefined()
+                   .heightPercent(100);
+        add(loginOut).width(100)
+                     .heightPercent(100);
+        add(menu).height(60);
+        add(navTree);
+        add(breadcrumb).height(45);
+        add(body).heightPercent(100);
+        add(subpage).height(55);
+        add(messageBar).height(80);
+        return null;
+    }
 
-	@Override
-	protected void processParams(List<String> params) {
-		body.processParams(params);
-	}
+    @Override
+    protected void processParams(List<String> params) {
+        body.processParams(params);
+    }
 
-	@Override
-	public String viewName() {
-		return "ApplicationView1";
-	}
+    @Override
+    public String viewName() {
+        return "ApplicationView1";
+    }
 
 }

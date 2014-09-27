@@ -12,52 +12,44 @@
  */
 package uk.co.q3c.v7.testapp.view;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.vaadin.risto.stepper.IntStepper;
-
-import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.view.ViewBase;
-
 import com.google.inject.Inject;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
-
 import de.steinwedel.messagebox.ButtonId;
 import de.steinwedel.messagebox.Icon;
 import de.steinwedel.messagebox.MessageBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.vaadin.risto.stepper.IntStepper;
+import uk.co.q3c.util.ID;
+import uk.co.q3c.v7.base.view.ViewBase;
+
+import java.util.List;
 
 public class WidgetsetView extends ViewBase {
 	private static Logger log = LoggerFactory.getLogger(WidgetsetView.class);
-	private Button popupButton;
 	protected GridLayout grid;
-	private Panel buttonPanel;
-	protected MessageBox messageBox;
+    protected MessageBox messageBox;
+    private Panel buttonPanel;
 	private Label infoArea;
-	private IntStepper stepper;
+    private Button popupButton;
+    private IntStepper stepper;
 
 	@Inject
 	protected WidgetsetView(SessionObject sessionObject) {
 		super();
 		log.debug("Constructor injecting with session object");
-		buildView();
 	}
 
 	@Override
 	protected void processParams(List<String> params) {
 	}
 
-	@SuppressWarnings("serial")
-	private void buildView() {
-		buttonPanel = new Panel();
+    @Override
+    protected Component buildView() {
+        buttonPanel = new Panel();
 		VerticalLayout verticalLayout = new VerticalLayout();
 		buttonPanel.setContent(verticalLayout);
 
@@ -73,7 +65,6 @@ public class WidgetsetView extends ViewBase {
 		grid.setRowExpandRatio(1, 0.15f);
 		grid.setRowExpandRatio(2, 0.4f);
 		grid.setRowExpandRatio(3, 0.15f);
-		rootComponent = grid;
 
 		popupButton = new Button("Popup message box");
 		popupButton.setWidth("100%");
@@ -95,7 +86,8 @@ public class WidgetsetView extends ViewBase {
 		infoArea.setSizeFull();
 		infoArea.setValue("These components are used purely to ensure that the Widgetset has compiled and included add-ons");
 		grid.addComponent(infoArea, 0, 1, 1, 1);
-	}
+        return grid;
+    }
 
 	@Override
 	public void setIds() {

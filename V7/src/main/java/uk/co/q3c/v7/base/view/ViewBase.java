@@ -23,7 +23,7 @@ import java.util.List;
 public abstract class ViewBase implements V7View {
 
     private static Logger log = LoggerFactory.getLogger(ViewBase.class);
-    protected Component rootComponent;
+    private Component rootComponent;
 
     @Inject
     protected ViewBase() {
@@ -39,7 +39,8 @@ public abstract class ViewBase implements V7View {
     }
 
     /**
-     * You only need to override / implement this method if you are using TestBench, or another testing tool which looks
+     * You only need to override / implement this method if you are using TestBench, or another testing tool which
+     * looks
      * for debug
      * ids. If you do override it to add your own subclass ids, make sure you call super
      */
@@ -49,8 +50,19 @@ public abstract class ViewBase implements V7View {
 
     @Override
     public Component getRootComponent() {
+        if (rootComponent == null) {
+            rootComponent = buildView();
+            setIds();
+        }
         return rootComponent;
     }
+
+    /**
+     * Override this method to build the layout and components for this View
+     *
+     * @return
+     */
+    protected abstract Component buildView();
 
     @Override
     public void enter(V7ViewChangeEvent event) {

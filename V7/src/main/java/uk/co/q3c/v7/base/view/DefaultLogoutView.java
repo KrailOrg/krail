@@ -23,38 +23,24 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
     @Inject
     protected DefaultLogoutView() {
         super();
-        buildView();
-    }
-
-    protected void buildView() {
-        Panel p = new Panel("Logged out");
-        p.setSizeFull();
-        addComponent(p);
     }
 
     @Override
-    public Component getRootComponent() {
-
-        return this;
-
+    protected Component buildView() {
+        super.buildView();
+        Panel p = new Panel("Logged out");
+        p.setSizeFull();
+        getLayout().addComponent(p);
+        return getRootComponent();
     }
+
 
     @Override
     protected void processParams(List<String> params) {
 
     }
 
-    @Override
-    public void enter(V7ViewChangeEvent event) {
-        // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public String viewName() {
-
-        return getClass().getSimpleName();
-    }
 
 
 }

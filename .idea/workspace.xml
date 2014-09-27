@@ -4,35 +4,22 @@
     <option name="ANALYSIS_IN_BACKGROUND" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8c51d812-e01c-4a95-8979-ff32e1b01c84" name="Default" comment="Standardising common Entity interface">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultAnnotationSitemapLoaderTest.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultAnnotationSitemapLoaderTest.java" />
+    <list default="true" id="8c51d812-e01c-4a95-8979-ff32e1b01c84" name="Default" comment="Modified V7View interface.  setIds() is now init(), and is called after the View is constructed in the ViewFactory">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/src/main/java/uk/co/q3c/v7/base/view/ApplicationView1.java" afterPath="$PROJECT_DIR$/views/src/main/java/uk/co/q3c/v7/base/view/ApplicationView1.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/src/test/java/uk/co/q3c/v7/base/view/layout/ApplicationViewLayout1Test.java" afterPath="$PROJECT_DIR$/views/src/test/java/uk/co/q3c/v7/base/view/layout/ApplicationViewLayout1Test.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultErrorView.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultErrorView.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLoginView.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLoginView.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLogoutView.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLogoutView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/DefaultUserNavigationTreeBuilder.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/DefaultUserNavigationTreeBuilder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultViewFactory.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultViewFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/testviews/subview/MoneyInOutView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/testviews/subview/MoneyInOutView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/My_AccountView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/My_AccountView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/OptionsView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/OptionsView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/PrivateView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/PrivateView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestAnnotatedView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestAnnotatedView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture1/TestAnnotatedView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture1/TestAnnotatedView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestLoginView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestLoginView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestLogoutView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestLogoutView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestPrivateHomeView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestPrivateHomeView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestPublicHomeView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/TestPublicHomeView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/testviews/subview/TransferView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/testviews/subview/TransferView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/V7View.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/V7View.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml" afterPath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/GridViewBase.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/GridViewBase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/view/NotificationsView.java" afterPath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/view/NotificationsView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/NotificationsView.java" afterPath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/NotificationsView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/PushView.java" afterPath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/PushView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/StandardPageViewBase.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/StandardPageViewBase.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/VerticalViewBase.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/VerticalViewBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewA.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewA.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewA1.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewA1.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewA11.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewA11.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewB.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewB.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewB1.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewB1.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewB11.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/ViewB11.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/ViewBase.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/ViewBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/WigglyHomeView.java" afterPath="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/WigglyHomeView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/widgetset/testAppWidgetset.gwt.xml" afterPath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/widgetset/testAppWidgetset.gwt.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/ViewBaseGrid.java" afterPath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/ViewBaseGrid.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/src/test/java/uk/co/q3c/v7/base/view/layout/ViewBaseWithLayoutTest.java" afterPath="$PROJECT_DIR$/views/src/test/java/uk/co/q3c/v7/base/view/layout/ViewBaseWithLayoutTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/WidgetsetView.java" afterPath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/WidgetsetView.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="v7.iws" />
@@ -62,108 +49,122 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="VaadinErrorNotification.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/VaadinErrorNotification.java">
+      <file leaf-file-name="GridViewBase.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/GridViewBase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
-              <caret line="25" column="79" selection-start-line="25" selection-start-column="65" selection-end-line="25" selection-end-column="79" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
+              <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
               <folding>
-                <element signature="e#0#1053#0" expanded="true" />
+                <element signature="e#450#451#0" expanded="true" />
+                <element signature="e#483#484#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VaadinInformationNotification.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/VaadinInformationNotification.java">
+      <file leaf-file-name="DefaultLoginView.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLoginView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="345">
-              <caret line="25" column="91" selection-start-line="25" selection-start-column="91" selection-end-line="25" selection-end-column="91" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="VaadinWarningNotification.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/VaadinWarningNotification.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="315">
-              <caret line="25" column="83" selection-start-line="25" selection-start-column="83" selection-end-line="25" selection-end-column="83" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WarningNotification.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/WarningNotification.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="270">
-              <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="InformationNotification.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/InformationNotification.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="270">
-              <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserNotification.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/UserNotification.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="375">
-              <caret line="25" column="17" selection-start-line="25" selection-start-column="17" selection-end-line="25" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MessageBarErrorNotification.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/MessageBarErrorNotification.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="330">
-              <caret line="19" column="83" selection-start-line="19" selection-start-column="83" selection-end-line="19" selection-end-column="83" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="2400">
+              <caret line="56" column="23" selection-start-line="56" selection-start-column="23" selection-end-line="56" selection-end-column="23" />
               <folding>
-                <element signature="imports" expanded="false" />
+                <element signature="e#0#6450#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MessageBarInformationNotification.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/MessageBarInformationNotification.java">
+      <file leaf-file-name="NotificationsView.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/NotificationsView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="330">
-              <caret line="19" column="95" selection-start-line="19" selection-start-column="95" selection-end-line="19" selection-end-column="95" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="780" max-vertical-offset="1365">
+              <caret line="45" column="5" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WidgetsetView.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/WidgetsetView.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="577" max-vertical-offset="1140">
+              <caret line="46" column="5" selection-start-line="46" selection-start-column="5" selection-end-line="46" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ViewBaseGrid.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/ViewBaseGrid.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1080">
+              <caret line="27" column="30" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
               <folding>
-                <element signature="imports" expanded="false" />
+                <element signature="e#1011#1012#0" expanded="true" />
+                <element signature="e#1038#1039#0" expanded="true" />
+                <element signature="e#1071#1072#0" expanded="true" />
+                <element signature="e#1094#1095#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MessageBarWarningNotification.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/MessageBarWarningNotification.java">
+      <file leaf-file-name="PushView.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/PushView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.10714286" vertical-offset="0" max-vertical-offset="700">
-              <caret line="19" column="87" selection-start-line="19" selection-start-column="87" selection-end-line="19" selection-end-column="87" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="430" max-vertical-offset="1320">
+              <caret line="109" column="61" selection-start-line="109" selection-start-column="61" selection-end-line="109" selection-end-column="61" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NavigationState.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/NavigationState.java">
+      <file leaf-file-name="DefaultErrorView.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultErrorView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="2145">
-              <caret line="2" column="15" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="10" max-vertical-offset="885">
+              <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
+              <folding>
+                <element signature="e#561#562#0" expanded="true" />
+                <element signature="e#575#576#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ViewBaseI18N.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/ViewBaseI18N.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="450">
+              <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VerticalViewBase.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/VerticalViewBase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="795">
+              <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#1444#0" expanded="true" />
+                <element signature="e#1014#1015#0" expanded="true" />
+                <element signature="e#1043#1044#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DefaultLogoutView.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLogoutView.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.29296875" vertical-offset="0" max-vertical-offset="555">
+              <caret line="25" column="5" selection-start-line="25" selection-start-column="5" selection-end-line="25" selection-end-column="5" />
+              <folding>
+                <element signature="e#869#870#0" expanded="true" />
+                <element signature="e#892#893#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -3065,14 +3066,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/V7/build.gradle" />
-        <option value="$PROJECT_DIR$/demo/src/main/webapp/WEB-INF/web.xml" />
-        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/sitemap/DefaultSitemapServiceTest.java" />
-        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/config/DefaultApplicationConfigurationService.java" />
-        <option value="$PROJECT_DIR$/.idea/gradle.xml" />
-        <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/testApp/build.gradle" />
         <option value="$PROJECT_DIR$/demo/build.gradle" />
         <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/form/BeanFieldSetTest.java" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/ui/form/BeanFieldSet.java" />
@@ -3086,11 +3079,7 @@
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/ui/form/BeanFieldGroup_I18N.java" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/DefaultUserNavigationTreeBuilder.java" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/V7View.java" />
-        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/ViewBase.java" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultViewFactory.java" />
-        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLogoutView.java" />
-        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLoginView.java" />
-        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/VerticalViewBase.java" />
         <option value="$PROJECT_DIR$/V7/src/test/java/fixture1/TestAnnotatedView.java" />
         <option value="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/My_AccountView.java" />
         <option value="$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/OptionsView.java" />
@@ -3116,6 +3105,18 @@
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/MessageBarErrorNotification.java" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/MessageBarInformationNotification.java" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/MessageBarWarningNotification.java" />
+        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/ServiceTest.java" />
+        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/GridViewBase.java" />
+        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/StandardPageViewBase.java" />
+        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/ViewBase.java" />
+        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLoginView.java" />
+        <option value="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/NotificationsView.java" />
+        <option value="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/WidgetsetView.java" />
+        <option value="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/ViewBaseGrid.java" />
+        <option value="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/PushView.java" />
+        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultErrorView.java" />
+        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/VerticalViewBase.java" />
+        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLogoutView.java" />
       </list>
     </option>
   </component>
@@ -3447,6 +3448,48 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="form" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="V7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="q3c" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="base" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -4020,36 +4063,27 @@
       <recent name="uk.co.q3c.v7.testutil" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.v7 [deployToTomcat]">
-    <configuration default="false" name="BeanFieldI18NTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="uk.co.q3c.v7.base.ui.form.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="V7" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.base.ui.form" />
-      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.base.ui.form.BeanFieldI18NTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
+  <component name="RunManager" selected="JUnit.All in testApp">
+    <configuration default="false" name="v7 [deployToTomcat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="deployToTomcat" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
+      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="All in testApp (2)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration default="false" name="All in testApp" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="testApp" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -4072,7 +4106,7 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="ServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration default="false" name="ServiceTest.monitorLogsStatusChange" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="uk.co.q3c.v7.base.services.*" />
@@ -4084,8 +4118,8 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="uk.co.q3c.v7.base.services" />
       <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.base.services.ServiceTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="METHOD_NAME" value="monitorLogsStatusChange" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -4100,20 +4134,20 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="DefaultUserNavigationTreeBuilderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration default="false" name="ServiceTest.monitorLogsStatusChange (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="uk.co.q3c.v7.base.view.component.*" />
+          <option name="PATTERN" value="uk.co.q3c.v7.base.services.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <module name="V7" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.base.view.component" />
-      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.base.view.component.DefaultUserNavigationTreeBuilderTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.base.services" />
+      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.base.services.ServiceTest" />
+      <option name="METHOD_NAME" value="monitorLogsStatusChange" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -4128,23 +4162,32 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="v7 [deployToTomcat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="deployToTomcat" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
-      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
+    <configuration default="false" name="DefaultV7NavigatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="uk.co.q3c.v7.base.navigate.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="testApp" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.base.navigate" />
+      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.base.navigate.DefaultV7NavigatorTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
     <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
@@ -4337,19 +4380,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Tomcat Server.TestApp on Tomcat 7" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.BeanFieldI18NTest" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.All in testApp (2)" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.ServiceTest" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.DefaultUserNavigationTreeBuilderTest" />
-      <item index="5" class="java.lang.String" itemvalue="Gradle.v7 [deployToTomcat]" />
+      <item index="1" class="java.lang.String" itemvalue="Gradle.v7 [deployToTomcat]" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.All in testApp" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.ServiceTest.monitorLogsStatusChange" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.ServiceTest.monitorLogsStatusChange (1)" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.DefaultV7NavigatorTest" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Gradle.v7 [deployToTomcat]" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.DefaultUserNavigationTreeBuilderTest" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.ServiceTest" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.All in testApp (2)" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.BeanFieldI18NTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.All in testApp" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.DefaultV7NavigatorTest" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.ServiceTest.monitorLogsStatusChange (1)" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.ServiceTest.monitorLogsStatusChange" />
+        <item index="4" class="java.lang.String" itemvalue="Gradle.v7 [deployToTomcat]" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -4427,7 +4470,19 @@
       <created>1411822696091</created>
       <updated>1411822696091</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Modified V7View interface.  setIds() is now init(), and is called after the View is constructed in the ViewFactory">
+      <created>1411822821647</created>
+      <updated>1411822821647</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Split the check on timing of getLastStopTime() - fails now and then probably when the test runs too fast for a time difference to occur.">
+      <created>1411823320100</created>
+      <updated>1411823320100</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Put in loop to hopefully prevent random test failure">
+      <created>1411824672304</created>
+      <updated>1411824672304</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers>
       <YouTrack shared="false" url="http://localhost:8081">
         <commitMessageFormat>{id} {summary}</commitMessageFormat>
@@ -4467,28 +4522,28 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-4" width="1857" height="1085" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32837406" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20234291" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20234291" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3987854" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37938362" sideWeight="0.5002758" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3375932" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3250283" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32481363" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.32991913" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" x="1200" y="487" width="284" height="582" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.32991913" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" x="1200" y="487" width="284" height="582" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2498621" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2857143" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24959612" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.403171" sideWeight="0.4997242" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22890237" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24931054" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4025559" sideWeight="0.4997242" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Usages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2498621" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -4574,7 +4629,10 @@
     <MESSAGE value="Made registerAnnotations methods protected so that they can be called from sub-classes" />
     <MESSAGE value="Standardising common Entity interface" />
     <MESSAGE value="Implemented Serializable" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented Serializable" />
+    <MESSAGE value="Modified V7View interface.  setIds() is now init(), and is called after the View is constructed in the ViewFactory" />
+    <MESSAGE value="Split the check on timing of getLastStopTime() - fails now and then probably when the test runs too fast for a time difference to occur." />
+    <MESSAGE value="Put in loop to hopefully prevent random test failure" />
+    <option name="LAST_COMMIT_MESSAGE" value="Put in loop to hopefully prevent random test failure" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -4595,7 +4653,7 @@
           <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="18" />
+      <option name="time" value="19" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -4603,81 +4661,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.9.0/3cdbb5d11e1cf6c98b4d3697d9eeaa71ad59ef47/mockito-all-1.9.0-sources.jar!/org/mockito/Mockito.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.5155994" vertical-offset="17407" max-vertical-offset="28065">
-          <caret line="1240" column="24" selection-start-line="1240" selection-start-column="24" selection-end-line="1240" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/guice/BaseGuiceServletInjectorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="405" max-vertical-offset="1455">
-          <caret line="38" column="25" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/ui/form/TestBeanFieldGroupI18N.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
-          <caret line="21" column="69" selection-start-line="21" selection-start-column="69" selection-end-line="21" selection-end-column="69" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/data/TestEntity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
-          <caret line="17" column="51" selection-start-line="17" selection-start-column="51" selection-end-line="17" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/data/Entity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="555">
-          <caret line="24" column="25" selection-start-line="24" selection-start-column="25" selection-end-line="24" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/ui/form/BeanFieldGroup_I18N.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="460" max-vertical-offset="1395">
-          <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#2913#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/ServiceTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5312" max-vertical-offset="5910">
-          <caret line="399" column="15" selection-start-line="399" selection-start-column="15" selection-end-line="399" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/sitemap/SystemAccountManagementPages.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="585">
-          <caret line="29" column="64" selection-start-line="29" selection-start-column="64" selection-end-line="29" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/sitemap/DirectSitemapModule.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="1200">
-          <caret line="39" column="40" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/sitemap/DirectSitemapEntry.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1155">
@@ -4715,8 +4698,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="810">
           <caret line="51" column="38" selection-start-line="51" selection-start-column="38" selection-end-line="51" selection-end-column="38" />
           <folding>
-            <element signature="e#2037#2038#0" expanded="true" />
-            <element signature="e#2088#2089#0" expanded="true" />
+            <element signature="e#2132#2133#0" expanded="true" />
+            <element signature="e#2183#2184#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -4729,67 +4712,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/V7View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="38" max-vertical-offset="705">
-          <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/ViewBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="266" max-vertical-offset="1065">
-          <caret line="41" column="5" selection-start-line="41" selection-start-column="5" selection-end-line="41" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#2169#0" expanded="true" />
-            <element signature="e#1256#1257#0" expanded="true" />
-            <element signature="e#1323#1324#0" expanded="true" />
-            <element signature="e#1433#1434#0" expanded="true" />
-            <element signature="e#1457#1458#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultViewFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="705">
           <caret line="37" column="52" selection-start-line="37" selection-start-column="52" selection-end-line="37" selection-end-column="52" />
           <folding>
-            <element signature="e#0#1462#0" expanded="true" />
+            <element signature="e#0#1418#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/GridViewBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
-          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLoginView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="2175">
-          <caret line="65" column="20" selection-start-line="65" selection-start-column="20" selection-end-line="65" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLogoutView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="780">
-          <caret line="20" column="45" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/VerticalViewBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
-          <caret line="51" column="8" selection-start-line="51" selection-start-column="8" selection-end-line="51" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -4805,14 +4734,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
           <caret line="39" column="20" selection-start-line="39" selection-start-column="20" selection-end-line="39" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/OptionsView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
-          <caret line="40" column="20" selection-start-line="40" selection-start-column="20" selection-end-line="40" selection-end-column="20" />
           <folding />
         </state>
       </provider>
@@ -5025,9 +4946,176 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/user/notify/MessageBarWarningNotification.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.10714286" vertical-offset="0" max-vertical-offset="700">
-          <caret line="19" column="87" selection-start-line="19" selection-start-column="87" selection-end-line="19" selection-end-column="87" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="330">
+          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/services/ServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3415" max-vertical-offset="6630">
+          <caret line="242" column="27" selection-start-line="242" selection-start-column="27" selection-end-line="242" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#12724#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#9936#9937#0" expanded="true" />
+            <element signature="e#9976#9977#0" expanded="true" />
+            <element signature="e#10210#10211#0" expanded="true" />
+            <element signature="e#10246#10247#0" expanded="true" />
+            <element signature="e#10313#10314#0" expanded="true" />
+            <element signature="e#10348#10349#0" expanded="true" />
+            <element signature="e#12683#12684#0" expanded="true" />
+            <element signature="e#12716#12717#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/V7View.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="32" max-vertical-offset="825">
+          <caret line="15" column="17" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#1747#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/test/java/fixture/testviews2/OptionsView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/view/DemoPublicHomeView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="315">
+          <caret line="21" column="52" selection-start-line="21" selection-start-column="52" selection-end-line="21" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/StandardPageViewBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="870">
+          <caret line="20" column="56" selection-start-line="20" selection-start-column="56" selection-end-line="20" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/ViewBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="1305">
+          <caret line="58" column="7" selection-start-line="58" selection-start-column="7" selection-end-line="58" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#2645#0" expanded="true" />
+            <element signature="e#1130#1131#0" expanded="true" />
+            <element signature="e#1154#1155#0" expanded="true" />
+            <element signature="e#1428#1429#0" expanded="true" />
+            <element signature="e#1504#1505#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLoginView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="2400">
+          <caret line="56" column="23" selection-start-line="56" selection-start-column="23" selection-end-line="56" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#6450#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/NotificationsView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="780" max-vertical-offset="1365">
+          <caret line="45" column="5" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/WidgetsetView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="577" max-vertical-offset="1140">
+          <caret line="46" column="5" selection-start-line="46" selection-start-column="5" selection-end-line="46" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/ViewBaseGrid.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1080">
+          <caret line="27" column="30" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
+          <folding>
+            <element signature="e#1011#1012#0" expanded="true" />
+            <element signature="e#1038#1039#0" expanded="true" />
+            <element signature="e#1071#1072#0" expanded="true" />
+            <element signature="e#1094#1095#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/GridViewBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
+          <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
+          <folding>
+            <element signature="e#450#451#0" expanded="true" />
+            <element signature="e#483#484#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/PushView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="430" max-vertical-offset="1320">
+          <caret line="109" column="61" selection-start-line="109" selection-start-column="61" selection-end-line="109" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultErrorView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="10" max-vertical-offset="885">
+          <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
+          <folding>
+            <element signature="e#561#562#0" expanded="true" />
+            <element signature="e#575#576#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/ViewBaseI18N.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="450">
+          <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/VerticalViewBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="795">
+          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#1444#0" expanded="true" />
+            <element signature="e#1014#1015#0" expanded="true" />
+            <element signature="e#1043#1044#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLogoutView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.29296875" vertical-offset="0" max-vertical-offset="555">
+          <caret line="25" column="5" selection-start-line="25" selection-start-column="5" selection-end-line="25" selection-end-column="5" />
+          <folding>
+            <element signature="e#869#870#0" expanded="true" />
+            <element signature="e#892#893#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

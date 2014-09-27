@@ -12,55 +12,57 @@
  */
 package uk.co.q3c.v7.base.view;
 
-import uk.co.q3c.util.ID;
-
 import com.google.inject.Inject;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
+import uk.co.q3c.util.ID;
 
 public abstract class StandardPageViewBase extends ViewBase {
 
-	private Label label;
+    protected GridLayout grid;
+    private Label label;
 
-	protected GridLayout grid;
+    @Inject
+    protected StandardPageViewBase() {
+        super();
+        buildView();
+    }
 
-	@Inject
-	protected StandardPageViewBase() {
-		super();
-		buildView();
-	}
+    @Override
+    protected Component buildView() {
 
-	protected void buildView() {
+        label = new Label("This is the " + this.getClass()
+                                               .getSimpleName());
+        label.setHeight("100px");
+        grid = new GridLayout(3, 3);
 
-		label = new Label("This is the " + this.getClass().getSimpleName());
-		label.setHeight("100px");
-		grid = new GridLayout(3, 3);
+        grid.addComponent(label, 1, 1);
+        grid.setSizeFull();
+        grid.setColumnExpandRatio(0, 0.33f);
+        grid.setColumnExpandRatio(1, 0.33f);
+        grid.setColumnExpandRatio(2, 0.33f);
 
-		grid.addComponent(label, 1, 1);
-		grid.setSizeFull();
-		grid.setColumnExpandRatio(0, 0.33f);
-		grid.setColumnExpandRatio(1, 0.33f);
-		grid.setColumnExpandRatio(2, 0.33f);
+        grid.setRowExpandRatio(0, 0.4f);
+        grid.setRowExpandRatio(1, 0.2f);
+        grid.setRowExpandRatio(2, 0.4f);
 
-		grid.setRowExpandRatio(0, 0.4f);
-		grid.setRowExpandRatio(1, 0.2f);
-		grid.setRowExpandRatio(2, 0.4f);
+        label.setSizeFull();
 
-		label.setSizeFull();
+        return grid;
+    }
 
-		rootComponent = grid;
+    @Override
+    public void setIds() {
+        super.setIds();
+        grid.setId(ID.getId(this.getClass()
+                                .getSimpleName(), grid));
+        label.setId(ID.getId(this.getClass()
+                                 .getSimpleName(), label));
+    }
 
-	}
-
-	@Override
-	public void setIds() {
-		super.setIds();
-		grid.setId(ID.getId(this.getClass().getSimpleName(), grid));
-		label.setId(ID.getId(this.getClass().getSimpleName(), label));
-	}
-
-	public Label getLabel() {
-		return label;
-	}
+    public Label getLabel() {
+        return label;
+    }
 
 }
