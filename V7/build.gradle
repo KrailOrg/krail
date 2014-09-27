@@ -54,7 +54,7 @@ dependencies {
     compile "javax.servlet:javax.servlet-api:3.+"
 
 
-    testCompile project(path: ':testUtil', configuration: 'tests')
+    testCompile project(':testUtil')
 
     // needed for Vaadin javadoc only
     compile "javax.portlet:portlet-api:2.0"

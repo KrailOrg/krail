@@ -59,10 +59,10 @@ dependencies {
     compile 'org.vaadin.addons:stepper:2.1.2'
 
     compile project(':V7')
-    compile project(':testbench')
-    compile project(':testUtil')
 
 
+    testCompile project(':testbench')
+    testCompile project(':testUtil')
     testCompile 'com.vaadin:vaadin-testbench:3.1.2'
 
 

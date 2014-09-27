@@ -41,10 +41,9 @@ public class NotificationsView extends ViewBase {
         super();
         this.userNotifier = userNotifier;
         this.translate = translate;
-        buildView();
     }
 
-    private com.vaadin.ui.TextArea buildView() {
+    protected Component buildView() {
         buttonPanel = new Panel();
         VerticalLayout verticalLayout = new VerticalLayout();
         buttonPanel.setContent(verticalLayout);
@@ -61,7 +60,7 @@ public class NotificationsView extends ViewBase {
         grid.setRowExpandRatio(1, 0.15f);
         grid.setRowExpandRatio(2, 0.4f);
         grid.setRowExpandRatio(3, 0.15f);
-        rootComponent = grid;
+
 
         errorButton = new Button("Fake an error");
         errorButton.setWidth("100%");
@@ -101,7 +100,7 @@ public class NotificationsView extends ViewBase {
         infoArea.setSizeFull();
         infoArea.setValue(translate.from(DescriptionKey.Notifications));
         grid.addComponent(infoArea, 0, 1, 1, 1);
-        return null;
+        return grid;
     }
 
     @Override
