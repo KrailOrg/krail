@@ -18,8 +18,8 @@ import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.co.q3c.persist.dynamo.Entity;
 import uk.co.q3c.v7.base.data.CommitException;
+import uk.co.q3c.v7.base.data.Entity;
 import uk.co.q3c.v7.i18n.I18NProcessor;
 
 
@@ -81,6 +81,13 @@ public class BeanFieldGroup_I18N<T extends Entity> {
             log.error("Unable to save changes", e);
             throw new CommitException(e);
         }
+    }
+
+    /**
+     * Cancels changes to the backing bean, and re-instates original values in Fields
+     */
+    public void cancel() {
+        fieldGroup.discard();
     }
 
 }

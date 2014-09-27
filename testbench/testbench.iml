@@ -103,7 +103,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: objenesis-1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: mockito-core-1.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: hamcrest-all-1.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: junit-4.12-beta-1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: junit-4.12-beta-2" level="project" />
   </component>
 </module>
 

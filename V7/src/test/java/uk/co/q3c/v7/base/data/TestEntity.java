@@ -14,9 +14,11 @@ package uk.co.q3c.v7.base.data;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.beans.PropertyChangeEvent;
+import java.lang.reflect.InvocationTargetException;
 
-public class TestEntity {
-	@NotNull
+public class TestEntity implements Entity {
+    @NotNull
 	@Size(min = 2, max = 14)
 	private String firstName;
 	private String lastName;
@@ -37,4 +39,39 @@ public class TestEntity {
 		this.lastName = lastName;
 	}
 
+    @Override
+    public boolean isDirty() {
+        return false;
+    }
+
+    @Override
+    public void setDirty(boolean dirty) {
+
+    }
+
+    @Override
+    public void save() {
+
+    }
+
+    @Override
+    public void delete() throws NoSuchMethodException, InstantiationException, IllegalAccessException,
+            InvocationTargetException {
+
+    }
+
+    @Override
+    public Dao getDao() {
+        return null;
+    }
+
+    @Override
+    public void init(Dao Dao) {
+
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+
+    }
 }
