@@ -214,7 +214,6 @@ public class DefaultV7Navigator implements V7Navigator {
             }
             // now change the view
             V7View view = viewFactory.get(node.getViewClass());
-            view.prepareView(navigationState);
             changeView(view, event);
             // and tell listeners its changed
             fireAfterViewChange(event);
@@ -249,8 +248,13 @@ public class DefaultV7Navigator implements V7Navigator {
 
     protected void changeView(V7View view, V7ViewChangeEvent event) {
         ScopedUI ui = uiProvider.get();
+        log.debug("calling view.beforeBuild(event)");
+        view.beforeBuild(event);
+        log.debug("calling view.buildView(event)");
+        view.buildView(event);
         ui.changeView(view);
-        view.enter(event);
+        log.debug("calling view.afterBuild(event)");
+        view.afterBuild(event);
         currentView = view;
     }
 

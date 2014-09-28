@@ -13,11 +13,9 @@
 package uk.co.q3c.v7.base.view;
 
 import com.google.inject.Inject;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 
 public abstract class StandardPageViewBase extends ViewBase {
 
@@ -27,11 +25,10 @@ public abstract class StandardPageViewBase extends ViewBase {
     @Inject
     protected StandardPageViewBase() {
         super();
-        buildView();
     }
 
     @Override
-    protected Component buildView() {
+    public void buildView(V7ViewChangeEvent event) {
 
         label = new Label("This is the " + this.getClass()
                                                .getSimpleName());
@@ -50,7 +47,7 @@ public abstract class StandardPageViewBase extends ViewBase {
 
         label.setSizeFull();
 
-        return grid;
+        setRootComponent(grid);
     }
 
     @Override
@@ -62,22 +59,23 @@ public abstract class StandardPageViewBase extends ViewBase {
                                  .getSimpleName(), label));
     }
 
-    /**
-     * Called immediately after construction of the view to enable setting up the view from URL parameters
-     *
-     * @param navigationState
-     */
-    @Override
-    public void prepareView(NavigationState navigationState) {
-
-    }
 
     public Label getLabel() {
         return label;
     }
 
+    /**
+     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+     * configuration which affects the way the view is presented.
+     *
+     * @param event
+     *         contains information about the change to this View
+     */
     @Override
-    protected void processParams(NavigationState navigationState) {
+    public void beforeBuild(V7ViewChangeEvent event) {
+
     }
+
 
 }

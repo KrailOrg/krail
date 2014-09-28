@@ -13,9 +13,7 @@
 package uk.co.q3c.v7.base.view;
 
 import com.google.inject.Inject;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 
 public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 
@@ -24,29 +22,26 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
         super();
     }
 
+    /**
+     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+     * configuration which affects the way the view is presented.
+     *
+     * @param event
+     *         contains information about the change to this View
+     */
     @Override
-    protected Component buildView() {
-        super.buildView();
+    public void beforeBuild(V7ViewChangeEvent event) {
+
+    }
+
+    @Override
+    public void buildView(V7ViewChangeEvent event) {
+        super.buildView(event);
         Panel p = new Panel("Logged out");
         p.setSizeFull();
         getLayout().addComponent(p);
-        return getRootComponent();
     }
 
 
-    @Override
-    protected void processParams(NavigationState navigationState) {
-
-    }
-
-
-    /**
-     * Called immediately after construction of the view to enable setting up the view from URL parameters
-     *
-     * @param navigationState
-     */
-    @Override
-    public void prepareView(NavigationState navigationState) {
-
-    }
 }

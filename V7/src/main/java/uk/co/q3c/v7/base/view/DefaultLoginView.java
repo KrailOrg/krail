@@ -22,7 +22,6 @@ import com.vaadin.ui.themes.ChameleonTheme;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.shiro.LoginExceptionHandler;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.user.status.UserStatus;
@@ -53,7 +52,8 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         this.userStatus = userStatus;
     }
 
-    protected Component buildView() {
+    @Override
+    public void buildView(V7ViewChangeEvent event) {
         getGridLayout().setColumns(3);
         getGridLayout().setRows(3);
         getGridLayout().setSizeFull();
@@ -91,7 +91,6 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         getGridLayout().setRowExpandRatio(0, 1);
         getGridLayout().setRowExpandRatio(2, 1);
 
-        return getGridLayout();
     }
 
     @Override
@@ -103,10 +102,6 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         statusMsgLabel.setId(ID.getId("status", this, statusMsgLabel));
     }
 
-    @Override
-    protected void processParams(NavigationState navigationState) {
-        // None to process for login
-    }
 
     @Override
     public void buttonClick(ClickEvent event) {
@@ -157,13 +152,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(I18NKey<?> messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey<?> messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     public TextField getUsernameBox() {
@@ -174,20 +169,24 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         return passwordBox;
     }
 
+    /**
+     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+     * configuration which affects the way the view is presented.
+     *
+     * @param event
+     *         contains information about the change to this View
+     */
+    @Override
+    public void beforeBuild(V7ViewChangeEvent event) {
+
+    }
+
     @Override
     public String viewName() {
 
         return getClass().getSimpleName();
     }
 
-    /**
-     * Called immediately after construction of the view to enable setting up the view from URL parameters
-     *
-     * @param navigationState
-     */
-    @Override
-    public void prepareView(NavigationState navigationState) {
-
-    }
 
 }

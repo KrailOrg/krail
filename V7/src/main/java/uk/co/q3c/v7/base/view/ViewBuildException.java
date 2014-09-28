@@ -13,15 +13,26 @@
 
 package uk.co.q3c.v7.base.view;
 
-import com.google.inject.Inject;
-import uk.co.q3c.v7.base.view.component.DefaultUserNavigationTree;
-
-public class DefaultPublicHomeView extends StandardPageViewBase implements PublicHomeView {
-
-    @Inject
-    protected DefaultPublicHomeView(DefaultUserNavigationTree navtree) {
-        super();
+/**
+ * Created by david on 28/09/14.
+ */
+public class ViewBuildException extends RuntimeException {
+    public ViewBuildException() {
     }
 
+    public ViewBuildException(String message) {
+        super(message);
+    }
 
+    public ViewBuildException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ViewBuildException(Throwable cause) {
+        super(cause);
+    }
+
+    public ViewBuildException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

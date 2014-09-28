@@ -18,16 +18,16 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.user.notify.UserNotifier;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.ViewBase;
 import uk.co.q3c.v7.i18n.MessageKey;
 import uk.co.q3c.v7.i18n.Translate;
 import uk.co.q3c.v7.testapp.i18n.TestAppDescriptionKey;
 
 public class NotificationsView extends ViewBase {
-	private final UserNotifier userNotifier;
-	private final Translate translate;
+    private final UserNotifier userNotifier;
+    private final Translate translate;
     protected GridLayout grid;
     private Panel buttonPanel;
     private Button errorButton;
@@ -35,103 +35,98 @@ public class NotificationsView extends ViewBase {
     private Button infoButton;
     private Button warnButton;
 
-	@Inject
-	protected NotificationsView(UserNotifier userNotifier, Translate translate) {
-		super();
-		this.userNotifier = userNotifier;
-		this.translate = translate;
-	}
+    @Inject
+    protected NotificationsView(UserNotifier userNotifier, Translate translate) {
+        super();
+        this.userNotifier = userNotifier;
+        this.translate = translate;
+    }
 
+
+    /**
+     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+     * configuration which affects the way the view is presented.
+     *
+     * @param event
+     *         contains information about the change to this View
+     */
+    @Override
+    public void beforeBuild(V7ViewChangeEvent event) {
+
+    }
 
     @Override
-    protected Component buildView() {
+    public void buildView(V7ViewChangeEvent event) {
         buttonPanel = new Panel();
-		VerticalLayout verticalLayout = new VerticalLayout();
-		buttonPanel.setContent(verticalLayout);
+        VerticalLayout verticalLayout = new VerticalLayout();
+        buttonPanel.setContent(verticalLayout);
 
-		grid = new GridLayout(3, 4);
+        grid = new GridLayout(3, 4);
 
-		grid.addComponent(buttonPanel, 1, 2);
-		grid.setSizeFull();
-		grid.setColumnExpandRatio(0, 0.400f);
-		grid.setColumnExpandRatio(1, 0.20f);
-		grid.setColumnExpandRatio(2, 0.40f);
+        grid.addComponent(buttonPanel, 1, 2);
+        grid.setSizeFull();
+        grid.setColumnExpandRatio(0, 0.400f);
+        grid.setColumnExpandRatio(1, 0.20f);
+        grid.setColumnExpandRatio(2, 0.40f);
 
-		grid.setRowExpandRatio(0, 0.05f);
-		grid.setRowExpandRatio(1, 0.15f);
-		grid.setRowExpandRatio(2, 0.4f);
-		grid.setRowExpandRatio(3, 0.15f);
+        grid.setRowExpandRatio(0, 0.05f);
+        grid.setRowExpandRatio(1, 0.15f);
+        grid.setRowExpandRatio(2, 0.4f);
+        grid.setRowExpandRatio(3, 0.15f);
 
 
         errorButton = new Button("Fake an error");
-		errorButton.setWidth("100%");
-		errorButton.addClickListener(new ClickListener() {
+        errorButton.setWidth("100%");
+        errorButton.addClickListener(new ClickListener() {
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				userNotifier.notifyError(MessageKey.Service_not_Started, "Fake Service");
-			}
-		});
-		verticalLayout.addComponent(errorButton);
+            @Override
+            public void buttonClick(ClickEvent event) {
+                userNotifier.notifyError(MessageKey.Service_not_Started, "Fake Service");
+            }
+        });
+        verticalLayout.addComponent(errorButton);
 
-		warnButton = new Button("Fake a warning");
-		warnButton.setWidth("100%");
-		warnButton.addClickListener(new ClickListener() {
+        warnButton = new Button("Fake a warning");
+        warnButton.setWidth("100%");
+        warnButton.addClickListener(new ClickListener() {
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				userNotifier.notifyWarning(MessageKey.Service_not_Started, "Fake Service");
-			}
-		});
-		verticalLayout.addComponent(warnButton);
+            @Override
+            public void buttonClick(ClickEvent event) {
+                userNotifier.notifyWarning(MessageKey.Service_not_Started, "Fake Service");
+            }
+        });
+        verticalLayout.addComponent(warnButton);
 
-		infoButton = new Button("Fake user information");
-		infoButton.setWidth("100%");
-		infoButton.addClickListener(new ClickListener() {
+        infoButton = new Button("Fake user information");
+        infoButton.setWidth("100%");
+        infoButton.addClickListener(new ClickListener() {
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				userNotifier.notifyInformation(MessageKey.Service_not_Started, "Fake Service");
-			}
-		});
-		verticalLayout.addComponent(infoButton);
+            @Override
+            public void buttonClick(ClickEvent event) {
+                userNotifier.notifyInformation(MessageKey.Service_not_Started, "Fake Service");
+            }
+        });
+        verticalLayout.addComponent(infoButton);
 
-		infoArea = new Label();
-		infoArea.setContentMode(ContentMode.HTML);
-		infoArea.setSizeFull();
-		infoArea.setValue(translate.from(TestAppDescriptionKey.Notifications));
-		grid.addComponent(infoArea, 0, 1, 1, 1);
-        return grid;
+        infoArea = new Label();
+        infoArea.setContentMode(ContentMode.HTML);
+        infoArea.setSizeFull();
+        infoArea.setValue(translate.from(TestAppDescriptionKey.Notifications));
+        grid.addComponent(infoArea, 0, 1, 1, 1);
+        setRootComponent(grid);
     }
 
-    /**
-     * This method is called with the URI parameters separated from the "address" part of the URI, and is typically
-     * used
-     * to set up the state of a view in response to the parameter values
-     *
-     * @param navigationState
-     */
-    @Override
-    protected void processParams(NavigationState navigationState) {
-
-    }
 
     @Override
     public void setIds() {
-		super.setIds();
-		grid.setId(ID.getId(this.getClass().getSimpleName(), grid));
-		infoButton.setId(ID.getId("information", this, infoButton));
-		warnButton.setId(ID.getId("warning", this, warnButton));
-		errorButton.setId(ID.getId("error", this, errorButton));
-	}
-
-    /**
-     * Called immediately after construction of the view to enable setting up the view from URL parameters
-     *
-     * @param navigationState
-     */
-    @Override
-    public void prepareView(NavigationState navigationState) {
-
+        super.setIds();
+        grid.setId(ID.getId(this.getClass()
+                                .getSimpleName(), grid));
+        infoButton.setId(ID.getId("information", this, infoButton));
+        warnButton.setId(ID.getId("warning", this, warnButton));
+        errorButton.setId(ID.getId("error", this, errorButton));
     }
+
+
 }

@@ -13,26 +13,55 @@
 
 package uk.co.q3c.v7.base.view;
 
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Component;
 import uk.co.q3c.v7.base.navigate.NavigationState;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
 
+
+/**
+ * A view is constructed by the {@link ViewFactory} from a Provider defined in the sitemap building process.  When
+ * the view is selected for use, calls are made against {@link V7ViewChangeListener}s added to {@link V7Navigator}, and
+ * this interface, in the following order:
+ * <ol>
+ * <li>{@link V7ViewChangeListener#beforeViewChange(V7ViewChangeEvent)}</li>
+ * <li>{@link #init()}</li>
+ * <li>{@link #beforeBuild}</li>
+ * <li>{@link #buildView}</li>
+ * <li>{@link #afterBuild}</li>
+ * <li>{@link V7ViewChangeListener#afterViewChange(V7ViewChangeEvent)}</li>
+ * </ol>
+ * where build refers to the creation of UI fields and components which populate the view.  Each method, except init(),
+ * is passed a
+ * {@link V7ViewChangeEvent}, which contains the current {@link NavigationState} so that, for example, parameter
+ * information can be used to determine how the View is to be built or respond in some other way to URL parameters.
+ */
 public interface V7View {
+
     /**
-     * This view is navigated to.
-     * <p/>
-     * This method is always called before the view is shown on screen. {@link ViewChangeEvent#getParameters()
-     * event.getParameters()} may contain extra parameters relevant to the view.
+     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+     * configuration which affects the way the view is presented.
      *
      * @param event
-     *         ViewChangeEvent representing the view change that is occurring. {@link ViewChangeEvent#getNewView()
-     *         event.getNewView()} returns <code>this</code>.
+     *         contains information about the change to this View
      */
-    public void enter(V7ViewChangeEvent event);
+    public void beforeBuild(V7ViewChangeEvent event);
+
+    /**
+     * Builds the UI components of the view.  MUST set the root component of the View (returned by {@link
+     * #getRootComponent()}, which is used to insert into the {@link ScopedUI} view area. The view implementation may
+     * need to check whether components have already been constructed, as this method may be called when the View is
+     * selected again after initial construction.
+     *
+     * @param event
+     *         contains information about the change to this View
+     */
+    public void buildView(V7ViewChangeEvent event);
 
     /**
      * To enable implementations to implement this interface without descending from Component. If the implementation
-     * does descend from Component, just return 'this'
+     * does descend from Component, just return 'this'.  Throws a ViewBuildException if the root component has not been
+     * set
      *
      * @return
      */
@@ -46,14 +75,16 @@ public interface V7View {
     public String viewName();
 
     /**
-     * Called by the {@link ViewFactory} after the construction of a view.
+     * Called by the {@link ViewFactory} after the construction of a view, and intended for initialisation which does
+     * not depend on navigation state.
      */
     public void init();
 
     /**
-     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     * Called immediately after the construction of the Views components (see {@link buildView}) to enable setting up
+     * the view from URL parameters.  A typical use is to set ids for components if these are being used.
      *
      * @param navigationState
      */
-    void prepareView(NavigationState navigationState);
+    void afterBuild(V7ViewChangeEvent event);
 }

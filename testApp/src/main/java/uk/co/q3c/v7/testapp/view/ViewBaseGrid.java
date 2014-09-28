@@ -15,6 +15,7 @@ package uk.co.q3c.v7.testapp.view;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Panel;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.ViewBase;
 
 /**
@@ -24,20 +25,15 @@ import uk.co.q3c.v7.base.view.ViewBase;
  */
 public abstract class ViewBaseGrid extends ViewBase {
 
-    private GridLayout grid;
     private int topMargin = 5;
 
     protected ViewBaseGrid() {
         super();
     }
 
-    public GridLayout getGrid() {
-        return grid;
-    }
-
     @Override
-    protected Component buildView() {
-        grid = new GridLayout(3, 4);
+    public void buildView(V7ViewChangeEvent event) {
+        GridLayout grid = new GridLayout(3, 4);
         Panel topMarginPanel = new Panel();
         topMarginPanel.setHeight(topMargin + "px");
         topMarginPanel.setWidth("100%");
@@ -50,24 +46,27 @@ public abstract class ViewBaseGrid extends ViewBase {
         grid.setRowExpandRatio(1, 0.40f);
         grid.setRowExpandRatio(2, 0.20f);
         grid.setRowExpandRatio(3, 0.40f);
-        return grid;
+        setRootComponent(grid);
     }
 
-
     protected void setTopCentreCell(Component component) {
-        grid.addComponent(component, 1, 1);
+        getGrid().addComponent(component, 1, 1);
+    }
+
+    public GridLayout getGrid() {
+        return (GridLayout) getRootComponent();
     }
 
     protected void setCentreCell(Component component) {
-        grid.addComponent(component, 1, 2);
+        getGrid().addComponent(component, 1, 2);
     }
 
     protected void setTopLeftCell(Component component) {
-        grid.addComponent(component, 0, 1);
+        getGrid().addComponent(component, 0, 1);
     }
 
     protected void setBottomCentreCell(Component component) {
-        grid.addComponent(component, 1, 3);
+        getGrid().addComponent(component, 1, 3);
     }
 
     /**
@@ -86,6 +85,19 @@ public abstract class ViewBaseGrid extends ViewBase {
      */
     public void setTopMargin(int topMargin) {
         this.topMargin = topMargin;
+    }
+
+    /**
+     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+     * configuration which affects the way the view is presented.
+     *
+     * @param event
+     *         contains information about the change to this View
+     */
+    @Override
+    public void beforeBuild(V7ViewChangeEvent event) {
+
     }
 
 }

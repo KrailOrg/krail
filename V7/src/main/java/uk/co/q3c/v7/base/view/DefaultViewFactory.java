@@ -13,10 +13,12 @@
 package uk.co.q3c.v7.base.view;
 
 import com.google.inject.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.q3c.v7.base.guice.uiscope.UIScope;
 
 public class DefaultViewFactory implements ViewFactory {
-
+    private static Logger log = LoggerFactory.getLogger(DefaultViewFactory.class);
     private final Injector injector;
 
     @Inject
@@ -35,8 +37,9 @@ public class DefaultViewFactory implements ViewFactory {
         Provider<T> unscoped = injector.getProvider(key);
         UIScope.getCurrent()
                .scope(key, unscoped);
-
+        log.debug("getting or retrieving instance of {}", viewClass);
         T view = injector.getInstance(key);
+        log.debug("Calling view.init()");
         view.init();
         return view;
     }

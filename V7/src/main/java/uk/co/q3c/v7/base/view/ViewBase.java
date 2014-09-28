@@ -17,8 +17,10 @@ import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 
+/**
+ * Provides default View behaviour suitable for most view implementations
+ */
 public abstract class ViewBase implements V7View {
 
     private static Logger log = LoggerFactory.getLogger(ViewBase.class);
@@ -30,10 +32,15 @@ public abstract class ViewBase implements V7View {
 
     }
 
+    public void init() {
+
+    }
+
     /**
      * Calls {@link #setIds() after the View has been constructed}
      */
-    public void init() {
+    @Override
+    public void afterBuild(V7ViewChangeEvent event) {
         setIds();
     }
 
@@ -50,35 +57,15 @@ public abstract class ViewBase implements V7View {
     @Override
     public Component getRootComponent() {
         if (rootComponent == null) {
-            rootComponent = buildView();
-            setIds();
+            throw new ViewBuildException("Root component cannot be null. Has your buildView() method called " +
+                    "setRootComponent()?");
         }
         return rootComponent;
     }
 
-    /**
-     * Override this method to build the layout and components for this View
-     *
-     * @return
-     */
-    protected abstract Component buildView();
-
-    @Override
-    public void enter(V7ViewChangeEvent event) {
-        log.debug("entered view: " + this.getClass()
-                                         .getSimpleName() + " with uri " + event.getNavigationState());
-
-        processParams(event.getNavigationState());
+    public void setRootComponent(Component rootComponent) {
+        this.rootComponent = rootComponent;
     }
-
-    /**
-     * This method is called with the URI parameters separated from the "address" part of the URI, and is typically
-     * used
-     * to set up the state of a view in response to the parameter values
-     *
-     * @param params
-     */
-    protected abstract void processParams(NavigationState navigationState);
 
     @Override
     public String viewName() {

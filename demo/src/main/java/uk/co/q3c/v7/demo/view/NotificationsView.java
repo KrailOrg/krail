@@ -18,8 +18,8 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.user.notify.UserNotifier;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.ViewBase;
 import uk.co.q3c.v7.demo.i18n.DescriptionKey;
 import uk.co.q3c.v7.i18n.MessageKey;
@@ -28,7 +28,6 @@ import uk.co.q3c.v7.i18n.Translate;
 public class NotificationsView extends ViewBase {
     private final UserNotifier userNotifier;
     private final Translate translate;
-    protected GridLayout grid;
     private Panel buttonPanel;
     private Button errorButton;
     private Label infoArea;
@@ -42,23 +41,24 @@ public class NotificationsView extends ViewBase {
         this.translate = translate;
     }
 
-    protected Component buildView() {
+    @Override
+    public void buildView(V7ViewChangeEvent event) {
         buttonPanel = new Panel();
         VerticalLayout verticalLayout = new VerticalLayout();
         buttonPanel.setContent(verticalLayout);
 
-        grid = new GridLayout(3, 4);
+        setRootComponent(new GridLayout(3, 4));
 
-        grid.addComponent(buttonPanel, 1, 2);
-        grid.setSizeFull();
-        grid.setColumnExpandRatio(0, 0.400f);
-        grid.setColumnExpandRatio(1, 0.20f);
-        grid.setColumnExpandRatio(2, 0.40f);
+        getGrid().addComponent(buttonPanel, 1, 2);
+        getGrid().setSizeFull();
+        getGrid().setColumnExpandRatio(0, 0.400f);
+        getGrid().setColumnExpandRatio(1, 0.20f);
+        getGrid().setColumnExpandRatio(2, 0.40f);
 
-        grid.setRowExpandRatio(0, 0.05f);
-        grid.setRowExpandRatio(1, 0.15f);
-        grid.setRowExpandRatio(2, 0.4f);
-        grid.setRowExpandRatio(3, 0.15f);
+        getGrid().setRowExpandRatio(0, 0.05f);
+        getGrid().setRowExpandRatio(1, 0.15f);
+        getGrid().setRowExpandRatio(2, 0.4f);
+        getGrid().setRowExpandRatio(3, 0.15f);
 
 
         errorButton = new Button("Fake an error");
@@ -98,40 +98,33 @@ public class NotificationsView extends ViewBase {
         infoArea.setContentMode(ContentMode.HTML);
         infoArea.setSizeFull();
         infoArea.setValue(translate.from(DescriptionKey.Notifications));
-        grid.addComponent(infoArea, 0, 1, 1, 1);
-        return grid;
+        getGrid().addComponent(infoArea, 0, 1, 1, 1);
     }
 
-    /**
-     * This method is called with the URI parameters separated from the "address" part of the URI, and is typically
-     * used
-     * to set up the state of a view in response to the parameter values
-     *
-     * @param navigationState
-     */
-    @Override
-    protected void processParams(NavigationState navigationState) {
-
+    public GridLayout getGrid() {
+        return (GridLayout) getRootComponent();
     }
-
 
     @Override
     public void setIds() {
         super.setIds();
-        grid.setId(ID.getId(this.getClass()
-                                .getSimpleName(), grid));
+        getGrid().setId(ID.getId(this.getClass()
+                                     .getSimpleName(), getGrid()));
         infoButton.setId(ID.getId("information", this, infoButton));
         warnButton.setId(ID.getId("warning", this, warnButton));
         errorButton.setId(ID.getId("error", this, errorButton));
     }
 
     /**
-     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+     * configuration which affects the way the view is presented.
      *
-     * @param navigationState
+     * @param event
+     *         contains information about the change to this View
      */
     @Override
-    public void prepareView(NavigationState navigationState) {
+    public void beforeBuild(V7ViewChangeEvent event) {
 
     }
 }

@@ -22,8 +22,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.i18n.Translate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -170,10 +170,24 @@ public class ApplicationViewLayout1Test {
 
         protected TestView(ViewLayout viewLayout, Translate translate) {
             super(viewLayout, translate);
-            buildView();
         }
 
-        protected com.vaadin.ui.TextArea buildView() {
+        /**
+         * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically
+         * checks
+         * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+         * configuration which affects the way the view is presented.
+         *
+         * @param event
+         *         contains information about the change to this View
+         */
+        @Override
+        public void beforeBuild(V7ViewChangeEvent event) {
+
+        }
+
+        @Override
+        public void buildView(V7ViewChangeEvent event) {
             add(logo).width(50)
                      .height(70);
             add(header).widthUndefined()
@@ -186,19 +200,6 @@ public class ApplicationViewLayout1Test {
             add(body).heightPercent(100);
             add(subpage).height(55);
             add(messageBar).height(80);
-            return null;
-        }
-
-        /**
-         * This method is called with the URI parameters separated from the "address" part of the URI, and is typically
-         * used
-         * to set up the state of a view in response to the parameter values
-         *
-         * @param navigationState
-         */
-        @Override
-        protected void processParams(NavigationState navigationState) {
-
         }
 
 
@@ -208,15 +209,6 @@ public class ApplicationViewLayout1Test {
             return "TestView";
         }
 
-        /**
-         * Called immediately after construction of the view to enable setting up the view from URL parameters
-         *
-         * @param navigationState
-         */
-        @Override
-        public void prepareView(NavigationState navigationState) {
-
-        }
 
     }
 }

@@ -13,7 +13,6 @@
 package uk.co.q3c.v7.base.view;
 
 import com.google.inject.Inject;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.view.component.*;
 import uk.co.q3c.v7.base.view.layout.ApplicationViewLayout1;
 import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout;
@@ -54,7 +53,6 @@ public class ApplicationView1 extends ViewBaseWithLayout {
         this.logo = logo;
         this.header = header;
         body = createBody();
-        buildView();
     }
 
     /**
@@ -66,7 +64,21 @@ public class ApplicationView1 extends ViewBaseWithLayout {
         return new DefaultViewBody();
     }
 
-    protected com.vaadin.ui.TextArea buildView() {
+    /**
+     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+     * configuration which affects the way the view is presented.
+     *
+     * @param event
+     *         contains information about the change to this View
+     */
+    @Override
+    public void beforeBuild(V7ViewChangeEvent event) {
+
+    }
+
+    @Override
+    public void buildView(V7ViewChangeEvent event) {
         add(logo).width(50)
                  .height(70);
         add(header).widthUndefined()
@@ -79,13 +91,13 @@ public class ApplicationView1 extends ViewBaseWithLayout {
         add(body).heightPercent(100);
         add(subpage).height(55);
         add(messageBar).height(80);
-        return null;
     }
 
 
     @Override
-    protected void processParams(NavigationState navigationState) {
-        body.processParams(navigationState);
+    public void afterBuild(V7ViewChangeEvent event) {
+        super.afterBuild(event);
+        body.processParams(event.getNavigationState());
     }
 
     @Override
@@ -93,14 +105,5 @@ public class ApplicationView1 extends ViewBaseWithLayout {
         return "ApplicationView1";
     }
 
-    /**
-     * Called immediately after construction of the view to enable setting up the view from URL parameters
-     *
-     * @param navigationState
-     */
-    @Override
-    public void prepareView(NavigationState navigationState) {
-
-    }
 
 }

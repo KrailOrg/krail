@@ -24,94 +24,89 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.risto.stepper.IntStepper;
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.navigate.NavigationState;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.ViewBase;
 
 public class WidgetsetView extends ViewBase {
-	private static Logger log = LoggerFactory.getLogger(WidgetsetView.class);
-	protected GridLayout grid;
+    private static Logger log = LoggerFactory.getLogger(WidgetsetView.class);
     protected MessageBox messageBox;
     private Panel buttonPanel;
-	private Label infoArea;
+    private Label infoArea;
     private Button popupButton;
     private IntStepper stepper;
 
-	@Inject
-	protected WidgetsetView(SessionObject sessionObject) {
-		super();
-		log.debug("Constructor injecting with session object");
-	}
-
-
-    @Override
-    protected Component buildView() {
-        buttonPanel = new Panel();
-		VerticalLayout verticalLayout = new VerticalLayout();
-		buttonPanel.setContent(verticalLayout);
-
-		grid = new GridLayout(3, 4);
-
-		grid.addComponent(buttonPanel, 1, 2);
-		grid.setSizeFull();
-		grid.setColumnExpandRatio(0, 0.400f);
-		grid.setColumnExpandRatio(1, 0.20f);
-		grid.setColumnExpandRatio(2, 0.40f);
-
-		grid.setRowExpandRatio(0, 0.05f);
-		grid.setRowExpandRatio(1, 0.15f);
-		grid.setRowExpandRatio(2, 0.4f);
-		grid.setRowExpandRatio(3, 0.15f);
-
-		popupButton = new Button("Popup message box");
-		popupButton.setWidth("100%");
-		popupButton.addClickListener(new ClickListener() {
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				messageBox = MessageBox.showPlain(Icon.INFO, "Example 1", "Hello World!", ButtonId.OK);
-			}
-		});
-		verticalLayout.addComponent(popupButton);
-
-		stepper = new IntStepper("Stepper");
-		stepper.setValue(5);
-		verticalLayout.addComponent(stepper);
-
-		infoArea = new Label();
-		infoArea.setContentMode(ContentMode.HTML);
-		infoArea.setSizeFull();
-		infoArea.setValue("These components are used purely to ensure that the Widgetset has compiled and included add-ons");
-		grid.addComponent(infoArea, 0, 1, 1, 1);
-        return grid;
+    @Inject
+    protected WidgetsetView(SessionObject sessionObject) {
+        super();
+        log.debug("Constructor injecting with session object");
     }
 
+
     /**
-     * This method is called with the URI parameters separated from the "address" part of the URI, and is typically
-     * used
-     * to set up the state of a view in response to the parameter values
+     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+     * configuration which affects the way the view is presented.
      *
-     * @param navigationState
+     * @param event
+     *         contains information about the change to this View
      */
     @Override
-    protected void processParams(NavigationState navigationState) {
+    public void beforeBuild(V7ViewChangeEvent event) {
 
+    }
+
+    @Override
+    public void buildView(V7ViewChangeEvent event) {
+        buttonPanel = new Panel();
+        VerticalLayout verticalLayout = new VerticalLayout();
+        buttonPanel.setContent(verticalLayout);
+
+        setRootComponent(new GridLayout(3, 4));
+
+        getGrid().addComponent(buttonPanel, 1, 2);
+        getGrid().setSizeFull();
+        getGrid().setColumnExpandRatio(0, 0.400f);
+        getGrid().setColumnExpandRatio(1, 0.20f);
+        getGrid().setColumnExpandRatio(2, 0.40f);
+
+        getGrid().setRowExpandRatio(0, 0.05f);
+        getGrid().setRowExpandRatio(1, 0.15f);
+        getGrid().setRowExpandRatio(2, 0.4f);
+        getGrid().setRowExpandRatio(3, 0.15f);
+
+        popupButton = new Button("Popup message box");
+        popupButton.setWidth("100%");
+        popupButton.addClickListener(new ClickListener() {
+
+            @Override
+            public void buttonClick(ClickEvent event) {
+                messageBox = MessageBox.showPlain(Icon.INFO, "Example 1", "Hello World!", ButtonId.OK);
+            }
+        });
+        verticalLayout.addComponent(popupButton);
+
+        stepper = new IntStepper("Stepper");
+        stepper.setValue(5);
+        verticalLayout.addComponent(stepper);
+
+        infoArea = new Label();
+        infoArea.setContentMode(ContentMode.HTML);
+        infoArea.setSizeFull();
+        infoArea.setValue("These components are used purely to ensure that the Widgetset has compiled and included " +
+                "add-ons");
+        getGrid().addComponent(infoArea, 0, 1, 1, 1);
+    }
+
+    public GridLayout getGrid() {
+        return (GridLayout) getRootComponent();
     }
 
     @Override
     public void setIds() {
-		super.setIds();
-		grid.setId(ID.getId(this.getClass().getSimpleName(), grid));
-		popupButton.setId(ID.getId("popup", this, popupButton));
-		stepper.setId(ID.getId(this, stepper));
-	}
-
-    /**
-     * Called immediately after construction of the view to enable setting up the view from URL parameters
-     *
-     * @param navigationState
-     */
-    @Override
-    public void prepareView(NavigationState navigationState) {
-
+        super.setIds();
+        getGrid().setId(ID.getId(this.getClass()
+                                     .getSimpleName(), getGrid()));
+        popupButton.setId(ID.getId("popup", this, popupButton));
+        stepper.setId(ID.getId(this, stepper));
     }
 }

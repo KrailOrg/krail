@@ -25,8 +25,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.layout.ViewBaseWithLayout.ComponentWrapper;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
@@ -308,10 +308,24 @@ public class ViewBaseWithLayoutTest {
 
         protected TestViewBaseWithLayout() {
             super(new VerticalViewLayout(), translate);
-            buildView();
         }
 
-        public com.vaadin.ui.TextArea buildView() {
+        /**
+         * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically
+         * checks
+         * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+         * configuration which affects the way the view is presented.
+         *
+         * @param event
+         *         contains information about the change to this View
+         */
+        @Override
+        public void beforeBuild(V7ViewChangeEvent event) {
+
+        }
+
+        @Override
+        public void buildView(V7ViewChangeEvent event) {
             button1 = new Button();
             button2 = new Button();
             label1 = new Label();
@@ -322,7 +336,6 @@ public class ViewBaseWithLayoutTest {
             add(label1);
             add(label2);
 
-            return null;
         }
 
         /**
@@ -333,20 +346,13 @@ public class ViewBaseWithLayoutTest {
          * @param navigationState
          */
         @Override
-        protected void processParams(NavigationState navigationState) {
-            System.out.println(navigationState.getParameterList());
+        public void afterBuild(V7ViewChangeEvent event) {
+            super.afterBuild(event);
+            System.out.println(event.getNavigationState()
+                                    .getParameterList());
         }
 
 
-        /**
-         * Called immediately after construction of the view to enable setting up the view from URL parameters
-         *
-         * @param navigationState
-         */
-        @Override
-        public void prepareView(NavigationState navigationState) {
-
-        }
     }
 
 }

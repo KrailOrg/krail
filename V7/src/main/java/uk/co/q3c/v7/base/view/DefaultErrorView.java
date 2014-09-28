@@ -16,7 +16,6 @@ package uk.co.q3c.v7.base.view;
 import com.google.inject.Inject;
 import com.vaadin.ui.TextArea;
 import uk.co.q3c.util.StackTraceUtil;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 
 /**
  * @author David Sowerby 4 Aug 2013
@@ -33,10 +32,6 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
         super();
     }
 
-    @Override
-    public void processParams(NavigationState navigationState) {
-
-    }
 
     public TextArea getTextArea() {
         return textArea;
@@ -48,9 +43,6 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 
     @Override
     public void setError(Throwable error) {
-        if (!viewBuilt) {
-            buildView();
-        }
         this.error = error;
         textArea.setReadOnly(false);
         String s = StackTraceUtil.getStackTrace(error);
@@ -59,21 +51,26 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 
     }
 
+    /**
+     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+     * configuration which affects the way the view is presented.
+     *
+     * @param event
+     *         contains information about the change to this View
+     */
     @Override
-    protected TextArea buildView() {
+    public void beforeBuild(V7ViewChangeEvent event) {
+
+    }
+
+    @Override
+    public void buildView(V7ViewChangeEvent event) {
         textArea = new TextArea();
         textArea.setSizeFull();
         viewBuilt = true;
-        return textArea;
+        setRootComponent(textArea);
     }
 
-    /**
-     * Called immediately after construction of the view to enable setting up the view from URL parameters
-     *
-     * @param navigationState
-     */
-    @Override
-    public void prepareView(NavigationState navigationState) {
 
-    }
 }

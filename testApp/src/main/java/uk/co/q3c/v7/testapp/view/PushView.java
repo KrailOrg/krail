@@ -22,8 +22,8 @@ import com.vaadin.ui.Button.ClickListener;
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.config.ApplicationConfiguration;
 import uk.co.q3c.v7.base.config.ConfigKeys;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.push.Broadcaster;
+import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.base.view.component.BroadcastMessageLog;
 
 public class PushView extends ViewBaseGrid {
@@ -34,23 +34,23 @@ public class PushView extends ViewBaseGrid {
     private TextField groupInput;
     private Label infoArea;
     private HorizontalLayout inputLayout;
-	private TextField messageInput;
+    private TextField messageInput;
     private CheckBox pushEnabled;
     private Button sendButton;
 
-	@Inject
-	protected PushView(Broadcaster broadcaster, BroadcastMessageLog messageLog,
-			ApplicationConfiguration applicationConfiguration) {
-		super();
-		this.broadcaster = broadcaster;
-		this.messageLog = messageLog;
-		this.applicationConfiguration = applicationConfiguration;
-	}
+    @Inject
+    protected PushView(Broadcaster broadcaster, BroadcastMessageLog messageLog,
+                       ApplicationConfiguration applicationConfiguration) {
+        super();
+        this.broadcaster = broadcaster;
+        this.messageLog = messageLog;
+        this.applicationConfiguration = applicationConfiguration;
+    }
 
 
     @Override
-    protected Component buildView() {
-        super.buildView();
+    public void buildView(V7ViewChangeEvent event) {
+        super.buildView(event);
         groupInput = new TextField("Group");
         groupInput.setWidth("100px");
         messageInput = new TextField("Message");
@@ -91,40 +91,20 @@ public class PushView extends ViewBaseGrid {
 
         getGrid().setComponentAlignment(pushEnabled, Alignment.MIDDLE_CENTER);
         getGrid().setComponentAlignment(inputLayout, Alignment.MIDDLE_CENTER);
-        return null;
     }
 
-    /**
-     * This method is called with the URI parameters separated from the "address" part of the URI, and is typically
-     * used
-     * to set up the state of a view in response to the parameter values
-     *
-     * @param navigationState
-     */
-    @Override
-    protected void processParams(NavigationState navigationState) {
-
-    }
 
     @Override
     public void setIds() {
-		super.setIds();
+        super.setIds();
         getGrid().setId(ID.getId(this.getClass()
                                      .getSimpleName(), getGrid()));
         sendButton.setId(ID.getId("send", this, sendButton));
-		groupInput.setId(ID.getId("group", this, groupInput));
-		messageInput.setId(ID.getId("message", this, messageInput));
-		messageLog.setId(ID.getId(this, messageLog));
-		pushEnabled.setId(ID.getId(this, pushEnabled));
-	}
-
-    /**
-     * Called immediately after construction of the view to enable setting up the view from URL parameters
-     *
-     * @param navigationState
-     */
-    @Override
-    public void prepareView(NavigationState navigationState) {
-
+        groupInput.setId(ID.getId("group", this, groupInput));
+        messageInput.setId(ID.getId("message", this, messageInput));
+        messageLog.setId(ID.getId(this, messageLog));
+        pushEnabled.setId(ID.getId(this, pushEnabled));
     }
+
+
 }

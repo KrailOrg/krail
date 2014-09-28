@@ -36,12 +36,14 @@ public abstract class VerticalViewBase extends ViewBase implements V7View {
     /**
      * Override this method to build the layout and components for this View
      *
+     * @param event
+     *
      * @return
      */
     @Override
-    protected Component buildView() {
+    public void buildView(V7ViewChangeEvent event) {
         layout = new VerticalLayout();
-        return layout;
+        setRootComponent(layout);
     }
 
     @Override

@@ -15,15 +15,36 @@ package fixture.testviews2;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import uk.co.q3c.v7.base.navigate.NavigationState;
 import uk.co.q3c.v7.base.view.LoginView;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.i18n.I18NKey;
 
 public class TestLoginView implements LoginView {
 
+
+    /**
+     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
+     * configuration which affects the way the view is presented.
+     *
+     * @param event
+     *         contains information about the change to this View
+     */
     @Override
-    public void enter(V7ViewChangeEvent event) {
+    public void beforeBuild(V7ViewChangeEvent event) {
+
+    }
+
+    /**
+     * Builds the UI components of the view.  The view implementation may need to check whether components have already
+     * been constructed, as this method may be called when the View is selected again after initial construction.
+     *
+     * @param event
+     *
+     * @return the root component of the View, which is used to insert into the {@link ScopedUI} view area.
+     */
+    @Override
+    public void buildView(V7ViewChangeEvent event) {
 
     }
 
@@ -53,12 +74,12 @@ public class TestLoginView implements LoginView {
     }
 
     @Override
-    public void setStatusMessage(String invalidLogin) {
-
+    public void setStatusMessage(I18NKey<?> messageKey) {
     }
 
     @Override
-    public void setStatusMessage(I18NKey<?> messageKey) {
+    public void setStatusMessage(String invalidLogin) {
+
     }
 
     @Override
@@ -72,12 +93,14 @@ public class TestLoginView implements LoginView {
     }
 
     /**
-     * Called immediately after construction of the view to enable setting up the view from URL parameters
+     * Called immediately after the construction of the Views components (see {@link buildView}) to enable setting up
+     * the view from URL parameters
      *
-     * @param navigationState
+     * @param event
      */
     @Override
-    public void prepareView(NavigationState navigationState) {
+    public void afterBuild(V7ViewChangeEvent event) {
 
     }
+
 }
