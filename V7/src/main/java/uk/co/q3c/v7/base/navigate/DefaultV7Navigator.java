@@ -248,12 +248,15 @@ public class DefaultV7Navigator implements V7Navigator {
 
     protected void changeView(V7View view, V7ViewChangeEvent event) {
         ScopedUI ui = uiProvider.get();
-        log.debug("calling view.beforeBuild(event)");
+        log.debug("calling view.beforeBuild(event) for {}", view.getClass()
+                                                                .getName());
         view.beforeBuild(event);
-        log.debug("calling view.buildView(event)");
+        log.debug("calling view.buildView(event) {}", view.getClass()
+                                                          .getName());
         view.buildView(event);
         ui.changeView(view);
-        log.debug("calling view.afterBuild(event)");
+        log.debug("calling view.afterBuild(event) {}", view.getClass()
+                                                           .getName());
         view.afterBuild(event);
         currentView = view;
     }
@@ -327,9 +330,12 @@ public class DefaultV7Navigator implements V7Navigator {
 
     @Override
     public void error(Throwable error) {
+        log.debug("A {} Error has been thrown, reporting via the Error View", error.getClass()
+                                                                                   .getName());
         NavigationState navigationState = uriHandler.navigationState("error");
         V7ViewChangeEvent event = new V7ViewChangeEvent(navigationState);
-        V7View view = viewFactory.get(ErrorView.class);
+        ErrorView view = viewFactory.get(ErrorView.class);
+        view.setError(error);
         changeView(view, event);
     }
 

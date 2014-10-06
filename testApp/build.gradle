@@ -8,9 +8,11 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 //build for V7 test application
+
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
-ext.tomcatHome = "/home/david/tomcat7"
+
+ext.tomcatHome = "/home/david/tomcat7_8080"
 
 
 war {
@@ -24,12 +26,40 @@ vaadin {
     serverPort 8001
 }
 
-task copyTask(type: Copy) {
-    it.dependsOn("war")
-    from war
-    into "${tomcatHome}/webapps"
-}
 
+task stopTomcat(type: Exec) {
+
+    //on windows:
+    commandLine 'cmd', '/c', 'stop.bat'
+
+    //on linux
+    commandLine '/home/david/stop7_8080.sh'
+
+    //store the output instead of printing to the console:
+//    standardOutput = new ByteArrayOutputStream()
+
+    //extension method stopTomcat.output() can be used to obtain the output:
+//    ext.output = {
+//        return standardOutput.toString()
+//    }
+}
+task startTomcat(type: Exec) {
+//    workingDir '~/tomcat7_8080/bin'
+
+    //on windows:
+//    commandLine 'cmd', '/c', 'stop.bat'
+
+    //on linux
+    commandLine '/home/david/start7_8080.sh'
+
+    //store the output instead of printing to the console:
+//    standardOutput = new ByteArrayOutputStream()
+
+    //extension method stopTomcat.output() can be used to obtain the output:
+//    ext.output = {
+//        return standardOutput.toString()
+//    }
+}
 
 task deployToTomcat(type: Copy) {
     it.dependsOn("war")
@@ -38,15 +68,29 @@ task deployToTomcat(type: Copy) {
 }
 
 
-test {
-    it.dependsOn("deployToTomcat")
 
-    //delay to allow tomcat to spin it up
+task waitForTomcat(dependsOn: startTomcat) {
     doFirst {
-        println("giving Tomcat time to deploy the application")
-        sleep(30 * 1000)
+        println "giving Tomcat time to start"
+        sleep(20 * 1000)
+        println "sleep over"
     }
 }
+
+task showResults() {
+    println 'results at  file:///home/david/git/v7/testApp/build/reports/tests/index.html'
+}
+
+deployToTomcat.mustRunAfter(stopTomcat)
+deployToTomcat.mustRunAfter(clean)
+test.mustRunAfter(waitForTomcat)
+showResults.mustRunAfter(test)
+
+task cleantest(dependsOn: ['clean', 'stopTomcat', 'deployToTomcat', 'waitForTomcat', 'test', 'showResults']) {
+
+}
+
+
 
 
 dependencies {
@@ -65,6 +109,16 @@ dependencies {
     testCompile project(':testUtil')
     testCompile 'com.vaadin:vaadin-testbench:3.1.2'
 
+//    //tomcat testing
+//    classpath 'com.bmuschko:gradle-tomcat-plugin:2.0'
+//
+//
+//    def tomcatVersion = '7.0.11'
+//    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+//            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
+//    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
+//        exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+//    }
 
 }
 

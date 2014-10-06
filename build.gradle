@@ -16,54 +16,51 @@ project.ext.shiroVersion = '1.2.1'
 
 
 
-allprojects{
-        group = 'uk.co.q3c.v7'
-        version = '0.5'
+allprojects {
+    group = 'uk.co.q3c.v7'
+    version = '0.5'
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.1'
 }
 
-subprojects{
-        apply plugin: 'java'
-        apply plugin: 'eclipse-wtp'
-        sourceCompatibility = 1.7
-        targetCompatibility = 1.7
-
-	
-
-        repositories{
-                mavenCentral()
-        }
-
-	dependencies{
-   	  //Dependency Injection
-	  compile   'com.google.inject:guice:'+guiceVersion
-	  compile   'com.google.inject.extensions:guice-servlet:'+guiceVersion
-	  compile   'com.google.inject.extensions:guice-assistedinject:'+guiceVersion
-	  compile   'com.google.inject.extensions:guice-multibindings:'+guiceVersion
-
-	  //Logging
-	  compile 'org.slf4j:slf4j-api:1.6.6'
-	  compile 'org.slf4j:slf4j-log4j12:1.6.6'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse-wtp'
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
 
 
-	  //testing
-  	  testCompile 'com.mycila:mycila-guice:2.10.ga'
-	  testCompile 'com.mycila.testing.plugins:mycila-testing-guice:2.8'
-	  testCompile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
-	  testCompile 'org.mockito:mockito-all:1.9.0'
-	  testCompile 'junit:junit:4.+'
-	  testCompile 'org.assertj:assertj-core:1.5.0'
-	  testCompile 'org.assertj:assertj-joda-time:1.1.0'
-	  testCompile 'org.assertj:assertj-guava:1.0.0'
-            
-            
-            
-            
-            
-	}
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        //Dependency Injection
+        compile 'com.google.inject:guice:' + guiceVersion
+        compile 'com.google.inject.extensions:guice-servlet:' + guiceVersion
+        compile 'com.google.inject.extensions:guice-assistedinject:' + guiceVersion
+        compile 'com.google.inject.extensions:guice-multibindings:' + guiceVersion
+
+        //Logging
+        compile 'org.slf4j:slf4j-api:1.6.6'
+        compile 'org.slf4j:slf4j-log4j12:1.6.6'
+
+        //testing
+        testCompile 'com.mycila:mycila-guice:2.10.ga'
+        testCompile 'com.mycila.testing.plugins:mycila-testing-guice:2.8'
+        testCompile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
+        testCompile 'org.mockito:mockito-all:1.9.0'
+        testCompile 'junit:junit:4.+'
+        testCompile 'org.assertj:assertj-core:1.5.0'
+        testCompile 'org.assertj:assertj-joda-time:1.1.0'
+        testCompile 'org.assertj:assertj-guava:1.0.0'
+
+
+    }
 }
 
 

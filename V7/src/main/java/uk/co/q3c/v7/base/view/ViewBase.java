@@ -57,7 +57,8 @@ public abstract class ViewBase implements V7View {
     @Override
     public Component getRootComponent() {
         if (rootComponent == null) {
-            throw new ViewBuildException("Root component cannot be null. Has your buildView() method called " +
+            throw new ViewBuildException("Root component cannot be null in " + getClass().getName() + ". Has your " +
+                    "buildView() method called " +
                     "setRootComponent()?");
         }
         return rootComponent;

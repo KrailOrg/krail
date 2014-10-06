@@ -11,7 +11,7 @@
 //build for V7 demo sub-project
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
-ext.tomcatHome = "/home/david/tomcat7"
+ext.tomcatHome = "/home/david/tomcat7_8080"
 
 
 war {

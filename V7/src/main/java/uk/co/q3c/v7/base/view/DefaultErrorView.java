@@ -44,11 +44,6 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
     @Override
     public void setError(Throwable error) {
         this.error = error;
-        textArea.setReadOnly(false);
-        String s = StackTraceUtil.getStackTrace(error);
-        textArea.setValue(s);
-        textArea.setReadOnly(true);
-
     }
 
     /**
@@ -68,9 +63,15 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
     public void buildView(V7ViewChangeEvent event) {
         textArea = new TextArea();
         textArea.setSizeFull();
-        viewBuilt = true;
+        textArea.setReadOnly(false);
+        if (error != null) {
+            String s = StackTraceUtil.getStackTrace(error);
+            textArea.setValue(s);
+        } else {
+            textArea.setValue("Error view has been called but no error has been set.  This should not happen");
+            textArea.setReadOnly(true);
+        }
         setRootComponent(textArea);
     }
-
 
 }
