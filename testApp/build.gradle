@@ -56,16 +56,16 @@ task waitForTomcat(dependsOn: startTomcat) {
     }
 }
 
-task showResults() {
-    println 'results at  file:///home/david/git/v7/testApp/build/reports/tests/index.html'
-}
+//task showResults() {
+//    println 'results at  file:///home/david/git/v7/testApp/build/reports/tests/index.html'
+//}
 
 deployToTomcat.mustRunAfter(stopTomcat)
 deployToTomcat.mustRunAfter(clean)
 test.mustRunAfter(waitForTomcat)
-showResults.mustRunAfter(test)
+//showResults.dependsOn(test)
 
-task cleantest(dependsOn: ['clean', 'stopTomcat', 'deployToTomcat', 'waitForTomcat', 'test', 'showResults']) {
+task cleantest(dependsOn: ['clean', 'stopTomcat', 'deployToTomcat', 'waitForTomcat', 'test']) {
 
 }
 
@@ -75,13 +75,13 @@ task cleantest(dependsOn: ['clean', 'stopTomcat', 'deployToTomcat', 'waitForTomc
 dependencies {
 
     //vaadin push
-    compile 'com.vaadin:vaadin-push:' + vaadinVersion
+    providedCompile 'com.vaadin:vaadin-push:' + vaadinVersion
 
     //UI components
-    compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
-    compile 'org.vaadin.addons:stepper:2.1.2'
+    providedCompile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
+    providedCompile 'org.vaadin.addons:stepper:2.1.2'
 
-    compile project(':V7')
+    providedCompile project(':V7')
 
 
     testCompile project(':testbench')
