@@ -56,16 +56,17 @@ task waitForTomcat(dependsOn: startTomcat) {
         println "sleep over"
     }
 }
-//task showResults() {
-//    println 'results at  file:///home/david/git/v7/demo/build/reports/tests/index.html'
-//}
+
+task showResults(type: Exec, dependsOn: test) {
+    commandLine '/home/david/demo_results.sh'
+}
 
 deployToTomcat.mustRunAfter(stopTomcat)
 deployToTomcat.mustRunAfter(clean)
 test.mustRunAfter(waitForTomcat)
-//showResults.dependsOn(test)
+showResults.mustRunAfter(test)
 
-task cleantest(dependsOn: ['clean', 'stopTomcat', 'deployToTomcat', 'waitForTomcat', 'test']) {
+task cleantest(dependsOn: ['clean', 'stopTomcat', 'deployToTomcat', 'waitForTomcat', 'test', 'showResults']) {
 
 }
 

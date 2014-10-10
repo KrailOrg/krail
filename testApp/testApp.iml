@@ -39,14 +39,11 @@
     <orderEntry type="library" exported="" name="Gradle: guice-multibindings-3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: slf4j-api-1.6.6" level="project" />
     <orderEntry type="library" exported="" name="Gradle: slf4j-log4j12-1.6.6" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: messagebox-2.0.6" level="project" />
     <orderEntry type="library" exported="" name="Gradle: javax.inject-1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: aopalliance-1.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: asm-3.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: cglib-2.2.1-v20090111" level="project" />
     <orderEntry type="library" exported="" name="Gradle: log4j-1.2.17" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-client-compiled-7.0.2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-themes-7.0.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: mycila-guice-2.10.ga" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: mycila-testing-guice-2.8" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: mycila-testing-mockito-2.8" level="project" />
@@ -110,23 +107,26 @@
     <orderEntry type="library" scope="TEST" name="Gradle: selenium-server-2.39.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: phantomjsdriver-1.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: cssparser-0.9.11" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-slf4j-jdk14-1.6.1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: sac-1.3" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: flute-1.3.0.gg2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-sass-compiler-0.9.10" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: streamhtmlparser-jsilver-0.0.10.vaadin1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: guava-16.0.1.vaadin1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: json-0.0.20080701" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: jsoup-1.6.3" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: stepper-2.1.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit-4.12-beta-2" level="project" />
     <orderEntry type="module" module-name="testbench" scope="TEST" />
     <orderEntry type="module" module-name="testUtil" scope="TEST" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-push-7.3.2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: atmosphere-runtime-2.1.2.vaadin5" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-server-7.3.2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-shared-7.3.2" level="project" />
     <orderEntry type="module" module-name="V7" scope="PROVIDED" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: vaadin-push-7.3.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: messagebox-2.0.6" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: stepper-2.1.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: atmosphere-runtime-2.1.2.vaadin5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: vaadin-client-compiled-7.0.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: vaadin-themes-7.0.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: vaadin-slf4j-jdk14-1.6.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: vaadin-server-7.3.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: vaadin-sass-compiler-0.9.10" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: vaadin-shared-7.3.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: jsoup-1.6.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: sac-1.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: flute-1.3.0.gg2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: streamhtmlparser-jsilver-0.0.10.vaadin1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: guava-16.0.1.vaadin1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: json-0.0.20080701" level="project" />
   </component>
 </module>
 
