@@ -13,12 +13,12 @@ Fails on Tomcat 8
 
 There are a number of sub-projects, each with a different status
 
-16th September 2014:
+10th October 2014:
 
 
 ### V7
 
-This is the base, or core, library.  Vaadin 7.3.0 is integrated with:
+This is the base, or core, library.  Vaadin 7.3.2 is integrated with:
 
 * Guice 3.0, 
 * Shiro 1.2.1, 

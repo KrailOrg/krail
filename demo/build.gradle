@@ -7,9 +7,10 @@
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
+//build for V7 test application
 
-//build for V7 demo sub-project
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
+
 
 ext.tomcatHome = "/home/david/tomcat7_8080"
 
@@ -19,6 +20,7 @@ war {
     destinationDir file("/home/david/temp")
 }
 
+
 vaadin {
 
     widgetset "uk.co.q3c.v7.demo.widgetset.V7demoWidgetset"
@@ -26,9 +28,17 @@ vaadin {
     serverPort 8001
 }
 
+task stopTomcat(type: Exec) {
 
-repositories {
-    maven { url "http://maven.vaadin.com/vaadin-addons" }
+    //on linux
+    commandLine '/home/david/stop7_8080.sh'
+
+}
+task startTomcat(type: Exec) {
+
+    commandLine '/home/david/start7_8080.sh'
+
+
 }
 
 task deployToTomcat(type: Copy) {
@@ -38,15 +48,28 @@ task deployToTomcat(type: Copy) {
 }
 
 
-test {
-    it.dependsOn("deployToTomcat")
 
-    //delay to allow tomcat to spin it up
+task waitForTomcat(dependsOn: startTomcat) {
     doFirst {
-        println("giving Tomcat time to deploy the application")
-        sleep(30 * 1000)
+        println "giving Tomcat time to start"
+        sleep(20 * 1000)
+        println "sleep over"
     }
 }
+task showResults() {
+    println 'results at  file:///home/david/git/v7/demo/build/reports/tests/index.html'
+}
+
+deployToTomcat.mustRunAfter(stopTomcat)
+deployToTomcat.mustRunAfter(clean)
+test.mustRunAfter(waitForTomcat)
+showResults.mustRunAfter(test)
+
+task cleantest(dependsOn: ['clean', 'stopTomcat', 'deployToTomcat', 'waitForTomcat', 'test', 'showResults']) {
+
+}
+
+
 
 
 dependencies {
@@ -56,15 +79,25 @@ dependencies {
 
     //UI components
     compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
-
+    compile 'org.vaadin.addons:stepper:2.1.2'
 
     compile project(':V7')
-    compile project(':testbench')
-    compile project(':testUtil')
 
 
+    testCompile project(':testbench')
+    testCompile project(':testUtil')
     testCompile 'com.vaadin:vaadin-testbench:3.1.2'
 
+//    //tomcat testing
+//    classpath 'com.bmuschko:gradle-tomcat-plugin:2.0'
+//
+//
+//    def tomcatVersion = '7.0.11'
+//    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+//            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
+//    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
+//        exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+//    }
 
 }
 

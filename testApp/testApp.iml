@@ -111,22 +111,22 @@
     <orderEntry type="library" scope="TEST" name="Gradle: selenium-server-2.39.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: phantomjsdriver-1.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: cssparser-0.9.11" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-push-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: vaadin-slf4j-jdk14-1.6.1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: atmosphere-runtime-2.1.2.vaadin3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: sac-1.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: flute-1.3.0.gg2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: vaadin-sass-compiler-0.9.10" level="project" />
     <orderEntry type="library" exported="" name="Gradle: streamhtmlparser-jsilver-0.0.10.vaadin1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: guava-16.0.1.vaadin1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: json-0.0.20080701" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-shared-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jsoup-1.6.3" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-server-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: stepper-2.1.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit-4.12-beta-2" level="project" />
     <orderEntry type="module" module-name="testbench" scope="TEST" />
     <orderEntry type="module" module-name="testUtil" scope="TEST" />
+    <orderEntry type="library" exported="" name="Gradle: vaadin-push-7.3.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: atmosphere-runtime-2.1.2.vaadin5" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: vaadin-server-7.3.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: vaadin-shared-7.3.2" level="project" />
   </component>
 </module>
 

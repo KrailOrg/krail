@@ -5,18 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c51d812-e01c-4a95-8979-ff32e1b01c84" name="Default" comment="Improved options for URL parameter processing in V7View, by adding a prepareView() call immediately after the view construction, thus the call order is:&#10; &#10; prepareView()&#10; buildView()&#10; processParams()&#10; &#10; processParams now has the full NavigationState passed to it.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/DefaultLoginViewTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo/src/main/resources/log4j.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testApp/src/main/resources/log4j.properties" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/testApp/src/main/java/log4j.properties" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultErrorView.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultErrorView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLoginView.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLoginView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/DefaultV7Navigator.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/DefaultV7Navigator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/GridViewBase.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/GridViewBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/LoginTest.java" afterPath="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/LoginTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/NavigationState.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/NavigationState.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/V7.iml" afterPath="$PROJECT_DIR$/V7/V7.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml" afterPath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/ViewBase.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/ViewBase.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/build.gradle" afterPath="$PROJECT_DIR$/demo/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/build.gradle" afterPath="$PROJECT_DIR$/testApp/build.gradle" />
@@ -24,8 +15,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/testApp.iml" afterPath="$PROJECT_DIR$/testApp/testApp.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/widgetset/testAppWidgetset.gwt.xml" afterPath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/widgetset/testAppWidgetset.gwt.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testUtil/testUtil.iml" afterPath="$PROJECT_DIR$/testUtil/testUtil.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testbench/testbench.iml" afterPath="$PROJECT_DIR$/testbench/testbench.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/views.iml" afterPath="$PROJECT_DIR$/views/views.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="v7.iws" />
@@ -55,21 +44,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DefaultUserStatusPanel.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/DefaultUserStatusPanel.java">
+      <file leaf-file-name="build.gradle" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testApp/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1620">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="630" max-vertical-offset="1695">
+              <caret line="56" column="5" selection-start-line="0" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="build.gradle" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/testApp/build.gradle">
+        <entry file="file://$PROJECT_DIR$/demo/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.82791585" vertical-offset="932" max-vertical-offset="1995">
-              <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+            <state vertical-scroll-proportion="2.173664" vertical-offset="91" max-vertical-offset="1695">
+              <caret line="82" column="45" selection-start-line="82" selection-start-column="45" selection-end-line="82" selection-end-column="45" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -78,22 +69,23 @@
         </entry>
       </file>
       <file leaf-file-name="build.gradle" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/demo/build.gradle">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1185">
-              <caret line="13" column="42" selection-start-line="13" selection-start-column="42" selection-end-line="13" selection-end-column="42" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="975">
+              <caret line="12" column="34" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LoginTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LoginTest.java">
+      <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="154" max-vertical-offset="1605">
-              <caret line="53" column="5" selection-start-line="26" selection-start-column="4" selection-end-line="53" selection-end-column="5" />
+            <state vertical-scroll-proportion="-8.653846" vertical-offset="0" max-vertical-offset="1425">
+              <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -102,8 +94,8 @@
       <file leaf-file-name="LoginTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/LoginTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="975">
-              <caret line="27" column="22" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="405" max-vertical-offset="1260">
+              <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -112,7 +104,7 @@
       <file leaf-file-name="NavigationTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="870">
+            <state vertical-scroll-proportion="0.0" vertical-offset="450" max-vertical-offset="1020">
               <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
               <folding />
             </state>
@@ -122,7 +114,7 @@
       <file leaf-file-name="StandardPagesModule.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/sitemap/StandardPagesModule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="795">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -132,7 +124,7 @@
       <file leaf-file-name="DemoGuiceServletInjector.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/DemoGuiceServletInjector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+            <state vertical-scroll-proportion="0.0" vertical-offset="405" max-vertical-offset="630">
               <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
               <folding />
             </state>
@@ -142,11 +134,9 @@
       <file leaf-file-name="DemoPages.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/view/DemoPages.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
+            <state vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="285">
               <caret line="10" column="109" selection-start-line="10" selection-start-column="109" selection-end-line="10" selection-end-column="109" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -154,7 +144,7 @@
       <file leaf-file-name="DirectSitemapModule.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/sitemap/DirectSitemapModule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="690" max-vertical-offset="1200">
+            <state vertical-scroll-proportion="0.0" vertical-offset="555" max-vertical-offset="1485">
               <caret line="37" column="22" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
               <folding />
             </state>
@@ -168,6 +158,9 @@
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
+  <component name="Git.Push.Settings">
+    <option name="myUpdateMethod" value="REBASE" />
+  </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
@@ -177,7 +170,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="tomcat8" />
+        <entry key="$PROJECT_DIR$" value="develop" />
       </map>
     </option>
   </component>
@@ -186,7 +179,7 @@
       <map>
         <entry key="" value="true" />
         <entry key=":V7/v7/" value="false" />
-        <entry key=":demo/v7/" value="false" />
+        <entry key=":demo/v7/" value="true" />
         <entry key=":testApp/v7/" value="true" />
         <entry key=":testUtil/v7/" value="false" />
         <entry key=":views/v7/" value="false" />
@@ -199,11 +192,11 @@
           <option name="executorId" value="Run" />
           <option name="settings">
             <ExternalSystemSettings>
-              <option name="externalProjectPath" value="$PROJECT_DIR$/testApp" />
+              <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
               <option name="externalSystemIdString" value="GRADLE" />
               <option name="taskNames">
                 <list>
-                  <option value="showResults" />
+                  <option value="cleantest" />
                 </list>
               </option>
             </ExternalSystemSettings>
@@ -218,6 +211,34 @@
               <option name="taskNames">
                 <list>
                   <option value="cleantest" />
+                </list>
+              </option>
+            </ExternalSystemSettings>
+          </option>
+        </ExternalTaskExecutionInfo>
+        <ExternalTaskExecutionInfo>
+          <option name="executorId" value="Run" />
+          <option name="settings">
+            <ExternalSystemSettings>
+              <option name="externalProjectPath" value="$PROJECT_DIR$" />
+              <option name="externalSystemIdString" value="GRADLE" />
+              <option name="taskNames">
+                <list>
+                  <option value="clean" />
+                </list>
+              </option>
+            </ExternalSystemSettings>
+          </option>
+        </ExternalTaskExecutionInfo>
+        <ExternalTaskExecutionInfo>
+          <option name="executorId" value="Run" />
+          <option name="settings">
+            <ExternalSystemSettings>
+              <option name="externalProjectPath" value="$PROJECT_DIR$/testApp" />
+              <option name="externalSystemIdString" value="GRADLE" />
+              <option name="taskNames">
+                <list>
+                  <option value="showResults" />
                 </list>
               </option>
             </ExternalSystemSettings>
@@ -260,34 +281,6 @@
               <option name="taskNames">
                 <list>
                   <option value="deployToTomcat" />
-                </list>
-              </option>
-            </ExternalSystemSettings>
-          </option>
-        </ExternalTaskExecutionInfo>
-        <ExternalTaskExecutionInfo>
-          <option name="executorId" value="Run" />
-          <option name="settings">
-            <ExternalSystemSettings>
-              <option name="externalProjectPath" value="$PROJECT_DIR$/testApp" />
-              <option name="externalSystemIdString" value="GRADLE" />
-              <option name="taskNames">
-                <list>
-                  <option value="stopTomcat" />
-                </list>
-              </option>
-            </ExternalSystemSettings>
-          </option>
-        </ExternalTaskExecutionInfo>
-        <ExternalTaskExecutionInfo>
-          <option name="executorId" value="Run" />
-          <option name="settings">
-            <ExternalSystemSettings>
-              <option name="externalProjectPath" value="$PROJECT_DIR$" />
-              <option name="externalSystemIdString" value="GRADLE" />
-              <option name="taskNames">
-                <list>
-                  <option value="clean" />
                 </list>
               </option>
             </ExternalSystemSettings>
@@ -388,13 +381,13 @@
                 <option name="name" value="vaadinCreateComponent" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="stopTomcat" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Assembles classes 'main'." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="classes" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="stopTomcat" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Creates a new Testbench test" />
@@ -413,16 +406,16 @@
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="cleantest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="testJar" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Runs the Vaadin application on an embedded Jetty ApplicationServer" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="vaadinRun" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="cleantest" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Compiles Vaadin Addons and components into Javascript." />
@@ -443,13 +436,13 @@
                 <option name="name" value="cleanVaadinCompileWidgetset" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="cleanEclipseProject" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Generates the Eclipse classpath file." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="eclipseClasspath" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="cleanEclipseProject" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Assembles the outputs of this project." />
@@ -877,6 +870,10 @@
                 <option name="name" value="cleanVaadinSuperDevMode" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/demo" />
+                <option name="name" value="cleantest" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Compiles Java source 'main:java'." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/demo" />
                 <option name="name" value="compileJava" />
@@ -944,6 +941,18 @@
                 <option name="description" value="Processes resources 'test:resources'." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/demo" />
                 <option name="name" value="processTestResources" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/demo" />
+                <option name="name" value="showResults" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/demo" />
+                <option name="name" value="startTomcat" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/demo" />
+                <option name="name" value="stopTomcat" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Runs the unit tests." />
@@ -1044,6 +1053,10 @@
                 <option name="description" value="Updates the widgetset xml file" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/demo" />
                 <option name="name" value="vaadinUpdateWidgetset" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/demo" />
+                <option name="name" value="waitForTomcat" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Generates a war archive with all the compiled classes, the web-app content and the libraries." />
@@ -2389,7 +2402,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="14110289867444" />
+        <entry key="$PROJECT_DIR$" value="14111466144153" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -2423,8 +2436,8 @@
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.6.6/ce53b0a0e2cfbb27e8a59d38f79a18a5c6a8d2b0/slf4j-api-1.6.6.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-log4j12/1.6.6/497bfac9a678118e7ff75d1f3b8c3bcc06dc9c8c/slf4j-log4j12-1.6.6-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-log4j12/1.6.6/5cd9b4fbc3ff6a97beaade3206137d76f65df805/slf4j-log4j12-1.6.6.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.0/8ca317605b8b8eb7ce0b45625dd1566647bae755/vaadin-server-7.3.0-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.0/faa52c1afbd642d577e06bdee00805a36ffc7208/vaadin-server-7.3.0.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.2/df86ab297547cbbdde2caca16bb5c7cbdeb2dbab/vaadin-server-7.3.2-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.2/aa5c0bc5e1466af8bce161badc4761551298918/vaadin-server-7.3.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/joda-time/joda-time/2.1/e4fb55e2e35656974d78363afaa19720670ce867/joda-time-2.1-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/joda-time/joda-time/2.1/8f79e353ef77da6710e1f10d34fc3698eaaacbca/joda-time-2.1.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.apache.bval/bval-jsr303/0.5/c29ace915e77bbfb21424e470f9b7749b1a6f97b/bval-jsr303-0.5-sources.jar" />
@@ -2467,8 +2480,8 @@
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/log4j/log4j/1.2.17/5af35056b4d257e4b64b9e8069c0746e8b08629f/log4j-1.2.17.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-sass-compiler/0.9.10/d10952a1ce74c518b9e8576644a38b560e348f22/vaadin-sass-compiler-0.9.10-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-sass-compiler/0.9.10/cb5b2c53223a8eef2e9da8f295a7ff4b047d28a/vaadin-sass-compiler-0.9.10.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.0/218e4f6f026d0d445efc53ce80e4e3e9eb7cd42/vaadin-shared-7.3.0-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.0/6baa45755b1c3b6a6164af57aefd9a7e635eb3b6/vaadin-shared-7.3.0.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.2/27936be3d30213216d90f3f3093b77302c54619f/vaadin-shared-7.3.2-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.2/d095c34aa0e0cd340e60214cf09fe8872552845e/vaadin-shared-7.3.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.6.3/242ea29175dcca8cbbea614d64f8bd91193a1537/jsoup-1.6.3-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.6.3/5cf4f55a71ae352d9c13ede8388974527540e506/jsoup-1.6.3.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.apache.bval/bval-core/0.5/9987ad92f5dc4527a23ed31ab2063b573cf49ae2/bval-core-0.5-sources.jar" />
@@ -2540,8 +2553,9 @@
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.6.6/ce53b0a0e2cfbb27e8a59d38f79a18a5c6a8d2b0/slf4j-api-1.6.6.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-log4j12/1.6.6/497bfac9a678118e7ff75d1f3b8c3bcc06dc9c8c/slf4j-log4j12-1.6.6-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-log4j12/1.6.6/5cd9b4fbc3ff6a97beaade3206137d76f65df805/slf4j-log4j12-1.6.6.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-push/7.3.0/68687b6d8d5a4c1ee511005b824ddc277284d141/vaadin-push-7.3.0.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-push/7.3.2/1f21af4ec2aedc4b00d311c0867c479121908b44/vaadin-push-7.3.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/de.steinwedel.vaadin.addon/messagebox/2.0.6/1d7ec9f5bd53bfa70012650e826b658502d2024b/messagebox-2.0.6.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.vaadin.addons/stepper/2.1.2/7577d4a4b35cf30a1ad9261d5cd7b20ff1f68e2c/stepper-2.1.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/javax.inject/javax.inject/1/a00123f261762a7c5e0ec916a2c7c8298d29c400/javax.inject-1-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/javax.inject/javax.inject/1/6975da39a7040257bd51d21a231b76c915872d38/javax.inject-1.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/aopalliance/aopalliance/1.0/4a4b6d692e17846a9f3da036438a7ac491d3c814/aopalliance-1.0-sources.jar" />
@@ -2550,24 +2564,24 @@
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.sonatype.sisu.inject/cglib/2.2.1-v20090111/7ce5e983fd0e6c78346f4c9cbfa39d83049dda2/cglib-2.2.1-v20090111.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/log4j/log4j/1.2.17/677abe279b68c5e7490d6d50c6951376238d7d3e/log4j-1.2.17-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/log4j/log4j/1.2.17/5af35056b4d257e4b64b9e8069c0746e8b08629f/log4j-1.2.17.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.atmosphere/atmosphere-runtime/2.1.2.vaadin3/fb9e908303b37e37fad5d3102bfdbfb3cdd337d1/atmosphere-runtime-2.1.2.vaadin3-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.atmosphere/atmosphere-runtime/2.1.2.vaadin3/2d8c48337d4836c194d0e2ccbef973f706d0810a/atmosphere-runtime-2.1.2.vaadin3.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.atmosphere/atmosphere-runtime/2.1.2.vaadin5/c43a4eb794a269318be36b3e1081d6b3dfdf37ab/atmosphere-runtime-2.1.2.vaadin5-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.atmosphere/atmosphere-runtime/2.1.2.vaadin5/d2c1eb4268708a58836d60b1144398bf559972c4/atmosphere-runtime-2.1.2.vaadin5.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-client-compiled/7.0.2/cb70b3781aa8164965f8ddee5ddb0480e8f3b611/vaadin-client-compiled-7.0.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-themes/7.0.2/227fab2eaf30e496c3f1e01b2e495d041d94e70f/vaadin-themes-7.0.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/asm/asm/3.1/2eaa4de56203f433f287a6df5885ef9ad3c5bcae/asm-3.1-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/asm/asm/3.1/c157def142714c544bdea2e6144645702adf7097/asm-3.1.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.slf4j/vaadin-slf4j-jdk14/1.6.1/c57b4d7edd92cd859014c7a6c34b0aef5afb2854/vaadin-slf4j-jdk14-1.6.1-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.slf4j/vaadin-slf4j-jdk14/1.6.1/2268b4bb8226e01963357bc9a02a5d56c9992b8a/vaadin-slf4j-jdk14-1.6.1.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.w3c.css/sac/1.3/d0eab9163d161293dcd1e291bc2b6b09b4b5c717/sac-1.3-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.w3c.css/sac/1.3/cdb2dcb4e22b83d6b32b93095f644c3462739e82/sac-1.3.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.0/8ca317605b8b8eb7ce0b45625dd1566647bae755/vaadin-server-7.3.0-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.0/faa52c1afbd642d577e06bdee00805a36ffc7208/vaadin-server-7.3.0.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.2/df86ab297547cbbdde2caca16bb5c7cbdeb2dbab/vaadin-server-7.3.2-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.2/aa5c0bc5e1466af8bce161badc4761551298918/vaadin-server-7.3.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-sass-compiler/0.9.10/d10952a1ce74c518b9e8576644a38b560e348f22/vaadin-sass-compiler-0.9.10-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-sass-compiler/0.9.10/cb5b2c53223a8eef2e9da8f295a7ff4b047d28a/vaadin-sass-compiler-0.9.10.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.0/218e4f6f026d0d445efc53ce80e4e3e9eb7cd42/vaadin-shared-7.3.0-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.0/6baa45755b1c3b6a6164af57aefd9a7e635eb3b6/vaadin-shared-7.3.0.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.2/27936be3d30213216d90f3f3093b77302c54619f/vaadin-shared-7.3.2-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.2/d095c34aa0e0cd340e60214cf09fe8872552845e/vaadin-shared-7.3.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.6.3/242ea29175dcca8cbbea614d64f8bd91193a1537/jsoup-1.6.3-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.6.3/5cf4f55a71ae352d9c13ede8388974527540e506/jsoup-1.6.3.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.w3c.css/sac/1.3/d0eab9163d161293dcd1e291bc2b6b09b4b5c717/sac-1.3-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.w3c.css/sac/1.3/cdb2dcb4e22b83d6b32b93095f644c3462739e82/sac-1.3.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.flute/flute/1.3.0.gg2/169d8c83c78be038206fd15e7181829076e22f27/flute-1.3.0.gg2-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.flute/flute/1.3.0.gg2/48e8c3a235544a0506ca3081519ce114169242a/flute-1.3.0.gg2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.streamhtmlparser/streamhtmlparser-jsilver/0.0.10.vaadin1/8c7f9d8b47103d1c513dcf4c5fcfdc7ac2f29edf/streamhtmlparser-jsilver-0.0.10.vaadin1-sources.jar" />
@@ -2718,7 +2732,7 @@
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.6.6/ce53b0a0e2cfbb27e8a59d38f79a18a5c6a8d2b0/slf4j-api-1.6.6.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-log4j12/1.6.6/497bfac9a678118e7ff75d1f3b8c3bcc06dc9c8c/slf4j-log4j12-1.6.6-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-log4j12/1.6.6/5cd9b4fbc3ff6a97beaade3206137d76f65df805/slf4j-log4j12-1.6.6.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-push/7.3.0/68687b6d8d5a4c1ee511005b824ddc277284d141/vaadin-push-7.3.0.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-push/7.3.2/1f21af4ec2aedc4b00d311c0867c479121908b44/vaadin-push-7.3.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/de.steinwedel.vaadin.addon/messagebox/2.0.6/1d7ec9f5bd53bfa70012650e826b658502d2024b/messagebox-2.0.6.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.vaadin.addons/stepper/2.1.2/7577d4a4b35cf30a1ad9261d5cd7b20ff1f68e2c/stepper-2.1.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/javax.inject/javax.inject/1/a00123f261762a7c5e0ec916a2c7c8298d29c400/javax.inject-1-sources.jar" />
@@ -2729,20 +2743,20 @@
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.sonatype.sisu.inject/cglib/2.2.1-v20090111/7ce5e983fd0e6c78346f4c9cbfa39d83049dda2/cglib-2.2.1-v20090111.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/log4j/log4j/1.2.17/677abe279b68c5e7490d6d50c6951376238d7d3e/log4j-1.2.17-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/log4j/log4j/1.2.17/5af35056b4d257e4b64b9e8069c0746e8b08629f/log4j-1.2.17.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.atmosphere/atmosphere-runtime/2.1.2.vaadin3/fb9e908303b37e37fad5d3102bfdbfb3cdd337d1/atmosphere-runtime-2.1.2.vaadin3-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.atmosphere/atmosphere-runtime/2.1.2.vaadin3/2d8c48337d4836c194d0e2ccbef973f706d0810a/atmosphere-runtime-2.1.2.vaadin3.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.atmosphere/atmosphere-runtime/2.1.2.vaadin5/c43a4eb794a269318be36b3e1081d6b3dfdf37ab/atmosphere-runtime-2.1.2.vaadin5-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.atmosphere/atmosphere-runtime/2.1.2.vaadin5/d2c1eb4268708a58836d60b1144398bf559972c4/atmosphere-runtime-2.1.2.vaadin5.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-client-compiled/7.0.2/cb70b3781aa8164965f8ddee5ddb0480e8f3b611/vaadin-client-compiled-7.0.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-themes/7.0.2/227fab2eaf30e496c3f1e01b2e495d041d94e70f/vaadin-themes-7.0.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/asm/asm/3.1/2eaa4de56203f433f287a6df5885ef9ad3c5bcae/asm-3.1-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/asm/asm/3.1/c157def142714c544bdea2e6144645702adf7097/asm-3.1.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.slf4j/vaadin-slf4j-jdk14/1.6.1/c57b4d7edd92cd859014c7a6c34b0aef5afb2854/vaadin-slf4j-jdk14-1.6.1-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin.external.slf4j/vaadin-slf4j-jdk14/1.6.1/2268b4bb8226e01963357bc9a02a5d56c9992b8a/vaadin-slf4j-jdk14-1.6.1.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.0/8ca317605b8b8eb7ce0b45625dd1566647bae755/vaadin-server-7.3.0-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.0/faa52c1afbd642d577e06bdee00805a36ffc7208/vaadin-server-7.3.0.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.2/df86ab297547cbbdde2caca16bb5c7cbdeb2dbab/vaadin-server-7.3.2-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.2/aa5c0bc5e1466af8bce161badc4761551298918/vaadin-server-7.3.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-sass-compiler/0.9.10/d10952a1ce74c518b9e8576644a38b560e348f22/vaadin-sass-compiler-0.9.10-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-sass-compiler/0.9.10/cb5b2c53223a8eef2e9da8f295a7ff4b047d28a/vaadin-sass-compiler-0.9.10.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.0/218e4f6f026d0d445efc53ce80e4e3e9eb7cd42/vaadin-shared-7.3.0-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.0/6baa45755b1c3b6a6164af57aefd9a7e635eb3b6/vaadin-shared-7.3.0.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.2/27936be3d30213216d90f3f3093b77302c54619f/vaadin-shared-7.3.2-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.2/d095c34aa0e0cd340e60214cf09fe8872552845e/vaadin-shared-7.3.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.6.3/242ea29175dcca8cbbea614d64f8bd91193a1537/jsoup-1.6.3-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.6.3/5cf4f55a71ae352d9c13ede8388974527540e506/jsoup-1.6.3.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.w3c.css/sac/1.3/d0eab9163d161293dcd1e291bc2b6b09b4b5c717/sac-1.3-sources.jar" />
@@ -2778,8 +2792,8 @@
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.6.6/ce53b0a0e2cfbb27e8a59d38f79a18a5c6a8d2b0/slf4j-api-1.6.6.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-log4j12/1.6.6/497bfac9a678118e7ff75d1f3b8c3bcc06dc9c8c/slf4j-log4j12-1.6.6-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-log4j12/1.6.6/5cd9b4fbc3ff6a97beaade3206137d76f65df805/slf4j-log4j12-1.6.6.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.0/8ca317605b8b8eb7ce0b45625dd1566647bae755/vaadin-server-7.3.0-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.0/faa52c1afbd642d577e06bdee00805a36ffc7208/vaadin-server-7.3.0.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.2/df86ab297547cbbdde2caca16bb5c7cbdeb2dbab/vaadin-server-7.3.2-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-server/7.3.2/aa5c0bc5e1466af8bce161badc4761551298918/vaadin-server-7.3.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/javax.inject/javax.inject/1/a00123f261762a7c5e0ec916a2c7c8298d29c400/javax.inject-1-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/javax.inject/javax.inject/1/6975da39a7040257bd51d21a231b76c915872d38/javax.inject-1.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/aopalliance/aopalliance/1.0/4a4b6d692e17846a9f3da036438a7ac491d3c814/aopalliance-1.0-sources.jar" />
@@ -2790,8 +2804,8 @@
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/log4j/log4j/1.2.17/5af35056b4d257e4b64b9e8069c0746e8b08629f/log4j-1.2.17.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-sass-compiler/0.9.10/d10952a1ce74c518b9e8576644a38b560e348f22/vaadin-sass-compiler-0.9.10-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-sass-compiler/0.9.10/cb5b2c53223a8eef2e9da8f295a7ff4b047d28a/vaadin-sass-compiler-0.9.10.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.0/218e4f6f026d0d445efc53ce80e4e3e9eb7cd42/vaadin-shared-7.3.0-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.0/6baa45755b1c3b6a6164af57aefd9a7e635eb3b6/vaadin-shared-7.3.0.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.2/27936be3d30213216d90f3f3093b77302c54619f/vaadin-shared-7.3.2-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-shared/7.3.2/d095c34aa0e0cd340e60214cf09fe8872552845e/vaadin-shared-7.3.2.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.6.3/242ea29175dcca8cbbea614d64f8bd91193a1537/jsoup-1.6.3-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.6.3/5cf4f55a71ae352d9c13ede8388974527540e506/jsoup-1.6.3.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/asm/asm/3.1/2eaa4de56203f433f287a6df5885ef9ad3c5bcae/asm-3.1-sources.jar" />
@@ -2849,8 +2863,6 @@
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.seleniumhq.selenium/selenium-java/2.39.0/3d9e645e01fb724bbb44b76f21c8b6d62b35921/selenium-java-2.39.0.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.github.detro.ghostdriver/phantomjsdriver/1.1.0/59d0d33cb486133ff9ca19f27066f8955d119c26/phantomjsdriver-1.1.0-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/com.github.detro.ghostdriver/phantomjsdriver/1.1.0/a412a2ee952d79d6e2c7d7b426c7ae47ed449a86/phantomjsdriver-1.1.0.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/junit/junit/4.10/6c98d6766e72d5575f96c9479d1c1d3b865c6e25/junit-4.10-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/junit/junit/4.10/e4f1766ce7404a08f45d859fb9c226fc9e41a861/junit-4.10.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/asm/asm/3.1/2eaa4de56203f433f287a6df5885ef9ad3c5bcae/asm-3.1-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/asm/asm/3.1/c157def142714c544bdea2e6144645702adf7097/asm-3.1.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.seleniumhq.selenium/selenium-android-driver/2.39.0/c9af8222273283bdd0b814d9096bcc465ff9aff7/selenium-android-driver-2.39.0-sources.jar" />
@@ -2875,8 +2887,6 @@
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.seleniumhq.selenium/selenium-remote-driver/2.39.0/e356ebf874c68a65f891df84f7a952cf55f3e0d5/selenium-remote-driver-2.39.0.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.seleniumhq.selenium/selenium-server/2.39.0/70481a60d62ce76894a7bbcba4ebaa653b056aea/selenium-server-2.39.0-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.seleniumhq.selenium/selenium-server/2.39.0/6b29f732fc936e3898006ba0dc0a7d6dfe94878b/selenium-server-2.39.0.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.1/2ccf1154d1a8936042a8a742dc3e611d02ac7213/hamcrest-core-1.1-sources.jar" />
-                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.1/860340562250678d1a344907ac75754e259cdb14/hamcrest-core-1.1.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.w3c.css/sac/1.3/d0eab9163d161293dcd1e291bc2b6b09b4b5c717/sac-1.3-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.w3c.css/sac/1.3/cdb2dcb4e22b83d6b32b93095f644c3462739e82/sac-1.3.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/net.sourceforge.htmlunit/htmlunit/2.13/22a0402004f08019849ae89b4abd96dfd8e0d959/htmlunit-2.13-sources.jar" />
@@ -2944,6 +2954,10 @@
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.1.3/f6f66e966c70a83ffbdb6f17a0919eaf7c8aca7f/commons-logging-1.1.3.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/xml-apis/xml-apis/1.4.01/5502da0c4c0a7916a604356ef19394ccfa30cd4b/xml-apis-1.4.01-sources.jar" />
                             <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/xml-apis/xml-apis/1.4.01/3789d9fada2d3d458c4ba2de349d48780f381ee3/xml-apis-1.4.01.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/junit/junit/4.10/6c98d6766e72d5575f96c9479d1c1d3b865c6e25/junit-4.10-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/junit/junit/4.10/e4f1766ce7404a08f45d859fb9c226fc9e41a861/junit-4.10.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.1/2ccf1154d1a8936042a8a742dc3e611d02ac7213/hamcrest-core-1.1-sources.jar" />
+                            <option value="$USER_HOME$/gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.1/860340562250678d1a344907ac75754e259cdb14/hamcrest-core-1.1.jar" />
                           </list>
                         </option>
                         <option name="path" value="$PROJECT_DIR$/testbench" />
@@ -3091,7 +3105,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultRequestSystemAccountEnableView.java" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultViewFactory.java" />
         <option value="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/NotificationsView.java" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/StandardPageViewBase.java" />
@@ -3137,11 +3150,12 @@
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/GridViewBase.java" />
         <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/DefaultLoginViewTest.java" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLoginView.java" />
-        <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/demo/build.gradle" />
         <option value="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/LoginTest.java" />
         <option value="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/view/DemoPages.java" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/testApp/build.gradle" />
+        <option value="$PROJECT_DIR$/demo/build.gradle" />
       </list>
     </option>
   </component>
@@ -3236,64 +3250,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Tests">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="V7">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="V7">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="src/test">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="V7">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="V7">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="src/test">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="java">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-        <subPane subId="Changed Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -3356,11 +3312,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testApp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
+              <option name="myItemId" value="demo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -3374,16 +3326,66 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testApp" />
+              <option name="myItemId" value=".idea" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Tests">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src/test">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src/test">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="java">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+        <subPane subId="Changed Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -3441,26 +3443,7 @@
       <recent name="uk.co.q3c.v7.testutil" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.v7:testApp [showResults]">
-    <configuration default="false" name="v7:testApp [stopTomcat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/testApp" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="stopTomcat" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
-      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Gradle.v7:demo [cleantest]">
     <configuration default="false" name="v7:testApp [startTomcat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/testApp" />
@@ -3499,25 +3482,6 @@
       <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="v7:testApp [deployToTomcat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/testApp" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="deployToTomcat" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
-      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
-      <method />
-    </configuration>
     <configuration default="false" name="v7:testApp [showResults]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/testApp" />
@@ -3529,6 +3493,48 @@
         <option name="taskNames">
           <list>
             <option value="showResults" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
+      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="All in demo" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="demo" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="v7:demo [cleantest]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="cleantest" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -3828,19 +3834,19 @@
       <item index="0" class="java.lang.String" itemvalue="JUnit.Al in project" />
       <item index="1" class="java.lang.String" itemvalue="Tomcat Server.TestApp on Tomcat 7" />
       <item index="2" class="java.lang.String" itemvalue="Tomcat Server.Demo on Tomcat 8180" />
-      <item index="3" class="java.lang.String" itemvalue="Gradle.v7:testApp [stopTomcat]" />
-      <item index="4" class="java.lang.String" itemvalue="Gradle.v7:testApp [startTomcat]" />
-      <item index="5" class="java.lang.String" itemvalue="Gradle.v7:testApp [test]" />
-      <item index="6" class="java.lang.String" itemvalue="Gradle.v7:testApp [deployToTomcat]" />
-      <item index="7" class="java.lang.String" itemvalue="Gradle.v7:testApp [showResults]" />
+      <item index="3" class="java.lang.String" itemvalue="Gradle.v7:testApp [startTomcat]" />
+      <item index="4" class="java.lang.String" itemvalue="Gradle.v7:testApp [test]" />
+      <item index="5" class="java.lang.String" itemvalue="Gradle.v7:testApp [showResults]" />
+      <item index="6" class="java.lang.String" itemvalue="JUnit.All in demo" />
+      <item index="7" class="java.lang.String" itemvalue="Gradle.v7:demo [cleantest]" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Gradle.v7:testApp [showResults]" />
-        <item index="1" class="java.lang.String" itemvalue="Gradle.v7:testApp [test]" />
-        <item index="2" class="java.lang.String" itemvalue="Gradle.v7:testApp [startTomcat]" />
-        <item index="3" class="java.lang.String" itemvalue="Gradle.v7:testApp [deployToTomcat]" />
-        <item index="4" class="java.lang.String" itemvalue="Gradle.v7:testApp [stopTomcat]" />
+        <item index="0" class="java.lang.String" itemvalue="Gradle.v7:demo [cleantest]" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.All in demo" />
+        <item index="2" class="java.lang.String" itemvalue="Gradle.v7:testApp [showResults]" />
+        <item index="3" class="java.lang.String" itemvalue="Gradle.v7:testApp [test]" />
+        <item index="4" class="java.lang.String" itemvalue="Gradle.v7:testApp [startTomcat]" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -3982,12 +3988,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32837406" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40468583" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32984003" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44960362" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -3997,12 +4002,12 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32481363" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.32991913" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" x="2237" y="333" width="284" height="582" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.32991913" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" x="2517" y="365" width="284" height="582" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2498621" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34528404" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37699682" sideWeight="0.4997242" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26475456" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37593183" sideWeight="0.4997242" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="1919" y="-4" width="1282" height="1029" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Usages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -4012,6 +4017,7 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40468583" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Dependencies Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32984003" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39979756" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -4296,7 +4302,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1290">
           <caret line="34" column="17" selection-start-line="34" selection-start-column="17" selection-end-line="34" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -4326,17 +4331,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.5439672" vertical-offset="1195" max-vertical-offset="2085">
           <caret line="159" column="53" selection-start-line="159" selection-start-column="53" selection-end-line="159" selection-end-column="53" />
-          <folding>
-            <element signature="e#4251#4252#0" expanded="false" />
-            <element signature="e#4311#4312#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/navigate/NavigationStateTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.1055777" vertical-offset="0" max-vertical-offset="690">
-          <caret line="56" column="34" selection-start-line="56" selection-start-column="34" selection-end-line="56" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -4344,7 +4338,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="9463" max-vertical-offset="10230">
           <caret line="715" column="57" selection-start-line="715" selection-start-column="57" selection-end-line="715" selection-end-column="57" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -4380,7 +4373,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1228" max-vertical-offset="3015">
           <caret line="144" column="0" selection-start-line="144" selection-start-column="0" selection-end-line="144" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -4423,10 +4415,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="197" max-vertical-offset="690">
           <caret line="64" column="18" selection-start-line="64" selection-start-column="18" selection-end-line="64" selection-end-column="18" />
-          <folding>
-            <element signature="e#1661#1662#0" expanded="false" />
-            <element signature="e#1767#1768#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -4441,7 +4430,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2117" max-vertical-offset="2865">
           <caret line="162" column="0" selection-start-line="162" selection-start-column="0" selection-end-line="162" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -4456,7 +4444,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2837" max-vertical-offset="4740">
           <caret line="267" column="32" selection-start-line="267" selection-start-column="32" selection-end-line="267" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -4465,17 +4452,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="1721" max-vertical-offset="4995">
           <caret line="175" column="16" selection-start-line="175" selection-start-column="16" selection-end-line="175" selection-end-column="16" />
           <folding>
-            <element signature="e#2590#2612#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1155">
-          <caret line="38" column="9" selection-start-line="38" selection-start-column="9" selection-end-line="38" selection-end-column="9" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#2590#2612#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -4485,16 +4462,6 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="855" max-vertical-offset="1785">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1185">
-          <caret line="13" column="42" selection-start-line="13" selection-start-column="42" selection-end-line="13" selection-end-column="42" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -4508,8 +4475,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/LoginTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="975">
-          <caret line="27" column="22" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="405" max-vertical-offset="1260">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -4550,16 +4517,43 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
           <caret line="10" column="109" selection-start-line="10" selection-start-column="109" selection-end-line="10" selection-end-column="109" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="975">
+          <caret line="12" column="34" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.653846" vertical-offset="0" max-vertical-offset="1425">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/testApp/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.82791585" vertical-offset="932" max-vertical-offset="1995">
-          <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="630" max-vertical-offset="1695">
+          <caret line="56" column="5" selection-start-line="0" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.173664" vertical-offset="91" max-vertical-offset="1695">
+          <caret line="82" column="45" selection-start-line="82" selection-start-column="45" selection-end-line="82" selection-end-column="45" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
