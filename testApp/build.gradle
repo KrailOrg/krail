@@ -60,12 +60,20 @@ task showResults(type: Exec, dependsOn: test) {
     commandLine '/home/david/testapp_results.sh'
 }
 
+task cleanTomcat(type: Delete, dependsOn: stopTomcat) {
+    delete '/home/david/tomcat7_8080/webapps/testapp.war', '/home/david/tomcat7_8080/webapps/testapp'
+}
+
+
 deployToTomcat.mustRunAfter(stopTomcat)
-deployToTomcat.mustRunAfter(clean)
+deployToTomcat.mustRunAfter(cleanTomcat)
 test.mustRunAfter(waitForTomcat)
 showResults.mustRunAfter(test)
 
-task cleantest(dependsOn: ['clean', 'stopTomcat', 'deployToTomcat', 'waitForTomcat', 'test', 'showResults']) {
+
+
+
+task cleantest(dependsOn: ['clean', 'cleanTomcat', 'deployToTomcat', 'waitForTomcat', 'test', 'showResults']) {
 
 }
 
@@ -87,16 +95,6 @@ dependencies {
     testCompile project(':testbench')
     testCompile project(':testUtil')
 
-//    //tomcat testing
-//    classpath 'com.bmuschko:gradle-tomcat-plugin:2.0'
-//
-//
-//    def tomcatVersion = '7.0.11'
-//    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
-//            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
-//    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
-//        exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
-//    }
 
 }
 
