@@ -86,7 +86,6 @@ dependencies {
 
     testCompile project(':testbench')
     testCompile project(':testUtil')
-    testCompile 'com.vaadin:vaadin-testbench:3.1.2'
 
 //    //tomcat testing
 //    classpath 'com.bmuschko:gradle-tomcat-plugin:2.0'

@@ -12,14 +12,13 @@
  */
 package uk.co.q3c.v7.testbench;
 
+import com.google.common.base.Optional;
 import com.vaadin.testbench.By;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
-import com.vaadin.testbench.commands.TestBenchElementCommands;
-import com.vaadin.ui.Button;
+import com.vaadin.testbench.elements.*;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.Dimension;
@@ -30,8 +29,12 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.view.DefaultLoginView;
-import uk.co.q3c.v7.base.view.component.*;
+import uk.co.q3c.v7.base.view.component.DefaultLocaleSelector;
+import uk.co.q3c.v7.base.view.component.DefaultUserStatusPanel;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,10 +42,15 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
     private static Logger log = LoggerFactory.getLogger(V7TestBenchTestCase.class);
     protected final StringBuffer verificationErrors = new StringBuffer();
     protected String baseUrl = "http://localhost:8080/";
-    protected String context = "testapp";
+    protected LoginStatusPageObject loginStatus = new LoginStatusPageObject(this);
+    protected LoginFormPageObject loginForm = new LoginFormPageObject(this);
+    protected String appContext = "testapp";
+    private int currentDriverIndex = 1;
+    private List<WebDriver> drivers = new ArrayList<>();
 
     @Before
-    public void defaultSetup() {
+    public void baseSetup() {
+        System.out.println("setting up base test bench case");
         setDriver(TestBench.createDriver(new FirefoxDriver()));
         getDriver().manage()
                    .window()
@@ -50,21 +58,29 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         getDriver().manage()
                    .window()
                    .setSize(new Dimension(1024, 768));
+        System.out.println("default driver added");
+        addDriver(getDriver());
+        currentDriverIndex = 1;
+        System.out.println("current driver index set to " + currentDriverIndex);
+    }
+
+    protected void addDriver(WebDriver driver) {
+        System.out.println("adding driver " + drivers.size());
+        drivers.add(driver);
     }
 
     @After
-    public void tearDown() {
-        driver.close();
+    public void baseTearDown() {
+        System.out.println("closing all drivers");
+        for (WebDriver webDriver : drivers) {
+            webDriver.close();
+            System.out.println(webDriver.getTitle() + " closed");
+        }
+        drivers.clear();
     }
 
-    /**
-     * @see com.vaadin.testbench.TestBenchTestCase#concatUrl(java.lang.String, java.lang.String)
-     * @deprecated Use buildUrl() instead
-     */
-    @Override
-    @Deprecated
-    protected String concatUrl(String baseUrl, String uri) {
-        return super.concatUrl(baseUrl, uri);
+    public String getAppContext() {
+        return appContext;
     }
 
     protected void verifyUrl(String fragment) {
@@ -74,7 +90,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
     }
 
     protected String rootUrl() {
-        String rootUrl = buildUrl(baseUrl, context);
+        String rootUrl = buildUrl(baseUrl, appContext);
         return rootUrl;
     }
 
@@ -102,47 +118,12 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         assertThat(actual).isNotEqualTo(expected);
     }
 
-    /**
-     * Returns the ElementLocator for the breadcrumb button at index
-     *
-     * @param index
-     *
-     * @return
-     */
-    protected ElementLocator breadcrumb(int index) {
-        String idIndex = ID.getIdcIndex(index, DefaultBreadcrumb.class, NavigationButton.class);
-        return locator().id(idIndex);
-    }
-
-    protected ElementLocator locator() {
-        return new ElementLocator(driver, context);
-    }
-
-    protected ElementLocator subpagepanel(int index) {
-        String idIndex = ID.getIdcIndex(index, DefaultSubpagePanel.class, NavigationButton.class);
-        return locator().id(idIndex);
-    }
-
-    protected String navTreeSelection() {
-        try {
-            String selectedNodeText = getDriver().findElement(By.xpath("id('DefaultUserNavigationTree')//div[contains" +
-                    "(@class, 'v-tree-node-selected')]"))
-                                                 .getText();
-            return selectedNodeText;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     protected void navigateTo(String fragment) {
-        navigateTo(driver, fragment);
-    }
-
-    protected void navigateTo(WebDriver driver, String fragment) {
         String url = url(fragment);
         driver.get(url);
         pause(500);
     }
+
 
     protected String url(String fragment) {
         return rootUrl() + "/#" + fragment;
@@ -156,15 +137,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         }
     }
 
-    protected WebElement element(String qualifier, Class<?>... classes) {
-        return element(driver, qualifier, classes);
-    }
-
-    protected String id(Class<?>... components) {
-        ElementPath elementPath = new ElementPath(context);
-        ElementPath id = elementPath.id(ID.getIdc(components));
-        return id.get();
-    }
 
     public String getBaseUrl() {
         return baseUrl;
@@ -187,30 +159,21 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
     }
 
     protected void closeNotification() {
-        ((TestBenchElementCommands) notification()).closeNotification();
+        notification().closeNotification();
     }
 
-    protected WebElement notification() {
-        WebElement notification = getDriver().findElement(By.className("v-Notification"));
+    protected NotificationElement notification() {
+        NotificationElement notification = $(NotificationElement.class).get(0);
         return notification;
     }
 
-    public void fillLoginForm() {
-        fillLoginForm("ds", "password");
-    }
 
-    public void fillLoginForm(String username, String password) {
-        usernameBox().clear();
-        usernameBox().sendKeys(username);
-        passwordBox().clear();
-        passwordBox().sendKeys(password);
-        clickButton(null, DefaultLoginView.class, Button.class);
-    }
-
-    public void login() {
-        loginButton().click();
-        pause(100);
-        fillLoginForm();
+    /**
+     * shorthand method to click the login button, and fill in the login form using credentials in {@link #loginForm}
+     */
+    protected void login() {
+        loginStatus.clickButton();
+        loginForm.login();
     }
 
     protected WebElement loginLabel() {
@@ -222,10 +185,38 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
     }
 
     protected WebElement element(WebDriver driver, Class<?>... classes) {
-        return element(driver, null, classes);
+        return element(driver, Optional.absent(), classes);
     }
 
-    protected WebElement element(WebDriver driver, String qualifier, Class<?>... classes) {
+    //    protected WebElement element(WebDriver driver, String qualifier, Class<?>... classes) {
+    //        if (classes == null || classes.length == 0) {
+    //            throw new RuntimeException("Id will fail with only a qualifier supplied.  Always use classes to
+    // define Id");
+    //        }
+    //        String s = id(qualifier, classes);
+    //        WebElement findElement = driver.findElement(By.vaadin(s));
+    //        return findElement;
+    //    }
+    //
+    //    protected String id(String qualifier, Class<?>... components) {
+    //        ElementPath elementPath = new ElementPath(appContext);
+    //        ElementPath id = elementPath.id(ID.getIdc(Optional.of(qualifier), components));
+    //        return id.get();
+    //    }
+    //
+    //    protected WebElement usernameBox() {
+    //        return element("username", DefaultLoginView.class, TextField.class);
+    //    }
+    //
+    //    protected WebElement passwordBox() {
+    //        return element("password", DefaultLoginView.class, PasswordField.class);
+    //    }
+    //
+    //    protected WebElement submitButton() {
+    //        return element(DefaultLoginView.class, Button.class);
+    //    }
+
+    protected WebElement element(WebDriver driver, Optional<?> qualifier, Class<?>... classes) {
         if (classes == null || classes.length == 0) {
             throw new RuntimeException("Id will fail with only a qualifier supplied.  Always use classes to define Id");
         }
@@ -234,163 +225,169 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         return findElement;
     }
 
-    protected String id(String qualifier, Class<?>... components) {
-        ElementPath elementPath = new ElementPath(context);
+    protected String id(Optional<?> qualifier, Class<?>... components) {
+        ElementPath elementPath = new ElementPath(appContext);
         ElementPath id = elementPath.id(ID.getIdc(qualifier, components));
         return id.get();
     }
 
-    protected WebElement usernameBox() {
-        return element("username", DefaultLoginView.class, TextField.class);
-    }
-
-    protected WebElement passwordBox() {
-        return element("password", DefaultLoginView.class, PasswordField.class);
-    }
-
-    protected WebElement submitButton() {
-        return element(DefaultLoginView.class, Button.class);
-    }
-
-    /**
-     * This does assume that you are already logged in!
-     */
-    protected void logout() {
-        loginButton().click();
-    }
-
-    protected WebElement loginButton() {
-        return element(DefaultUserStatusPanel.class, Button.class);
-    }
-
-    protected void clickButton(WebDriver driver, String qualifier, Class<?>... classes) {
-        String id = id(qualifier, classes);
-        WebElement element = driver.findElement(By.vaadin(id));
-        pause(1000);
-        element.click();
-    }
-
-    protected void clickButton(String qualifier, Class<?>... classes) {
-        clickButton(driver, qualifier, classes);
-    }
-
-    protected String readTextArea(String qualifier, Class<?>... classes) {
-        return readTextArea(driver, qualifier, classes);
-    }
-
-    protected String readTextArea(WebDriver driver, String qualifier, Class<?>... classes) {
-        WebElement webElement = element(driver, qualifier, classes);
-        return webElement.getAttribute("value");
-    }
-
-    protected String readTextArea(WebDriver driver, Class<?>... classes) {
-        return readTextArea(driver, null, classes);
-    }
-
-    protected String readTextArea(Class<?>... classes) {
-        return readTextArea(driver, null, classes);
-    }
-
-    protected String readLabel(String qualifier, Class<?>... classes) {
-        return readLabel(driver, qualifier, classes);
-    }
-
-    protected String readLabel(WebDriver driver, String qualifier, Class<?>... classes) {
-        WebElement webElement = element(driver, qualifier, classes);
-        return webElement.getText();
-    }
-
-    protected String readLabel(WebDriver driver, Class<?>... classes) {
-        return readLabel(driver, null, classes);
-    }
-
-    protected String readLabel(Class<?>... classes) {
-        return readLabel(driver, null, classes);
-    }
-
-    protected void setTextField(String value, String qualifier, Class<?>... classes) {
-        setTextField(value, driver, qualifier, classes);
-    }
-
-    protected void setTextField(String value, WebDriver driver, String qualifier, Class<?>... classes) {
-        WebElement webElement = element(driver, qualifier, classes);
-        webElement.sendKeys(value);
-    }
-
-    protected void setTextField(String value, Class<?>... classes) {
-        setTextField(value, driver, null, classes);
-    }
-
-    protected void clickCheckBox(String qualifier, Class<?>... classes) {
-        clickCheckBox(driver, qualifier, classes);
-    }
-
-    protected void clickCheckBox(WebDriver driver, String qualifier, Class<?>... classes) {
-        String id = id(qualifier, classes) + "/domChild[0]";
-        WebElement element = driver.findElement(By.vaadin(id));
-        element.click();
-    }
-
-    protected void clickCheckBox(Class<?>... classes) {
-        clickCheckBox(driver, null, classes);
-    }
-
-    protected String currentSelectionNavTree() {
-        String sysaccount = "system-account";
-        WebElement tree = navTree().getLocator()
-                                   .get();
-        WebElement e5 = tree.findElement(By.partialLinkText(sysaccount));
-        return e5.getText();
-    }
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     protected UITree navTree() {
         return treeLocator().id("DefaultUserNavigationTree");
     }
 
     protected UITree treeLocator() {
-        return new UITree(driver, context);
+        return new UITree(driver, appContext);
     }
 
-    protected String comboValue(Class<?>... classes) {
-        return comboValue(null, classes);
+    protected String textFieldValue(Optional<?> qualifier, Class<?>... componentClasses) {
+        TextFieldElement element = textField(qualifier, componentClasses);
+        return element.getText();
     }
 
-    protected String comboValue(String qualifier, Class<?>... classes) {
-        String id = id(qualifier, classes) + "#textbox";
-        WebElement element = driver.findElement(By.vaadin(id));
-        String value = element.getAttribute("value");
-        return value;
+    protected TextFieldElement textField(Optional<?> qualifier, Class<?>... componentClasses) {
+        TextFieldElement element = $(TextFieldElement.class).id(ID.getIdc(qualifier, componentClasses));
+        return element;
+    }
+
+    protected void setTextFieldValue(String text, Optional<?> qualifier, Class<?>... componentClasses) {
+        TextFieldElement element = textField(qualifier, componentClasses);
+        element.sendKeys(text);
+    }
+
+    protected void clickButton(Optional<?> qualifier, Class<?>... classes) {
+        button(qualifier, classes).click();
+    }
+
+    protected ButtonElement button(Optional<?> qualifier, Class<?>... componentClasses) {
+        String id = ID.getIdc(qualifier, componentClasses);
+        return $(ButtonElement.class).id(id);
+    }
+
+    protected WebElement element(Optional<?> qualifier, Class<?>... classes) {
+        return element(driver, qualifier, classes);
+    }
+
+    protected String loginStatusLabelText() {
+        return labelText(Optional.absent(), DefaultUserStatusPanel.class, Label.class);
+    }
+
+    protected String labelText(Optional<?> qualifier, Class<?>... componentClasses) {
+        return label(qualifier, componentClasses).getText();
+    }
+
+    protected LabelElement label(Optional<?> qualifier, Class<?>... componentClasses) {
+        String id = ID.getIdc(qualifier, componentClasses);
+        return label(id);
+    }
+
+    protected LabelElement label(String id) {
+        LabelElement label = $(LabelElement.class).id(id);
+        return label;
+    }
+
+    public PanelElement panel(Optional<?> qualifier, Class<?>... componentClasses) {
+        PanelElement element = $(PanelElement.class).id(ID.getIdc(qualifier, componentClasses));
+        return element;
+    }
+
+    public HorizontalLayoutElement horizontalLayout(Optional<?> qualifier, Class<?>... componentClasses) {
+        HorizontalLayoutElement element = $(HorizontalLayoutElement.class).id(ID.getIdc(qualifier, componentClasses));
+        return element;
+    }
+
+    public VerticalLayoutElement verticalLayout(Optional<?> qualifier, Class<?>... componentClasses) {
+        VerticalLayoutElement element = $(VerticalLayoutElement.class).id(ID.getIdc(qualifier, componentClasses));
+        return element;
+    }
+
+
+    protected String comboValue(Optional<?> qualifier, Class<?>... componentClasses) {
+        ComboBoxElement element = combo(qualifier, componentClasses);
+        return element.getValue();
+    }
+
+    protected ComboBoxElement combo(Optional<?> qualifier, Class<?>... componentClasses) {
+        ComboBoxElement element = $(ComboBoxElement.class).id(ID.getIdc(qualifier, componentClasses));
+        return element;
+    }
+
+    protected void selectComboValue(String valueToSelect, Optional<?> qualifier, Class<?>... componentClasses) {
+        ComboBoxElement element = combo(qualifier, componentClasses);
+        element.selectByText(valueToSelect);
+    }
+
+    protected void clickMenuItem(String[] path, Optional<?> qualifier, Class<?>... componentClasses) {
+        menu(qualifier, componentClasses).clickItem(path);
+    }
+
+    protected MenuBarElement menu(Optional<?> qualifier, Class<?>... componentClasses) {
+        MenuBarElement element = $(MenuBarElement.class).id(ID.getIdc(qualifier, componentClasses));
+        return element;
+    }
+
+    protected boolean checkboxValue(Optional<?> qualifier, Class<?>... componentClasses) {
+        return checkbox(qualifier, componentClasses).getValue()
+                                                    .equals("checked");
+    }
+
+    protected CheckBoxElement checkbox(Optional<?> qualifier, Class<?>... componentClasses) {
+        String id = ID.getIdc(qualifier, componentClasses);
+        return $(CheckBoxElement.class).id(id);
+    }
+
+    protected void clickCheckBox(Optional<?> qualifier, Class<?>... componentClasses) {
+        checkbox(qualifier, componentClasses).click();
+    }
+
+    protected String textAreaValue(Optional<?> qualifier, Class<?>... componentClasses) {
+        return textArea(qualifier, componentClasses).getValue();
+    }
+
+    protected TextAreaElement textArea(Optional<?> qualifier, Class<?>... componentClasses) {
+        TextAreaElement element = $(TextAreaElement.class).id(ID.getIdc(qualifier, componentClasses));
+        return element;
+    }
+
+    protected void setTextAreaValue(String text, Optional<?> qualifier, Class<?>... componentClasses) {
+        textArea(qualifier, componentClasses).sendKeys(text);
+    }
+
+    protected String localeSelectorValue() {
+        return localeSelector().getValue();
+    }
+
+    protected ComboBoxElement localeSelector() {
+        return combo(Optional.absent(), DefaultLocaleSelector.class, ComboBox.class);
+    }
+
+    protected void selectLocale(Locale locale) {
+        localeSelector().selectByText(locale.getDisplayName());
+    }
+
+    protected TreeElement tree(Optional<?> qualifier, Class<?>... componentClasses) {
+        TreeElement element = $(TreeElement.class).id(ID.getIdc(qualifier, componentClasses));
+        return element;
     }
 
     /**
-     * reads the text (caption) of the top level navigation menu item, as selected by {@code index}
+     * Indexed from 1 (that is, the default driver is at index 1)
      *
      * @param index
      *
      * @return
      */
-    protected String navMenuItem(int index) {
-        String id = id((String) null, DefaultUserNavigationMenu.class) + "#item" + index;
-        WebElement element = driver.findElement(By.vaadin(id));
-        return element.getText();
-    }
-
-    protected void navMenuClick(int index) {
-        String id = id((String) null, DefaultUserNavigationMenu.class) + "#item" + index;
-        WebElement element = driver.findElement(By.vaadin(id));
-        TestBenchElementCommands telement = testBenchElement(element);
-        telement.click(20, 20);
-    }
-
-    protected void localeSelect(int index) {
-        testBenchElement(driver.findElement(By.vaadin("testapp::PID_SDefaultLocaleSelector-ComboBox#button"))).click
-                (17, 15);
-        testBenchElement(driver.findElement(By.xpath("//div[@id='VAADIN_COMBOBOX_OPTIONLIST']/div/div[2]/table/tbody/tr[" + index + "]/td"))).click(7, 7);
-    }
-
-    protected String navTreeItemCaption(int index) {
-        return navTree().index(index)
-                        .get()
-                        .getText();
+    public WebDriver selectDriver(int index) {
+        try {
+            WebDriver wd = drivers.get(index - 1);
+            currentDriverIndex = index;
+            setDriver(wd);
+            System.out.println("Driver index " + index + " selected");
+            return driver;
+        } catch (Exception e) {
+            throw new RuntimeException("Driver index of " + index + " is invalid");
+        }
     }
 }

@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.util;
 
+import com.google.common.base.Optional;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Panel;
 import org.junit.Test;
@@ -20,44 +21,44 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class IDTest {
 
-	Button button = new Button();
-	Panel panel = new Panel();
+    Button button = new Button();
+    Panel panel = new Panel();
 
-	@Test
-	public void getIdComponentArray() {
+    @Test
+    public void getIdComponentArray() {
 
-		// given
+        // given
 
-		// when
+        // when
 
-		// then
-		assertThat(ID.getId(panel, button)).isEqualTo("Panel-Button");
+        // then
+        assertThat(ID.getId(Optional.absent(), panel, button)).isEqualTo("Panel-Button");
 
-	}
+    }
 
-	@Test
-	public void getIdComponent() {
+    @Test
+    public void getIdComponent() {
 
-		// given
+        // given
 
-		// when
+        // when
 
-		// then
-		assertThat(ID.getId(panel)).isEqualTo("Panel");
+        // then
+        assertThat(ID.getId(Optional.absent(), panel)).isEqualTo("Panel");
 
-	}
+    }
 
-	@Test
-	public void getIdStringComponentArray() {
+    @Test
+    public void getIdStringComponentArray() {
 
-		// given
+        // given
 
-		// when
+        // when
 
-		// then
-		assertThat(ID.getId("user", panel, button)).isEqualTo("Panel-Button-user");
-		assertThat(ID.getIdIndex(1, panel, button)).isEqualTo("Panel-Button-1");
+        // then
+        assertThat(ID.getId(Optional.of("user"), panel, button)).isEqualTo("Panel-Button-user");
+        assertThat(ID.getId(Optional.of(1), panel, button)).isEqualTo("Panel-Button-1");
 
-	}
+    }
 
 }

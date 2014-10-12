@@ -3,7 +3,9 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/org.assertj/assertj-guava/1.0.0/8cfc7650fda4db1961c6119c95fa0f43d96200df/assertj-guava-1.0.0.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/org.assertj/assertj-guava/1.0.0/4f70f494a1f1acbe368100d64fd8745554948952/assertj-guava-1.0.0-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/org.assertj/assertj-guava/1.0.0/18a7c1effffb643518666bcec1df2c4cd1b01429/assertj-guava-1.0.0-sources.jar!/" />
     </SOURCES>

@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.testapp.view;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -97,13 +98,12 @@ public class PushView extends ViewBaseGrid {
     @Override
     public void setIds() {
         super.setIds();
-        getGrid().setId(ID.getId(this.getClass()
-                                     .getSimpleName(), getGrid()));
-        sendButton.setId(ID.getId("send", this, sendButton));
-        groupInput.setId(ID.getId("group", this, groupInput));
-        messageInput.setId(ID.getId("message", this, messageInput));
-        messageLog.setId(ID.getId(this, messageLog));
-        pushEnabled.setId(ID.getId(this, pushEnabled));
+        getGrid().setId(ID.getId(Optional.absent(), this, getGrid()));
+        sendButton.setId(ID.getId(Optional.of("send"), this, sendButton));
+        groupInput.setId(ID.getId(Optional.of("group"), this, groupInput));
+        messageInput.setId(ID.getId(Optional.of("message"), this, messageInput));
+        messageLog.setId(ID.getId(Optional.absent(), this, messageLog));
+        pushEnabled.setId(ID.getId(Optional.absent(), this, pushEnabled));
     }
 
 

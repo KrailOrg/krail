@@ -44,7 +44,16 @@ public class UITree {
         locator.index(index)
                .get()
                .click();
+        pause(500);
         return this;
+    }
+
+    protected void pause(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (Exception e) {
+            log.error("Sleep was interrupted");
+        }
     }
 
     public UITree expand(int index) {
@@ -57,14 +66,6 @@ public class UITree {
 
     public ElementLocator index(int... index) {
         return locator.index(index);
-    }
-
-    protected void pause(int milliseconds) {
-        try {
-            Thread.sleep(milliseconds);
-        } catch (Exception e) {
-            log.error("Sleep was interrupted");
-        }
     }
 
     public ElementLocator getLocator() {

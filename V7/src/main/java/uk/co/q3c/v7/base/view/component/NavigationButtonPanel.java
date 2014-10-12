@@ -12,14 +12,14 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-
+import com.google.common.base.Optional;
+import com.google.inject.Inject;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.themes.BaseTheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.q3c.util.ID;
 import uk.co.q3c.util.NodeFilter;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -30,11 +30,10 @@ import uk.co.q3c.v7.base.view.V7ViewChangeListener;
 import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.LocaleChangeListener;
 
-import com.google.inject.Inject;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.themes.BaseTheme;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 public abstract class NavigationButtonPanel extends HorizontalLayout implements V7ViewChangeListener,
 		LocaleChangeListener, Button.ClickListener {
@@ -54,19 +53,21 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 		this.setSizeUndefined();
 		this.setSpacing(true);
 		currentLocale.addListener(this);
-		ID.getId(this);
+        String id = ID.getId(Optional.absent(), this);
+        setId(id);
+    }
 
-	}
+    public void moveToNavigationState() {
+        log.debug("moving to navigation state");
+        rebuildRequired = true;
+        build();
+    }
 
-	protected abstract void build();
+    protected abstract void build();
 
-	public void moveToNavigationState() {
-		log.debug("moving to navigation state");
-		rebuildRequired = true;
-		build();
-	};
+    ;
 
-	/**
+    /**
 	 * Displays buttons to represent the supplied nodes.
 	 * 
 	 * @param nodeList
@@ -104,8 +105,8 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 		button.addStyleName(BaseTheme.BUTTON_LINK);
 		button.addClickListener(this);
 		buttons.add(button);
-		String id = ID.getIdIndex(buttons.size() - 1, this, button);
-		button.setId(id);
+        String id = ID.getId(Optional.of(buttons.size() - 1), this, button);
+        button.setId(id);
 		this.addComponent(button);
 		return button;
 	}
@@ -117,69 +118,70 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 
 	}
 
-	@Override
-	public void localeChanged(Locale toLocale) {
-		for (NavigationButton button : buttons) {
-			button.setCaption(button.getNode().getLabel());
-		}
-	}
+    protected List<UserSitemapNode> filteredList(List<UserSitemapNode> list) {
+        List<UserSitemapNode> newList = new ArrayList<>();
+        for (UserSitemapNode node : list) {
+            boolean accept = true;
+            for (NodeFilter<UserSitemapNode> filter : sourceFilters) {
+                if (!filter.accept(node)) {
+                    accept = false;
+                    break;
+                }
+            }
+
+            if (accept) {
+                newList.add(node);
+            }
+        }
+        return newList;
+    }
 
 	@Override
-	public boolean beforeViewChange(V7ViewChangeEvent event) {
-		// do nothing
-		return true;
-	}
+    public void localeChanged(Locale toLocale) {
+        for (NavigationButton button : buttons) {
+            button.setCaption(button.getNode()
+                                    .getLabel());
+        }
+    }
 
 	@Override
-	public void afterViewChange(V7ViewChangeEvent event) {
-		log.debug("Responding to view change");
-		rebuildRequired = true;
-		build();
-	}
+    public boolean beforeViewChange(V7ViewChangeEvent event) {
+        // do nothing
+        return true;
+    }
 
 	@Override
-	public void detach() {
-		navigator.removeViewChangeListener(this);
-		super.detach();
+    public void afterViewChange(V7ViewChangeEvent event) {
+        log.debug("Responding to view change");
+        rebuildRequired = true;
+        build();
+    }
 
-	}
+    @Override
+    public void detach() {
+        navigator.removeViewChangeListener(this);
+        super.detach();
+
+    }
 
 	public List<NavigationButton> getButtons() {
-		return buttons;
-	}
+        return buttons;
+    }
 
-	@Override
-	public void buttonClick(ClickEvent event) {
-		NavigationButton button = (NavigationButton) event.getButton();
-		navigator.navigateTo(button.getNode());
+    @Override
+    public void buttonClick(ClickEvent event) {
+        NavigationButton button = (NavigationButton) event.getButton();
+        navigator.navigateTo(button.getNode());
 
-	}
+    }
 
-	public V7Navigator getNavigator() {
-		return navigator;
-	}
+    public V7Navigator getNavigator() {
+        return navigator;
+    }
 
-	public UserSitemap getSitemap() {
-		return sitemap;
-	}
-
-	protected List<UserSitemapNode> filteredList(List<UserSitemapNode> list) {
-		List<UserSitemapNode> newList = new ArrayList<>();
-		for (UserSitemapNode node : list) {
-			boolean accept = true;
-			for (NodeFilter<UserSitemapNode> filter : sourceFilters) {
-				if (!filter.accept(node)) {
-					accept = false;
-					break;
-				}
-			}
-
-			if (accept) {
-				newList.add(node);
-			}
-		}
-		return newList;
-	}
+    public UserSitemap getSitemap() {
+        return sitemap;
+    }
 
 	public void addFilter(NodeFilter<UserSitemapNode> filter) {
 		sourceFilters.add(filter);

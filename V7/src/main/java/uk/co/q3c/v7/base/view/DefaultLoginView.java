@@ -13,6 +13,7 @@
 
 package uk.co.q3c.v7.base.view;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.ui.*;
@@ -97,10 +98,10 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     @Override
     protected void setIds() {
         super.setIds();
-        submitButton.setId(ID.getId(this, submitButton));
-        usernameBox.setId(ID.getId("username", this, usernameBox));
-        passwordBox.setId(ID.getId("password", this, passwordBox));
-        statusMsgLabel.setId(ID.getId("status", this, statusMsgLabel));
+        submitButton.setId(ID.getId(Optional.absent(), this, submitButton));
+        usernameBox.setId(ID.getId(Optional.of("username"), this, usernameBox));
+        passwordBox.setId(ID.getId(Optional.of("password"), this, passwordBox));
+        statusMsgLabel.setId(ID.getId(Optional.of("status"), this, statusMsgLabel));
     }
 
 
@@ -153,13 +154,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(I18NKey<?> messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey<?> messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     public TextField getUsernameBox() {

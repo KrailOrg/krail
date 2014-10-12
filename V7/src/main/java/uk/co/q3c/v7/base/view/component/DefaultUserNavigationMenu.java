@@ -12,88 +12,87 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import com.google.common.base.Optional;
+import com.google.inject.Inject;
+import com.vaadin.ui.MenuBar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemap;
 import uk.co.q3c.v7.base.navigate.sitemap.UserSitemapChangeListener;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionProperty;
 
-import com.google.inject.Inject;
-import com.vaadin.ui.MenuBar;
-
 public class DefaultUserNavigationMenu extends MenuBar implements UserNavigationMenu, UserSitemapChangeListener {
-	private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationMenu.class);
-	private final UserSitemap userSitemap;
-	private final UserOption userOption;
-	private final UserNavigationMenuBuilder builder;
-	private boolean sorted = true;
+    private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationMenu.class);
+    private final UserSitemap userSitemap;
+    private final UserOption userOption;
+    private final UserNavigationMenuBuilder builder;
+    private boolean sorted = true;
 
-	// private final Translate translate;
+    // private final Translate translate;
 
-	@Inject
-	protected DefaultUserNavigationMenu(UserSitemap sitemap, UserOption userOption, UserNavigationMenuBuilder builder) {
-		super();
-		this.userSitemap = sitemap;
-		this.userOption = userOption;
-		this.builder = builder;
-		setImmediate(true);
-		builder.setUserNavigationMenu(this);
-		userSitemap.addListener(this);
-		setId(ID.getId(this));
-	}
+    @Inject
+    protected DefaultUserNavigationMenu(UserSitemap sitemap, UserOption userOption, UserNavigationMenuBuilder builder) {
+        super();
+        this.userSitemap = sitemap;
+        this.userOption = userOption;
+        this.builder = builder;
+        setImmediate(true);
+        builder.setUserNavigationMenu(this);
+        userSitemap.addListener(this);
+        setId(ID.getId(Optional.absent(), this));
+    }
 
-	@Override
-	public void build() {
-		log.debug("rebuilding");
-		clear();
-		builder.build();
-	}
+    @Override
+    public MenuBar getMenuBar() {
+        return this;
+    }
 
-	@Override
-	public MenuBar getMenuBar() {
-		return this;
-	}
+    @Override
+    public int getMaxDepth() {
+        return userOption.getOptionAsInt(getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, 10);
+    }
 
-	@Override
-	public void setMaxDepth(int depth) {
-		userOption.setOption(getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, depth);
-		build();
-	}
+    @Override
+    public void setMaxDepth(int depth) {
+        userOption.setOption(getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, depth);
+        build();
+    }
 
-	@Override
-	public int getMaxDepth() {
-		return userOption.getOptionAsInt(getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, 10);
-	}
+    @Override
+    public void build() {
+        log.debug("rebuilding");
+        clear();
+        builder.build();
+    }
 
-	@Override
-	public void clear() {
-		this.removeItems();
-		log.debug("contents cleared");
-	}
+    @Override
+    public void clear() {
+        this.removeItems();
+        log.debug("contents cleared");
+    }
 
-	@Override
-	public void labelsChanged() {
-		build();
-	}
+    @Override
+    public void labelsChanged() {
+        build();
+    }
 
-	@Override
-	public void structureChanged() {
-		build();
-	}
+    @Override
+    public void structureChanged() {
+        build();
+    }
 
-	@Override
-	public boolean isSorted() {
-		log.debug("Sorted is {}", sorted);
-		return sorted;
-	}
+    @Override
+    public boolean isSorted() {
+        log.debug("Sorted is {}", sorted);
+        return sorted;
+    }
 
-	@Override
-	public void setSorted(boolean sorted) {
-		this.sorted = sorted;
-		build();
-	}
+    @Override
+    public void setSorted(boolean sorted) {
+        this.sorted = sorted;
+        build();
+    }
 
 }

@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -37,8 +38,8 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
     private final UserNotifier userNotifier;
     @I18N(description = DescriptionKey.Select_from_available_languages)
     private ComboBox combo;
-    private boolean respondToLocaleChange = true;
     private boolean initialising;
+    private boolean respondToLocaleChange = true;
 
     @Inject
     protected DefaultLocaleSelector(CurrentLocale currentLocale, LocaleContainer container, UserNotifier userNotifier) {
@@ -56,7 +57,7 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
 
         combo.setWidth(200 + "px");
 
-        combo.setId(ID.getId(this, combo));
+        combo.setId(ID.getId(Optional.absent(), this, combo));
         combo.setContainerDataSource(container);
 
         // Sets the combobox to show a certain property as the item caption

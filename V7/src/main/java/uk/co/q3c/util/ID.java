@@ -12,65 +12,51 @@
  */
 package uk.co.q3c.util;
 
+import com.google.common.base.Optional;
+
 /**
  * Utility class used to standardise id setting (setId methods in Components).
- * 
+ * <p/>
+ * The qualifier is just a way of identifying one of several of the same type of component in the same parent component.
+ * (for example, the 'Cancel' button from 'Save' and 'Cancel' buttons in a dialog).
+ * <p/>
+ * The components list is a notional hierarchy of components (it can be anything that makes sense in your
+ * environment, this is just an identifier). Although it is generally instances of components you would use here,
+ * you may wish to use other things (for example V7View implementations) which are not components in their own
+ * right, therefore the method takes Object rather than Component parameters
+ *
  * @author David Sowerby 15 Sep 2013
- * 
  */
 public class ID {
 
-	/**
-	 * The qualifier is just a way of identifying one of several of the component in the same parent component. The
-	 * components list amounts to the notional hierarchy of components (it can be anything that makes sense in your
-	 * environment, this is just an identifier). Although it is generally instances of components you would use here,
-	 * you may wish to use other things (for example V7View implementations) which are not components in their own
-	 * right. Hence the method takes Object rather than Component parameters
-	 * 
-	 * @param qualifier
-	 * @param components
-	 * @return
-	 */
-	public static String getId(String qualifier, Object... components) {
-		Class<?>[] classes = new Class<?>[components.length];
-		for (int i = 0; i < components.length; i++) {
-			classes[i] = components[i].getClass();
-		}
-		return getIdc(qualifier, classes);
-	}
 
-	public static String getIdIndex(int qualifier, Object... components) {
-		return getId(Integer.toString(qualifier), components);
-	}
+    public static String getId(Optional<?> qualifier, Object... components) {
+        Class<?>[] classes = new Class<?>[components.length];
+        for (int i = 0; i < components.length; i++) {
+            classes[i] = components[i].getClass();
+        }
+        return getIdc(qualifier, classes);
+    }
 
-	public static String getIdcIndex(int qualifier, Class<?>... componentClasses) {
-		return getIdc(Integer.toString(qualifier), componentClasses);
-	}
 
-	public static String getIdc(String qualifier, Class<?>... componentClasses) {
-		StringBuilder buf = new StringBuilder();
-		boolean first = true;
-		for (Class<?> c : componentClasses) {
-			if (!first) {
-				buf.append("-");
-			} else {
-				first = false;
-			}
-			buf.append(c.getSimpleName());
-		}
-		if (qualifier != null) {
-			buf.append("-");
-			buf.append(qualifier);
-		}
-		return buf.toString();
-	}
+    public static String getIdc(Optional<?> qualifier, Class<?>... componentClasses) {
+        StringBuilder buf = new StringBuilder();
+        boolean first = true;
+        for (Class<?> c : componentClasses) {
+            if (!first) {
+                buf.append("-");
+            } else {
+                first = false;
+            }
+            buf.append(c.getSimpleName());
+        }
+        if (qualifier.isPresent()) {
+            buf.append("-");
+            buf.append(qualifier.get()
+                                .toString());
+        }
+        return buf.toString();
+    }
 
-	public static String getId(Object... components) {
-		return getId(null, components);
-	}
-
-	public static String getIdc(Class<?>... componentClasses) {
-		return getIdc(null, componentClasses);
-	}
 
 }

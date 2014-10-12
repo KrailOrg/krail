@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.view;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
@@ -53,10 +54,8 @@ public abstract class StandardPageViewBase extends ViewBase {
     @Override
     public void setIds() {
         super.setIds();
-        grid.setId(ID.getId(this.getClass()
-                                .getSimpleName(), grid));
-        label.setId(ID.getId(this.getClass()
-                                 .getSimpleName(), label));
+        grid.setId(ID.getId(Optional.absent(), this, grid));
+        label.setId(ID.getId(Optional.absent(), this, label));
     }
 
 

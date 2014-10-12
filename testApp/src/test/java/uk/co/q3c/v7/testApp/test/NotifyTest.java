@@ -12,7 +12,9 @@
  */
 package uk.co.q3c.v7.testApp.test;
 
+import com.google.common.base.Optional;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
+import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import org.junit.Before;
@@ -56,14 +58,15 @@ public class NotifyTest extends V7TestBenchTestCase {
 
 		// when
 
-		WebElement errorBtn = element("error", NotificationsView.class, Button.class);
-		// then
+        ButtonElement errorBtn = button(Optional.of("error"), NotificationsView.class, Button.class);
+        // then
 		errorBtn.click();
 		WebElement messageBar = element(DefaultMessageBar.class, Label.class);
 		assertThat(messageBar.getText()).isEqualTo(
 				"ERROR: You cannot use service Fake Service until it has been started");
 		assertThat(notification()).isNotNull();
-        assertThat(notification().getText()).isEqualTo("Error: You cannot use service Fake Service until it has been started - close with ESC-key");
+        assertThat(notification().getText()).isEqualTo("You cannot use service Fake Service until it has been started");
+        assertThat(notification().getAttribute("class")).isEqualTo("v-Notification error v-Notification-error");
         closeNotification();
 
 	}
@@ -72,15 +75,16 @@ public class NotifyTest extends V7TestBenchTestCase {
 	public void notifyWarning() {
 		// given
 		navigateTo(testPage);
-		WebElement warningBtn = element("warning", NotificationsView.class, Button.class);
-		WebElement messageBar = element(DefaultMessageBar.class, Label.class);
+        ButtonElement warningBtn = button(Optional.of("warning"), NotificationsView.class, Button.class);
+        WebElement messageBar = element(DefaultMessageBar.class, Label.class);
 		// when
 		warningBtn.click();
 		// then
 		assertThat(messageBar.getText()).isEqualTo(
 				"Warning: You cannot use service Fake Service until it has been started");
 		assertThat(notification()).isNotNull();
-        assertThat(notification().getText()).isEqualTo("Warning: You cannot use service Fake Service until it has been started");
+        assertThat(notification().getText()).isEqualTo("You cannot use service Fake Service until it has been started");
+        assertThat(notification().getAttribute("class")).isEqualTo("v-Notification warning v-Notification-warning");
         closeNotification();
 	}
 
@@ -88,14 +92,15 @@ public class NotifyTest extends V7TestBenchTestCase {
 	public void notifyInformation() {
 		// given
 		navigateTo(testPage);
-		WebElement informationBtn = element("information", NotificationsView.class, Button.class);
-		WebElement messageBar = element(DefaultMessageBar.class, Label.class);
+        ButtonElement informationBtn = button(Optional.of("information"), NotificationsView.class, Button.class);
+        WebElement messageBar = element(DefaultMessageBar.class, Label.class);
 		// when
 		informationBtn.click();
 		// then
 		assertThat(messageBar.getText()).isEqualTo("You cannot use service Fake Service until it has been started");
 		assertThat(notification()).isNotNull();
-        assertThat(notification().getText()).isEqualTo("Info: You cannot use service Fake Service until it has been started");
+        assertThat(notification().getText()).isEqualTo("You cannot use service Fake Service until it has been started");
+        assertThat(notification().getAttribute("class")).isEqualTo("v-Notification humanized v-Notification-humanized");
         closeNotification();
 	}
 }

@@ -1,13 +1,27 @@
+/*
+ * Copyright (c) 2014 David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+ * the specific language governing permissions and limitations under the License.
+ */
+
 package uk.co.q3c.v7.testApp.test;
 
-import com.vaadin.ui.ComboBox;
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.q3c.v7.base.view.component.DefaultLocaleSelector;
+import uk.co.q3c.v7.testbench.NavMenuPageObject;
+import uk.co.q3c.v7.testbench.NavTreePageObject;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,6 +30,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 public class LocaleTest extends V7TestBenchTestCase {
+
+    private NavMenuPageObject navMenu = new NavMenuPageObject(this);
+    private NavTreePageObject navTree = new NavTreePageObject(this);
 
     @Before
     public void setUp() throws Exception {
@@ -31,7 +48,7 @@ public class LocaleTest extends V7TestBenchTestCase {
         // when
 
         // then
-        String comboValue = comboValue(DefaultLocaleSelector.class, ComboBox.class);
+        String comboValue = localeSelectorValue();
         assertThat(comboValue).isEqualTo("English (United Kingdom)");
     }
 
@@ -41,28 +58,46 @@ public class LocaleTest extends V7TestBenchTestCase {
         // given
 
         // when
-        localeSelect(2);
+        selectLocale(Locale.GERMANY);
 
         // then
-        String comboValue = comboValue(DefaultLocaleSelector.class, ComboBox.class);
-        assertThat(comboValue).isEqualTo("German (Germany)");
+        String comboValue = localeSelectorValue();
+        assertThat(comboValue).isEqualTo(Locale.GERMANY.getDisplayName());
         List<String> items = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            items.add(navTreeItemCaption(i));
+            items.add(navTree.itemCaption(i));
         }
-        assertThat(items).containsExactly("Benachrichtigungen", "Einloggen", "Nachricht Feld", "Öffentliche Startseite", "Systemkonto");
+        assertThat(items).containsExactly("Benachrichtigungen", "Einloggen", "Nachricht Feld",
+                "Öffentliche Startseite", "Systemkonto");
 
         items.clear();
         for (int i = 0; i < 5; i++) {
-            String s = navMenuItem(i);
+            String s = navMenu.item(i);
             items.add(s);
         }
 
         //this is in a different order to navtree. See https://github.com/davidsowerby/v7/issues/257
-        assertThat(items).containsExactly("Benachrichtigungen", "Einloggen", "Nachricht Feld", "Systemkonto", "Öffentliche Startseite");
+        assertThat(items).containsExactly("Benachrichtigungen", "Einloggen", "Nachricht Feld", "Systemkonto",
+                "Öffentliche Startseite");
 
-        assertThat(loginButton().getText()).isEqualTo("einloggen");
-        assertThat(loginLabel().getText()).isEqualTo("Gast");
+        assertThat(loginStatus.loginButton()
+                              .getText()).isEqualTo("einloggen");
+        assertThat(loginStatusLabelText()).isEqualTo("Gast");
     }
+
+    /**
+     * Have the languages from the I18NModule been loaded into the LocaleSelector?
+     */
+    @Test
+    public void popup() {
+        //given
+
+        //when
+
+        //then
+        assertThat(localeSelector().getPopupSuggestions()).containsOnly(Locale.UK.getDisplayName(),
+                Locale.GERMANY.getDisplayName(), Locale.ITALY.getDisplayName());
+    }
+
 
 }

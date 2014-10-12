@@ -13,6 +13,7 @@
 
 package uk.co.q3c.v7.base.view;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ public abstract class GridViewBase extends ViewBase implements V7View {
     @Override
     protected void setIds() {
         super.setIds();
-        gridLayout.setId(ID.getId(gridLayout));
+        gridLayout.setId(ID.getId(Optional.absent(), gridLayout));
     }
 
     /**

@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2014 David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ */
+
 package uk.co.q3c.v7.testApp.test;
 
 import com.vaadin.testbench.By;
@@ -6,6 +16,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import uk.co.q3c.v7.testbench.BreadcrumbPageObject;
+import uk.co.q3c.v7.testbench.NavTreePageObject;
+import uk.co.q3c.v7.testbench.SubpagePanelPageObject;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,8 +28,11 @@ public class NavigationTest extends V7TestBenchTestCase {
 
 	@Rule
 	public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
+    private BreadcrumbPageObject breadcrumb = new BreadcrumbPageObject(this);
+    private NavTreePageObject navTree = new NavTreePageObject(this);
+    private SubpagePanelPageObject subPagePanel = new SubpagePanelPageObject(this);
 
-	@Before
+    @Before
 	public void setUp() throws Exception {
 	}
 
@@ -33,8 +49,8 @@ public class NavigationTest extends V7TestBenchTestCase {
 		navTree().select(4);
 		// // then
 		verifyUrl("system-account");
-		assertThat(navTreeSelection()).isEqualTo("System Account");
-		// // when
+        assertThat(navTree.currentSelection()).isEqualTo("System Account");
+        // // when
 		navTree().select(3);
 		// // then
 		verifyUrl("home");
@@ -69,7 +85,8 @@ public class NavigationTest extends V7TestBenchTestCase {
 
 		// then
 		assertThat(notification()).isNotNull();
-        assertThat(notification().getText()).isEqualTo("Info: home is not a valid page");
+        assertThat(notification().getText()).isEqualTo("home is not a valid page");
+        assertThat(notification().getAttribute("class")).isEqualTo("v-Notification humanized v-Notification-humanized");
         closeNotification();
 
 		verifyNotUrl("private/home"); // not a valid test, but maybe it should be
@@ -102,9 +119,9 @@ public class NavigationTest extends V7TestBenchTestCase {
 		pause(1000);
 		// then
 		verifyUrl("private/home");
-		assertThat(navTreeSelection()).isEqualTo("Private Home");
+        assertThat(navTree.currentSelection()).isEqualTo("Private Home");
 
-	}
+    }
 
 	@Test
 	public void browserBackForward() {
@@ -116,28 +133,28 @@ public class NavigationTest extends V7TestBenchTestCase {
 		navTree().select(4);
 		// then
 		verifyUrl("system-account");
-		assertThat(navTreeSelection()).isEqualTo("System Account");
+        assertThat(navTree.currentSelection()).isEqualTo("System Account");
 
-		// when
+        // when
 		navigateTo("notifications");
 		// then
 		verifyUrl("notifications");
-		assertThat(navTreeSelection()).isEqualTo("Notifications");
-		// when
+        assertThat(navTree.currentSelection()).isEqualTo("Notifications");
+        // when
 		navigateTo("system-account/enable-account");
 		// then
 		verifyUrl("system-account/enable-account");
-		assertThat(navTreeSelection()).isEqualTo("Enable Account");
-		// when
+        assertThat(navTree.currentSelection()).isEqualTo("Enable Account");
+        // when
 		navigateBack();
 		// then
 		verifyUrl("notifications");
-		assertThat(navTreeSelection()).isEqualTo("Notifications");
-		// when
+        assertThat(navTree.currentSelection()).isEqualTo("Notifications");
+        // when
 		navigateForward();
 		verifyUrl("system-account/enable-account");
-		assertThat(navTreeSelection()).isEqualTo("Enable Account");
-	}
+        assertThat(navTree.currentSelection()).isEqualTo("Enable Account");
+    }
 
 	@Test
 	public void breadcrumb_navigate() {
@@ -146,9 +163,10 @@ public class NavigationTest extends V7TestBenchTestCase {
 		pause(1000);
 		// when
 		navigateTo("system-account/reset-account");
-		assertThat(breadcrumb(0)).isNotNull();
-		breadcrumb(0).get().click();
-		// then
+        assertThat(breadcrumb.button(0)).isNotNull();
+        breadcrumb.button(0)
+                  .click();
+        // then
 		verifyUrl("system-account");
 	}
 
@@ -159,13 +177,17 @@ public class NavigationTest extends V7TestBenchTestCase {
 		pause(1000);
 		// when
 		navigateTo("system-account");
-		assertThat(subpagepanel(0)).isNotNull();
-		subpagepanel(0).get().click();
-		pause(500);
+        //then
+        assertThat(subPagePanel.buttonLabels()).containsExactly("Enable Account", "Refresh Account", "Request Account", "Reset Account", "Unlock Account");
+
+        subPagePanel.button(0)
+                    .click();
+        pause(500);
 		// then
 		verifyUrl("system-account/enable-account");
+        assertThat(subPagePanel.buttonLabels()).containsExactly("");
 
-	}
+    }
 
 	@Test
 	public void menuNavigate() {

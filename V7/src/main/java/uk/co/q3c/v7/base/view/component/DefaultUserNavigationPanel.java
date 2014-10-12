@@ -12,34 +12,34 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import uk.co.q3c.util.ID;
-
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import uk.co.q3c.util.ID;
 
 public class DefaultUserNavigationPanel extends Panel implements UserNavigationPanel {
 
-	private final UserNavigationTree tree;
-	private Panel toolbar;
+    private final UserNavigationTree tree;
+    private Panel toolbar;
 
-	@Inject
-	protected DefaultUserNavigationPanel(UserNavigationTree tree) {
-		super();
-		this.tree = tree;
-		setId(ID.getId(this));
-		build();
-	}
+    @Inject
+    protected DefaultUserNavigationPanel(UserNavigationTree tree) {
+        super();
+        this.tree = tree;
+        setId(ID.getId(Optional.absent(), this));
+        build();
+    }
 
-	private void build() {
-		VerticalLayout vl = new VerticalLayout();
-		vl.setSizeFull();
+    private void build() {
+        VerticalLayout vl = new VerticalLayout();
+        vl.setSizeFull();
 
-		toolbar = new Panel("controls");
-		toolbar.setHeight("100px");
-		toolbar.setWidth("100%");
-		vl.addComponent(toolbar);
-		vl.addComponent(tree);
-	}
+        toolbar = new Panel("controls");
+        toolbar.setHeight("100px");
+        toolbar.setWidth("100%");
+        vl.addComponent(toolbar);
+        vl.addComponent(tree);
+    }
 
 }

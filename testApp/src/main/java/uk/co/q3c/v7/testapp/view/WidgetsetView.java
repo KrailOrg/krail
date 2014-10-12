@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.testapp.view;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
@@ -92,8 +93,8 @@ public class WidgetsetView extends ViewBase {
         infoArea = new Label();
         infoArea.setContentMode(ContentMode.HTML);
         infoArea.setSizeFull();
-        infoArea.setValue("These components are used purely to ensure that the Widgetset has compiled and included " +
-                "add-ons");
+        infoArea.setValue("These components are used purely to ensure that the Widgetset has compiled and included "
+                + "add-ons");
         getGrid().addComponent(infoArea, 0, 1, 1, 1);
     }
 
@@ -104,9 +105,8 @@ public class WidgetsetView extends ViewBase {
     @Override
     public void setIds() {
         super.setIds();
-        getGrid().setId(ID.getId(this.getClass()
-                                     .getSimpleName(), getGrid()));
-        popupButton.setId(ID.getId("popup", this, popupButton));
-        stepper.setId(ID.getId(this, stepper));
+        getGrid().setId(ID.getId(Optional.absent(), this, getGrid()));
+        popupButton.setId(ID.getId(Optional.of("popup"), this, popupButton));
+        stepper.setId(ID.getId(Optional.absent(), this, stepper));
     }
 }

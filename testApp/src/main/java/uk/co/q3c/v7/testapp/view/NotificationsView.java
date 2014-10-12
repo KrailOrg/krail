@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.testapp.view;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
@@ -121,11 +122,10 @@ public class NotificationsView extends ViewBase {
     @Override
     public void setIds() {
         super.setIds();
-        grid.setId(ID.getId(this.getClass()
-                                .getSimpleName(), grid));
-        infoButton.setId(ID.getId("information", this, infoButton));
-        warnButton.setId(ID.getId("warning", this, warnButton));
-        errorButton.setId(ID.getId("error", this, errorButton));
+        grid.setId(ID.getId(Optional.absent(), this, grid));
+        infoButton.setId(ID.getId(Optional.of("information"), this, infoButton));
+        warnButton.setId(ID.getId(Optional.of("warning"), this, warnButton));
+        errorButton.setId(ID.getId(Optional.of("error"), this, errorButton));
     }
 
 

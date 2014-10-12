@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.base.view;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import org.slf4j.Logger;
@@ -51,7 +52,7 @@ public abstract class ViewBase implements V7View {
      * ids. If you do override it to add your own subclass ids, make sure you call super
      */
     protected void setIds() {
-        getRootComponent().setId(ID.getId(this, getRootComponent()));
+        getRootComponent().setId(ID.getId(Optional.absent(), this, getRootComponent()));
     }
 
     @Override

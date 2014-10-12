@@ -3,7 +3,9 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.mycila.testing.plugins/mycila-testing-mockito/2.8/2ac4bb5be16bca84c2a1e1ed957b82335db1ec77/mycila-testing-mockito-2.8.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.mycila.testing.plugins/mycila-testing-mockito/2.8/f4e5d9c7b7116a8c5eff08820ee9355947b816ca/mycila-testing-mockito-2.8-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.mycila.testing.plugins/mycila-testing-mockito/2.8/aebea492d105f3bb8dd9c6db3b7a8cc09879b370/mycila-testing-mockito-2.8-sources.jar!/" />
     </SOURCES>
