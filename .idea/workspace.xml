@@ -5,10 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c51d812-e01c-4a95-8979-ff32e1b01c84" name="Default" comment="showresults task in demo and test app build">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml" afterPath="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/widgetset/V7demoWidgetset.gwt.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/build.gradle" afterPath="$PROJECT_DIR$/demo/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/build.gradle" afterPath="$PROJECT_DIR$/testApp/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/widgetset/testAppWidgetset.gwt.xml" afterPath="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/widgetset/testAppWidgetset.gwt.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/IntStepperElement.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/TreePathException.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/ElementLocator.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/UITree.java" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/ElementPathTest.java" afterPath="$PROJECT_DIR$/testbench/src/test/java/uk/co/q3c/v7/testbench/ElementPathTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/LoginFormPageObject.java" afterPath="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/LoginFormPageObject.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LoginTest.java" afterPath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LoginTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/NavTreePageObject.java" afterPath="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/NavTreePageObject.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java" afterPath="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java" afterPath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java" afterPath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/StartupTest.java" afterPath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/StartupTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/StrictURIFragmentHandler.java" afterPath="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/StrictURIFragmentHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/V7TestBenchTestCase.java" afterPath="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/V7TestBenchTestCase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/WidgetsetTest.java" afterPath="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/WidgetsetTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testApp/testApp.iml" afterPath="$PROJECT_DIR$/testApp/testApp.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testUtil/testUtil.iml" afterPath="$PROJECT_DIR$/testUtil/testUtil.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/views.iml" afterPath="$PROJECT_DIR$/views/views.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="v7.iws" />
@@ -25,6 +39,11 @@
     <rightPanel />
     <splitter proportion="0.5" />
   </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/v7$NavigationTest_selectPath.coverage" NAME="NavigationTest.selectPath Coverage Results" MODIFIED="1413313440136" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>uk.co.q3c.v7.testApp.test.*</FILTER>
+    </SUITE>
+  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
@@ -38,51 +57,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="V7TestBenchTestCase.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="V7TestBenchTestCase.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/V7TestBenchTestCase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4620" max-vertical-offset="5985">
-              <caret line="308" column="34" selection-start-line="308" selection-start-column="34" selection-end-line="308" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HorizontalLayoutElement.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/HorizontalLayoutElement.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="390">
-              <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AbstractSingleComponentContainerElement.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/AbstractSingleComponentContainerElement.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="390">
-              <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AbstractComponentElement.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/AbstractComponentElement.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="825">
-              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SubpagePanelPageObject.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/SubpagePanelPageObject.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="855" max-vertical-offset="945">
-              <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.3652174" vertical-offset="2790" max-vertical-offset="5775">
+              <caret line="248" column="0" selection-start-line="248" selection-start-column="0" selection-end-line="248" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -91,52 +70,51 @@
       <file leaf-file-name="NavigationTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3030">
-              <caret line="65" column="25" selection-start-line="65" selection-start-column="25" selection-end-line="65" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="660" max-vertical-offset="3540">
+              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.gradle" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/testApp/build.gradle">
+      <file leaf-file-name="NavigationTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6306818" vertical-offset="1122" max-vertical-offset="1650">
-              <caret line="97" column="0" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="248" max-vertical-offset="1170">
+              <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
               <folding>
-                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#0#2283#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.gradle" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/demo/build.gradle">
+      <file leaf-file-name="ReflectiveCallable.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/junit/junit/4.12-beta-2/962bd452e8f8fdf9896a1f9f36e292f260fd3890/junit-4.12-beta-2-sources.jar!/org/junit/internal/runners/model/ReflectiveCallable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1032" max-vertical-offset="1620">
-              <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NotifyTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1530" max-vertical-offset="1680">
-              <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="195" max-vertical-offset="360">
+              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VaadinVersionTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/VaadinVersionTest.java">
+      <file leaf-file-name="NavTreePageObject.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/NavTreePageObject.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="660">
-              <caret line="26" column="9" selection-start-line="26" selection-start-column="9" selection-end-line="26" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1755" max-vertical-offset="2340">
+              <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Optional.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.google.guava/guava/15.0/36b6a585c0f0c63bd85fb04db0dcb7b217298956/guava-15.0-sources.jar!/com/google/common/base/Optional.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1170" max-vertical-offset="3735">
+              <caret line="78" column="0" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -2406,7 +2384,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="14114219353550" />
+        <entry key="$PROJECT_DIR$" value="14114219566660" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -3116,10 +3094,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/V7View.java" />
-        <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/ViewBaseTest.java" />
-        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/NavigationState.java" />
-        <option value="$PROJECT_DIR$/testApp/src/main/java/log4j.properties" />
         <option value="$PROJECT_DIR$/testApp/src/test/java/log4j.properties" />
         <option value="$PROJECT_DIR$/demo/src/main/resources/log4j.properties" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultErrorView.java" />
@@ -3146,27 +3120,31 @@
         <option value="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/WidgetsetView.java" />
         <option value="$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/PushView.java" />
         <option value="$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/view/NotificationsView.java" />
-        <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/LoginFormPageObject.java" />
         <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/LoginStatusPageObject.java" />
         <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LocaleTest.java" />
-        <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/StartupTest.java" />
         <option value="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/LoginTest.java" />
-        <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/NavTreePageObject.java" />
-        <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LoginTest.java" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/util/ID.java" />
-        <option value="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java" />
         <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/push/Push_Functional.java" />
         <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/BreadcrumbPageObject.java" />
         <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/UITree.java" />
         <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/NavigationButtonPanel.java" />
         <option value="$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/view/component/DefaultSubpagePanelTest.java" />
-        <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/V7TestBenchTestCase.java" />
         <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/SubpagePanelPageObject.java" />
         <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/VaadinVersionTest.java" />
-        <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java" />
-        <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java" />
         <option value="$PROJECT_DIR$/demo/build.gradle" />
         <option value="$PROJECT_DIR$/testApp/build.gradle" />
+        <option value="$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/StrictURIFragmentHandler.java" />
+        <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/TreePathException.java" />
+        <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java" />
+        <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/StartupTest.java" />
+        <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/LoginFormPageObject.java" />
+        <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LoginTest.java" />
+        <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/IntStepperElement.java" />
+        <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/WidgetsetTest.java" />
+        <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/NavTreePageObject.java" />
+        <option value="$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java" />
+        <option value="$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java" />
+        <option value="$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/V7TestBenchTestCase.java" />
       </list>
     </option>
   </component>
@@ -3261,6 +3239,84 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Tests">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src/test">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="V7">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src/test">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="java">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+        <subPane subId="Changed Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="V7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -3286,6 +3342,36 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testbench" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testbench" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -3356,6 +3442,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="testApp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="v7" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testApp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -3449,84 +3553,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v7" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v7" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="V7" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Tests">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="V7">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="V7">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="src/test">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="V7">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="V7">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="src/test">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="java">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-        <subPane subId="Changed Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -3553,16 +3579,17 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.includeInheritedMembers" value="false" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/testbench/src/test/java" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+      <recent name="junit.framework.TestCase" />
+    </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="uk.co.q3c.v7.base.view" />
       <recent name="uk.co.q3c.v7.base.ui.form" />
       <recent name="uk.co.q3c.v7.base.view.component" />
-    </key>
-    <key name="CreateTestDialog.Recents.Supers">
-      <recent name="" />
-      <recent name="junit.framework.TestCase" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="uk.co.q3c.v7.testbench" />
@@ -3574,27 +3601,34 @@
       <recent name="$PROJECT_DIR$/testApp/src/resources" />
     </key>
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="uk.co.q3c.v7.testbench" />
       <recent name="uk.co.q3c.v7.base.view" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/testApp/src/main/resources" />
-    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="uk.co.q3c.v7.base.data" />
       <recent name="uk.co.q3c.v7.testbench" />
+      <recent name="uk.co.q3c.v7.base.data" />
       <recent name="uk.co.q3c.v7.testutil" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/testbench/src" />
+      <recent name="$PROJECT_DIR$/testApp/src/main/resources" />
+    </key>
   </component>
-  <component name="RunManager" selected="Gradle.v7:demo [cleanTomcat]">
-    <configuration default="false" name="All in demo" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="demo" />
+  <component name="RunManager" selected="JUnit.Al in project">
+    <configuration default="false" name="WidgetsetTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="uk.co.q3c.v7.testApp.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="testApp" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" />
+      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.testApp.test" />
+      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.testApp.test.WidgetsetTest" />
       <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="package" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -3609,80 +3643,126 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="v7:testApp [deployToTomcat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/testApp" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="deployToTomcat" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
-      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
+    <configuration default="false" name="NavigationTest.selectPath" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="uk.co.q3c.v7.testApp.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="testApp" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.testApp.test" />
+      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.testApp.test.NavigationTest" />
+      <option name="METHOD_NAME" value="selectPath" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <ConfigurationWrapper RunnerId="Debug" />
       <method />
     </configuration>
-    <configuration default="false" name="v7:testApp [cleanTomcat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/testApp" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="cleanTomcat" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
-      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
+    <configuration default="false" name="NavigationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="uk.co.q3c.v7.testApp.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="testApp" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.testApp.test" />
+      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.testApp.test.NavigationTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="v7:demo [startTomcat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="startTomcat" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
-      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
+    <configuration default="false" name="NavigationTest.navigateFromTree" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="uk.co.q3c.v7.testApp.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="testApp" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.testApp.test" />
+      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.testApp.test.NavigationTest" />
+      <option name="METHOD_NAME" value="navigateFromTree" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="v7:demo [cleanTomcat]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/demo" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="cleanTomcat" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
-      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
+    <configuration default="false" name="NavigationTest.navigateFromTree (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="uk.co.q3c.v7.demo.bench.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="demo" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="uk.co.q3c.v7.demo.bench" />
+      <option name="MAIN_CLASS_NAME" value="uk.co.q3c.v7.demo.bench.NavigationTest" />
+      <option name="METHOD_NAME" value="navigateFromTree" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
     <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
@@ -3976,19 +4056,19 @@
       <item index="0" class="java.lang.String" itemvalue="JUnit.Al in project" />
       <item index="1" class="java.lang.String" itemvalue="Tomcat Server.TestApp on Tomcat 7" />
       <item index="2" class="java.lang.String" itemvalue="Tomcat Server.Demo on Tomcat 8180" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.All in demo" />
-      <item index="4" class="java.lang.String" itemvalue="Gradle.v7:testApp [deployToTomcat]" />
-      <item index="5" class="java.lang.String" itemvalue="Gradle.v7:testApp [cleanTomcat]" />
-      <item index="6" class="java.lang.String" itemvalue="Gradle.v7:demo [startTomcat]" />
-      <item index="7" class="java.lang.String" itemvalue="Gradle.v7:demo [cleanTomcat]" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.WidgetsetTest" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.NavigationTest.selectPath" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.NavigationTest" />
+      <item index="6" class="java.lang.String" itemvalue="JUnit.NavigationTest.navigateFromTree" />
+      <item index="7" class="java.lang.String" itemvalue="JUnit.NavigationTest.navigateFromTree (1)" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Gradle.v7:demo [cleanTomcat]" />
-        <item index="1" class="java.lang.String" itemvalue="Gradle.v7:demo [startTomcat]" />
-        <item index="2" class="java.lang.String" itemvalue="Gradle.v7:testApp [cleanTomcat]" />
-        <item index="3" class="java.lang.String" itemvalue="Gradle.v7:testApp [deployToTomcat]" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.All in demo" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.NavigationTest.navigateFromTree (1)" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.NavigationTest.navigateFromTree" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.NavigationTest" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.NavigationTest.selectPath" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.WidgetsetTest" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -4138,36 +4218,36 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-4" width="1857" height="1085" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32837406" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32984003" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4771033" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.49037373" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37938362" sideWeight="0.5002758" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3375932" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32481363" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3227633" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.32991913" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" x="2518" y="393" width="284" height="582" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.32991913" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" x="2518" y="393" width="284" height="582" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2498621" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23827909" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.371672" sideWeight="0.4997242" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24931054" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35889244" sideWeight="0.4997242" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="1919" y="-4" width="1282" height="1029" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Usages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2498621" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24931054" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24875896" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspector" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40362087" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.40362087" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Dependencies Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32984003" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39979756" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -4311,8 +4391,20 @@
           <properties />
           <option name="timeStamp" value="45" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java</url>
+          <line>215</line>
+          <properties />
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java</url>
+          <line>57</line>
+          <properties />
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="46" />
+      <option name="time" value="73" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -4320,132 +4412,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/NavMenuPageObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="720">
-          <caret line="55" column="43" selection-start-line="55" selection-start-column="43" selection-end-line="55" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/StandardPageViewBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="405" max-vertical-offset="1005">
-          <caret line="57" column="22" selection-start-line="57" selection-start-column="22" selection-end-line="57" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/DefaultLoginView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="960" max-vertical-offset="2400">
-          <caret line="103" column="59" selection-start-line="103" selection-start-column="59" selection-end-line="103" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/util/IDTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
-          <caret line="59" column="42" selection-start-line="59" selection-start-column="42" selection-end-line="59" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/NotificationsView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="655" max-vertical-offset="1545">
-          <caret line="125" column="55" selection-start-line="125" selection-start-column="55" selection-end-line="125" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/WidgetsetView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="415" max-vertical-offset="1305">
-          <caret line="108" column="55" selection-start-line="108" selection-start-column="55" selection-end-line="108" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/PushView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="355" max-vertical-offset="1245">
-          <caret line="103" column="58" selection-start-line="103" selection-start-column="58" selection-end-line="103" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/src/main/java/uk/co/q3c/v7/demo/view/NotificationsView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="595" max-vertical-offset="1485">
-          <caret line="114" column="55" selection-start-line="114" selection-start-column="55" selection-end-line="114" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/LoginStatusPageObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
-          <caret line="47" column="51" selection-start-line="47" selection-start-column="51" selection-end-line="47" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LocaleTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1440">
-          <caret line="102" column="1" selection-start-line="102" selection-start-column="1" selection-end-line="102" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/StartupTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="61" max-vertical-offset="1245">
-          <caret line="36" column="16" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/LoginFormPageObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="1080">
-          <caret line="60" column="16" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/LoginTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="915">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/NavTreePageObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="810">
-          <caret line="61" column="27" selection-start-line="61" selection-start-column="27" selection-end-line="61" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6672158" vertical-offset="0" max-vertical-offset="900">
-          <caret line="38" column="45" selection-start-line="38" selection-start-column="45" selection-end-line="38" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/util/VersionUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33278418" vertical-offset="143" max-vertical-offset="2205">
-          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/push/Push_Functional.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1530">
-          <caret line="38" column="24" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/ElementLocator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="750">
-          <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/BreadcrumbPageObject.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
@@ -4492,13 +4458,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/UITree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="331" max-vertical-offset="960">
-          <caret line="46" column="19" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/V7/src/test/java/uk/co/q3c/v7/base/config/DefaultApplicationConfigurationServiceTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1662" max-vertical-offset="1995">
@@ -4528,13 +4487,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LoginTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="377" max-vertical-offset="1680">
-          <caret line="55" column="0" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/junit/junit/4.12-beta-2/962bd452e8f8fdf9896a1f9f36e292f260fd3890/junit-4.12-beta-2-sources.jar!/org/junit/internal/runners/statements/RunAfters.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="208" max-vertical-offset="615">
@@ -4560,13 +4512,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="295" max-vertical-offset="5715">
           <caret line="55" column="0" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.google.guava/guava/15.0/36b6a585c0f0c63bd85fb04db0dcb7b217298956/guava-15.0-sources.jar!/com/google/common/base/Optional.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="678" max-vertical-offset="3315">
-          <caret line="78" column="0" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -4606,6 +4551,203 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/AbstractSingleComponentContainerElement.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.28651685" vertical-offset="0" max-vertical-offset="890">
+          <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/HorizontalLayoutElement.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.101123594" vertical-offset="0" max-vertical-offset="890">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/SubpagePanelPageObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.9013158" vertical-offset="33" max-vertical-offset="945">
+          <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/VaadinVersionTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4276316" vertical-offset="0" max-vertical-offset="912">
+          <caret line="26" column="9" selection-start-line="26" selection-start-column="9" selection-end-line="26" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.89988875" vertical-offset="706" max-vertical-offset="1605">
+          <caret line="101" column="0" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/StrictURIFragmentHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="319" max-vertical-offset="2640">
+          <caret line="45" column="10" selection-start-line="45" selection-start-column="10" selection-end-line="45" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/TreePathException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
+          <caret line="17" column="32" selection-start-line="17" selection-start-column="32" selection-end-line="17" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar!/java/util/Queue.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.24429968" vertical-offset="0" max-vertical-offset="345">
+          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/TreeElement.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="44" max-vertical-offset="450">
+          <caret line="32" column="48" selection-start-line="32" selection-start-column="27" selection-end-line="32" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/ElementPath.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="286" max-vertical-offset="750">
+          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1002" max-vertical-offset="1635">
+          <caret line="97" column="0" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testbench/src/test/java/uk/co/q3c/v7/testbench/ElementPathTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1170">
+          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/view/component/DefaultMessageBar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1005">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="1320">
+          <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/StartupTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="190" max-vertical-offset="1080">
+          <caret line="61" column="37" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/LoginFormPageObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="522" max-vertical-offset="1065">
+          <caret line="78" column="41" selection-start-line="78" selection-start-column="41" selection-end-line="78" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/LoginTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="522" max-vertical-offset="1650">
+          <caret line="100" column="34" selection-start-line="100" selection-start-column="34" selection-end-line="100" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/AbstractComponentElement.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34539473" vertical-offset="0" max-vertical-offset="912">
+          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/CustomComponentElement.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.27960527" vertical-offset="0" max-vertical-offset="912">
+          <caret line="17" column="61" selection-start-line="17" selection-start-column="61" selection-end-line="17" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/ButtonElement.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.32894737" vertical-offset="0" max-vertical-offset="912">
+          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/org.vaadin.addons/stepper/2.1.2/7577d4a4b35cf30a1ad9261d5cd7b20ff1f68e2c/stepper-2.1.2.jar!/org/vaadin/risto/stepper/AbstractStepper.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0867052" vertical-offset="0" max-vertical-offset="865">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/main/java/uk/co/q3c/v7/testapp/view/WidgetsetView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="47" max-vertical-offset="1515">
+          <caret line="25" column="38" selection-start-line="25" selection-start-column="38" selection-end-line="25" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/org.vaadin.addons/stepper/2.1.2/7577d4a4b35cf30a1ad9261d5cd7b20ff1f68e2c/stepper-2.1.2.jar!/org/vaadin/risto/stepper/IntStepper.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.0" vertical-offset="0" max-vertical-offset="465">
+          <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/IntStepperElement.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
+          <caret line="18" column="49" selection-start-line="18" selection-start-column="49" selection-end-line="18" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/WidgetsetTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+          <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V7/src/main/java/uk/co/q3c/v7/base/navigate/NavigationState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1995">
+          <caret line="53" column="13" selection-start-line="53" selection-start-column="13" selection-end-line="53" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.google.guava/guava/15.0/36b6a585c0f0c63bd85fb04db0dcb7b217298956/guava-15.0-sources.jar!/com/google/common/base/Optional.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="671" max-vertical-offset="3315">
+          <caret line="78" column="0" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/junit/junit/4.12-beta-2/962bd452e8f8fdf9896a1f9f36e292f260fd3890/junit-4.12-beta-2-sources.jar!/org/junit/internal/runners/model/ReflectiveCallable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
@@ -4614,87 +4756,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/AbstractSingleComponentContainerElement.java">
+    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/NavTreePageObject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="225">
-          <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/AbstractComponentElement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.vaadin/vaadin-testbench-api/7.3.0.beta1/6eb60162d0fdd05910989f8040567e1df33624e1/vaadin-testbench-api-7.3.0.beta1-sources.jar!/com/vaadin/testbench/elements/HorizontalLayoutElement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="225">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/V7TestBenchTestCase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4620" max-vertical-offset="5985">
-          <caret line="308" column="34" selection-start-line="308" selection-start-column="34" selection-end-line="308" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/SubpagePanelPageObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="855" max-vertical-offset="945">
-          <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/VaadinVersionTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="660">
-          <caret line="26" column="9" selection-start-line="26" selection-start-column="9" selection-end-line="26" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NotifyTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="878" max-vertical-offset="1320">
-          <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="784" max-vertical-offset="1755">
+          <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/testApp/src/test/java/uk/co/q3c/v7/testApp/test/NavigationTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3030">
-          <caret line="65" column="25" selection-start-line="65" selection-start-column="25" selection-end-line="65" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="3180">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/demo/build.gradle">
+    <entry file="file://$PROJECT_DIR$/demo/src/test/java/uk/co/q3c/v7/demo/bench/NavigationTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1032" max-vertical-offset="1620">
-          <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="248" max-vertical-offset="1170">
+          <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#0#2283#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testApp/build.gradle">
+    <entry file="file://$PROJECT_DIR$/testbench/src/main/java/uk/co/q3c/v7/testbench/V7TestBenchTestCase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6306818" vertical-offset="1122" max-vertical-offset="1650">
-          <caret line="97" column="0" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.3652174" vertical-offset="2790" max-vertical-offset="5775">
+          <caret line="248" column="0" selection-start-line="248" selection-start-column="0" selection-end-line="248" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

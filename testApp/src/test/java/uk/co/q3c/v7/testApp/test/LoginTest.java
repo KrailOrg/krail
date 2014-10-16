@@ -105,7 +105,7 @@ public class LoginTest extends V7TestBenchTestCase {
         verifyUrl("login"); // has not moved
         assertThat(navTree.currentSelection()).isEqualTo("Log In");
         pause(1000);
-        WebElement label = element(Optional.of("status"), DefaultLoginView.class, Label.class);
+        WebElement label = label(Optional.of("status"), DefaultLoginView.class, Label.class);
         pause(1000);
         assertThat(label).isNotNull();
         String s = label.getText();

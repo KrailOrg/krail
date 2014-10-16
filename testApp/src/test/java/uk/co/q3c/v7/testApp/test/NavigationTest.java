@@ -46,23 +46,22 @@ public class NavigationTest extends V7TestBenchTestCase {
 		// then
 		verifyUrl("home");
 		// // when
-		navTree().select(4);
-		// // then
+        navTree.select("System Account");
+        // // then
 		verifyUrl("system-account");
         assertThat(navTree.currentSelection()).isEqualTo("System Account");
         // // when
-		navTree().select(3);
-		// // then
+        navTree.select("Public Home");
+        // // then
 		verifyUrl("home");
 		// // when
-		navTree().select(0);
-		// // then
+        navTree.select("Log In");
+        // // then
 		verifyUrl("login");
 
 		// when
-		navTree().expand(4);
-		navTree().select(4, 0);
-		// then
+        navTree.select("System Account/Enable Account");
+        // then
 		verifyUrl("system-account/enable-account");
 
 	}
@@ -130,8 +129,8 @@ public class NavigationTest extends V7TestBenchTestCase {
 		driver.get(rootUrl());
 		pause(1000);
 		// when
-		navTree().select(4);
-		// then
+        navTree.select(4);
+        // then
 		verifyUrl("system-account");
         assertThat(navTree.currentSelection()).isEqualTo("System Account");
 
@@ -204,7 +203,18 @@ public class NavigationTest extends V7TestBenchTestCase {
 
 	}
 
-	@After
+    @Test
+    public void selectPath() {
+        //given
+        driver.get(rootUrl());
+        pause(1000);
+        //when
+        navTree.select("System Account/Enable Account");
+        //then
+        assertThat(navTree.currentSelection()).isEqualTo("Enable Account");
+    }
+
+    @After
     public void tearDown2() throws Exception {
         String verificationErrorString = verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {

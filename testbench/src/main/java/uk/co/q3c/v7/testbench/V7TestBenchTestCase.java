@@ -48,6 +48,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
     private int currentDriverIndex = 1;
     private List<WebDriver> drivers = new ArrayList<>();
 
+
     @Before
     public void baseSetup() {
         System.out.println("setting up base test bench case");
@@ -177,16 +178,16 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
     }
 
     protected WebElement loginLabel() {
-        return element(DefaultUserStatusPanel.class, Label.class);
+        return label(Optional.absent(), DefaultUserStatusPanel.class, Label.class);
     }
 
-    protected WebElement element(Class<?>... classes) {
-        return element(driver, classes);
-    }
+    //    protected WebElement element(Class<?>... classes) {
+    //        return element(driver, classes);
+    //    }
 
-    protected WebElement element(WebDriver driver, Class<?>... classes) {
-        return element(driver, Optional.absent(), classes);
-    }
+    //    protected WebElement element(WebDriver driver, Class<?>... classes) {
+    //        return element(driver, Optional.absent(), classes);
+    //    }
 
     //    protected WebElement element(WebDriver driver, String qualifier, Class<?>... classes) {
     //        if (classes == null || classes.length == 0) {
@@ -216,12 +217,35 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
     //        return element(DefaultLoginView.class, Button.class);
     //    }
 
-    protected WebElement element(WebDriver driver, Optional<?> qualifier, Class<?>... classes) {
+    protected LabelElement label(Optional<?> qualifier, Class<?>... componentClasses) {
+        String id = ID.getIdc(qualifier, componentClasses);
+        return label(id);
+    }
+
+    protected LabelElement label(String id) {
+        LabelElement label = $(LabelElement.class).id(id);
+        return label;
+    }
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    /**
+     * Use rarely - you should be able to use the more specialised versions;  this is a catch all for classes which do
+     * not have an implementation of AbstractElement
+     *
+     * @param driver
+     * @param qualifier
+     * @param classes
+     *
+     * @return
+     */
+    protected WebElement element(Optional<?> qualifier, Class<?>... classes) {
         if (classes == null || classes.length == 0) {
             throw new RuntimeException("Id will fail with only a qualifier supplied.  Always use classes to define Id");
         }
-        String s = id(qualifier, classes);
-        WebElement findElement = driver.findElement(By.vaadin(s));
+        String s = ID.getIdc(qualifier, classes);
+        WebElement findElement = getDriver().findElement(By.vaadin(s));
         return findElement;
     }
 
@@ -229,17 +253,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         ElementPath elementPath = new ElementPath(appContext);
         ElementPath id = elementPath.id(ID.getIdc(qualifier, components));
         return id.get();
-    }
-
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    protected UITree navTree() {
-        return treeLocator().id("DefaultUserNavigationTree");
-    }
-
-    protected UITree treeLocator() {
-        return new UITree(driver, appContext);
     }
 
     protected String textFieldValue(Optional<?> qualifier, Class<?>... componentClasses) {
@@ -257,6 +270,42 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         element.sendKeys(text);
     }
 
+    //--
+    protected String intStepperValue(Optional<?> qualifier, Class<?>... componentClasses) {
+        IntStepperElement element = intStepper(qualifier, componentClasses);
+        return element.getText();
+    }
+
+    protected IntStepperElement intStepper(Optional<?> qualifier, Class<?>... componentClasses) {
+        IntStepperElement element = $(IntStepperElement.class).id(ID.getIdc(qualifier, componentClasses));
+        return element;
+    }
+
+    protected void setIntStepperValue(String text, Optional<?> qualifier, Class<?>... componentClasses) {
+        IntStepperElement element = intStepper(qualifier, componentClasses);
+        element.sendKeys(text);
+    }
+
+    //--
+    protected String passwordFieldValue(Optional<?> qualifier, Class<?>... componentClasses) {
+        PasswordFieldElement element = passwordField(qualifier, componentClasses);
+        return element.getText();
+    }
+
+    protected PasswordFieldElement passwordField(Optional<?> qualifier, Class<?>... componentClasses) {
+        PasswordFieldElement element = $(PasswordFieldElement.class).id(ID.getIdc(qualifier, componentClasses));
+        return element;
+    }
+
+    protected void setPasswordFieldValue(String text, Optional<?> qualifier, Class<?>... componentClasses) {
+        PasswordFieldElement element = passwordField(qualifier, componentClasses);
+        element.sendKeys(text);
+    }
+
+    //    protected WebElement element(Optional<?> qualifier, Class<?>... classes) {
+    //        return element(driver, qualifier, classes);
+    //    }
+
     protected void clickButton(Optional<?> qualifier, Class<?>... classes) {
         button(qualifier, classes).click();
     }
@@ -266,26 +315,12 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         return $(ButtonElement.class).id(id);
     }
 
-    protected WebElement element(Optional<?> qualifier, Class<?>... classes) {
-        return element(driver, qualifier, classes);
-    }
-
     protected String loginStatusLabelText() {
         return labelText(Optional.absent(), DefaultUserStatusPanel.class, Label.class);
     }
 
     protected String labelText(Optional<?> qualifier, Class<?>... componentClasses) {
         return label(qualifier, componentClasses).getText();
-    }
-
-    protected LabelElement label(Optional<?> qualifier, Class<?>... componentClasses) {
-        String id = ID.getIdc(qualifier, componentClasses);
-        return label(id);
-    }
-
-    protected LabelElement label(String id) {
-        LabelElement label = $(LabelElement.class).id(id);
-        return label;
     }
 
     public PanelElement panel(Optional<?> qualifier, Class<?>... componentClasses) {
@@ -371,6 +406,9 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         TreeElement element = $(TreeElement.class).id(ID.getIdc(qualifier, componentClasses));
         return element;
     }
+
+
+    ;
 
     /**
      * Indexed from 1 (that is, the default driver is at index 1)

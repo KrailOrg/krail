@@ -43,22 +43,21 @@ public class NavigationTest extends V7TestBenchTestCase {
         // then
         verifyUrl("home");
         // // when
-        navTree().select(3);
+        navTree.select("System Account");
         // // then
         verifyUrl("system-account");
         assertThat(navTree.currentSelection()).isEqualTo("System Account");
         // // when
-        navTree().select(2);
+        navTree.select("Public Home");
         // // then
         verifyUrl("home");
         // // when
-        navTree().select(0);
+        navTree.select("Log In");
         // // then
         verifyUrl("login");
 
         // when
-        navTree().expand(3);
-        navTree().select(3, 0);
+        navTree.select("System Account/Enable Account");
         // then
         verifyUrl("system-account/enable-account");
 

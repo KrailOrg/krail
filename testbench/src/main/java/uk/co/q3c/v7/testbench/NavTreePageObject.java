@@ -14,56 +14,135 @@
 package uk.co.q3c.v7.testbench;
 
 import com.google.common.base.Optional;
+import com.google.common.primitives.Ints;
+import com.vaadin.testbench.By;
 import com.vaadin.testbench.elements.TreeElement;
+import org.openqa.selenium.WebElement;
+import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.view.component.DefaultUserNavigationTree;
+
+import java.util.*;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by david on 04/10/14.
  */
 public class NavTreePageObject extends PageObject {
-    /**
-     * Initialises the PageObject with a reference to the parent test case, so that the PageObject can access a number
-     * of variables from the parent, for example: drivers, baseUrl,
-     * application appContext.
-     * <p/>
-     * <p/>
-     * Note that all calls requiring eventual access to a WebDriver should be made via the parentCase, so that the
-     * correct driver is acted on.
-     *
-     * @param parentCase
-     */
+    private String id = ID.getIdc(Optional.absent(), DefaultUserNavigationTree.class);
+
     public NavTreePageObject(V7TestBenchTestCase parentCase) {
         super(parentCase);
     }
 
-    public String itemCaption(int index) {
-        return navTree().index(index)
-                        .get()
-                        .getText();
+    public String itemCaption(int... index) {
+        return webElement(false, index).getText();
     }
 
-    protected UITree navTree() {
-        return treeLocator().id("DefaultUserNavigationTree");
+    /**
+     * @param expand
+     *         if true, set the id so that it will expand when clicked, otherwise select the node will just select when
+     *         clicked
+     * @param index
+     *         an integer array describing the path to the required node
+     *
+     * @return
+     */
+    private WebElement webElement(boolean expand, int... index) {
+        ElementPath elementPath = new ElementPath(parentCase.getAppContext());
+        elementPath.id(id)
+                   .index(index);
+        if (expand) {
+            elementPath.expand();
+        }
+        WebElement webElement = parentCase.getDriver()
+                                          .findElement(By.vaadin(elementPath.get()));
+        return webElement;
     }
 
-    protected UITree treeLocator() {
-        return new UITree(parentCase.getDriver(), parentCase.getAppContext());
+    public void expand(int... index) {
+        webElement(true, index).click();
     }
 
-    public void expand(int index) {
-        navTree().expand(index);
+    public void select(String path) {
+        List<Integer> index = treeItemIndex(path, Optional.absent(), DefaultUserNavigationTree.class);
+        int[] indexArray = Ints.toArray(index);
+        select(indexArray);
     }
-
 
     public void select(int... index) {
-        navTree().select(index);
+        webElement(false, index).click();
+    }
+
+    /**
+     * Returns the WebElement described by the url "path"
+     *
+     * @param path
+     *
+     * @return
+     */
+    protected List<Integer> treeItemIndex(String path, Optional<?> qualifier, Class<?>... componentClasses) {
+        checkNotNull(path);
+        String[] segments = path.split("/");
+        Queue<String> queue = new ArrayDeque<>();
+        queue.addAll(Arrays.asList(segments));
+        WebElement parentElement = navTree();
+
+        TreeNodeInfo nodeInfo = null;
+        List<Integer> indexes = new ArrayList<>();
+        while (queue.size() > 0) {
+            parentElement.click();
+
+            nodeInfo = getChildElement(parentElement, queue.poll());
+            indexes.add(nodeInfo.index);
+            parentElement = nodeInfo.nodeElement;
+        }
+
+        return indexes;
+    }
+
+    private TreeElement navTree() {
+        return parentCase.tree(Optional.absent(), DefaultUserNavigationTree.class);
+    }
+
+    private TreeNodeInfo getChildElement(WebElement parentElement, String segment) {
+        TreeNodeInfo nodeInfo = new TreeNodeInfo();
+        List<WebElement> nodeElements = parentElement.findElements(By.className("v-tree-node"));
+        List<WebElement> nodeChildrenElements = parentElement.findElements(By.className("v-tree-node-children"));
+        List<WebElement> nodeCaptionElements = parentElement.findElements(By.className("v-tree-node-caption"));
+
+        int index = -1;
+        for (int i = 0; i < nodeElements.size(); i++) {
+            WebElement element = nodeElements.get(i);
+            if (element.getText()
+                       .equals(segment)) {
+                index = i;
+                break;
+            }
+        }
+        if (index < 0) {
+            throw new TreePathException("Segment " + segment + "not found");
+        }
+        nodeInfo.index = index;
+        nodeInfo.nodeElement = nodeElements.get(index);
+        nodeInfo.nodeCaptionElement = nodeCaptionElements.get(index);
+        nodeInfo.nodeChildrenElement = nodeChildrenElements.get(index);
+        return nodeInfo;
     }
 
     public String currentSelection() {
-        return navTree2().getValue();
+        return navTree().getValue();
     }
 
-    private TreeElement navTree2() {
-        return parentCase.tree(Optional.absent(), DefaultUserNavigationTree.class);
+    private boolean treeItemHasChildren(WebElement parentElement) {
+        return true;
     }
+
+    public class TreeNodeInfo {
+        WebElement nodeElement;
+        WebElement nodeCaptionElement;
+        WebElement nodeChildrenElement;
+        int index;
+    }
+
 }

@@ -13,6 +13,7 @@
 
 package uk.co.q3c.v7.testApp.test;
 
+import com.google.common.base.Optional;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.ui.Label;
 import org.junit.Before;
@@ -58,7 +59,7 @@ public class StartupTest extends V7TestBenchTestCase {
         String comboValue = localeSelectorValue();
         assertThat(comboValue).isEqualTo("English (United Kingdom)");
 
-        WebElement messageBar = element(DefaultMessageBar.class, Label.class);
+        WebElement messageBar = label(Optional.absent(), DefaultMessageBar.class, Label.class);
         assertThat(messageBar.getText()).isEqualTo("Message bar");
     }
 

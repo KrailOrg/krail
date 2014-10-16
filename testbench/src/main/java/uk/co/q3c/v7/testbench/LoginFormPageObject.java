@@ -15,10 +15,11 @@ package uk.co.q3c.v7.testbench;
 
 import com.google.common.base.Optional;
 import com.vaadin.testbench.elements.ButtonElement;
+import com.vaadin.testbench.elements.PasswordFieldElement;
+import com.vaadin.testbench.elements.TextFieldElement;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
-import org.openqa.selenium.WebElement;
 import uk.co.q3c.v7.base.view.DefaultLoginView;
 
 /**
@@ -63,27 +64,28 @@ public class LoginFormPageObject extends PageObject {
         usernameBox().sendKeys(username);
         passwordBox().clear();
         passwordBox().sendKeys(password);
-        ButtonElement button = parentCase.button(Optional.absent(), DefaultLoginView.class, Button.class);
-        button.click();
+        submitButton().click();
 
     }
 
-    protected WebElement usernameBox() {
-        return parentCase.element(Optional.of("username"), DefaultLoginView.class, TextField.class);
+    protected TextFieldElement usernameBox() {
+        return parentCase.textField(Optional.of("username"), DefaultLoginView.class, TextField.class);
     }
 
-    protected WebElement passwordBox() {
-        return parentCase.element(Optional.of("password"), DefaultLoginView.class, PasswordField.class);
+    protected PasswordFieldElement passwordBox() {
+        return parentCase.passwordField(Optional.of("password"), DefaultLoginView.class, PasswordField.class);
+    }
+
+    private ButtonElement submitButton() {
+        return parentCase.button(Optional.absent(), DefaultLoginView.class, Button.class);
     }
 
     protected String submitButtonText() {
-        return parentCase.button(Optional.absent(), DefaultLoginView.class, Button.class)
-                         .getCaption();
+        return submitButton().getCaption();
     }
 
     public static class Credentials {
         private String password = "password";
         private String username = "ds";
     }
-
 }
