@@ -11,7 +11,7 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testbench.page.object;
 
 /**
  * Created by david on 14/10/14.

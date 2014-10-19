@@ -11,12 +11,14 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testbench.page.object;
 
 import com.google.common.base.Optional;
+import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.HorizontalLayoutElement;
-import uk.co.q3c.v7.base.view.component.DefaultSubpagePanel;
+import uk.co.q3c.v7.base.view.component.DefaultSubPagePanel;
 import uk.co.q3c.v7.base.view.component.NavigationButton;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,23 +26,26 @@ import java.util.List;
 /**
  * Created by david on 04/10/14.
  */
-public class SubpagePanelPageObject extends PageObject {
+public class SubPagePanelPageObject extends PageObject {
 
-    public SubpagePanelPageObject(V7TestBenchTestCase parentCase) {
+    public SubPagePanelPageObject(V7TestBenchTestCase parentCase) {
         super(parentCase);
     }
 
-    public ButtonPageElement button(int index) {
-        return new ButtonPageElement(parentCase, Optional.of(index), DefaultSubpagePanel.class, NavigationButton.class);
+    public ButtonElement button(int index) {
+        return element(ButtonElement.class, Optional.of(index), DefaultSubPagePanel.class, NavigationButton.class);
     }
 
     public List<String> buttonLabels() {
-        HorizontalLayoutElement panelElement = parentCase.horizontalLayout(Optional.absent(),
-                DefaultSubpagePanel.class);
+        HorizontalLayoutElement panelElement = subPagePanel();
         parentCase.pause(500);
         String[] labelSet = panelElement.getText()
                                         .split("\\\n");
         List<String> labels = Arrays.asList(labelSet);
         return labels;
+    }
+
+    public HorizontalLayoutElement subPagePanel() {
+        return element(HorizontalLayoutElement.class, Optional.absent(), DefaultSubPagePanel.class);
     }
 }

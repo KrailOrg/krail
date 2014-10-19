@@ -19,8 +19,8 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import uk.co.q3c.v7.testbench.MessageBarPageObject;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.page.object.MessageBarPageObject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -56,36 +56,36 @@ public class Push_Functional extends V7TestBenchTestCase {
 
         selectDriver(1);
         pushView.groupBox()
-                .setText("a");
+                .sendKeys("a");
         pushView.messageBox()
-                .setText("a1");
+                .sendKeys("a1");
         pushView.sendButton()
                 .click();
         // then
 
         assertThat(pushView.messageLog()
-                           .getText()).isEqualTo("a:a1\n");
+                           .getValue()).isEqualTo("a:a1\n");
         assertThat(messageBar.message()).isEqualTo("a:a1");
         selectDriver(2);
         assertThat(pushView.messageLog()
-                           .getText()).isEqualTo("a:a1\n");
+                           .getValue()).isEqualTo("a:a1\n");
 
 
         // when
         pushView.groupBox()
-                .setText("b");
+                .sendKeys("b");
         pushView.messageBox()
-                .setText("b1");
+                .sendKeys("b1");
         pushView.sendButton()
                 .click();
 
         // then
         assertThat(pushView.messageLog()
-                           .getText()).isEqualTo("b:b1\na:a1\n");
+                           .getValue()).isEqualTo("b:b1\na:a1\n");
 
         selectDriver(1);
         assertThat(pushView.messageLog()
-                           .getText()).isEqualTo("b:b1\na:a1\n");
+                           .getValue()).isEqualTo("b:b1\na:a1\n");
         assertThat(messageBar.message()).isEqualTo("b:b1");
 
     }
@@ -103,9 +103,9 @@ public class Push_Functional extends V7TestBenchTestCase {
         // when
 
         pushView.groupBox()
-                .setText("x");
+                .sendKeys("x");
         pushView.messageBox()
-                .setText("x1");
+                .sendKeys("x1");
 
         pushView.sendButton()
                 .click();

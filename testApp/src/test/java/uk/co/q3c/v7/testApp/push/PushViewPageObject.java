@@ -14,12 +14,17 @@
 package uk.co.q3c.v7.testApp.push;
 
 import com.google.common.base.Optional;
+import com.vaadin.testbench.elements.ButtonElement;
+import com.vaadin.testbench.elements.CheckBoxElement;
+import com.vaadin.testbench.elements.TextAreaElement;
+import com.vaadin.testbench.elements.TextFieldElement;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.TextField;
 import uk.co.q3c.v7.base.view.component.BroadcastMessageLog;
 import uk.co.q3c.v7.testapp.view.PushView;
-import uk.co.q3c.v7.testbench.*;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.page.object.PageObject;
 
 /**
  * PageObject representing {@link PushView} used to assist the {@link Push_Functional} test
@@ -32,24 +37,24 @@ public class PushViewPageObject extends PageObject {
         super(parentCase);
     }
 
-    public TextFieldPageElement groupBox() {
-        return new TextFieldPageElement(parentCase, Optional.of("group"), PushView.class, TextField.class);
+    public TextFieldElement groupBox() {
+        return element(TextFieldElement.class, Optional.of("group"), PushView.class, TextField.class);
     }
 
-    public TextFieldPageElement messageBox() {
-        return new TextFieldPageElement(parentCase, Optional.of("message"), PushView.class, TextField.class);
+    public TextFieldElement messageBox() {
+        return element(TextFieldElement.class, Optional.of("message"), PushView.class, TextField.class);
     }
 
-    public ButtonPageElement sendButton() {
-        return new ButtonPageElement(parentCase, Optional.of("send"), PushView.class, Button.class);
+    public ButtonElement sendButton() {
+        return element(ButtonElement.class, Optional.of("send"), PushView.class, Button.class);
     }
 
-    public TextAreaPageElement messageLog() {
-        return new TextAreaPageElement(parentCase, Optional.absent(), PushView.class, BroadcastMessageLog.class);
+    public TextAreaElement messageLog() {
+        return element(TextAreaElement.class, Optional.absent(), PushView.class, BroadcastMessageLog.class);
     }
 
-    public CheckboxPageElement checkbox() {
-        return new CheckboxPageElement(parentCase, Optional.absent(), PushView.class, CheckBox.class);
+    public CheckBoxElement checkbox() {
+        return element(CheckBoxElement.class, Optional.absent(), PushView.class, CheckBox.class);
     }
 
 }

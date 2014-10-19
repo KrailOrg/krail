@@ -16,10 +16,8 @@ import com.google.common.base.Optional;
 import com.vaadin.testbench.By;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
-import com.vaadin.testbench.elements.*;
+import com.vaadin.testbench.elements.NotificationElement;
 import com.vaadin.testbench.elementsbase.AbstractElement;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Label;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.Dimension;
@@ -30,12 +28,12 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.base.view.component.DefaultLocaleSelector;
-import uk.co.q3c.v7.base.view.component.DefaultUserStatusPanel;
+import uk.co.q3c.v7.testbench.page.object.ElementPath;
+import uk.co.q3c.v7.testbench.page.object.LoginFormPageObject;
+import uk.co.q3c.v7.testbench.page.object.LoginStatusPageObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -131,7 +129,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         return rootUrl() + "/#" + fragment;
     }
 
-    protected void pause(int milliseconds) {
+    public void pause(int milliseconds) {
         try {
             Thread.sleep(milliseconds);
         } catch (Exception e) {
@@ -179,21 +177,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         loginForm.login();
     }
 
-    protected WebElement loginLabel() {
-        return label(Optional.absent(), DefaultUserStatusPanel.class, Label.class);
-    }
-
-
-    protected LabelElement label(Optional<?> qualifier, Class<?>... componentClasses) {
-        String id = ID.getIdc(qualifier, componentClasses);
-        return label(id);
-    }
-
-    protected LabelElement label(String id) {
-        LabelElement label = $(LabelElement.class).id(id);
-        return label;
-    }
-
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -216,143 +199,35 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         return findElement;
     }
 
-    protected String id(Optional<?> qualifier, Class<?>... components) {
+    public String id(Optional<?> qualifier, Class<?>... components) {
         ElementPath elementPath = new ElementPath(appContext);
         ElementPath id = elementPath.id(ID.getIdc(qualifier, components));
         return id.get();
     }
 
 
-    //--
-    protected String intStepperValue(Optional<?> qualifier, Class<?>... componentClasses) {
-        IntStepperElement element = intStepper(qualifier, componentClasses);
-        return element.getText();
-    }
-
-    protected IntStepperElement intStepper(Optional<?> qualifier, Class<?>... componentClasses) {
-        IntStepperElement element = $(IntStepperElement.class).id(ID.getIdc(qualifier, componentClasses));
-        return element;
-    }
-
-    protected void setIntStepperValue(String text, Optional<?> qualifier, Class<?>... componentClasses) {
-        IntStepperElement element = intStepper(qualifier, componentClasses);
-        element.sendKeys(text);
-    }
-
-    //--
-    protected String passwordFieldValue(Optional<?> qualifier, Class<?>... componentClasses) {
-        PasswordFieldElement element = passwordField(qualifier, componentClasses);
-        return element.getText();
-    }
-
-    protected PasswordFieldElement passwordField(Optional<?> qualifier, Class<?>... componentClasses) {
-        PasswordFieldElement element = $(PasswordFieldElement.class).id(ID.getIdc(qualifier, componentClasses));
-        return element;
-    }
-
-    protected void setPasswordFieldValue(String text, Optional<?> qualifier, Class<?>... componentClasses) {
-        PasswordFieldElement element = passwordField(qualifier, componentClasses);
-        element.sendKeys(text);
-    }
 
 
     protected <E extends AbstractElement> E element(Class<E> elementClass, Optional<?> qualifier,
                                                     Class<?>... componentClasses) {
 
         return element(elementClass, ID.getIdc(qualifier, componentClasses));
-
     }
 
     public <E extends AbstractElement> E element(Class<E> elementClass, String id) {
 
         return $(elementClass).id(id);
-
     }
 
 
-    public PanelElement panel(Optional<?> qualifier, Class<?>... componentClasses) {
-        PanelElement element = $(PanelElement.class).id(ID.getIdc(qualifier, componentClasses));
-        return element;
-    }
+    //    protected void clickMenuItem(String[] path, Optional<?> qualifier, Class<?>... componentClasses) {
+    //        menu(qualifier, componentClasses).clickItem(path);
+    //    }
 
-    public HorizontalLayoutElement horizontalLayout(Optional<?> qualifier, Class<?>... componentClasses) {
-        HorizontalLayoutElement element = $(HorizontalLayoutElement.class).id(ID.getIdc(qualifier, componentClasses));
-        return element;
-    }
-
-    public VerticalLayoutElement verticalLayout(Optional<?> qualifier, Class<?>... componentClasses) {
-        VerticalLayoutElement element = $(VerticalLayoutElement.class).id(ID.getIdc(qualifier, componentClasses));
-        return element;
-    }
-
-
-    protected String comboValue(Optional<?> qualifier, Class<?>... componentClasses) {
-        ComboBoxElement element = combo(qualifier, componentClasses);
-        return element.getValue();
-    }
-
-    protected ComboBoxElement combo(Optional<?> qualifier, Class<?>... componentClasses) {
-        ComboBoxElement element = $(ComboBoxElement.class).id(ID.getIdc(qualifier, componentClasses));
-        return element;
-    }
-
-    protected void selectComboValue(String valueToSelect, Optional<?> qualifier, Class<?>... componentClasses) {
-        ComboBoxElement element = combo(qualifier, componentClasses);
-        element.selectByText(valueToSelect);
-    }
-
-    protected void clickMenuItem(String[] path, Optional<?> qualifier, Class<?>... componentClasses) {
-        menu(qualifier, componentClasses).clickItem(path);
-    }
-
-    protected MenuBarElement menu(Optional<?> qualifier, Class<?>... componentClasses) {
-        MenuBarElement element = $(MenuBarElement.class).id(ID.getIdc(qualifier, componentClasses));
-        return element;
-    }
-
-    protected boolean checkboxValue(Optional<?> qualifier, Class<?>... componentClasses) {
-        return checkbox(qualifier, componentClasses).getValue()
-                                                    .equals("checked");
-    }
-
-    protected CheckBoxElement checkbox(Optional<?> qualifier, Class<?>... componentClasses) {
-        String id = ID.getIdc(qualifier, componentClasses);
-        return $(CheckBoxElement.class).id(id);
-    }
-
-    protected void clickCheckBox(Optional<?> qualifier, Class<?>... componentClasses) {
-        checkbox(qualifier, componentClasses).click();
-    }
-
-    protected String textAreaValue(Optional<?> qualifier, Class<?>... componentClasses) {
-        return textArea(qualifier, componentClasses).getValue();
-    }
-
-    protected TextAreaElement textArea(Optional<?> qualifier, Class<?>... componentClasses) {
-        TextAreaElement element = $(TextAreaElement.class).id(ID.getIdc(qualifier, componentClasses));
-        return element;
-    }
-
-    protected void setTextAreaValue(String text, Optional<?> qualifier, Class<?>... componentClasses) {
-        textArea(qualifier, componentClasses).sendKeys(text);
-    }
-
-    protected String localeSelectorValue() {
-        return localeSelector().getValue();
-    }
-
-    protected ComboBoxElement localeSelector() {
-        return combo(Optional.absent(), DefaultLocaleSelector.class, ComboBox.class);
-    }
-
-    protected void selectLocale(Locale locale) {
-        localeSelector().selectByText(locale.getDisplayName());
-    }
-
-    protected TreeElement tree(Optional<?> qualifier, Class<?>... componentClasses) {
-        TreeElement element = $(TreeElement.class).id(ID.getIdc(qualifier, componentClasses));
-        return element;
-    }
+    //    public MenuBarElement menu(Optional<?> qualifier, Class<?>... componentClasses) {
+    //        MenuBarElement element = $(MenuBarElement.class).id(ID.getIdc(qualifier, componentClasses));
+    //        return element;
+    //    }
 
 
     ;

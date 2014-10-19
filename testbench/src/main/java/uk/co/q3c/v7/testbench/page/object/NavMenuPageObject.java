@@ -11,13 +11,15 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testbench.page.object;
 
 import com.google.common.base.Optional;
 import com.vaadin.testbench.By;
 import com.vaadin.testbench.elements.MenuBarElement;
 import org.openqa.selenium.WebElement;
 import uk.co.q3c.v7.base.view.component.DefaultUserNavigationMenu;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.page.element.V7MenuBarElement;
 
 /**
  * Created by david on 04/10/14.
@@ -52,8 +54,19 @@ public class NavMenuPageObject extends PageObject {
         return element.getText();
     }
 
+    /**
+     * See {@link MenuBarElement#clickItem(String...)}
+     *
+     * @param path
+     */
     public void clickItem(String... path) {
-        MenuBarElement element = parentCase.menu(Optional.absent(), DefaultUserNavigationMenu.class);
+        V7MenuBarElement element = menuBar();
         element.clickItem(path);
+    }
+
+    public V7MenuBarElement menuBar() {
+        V7MenuBarElement menuBar = parentCase.$(V7MenuBarElement.class)
+                                             .first();
+        return menuBar;
     }
 }

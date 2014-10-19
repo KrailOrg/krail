@@ -11,13 +11,14 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testbench.page.object;
 
 import com.google.common.base.Optional;
 import com.vaadin.testbench.elements.AbstractComponentElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.q3c.util.ID;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 /**
  * Created by david on 03/10/14.
@@ -27,15 +28,21 @@ public class PageElement<E extends AbstractComponentElement> {
     private static Logger log = LoggerFactory.getLogger(PageElement.class);
 
     private final String id;
-    private final Class<E> elementClass;
     protected V7TestBenchTestCase parentCase;
+    private Class<E> elementClass;
 
 
     public PageElement(V7TestBenchTestCase parentCase, Class<E> elementClass, Optional<?> qualifier,
                        Class<?>... componentClasses) {
         this.parentCase = parentCase;
-        this.elementClass = elementClass;
         this.id = ID.getIdc(qualifier, componentClasses);
+        this.elementClass = elementClass;
+    }
+
+    public PageElement(V7TestBenchTestCase parentCase, Class<E> elementClass, String id) {
+        this.parentCase = parentCase;
+        this.id = id;
+        this.elementClass = elementClass;
     }
 
     public void click() {

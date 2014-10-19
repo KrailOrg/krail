@@ -11,18 +11,25 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testApp.test;
 
 import com.google.common.base.Optional;
-import com.vaadin.testbench.elements.TextFieldElement;
+import org.vaadin.risto.stepper.IntStepper;
+import uk.co.q3c.v7.testapp.view.WidgetsetView;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.page.element.IntStepperElement;
+import uk.co.q3c.v7.testbench.page.object.PageObject;
 
 /**
- * Created by david on 18/10/14.
+ * Created by David Sowerby on 19/10/14.
  */
-public class TextFieldPageElement extends PageElement<TextFieldElement> {
+public class WidgetSetViewPageObject extends PageObject {
 
+    public WidgetSetViewPageObject(V7TestBenchTestCase parentCase) {
+        super(parentCase);
+    }
 
-    public TextFieldPageElement(V7TestBenchTestCase parentCase, Optional<?> qualifier, Class<?>... componentClasses) {
-        super(parentCase, TextFieldElement.class, qualifier, componentClasses);
+    public IntStepperElement stepper() {
+        return element(IntStepperElement.class, Optional.absent(), WidgetsetView.class, IntStepper.class);
     }
 }

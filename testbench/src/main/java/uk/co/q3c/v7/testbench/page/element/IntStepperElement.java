@@ -11,17 +11,14 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testbench.page.element;
 
-import com.google.common.base.Optional;
-import com.vaadin.testbench.elements.PasswordFieldElement;
+import com.vaadin.testbench.elements.TextFieldElement;
+import com.vaadin.testbench.elementsbase.ServerClass;
 
 /**
- * Created by david on 18/10/14.
+ * Created by david on 15/10/14.
  */
-public class PasswordFieldPageElement extends PageElement<PasswordFieldElement> {
-    public PasswordFieldPageElement(V7TestBenchTestCase parentCase, Optional<?> qualifier,
-                                    Class<?>... componentClasses) {
-        super(parentCase, PasswordFieldElement.class, qualifier, componentClasses);
-    }
+@ServerClass("org.vaadin.risto.stepper.IntStepper")
+public class IntStepperElement extends TextFieldElement {
 }

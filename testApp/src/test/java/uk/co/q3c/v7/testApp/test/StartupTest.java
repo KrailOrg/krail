@@ -13,17 +13,15 @@
 
 package uk.co.q3c.v7.testApp.test;
 
-import com.google.common.base.Optional;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
-import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
-import uk.co.q3c.v7.base.view.component.DefaultMessageBar;
-import uk.co.q3c.v7.testbench.NavMenuPageObject;
-import uk.co.q3c.v7.testbench.NavTreePageObject;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.page.object.LocaleSelectorPageObject;
+import uk.co.q3c.v7.testbench.page.object.MessageBarPageObject;
+import uk.co.q3c.v7.testbench.page.object.NavMenuPageObject;
+import uk.co.q3c.v7.testbench.page.object.NavTreePageObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +37,8 @@ public class StartupTest extends V7TestBenchTestCase {
 
     @Rule
     public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
+    private LocaleSelectorPageObject localeSelector = new LocaleSelectorPageObject(this);
+    private MessageBarPageObject messageBar = new MessageBarPageObject(this);
     private NavMenuPageObject navMenu = new NavMenuPageObject(this);
     private NavTreePageObject navTree = new NavTreePageObject(this);
 
@@ -56,11 +56,10 @@ public class StartupTest extends V7TestBenchTestCase {
 
         // then
         // localSelector is UK
-        String comboValue = localeSelectorValue();
+        String comboValue = localeSelector.getValue();
         assertThat(comboValue).isEqualTo("English (United Kingdom)");
 
-        WebElement messageBar = label(Optional.absent(), DefaultMessageBar.class, Label.class);
-        assertThat(messageBar.getText()).isEqualTo("Message bar");
+        assertThat(messageBar.message()).isEqualTo("Message bar");
     }
 
     @Test

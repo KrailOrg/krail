@@ -18,9 +18,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import uk.co.q3c.v7.testbench.LoginFormPageObject;
-import uk.co.q3c.v7.testbench.NavTreePageObject;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.page.object.LoginFormPageObject;
+import uk.co.q3c.v7.testbench.page.object.NavTreePageObject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

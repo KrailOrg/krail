@@ -12,98 +12,101 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
-
 import com.google.inject.AbstractModule;
+import uk.co.q3c.v7.base.guice.BaseGuiceServletInjector;
 
 public class StandardComponentModule extends AbstractModule {
 
-	@Override
-	protected void configure() {
-		bindUserNavigationTree();
-		bindBreadcrumb();
-		bindLoginStatusPanel();
-		bindNavigationMenu();
-		bindSubpagePanel();
-		bindMessageStatusPanel();
-		bindApplicationLogo();
-		bindApplicationHeader();
-		bindLocaleSelector();
-	}
+    @Override
+    protected void configure() {
+        bindUserNavigationTree();
+        bindBreadcrumb();
+        bindLoginStatusPanel();
+        bindNavigationMenu();
+        bindSubpagePanel();
+        bindMessageStatusPanel();
+        bindApplicationLogo();
+        bindApplicationHeader();
+        bindLocaleSelector();
+    }
 
-	/**
-	 * Override this method to provide your own implementation of {@link LocaleSelector} in a sub-class of this module.
-	 * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
-	 */
-	protected void bindLocaleSelector() {
-		bind(LocaleSelector.class).to(DefaultLocaleSelector.class);
-	}
+    /**
+     * Override this method to provide your own implementation of {@link LocaleSelector} in a sub-class of this module.
+     * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+     */
+    protected void bindLocaleSelector() {
+        bind(LocaleSelector.class).to(DefaultLocaleSelector.class);
+    }
 
-	/**
-	 * Override this method to provide your own implementation of {@link MessageBar} in a sub-class of this module. Your
-	 * module will then need to replace this module in {@link BaseGuiceServletInjector}
-	 */
-	protected void bindMessageStatusPanel() {
-		bind(MessageBar.class).to(DefaultMessageBar.class);
-	}
+    /**
+     * Override this method to provide your own implementation of {@link MessageBar} in a sub-class of this module.
+     * Your
+     * module will then need to replace this module in {@link BaseGuiceServletInjector}
+     */
+    protected void bindMessageStatusPanel() {
+        bind(MessageBar.class).to(DefaultMessageBar.class);
+    }
 
-	/**
-	 * Override this method to provide your own implementation of {@link ApplicationHeader} in a sub-class of this
-	 * module. Your module will then need to replace this module in {@link BaseGuiceServletInjector}
-	 */
-	protected void bindApplicationHeader() {
-		bind(ApplicationHeader.class).to(DefaultApplicationHeader.class);
-	}
+    /**
+     * Override this method to provide your own implementation of {@link ApplicationHeader} in a sub-class of this
+     * module. Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+     */
+    protected void bindApplicationHeader() {
+        bind(ApplicationHeader.class).to(DefaultApplicationHeader.class);
+    }
 
-	/**
-	 * Override this method to provide your own implementation of {@link ApplicationLogo} in a sub-class of this module.
-	 * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
-	 */
-	protected void bindApplicationLogo() {
-		bind(ApplicationLogo.class).to(DefaultApplicationLogo.class);
-	}
+    /**
+     * Override this method to provide your own implementation of {@link ApplicationLogo} in a sub-class of this
+     * module.
+     * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+     */
+    protected void bindApplicationLogo() {
+        bind(ApplicationLogo.class).to(DefaultApplicationLogo.class);
+    }
 
-	/**
-	 * Override this method to provide your own implementation of {@link SubpagePanel} in a sub-class of this module.
-	 * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
-	 */
-	protected void bindSubpagePanel() {
-		bind(SubpagePanel.class).to(DefaultSubpagePanel.class);
-	}
+    /**
+     * Override this method to provide your own implementation of {@link SubPagePanel} in a sub-class of this module.
+     * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+     */
+    protected void bindSubpagePanel() {
+        bind(SubPagePanel.class).to(DefaultSubPagePanel.class);
+    }
 
-	/**
-	 * Override this method to provide your own implementation of {@link UserStatusPanel} in a sub-class of this module.
-	 * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
-	 */
-	protected void bindLoginStatusPanel() {
-		bind(UserStatusPanel.class).to(DefaultUserStatusPanel.class);
-	}
+    /**
+     * Override this method to provide your own implementation of {@link UserStatusPanel} in a sub-class of this
+     * module.
+     * Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+     */
+    protected void bindLoginStatusPanel() {
+        bind(UserStatusPanel.class).to(DefaultUserStatusPanel.class);
+    }
 
-	/**
-	 * Override this method to provide your own implementation of {@link UserNavigationMenu} in a sub-class of this
-	 * module. Your module will then need to replace this module in {@link BaseGuiceServletInjector}
-	 */
-	protected void bindNavigationMenu() {
-		bind(UserNavigationMenu.class).to(DefaultUserNavigationMenu.class);
-		bind(UserNavigationMenuBuilder.class).to(DefaultUserNavigationMenuBuilder.class);
-	}
+    /**
+     * Override this method to provide your own implementation of {@link UserNavigationMenu} in a sub-class of this
+     * module. Your module will then need to replace this module in {@link BaseGuiceServletInjector}
+     */
+    protected void bindNavigationMenu() {
+        bind(UserNavigationMenu.class).to(DefaultUserNavigationMenu.class);
+        bind(UserNavigationMenuBuilder.class).to(DefaultUserNavigationMenuBuilder.class);
+    }
 
-	/**
-	 * Override this method to provide your own implementation of {@link Breadcrumb} in a sub-class of this module. Your
-	 * module will then need to replace this module in {@link BaseGuiceServletInjector}
-	 */
-	protected void bindBreadcrumb() {
-		bind(Breadcrumb.class).to(DefaultBreadcrumb.class);
-	}
+    /**
+     * Override this method to provide your own implementation of {@link Breadcrumb} in a sub-class of this module.
+     * Your
+     * module will then need to replace this module in {@link BaseGuiceServletInjector}
+     */
+    protected void bindBreadcrumb() {
+        bind(Breadcrumb.class).to(DefaultBreadcrumb.class);
+    }
 
-	/**
-	 * Override this method to provide your own implementation of {@link UserNavigationTree}, and its associated
-	 * builder, in a sub-class of this module. Your module will then need to replace this module in
-	 * {@link BaseGuiceServletInjector}
-	 */
-	protected void bindUserNavigationTree() {
-		bind(UserNavigationTree.class).to(DefaultUserNavigationTree.class);
-		bind(UserNavigationTreeBuilder.class).to(DefaultUserNavigationTreeBuilder.class);
-	}
+    /**
+     * Override this method to provide your own implementation of {@link UserNavigationTree}, and its associated
+     * builder, in a sub-class of this module. Your module will then need to replace this module in
+     * {@link BaseGuiceServletInjector}
+     */
+    protected void bindUserNavigationTree() {
+        bind(UserNavigationTree.class).to(DefaultUserNavigationTree.class);
+        bind(UserNavigationTreeBuilder.class).to(DefaultUserNavigationTreeBuilder.class);
+    }
 
 }

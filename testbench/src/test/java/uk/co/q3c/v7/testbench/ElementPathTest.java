@@ -13,6 +13,7 @@
 package uk.co.q3c.v7.testbench;
 
 import org.junit.Test;
+import uk.co.q3c.v7.testbench.page.object.ElementPath;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

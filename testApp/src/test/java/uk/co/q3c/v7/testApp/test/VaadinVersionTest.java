@@ -27,7 +27,8 @@ public class VaadinVersionTest extends V7TestBenchTestCase {
     @Test
     public void confirmVersion() {
         //given
-        driver.get("http://localhost:8080/testapp");
+        driver.get(rootUrl());
+        pause(500);
         //when
 
         //then

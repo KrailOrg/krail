@@ -11,14 +11,15 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testbench.page.element;
 
-import com.vaadin.testbench.elements.TextFieldElement;
+import com.vaadin.testbench.elements.HorizontalLayoutElement;
 import com.vaadin.testbench.elementsbase.ServerClass;
 
 /**
- * Created by david on 15/10/14.
+ * Created by david on 17/10/14.
  */
-@ServerClass("org.vaadin.risto.stepper.IntStepper")
-public class IntStepperElement extends TextFieldElement {
+
+@ServerClass("uk.co.q3c.v7.base.view.component.DefaultBreadcrumb")
+public class DefaultBreadcrumbElement extends HorizontalLayoutElement {
 }

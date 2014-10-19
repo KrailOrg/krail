@@ -11,12 +11,15 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testbench.page.object;
 
 import com.google.common.base.Optional;
+import com.vaadin.testbench.elements.ButtonElement;
+import com.vaadin.testbench.elements.LabelElement;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import uk.co.q3c.v7.base.view.component.DefaultUserStatusPanel;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 /**
  * Created by david on 03/10/14.
@@ -44,8 +47,8 @@ public class LoginStatusPageObject extends PageObject {
         loginButton().click();
     }
 
-    public ButtonPageElement loginButton() {
-        return new ButtonPageElement(parentCase, Optional.absent(), DefaultUserStatusPanel.class, Button.class);
+    public ButtonElement loginButton() {
+        return element(ButtonElement.class, Optional.absent(), DefaultUserStatusPanel.class, Button.class);
     }
 
 
@@ -60,7 +63,7 @@ public class LoginStatusPageObject extends PageObject {
         return usernameLabel().getText();
     }
 
-    public LabelPageElement usernameLabel() {
-        return new LabelPageElement(parentCase, Optional.absent(), DefaultUserStatusPanel.class, Label.class);
+    public LabelElement usernameLabel() {
+        return element(LabelElement.class, Optional.absent(), DefaultUserStatusPanel.class, Label.class);
     }
 }

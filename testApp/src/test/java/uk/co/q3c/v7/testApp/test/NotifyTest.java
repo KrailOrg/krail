@@ -12,27 +12,22 @@
  */
 package uk.co.q3c.v7.testApp.test;
 
-import com.google.common.base.Optional;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
-import uk.co.q3c.v7.base.view.component.DefaultMessageBar;
-import uk.co.q3c.v7.testapp.view.NotificationsView;
-import uk.co.q3c.v7.testbench.ButtonPageElement;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.page.object.MessageBarPageObject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NotifyTest extends V7TestBenchTestCase {
 
     private final String testPage = "notifications";
-
     @Rule
     public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
+    private MessageBarPageObject messageBar = new MessageBarPageObject(this);
+    private NotificationsViewPageObject notificationsView = new NotificationsViewPageObject(this);
 
     @Before
     public void setUp() throws Exception {
@@ -43,11 +38,10 @@ public class NotifyTest extends V7TestBenchTestCase {
 
         // given
         navigateTo(testPage);
-        WebElement messageLabel = label(Optional.absent(), DefaultMessageBar.class, Label.class);
         // when
 
         // then
-        assertThat(messageLabel.getText()).isEqualTo("Message bar");
+        assertThat(messageBar.message()).isEqualTo("Message bar");
     }
 
     @Test
@@ -55,16 +49,14 @@ public class NotifyTest extends V7TestBenchTestCase {
 
         // given
         navigateTo(testPage);
-        ButtonPageElement errorBtn = new ButtonPageElement(this, Optional.of("error"), NotificationsView.class,
-                Button.class);
 
         // when
-        errorBtn.click();
+        notificationsView.errorButton()
+                         .click();
         // then
 
-        WebElement messageLabel = label(Optional.absent(), DefaultMessageBar.class, Label.class);
-        assertThat(messageLabel.getText()).isEqualTo("ERROR: You cannot use service Fake Service until it has been "
-                + "started");
+        assertThat(messageBar.message()).isEqualTo("ERROR: You cannot use service Fake Service until it has been " +
+                "started");
         assertThat(notification()).isNotNull();
         assertThat(notification().getText()).isEqualTo("You cannot use service Fake Service until it has been started");
         assertThat(notification().getAttribute("class")).isEqualTo("v-Notification error v-Notification-error");
@@ -76,13 +68,11 @@ public class NotifyTest extends V7TestBenchTestCase {
     public void notifyWarning() {
         // given
         navigateTo(testPage);
-        ButtonPageElement warningBtn = new ButtonPageElement(this, Optional.of("warning"), NotificationsView.class,
-                Button.class);
-        WebElement messageLabel = label(Optional.absent(), DefaultMessageBar.class, Label.class);
         // when
-        warningBtn.click();
+        notificationsView.warningButton()
+                         .click();
         // then
-        assertThat(messageLabel.getText()).isEqualTo("Warning: You cannot use service Fake Service until it has been " +
+        assertThat(messageBar.message()).isEqualTo("Warning: You cannot use service Fake Service until it has been " +
                 "" + "started");
         assertThat(notification()).isNotNull();
         assertThat(notification().getText()).isEqualTo("You cannot use service Fake Service until it has been started");
@@ -94,13 +84,12 @@ public class NotifyTest extends V7TestBenchTestCase {
     public void notifyInformation() {
         // given
         navigateTo(testPage);
-        ButtonPageElement informationBtn = new ButtonPageElement(this, Optional.of("information"),
-                NotificationsView.class, Button.class);
-        WebElement messageLabel = label(Optional.absent(), DefaultMessageBar.class, Label.class);
+
         // when
-        informationBtn.click();
+        notificationsView.informationButton()
+                         .click();
         // then
-        assertThat(messageLabel.getText()).isEqualTo("You cannot use service Fake Service until it has been started");
+        assertThat(messageBar.message()).isEqualTo("You cannot use service Fake Service until it has been started");
         assertThat(notification()).isNotNull();
         assertThat(notification().getText()).isEqualTo("You cannot use service Fake Service until it has been started");
         assertThat(notification().getAttribute("class")).isEqualTo("v-Notification humanized v-Notification-humanized");

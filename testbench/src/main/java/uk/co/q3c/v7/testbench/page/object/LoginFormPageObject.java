@@ -11,13 +11,20 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testbench.page.object;
 
 import com.google.common.base.Optional;
+import com.vaadin.testbench.elements.ButtonElement;
+import com.vaadin.testbench.elements.LabelElement;
+import com.vaadin.testbench.elements.PasswordFieldElement;
+import com.vaadin.testbench.elements.TextFieldElement;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import uk.co.q3c.v7.base.view.DefaultLoginView;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
+
 
 /**
  * Created by david on 03/10/14.
@@ -25,9 +32,6 @@ import uk.co.q3c.v7.base.view.DefaultLoginView;
 public class LoginFormPageObject extends PageObject {
 
     private Credentials credentials = new Credentials();
-    private PasswordFieldPageElement passwordField;
-    private ButtonPageElement submitButton;
-    private TextFieldPageElement usernameField;
 
     /**
      * Initialises the PageObject with a reference to the parent test case, so that the PageObject can access a number
@@ -37,12 +41,6 @@ public class LoginFormPageObject extends PageObject {
      */
     public LoginFormPageObject(V7TestBenchTestCase parentCase) {
         super(parentCase);
-        usernameField = new TextFieldPageElement(parentCase, Optional.of("username"), DefaultLoginView.class,
-                TextField.class);
-        passwordField = new PasswordFieldPageElement(parentCase, Optional.of("password"), DefaultLoginView.class,
-                PasswordField.class);
-
-
     }
 
     public Credentials getCredentials() {
@@ -60,7 +58,7 @@ public class LoginFormPageObject extends PageObject {
     }
 
     /**
-     * Log in using the credentials in {@link #credentials}
+     * Log in using {@link #credentials}
      */
     public void login() {
         login(credentials.username, credentials.password);
@@ -68,31 +66,42 @@ public class LoginFormPageObject extends PageObject {
 
     public void login(String username, String password) {
         usernameBox().clear();
-        usernameBox().setText(username);
+        usernameBox().sendKeys(username);
         passwordBox().clear();
-        passwordBox().setText(password);
+        passwordBox().sendKeys(password);
         submitButton().click();
 
     }
 
-    protected TextFieldPageElement usernameBox() {
-        return usernameField;
+    protected TextFieldElement usernameBox() {
+        return element(TextFieldElement.class, Optional.of("username"), DefaultLoginView.class, TextField.class);
     }
 
-    protected PasswordFieldPageElement passwordBox() {
-        return passwordField;
+    protected PasswordFieldElement passwordBox() {
+        return element(PasswordFieldElement.class, Optional.of("password"), DefaultLoginView.class,
+                PasswordField.class);
     }
 
-    private ButtonPageElement submitButton() {
-        return new ButtonPageElement(parentCase, Optional.absent(), DefaultLoginView.class, Button.class);
+    private ButtonElement submitButton() {
+        return element(ButtonElement.class, Optional.absent(), DefaultLoginView.class, Button.class);
     }
 
     protected String submitButtonText() {
         return submitButton().getCaption();
     }
 
+    public String message() {
+        return messageLabel().getText();
+    }
+
+    public LabelElement messageLabel() {
+        return element(LabelElement.class, Optional.of("status"), DefaultLoginView.class, Label.class);
+    }
+
     public static class Credentials {
         private String password = "password";
         private String username = "ds";
     }
+
+
 }

@@ -32,7 +32,7 @@ public class ApplicationView1 extends ViewBaseWithLayout {
     private final Breadcrumb breadcrumb;
     private final UserStatusPanel loginOut;
     private final UserNavigationMenu menu;
-    private final SubpagePanel subpage;
+    private final SubPagePanel subpage;
     private final MessageBar messageBar;
     private final ApplicationLogo logo;
     private final ApplicationHeader header;
@@ -41,7 +41,7 @@ public class ApplicationView1 extends ViewBaseWithLayout {
     @Inject
     protected ApplicationView1(ApplicationViewLayout1 viewLayout, Translate translate, UserNavigationTree navTree,
                                Breadcrumb breadcrumb, UserStatusPanel loginOut, UserNavigationMenu menu,
-                               SubpagePanel subpage, MessageBar messageBar, ApplicationLogo logo,
+                               SubPagePanel subpage, MessageBar messageBar, ApplicationLogo logo,
                                ApplicationHeader header) {
         super(viewLayout, translate);
         this.navTree = navTree;

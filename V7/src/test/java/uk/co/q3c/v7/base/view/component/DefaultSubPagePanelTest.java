@@ -47,9 +47,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({I18NModule.class, VaadinSessionScopeModule.class})
-public class DefaultSubpagePanelTest {
+public class DefaultSubPagePanelTest {
 
-    DefaultSubpagePanel panel;
+    DefaultSubPagePanel panel;
 
     @Inject
     ReferenceUserSitemap userSitemap;
@@ -77,7 +77,7 @@ public class DefaultSubpagePanelTest {
         userOption.clear();
         currentLocale.setLocale(Locale.UK, false);
         userSitemap.populate();
-        panel = new DefaultSubpagePanel(navigator, userSitemap, userOption, sorters, currentLocale);
+        panel = new DefaultSubPagePanel(navigator, userSitemap, userOption, sorters, currentLocale);
     }
 
     @Test
@@ -281,7 +281,7 @@ public class DefaultSubpagePanelTest {
         //when
 
         //then
-        assertThat(panel.getId()).isEqualTo("DefaultSubpagePanel");
+        assertThat(panel.getId()).isEqualTo("DefaultSubPagePanel");
     }
 
     @ModuleProvider

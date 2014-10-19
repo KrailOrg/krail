@@ -11,26 +11,34 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testbench.page.object;
 
 import com.google.common.base.Optional;
+import com.vaadin.testbench.elements.ButtonElement;
 import uk.co.q3c.v7.base.view.component.DefaultBreadcrumb;
 import uk.co.q3c.v7.base.view.component.NavigationButton;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.page.element.DefaultBreadcrumbElement;
 
 /**
  * Created by david on 04/10/14.
  */
-public class BreadcrumbPageObject extends PageElement<DefaultBreadcrumbElement> {
+public class BreadcrumbPageObject extends PageObject {
+
     /**
      * Test object to represent a {@link DefaultBreadcrumb}
      *
      * @param parentCase
      */
     public BreadcrumbPageObject(V7TestBenchTestCase parentCase) {
-        super(parentCase, DefaultBreadcrumbElement.class, Optional.absent(), DefaultBreadcrumb.class);
+        super(parentCase);
     }
 
-    public ButtonPageElement button(int index) {
-        return new ButtonPageElement(parentCase, Optional.of(index), DefaultBreadcrumb.class, NavigationButton.class);
+    public ButtonElement button(int index) {
+        return element(ButtonElement.class, Optional.of(index), DefaultBreadcrumb.class, NavigationButton.class);
+    }
+
+    public DefaultBreadcrumbElement breadcrumb() {
+        return element(DefaultBreadcrumbElement.class, Optional.absent(), DefaultBreadcrumb.class);
     }
 }

@@ -11,7 +11,7 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testbench.page.object;
 
 import com.google.common.base.Optional;
 import com.google.common.primitives.Ints;
@@ -20,6 +20,7 @@ import com.vaadin.testbench.elements.TreeElement;
 import org.openqa.selenium.WebElement;
 import uk.co.q3c.util.ID;
 import uk.co.q3c.v7.base.view.component.DefaultUserNavigationTree;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import java.util.*;
 
@@ -102,7 +103,7 @@ public class NavTreePageObject extends PageObject {
     }
 
     private TreeElement navTree() {
-        return parentCase.tree(Optional.absent(), DefaultUserNavigationTree.class);
+        return element(TreeElement.class, Optional.absent(), DefaultUserNavigationTree.class);
     }
 
     private TreeNodeInfo getChildElement(WebElement parentElement, String segment) {

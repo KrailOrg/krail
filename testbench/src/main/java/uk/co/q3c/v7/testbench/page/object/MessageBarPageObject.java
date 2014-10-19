@@ -11,11 +11,13 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testbench;
+package uk.co.q3c.v7.testbench.page.object;
 
 import com.google.common.base.Optional;
+import com.vaadin.testbench.elements.LabelElement;
 import com.vaadin.ui.Label;
 import uk.co.q3c.v7.base.view.component.DefaultMessageBar;
+import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 /**
  * Created by david on 03/10/14.
@@ -40,7 +42,7 @@ public class MessageBarPageObject extends PageObject {
         return label().getText();
     }
 
-    public LabelPageElement label() {
-        return new LabelPageElement(parentCase, Optional.absent(), DefaultMessageBar.class, Label.class);
+    public LabelElement label() {
+        return element(LabelElement.class, Optional.absent(), DefaultMessageBar.class, Label.class);
     }
 }

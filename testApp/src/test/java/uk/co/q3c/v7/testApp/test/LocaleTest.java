@@ -15,9 +15,10 @@ package uk.co.q3c.v7.testApp.test;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.co.q3c.v7.testbench.NavMenuPageObject;
-import uk.co.q3c.v7.testbench.NavTreePageObject;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
+import uk.co.q3c.v7.testbench.page.object.LocaleSelectorPageObject;
+import uk.co.q3c.v7.testbench.page.object.NavMenuPageObject;
+import uk.co.q3c.v7.testbench.page.object.NavTreePageObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LocaleTest extends V7TestBenchTestCase {
 
+    private LocaleSelectorPageObject localeSelector = new LocaleSelectorPageObject(this);
     private NavMenuPageObject navMenu = new NavMenuPageObject(this);
     private NavTreePageObject navTree = new NavTreePageObject(this);
 
@@ -48,7 +50,7 @@ public class LocaleTest extends V7TestBenchTestCase {
         // when
 
         // then
-        String comboValue = localeSelectorValue();
+        String comboValue = localeSelector.getValue();
         assertThat(comboValue).isEqualTo("English (United Kingdom)");
     }
 
@@ -58,10 +60,10 @@ public class LocaleTest extends V7TestBenchTestCase {
         // given
 
         // when
-        selectLocale(Locale.GERMANY);
+        localeSelector.selectLocale(Locale.GERMANY);
 
         // then
-        String comboValue = localeSelectorValue();
+        String comboValue = localeSelector.getValue();
         assertThat(comboValue).isEqualTo(Locale.GERMANY.getDisplayName());
         List<String> items = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -95,7 +97,7 @@ public class LocaleTest extends V7TestBenchTestCase {
         //when
 
         //then
-        assertThat(localeSelector().getPopupSuggestions()).containsOnly(Locale.UK.getDisplayName(),
+        assertThat(localeSelector.getPopupSuggestions()).containsOnly(Locale.UK.getDisplayName(),
                 Locale.GERMANY.getDisplayName(), Locale.ITALY.getDisplayName());
     }
 
