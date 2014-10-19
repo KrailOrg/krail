@@ -14,23 +14,20 @@
 package uk.co.q3c.v7.testbench;
 
 import com.google.common.base.Optional;
-import uk.co.q3c.v7.base.view.component.DefaultBreadcrumb;
-import uk.co.q3c.v7.base.view.component.NavigationButton;
+import com.vaadin.testbench.elements.TextAreaElement;
 
 /**
- * Created by david on 04/10/14.
+ * Created by david on 18/10/14.
  */
-public class BreadcrumbPageObject extends PageElement<DefaultBreadcrumbElement> {
-    /**
-     * Test object to represent a {@link DefaultBreadcrumb}
-     *
-     * @param parentCase
-     */
-    public BreadcrumbPageObject(V7TestBenchTestCase parentCase) {
-        super(parentCase, DefaultBreadcrumbElement.class, Optional.absent(), DefaultBreadcrumb.class);
+public class TextAreaPageElement extends PageElement<TextAreaElement> {
+
+
+    public TextAreaPageElement(V7TestBenchTestCase parentCase, Optional<?> qualifier, Class<?>... componentClasses) {
+        super(parentCase, TextAreaElement.class, qualifier, componentClasses);
     }
 
-    public ButtonPageElement button(int index) {
-        return new ButtonPageElement(parentCase, Optional.of(index), DefaultBreadcrumb.class, NavigationButton.class);
+    @Override
+    public String getText() {
+        return getElement().getValue();
     }
 }

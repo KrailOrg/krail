@@ -14,7 +14,6 @@
 package uk.co.q3c.v7.testbench;
 
 import com.google.common.base.Optional;
-import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.HorizontalLayoutElement;
 import uk.co.q3c.v7.base.view.component.DefaultSubpagePanel;
 import uk.co.q3c.v7.base.view.component.NavigationButton;
@@ -26,23 +25,13 @@ import java.util.List;
  * Created by david on 04/10/14.
  */
 public class SubpagePanelPageObject extends PageObject {
-    /**
-     * Initialises the PageObject with a reference to the parent test case, so that the PageObject can access a number
-     * of variables from the parent, for example: drivers, baseUrl,
-     * application appContext.
-     * <p/>
-     * <p/>
-     * Note that all calls requiring eventual access to a WebDriver should be made via the parentCase, so that the
-     * correct driver is acted on.
-     *
-     * @param parentCase
-     */
+
     public SubpagePanelPageObject(V7TestBenchTestCase parentCase) {
         super(parentCase);
     }
 
-    public ButtonElement button(int index) {
-        return parentCase.button(Optional.of(index), DefaultSubpagePanel.class, NavigationButton.class);
+    public ButtonPageElement button(int index) {
+        return new ButtonPageElement(parentCase, Optional.of(index), DefaultSubpagePanel.class, NavigationButton.class);
     }
 
     public List<String> buttonLabels() {

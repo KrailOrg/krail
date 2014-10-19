@@ -82,7 +82,7 @@ public class LocaleTest extends V7TestBenchTestCase {
 
         assertThat(loginStatus.loginButton()
                               .getText()).isEqualTo("einloggen");
-        assertThat(loginStatusLabelText()).isEqualTo("Gast");
+        assertThat(loginStatus.username()).isEqualTo("Gast");
     }
 
     /**

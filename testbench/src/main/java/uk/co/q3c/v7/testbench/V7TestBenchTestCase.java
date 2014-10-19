@@ -17,6 +17,7 @@ import com.vaadin.testbench.By;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.*;
+import com.vaadin.testbench.elementsbase.AbstractElement;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Label;
 import org.junit.After;
@@ -173,7 +174,8 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
      * shorthand method to click the login button, and fill in the login form using credentials in {@link #loginForm}
      */
     protected void login() {
-        loginStatus.clickButton();
+        loginStatus.loginButton()
+                   .click();
         loginForm.login();
     }
 
@@ -181,41 +183,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         return label(Optional.absent(), DefaultUserStatusPanel.class, Label.class);
     }
 
-    //    protected WebElement element(Class<?>... classes) {
-    //        return element(driver, classes);
-    //    }
-
-    //    protected WebElement element(WebDriver driver, Class<?>... classes) {
-    //        return element(driver, Optional.absent(), classes);
-    //    }
-
-    //    protected WebElement element(WebDriver driver, String qualifier, Class<?>... classes) {
-    //        if (classes == null || classes.length == 0) {
-    //            throw new RuntimeException("Id will fail with only a qualifier supplied.  Always use classes to
-    // define Id");
-    //        }
-    //        String s = id(qualifier, classes);
-    //        WebElement findElement = driver.findElement(By.vaadin(s));
-    //        return findElement;
-    //    }
-    //
-    //    protected String id(String qualifier, Class<?>... components) {
-    //        ElementPath elementPath = new ElementPath(appContext);
-    //        ElementPath id = elementPath.id(ID.getIdc(Optional.of(qualifier), components));
-    //        return id.get();
-    //    }
-    //
-    //    protected WebElement usernameBox() {
-    //        return element("username", DefaultLoginView.class, TextField.class);
-    //    }
-    //
-    //    protected WebElement passwordBox() {
-    //        return element("password", DefaultLoginView.class, PasswordField.class);
-    //    }
-    //
-    //    protected WebElement submitButton() {
-    //        return element(DefaultLoginView.class, Button.class);
-    //    }
 
     protected LabelElement label(Optional<?> qualifier, Class<?>... componentClasses) {
         String id = ID.getIdc(qualifier, componentClasses);
@@ -255,20 +222,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         return id.get();
     }
 
-    protected String textFieldValue(Optional<?> qualifier, Class<?>... componentClasses) {
-        TextFieldElement element = textField(qualifier, componentClasses);
-        return element.getText();
-    }
-
-    protected TextFieldElement textField(Optional<?> qualifier, Class<?>... componentClasses) {
-        TextFieldElement element = $(TextFieldElement.class).id(ID.getIdc(qualifier, componentClasses));
-        return element;
-    }
-
-    protected void setTextFieldValue(String text, Optional<?> qualifier, Class<?>... componentClasses) {
-        TextFieldElement element = textField(qualifier, componentClasses);
-        element.sendKeys(text);
-    }
 
     //--
     protected String intStepperValue(Optional<?> qualifier, Class<?>... componentClasses) {
@@ -302,26 +255,20 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         element.sendKeys(text);
     }
 
-    //    protected WebElement element(Optional<?> qualifier, Class<?>... classes) {
-    //        return element(driver, qualifier, classes);
-    //    }
 
-    protected void clickButton(Optional<?> qualifier, Class<?>... classes) {
-        button(qualifier, classes).click();
+    protected <E extends AbstractElement> E element(Class<E> elementClass, Optional<?> qualifier,
+                                                    Class<?>... componentClasses) {
+
+        return element(elementClass, ID.getIdc(qualifier, componentClasses));
+
     }
 
-    protected ButtonElement button(Optional<?> qualifier, Class<?>... componentClasses) {
-        String id = ID.getIdc(qualifier, componentClasses);
-        return $(ButtonElement.class).id(id);
+    public <E extends AbstractElement> E element(Class<E> elementClass, String id) {
+
+        return $(elementClass).id(id);
+
     }
 
-    protected String loginStatusLabelText() {
-        return labelText(Optional.absent(), DefaultUserStatusPanel.class, Label.class);
-    }
-
-    protected String labelText(Optional<?> qualifier, Class<?>... componentClasses) {
-        return label(qualifier, componentClasses).getText();
-    }
 
     public PanelElement panel(Optional<?> qualifier, Class<?>... componentClasses) {
         PanelElement element = $(PanelElement.class).id(ID.getIdc(qualifier, componentClasses));

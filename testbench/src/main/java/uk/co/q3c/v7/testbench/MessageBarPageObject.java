@@ -37,6 +37,10 @@ public class MessageBarPageObject extends PageObject {
     }
 
     public String message() {
-        return parentCase.labelText(Optional.absent(), DefaultMessageBar.class, Label.class);
+        return label().getText();
+    }
+
+    public LabelPageElement label() {
+        return new LabelPageElement(parentCase, Optional.absent(), DefaultMessageBar.class, Label.class);
     }
 }

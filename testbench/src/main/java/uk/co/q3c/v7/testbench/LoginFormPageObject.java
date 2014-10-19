@@ -14,9 +14,6 @@
 package uk.co.q3c.v7.testbench;
 
 import com.google.common.base.Optional;
-import com.vaadin.testbench.elements.ButtonElement;
-import com.vaadin.testbench.elements.PasswordFieldElement;
-import com.vaadin.testbench.elements.TextFieldElement;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
@@ -28,6 +25,9 @@ import uk.co.q3c.v7.base.view.DefaultLoginView;
 public class LoginFormPageObject extends PageObject {
 
     private Credentials credentials = new Credentials();
+    private PasswordFieldPageElement passwordField;
+    private ButtonPageElement submitButton;
+    private TextFieldPageElement usernameField;
 
     /**
      * Initialises the PageObject with a reference to the parent test case, so that the PageObject can access a number
@@ -37,6 +37,12 @@ public class LoginFormPageObject extends PageObject {
      */
     public LoginFormPageObject(V7TestBenchTestCase parentCase) {
         super(parentCase);
+        usernameField = new TextFieldPageElement(parentCase, Optional.of("username"), DefaultLoginView.class,
+                TextField.class);
+        passwordField = new PasswordFieldPageElement(parentCase, Optional.of("password"), DefaultLoginView.class,
+                PasswordField.class);
+
+
     }
 
     public Credentials getCredentials() {
@@ -44,7 +50,8 @@ public class LoginFormPageObject extends PageObject {
     }
 
     /**
-     * Sets the credentials you want to use to log in.  If not set, the default is used
+     * Sets the credentials you want to use to log in.  If not set, the default is used when you call {@link #login()}.
+     * Alternatively you can set the username and password independently and then click the submit button.
      *
      * @param credentials
      */
@@ -61,23 +68,23 @@ public class LoginFormPageObject extends PageObject {
 
     public void login(String username, String password) {
         usernameBox().clear();
-        usernameBox().sendKeys(username);
+        usernameBox().setText(username);
         passwordBox().clear();
-        passwordBox().sendKeys(password);
+        passwordBox().setText(password);
         submitButton().click();
 
     }
 
-    protected TextFieldElement usernameBox() {
-        return parentCase.textField(Optional.of("username"), DefaultLoginView.class, TextField.class);
+    protected TextFieldPageElement usernameBox() {
+        return usernameField;
     }
 
-    protected PasswordFieldElement passwordBox() {
-        return parentCase.passwordField(Optional.of("password"), DefaultLoginView.class, PasswordField.class);
+    protected PasswordFieldPageElement passwordBox() {
+        return passwordField;
     }
 
-    private ButtonElement submitButton() {
-        return parentCase.button(Optional.absent(), DefaultLoginView.class, Button.class);
+    private ButtonPageElement submitButton() {
+        return new ButtonPageElement(parentCase, Optional.absent(), DefaultLoginView.class, Button.class);
     }
 
     protected String submitButtonText() {

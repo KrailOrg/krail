@@ -14,7 +14,6 @@ package uk.co.q3c.v7.testApp.test;
 
 import com.google.common.base.Optional;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
-import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import org.junit.Before;
@@ -23,6 +22,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebElement;
 import uk.co.q3c.v7.base.view.component.DefaultMessageBar;
 import uk.co.q3c.v7.testapp.view.NotificationsView;
+import uk.co.q3c.v7.testbench.ButtonPageElement;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,12 +55,13 @@ public class NotifyTest extends V7TestBenchTestCase {
 
         // given
         navigateTo(testPage);
+        ButtonPageElement errorBtn = new ButtonPageElement(this, Optional.of("error"), NotificationsView.class,
+                Button.class);
 
         // when
-
-        ButtonElement errorBtn = button(Optional.of("error"), NotificationsView.class, Button.class);
-        // then
         errorBtn.click();
+        // then
+
         WebElement messageLabel = label(Optional.absent(), DefaultMessageBar.class, Label.class);
         assertThat(messageLabel.getText()).isEqualTo("ERROR: You cannot use service Fake Service until it has been "
                 + "started");
@@ -75,7 +76,8 @@ public class NotifyTest extends V7TestBenchTestCase {
     public void notifyWarning() {
         // given
         navigateTo(testPage);
-        ButtonElement warningBtn = button(Optional.of("warning"), NotificationsView.class, Button.class);
+        ButtonPageElement warningBtn = new ButtonPageElement(this, Optional.of("warning"), NotificationsView.class,
+                Button.class);
         WebElement messageLabel = label(Optional.absent(), DefaultMessageBar.class, Label.class);
         // when
         warningBtn.click();
@@ -92,7 +94,8 @@ public class NotifyTest extends V7TestBenchTestCase {
     public void notifyInformation() {
         // given
         navigateTo(testPage);
-        ButtonElement informationBtn = button(Optional.of("information"), NotificationsView.class, Button.class);
+        ButtonPageElement informationBtn = new ButtonPageElement(this, Optional.of("information"),
+                NotificationsView.class, Button.class);
         WebElement messageLabel = label(Optional.absent(), DefaultMessageBar.class, Label.class);
         // when
         informationBtn.click();

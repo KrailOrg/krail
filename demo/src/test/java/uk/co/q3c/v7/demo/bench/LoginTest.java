@@ -51,10 +51,11 @@ public class LoginTest extends V7TestBenchTestCase {
         // then initial state
         assertThat(loginStatus.loginButton()
                               .getText()).isEqualTo("log in");
-        assertThat(loginStatusLabelText()).isEqualTo("Guest");
+        assertThat(loginStatus.username()).isEqualTo("Guest");
 
         // when LoginStatusPanel button clicked
-        loginStatus.clickButton();
+        loginStatus.loginButton()
+                   .click();
         // then
         verifyUrl("login");
 
@@ -64,7 +65,7 @@ public class LoginTest extends V7TestBenchTestCase {
         verifyUrl(startFragment);
         assertThat(loginStatus.loginButton()
                               .getText()).isEqualTo("log out");
-        assertThat(loginStatusLabelText()).isEqualTo("ds");
+        assertThat(loginStatus.username()).isEqualTo("ds");
     }
 
 

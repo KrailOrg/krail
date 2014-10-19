@@ -14,8 +14,8 @@
 package uk.co.q3c.v7.testbench;
 
 import com.google.common.base.Optional;
-import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 import uk.co.q3c.v7.base.view.component.DefaultUserStatusPanel;
 
 /**
@@ -44,18 +44,23 @@ public class LoginStatusPageObject extends PageObject {
         loginButton().click();
     }
 
-    public ButtonElement loginButton() {
-        return parentCase.button(Optional.absent(), DefaultUserStatusPanel.class, Button.class);
+    public ButtonPageElement loginButton() {
+        return new ButtonPageElement(parentCase, Optional.absent(), DefaultUserStatusPanel.class, Button.class);
     }
+
 
     /**
-     * Clicks the login button and fills in the LoginForm with the credentials the LoginForm has set
+     * Should open the login form
      */
-    protected void login() {
+    public void clickButton() {
         loginButton().click();
     }
 
-    public void clickButton() {
-        loginButton().click();
+    public String username() {
+        return usernameLabel().getText();
+    }
+
+    public LabelPageElement usernameLabel() {
+        return new LabelPageElement(parentCase, Optional.absent(), DefaultUserStatusPanel.class, Label.class);
     }
 }
