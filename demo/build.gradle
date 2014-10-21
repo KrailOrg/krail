@@ -16,6 +16,7 @@ ext.tomcatHome = "/home/david/tomcat7_8080"
 
 
 war {
+    exclude 'WEB-INF/lib/*'
     archiveName "V7demo.war"
     destinationDir file("/home/david/temp")
 }
@@ -83,13 +84,13 @@ task cleantest(dependsOn: ['clean', 'cleanTomcat', 'deployToTomcat', 'waitForTom
 dependencies {
 
     //vaadin push
-    providedCompile 'com.vaadin:vaadin-push:' + vaadinVersion
+    compile 'com.vaadin:vaadin-push:' + vaadinVersion
 
     //UI components
-    providedCompile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
-    providedCompile 'org.vaadin.addons:stepper:2.1.2'
+    compile 'de.steinwedel.vaadin.addon:messagebox:2.0.6'
+    compile 'org.vaadin.addons:stepper:2.1.2'
 
-    providedCompile project(':V7')
+    compile project(':V7')
 
 
     testCompile project(':testbench')

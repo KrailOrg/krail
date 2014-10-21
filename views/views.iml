@@ -108,7 +108,6 @@
     <orderEntry type="library" scope="TEST" name="Gradle: objenesis-1.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: commons-lang3-3.3.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: httpcore-4.3.2" level="project" />
-    <orderEntry type="library" name="sass-stdlib" level="application" />
   </component>
 </module>
 

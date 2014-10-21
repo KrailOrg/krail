@@ -13,7 +13,6 @@
 package uk.co.q3c.v7.testbench;
 
 import com.google.common.base.Optional;
-import com.vaadin.testbench.By;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.NotificationElement;
@@ -23,12 +22,10 @@ import org.junit.Before;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.q3c.util.ID;
-import uk.co.q3c.v7.testbench.page.object.ElementPath;
 import uk.co.q3c.v7.testbench.page.object.LoginFormPageObject;
 import uk.co.q3c.v7.testbench.page.object.LoginStatusPageObject;
 
@@ -177,36 +174,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         loginForm.login();
     }
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    /**
-     * Use rarely - you should be able to use the more specialised versions;  this is a catch all for classes which do
-     * not have an implementation of AbstractElement
-     *
-     * @param driver
-     * @param qualifier
-     * @param classes
-     *
-     * @return
-     */
-    protected WebElement element(Optional<?> qualifier, Class<?>... classes) {
-        if (classes == null || classes.length == 0) {
-            throw new RuntimeException("Id will fail with only a qualifier supplied.  Always use classes to define Id");
-        }
-        String s = ID.getIdc(qualifier, classes);
-        WebElement findElement = getDriver().findElement(By.vaadin(s));
-        return findElement;
-    }
-
-    public String id(Optional<?> qualifier, Class<?>... components) {
-        ElementPath elementPath = new ElementPath(appContext);
-        ElementPath id = elementPath.id(ID.getIdc(qualifier, components));
-        return id.get();
-    }
-
-
-
 
     protected <E extends AbstractElement> E element(Class<E> elementClass, Optional<?> qualifier,
                                                     Class<?>... componentClasses) {
@@ -219,18 +186,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         return $(elementClass).id(id);
     }
 
-
-    //    protected void clickMenuItem(String[] path, Optional<?> qualifier, Class<?>... componentClasses) {
-    //        menu(qualifier, componentClasses).clickItem(path);
-    //    }
-
-    //    public MenuBarElement menu(Optional<?> qualifier, Class<?>... componentClasses) {
-    //        MenuBarElement element = $(MenuBarElement.class).id(ID.getIdc(qualifier, componentClasses));
-    //        return element;
-    //    }
-
-
-    ;
 
     /**
      * Indexed from 1 (that is, the default driver is at index 1)
