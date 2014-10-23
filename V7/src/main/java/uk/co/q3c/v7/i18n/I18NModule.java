@@ -23,45 +23,50 @@ import static com.google.inject.multibindings.Multibinder.newSetBinder;
 
 public class I18NModule extends AbstractModule {
 
-	private Multibinder<String> registeredAnnotations;
-	private Multibinder<String> registeredValueAnnotations;
-	private Multibinder<Locale> supportedLocales;
+    private Multibinder<String> registeredAnnotations;
+    private Multibinder<String> registeredValueAnnotations;
+    private Multibinder<Locale> supportedLocales;
 
-	@Override
-	protected void configure() {
-		registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
-		registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
-		supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
-		registerAnnotation(I18N.class);
-		registerAnnotation(I18NFlex.class);
-		registerValueAnnotation(I18NValue.class);
-		registerValueAnnotation(I18NValueFlex.class);
+    @Override
+    protected void configure() {
+        registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
+        registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
+        supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
+        registerAnnotation(I18N.class);
+        registerAnnotation(I18NFlex.class);
+        registerValueAnnotation(I18NValue.class);
+        registerValueAnnotation(I18NValueFlex.class);
 
-		bindProcessor();
-		bindCurrentLocale();
+        bindProcessor();
+        bindCurrentLocale();
+        bindTranslate();
 
-		define();
-	}
+        define();
+    }
 
-	/**
-	 * Override this method to provide your own implementation of {@link CurrentLocale}
-	 */
-	protected void bindCurrentLocale() {
-		bind(CurrentLocale.class).to(DefaultCurrentLocale.class);
-	}
+    protected void bindTranslate() {
+        bind(Translate.class).to(MapTranslate.class);
+    }
 
-	/**
-	 * Override this to define more registered annotations, or registered value annotations, by calling
-	 * {@link #registerAnnotation(Class)} or {@link #registerValueAnnotation(Class)}, or make a copy of this module and
-	 * use the same structure (multiple instances of the {@link #registeredAnnotations} and
-	 * {@link #registerValueAnnotation(Class)} will be merged by Guice}.
-	 * <p>
-	 * Here you should also define the locales your application supports, with calls to
-	 * {@link #addSupportedLocale(Locale)}
-	 */
-	protected void define() {
-		addSupportedLocale(Locale.UK);
-	}
+    /**
+     * Override this method to provide your own implementation of {@link CurrentLocale}
+     */
+    protected void bindCurrentLocale() {
+        bind(CurrentLocale.class).to(DefaultCurrentLocale.class);
+    }
+
+    /**
+     * Override this to define more registered annotations, or registered value annotations, by calling
+     * {@link #registerAnnotation(Class)} or {@link #registerValueAnnotation(Class)}, or make a copy of this module and
+     * use the same structure (multiple instances of the {@link #registeredAnnotations} and
+     * {@link #registerValueAnnotation(Class)} will be merged by Guice}.
+     * <p/>
+     * Here you should also define the locales your application supports, with calls to
+     * {@link #addSupportedLocale(Locale)}
+     */
+    protected void define() {
+        addSupportedLocale(Locale.UK);
+    }
 
     protected void addSupportedLocale(Locale locale) {
         supportedLocales.addBinding()
