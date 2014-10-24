@@ -59,7 +59,7 @@ public class StartupTest extends V7TestBenchTestCase {
         String comboValue = localeSelector.getValue();
         assertThat(comboValue).isEqualTo("English (United Kingdom)");
 
-        assertThat(messageBar.message()).isEqualTo("Message bar");
+        assertThat(messageBar.message()).isEqualTo("Message Bar");
     }
 
     @Test

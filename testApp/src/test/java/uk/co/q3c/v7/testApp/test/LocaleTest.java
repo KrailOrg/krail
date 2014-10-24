@@ -69,7 +69,7 @@ public class LocaleTest extends V7TestBenchTestCase {
         for (int i = 0; i < 5; i++) {
             items.add(navTree.itemCaption(i));
         }
-        assertThat(items).containsExactly("Benachrichtigungen", "Einloggen", "Nachricht Feld",
+        assertThat(items).containsExactly("Benachrichtigungen", "Einloggen", "Nachrichtenfeld",
                 "Öffentliche Startseite", "Systemkonto");
 
         items.clear();
@@ -79,7 +79,7 @@ public class LocaleTest extends V7TestBenchTestCase {
         }
 
         //this is in a different order to navtree. See https://github.com/davidsowerby/v7/issues/257
-        assertThat(items).containsExactly("Benachrichtigungen", "Einloggen", "Nachricht Feld", "Systemkonto",
+        assertThat(items).containsExactly("Benachrichtigungen", "Einloggen", "Nachrichtenfeld", "Systemkonto",
                 "Öffentliche Startseite");
 
         assertThat(loginStatus.loginButton()

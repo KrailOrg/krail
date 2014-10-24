@@ -59,7 +59,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         getGridLayout().setColumns(3);
         getGridLayout().setRows(3);
         getGridLayout().setSizeFull();
-        Panel centrePanel = new Panel("Log in"); // TODO i18N
+        Panel centrePanel = new Panel(translate.from(LabelKey.Log_In));
         centrePanel.addStyleName(ChameleonTheme.PANEL_BUBBLE);
         centrePanel.setSizeUndefined();
         VerticalLayout vl = new VerticalLayout();
@@ -68,12 +68,12 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         vl.setSizeUndefined();
         label = new Label();
         usernameBox = new TextField();
-        passwordBox = new PasswordField("password");
+        passwordBox = new PasswordField(translate.from(LabelKey.Password));
 
         demoInfoLabel = new Label("for this demo, enter any user name, and a password of 'password'");
         demoInfoLabel2 = new Label("In a real application your Shiro Realm implementation defines how to authenticate");
 
-        submitButton = new Button("submit");
+        submitButton = new Button(translate.from(LabelKey.Submit));
         submitButton.addClickListener(this);
 
         statusMsgLabel = new Label("Please enter your username and password");

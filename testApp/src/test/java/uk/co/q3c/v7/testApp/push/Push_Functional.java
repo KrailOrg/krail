@@ -111,7 +111,7 @@ public class Push_Functional extends V7TestBenchTestCase {
                 .click();
 
         // then message not processed
-        assertThat(messageBar.message()).isEqualTo("Message bar");
+        assertThat(messageBar.message()).isEqualTo("Message Bar");
     }
 
 

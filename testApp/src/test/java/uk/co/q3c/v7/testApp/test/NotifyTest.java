@@ -41,7 +41,7 @@ public class NotifyTest extends V7TestBenchTestCase {
         // when
 
         // then
-        assertThat(messageBar.message()).isEqualTo("Message bar");
+        assertThat(messageBar.message()).isEqualTo("Message Bar");
     }
 
     @Test
