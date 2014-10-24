@@ -22,11 +22,11 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Translates an I18NKey to a value held in a map, expanding its arguments if it has them. You can also get the
- * value for the key (but cannot use arguments) by using {@link I18NKey#getValue(Locale)}. This class simply provides a
- * slightly neater syntax, a method for expanding a pattern with parameters. Some methods also have a simpler signature
- * by defaulting to {@link CurrentLocale}
+ * Translates an I18NKey to a value held in a map, expanding its arguments if it has them.  Using the standard V7 method
+ * for I18N, the keys will be defined as Enum, implementing I18NKey.  However, this Translate implementation should also
+ * work for any other object used as a key, although it has not been tested.
  *
+ * @author David Sowerby 24 October 2014 - all translation made in this class, removing dependency on key itself
  * @author David Sowerby 3 Aug 2013
  */
 public class MapTranslate implements Translate {
@@ -40,33 +40,48 @@ public class MapTranslate implements Translate {
     }
 
     /**
-     * Looks up key pattern from its associated map. The locale is assumed to be {@link CurrentLocale}. If the key is
-     * not present in the map, the enum.name() is returned. Before returning the enum.name(), underscores are replaced
-     * with spaces. If arguments are supplied, these are applied to the pattern.
+     * Looks up key pattern from its associated map. The map used is determined by the actual parameter value of key
+     * (that is, a key of type I18N<Labels> will use the Labels class as the map source)
+     * <p/>
+     * The locale is assumed to be {@link CurrentLocale}.
+     * <p/>
+     * If the key is not present in the map, and key is an Enum, the enum.name() is returned. Before returning the
+     * enum.name(), underscores are replaced
+     * with spaces.
+     * <p/>
+     * If the key is not present in the map, and key is not an Enum, the key.toString() is returned
+     * <p/>
+     * If arguments are supplied, these are applied to the pattern.  If key is null, a String "key is null"
+     * is returned.
      *
      * @param key
+     *         the key to look up the I18N pattern
      * @param arguments
+     *         the arguments used to expand the pattern, if required
      *
-     * @return
+     * @return the translated value, or "key is null" if {@code key} is null
      */
-    //    @Override
+    @Override
     public String from(I18NKey<?> key, Object... arguments) {
         return from(key, currentLocale.getLocale(), arguments);
     }
 
+
     /**
-     * Looks up key pattern from its associated, locale specific, map. If the key is not present in the map, the
-     * enum.name() is returned. Before returning the enum.name(), underscores are replaced with spaces. If arguments
-     * are
-     * supplied, these are applied to the pattern.
+     * Looks up key pattern from its associated map. The map used is determined by the actual parameter value of key
+     * (that is, a key of type I18N<Labels> will use the Labels class as the map source)
+     * <p/>
+     * If the key is not present in the map, and key is an Enum, the enum.name() is returned. Before returning the
+     * enum.name(), underscores are replaced
+     * with spaces.
+     * <p/>
+     * If the key is not present in the map, and key is not an Enum, the key.toString() is returned
+     * <p/>
+     * If arguments are supplied, these are applied to the pattern.  If key is null, a String "key is null"
+     * is returned.
      *
-     * @param locale
-     * @param key
-     * @param arguments
-     *
-     * @return
      */
-    //    @Override
+    @Override
     public String from(I18NKey<?> key, Locale locale, Object... arguments) {
         if (key == null) {
             return "key is null";
