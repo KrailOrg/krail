@@ -12,11 +12,10 @@
  */
 package uk.co.q3c.v7.testapp.i18n;
 
-import uk.co.q3c.v7.i18n.EnumResourceBundle;
-import uk.co.q3c.v7.i18n.Labels;
-import uk.co.q3c.v7.i18n.Messages;
-
 import com.google.common.collect.ImmutableMap;
+import uk.co.q3c.v7.i18n.Labels;
+import uk.co.q3c.v7.i18n.MapResourceBundle;
+import uk.co.q3c.v7.i18n.Messages;
 
 /**
  * The base for the resource bundle of {@link Descriptions}. The separation between them is arbitrary, but helps break
@@ -25,28 +24,26 @@ import com.google.common.collect.ImmutableMap;
  * <li>{@link Labels} : short, usually one or two words, no parameters, generally used as captions
  * <li>{@link Descriptions} : longer, typically several words, no parameters, generally used in tooltips
  * <li>{@link Messages} : contains parameters, typically used for user messages.
- * 
- * 
- * 
+ *
  * @author David Sowerby 3 Aug 2013
- * 
  */
-public class Descriptions extends EnumResourceBundle<TestAppDescriptionKey> {
+public class Descriptions extends MapResourceBundle<TestAppDescriptionKey> {
 
-	private static final ImmutableMap<uk.co.q3c.v7.testapp.i18n.TestAppDescriptionKey, String> map;
-	static {
-		map = new ImmutableMap.Builder<TestAppDescriptionKey, String>()
-				// @formatter:off		
-			.put(TestAppDescriptionKey.Notifications,	"Vaadin provides "
-						+ "<a href=\"https://vaadin.com/en_GB/book/vaadin7/-/page/application.notifications.html\" target=\"\">notification</a>"
-						+ " 'splash' messages.  V7 adds to this by enabling the use of multiple"
-						+ " methods of notification, combined or selected for each of the message types - Error, "
-						+ "Warning and Information, and invoked through a single call to the UserNotifier class.  "
-						+ "\nConfiguration is through a Guice module (DefaultUserNotificationModule by default)."
-						+ "\nWhen you try the buttons below, note that the "
-						+ "message is presented through both the Vaadin notification and the message bar.  "
-						+ "For more detail see the "
-						+ "<a href=\"https://sites.google.com/site/q3cjava/notifications\" target=\"\">V7 documentation</a>")
+    private static final ImmutableMap<uk.co.q3c.v7.testapp.i18n.TestAppDescriptionKey, String> map;
+
+    static {
+        map = new ImmutableMap.Builder<TestAppDescriptionKey, String>()
+                // @formatter:off
+            .put(TestAppDescriptionKey.Notifications, "Vaadin provides " + "<a href=\"https://vaadin" +
+                    ".com/en_GB/book/vaadin7/-/page/application.notifications.html\" " +
+                    "target=\"\">notification</a>" + " 'splash' messages.  V7 adds to this by enabling the use of " +
+                    "multiple" + " methods of notification, combined or selected for each of the message types - " +
+                    "Error, " + "Warning and Information, and invoked through a single call to the UserNotifier class" +
+                    ".  " + "\nConfiguration is through a Guice module (DefaultUserNotificationModule by default)." +
+                    "\nWhen you try the buttons below, note that the " + "message is presented through both the " +
+                    "Vaadin notification and the message bar.  " + "For more detail see the " + "<a " +
+                    "href=\"https://sites.google.com/site/q3cjava/notifications\" target=\"\">V7 " +
+                    "documentation</a>")
 						.build();
 	}
 

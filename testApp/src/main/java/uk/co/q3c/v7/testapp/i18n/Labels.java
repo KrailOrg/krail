@@ -12,26 +12,23 @@
  */
 package uk.co.q3c.v7.testapp.i18n;
 
-import uk.co.q3c.v7.i18n.EnumResourceBundle;
-
 import com.google.common.collect.ImmutableMap;
+import uk.co.q3c.v7.i18n.MapResourceBundle;
 
 /**
  * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely
  * defined as containing those value which are short, contain no parameters and are typically used for captions and
  * labels. They can of course be used anywhere.
- * 
- * 
+ *
  * @author David Sowerby 9 Feb 2013
- * 
  */
-public class Labels extends EnumResourceBundle<TestAppLabelKey> {
+public class Labels extends MapResourceBundle<TestAppLabelKey> {
 
-	private static final ImmutableMap<uk.co.q3c.v7.testapp.i18n.TestAppLabelKey, String> map;
+    private static final ImmutableMap<uk.co.q3c.v7.testapp.i18n.TestAppLabelKey, String> map;
 
-	static {
-		map = new ImmutableMap.Builder<TestAppLabelKey, String>()
-// @formatter:off		
+    static {
+        map = new ImmutableMap.Builder<TestAppLabelKey, String>()
+                // @formatter:off
 				
 		.put(TestAppLabelKey.Yes, "yes")
 		.put(TestAppLabelKey.No, "no")
@@ -39,11 +36,11 @@ public class Labels extends EnumResourceBundle<TestAppLabelKey> {
 		
 // @formatter:on
 
-	}
+    }
 
-	@Override
-	public ImmutableMap<TestAppLabelKey, String> getMap() {
-		return map;
-	}
+    @Override
+    public ImmutableMap<TestAppLabelKey, String> getMap() {
+        return map;
+    }
 
 }

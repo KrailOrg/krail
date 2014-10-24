@@ -21,27 +21,25 @@ import com.google.common.collect.ImmutableMap;
  * <li>{@link Labels} : short, usually one or two words, no parameters, generally used as captions
  * <li>{@link Descriptions} : longer, typically several words, no parameters, generally used in tooltips
  * <li>{@link Messages} : contains parameters, typically used for user messages.
- * 
- * 
- * 
+ *
  * @author David Sowerby 3 Aug 2013
- * 
  */
-public class Labels extends EnumResourceBundle<LabelKey> {
+public class Labels extends MapResourceBundle<LabelKey> {
 
-	private static final ImmutableMap<LabelKey, String> map;
-	static {
-		map = new ImmutableMap.Builder<LabelKey, String>()
-// @formatter:off	
+    private static final ImmutableMap<LabelKey, String> map;
+
+    static {
+        map = new ImmutableMap.Builder<LabelKey, String>()
+                // @formatter:off
 
 			.build();
 
 // @formatter:on
-	}
+    }
 
-	@Override
-	public ImmutableMap<LabelKey, String> getMap() {
-		return map;
-	}
+    @Override
+    public ImmutableMap<LabelKey, String> getMap() {
+        return map;
+    }
 
 }

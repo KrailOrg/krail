@@ -15,7 +15,7 @@ package uk.co.q3c.v7.i18n;
 public enum TestLabelKey implements I18NKey<TestLabels> {
 
     _nullkey_, Home, My_Account, Transfers, Login, MoneyInOut, Private, Public, Opt, Yes, No, View1, View2, ViewA,
-    ViewA1, ViewA11, ViewB, ViewB1, ViewB11;
+    ViewA1, ViewA11, ViewB, ViewB1, ViewB11, pattern_with_embedded_key;
 
 
 }

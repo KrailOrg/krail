@@ -12,6 +12,6 @@
  */
 package uk.co.q3c.v7.i18n;
 
-public interface I18NKey<E extends EnumResourceBundle<?>> {
+public interface I18NKey<E extends MapResourceBundle<?>> {
 
 }

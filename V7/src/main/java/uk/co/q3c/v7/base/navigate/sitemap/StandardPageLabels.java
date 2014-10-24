@@ -12,39 +12,37 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import uk.co.q3c.v7.i18n.Descriptions;
-import uk.co.q3c.v7.i18n.EnumResourceBundle;
-
 import com.google.common.collect.ImmutableMap;
+import uk.co.q3c.v7.i18n.Descriptions;
+import uk.co.q3c.v7.i18n.MapResourceBundle;
 
 /**
- * The base for the resource bundle of {@link StandardPageLabels}. The separation between them is arbitrary, but helps break down
+ * The base for the resource bundle of {@link StandardPageLabels}. The separation between them is arbitrary, but helps
+ * break down
  * what could other wise be long lists, and only one of them needs to look up parameter values:
  * <ol>
  * <li>{@link StandardPageLabels} : short, usually one or two words, no parameters, generally used as captions
  * <li>{@link Descriptions} : longer, typically several words, no parameters, generally used in tooltips
  * <li>{@link Messages} : contains parameters, typically used for user messages.
  *
- *
- *
  * @author David Sowerby 3 Aug 2013
- *
  */
-public class StandardPageLabels extends EnumResourceBundle<StandardPageKey> {
+public class StandardPageLabels extends MapResourceBundle<StandardPageKey> {
 
-	private static final ImmutableMap<StandardPageKey, String> map;
-	static {
-		map = new ImmutableMap.Builder<StandardPageKey, String>()
-// @formatter:off
+    private static final ImmutableMap<StandardPageKey, String> map;
+
+    static {
+        map = new ImmutableMap.Builder<StandardPageKey, String>()
+                // @formatter:off
 
 			.build();
 
 // @formatter:on
-	}
+    }
 
-	@Override
-	public ImmutableMap<StandardPageKey, String> getMap() {
-		return map;
-	}
+    @Override
+    public ImmutableMap<StandardPageKey, String> getMap() {
+        return map;
+    }
 
 }

@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableMap;
  * @author David Sowerby 9 Feb 2013
  * 
  */
-public class TestLabels extends EnumResourceBundle<TestLabelKey> {
+public class TestLabels extends MapResourceBundle<TestLabelKey> {
 
 	private static final ImmutableMap<TestLabelKey, String> map;
 
@@ -33,6 +33,7 @@ public class TestLabels extends EnumResourceBundle<TestLabelKey> {
 // @formatter:off	
 
 			.put(TestLabelKey.Home, "home")
+            .put(TestLabelKey.pattern_with_embedded_key, "Your {0} request has been refused")
 			.put(TestLabelKey.Transfers, "transfers")
 			.put(TestLabelKey.Opt, "option")
 			.put(TestLabelKey.Yes, "Yes")

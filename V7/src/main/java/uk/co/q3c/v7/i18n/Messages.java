@@ -22,17 +22,15 @@ import com.google.common.collect.ImmutableMap;
  * <li>{@link Descriptions} : longer, typically several words, no parameters, generally used in tooltips
  * <li>{@link Messages} : contains parameters, typically used for user messages.
  *
- *
- *
  * @author David Sowerby 3 Aug 2013
- *
  */
-public class Messages extends EnumResourceBundle<MessageKey> {
+public class Messages extends MapResourceBundle<MessageKey> {
 
-	private static final ImmutableMap<MessageKey, String> map;
-	static {
-		map = new ImmutableMap.Builder<MessageKey, String>()
-// @formatter:off
+    private static final ImmutableMap<MessageKey, String> map;
+
+    static {
+        map = new ImmutableMap.Builder<MessageKey, String>()
+                // @formatter:off
 
 			.put(MessageKey.invalidURI, "{0} is not a valid page")
 			.put(MessageKey.Service_not_Started, "You cannot use service {0} until it has been started")
@@ -40,11 +38,11 @@ public class Messages extends EnumResourceBundle<MessageKey> {
 			.build();
 
 // @formatter:on
-	}
+    }
 
-	@Override
-	public ImmutableMap<MessageKey, String> getMap() {
-		return map;
-	}
+    @Override
+    public ImmutableMap<MessageKey, String> getMap() {
+        return map;
+    }
 
 }

@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
-public class TranslateTest {
+public class MapTranslateTest {
 
 	@Inject
 	Translate translate;
@@ -60,8 +60,27 @@ public class TranslateTest {
 		assertThat(translate.from(LabelKey.Ok, germanSwitzerland)).isEqualTo("Ok");
 	}
 
-	@ModuleProvider
-	protected AbstractModule moduleProvider() {
+    @Test
+    public void patternContainsI18NKey() {
+        //given
+
+        //when
+        String translation = translate.from(TestLabelKey.pattern_with_embedded_key, LabelKey.Log_In);
+        //then
+        assertThat(translation).isEqualTo("Your Log In request has been refused");
+
+        //given
+        currentLocale.setLocale(Locale.GERMANY);
+
+        //when
+        translation = translate.from(TestLabelKey.pattern_with_embedded_key, LabelKey.Log_In);
+
+        //then
+        assertThat(translation).isEqualTo("Your Einloggen request has been refused");
+    }
+
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
 		return new AbstractModule() {
 
 			@Override

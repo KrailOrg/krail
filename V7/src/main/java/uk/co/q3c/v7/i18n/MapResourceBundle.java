@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
-public abstract class EnumResourceBundle<E extends I18NKey> extends ResourceBundle {
+public abstract class MapResourceBundle<E extends I18NKey> extends ResourceBundle {
 
     @Override
     public Enumeration<String> getKeys() {
@@ -37,7 +37,7 @@ public abstract class EnumResourceBundle<E extends I18NKey> extends ResourceBund
         if (value != null) {
             return value;
         }
-        @SuppressWarnings("unchecked") EnumResourceBundle<E> enumparent = (EnumResourceBundle<E>) parent;
+        @SuppressWarnings("unchecked") MapResourceBundle<E> enumparent = (MapResourceBundle<E>) parent;
         // returning null so that the enum name() can be used when there is no map entry
         if (enumparent == null) {
             return null;
