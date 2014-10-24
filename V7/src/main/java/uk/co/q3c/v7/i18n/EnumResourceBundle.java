@@ -12,40 +12,39 @@
  */
 package uk.co.q3c.v7.i18n;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
-import com.google.common.collect.ImmutableMap;
+public abstract class EnumResourceBundle<E extends I18NKey> extends ResourceBundle {
 
-public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBundle {
+    @Override
+    public Enumeration<String> getKeys() {
+        throw new RuntimeException("getKeys() replaced in V7, use getMap() instead");
+    }
 
-	@Override
-	public Enumeration<String> getKeys() {
-		throw new RuntimeException("getKeys() replaced in V7, use getMap() instead");
-	}
+    @Override
+    protected Object handleGetObject(String arg0) {
+        throw new RuntimeException("handleGetObject() replaced in V7, use getValue() instead");
+    }
 
-	@Override
-	protected Object handleGetObject(String arg0) {
-		throw new RuntimeException("handleGetObject() replaced in V7, use getValue() instead");
-	}
+    public String getValue(E key) {
+        if (key == null) {
+            return null;
+        }
+        String value = getMap().get(key);
+        if (value != null) {
+            return value;
+        }
+        @SuppressWarnings("unchecked") EnumResourceBundle<E> enumparent = (EnumResourceBundle<E>) parent;
+        // returning null so that the enum name() can be used when there is no map entry
+        if (enumparent == null) {
+            return null;
+        }
+        return enumparent.getValue(key);
 
-	public String getValue(E key) {
-		if (key == null) {
-			return null;
-		}
-		String value = getMap().get(key);
-		if (value != null) {
-			return value;
-		}
-		@SuppressWarnings("unchecked")
-		EnumResourceBundle<E> enumparent = (EnumResourceBundle<E>) parent;
-		// returning null so that the enum name() can be used when there is no map entry
-		if (enumparent == null) {
-			return null;
-		}
-		return enumparent.getValue(key);
+    }
 
-	}
-
-	public abstract ImmutableMap<E, String> getMap();
+    public abstract ImmutableMap<E, String> getMap();
 }

@@ -16,6 +16,7 @@ package uk.co.q3c.v7.i18n;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
@@ -33,6 +34,7 @@ public class MapTranslate2Test {
     @Inject
     MapTranslate2 t2;
 
+    @Ignore
     @Test
     public void from() {
         //given
@@ -46,6 +48,7 @@ public class MapTranslate2Test {
         assertThat(answer2).isEqualTo("Enable Account");
     }
 
+    @Ignore
     @Test
     public void from1() {
         //given
@@ -64,6 +67,7 @@ public class MapTranslate2Test {
         //then
     }
 
+    @Ignore
     @Test
     public void collator() {
         //given

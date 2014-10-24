@@ -12,36 +12,17 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import uk.co.q3c.v7.i18n.I18NKey;
 
 /**
- * @see StandardPageLabels
  * @author David Sowerby 24 Mar 2013
- *
+ * @see StandardPageLabels
  */
 public enum StandardPageKey implements I18NKey<StandardPageLabels> {
-	Public_Home, // The home page for non-authenticated users
-	Private_Home, // The home page for authenticated users
-	Log_In, // the login page
-	Log_Out; // the page to go to after logging out
+    Public_Home, // The home page for non-authenticated users
+    Private_Home, // The home page for authenticated users
+    Log_In, // the login page
+    Log_Out; // the page to go to after logging out
 
-	@Override
-	public StandardPageLabels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(StandardPageLabels.class.getName(), locale);
-		return (StandardPageLabels) bundle;
-	}
 
-	@Override
-	public String getValue(Locale locale) {
-		String value = getBundle(locale).getValue(this);
-		return value;
-	}
-
-	@Override
-	public boolean isNullKey() {
-		return false;
-	}
 }

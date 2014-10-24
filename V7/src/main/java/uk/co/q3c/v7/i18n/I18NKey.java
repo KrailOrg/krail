@@ -12,22 +12,6 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.Locale;
-
 public interface I18NKey<E extends EnumResourceBundle<?>> {
-
-	E getBundle(Locale locale);
-
-	/**
-	 * Use {@link Translate} rather than call this method directly
-	 * 
-	 * @param locale
-	 * @return
-	 */
-	String getValue(Locale locale);
-
-	boolean isNullKey();
-
-	String name();
 
 }

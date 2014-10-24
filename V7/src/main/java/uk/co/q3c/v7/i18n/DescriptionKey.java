@@ -12,9 +12,6 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 public enum DescriptionKey implements I18NKey<Descriptions> {
 	_nullkey_,
 	Account_Already_In_Use,
@@ -32,24 +29,6 @@ public enum DescriptionKey implements I18NKey<Descriptions> {
 	Sitemap_Service,
 	Too_Many_Login_Attempts,
 	Unknown_Account,
-	You_have_not_logged_in,
-
-	// Small_Font;
-	;
-	@Override
-	public Descriptions getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Descriptions.class.getName(), locale);
-		return (Descriptions) bundle;
-	}
-
-	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
-	}
-
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
-	}
+    You_have_not_logged_in;
 
 }
