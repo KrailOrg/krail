@@ -40,7 +40,7 @@ public class DefaultMessageBar extends Panel implements MessageBar {
 
     private void build() {
         layout = new HorizontalLayout();
-        label = new Label("Message bar");
+        label = new Label(translate.from(LabelKey.Message_Bar));
         label.setImmediate(true);
         layout.addComponent(label);
         this.setContent(layout);

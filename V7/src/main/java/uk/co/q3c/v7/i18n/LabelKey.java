@@ -66,7 +66,9 @@ public enum LabelKey implements I18NKey<Labels> {
 	User_Name,
 	V7,
 	Warning,
-	Yes;
+	Yes, 
+	Password, 
+	Submit;
 
 	@Override
 	public Labels getBundle(Locale locale) {
