@@ -14,9 +14,12 @@ package uk.co.q3c.v7.i18n;
 
 import com.google.inject.Inject;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.text.Collator;
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Translates an I18NKey to a value held in a map, expanding its arguments if it has them. You can also get the
@@ -26,12 +29,12 @@ import java.util.Locale;
  *
  * @author David Sowerby 3 Aug 2013
  */
-public class MapTranslate implements Translate {
+public class MapTranslate2 {
 
     private final CurrentLocale currentLocale;
 
     @Inject
-    protected MapTranslate(CurrentLocale currentLocale) {
+    protected MapTranslate2(CurrentLocale currentLocale) {
         super();
         this.currentLocale = currentLocale;
     }
@@ -46,9 +49,8 @@ public class MapTranslate implements Translate {
      *
      * @return
      */
-    @Override
-    public String from(I18NKey<?> key, Object... arguments) {
-
+    //    @Override
+    public String from(I18NKey2<?> key, Object... arguments) {
         return from(key, currentLocale.getLocale(), arguments);
     }
 
@@ -64,15 +66,28 @@ public class MapTranslate implements Translate {
      *
      * @return
      */
-    @Override
-    public String from(I18NKey<?> key, Locale locale, Object... arguments) {
+    //    @Override
+    public String from(I18NKey2<?> key, Locale locale, Object... arguments) {
         if (key == null) {
             return "key is null";
         }
-        String pattern = key.getValue(locale);
+
+        Type[] genericInterfaces = key.getClass()
+                                      .getGenericInterfaces();
+        ParameterizedType parameterizedType = (ParameterizedType) genericInterfaces[0];
+
+        Type actualType = parameterizedType.getActualTypeArguments()[0];
+        Class bundleClazz = (Class) actualType;
+
+        EnumResourceBundle2 bundle = (EnumResourceBundle2) ResourceBundle.getBundle(bundleClazz.getName(), locale);
+
+
+        String pattern = bundle.getValue(key);
+
+        //If no pattern defined use the enum name
         if (pattern == null) {
-            return key.name()
-                      .replace("_", " ");
+            return ((Enum) key).name()
+                               .replace("_", " ");
         }
         if ((arguments == null) || (arguments.length == 0)) {
             return pattern;
@@ -86,7 +101,7 @@ public class MapTranslate implements Translate {
      *
      * @return
      */
-    @Override
+    //    @Override
     public Collator collator() {
         return Collator.getInstance(currentLocale.getLocale());
     }
