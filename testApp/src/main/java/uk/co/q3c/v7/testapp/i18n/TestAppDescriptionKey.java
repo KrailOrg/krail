@@ -12,28 +12,8 @@
  */
 package uk.co.q3c.v7.testapp.i18n;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import uk.co.q3c.v7.i18n.I18NKey;
 
 public enum TestAppDescriptionKey implements I18NKey<Descriptions> {
-	_nullkey_, Notifications
-
-	;
-	@Override
-	public Descriptions getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Descriptions.class.getName(), locale);
-		return (Descriptions) bundle;
-	}
-
-	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
-	}
-
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
-	}
+    Notifications
 }

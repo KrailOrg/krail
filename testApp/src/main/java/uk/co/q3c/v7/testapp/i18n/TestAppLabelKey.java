@@ -12,43 +12,24 @@
  */
 package uk.co.q3c.v7.testapp.i18n;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import uk.co.q3c.v7.i18n.I18NKey;
 
 public enum TestAppLabelKey implements I18NKey<Labels> {
 
-	_nullkey_,
-	Yes,
-	No,
-	View1,
-	View2,
-	Home,
-	Private,
-	Public,
-	Reset_Account,
-	Logout,
-	Unlock_Account,
-	Enable_Account,
-	Login,
-	Refresh_Account,
-	Request_Account,
-	V7_Test_Application;
+    Yes,
+    No,
+    View1,
+    View2,
+    Home,
+    Private,
+    Public,
+    Reset_Account,
+    Logout,
+    Unlock_Account,
+    Enable_Account,
+    Login,
+    Refresh_Account,
+    Request_Account,
+    V7_Test_Application, _nullkey_;
 
-	@Override
-	public Labels getBundle(Locale locale) {
-		ResourceBundle bundle = ResourceBundle.getBundle(Labels.class.getName(), locale);
-		return (Labels) bundle;
-	}
-
-	@Override
-	public String getValue(Locale locale) {
-		return getBundle(locale).getValue(this);
-	}
-
-	@Override
-	public boolean isNullKey() {
-		return this.equals(_nullkey_);
-	}
 }
