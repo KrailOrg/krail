@@ -73,21 +73,17 @@ public class LoginFormPageObject extends PageObject {
 
     }
 
-    protected TextFieldElement usernameBox() {
+    public TextFieldElement usernameBox() {
         return element(TextFieldElement.class, Optional.of("username"), DefaultLoginView.class, TextField.class);
     }
 
-    protected PasswordFieldElement passwordBox() {
+    public PasswordFieldElement passwordBox() {
         return element(PasswordFieldElement.class, Optional.of("password"), DefaultLoginView.class,
                 PasswordField.class);
     }
 
-    private ButtonElement submitButton() {
+    public ButtonElement submitButton() {
         return element(ButtonElement.class, Optional.absent(), DefaultLoginView.class, Button.class);
-    }
-
-    protected String submitButtonText() {
-        return submitButton().getCaption();
     }
 
     public String message() {
@@ -97,6 +93,7 @@ public class LoginFormPageObject extends PageObject {
     public LabelElement messageLabel() {
         return element(LabelElement.class, Optional.of("status"), DefaultLoginView.class, Label.class);
     }
+
 
     public static class Credentials {
         private String password = "password";

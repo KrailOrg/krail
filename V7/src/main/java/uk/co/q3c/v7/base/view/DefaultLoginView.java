@@ -33,12 +33,16 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     private final Provider<Subject> subjectProvider;
     private final Translate translate;
     private final UserStatus userStatus;
+    @I18N(caption = LabelKey.Log_In)
+    private Panel centrePanel;
     private Label demoInfoLabel;
     private Label demoInfoLabel2;
     @I18NValue(value = LabelKey.Authentication)
     private Label label;
+    @I18N(caption = LabelKey.Password)
     private PasswordField passwordBox;
     private Label statusMsgLabel;
+    @I18N(caption = LabelKey.Submit)
     private Button submitButton;
     @I18N(caption = LabelKey.User_Name, description = DescriptionKey.Enter_your_user_name)
     private TextField usernameBox;
@@ -59,7 +63,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         getGridLayout().setColumns(3);
         getGridLayout().setRows(3);
         getGridLayout().setSizeFull();
-        Panel centrePanel = new Panel(translate.from(LabelKey.Log_In));
+        centrePanel = new Panel();
         centrePanel.addStyleName(ChameleonTheme.PANEL_BUBBLE);
         centrePanel.setSizeUndefined();
         VerticalLayout vl = new VerticalLayout();
@@ -68,12 +72,12 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         vl.setSizeUndefined();
         label = new Label();
         usernameBox = new TextField();
-        passwordBox = new PasswordField(translate.from(LabelKey.Password));
+        passwordBox = new PasswordField();
 
         demoInfoLabel = new Label("for this demo, enter any user name, and a password of 'password'");
         demoInfoLabel2 = new Label("In a real application your Shiro Realm implementation defines how to authenticate");
 
-        submitButton = new Button(translate.from(LabelKey.Submit));
+        submitButton = new Button();
         submitButton.addClickListener(this);
 
         statusMsgLabel = new Label("Please enter your username and password");
@@ -154,13 +158,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey<?> messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     @Override
-    public void setStatusMessage(I18NKey<?> messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     public TextField getUsernameBox() {
