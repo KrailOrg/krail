@@ -92,7 +92,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 
         // then
         assertThat(notification()).isNotNull();
-        assertThat(notification().getText()).isEqualTo("home is not a valid page");
+        assertThat(notification().getText()).isEqualTo("private/home is not a valid page");
         assertThat(notification().getAttribute("class")).isEqualTo("v-Notification humanized v-Notification-humanized");
         closeNotification();
 
@@ -109,6 +109,25 @@ public class NavigationTest extends V7TestBenchTestCase {
         // then
         verifyUrl("private/home");
 
+    }
+
+    @Test
+    public void navigateToInvalidPage() {
+        // given
+        driver.get(rootUrl());
+        pause(1000);
+        // when
+
+        navigateTo("rubbish");
+        pause(500);
+
+        // then
+        assertThat(notification()).isNotNull();
+        assertThat(notification().getText()).isEqualTo("rubbish is not a valid page");
+        assertThat(notification().getAttribute("class")).isEqualTo("v-Notification humanized v-Notification-humanized");
+
+        // then
+        verifyUrl("rubbish");
     }
 
     @Test

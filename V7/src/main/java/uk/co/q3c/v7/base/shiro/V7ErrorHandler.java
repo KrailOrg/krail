@@ -12,17 +12,15 @@
  */
 package uk.co.q3c.v7.base.shiro;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.shiro.authz.UnauthenticatedException;
-import org.apache.shiro.authz.UnauthorizedException;
-
-import uk.co.q3c.v7.base.navigate.InvalidURIException;
-import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
-import uk.co.q3c.v7.base.navigate.V7Navigator;
-
 import com.google.inject.Inject;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorEvent;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
+import uk.co.q3c.v7.base.navigate.InvalidURIException;
+import uk.co.q3c.v7.base.navigate.InvalidURIExceptionHandler;
+import uk.co.q3c.v7.base.navigate.V7Navigator;
 
 /**
  * Extends the {@link DefaultErrorHandler} to intercept known V& exceptions, including Shiro related exceptions -
@@ -57,8 +55,9 @@ public class V7ErrorHandler extends DefaultErrorHandler {
 		// handle an attempt to navigate to an invalid page
 		int invalidURI = ExceptionUtils.indexOfThrowable(originalError, InvalidURIException.class);
 		if (invalidURI >= 0) {
-			invalidUriHandler.invoke();
-			return;
+            InvalidURIException e = (InvalidURIException) ExceptionUtils.getThrowables(originalError)[invalidURI];
+            invalidUriHandler.invoke(e);
+            return;
 		}
 
 		// handle an unauthenticated access attempt

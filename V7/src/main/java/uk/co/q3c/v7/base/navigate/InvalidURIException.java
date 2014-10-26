@@ -14,8 +14,10 @@ package uk.co.q3c.v7.base.navigate;
 
 public class InvalidURIException extends RuntimeException {
 
-	public InvalidURIException() {
-		super();
+    private String targetURI;
+
+    public InvalidURIException() {
+        super();
 	}
 
 	public InvalidURIException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
@@ -34,4 +36,11 @@ public class InvalidURIException extends RuntimeException {
 		super(cause);
 	}
 
+    public String getTargetURI() {
+        return targetURI;
+    }
+
+    public void setTargetURI(String targetURI) {
+        this.targetURI = targetURI;
+    }
 }

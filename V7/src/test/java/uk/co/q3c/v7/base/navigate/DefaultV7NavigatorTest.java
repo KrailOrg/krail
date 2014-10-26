@@ -230,6 +230,21 @@ public class DefaultV7NavigatorTest {
 
     }
 
+    @Test
+    public void navigate_to_invalid_URI_exception_target_uri() {
+        //given
+        navigator = createNavigator();
+        String page = "public/view3";
+        // when
+        try {
+            navigator.navigateTo(page);
+        } catch (InvalidURIException iue) {
+            //then
+            assertThat(iue.getTargetURI()).isEqualTo(page);
+        }
+
+    }
+
     public void navigateTo_invalidURI_checkView() {
 
         // given

@@ -54,12 +54,12 @@ public class V7ErrorHandlerTest {
 	public void invalidUri() {
 
 		// given
-		Throwable exception = new InvalidURIException();
-		when(event.getThrowable()).thenReturn(exception);
+        InvalidURIException exception = new InvalidURIException();
+        when(event.getThrowable()).thenReturn(exception);
 		// when
 		handler.error(event);
 		// then
-		verify(invalidUriHandler).invoke();
+        verify(invalidUriHandler).invoke(exception);
 
 	}
 

@@ -184,7 +184,9 @@ public class DefaultV7Navigator implements V7Navigator {
 
         UserSitemapNode node = userSitemap.nodeFor(navigationState);
         if (node == null) {
-            throw new InvalidURIException("URI not found: " + navigationState.getVirtualPage());
+            InvalidURIException exception = new InvalidURIException("URI not found");
+            exception.setTargetURI(navigationState.getVirtualPage());
+            throw exception;
         }
 
         Subject subject = subjectProvider.get();
