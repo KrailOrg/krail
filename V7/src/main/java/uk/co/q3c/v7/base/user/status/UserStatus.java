@@ -20,15 +20,17 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
  * to be {@link VaadinSessionScoped}. In addition to registered listeners, the {@link V7Navigator} is also advised of
  * the status change (the navigator should not be added as a listener - it is called explicitly, as it has to be the
  * last one to be called so that navigation components are up to date when the call is made)
- * 
+ *
  * @author David Sowerby
  * @date 18 Apr 2014
  */
 public interface UserStatus {
 
-	public void statusChanged();
+    public void statusChanged();
 
-	public abstract void removeListener(UserStatusListener listener);
+    public abstract void removeListener(UserStatusListener listener);
 
-	public abstract void addListener(UserStatusListener listener);
+    public abstract void addListener(UserStatusListener listener);
+
+    boolean isAuthenticated();
 }

@@ -12,11 +12,16 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import fixture.MockCurrentLocale;
+import fixture.testviews2.ViewA;
+import fixture.testviews2.ViewA1;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -26,258 +31,256 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.i18n.MapTranslate;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
-
-import fixture.testviews2.ViewA;
-import fixture.testviews2.ViewA1;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({VaadinSessionScopeModule.class})
 public class DefaultSitemapCheckerTest {
 
-	String uriNodeNoClass = "node/noclass";
-	String uriNodeNoKey = "node/nokey";
+    String uriNodeNoClass = "node/noclass";
+    String uriNodeNoKey = "node/nokey";
 
-	String uripublic_Node1 = "public/node1";
-	String uripublic_Node11 = "public/node1/1";
+    String uripublic_Node1 = "public/node1";
+    String uripublic_Node11 = "public/node1/1";
 
-	@Inject
-	DefaultSitemapChecker checker;
+    @Inject
+    DefaultSitemapChecker checker;
 
-	@Inject
-	Translate translate;
+    @Inject
+    Translate translate;
 
-	@Inject
-	DefaultMasterSitemap sitemap;
-	private MasterSitemapNode nodeNoClass;
-	private MasterSitemapNode nodeNoKey;
+    @Inject
+    DefaultMasterSitemap sitemap;
+    CurrentLocale currentLocale = new MockCurrentLocale();
+    private MasterSitemapNode baseNode;
+    private MasterSitemapNode node1;
+    private MasterSitemapNode node11;
+    private MasterSitemapNode nodeNoClass;
+    private MasterSitemapNode nodeNoKey;
 
-	@Inject
-	CurrentLocale currentLocale;
-	private MasterSitemapNode baseNode;
-	private MasterSitemapNode node1;
-	private MasterSitemapNode node11;
+    @Test(expected = SitemapException.class)
+    public void checkOnly() {
 
-	@Test(expected = SitemapException.class)
-	public void checkOnly() {
+        // given
+        buildSitemap(0);
+        // when
+        checker.check();
+        // then
 
-		// given
-		buildSitemap(0);
-		// when
-		checker.check();
-		// then
+    }
 
-	}
+    /**
+     * the root node "node" will have nothing set except the segment
+     *
+     * @param index
+     */
+    private void buildSitemap(int index) {
+        switch (index) {
+            case 0:
 
-	public void checkOnly_report() {
+                nodeNoClass = sitemap.append(uriNodeNoClass);
+                nodeNoClass.setLabelKey(TestLabelKey.No);
+                nodeNoClass.setPageAccessControl(PageAccessControl.PUBLIC);
+                nodeNoKey = sitemap.append(uriNodeNoKey);
+                nodeNoKey.setViewClass(ViewA1.class);
+                nodeNoKey.setPageAccessControl(PageAccessControl.PUBLIC);
+                baseNode = sitemap.nodeFor("node");
+                baseNode.setPageAccessControl(PageAccessControl.PUBLIC);
+                break;
+            case 1:
+                node1 = sitemap.append(uripublic_Node1);
+                node1.setLabelKey(TestLabelKey.No);
+                node1.setViewClass(ViewA1.class);
+                node1.setPageAccessControl(PageAccessControl.PERMISSION);
+                sitemap.addRedirect("public", uripublic_Node1);
+            case 2:
+                node1 = sitemap.append(uripublic_Node1);
+                node1.setLabelKey(TestLabelKey.No);
+                node1.setViewClass(ViewA1.class);
 
-		// given
-		buildSitemap(0);
-		// when
-		String report = null;
-		try {
-			checker.check();
-		} catch (SitemapException se) {
-			report = checker.getReport().toString();
-		}
-		// then
-		assertThat(report).contains("node/noclass");
-		assertThat(report).contains("node/nokey");
-		assertThat(report).contains("node/n");
-	}
+                node11 = sitemap.append(uripublic_Node11);
+                node11.setLabelKey(TestLabelKey.No);
+                node11.setViewClass(ViewA1.class);
+                node11.setPageAccessControl(PageAccessControl.PERMISSION);
 
-	@Test
-	public void redirect() {
+                sitemap.addRedirect("public", uripublic_Node1);
+                sitemap.addRedirect(uripublic_Node1, uripublic_Node11);
 
-		// given
-		buildSitemap(1);
-		MasterSitemapNode publicNode = sitemap.nodeFor("public");
-		publicNode.setLabelKey(TestLabelKey.Home);
-		// when
-		checker.check();
-		// then
+        }
+    }
 
-		assertThat(publicNode).isNotNull();
-		assertThat(publicNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
-	}
+    public void checkOnly_report() {
 
-	@Test
-	public void redirect_multiLevel() {
+        // given
+        buildSitemap(0);
+        // when
+        String report = null;
+        try {
+            checker.check();
+        } catch (SitemapException se) {
+            report = checker.getReport()
+                            .toString();
+        }
+        // then
+        assertThat(report).contains("node/noclass");
+        assertThat(report).contains("node/nokey");
+        assertThat(report).contains("node/n");
+    }
 
-		// given
-		buildSitemap(2);
-		MasterSitemapNode publicNode = sitemap.nodeFor("public");
-		publicNode.setLabelKey(TestLabelKey.Public);
-		// when
-		checker.check();
-		// then
+    @Test
+    public void redirect() {
 
-		MasterSitemapNode n1 = sitemap.nodeFor(uripublic_Node1);
-		MasterSitemapNode n11 = sitemap.nodeFor(uripublic_Node11);
+        // given
+        buildSitemap(1);
+        MasterSitemapNode publicNode = sitemap.nodeFor("public");
+        publicNode.setLabelKey(TestLabelKey.Home);
+        // when
+        checker.check();
+        // then
 
-		assertThat(publicNode).isNotNull();
-		assertThat(publicNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+        assertThat(publicNode).isNotNull();
+        assertThat(publicNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+    }
 
-		assertThat(n1).isNotNull();
-		assertThat(n1.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+    @Test
+    public void redirect_multiLevel() {
 
-		assertThat(n11).isNotNull();
-		assertThat(n11.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+        // given
+        buildSitemap(2);
+        MasterSitemapNode publicNode = sitemap.nodeFor("public");
+        publicNode.setLabelKey(TestLabelKey.Public);
+        // when
+        checker.check();
+        // then
 
-	}
+        MasterSitemapNode n1 = sitemap.nodeFor(uripublic_Node1);
+        MasterSitemapNode n11 = sitemap.nodeFor(uripublic_Node11);
 
-	@Test(expected = SitemapException.class)
-	public void replaceMissingViews() {
+        assertThat(publicNode).isNotNull();
+        assertThat(publicNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
-		// given
-		buildSitemap(0);
-		// when
-		checker.replaceMissingViewWith(ViewA.class).check();
-		// then
+        assertThat(n1).isNotNull();
+        assertThat(n1.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
-	}
+        assertThat(n11).isNotNull();
+        assertThat(n11.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
 
-	@Test(expected = SitemapException.class)
-	public void replaceMissingKeys() {
+    }
 
-		// given
-		buildSitemap(0);
-		// when
-		checker.replaceMissingKeyWith(TestLabelKey.Home).check();
-		// then
+    @Test(expected = SitemapException.class)
+    public void replaceMissingViews() {
 
-	}
+        // given
+        buildSitemap(0);
+        // when
+        checker.replaceMissingViewWith(ViewA.class)
+               .check();
+        // then
 
-	@Test
-	public void replaceMissingViewsAndKeys() {
+    }
 
-		// given
-		buildSitemap(0);
-		// when
-		checker.replaceMissingViewWith(ViewA.class).replaceMissingKeyWith(TestLabelKey.Home).check();
-		// then
-		assertThat(checker.getMissingLabelKeys()).isEmpty();
-		assertThat(checker.getMissingViewClasses()).isEmpty();
-		assertThat(checker.getMissingPageAccessControl()).isEmpty();
-		assertThat(baseNode.getLabelKey()).isEqualTo(TestLabelKey.Home);
-		assertThat(baseNode.getViewClass()).isEqualTo(ViewA.class);
-		assertThat(nodeNoClass.getLabelKey()).isEqualTo(TestLabelKey.No);
-		assertThat(nodeNoClass.getViewClass()).isEqualTo(ViewA.class);
-		assertThat(nodeNoKey.getLabelKey()).isEqualTo(TestLabelKey.Home);
-		assertThat(nodeNoKey.getViewClass()).isEqualTo(ViewA1.class);
-	}
+    @Test(expected = SitemapException.class)
+    public void replaceMissingKeys() {
 
-	@Test(expected = SitemapException.class)
-	public void redirectLoop_immediate() {
+        // given
+        buildSitemap(0);
+        // when
+        checker.replaceMissingKeyWith(TestLabelKey.Home)
+               .check();
+        // then
 
-		// given
+    }
 
-		sitemap.addRedirect("p/1", "p/2");
-		sitemap.addRedirect("p/2", "p/1");
+    @Test
+    public void replaceMissingViewsAndKeys() {
 
-		// when
-		checker.check();
-		// then
+        // given
+        buildSitemap(0);
+        // when
+        checker.replaceMissingViewWith(ViewA.class)
+               .replaceMissingKeyWith(TestLabelKey.Home)
+               .check();
+        // then
+        assertThat(checker.getMissingLabelKeys()).isEmpty();
+        assertThat(checker.getMissingViewClasses()).isEmpty();
+        assertThat(checker.getMissingPageAccessControl()).isEmpty();
+        assertThat(baseNode.getLabelKey()).isEqualTo(TestLabelKey.Home);
+        assertThat(baseNode.getViewClass()).isEqualTo(ViewA.class);
+        assertThat(nodeNoClass.getLabelKey()).isEqualTo(TestLabelKey.No);
+        assertThat(nodeNoClass.getViewClass()).isEqualTo(ViewA.class);
+        assertThat(nodeNoKey.getLabelKey()).isEqualTo(TestLabelKey.Home);
+        assertThat(nodeNoKey.getViewClass()).isEqualTo(ViewA1.class);
+    }
 
-	}
+    @Test(expected = SitemapException.class)
+    public void redirectLoop_immediate() {
 
-	@Test(expected = SitemapException.class)
-	public void redirectLoop_longloop() {
+        // given
 
-		// given
+        sitemap.addRedirect("p/1", "p/2");
+        sitemap.addRedirect("p/2", "p/1");
 
-		sitemap.addRedirect("p/1", "p/2");
-		sitemap.addRedirect("p/2", "p/3");
-		sitemap.addRedirect("p/3", "p/4");
-		sitemap.addRedirect("p/4", "p/1");
-		sitemap.addRedirect("a/1", "a/2");
-		sitemap.addRedirect("a/2", "a/1");
+        // when
+        checker.check();
+        // then
 
-		// when
-		checker.check();
-		// then
+    }
 
-	}
+    @Test(expected = SitemapException.class)
+    public void redirectLoop_longloop() {
 
-	@Test(expected = SitemapException.class)
-	public void redirectLoop_longloop_two_errors() {
+        // given
 
-		// given
+        sitemap.addRedirect("p/1", "p/2");
+        sitemap.addRedirect("p/2", "p/3");
+        sitemap.addRedirect("p/3", "p/4");
+        sitemap.addRedirect("p/4", "p/1");
+        sitemap.addRedirect("a/1", "a/2");
+        sitemap.addRedirect("a/2", "a/1");
 
-		sitemap.addRedirect("p/1", "p/2");
-		sitemap.addRedirect("p/2", "p/3");
-		sitemap.addRedirect("p/3", "p/4");
-		sitemap.addRedirect("p/4", "p/1");
-		sitemap.addRedirect("p/3", "p/2");
+        // when
+        checker.check();
+        // then
 
-		// when
-		checker.check();
-		// then
+    }
 
-	}
+    @Test(expected = SitemapException.class)
+    public void redirectLoop_longloop_two_errors() {
 
-	/**
-	 * the root node "node" will have nothing set except the segment
-	 *
-	 * @param index
-	 */
-	private void buildSitemap(int index) {
-		switch (index) {
-		case 0:
+        // given
 
-			nodeNoClass = sitemap.append(uriNodeNoClass);
-			nodeNoClass.setLabelKey(TestLabelKey.No);
-			nodeNoClass.setPageAccessControl(PageAccessControl.PUBLIC);
-			nodeNoKey = sitemap.append(uriNodeNoKey);
-			nodeNoKey.setViewClass(ViewA1.class);
-			nodeNoKey.setPageAccessControl(PageAccessControl.PUBLIC);
-			baseNode = sitemap.nodeFor("node");
-			baseNode.setPageAccessControl(PageAccessControl.PUBLIC);
-			break;
-		case 1:
-			node1 = sitemap.append(uripublic_Node1);
-			node1.setLabelKey(TestLabelKey.No);
-			node1.setViewClass(ViewA1.class);
-			node1.setPageAccessControl(PageAccessControl.PERMISSION);
-			sitemap.addRedirect("public", uripublic_Node1);
-		case 2:
-			node1 = sitemap.append(uripublic_Node1);
-			node1.setLabelKey(TestLabelKey.No);
-			node1.setViewClass(ViewA1.class);
+        sitemap.addRedirect("p/1", "p/2");
+        sitemap.addRedirect("p/2", "p/3");
+        sitemap.addRedirect("p/3", "p/4");
+        sitemap.addRedirect("p/4", "p/1");
+        sitemap.addRedirect("p/3", "p/2");
 
-			node11 = sitemap.append(uripublic_Node11);
-			node11.setLabelKey(TestLabelKey.No);
-			node11.setViewClass(ViewA1.class);
-			node11.setPageAccessControl(PageAccessControl.PERMISSION);
+        // when
+        checker.check();
+        // then
 
-			sitemap.addRedirect("public", uripublic_Node1);
-			sitemap.addRedirect(uripublic_Node1, uripublic_Node11);
+    }
 
-		}
-	}
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
 
-	@ModuleProvider
-	protected AbstractModule moduleProvider() {
-		return new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+                bind(UserSitemap.class).to(DefaultUserSitemap.class);
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+                bind(Translate.class).to(MapTranslate.class);
+                bind(CurrentLocale.class).toInstance(currentLocale);
+            }
 
-			@Override
-			protected void configure() {
-				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
-				bind(UserSitemap.class).to(DefaultUserSitemap.class);
-				bind(UserOption.class).to(DefaultUserOption.class);
-				bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-			}
-
-		};
-	}
+        };
+    }
 
 }

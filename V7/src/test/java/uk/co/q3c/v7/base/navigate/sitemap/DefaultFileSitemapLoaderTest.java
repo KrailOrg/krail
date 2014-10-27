@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import fixture.TestI18NModule;
 import fixture.testviews2.My_AccountView;
 import fixture.testviews2.OptionsView;
 import org.apache.commons.io.FileUtils;
@@ -39,7 +40,6 @@ import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
 import uk.co.q3c.v7.base.view.testviews.subview.TransferView;
 import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
-import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.testutil.TestResource;
@@ -64,7 +64,7 @@ import static org.assertj.jodatime.api.Assertions.assertThat;
  * @author dsowerby
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestFileSitemapModule.class, I18NModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({TestFileSitemapModule.class, TestI18NModule.class, VaadinSessionScopeModule.class})
 public class DefaultFileSitemapLoaderTest {
 
     private static int COMMENT_LINES = 12;
@@ -76,8 +76,8 @@ public class DefaultFileSitemapLoaderTest {
     DefaultFileSitemapLoader loader;
     List<SitemapLoader> loaders;
     LoaderReportBuilder lrb;
-    private File propFile;
     private List<String> lines;
+    private File propFile;
 
     @BeforeClass
     public static void beforeClass() {
@@ -91,6 +91,11 @@ public class DefaultFileSitemapLoaderTest {
         loadMasterFile();
         loaders = new ArrayList<>();
         loaders.add(loader);
+    }
+
+    private void loadMasterFile() throws IOException {
+        propFile = new File(propDir, "sitemap_good.properties");
+        lines = FileUtils.readLines(propFile);
     }
 
     /**
@@ -108,7 +113,9 @@ public class DefaultFileSitemapLoaderTest {
         assertThat(propFile.exists()).isTrue();
         loader.load();
         lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
         // then
         assertThat(loader.getSitemap()).isNotNull();
         assertThat(loader.getCommentLines()).isEqualTo(COMMENT_LINES);
@@ -121,10 +128,14 @@ public class DefaultFileSitemapLoaderTest {
         assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
         assertThat(loader.getMissingEnums()).isEmpty();
 
-        System.out.println(loader.getSitemap().getReport());
-        System.out.println(loader.getSitemap().toString());
-        assertThat(loader.getSitemap().getNodeCount()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.missingSections().size()).isEqualTo(0);
+        System.out.println(loader.getSitemap()
+                                 .getReport());
+        System.out.println(loader.getSitemap()
+                                 .toString());
+        assertThat(loader.getSitemap()
+                         .getNodeCount()).isEqualTo(PAGE_COUNT);
+        assertThat(loader.missingSections()
+                         .size()).isEqualTo(0);
         assertThat(loader.getErrorCount()).isEqualTo(0);
         assertThat(loader.getWarningCount()).isEqualTo(0);
         assertThat(loader.getInfoCount()).isEqualTo(0);
@@ -135,285 +146,20 @@ public class DefaultFileSitemapLoaderTest {
 
         System.out.println(sitemap.toString());
 
-        Collection<MasterSitemapNode> nodes = loader.getSitemap().getAllNodes();
+        Collection<MasterSitemapNode> nodes = loader.getSitemap()
+                                                    .getAllNodes();
         for (MasterSitemapNode node : nodes) {
             validateNode(sitemap, node);
         }
 
         assertThat(loader.getStartTime()).isNotNull();
         assertThat(loader.getEndTime()).isNotNull();
-        assertThat(loader.getStartTime().getMillis()).isGreaterThanOrEqualTo(start.getMillis());
-        assertThat(loader.getEndTime().isAfter(loader.getStartTime())).isTrue();
+        assertThat(loader.getStartTime()
+                         .getMillis()).isGreaterThanOrEqualTo(start.getMillis());
+        assertThat(loader.getEndTime()
+                         .isAfter(loader.getStartTime())).isTrue();
 
         System.out.println(loader.getSitemap());
-    }
-
-    @Test
-    public void keyName() {
-
-        // given
-        MasterSitemapNode node = new MasterSitemapNode();
-        node.setUriSegment("reset-account");
-        // when
-        String keyName = loader.keyName(null, node);
-        // then
-
-        assertThat(keyName).isEqualTo("Reset_Account");
-    }
-
-    @Test
-    public void sectionMissingClosingBracket() throws IOException {
-
-        // given
-        substitute("[viewPackages]", "[viewPackages");
-        prepFile();
-        // when
-        loader.load();
-        lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
-        // then
-
-        assertThat(loader.missingSections()).containsOnly("viewPackages");
-        assertThat(loader.getErrorCount()).isEqualTo(1);
-        assertThat(loader.getWarningCount()).isEqualTo(1);
-        assertThat(loader.getInfoCount()).isEqualTo(0);
-        assertThat(containsError(FileSitemapLoader.SECTION_MISSING)).isTrue();
-        assertThat(containsWarning(FileSitemapLoader.SECTION_MISSING_CLOSING)).isTrue();
-        assertThat(loader.getPagesDefined()).isEqualTo(0);
-        assertThat(loader.getViewPackages()).isNull();
-        System.out.println(lrb.getReport());
-    }
-
-    @Test
-    public void unrecognisedPropertyName() throws IOException {
-        // given
-        insertAfter("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "randomProperty=23");
-        prepFile();
-        // when
-        loader.load();
-        lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
-        // then
-
-        assertThat(loader.missingSections()).containsOnly();
-
-        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
-
-        assertThat(loader.getMissingEnums()).containsOnly();
-        assertThat(loader.getErrorCount()).isEqualTo(0);
-        assertThat(loader.getWarningCount()).isEqualTo(1);
-        assertThat(loader.getInfoCount()).isEqualTo(0);
-        assertThat(containsWarning(FileSitemapLoader.PROPERTY_NAME_UNRECOGNISED)).isTrue();
-        System.out.println(lrb.getReport());
-
-    }
-
-    @Test
-    public void invalidSectionName() throws IOException {
-
-        // given
-        substitute("[options]", "[option]");
-        prepFile();
-        // when
-        loader.load();
-        lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
-        // then
-
-        assertThat(loader.missingSections()).containsOnly("options");
-
-        assertThat(loader.getErrorCount()).isEqualTo(1);
-        assertThat(loader.getWarningCount()).isEqualTo(1);
-        assertThat(loader.getInfoCount()).isEqualTo(0);
-        assertThat(containsWarning(FileSitemapLoader.SECTION_NOT_VALID_FOR_SITEMAP)).isTrue();
-        assertThat(containsWarning(FileSitemapLoader.SECTION_MISSING)).isTrue();
-        assertThat(loader.getPagesDefined()).isEqualTo(0);
-        assertThat(loader.getMissingEnums()).containsOnly();
-
-        System.out.println(lrb.getReport());
-    }
-
-    /**
-     * Does not implement i18N
-     *
-     * @throws IOException
-     */
-    @Test
-    public void invalidLabelKeysClass_no_i18N() throws IOException {
-
-        // given
-        substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKey_Invalid");
-        prepFile();
-        // when
-        loader.load();
-        lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
-        // then
-        assertThat(loader.getErrorCount()).isEqualTo(2);
-        assertThat(loader.getWarningCount()).isEqualTo(0);
-        assertThat(loader.getInfoCount()).isEqualTo(0);
-
-        assertThat(loader.missingSections()).isEmpty();
-        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
-        assertThat(loader.getMissingEnums()).contains("MoneyInOut", "Transfers", "Opt");
-
-        assertThat(containsError(FileSitemapLoader.LABELKEY_DOES_NOT_IMPLEMENT_I18N_KEY)).isTrue();
-        assertThat(containsError(FileSitemapLoader.LABELKEY_NOT_VALID_CLASS_FOR_I18N_LABELS)).isTrue();
-        System.out.println(lrb.getReport());
-    }
-
-    /**
-     * Does not exist
-     *
-     * @throws IOException
-     */
-    @Test
-    public void invalidLabelKeysClass_does_not_exist() throws IOException {
-        // given
-        substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKey2");
-        prepFile();
-        // when
-        loader.load();
-        lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
-
-        // then
-        assertThat(loader.getErrorCount()).isEqualTo(2);
-        assertThat(loader.getWarningCount()).isEqualTo(0);
-        assertThat(loader.getInfoCount()).isEqualTo(0);
-
-        assertThat(loader.missingSections()).isEmpty();
-        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
-        assertThat(loader.getMissingEnums()).contains("MoneyInOut", "Transfers", "Opt");
-
-        assertThat(containsError(FileSitemapLoader.LABELKEY_NOT_IN_CLASSPATH)).isTrue();
-        assertThat(containsError(FileSitemapLoader.LABELKEY_NOT_VALID_CLASS_FOR_I18N_LABELS)).isTrue();
-        System.out.println(lrb.getReport());
-    }
-
-    @Test
-    public void viewNotFound() throws IOException {
-
-        substituteIn(29, "subview.Transfer", "subview.Transfers");
-        prepFile();
-        outputModifiedFile();
-        // when
-        loader.load();
-        lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
-        // then
-        assertThat(loader.getErrorCount()).isEqualTo(1);
-        assertThat(loader.getWarningCount()).isEqualTo(0);
-        assertThat(loader.getInfoCount()).isEqualTo(0);
-
-        assertThat(loader.missingSections()).isEmpty();
-        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
-        assertThat(loader.getMissingEnums()).isEmpty();
-
-        assertThat(containsError(FileSitemapLoader.VIEW_NOT_FOUND_IN_SPECIFIED_PACKAGES)).isTrue();
-        System.out.println(lrb.getReport());
-
-    }
-
-    @Test
-    public void viewNotV7View() throws IOException {
-
-        substituteIn(30, "subview.MoneyInOut", "subview.NotV7");
-        prepFile();
-        // when
-        loader.load();
-        lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
-
-        // then
-        assertThat(loader.getErrorCount()).isEqualTo(1);
-        assertThat(loader.getWarningCount()).isEqualTo(0);
-        assertThat(loader.getInfoCount()).isEqualTo(0);
-
-        assertThat(loader.missingSections()).isEmpty();
-        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
-        assertThat(loader.getMissingEnums()).isEmpty();
-
-        assertThat(containsError(FileSitemapLoader.VIEW_DOES_NOT_IMPLEMENT_V7VIEW)).isTrue();
-        System.out.println(lrb.getReport());
-
-    }
-
-    /**
-     * Tries to go out of structure by double indenting from previous
-     *
-     * @throws IOException
-     */
-    @Test
-    public void mapIndentTooGreat() throws IOException {
-
-        substituteIn(29, "+-transfers", "+---transfers");
-        prepFile();
-        // when
-        loader.load();
-        lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
-
-        // then
-        assertThat(loader.getErrorCount()).isEqualTo(0);
-        assertThat(loader.getWarningCount()).isEqualTo(1);
-        assertThat(loader.getInfoCount()).isEqualTo(0);
-
-        assertThat(loader.missingSections()).isEmpty();
-        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
-        assertThat(loader.getMissingEnums()).isEmpty();
-
-        assertThat(containsWarning(FileSitemapLoader.LINE_FORMAT_INDENTATION_INCORRECT)).isTrue();
-        System.out.println(lrb.getReport());
-    }
-
-    @Test
-    public void options() throws IOException {
-
-        // given
-        prepFile();
-        // when
-        loader.load();
-        lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
-
-        // then
-        assertThat(loader.isAppendView()).isTrue();
-        assertThat(loader.getLabelKey()).isEqualTo("uk.co.q3c.v7.i18n.TestLabelKey");
-
-        // given properties not defined
-        deleteLine("appendView=true");
-        prepFile();
-
-        // when
-        loader.load();
-        lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
-
-        // then defaults correct
-        assertThat(loader.isAppendView()).isTrue();
-
-    }
-
-    @Test
-    public void options_to_non_default() throws IOException {
-
-        // given properties set to non-default
-        substitute("appendView=true", "appendView=false");
-        prepFile();
-        // when
-        loader.load();
-        lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
-        // then values correct
-        assertThat(loader.isAppendView()).isFalse();
-
     }
 
     private void validateNode(Sitemap<MasterSitemapNode> sitemap, MasterSitemapNode node) {
@@ -461,13 +207,46 @@ public class DefaultFileSitemapLoaderTest {
         }
     }
 
-    private void loadMasterFile() throws IOException {
-        propFile = new File(propDir, "sitemap_good.properties");
-        lines = FileUtils.readLines(propFile);
-    }
-
     private void prepFile() throws IOException {
         FileUtils.writeLines(modifiedFile, lines);
+    }
+
+    @Test
+    public void keyName() {
+
+        // given
+        MasterSitemapNode node = new MasterSitemapNode();
+        node.setUriSegment("reset-account");
+        // when
+        String keyName = loader.keyName(null, node);
+        // then
+
+        assertThat(keyName).isEqualTo("Reset_Account");
+    }
+
+    @Test
+    public void sectionMissingClosingBracket() throws IOException {
+
+        // given
+        substitute("[viewPackages]", "[viewPackages");
+        prepFile();
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
+        // then
+
+        assertThat(loader.missingSections()).containsOnly("viewPackages");
+        assertThat(loader.getErrorCount()).isEqualTo(1);
+        assertThat(loader.getWarningCount()).isEqualTo(1);
+        assertThat(loader.getInfoCount()).isEqualTo(0);
+        assertThat(containsError(FileSitemapLoader.SECTION_MISSING)).isTrue();
+        assertThat(containsWarning(FileSitemapLoader.SECTION_MISSING_CLOSING)).isTrue();
+        assertThat(loader.getPagesDefined()).isEqualTo(0);
+        assertThat(loader.getViewPackages()).isNull();
+        System.out.println(lrb.getReport());
     }
 
     private void substitute(String original, String replacement) {
@@ -480,53 +259,6 @@ public class DefaultFileSitemapLoaderTest {
         if (replacement != null) {
             lines.add(index, replacement);
         }
-    }
-
-    private void substituteIn(int lineNum, String original, String replacement) {
-        String line = lines.get(lineNum);
-        if (line.contains(original)) {
-            line = line.replace(original, replacement);
-            lines.add(lineNum, line);
-        } else {
-            throw new RuntimeException("Subsitution failed in test setup, " + original + " was not found in line " + lineNum);
-        }
-
-    }
-
-    private void deleteLine(String original) {
-        int index = lines.indexOf(original);
-        if (index >= 0) {
-            lines.remove(index);
-        }
-    }
-
-    private void insertAfter(String reference, String insertion) {
-        int index = lines.indexOf(reference);
-        lines.add(index + 1, insertion);
-    }
-
-    private void outputModifiedFile() {
-        for (String line : lines) {
-            System.out.println(line);
-        }
-    }
-
-    @ModuleProvider
-    protected AbstractModule module() {
-        return new AbstractModule() {
-
-            @Override
-            protected void configure() {
-                bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
-                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
-                bind(UserSitemap.class).to(DefaultUserSitemap.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-            }
-
-        };
     }
 
     private boolean containsError(String pattern) {
@@ -551,6 +283,306 @@ public class DefaultFileSitemapLoaderTest {
             }
             return true;
         }
+    }
+
+    @Test
+    public void unrecognisedPropertyName() throws IOException {
+        // given
+        insertAfter("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "randomProperty=23");
+        prepFile();
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
+        // then
+
+        assertThat(loader.missingSections()).containsOnly();
+
+        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+
+        assertThat(loader.getMissingEnums()).containsOnly();
+        assertThat(loader.getErrorCount()).isEqualTo(0);
+        assertThat(loader.getWarningCount()).isEqualTo(1);
+        assertThat(loader.getInfoCount()).isEqualTo(0);
+        assertThat(containsWarning(FileSitemapLoader.PROPERTY_NAME_UNRECOGNISED)).isTrue();
+        System.out.println(lrb.getReport());
+
+    }
+
+    private void insertAfter(String reference, String insertion) {
+        int index = lines.indexOf(reference);
+        lines.add(index + 1, insertion);
+    }
+
+    @Test
+    public void invalidSectionName() throws IOException {
+
+        // given
+        substitute("[options]", "[option]");
+        prepFile();
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
+        // then
+
+        assertThat(loader.missingSections()).containsOnly("options");
+
+        assertThat(loader.getErrorCount()).isEqualTo(1);
+        assertThat(loader.getWarningCount()).isEqualTo(1);
+        assertThat(loader.getInfoCount()).isEqualTo(0);
+        assertThat(containsWarning(FileSitemapLoader.SECTION_NOT_VALID_FOR_SITEMAP)).isTrue();
+        assertThat(containsWarning(FileSitemapLoader.SECTION_MISSING)).isTrue();
+        assertThat(loader.getPagesDefined()).isEqualTo(0);
+        assertThat(loader.getMissingEnums()).containsOnly();
+
+        System.out.println(lrb.getReport());
+    }
+
+    /**
+     * Does not implement i18N
+     *
+     * @throws IOException
+     */
+    @Test
+    public void invalidLabelKeysClass_no_i18N() throws IOException {
+
+        // given
+        substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKey_Invalid");
+        prepFile();
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
+        // then
+        assertThat(loader.getErrorCount()).isEqualTo(2);
+        assertThat(loader.getWarningCount()).isEqualTo(0);
+        assertThat(loader.getInfoCount()).isEqualTo(0);
+
+        assertThat(loader.missingSections()).isEmpty();
+        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+        assertThat(loader.getMissingEnums()).contains("MoneyInOut", "Transfers", "Opt");
+
+        assertThat(containsError(FileSitemapLoader.LABELKEY_DOES_NOT_IMPLEMENT_I18N_KEY)).isTrue();
+        assertThat(containsError(FileSitemapLoader.LABELKEY_NOT_VALID_CLASS_FOR_I18N_LABELS)).isTrue();
+        System.out.println(lrb.getReport());
+    }
+
+    /**
+     * Does not exist
+     *
+     * @throws IOException
+     */
+    @Test
+    public void invalidLabelKeysClass_does_not_exist() throws IOException {
+        // given
+        substitute("labelKeys=uk.co.q3c.v7.i18n.TestLabelKey", "labelKeys=uk.co.q3c.v7.i18n.TestLabelKey2");
+        prepFile();
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
+
+        // then
+        assertThat(loader.getErrorCount()).isEqualTo(2);
+        assertThat(loader.getWarningCount()).isEqualTo(0);
+        assertThat(loader.getInfoCount()).isEqualTo(0);
+
+        assertThat(loader.missingSections()).isEmpty();
+        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+        assertThat(loader.getMissingEnums()).contains("MoneyInOut", "Transfers", "Opt");
+
+        assertThat(containsError(FileSitemapLoader.LABELKEY_NOT_IN_CLASSPATH)).isTrue();
+        assertThat(containsError(FileSitemapLoader.LABELKEY_NOT_VALID_CLASS_FOR_I18N_LABELS)).isTrue();
+        System.out.println(lrb.getReport());
+    }
+
+    @Test
+    public void viewNotFound() throws IOException {
+
+        substituteIn(29, "subview.Transfer", "subview.Transfers");
+        prepFile();
+        outputModifiedFile();
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
+        // then
+        assertThat(loader.getErrorCount()).isEqualTo(1);
+        assertThat(loader.getWarningCount()).isEqualTo(0);
+        assertThat(loader.getInfoCount()).isEqualTo(0);
+
+        assertThat(loader.missingSections()).isEmpty();
+        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+        assertThat(loader.getMissingEnums()).isEmpty();
+
+        assertThat(containsError(FileSitemapLoader.VIEW_NOT_FOUND_IN_SPECIFIED_PACKAGES)).isTrue();
+        System.out.println(lrb.getReport());
+
+    }
+
+    private void substituteIn(int lineNum, String original, String replacement) {
+        String line = lines.get(lineNum);
+        if (line.contains(original)) {
+            line = line.replace(original, replacement);
+            lines.add(lineNum, line);
+        } else {
+            throw new RuntimeException("Subsitution failed in test setup, " + original + " was not found in line " +
+                    lineNum);
+        }
+
+    }
+
+    private void outputModifiedFile() {
+        for (String line : lines) {
+            System.out.println(line);
+        }
+    }
+
+    @Test
+    public void viewNotV7View() throws IOException {
+
+        substituteIn(30, "subview.MoneyInOut", "subview.NotV7");
+        prepFile();
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
+
+        // then
+        assertThat(loader.getErrorCount()).isEqualTo(1);
+        assertThat(loader.getWarningCount()).isEqualTo(0);
+        assertThat(loader.getInfoCount()).isEqualTo(0);
+
+        assertThat(loader.missingSections()).isEmpty();
+        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+        assertThat(loader.getMissingEnums()).isEmpty();
+
+        assertThat(containsError(FileSitemapLoader.VIEW_DOES_NOT_IMPLEMENT_V7VIEW)).isTrue();
+        System.out.println(lrb.getReport());
+
+    }
+
+    /**
+     * Tries to go out of structure by double indenting from previous
+     *
+     * @throws IOException
+     */
+    @Test
+    public void mapIndentTooGreat() throws IOException {
+
+        substituteIn(29, "+-transfers", "+---transfers");
+        prepFile();
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
+
+        // then
+        assertThat(loader.getErrorCount()).isEqualTo(0);
+        assertThat(loader.getWarningCount()).isEqualTo(1);
+        assertThat(loader.getInfoCount()).isEqualTo(0);
+
+        assertThat(loader.missingSections()).isEmpty();
+        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.co.q3c.v7.base.view.testviews");
+        assertThat(loader.getMissingEnums()).isEmpty();
+
+        assertThat(containsWarning(FileSitemapLoader.LINE_FORMAT_INDENTATION_INCORRECT)).isTrue();
+        System.out.println(lrb.getReport());
+    }
+
+    @Test
+    public void options() throws IOException {
+
+        // given
+        prepFile();
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
+
+        // then
+        assertThat(loader.isAppendView()).isTrue();
+        assertThat(loader.getLabelKey()).isEqualTo("uk.co.q3c.v7.i18n.TestLabelKey");
+
+        // given properties not defined
+        deleteLine("appendView=true");
+        prepFile();
+
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
+
+        // then defaults correct
+        assertThat(loader.isAppendView()).isTrue();
+
+    }
+
+    private void deleteLine(String original) {
+        int index = lines.indexOf(original);
+        if (index >= 0) {
+            lines.remove(index);
+        }
+    }
+
+    @Test
+    public void options_to_non_default() throws IOException {
+
+        // given properties set to non-default
+        substitute("appendView=true", "appendView=false");
+        prepFile();
+        // when
+        loader.load();
+        lrb = new LoaderReportBuilder(loaders);
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
+        // then values correct
+        assertThat(loader.isAppendView()).isFalse();
+
+    }
+
+    @ModuleProvider
+    protected AbstractModule module() {
+        return new AbstractModule() {
+
+            @Override
+            protected void configure() {
+                bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+                bind(UserSitemap.class).to(DefaultUserSitemap.class);
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
+
+        };
     }
 
     private boolean containsInfo(String pattern) {

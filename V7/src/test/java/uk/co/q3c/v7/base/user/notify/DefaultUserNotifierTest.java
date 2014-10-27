@@ -18,6 +18,7 @@ import com.google.inject.multibindings.MapBinder;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import fixture.MockCurrentLocale;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -29,84 +30,96 @@ import java.util.Map;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({VaadinSessionScopeModule.class})
 @SuppressWarnings("rawtypes")
 public class DefaultUserNotifierTest {
 
-	@Inject
-	Map<I18NKey, ErrorNotification> errorNotifications;
-	@Inject
-	Map<I18NKey, WarningNotification> warningNotifications;
-	@Inject
-	Map<I18NKey, InformationNotification> informationNotifications;
+    CurrentLocale currentLocale = new MockCurrentLocale();
 
-	@Mock
-	ErrorNotification errorNotification1;
 
-	@Mock
-	ErrorNotification errorNotification2;
+    @Inject
+    Map<I18NKey, ErrorNotification> errorNotifications;
+    @Inject
+    Map<I18NKey, WarningNotification> warningNotifications;
+    @Inject
+    Map<I18NKey, InformationNotification> informationNotifications;
 
-	@Mock
-	WarningNotification warningNotification1;
+    @Mock
+    ErrorNotification errorNotification1;
 
-	@Mock
-	WarningNotification warningNotification2;
+    @Mock
+    ErrorNotification errorNotification2;
 
-	@Mock
-	InformationNotification informationNotification1;
+    @Mock
+    WarningNotification warningNotification1;
 
-	@Mock
-	InformationNotification informationNotification2;
+    @Mock
+    WarningNotification warningNotification2;
 
-	@Inject
-	DefaultUserNotifier dun;
+    @Mock
+    InformationNotification informationNotification1;
 
-	@Inject
-	Translate translate;
+    @Mock
+    InformationNotification informationNotification2;
 
-	@Test
-	public void message() {
+    @Inject
+    DefaultUserNotifier dun;
 
-		// given
+    @Inject
+    Translate translate;
 
-		// when
-		dun.notifyError(MessageKey.Service_not_Started, "error");
-		dun.notifyInformation(MessageKey.Service_not_Started, "info");
-		dun.notifyWarning(MessageKey.Service_not_Started, "warn");
-		// then
-		String errorMsg = translate.from(MessageKey.Service_not_Started, "error");
-		verify(errorNotification1).message(errorMsg);
-		verify(errorNotification2).message(errorMsg);
-		String warnMsg = translate.from(MessageKey.Service_not_Started, "warn");
-		verify(warningNotification1).message(warnMsg);
-		verify(warningNotification2).message(warnMsg);
-		String infoMsg = translate.from(MessageKey.Service_not_Started, "info");
-		verify(informationNotification1).message(infoMsg);
-		verify(informationNotification2).message(infoMsg);
-	}
+    @Test
+    public void message() {
 
-	@ModuleProvider
-	protected AbstractModule moduleProvider() {
-		return new AbstractModule() {
+        // given
 
-			@Override
-			protected void configure() {
-				MapBinder<I18NKey, ErrorNotification> errorNotificationBinder = MapBinder.newMapBinder(binder(),
-						I18NKey.class, ErrorNotification.class);
-				MapBinder<I18NKey, WarningNotification> warningNotificationBinder = MapBinder.newMapBinder(binder(),
-						I18NKey.class, WarningNotification.class);
-				MapBinder<I18NKey, InformationNotification> informationNotificationBinder = MapBinder.newMapBinder(
-						binder(), I18NKey.class, InformationNotification.class);
-				errorNotificationBinder.addBinding(LabelKey.Splash).toInstance(errorNotification1);
-				warningNotificationBinder.addBinding(LabelKey.Splash).toInstance(warningNotification1);
-				informationNotificationBinder.addBinding(LabelKey.Splash).toInstance(informationNotification1);
+        // when
+        dun.notifyError(MessageKey.Service_not_Started, "error");
+        dun.notifyInformation(MessageKey.Service_not_Started, "info");
+        dun.notifyWarning(MessageKey.Service_not_Started, "warn");
+        // then
+        String errorMsg = translate.from(MessageKey.Service_not_Started, "error");
+        verify(errorNotification1).message(errorMsg);
+        verify(errorNotification2).message(errorMsg);
+        String warnMsg = translate.from(MessageKey.Service_not_Started, "warn");
+        verify(warningNotification1).message(warnMsg);
+        verify(warningNotification2).message(warnMsg);
+        String infoMsg = translate.from(MessageKey.Service_not_Started, "info");
+        verify(informationNotification1).message(infoMsg);
+        verify(informationNotification2).message(infoMsg);
+    }
 
-				errorNotificationBinder.addBinding(LabelKey.Message_Bar).toInstance(errorNotification2);
-				warningNotificationBinder.addBinding(LabelKey.Message_Bar).toInstance(warningNotification2);
-				informationNotificationBinder.addBinding(LabelKey.Message_Bar).toInstance(informationNotification2);
-			}
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
 
-		};
-	}
+            @Override
+            protected void configure() {
+                MapBinder<I18NKey, ErrorNotification> errorNotificationBinder = MapBinder.newMapBinder(binder(),
+                        I18NKey.class, ErrorNotification.class);
+                MapBinder<I18NKey, WarningNotification> warningNotificationBinder = MapBinder.newMapBinder(binder(),
+                        I18NKey.class, WarningNotification.class);
+                MapBinder<I18NKey, InformationNotification> informationNotificationBinder = MapBinder.newMapBinder
+                        (binder(), I18NKey.class, InformationNotification.class);
+                errorNotificationBinder.addBinding(LabelKey.Splash)
+                                       .toInstance(errorNotification1);
+                warningNotificationBinder.addBinding(LabelKey.Splash)
+                                         .toInstance(warningNotification1);
+                informationNotificationBinder.addBinding(LabelKey.Splash)
+                                             .toInstance(informationNotification1);
+
+                errorNotificationBinder.addBinding(LabelKey.Message_Bar)
+                                       .toInstance(errorNotification2);
+                warningNotificationBinder.addBinding(LabelKey.Message_Bar)
+                                         .toInstance(warningNotification2);
+                informationNotificationBinder.addBinding(LabelKey.Message_Bar)
+                                             .toInstance(informationNotification2);
+                bind(Translate.class).to(MapTranslate.class);
+                bind(CurrentLocale.class).toInstance(currentLocale);
+
+            }
+
+        };
+    }
 
 }

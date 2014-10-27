@@ -1,11 +1,14 @@
 /*
  * Copyright (c) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+ * the specific language governing permissions and limitations under the License.
  */
 
 package uk.co.q3c.v7.base.guice.uiscope;
@@ -62,16 +65,16 @@ import static org.mockito.Mockito.when;
 
 public class UIScopeTest {
 
-	static ErrorHandler mockedErrorHandler = mock(ErrorHandler.class);
-	static ConverterFactory mockedConverterFactory = mock(ConverterFactory.class);
-	static Provider<UI> uiProvider;
+    static ErrorHandler mockedErrorHandler = mock(ErrorHandler.class);
+    static ConverterFactory mockedConverterFactory = mock(ConverterFactory.class);
+    static Provider<UI> uiProvider;
     static Map<String, Provider<UI>> uibinder;
     static Subject subject = mock(Subject.class);
     static VaadinService vaadinService;
     public int connectCount;
     protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
-	protected VaadinSession mockedSession = mock(VaadinSession.class);
-	UIKeyProvider uiKeyProvider = new UIKeyProvider();
+    protected VaadinSession mockedSession = mock(VaadinSession.class);
+    UIKeyProvider uiKeyProvider = new UIKeyProvider();
     UIProvider provider;
     private Injector injector;
     private ScopedUI ui;
@@ -83,7 +86,7 @@ public class UIScopeTest {
         VaadinService.setCurrent(vaadinService);
     }
 
-	@Test
+    @Test
     public void uiScope2() {
 
         // given
@@ -109,7 +112,7 @@ public class UIScopeTest {
         assertThat(to1).isNotEqualTo(to2);
     }
 
-	@SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation")
     protected ScopedUI createUI(final Class<? extends UI> clazz) {
         String baseUri = "http://example.com";
         when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
@@ -137,7 +140,7 @@ public class UIScopeTest {
         return ui;
     }
 
-	protected ScopedUIProvider getUIProvider() {
+    protected ScopedUIProvider getUIProvider() {
         return (ScopedUIProvider) provider;
     }
 
@@ -169,7 +172,7 @@ public class UIScopeTest {
 
     static class TestObject {
 
-	}
+    }
 
     static class MockSubjectProvider implements Provider<Subject> {
 
@@ -178,7 +181,7 @@ public class UIScopeTest {
             return subject;
         }
 
-	}
+    }
 
     static class TestModule extends AbstractModule {
 
@@ -238,6 +241,8 @@ public class UIScopeTest {
             bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             bind(UserSitemapSorters.class).to(DefaultUserSitemapSorters.class);
             bind(Translate.class).to(MapTranslate.class);
+            bind(Locale.class).annotatedWith(DefaultLocale.class)
+                              .toInstance(Locale.UK);
             registeredAnnotations.addBinding()
                                  .toInstance(I18N.class.getName());
             registeredValueAnnotations.addBinding()
@@ -257,6 +262,6 @@ public class UIScopeTest {
             return Integer.toString(connectCount);
         }
 
-	}
+    }
 
 }

@@ -15,12 +15,12 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import fixture.TestI18NModule;
 import fixture.testviews2.ViewA;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -30,28 +30,26 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
 public class UserSitemapNodeTest {
 
-	private UserSitemapNode userNode;
+    @Inject
+    Translate translate;
+    @Inject
+    CurrentLocale currentLocale;
+    private UserSitemapNode userNode;
 
-	@Inject
-	Translate translate;
-
-	@Inject
-	CurrentLocale currentLocale;
-
-	@Test
-	public void translate() {
-		// given
-		MasterSitemapNode masterNode = new MasterSitemapNode("a", ViewA.class, LabelKey.Home_Page);
-		userNode = new UserSitemapNode(masterNode);
-		currentLocale.setLocale(Locale.GERMANY);
-		Collator collator = Collator.getInstance(Locale.GERMANY);
-		// when
-		userNode.translate(translate, Locale.GERMANY, collator);
-		// then
-		assertThat(userNode.getLabel()).isEqualTo("Startseite");
-		assertThat(userNode.getCollationKey()).isEqualTo(collator.getCollationKey("Startseite"));
-	}
+    @Test
+    public void translate() {
+        // given
+        MasterSitemapNode masterNode = new MasterSitemapNode("a", ViewA.class, LabelKey.Home_Page);
+        userNode = new UserSitemapNode(masterNode);
+        currentLocale.setLocale(Locale.GERMANY);
+        Collator collator = Collator.getInstance(Locale.GERMANY);
+        // when
+        userNode.translate(translate, Locale.GERMANY, collator);
+        // then
+        assertThat(userNode.getLabel()).isEqualTo("Startseite");
+        assertThat(userNode.getCollationKey()).isEqualTo(collator.getCollationKey("Startseite"));
+    }
 }

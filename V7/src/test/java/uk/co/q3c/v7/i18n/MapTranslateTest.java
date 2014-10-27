@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,38 +28,38 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
 public class MapTranslateTest {
 
-	@Inject
-	Translate translate;
+    @Inject
+    Translate translate;
 
-	@Inject
-	CurrentLocale currentLocale;
+    @Inject
+    CurrentLocale currentLocale;
 
-	@Before
-	public void setup() {
-		currentLocale.removeAllListeners();
-		currentLocale.setLocale(Locale.UK);
-	}
+    @Before
+    public void setup() {
+        currentLocale.removeAllListeners();
+        currentLocale.setLocale(Locale.UK);
+    }
 
-	@Test
-	public void test() {
+    @Test
+    public void test() {
 
-		Locale germanSwitzerland = new Locale("de", "CH");
-		// when
-		assertThat(translate.from(LabelKey.Cancel)).isEqualTo("Cancel");
-		assertThat(translate.from(LabelKey.Ok)).isEqualTo("Ok");
-		// then
-		assertThat(translate.from(LabelKey.Cancel, Locale.GERMAN)).isEqualTo("Stornieren");
-		// Ok is not redefined in _de
-		assertThat(translate.from(LabelKey.Ok, Locale.GERMAN)).isEqualTo("Ok");
+        Locale germanSwitzerland = new Locale("de", "CH");
+        // when
+        assertThat(translate.from(LabelKey.Cancel)).isEqualTo("Cancel");
+        assertThat(translate.from(LabelKey.Ok)).isEqualTo("Ok");
+        // then
+        assertThat(translate.from(LabelKey.Cancel, Locale.GERMAN)).isEqualTo("Stornieren");
+        // OK is not redefined in _de
+        assertThat(translate.from(LabelKey.Ok, Locale.GERMAN)).isEqualTo("OK");
 
-		// this in inherited from Labels_de
-		assertThat(translate.from(LabelKey.Cancel, germanSwitzerland)).isEqualTo("Stornieren");
-		// this is inherited from Labels (2 levels of inheritance)
-		assertThat(translate.from(LabelKey.Ok, germanSwitzerland)).isEqualTo("Ok");
-	}
+        // this in inherited from Labels_de
+        assertThat(translate.from(LabelKey.Cancel, germanSwitzerland)).isEqualTo("Stornieren");
+        // this is inherited from Labels (2 levels of inheritance)
+        assertThat(translate.from(LabelKey.Ok, germanSwitzerland)).isEqualTo("OK");
+    }
 
     @Test
     public void patternContainsI18NKey() {
@@ -81,13 +82,13 @@ public class MapTranslateTest {
 
     @ModuleProvider
     protected AbstractModule moduleProvider() {
-		return new AbstractModule() {
+        return new AbstractModule() {
 
-			@Override
-			protected void configure() {
-				bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
-			}
+            @Override
+            protected void configure() {
+                bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
+            }
 
-		};
-	}
+        };
+    }
 }

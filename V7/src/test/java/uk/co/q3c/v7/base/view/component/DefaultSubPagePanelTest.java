@@ -17,12 +17,12 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import fixture.MockCurrentLocale;
 import fixture.ReferenceUserSitemap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
@@ -34,8 +34,8 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
-import uk.co.q3c.v7.i18n.DefaultCurrentLocale;
-import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.MapTranslate;
 import uk.co.q3c.v7.i18n.Translate;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({I18NModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({})
 public class DefaultSubPagePanelTest {
 
     DefaultSubPagePanel panel;
@@ -57,8 +57,7 @@ public class DefaultSubPagePanelTest {
     @Mock
     V7Navigator navigator;
 
-    @Inject
-    DefaultCurrentLocale currentLocale;
+    CurrentLocale currentLocale = new MockCurrentLocale();
 
     @Mock
     Translate translate;
@@ -295,6 +294,8 @@ public class DefaultSubPagePanelTest {
                 // bind(UserSitemap.class).to(DefaultUserSitemap.class);
                 bind(UserOption.class).to(DefaultUserOption.class);
                 bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+                bind(Translate.class).to(MapTranslate.class);
+                bind(CurrentLocale.class).toInstance(currentLocale);
             }
 
         };

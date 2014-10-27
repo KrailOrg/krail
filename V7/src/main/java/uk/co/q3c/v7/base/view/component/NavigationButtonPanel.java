@@ -36,23 +36,23 @@ import java.util.List;
 import java.util.Locale;
 
 public abstract class NavigationButtonPanel extends HorizontalLayout implements V7ViewChangeListener,
-		LocaleChangeListener, Button.ClickListener {
-	private static Logger log = LoggerFactory.getLogger(NavigationButtonPanel.class);
-	private final List<NavigationButton> buttons = new ArrayList<>();
-	private final LinkedList<NodeFilter<UserSitemapNode>> sourceFilters = new LinkedList<>();
-	private final V7Navigator navigator;
-	private final UserSitemap sitemap;
+        LocaleChangeListener, Button.ClickListener {
+    private static Logger log = LoggerFactory.getLogger(NavigationButtonPanel.class);
+    private final List<NavigationButton> buttons = new ArrayList<>();
+    private final LinkedList<NodeFilter<UserSitemapNode>> sourceFilters = new LinkedList<>();
+    private final V7Navigator navigator;
+    private final UserSitemap sitemap;
 
-	protected boolean rebuildRequired = true;
+    protected boolean rebuildRequired = true;
 
-	@Inject
-	protected NavigationButtonPanel(V7Navigator navigator, UserSitemap sitemap, CurrentLocale currentLocale) {
-		this.navigator = navigator;
-		navigator.addViewChangeListener(this);
-		this.sitemap = sitemap;
-		this.setSizeUndefined();
-		this.setSpacing(true);
-		currentLocale.addListener(this);
+    @Inject
+    protected NavigationButtonPanel(V7Navigator navigator, UserSitemap sitemap, CurrentLocale currentLocale) {
+        this.navigator = navigator;
+        navigator.addViewChangeListener(this);
+        this.sitemap = sitemap;
+        this.setSizeUndefined();
+        this.setSpacing(true);
+        currentLocale.addListener(this);
         String id = ID.getId(Optional.absent(), this);
         setId(id);
     }
@@ -68,55 +68,56 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
     ;
 
     /**
-	 * Displays buttons to represent the supplied nodes.
-	 * 
-	 * @param nodeList
-	 *            contains the list of buttons to display. It is assumed that these are in the right order
-	 */
-	protected void organiseButtons(List<UserSitemapNode> nodeList) {
-		log.debug("{} nodes to display before filtering", nodeList.size());
-		List<UserSitemapNode> filteredList = filteredList(nodeList);
-		log.debug("{} nodes to display after filtering", filteredList.size());
-		int maxIndex = (filteredList.size() > buttons.size() ? filteredList.size() : buttons.size());
-		for (int i = 0; i < maxIndex; i++) {
-			// nothing left in chain
-			if (i + 1 > filteredList.size()) {
-				// but buttons still exist
-				if (i < buttons.size()) {
-					buttons.get(i).setVisible(false);
-				}
-			} else {
-				// chain continues
-				NavigationButton button = null;
-				// steps still exist, re-use
-				if (i < buttons.size()) {
-					button = buttons.get(i);
-				} else {
-					button = createButton();
-				}
-				setupButton(button, filteredList.get(i));
-			}
+     * Displays buttons to represent the supplied nodes.
+     *
+     * @param nodeList
+     *         contains the list of buttons to display. It is assumed that these are in the right order
+     */
+    protected void organiseButtons(List<UserSitemapNode> nodeList) {
+        log.debug("{} nodes to display before filtering", nodeList.size());
+        List<UserSitemapNode> filteredList = filteredList(nodeList);
+        log.debug("{} nodes to display after filtering", filteredList.size());
+        int maxIndex = (filteredList.size() > buttons.size() ? filteredList.size() : buttons.size());
+        for (int i = 0; i < maxIndex; i++) {
+            // nothing left in chain
+            if (i + 1 > filteredList.size()) {
+                // but buttons still exist
+                if (i < buttons.size()) {
+                    buttons.get(i)
+                           .setVisible(false);
+                }
+            } else {
+                // chain continues
+                NavigationButton button = null;
+                // steps still exist, re-use
+                if (i < buttons.size()) {
+                    button = buttons.get(i);
+                } else {
+                    button = createButton();
+                }
+                setupButton(button, filteredList.get(i));
+            }
 
-		}
-	}
+        }
+    }
 
-	protected NavigationButton createButton() {
-		NavigationButton button = new NavigationButton();
-		button.addStyleName(BaseTheme.BUTTON_LINK);
-		button.addClickListener(this);
-		buttons.add(button);
+    protected NavigationButton createButton() {
+        NavigationButton button = new NavigationButton();
+        button.addStyleName(BaseTheme.BUTTON_LINK);
+        button.addClickListener(this);
+        buttons.add(button);
         String id = ID.getId(Optional.of(buttons.size() - 1), this, button);
         button.setId(id);
-		this.addComponent(button);
-		return button;
-	}
+        this.addComponent(button);
+        return button;
+    }
 
-	private void setupButton(NavigationButton button, UserSitemapNode sitemapNode) {
+    private void setupButton(NavigationButton button, UserSitemapNode sitemapNode) {
 
-		button.setNode(sitemapNode);
-		button.setVisible(true);
+        button.setNode(sitemapNode);
+        button.setVisible(true);
 
-	}
+    }
 
     protected List<UserSitemapNode> filteredList(List<UserSitemapNode> list) {
         List<UserSitemapNode> newList = new ArrayList<>();
@@ -136,21 +137,22 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
         return newList;
     }
 
-	@Override
+    @Override
     public void localeChanged(Locale toLocale) {
+        log.debug("responding to locale change to {}", toLocale);
         for (NavigationButton button : buttons) {
             button.setCaption(button.getNode()
                                     .getLabel());
         }
     }
 
-	@Override
+    @Override
     public boolean beforeViewChange(V7ViewChangeEvent event) {
         // do nothing
         return true;
     }
 
-	@Override
+    @Override
     public void afterViewChange(V7ViewChangeEvent event) {
         log.debug("Responding to view change");
         rebuildRequired = true;
@@ -164,7 +166,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 
     }
 
-	public List<NavigationButton> getButtons() {
+    public List<NavigationButton> getButtons() {
         return buttons;
     }
 
@@ -183,16 +185,16 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
         return sitemap;
     }
 
-	public void addFilter(NodeFilter<UserSitemapNode> filter) {
-		sourceFilters.add(filter);
-	}
+    public void addFilter(NodeFilter<UserSitemapNode> filter) {
+        sourceFilters.add(filter);
+    }
 
-	public void removeFilter(NodeFilter<UserSitemapNode> filter) {
-		sourceFilters.remove(filter);
-	}
+    public void removeFilter(NodeFilter<UserSitemapNode> filter) {
+        sourceFilters.remove(filter);
+    }
 
-	public boolean isRebuildRequired() {
-		return rebuildRequired;
-	}
+    public boolean isRebuildRequired() {
+        return rebuildRequired;
+    }
 
 }

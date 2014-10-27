@@ -1,11 +1,14 @@
 /*
  * Copyright (c) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+ * the specific language governing permissions and limitations under the License.
  */
 
 package uk.co.q3c.v7.base.navigate;
@@ -20,6 +23,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.Page;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
+import fixture.MockCurrentLocale;
 import fixture.ReferenceUserSitemap;
 import fixture.testviews2.TestLoginView;
 import fixture.testviews2.ViewA1;
@@ -43,7 +47,9 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.base.view.*;
-import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.MapTranslate;
+import uk.co.q3c.v7.i18n.Translate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +59,14 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({I18NModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({VaadinSessionScopeModule.class})
 public class DefaultV7NavigatorTest {
 
     @Mock
     UserSitemapBuilder builder;
     @Inject
     TestViewChangeListener changeListener;
+    CurrentLocale currentLocale = new MockCurrentLocale();
     @Mock
     private Page browserPage;
     @Mock
@@ -706,6 +713,8 @@ public class DefaultV7NavigatorTest {
                 bind(UserSitemap.class).to(DefaultUserSitemap.class);
                 bind(UserOption.class).to(DefaultUserOption.class);
                 bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+                bind(CurrentLocale.class).toInstance(currentLocale);
+                bind(Translate.class).to(MapTranslate.class);
             }
 
         };

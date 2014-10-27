@@ -12,60 +12,71 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.server.WebBrowser;
+import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.co.q3c.v7.base.ui.BrowserProvider;
 
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
 public class DescriptionKeyTest {
 
-	@Inject
-	CurrentLocale currentLocale;
 
-	@Inject
-	Translate translate;
+    @Mock
+    CurrentLocale currentLocale;
+    Translate translate;
+    @Mock
+    private WebBrowser browser;
+    @Mock
+    private BrowserProvider browserProvider;
 
-	@Before
-	public void setup() {
-		currentLocale.removeAllListeners();
-		currentLocale.setLocale(Locale.UK);
-	}
+    @Before
+    public void setup() {
+        translate = new MapTranslate(currentLocale);
+    }
 
-	@Test
-	public void locale_en() {
-		// given
-		// when
-		currentLocale.setLocale(Locale.UK);
-		// then
-		assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("the last name or family name");
 
-	}
+    @Test
+    public void locale_en() {
+        // given
+        when(currentLocale.getLocale()).thenReturn(Locale.UK);
 
-	@Test
-	public void locale_de() {
-		// given
-		// when
-		currentLocale.setLocale(Locale.GERMANY);
-		// then
-		assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("die Nachname oder der Familienname");
+        // when
 
-	}
+        // then
+        assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("the last name or family name");
 
-	@Test
-	public void locale_it() {
-		// given
-		// when
-		currentLocale.setLocale(Locale.ITALY);
-		// then
-		assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("il cognome o il nome di famiglia");
-	}
+    }
+
+    @Test
+    public void locale_de() {
+        // given
+        when(currentLocale.getLocale()).thenReturn(Locale.GERMANY);
+        // when
+
+        // then
+        assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("Der Nachname oder der Familienname");
+
+    }
+
+    @Test
+    public void locale_it() {
+        // given
+        when(currentLocale.getLocale()).thenReturn(Locale.ITALY);
+        // when
+
+        // then
+        assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("il cognome o il nome di famiglia");
+    }
 }

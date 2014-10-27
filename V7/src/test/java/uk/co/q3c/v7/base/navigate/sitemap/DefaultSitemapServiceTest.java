@@ -19,6 +19,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinService;
 import fixture.TestConfigurationException;
+import fixture.TestI18NModule;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.io.FileUtils;
@@ -50,7 +51,6 @@ import uk.co.q3c.v7.base.view.PublicHomeView;
 import uk.co.q3c.v7.base.view.ViewModule;
 import uk.co.q3c.v7.base.view.component.StandardComponentModule;
 import uk.co.q3c.v7.i18n.DescriptionKey;
-import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.LabelKey;
 import uk.co.q3c.v7.testutil.TestResource;
 
@@ -71,7 +71,10 @@ import static org.mockito.Mockito.when;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class, StandardComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class,
+        ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class,
+        ApplicationConfigurationModule.class, StandardShiroModule.class, StandardComponentModule.class,
+        StandardPagesModule.class, VaadinSessionScopeModule.class})
 public class DefaultSitemapServiceTest {
 
     static VaadinService vaadinService;
@@ -120,9 +123,32 @@ public class DefaultSitemapServiceTest {
         assertThat(service.getReport()).isNotNull();
         assertThat(service.isStarted()).isTrue();
         assertThat(sitemap.getNodeCount()).isEqualTo(STANDARD_NODE_COUNT + FILE_NODE_COUNT + DIRECT_NODE_COUNT);
-        assertThat(service.getSourceTypes()).containsOnly(SitemapSourceType.FILE, SitemapSourceType.DIRECT, SitemapSourceType.ANNOTATION);
+        assertThat(service.getSourceTypes()).containsOnly(SitemapSourceType.FILE, SitemapSourceType.DIRECT,
+                SitemapSourceType.ANNOTATION);
         assertThat(sitemap.getReport()).isNotEmpty();
         System.out.println(sitemap.getReport());
+    }
+
+    /**
+     * Copies a 'good' version of sitemap.properties to the
+     */
+    private void copySitemapPropertiesToTemp() {
+
+        File source = new File(TestResource.testJavaRootDir("V7"), "uk/co/q3c/v7/base/navigate/sitemap_good" +
+                ".properties");
+
+        if (!source.exists()) {
+            throw new TestConfigurationException("Source file missing");
+        }
+        File destination = new File(ResourceUtils.applicationBaseDirectory(), "sitemap.properties");
+        if (destination.exists()) {
+            destination.delete();
+        }
+        try {
+            FileUtils.copyFile(source, destination);
+        } catch (IOException e) {
+            throw new TestConfigurationException("Unable to copy sitemap.properties", e);
+        }
     }
 
     @Test
@@ -137,7 +163,8 @@ public class DefaultSitemapServiceTest {
         assertThat(service.getNameKey()).isEqualTo(LabelKey.Sitemap_Service);
         assertThat(service.getDescriptionKey()).isEqualTo(DescriptionKey.Sitemap_Service);
         assertThat(service.getName()).isEqualTo("Sitemap Service");
-        assertThat(service.getDescription()).isEqualTo("This service creates the Sitemap using options from the application configuration");
+        assertThat(service.getDescription()).isEqualTo("This service creates the Sitemap using options from the " +
+                "application configuration");
     }
 
     public void sourcesPropertyMissing() throws Exception {
@@ -218,7 +245,8 @@ public class DefaultSitemapServiceTest {
 
         // then
 
-        assertThat(service.absolutePathFor("wiggly.ini")).isEqualTo(new File(ResourceUtils.applicationBaseDirectory(), "wiggly.ini"));
+        assertThat(service.absolutePathFor("wiggly.ini")).isEqualTo(new File(ResourceUtils.applicationBaseDirectory()
+                , "wiggly.ini"));
         assertThat(service.absolutePathFor("/wiggly.ini")).isEqualTo(new File("/wiggly.ini"));
     }
 
@@ -253,27 +281,6 @@ public class DefaultSitemapServiceTest {
             }
 
         };
-    }
-
-    /**
-     * Copies a 'good' version of sitemap.properties to the
-     */
-    private void copySitemapPropertiesToTemp() {
-
-        File source = new File(TestResource.testJavaRootDir("V7"), "uk/co/q3c/v7/base/navigate/sitemap_good.properties");
-
-        if (!source.exists()) {
-            throw new TestConfigurationException("Source file missing");
-        }
-        File destination = new File(ResourceUtils.applicationBaseDirectory(), "sitemap.properties");
-        if (destination.exists()) {
-            destination.delete();
-        }
-        try {
-            FileUtils.copyFile(source, destination);
-        } catch (IOException e) {
-            throw new TestConfigurationException("Unable to copy sitemap.properties", e);
-        }
     }
 
     public static class TestDirectSitemapModule extends DirectSitemapModule {

@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
+import org.mockito.Mock;
 import uk.co.q3c.v7.base.services.Service.Status;
 import uk.co.q3c.v7.base.services.ServiceException;
 import uk.co.q3c.v7.i18n.*;
@@ -30,6 +30,7 @@ import uk.co.q3c.v7.testutil.TestResource;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -38,17 +39,24 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({I18NModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({})
 public class DefaultApplicationConfigurationServiceTest {
 
     static File iniDir;
     static VaadinService vaadinService;
     Map<Integer, IniFileConfig> iniFiles;
-    @Inject
+    @Mock
     Translate translate;
     DefaultApplicationConfigurationService service;
     @Inject
     ApplicationConfiguration configuration;
+
+
+    @Mock
+    CurrentLocale currentLocale;
+
+    @Mock
+    I18NProcessor i18NProcessor;
 
     @BeforeClass
     public static void setupClass() {
@@ -63,6 +71,7 @@ public class DefaultApplicationConfigurationServiceTest {
         iniFiles = new HashMap<>();
         configuration.clear();
         service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles);
+        when(currentLocale.getLocale()).thenReturn(Locale.UK);
     }
 
     @Test
@@ -76,6 +85,12 @@ public class DefaultApplicationConfigurationServiceTest {
         assertThat(configuration.getBoolean("test")).isTrue();
         assertThat(configuration.getString("dbUser")).isEqualTo("monty");
 
+    }
+
+    protected void addConfig(String filename, int index, boolean optional) {
+        checkNotNull(filename);
+        IniFileConfig ifc = new IniFileConfig(filename, optional);
+        iniFiles.put(index, ifc);
     }
 
     @Test
@@ -137,7 +152,10 @@ public class DefaultApplicationConfigurationServiceTest {
     public void i18N() {
 
         // given
-
+        when(translate.from(LabelKey.Application_Configuration_Service)).thenReturn("Application Configuration " +
+                "Service");
+        when(translate.from(DescriptionKey.Application_Configuration_Service)).thenReturn("This service loads the " +
+                "application configuration from V7.ini");
         // when
 
         // then
@@ -154,15 +172,11 @@ public class DefaultApplicationConfigurationServiceTest {
 
             @Override
             protected void configure() {
-                bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
+                bind(Translate.class).to(MapTranslate.class);
+                bind(CurrentLocale.class).toInstance(currentLocale);
+                bind(I18NProcessor.class).toInstance(i18NProcessor);
             }
 
         };
-    }
-
-    protected void addConfig(String filename, int index, boolean optional) {
-        checkNotNull(filename);
-        IniFileConfig ifc = new IniFileConfig(filename, optional);
-        iniFiles.put(index, ifc);
     }
 }

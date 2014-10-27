@@ -18,6 +18,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.ui.Component;
+import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,10 @@ import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.base.view.V7View;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
-import uk.co.q3c.v7.i18n.*;
+import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
+import uk.co.q3c.v7.i18n.DescriptionKey;
+import uk.co.q3c.v7.i18n.I18NProcessor;
+import uk.co.q3c.v7.i18n.TestLabelKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +46,8 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, I18NModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, TestI18NModule.class,
+        VaadinSessionScopeModule.class})
 public class DefaultAnnotationSitemapLoaderTest {
 
     @Inject

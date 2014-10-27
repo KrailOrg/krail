@@ -19,6 +19,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
+import fixture.MockCurrentLocale;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -28,13 +29,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.co.q3c.v7.base.guice.uiscope.UIKey;
 import uk.co.q3c.v7.base.guice.uiscope.UIScopeModule;
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.component.UserStatusPanel;
-import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.i18n.CurrentLocale;
+import uk.co.q3c.v7.i18n.MapTranslate;
+import uk.co.q3c.v7.i18n.Translate;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -42,69 +44,74 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ UIScopeModule.class, I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({UIScopeModule.class})
 public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 
-	@Mock
-	UserStatusPanel monitor1;
+    @Mock
+    UserStatusPanel monitor1;
 
-	@Mock
-	UserStatusPanel monitor2;
+    @Mock
+    UserStatusPanel monitor2;
 
-	@Mock
-	BasicUI ui;
+    CurrentLocale currentLocale = new MockCurrentLocale();
 
-	@Mock
-	VaadinSessionProvider vsp;
+    @Mock
+    BasicUI ui;
 
-	@Mock
-	VaadinSession session;
+    @Mock
+    VaadinSessionProvider vsp;
 
-	@Override
-	@Before
-	public void setupShiro() {
+    @Mock
+    VaadinSession session;
 
-		super.setupShiro();
+    @Override
+    @Before
+    public void setupShiro() {
 
-	}
+        super.setupShiro();
 
-	@Test
-	public void login() {
+    }
 
-		// given
-		when(vsp.get()).thenReturn(session);
-		V7SecurityManager securityManager = (V7SecurityManager) SecurityUtils.getSecurityManager();
+    @Test
+    public void login() {
 
-		securityManager.setSessionProvider(vsp);
-		UsernamePasswordToken token = new UsernamePasswordToken("xxx", "password");
-		// when
-		getSubject().login(token);
-		// then stored in session
-		verify(session).setAttribute(eq(Subject.class), any(Subject.class));
+        // given
+        when(vsp.get()).thenReturn(session);
+        V7SecurityManager securityManager = (V7SecurityManager) SecurityUtils.getSecurityManager();
 
-	}
+        securityManager.setSessionProvider(vsp);
+        UsernamePasswordToken token = new UsernamePasswordToken("xxx", "password");
+        // when
+        getSubject().login(token);
+        // then stored in session
+        verify(session).setAttribute(eq(Subject.class), any(Subject.class));
 
-	protected ScopedUI createUI() {
-		UIKey uiKey = new UIKey(3);
-		CurrentInstance.set(UI.class, null);
-		CurrentInstance.set(UIKey.class, uiKey);
-		CurrentInstance.set(UI.class, ui);
-		when(ui.getInstanceKey()).thenReturn(uiKey);
+    }
 
-		return ui;
-	}
+    @ModuleProvider
+    AbstractModule moduleProvider() {
+        // creates the UIScope before injections
+        createUI();
+        return new AbstractModule() {
 
-	@ModuleProvider
-	AbstractModule moduleProvider() {
-		// creates the UIScope before injections
-		createUI();
-		return new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(Translate.class).to(MapTranslate.class);
+                bind(CurrentLocale.class).toInstance(currentLocale);
 
-			@Override
-			protected void configure() {
-				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-			}
-		};
-	}
+            }
+        };
+    }
+
+    protected ScopedUI createUI() {
+        UIKey uiKey = new UIKey(3);
+        CurrentInstance.set(UI.class, null);
+        CurrentInstance.set(UIKey.class, uiKey);
+        CurrentInstance.set(UI.class, ui);
+        when(ui.getInstanceKey()).thenReturn(uiKey);
+
+        return ui;
+    }
 
 }

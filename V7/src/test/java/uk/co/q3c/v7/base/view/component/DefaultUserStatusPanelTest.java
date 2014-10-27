@@ -12,19 +12,18 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Locale;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import com.vaadin.ui.Button;
+import fixture.MockCurrentLocale;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
 import uk.co.q3c.v7.base.navigate.sitemap.StandardPageKey;
 import uk.co.q3c.v7.base.shiro.DefaultSubjectIdentifier;
@@ -32,124 +31,139 @@ import uk.co.q3c.v7.base.shiro.SubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.i18n.MapTranslate;
 import uk.co.q3c.v7.i18n.Translate;
 
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.ui.Button;
+import java.util.Locale;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({})
 public class DefaultUserStatusPanelTest {
 
-	DefaultUserStatusPanel panel;
+    DefaultUserStatusPanel panel;
 
-	@Mock
-	Subject subject;
+    @Mock
+    Subject subject;
 
-	@Mock
-	V7Navigator navigator;
+    @Mock
+    V7Navigator navigator;
 
-	Button loginoutBtn;
+    Button loginoutBtn;
 
-	@Mock
-	SubjectProvider subjectProvider;
+    @Mock
+    SubjectProvider subjectProvider;
 
-	@Mock
-	UserStatus userStatus;
+    @Mock
+    UserStatus userStatus;
 
-	SubjectIdentifier subjectIdentifier;
+    SubjectIdentifier subjectIdentifier;
 
-	@Inject
-	Translate translate;
+    @Inject
+    Translate translate;
 
-	@Inject
-	CurrentLocale currentLocale;
 
-	@Before
-	public void setup() {
-		currentLocale.setLocale(Locale.UK);
-		when(subjectProvider.get()).thenReturn(subject);
-		subjectIdentifier = new DefaultSubjectIdentifier(subjectProvider, translate);
+    CurrentLocale currentLocale = new MockCurrentLocale();
 
-		panel = new DefaultUserStatusPanel(navigator, subjectProvider, translate, subjectIdentifier, userStatus,
-				currentLocale);
+    @Before
+    public void setup() {
+        currentLocale.setLocale(Locale.UK);
+        when(subjectProvider.get()).thenReturn(subject);
+        subjectIdentifier = new DefaultSubjectIdentifier(subjectProvider, translate);
 
-		loginoutBtn = panel.getLogin_logout_Button();
-	}
+        panel = new DefaultUserStatusPanel(navigator, subjectProvider, translate, subjectIdentifier, userStatus,
+                currentLocale);
 
-	@Test
-	public void unknown() {
+        loginoutBtn = panel.getLogin_logout_Button();
+    }
 
-		// given
-		when(subject.isRemembered()).thenReturn(false);
-		when(subject.isAuthenticated()).thenReturn(false);
-		when(subject.getPrincipal()).thenReturn(null);
+    @Test
+    public void unknown() {
 
-		// when
-		panel.userStatusChanged();
-		// then
-		assertThat(panel.getActionLabel()).isEqualTo("log in");
-		assertThat(panel.getUserId()).isEqualTo("Guest");
+        // given
+        when(subject.isRemembered()).thenReturn(false);
+        when(subject.isAuthenticated()).thenReturn(false);
+        when(subject.getPrincipal()).thenReturn(null);
 
-		// when
-		loginoutBtn.click();
-		// then
-		verify(navigator).navigateTo(StandardPageKey.Log_In);
-	}
+        // when
+        panel.userStatusChanged();
+        // then
+        assertThat(panel.getActionLabel()).isEqualTo("log in");
+        assertThat(panel.getUserId()).isEqualTo("Guest");
 
-	@Test
-	public void localeChange() {
+        // when
+        loginoutBtn.click();
+        // then
+        verify(navigator).navigateTo(StandardPageKey.Log_In);
+    }
 
-		// given
-		when(subject.isRemembered()).thenReturn(false);
-		when(subject.isAuthenticated()).thenReturn(false);
-		when(subject.getPrincipal()).thenReturn(null);
-		panel.userStatusChanged();
+    @Test
+    public void localeChange() {
 
-		// when
-		currentLocale.setLocale(Locale.GERMANY);
-		// then
-		assertThat(panel.getActionLabel()).isEqualTo("einloggen");
-		assertThat(panel.getUserId()).isEqualTo("Gast");
-	}
+        // given
+        when(subject.isRemembered()).thenReturn(false);
+        when(subject.isAuthenticated()).thenReturn(false);
+        when(subject.getPrincipal()).thenReturn(null);
+        panel.userStatusChanged();
 
-	@Test
-	public void remembered() {
+        // when
+        currentLocale.setLocale(Locale.GERMANY);
+        // then
+        assertThat(panel.getActionLabel()).isEqualTo("einloggen");
+        assertThat(panel.getUserId()).isEqualTo("Gast");
+    }
 
-		// given
-		when(subject.isRemembered()).thenReturn(true);
-		when(subject.isAuthenticated()).thenReturn(false);
-		when(subject.getPrincipal()).thenReturn("userId");
-		// when
-		panel.userStatusChanged();
-		// then
-		assertThat(panel.getActionLabel()).isEqualTo("log in");
-		assertThat(panel.getUserId()).isEqualTo("userId?");
-		// when
-		loginoutBtn.click();
-		// then
-		verify(navigator).navigateTo(StandardPageKey.Log_In);
-	}
+    @Test
+    public void remembered() {
 
-	@Test
-	public void authenticated() {
+        // given
+        when(subject.isRemembered()).thenReturn(true);
+        when(subject.isAuthenticated()).thenReturn(false);
+        when(subject.getPrincipal()).thenReturn("userId");
+        // when
+        panel.userStatusChanged();
+        // then
+        assertThat(panel.getActionLabel()).isEqualTo("log in");
+        assertThat(panel.getUserId()).isEqualTo("userId?");
+        // when
+        loginoutBtn.click();
+        // then
+        verify(navigator).navigateTo(StandardPageKey.Log_In);
+    }
 
-		// given
-		when(subject.isRemembered()).thenReturn(false);
-		when(subject.isAuthenticated()).thenReturn(true);
-		when(subject.getPrincipal()).thenReturn("userId");
-		// when
-		panel.userStatusChanged();
-		// then
-		assertThat(panel.getActionLabel()).isEqualTo("log out");
-		assertThat(panel.getUserId()).isEqualTo("userId");
-		// when
-		loginoutBtn.click();
-		// then
-		verify(navigator).navigateTo(StandardPageKey.Log_Out);
-	}
+    @Test
+    public void authenticated() {
+
+        // given
+        when(subject.isRemembered()).thenReturn(false);
+        when(subject.isAuthenticated()).thenReturn(true);
+        when(subject.getPrincipal()).thenReturn("userId");
+        // when
+        panel.userStatusChanged();
+        // then
+        assertThat(panel.getActionLabel()).isEqualTo("log out");
+        assertThat(panel.getUserId()).isEqualTo("userId");
+        // when
+        loginoutBtn.click();
+        // then
+        verify(navigator).navigateTo(StandardPageKey.Log_Out);
+    }
+
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
+
+            @Override
+            protected void configure() {
+                bind(Translate.class).to(MapTranslate.class);
+                bind(CurrentLocale.class).toInstance(currentLocale);
+
+            }
+
+        };
+    }
 
 }

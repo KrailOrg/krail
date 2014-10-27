@@ -14,42 +14,42 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.view.PublicHomeView;
-import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
 public class MasterSitemapNodeTest {
 
-	@Test
-	public void setLabelKey() {
+    @Test
+    public void setLabelKey() {
 
-		// given
-		MasterSitemapNode node = new MasterSitemapNode();
-		// when
-		node.setLabelKey(TestLabelKey.Yes);
-		// then
-		assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
-	}
+        // given
+        MasterSitemapNode node = new MasterSitemapNode();
+        // when
+        node.setLabelKey(TestLabelKey.Yes);
+        // then
+        assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
+    }
 
-	@Test
-	public void constructor() {
+    @Test
+    public void constructor() {
 
-		// given
+        // given
 
-		// when
-		SitemapNode node = new MasterSitemapNode("one", PublicHomeView.class, TestLabelKey.Yes);
-		// then
-		assertThat(node.getUriSegment()).isEqualTo("one");
-		assertThat(node.getViewClass()).isEqualTo(PublicHomeView.class);
-		assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
+        // when
+        SitemapNode node = new MasterSitemapNode("one", PublicHomeView.class, TestLabelKey.Yes);
+        // then
+        assertThat(node.getUriSegment()).isEqualTo("one");
+        assertThat(node.getViewClass()).isEqualTo(PublicHomeView.class);
+        assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
 
-	}
+    }
 
 }

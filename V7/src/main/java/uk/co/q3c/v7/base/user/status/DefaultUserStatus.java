@@ -12,52 +12,59 @@
  */
 package uk.co.q3c.v7.base.user.status;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 import uk.co.q3c.v7.base.navigate.V7Navigator;
+import uk.co.q3c.v7.base.shiro.SubjectProvider;
 
-import com.google.inject.Inject;
+import java.util.LinkedList;
+import java.util.List;
 
 @VaadinSessionScoped
 public class DefaultUserStatus implements UserStatus {
 
-	private static Logger log = LoggerFactory.getLogger(DefaultUserStatus.class);
-	private final List<UserStatusListener> listeners;
-	private final V7Navigator navigator;
+    private static Logger log = LoggerFactory.getLogger(DefaultUserStatus.class);
+    private final List<UserStatusListener> listeners;
+    private final V7Navigator navigator;
+    private SubjectProvider subjectProvider;
 
-	@Inject
-	protected DefaultUserStatus(V7Navigator navigator) {
-		super();
-		this.navigator = navigator;
-		listeners = new LinkedList<>();
-	}
+    @Inject
+    protected DefaultUserStatus(V7Navigator navigator, SubjectProvider subjectProvider) {
+        super();
+        this.navigator = navigator;
+        this.subjectProvider = subjectProvider;
+        listeners = new LinkedList<>();
+    }
 
-	@Override
-	public void addListener(UserStatusListener listener) {
-		listeners.add(listener);
-	}
+    @Override
+    public void addListener(UserStatusListener listener) {
+        listeners.add(listener);
+    }
 
-	@Override
-	public void removeListener(UserStatusListener listener) {
-		listeners.remove(listener);
-	}
+    @Override
+    public void removeListener(UserStatusListener listener) {
+        listeners.remove(listener);
+    }
 
-	protected void fireListeners() {
-		log.debug("firing user status change listeners");
-		for (UserStatusListener listener : listeners) {
-			listener.userStatusChanged();
-		}
-	}
+    @Override
+    public void statusChanged() {
+        fireListeners();
+        log.debug("user status change listeners have been fired, now invoke the navigator");
+        navigator.userStatusChanged();
+    }
 
-	@Override
-	public void statusChanged() {
-		fireListeners();
-		log.debug("user status change listeners have been fired, now invoke the navigator");
-		navigator.userStatusChanged();
-	}
+    protected void fireListeners() {
+        log.debug("firing user status change listeners");
+        for (UserStatusListener listener : listeners) {
+            listener.userStatusChanged();
+        }
+    }
+
+    @Override
+    public boolean isAuthenticated() {
+        return subjectProvider.get()
+                              .isAuthenticated();
+    }
 }

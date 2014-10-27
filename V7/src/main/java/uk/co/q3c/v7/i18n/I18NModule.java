@@ -14,6 +14,7 @@ package uk.co.q3c.v7.i18n;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
+import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -39,20 +40,26 @@ public class I18NModule extends AbstractModule {
 
         bindProcessor();
         bindCurrentLocale();
+        bindDefaultLocale();
         bindTranslate();
 
         define();
     }
+
 
     protected void bindTranslate() {
         bind(Translate.class).to(MapTranslate.class);
     }
 
     /**
-     * Override this method to provide your own implementation of {@link CurrentLocale}
+     * Override this method to provide your own implementation of {@link CurrentLocale} or to change the scope used.
+     * Choose
+     * between {@link UIScoped} or {@link VaadinSessionScoped}, depending on whether you want users to set the
+     * language for each browser tab or each browser instance, respectively.
      */
     protected void bindCurrentLocale() {
-        bind(CurrentLocale.class).to(DefaultCurrentLocale.class);
+        bind(CurrentLocale.class).to(DefaultCurrentLocale.class)
+                                 .in(VaadinSessionScoped.class);
     }
 
     /**
@@ -62,7 +69,7 @@ public class I18NModule extends AbstractModule {
      * {@link #registerValueAnnotation(Class)} will be merged by Guice}.
      * <p/>
      * Here you should also define the locales your application supports, with calls to
-     * {@link #addSupportedLocale(Locale)}
+     * {@link #addSupportedLocale(Locale)}.  Make sure this includes the {@link DefaultLocale}
      */
     protected void define() {
         addSupportedLocale(Locale.UK);
@@ -90,6 +97,15 @@ public class I18NModule extends AbstractModule {
                                   .toInstance(i18Nclass.getName());
     }
 
+    /**
+     * This locale is used when all else fails - that is, when the neither the browser locale or user option is valid
+     * {@link DefaultCurrentLocale} for more detail. This MUST ALSO be in the {@link #supportedLocales}
+     */
+    protected void bindDefaultLocale() {
+        bind(Locale.class).annotatedWith(DefaultLocale.class)
+                          .toInstance(Locale.UK);
+    }
+
     protected void addSupportedLocale(List<String> locales) {
         for (String locale : locales) {
             addSupportedLocale(locale);
@@ -99,5 +115,4 @@ public class I18NModule extends AbstractModule {
     protected void addSupportedLocale(String locale) {
         addSupportedLocale(Locale.forLanguageTag(locale));
     }
-
 }

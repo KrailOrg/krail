@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import fixture.TestI18NModule;
 import fixture.testviews2.My_AccountView;
 import fixture.testviews2.OptionsView;
 import org.junit.Before;
@@ -33,7 +34,6 @@ import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.base.view.testviews.subview.MoneyInOutView;
 import uk.co.q3c.v7.base.view.testviews.subview.TransferView;
 import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
-import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.I18NProcessor;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.testutil.TestResource;
@@ -52,7 +52,7 @@ import static org.assertj.core.api.Assertions.fail;
  * @author dsowerby
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestFileSitemapModule.class, I18NModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({TestFileSitemapModule.class, TestI18NModule.class, VaadinSessionScopeModule.class})
 public class DefaultFileSitemapLoaderTest2 {
 
     List<SitemapLoader> loaders;
@@ -75,7 +75,9 @@ public class DefaultFileSitemapLoaderTest2 {
         // when
         loader.load();
         lrb = new LoaderReportBuilder(loaders);
-        loader.getSitemap().setReport(lrb.getReport().toString());
+        loader.getSitemap()
+              .setReport(lrb.getReport()
+                            .toString());
         StringBuilder report = lrb.getReport();
 
         // then
@@ -191,7 +193,8 @@ public class DefaultFileSitemapLoaderTest2 {
         @Override
         protected void define() {
             File a = new File(TestResource.testJavaRootDir("V7"), "uk/co/q3c/v7/base/navigate/sitemap_good.properties");
-            File b = new File(TestResource.testJavaRootDir("V7"), "uk/co/q3c/v7/base/navigate/sitemap_good1.properties");
+            File b = new File(TestResource.testJavaRootDir("V7"), "uk/co/q3c/v7/base/navigate/sitemap_good1" +
+                    ".properties");
 
             addEntry("a", new SitemapFile(a.getAbsolutePath()));
             addEntry("b", new SitemapFile(b.getAbsolutePath()));

@@ -12,11 +12,14 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -24,57 +27,50 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
 import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
-import uk.co.q3c.v7.i18n.I18NModule;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- *
  * No pages to load but should not fail
  *
  * @author David Sowerby
- *
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
 public class DefaultDirectSitemapLoaderTest_none {
 
-	@Inject
-	DefaultDirectSitemapLoader loader;
+    @Inject
+    DefaultDirectSitemapLoader loader;
 
-	@Inject
-	MasterSitemap sitemap;
+    @Inject
+    MasterSitemap sitemap;
 
-	@Test
-	public void load() {
+    @Test
+    public void load() {
 
-		// given
+        // given
 
-		// when
-		boolean result = loader.load();
-		// then
-		assertThat(result).isFalse();
-	}
+        // when
+        boolean result = loader.load();
+        // then
+        assertThat(result).isFalse();
+    }
 
-	@ModuleProvider
-	protected AbstractModule moduleProvider() {
-		return new AbstractModule() {
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
 
-			@Override
-			protected void configure() {
-				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
-				bind(UserSitemap.class).to(DefaultUserSitemap.class);
-				bind(UserOption.class).to(DefaultUserOption.class);
-				bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-			}
+            @Override
+            protected void configure() {
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+                bind(UserSitemap.class).to(DefaultUserSitemap.class);
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
 
-		};
-	}
+        };
+    }
 }

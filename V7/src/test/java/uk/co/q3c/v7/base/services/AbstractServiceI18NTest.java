@@ -16,12 +16,12 @@ package uk.co.q3c.v7.base.services;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
@@ -30,7 +30,7 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
 public class AbstractServiceI18NTest {
 
     @Inject
@@ -58,11 +58,11 @@ public class AbstractServiceI18NTest {
         assertThat(service.getDescription()).isEqualTo("Private");
     }
 
-	@Test
+    @Test
     public void notNamed() {
         // given
 
-		// when
+        // when
 
         // then
         assertThat(service.getName()).isEqualTo("Unnamed");
@@ -84,6 +84,6 @@ public class AbstractServiceI18NTest {
 
         }
 
-	}
+    }
 
 }

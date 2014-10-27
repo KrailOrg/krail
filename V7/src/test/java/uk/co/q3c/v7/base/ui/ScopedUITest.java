@@ -86,7 +86,8 @@ public class ScopedUITest {
 
     @Before
     public void setup() {
-        ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+        ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle,
+                translate, currentLocale, translator);
     }
 
     @Test
@@ -109,6 +110,18 @@ public class ScopedUITest {
         ui.detach();
         // then
         // no exception
+    }
+
+    @SuppressWarnings("deprecation")
+    private void prepAttach() {
+        when(request.getParameter("v-loc")).thenReturn(baseUri + "/#home");
+        ui.getPage()
+          .init(request);
+        when(session.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
+        when(session.getLocale()).thenReturn(Locale.FRANCE);
+
+        when(session.hasLock()).thenReturn(true);
+        ui.setSession(session);
     }
 
     @Test
@@ -142,10 +155,14 @@ public class ScopedUITest {
         // then
         verify(session).setConverterFactory(converterFactory);
         InOrder inOrder = inOrder(currentLocale, navigator, translator, navigator);
-        inOrder.verify(currentLocale).setLocale(Locale.FRANCE, false);
-        inOrder.verify(navigator).init();
-        inOrder.verify(translator).translate(ui);
-        inOrder.verify(navigator).navigateTo("home");
+        inOrder.verify(currentLocale)
+               .setLocale(Locale.FRANCE, false);
+        inOrder.verify(navigator)
+               .init();
+        inOrder.verify(translator)
+               .translate(ui);
+        inOrder.verify(navigator)
+               .navigateTo("home");
     }
 
     @Test
@@ -156,20 +173,10 @@ public class ScopedUITest {
         ui.changeView(toView);
         // then
         verify(toView).getRootComponent();
-        verify(translator).translate(viewContent);
+        verify(translator).translate(toView);
         verify(viewContent).setSizeFull();
-        assertThat(ui.getViewDisplayPanel().getContent()).isEqualTo(viewContent);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void prepAttach() {
-        when(request.getParameter("v-loc")).thenReturn(baseUri + "/#home");
-        ui.getPage().init(request);
-        when(session.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
-        when(session.getLocale()).thenReturn(Locale.FRANCE);
-
-        when(session.hasLock()).thenReturn(true);
-        ui.setSession(session);
+        assertThat(ui.getViewDisplayPanel()
+                     .getContent()).isEqualTo(viewContent);
     }
 
     public class ConnectorIdAnswer implements Answer<String> {

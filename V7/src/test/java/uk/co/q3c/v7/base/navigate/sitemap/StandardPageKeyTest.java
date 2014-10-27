@@ -15,11 +15,11 @@ package uk.co.q3c.v7.base.navigate.sitemap;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.Translate;
 
 import java.util.Locale;
@@ -27,40 +27,40 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
 public class StandardPageKeyTest {
 
-	@Inject
-	CurrentLocale currentLocale;
+    @Inject
+    CurrentLocale currentLocale;
 
-	@Inject
-	Translate translate;
+    @Inject
+    Translate translate;
 
-	@Test
-	public void locale_en() {
-		// given
-		// when
-		currentLocale.setLocale(Locale.UK);
-		// then
-		assertThat(translate.from(StandardPageKey.Public_Home)).isEqualTo("Public Home");
-	}
+    @Test
+    public void locale_en() {
+        // given
+        // when
+        currentLocale.setLocale(Locale.UK);
+        // then
+        assertThat(translate.from(StandardPageKey.Public_Home)).isEqualTo("Public Home");
+    }
 
-	@Test
-	public void locale_de() {
-		// given
-		// when
-		currentLocale.setLocale(Locale.GERMANY);
-		// then
-		assertThat(translate.from(StandardPageKey.Public_Home)).isEqualTo("Öffentliche Startseite");
-	}
+    @Test
+    public void locale_de() {
+        // given
+        // when
+        currentLocale.setLocale(Locale.GERMANY);
+        // then
+        assertThat(translate.from(StandardPageKey.Public_Home)).isEqualTo("Öffentliche Startseite");
+    }
 
-	@Test
-	public void locale_it() {
-		// given
-		// when
-		currentLocale.setLocale(Locale.ITALY);
-		// then
-		assertThat(translate.from(StandardPageKey.Public_Home)).isEqualTo("Public Pagina");
-	}
+    @Test
+    public void locale_it() {
+        // given
+        // when
+        currentLocale.setLocale(Locale.ITALY);
+        // then
+        assertThat(translate.from(StandardPageKey.Public_Home)).isEqualTo("Public Pagina");
+    }
 
 }

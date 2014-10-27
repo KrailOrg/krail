@@ -22,11 +22,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NModule;
+import uk.co.q3c.v7.i18n.MapTranslate;
 import uk.co.q3c.v7.i18n.Translate;
 
 import java.util.Locale;
@@ -35,98 +34,97 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({})
 public class DefaultSubjectIdentifierTest {
 
-	private DefaultSubjectIdentifier converter;
+    @Mock
+    CurrentLocale currentLocale;
+    @Mock
+    SubjectProvider subjectPro;
+    @Mock
+    Subject subject;
+    TestPrincipal principal;
+    private DefaultSubjectIdentifier converter;
+    @Inject
+    private Translate translate;
 
-	private class TestPrincipal {
-		private final String name = "wiggly";
+    @Before
+    public void setup() {
+        when(currentLocale.getLocale()).thenReturn(Locale.UK);
+        converter = new DefaultSubjectIdentifier(subjectPro, translate);
+        when(subjectPro.get()).thenReturn(subject);
+        principal = new TestPrincipal();
+    }
 
-		@Override
-		public String toString() {
-			return name;
-		}
-	}
+    @Test
+    public void notAuthenticatedNotRemembered() {
 
-	@Inject
-	CurrentLocale currentLocale;
+        // given
+        when(subject.isAuthenticated()).thenReturn(false);
+        when(subject.isRemembered()).thenReturn(false);
+        when(subject.getPrincipal()).thenReturn(null);
+        // when
 
-	@Inject
-	private Translate translate;
+        // then
+        assertThat(converter.subjectName()).isEqualTo("Guest");
+        assertThat(converter.subjectIdentifier()).isNull();
+    }
 
-	@Mock
-	SubjectProvider subjectPro;
+    @Test
+    public void remembered() {
 
-	@Mock
-	Subject subject;
+        // given
+        when(subject.isAuthenticated()).thenReturn(false);
+        when(subject.isRemembered()).thenReturn(true);
+        when(subject.getPrincipal()).thenReturn(principal);
+        // when
 
-	TestPrincipal principal;
+        // then
+        assertThat(converter.subjectName()).isEqualTo("wiggly?");
+        assertThat(converter.subjectIdentifier()).isNotNull();
+        assertThat(converter.subjectIdentifier()).isEqualTo(principal);
+    }
 
-	@Before
-	public void setup() {
-		currentLocale.setLocale(Locale.UK);
-		converter = new DefaultSubjectIdentifier(subjectPro, translate);
-		when(subjectPro.get()).thenReturn(subject);
-		principal = new TestPrincipal();
-	}
+    @Test
+    public void authenticated() {
 
-	@Test
-	public void notAuthenticatedNotRememebered() {
+        // given
+        when(subject.isAuthenticated()).thenReturn(true);
+        when(subject.isRemembered()).thenReturn(false);
+        when(subject.getPrincipal()).thenReturn(principal);
+        // when
 
-		// given
-		when(subject.isAuthenticated()).thenReturn(false);
-		when(subject.isRemembered()).thenReturn(false);
-		when(subject.getPrincipal()).thenReturn(null);
-		// when
+        // then
+        assertThat(converter.subjectName()).isEqualTo("wiggly");
+        assertThat(converter.subjectIdentifier()).isNotNull();
+        assertThat(converter.subjectIdentifier()).isEqualTo(principal);
 
-		// then
-		assertThat(converter.subjectName()).isEqualTo("Guest");
-		assertThat(converter.subjectIdentifier()).isNull();
-	}
+    }
 
-	@Test
-	public void remembered() {
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
 
-		// given
-		when(subject.isAuthenticated()).thenReturn(false);
-		when(subject.isRemembered()).thenReturn(true);
-		when(subject.getPrincipal()).thenReturn(principal);
-		// when
+            @Override
+            protected void configure() {
 
-		// then
-		assertThat(converter.subjectName()).isEqualTo("wiggly?");
-		assertThat(converter.subjectIdentifier()).isNotNull();
-		assertThat(converter.subjectIdentifier()).isEqualTo(principal);
-	}
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(Translate.class).to(MapTranslate.class);
+                bind(CurrentLocale.class).toInstance(currentLocale);
 
-	@Test
-	public void authenticated() {
 
-		// given
-		when(subject.isAuthenticated()).thenReturn(true);
-		when(subject.isRemembered()).thenReturn(false);
-		when(subject.getPrincipal()).thenReturn(principal);
-		// when
+            }
 
-		// then
-		assertThat(converter.subjectName()).isEqualTo("wiggly");
-		assertThat(converter.subjectIdentifier()).isNotNull();
-		assertThat(converter.subjectIdentifier()).isEqualTo(principal);
+        };
+    }
 
-	}
+    private class TestPrincipal {
+        private final String name = "wiggly";
 
-	@ModuleProvider
-	protected AbstractModule moduleProvider() {
-		return new AbstractModule() {
-
-			@Override
-			protected void configure() {
-				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-
-			}
-
-		};
-	}
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
 
 }

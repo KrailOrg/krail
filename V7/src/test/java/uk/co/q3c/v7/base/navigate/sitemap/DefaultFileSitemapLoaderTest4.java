@@ -12,14 +12,15 @@
  */
 package uk.co.q3c.v7.base.navigate.sitemap;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.IOException;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
@@ -28,75 +29,68 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.i18n.DefaultI18NProcessor;
-import uk.co.q3c.v7.i18n.I18NModule;
 import uk.co.q3c.v7.i18n.I18NProcessor;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
+import java.io.IOException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests {@link DefaultFileSitemapLoader} with empty define in module
  *
- *
- *
  * @author dsowerby
- *
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ uk.co.q3c.v7.base.navigate.sitemap.DefaultFileSitemapLoaderTest4.TestFileSitemapModule.class,
-		I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({uk.co.q3c.v7.base.navigate.sitemap.DefaultFileSitemapLoaderTest4.TestFileSitemapModule.class,
+        TestI18NModule.class, VaadinSessionScopeModule.class})
 public class DefaultFileSitemapLoaderTest4 {
 
-	public static class TestFileSitemapModule extends FileSitemapModule {
+    @Inject
+    DefaultFileSitemapLoader loader;
+    @Inject
+    MasterSitemap sitemap;
 
-		@Override
-		protected void define() {
-		}
+    @Before
+    public void setup() throws IOException {
+    }
 
-	}
+    @Test
+    public void fail1() {
 
-	@Inject
-	DefaultFileSitemapLoader loader;
+        // given
 
-	@Inject
-	MasterSitemap sitemap;
+        // when
+        boolean result = loader.load();
 
-	@Before
-	public void setup() throws IOException {
-	}
+        // then
+        assertThat(result).isFalse();
 
-	@Test
-	public void fail1() {
+    }
 
-		// given
+    @ModuleProvider
+    protected AbstractModule module() {
+        return new AbstractModule() {
 
-		// when
-		boolean result = loader.load();
+            @Override
+            protected void configure() {
+                bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
+                bind(UserSitemap.class).to(DefaultUserSitemap.class);
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
 
-		// then
-		assertThat(result).isFalse();
+        };
+    }
 
-	}
+    public static class TestFileSitemapModule extends FileSitemapModule {
 
-	@ModuleProvider
-	protected AbstractModule module() {
-		return new AbstractModule() {
+        @Override
+        protected void define() {
+        }
 
-			@Override
-			protected void configure() {
-				bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
-				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-				bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
-				bind(UserSitemap.class).to(DefaultUserSitemap.class);
-				bind(UserOption.class).to(DefaultUserOption.class);
-				bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-			}
-
-		};
-	}
+    }
 
 }

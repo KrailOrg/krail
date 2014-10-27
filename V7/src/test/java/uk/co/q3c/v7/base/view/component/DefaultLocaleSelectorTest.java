@@ -1,9 +1,19 @@
+/*
+ * Copyright (c) 2014 David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ */
+
 package uk.co.q3c.v7.base.view.component;
 
-import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinService;
+import fixture.MockCurrentLocale;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +22,6 @@ import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.user.notify.UserNotifier;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NModule;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -21,61 +30,60 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ I18NModule.class, VaadinSessionScopeModule.class })
+@GuiceContext({VaadinSessionScopeModule.class})
 public class DefaultLocaleSelectorTest {
 
-	@Mock
-	VaadinService vaadinService;
+    @Mock
+    VaadinService vaadinService;
 
-	@Inject
-	CurrentLocale currentLocale;
+    CurrentLocale currentLocale = new MockCurrentLocale();
 
-	@Mock
-	UserNotifier userNotifier;
+    @Mock
+    UserNotifier userNotifier;
 
-	@Mock
-	UserOption userOption;
+    @Mock
+    UserOption userOption;
 
-	private DefaultLocaleSelector selector;
+    private DefaultLocaleSelector selector;
 
-	@Before
-	public void setup() {
+    @Before
+    public void setup() {
         currentLocale.setLocale(Locale.UK);
         VaadinService.setCurrent(vaadinService);
-		Set<Locale> supportedLocales = new HashSet<>();
-		supportedLocales.add(Locale.UK);
-		supportedLocales.add(Locale.GERMANY);
+        Set<Locale> supportedLocales = new HashSet<>();
+        supportedLocales.add(Locale.UK);
+        supportedLocales.add(Locale.GERMANY);
 
-		LocaleContainer container = new LocaleContainer(supportedLocales, userOption);
-		selector = new DefaultLocaleSelector(currentLocale, container, userNotifier);
-	}
+        LocaleContainer container = new LocaleContainer(supportedLocales, userOption);
+        selector = new DefaultLocaleSelector(currentLocale, container, userNotifier);
+    }
 
-	@Test
-	public void build() {
+    @Test
+    public void build() {
 
-		// given
+        // given
 
-		// when
+        // when
 
-		// then
-		assertThat(selector.selectedLocale()).isEqualTo(Locale.UK);
-	}
+        // then
+        assertThat(selector.selectedLocale()).isEqualTo(Locale.UK);
+    }
 
-	@Test
-	public void localeChanged() {
+    @Test
+    public void localeChanged() {
 
-		// given
-		selector.setRespondToLocaleChange(true);
-		// when
-		selector.localeChanged(Locale.GERMANY);
-		// then
-		assertThat(selector.selectedLocale()).isEqualTo(Locale.GERMANY);
-		// given
-		selector.setRespondToLocaleChange(false);
-		// when
-		selector.localeChanged(Locale.UK);
-		// then
-		assertThat(selector.selectedLocale()).isEqualTo(Locale.GERMANY);
-	}
+        // given
+        selector.setRespondToLocaleChange(true);
+        // when
+        selector.localeChanged(Locale.GERMANY);
+        // then
+        assertThat(selector.selectedLocale()).isEqualTo(Locale.GERMANY);
+        // given
+        selector.setRespondToLocaleChange(false);
+        // when
+        selector.localeChanged(Locale.UK);
+        // then
+        assertThat(selector.selectedLocale()).isEqualTo(Locale.GERMANY);
+    }
 
 }
