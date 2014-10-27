@@ -25,9 +25,10 @@ dependencies {
     compile 'com.vaadin:vaadin-testbench:' + testbenchVersion
 
 }
+//This should no longer be necessary as it is now in the src/main folder
 //see http://stackoverflow.com/questions/5144325/gradle-test-dependency
 //the testJar, configurations and artifacts closure enable tests in other projects to use these tests
-//see the demo project or testApp project fopr examples
+//see the demo project or testApp project for examples
 task testJar(type: Jar, dependsOn: testClasses) {
     baseName = "test-${project.archivesBaseName}"
     from sourceSets.test.output
