@@ -41,7 +41,7 @@ public class ViewB implements V7View {
      */
     @Override
     public void beforeBuild(V7ViewChangeEvent event) {
-        changeListener.addCall("beforeBuild");
+        changeListener.addCall("beforeBuild", event);
     }
 
     /**
@@ -54,7 +54,7 @@ public class ViewB implements V7View {
      */
     @Override
     public void buildView(V7ViewChangeEvent event) {
-        changeListener.addCall("buildView");
+        changeListener.addCall("buildView", event);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ViewB implements V7View {
 
     @Override
     public void init() {
-        changeListener.addCall("init");
+        changeListener.addCall("init", null);
     }
 
     /**
@@ -81,7 +81,7 @@ public class ViewB implements V7View {
      */
     @Override
     public void afterBuild(V7ViewChangeEvent event) {
-        changeListener.addCall("afterBuild");
+        changeListener.addCall("afterBuild", event);
     }
 
 

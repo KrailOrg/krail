@@ -51,8 +51,10 @@ import uk.co.q3c.v7.i18n.CurrentLocale;
 import uk.co.q3c.v7.i18n.MapTranslate;
 import uk.co.q3c.v7.i18n.Translate;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -698,7 +700,61 @@ public class DefaultV7NavigatorTest {
         ViewB view = (ViewB) navigator.getCurrentView();
         assertThat(changeListener.getCalls()).containsExactly("beforeViewChange", "init", "beforeBuild", "buildView",
                 "afterBuild", "afterViewChange");
+
     }
+
+    @Test
+    public void eventContent() {
+        navigator = createNavigator();
+        navigator.addViewChangeListener(changeListener);
+        String page = userSitemap.bURI;
+        when(subject.isAuthenticated()).thenReturn(true);
+        when(subject.isRemembered()).thenReturn(false);
+        when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
+        //when
+        navigator.navigateTo(page);
+
+        //then
+        V7ViewChangeEvent event = getEvent("beforeViewChange");
+        assertThat(event.getFromState()).isNull();
+        assertThat(event.getToState()
+                        .getFragment()).isEqualTo(userSitemap.bURI);
+
+        event = getEvent("afterViewChange");
+        assertThat(event.getFromState()).isNull();
+        assertThat(event.getToState()
+                        .getFragment()).isEqualTo(userSitemap.bURI);
+
+
+        //given
+        String page2 = userSitemap.b1URI;
+        changeListener.clear();
+        //when
+
+        navigator.navigateTo(page2);
+        //then
+
+        event = getEvent("beforeViewChange");
+        assertThat(event.getFromState()
+                        .getFragment()).isEqualTo(userSitemap.bURI);
+
+        assertThat(event.getToState()
+                        .getFragment()).isEqualTo(userSitemap.b1URI);
+
+        event = getEvent("afterViewChange");
+        assertThat(event.getFromState()
+                        .getFragment()).isEqualTo(userSitemap.bURI);
+
+        assertThat(event.getToState()
+                        .getFragment()).isEqualTo(userSitemap.b1URI);
+
+
+    }
+
+    private V7ViewChangeEvent getEvent(String eventKey) {
+        return changeListener.getEvent(eventKey);
+    }
+
 
     @ModuleProvider
     protected AbstractModule moduleProvider() {
@@ -723,15 +779,15 @@ public class DefaultV7NavigatorTest {
     @Singleton
     public static class TestViewChangeListener implements V7ViewChangeListener {
 
-        List<String> calls = new ArrayList<>();
+        Map<String, V7ViewChangeEvent> calls = new LinkedHashMap<>();
 
-        public List<String> getCalls() {
-            return calls;
+        public Set<String> getCalls() {
+            return calls.keySet();
         }
 
         @Override
         public boolean beforeViewChange(V7ViewChangeEvent event) {
-            calls.add("beforeViewChange");
+            calls.put("beforeViewChange", event);
             return true;
         }
 
@@ -746,14 +802,21 @@ public class DefaultV7NavigatorTest {
          */
         @Override
         public void afterViewChange(V7ViewChangeEvent event) {
-            calls.add("afterViewChange");
+            calls.put("afterViewChange", event);
         }
 
-        public void addCall(String call) {
-            calls.add(call);
+        public void addCall(String call, V7ViewChangeEvent event) {
+            calls.put(call, event);
         }
 
 
+        public V7ViewChangeEvent getEvent(String eventKey) {
+            return calls.get(eventKey);
+        }
+
+        public void clear() {
+            calls.clear();
+        }
     }
 
 }

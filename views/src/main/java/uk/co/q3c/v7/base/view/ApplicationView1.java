@@ -97,7 +97,7 @@ public class ApplicationView1 extends ViewBaseWithLayout {
     @Override
     public void afterBuild(V7ViewChangeEvent event) {
         super.afterBuild(event);
-        body.processParams(event.getNavigationState());
+        body.processParams(event.getFromState());
     }
 
     @Override

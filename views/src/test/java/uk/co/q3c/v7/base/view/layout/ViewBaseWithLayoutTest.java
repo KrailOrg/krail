@@ -348,7 +348,7 @@ public class ViewBaseWithLayoutTest {
         @Override
         public void afterBuild(V7ViewChangeEvent event) {
             super.afterBuild(event);
-            System.out.println(event.getNavigationState()
+            System.out.println(event.getFromState()
                                     .getParameterList());
         }
 
