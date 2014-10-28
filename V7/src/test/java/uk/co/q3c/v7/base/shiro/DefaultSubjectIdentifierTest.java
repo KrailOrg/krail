@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import fixture.MockCurrentLocale;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,8 +38,8 @@ import static org.mockito.Mockito.when;
 @GuiceContext({})
 public class DefaultSubjectIdentifierTest {
 
-    @Mock
-    CurrentLocale currentLocale;
+
+    CurrentLocale currentLocale = new MockCurrentLocale();
     @Mock
     SubjectProvider subjectPro;
     @Mock
@@ -51,7 +52,6 @@ public class DefaultSubjectIdentifierTest {
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
-        when(currentLocale.getLocale()).thenReturn(Locale.UK);
         converter = new DefaultSubjectIdentifier(subjectPro, translate);
         when(subjectPro.get()).thenReturn(subject);
         principal = new TestPrincipal();
