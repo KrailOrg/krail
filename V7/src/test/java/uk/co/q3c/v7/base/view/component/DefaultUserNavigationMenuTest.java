@@ -61,6 +61,7 @@ public class DefaultUserNavigationMenuTest {
 
     @Before
     public void setUp() throws Exception {
+        Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
         userSitemap.clear();
         userSitemap.populate();

@@ -23,38 +23,39 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DateTimeConverterTest {
 
-	DateTimeConverter dtc;
+    DateTimeConverter dtc;
 
-	@Before
-	public void setup() {
-		dtc = new DateTimeConverter();
-	}
+    @Before
+    public void setup() {
+        Locale.setDefault(Locale.UK);
+        dtc = new DateTimeConverter();
+    }
 
-	@Test
-	public void classes() {
+    @Test
+    public void classes() {
 
-		// given
+        // given
 
-		// when
+        // when
 
-		// then
-		assertThat(dtc.getModelType()).isEqualTo(DateTime.class);
-		assertThat(dtc.getPresentationType()).isEqualTo(Date.class);
+        // then
+        assertThat(dtc.getModelType()).isEqualTo(DateTime.class);
+        assertThat(dtc.getPresentationType()).isEqualTo(Date.class);
 
-	}
+    }
 
-	@Test
-	public void conversion() {
+    @Test
+    public void conversion() {
 
-		// given
-		Date d = new Date();
-		DateTime dt = new DateTime(d);
-		// when
-		DateTime dt2 = dtc.convertToModel(d, DateTime.class, Locale.UK);
-		Date d2 = dtc.convertToPresentation(dt, Date.class, Locale.UK);
-		// then
-		assertThat(dt).isEqualTo(dt2);
-		assertThat(d).isEqualTo(d2);
+        // given
+        Date d = new Date();
+        DateTime dt = new DateTime(d);
+        // when
+        DateTime dt2 = dtc.convertToModel(d, DateTime.class, Locale.UK);
+        Date d2 = dtc.convertToPresentation(dt, Date.class, Locale.UK);
+        // then
+        assertThat(dt).isEqualTo(dt2);
+        assertThat(d).isEqualTo(d2);
 
-	}
+    }
 }

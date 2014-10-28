@@ -50,6 +50,7 @@ public class DefaultSubjectIdentifierTest {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         when(currentLocale.getLocale()).thenReturn(Locale.UK);
         converter = new DefaultSubjectIdentifier(subjectPro, translate);
         when(subjectPro.get()).thenReturn(subject);

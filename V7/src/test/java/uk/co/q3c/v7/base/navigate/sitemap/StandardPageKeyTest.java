@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import fixture.TestI18NModule;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
@@ -35,6 +36,11 @@ public class StandardPageKeyTest {
 
     @Inject
     Translate translate;
+
+    @Before
+    public void setup() {
+        Locale.setDefault(Locale.UK);
+    }
 
     @Test
     public void locale_en() {

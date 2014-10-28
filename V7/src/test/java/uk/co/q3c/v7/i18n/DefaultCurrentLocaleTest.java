@@ -59,6 +59,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         when(browserProvider.get()).thenReturn(browser);
         listenerFired = false;
         supportedLocales = new HashSet<>();

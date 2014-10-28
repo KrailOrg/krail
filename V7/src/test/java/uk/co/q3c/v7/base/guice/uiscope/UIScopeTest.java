@@ -23,6 +23,7 @@ import com.vaadin.util.CurrentInstance;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -84,6 +85,11 @@ public class UIScopeTest {
         vaadinService = mock(VaadinService.class);
         when(vaadinService.getBaseDirectory()).thenReturn(ResourceUtils.userTempDirectory());
         VaadinService.setCurrent(vaadinService);
+    }
+
+    @Before
+    public void setup() {
+        Locale.setDefault(Locale.UK);
     }
 
     @Test

@@ -61,7 +61,7 @@ public class LocaleContainerTest {
 
     @Before
     public void setup() {
-
+        Locale.setDefault(Locale.UK);
         File baseDir = TestResource.testJavaRootDir("V7");
 
         VaadinService.setCurrent(vaadinService);
@@ -97,8 +97,14 @@ public class LocaleContainerTest {
         assertThat(property.getValue()).isInstanceOf(FileResource.class);
         FileResource flag = (FileResource) property.getValue();
         assertThat(flag.getFilename()).isEqualTo("de.png");
-        assertThat(flag.getSourceFile().exists()).isEqualTo(true);
+        assertThat(flag.getSourceFile()
+                       .exists()).isEqualTo(true);
 
+    }
+
+    private Item itemFor(Locale locale) {
+        Item item = container.getItem(locale.toLanguageTag());
+        return item;
     }
 
     @Test
@@ -137,11 +143,6 @@ public class LocaleContainerTest {
 
         property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
         assertThat(property.getValue()).isNull();
-    }
-
-    private Item itemFor(Locale locale) {
-        Item item = container.getItem(locale.toLanguageTag());
-        return item;
     }
 
     @ModuleProvider

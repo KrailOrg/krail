@@ -39,6 +39,7 @@ public class MapTranslateTest {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         currentLocale.removeAllListeners();
         currentLocale.setLocale(Locale.UK);
     }

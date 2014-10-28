@@ -86,6 +86,7 @@ public class ScopedUITest {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle,
                 translate, currentLocale, translator);
     }

@@ -40,6 +40,7 @@ public class AbstractServiceI18NTest {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
     }
 

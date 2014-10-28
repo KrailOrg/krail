@@ -43,6 +43,7 @@ public class DescriptionKeyTest {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         translate = new MapTranslate(currentLocale);
     }
 

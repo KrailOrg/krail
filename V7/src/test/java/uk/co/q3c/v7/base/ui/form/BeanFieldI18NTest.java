@@ -44,6 +44,7 @@ public class BeanFieldI18NTest {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         fieldSet = new TestBeanFieldGroupI18N(translator);
         te = new TestEntity();
         te.setFirstName("Mango");

@@ -64,6 +64,7 @@ public class DefaultUserNavigationTreeTest {
 
     @Before
     public void setUp() throws Exception {
+        Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
         userSitemap.clear();
         userSitemap.populate();
@@ -335,8 +336,10 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree.setSortAscending(true);
         userNavigationTree.setSortType(SortType.INSERTION);
         // then
-        assertThat(userOption.getOptionAsBoolean(DefaultUserNavigationTree.class.getSimpleName(), UserOptionProperty.SORT_ASCENDING, false)).isTrue();
-        assertThat(userOption.getOptionAsEnum(DefaultUserNavigationTree.class.getSimpleName(), UserOptionProperty.SORT_TYPE, SortType.ALPHA)).isEqualTo(SortType.INSERTION);
+        assertThat(userOption.getOptionAsBoolean(DefaultUserNavigationTree.class.getSimpleName(),
+                UserOptionProperty.SORT_ASCENDING, false)).isTrue();
+        assertThat(userOption.getOptionAsEnum(DefaultUserNavigationTree.class.getSimpleName(),
+                UserOptionProperty.SORT_TYPE, SortType.ALPHA)).isEqualTo(SortType.INSERTION);
 
     }
 

@@ -72,6 +72,7 @@ public class BreadcrumbTest {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         userSitemap.populate();
         createBreadcrumb();
 

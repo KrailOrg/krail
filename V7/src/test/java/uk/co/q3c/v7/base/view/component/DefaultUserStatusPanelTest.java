@@ -70,6 +70,7 @@ public class DefaultUserStatusPanelTest {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
         when(subjectProvider.get()).thenReturn(subject);
         subjectIdentifier = new DefaultSubjectIdentifier(subjectProvider, translate);

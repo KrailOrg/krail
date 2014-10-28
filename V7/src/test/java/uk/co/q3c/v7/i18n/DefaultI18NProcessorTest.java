@@ -43,6 +43,7 @@ public class DefaultI18NProcessorTest {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         testObject = new I18NTestClass();
         testObject2 = new I18NTestClass2();
         testObject3 = new I18NTestClass3();

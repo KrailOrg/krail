@@ -68,6 +68,7 @@ public class DefaultApplicationConfigurationServiceTest {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         iniFiles = new HashMap<>();
         configuration.clear();
         service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles);

@@ -73,6 +73,7 @@ public class DefaultSubPagePanelTest {
 
     @Before
     public void setup() {
+        Locale.setDefault(Locale.UK);
         userOption.clear();
         currentLocale.setLocale(Locale.UK, false);
         userSitemap.populate();
