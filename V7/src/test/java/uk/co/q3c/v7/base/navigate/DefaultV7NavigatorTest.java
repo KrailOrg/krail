@@ -70,6 +70,8 @@ public class DefaultV7NavigatorTest {
     TestViewChangeListener changeListener;
     CurrentLocale currentLocale = new MockCurrentLocale();
     @Mock
+    V7ViewChangeEvent event;
+    @Mock
     private Page browserPage;
     @Mock
     private ErrorView errorView;
@@ -98,7 +100,6 @@ public class DefaultV7NavigatorTest {
     private StrictURIFragmentHandler uriHandler;
     @Mock
     private UserOption userOption;
-
     @Inject
     private ReferenceUserSitemap userSitemap;
     @Mock
@@ -372,7 +373,6 @@ public class DefaultV7NavigatorTest {
         String page = userSitemap.a11URI;
 
         // need to return true, or first listener will block the second
-        when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(true);
         navigator.addViewChangeListener(listener1);
         navigator.addViewChangeListener(listener2);
         navigator.addViewChangeListener(listener3);
@@ -391,18 +391,35 @@ public class DefaultV7NavigatorTest {
         // given
         navigator = createNavigator();
         String page = userSitemap.a11URI;
+        MockListener listener4 = new MockListener();
+        listener4.cancelBefore = true;
 
         // to block second and subsequent
-        when(listener1.beforeViewChange(any(V7ViewChangeEvent.class))).thenReturn(false);
-        navigator.addViewChangeListener(listener1);
+        navigator.addViewChangeListener(listener4);
         navigator.addViewChangeListener(listener2);
         navigator.addViewChangeListener(listener3);
         // when
         navigator.navigateTo(page);
         // then
-        verify(listener1, times(1)).beforeViewChange(any(V7ViewChangeEvent.class));
         verify(listener2, never()).beforeViewChange(any(V7ViewChangeEvent.class));
         verify(listener3, never()).beforeViewChange(any(V7ViewChangeEvent.class));
+    }
+
+    @Test
+    public void attemptToBlockAfter() {
+        //given
+        navigator = createNavigator();
+        String page = userSitemap.a11URI;
+        MockListener listener4 = new MockListener();
+        listener4.cancelAfter = true;
+        navigator.addViewChangeListener(listener4);
+        navigator.addViewChangeListener(listener2);
+        navigator.addViewChangeListener(listener3);
+        //when
+        navigator.navigateTo(page);
+        //then
+        verify(listener2, times(1)).beforeViewChange(any(V7ViewChangeEvent.class));
+        verify(listener3, times(1)).beforeViewChange(any(V7ViewChangeEvent.class));
     }
 
     @Test
@@ -755,7 +772,6 @@ public class DefaultV7NavigatorTest {
         return changeListener.getEvent(eventKey);
     }
 
-
     @ModuleProvider
     protected AbstractModule moduleProvider() {
         return new AbstractModule() {
@@ -776,6 +792,25 @@ public class DefaultV7NavigatorTest {
         };
     }
 
+    static class MockListener implements V7ViewChangeListener {
+        boolean cancelBefore = false;
+        boolean cancelAfter = false;
+
+        @Override
+        public void beforeViewChange(V7ViewChangeEvent event) {
+            if (cancelBefore) {
+                event.cancel();
+            }
+        }
+
+        @Override
+        public void afterViewChange(V7ViewChangeEvent event) {
+            if (cancelAfter) {
+                event.cancel();
+            }
+        }
+    }
+
     @Singleton
     public static class TestViewChangeListener implements V7ViewChangeListener {
 
@@ -786,9 +821,8 @@ public class DefaultV7NavigatorTest {
         }
 
         @Override
-        public boolean beforeViewChange(V7ViewChangeEvent event) {
+        public void beforeViewChange(V7ViewChangeEvent event) {
             calls.put("beforeViewChange", event);
-            return true;
         }
 
         /**

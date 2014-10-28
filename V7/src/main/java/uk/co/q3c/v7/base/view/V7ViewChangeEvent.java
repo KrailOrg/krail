@@ -14,11 +14,16 @@ import uk.co.q3c.v7.base.navigate.NavigationState;
 
 public class V7ViewChangeEvent {
     private final NavigationState fromState;
+    private boolean cancelled;
     private NavigationState toState;
 
     public V7ViewChangeEvent(NavigationState fromState, NavigationState toState) {
         this.fromState = fromState;
         this.toState = toState;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
     }
 
     public NavigationState getToState() {
@@ -30,4 +35,7 @@ public class V7ViewChangeEvent {
         return fromState;
     }
 
+    public void cancel() {
+        cancelled = true;
+    }
 }

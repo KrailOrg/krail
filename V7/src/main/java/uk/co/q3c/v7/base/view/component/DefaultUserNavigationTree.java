@@ -172,8 +172,9 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
      * @see uk.co.q3c.v7.base.view.V7ViewChangeListener#beforeViewChange(uk.co.q3c.v7.base.view.V7ViewChangeEvent)
      */
     @Override
-    public boolean beforeViewChange(V7ViewChangeEvent event) {
-        return true; // do nothing, and don't block
+    public void beforeViewChange(V7ViewChangeEvent event) {
+        //       do nothing
+        //
     }
 
     /**

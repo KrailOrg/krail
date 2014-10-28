@@ -264,14 +264,13 @@ public class DefaultV7Navigator implements V7Navigator {
     }
 
     /**
-     * Fires an event before an imminent view change.
+     * Fires an event before an imminent view change.  At this point the event:<ol> <
+     * <li><{@code fromState} represents the current navigation state/li>
+     * li>{@code toState} represents the navigation state which will be moved to if the change is successful.</li></ol>
      * <p/>
-     * Listeners are called in registration order. If any listener returns <code>false</code>, the rest of the
-     * listeners
-     * are not called and the view change is blocked.
-     * <p/>
-     * The view change listeners may also e.g. open a warning or question dialog and save the parameters to re-initiate
-     * the navigation operation upon user action.
+     * Listeners are called in registration order. If any listener cancels the event, {@link
+     * V7ViewChangeEvent#cancel()}, the rest of the
+     * listeners are not called and the view change is blocked.
      *
      * @param event
      *         view change event (not null, view change not yet performed)
@@ -280,7 +279,8 @@ public class DefaultV7Navigator implements V7Navigator {
      */
     protected boolean fireBeforeViewChange(V7ViewChangeEvent event) {
         for (V7ViewChangeListener l : viewChangeListeners) {
-            if (!l.beforeViewChange(event)) {
+            l.beforeViewChange(event);
+            if (event.isCancelled()) {
                 return false;
             }
         }

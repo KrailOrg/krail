@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2014 David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ */
+
 package fixture;
 
 import com.google.inject.Inject;
@@ -51,19 +61,9 @@ import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ BaseServletModule.class })
 public abstract class UITestBase extends ShiroIntegrationTestBase implements V7ViewChangeListener {
-	// this is static to ensure count remains unique across all method calls
+    protected static Class<? extends ScopedUI> uiClass;
+    // this is static to ensure count remains unique across all method calls
 	private static int connectCount = 1;
-
-	public class ConnectorIdAnswer implements Answer<String> {
-
-		@Override
-		public String answer(InvocationOnMock invocation) throws Throwable {
-			connectCount++;
-			return Integer.toString(connectCount);
-		}
-
-	}
-
 	protected final String baseUri = "http://example.com";
 
 	protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
@@ -81,77 +81,85 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 	@Inject
 	protected Provider<V7Navigator> navigatorPro;
 
-	protected static Class<? extends ScopedUI> uiClass;
+    @Before
+    public void setup() {
+        if (uiClass != null) {
+            createUI(uiClass);
+        }
+    }
 
-	@Before
-	public void setup() {
-		if (uiClass != null) {
-			createUI(uiClass);
-		}
-	}
+    @SuppressWarnings("deprecation")
+    protected ScopedUI createUI(final Class<? extends ScopedUI> clazz) {
+        CurrentInstance.set(UI.class, null);
+        CurrentInstance.set(UIKey.class, null);
+        UICreateEvent event = mock(UICreateEvent.class);
+        // when(event.getSource()).thenReturn(vaadinService);
 
-	@After
-	public void teardown() {
-		currentView = null;
-	}
+        Answer<Class<? extends ScopedUI>> answer = new Answer<Class<? extends ScopedUI>>() {
+
+            @Override
+            public Class<? extends ScopedUI> answer(InvocationOnMock invocation) throws Throwable {
+                return clazz;
+            }
+        };
+        when(event.getUIClass()).thenAnswer(answer);
+        ui = (ScopedUI) getUIProvider().createInstance(event);
+        CurrentInstance.set(UI.class, ui);
+        when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
+        when(mockedSession.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
+        ui.setSession(mockedSession);
+        ui.getV7Navigator()
+          .addViewChangeListener(this);
+        // ui.doInit(mockedRequest, 23);
+        return ui;
+    }
+
+    /**
+     * Override to define your UIProvider
+     */
+    protected abstract ScopedUIProvider getUIProvider();
+
+    @After
+    public void teardown() {
+        currentView = null;
+    }
 
 	@Override
-	public boolean beforeViewChange(V7ViewChangeEvent event) {
-		return true;
-	}
+    public void beforeViewChange(V7ViewChangeEvent event) {
+    }
 
-	@Override
-	public void afterViewChange(V7ViewChangeEvent event) {
-	}
+    @Override
+    public void afterViewChange(V7ViewChangeEvent event) {
+    }
 
-	/**
-	 * Use this method to create TestUI instances, rather than the UIProvider It simulates the creation of a new
-	 * CurrentInstance (which happens for each request)
-	 * 
+    /**
+     * Use this method to create TestUI instances, rather than the UIProvider It simulates the creation of a new
+     * CurrentInstance (which happens for each request)
+     *
 	 * @return
-	 */
-	protected TestUI createTestUI() {
-		return (TestUI) createUI(TestUI.class);
+     */
+    protected TestUI createTestUI() {
+        return (TestUI) createUI(TestUI.class);
+    }
+
+    /**
+     * Use this method to create BasicUI instances, rather than the UIProvider It simulates the creation of a new
+     * CurrentInstance (which happens for each request)
+     *
+     * @return
+     */
+    protected BasicUI createBasicUI() {
+        return (BasicUI) createUI(BasicUI.class);
+    }
+
+    public class ConnectorIdAnswer implements Answer<String> {
+
+        @Override
+        public String answer(InvocationOnMock invocation) throws Throwable {
+            connectCount++;
+            return Integer.toString(connectCount);
+        }
+
 	}
-
-	/**
-	 * Use this method to create BasicUI instances, rather than the UIProvider It simulates the creation of a new
-	 * CurrentInstance (which happens for each request)
-	 * 
-	 * @return
-	 */
-	protected BasicUI createBasicUI() {
-		return (BasicUI) createUI(BasicUI.class);
-	}
-
-	@SuppressWarnings("deprecation")
-	protected ScopedUI createUI(final Class<? extends ScopedUI> clazz) {
-		CurrentInstance.set(UI.class, null);
-		CurrentInstance.set(UIKey.class, null);
-		UICreateEvent event = mock(UICreateEvent.class);
-		// when(event.getSource()).thenReturn(vaadinService);
-
-		Answer<Class<? extends ScopedUI>> answer = new Answer<Class<? extends ScopedUI>>() {
-
-			@Override
-			public Class<? extends ScopedUI> answer(InvocationOnMock invocation) throws Throwable {
-				return clazz;
-			}
-		};
-		when(event.getUIClass()).thenAnswer(answer);
-		ui = (ScopedUI) getUIProvider().createInstance(event);
-		CurrentInstance.set(UI.class, ui);
-		when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
-		when(mockedSession.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
-		ui.setSession(mockedSession);
-		ui.getV7Navigator().addViewChangeListener(this);
-		// ui.doInit(mockedRequest, 23);
-		return ui;
-	}
-
-	/**
-	 * Override to define your UIProvider
-	 */
-	protected abstract ScopedUIProvider getUIProvider();
 
 }

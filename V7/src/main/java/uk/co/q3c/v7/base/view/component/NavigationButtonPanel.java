@@ -147,9 +147,8 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
     }
 
     @Override
-    public boolean beforeViewChange(V7ViewChangeEvent event) {
+    public void beforeViewChange(V7ViewChangeEvent event) {
         // do nothing
-        return true;
     }
 
     @Override
