@@ -156,8 +156,8 @@ public class ScopedUITest {
         // then
         verify(session).setConverterFactory(converterFactory);
         InOrder inOrder = inOrder(currentLocale, navigator, translator, navigator);
-        inOrder.verify(currentLocale)
-               .setLocale(Locale.FRANCE, false);
+        //        inOrder.verify(currentLocale)
+        //               .setLocale(Locale.FRANCE, false);
         inOrder.verify(navigator)
                .init();
         inOrder.verify(translator)

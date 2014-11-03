@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 import com.vaadin.server.WebBrowser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.co.q3c.util.MessageFormat;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 import uk.co.q3c.v7.base.ui.BrowserProvider;
 import uk.co.q3c.v7.base.user.opt.UserOption;
@@ -72,6 +73,11 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener {
      * Sets up the locale, see the Javadoc for the class
      */
     private void initialise() {
+        if (!supportedLocales.contains(defaultLocale)) {
+            String msg = MessageFormat.format("The default locale ({0}) you have specified must also be defined as a " +
+                    "supported locale in your Guice I18N module", defaultLocale);
+            throw new UnsupportedLocaleException(msg);
+        }
         if (setLocaleFromUserOption(false)) {
             return;
         }
@@ -113,6 +119,13 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener {
         setLocale(locale, true);
     }
 
+    /**
+     * Sets the locale and optionally fires listeners.  If an attempt is made to set a locale which is not defined in
+     * {@link #supportedLocales},
+     *
+     * @param locale
+     * @param fireListeners
+     */
     @Override
     public void setLocale(Locale locale, boolean fireListeners) {
         if (supportedLocales.contains(locale)) {
@@ -126,7 +139,8 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener {
                 }
             }
         } else {
-            throw new UnsupportedLocaleException("Locale is not supported: " + locale);
+            String msg = MessageFormat.format("{0} locale is not supported.", locale);
+            throw new UnsupportedLocaleException(msg);
         }
 
     }

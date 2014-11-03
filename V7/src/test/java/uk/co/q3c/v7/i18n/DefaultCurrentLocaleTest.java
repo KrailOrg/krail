@@ -13,7 +13,6 @@
 package uk.co.q3c.v7.i18n;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
@@ -48,8 +47,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
     DefaultUserStatus userStatus;
     @Mock
     DefaultUserOption userOption;
-    @Inject
-    @DefaultLocale
+
     Locale defaultLocale;
     @Mock
     private WebBrowser browser;
@@ -66,6 +64,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         supportedLocales.add(Locale.UK);
         supportedLocales.add(Locale.GERMANY);
         supportedLocales.add(Locale.FRANCE);
+        defaultLocale = Locale.UK;
 
     }
 
@@ -249,6 +248,16 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         // then
         assertThat(listenerFired).isFalse();
 
+    }
+
+    @Test(expected = UnsupportedLocaleException.class)
+    public void invalid_setup_default_locale_not_in_supported_locales() {
+        //given
+        defaultLocale = Locale.CANADA;
+        //when
+        currentLocale = new DefaultCurrentLocale(browserProvider, supportedLocales, defaultLocale, userStatus,
+                userOption);
+        //then
     }
 
     @Override
