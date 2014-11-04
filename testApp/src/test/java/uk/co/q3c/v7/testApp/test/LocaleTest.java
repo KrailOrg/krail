@@ -41,6 +41,7 @@ public class LocaleTest extends V7TestBenchTestCase {
     @Before
     public void setUp() throws Exception {
         driver.get(rootUrl());
+
     }
 
 
@@ -62,7 +63,7 @@ public class LocaleTest extends V7TestBenchTestCase {
         // given
 
         // when
-        localeSelector.selectLocale(Locale.GERMANY);
+        localeSelector.selectLocale(Locale.GERMANY, Locale.getDefault());
         pause(500);
 
         // then
@@ -93,7 +94,7 @@ public class LocaleTest extends V7TestBenchTestCase {
     @Test
     public void switchLanguages_View() {
         //given
-        localeSelector.selectLocale(Locale.UK);
+        localeSelector.selectLocale(Locale.UK, Locale.getDefault());
         pause(500);
         navigateTo("login");
         //when
@@ -107,7 +108,7 @@ public class LocaleTest extends V7TestBenchTestCase {
                             .getCaption()).isEqualTo("User Name");
 
         //when
-        localeSelector.selectLocale(Locale.GERMANY);
+        localeSelector.selectLocale(Locale.GERMANY, Locale.UK);
         pause(500);
 
         //then

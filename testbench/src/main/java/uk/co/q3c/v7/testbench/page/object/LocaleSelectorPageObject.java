@@ -32,8 +32,17 @@ public class LocaleSelectorPageObject extends PageObject {
         super(parentCase);
     }
 
-    public void selectLocale(Locale locale) {
-        combo().selectByText(locale.getDisplayName());
+    /**
+     * Selecting the locale in the combo box is done by text string - that string will change depending on the local in
+     * force at the time of the call.  To make this method work on platforms with different platform settings we need
+     * to
+     * specify the Locale which should be used to return the display name ({@code inLocale}
+     *
+     * @param locale
+     * @param inLocale
+     */
+    public void selectLocale(Locale locale, Locale inLocale) {
+        combo().selectByText(locale.getDisplayName(inLocale));
     }
 
     public ComboBoxElement combo() {
