@@ -95,6 +95,7 @@ dependencies {
 
     testCompile project(':testbench')
     testCompile project(':testUtil')
+    testCompile 'com.vaadin:vaadin-testbench:' + testbenchVersion
 
 
 }
