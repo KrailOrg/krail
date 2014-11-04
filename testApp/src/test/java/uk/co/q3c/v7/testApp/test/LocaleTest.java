@@ -63,6 +63,7 @@ public class LocaleTest extends V7TestBenchTestCase {
 
         // when
         localeSelector.selectLocale(Locale.GERMANY);
+        pause(500);
 
         // then
         String comboValue = localeSelector.getValue();
@@ -93,6 +94,7 @@ public class LocaleTest extends V7TestBenchTestCase {
     public void switchLanguages_View() {
         //given
         localeSelector.selectLocale(Locale.UK);
+        pause(500);
         navigateTo("login");
         //when
 
@@ -128,7 +130,8 @@ public class LocaleTest extends V7TestBenchTestCase {
         //when
 
         //then
-        assertThat(localeSelector.getPopupSuggestions()).containsOnly(Locale.UK.getDisplayName(), Locale.GERMANY.getDisplayName(), Locale.ITALY.getDisplayName());
+        assertThat(localeSelector.getPopupSuggestions()).containsOnly("English (United Kingdom)", "German (Germany)",
+                "Italian (Italy)");
     }
 
 
