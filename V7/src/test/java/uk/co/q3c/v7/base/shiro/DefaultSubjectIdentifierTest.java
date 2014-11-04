@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.MockCurrentLocale;
+import fixture.TestI18NModule;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,8 +25,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.co.q3c.v7.base.navigate.StrictURIFragmentHandler;
 import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
-import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.MapTranslate;
 import uk.co.q3c.v7.i18n.Translate;
 
 import java.util.Locale;
@@ -35,17 +33,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({TestI18NModule.class})
 public class DefaultSubjectIdentifierTest {
 
 
-    CurrentLocale currentLocale = new MockCurrentLocale();
     @Mock
     SubjectProvider subjectPro;
+
     @Mock
     Subject subject;
+
     TestPrincipal principal;
+
     private DefaultSubjectIdentifier converter;
+
     @Inject
     private Translate translate;
 
@@ -108,12 +109,7 @@ public class DefaultSubjectIdentifierTest {
 
             @Override
             protected void configure() {
-
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(Translate.class).to(MapTranslate.class);
-                bind(CurrentLocale.class).toInstance(currentLocale);
-
-
             }
 
         };

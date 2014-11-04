@@ -18,6 +18,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinService;
+import fixture.MockCurrentLocale;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -52,8 +53,7 @@ public class DefaultApplicationConfigurationServiceTest {
     ApplicationConfiguration configuration;
 
 
-    @Mock
-    CurrentLocale currentLocale;
+    CurrentLocale currentLocale = new MockCurrentLocale();
 
     @Mock
     I18NProcessor i18NProcessor;
@@ -72,7 +72,7 @@ public class DefaultApplicationConfigurationServiceTest {
         iniFiles = new HashMap<>();
         configuration.clear();
         service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles);
-        when(currentLocale.getLocale()).thenReturn(Locale.UK);
+        currentLocale.setLocale(Locale.UK);
     }
 
     @Test
@@ -173,7 +173,7 @@ public class DefaultApplicationConfigurationServiceTest {
 
             @Override
             protected void configure() {
-                bind(Translate.class).to(MapTranslate.class);
+                bind(Translate.class).toInstance(translate);
                 bind(CurrentLocale.class).toInstance(currentLocale);
                 bind(I18NProcessor.class).toInstance(i18NProcessor);
             }

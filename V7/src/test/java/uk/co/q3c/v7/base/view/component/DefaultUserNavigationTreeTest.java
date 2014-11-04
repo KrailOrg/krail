@@ -17,8 +17,8 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.MockCurrentLocale;
 import fixture.ReferenceUserSitemap;
+import fixture.TestI18NModule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,8 +34,6 @@ import uk.co.q3c.v7.base.navigate.sitemap.comparator.DefaultUserSitemapSorters.S
 import uk.co.q3c.v7.base.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.co.q3c.v7.base.user.opt.*;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.MapTranslate;
-import uk.co.q3c.v7.i18n.Translate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,19 +45,26 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({UIScopeModule.class})
+@GuiceContext({UIScopeModule.class, TestI18NModule.class})
 public class DefaultUserNavigationTreeTest {
 
     @Inject
     ReferenceUserSitemap userSitemap;
-    CurrentLocale currentLocale = new MockCurrentLocale();
+
+    @Inject
+    CurrentLocale currentLocale;
+
     @Inject
     UserSitemapSorters sorters;
+
     @Mock
     V7Navigator navigator;
+
     @Inject
     DefaultUserOption userOption;
+
     DefaultUserNavigationTreeBuilder builder;
+
     private DefaultUserNavigationTree userNavigationTree;
 
     @Before
@@ -354,8 +359,7 @@ public class DefaultUserNavigationTreeTest {
                 bind(UserOption.class).to(DefaultUserOption.class);
                 bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
                 bind(UserSitemapSorters.class).to(DefaultUserSitemapSorters.class);
-                bind(Translate.class).to(MapTranslate.class);
-                bind(CurrentLocale.class).toInstance(currentLocale);
+
             }
 
         };

@@ -13,6 +13,7 @@
 package uk.co.q3c.v7.i18n;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
 
@@ -24,6 +25,7 @@ import static com.google.inject.multibindings.Multibinder.newSetBinder;
 
 public class I18NModule extends AbstractModule {
 
+    private MapBinder<Integer, PatternSource> patternSources;
     private Multibinder<String> registeredAnnotations;
     private Multibinder<String> registeredValueAnnotations;
     private Multibinder<Locale> supportedLocales;
@@ -33,6 +35,8 @@ public class I18NModule extends AbstractModule {
         registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
         registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
         supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
+        patternSources = MapBinder.newMapBinder(binder(), Integer.class, PatternSource.class, PatternSources.class);
+
         registerAnnotation(I18N.class);
         registerAnnotation(I18NFlex.class);
         registerValueAnnotation(I18NValue.class);
@@ -48,7 +52,7 @@ public class I18NModule extends AbstractModule {
 
 
     protected void bindTranslate() {
-        bind(Translate.class).to(MapTranslate.class);
+        bind(Translate.class).to(DefaultTranslate.class);
     }
 
     /**
@@ -73,11 +77,27 @@ public class I18NModule extends AbstractModule {
      */
     protected void define() {
         addSupportedLocale(Locale.UK);
+        addPatternSource(10, JavaMapPatternSource.class);
     }
 
     protected void addSupportedLocale(Locale locale) {
         supportedLocales.addBinding()
                         .toInstance(locale);
+    }
+
+    /**
+     * Add a source for I18NKey patterns. {@code order} determines the order in which multiple sources are accessed.
+     * {@link DefaultTranslate} uses the first result returned, using ascending order (order need not be sequential, but
+     * must be unique).
+     * <p/>
+     * Other implementations of {@link Translate} may behave differently
+     *
+     * @param order
+     * @param patternSource
+     */
+    protected void addPatternSource(Integer order, Class<? extends PatternSource> patternSource) {
+        patternSources.addBinding(order)
+                      .to(patternSource);
     }
 
     /**

@@ -12,13 +12,12 @@
  */
 package uk.co.q3c.v7.base.view.component;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.ui.Button;
 import fixture.MockCurrentLocale;
+import fixture.TestI18NModule;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +30,6 @@ import uk.co.q3c.v7.base.shiro.SubjectIdentifier;
 import uk.co.q3c.v7.base.shiro.SubjectProvider;
 import uk.co.q3c.v7.base.user.status.UserStatus;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.MapTranslate;
 import uk.co.q3c.v7.i18n.Translate;
 
 import java.util.Locale;
@@ -41,7 +39,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({TestI18NModule.class})
 public class DefaultUserStatusPanelTest {
 
     DefaultUserStatusPanel panel;
@@ -153,18 +151,5 @@ public class DefaultUserStatusPanelTest {
         verify(navigator).navigateTo(StandardPageKey.Log_Out);
     }
 
-    @ModuleProvider
-    protected AbstractModule moduleProvider() {
-        return new AbstractModule() {
-
-            @Override
-            protected void configure() {
-                bind(Translate.class).to(MapTranslate.class);
-                bind(CurrentLocale.class).toInstance(currentLocale);
-
-            }
-
-        };
-    }
 
 }

@@ -1,11 +1,14 @@
 /*
  * Copyright (c) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+ * the specific language governing permissions and limitations under the License.
  */
 
 package uk.co.q3c.v7.base.view.component;
@@ -16,8 +19,8 @@ import com.google.inject.Provides;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.MockCurrentLocale;
 import fixture.ReferenceUserSitemap;
+import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,15 +36,16 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.MapTranslate;
-import uk.co.q3c.v7.i18n.Translate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class})
 public class DefaultUserNavigationMenuBuilderTest {
-    CurrentLocale currentLocale = new MockCurrentLocale();
+
+    @Inject
+    CurrentLocale currentLocale;
+
     DefaultUserNavigationTreeBuilder builder;
 
     @Inject
@@ -49,10 +53,13 @@ public class DefaultUserNavigationMenuBuilderTest {
 
     @Inject
     DefaultUserSitemapSorters sorters;
+
     @Inject
     DefaultUserOption userOption;
+
     @Mock
     V7Navigator navigator;
+
     private DefaultUserNavigationTree userNavigationTree;
 
     @Before
@@ -79,9 +86,6 @@ public class DefaultUserNavigationMenuBuilderTest {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
                 bind(UserOption.class).to(DefaultUserOption.class);
                 bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-                bind(Translate.class).to(MapTranslate.class);
-                bind(CurrentLocale.class).toInstance(currentLocale);
-
             }
 
             @Provides

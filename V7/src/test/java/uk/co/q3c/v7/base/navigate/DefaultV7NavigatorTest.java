@@ -23,8 +23,8 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.Page;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
-import fixture.MockCurrentLocale;
 import fixture.ReferenceUserSitemap;
+import fixture.TestI18NModule;
 import fixture.testviews2.TestLoginView;
 import fixture.testviews2.ViewA1;
 import fixture.testviews2.ViewB;
@@ -47,9 +47,6 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.base.view.*;
-import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.MapTranslate;
-import uk.co.q3c.v7.i18n.Translate;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -61,14 +58,13 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class})
 public class DefaultV7NavigatorTest {
 
     @Mock
     UserSitemapBuilder builder;
     @Inject
     TestViewChangeListener changeListener;
-    CurrentLocale currentLocale = new MockCurrentLocale();
     @Mock
     V7ViewChangeEvent event;
     @Mock
@@ -785,8 +781,6 @@ public class DefaultV7NavigatorTest {
                 bind(UserSitemap.class).to(DefaultUserSitemap.class);
                 bind(UserOption.class).to(DefaultUserOption.class);
                 bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-                bind(CurrentLocale.class).toInstance(currentLocale);
-                bind(Translate.class).to(MapTranslate.class);
             }
 
         };

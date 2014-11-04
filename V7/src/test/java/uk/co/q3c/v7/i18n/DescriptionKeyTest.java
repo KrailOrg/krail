@@ -12,6 +12,7 @@
  */
 package uk.co.q3c.v7.i18n;
 
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.WebBrowser;
@@ -24,6 +25,7 @@ import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.co.q3c.v7.base.ui.BrowserProvider;
 
 import java.util.Locale;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -36,6 +38,9 @@ public class DescriptionKeyTest {
     @Mock
     CurrentLocale currentLocale;
     Translate translate;
+    @Inject
+    @PatternSources
+    Map<Integer, PatternSource> patternSources;
     @Mock
     private WebBrowser browser;
     @Mock
@@ -44,7 +49,7 @@ public class DescriptionKeyTest {
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
-        translate = new MapTranslate(currentLocale);
+        translate = new DefaultTranslate(patternSources, currentLocale);
     }
 
 

@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
-public class MapTranslateTest {
+public class DefaultTranslateTest {
 
     @Inject
     Translate translate;

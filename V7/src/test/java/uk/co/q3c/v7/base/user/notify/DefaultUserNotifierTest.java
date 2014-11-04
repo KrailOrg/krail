@@ -18,29 +18,32 @@ import com.google.inject.multibindings.MapBinder;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.MockCurrentLocale;
+import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.co.q3c.v7.i18n.*;
+import uk.co.q3c.v7.i18n.I18NKey;
+import uk.co.q3c.v7.i18n.LabelKey;
+import uk.co.q3c.v7.i18n.MessageKey;
+import uk.co.q3c.v7.i18n.Translate;
 
 import java.util.Map;
 
 import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class})
 @SuppressWarnings("rawtypes")
 public class DefaultUserNotifierTest {
-
-    CurrentLocale currentLocale = new MockCurrentLocale();
 
 
     @Inject
     Map<I18NKey, ErrorNotification> errorNotifications;
+
     @Inject
     Map<I18NKey, WarningNotification> warningNotifications;
+
     @Inject
     Map<I18NKey, InformationNotification> informationNotifications;
 
@@ -114,8 +117,6 @@ public class DefaultUserNotifierTest {
                                          .toInstance(warningNotification2);
                 informationNotificationBinder.addBinding(LabelKey.Message_Bar)
                                              .toInstance(informationNotification2);
-                bind(Translate.class).to(MapTranslate.class);
-                bind(CurrentLocale.class).toInstance(currentLocale);
 
             }
 

@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.MockCurrentLocale;
+import fixture.TestI18NModule;
 import fixture.testviews2.ViewA;
 import fixture.testviews2.ViewA1;
 import org.junit.Test;
@@ -30,15 +30,13 @@ import uk.co.q3c.v7.base.user.opt.DefaultUserOption;
 import uk.co.q3c.v7.base.user.opt.DefaultUserOptionStore;
 import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
-import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.MapTranslate;
 import uk.co.q3c.v7.i18n.TestLabelKey;
 import uk.co.q3c.v7.i18n.Translate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class})
 public class DefaultSitemapCheckerTest {
 
     String uriNodeNoClass = "node/noclass";
@@ -55,7 +53,7 @@ public class DefaultSitemapCheckerTest {
 
     @Inject
     DefaultMasterSitemap sitemap;
-    CurrentLocale currentLocale = new MockCurrentLocale();
+
     private MasterSitemapNode baseNode;
     private MasterSitemapNode node1;
     private MasterSitemapNode node11;
@@ -276,8 +274,6 @@ public class DefaultSitemapCheckerTest {
                 bind(UserSitemap.class).to(DefaultUserSitemap.class);
                 bind(UserOption.class).to(DefaultUserOption.class);
                 bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-                bind(Translate.class).to(MapTranslate.class);
-                bind(CurrentLocale.class).toInstance(currentLocale);
             }
 
         };

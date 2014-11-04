@@ -193,6 +193,7 @@ public class UIScopeTest {
 
         // private final Scope vaadinSessionScope = mock(VaadinSessionScope.class);
         private final Scope vaadinSessionScope = new VaadinSessionScope();
+        private MapBinder<Integer, PatternSource> patternSources;
         private Multibinder<String> registeredAnnotations;
         private Multibinder<String> registeredValueAnnotations;
         private Multibinder<Locale> supportedLocales;
@@ -202,6 +203,7 @@ public class UIScopeTest {
         protected void configure() {
             registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
             registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
+            patternSources = MapBinder.newMapBinder(binder(), Integer.class, PatternSource.class, PatternSources.class);
 
             bind(ApplicationTitle.class).toInstance(new ApplicationTitle(LabelKey.V7));
 
@@ -246,7 +248,7 @@ public class UIScopeTest {
             bind(UserOption.class).to(DefaultUserOption.class);
             bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             bind(UserSitemapSorters.class).to(DefaultUserSitemapSorters.class);
-            bind(Translate.class).to(MapTranslate.class);
+            bind(Translate.class).to(DefaultTranslate.class);
             bind(Locale.class).annotatedWith(DefaultLocale.class)
                               .toInstance(Locale.UK);
             registeredAnnotations.addBinding()
@@ -256,6 +258,8 @@ public class UIScopeTest {
             supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
             supportedLocales.addBinding()
                             .toInstance(Locale.UK);
+            patternSources.addBinding(10)
+                          .to(JavaMapPatternSource.class);
 
         }
     }

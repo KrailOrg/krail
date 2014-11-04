@@ -17,8 +17,8 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.MockCurrentLocale;
 import fixture.ReferenceUserSitemap;
+import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,8 +35,6 @@ import uk.co.q3c.v7.base.user.opt.UserOption;
 import uk.co.q3c.v7.base.user.opt.UserOptionStore;
 import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
 import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.MapTranslate;
-import uk.co.q3c.v7.i18n.Translate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +44,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({TestI18NModule.class})
 public class DefaultSubPagePanelTest {
 
     DefaultSubPagePanel panel;
@@ -57,10 +55,8 @@ public class DefaultSubPagePanelTest {
     @Mock
     V7Navigator navigator;
 
-    CurrentLocale currentLocale = new MockCurrentLocale();
-
-    @Mock
-    Translate translate;
+    @Inject
+    CurrentLocale currentLocale;
 
     @Inject
     UserOption userOption;
@@ -291,12 +287,8 @@ public class DefaultSubPagePanelTest {
             @Override
             protected void configure() {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                // bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
-                // bind(UserSitemap.class).to(DefaultUserSitemap.class);
                 bind(UserOption.class).to(DefaultUserOption.class);
                 bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-                bind(Translate.class).to(MapTranslate.class);
-                bind(CurrentLocale.class).toInstance(currentLocale);
             }
 
         };

@@ -19,7 +19,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
-import fixture.MockCurrentLocale;
+import fixture.TestI18NModule;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -34,9 +34,6 @@ import uk.co.q3c.v7.base.navigate.URIFragmentHandler;
 import uk.co.q3c.v7.base.ui.BasicUI;
 import uk.co.q3c.v7.base.ui.ScopedUI;
 import uk.co.q3c.v7.base.view.component.UserStatusPanel;
-import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.MapTranslate;
-import uk.co.q3c.v7.i18n.Translate;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -44,7 +41,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({UIScopeModule.class})
+@GuiceContext({UIScopeModule.class, TestI18NModule.class})
 public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
 
     @Mock
@@ -53,7 +50,6 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
     @Mock
     UserStatusPanel monitor2;
 
-    CurrentLocale currentLocale = new MockCurrentLocale();
 
     @Mock
     BasicUI ui;
@@ -97,9 +93,6 @@ public class V7SecurityManagerTest extends ShiroIntegrationTestBase {
             @Override
             protected void configure() {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(Translate.class).to(MapTranslate.class);
-                bind(CurrentLocale.class).toInstance(currentLocale);
-
             }
         };
     }
