@@ -17,6 +17,7 @@ import com.google.common.base.Optional;
 import com.vaadin.testbench.elements.ComboBoxElement;
 import com.vaadin.ui.ComboBox;
 import uk.co.q3c.v7.base.view.component.DefaultLocaleSelector;
+import uk.co.q3c.v7.base.view.component.LocaleContainer;
 import uk.co.q3c.v7.testbench.V7TestBenchTestCase;
 
 import java.util.List;
@@ -33,16 +34,13 @@ public class LocaleSelectorPageObject extends PageObject {
     }
 
     /**
-     * Selecting the locale in the combo box is done by text string - that string will change depending on the local in
-     * force at the time of the call.  To make this method work on platforms with different platform settings we need
-     * to
-     * specify the Locale which should be used to return the display name ({@code inLocale}
+     * Selects the locale using the same method as {@link LocaleContainer} (that is, translating the displayed string
+     * into the language of the target selection (for example Locale.GERMANY is always "German (Germany)"
      *
      * @param locale
-     * @param inLocale
      */
-    public void selectLocale(Locale locale, Locale inLocale) {
-        combo().selectByText(locale.getDisplayName(inLocale));
+    public void selectLocale(Locale locale) {
+        combo().selectByText(locale.getDisplayName(locale));
     }
 
     public ComboBoxElement combo() {

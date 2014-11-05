@@ -62,7 +62,7 @@ public class LocaleContainer extends IndexedContainer {
             String id = supportedLocale.toLanguageTag();
             log.debug("Added supported locale with id: '{}'", id);
             Item item = addItem(id);
-            item.getItemProperty(PropertyName.NAME).setValue(supportedLocale.getDisplayName());
+            item.getItemProperty(PropertyName.NAME).setValue(supportedLocale.getDisplayName(supportedLocale));
 
             // if the directory is missing don't bother with file
             if (flagSizedDir.exists()) {

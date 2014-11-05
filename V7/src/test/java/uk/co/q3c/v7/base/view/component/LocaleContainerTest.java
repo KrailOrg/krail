@@ -90,7 +90,7 @@ public class LocaleContainerTest {
 
         Property<?> property = item.getItemProperty(LocaleContainer.PropertyName.NAME);
         assertThat(property).isNotNull();
-        assertThat(property.getValue()).isEqualTo(Locale.GERMANY.getDisplayName());
+        assertThat(property.getValue()).isEqualTo(Locale.GERMANY.getDisplayName(Locale.GERMANY));
 
         property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
         assertThat(property).isNotNull();
@@ -120,7 +120,7 @@ public class LocaleContainerTest {
 
         Property<?> property = item.getItemProperty(LocaleContainer.PropertyName.NAME);
         assertThat(property).isNotNull();
-        assertThat(property.getValue()).isEqualTo(Locale.GERMANY.getDisplayName());
+        assertThat(property.getValue()).isEqualTo(Locale.GERMANY.getDisplayName(Locale.GERMANY));
 
         property = item.getItemProperty(LocaleContainer.PropertyName.FLAG);
         assertThat(property.getValue()).isNull();

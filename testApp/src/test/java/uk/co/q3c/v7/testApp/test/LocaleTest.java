@@ -63,7 +63,7 @@ public class LocaleTest extends V7TestBenchTestCase {
         // given
 
         // when
-        localeSelector.selectLocale(Locale.GERMANY, Locale.getDefault());
+        localeSelector.selectLocale(Locale.GERMANY);
         pause(500);
 
         // then
@@ -87,37 +87,37 @@ public class LocaleTest extends V7TestBenchTestCase {
                 "Öffentliche Startseite");
 
         assertThat(loginStatus.loginButton()
-                              .getText()).isEqualTo("einloggen");
+                .getText()).isEqualTo("einloggen");
         assertThat(loginStatus.username()).isEqualTo("Gast");
     }
 
     @Test
     public void switchLanguages_View() {
         //given
-        localeSelector.selectLocale(Locale.UK, Locale.getDefault());
+        localeSelector.selectLocale(Locale.UK);
         pause(500);
         navigateTo("login");
         //when
 
         //then
         assertThat(loginForm.submitButton()
-                            .getCaption()).isEqualTo("Submit");
+                .getCaption()).isEqualTo("Submit");
         assertThat(loginForm.passwordBox()
-                            .getCaption()).isEqualTo("Password");
+                .getCaption()).isEqualTo("Password");
         assertThat(loginForm.usernameBox()
-                            .getCaption()).isEqualTo("User Name");
+                .getCaption()).isEqualTo("User Name");
 
         //when
-        localeSelector.selectLocale(Locale.GERMANY, Locale.UK);
+        localeSelector.selectLocale(Locale.GERMANY);
         pause(500);
 
         //then
         assertThat(loginForm.submitButton()
-                            .getCaption()).isEqualTo("Absenden");
+                .getCaption()).isEqualTo("Absenden");
         assertThat(loginForm.passwordBox()
-                            .getCaption()).isEqualTo("Passwort");
+                .getCaption()).isEqualTo("Passwort");
         assertThat(loginForm.usernameBox()
-                            .getCaption()).isEqualTo("Benutzername");
+                .getCaption()).isEqualTo("Benutzername");
 
     }
 
@@ -127,12 +127,14 @@ public class LocaleTest extends V7TestBenchTestCase {
     @Test
     public void popup() {
         //given
+        String uk = Locale.UK.getDisplayName(Locale.UK);
+        String germany = Locale.GERMANY.getDisplayName(Locale.GERMANY);
+        String italy = Locale.ITALY.getDisplayName(Locale.ITALY);
 
         //when
 
         //then
-        assertThat(localeSelector.getPopupSuggestions()).containsOnly("English (United Kingdom)", "German (Germany)",
-                "Italian (Italy)");
+        assertThat(localeSelector.getPopupSuggestions()).containsOnly(uk, germany, italy);
     }
 
 
