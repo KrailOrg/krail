@@ -64,11 +64,11 @@ public class LocaleTest extends V7TestBenchTestCase {
 
         // when
         localeSelector.selectLocale(Locale.GERMANY);
-        pause(500);
+        pause(1000);
 
         // then
         String comboValue = localeSelector.getValue();
-        assertThat(comboValue).isEqualTo(Locale.GERMANY.getDisplayName());
+        assertThat(comboValue).isEqualTo(Locale.GERMANY.getDisplayName(Locale.GERMANY));
         List<String> items = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             items.add(navTree.itemCaption(i));

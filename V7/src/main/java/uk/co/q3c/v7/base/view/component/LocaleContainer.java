@@ -43,8 +43,12 @@ public class LocaleContainer extends IndexedContainer {
     }
 
     /**
-     * Loads the container with text from {@link Locale#getDisplayName()}, and an icon for the country flag if there is
-     * one. If there is no image flag, the flag property is left as null.
+     * Loads the container with text from {@link Locale#getDisplayName(locale)}, and an icon for the country flag if
+     * there is
+     * one. If there is no image flag, the flag property is left as null.  The result is that the combo contains an
+     * entry
+     * for a country in the language of that counter (for example Germany is always Deutsch (Deutschland), regardless of
+     * the current locale).  This means the user looking for a language will see it in its most familiar form.
      */
     @SuppressWarnings("unchecked")
     private void fillContainer() {
@@ -62,15 +66,18 @@ public class LocaleContainer extends IndexedContainer {
             String id = supportedLocale.toLanguageTag();
             log.debug("Added supported locale with id: '{}'", id);
             Item item = addItem(id);
-            item.getItemProperty(PropertyName.NAME).setValue(supportedLocale.getDisplayName(supportedLocale));
+            item.getItemProperty(PropertyName.NAME)
+                .setValue(supportedLocale.getDisplayName(supportedLocale));
 
             // if the directory is missing don't bother with file
             if (flagSizedDir.exists()) {
-                String filename = supportedLocale.getCountry().toLowerCase() + ".png";
+                String filename = supportedLocale.getCountry()
+                                                 .toLowerCase() + ".png";
                 File file = new File(flagSizedDir, filename);
                 if (file.exists()) {
                     FileResource resource = new FileResource(file);
-                    item.getItemProperty(PropertyName.FLAG).setValue(resource);
+                    item.getItemProperty(PropertyName.FLAG)
+                        .setValue(resource);
                 } else {
                     log.warn("File {} for locale flag does not exist.", file.getAbsolutePath());
                 }
@@ -84,7 +91,8 @@ public class LocaleContainer extends IndexedContainer {
     }
 
     public Integer flagSize() {
-        return userOption.getOptionAsInt(this.getClass().getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 32);
+        return userOption.getOptionAsInt(this.getClass()
+                                             .getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 32);
     }
 
     public enum PropertyName {
