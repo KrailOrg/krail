@@ -11,7 +11,7 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.co.q3c.v7.testApp.test;
+package uk.co.q3c.v7;
 
 import com.vaadin.testbench.util.VersionUtil;
 import org.junit.Test;

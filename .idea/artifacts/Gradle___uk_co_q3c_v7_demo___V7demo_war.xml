@@ -64,15 +64,15 @@
           <element id="library" level="project" name="Gradle: guava-16.0.1.vaadin1" />
           <element id="library" level="project" name="Gradle: json-0.0.20080701" />
           <element id="library" level="project" name="Gradle: jsoup-1.6.3" />
-          <element id="library" level="project" name="Gradle: vaadin-server-7.3.2" />
-          <element id="library" level="project" name="Gradle: vaadin-shared-7.3.2" />
-          <element id="library" level="project" name="Gradle: vaadin-push-7.3.2" />
+          <element id="library" level="project" name="Gradle: vaadin-server-7.3.4" />
+          <element id="library" level="project" name="Gradle: vaadin-shared-7.3.4" />
           <element id="library" level="project" name="Gradle: messagebox-2.0.6" />
           <element id="library" level="project" name="Gradle: stepper-2.1.2" />
-          <element id="library" level="project" name="Gradle: atmosphere-runtime-2.1.2.vaadin5" />
           <element id="library" level="project" name="Gradle: vaadin-client-compiled-7.0.2" />
           <element id="library" level="project" name="Gradle: vaadin-themes-7.0.2" />
           <element id="library" level="project" name="Gradle: vaadin-slf4j-jdk14-1.6.1" />
+          <element id="library" level="project" name="Gradle: vaadin-push-7.3.4" />
+          <element id="library" level="project" name="Gradle: atmosphere-runtime-2.1.2.vaadin6" />
         </element>
       </element>
       <element id="directory" name="META-INF">

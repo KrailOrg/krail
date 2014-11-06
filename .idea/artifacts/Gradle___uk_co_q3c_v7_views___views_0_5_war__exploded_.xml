@@ -59,8 +59,8 @@
           <element id="library" level="project" name="Gradle: guava-16.0.1.vaadin1" />
           <element id="library" level="project" name="Gradle: json-0.0.20080701" />
           <element id="library" level="project" name="Gradle: jsoup-1.6.3" />
-          <element id="library" level="project" name="Gradle: vaadin-server-7.3.2" />
-          <element id="library" level="project" name="Gradle: vaadin-shared-7.3.2" />
+          <element id="library" level="project" name="Gradle: vaadin-server-7.3.4" />
+          <element id="library" level="project" name="Gradle: vaadin-shared-7.3.4" />
           <element id="archive" name="uk.co.q3c.v7-testbench-0.5.jar">
             <element id="module-output" name="testbench" />
           </element>

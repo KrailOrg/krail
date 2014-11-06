@@ -84,8 +84,8 @@
     <orderEntry type="library" exported="" name="Gradle: json-0.0.20080701" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jsoup-1.6.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit-4.12-beta-2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-server-7.3.2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: vaadin-shared-7.3.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: vaadin-server-7.3.4" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: vaadin-shared-7.3.4" level="project" />
   </component>
 </module>
 
