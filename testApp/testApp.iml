@@ -130,6 +130,7 @@
     <orderEntry type="library" exported="" name="Gradle: atmosphere-runtime-2.1.2.vaadin6" level="project" />
     <orderEntry type="library" exported="" name="Gradle: vaadin-server-7.3.4" level="project" />
     <orderEntry type="library" exported="" name="Gradle: vaadin-shared-7.3.4" level="project" />
+    <orderEntry type="library" name="sass-stdlib" level="application" />
   </component>
 </module>
 

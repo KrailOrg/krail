@@ -24,6 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class VaadinVersionTest extends KrailTestBenchTestCase {
 
+    public VaadinVersionTest() {
+        appContext = "krail-demo";
+    }
+
     @Test
     public void confirmVersion() {
         //given
