@@ -20,8 +20,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.*;
 import org.quartz.listeners.BroadcastSchedulerListener;
-import uk.q3c.krail.base.config.ApplicationConfigurationModule;
-import uk.q3c.krail.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.config.ApplicationConfigurationModule;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.i18n.I18NModule;
 import uk.q3c.krail.quartz.job.JobModuleBase;
 import uk.q3c.krail.quartz.scheduler.*;
@@ -132,7 +132,7 @@ public class DefaultQuartzServiceTest2 {
             simpleSchedule();
             TriggerBuilder<SimpleTrigger> triggerBuilder = newTrigger().startNow()
                                                                        .withSchedule(SimpleScheduleBuilder
-                                                                               .repeatSecondlyForTotalCount(5, 1));
+                                                                               .repeatSecondlyForTotalCount(5,  ));
             addJob("test", jobBuilder, triggerBuilder);
             addJobListener("test", TestJobListener.class, jobKey);
         }

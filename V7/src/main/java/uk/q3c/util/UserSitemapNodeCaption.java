@@ -12,7 +12,7 @@
  */
 package uk.q3c.util;
 
-import uk.q3c.krail.base.navigate.sitemap.UserSitemapNode;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 
 public class UserSitemapNodeCaption implements CaptionReader<UserSitemapNode> {
 

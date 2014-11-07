@@ -14,7 +14,7 @@ package uk.q3c.krail.quartz.scheduler;
 
 import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
-import uk.q3c.krail.base.config.ApplicationConfiguration;
+import uk.q3c.krail.core.config.ApplicationConfiguration;
 import uk.q3c.krail.quartz.service.DefaultQuartzService;
 
 import java.util.Properties;

@@ -20,11 +20,11 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import uk.q3c.krail.base.config.ApplicationConfiguration;
-import uk.q3c.krail.base.config.ConfigKeys;
-import uk.q3c.krail.base.push.Broadcaster;
-import uk.q3c.krail.base.view.KrailViewChangeEvent;
-import uk.q3c.krail.base.view.component.BroadcastMessageLog;
+import uk.q3c.krail.core.config.ApplicationConfiguration;
+import uk.q3c.krail.core.config.ConfigKeys;
+import uk.q3c.krail.core.push.Broadcaster;
+import uk.q3c.krail.core.view.KrailViewChangeEvent;
+import uk.q3c.krail.core.view.component.BroadcastMessageLog;
 import uk.q3c.util.ID;
 
 public class PushView extends ViewBaseGrid {

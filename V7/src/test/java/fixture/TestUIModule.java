@@ -14,10 +14,10 @@ package fixture;
 
 import com.google.inject.multibindings.MapBinder;
 import com.vaadin.ui.UI;
-import uk.q3c.krail.base.ui.BasicUIProvider;
-import uk.q3c.krail.base.ui.ScopedUIProvider;
-import uk.q3c.krail.base.ui.TestUI;
-import uk.q3c.krail.base.ui.UIModule;
+import uk.q3c.krail.core.ui.BasicUIProvider;
+import uk.q3c.krail.core.ui.ScopedUIProvider;
+import uk.q3c.krail.core.ui.TestUI;
+import uk.q3c.krail.core.ui.UIModule;
 
 /**
  * Extends the default UIModule to provide instances of TestUI

@@ -12,7 +12,7 @@
  */
 package fixture;
 
-import uk.q3c.krail.base.guice.uiscope.UIScope;
+import uk.q3c.krail.core.guice.uiscope.UIScope;
 
 public class TestUIScope extends UIScope {
 

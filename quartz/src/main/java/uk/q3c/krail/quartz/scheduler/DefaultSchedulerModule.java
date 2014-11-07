@@ -13,7 +13,7 @@
 package uk.q3c.krail.quartz.scheduler;
 
 import org.quartz.Scheduler;
-import uk.q3c.krail.base.guice.BaseGuiceServletInjector;
+import uk.q3c.krail.core.guice.BaseGuiceServletInjector;
 import uk.q3c.krail.quartz.job.JobModuleBase;
 
 /**

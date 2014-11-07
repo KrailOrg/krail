@@ -13,8 +13,8 @@
 package fixture.testviews2;
 
 import com.vaadin.ui.Component;
-import uk.q3c.krail.base.view.KrailView;
-import uk.q3c.krail.base.view.KrailViewChangeEvent;
+import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.KrailViewChangeEvent;
 
 public class My_AccountView implements KrailView {
 

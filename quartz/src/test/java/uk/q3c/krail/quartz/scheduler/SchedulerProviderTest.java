@@ -23,10 +23,10 @@ import org.junit.runner.RunWith;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.SchedulerRepository;
-import uk.q3c.krail.base.config.ApplicationConfiguration;
-import uk.q3c.krail.base.config.ApplicationConfigurationModule;
-import uk.q3c.krail.base.config.InheritingConfiguration;
-import uk.q3c.krail.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.config.ApplicationConfiguration;
+import uk.q3c.krail.core.config.ApplicationConfigurationModule;
+import uk.q3c.krail.core.config.InheritingConfiguration;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.i18n.I18NModule;
 import uk.q3c.krail.i18n.Translate;
 

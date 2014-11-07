@@ -15,13 +15,13 @@ package fixture;
 
 import com.google.inject.Inject;
 import fixture.testviews2.*;
-import uk.q3c.krail.base.navigate.URIFragmentHandler;
-import uk.q3c.krail.base.navigate.sitemap.DefaultUserSitemap;
-import uk.q3c.krail.base.navigate.sitemap.MasterSitemapNode;
-import uk.q3c.krail.base.navigate.sitemap.StandardPageKey;
-import uk.q3c.krail.base.navigate.sitemap.UserSitemapNode;
-import uk.q3c.krail.base.shiro.PageAccessControl;
-import uk.q3c.krail.base.view.KrailView;
+import uk.q3c.krail.core.navigate.URIFragmentHandler;
+import uk.q3c.krail.core.navigate.sitemap.DefaultUserSitemap;
+import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
+import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
+import uk.q3c.krail.core.shiro.PageAccessControl;
+import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.*;
 
 import java.text.CollationKey;

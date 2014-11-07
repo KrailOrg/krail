@@ -15,8 +15,8 @@ package fixture.testviews2;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.base.view.KrailViewChangeEvent;
-import uk.q3c.krail.base.view.LoginView;
+import uk.q3c.krail.core.view.KrailViewChangeEvent;
+import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.i18n.I18NKey;
 
 public class TestLoginView implements LoginView {
@@ -74,12 +74,12 @@ public class TestLoginView implements LoginView {
     }
 
     @Override
-    public void setStatusMessage(I18NKey<?> messageKey) {
+    public void setStatusMessage(String invalidLogin) {
+
     }
 
     @Override
-    public void setStatusMessage(String invalidLogin) {
-
+    public void setStatusMessage(I18NKey<?> messageKey) {
     }
 
     @Override

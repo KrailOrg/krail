@@ -13,9 +13,9 @@
 package fixture1;
 
 import com.vaadin.ui.Component;
-import uk.q3c.krail.base.navigate.sitemap.View;
-import uk.q3c.krail.base.view.KrailView;
-import uk.q3c.krail.base.view.KrailViewChangeEvent;
+import uk.q3c.krail.core.navigate.sitemap.View;
+import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.KrailViewChangeEvent;
 
 /**
  * This is NOT UIScoped to avoid unnecessary complexity in setting up some of the tests - if you need a UIScoped test

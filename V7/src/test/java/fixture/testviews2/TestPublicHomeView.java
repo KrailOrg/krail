@@ -14,8 +14,8 @@ package fixture.testviews2;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.base.view.KrailViewChangeEvent;
-import uk.q3c.krail.base.view.PublicHomeView;
+import uk.q3c.krail.core.view.KrailViewChangeEvent;
+import uk.q3c.krail.core.view.PublicHomeView;
 
 public class TestPublicHomeView implements PublicHomeView {
 

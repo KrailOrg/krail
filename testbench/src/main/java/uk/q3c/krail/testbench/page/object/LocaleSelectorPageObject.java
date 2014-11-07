@@ -16,8 +16,8 @@ package uk.q3c.krail.testbench.page.object;
 import com.google.common.base.Optional;
 import com.vaadin.testbench.elements.ComboBoxElement;
 import com.vaadin.ui.ComboBox;
-import uk.q3c.krail.base.view.component.DefaultLocaleSelector;
-import uk.q3c.krail.base.view.component.LocaleContainer;
+import uk.q3c.krail.core.view.component.DefaultLocaleSelector;
+import uk.q3c.krail.core.view.component.LocaleContainer;
 import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 import java.util.List;

@@ -16,8 +16,8 @@ package uk.q3c.krail.testbench.page.object;
 import com.google.common.base.Optional;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.HorizontalLayoutElement;
-import uk.q3c.krail.base.view.component.DefaultSubPagePanel;
-import uk.q3c.krail.base.view.component.NavigationButton;
+import uk.q3c.krail.core.view.component.DefaultSubPagePanel;
+import uk.q3c.krail.core.view.component.NavigationButton;
 import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 import java.util.Arrays;

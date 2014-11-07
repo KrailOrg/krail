@@ -15,8 +15,8 @@ package uk.q3c.krail.testapp.view;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Panel;
-import uk.q3c.krail.base.view.KrailViewChangeEvent;
-import uk.q3c.krail.base.view.ViewBase;
+import uk.q3c.krail.core.view.KrailViewChangeEvent;
+import uk.q3c.krail.core.view.ViewBase;
 
 /**
  * Creates a grid, 4 rows x 3 cols. The top row is just a spacer.

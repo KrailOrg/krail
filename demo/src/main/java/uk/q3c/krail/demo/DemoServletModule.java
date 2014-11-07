@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.demo;
 
-import uk.q3c.krail.base.guice.BaseServletModule;
+import uk.q3c.krail.core.guice.BaseServletModule;
 
 public class DemoServletModule extends BaseServletModule {
 

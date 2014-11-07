@@ -20,6 +20,6 @@ import com.vaadin.testbench.elementsbase.ServerClass;
  * Created by david on 17/10/14.
  */
 
-@ServerClass("uk.q3c.krail.base.view.component.DefaultBreadcrumb")
+@ServerClass("uk.q3c.krail.core.view.component.DefaultBreadcrumb")
 public class DefaultBreadcrumbElement extends HorizontalLayoutElement {
 }

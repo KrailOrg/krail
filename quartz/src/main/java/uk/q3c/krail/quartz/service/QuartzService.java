@@ -13,7 +13,7 @@
 package uk.q3c.krail.quartz.service;
 
 import org.quartz.Scheduler;
-import uk.q3c.krail.base.services.Service;
+import uk.q3c.krail.core.services.Service;
 import uk.q3c.krail.quartz.job.JobModuleBase;
 import uk.q3c.krail.quartz.scheduler.DefaultSchedulerModule;
 

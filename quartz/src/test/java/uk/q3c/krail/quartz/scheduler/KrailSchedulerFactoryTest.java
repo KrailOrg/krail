@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import uk.q3c.krail.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.i18n.I18NModule;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -16,7 +16,7 @@ package uk.q3c.krail.testbench.page.object;
 import com.google.common.base.Optional;
 import com.vaadin.testbench.elements.LabelElement;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.base.view.component.DefaultMessageBar;
+import uk.q3c.krail.core.view.component.DefaultMessageBar;
 import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 /**

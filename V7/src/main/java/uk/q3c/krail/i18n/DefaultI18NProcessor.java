@@ -18,7 +18,7 @@ import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.base.ui.ScopedUI;
+import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.util.MessageFormat;
 
 import java.lang.annotation.Annotation;
@@ -246,7 +246,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
                     applyAnnotation(component, field, annotation);
                 } else {
                     String msg = MessageFormat.format("object for field '{0}' has not been constructed, " +
-                            "i18N cannot be applied", field.getName());
+                            "" + "i18N cannot be applied", field.getName());
                     throw new I18NException(msg);
                 }
             } catch (Exception e) {

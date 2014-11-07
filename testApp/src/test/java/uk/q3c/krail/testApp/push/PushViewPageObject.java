@@ -21,7 +21,7 @@ import com.vaadin.testbench.elements.TextFieldElement;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.TextField;
-import uk.q3c.krail.base.view.component.BroadcastMessageLog;
+import uk.q3c.krail.core.view.component.BroadcastMessageLog;
 import uk.q3c.krail.testapp.view.PushView;
 import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.object.PageObject;

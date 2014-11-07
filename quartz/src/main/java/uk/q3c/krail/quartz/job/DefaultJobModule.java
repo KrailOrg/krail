@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.quartz.job;
 
-import uk.q3c.krail.base.guice.BaseGuiceServletInjector;
+import uk.q3c.krail.core.guice.BaseGuiceServletInjector;
 
 public class DefaultJobModule extends JobModuleBase {
 

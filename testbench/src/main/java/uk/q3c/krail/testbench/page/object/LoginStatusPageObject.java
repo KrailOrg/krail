@@ -18,7 +18,7 @@ import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.LabelElement;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.base.view.component.DefaultUserStatusPanel;
+import uk.q3c.krail.core.view.component.DefaultUserStatusPanel;
 import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 /**

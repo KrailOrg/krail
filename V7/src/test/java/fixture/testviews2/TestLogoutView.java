@@ -14,8 +14,8 @@ package fixture.testviews2;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.base.view.KrailViewChangeEvent;
-import uk.q3c.krail.base.view.LogoutView;
+import uk.q3c.krail.core.view.KrailViewChangeEvent;
+import uk.q3c.krail.core.view.LogoutView;
 
 public class TestLogoutView implements LogoutView {
 

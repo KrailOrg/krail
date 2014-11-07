@@ -17,7 +17,7 @@ import com.google.common.base.Optional;
 import com.vaadin.testbench.By;
 import com.vaadin.testbench.elements.MenuBarElement;
 import org.openqa.selenium.WebElement;
-import uk.q3c.krail.base.view.component.DefaultUserNavigationMenu;
+import uk.q3c.krail.core.view.component.DefaultUserNavigationMenu;
 import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.element.HackedMenuBarElement;
 import uk.q3c.util.ID;

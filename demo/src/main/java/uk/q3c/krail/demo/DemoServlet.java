@@ -14,8 +14,8 @@ package uk.q3c.krail.demo;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import uk.q3c.krail.base.guice.BaseServlet;
-import uk.q3c.krail.base.ui.ScopedUIProvider;
+import uk.q3c.krail.core.guice.BaseServlet;
+import uk.q3c.krail.core.ui.ScopedUIProvider;
 
 @Singleton
 public class DemoServlet extends BaseServlet {

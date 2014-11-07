@@ -15,8 +15,8 @@ package uk.q3c.krail.demo;
 
 import com.google.inject.multibindings.MapBinder;
 import com.vaadin.ui.UI;
-import uk.q3c.krail.base.ui.ScopedUIProvider;
-import uk.q3c.krail.base.ui.UIModule;
+import uk.q3c.krail.core.ui.ScopedUIProvider;
+import uk.q3c.krail.core.ui.UIModule;
 
 public class DemoUIModule extends UIModule {
     @Override

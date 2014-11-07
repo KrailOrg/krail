@@ -21,7 +21,7 @@ import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 
 import java.util.Locale;
 

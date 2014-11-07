@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.i18n;
 
-import uk.q3c.krail.base.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 
 import java.util.Locale;
 

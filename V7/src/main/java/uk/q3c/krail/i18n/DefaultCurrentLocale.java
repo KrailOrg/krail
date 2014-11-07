@@ -16,11 +16,11 @@ import com.google.inject.Inject;
 import com.vaadin.server.WebBrowser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.base.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.base.ui.BrowserProvider;
-import uk.q3c.krail.base.user.opt.UserOption;
-import uk.q3c.krail.base.user.status.UserStatus;
-import uk.q3c.krail.base.user.status.UserStatusListener;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.ui.BrowserProvider;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.status.UserStatus;
+import uk.q3c.krail.core.user.status.UserStatusListener;
 import uk.q3c.util.MessageFormat;
 
 import java.util.ArrayList;

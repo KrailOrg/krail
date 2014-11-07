@@ -15,7 +15,7 @@ package uk.q3c.krail.testapp.view;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.base.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 
 @VaadinSessionScoped
 public class SessionObject {

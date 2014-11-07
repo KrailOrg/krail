@@ -1,0 +1,199 @@
+/*
+ * Copyright (C) 2013 David Sowerby
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+package uk.q3c.krail.core.navigate.sitemap;
+
+import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.config.ApplicationConfiguration;
+import uk.q3c.krail.core.config.ApplicationConfigurationService;
+import uk.q3c.krail.core.config.ConfigKeys;
+import uk.q3c.krail.core.config.InheritingConfiguration;
+import uk.q3c.krail.core.services.AbstractServiceI18N;
+import uk.q3c.krail.core.services.Dependency;
+import uk.q3c.krail.i18n.DescriptionKey;
+import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.i18n.Translate;
+import uk.q3c.util.MessageFormat;
+import uk.q3c.util.ResourceUtils;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DefaultSitemapService extends AbstractServiceI18N implements SitemapService {
+
+    private static Logger log = LoggerFactory.getLogger(DefaultSitemapService.class);
+    @Dependency
+    private final ApplicationConfigurationService configurationService;
+    private final Provider<FileSitemapLoader> fileSitemapLoaderProvider;
+    private final MasterSitemap sitemap;
+    private final ApplicationConfiguration configuration;
+    private final Provider<DirectSitemapLoader> directSitemapLoaderProvider;
+    private final Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider;
+    private final SitemapChecker sitemapChecker;
+    private boolean loaded;
+    private List<SitemapLoader> loaders;
+    private StringBuilder report;
+    private List<SitemapSourceType> sourceTypes;
+
+    @Inject
+    protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate,
+                                    Provider<FileSitemapLoader> fileSitemapLoaderProvider,
+                                    Provider<DirectSitemapLoader> directSitemapLoaderProvider,
+                                    Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider,
+                                    MasterSitemap sitemap, SitemapChecker sitemapChecker,
+                                    ApplicationConfiguration configuration) {
+        super(translate);
+        this.configurationService = configurationService;
+        this.annotationSitemapLoaderProvider = annotationSitemapLoaderProvider;
+        this.directSitemapLoaderProvider = directSitemapLoaderProvider;
+        this.fileSitemapLoaderProvider = fileSitemapLoaderProvider;
+        this.sitemap = sitemap;
+        this.sitemapChecker = sitemapChecker;
+        this.configuration = configuration;
+        configure();
+    }
+
+    protected void configure() {
+        setNameKey(LabelKey.Sitemap_Service);
+        setDescriptionKey(DescriptionKey.Sitemap_Service);
+    }
+
+    @Override
+    protected void doStart() throws Exception {
+        if (getStatus().equals(Status.DEPENDENCY_FAILED)) {
+            String msg = MessageFormat.format("Unable to start {0}, because it depends on {1}", getName(),
+                    configurationService.getName());
+            log.error(msg);
+            setStatus(Status.DEPENDENCY_FAILED);
+            throw new SitemapException(msg);
+        }
+        loadSources();
+        LoaderReportBuilder lrb = new LoaderReportBuilder(loaders);
+        report = lrb.getReport();
+        sitemap.setReport(report.toString());
+        if (!loaded) {
+            throw new SitemapException("No valid sources found");
+        }
+    }
+
+    /**
+     * Loads the Sitemap from all the sources specified in {@link #sourceTypes}. The first call to
+     * {@link #loadSource(String, boolean)} has {@code firstLoad} set to true. Subsequent calls have {@code firstLoad}
+     * set to false
+     */
+    private void loadSources() {
+        extractSourcesFromConfig();
+        loaders = new ArrayList<>();
+        for (SitemapSourceType source : sourceTypes) {
+            loadSource(source);
+        }
+        log.debug("Checking Sitemap");
+        sitemapChecker.check();
+        log.debug("Sitemap checked, no errors found");
+    }
+
+    /**
+     * Loads the Sitemap with all sources of the specified {@code source type}.
+     *
+     * @param sourceType
+     */
+    private void loadSource(SitemapSourceType sourceType) {
+        log.debug("Loading Sitemap from {}", sourceType);
+        switch (sourceType) {
+            case FILE:
+                FileSitemapLoader fileSitemapLoader = fileSitemapLoaderProvider.get();
+                loaders.add(fileSitemapLoader);
+                fileSitemapLoader.load();
+                loaded = true;
+                return;
+            case DIRECT:
+                DirectSitemapLoader directSitemapLoader = directSitemapLoaderProvider.get();
+                loaders.add(directSitemapLoader);
+                directSitemapLoader.load();
+                loaded = true;
+                return;
+            case ANNOTATION:
+                AnnotationSitemapLoader annotationSitemapLoader = annotationSitemapLoaderProvider.get();
+                loaders.add(annotationSitemapLoader);
+                annotationSitemapLoader.load();
+                loaded = true;
+                return;
+        }
+    }
+
+    /**
+     * Extracts the source types from the {@link InheritingConfiguration}, and populates {@link #sourceTypes}. The
+     * default is to load from all source types (
+     */
+    private void extractSourcesFromConfig() {
+        List<String> defaultValues = new ArrayList<>();
+        defaultValues.add(SitemapSourceType.FILE.name());
+        defaultValues.add(SitemapSourceType.DIRECT.name());
+        defaultValues.add(SitemapSourceType.ANNOTATION.name());
+        List<Object> list = configuration.getList(ConfigKeys.SITEMAP_SOURCES, defaultValues);
+        sourceTypes = new ArrayList<>();
+        for (Object o : list) {
+            try {
+                SitemapSourceType source = SitemapSourceType.valueOf(o.toString()
+                                                                      .toUpperCase());
+                sourceTypes.add(source);
+            } catch (IllegalArgumentException iae) {
+                log.warn("'{}' is not a valid Sitemap source type", o.toString(), ConfigKeys.SITEMAP_SOURCES);
+
+            }
+        }
+
+        // this will only happen if there is a key with an empty value
+        if (sourceTypes.isEmpty()) {
+            throw new SitemapException("At least one sitemap source must be specified");
+        }
+
+    }
+
+    public File absolutePathFor(String source) {
+
+        if (source.startsWith("/")) {
+            return new File(source);
+        } else {
+            return new File(ResourceUtils.applicationBaseDirectory(), source);
+        }
+
+    }
+
+    @Override
+    protected void doStop() {
+        loaded = false;
+    }
+
+    public StringBuilder getReport() {
+        return report;
+    }
+
+    @Override
+    public Sitemap<MasterSitemapNode> getSitemap() {
+        return sitemap;
+    }
+
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public ImmutableList<SitemapSourceType> getSourceTypes() {
+        return ImmutableList.copyOf(sourceTypes);
+    }
+
+}

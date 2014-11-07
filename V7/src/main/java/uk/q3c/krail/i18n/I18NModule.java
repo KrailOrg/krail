@@ -15,7 +15,7 @@ package uk.q3c.krail.i18n;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
-import uk.q3c.krail.base.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 
 import java.lang.annotation.Annotation;
 import java.util.List;

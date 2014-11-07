@@ -13,8 +13,8 @@
 package uk.q3c.krail.demo.view;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.base.view.PublicHomeView;
-import uk.q3c.krail.base.view.StandardPageViewBase;
+import uk.q3c.krail.core.view.PublicHomeView;
+import uk.q3c.krail.core.view.StandardPageViewBase;
 
 public class DemoPublicHomeView extends StandardPageViewBase implements PublicHomeView {
 

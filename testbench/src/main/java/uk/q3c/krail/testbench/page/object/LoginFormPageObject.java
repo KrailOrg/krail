@@ -22,7 +22,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
-import uk.q3c.krail.base.view.DefaultLoginView;
+import uk.q3c.krail.core.view.DefaultLoginView;
 import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 

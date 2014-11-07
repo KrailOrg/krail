@@ -24,8 +24,8 @@ import de.steinwedel.messagebox.MessageBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.risto.stepper.IntStepper;
-import uk.q3c.krail.base.view.KrailViewChangeEvent;
-import uk.q3c.krail.base.view.ViewBase;
+import uk.q3c.krail.core.view.KrailViewChangeEvent;
+import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.util.ID;
 
 public class WidgetsetView extends ViewBase {

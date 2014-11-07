@@ -12,8 +12,8 @@
  */
 package uk.q3c.krail.testapp.view;
 
-import uk.q3c.krail.base.view.PublicHomeView;
-import uk.q3c.krail.base.view.ViewModule;
+import uk.q3c.krail.core.view.PublicHomeView;
+import uk.q3c.krail.core.view.ViewModule;
 
 public class TestAppViewModule extends ViewModule {
 

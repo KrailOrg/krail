@@ -18,7 +18,7 @@ import com.google.common.primitives.Ints;
 import com.vaadin.testbench.By;
 import com.vaadin.testbench.elements.TreeElement;
 import org.openqa.selenium.WebElement;
-import uk.q3c.krail.base.view.component.DefaultUserNavigationTree;
+import uk.q3c.krail.core.view.component.DefaultUserNavigationTree;
 import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.util.ID;
 

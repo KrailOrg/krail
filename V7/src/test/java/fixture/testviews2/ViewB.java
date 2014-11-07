@@ -15,9 +15,9 @@ package fixture.testviews2;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.base.navigate.DefaultNavigatorTest;
-import uk.q3c.krail.base.view.KrailView;
-import uk.q3c.krail.base.view.KrailViewChangeEvent;
+import uk.q3c.krail.core.navigate.DefaultNavigatorTest;
+import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.KrailViewChangeEvent;
 
 public class ViewB implements KrailView {
 
