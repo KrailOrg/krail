@@ -1,0 +1,38 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Gradle : uk.q3c.krail:testUtil : testUtil-0.5.war">
+    <output-path>$PROJECT_DIR$/build/classes/artifacts/testUtil</output-path>
+    <root id="archive" name="testUtil-0.5.war">
+      <element id="javaee-facet-resources" facet="testUtil/web/Web Gradle : testUtil-0.5.war" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="testUtil" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Gradle: guice-3.0" />
+          <element id="library" level="project" name="Gradle: guice-servlet-3.0" />
+          <element id="library" level="project" name="Gradle: guice-assistedinject-3.0" />
+          <element id="library" level="project" name="Gradle: guice-multibindings-3.0" />
+          <element id="library" level="project" name="Gradle: slf4j-api-1.6.6" />
+          <element id="library" level="project" name="Gradle: slf4j-log4j12-1.6.6" />
+          <element id="library" level="project" name="Gradle: javax.inject-1" />
+          <element id="library" level="project" name="Gradle: aopalliance-1.0" />
+          <element id="library" level="project" name="Gradle: asm-3.1" />
+          <element id="library" level="project" name="Gradle: cglib-2.2.1-v20090111" />
+          <element id="library" level="project" name="Gradle: log4j-1.2.17" />
+          <element id="library" level="project" name="Gradle: sac-1.3" />
+          <element id="library" level="project" name="Gradle: flute-1.3.0.gg2" />
+          <element id="library" level="project" name="Gradle: vaadin-sass-compiler-0.9.10" />
+          <element id="library" level="project" name="Gradle: streamhtmlparser-jsilver-0.0.10.vaadin1" />
+          <element id="library" level="project" name="Gradle: guava-16.0.1.vaadin1" />
+          <element id="library" level="project" name="Gradle: json-0.0.20080701" />
+          <element id="library" level="project" name="Gradle: jsoup-1.6.3" />
+          <element id="library" level="project" name="Gradle: vaadin-server-7.3.4" />
+          <element id="library" level="project" name="Gradle: vaadin-shared-7.3.4" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/build/classes/artifacts/testUtil/exploded/testUtil-0.5.war/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>
