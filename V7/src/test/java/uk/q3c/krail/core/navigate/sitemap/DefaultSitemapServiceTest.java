@@ -134,7 +134,7 @@ public class DefaultSitemapServiceTest {
      */
     private void copySitemapPropertiesToTemp() {
 
-        File source = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/base/navigate/sitemap_good" + "" +
+        File source = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/core/navigate/sitemap_good" + "" +
                 ".properties");
 
         if (!source.exists()) {
@@ -298,7 +298,7 @@ public class DefaultSitemapServiceTest {
 
         @Override
         protected void define() {
-            File a = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/base/navigate/sitemap_good.properties");
+            File a = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/core/navigate/sitemap_good.properties");
             addEntry("a", new SitemapFile(a.getAbsolutePath()));
         }
     }

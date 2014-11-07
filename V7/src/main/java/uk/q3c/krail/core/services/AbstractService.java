@@ -74,13 +74,13 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
     }
 
     @Override
-    public Status getStatus() {
-        return status;
+    public void dependencyServiceStopped(Service service) throws Exception {
+        stop();
     }
 
     @Override
-    public void dependencyServiceStopped(Service service) throws Exception {
-        stop();
+    public Status getStatus() {
+        return status;
     }
 
     @Override
@@ -151,32 +151,6 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
         return status;
     }
 
-    protected void fireListeners(Status previousStatus) throws Exception {
-
-        log.debug("firing status change listeners in {}.  Status is now {}", this.getName(), this.getStatus());
-        for (ServiceChangeListener listener : statusChangeListeners) {
-            listener.serviceStatusChange(this, previousStatus, status);
-        }
-
-        // prevents re-entrant use of iterator
-        ImmutableList<ServiceStartListener> startListeners = ImmutableList.copyOf(serviceStartListeners);
-        if (previousStatus != Status.INITIAL && status == Status.STARTED) {
-            log.debug("Firing start listeners from {}", getName());
-            for (ServiceStartListener listener : startListeners) {
-                listener.dependencyServiceStarted(this);
-            }
-        }
-
-        // prevents re-entrant use of iterator
-        ImmutableList<ServiceStopListener> stopListeners = ImmutableList.copyOf(serviceStopListeners);
-        if (previousStatus == Status.STARTED && isStopped()) {
-            log.debug("Firing stop listeners from {}", getName());
-            for (ServiceStopListener listener : stopListeners) {
-                listener.dependencyServiceStopped(this);
-            }
-        }
-    }
-
     protected abstract void doStart() throws Exception;
 
     private List<DependencyRecord> getDependencies() throws IllegalArgumentException, IllegalAccessException {
@@ -204,6 +178,7 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
                             depRec.service.addStopListener(this);
                         }
                         dependencies.add(depRec);
+                        log.debug("Service dependency {} identified", depRec.service.getName());
                     }
                 }
             }
@@ -211,9 +186,30 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
         return dependencies;
     }
 
-    @Override
-    public boolean isStopped() {
-        return status == Status.STOPPED || (status == Status.FAILED) || status == Status.DEPENDENCY_FAILED;
+    protected void fireListeners(Status previousStatus) throws Exception {
+
+        log.debug("firing status change listeners in {}.  Status is now {}", this.getName(), this.getStatus());
+        for (ServiceChangeListener listener : statusChangeListeners) {
+            listener.serviceStatusChange(this, previousStatus, status);
+        }
+
+        // prevents re-entrant use of iterator
+        ImmutableList<ServiceStartListener> startListeners = ImmutableList.copyOf(serviceStartListeners);
+        if (previousStatus != Status.INITIAL && status == Status.STARTED) {
+            log.debug("Firing start listeners from {}", getName());
+            for (ServiceStartListener listener : startListeners) {
+                listener.dependencyServiceStarted(this);
+            }
+        }
+
+        // prevents re-entrant use of iterator
+        ImmutableList<ServiceStopListener> stopListeners = ImmutableList.copyOf(serviceStopListeners);
+        if (previousStatus == Status.STARTED && isStopped()) {
+            log.debug("Firing stop listeners from {}", getName());
+            for (ServiceStopListener listener : stopListeners) {
+                listener.dependencyServiceStopped(this);
+            }
+        }
     }
 
     @Override
@@ -226,18 +222,14 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
         serviceStopListeners.remove(listener);
     }
 
-    protected void setStatus(Status status) throws Exception {
-        if (status != this.status) {
-            Status previousStatus = this.status;
-            this.status = status;
-            log.debug(getName() + " has changed status from {} to {}", previousStatus, getStatus());
-            fireListeners(previousStatus);
-        }
-    }
-
     @Override
     public void addStartListener(ServiceStartListener listener) {
         serviceStartListeners.add(listener);
+    }
+
+    @Override
+    public boolean isStopped() {
+        return status == Status.STOPPED || (status == Status.FAILED) || status == Status.DEPENDENCY_FAILED;
     }
 
     @Override
@@ -257,6 +249,15 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
                     "startOnRestart=" + startOnRestart + ", stopOnFail=" + stopOnFail + "]";
         }
 
+    }
+
+    protected void setStatus(Status status) throws Exception {
+        if (status != this.status) {
+            Status previousStatus = this.status;
+            this.status = status;
+            log.debug(getName() + " has changed status from {} to {}", previousStatus, getStatus());
+            fireListeners(previousStatus);
+        }
     }
 
 

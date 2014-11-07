@@ -81,7 +81,7 @@ public class DefaultFileSitemapLoaderTest {
 
     @BeforeClass
     public static void beforeClass() {
-        propDir = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/base/navigate");
+        propDir = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/core/navigate");
         File modDir = new File(System.getProperty("user.home"));
         modifiedFile = new File(modDir, "temp/sitemap.properties");
     }
@@ -125,7 +125,7 @@ public class DefaultFileSitemapLoaderTest {
         assertThat(loader.getLabelKey()).isEqualTo("uk.q3c.krail.i18n.TestLabelKey");
         assertThat(loader.isAppendView()).isTrue();
         assertThat(loader.getLabelKeysClass()).isEqualTo(TestLabelKey.class);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.base.view.testviews");
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.core.view.testviews");
         assertThat(loader.getMissingEnums()).isEmpty();
 
         System.out.println(loader.getSitemap()
@@ -301,7 +301,7 @@ public class DefaultFileSitemapLoaderTest {
         assertThat(loader.missingSections()).containsOnly();
 
         assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.base.view.testviews");
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.core.view.testviews");
 
         assertThat(loader.getMissingEnums()).containsOnly();
         assertThat(loader.getErrorCount()).isEqualTo(0);
@@ -368,7 +368,7 @@ public class DefaultFileSitemapLoaderTest {
 
         assertThat(loader.missingSections()).isEmpty();
         assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.base.view.testviews");
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.core.view.testviews");
         assertThat(loader.getMissingEnums()).contains("MoneyInOut", "Transfers", "Opt");
 
         assertThat(containsError(FileSitemapLoader.LABELKEY_DOES_NOT_IMPLEMENT_I18N_KEY)).isTrue();
@@ -400,7 +400,7 @@ public class DefaultFileSitemapLoaderTest {
 
         assertThat(loader.missingSections()).isEmpty();
         assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.base.view.testviews");
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.core.view.testviews");
         assertThat(loader.getMissingEnums()).contains("MoneyInOut", "Transfers", "Opt");
 
         assertThat(containsError(FileSitemapLoader.LABELKEY_NOT_IN_CLASSPATH)).isTrue();
@@ -427,7 +427,7 @@ public class DefaultFileSitemapLoaderTest {
 
         assertThat(loader.missingSections()).isEmpty();
         assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.base.view.testviews");
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.core.view.testviews");
         assertThat(loader.getMissingEnums()).isEmpty();
 
         assertThat(containsError(FileSitemapLoader.VIEW_NOT_FOUND_IN_SPECIFIED_PACKAGES)).isTrue();
@@ -472,7 +472,7 @@ public class DefaultFileSitemapLoaderTest {
 
         assertThat(loader.missingSections()).isEmpty();
         assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.base.view.testviews");
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.core.view.testviews");
         assertThat(loader.getMissingEnums()).isEmpty();
 
         assertThat(containsError(FileSitemapLoader.VIEW_DOES_NOT_IMPLEMENT_KRAILVIEW)).isTrue();
@@ -504,7 +504,7 @@ public class DefaultFileSitemapLoaderTest {
 
         assertThat(loader.missingSections()).isEmpty();
         assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
-        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.base.view.testviews");
+        assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.core.view.testviews");
         assertThat(loader.getMissingEnums()).isEmpty();
 
         assertThat(containsWarning(FileSitemapLoader.LINE_FORMAT_INDENTATION_INCORRECT)).isTrue();

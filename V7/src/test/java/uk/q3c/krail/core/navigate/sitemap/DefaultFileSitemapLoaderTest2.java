@@ -88,7 +88,7 @@ public class DefaultFileSitemapLoaderTest2 {
 
         // Note: this currently only works if there are errors
         assertThat(report).contains("V7/src/test/java/uk/q3c/krail/core/navigate/sitemap_good1.properties");
-        assertThat(report).contains("uk/q3c/krail/base/navigate/sitemap_good1.properties");
+        assertThat(report).contains("uk/q3c/krail/core/navigate/sitemap_good1.properties");
         System.out.println(report.toString());
     }
 
@@ -192,8 +192,8 @@ public class DefaultFileSitemapLoaderTest2 {
 
         @Override
         protected void define() {
-            File a = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/base/navigate/sitemap_good.properties");
-            File b = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/base/navigate/sitemap_good1" + "" +
+            File a = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/core/navigate/sitemap_good.properties");
+            File b = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/core/navigate/sitemap_good1" + "" +
                     ".properties");
 
             addEntry("a", new SitemapFile(a.getAbsolutePath()));
