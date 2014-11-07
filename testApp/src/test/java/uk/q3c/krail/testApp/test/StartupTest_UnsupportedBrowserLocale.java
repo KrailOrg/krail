@@ -17,7 +17,7 @@ import com.vaadin.testbench.ScreenshotOnFailureRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.object.LocaleSelectorPageObject;
 
 import java.util.Locale;
@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 
-public class StartupTest_UnsupportedBrowserLocale extends V7TestBenchTestCase {
+public class StartupTest_UnsupportedBrowserLocale extends KrailTestBenchTestCase {
 
     @Rule
     public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);

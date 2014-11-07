@@ -24,7 +24,7 @@ import uk.q3c.krail.base.services.Dependency;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.quartz.job.JobEntry;
 import uk.q3c.krail.quartz.job.JobListenerEntry;
-import uk.q3c.krail.quartz.job.V7JobFactory;
+import uk.q3c.krail.quartz.job.KrailJobFactory;
 import uk.q3c.krail.quartz.scheduler.*;
 
 import java.util.Map;
@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * Creates schedulers and attaches listeners and jobs to those schedulers, as defined in the associated Guice modules.
  * Note that this class has a dependency on the {@link ApplicationConfigurationService}, because the
- * {@link DefaultV7SchedulerFactory} may need the ApplicationConfiguration object
+ * {@link DefaultKrailSchedulerFactory} may need the ApplicationConfiguration object
  * <p/>
  *
  * @author David Sowerby
@@ -51,19 +51,19 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
     private final Map<String, SchedulerConfiguration> schedulerConfigurations;
     private final Set<JobEntry> jobs;
     private final Set<JobListenerEntry> jobListeners;
-    private final Provider<V7SchedulerFactory> factoryProvider;
+    private final Provider<KrailSchedulerFactory> factoryProvider;
     private final Set<TriggerListenerEntry> triggerListeners;
     private final SchedulerProvider schedulerProvider;
     private final Injector injector;
-    private final V7JobFactory jobFactory;
+    private final KrailJobFactory jobFactory;
 
     @Inject
     public DefaultQuartzService(Translate translate, Map<String, SchedulerConfiguration> schedulerConfigurations,
                                 Set<SchedulerListenerEntry> schedulerListeners,
-                                Set<TriggerListenerEntry> triggerListeners,
-                                Provider<V7SchedulerFactory> factoryProvider, ApplicationConfigurationService
-            applicationConfigurationService, SchedulerProvider schedulerProvider, Injector injector,
-                                V7JobFactory jobFactory, Set<JobEntry> jobs, Set<JobListenerEntry> jobListeners) {
+                                Set<TriggerListenerEntry> triggerListeners, Provider<KrailSchedulerFactory>
+            factoryProvider, ApplicationConfigurationService applicationConfigurationService,
+                                SchedulerProvider schedulerProvider, Injector injector, KrailJobFactory jobFactory,
+                                Set<JobEntry> jobs, Set<JobListenerEntry> jobListeners) {
         super(translate);
         this.schedulerConfigurations = schedulerConfigurations;
         this.schedulerListeners = schedulerListeners;
@@ -98,7 +98,7 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
         for (Entry<String, SchedulerConfiguration> configurationEntry : schedulerConfigurations.entrySet()) {
             SchedulerConfiguration configuration = configurationEntry.getValue();
             if (configuration.isAutoStart()) {
-                V7Scheduler scheduler = schedulerProvider.get(configuration.getName());
+                KrailScheduler scheduler = schedulerProvider.get(configuration.getName());
                 scheduler.start();
             }
         }
@@ -112,7 +112,7 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
      */
     private void attachSchedulerListeners() throws SchedulerException {
         for (SchedulerListenerEntry entry : schedulerListeners) {
-            V7Scheduler scheduler = schedulerProvider.get(entry.getSchedulerName());
+            KrailScheduler scheduler = schedulerProvider.get(entry.getSchedulerName());
             SchedulerListener listener = injector.getInstance(entry.getListenerClass());
             scheduler.getListenerManager()
                      .addSchedulerListener(listener);
@@ -126,8 +126,8 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
      */
     private void attachTriggerListeners() throws SchedulerException {
         for (TriggerListenerEntry entry : triggerListeners) {
-            V7Scheduler scheduler = schedulerProvider.get(entry.getSchedulerName());
-            V7TriggerListener listener = injector.getInstance(entry.getListenerClass());
+            KrailScheduler scheduler = schedulerProvider.get(entry.getSchedulerName());
+            KrailTriggerListener listener = injector.getInstance(entry.getListenerClass());
             listener.setName(entry.getTriggerName());
             scheduler.getListenerManager()
                      .addTriggerListener(listener);
@@ -138,7 +138,7 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
         for (Entry<String, SchedulerConfiguration> configurationEntry : schedulerConfigurations.entrySet()) {
             SchedulerConfiguration configuration = configurationEntry.getValue();
             String schedulerName = configuration.getName();
-            V7Scheduler scheduler = schedulerProvider.get(schedulerName);
+            KrailScheduler scheduler = schedulerProvider.get(schedulerName);
             scheduler.setJobFactory(jobFactory);
             for (JobEntry jobEntry : jobs) {
                 if (jobEntry.getSchedulerName()
@@ -155,7 +155,7 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
         for (Entry<String, SchedulerConfiguration> configurationEntry : schedulerConfigurations.entrySet()) {
             SchedulerConfiguration configuration = configurationEntry.getValue();
             String schedulerName = configuration.getName();
-            V7Scheduler scheduler = schedulerProvider.get(schedulerName);
+            KrailScheduler scheduler = schedulerProvider.get(schedulerName);
             for (JobListenerEntry entry : jobListeners) {
                 if (entry.getSchedulerName()
                          .equals(schedulerName)) {
@@ -179,7 +179,7 @@ public class DefaultQuartzService extends AbstractServiceI18N implements QuartzS
             // force the scheduler name to be the same as map key to avoid errors
             configuration.name(configurationEntry.getKey());
             // create a factory
-            V7SchedulerFactory factory = factoryProvider.get();
+            KrailSchedulerFactory factory = factoryProvider.get();
             // the factory will combine scheduler configuration sources as needed
             factory.createScheduler(configuration);
         }

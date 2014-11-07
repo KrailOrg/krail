@@ -23,9 +23,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.base.navigate.URIFragmentHandler;
-import uk.q3c.krail.base.navigate.V7Navigator;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.base.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.base.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
@@ -33,7 +33,7 @@ import uk.q3c.krail.base.user.opt.DefaultUserOption;
 import uk.q3c.krail.base.user.opt.DefaultUserOptionStore;
 import uk.q3c.krail.base.user.opt.UserOption;
 import uk.q3c.krail.base.user.opt.UserOptionStore;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
 import uk.q3c.krail.i18n.CurrentLocale;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class DefaultSubPagePanelTest {
     ReferenceUserSitemap userSitemap;
 
     @Mock
-    V7Navigator navigator;
+    Navigator navigator;
 
     @Inject
     CurrentLocale currentLocale;
@@ -65,7 +65,7 @@ public class DefaultSubPagePanelTest {
     DefaultUserSitemapSorters sorters;
 
     @Mock
-    V7ViewChangeEvent event;
+    KrailViewChangeEvent event;
 
     @Before
     public void setup() {

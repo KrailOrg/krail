@@ -16,13 +16,13 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 import org.reflections.Reflections;
 import uk.q3c.krail.base.guice.BaseGuiceServletInjector;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 
 import java.lang.ProcessBuilder.Redirect;
 
 /**
- * If you want to create Sitemap entries for your own code using {@link View} annotations on your {@link V7View}
+ * If you want to create Sitemap entries for your own code using {@link View} annotations on your {@link KrailView}
  * classes, you can either subclass this module and provide the entries in the {@link #define} method, or just simply
  * use this as an example and create your own. The module then needs to be added to your subclass of
  * {@link BaseGuiceServletInjector}. By convention, modules relating to the Sitemap are added in the
@@ -58,7 +58,8 @@ public abstract class AnnotationSitemapModule extends AbstractModule {
      * not matter what the sample is as long as it is a member of the I18NKey class you want to use. This is only used
      * for the {@link View} annotation, the {@link Redirect} annotation does not use the key
      * <p/>
-     * V7 uses the {@link Reflections} utility to scan for the annotations. When you add a package root in your module,
+     * Krail uses the {@link Reflections} utility to scan for the annotations. When you add a package root in your
+     * module,
      * you are actually using the Reflections facility to scan from a package prefix. Note that this is a literal
      * prefix
      * from the full class name. This means that a prefix of 'com.example.view' would scan both of these:

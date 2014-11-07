@@ -15,7 +15,7 @@ package uk.q3c.krail.testApp.test;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.object.LocaleSelectorPageObject;
 import uk.q3c.krail.testbench.page.object.LoginFormPageObject;
 import uk.q3c.krail.testbench.page.object.NavMenuPageObject;
@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by david on 09/07/14.
  */
 
-public class LocaleTest extends V7TestBenchTestCase {
+public class LocaleTest extends KrailTestBenchTestCase {
 
     private LocaleSelectorPageObject localeSelector = new LocaleSelectorPageObject(this);
     private LoginFormPageObject loginForm = new LoginFormPageObject(this);

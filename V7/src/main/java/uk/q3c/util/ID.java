@@ -23,7 +23,7 @@ import com.google.common.base.Optional;
  * <p/>
  * The components list is a notional hierarchy of components (it can be anything that makes sense in your
  * environment, this is just an identifier). Although it is generally instances of components you would use here,
- * you may wish to use other things (for example V7View implementations) which are not components in their own
+ * you may wish to use other things (for example KrailView implementations) which are not components in their own
  * right, therefore the method takes Object rather than Component parameters
  *
  * @author David Sowerby 15 Sep 2013

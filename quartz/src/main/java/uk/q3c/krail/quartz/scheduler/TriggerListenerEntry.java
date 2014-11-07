@@ -17,9 +17,9 @@ public class TriggerListenerEntry {
 
     private final String schedulerName;
     private final String triggerName;
-    private final Class<? extends V7TriggerListener> listenerClass;
+    private final Class<? extends KrailTriggerListener> listenerClass;
 
-    protected TriggerListenerEntry(String schedulerName, String triggerName, Class<? extends V7TriggerListener>
+    protected TriggerListenerEntry(String schedulerName, String triggerName, Class<? extends KrailTriggerListener>
             listenerClass) {
         super();
         this.schedulerName = schedulerName;
@@ -31,7 +31,7 @@ public class TriggerListenerEntry {
         return schedulerName;
     }
 
-    public Class<? extends V7TriggerListener> getListenerClass() {
+    public Class<? extends KrailTriggerListener> getListenerClass() {
         return listenerClass;
     }
 

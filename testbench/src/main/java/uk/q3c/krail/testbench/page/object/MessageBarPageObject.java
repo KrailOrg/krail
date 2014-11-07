@@ -17,7 +17,7 @@ import com.google.common.base.Optional;
 import com.vaadin.testbench.elements.LabelElement;
 import com.vaadin.ui.Label;
 import uk.q3c.krail.base.view.component.DefaultMessageBar;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 /**
  * Created by david on 03/10/14.
@@ -34,7 +34,7 @@ public class MessageBarPageObject extends PageObject {
      *
      * @param parentCase
      */
-    public MessageBarPageObject(V7TestBenchTestCase parentCase) {
+    public MessageBarPageObject(KrailTestBenchTestCase parentCase) {
         super(parentCase);
     }
 

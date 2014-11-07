@@ -66,12 +66,12 @@ public class ViewBaseTest {
 
 
         @Override
-        public void beforeBuild(V7ViewChangeEvent event) {
+        public void beforeBuild(KrailViewChangeEvent event) {
 
         }
 
         @Override
-        public void buildView(V7ViewChangeEvent event) {
+        public void buildView(KrailViewChangeEvent event) {
 
         }
     }
@@ -80,12 +80,12 @@ public class ViewBaseTest {
 
 
         @Override
-        public void beforeBuild(V7ViewChangeEvent event) {
+        public void beforeBuild(KrailViewChangeEvent event) {
 
         }
 
         @Override
-        public void buildView(V7ViewChangeEvent event) {
+        public void buildView(KrailViewChangeEvent event) {
             setRootComponent(new Label("blank"));
         }
     }

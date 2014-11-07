@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.object.BreadcrumbPageObject;
 import uk.q3c.krail.testbench.page.object.NavMenuPageObject;
 import uk.q3c.krail.testbench.page.object.NavTreePageObject;
@@ -31,7 +31,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-public class NavigationTest extends V7TestBenchTestCase {
+public class NavigationTest extends KrailTestBenchTestCase {
 
     @Rule
     public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);

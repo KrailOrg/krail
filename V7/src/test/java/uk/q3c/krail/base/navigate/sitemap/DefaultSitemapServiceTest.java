@@ -33,10 +33,10 @@ import uk.q3c.krail.base.config.ConfigKeys;
 import uk.q3c.krail.base.config.InheritingConfiguration;
 import uk.q3c.krail.base.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.base.navigate.DefaultV7Navigator;
+import uk.q3c.krail.base.navigate.DefaultNavigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.base.navigate.URIFragmentHandler;
-import uk.q3c.krail.base.navigate.V7Navigator;
 import uk.q3c.krail.base.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
 import uk.q3c.krail.base.navigate.sitemap.DefaultSitemapServiceTest.TestFileSitemapModule;
 import uk.q3c.krail.base.services.ServiceException;
@@ -99,7 +99,7 @@ public class DefaultSitemapServiceTest {
     @Before
     public void setup() throws ConfigurationException {
 
-        File inifile = new File(ResourceUtils.userTempDirectory(), "WEB-INF/V7.ini");
+        File inifile = new File(ResourceUtils.userTempDirectory(), "WEB-INF/krail.ini");
         iniConfig = new HierarchicalINIConfiguration(inifile);
         iniConfig.clear();
         iniConfig.save();
@@ -134,7 +134,7 @@ public class DefaultSitemapServiceTest {
      */
     private void copySitemapPropertiesToTemp() {
 
-        File source = new File(TestResource.testJavaRootDir("V7"), "uk/co/q3c/v7/base/navigate/sitemap_good" + "" +
+        File source = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/base/navigate/sitemap_good" + "" +
                 ".properties");
 
         if (!source.exists()) {
@@ -275,7 +275,7 @@ public class DefaultSitemapServiceTest {
 
             @Override
             protected void configure() {
-                bind(V7Navigator.class).to(DefaultV7Navigator.class);
+                bind(Navigator.class).to(DefaultNavigator.class);
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
                 bind(ScopedUIProvider.class).to(BasicUIProvider.class);
             }
@@ -298,7 +298,7 @@ public class DefaultSitemapServiceTest {
 
         @Override
         protected void define() {
-            File a = new File(TestResource.testJavaRootDir("V7"), "uk/co/q3c/v7/base/navigate/sitemap_good.properties");
+            File a = new File(TestResource.testJavaRootDir("V7"), "uk/q3c/krail/base/navigate/sitemap_good.properties");
             addEntry("a", new SitemapFile(a.getAbsolutePath()));
         }
     }

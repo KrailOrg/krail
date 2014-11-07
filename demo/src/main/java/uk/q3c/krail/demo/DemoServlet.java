@@ -27,7 +27,7 @@ public class DemoServlet extends BaseServlet {
 
     @Override
     protected String widgetset() {
-        return "uk.q3c.krail.demo.widgetset.V7demoWidgetset";
+        return "uk.q3c.krail.demo.widgetset.demoWidgetset";
     }
 
 }

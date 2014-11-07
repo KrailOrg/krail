@@ -23,7 +23,7 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.TextField;
 import uk.q3c.krail.base.view.component.BroadcastMessageLog;
 import uk.q3c.krail.testapp.view.PushView;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.object.PageObject;
 
 /**
@@ -33,7 +33,7 @@ import uk.q3c.krail.testbench.page.object.PageObject;
  */
 public class PushViewPageObject extends PageObject {
 
-    public PushViewPageObject(V7TestBenchTestCase parentCase) {
+    public PushViewPageObject(KrailTestBenchTestCase parentCase) {
         super(parentCase);
     }
 

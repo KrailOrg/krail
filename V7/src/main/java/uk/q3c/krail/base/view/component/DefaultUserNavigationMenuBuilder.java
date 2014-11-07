@@ -14,7 +14,7 @@ package uk.q3c.krail.base.view.component;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.MenuBar.MenuItem;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemapNode;
 import uk.q3c.util.*;
@@ -23,11 +23,11 @@ import uk.q3c.util.TreeCopy.SortOption;
 public class DefaultUserNavigationMenuBuilder implements UserNavigationMenuBuilder {
 
     private final UserSitemap userSitemap;
-    private final V7Navigator navigator;
+    private final Navigator navigator;
     private UserNavigationMenu userNavigationMenu;
 
     @Inject
-    protected DefaultUserNavigationMenuBuilder(UserSitemap userSitemap, V7Navigator navigator) {
+    protected DefaultUserNavigationMenuBuilder(UserSitemap userSitemap, Navigator navigator) {
         this.userSitemap = userSitemap;
         this.navigator = navigator;
     }

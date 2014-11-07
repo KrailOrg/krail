@@ -73,12 +73,12 @@ public class ApplicationView1 extends ViewBaseWithLayout {
      *         contains information about the change to this View
      */
     @Override
-    public void beforeBuild(V7ViewChangeEvent event) {
+    public void beforeBuild(KrailViewChangeEvent event) {
 
     }
 
     @Override
-    public void buildView(V7ViewChangeEvent event) {
+    public void buildView(KrailViewChangeEvent event) {
         add(logo).width(50)
                  .height(70);
         add(header).widthUndefined()
@@ -95,7 +95,7 @@ public class ApplicationView1 extends ViewBaseWithLayout {
 
 
     @Override
-    public void afterBuild(V7ViewChangeEvent event) {
+    public void afterBuild(KrailViewChangeEvent event) {
         super.afterBuild(event);
         body.processParams(event.getFromState());
     }

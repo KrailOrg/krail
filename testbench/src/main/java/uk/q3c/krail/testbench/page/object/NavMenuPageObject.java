@@ -18,8 +18,8 @@ import com.vaadin.testbench.By;
 import com.vaadin.testbench.elements.MenuBarElement;
 import org.openqa.selenium.WebElement;
 import uk.q3c.krail.base.view.component.DefaultUserNavigationMenu;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
-import uk.q3c.krail.testbench.page.element.V7MenuBarElement;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
+import uk.q3c.krail.testbench.page.element.HackedMenuBarElement;
 import uk.q3c.util.ID;
 
 /**
@@ -37,7 +37,7 @@ public class NavMenuPageObject extends PageObject {
      *
      * @param parentCase
      */
-    public NavMenuPageObject(V7TestBenchTestCase parentCase) {
+    public NavMenuPageObject(KrailTestBenchTestCase parentCase) {
         super(parentCase);
     }
 
@@ -63,13 +63,13 @@ public class NavMenuPageObject extends PageObject {
      * @param path
      */
     public void clickItem(String... path) {
-        V7MenuBarElement element = menuBar();
+        HackedMenuBarElement element = menuBar();
         element.clickItem(path);
     }
 
-    public V7MenuBarElement menuBar() {
-        V7MenuBarElement menuBar = parentCase.$(V7MenuBarElement.class)
-                                             .first();
+    public HackedMenuBarElement menuBar() {
+        HackedMenuBarElement menuBar = parentCase.$(HackedMenuBarElement.class)
+                                                 .first();
         return menuBar;
     }
 }

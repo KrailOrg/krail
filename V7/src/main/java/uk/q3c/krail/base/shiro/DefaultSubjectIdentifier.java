@@ -20,7 +20,7 @@ import uk.q3c.krail.i18n.Translate;
 
 /**
  * This default implementation assumes that the Subject's primary principal toString() method will return a username.
- * This is the case for a Subject created under V7's default conditions. You may of course choose to change those
+ * This is the case for a Subject created under Krail's default conditions. You may of course choose to change those
  * conditions, and you may then need to provide your own SubjectIdentifier implementation.
  *
  * @author David Sowerby 3 Oct 2013

@@ -35,7 +35,7 @@ public class Descriptions extends MapResourceBundle<DescriptionKey> {
 				.put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok")
 				.put(DescriptionKey.No_Permission, "You do not have permission for that action")
 				.put(DescriptionKey.Application_Configuration_Service, "This service loads the application " +
-                        "configuration from V7.ini")
+                        "configuration from krail.ini")
 				.put(DescriptionKey.Sitemap_Service, "This service creates the Sitemap using options from the " +
                         "application configuration")
 				.put(DescriptionKey.Unknown_Account, "That username or password was not recognised")

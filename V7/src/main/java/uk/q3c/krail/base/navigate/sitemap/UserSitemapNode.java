@@ -13,7 +13,7 @@
 package uk.q3c.krail.base.navigate.sitemap;
 
 import uk.q3c.krail.base.shiro.PageAccessControl;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -76,7 +76,7 @@ public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode>
     }
 
     @Override
-    public Class<? extends V7View> getViewClass() {
+    public Class<? extends KrailView> getViewClass() {
         return masterNode.getViewClass();
     }
 

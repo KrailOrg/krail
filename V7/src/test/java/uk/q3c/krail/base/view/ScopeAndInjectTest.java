@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class ScopeAndInjectTest {
     /**
-     * All implementations of V7View should be have a scope of {@link UIScoped} to avoid issues when navigating and
+     * All implementations of KrailView should be have a scope of {@link UIScoped} to avoid issues when navigating and
      * going back to existing pages.
      * <p/>
      */
@@ -50,22 +50,22 @@ public class ScopeAndInjectTest {
         // given
         Reflections reflections = new Reflections("");
 
-        Set<Class<? extends V7View>> subTypes = reflections.getSubTypesOf(V7View.class);
-        Set<Class<? extends V7View>> concreteTypes = new HashSet<>();
+        Set<Class<? extends KrailView>> subTypes = reflections.getSubTypesOf(KrailView.class);
+        Set<Class<? extends KrailView>> concreteTypes = new HashSet<>();
 
-        Set<Class<? extends V7View>> noInject = new HashSet<>();
-        // Set<Class<? extends V7View>> noScope = new HashSet<>();
+        Set<Class<? extends KrailView>> noInject = new HashSet<>();
+        // Set<Class<? extends KrailView>> noScope = new HashSet<>();
 
         // when
         // remove interfaces, abstract classes and inner classes
         // inner classes are the responsibility of the test
-        for (Class<? extends V7View> clazz : subTypes) {
+        for (Class<? extends KrailView> clazz : subTypes) {
             if (!clazz.isInterface() && !Modifier.isAbstract(clazz.getModifiers()) && !clazz.isMemberClass()) {
                 concreteTypes.add(clazz);
             }
         }
 
-        for (Class<? extends V7View> clazz : concreteTypes) {
+        for (Class<? extends KrailView> clazz : concreteTypes) {
             // if (!clazz.isAnnotationPresent(UIScoped.class)) {
             // noScope.add(clazz);
             // }
@@ -81,17 +81,18 @@ public class ScopeAndInjectTest {
 
         // if (noScope.size() > 0) {
         // System.out
-        // .println("\n\n-------- The following V7View implementations are missing @UIScoped annotation
+        // .println("\n\n-------- The following KrailView implementations are missing @UIScoped annotation
         // -------------\n");
-        // for (Class<? extends V7View> clazz : noScope) {
+        // for (Class<? extends KrailView> clazz : noScope) {
         // System.out.println(clazz.getName());
         // }
         // }
 
         if (noInject.size() > 0) {
-            System.out.println("\n\n------ The following V7View implementation has no constructor with a javax.Inject" +
-                    " annotation (if have you used the com.google.Inject, change it to javax.Inject ------\n");
-            for (Class<? extends V7View> clazz : noInject) {
+            System.out.println("\n\n------ The following KrailView implementation has no constructor with a javax" +
+                    ".Inject" + " annotation (if have you used the com.google.Inject, " +
+                    "change it to javax.Inject ------\n");
+            for (Class<? extends KrailView> clazz : noInject) {
                 System.out.println(clazz.getName());
             }
         }
@@ -111,7 +112,7 @@ public class ScopeAndInjectTest {
      *
      * @return
      */
-    protected boolean hasConstructorWithInject(Class<? extends V7View> clazz) {
+    protected boolean hasConstructorWithInject(Class<? extends KrailView> clazz) {
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
         for (Constructor<?> constructor : constructors) {
             if (constructor.getAnnotation(Inject.class) != null) {
@@ -172,8 +173,8 @@ public class ScopeAndInjectTest {
 
         Reflections reflections = new Reflections(new ConfigurationBuilder().setScanners(new SubTypesScanner(false /*
          don't exclude Object.class */), new ResourcesScanner())
-                                                                            .setUrls(ClasspathHelper.forPackage("uk" +
-                                                                                    ".co.q3c")));
+                                                                            .setUrls(ClasspathHelper.forPackage("uk"
+                                                                                    + ".co.q3c")));
 
         Set<Class<? extends Object>> allClasses = reflections.getSubTypesOf(Object.class);
         // when
@@ -195,7 +196,7 @@ public class ScopeAndInjectTest {
     }
 
     /**
-     * All View classes should have an injected constructor. V7 standardises on the com.google.inject.Inject rather
+     * All View classes should have an injected constructor. Krail standardises on the com.google.inject.Inject rather
      * than
      * the javax.inject.Inject, and this test will identify any implementations which do not have a constructor with a
      * Google Inject annotation (it will also accept a no-args public constructor as Guice will accept that)
@@ -245,7 +246,7 @@ public class ScopeAndInjectTest {
         return false;
     }
 
-    protected boolean classHasTestAnnotatedMethods(Class<? extends V7View> clazz) {
+    protected boolean classHasTestAnnotatedMethods(Class<? extends KrailView> clazz) {
         Method[] methods = clazz.getMethods();
         for (Method method : methods) {
             if (method.getAnnotation(Test.class) != null) {

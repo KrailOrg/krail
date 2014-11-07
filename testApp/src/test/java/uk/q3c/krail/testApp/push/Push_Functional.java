@@ -19,12 +19,12 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.object.MessageBarPageObject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Push_Functional extends V7TestBenchTestCase {
+public class Push_Functional extends KrailTestBenchTestCase {
 
     private WebDriver driver2;
     private MessageBarPageObject messageBar = new MessageBarPageObject(this);

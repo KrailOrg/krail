@@ -22,7 +22,7 @@ import uk.q3c.util.ID;
 /**
  * Provides default View behaviour suitable for most view implementations
  */
-public abstract class ViewBase implements V7View {
+public abstract class ViewBase implements KrailView {
 
     private static Logger log = LoggerFactory.getLogger(ViewBase.class);
     private Component rootComponent;
@@ -41,7 +41,7 @@ public abstract class ViewBase implements V7View {
      * Calls {@link #setIds() after the View has been constructed}
      */
     @Override
-    public void afterBuild(V7ViewChangeEvent event) {
+    public void afterBuild(KrailViewChangeEvent event) {
         setIds();
     }
 

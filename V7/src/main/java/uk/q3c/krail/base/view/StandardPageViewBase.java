@@ -29,7 +29,7 @@ public abstract class StandardPageViewBase extends ViewBase {
     }
 
     @Override
-    public void buildView(V7ViewChangeEvent event) {
+    public void buildView(KrailViewChangeEvent event) {
 
         label = new Label("This is the " + this.getClass()
                                                .getSimpleName());
@@ -72,7 +72,7 @@ public abstract class StandardPageViewBase extends ViewBase {
      *         contains information about the change to this View
      */
     @Override
-    public void beforeBuild(V7ViewChangeEvent event) {
+    public void beforeBuild(KrailViewChangeEvent event) {
 
     }
 

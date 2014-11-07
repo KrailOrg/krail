@@ -13,7 +13,7 @@
 package uk.q3c.krail.base.navigate.sitemap;
 
 import uk.q3c.krail.base.shiro.PageAccessControl;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -23,7 +23,8 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * An annotation used to map a uri to a {@link V7View} implementation, the name of the key for an I18N label and a flag
+ * An annotation used to map a uri to a {@link KrailView} implementation, the name of the key for an I18N label and a
+ * flag
  * to indicate whether or not this uri is "public" (does not require the user to be authorised). Permission is the
  * permission required in order to access this view. Used by a {@link AnnotationSitemapModule} to scan views for the
  * {@link AnnotationSitemapLoader} to load into the {@link MasterSitemap}. Roles must be defined if

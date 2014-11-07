@@ -31,7 +31,7 @@ public class DefaultViewFactory implements ViewFactory {
      * @see uk.q3c.krail.base.view.ViewFactory#get(java.lang.Class)
      */
     @Override
-    public <T extends V7View> T get(Class<T> viewClass) {
+    public <T extends KrailView> T get(Class<T> viewClass) {
         TypeLiteral<T> typeLiteral = TypeLiteral.get(viewClass);
         Key<T> key = Key.get(typeLiteral);
         Provider<T> unscoped = injector.getProvider(key);

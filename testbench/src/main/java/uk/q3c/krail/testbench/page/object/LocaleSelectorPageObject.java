@@ -18,7 +18,7 @@ import com.vaadin.testbench.elements.ComboBoxElement;
 import com.vaadin.ui.ComboBox;
 import uk.q3c.krail.base.view.component.DefaultLocaleSelector;
 import uk.q3c.krail.base.view.component.LocaleContainer;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 import java.util.List;
 import java.util.Locale;
@@ -29,7 +29,7 @@ import java.util.Locale;
 public class LocaleSelectorPageObject extends PageObject {
 
 
-    public LocaleSelectorPageObject(V7TestBenchTestCase parentCase) {
+    public LocaleSelectorPageObject(KrailTestBenchTestCase parentCase) {
         super(parentCase);
     }
 

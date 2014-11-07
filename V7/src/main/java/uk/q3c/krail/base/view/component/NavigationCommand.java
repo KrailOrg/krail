@@ -14,15 +14,15 @@ package uk.q3c.krail.base.view.component;
 
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemapNode;
 
 public class NavigationCommand implements MenuBar.Command {
 
     private final UserSitemapNode node;
-    private final V7Navigator navigator;
+    private final Navigator navigator;
 
-    public NavigationCommand(V7Navigator navigator, UserSitemapNode node) {
+    public NavigationCommand(Navigator navigator, UserSitemapNode node) {
         this.node = node;
         this.navigator = navigator;
     }
@@ -36,7 +36,7 @@ public class NavigationCommand implements MenuBar.Command {
         return node;
     }
 
-    public V7Navigator getNavigator() {
+    public Navigator getNavigator() {
         return navigator;
     }
 

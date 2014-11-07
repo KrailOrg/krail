@@ -65,7 +65,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
     }
 
     /**
-     * Module instances for the base should be added in {@link #getModules()}. Module instance for the app using V7
+     * Module instances for the base should be added in {@link #getModules()}. Module instance for the app using Krail
      * should be added to {@link AppModules#appModules()}
      *
      * @see com.google.inject.servlet.GuiceServletContextListener#getInjector()
@@ -83,7 +83,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
         log.debug("injector created");
 
         // By default Shiro provides a binding to DefaultSecurityManager, but that is replaced by a binding to
-        // V7SecurityManager in DefaultShiroModule#bindSecurityManager (or potentially to another security manager if
+        // KrailSecurityManager in DefaultShiroModule#bindSecurityManager (or potentially to another security manager if
         // the developer overrides that method)
         SecurityManager securityManager = injector.getInstance(SecurityManager.class);
         SecurityUtils.setSecurityManager(securityManager);

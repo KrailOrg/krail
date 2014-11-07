@@ -23,7 +23,7 @@ import com.vaadin.ui.Button.ClickListener;
 import uk.q3c.krail.base.config.ApplicationConfiguration;
 import uk.q3c.krail.base.config.ConfigKeys;
 import uk.q3c.krail.base.push.Broadcaster;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
 import uk.q3c.krail.base.view.component.BroadcastMessageLog;
 import uk.q3c.util.ID;
 
@@ -50,7 +50,7 @@ public class PushView extends ViewBaseGrid {
 
 
     @Override
-    public void buildView(V7ViewChangeEvent event) {
+    public void buildView(KrailViewChangeEvent event) {
         super.buildView(event);
         groupInput = new TextField("Group");
         groupInput.setWidth("100px");

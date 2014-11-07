@@ -18,13 +18,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.object.NavTreePageObject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-public class NavigationTest extends V7TestBenchTestCase {
+public class NavigationTest extends KrailTestBenchTestCase {
 
     @Rule
     public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
@@ -33,7 +33,7 @@ public class NavigationTest extends V7TestBenchTestCase {
 
     @Before
     public void setUp() throws Exception {
-        appContext = "V7demo";
+        appContext = "krail-demo";
     }
 
     @Test

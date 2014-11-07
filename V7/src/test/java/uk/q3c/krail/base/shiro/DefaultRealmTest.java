@@ -53,7 +53,7 @@ public class DefaultRealmTest {
         // when
 
         // then
-        assertThat(realm.getName()).isEqualTo("V7 Default Realm");
+        assertThat(realm.getName()).isEqualTo("Krail Default Realm");
 
     }
 

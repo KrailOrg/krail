@@ -15,14 +15,14 @@ package uk.q3c.krail.testApp.test;
 
 import com.vaadin.testbench.util.VersionUtil;
 import org.junit.Test;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by david on 04/10/14.
  */
-public class VaadinVersionTest extends V7TestBenchTestCase {
+public class VaadinVersionTest extends KrailTestBenchTestCase {
 
     @Test
     public void confirmVersion() {

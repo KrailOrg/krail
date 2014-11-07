@@ -18,7 +18,7 @@ import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.HorizontalLayoutElement;
 import uk.q3c.krail.base.view.component.DefaultSubPagePanel;
 import uk.q3c.krail.base.view.component.NavigationButton;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class SubPagePanelPageObject extends PageObject {
 
-    public SubPagePanelPageObject(V7TestBenchTestCase parentCase) {
+    public SubPagePanelPageObject(KrailTestBenchTestCase parentCase) {
         super(parentCase);
     }
 

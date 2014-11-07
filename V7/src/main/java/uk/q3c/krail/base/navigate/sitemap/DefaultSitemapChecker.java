@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.util.CycleDetectedException;
@@ -48,7 +48,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
     private final Set<String> missingPageAccessControl;
     private final Set<String> redirectLoops;
     private I18NKey<?> defaultKey;
-    private Class<? extends V7View> defaultView;
+    private Class<? extends KrailView> defaultView;
     private StringBuilder report;
     private MasterSitemap sitemap;
 
@@ -172,7 +172,8 @@ public class DefaultSitemapChecker implements SitemapChecker {
             try {
                 dag.addChild(entry.getKey(), entry.getValue());
             } catch (CycleDetectedException cde) {
-                String msg = MessageFormat.format("Redirecting {0} to {1} would cause a loop", entry.getKey(), entry.getValue());
+                String msg = MessageFormat.format("Redirecting {0} to {1} would cause a loop", entry.getKey(),
+                        entry.getValue());
                 redirectLoops.add(msg);
                 // throw new CycleDetectedException(msg);
             }
@@ -182,7 +183,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
     }
 
     @Override
-    public SitemapChecker replaceMissingViewWith(Class<? extends V7View> defaultView) {
+    public SitemapChecker replaceMissingViewWith(Class<? extends KrailView> defaultView) {
         this.defaultView = defaultView;
         return this;
     }

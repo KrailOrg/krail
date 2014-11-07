@@ -13,11 +13,11 @@
 package uk.q3c.krail.base.user.status;
 
 import uk.q3c.krail.base.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 
 /**
  * The main purpose of this implementation is to act as a router for changes in a user's login status, and is expected
- * to be {@link VaadinSessionScoped}. In addition to registered listeners, the {@link V7Navigator} is also advised of
+ * to be {@link VaadinSessionScoped}. In addition to registered listeners, the {@link Navigator} is also advised of
  * the status change (the navigator should not be added as a listener - it is called explicitly, as it has to be the
  * last one to be called so that navigation components are up to date when the call is made)
  *

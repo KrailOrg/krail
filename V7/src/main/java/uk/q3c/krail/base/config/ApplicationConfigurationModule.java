@@ -34,7 +34,7 @@ public class ApplicationConfigurationModule extends ConfigurationModuleBase {
 
     @Override
     protected void bindConfigs() {
-        addConfig("V7.ini", 0, true);
+        addConfig("krail.ini", 0, true);
     }
 
 }

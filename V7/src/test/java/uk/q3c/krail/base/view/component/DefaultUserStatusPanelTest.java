@@ -23,7 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.base.shiro.DefaultSubjectIdentifier;
 import uk.q3c.krail.base.shiro.SubjectIdentifier;
@@ -48,7 +48,7 @@ public class DefaultUserStatusPanelTest {
     Subject subject;
 
     @Mock
-    V7Navigator navigator;
+    Navigator navigator;
 
     Button loginoutBtn;
 

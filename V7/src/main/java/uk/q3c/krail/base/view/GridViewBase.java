@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.util.ID;
 
-public abstract class GridViewBase extends ViewBase implements V7View {
+public abstract class GridViewBase extends ViewBase implements KrailView {
     private static Logger log = LoggerFactory.getLogger(GridViewBase.class);
     private GridLayout gridLayout = new GridLayout();
 
@@ -56,7 +56,7 @@ public abstract class GridViewBase extends ViewBase implements V7View {
      *         contains information about the change to this View
      */
     @Override
-    public void buildView(V7ViewChangeEvent event) {
+    public void buildView(KrailViewChangeEvent event) {
         setRootComponent(gridLayout);
     }
 }

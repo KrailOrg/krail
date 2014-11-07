@@ -1,11 +1,14 @@
 /*
  * Copyright (c) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+ * the specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.base.view.component;
@@ -13,7 +16,7 @@ package uk.q3c.krail.base.view.component;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import org.apache.commons.collections15.map.HashedMap;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemapNode;
 import uk.q3c.util.CaptionReader;
 import uk.q3c.util.NodeModifier;
@@ -30,10 +33,10 @@ public class MenuBarNodeModifier implements NodeModifier<UserSitemapNode, MenuIt
 
     private final MenuBar menuBar;
     private final Map<MenuItem, UserSitemapNode> targetLookup = new HashedMap<>();
-    private final V7Navigator navigator;
+    private final Navigator navigator;
     private final CaptionReader<UserSitemapNode> captionReader;
 
-    public MenuBarNodeModifier(MenuBar menuBar, V7Navigator navigator, CaptionReader<UserSitemapNode> captionReader) {
+    public MenuBarNodeModifier(MenuBar menuBar, Navigator navigator, CaptionReader<UserSitemapNode> captionReader) {
         this.menuBar = menuBar;
         this.navigator = navigator;
         this.captionReader = captionReader;

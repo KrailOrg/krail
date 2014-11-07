@@ -1,11 +1,14 @@
 /*
  * Copyright (c) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+ * the specific language governing permissions and limitations under the License.
  */
 
 package fixture;
@@ -18,7 +21,7 @@ import uk.q3c.krail.base.navigate.sitemap.MasterSitemapNode;
 import uk.q3c.krail.base.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.base.shiro.PageAccessControl;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.*;
 
 import java.text.CollationKey;
@@ -44,23 +47,23 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
 
     public UserSitemapNode aNode;
     public String aURI = "public/a";
-    public Class<? extends V7View> aViewClass = ViewA.class;
+    public Class<? extends KrailView> aViewClass = ViewA.class;
     public UserSitemapNode a1Node;
     public String a1URI = "public/a/a1";
-    public Class<? extends V7View> a1ViewClass = ViewA1.class;
+    public Class<? extends KrailView> a1ViewClass = ViewA1.class;
     public UserSitemapNode a11Node;
     public String a11URI = "public/a/a1/a11";
-    public Class<? extends V7View> a11ViewClass = ViewA11.class;
+    public Class<? extends KrailView> a11ViewClass = ViewA11.class;
 
     public UserSitemapNode bNode;
     public String bURI = "private/b";
-    public Class<? extends V7View> bViewClass = ViewB.class;
+    public Class<? extends KrailView> bViewClass = ViewB.class;
     public UserSitemapNode b1Node;
     public String b1URI = "private/b/b1";
-    public Class<? extends V7View> b1ViewClass = ViewB1.class;
+    public Class<? extends KrailView> b1ViewClass = ViewB1.class;
     public UserSitemapNode b11Node;
     public String b11URI = "private/b/b1/b11";
-    public Class<? extends V7View> b11ViewClass = ViewB11.class;
+    public Class<? extends KrailView> b11ViewClass = ViewB11.class;
 
     public UserSitemapNode loginNode;
     public UserSitemapNode logoutNode;
@@ -76,10 +79,10 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
     public String privateHomeURI = "private/home";
     public String publicHomeURI = "public/home";
 
-    public Class<? extends V7View> loginViewClass = TestLoginView.class;
-    public Class<? extends V7View> logoutViewClass = TestLogoutView.class;
-    public Class<? extends V7View> privateHomeViewClass = TestPrivateHomeView.class;
-    public Class<? extends V7View> publicHomeViewClass = TestPublicHomeView.class;
+    public Class<? extends KrailView> loginViewClass = TestLoginView.class;
+    public Class<? extends KrailView> logoutViewClass = TestLogoutView.class;
+    public Class<? extends KrailView> privateHomeViewClass = TestPrivateHomeView.class;
+    public Class<? extends KrailView> publicHomeViewClass = TestPublicHomeView.class;
 
     @Inject
     public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler, CurrentLocale currentLocale) {
@@ -150,7 +153,7 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
     }
 
-    public UserSitemapNode createNode(String fullURI, String uriSegment, Class<? extends V7View> viewClass,
+    public UserSitemapNode createNode(String fullURI, String uriSegment, Class<? extends KrailView> viewClass,
                                       I18NKey<?> labelKey, PageAccessControl pageAccessControl, String... roles) {
 
         Collator collator = Collator.getInstance();

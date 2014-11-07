@@ -19,7 +19,7 @@ import com.vaadin.testbench.By;
 import com.vaadin.testbench.elements.TreeElement;
 import org.openqa.selenium.WebElement;
 import uk.q3c.krail.base.view.component.DefaultUserNavigationTree;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.util.ID;
 
 import java.util.*;
@@ -32,7 +32,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class NavTreePageObject extends PageObject {
     private String id = ID.getIdc(Optional.absent(), DefaultUserNavigationTree.class);
 
-    public NavTreePageObject(V7TestBenchTestCase parentCase) {
+    public NavTreePageObject(KrailTestBenchTestCase parentCase) {
         super(parentCase);
     }
 

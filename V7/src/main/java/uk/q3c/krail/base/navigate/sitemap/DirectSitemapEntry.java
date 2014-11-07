@@ -13,7 +13,7 @@
 package uk.q3c.krail.base.navigate.sitemap;
 
 import uk.q3c.krail.base.shiro.PageAccessControl;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 
 /**
@@ -29,14 +29,14 @@ public class DirectSitemapEntry {
     private I18NKey<?> labelKey;
     private PageAccessControl pageAccessControl;
     private String roles;
-    private Class<? extends V7View> viewClass;
+    private Class<? extends KrailView> viewClass;
 
     /**
      * @param viewClass
      * @param labelKey
      * @param pageAccessControl
      */
-    public DirectSitemapEntry(Class<? extends V7View> viewClass, I18NKey<?> labelKey,
+    public DirectSitemapEntry(Class<? extends KrailView> viewClass, I18NKey<?> labelKey,
                               PageAccessControl pageAccessControl) {
         super();
         this.pageAccessControl = pageAccessControl;
@@ -57,7 +57,7 @@ public class DirectSitemapEntry {
      * @throws PageAccessControlException
      *         is {@link #pageAccessControl} is {@link PageAccessControl#ROLES} and roles is null or empty
      */
-    public DirectSitemapEntry(Class<? extends V7View> viewClass, I18NKey<?> labelKey,
+    public DirectSitemapEntry(Class<? extends KrailView> viewClass, I18NKey<?> labelKey,
                               PageAccessControl pageAccessControl, String roles) {
         super();
         this.pageAccessControl = pageAccessControl;
@@ -66,11 +66,11 @@ public class DirectSitemapEntry {
         this.roles = roles;
     }
 
-    public Class<? extends V7View> getViewClass() {
+    public Class<? extends KrailView> getViewClass() {
         return viewClass;
     }
 
-    public void setViewClass(Class<? extends V7View> viewClass) {
+    public void setViewClass(Class<? extends KrailView> viewClass) {
         this.viewClass = viewClass;
     }
 

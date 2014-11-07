@@ -16,7 +16,7 @@ package uk.q3c.krail.testApp.test;
 import com.google.common.base.Optional;
 import org.vaadin.risto.stepper.IntStepper;
 import uk.q3c.krail.testapp.view.WidgetsetView;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.element.IntStepperElement;
 import uk.q3c.krail.testbench.page.object.PageObject;
 
@@ -25,7 +25,7 @@ import uk.q3c.krail.testbench.page.object.PageObject;
  */
 public class WidgetSetViewPageObject extends PageObject {
 
-    public WidgetSetViewPageObject(V7TestBenchTestCase parentCase) {
+    public WidgetSetViewPageObject(KrailTestBenchTestCase parentCase) {
         super(parentCase);
     }
 

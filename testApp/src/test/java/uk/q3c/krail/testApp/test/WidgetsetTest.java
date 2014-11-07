@@ -18,14 +18,14 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class WidgetsetTest extends V7TestBenchTestCase {
+public class WidgetsetTest extends KrailTestBenchTestCase {
 
     private WidgetSetViewPageObject view = new WidgetSetViewPageObject(this);
 

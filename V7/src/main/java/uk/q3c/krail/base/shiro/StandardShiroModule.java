@@ -79,11 +79,11 @@ public class StandardShiroModule extends ShiroModule {
     @Override
     protected void bindSecurityManager(AnnotatedBindingBuilder<? super SecurityManager> bind) {
         try {
-            bind.toConstructor(V7SecurityManager.class.getConstructor(Collection.class))
+            bind.toConstructor(KrailSecurityManager.class.getConstructor(Collection.class))
                 .asEagerSingleton();
         } catch (NoSuchMethodException e) {
             throw new ConfigurationException("This really shouldn't happen.  Either something has changed in Shiro, " +
-                    "or there's a bug in ShiroModule.", e);
+                    "" + "or there's a bug in ShiroModule.", e);
         }
     }
 

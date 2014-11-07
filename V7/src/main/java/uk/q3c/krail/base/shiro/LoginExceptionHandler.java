@@ -43,7 +43,7 @@ public interface LoginExceptionHandler {
 
     /**
      * Response to {@link ExpiredCredentialsException}. See the javadoc of the exception. Typically, the implementation
-     * of this method will navigate to a V7View which allows the user to update their password.
+     * of this method will navigate to a KrailView which allows the user to update their password.
      *
      * @param loginView
      * @param token
@@ -52,7 +52,8 @@ public interface LoginExceptionHandler {
 
     /**
      * Response to {@link AccountLockedException}. See the javadoc of the exception. Typically, the implementation of
-     * this method will navigate to a V7View which allows the user to request that their account is unlocked, although
+     * this method will navigate to a KrailView which allows the user to request that their account is unlocked,
+     * although
      * it perhaps just inform the user and do nothing else.
      *
      * @param loginView
@@ -65,7 +66,8 @@ public interface LoginExceptionHandler {
      * exception
      * when there is a specified limit to the number of times a user can try and login. A login failure before that
      * threshold is reached is handled by {@link #unknownAccount(LoginView, UsernamePasswordToken)}. Typically, the
-     * implementation of this method will navigate to a V7View which allows the user to request a reset after filling
+     * implementation of this method will navigate to a KrailView which allows the user to request a reset after
+     * filling
      * in
      * appropriate security answers.
      *
@@ -84,7 +86,7 @@ public interface LoginExceptionHandler {
 
     /**
      * Response to {@link DisabledAcoountException}. See the javadoc of the exception. Typically, the implementation of
-     * this method will navigate to a V7View which allows the user to request that their account is re-enabled,
+     * this method will navigate to a KrailView which allows the user to request that their account is re-enabled,
      * although
      * exact behaviour is up to the implementation.
      *

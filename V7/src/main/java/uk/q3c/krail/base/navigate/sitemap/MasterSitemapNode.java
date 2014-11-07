@@ -14,9 +14,9 @@ package uk.q3c.krail.base.navigate.sitemap;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.shiro.PageAccessControl;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 
@@ -33,7 +33,8 @@ import java.util.Set;
  * use
  * {@link MasterSitemap#uri(MasterSitemapNode)}.
  * <p/>
- * {@link #viewClass} is the class of {@link V7View} to be used in displaying the page, and the {@link #getLabelKey()}
+ * {@link #viewClass} is the class of {@link KrailView} to be used in displaying the page, and the {@link
+ * #getLabelKey()}
  * is an {@link I18NKey} key to a localised label for the page
  * <p/>
  * The {@link #id} is required because the URI segment alone may not be unique, and the view class and labelKey are
@@ -51,7 +52,7 @@ import java.util.Set;
  * <p/>
  * The type of user access control applied to the page is determined by {@link #pageAccessControl}. Note that these are
  * mutually exclusive, so a page cannot require both roles and permissions. This control is applied by the
- * {@link V7Navigator} during page changes, thereby disallowing access to an authorised page.
+ * {@link Navigator} during page changes, thereby disallowing access to an authorised page.
  *
  * @author David Sowerby 6 May 2013
  */
@@ -67,9 +68,9 @@ public class MasterSitemapNode implements SitemapNode {
      */
     private Set<String> roles = new HashSet<>();
     private String uriSegment;
-    private Class<? extends V7View> viewClass;
+    private Class<? extends KrailView> viewClass;
 
-    public MasterSitemapNode(String uriSegment, Class<? extends V7View> viewClass, I18NKey<?> labelKey) {
+    public MasterSitemapNode(String uriSegment, Class<? extends KrailView> viewClass, I18NKey<?> labelKey) {
         super();
         this.uriSegment = uriSegment;
         this.viewClass = viewClass;
@@ -105,11 +106,11 @@ public class MasterSitemapNode implements SitemapNode {
     }
 
     @Override
-    public Class<? extends V7View> getViewClass() {
+    public Class<? extends KrailView> getViewClass() {
         return viewClass;
     }
 
-    public void setViewClass(Class<? extends V7View> viewClass) {
+    public void setViewClass(Class<? extends KrailView> viewClass) {
         this.viewClass = viewClass;
     }
 

@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.base.navigate.LabelKeyForName;
 import uk.q3c.krail.base.navigate.URITracker;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
@@ -321,11 +321,11 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
             String fullViewName = pkg + "." + viewName;
             try {
                 viewClass = Class.forName(fullViewName);
-                if (V7View.class.isAssignableFrom(viewClass)) {
-                    node.setViewClass((Class<V7View>) viewClass);
+                if (KrailView.class.isAssignableFrom(viewClass)) {
+                    node.setViewClass((Class<KrailView>) viewClass);
                     break;
                 } else {
-                    addError(source, VIEW_DOES_NOT_IMPLEMENT_V7VIEW, fullViewName);
+                    addError(source, VIEW_DOES_NOT_IMPLEMENT_KRAILVIEW, fullViewName);
                 }
             } catch (ClassNotFoundException e) {
                 // don't need to do anything

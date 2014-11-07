@@ -27,7 +27,7 @@ import java.util.Locale;
 /**
  * Created by David Sowerby on 07/11/14.
  */
-public class BrowserSettingTest extends V7TestBenchTestCase {
+public class BrowserSettingTest extends KrailTestBenchTestCase {
 
     @Before
     @Override

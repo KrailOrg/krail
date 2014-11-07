@@ -25,7 +25,7 @@ import com.vaadin.ui.themes.ChameleonTheme;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.base.shiro.SubjectIdentifier;
 import uk.q3c.krail.base.shiro.SubjectProvider;
@@ -48,14 +48,14 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
     private static Logger log = LoggerFactory.getLogger(DefaultUserStatusPanel.class);
     private final Label usernameLabel;
     private final Button login_logout_Button;
-    private final V7Navigator navigator;
+    private final Navigator navigator;
     private final Provider<Subject> subjectProvider;
     private final Translate translate;
     private final SubjectIdentifier subjectIdentifier;
     private final UserStatus userStatus;
 
     @Inject
-    protected DefaultUserStatusPanel(V7Navigator navigator, SubjectProvider subjectProvider, Translate translate,
+    protected DefaultUserStatusPanel(Navigator navigator, SubjectProvider subjectProvider, Translate translate,
                                      SubjectIdentifier subjectIdentifier, UserStatus userStatus,
                                      CurrentLocale currentLocale) {
         super();

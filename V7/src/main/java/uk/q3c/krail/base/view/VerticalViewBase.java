@@ -19,7 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class VerticalViewBase extends ViewBase implements V7View {
+public abstract class VerticalViewBase extends ViewBase implements KrailView {
     private static Logger log = LoggerFactory.getLogger(VerticalViewBase.class);
 
     private VerticalLayout layout;
@@ -41,7 +41,7 @@ public abstract class VerticalViewBase extends ViewBase implements V7View {
      * @return
      */
     @Override
-    public void buildView(V7ViewChangeEvent event) {
+    public void buildView(KrailViewChangeEvent event) {
         layout = new VerticalLayout();
         setRootComponent(layout);
     }

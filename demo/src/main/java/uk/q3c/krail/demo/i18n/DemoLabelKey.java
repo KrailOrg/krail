@@ -31,6 +31,6 @@ public enum DemoLabelKey implements I18NKey<DemoLabels> {
     Login,
     Refresh_Account,
     Request_Account,
-    V7_Demo;
+    Krail_Demo;
 
 }

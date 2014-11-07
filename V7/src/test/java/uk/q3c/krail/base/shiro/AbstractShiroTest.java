@@ -46,12 +46,19 @@ public abstract class AbstractShiroTest {
         setSecurityManager(null);
     }
 
-    protected static V7SecurityManager getSecurityManager() {
-        return (V7SecurityManager) SecurityUtils.getSecurityManager();
+    protected static KrailSecurityManager getSecurityManager() {
+        return (KrailSecurityManager) SecurityUtils.getSecurityManager();
     }
 
     protected static void setSecurityManager(SecurityManager securityManager) {
         SecurityUtils.setSecurityManager(securityManager);
+    }
+
+    private static void doClearSubject() {
+        if (subjectThreadState != null) {
+            subjectThreadState.clear();
+            subjectThreadState = null;
+        }
     }
 
     protected Subject getSubject() {
@@ -79,12 +86,5 @@ public abstract class AbstractShiroTest {
      */
     protected void clearSubject() {
         doClearSubject();
-    }
-
-    private static void doClearSubject() {
-        if (subjectThreadState != null) {
-            subjectThreadState.clear();
-            subjectThreadState = null;
-        }
     }
 }

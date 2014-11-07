@@ -18,13 +18,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.object.LoginFormPageObject;
 import uk.q3c.krail.testbench.page.object.NavTreePageObject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LoginTest extends V7TestBenchTestCase {
+public class LoginTest extends KrailTestBenchTestCase {
 
     @Rule
     public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
@@ -33,7 +33,7 @@ public class LoginTest extends V7TestBenchTestCase {
 
     @Before
     public void setUp() throws Exception {
-        appContext = "V7demo";
+        appContext = "krail-demo";
         driver.get(rootUrl());
     }
 

@@ -20,6 +20,6 @@ package uk.q3c.krail.base.view;
  *
  * @author David Sowerby 1 Jan 2013
  */
-public interface PublicHomeView extends V7View {
+public interface PublicHomeView extends KrailView {
 
 }

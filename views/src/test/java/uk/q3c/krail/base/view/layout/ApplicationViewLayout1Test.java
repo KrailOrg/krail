@@ -22,8 +22,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.base.navigate.V7Navigator;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
+import uk.q3c.krail.base.navigate.Navigator;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
 import uk.q3c.krail.i18n.Translate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Ignore("https://github.com/davidsowerby/krail/issues/185")
 public class ApplicationViewLayout1Test {
     @Mock
-    V7Navigator navigator;
+    Navigator navigator;
     @Mock
     Translate translate;
     Panel logo;
@@ -182,12 +182,12 @@ public class ApplicationViewLayout1Test {
          *         contains information about the change to this View
          */
         @Override
-        public void beforeBuild(V7ViewChangeEvent event) {
+        public void beforeBuild(KrailViewChangeEvent event) {
 
         }
 
         @Override
-        public void buildView(V7ViewChangeEvent event) {
+        public void buildView(KrailViewChangeEvent event) {
             add(logo).width(50)
                      .height(70);
             add(header).widthUndefined()

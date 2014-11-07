@@ -29,7 +29,7 @@ import static com.google.inject.multibindings.Multibinder.newSetBinder;
  * use in your code. According to the {@link JobListener} javadoc, "In general, applications that use a
  * <code>Scheduler</code> will not have use for this mechanism."
  * <p/>
- * V7 assumes a Scheduler will be used
+ * Krail assumes a Scheduler will be used
  *
  * @author David Sowerby
  */

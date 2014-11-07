@@ -17,7 +17,7 @@ import com.google.common.base.Optional;
 import com.vaadin.testbench.elements.ButtonElement;
 import uk.q3c.krail.base.view.component.DefaultBreadcrumb;
 import uk.q3c.krail.base.view.component.NavigationButton;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.element.DefaultBreadcrumbElement;
 
 /**
@@ -30,7 +30,7 @@ public class BreadcrumbPageObject extends PageObject {
      *
      * @param parentCase
      */
-    public BreadcrumbPageObject(V7TestBenchTestCase parentCase) {
+    public BreadcrumbPageObject(KrailTestBenchTestCase parentCase) {
         super(parentCase);
     }
 

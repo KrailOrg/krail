@@ -15,7 +15,8 @@ package uk.q3c.krail.base.view;
 import uk.q3c.krail.base.guice.uiscope.UIScoped;
 
 /**
- * Implementation return an injected V7View instance, scoped to {@link UIScoped}. The interface is provided primarily
+ * Implementation return an injected KrailView instance, scoped to {@link UIScoped}. The interface is provided
+ * primarily
  * to
  * facilitate testing.
  *
@@ -24,6 +25,6 @@ import uk.q3c.krail.base.guice.uiscope.UIScoped;
  */
 public interface ViewFactory {
 
-    public abstract <T extends V7View> T get(Class<T> viewClass);
+    public abstract <T extends KrailView> T get(Class<T> viewClass);
 
 }

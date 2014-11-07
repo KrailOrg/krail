@@ -17,7 +17,7 @@ import com.google.common.base.Optional;
 import com.vaadin.testbench.elements.AbstractComponentElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 /**
  * Created by david on 03/10/14.
@@ -25,7 +25,7 @@ import uk.q3c.krail.testbench.V7TestBenchTestCase;
 public class PageObject {
 
     private static Logger log = LoggerFactory.getLogger(PageObject.class);
-    protected V7TestBenchTestCase parentCase;
+    protected KrailTestBenchTestCase parentCase;
 
     /**
      * Initialises the PageObject with a reference to the parent test case, so that the PageObject can access a number
@@ -38,7 +38,7 @@ public class PageObject {
      *
      * @param parentCase
      */
-    public PageObject(V7TestBenchTestCase parentCase) {
+    public PageObject(KrailTestBenchTestCase parentCase) {
         this.parentCase = parentCase;
     }
 

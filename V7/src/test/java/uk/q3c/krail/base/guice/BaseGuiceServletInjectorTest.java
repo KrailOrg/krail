@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.base.services.Service;
 import uk.q3c.krail.base.services.ServicesMonitor;
-import uk.q3c.krail.base.shiro.V7SecurityManager;
+import uk.q3c.krail.base.shiro.KrailSecurityManager;
 import uk.q3c.krail.testutil.LogMonitor;
 
 import javax.servlet.ServletContext;
@@ -74,7 +74,7 @@ public class BaseGuiceServletInjectorTest {
         // when
         Injector injector = out.getInjector();
         // then
-        assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(V7SecurityManager.class);
+        assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(KrailSecurityManager.class);
         assertThat(out.isAddAppModulesCalled()).isEqualTo(true);
         assertThat(injector).isNotNull();
 

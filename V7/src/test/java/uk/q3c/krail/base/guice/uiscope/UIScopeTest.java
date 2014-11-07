@@ -32,7 +32,7 @@ import org.mockito.stubbing.Answer;
 import uk.q3c.krail.base.config.ApplicationConfigurationService;
 import uk.q3c.krail.base.config.DefaultApplicationConfigurationService;
 import uk.q3c.krail.base.config.IniFileConfig;
-import uk.q3c.krail.base.data.V7DefaultConverterFactory;
+import uk.q3c.krail.base.data.KrailDefaultConverterFactory;
 import uk.q3c.krail.base.guice.vsscope.VaadinSessionScope;
 import uk.q3c.krail.base.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.base.navigate.*;
@@ -96,7 +96,7 @@ public class UIScopeTest {
     public void uiScope2() {
 
         // given
-        SecurityUtils.setSecurityManager(new V7SecurityManager());
+        SecurityUtils.setSecurityManager(new KrailSecurityManager());
         when(subject.isPermitted(anyString())).thenReturn(true);
         when(subject.isPermitted(any(org.apache.shiro.authz.Permission.class))).thenReturn(true);
         when(mockedSession.hasLock()).thenReturn(true);
@@ -107,7 +107,7 @@ public class UIScopeTest {
                 new UserModule(), new StandardComponentModule());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
-        // navigator = injector.getInstance(V7Navigator.class);
+        // navigator = injector.getInstance(Navigator.class);
         TestObject to1 = injector.getInstance(TestObject.class);
         createUI(BasicUI.class);
         TestObject to2 = injector.getInstance(TestObject.class);
@@ -205,7 +205,7 @@ public class UIScopeTest {
             registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
             patternSources = MapBinder.newMapBinder(binder(), Integer.class, PatternSource.class, PatternSources.class);
 
-            bind(ApplicationTitle.class).toInstance(new ApplicationTitle(LabelKey.V7));
+            bind(ApplicationTitle.class).toInstance(new ApplicationTitle(LabelKey.Krail));
 
             MapBinder<String, UI> uiProviders = MapBinder.newMapBinder(binder(), String.class, UI.class);
             bind(UIProvider.class).to(BasicUIProvider.class);
@@ -215,13 +215,13 @@ public class UIScopeTest {
             uibinder.put(BasicUI.class.getName(), uiProvider);
 
             bind(PublicHomeView.class).to(DefaultPublicHomeView.class);
-            bind(V7Navigator.class).to(DefaultV7Navigator.class);
+            bind(Navigator.class).to(DefaultNavigator.class);
             bind(TestObject.class).in(UIScoped.class);
             bind(ErrorView.class).to(DefaultErrorView.class);
             bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
             bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-            bind(ErrorHandler.class).to(V7ErrorHandler.class);
-            bind(ConverterFactory.class).to(V7DefaultConverterFactory.class);
+            bind(ErrorHandler.class).to(KrailErrorHandler.class);
+            bind(ConverterFactory.class).to(KrailDefaultConverterFactory.class);
             bind(UnauthenticatedExceptionHandler.class).to(DefaultUnauthenticatedExceptionHandler.class);
             bind(UnauthorizedExceptionHandler.class).to(DefaultUnauthorizedExceptionHandler.class);
             bind(Subject.class).toProvider(MockSubjectProvider.class);
@@ -239,7 +239,7 @@ public class UIScopeTest {
             bind(CurrentLocale.class).to(DefaultCurrentLocale.class);
             MapBinder<Integer, IniFileConfig> iniFileConfigs = MapBinder.newMapBinder(binder(), Integer.class,
                     IniFileConfig.class);
-            MapBinder<String, V7View> viewMapping = MapBinder.newMapBinder(binder(), String.class, V7View.class);
+            MapBinder<String, KrailView> viewMapping = MapBinder.newMapBinder(binder(), String.class, KrailView.class);
             bind(ScopedUIProvider.class).to(BasicUIProvider.class);
             bindScope(VaadinSessionScoped.class, vaadinSessionScope);
             bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);

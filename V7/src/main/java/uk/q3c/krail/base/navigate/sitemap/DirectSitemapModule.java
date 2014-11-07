@@ -16,7 +16,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 import uk.q3c.krail.base.guice.BaseGuiceServletInjector;
 import uk.q3c.krail.base.shiro.PageAccessControl;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 
 /**
@@ -58,7 +58,7 @@ public abstract class DirectSitemapModule extends AbstractModule {
      */
     protected abstract void define();
 
-    protected void addEntry(String uri, Class<? extends V7View> viewClass, I18NKey<?> labelKey,
+    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey<?> labelKey,
                             PageAccessControl pageAccessControl) {
         addEntry(uri, viewClass, labelKey, pageAccessControl, null);
     }
@@ -69,7 +69,8 @@ public abstract class DirectSitemapModule extends AbstractModule {
      * @param uri
      *         the URI for this page
      * @param viewClass
-     *         the class of the V7View for this page. This can be null if a redirection will prevent it from actually
+     *         the class of the KrailView for this page. This can be null if a redirection will prevent it from
+     *         actually
      *         being displayed, but it is up to the developer to ensure that the redirection is in place
      * @param labelKey
      *         the I18NKey for a localised label for the view
@@ -78,7 +79,7 @@ public abstract class DirectSitemapModule extends AbstractModule {
      * @param permission
      *         the permission string for the page. May be null if no permissions are set
      */
-    protected void addEntry(String uri, Class<? extends V7View> viewClass, I18NKey<?> labelKey,
+    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey<?> labelKey,
                             PageAccessControl pageAccessControl, String permission) {
 
         DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, permission);

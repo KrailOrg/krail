@@ -23,10 +23,10 @@ import org.junit.runner.RunWith;
 import uk.q3c.krail.base.config.ApplicationConfigurationModule;
 import uk.q3c.krail.base.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.base.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.base.navigate.DefaultV7Navigator;
+import uk.q3c.krail.base.navigate.DefaultNavigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.base.navigate.URIFragmentHandler;
-import uk.q3c.krail.base.navigate.V7Navigator;
 import uk.q3c.krail.base.shiro.PageAccessControl;
 import uk.q3c.krail.base.shiro.ShiroVaadinModule;
 import uk.q3c.krail.base.shiro.StandardShiroModule;
@@ -91,7 +91,7 @@ public class DefaultStandardPagesModuleTest {
 
             @Override
             protected void configure() {
-                bind(V7Navigator.class).to(DefaultV7Navigator.class);
+                bind(Navigator.class).to(DefaultNavigator.class);
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
                 bind(ScopedUIProvider.class).to(BasicUIProvider.class);
 

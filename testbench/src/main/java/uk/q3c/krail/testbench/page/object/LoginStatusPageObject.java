@@ -19,7 +19,7 @@ import com.vaadin.testbench.elements.LabelElement;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import uk.q3c.krail.base.view.component.DefaultUserStatusPanel;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 /**
  * Created by david on 03/10/14.
@@ -36,7 +36,7 @@ public class LoginStatusPageObject extends PageObject {
      *
      * @param parentCase
      */
-    public LoginStatusPageObject(V7TestBenchTestCase parentCase) {
+    public LoginStatusPageObject(KrailTestBenchTestCase parentCase) {
         super(parentCase);
     }
 

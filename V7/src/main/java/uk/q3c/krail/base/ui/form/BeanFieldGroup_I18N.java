@@ -24,7 +24,7 @@ import uk.q3c.krail.i18n.I18NProcessor;
 
 
 /**
- * Wraps a {@link BeanFieldGroup} with methods to provide equivalent functionality, but using V7's I18N Framework to
+ * Wraps a {@link BeanFieldGroup} with methods to provide equivalent functionality, but using Krail's I18N Framework to
  * provide captions and descriptions for the Field components
  *
  * @param <T>

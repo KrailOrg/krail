@@ -20,7 +20,7 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.push.Broadcaster;
 import uk.q3c.krail.base.push.PushMessageRouter;
 import uk.q3c.krail.base.user.notify.UserNotifier;
@@ -49,11 +49,10 @@ public class DefaultApplicationUI extends ScopedUI {
     private VerticalLayout baseLayout;
 
     @Inject
-    protected DefaultApplicationUI(V7Navigator navigator, ErrorHandler errorHandler,
-                                   ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader header,
-                                   UserStatusPanel userStatusPanel, UserNavigationMenu menu,
-                                   UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage,
-                                   MessageBar messageBar, Broadcaster broadcaster,
+    protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
+                                   ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel,
+                                   UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb,
+                                   SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster,
                                    PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
                                    Translate translate, CurrentLocale currentLocale, I18NProcessor translator,
                                    LocaleSelector localeSelector, UserNotifier userNotifier) {

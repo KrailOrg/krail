@@ -15,7 +15,6 @@ package uk.q3c.krail.base.ui;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.data.util.converter.ConverterFactory;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ClientConnector;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
@@ -31,10 +30,10 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import uk.q3c.krail.base.guice.uiscope.UIKey;
 import uk.q3c.krail.base.guice.uiscope.UIScope;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.push.Broadcaster;
 import uk.q3c.krail.base.push.PushMessageRouter;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.Translate;
@@ -52,7 +51,7 @@ public class ScopedUITest {
     protected final String baseUri = "http://example.com";
     ScopedUI ui;
     @Mock
-    V7Navigator navigator;
+    Navigator navigator;
     @Mock
     ErrorHandler errorHandler;
     @Mock
@@ -70,7 +69,7 @@ public class ScopedUITest {
     @Mock
     I18NProcessor translator;
     @Mock
-    Navigator vaadinNavigator;
+    com.vaadin.navigator.Navigator vaadinNavigator;
     @Mock
     VaadinRequest request;
     @Mock
@@ -80,7 +79,7 @@ public class ScopedUITest {
     @Mock
     UIKey instanceKey;
     @Mock
-    V7View toView;
+    KrailView toView;
     @Mock
     Component viewContent;
 

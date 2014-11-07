@@ -59,12 +59,12 @@ public class DefaultQuartzServiceTest2 {
         // when
         service.start();
         // then
-        V7Scheduler defaultScheduler = provider.get();
+        KrailScheduler defaultScheduler = provider.get();
         assertThat(defaultScheduler.isStarted()).isTrue();
         assertThat(defaultScheduler.getMetaData()
                                    .getSchedulerName()).isEqualTo("default");
 
-        V7Scheduler testScheduler = provider.get("test");
+        KrailScheduler testScheduler = provider.get("test");
         assertThat(testScheduler).isNotNull();
         assertThat(testScheduler.isStarted()).isFalse();
         assertThat(testScheduler.getMetaData()
@@ -89,7 +89,7 @@ public class DefaultQuartzServiceTest2 {
     public void job() throws Exception {
 
         // given
-        V7Scheduler testScheduler = provider.get("test");
+        KrailScheduler testScheduler = provider.get("test");
         testScheduler.deleteJob(jobKey);
         // when
         service.start();
@@ -101,7 +101,7 @@ public class DefaultQuartzServiceTest2 {
 
     }
 
-    public static class TestTriggerListener extends V7TriggerListenerSupport {
+    public static class TestTriggerListener extends KrailTriggerListenerSupport {
 
     }
 
@@ -131,7 +131,8 @@ public class DefaultQuartzServiceTest2 {
                                             .withIdentity(jobKey);
             simpleSchedule();
             TriggerBuilder<SimpleTrigger> triggerBuilder = newTrigger().startNow()
-                                                                       .withSchedule(SimpleScheduleBuilder.repeatSecondlyForTotalCount(5, 1));
+                                                                       .withSchedule(SimpleScheduleBuilder
+                                                                               .repeatSecondlyForTotalCount(5, 1));
             addJob("test", jobBuilder, triggerBuilder);
             addJobListener("test", TestJobListener.class, jobKey);
         }

@@ -27,9 +27,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.base.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.base.navigate.URIFragmentHandler;
-import uk.q3c.krail.base.navigate.V7Navigator;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.base.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.base.user.opt.DefaultUserOption;
@@ -55,7 +55,7 @@ public class DefaultUserNavigationTreeBuilderTest {
     @Inject
     DefaultUserOption userOption;
     @Mock
-    V7Navigator navigator;
+    Navigator navigator;
     private DefaultUserNavigationTree userNavigationTree;
 
     @Before

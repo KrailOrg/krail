@@ -42,7 +42,7 @@ public class SchedulerProvider {
      *
      * @see com.google.inject.Provider#get()
      */
-    public V7Scheduler get() {
+    public KrailScheduler get() {
         log.debug("Getting default scheduler,defaultSchedulerName='{}'", defaultSchedulerName);
         Collection<Scheduler> schedulers = SchedulerRepository.getInstance()
                                                               .lookupAll();
@@ -52,14 +52,14 @@ public class SchedulerProvider {
             defaultScheduler = SchedulerRepository.getInstance()
                                                   .lookup(defaultSchedulerName);
             if (defaultScheduler != null) {
-                return (V7Scheduler) defaultScheduler;
+                return (KrailScheduler) defaultScheduler;
             }
         }
         if (schedulers.size() == 0) {
             throw new ProvisionException("No schedulers have been defined");
         } else { // take the next one as default
             Iterator<Scheduler> iterator = schedulers.iterator();
-            V7Scheduler scheduler = (V7Scheduler) iterator.next();
+            KrailScheduler scheduler = (KrailScheduler) iterator.next();
             defaultScheduler = scheduler;
             return scheduler;
         }
@@ -73,9 +73,9 @@ public class SchedulerProvider {
      *
      * @return
      */
-    public V7Scheduler get(String schedulerName) {
-        return (V7Scheduler) SchedulerRepository.getInstance()
-                                                .lookup(schedulerName);
+    public KrailScheduler get(String schedulerName) {
+        return (KrailScheduler) SchedulerRepository.getInstance()
+                                                   .lookup(schedulerName);
 
     }
 
@@ -84,7 +84,7 @@ public class SchedulerProvider {
      *
      * @param defaultScheduler
      */
-    public synchronized void setDefaultScheduler(V7Scheduler defaultScheduler) {
+    public synchronized void setDefaultScheduler(KrailScheduler defaultScheduler) {
         setDefaultScheduler(defaultScheduler.getMetaData()
                                             .getSchedulerName());
     }
@@ -96,10 +96,11 @@ public class SchedulerProvider {
      * @param schedulerName
      */
     public synchronized void setDefaultScheduler(String schedulerName) {
-        V7Scheduler scheduler = (V7Scheduler) SchedulerRepository.getInstance()
-                                                                 .lookup(schedulerName);
+        KrailScheduler scheduler = (KrailScheduler) SchedulerRepository.getInstance()
+                                                                       .lookup(schedulerName);
         if (scheduler == null) {
-            throw new ProvisionException("Unable to set default scheduler to " + schedulerName + ", there is no scheduler with that name");
+            throw new ProvisionException("Unable to set default scheduler to " + schedulerName + ", " +
+                    "there is no scheduler with that name");
         }
         this.defaultSchedulerName = schedulerName;
 

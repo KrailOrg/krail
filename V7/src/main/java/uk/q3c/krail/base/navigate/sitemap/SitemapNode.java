@@ -13,7 +13,7 @@
 package uk.q3c.krail.base.navigate.sitemap;
 
 import uk.q3c.krail.base.shiro.PageAccessControl;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public interface SitemapNode {
 
     public abstract I18NKey<?> getLabelKey();
 
-    public abstract Class<? extends V7View> getViewClass();
+    public abstract Class<? extends KrailView> getViewClass();
 
     public abstract PageAccessControl getPageAccessControl();
 

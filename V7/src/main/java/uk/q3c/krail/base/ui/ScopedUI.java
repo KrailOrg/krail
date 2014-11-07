@@ -14,7 +14,6 @@ package uk.q3c.krail.base.ui;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.data.util.converter.ConverterFactory;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
@@ -25,16 +24,16 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.base.config.V7ConfigurationException;
+import uk.q3c.krail.base.config.ConfigurationException;
 import uk.q3c.krail.base.guice.uiscope.UIKey;
 import uk.q3c.krail.base.guice.uiscope.UIScope;
 import uk.q3c.krail.base.guice.uiscope.UIScoped;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.push.Broadcaster;
 import uk.q3c.krail.base.push.Broadcaster.BroadcastListener;
 import uk.q3c.krail.base.push.PushMessageRouter;
-import uk.q3c.krail.base.view.V7View;
-import uk.q3c.krail.base.view.V7ViewHolder;
+import uk.q3c.krail.base.view.KrailView;
+import uk.q3c.krail.base.view.KrailViewHolder;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.LocaleChangeListener;
@@ -43,33 +42,33 @@ import uk.q3c.krail.i18n.Translate;
 import java.util.Locale;
 
 /**
- * The base class for all V7 UIs, it provides an essential part of the {@link UIScoped} mechanism. It also provides
+ * The base class for all Krail UIs, it provides an essential part of the {@link UIScoped} mechanism. It also provides
  * support for Vaadin Server Push (but only if you annotate your sub-class with {@link Push}), by capturing broadcast
  * messages in {@link #processBroadcastMessage(String, String)} and passing them to the {@link PushMessageRouter}. For
  * a
- * full description of the V7 server push implementation see: https://sites.google.com/site/q3cjava/server-push
+ * full description of the Krail server push implementation see: https://sites.google.com/site/q3cjava/server-push
  *
  * @author David Sowerby
  * @date modified 31 Mar 2014
  */
 
-public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastListener, LocaleChangeListener {
+public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastListener, LocaleChangeListener {
     private static Logger log = LoggerFactory.getLogger(ScopedUI.class);
     protected final CurrentLocale currentLocale;
     private final Panel viewDisplayPanel;
     private final ErrorHandler errorHandler;
     private final ConverterFactory converterFactory;
     private final PushMessageRouter pushMessageRouter;
-    private final V7Navigator navigator;
+    private final Navigator navigator;
     private final ApplicationTitle applicationTitle;
     private final Translate translate;
     private final I18NProcessor translator;
     private UIKey instanceKey;
     private AbstractOrderedLayout screenLayout;
     private UIScope uiScope;
-    private V7View view;
+    private KrailView view;
 
-    protected ScopedUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
+    protected ScopedUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
                        Broadcaster broadcaster, PushMessageRouter pushMessageRouter,
                        ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale,
                        I18NProcessor translator) {
@@ -113,23 +112,23 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
     }
 
     /**
-     * The Vaadin navigator has been replaced by the V7Navigator, use {@link #getV7Navigator()} instead.
+     * The Vaadin navigator has been replaced by the Navigator, use {@link #getKrailNavigator()} instead.
      *
      * @see com.vaadin.ui.UI#getNavigator()
      */
     @Override
     @Deprecated
-    public Navigator getNavigator() {
+    public com.vaadin.navigator.Navigator getNavigator() {
         return null;
     }
 
     @Override
-    public void setNavigator(Navigator navigator) {
+    public void setNavigator(com.vaadin.navigator.Navigator navigator) {
         throw new MethodReconfigured("UI.setNavigator() not available, use injection instead");
     }
 
     @Override
-    public void changeView(V7View toView) {
+    public void changeView(KrailView toView) {
         if (log.isDebugEnabled()) {
             String to = (toView == null) ? "null" : toView.getClass()
                                                           .getSimpleName();
@@ -166,7 +165,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
         page.setTitle(pageTitle());
 
         // readFromEnvironment navigator, which also loads the UserSitemap if not already loaded
-        getV7Navigator().init();
+        getKrailNavigator().init();
 
         // now that browser is active, and user sitemap loaded, set up currentLocale
         currentLocale.readFromEnvironment();
@@ -176,16 +175,16 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
         translator.translate(this);
         // Navigate to the correct start point
         String fragment = getPage().getUriFragment();
-        getV7Navigator().navigateTo(fragment);
+        getKrailNavigator().navigateTo(fragment);
     }
 
-    public V7Navigator getV7Navigator() {
+    public Navigator getKrailNavigator() {
         return navigator;
     }
 
     /**
      * Provides a locale sensitive title for your application (which appears in the browser tab). The title is defined
-     * by the {@link #applicationTitle}, which should be specified in your sub-class of {@link V7UIModule}
+     * by the {@link #applicationTitle}, which should be specified in your sub-class of {@link UIModule}
      *
      * @return
      */
@@ -206,7 +205,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
             String msg = "Your implementation of ScopedUI.screenLayout() must include getViewDisplayPanel().  AS a "
                     + "minimum this could be 'return new VerticalLayout(getViewDisplayPanel())'";
             log.error(msg);
-            throw new V7ConfigurationException(msg);
+            throw new ConfigurationException(msg);
         }
         viewDisplayPanel.setSizeFull();
         setContent(screenLayout);
@@ -247,7 +246,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
 
     /**
      * Responds to a locale change from {@link CurrentLocale} and updates the translation for this UI and the current
-     * V7View
+     * KrailView
      */
     @Override
     public void localeChanged(Locale toLocale) {
@@ -258,7 +257,7 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
         }
     }
 
-    public V7View getView() {
+    public KrailView getView() {
         return view;
     }
 

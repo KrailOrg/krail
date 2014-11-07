@@ -15,8 +15,8 @@ package fixture.testviews2;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
 import uk.q3c.krail.base.view.LoginView;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
 import uk.q3c.krail.i18n.I18NKey;
 
 public class TestLoginView implements LoginView {
@@ -31,7 +31,7 @@ public class TestLoginView implements LoginView {
      *         contains information about the change to this View
      */
     @Override
-    public void beforeBuild(V7ViewChangeEvent event) {
+    public void beforeBuild(KrailViewChangeEvent event) {
 
     }
 
@@ -44,7 +44,7 @@ public class TestLoginView implements LoginView {
      * @return the root component of the View, which is used to insert into the {@link ScopedUI} view area.
      */
     @Override
-    public void buildView(V7ViewChangeEvent event) {
+    public void buildView(KrailViewChangeEvent event) {
 
     }
 
@@ -74,12 +74,12 @@ public class TestLoginView implements LoginView {
     }
 
     @Override
-    public void setStatusMessage(String invalidLogin) {
-
+    public void setStatusMessage(I18NKey<?> messageKey) {
     }
 
     @Override
-    public void setStatusMessage(I18NKey<?> messageKey) {
+    public void setStatusMessage(String invalidLogin) {
+
     }
 
     @Override
@@ -99,7 +99,7 @@ public class TestLoginView implements LoginView {
      * @param event
      */
     @Override
-    public void afterBuild(V7ViewChangeEvent event) {
+    public void afterBuild(KrailViewChangeEvent event) {
 
     }
 

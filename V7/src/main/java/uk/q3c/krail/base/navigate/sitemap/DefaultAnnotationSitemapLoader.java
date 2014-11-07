@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 
 import java.util.Map;
@@ -41,11 +41,12 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
      * Scans for {@link View} annotations, starting from {@link #reflectionRoot}. Annotations cannot hold enum
      * parameters, so the enum name has to be converted from the labelKeyName parameter of the {@link View} annotation.
      * In order to do that one or more enum classes must be added to {@link #labelKeyClasses}. If a class has the
-     * {@link View} annotation, but does not implement {@link V7View}, then it is ignored.
+     * {@link View} annotation, but does not implement {@link KrailView}, then it is ignored.
      * <p/>
      * <br>
      * Also scans for the {@link RedirectFrom} annotation, and populates the {@link MasterSitemap} redirects with the
-     * appropriate entries. If a class is annotated with {@link RedirectFrom}, but does not implement {@link V7View},
+     * appropriate entries. If a class is annotated with {@link RedirectFrom}, but does not implement {@link
+     * KrailView},
      * then the annotation is ignored.
      *
      * @see uk.q3c.krail.base.navigate.sitemap.SitemapLoader#load()
@@ -63,17 +64,17 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
 
                 // find the View annotations
                 Set<Class<?>> typesWithView = reflections.getTypesAnnotatedWith(View.class);
-                log.debug("{} V7Views with View annotation found", typesWithView.size());
+                log.debug("{} KrailViews with View annotation found", typesWithView.size());
 
                 // find the RedirectFrom annotations
                 Set<Class<?>> typesWithRedirectFrom = reflections.getTypesAnnotatedWith(RedirectFrom.class);
-                log.debug("{} V7Views with RedirectFrom annotation found", typesWithRedirectFrom.size());
+                log.debug("{} KrailViews with RedirectFrom annotation found", typesWithRedirectFrom.size());
 
                 // process the View annotations
                 for (Class<?> clazz : typesWithView) {
-                    Class<? extends V7View> viewClass = null;
-                    if (V7View.class.isAssignableFrom(clazz)) {
-                        viewClass = (Class<? extends V7View>) clazz;
+                    Class<? extends KrailView> viewClass = null;
+                    if (KrailView.class.isAssignableFrom(clazz)) {
+                        viewClass = (Class<? extends KrailView>) clazz;
                         View annotation = viewClass.getAnnotation(View.class);
                         MasterSitemapNode node = sitemap.append(annotation.uri());
                         node.setViewClass(viewClass);
@@ -102,9 +103,9 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
                 }
                 // process the RedirectFrom annotations
                 for (Class<?> clazz : typesWithRedirectFrom) {
-                    Class<? extends V7View> viewClass = null;
-                    if (V7View.class.isAssignableFrom(clazz)) {
-                        viewClass = (Class<? extends V7View>) clazz;
+                    Class<? extends KrailView> viewClass = null;
+                    if (KrailView.class.isAssignableFrom(clazz)) {
+                        viewClass = (Class<? extends KrailView>) clazz;
                         RedirectFrom redirectAnnotation = viewClass.getAnnotation(RedirectFrom.class);
                         View viewAnnotation = viewClass.getAnnotation(View.class);
                         if (viewAnnotation == null) {

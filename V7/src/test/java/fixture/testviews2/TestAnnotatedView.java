@@ -15,8 +15,8 @@ package fixture.testviews2;
 import com.vaadin.ui.Component;
 import uk.q3c.krail.base.navigate.sitemap.View;
 import uk.q3c.krail.base.shiro.PageAccessControl;
-import uk.q3c.krail.base.view.V7View;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
+import uk.q3c.krail.base.view.KrailView;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
 
 /**
  * This is NOT UIScoped to avoid unnecessary complexity in setting up some of the tests - if you need a UIScoped test
@@ -25,7 +25,7 @@ import uk.q3c.krail.base.view.V7ViewChangeEvent;
  * @author David Sowerby
  */
 @View(uri = "a/b", labelKeyName = "Transfers", pageAccessControl = PageAccessControl.PERMISSION)
-public class TestAnnotatedView implements V7View {
+public class TestAnnotatedView implements KrailView {
 
 
     /**
@@ -37,7 +37,7 @@ public class TestAnnotatedView implements V7View {
      *         contains information about the change to this View
      */
     @Override
-    public void beforeBuild(V7ViewChangeEvent event) {
+    public void beforeBuild(KrailViewChangeEvent event) {
 
     }
 
@@ -50,7 +50,7 @@ public class TestAnnotatedView implements V7View {
      * @return the root component of the View, which is used to insert into the {@link ScopedUI} view area.
      */
     @Override
-    public void buildView(V7ViewChangeEvent event) {
+    public void buildView(KrailViewChangeEvent event) {
 
     }
 
@@ -77,7 +77,7 @@ public class TestAnnotatedView implements V7View {
      * @param event
      */
     @Override
-    public void afterBuild(V7ViewChangeEvent event) {
+    public void afterBuild(KrailViewChangeEvent event) {
 
     }
 

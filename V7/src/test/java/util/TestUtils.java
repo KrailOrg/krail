@@ -16,7 +16,8 @@ import java.nio.file.Paths;
 
 /**
  * Used mainly to overcome the differences between Intellij IDEA and Eclipse in their default project paths. For
- * example, when running a V7 test in Eclipse the current directory is V7, but in IDEA it is the parent directory (the
+ * example, when running a Krail test in Eclipse the current directory is V7, but in IDEA it is the parent directory
+ * (the
  * master project) krail
  * <p/>
  * Created by dsowerby on 22/06/14.
@@ -29,7 +30,7 @@ public class TestUtils {
         Path path = Paths.get("");
         String s = path.toAbsolutePath()
                        .toString();
-        runningIDEA = s.endsWith("krail");
+        runningIDEA = s.endsWith("v7");
     }
 
     public static File projectRootV7() {

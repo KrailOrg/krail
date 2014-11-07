@@ -55,12 +55,12 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
      *         contains information about the change to this View
      */
     @Override
-    public void beforeBuild(V7ViewChangeEvent event) {
+    public void beforeBuild(KrailViewChangeEvent event) {
 
     }
 
     @Override
-    public void buildView(V7ViewChangeEvent event) {
+    public void buildView(KrailViewChangeEvent event) {
         textArea = new TextArea();
         textArea.setSizeFull();
         textArea.setReadOnly(false);

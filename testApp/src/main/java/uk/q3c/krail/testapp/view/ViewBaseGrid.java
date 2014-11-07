@@ -15,7 +15,7 @@ package uk.q3c.krail.testapp.view;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Panel;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
 import uk.q3c.krail.base.view.ViewBase;
 
 /**
@@ -32,7 +32,7 @@ public abstract class ViewBaseGrid extends ViewBase {
     }
 
     @Override
-    public void buildView(V7ViewChangeEvent event) {
+    public void buildView(KrailViewChangeEvent event) {
         GridLayout grid = new GridLayout(3, 4);
         Panel topMarginPanel = new Panel();
         topMarginPanel.setHeight(topMargin + "px");
@@ -96,7 +96,7 @@ public abstract class ViewBaseGrid extends ViewBase {
      *         contains information about the change to this View
      */
     @Override
-    public void beforeBuild(V7ViewChangeEvent event) {
+    public void beforeBuild(KrailViewChangeEvent event) {
 
     }
 

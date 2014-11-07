@@ -65,7 +65,7 @@ public abstract class ShiroIntegrationTestBase extends AbstractShiroTest {
         // otherwise, you'll need to do this logic in each test that is different
         // Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:test.shiro.ini");
         // setSecurityManager(factory.getInstance());
-        setSecurityManager(new V7SecurityManager());
+        setSecurityManager(new KrailSecurityManager());
     }
 
     @Before

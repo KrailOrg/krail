@@ -54,7 +54,7 @@ public class DefaultLoginViewTest {
     @Test
     public void buildView() {
         //given
-        V7ViewChangeEvent event = new V7ViewChangeEvent(new NavigationState(), new NavigationState());
+        KrailViewChangeEvent event = new KrailViewChangeEvent(new NavigationState(), new NavigationState());
         //when
 
         view.buildView(event);

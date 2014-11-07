@@ -18,7 +18,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used with a {@link View} annotation, to indicate that the annotated V7View (and therefore virtual page) is the
+ * Used with a {@link View} annotation, to indicate that the annotated KrailView (and therefore virtual page) is the
  * redirection target from other (source) pages. This annotation is meaningful only when used with a View annotation,
  * and is otherwise ignored
  *

@@ -31,15 +31,15 @@ import org.mockito.stubbing.Answer;
 import uk.q3c.krail.base.guice.BaseServletModule;
 import uk.q3c.krail.base.guice.uiscope.UIKey;
 import uk.q3c.krail.base.guice.uiscope.UIScope;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.shiro.ShiroIntegrationTestBase;
 import uk.q3c.krail.base.ui.BasicUI;
 import uk.q3c.krail.base.ui.ScopedUI;
 import uk.q3c.krail.base.ui.ScopedUIProvider;
 import uk.q3c.krail.base.ui.TestUI;
-import uk.q3c.krail.base.view.V7View;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
-import uk.q3c.krail.base.view.V7ViewChangeListener;
+import uk.q3c.krail.base.view.KrailView;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
+import uk.q3c.krail.base.view.KrailViewChangeListener;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -48,7 +48,8 @@ import static org.mockito.Mockito.when;
  * THIS IS NOT IN USE - AND PROBABLY WON'T WORK. I HAVE KEPT IT ONLY BECAUSE THERE MAY BE SOME USEFUL IDEAS IN HERE
  * <p/>
  * <p/>
- * Extend this class to test anything related to a Vaadin UI (or in the case of V7, as {@link ScopedUI}. Note that the
+ * Extend this class to test anything related to a Vaadin UI (or in the case of Krail, as {@link ScopedUI}. Note that
+ * the
  * {@link UIScope} is not prepared until the {@link #uiSetup()} method is called, so subclasses must use providers if
  * they want to inject UIScoped objects - otherwise the injection happens before the UIScope context is ready.
  * <p/>
@@ -62,7 +63,7 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({BaseServletModule.class})
-public abstract class UITestBase extends ShiroIntegrationTestBase implements V7ViewChangeListener {
+public abstract class UITestBase extends ShiroIntegrationTestBase implements KrailViewChangeListener {
     protected static Class<? extends ScopedUI> uiClass;
     // this is static to ensure count remains unique across all method calls
     private static int connectCount = 1;
@@ -70,7 +71,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
 
     protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
     protected VaadinSession mockedSession = mock(VaadinSession.class);
-    protected V7View currentView;
+    protected KrailView currentView;
 
     @Inject
     protected Injector injector;
@@ -81,7 +82,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
     protected ScopedUI ui;
 
     @Inject
-    protected Provider<V7Navigator> navigatorPro;
+    protected Provider<Navigator> navigatorPro;
 
     @Before
     public void setup() {
@@ -110,7 +111,7 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
         when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
         when(mockedSession.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
         ui.setSession(mockedSession);
-        ui.getV7Navigator()
+        ui.getKrailNavigator()
           .addViewChangeListener(this);
         // ui.doInit(mockedRequest, 23);
         return ui;
@@ -127,11 +128,11 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements V7V
     }
 
     @Override
-    public void beforeViewChange(V7ViewChangeEvent event) {
+    public void beforeViewChange(KrailViewChangeEvent event) {
     }
 
     @Override
-    public void afterViewChange(V7ViewChangeEvent event) {
+    public void afterViewChange(KrailViewChangeEvent event) {
     }
 
     /**

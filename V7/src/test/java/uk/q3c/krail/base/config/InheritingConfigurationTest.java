@@ -72,7 +72,7 @@ public class InheritingConfigurationTest {
 
     private HierarchicalINIConfiguration config(String filename) throws ConfigurationException {
         File root = TestUtils.projectRootV7();
-        File dir = new File(root, "src/test/java/uk/co/q3c/krail/base/config");
+        File dir = new File(root, "src/test/java/uk/q3c/krail/base/config");
         File file = new File(dir, filename);
         System.out.println(file.getAbsolutePath());
         HierarchicalINIConfiguration config = new HierarchicalINIConfiguration(file);

@@ -19,7 +19,7 @@ import com.vaadin.ui.Tree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.base.guice.uiscope.UIScoped;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemapChangeListener;
@@ -28,8 +28,8 @@ import uk.q3c.krail.base.navigate.sitemap.comparator.DefaultUserSitemapSorters.S
 import uk.q3c.krail.base.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.base.user.opt.UserOption;
 import uk.q3c.krail.base.user.opt.UserOptionProperty;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
-import uk.q3c.krail.base.view.V7ViewChangeListener;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
+import uk.q3c.krail.base.view.KrailViewChangeListener;
 import uk.q3c.util.ID;
 
 import java.util.Collection;
@@ -45,11 +45,11 @@ import java.util.Comparator;
  * @author David Sowerby 17 May 2013
  * @modified David Sowerby
  */
-public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, V7ViewChangeListener,
+public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, KrailViewChangeListener,
         UserSitemapChangeListener {
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
     private final UserSitemap userSitemap;
-    private final V7Navigator navigator;
+    private final Navigator navigator;
     private final UserOption userOption;
     private final UserNavigationTreeBuilder builder;
     private final UserSitemapSorters sorters;
@@ -57,7 +57,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
     private boolean suppressValueChangeEvents;
 
     @Inject
-    protected DefaultUserNavigationTree(UserSitemap userSitemap, V7Navigator navigator, UserOption userOption,
+    protected DefaultUserNavigationTree(UserSitemap userSitemap, Navigator navigator, UserOption userOption,
                                         UserNavigationTreeBuilder builder, UserSitemapSorters sorters) {
         super();
         this.userSitemap = userSitemap;
@@ -169,10 +169,10 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
     }
 
     /**
-     * @see uk.q3c.krail.base.view.V7ViewChangeListener#beforeViewChange(uk.q3c.krail.base.view.V7ViewChangeEvent)
+     * @see KrailViewChangeListener#beforeViewChange(KrailViewChangeEvent)
      */
     @Override
-    public void beforeViewChange(V7ViewChangeEvent event) {
+    public void beforeViewChange(KrailViewChangeEvent event) {
         //       do nothing
         //
     }
@@ -180,10 +180,10 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
     /**
      * After a navigation change, select the appropriate node.
      *
-     * @see uk.q3c.krail.base.view.V7ViewChangeListener#afterViewChange(uk.q3c.krail.base.view.V7ViewChangeEvent)
+     * @see KrailViewChangeListener#afterViewChange(KrailViewChangeEvent)
      */
     @Override
-    public void afterViewChange(V7ViewChangeEvent event) {
+    public void afterViewChange(KrailViewChangeEvent event) {
         UserSitemapNode selectedNode = navigator.getCurrentNode();
         UserSitemapNode childNode = selectedNode;
 

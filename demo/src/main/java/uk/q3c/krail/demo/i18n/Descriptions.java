@@ -36,7 +36,8 @@ public class Descriptions extends MapResourceBundle<DescriptionKey> {
                 // @formatter:off
 		.put(DescriptionKey.Notifications, "Vaadin provides " + "<a href=\"https://vaadin" +
                 ".com/en_GB/book/vaadin7/-/page/application.notifications.html\" " +
-                        "target=\"\">notification</a>" + " 'splash' messages.  V7 adds to this by enabling the use of" +
+                        "target=\"\">notification</a>" + " 'splash' messages.  Krail adds to this by enabling the use" +
+                " of" +
                 " multiple" + " methods of notification, combined or selected for each of the message types - Error, " +
                 "" + "Warning and Information, and invoked through a single call to the UserNotifier class.  " +
                 "\nConfiguration is through a Guice module (DefaultUserNotificationModule by default)." + "\nWhen you" +

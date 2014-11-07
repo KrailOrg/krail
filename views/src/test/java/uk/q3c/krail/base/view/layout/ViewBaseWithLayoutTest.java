@@ -25,8 +25,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.base.navigate.V7Navigator;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
+import uk.q3c.krail.base.navigate.Navigator;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
 import uk.q3c.krail.base.view.layout.ViewBaseWithLayout.ComponentWrapper;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
@@ -45,7 +45,7 @@ public class ViewBaseWithLayoutTest {
     Translate translate;
     ViewBaseWithLayout vbwl;
     @Mock
-    V7Navigator navigator;
+    Navigator navigator;
     private Button button1;
     private Button button2;
     private Label label1;
@@ -320,12 +320,12 @@ public class ViewBaseWithLayoutTest {
          *         contains information about the change to this View
          */
         @Override
-        public void beforeBuild(V7ViewChangeEvent event) {
+        public void beforeBuild(KrailViewChangeEvent event) {
 
         }
 
         @Override
-        public void buildView(V7ViewChangeEvent event) {
+        public void buildView(KrailViewChangeEvent event) {
             button1 = new Button();
             button2 = new Button();
             label1 = new Label();
@@ -346,7 +346,7 @@ public class ViewBaseWithLayoutTest {
          * @param navigationState
          */
         @Override
-        public void afterBuild(V7ViewChangeEvent event) {
+        public void afterBuild(KrailViewChangeEvent event) {
             super.afterBuild(event);
             System.out.println(event.getFromState()
                                     .getParameterList());

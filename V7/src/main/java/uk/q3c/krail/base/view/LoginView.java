@@ -20,7 +20,7 @@ import uk.q3c.krail.i18n.I18NKey;
  *
  * @author David Sowerby 1 Jan 2013
  */
-public interface LoginView extends V7View {
+public interface LoginView extends KrailView {
 
     void setUsername(String username);
 
@@ -35,8 +35,8 @@ public interface LoginView extends V7View {
      */
     String getStatusMessage();
 
-    void setStatusMessage(I18NKey<?> messageKey);
-
     void setStatusMessage(String invalidLogin);
+
+    void setStatusMessage(I18NKey<?> messageKey);
 
 }

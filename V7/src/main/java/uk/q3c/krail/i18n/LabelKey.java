@@ -35,6 +35,7 @@ public enum LabelKey implements I18NKey<Labels> {
     Invalid_Page,
     Insertion_Order_Ascending,
     Insertion_Order_Descending,
+    Krail,
     Last_Name,
     Log_In,
     Log_Out,
@@ -62,7 +63,6 @@ public enum LabelKey implements I18NKey<Labels> {
     Unlock_Account,
     Unnamed,
     User_Name,
-    V7,
     Warning,
     Yes;
 

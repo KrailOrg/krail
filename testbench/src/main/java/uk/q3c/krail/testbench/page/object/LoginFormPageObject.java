@@ -23,7 +23,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import uk.q3c.krail.base.view.DefaultLoginView;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 
 
 /**
@@ -39,7 +39,7 @@ public class LoginFormPageObject extends PageObject {
      *
      * @param parentCase
      */
-    public LoginFormPageObject(V7TestBenchTestCase parentCase) {
+    public LoginFormPageObject(KrailTestBenchTestCase parentCase) {
         super(parentCase);
     }
 

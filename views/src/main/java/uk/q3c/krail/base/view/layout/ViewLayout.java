@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * A further level of abstraction from the standard Vaadin Layout components, the implementations of this interface
- * provide some common composite layouts, typical for web (and other) applications. The core V7 library only provide
+ * provide some common composite layouts, typical for web (and other) applications. The core Krail library only provide
  * one
  * implementation, {@link VerticalViewLayout}, but it is expected that others will be added as a separate library.
  *

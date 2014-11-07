@@ -38,7 +38,7 @@ public class LoaderReportBuilderTest {
     @Before
     public void setup() {
         templateFile = new File(TestResource.testJavaRootDir("V7"),
-                "uk/co/q3c/v7/base/navigate/sitemap/LoadReportBuilderTest.template");
+                "uk/q3c/krail/base/navigate/sitemap/LoadReportBuilderTest.template");
         loaders = new ArrayList<>();
         loaders.add(new MockAnnotationLoader());
         loaders.add(new MockDirectLoader());

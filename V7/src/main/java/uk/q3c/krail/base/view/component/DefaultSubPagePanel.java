@@ -15,7 +15,7 @@ package uk.q3c.krail.base.view.component;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemapChangeListener;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemapNode;
@@ -38,7 +38,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements SubPag
     private final UserSitemapSorters sorters;
 
     @Inject
-    protected DefaultSubPagePanel(V7Navigator navigator, UserSitemap userSitemap, UserOption userOption,
+    protected DefaultSubPagePanel(Navigator navigator, UserSitemap userSitemap, UserOption userOption,
                                   UserSitemapSorters sorters, CurrentLocale currentLocale) {
         super(navigator, userSitemap, currentLocale);
         this.userSitemap = userSitemap;

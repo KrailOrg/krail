@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 public class DefaultInvalidURIExceptionHandlerTest {
 
     @Mock
-    V7Navigator navigator;
+    Navigator navigator;
 
     @Mock
     UserNotifier notifier;

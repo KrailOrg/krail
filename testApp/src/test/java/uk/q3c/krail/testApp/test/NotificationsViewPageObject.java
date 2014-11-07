@@ -17,7 +17,7 @@ import com.google.common.base.Optional;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.ui.Button;
 import uk.q3c.krail.testapp.view.NotificationsView;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.object.PageObject;
 
 /**
@@ -25,7 +25,7 @@ import uk.q3c.krail.testbench.page.object.PageObject;
  */
 public class NotificationsViewPageObject extends PageObject {
 
-    public NotificationsViewPageObject(V7TestBenchTestCase parentCase) {
+    public NotificationsViewPageObject(KrailTestBenchTestCase parentCase) {
         super(parentCase);
     }
 

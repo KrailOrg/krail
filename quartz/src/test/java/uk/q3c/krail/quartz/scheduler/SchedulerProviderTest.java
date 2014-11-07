@@ -53,11 +53,12 @@ public class SchedulerProviderTest {
     @Inject
     Provider<InheritingConfiguration> inheritingConfigurationProvider;
 
-    private DefaultV7SchedulerFactory factory;
+    private DefaultKrailSchedulerFactory factory;
 
     @Before
     public void setup() throws SchedulerException, InterruptedException {
-        factory = new DefaultV7SchedulerFactory(translate, applicationConfiguration, inheritingConfigurationProvider);
+        factory = new DefaultKrailSchedulerFactory(translate, applicationConfiguration,
+                inheritingConfigurationProvider);
         clearSchedulerRepo();
     }
 
@@ -98,7 +99,7 @@ public class SchedulerProviderTest {
         SchedulerConfiguration config1 = new SchedulerConfiguration().name("first");
         SchedulerConfiguration config2 = new SchedulerConfiguration().name("second");
         // when
-        V7Scheduler s = factory.createScheduler(config1);
+        KrailScheduler s = factory.createScheduler(config1);
         provider.setDefaultScheduler(s);
         factory.createScheduler(config2);
         // then
@@ -119,7 +120,7 @@ public class SchedulerProviderTest {
         // when
         factory.createScheduler(config1);
         provider.setDefaultScheduler("first");
-        V7Scheduler s02 = factory.createScheduler(config2);
+        KrailScheduler s02 = factory.createScheduler(config2);
         // then
         Scheduler s1 = provider.get();
         Scheduler s2 = provider.get();
@@ -142,11 +143,11 @@ public class SchedulerProviderTest {
         SchedulerConfiguration config1 = new SchedulerConfiguration().name("first");
         SchedulerConfiguration config2 = new SchedulerConfiguration().name("second");
         // when
-        V7Scheduler s01 = factory.createScheduler(config1);
-        V7Scheduler s02 = factory.createScheduler(config2);
+        KrailScheduler s01 = factory.createScheduler(config1);
+        KrailScheduler s02 = factory.createScheduler(config2);
         // then
-        V7Scheduler s1 = provider.get("first");
-        V7Scheduler s2 = provider.get("second");
+        KrailScheduler s1 = provider.get("first");
+        KrailScheduler s2 = provider.get("second");
 
         assertThat(s1).isEqualTo(s01);
         assertThat(s2).isEqualTo(s02);
@@ -163,7 +164,7 @@ public class SchedulerProviderTest {
         factory.createScheduler(config1);
         factory.createScheduler(config2);
         // then
-        V7Scheduler s1 = provider.get("third");
+        KrailScheduler s1 = provider.get("third");
         assertThat(s1).isNull();
     }
 
@@ -185,7 +186,7 @@ public class SchedulerProviderTest {
         SchedulerConfiguration config1 = new SchedulerConfiguration().name("first");
         SchedulerConfiguration config2 = new SchedulerConfiguration().name("second");
         SchedulerConfiguration config3 = new SchedulerConfiguration().name("third");
-        V7Scheduler s1 = factory.createScheduler(config1);
+        KrailScheduler s1 = factory.createScheduler(config1);
         factory.createScheduler(config2);
         factory.createScheduler(config3);
         provider.setDefaultScheduler("first");

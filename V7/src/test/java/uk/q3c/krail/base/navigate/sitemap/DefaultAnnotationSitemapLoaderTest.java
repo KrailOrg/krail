@@ -32,8 +32,8 @@ import uk.q3c.krail.base.user.opt.DefaultUserOption;
 import uk.q3c.krail.base.user.opt.DefaultUserOptionStore;
 import uk.q3c.krail.base.user.opt.UserOption;
 import uk.q3c.krail.base.user.opt.UserOptionStore;
-import uk.q3c.krail.base.view.V7View;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
+import uk.q3c.krail.base.view.KrailView;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.I18NProcessor;
@@ -126,7 +126,7 @@ public class DefaultAnnotationSitemapLoaderTest {
 
     @View(uri = "a", labelKeyName = "Home", pageAccessControl = PageAccessControl.PERMISSION)
     @RedirectFrom(sourcePages = {"home/redirected", "home/splat"})
-    static class View1 implements V7View {
+    static class View1 implements KrailView {
 
 
         /**
@@ -139,7 +139,7 @@ public class DefaultAnnotationSitemapLoaderTest {
          *         contains information about the change to this View
          */
         @Override
-        public void beforeBuild(V7ViewChangeEvent event) {
+        public void beforeBuild(KrailViewChangeEvent event) {
 
         }
 
@@ -153,7 +153,7 @@ public class DefaultAnnotationSitemapLoaderTest {
          * @return the root component of the View, which is used to insert into the {@link ScopedUI} view area.
          */
         @Override
-        public void buildView(V7ViewChangeEvent event) {
+        public void buildView(KrailViewChangeEvent event) {
 
         }
 
@@ -181,7 +181,7 @@ public class DefaultAnnotationSitemapLoaderTest {
          * @param event
          */
         @Override
-        public void afterBuild(V7ViewChangeEvent event) {
+        public void afterBuild(KrailViewChangeEvent event) {
 
         }
 

@@ -24,8 +24,8 @@ import uk.q3c.krail.base.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.i18n.I18NModule;
 import uk.q3c.krail.quartz.job.DefaultJobModule;
 import uk.q3c.krail.quartz.scheduler.DefaultSchedulerModule;
+import uk.q3c.krail.quartz.scheduler.KrailScheduler;
 import uk.q3c.krail.quartz.scheduler.SchedulerProvider;
-import uk.q3c.krail.quartz.scheduler.V7Scheduler;
 
 import java.io.File;
 
@@ -60,7 +60,7 @@ public class DefaultQuartzServiceTest {
         // when
         service.start();
         // then
-        V7Scheduler scheduler = provider.get();
+        KrailScheduler scheduler = provider.get();
         assertThat(scheduler.isStarted()).isTrue();
         assertThat(scheduler.getMetaData()
                             .getSchedulerName()).isEqualTo("default");

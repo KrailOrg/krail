@@ -18,7 +18,7 @@ import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.push.Broadcaster;
 import uk.q3c.krail.base.push.PushMessageRouter;
 import uk.q3c.krail.base.ui.ApplicationTitle;
@@ -30,7 +30,7 @@ import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.Translate;
 
 /**
- * The UI class used in this demo for the V7 application base
+ * The UI class used in this demo for the Krail application base
  *
  * @author David Sowerby
  */
@@ -39,7 +39,7 @@ import uk.q3c.krail.i18n.Translate;
 public class DemoUI extends DefaultApplicationUI {
 
     @Inject
-    protected DemoUI(V7Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
+    protected DemoUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
                      ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatus,
                      UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb,
                      SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster,

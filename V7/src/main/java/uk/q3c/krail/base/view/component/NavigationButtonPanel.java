@@ -20,11 +20,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemapNode;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
-import uk.q3c.krail.base.view.V7ViewChangeListener;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
+import uk.q3c.krail.base.view.KrailViewChangeListener;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeListener;
 import uk.q3c.util.ID;
@@ -35,18 +35,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-public abstract class NavigationButtonPanel extends HorizontalLayout implements V7ViewChangeListener,
+public abstract class NavigationButtonPanel extends HorizontalLayout implements KrailViewChangeListener,
         LocaleChangeListener, Button.ClickListener {
     private static Logger log = LoggerFactory.getLogger(NavigationButtonPanel.class);
     private final List<NavigationButton> buttons = new ArrayList<>();
     private final LinkedList<NodeFilter<UserSitemapNode>> sourceFilters = new LinkedList<>();
-    private final V7Navigator navigator;
+    private final Navigator navigator;
     private final UserSitemap sitemap;
 
     protected boolean rebuildRequired = true;
 
     @Inject
-    protected NavigationButtonPanel(V7Navigator navigator, UserSitemap sitemap, CurrentLocale currentLocale) {
+    protected NavigationButtonPanel(Navigator navigator, UserSitemap sitemap, CurrentLocale currentLocale) {
         this.navigator = navigator;
         navigator.addViewChangeListener(this);
         this.sitemap = sitemap;
@@ -147,12 +147,12 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
     }
 
     @Override
-    public void beforeViewChange(V7ViewChangeEvent event) {
+    public void beforeViewChange(KrailViewChangeEvent event) {
         // do nothing
     }
 
     @Override
-    public void afterViewChange(V7ViewChangeEvent event) {
+    public void afterViewChange(KrailViewChangeEvent event) {
         log.debug("Responding to view change");
         rebuildRequired = true;
         build();
@@ -176,7 +176,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
 
     }
 
-    public V7Navigator getNavigator() {
+    public Navigator getNavigator() {
         return navigator;
     }
 

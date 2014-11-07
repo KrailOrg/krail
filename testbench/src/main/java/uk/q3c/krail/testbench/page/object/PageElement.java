@@ -17,7 +17,7 @@ import com.google.common.base.Optional;
 import com.vaadin.testbench.elements.AbstractComponentElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.util.ID;
 
 /**
@@ -28,18 +28,18 @@ public class PageElement<E extends AbstractComponentElement> {
     private static Logger log = LoggerFactory.getLogger(PageElement.class);
 
     private final String id;
-    protected V7TestBenchTestCase parentCase;
+    protected KrailTestBenchTestCase parentCase;
     private Class<E> elementClass;
 
 
-    public PageElement(V7TestBenchTestCase parentCase, Class<E> elementClass, Optional<?> qualifier,
+    public PageElement(KrailTestBenchTestCase parentCase, Class<E> elementClass, Optional<?> qualifier,
                        Class<?>... componentClasses) {
         this.parentCase = parentCase;
         this.id = ID.getIdc(qualifier, componentClasses);
         this.elementClass = elementClass;
     }
 
-    public PageElement(V7TestBenchTestCase parentCase, Class<E> elementClass, String id) {
+    public PageElement(KrailTestBenchTestCase parentCase, Class<E> elementClass, String id) {
         this.parentCase = parentCase;
         this.id = id;
         this.elementClass = elementClass;

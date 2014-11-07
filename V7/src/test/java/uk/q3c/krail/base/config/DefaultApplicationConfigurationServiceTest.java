@@ -78,7 +78,7 @@ public class DefaultApplicationConfigurationServiceTest {
     @Test
     public void loadOneFile() throws Exception {
         // given
-        addConfig("V7.ini", 0, false);
+        addConfig("krail.ini", 0, false);
         // when
         service.start();
         // then (one configuration is the in memory one added automatically)
@@ -97,8 +97,8 @@ public class DefaultApplicationConfigurationServiceTest {
     @Test
     public void loadTwoFiles() throws Exception {
         // given
-        addConfig("V7.ini", 0, false);
-        addConfig("test.V7.ini", 1, false);
+        addConfig("krail.ini", 0, false);
+        addConfig("test.krail.ini", 1, false);
         // when
         service.start();
         // then (one configuration is the in memory one added automatically)
@@ -111,8 +111,8 @@ public class DefaultApplicationConfigurationServiceTest {
     @Test
     public void stopStart() throws Exception {
         // given
-        addConfig("V7.ini", 0, false);
-        addConfig("test.V7.ini", 1, false);
+        addConfig("krail.ini", 0, false);
+        addConfig("test.krail.ini", 1, false);
         configuration.addProperty("in memory", "memory");
         // when
         service.start();
@@ -156,14 +156,15 @@ public class DefaultApplicationConfigurationServiceTest {
         when(translate.from(LabelKey.Application_Configuration_Service)).thenReturn("Application Configuration " +
                 "Service");
         when(translate.from(DescriptionKey.Application_Configuration_Service)).thenReturn("This service loads the " +
-                "application configuration from V7.ini");
+                "application configuration from krail.ini");
         // when
 
         // then
         assertThat(service.getNameKey()).isEqualTo(LabelKey.Application_Configuration_Service);
         assertThat(service.getName()).isEqualTo("Application Configuration Service");
         assertThat(service.getDescriptionKey()).isEqualTo(DescriptionKey.Application_Configuration_Service);
-        assertThat(service.getDescription()).isEqualTo("This service loads the application configuration from V7.ini");
+        assertThat(service.getDescription()).isEqualTo("This service loads the application configuration from krail" +
+                ".ini");
 
     }
 

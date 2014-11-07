@@ -31,12 +31,12 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
      *         contains information about the change to this View
      */
     @Override
-    public void beforeBuild(V7ViewChangeEvent event) {
+    public void beforeBuild(KrailViewChangeEvent event) {
 
     }
 
     @Override
-    public void buildView(V7ViewChangeEvent event) {
+    public void buildView(KrailViewChangeEvent event) {
         super.buildView(event);
         Panel p = new Panel("Logged out");
         p.setSizeFull();

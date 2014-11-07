@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.base.navigate.sitemap;
 
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 
 /**
@@ -45,7 +45,7 @@ public interface SitemapChecker {
      *
      * @return
      */
-    SitemapChecker replaceMissingViewWith(Class<? extends V7View> defaultView);
+    SitemapChecker replaceMissingViewWith(Class<? extends KrailView> defaultView);
 
     /**
      * If a node has no label key defined, it has its label key set to {@code defaultKey}

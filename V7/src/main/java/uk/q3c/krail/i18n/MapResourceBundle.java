@@ -21,12 +21,12 @@ public abstract class MapResourceBundle<E extends I18NKey> extends ResourceBundl
 
     @Override
     public Enumeration<String> getKeys() {
-        throw new RuntimeException("getKeys() replaced in V7, use getMap() instead");
+        throw new RuntimeException("getKeys() replaced in Krail, use getMap() instead");
     }
 
     @Override
     protected Object handleGetObject(String arg0) {
-        throw new RuntimeException("handleGetObject() replaced in V7, use getValue() instead");
+        throw new RuntimeException("handleGetObject() replaced in Krail, use getValue() instead");
     }
 
     public String getValue(E key) {

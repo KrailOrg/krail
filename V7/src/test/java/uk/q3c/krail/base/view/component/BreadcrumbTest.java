@@ -23,9 +23,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.base.navigate.URIFragmentHandler;
-import uk.q3c.krail.base.navigate.V7Navigator;
 import uk.q3c.krail.base.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.base.navigate.sitemap.MasterSitemapNode;
 import uk.q3c.krail.base.user.opt.DefaultUserOption;
@@ -49,7 +49,7 @@ public class BreadcrumbTest {
     DefaultBreadcrumb breadcrumb;
 
     @Mock
-    V7Navigator navigator;
+    Navigator navigator;
 
     @Inject
     CurrentLocale currentLocale;

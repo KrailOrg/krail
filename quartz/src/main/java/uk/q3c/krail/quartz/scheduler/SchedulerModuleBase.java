@@ -22,7 +22,8 @@ import uk.q3c.krail.quartz.job.JobModuleBase;
 import static com.google.inject.multibindings.Multibinder.newSetBinder;
 
 /**
- * Provides a base class for configuring the schedulers. {@link QuartzService} constructs the {@link V7Scheduler}s from
+ * Provides a base class for configuring the schedulers. {@link QuartzService} constructs the {@link KrailScheduler}s
+ * from
  * the configurations provided by sub-classes of this module. To define jobs, either use sub-classes of
  * {@link JobModuleBase}, or inject an instance of {@link Scheduler} and add jobs directly
  *
@@ -90,7 +91,8 @@ public abstract class SchedulerModuleBase extends AbstractModule {
      * @param schedulerName
      * @param listenerClass
      */
-    protected void addTriggerListener(String schedulerName, String triggerName, Class<? extends V7TriggerListener> listenerClass) {
+    protected void addTriggerListener(String schedulerName, String triggerName, Class<? extends KrailTriggerListener>
+            listenerClass) {
         TriggerListenerEntry entry = new TriggerListenerEntry(schedulerName, triggerName, listenerClass);
         triggerListeners.addBinding()
                         .toInstance(entry);

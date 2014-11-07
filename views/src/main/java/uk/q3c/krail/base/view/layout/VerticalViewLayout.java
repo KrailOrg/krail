@@ -19,7 +19,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * This is one of the few {@link ViewLayout} implementations provided within the V7 base library. It is intended that
+ * This is one of the few {@link ViewLayout} implementations provided within the Krail core library. It is intended
+ * that
  * others will be provided in a companion library. This implementation provides the standard {@link VerticalLayout}
  * functionality, plus it allows the specification of a "splitter" at any one or more places between components.
  *

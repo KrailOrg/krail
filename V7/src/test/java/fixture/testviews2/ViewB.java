@@ -15,19 +15,19 @@ package fixture.testviews2;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.base.navigate.DefaultV7NavigatorTest;
-import uk.q3c.krail.base.view.V7View;
-import uk.q3c.krail.base.view.V7ViewChangeEvent;
+import uk.q3c.krail.base.navigate.DefaultNavigatorTest;
+import uk.q3c.krail.base.view.KrailView;
+import uk.q3c.krail.base.view.KrailViewChangeEvent;
 
-public class ViewB implements V7View {
+public class ViewB implements KrailView {
 
 
     private final Label label = new Label("not used");
-    private DefaultV7NavigatorTest.TestViewChangeListener changeListener;
+    private DefaultNavigatorTest.TestViewChangeListener changeListener;
 
 
     @Inject
-    public ViewB(DefaultV7NavigatorTest.TestViewChangeListener changeListener) {
+    public ViewB(DefaultNavigatorTest.TestViewChangeListener changeListener) {
         this.changeListener = changeListener;
     }
 
@@ -40,7 +40,7 @@ public class ViewB implements V7View {
      *         contains information about the change to this View
      */
     @Override
-    public void beforeBuild(V7ViewChangeEvent event) {
+    public void beforeBuild(KrailViewChangeEvent event) {
         changeListener.addCall("beforeBuild", event);
     }
 
@@ -53,7 +53,7 @@ public class ViewB implements V7View {
      * @return the root component of the View, which is used to insert into the {@link ScopedUI} view area.
      */
     @Override
-    public void buildView(V7ViewChangeEvent event) {
+    public void buildView(KrailViewChangeEvent event) {
         changeListener.addCall("buildView", event);
     }
 
@@ -80,7 +80,7 @@ public class ViewB implements V7View {
      * @param event
      */
     @Override
-    public void afterBuild(V7ViewChangeEvent event) {
+    public void afterBuild(KrailViewChangeEvent event) {
         changeListener.addCall("afterBuild", event);
     }
 

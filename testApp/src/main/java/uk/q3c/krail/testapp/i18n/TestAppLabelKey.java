@@ -30,6 +30,6 @@ public enum TestAppLabelKey implements I18NKey<Labels> {
     Login,
     Refresh_Account,
     Request_Account,
-    V7_Test_Application, _nullkey_;
+    Krail_Test_Application, _nullkey_;
 
 }

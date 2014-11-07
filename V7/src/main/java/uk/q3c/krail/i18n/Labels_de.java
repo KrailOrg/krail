@@ -70,7 +70,7 @@ public class Labels_de extends Labels {
                 .put(LabelKey.Unlock_Account, "Konto entsperren")
                 .put(LabelKey.Unnamed, "unbenannt")
                 .put(LabelKey.User_Name, "Benutzername")
-                .put(LabelKey.V7, "V7")
+                .put(LabelKey.Krail, "Krail")
                 .put(LabelKey.Warning, "Warnung")
                 .put(LabelKey.Password, "Passwort")
                 .put(LabelKey.Submit, "Absenden")

@@ -49,7 +49,7 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
      * <pre>
      * vaadin {<br>
      * version vaadinVersion<br>
-     * widgetset "uk.q3c.krail.demo.widgetset.V7demoWidgetset"<br>
+     * widgetset "uk.q3c.krail.demo.widgetset.demoWidgetset"<br>
      * }
      * </pre>
      * <p/>

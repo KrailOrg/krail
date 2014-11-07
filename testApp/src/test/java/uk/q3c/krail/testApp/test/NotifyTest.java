@@ -16,12 +16,12 @@ import com.vaadin.testbench.ScreenshotOnFailureRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import uk.q3c.krail.testbench.V7TestBenchTestCase;
+import uk.q3c.krail.testbench.KrailTestBenchTestCase;
 import uk.q3c.krail.testbench.page.object.MessageBarPageObject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NotifyTest extends V7TestBenchTestCase {
+public class NotifyTest extends KrailTestBenchTestCase {
 
     private final String testPage = "notifications";
     @Rule

@@ -20,7 +20,7 @@ import uk.q3c.krail.quartz.service.DefaultQuartzService;
 import java.util.Properties;
 
 /**
- * Provides configuration for the {@link V7Scheduler} (a minor variation of the Quartz {@link Scheduler}). The
+ * Provides configuration for the {@link KrailScheduler} (a minor variation of the Quartz {@link Scheduler}). The
  * configuration source may be taken from one of three places. Please note the order of importance of these:
  * <ol>
  * <li>coded in a Guice module
@@ -31,7 +31,7 @@ import java.util.Properties;
  * The 2nd and 3rd options do not need to exist. If they do, they will each override the property values of the
  * preceding methods, where properties with the same key exist in more than one source.
  * <p/>
- * The logic for combining these sources is actually in the {@link DefaultV7SchedulerFactory}, and invoked only when
+ * The logic for combining these sources is actually in the {@link DefaultKrailSchedulerFactory}, and invoked only when
  * services are being started. This helps to avoid having conditional logic in the Guice modules.
  * <p/>
  * Sets the org.quartz.threadPool.threadCount to 1 as a default, as without it, the creation of a Scheduler will fail

@@ -17,14 +17,14 @@ import com.vaadin.ui.UI;
 import uk.q3c.krail.base.ui.BasicUIProvider;
 import uk.q3c.krail.base.ui.ScopedUIProvider;
 import uk.q3c.krail.base.ui.TestUI;
-import uk.q3c.krail.base.ui.V7UIModule;
+import uk.q3c.krail.base.ui.UIModule;
 
 /**
  * Extends the default UIModule to provide instances of TestUI
  *
  * @author David Sowerby 12 Jan 2013
  */
-public class TestUIModule extends V7UIModule {
+public class TestUIModule extends UIModule {
 
     @Override
     protected void addUIBindings(MapBinder<String, UI> mapbinder) {

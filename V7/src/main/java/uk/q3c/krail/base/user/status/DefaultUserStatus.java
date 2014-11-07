@@ -16,7 +16,7 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.base.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.base.navigate.V7Navigator;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.shiro.SubjectProvider;
 
 import java.util.LinkedList;
@@ -27,11 +27,11 @@ public class DefaultUserStatus implements UserStatus {
 
     private static Logger log = LoggerFactory.getLogger(DefaultUserStatus.class);
     private final List<UserStatusListener> listeners;
-    private final V7Navigator navigator;
+    private final Navigator navigator;
     private SubjectProvider subjectProvider;
 
     @Inject
-    protected DefaultUserStatus(V7Navigator navigator, SubjectProvider subjectProvider) {
+    protected DefaultUserStatus(Navigator navigator, SubjectProvider subjectProvider) {
         super();
         this.navigator = navigator;
         this.subjectProvider = subjectProvider;

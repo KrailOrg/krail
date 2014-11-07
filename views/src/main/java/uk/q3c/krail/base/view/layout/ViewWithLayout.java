@@ -12,9 +12,9 @@
  */
 package uk.q3c.krail.base.view.layout;
 
-import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.KrailView;
 
-public interface ViewWithLayout extends V7View {
+public interface ViewWithLayout extends KrailView {
 
     ViewConfig getConfig();
 }

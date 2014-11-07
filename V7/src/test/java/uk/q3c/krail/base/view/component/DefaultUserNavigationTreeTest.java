@@ -25,9 +25,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.base.guice.uiscope.UIScopeModule;
+import uk.q3c.krail.base.navigate.Navigator;
 import uk.q3c.krail.base.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.base.navigate.URIFragmentHandler;
-import uk.q3c.krail.base.navigate.V7Navigator;
 import uk.q3c.krail.base.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.base.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.base.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
@@ -58,7 +58,7 @@ public class DefaultUserNavigationTreeTest {
     UserSitemapSorters sorters;
 
     @Mock
-    V7Navigator navigator;
+    Navigator navigator;
 
     @Inject
     DefaultUserOption userOption;
