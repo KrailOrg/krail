@@ -711,8 +711,8 @@ public class DefaultV7NavigatorTest {
         //then
         assertThat(navigator.getCurrentView()).isInstanceOf(ViewB.class);
         ViewB view = (ViewB) navigator.getCurrentView();
-        assertThat(changeListener.getCalls()).containsExactly("beforeViewChange", "init", "beforeBuild", "buildView",
-                "afterBuild", "afterViewChange");
+        assertThat(changeListener.getCalls()).containsExactly("beforeViewChange", "readFromEnvironment",
+                "beforeBuild", "buildView", "afterBuild", "afterViewChange");
 
     }
 

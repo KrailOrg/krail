@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * For testing all that is usually needed is to return a current locale and fire listeners on a change.  This class gets
+ * For testing all that is usually needed is to return a current locale and fire listeners on a change.  This class
+ * gets
  * used by som any things it makes test setup a pain if the full version is used
  */
 public class MockCurrentLocale implements CurrentLocale, UserStatusListener {
@@ -35,13 +36,14 @@ public class MockCurrentLocale implements CurrentLocale, UserStatusListener {
     @Inject
     public MockCurrentLocale() {
         super();
-        initialise();
+        readFromEnvironment();
     }
 
     /**
-     * Sets up the locale, see the Javadoc for the class
+     * Sets up the locale from the environment (typically browser locale and user option settings)
      */
-    private void initialise() {
+    @Override
+    public void readFromEnvironment() {
         setLocale(Locale.UK, false);
     }
 

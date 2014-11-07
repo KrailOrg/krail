@@ -12,39 +12,42 @@
  */
 package uk.co.q3c.v7.i18n;
 
-import java.util.Locale;
-
 import uk.co.q3c.v7.base.guice.vsscope.VaadinSessionScoped;
+
+import java.util.Locale;
 
 /**
  * Provides a reference to the currently selected Locale. {@link LocaleChangeListener}s can be added to listen for
- * locale changes. It is expected that implementations will generally be {@link VaadinSessionScoped} as the selection of
+ * locale changes. It is expected that implementations will generally be {@link VaadinSessionScoped} as the selection
+ * of
  * locale is a choice usually available to an individual user.
- * <p>
- *
- *
+ * <p/>
  *
  * @author David Sowerby 3 Mar 2013
- *
  */
 
 public interface CurrentLocale {
 
-	public abstract void removeListener(LocaleChangeListener listener);
+    public abstract void removeListener(LocaleChangeListener listener);
 
-	public abstract void addListener(LocaleChangeListener listener);
+    public abstract void addListener(LocaleChangeListener listener);
 
-	public abstract Locale getLocale();
+    /**
+     * Sets up the locale from the environment (typically browser locale and user option settings)
+     */
+    void readFromEnvironment();
 
-	public abstract void setLocale(Locale locale, boolean fireListeners);
+    public abstract Locale getLocale();
 
-	/**
-	 * Equivalent to {@link #setLocale(Locale,true)}
-	 *
-	 * @param locale
-	 */
-	public abstract void setLocale(Locale locale);
+    /**
+     * Equivalent to {@link #setLocale(Locale, true)}
+     *
+     * @param locale
+     */
+    public abstract void setLocale(Locale locale);
 
-	public abstract void removeAllListeners();
+    public abstract void setLocale(Locale locale, boolean fireListeners);
+
+    public abstract void removeAllListeners();
 
 }

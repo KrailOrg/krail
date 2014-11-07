@@ -70,7 +70,7 @@ public class ViewB implements V7View {
 
     @Override
     public void init() {
-        changeListener.addCall("init", null);
+        changeListener.addCall("readFromEnvironment", null);
     }
 
     /**

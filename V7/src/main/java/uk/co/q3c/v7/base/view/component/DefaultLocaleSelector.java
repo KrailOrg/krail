@@ -38,7 +38,8 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
     private final UserNotifier userNotifier;
     @I18N(description = DescriptionKey.Select_from_available_languages)
     private ComboBox combo;
-    private boolean initialising;
+    private boolean fireListeners;
+    private boolean inhibitMessage;
     private boolean respondToLocaleChange = true;
 
     @Inject
@@ -47,6 +48,8 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
         this.container = container;
         this.currentLocale = currentLocale;
         this.userNotifier = userNotifier;
+        //locale may be set somewhere else
+        currentLocale.addListener(this);
         buildUI();
     }
 
@@ -68,16 +71,18 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
         combo.setItemIconPropertyId(LocaleContainer.PropertyName.FLAG);
 
         combo.addValueChangeListener(this);
-        initialising = true;
+        fireListeners = true;
         localeChanged(currentLocale.getLocale());
-        initialising = false;
+        fireListeners = false;
     }
 
     @Override
     public void localeChanged(Locale locale) {
         if (respondToLocaleChange) {
             log.debug("responding in change to new locale of {}", locale.getDisplayName());
+            inhibitMessage = true;
             combo.setValue(locale.toLanguageTag());
+            inhibitMessage = false;
         } else {
             log.debug("response to locale change is disabled");
         }
@@ -94,15 +99,17 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
      */
     @Override
     public void valueChange(ValueChangeEvent event) {
-        if (!initialising) {
+        if (!fireListeners) {
             Locale newLocale = selectedLocale();
             // only process change if locale has really changed
             if (newLocale != null && newLocale != currentLocale.getLocale()) {
                 log.debug("locale selection changed");
                 respondToLocaleChange = false;
                 currentLocale.setLocale(newLocale);
-                userNotifier.notifyInformation(MessageKey.LocaleChange, newLocale.getDisplayName(newLocale));
-                respondToLocaleChange = true;
+                if (!inhibitMessage) {
+                    userNotifier.notifyInformation(MessageKey.LocaleChange, newLocale.getDisplayName(newLocale));
+                    respondToLocaleChange = true;
+                }
             }
         } else {
             log.debug("Initialising, combo value change ignored");

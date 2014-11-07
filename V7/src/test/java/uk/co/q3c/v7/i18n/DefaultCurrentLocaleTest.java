@@ -55,6 +55,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
     private BrowserProvider browserProvider;
     private Set<Locale> supportedLocales;
 
+
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
@@ -76,6 +77,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         //when
         currentLocale = new DefaultCurrentLocale(browserProvider, supportedLocales, defaultLocale, userStatus,
                 userOption);
+        currentLocale.readFromEnvironment();
         //then
         assertThat(currentLocale.getLocale()).isEqualTo(Locale.GERMANY);
     }
@@ -154,6 +156,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         //when
         currentLocale = new DefaultCurrentLocale(browserProvider, supportedLocales, defaultLocale, userStatus,
                 userOption);
+        currentLocale.readFromEnvironment();
 
         //then
         assertThat(currentLocale.getLocale()).isEqualTo(Locale.FRANCE);
@@ -192,6 +195,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         when(userStatus.isAuthenticated()).thenReturn(false);
         currentLocale = new DefaultCurrentLocale(browserProvider, supportedLocales, defaultLocale, userStatus,
                 userOption);
+        currentLocale.readFromEnvironment();
         currentLocale.removeAllListeners();
         currentLocale.addListener(this);
         listenerFired = false;

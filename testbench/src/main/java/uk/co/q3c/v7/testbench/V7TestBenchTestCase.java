@@ -23,6 +23,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.q3c.util.ID;
@@ -31,6 +32,7 @@ import uk.co.q3c.v7.testbench.page.object.LoginStatusPageObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,14 +43,16 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
     protected LoginStatusPageObject loginStatus = new LoginStatusPageObject(this);
     protected LoginFormPageObject loginForm = new LoginFormPageObject(this);
     protected String appContext = "testapp";
+    protected Locale firefoxLocale = Locale.UK;
     private int currentDriverIndex = 1;
     private List<WebDriver> drivers = new ArrayList<>();
 
-
     @Before
-    public void baseSetup() {
+    public void baseSetup() throws Exception {
         System.out.println("setting up base test bench case");
-        setDriver(TestBench.createDriver(new FirefoxDriver()));
+
+
+        setDriver(TestBench.createDriver(createFirefoxDriver()));
         getDriver().manage()
                    .window()
                    .setPosition(new Point(0, 0));
@@ -66,6 +70,20 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         drivers.add(driver);
     }
 
+    protected WebDriver createFirefoxDriver() {
+        FirefoxProfile profile = createFirefoxProfile(firefoxLocale);
+        return new FirefoxDriver(profile);
+    }
+
+    protected FirefoxProfile createFirefoxProfile(Locale locale) {
+        FirefoxProfile profile = new FirefoxProfile();
+        String s1 = locale.toLanguageTag()
+                          .toLowerCase()
+                          .replace("_", "-");
+        profile.setPreference("intl.accept_languages", s1);
+        return profile;
+    }
+
     @After
     public void baseTearDown() {
         System.out.println("closing all drivers");
@@ -73,6 +91,7 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
             webDriver.close();
             System.out.println(webDriver.getTitle() + " closed");
         }
+        driver.close();//in case it was set directly and not through addDriver
         drivers.clear();
     }
 
@@ -121,7 +140,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         pause(500);
     }
 
-
     protected String url(String fragment) {
         return rootUrl() + "/#" + fragment;
     }
@@ -133,7 +151,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
             log.error("Sleep was interrupted");
         }
     }
-
 
     public String getBaseUrl() {
         return baseUrl;
@@ -164,7 +181,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
         return notification;
     }
 
-
     /**
      * shorthand method to click the login button, and fill in the login form using credentials in {@link #loginForm}
      */
@@ -173,7 +189,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
                    .click();
         loginForm.login();
     }
-
 
     protected <E extends AbstractElement> E element(Class<E> elementClass, Optional<?> qualifier,
                                                     Class<?>... componentClasses) {
@@ -185,7 +200,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
 
         return $(elementClass).id(id);
     }
-
 
     /**
      * Indexed from 1 (that is, the default driver is at index 1)
@@ -205,4 +219,6 @@ public class V7TestBenchTestCase extends TestBenchTestCase {
             throw new RuntimeException("Driver index of " + index + " is invalid");
         }
     }
+
+
 }

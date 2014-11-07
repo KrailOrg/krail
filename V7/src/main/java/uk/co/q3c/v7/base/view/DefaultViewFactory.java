@@ -39,7 +39,7 @@ public class DefaultViewFactory implements ViewFactory {
                .scope(key, unscoped);
         log.debug("getting or retrieving instance of {}", viewClass);
         T view = injector.getInstance(key);
-        log.debug("Calling view.init()");
+        log.debug("Calling view.readFromEnvironment()");
         view.init();
         return view;
     }

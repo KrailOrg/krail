@@ -29,10 +29,12 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * When a CurrentLocale is instantiated it sets the current locale according to the following priorities: <ol>
+ * When a CurrentLocale is instantiated, or its {@link #readFromEnvironment()} method is called,it sets the current
+ * locale according to the following priorities:
+ * <ol>
  * <li>If a user is authenticated, the UserOption for preferred locale is used, if valid</li>
  * <li>If a user is not logged in, or the user option was invalid, the browser locale is used</li>
- * <li>If the browser locale not accessible, or is not a supported locale (as defined in {@link I18NModule} or its
+ * <li>If the browser locale is not accessible, or is not a supported locale (as defined in {@link I18NModule} or its
  * sub-class), the {@link #defaultLocale} is used.</li>
  * </ol>
  * When a user logs in after initialisation, the UserOption value for preferred locale is used, and the locale changed
@@ -72,25 +74,28 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener {
         this.userStatus = userStatus;
         this.userOption = userOption;
         userStatus.addListener(this);
-        initialise();
-    }
-
-    /**
-     * Sets up the locale, see the Javadoc for this class
-     */
-    private void initialise() {
+        locale = defaultLocale;
         if (!supportedLocales.contains(defaultLocale)) {
             String msg = MessageFormat.format("The default locale ({0}) you have specified must also be defined as a " +
                     "" + "supported locale in your Guice I18N module", defaultLocale);
             throw new UnsupportedLocaleException(msg);
         }
-        if (setLocaleFromUserOption(false)) {
+        //        readFromEnvironment();
+    }
+
+    /**
+     * , see the Javadoc for this class
+     */
+    @Override
+    public void readFromEnvironment() {
+
+        if (setLocaleFromUserOption(true)) {
             return;
         }
-        if (setLocaleFromBrowser(false)) {
+        if (setLocaleFromBrowser(true)) {
             return;
         }
-        setLocale(defaultLocale, false);
+        setLocale(defaultLocale, true);
     }
 
     /**
@@ -119,6 +124,9 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener {
         return locale;
     }
 
+    /**
+     * Explicitly set the locale
+     */
     @Override
     public void setLocale(Locale locale) {
         setLocale(locale, true);
@@ -127,8 +135,7 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener {
     /**
      * Sets the locale and optionally fires listeners.  Typically, a call to this method is from a component which only
      * allows the selection of a supported locale.  However, if an attempt is made to set a locale which is not defined
-     * in
-     * {@link #supportedLocales}, an UnsupportedLocaleException is thrown
+     * in {@link #supportedLocales}, an UnsupportedLocaleException is thrown
      *
      * @param locale
      *         the locale to set
@@ -144,6 +151,7 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener {
                 Locale.setDefault(locale);
                 log.debug("CurrentLocale set to {}", locale);
                 if (fireListeners) {
+                    log.debug("firing listeners");
                     fireListeners(locale);
                 }
             }
@@ -177,7 +185,7 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener {
     }
 
     /**
-     * A locale change is made only if the user is now authenticated (which means they ave just logged in).  If they
+     * A locale change is made only if the user is now authenticated (which means they have just logged in).  If they
      * have just logged out, they may still, no change is made, because they have public pages to view, and they would
      * probably want to view those in the same language as they had selected while logged in
      */

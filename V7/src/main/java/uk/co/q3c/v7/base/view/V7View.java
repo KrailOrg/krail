@@ -30,7 +30,8 @@ import uk.co.q3c.v7.base.navigate.V7Navigator;
  * <li>{@link #afterBuild}</li>
  * <li>{@link V7ViewChangeListener#afterViewChange(V7ViewChangeEvent)}</li>
  * </ol>
- * where build refers to the creation of UI fields and components which populate the view.  Each method, except init(),
+ * where build refers to the creation of UI fields and components which populate the view.  Each method, except
+ * readFromEnvironment(),
  * is passed a
  * {@link V7ViewChangeEvent}, which contains the current {@link NavigationState} so that, for example, parameter
  * information can be used to determine how the View is to be built or respond in some other way to URL parameters.

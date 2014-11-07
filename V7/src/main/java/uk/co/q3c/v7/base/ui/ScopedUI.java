@@ -161,16 +161,17 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
         Page page = getPage();
         page.addUriFragmentChangedListener(navigator);
 
+
         setErrorHandler(errorHandler);
         page.setTitle(pageTitle());
 
-        //remove this because it results in a confusing model for setting locale.  DefaultCurrentLocale already has a
-        // logic for setting locale from user options and the browser
-        // We want to use the same default locale as Vaadin (held by the session and usually the browser locale)
-        //        currentLocale.setLocale(session.getLocale(), false);
-
-        // init navigator, which also loads the UserSitemap if not already loaded
+        // readFromEnvironment navigator, which also loads the UserSitemap if not already loaded
         getV7Navigator().init();
+
+        // now that browser is active, and user sitemap loaded, set up currentLocale
+        currentLocale.readFromEnvironment();
+
+
         doLayout();
         translator.translate(this);
         // Navigate to the correct start point
@@ -251,7 +252,10 @@ public abstract class ScopedUI extends UI implements V7ViewHolder, BroadcastList
     @Override
     public void localeChanged(Locale toLocale) {
         translator.translate(this);
-        translator.translate(getView());
+        //during initial set up view has not been created but locale change gets called for other components
+        if (getView() != null) {
+            translator.translate(getView());
+        }
     }
 
     public V7View getView() {
