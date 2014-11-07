@@ -45,7 +45,8 @@ public class ElementPath {
         if (context.isEmpty()) {
             buf.append("ROOT::PID_S" + id);
         } else {
-            buf.append(context + "::PID_S" + id);
+            //Viewed in page source, hyphens are deleted from the context, presumably they are not allowed
+            buf.append(context.replace("-", "") + "::PID_S" + id);
         }
         return this;
     }

@@ -34,7 +34,6 @@ import uk.q3c.krail.i18n.Translate;
  *
  * @author David Sowerby
  */
-// @Theme("v7demo")
 public class DefaultApplicationUI extends ScopedUI {
 
     private final UserNavigationTree navTree;

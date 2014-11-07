@@ -64,7 +64,7 @@ task showResults(type: Exec, dependsOn: test) {
 
 
 task cleanTomcat(type: Delete, dependsOn: stopTomcat) {
-    delete '/home/david/tomcat7_8080/webapps/krail-demo.war', '/home/david/tomcat7_8080/webapps/V7demo'
+    delete '/home/david/tomcat7_8080/webapps/krail-demo.war', '/home/david/tomcat7_8080/webapps/krail-demo'
 }
 
 

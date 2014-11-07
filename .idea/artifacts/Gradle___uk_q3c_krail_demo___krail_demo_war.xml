@@ -1,27 +1,22 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="Gradle : uk.co.q3c.v7:demo : V7demo.war (exploded)">
-    <output-path>$PROJECT_DIR$/build/classes/artifacts/demo/exploded/V7demo.war</output-path>
-    <root id="root">
-      <element id="javaee-facet-resources" facet="demo/web/Web Gradle : V7demo.war" />
+  <artifact type="war" name="Gradle : uk.q3c.krail:demo : krail-demo.war">
+    <output-path>$PROJECT_DIR$/build/classes/artifacts/demo</output-path>
+    <root id="archive" name="krail-demo.war">
+      <element id="javaee-facet-resources" facet="demo/web/Web Gradle : krail-demo.war" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="demo" />
         </element>
         <element id="directory" name="lib">
+          <element id="archive" name="uk.q3c.krail-V7-0.5.jar">
+            <element id="module-output" name="V7" />
+          </element>
           <element id="library" level="project" name="Gradle: guice-3.0" />
           <element id="library" level="project" name="Gradle: guice-servlet-3.0" />
           <element id="library" level="project" name="Gradle: guice-assistedinject-3.0" />
           <element id="library" level="project" name="Gradle: guice-multibindings-3.0" />
           <element id="library" level="project" name="Gradle: slf4j-api-1.6.6" />
           <element id="library" level="project" name="Gradle: slf4j-log4j12-1.6.6" />
-          <element id="library" level="project" name="Gradle: javax.inject-1" />
-          <element id="library" level="project" name="Gradle: aopalliance-1.0" />
-          <element id="library" level="project" name="Gradle: asm-3.1" />
-          <element id="library" level="project" name="Gradle: cglib-2.2.1-v20090111" />
-          <element id="library" level="project" name="Gradle: log4j-1.2.17" />
-          <element id="archive" name="uk.co.q3c.v7-V7-0.5.jar">
-            <element id="module-output" name="V7" />
-          </element>
           <element id="library" level="project" name="Gradle: shiro-core-1.2.1" />
           <element id="library" level="project" name="Gradle: shiro-web-1.2.1" />
           <element id="library" level="project" name="Gradle: shiro-guice-1.2.1" />
@@ -38,6 +33,11 @@
           <element id="library" level="project" name="Gradle: javax.servlet-api-3.1.0" />
           <element id="library" level="project" name="Gradle: portlet-api-2.0" />
           <element id="library" level="project" name="Gradle: atmosphere-runtime-2.1.6" />
+          <element id="library" level="project" name="Gradle: javax.inject-1" />
+          <element id="library" level="project" name="Gradle: aopalliance-1.0" />
+          <element id="library" level="project" name="Gradle: asm-3.1" />
+          <element id="library" level="project" name="Gradle: cglib-2.2.1-v20090111" />
+          <element id="library" level="project" name="Gradle: log4j-1.2.17" />
           <element id="library" level="project" name="Gradle: commons-logging-1.1.1" />
           <element id="library" level="project" name="Gradle: commons-beanutils-1.8.3" />
           <element id="library" level="project" name="Gradle: commons-beanutils-core-1.8.3" />
@@ -66,17 +66,17 @@
           <element id="library" level="project" name="Gradle: jsoup-1.6.3" />
           <element id="library" level="project" name="Gradle: vaadin-server-7.3.4" />
           <element id="library" level="project" name="Gradle: vaadin-shared-7.3.4" />
+          <element id="library" level="project" name="Gradle: vaadin-push-7.3.4" />
           <element id="library" level="project" name="Gradle: messagebox-2.0.6" />
           <element id="library" level="project" name="Gradle: stepper-2.1.2" />
+          <element id="library" level="project" name="Gradle: atmosphere-runtime-2.1.2.vaadin6" />
           <element id="library" level="project" name="Gradle: vaadin-client-compiled-7.0.2" />
           <element id="library" level="project" name="Gradle: vaadin-themes-7.0.2" />
           <element id="library" level="project" name="Gradle: vaadin-slf4j-jdk14-1.6.1" />
-          <element id="library" level="project" name="Gradle: vaadin-push-7.3.4" />
-          <element id="library" level="project" name="Gradle: atmosphere-runtime-2.1.2.vaadin6" />
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/build/classes/artifacts/demo/exploded/V7demo.war/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/build/classes/artifacts/demo/exploded/krail-demo.war/META-INF/MANIFEST.MF" />
       </element>
     </root>
   </artifact>

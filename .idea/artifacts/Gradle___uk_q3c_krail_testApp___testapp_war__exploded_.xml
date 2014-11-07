@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="Gradle : uk.co.q3c.v7:testApp : testapp.war">
-    <output-path>$PROJECT_DIR$/build/classes/artifacts/testApp</output-path>
-    <root id="archive" name="testapp.war">
+  <artifact type="exploded-war" name="Gradle : uk.q3c.krail:testApp : testapp.war (exploded)">
+    <output-path>$PROJECT_DIR$/build/classes/artifacts/testApp/exploded/testapp.war</output-path>
+    <root id="root">
       <element id="javaee-facet-resources" facet="testApp/web/Web Gradle : testapp.war" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -19,7 +19,7 @@
           <element id="library" level="project" name="Gradle: asm-3.1" />
           <element id="library" level="project" name="Gradle: cglib-2.2.1-v20090111" />
           <element id="library" level="project" name="Gradle: log4j-1.2.17" />
-          <element id="archive" name="uk.co.q3c.v7-V7-0.5.jar">
+          <element id="archive" name="uk.q3c.krail-V7-0.5.jar">
             <element id="module-output" name="V7" />
           </element>
           <element id="library" level="project" name="Gradle: shiro-core-1.2.1" />

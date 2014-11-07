@@ -1,14 +1,14 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="Gradle : uk.co.q3c.v7:views : views-0.5.war">
-    <output-path>$PROJECT_DIR$/build/classes/artifacts/views</output-path>
-    <root id="archive" name="views-0.5.war">
+  <artifact type="exploded-war" name="Gradle : uk.q3c.krail:views : views-0.5.war (exploded)">
+    <output-path>$PROJECT_DIR$/build/classes/artifacts/views/exploded/views-0.5.war</output-path>
+    <root id="root">
       <element id="javaee-facet-resources" facet="views/web/Web Gradle : views-0.5.war" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="views" />
         </element>
         <element id="directory" name="lib">
-          <element id="archive" name="uk.co.q3c.v7-V7-0.5.jar">
+          <element id="archive" name="uk.q3c.krail-V7-0.5.jar">
             <element id="module-output" name="V7" />
           </element>
           <element id="library" level="project" name="Gradle: guice-3.0" />
@@ -61,7 +61,7 @@
           <element id="library" level="project" name="Gradle: jsoup-1.6.3" />
           <element id="library" level="project" name="Gradle: vaadin-server-7.3.4" />
           <element id="library" level="project" name="Gradle: vaadin-shared-7.3.4" />
-          <element id="archive" name="uk.co.q3c.v7-testbench-0.5.jar">
+          <element id="archive" name="uk.q3c.krail-testbench-0.5.jar">
             <element id="module-output" name="testbench" />
           </element>
           <element id="library" level="project" name="Gradle: assertj-core-1.5.0" />

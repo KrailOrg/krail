@@ -1,11 +1,11 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="Gradle : uk.co.q3c.v7:demo : V7demo.war">
-    <output-path>$PROJECT_DIR$/build/classes/artifacts/demo</output-path>
-    <root id="archive" name="V7demo.war">
-      <element id="javaee-facet-resources" facet="demo/web/Web Gradle : V7demo.war" />
+  <artifact type="war" name="Gradle : uk.q3c.krail:testApp : testapp.war">
+    <output-path>$PROJECT_DIR$/build/classes/artifacts/testApp</output-path>
+    <root id="archive" name="testapp.war">
+      <element id="javaee-facet-resources" facet="testApp/web/Web Gradle : testapp.war" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="demo" />
+          <element id="module-output" name="testApp" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Gradle: guice-3.0" />
@@ -19,7 +19,7 @@
           <element id="library" level="project" name="Gradle: asm-3.1" />
           <element id="library" level="project" name="Gradle: cglib-2.2.1-v20090111" />
           <element id="library" level="project" name="Gradle: log4j-1.2.17" />
-          <element id="archive" name="uk.co.q3c.v7-V7-0.5.jar">
+          <element id="archive" name="uk.q3c.krail-V7-0.5.jar">
             <element id="module-output" name="V7" />
           </element>
           <element id="library" level="project" name="Gradle: shiro-core-1.2.1" />
@@ -76,7 +76,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/build/classes/artifacts/demo/exploded/V7demo.war/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/build/classes/artifacts/testApp/exploded/testapp.war/META-INF/MANIFEST.MF" />
       </element>
     </root>
   </artifact>
