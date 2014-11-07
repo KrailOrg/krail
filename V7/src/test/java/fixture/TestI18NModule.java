@@ -12,8 +12,8 @@
  */
 package fixture;
 
-import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.I18NModule;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.I18NModule;
 
 /**
  * Different from

@@ -33,7 +33,7 @@
     </filter-mapping>
 
     <listener>
-        <listener-class>uk.co.q3c.v7.demo.DemoGuiceServletInjector</listener-class>
+        <listener-class>uk.q3c.krail.demo.DemoGuiceServletInjector</listener-class>
     </listener>
 
 

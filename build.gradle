@@ -18,7 +18,7 @@ project.ext.testbenchVersion = '4.0.0.beta1'
 
 
 allprojects {
-    group = 'uk.co.q3c.v7'
+    group = 'uk.q3c.krail'
     version = '0.5'
 }
 

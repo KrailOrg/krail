@@ -7,7 +7,7 @@
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
-//build for V7 test application
+//build for Krail demo application
 
 apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 
@@ -24,7 +24,7 @@ war {
 
 vaadin {
 
-    widgetset "uk.co.q3c.v7.demo.widgetset.V7demoWidgetset"
+    widgetset "uk.q3c.krail.demo.widgetset.V7demoWidgetset"
     version vaadinVersion
     serverPort 8001
 }

@@ -15,9 +15,9 @@ package fixture;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.co.q3c.v7.base.user.status.UserStatusListener;
-import uk.co.q3c.v7.i18n.CurrentLocale;
-import uk.co.q3c.v7.i18n.LocaleChangeListener;
+import uk.q3c.krail.base.user.status.UserStatusListener;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.LocaleChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;

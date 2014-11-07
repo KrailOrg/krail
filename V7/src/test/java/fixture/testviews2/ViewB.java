@@ -15,9 +15,9 @@ package fixture.testviews2;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import uk.co.q3c.v7.base.navigate.DefaultV7NavigatorTest;
-import uk.co.q3c.v7.base.view.V7View;
-import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
+import uk.q3c.krail.base.navigate.DefaultV7NavigatorTest;
+import uk.q3c.krail.base.view.V7View;
+import uk.q3c.krail.base.view.V7ViewChangeEvent;
 
 public class ViewB implements V7View {
 

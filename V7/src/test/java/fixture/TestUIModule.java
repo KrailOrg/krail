@@ -14,28 +14,28 @@ package fixture;
 
 import com.google.inject.multibindings.MapBinder;
 import com.vaadin.ui.UI;
-import uk.co.q3c.v7.base.ui.BasicUIProvider;
-import uk.co.q3c.v7.base.ui.ScopedUIProvider;
-import uk.co.q3c.v7.base.ui.TestUI;
-import uk.co.q3c.v7.base.ui.V7UIModule;
+import uk.q3c.krail.base.ui.BasicUIProvider;
+import uk.q3c.krail.base.ui.ScopedUIProvider;
+import uk.q3c.krail.base.ui.TestUI;
+import uk.q3c.krail.base.ui.V7UIModule;
 
 /**
  * Extends the default UIModule to provide instances of TestUI
- * 
+ *
  * @author David Sowerby 12 Jan 2013
- * 
  */
 public class TestUIModule extends V7UIModule {
 
-	@Override
-	protected void addUIBindings(MapBinder<String, UI> mapbinder) {
-		super.addUIBindings(mapbinder);
-		mapbinder.addBinding(TestUI.class.getName()).to(TestUI.class);
-	}
+    @Override
+    protected void addUIBindings(MapBinder<String, UI> mapbinder) {
+        super.addUIBindings(mapbinder);
+        mapbinder.addBinding(TestUI.class.getName())
+                 .to(TestUI.class);
+    }
 
-	@Override
-	protected void bindUIProvider() {
-		bind(ScopedUIProvider.class).to(BasicUIProvider.class);
-	}
+    @Override
+    protected void bindUIProvider() {
+        bind(ScopedUIProvider.class).to(BasicUIProvider.class);
+    }
 
 }

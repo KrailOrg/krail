@@ -14,8 +14,8 @@ package fixture.testviews2;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import uk.co.q3c.v7.base.view.PrivateHomeView;
-import uk.co.q3c.v7.base.view.V7ViewChangeEvent;
+import uk.q3c.krail.base.view.PrivateHomeView;
+import uk.q3c.krail.base.view.V7ViewChangeEvent;
 
 public class TestPrivateHomeView implements PrivateHomeView {
 

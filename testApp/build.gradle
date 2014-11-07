@@ -22,7 +22,7 @@ war {
 }
 
 vaadin {
-    widgetset "uk.co.q3c.v7.testapp.widgetset.testAppWidgetset"
+    widgetset "uk.q3c.krail.testapp.widgetset.testAppWidgetset"
     version vaadinVersion
     serverPort 8001
 }
