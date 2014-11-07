@@ -31,7 +31,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="V7" exported="" />
-    <orderEntry type="module" module-name="testbench" scope="TEST" />
+    <orderEntry type="module" module-name="krail-bench" scope="TEST" />
     <orderEntry type="module" module-name="testUtil" scope="TEST" />
     <orderEntry type="library" exported="" name="Gradle: guice-3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: guice-servlet-3.0" level="project" />
