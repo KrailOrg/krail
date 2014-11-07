@@ -1,7 +1,7 @@
-# V7
+# Krail
 
 ## Introduction
-V7 is a libary which provides a base application for Java / web development combining Vaadin, Guice and Apache Shiro.
+Krail (previously known as V7) is a libary which provides a base application for Java / web development combining Vaadin, Guice and Apache Shiro.
 
 The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information.  
 
