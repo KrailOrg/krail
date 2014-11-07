@@ -2,10 +2,10 @@
   <artifact type="war" name="Gradle : uk.q3c.krail:testbench : testbench-0.5.war">
     <output-path>$PROJECT_DIR$/build/classes/artifacts/testbench</output-path>
     <root id="archive" name="testbench-0.5.war">
-      <element id="javaee-facet-resources" facet="testbench/web/Web Gradle : testbench-0.5.war" />
+      <element id="javaee-facet-resources" facet="krail-bench/web/Web Gradle : testbench-0.5.war" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="testbench" />
+          <element id="module-output" name="krail-bench" />
         </element>
         <element id="directory" name="lib">
           <element id="archive" name="uk.q3c.krail-V7-0.5.jar">

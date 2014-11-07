@@ -62,7 +62,7 @@
           <element id="library" level="project" name="Gradle: vaadin-server-7.3.4" />
           <element id="library" level="project" name="Gradle: vaadin-shared-7.3.4" />
           <element id="archive" name="uk.q3c.krail-testbench-0.5.jar">
-            <element id="module-output" name="testbench" />
+            <element id="module-output" name="krail-bench" />
           </element>
           <element id="library" level="project" name="Gradle: assertj-core-1.5.0" />
           <element id="library" level="project" name="Gradle: commons-logging-1.1.3" />
