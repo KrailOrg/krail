@@ -28,7 +28,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="V7" exported="" />
-    <orderEntry type="module" module-name="krail-bench" exported="" />
     <orderEntry type="library" exported="" name="Gradle: guice-3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: guice-servlet-3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: guice-assistedinject-3.0" level="project" />
@@ -53,8 +52,6 @@
     <orderEntry type="library" scope="TEST" name="Gradle: mockito-core-1.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: hamcrest-all-1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: hamcrest-core-1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: guava-15.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: commons-logging-1.1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: commons-exec-1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: jna-3.4.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: platform-3.4.0" level="project" />
@@ -63,7 +60,6 @@
     <orderEntry type="library" scope="TEST" name="Gradle: serializer-2.7.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: xalan-2.7.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: commons-collections-3.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: xercesImpl-2.11.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: commons-io-2.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: sac-1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: bcprov-jdk15on-1.48" level="project" />
@@ -73,41 +69,42 @@
     <orderEntry type="library" scope="TEST" name="Gradle: jetty-repacked-7.6.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: jcip-annotations-1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: snakeyaml-1.8" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: phantomjsdriver-1.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit-4.12-beta-2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: vaadin-testbench-4.0.0.beta1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: vaadin-testbench-core-4.0.0.beta1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: vaadin-testbench-api-7.3.0.beta1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: selenium-server-2.43.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: selenium-remote-driver-2.43.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: selenium-java-2.43.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: easymock-3.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: jetty-rc-repacked-5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: commons-codec-1.9" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: selenium-api-2.43.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: httpclient-4.3.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: selenium-chrome-driver-2.43.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: selenium-htmlunit-driver-2.43.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: selenium-firefox-driver-2.43.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: selenium-ie-driver-2.43.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: selenium-safari-driver-2.43.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: selenium-support-2.43.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: webbit-0.4.15" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: javassist-3.18.1-GA" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: htmlunit-2.15" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: netty-3.5.5.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: httpmime-4.3.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: htmlunit-core-js-2.15" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: nekohtml-1.9.21" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: cssparser-0.9.14" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: jetty-websocket-8.1.15.v20140411" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: jetty-util-8.1.15.v20140411" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: jetty-io-8.1.15.v20140411" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: jetty-http-8.1.15.v20140411" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: cglib-nodep-2.2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: objenesis-1.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: commons-lang3-3.3.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: httpcore-4.3.2" level="project" />
+    <orderEntry type="module" module-name="testbench" exported="" />
+    <orderEntry type="library" scope="TEST" name="Gradle: vaadin-testbench-3.1.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: commons-lang3-3.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-java-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: phantomjsdriver-1.0.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-server-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-remote-driver-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-firefox-driver-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: commons-logging-1.1.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: objenesis-1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-android-driver-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-chrome-driver-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-htmlunit-driver-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-ie-driver-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-iphone-driver-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-safari-driver-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-support-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: webbit-0.4.14" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: cglib-nodep-2.1_3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: selenium-api-2.35.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: htmlunit-2.12" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: netty-3.5.2.Final" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: httpmime-4.2.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: htmlunit-core-js-2.12" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: xercesImpl-2.10.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: nekohtml-1.9.18" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: cssparser-0.9.9" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: jetty-websocket-8.1.9.v20130131" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: jetty-util-8.1.9.v20130131" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: jetty-io-8.1.9.v20130131" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: jetty-http-8.1.9.v20130131" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: guava-14.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: httpclient-4.2.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: commons-codec-1.7" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: httpcore-4.2.2" level="project" />
     <orderEntry type="library" name="sass-stdlib" level="application" />
   </component>
 </module>

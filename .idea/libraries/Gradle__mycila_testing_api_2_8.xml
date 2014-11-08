@@ -3,9 +3,7 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.mycila.testing/mycila-testing-api/2.8/4511009716934be4ae62089e541885a2580d9433/mycila-testing-api-2.8.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.mycila.testing/mycila-testing-api/2.8/b586ceba7144d3c1539099ca03bdecc7a047f7db/mycila-testing-api-2.8-javadoc.jar!/" />
-    </JAVADOC>
+    <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/gradle/caches/modules-2/files-2.1/com.mycila.testing/mycila-testing-api/2.8/d0c60677b3d33001847a644bf1ef2ab4838f609e/mycila-testing-api-2.8-sources.jar!/" />
     </SOURCES>

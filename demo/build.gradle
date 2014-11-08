@@ -93,7 +93,7 @@ dependencies {
     compile project(':V7')
 
 
-    testCompile project(':testbench')
+    testCompile project(':krail-bench')
     testCompile project(':testUtil')
 
 
