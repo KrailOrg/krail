@@ -1,7 +1,11 @@
 # Krail
 
 ## Introduction
-Krail (previously known as V7) is a libary which provides a base application for Java / web development combining Vaadin, Guice and Apache Shiro.
+Krail (previously known as V7) is a platform for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache configuration and others.
+
+It provides site navigation and the means to authenticate and authorise users. 
+Building an application is assisted by specifying the site structure using a Sitemap.  There are 3 methods for specifying the Sitemap: using files(s), annotations, or directly coded in Guice modules (these can also be mixed)
+
 
 The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information.  
 
@@ -11,15 +15,10 @@ Fails on Tomcat 8
 
 ## Status
 
-There are a number of sub-projects, each with a different status
-
 6th November 2014:
 
 
-### V7
-
-This is the base, or core, library.  Vaadin 7.3.4 is integrated with:
-
+* Vaadin 7.3.4 is integrated with:
 * Guice 3.0, 
 * Shiro 1.2.1, 
 * Apache Commons Configuration
@@ -28,45 +27,28 @@ This is the base, or core, library.  Vaadin 7.3.4 is integrated with:
 It also supports:
 
 * Vaadin Server Push (with option to disable it)
-* I18N support
+* Extensive I18N support
+* User options
 
-It provides site navigation and the means to authenticate and authorise users. 
-Building an application is assisted by specifying the site structure using a Sitemap.  There are 3 methods for specifying the Sitemap: using files(s), annotations, or directly coded in Guice modules (these can also be mixed)
 
-This library is usable, thought there are still some bugs and further developments needed.  Vaadin push is now supported.
+Krail is usable, though there are still some bugs and further developments needed.  Vaadin push is now supported.
 
 
 ### demo
 
-Very simple currently.  This sub-project is supported with tests run via Vaadin Testbench, which you won't be able to run unless you have TestBench (TestBench is a licenced product from Vaadin)
+There is a [simple demo](https://github.com/davidsowerby/krail-demo) project
 
 ### testApp
 
-Provides functional testing through the UI (using Vaadin TestBench). TestBench is a licenced product from Vaadin
+There is a [functional test application](https://github.com/davidsowerby/krail-testApp) which can also be used to explore functionality
 
 ### quartz
 
-An integration with Quartz Scheduler, constructed as an optional V7 library.
-
-### testbench
-
-Some common base classes for use with TestBench testing
-
-### testUtils
-
-Currently empty but will contain some common test routines or supporting classes
-
-### orient
-
-In an early iteration of this project I included some persistence code using OrientDb.  That now seems inappropriate for the core library, but is worth keeping for later.
-
-### views
-
-Something which seemed like a good idea at the time, but is now parked. Will be reviewed later
+An [integration with Quartz Scheduler](https://github.com/davidsowerby/krail-quartz), constructed as an optional Krail add-on.
 
 ##Project Build
 
-A Gradle multi-project structure is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).  If you are an Eclipse user you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files. 
+Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).  If you are an Eclipse user, and download the source, you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files. 
 
 
 ## Motivation
