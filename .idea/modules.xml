@@ -3,7 +3,14 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/V7/V7.iml" filepath="$PROJECT_DIR$/V7/V7.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/krail.iml" filepath="$PROJECT_DIR$/krail.iml" />
+      <module fileurl="file://$PROJECT_DIR$/krail-bench/krail-bench.iml" filepath="$PROJECT_DIR$/krail-bench/krail-bench.iml" />
+      <module fileurl="file://$PROJECT_DIR$/orient/orient.iml" filepath="$PROJECT_DIR$/orient/orient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quartz/quartz.iml" filepath="$PROJECT_DIR$/quartz/quartz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testApp/testApp.iml" filepath="$PROJECT_DIR$/testApp/testApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testUtil/testUtil.iml" filepath="$PROJECT_DIR$/testUtil/testUtil.iml" />
+      <module fileurl="file://$PROJECT_DIR$/views/views.iml" filepath="$PROJECT_DIR$/views/views.iml" />
     </modules>
   </component>
 </project>
