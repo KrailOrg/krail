@@ -9,6 +9,8 @@ Building an application is assisted by specifying the site structure using a Sit
 
 The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information.  
 
+[ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail/images/download.svg) ](https://bintray.com/dsowerby/maven/krail/_latestVersion)
+
 ##Limitations
 
 Fails on Tomcat 8
