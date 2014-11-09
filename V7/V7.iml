@@ -14,7 +14,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="testUtil" scope="TEST" />
     <orderEntry type="library" exported="" name="Gradle: guice-3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: guice-servlet-3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: guice-assistedinject-3.0" level="project" />
