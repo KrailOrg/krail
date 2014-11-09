@@ -1,9 +1,0 @@
-@import "addons.scss";
-@import "testbase.scss";
-
-/* This file prefixes all rules with the theme name to avoid causing conflicts with other themes. */
-/* The actual styles should be defined in testbase.scss */
-.testbase {
-  @include addons;
-  @include testbase;
-}

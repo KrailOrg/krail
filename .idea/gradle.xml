@@ -11,11 +11,11 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/V7" />
             <option value="$PROJECT_DIR$/demo" />
+            <option value="$PROJECT_DIR$/krail-bench" />
             <option value="$PROJECT_DIR$/orient" />
             <option value="$PROJECT_DIR$/quartz" />
             <option value="$PROJECT_DIR$/testApp" />
             <option value="$PROJECT_DIR$/testUtil" />
-            <option value="$PROJECT_DIR$/testbench" />
             <option value="$PROJECT_DIR$/views" />
           </set>
         </option>

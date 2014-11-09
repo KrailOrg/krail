@@ -8,7 +8,7 @@
           <element id="module-output" name="demo" />
         </element>
         <element id="directory" name="lib">
-          <element id="archive" name="uk.q3c.krail-V7-0.5.jar">
+          <element id="archive" name="uk.q3c.krail-V7-0.6.jar">
             <element id="module-output" name="V7" />
           </element>
           <element id="library" level="project" name="Gradle: guice-3.0" />

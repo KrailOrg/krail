@@ -8,7 +8,7 @@
           <element id="module-output" name="views" />
         </element>
         <element id="directory" name="lib">
-          <element id="archive" name="uk.q3c.krail-V7-0.5.jar">
+          <element id="archive" name="uk.q3c.krail-V7-0.6.jar">
             <element id="module-output" name="V7" />
           </element>
           <element id="library" level="project" name="Gradle: guice-3.0" />
@@ -66,8 +66,8 @@
           <element id="library" level="project" name="Gradle: jsoup-1.6.3" />
           <element id="library" level="project" name="Gradle: vaadin-server-7.3.4" />
           <element id="library" level="project" name="Gradle: vaadin-shared-7.3.4" />
-          <element id="archive" name="uk.q3c.krail-testbench-0.5.jar">
-            <element id="module-output" name="testbench" />
+          <element id="archive" name="uk.q3c.krail-krail-bench-0.5.jar">
+            <element id="module-output" name="krail-bench" />
           </element>
         </element>
       </element>

@@ -19,7 +19,7 @@
           <element id="library" level="project" name="Gradle: asm-3.1" />
           <element id="library" level="project" name="Gradle: cglib-2.2.1-v20090111" />
           <element id="library" level="project" name="Gradle: log4j-1.2.17" />
-          <element id="archive" name="uk.q3c.krail-V7-0.5.jar">
+          <element id="archive" name="uk.q3c.krail-V7-0.6.jar">
             <element id="module-output" name="V7" />
           </element>
           <element id="library" level="project" name="Gradle: shiro-core-1.2.1" />
