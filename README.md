@@ -13,13 +13,12 @@ The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state
 #### Gradle:
 ```
 repositories {
-   mavenCentral()
-   jcenter()
+    jcenter()
 }
 
 'uk.q3c.krail:krail:0.7.1'
 ```
-#### Maven (not yet available):
+#### Maven (not yet available in Maven Central):
 ```
 <repository>
   <id>jcenter</id>
