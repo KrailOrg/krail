@@ -19,7 +19,7 @@ repositories {
 
 'uk.q3c.krail:krail:0.7.1'
 ```
-#### Maven:
+#### Maven (not yet available):
 ```
 <repository>
   <id>jcenter</id>
