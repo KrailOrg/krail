@@ -18,7 +18,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.testutil.TestResource;
+import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
 import java.io.IOException;

@@ -27,7 +27,7 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.services.Service.Status;
 import uk.q3c.krail.core.services.ServiceException;
 import uk.q3c.krail.i18n.*;
-import uk.q3c.krail.testutil.TestResource;
+import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
 import java.util.HashMap;

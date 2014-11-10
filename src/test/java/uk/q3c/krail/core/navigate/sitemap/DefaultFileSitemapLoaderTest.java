@@ -42,7 +42,7 @@ import uk.q3c.krail.core.view.testviews.subview.TransferView;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.TestLabelKey;
-import uk.q3c.krail.testutil.TestResource;
+import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
 import java.io.IOException;

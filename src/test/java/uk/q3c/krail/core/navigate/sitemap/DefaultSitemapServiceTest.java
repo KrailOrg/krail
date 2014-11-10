@@ -51,8 +51,8 @@ import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.StandardComponentModule;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
-import uk.q3c.krail.testutil.TestResource;
 import uk.q3c.util.ResourceUtils;
+import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
 import java.io.IOException;

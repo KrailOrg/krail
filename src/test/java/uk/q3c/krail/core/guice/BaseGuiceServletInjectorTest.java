@@ -27,7 +27,7 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.services.Service;
 import uk.q3c.krail.core.services.ServicesMonitor;
 import uk.q3c.krail.core.shiro.KrailSecurityManager;
-import uk.q3c.krail.testutil.LogMonitor;
+import uk.q3c.util.testutil.LogMonitor;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;

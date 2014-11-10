@@ -30,8 +30,8 @@ import uk.q3c.krail.core.user.opt.DefaultUserOption;
 import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
 import uk.q3c.krail.core.user.opt.UserOptionProperty;
 import uk.q3c.krail.core.user.opt.UserOptionStore;
-import uk.q3c.krail.testutil.LogMonitor;
-import uk.q3c.krail.testutil.TestResource;
+import uk.q3c.util.testutil.LogMonitor;
+import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
 import java.util.HashSet;

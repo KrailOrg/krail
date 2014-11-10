@@ -11,15 +11,63 @@
 //build for main V7 library project
 
 apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
 
-version = '0.6'
+version = '0.7.1'
 
 project.ext.vaadinVersion = '7.3.4'
 project.ext.guiceVersion = '3.0'
 project.ext.shiroVersion = '1.2.1'
 
+
+project.ext.exportDir = System.getProperty("user.home") + "/temp/jars/" + project.name
+
 jar {
-    libsDirName = "/home/david/jars"
+    libsDirName = exportDir
+    println("jar exported to:  " + exportDir)
+}
+
+task writeNewPom << {
+    pom {
+        groupId = "uk.q3c.krail"
+        project {
+            inceptionYear '2014'
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo(exportDir + "/" + project.name + "-" + version + ".pom")
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+task publish(dependsOn: ['sourcesJar', 'javadocJar', 'jar', 'writeNewPom']) {
+
+
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+javadoc {
+    failOnError = false
 }
 
 repositories {
@@ -43,12 +91,12 @@ dependencies {
     compile 'org.slf4j:slf4j-log4j12:1.6.6'
 
     //testing
-    testCompile 'uk.q3c:testUtil:0.7'
+    testCompile 'uk.q3c.util:testUtil:0.7.0'
     testCompile 'com.mycila:mycila-guice:2.10.ga'
     testCompile 'com.mycila.testing.plugins:mycila-testing-guice:2.8'
     testCompile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
     testCompile 'org.mockito:mockito-all:1.9.0'
-    testCompile 'junit:junit:4.+'
+    testCompile 'junit:junit:4.11'
     testCompile 'org.assertj:assertj-core:1.5.0'
     testCompile 'org.assertj:assertj-joda-time:1.1.0'
     testCompile 'org.assertj:assertj-guava:1.0.0'
