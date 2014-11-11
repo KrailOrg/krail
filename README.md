@@ -1,11 +1,11 @@
 # Krail
 
-Krail (previously known as V7) is a platform for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache configuration and others.
+Krail (previously known as V7) provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.
 
 It provides site navigation and the means to authenticate and authorise users. 
 Building an application is assisted by specifying the site structure using a Sitemap.  There are 3 methods for specifying the Sitemap: using files(s), annotations, or directly coded in Guice modules (these can also be mixed)
 
-The [issues tracker](https://github.com/davidsowerby/v7/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information.  
+The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information.
 
 
 ## Download
