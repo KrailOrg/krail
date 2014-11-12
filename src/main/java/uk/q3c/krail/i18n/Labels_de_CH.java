@@ -12,8 +12,6 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * The base for the resource bundle of Labels specifically for Locale de_CH. Not currently populated as it is used only
  * for testing
@@ -22,21 +20,6 @@ import com.google.common.collect.ImmutableMap;
  */
 public class Labels_de_CH extends Labels {
 
-    private static final ImmutableMap<LabelKey, String> map;
 
-    static {
-        map = new ImmutableMap.Builder<LabelKey, String>()
-                // @formatter:off
-				
-				.build();
-
-// @formatter:on
-
-    }
-
-    @Override
-    public ImmutableMap<LabelKey, String> getMap() {
-        return map;
-    }
 
 }

@@ -44,7 +44,7 @@ public class JavaMapPatternSource implements PatternSource {
      * @return the String pattern for {@code key}, or {@link Optional.isAbsent()} if there is no pattern for the key
      */
     @Override
-    public Optional<String> retrievePattern(I18NKey key, Locale locale) {
+    public <E extends Enum<E>> Optional<String> retrievePattern(I18NKey key, Locale locale) {
 
         Type[] genericInterfaces = key.getClass()
                                       .getGenericInterfaces();
@@ -53,10 +53,10 @@ public class JavaMapPatternSource implements PatternSource {
         Type actualType = parameterizedType.getActualTypeArguments()[0];
         Class bundleClazz = (Class) actualType;
 
-        MapResourceBundle bundle = (MapResourceBundle) ResourceBundle.getBundle(bundleClazz.getName(), locale);
+        MapResourceBundle<E> bundle = (MapResourceBundle) ResourceBundle.getBundle(bundleClazz.getName(), locale);
 
 
-        String pattern = bundle.getValue(key);
+        String pattern = bundle.getValue((E) key);
         if (pattern == null) {
             return Optional.absent();
         }

@@ -12,8 +12,6 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * The base for the resource bundle of {@link Messages}. The separation between them is arbitrary, but helps break down
  * what could other wise be long lists, and only one of them needs to look up parameter values:
@@ -26,23 +24,18 @@ import com.google.common.collect.ImmutableMap;
  */
 public class Messages extends MapResourceBundle<MessageKey> {
 
-    private static final ImmutableMap<MessageKey, String> map;
 
-    static {
-        map = new ImmutableMap.Builder<MessageKey, String>()
-                // @formatter:off
-
-			.put(MessageKey.invalidURI, "{0} is not a valid page")
-			.put(MessageKey.Service_not_Started, "You cannot use service {0} until it has been started")
-			.put(MessageKey.LocaleChange,"Language and Country changed to {0}")
-			.build();
-
-// @formatter:on
+    public Messages() {
+        super(MessageKey.class);
     }
 
     @Override
-    public ImmutableMap<MessageKey, String> getMap() {
-        return map;
+    protected void loadMap() {
+        put(MessageKey.invalidURI, "{0} is not a valid page");
+        put(MessageKey.Service_not_Started, "You cannot use service {0} until it has been started");
+                put(MessageKey.LocaleChange, "Language and Country changed to {0}");
+
     }
+
 
 }

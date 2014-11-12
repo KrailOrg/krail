@@ -12,29 +12,20 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * @author David Sowerby 9 Feb 2013
  */
 public class TestLabels_de extends TestLabels {
 
-    private static final ImmutableMap<TestLabelKey, String> map;
-
-    static {
-
-        map = new ImmutableMap.Builder<TestLabelKey, String>()
-                // @formatter:off
-
-				.put(TestLabelKey.Home, "zu Hause").put(TestLabelKey.Yes, "Ja").put(TestLabelKey.No, "Nein")
-				.put(TestLabelKey.ViewA, "DE_ViewA").put(TestLabelKey.ViewB, "DE_ViewB").build();
-
-		// @formatter:on
-    }
-
     @Override
-    public ImmutableMap<TestLabelKey, String> getMap() {
-        return map;
+    protected void loadMap() {
+        put(TestLabelKey.Home, "zu Hause");
+        put(TestLabelKey.Yes, "Ja");
+        put(TestLabelKey.No, "Nein");
+        put(TestLabelKey.ViewA, "DE_ViewA");
+        put(TestLabelKey.ViewB, "DE_ViewB");
+
     }
+
 
 }

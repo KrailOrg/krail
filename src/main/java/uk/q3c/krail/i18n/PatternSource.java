@@ -38,7 +38,7 @@ public interface PatternSource {
      *
      * @return the String pattern for {@code key}, or {@link Optional.isAbsent()} if there is no pattern for the key
      */
-    Optional<String> retrievePattern(I18NKey key, Locale locale);
+    <E extends Enum<E>> Optional<String> retrievePattern(I18NKey key, Locale locale);
 
     /**
      * Generates an implementation specific stub for the key - value pair.  This is typically used as part of the

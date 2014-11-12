@@ -12,8 +12,6 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * The German language resource bundle for {@link StandardPageKey}
  *
@@ -21,24 +19,14 @@ import com.google.common.collect.ImmutableMap;
  */
 public class StandardPageLabels_de extends StandardPageLabels {
 
-    private static final ImmutableMap<StandardPageKey, String> map;
-
-    static {
-        map = new ImmutableMap.Builder<StandardPageKey, String>()
-                // @formatter:off
-
-				.put(StandardPageKey.Public_Home, "Öffentliche Startseite")
-				.put(StandardPageKey.Log_In, "Einloggen")
-				.put(StandardPageKey.Log_Out, "Ausloggen")
-				.put(StandardPageKey.Private_Home, "Privat Startseite")
-				.build();
-
-		// @formatter:on
-    }
 
     @Override
-    public ImmutableMap<StandardPageKey, String> getMap() {
-        return map;
+    protected void loadMap() {
+        put(StandardPageKey.Public_Home, "Öffentliche Startseite");
+        put(StandardPageKey.Log_In, "Einloggen");
+        put(StandardPageKey.Log_Out, "Ausloggen");
+        put(StandardPageKey.Private_Home, "Privat Startseite");
     }
+
 
 }

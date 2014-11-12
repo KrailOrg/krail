@@ -12,8 +12,6 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * The base for the resource bundle of Labels for Locale de. Entry is purely for testing
  *
@@ -21,68 +19,59 @@ import com.google.common.collect.ImmutableMap;
  */
 public class Labels_de extends Labels {
 
-    private static final ImmutableMap<LabelKey, String> map;
-
-    static {
-        map = new ImmutableMap.Builder<LabelKey, String>()
-                // @formatter:off
-
-                .put(LabelKey.Cancel, "Stornieren")
-                .put(LabelKey.Enable_Account, "Konto aktivieren")
-                .put(LabelKey.Error, "Fehler")
-                .put(LabelKey.First_Name, "Vorname")
-                .put(LabelKey.Guest, "Gast")
-                .put(LabelKey.Home_Page, "Startseite")
-                .put(LabelKey.Last_Name, "Nachname")
-                .put(LabelKey.Log_In, "Einloggen")
-                .put(LabelKey.Message_Box, "Nachrichtenfeld")
-                .put(LabelKey.No, "Nein")
-                .put(LabelKey.Notifications, "Benachrichtigungen")
-                .put(LabelKey.Private, "Privat")
-                .put(LabelKey.Public, "Öffentlich")
-                .put(LabelKey.Push, "Druck")
-                .put(LabelKey.Refresh_Account, "Konto aktualisieren")
-                .put(LabelKey.Request_Account, "Konto anfordern")
-                .put(LabelKey.Reset_Account, "Konto zurücksetzen")
-                .put(LabelKey.System_Account, "Systemkonto")
-                .put(LabelKey.Small, "Klein")
-                .put(LabelKey.Yes, "Ja")
-                .put(LabelKey.Alphabetic_Ascending, "alphabetisch aufsteigend")
-                .put(LabelKey.Alphabetic_Descending, "alphabetisch absteigend")
-                .put(LabelKey.Application_Configuration_Service, "Anwendung Konfigurations-Service")
-                .put(LabelKey.Authentication, "Authentifzierung")
-                .put(LabelKey.Authorisation, "Berechtigung")
-                .put(LabelKey.Broadcast_Messages, "Nachricht an alle Benutzer")
-                .put(LabelKey.Class, "Klasse")
-                .put(LabelKey.Field, "Feld")
-                .put(LabelKey.Invalid_Page, "Ungültige Seite")
-                .put(LabelKey.Insertion_Order_Ascending, "aufsteigend einfügen")
-                .put(LabelKey.Insertion_Order_Descending, "absteigend einfügen")
-                .put(LabelKey.Log_Out, "Ausloggen")
-                .put(LabelKey.Message_Bar, "Nachrichtenzeile")
-                .put(LabelKey.Nested, "verschachtelt")
-                .put(LabelKey.Ok, "OK")
-                .put(LabelKey.Position_Index_Ascending, "Positionsindex aufsteigend")
-                .put(LabelKey.Position_Index_Descending, "Positionsindex absteigend")
-                .put(LabelKey.Pull, "ziehen")
-                .put(LabelKey.Sitemap_Service, "Sitemap Service")
-                .put(LabelKey.Splash, "Splash")
-                .put(LabelKey.Unlock_Account, "Konto entsperren")
-                .put(LabelKey.Unnamed, "unbenannt")
-                .put(LabelKey.User_Name, "Benutzername")
-                .put(LabelKey.Krail, "Krail")
-                .put(LabelKey.Warning, "Warnung")
-                .put(LabelKey.Password, "Passwort")
-                .put(LabelKey.Submit, "Absenden")
-
-				.build();
-
-		// @formatter:on
-    }
 
     @Override
-    public ImmutableMap<LabelKey, String> getMap() {
-        return map;
-    }
+    protected void loadMap() {
 
+
+        put(LabelKey.Cancel, "Stornieren");
+        put(LabelKey.Enable_Account, "Konto aktivieren");
+        put(LabelKey.Error, "Fehler");
+        put(LabelKey.First_Name, "Vorname");
+        put(LabelKey.Guest, "Gast");
+        put(LabelKey.Home_Page, "Startseite");
+        put(LabelKey.Last_Name, "Nachname");
+        put(LabelKey.Log_In, "Einloggen");
+        put(LabelKey.Message_Box, "Nachrichtenfeld");
+        put(LabelKey.No, "Nein");
+        put(LabelKey.Notifications, "Benachrichtigungen");
+        put(LabelKey.Private, "Privat");
+        put(LabelKey.Public, "Öffentlich");
+        put(LabelKey.Push, "Druck");
+        put(LabelKey.Refresh_Account, "Konto aktualisieren");
+        put(LabelKey.Request_Account, "Konto anfordern");
+        put(LabelKey.Reset_Account, "Konto zurücksetzen");
+        put(LabelKey.System_Account, "Systemkonto");
+        put(LabelKey.Small, "Klein");
+        put(LabelKey.Yes, "Ja");
+        put(LabelKey.Alphabetic_Ascending, "alphabetisch aufsteigend");
+        put(LabelKey.Alphabetic_Descending, "alphabetisch absteigend");
+        put(LabelKey.Application_Configuration_Service, "Anwendung " + "Konfigurations-Service");
+        put(LabelKey.Authentication, "Authentifzierung");
+        put(LabelKey.Authorisation, "Berechtigung");
+        put(LabelKey.Broadcast_Messages, "Nachricht an alle Benutzer");
+        put(LabelKey.Class, "Klasse");
+        put(LabelKey.Field, "Feld");
+        put(LabelKey.Invalid_Page, "Ungültige Seite");
+        put(LabelKey.Insertion_Order_Ascending, "aufsteigend einfügen");
+        put(LabelKey.Insertion_Order_Descending, "absteigend einfügen");
+        put(LabelKey.Log_Out, "Ausloggen");
+        put(LabelKey.Message_Bar, "Nachrichtenzeile");
+        put(LabelKey.Nested, "verschachtelt");
+        put(LabelKey.Ok, "OK");
+        put(LabelKey.Position_Index_Ascending, "Positionsindex aufsteigend");
+        put(LabelKey.Position_Index_Descending, "Positionsindex absteigend");
+        put(LabelKey.Pull, "ziehen");
+        put(LabelKey.Sitemap_Service, "Sitemap Service");
+        put(LabelKey.Splash, "Splash");
+        put(LabelKey.Unlock_Account, "Konto entsperren");
+        put(LabelKey.Unnamed, "unbenannt");
+        put(LabelKey.User_Name, "Benutzername");
+        put(LabelKey.Krail, "Krail");
+        put(LabelKey.Warning, "Warnung");
+        put(LabelKey.Password, "Passwort");
+        put(LabelKey.Submit, "Absenden");
+
+
+    }
 }

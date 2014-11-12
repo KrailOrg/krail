@@ -12,8 +12,6 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely
  * defined as containing those value which are short, contain no parameters and are typically used for captions and
@@ -23,27 +21,19 @@ import com.google.common.collect.ImmutableMap;
  */
 public class TestLabels extends MapResourceBundle<TestLabelKey> {
 
-    private static final ImmutableMap<TestLabelKey, String> map;
 
-    static {
-
-        map = new ImmutableMap.Builder<TestLabelKey, String>()
-                // @formatter:off
-
-			.put(TestLabelKey.Home, "home")
-            .put(TestLabelKey.pattern_with_embedded_key, "Your {0} request has been refused")
-			.put(TestLabelKey.Transfers, "transfers")
-			.put(TestLabelKey.Opt, "option")
-			.put(TestLabelKey.Yes, "Yes")
-			.put(TestLabelKey.No, "No")
-			.build();
-
-// @formatter:on
+    public TestLabels() {
+        super(TestLabelKey.class);
     }
 
     @Override
-    public ImmutableMap<TestLabelKey, String> getMap() {
-        return map;
+    protected void loadMap() {
+        put(TestLabelKey.Home, "home");
+        put(TestLabelKey.pattern_with_embedded_key, "Your {0} request has been refused");
+        put(TestLabelKey.Transfers, "transfers");
+        put(TestLabelKey.Opt, "option");
+        put(TestLabelKey.Yes, "Yes");
+        put(TestLabelKey.No, "No");
     }
 
 }

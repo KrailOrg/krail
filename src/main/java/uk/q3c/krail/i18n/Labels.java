@@ -12,8 +12,6 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * The base for the resource bundle of {@link Labels}. The separation between them is arbitrary, but helps break down
  * what could other wise be long lists, and only one of them needs to look up parameter values:
@@ -26,20 +24,15 @@ import com.google.common.collect.ImmutableMap;
  */
 public class Labels extends MapResourceBundle<LabelKey> {
 
-    private static final ImmutableMap<LabelKey, String> map;
 
-    static {
-        map = new ImmutableMap.Builder<LabelKey, String>()
-                // @formatter:off
-
-			.build();
-
-// @formatter:on
+    public Labels() {
+        super(LabelKey.class);
     }
 
     @Override
-    public ImmutableMap<LabelKey, String> getMap() {
-        return map;
+    protected void loadMap() {
+
     }
+
 
 }

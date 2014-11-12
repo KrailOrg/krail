@@ -12,30 +12,17 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
- * The base for the resource bundle of Labels for Locale de. Entry is purely for testing
+ * The base for the resource bundle of Labels for Locale it.
  *
  * @author David Sowerby 9 Feb 2013
  */
 public class StandardPageLabels_it extends StandardPageLabels {
 
-    private static final ImmutableMap<StandardPageKey, String> map;
-
-    static {
-        map = new ImmutableMap.Builder<StandardPageKey, String>()
-                // @formatter:off
-
-			.put(StandardPageKey.Public_Home, "Public Pagina")
-			.build();
-
-// @formatter:on
-    }
-
     @Override
-    public ImmutableMap<StandardPageKey, String> getMap() {
-        return map;
+    protected void loadMap() {
+        put(StandardPageKey.Public_Home, "Public Pagina");
     }
+
 
 }

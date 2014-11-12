@@ -12,8 +12,6 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * The base for the resource bundle of {@link Descriptions}. The separation between them is arbitrary, but helps break
  * down what could other wise be long lists, and only one of them needs to look up parameter values:
@@ -26,33 +24,28 @@ import com.google.common.collect.ImmutableMap;
  */
 public class Descriptions extends MapResourceBundle<DescriptionKey> {
 
-    private static ImmutableMap<DescriptionKey, String> map;
-
-    static {
-        map = new ImmutableMap.Builder<DescriptionKey, String>()
-                // @formatter:off
-				.put(DescriptionKey.Last_Name, "the last name or family name")
-				.put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok")
-				.put(DescriptionKey.No_Permission, "You do not have permission for that action")
-				.put(DescriptionKey.Application_Configuration_Service, "This service loads the application " +
-                        "configuration from krail.ini")
-				.put(DescriptionKey.Sitemap_Service, "This service creates the Sitemap using options from the " +
-                        "application configuration")
-				.put(DescriptionKey.Unknown_Account, "That username or password was not recognised")
-				.put(DescriptionKey.Account_Expired, "Your account has expired")
-				.put(DescriptionKey.Account_Already_In_Use, "This account is already in use.  You must log out of " +
-                        "that" +
-                        " session before you can log in again.")
-				.put(DescriptionKey.Account_Locked, "Your account is locked")
-				.put(DescriptionKey.Too_Many_Login_Attempts,"Login has failed too many times, " +
-                        "the account will need to be reset")
-				.build();
-				// @formatter:on
+    public Descriptions() {
+        super(DescriptionKey.class);
     }
 
     @Override
-    public ImmutableMap<DescriptionKey, String> getMap() {
-        return map;
+    protected void loadMap() {
+        put(DescriptionKey.Last_Name, "the last name or family name");
+        put(DescriptionKey.Last_Name, "the last name or family name");
+        put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok");
+        put(DescriptionKey.No_Permission, "You do not have permission for that action");
+        put(DescriptionKey.Application_Configuration_Service, "This service loads the application " + "configuration " +
+                "from krail.ini");
+        put(DescriptionKey.Sitemap_Service, "This service creates the Sitemap using options from the " + "application" +
+                " configuration");
+        put(DescriptionKey.Unknown_Account, "That username or password was not recognised");
+        put(DescriptionKey.Account_Expired, "Your account has expired");
+        put(DescriptionKey.Account_Already_In_Use, "This account is already in use.  You must log out of " + "that " +
+                "session before you can log in again.");
+        put(DescriptionKey.Account_Locked, "Your account is locked");
+        put(DescriptionKey.Too_Many_Login_Attempts, "Login has failed too many times, the account will " + "need to " +
+                "be reset");
     }
+
 
 }

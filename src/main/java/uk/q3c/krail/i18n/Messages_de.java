@@ -12,8 +12,6 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * The base for the resource bundle of {@link Messages_de}. The separation between them is arbitrary, but helps break
  * down
@@ -27,23 +25,12 @@ import com.google.common.collect.ImmutableMap;
  */
 public class Messages_de extends Messages {
 
-    private static final ImmutableMap<MessageKey, String> map;
-
-    static {
-        map = new ImmutableMap.Builder<MessageKey, String>()
-                // @formatter:off
-
-			.put(MessageKey.invalidURI, "{0} ist keine gültige Seite")
-			.put(MessageKey.Service_not_Started, "Der Service {0} kann nicht benutzt werden bis er gestartet ist")
-			.put(MessageKey.LocaleChange,"Sprache und Land nach {0} geändert")
-			.build();
-
-// @formatter:on
-    }
-
     @Override
-    public ImmutableMap<MessageKey, String> getMap() {
-        return map;
+    protected void loadMap() {
+        put(MessageKey.invalidURI, "{0} ist keine gültige Seite");
+        put(MessageKey.Service_not_Started, "Der Service {0} kann nicht benutzt werden bis er gestartet ist");
+        put(MessageKey.LocaleChange, "Sprache und Land nach {0} geändert");
     }
+
 
 }

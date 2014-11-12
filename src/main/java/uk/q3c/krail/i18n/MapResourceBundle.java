@@ -14,10 +14,23 @@ package uk.q3c.krail.i18n;
 
 import com.google.common.collect.ImmutableMap;
 
+import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
-public abstract class MapResourceBundle<E extends I18NKey> extends ResourceBundle {
+public abstract class MapResourceBundle<E extends Enum<E>> extends ResourceBundle {
+
+
+    private Class<E> clazz;
+    private EnumMap<E, String> map ;
+
+    public MapResourceBundle(Class<E> clazz) {
+        this.clazz = clazz;
+        this.map = new EnumMap<E, String>(clazz);
+        loadMap();
+    }
+
+    protected abstract void loadMap();
 
     @Override
     public Enumeration<String> getKeys() {
@@ -46,5 +59,16 @@ public abstract class MapResourceBundle<E extends I18NKey> extends ResourceBundl
 
     }
 
-    public abstract ImmutableMap<E, String> getMap();
+    public  EnumMap<E, String> getMap() {
+        return map;
+    }
+
+    public void put(E key, String value) {
+        map.put(key, value);
+    }
+
+    public Class<E> getClazz() {
+        return clazz;
+    }
+
 }

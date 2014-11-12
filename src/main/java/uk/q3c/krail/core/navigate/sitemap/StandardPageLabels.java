@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import com.google.common.collect.ImmutableMap;
 import uk.q3c.krail.i18n.Descriptions;
 import uk.q3c.krail.i18n.MapResourceBundle;
 
@@ -29,20 +28,15 @@ import uk.q3c.krail.i18n.MapResourceBundle;
  */
 public class StandardPageLabels extends MapResourceBundle<StandardPageKey> {
 
-    private static final ImmutableMap<StandardPageKey, String> map;
 
-    static {
-        map = new ImmutableMap.Builder<StandardPageKey, String>()
-                // @formatter:off
-
-			.build();
-
-// @formatter:on
+    public StandardPageLabels() {
+        super(StandardPageKey.class);
     }
 
     @Override
-    public ImmutableMap<StandardPageKey, String> getMap() {
-        return map;
+    protected void loadMap() {
+
     }
+
 
 }
