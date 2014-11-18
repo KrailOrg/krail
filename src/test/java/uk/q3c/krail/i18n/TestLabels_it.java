@@ -12,10 +12,22 @@
  */
 package uk.q3c.krail.i18n;
 
-public enum TestLabelKey implements I18NKey<TestLabels> {
+/**
+ * @author David Sowerby 9 Feb 2013
+ */
+public class TestLabels_it extends TestLabels {
 
-    _nullkey_, Home, My_Account, Transfers, Login, MoneyInOut, Private, Public, Opt, Yes, No, View1, View2, ViewA,
-    ViewA1, ViewA11, ViewB, ViewB1, ViewB11, pattern_with_embedded_key, Blank;
+    @Override
+    protected void loadMap() {
+        put(TestLabelKey.Home, "it_Home");
+        put(TestLabelKey.Yes, "it_Yes");
+        put(TestLabelKey.No, "it_No");
+        put(TestLabelKey.ViewA, "it_ViewA");
+        put(TestLabelKey.ViewB, "it_ViewB");
+        put(TestLabelKey.MoneyInOut, "it_MoneyInOut");
+        put(TestLabelKey.Blank, "");
+
+    }
 
 
 }

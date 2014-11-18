@@ -25,8 +25,7 @@ import java.util.Locale;
 
 /**
  * For testing all that is usually needed is to return a current locale and fire listeners on a change.  This class
- * gets
- * used by som any things it makes test setup a pain if the full version is used
+ * gets used by so many things it makes test setup a pain if the full version is used
  */
 public class MockCurrentLocale implements CurrentLocale, UserStatusListener {
     private static Logger log = LoggerFactory.getLogger(MockCurrentLocale.class);

@@ -15,10 +15,6 @@ package uk.q3c.krail.core.user;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 import uk.q3c.krail.core.user.notify.*;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
 import uk.q3c.krail.core.user.status.DefaultUserStatus;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.i18n.I18NKey;
@@ -40,8 +36,7 @@ public class UserModule extends AbstractModule {
         bindWarningNotifications(warningNotificationBinder);
         bindInformationNotifications(informationNotificationBinder);
         bindUserStatus();
-        bindUserOption();
-        bindUserOptionStore();
+
     }
 
     /**
@@ -101,20 +96,5 @@ public class UserModule extends AbstractModule {
         bind(UserStatus.class).to(DefaultUserStatus.class);
     }
 
-    /**
-     * Override this method to provide your own {@link UserOption} implementation. If all you want to do is change the
-     * storage method, override {@link #bindUserOptionStore()} instead
-     */
-    protected void bindUserOption() {
-        bind(UserOption.class).to(DefaultUserOption.class);
-    }
 
-    /**
-     * Override this method to provide your own store implementation for user options. This is in effect a DAO
-     * implementation
-     */
-    protected void bindUserOptionStore() {
-        bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-
-    }
 }

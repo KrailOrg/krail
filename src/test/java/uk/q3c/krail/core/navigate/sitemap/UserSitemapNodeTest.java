@@ -12,14 +12,20 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.TestI18NModule;
 import fixture.testviews2.ViewA;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.user.opt.DefaultUserOption;
+import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionStore;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
@@ -51,5 +57,18 @@ public class UserSitemapNodeTest {
         // then
         assertThat(userNode.getLabel()).isEqualTo("Startseite");
         assertThat(userNode.getCollationKey()).isEqualTo(collator.getCollationKey("Startseite"));
+    }
+
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
+
+            @Override
+            protected void configure() {
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
+
+        };
     }
 }

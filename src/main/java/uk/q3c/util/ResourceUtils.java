@@ -71,4 +71,13 @@ public class ResourceUtils {
 
     }
 
+    public static File resourcePath(String file) {
+        File baseDir;
+        if (VaadinService.getCurrent() != null) {
+            baseDir = applicationBaseDirectory();
+        }
+        baseDir = new File("src/main/resources");
+        File resourceFile = new File(baseDir, file);
+        return resourceFile;
+    }
 }

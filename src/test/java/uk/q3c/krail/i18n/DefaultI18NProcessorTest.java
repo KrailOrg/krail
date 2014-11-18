@@ -12,9 +12,11 @@
  */
 package uk.q3c.krail.i18n;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import fixture.TestI18NModule;
@@ -22,6 +24,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.user.opt.DefaultUserOption;
+import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionStore;
 
 import java.util.Locale;
 
@@ -162,7 +168,7 @@ public class DefaultI18NProcessorTest {
         String confirmValueOk = "Bestätigen Sie, dass dieser Wert in Ordnung ist";
 
         // given
-        currentLocale.setLocale(Locale.GERMAN);
+        currentLocale.setLocale(Locale.GERMANY);
         // when
         processor.translate(testObject);
         // then
@@ -171,7 +177,7 @@ public class DefaultI18NProcessorTest {
         assertThat(testObject.getButtonWithAnnotation()
                              .getDescription()).isEqualTo(confirmValueOk);
         assertThat(testObject.getButtonWithAnnotation()
-                             .getLocale()).isEqualTo(Locale.GERMAN);
+                             .getLocale()).isEqualTo(Locale.GERMANY);
 
         assertThat(testObject.getLabel()
                              .getCaption()).isEqualTo("OK");
@@ -179,14 +185,14 @@ public class DefaultI18NProcessorTest {
                              .getDescription()).isEqualTo(confirmValueOk);
         // assertThat(testObject.getLabel().getValue()).isEqualTo("Ok");
         assertThat(testObject.getButtonWithAnnotation()
-                             .getLocale()).isEqualTo(Locale.GERMAN);
+                             .getLocale()).isEqualTo(Locale.GERMANY);
 
         assertThat(testObject.getTable()
                              .getCaption()).isEqualTo("OK");
         assertThat(testObject.getTable()
                              .getDescription()).isEqualTo(confirmValueOk);
         assertThat(testObject.getButtonWithAnnotation()
-                             .getLocale()).isEqualTo(Locale.GERMAN);
+                             .getLocale()).isEqualTo(Locale.GERMANY);
 
         Object[] columns = testObject.getTable()
                                      .getVisibleColumns();
@@ -198,4 +204,16 @@ public class DefaultI18NProcessorTest {
 
     }
 
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
+
+            @Override
+            protected void configure() {
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
+
+        };
+    }
 }

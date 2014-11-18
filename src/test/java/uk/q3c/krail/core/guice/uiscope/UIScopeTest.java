@@ -259,7 +259,7 @@ public class UIScopeTest {
             supportedLocales.addBinding()
                             .toInstance(Locale.UK);
             patternSources.addBinding(10)
-                          .to(JavaMapPatternSource.class);
+                          .to(DefaultJavaMapPatternSource.class);
 
         }
     }

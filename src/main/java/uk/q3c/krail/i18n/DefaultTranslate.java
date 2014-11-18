@@ -31,6 +31,7 @@ public class DefaultTranslate implements Translate {
 
 
     private final CurrentLocale currentLocale;
+    private final Set<Locale> supportedLocales;
     private TreeMap<Integer, PatternSource> patternSources;
 
     /**
@@ -40,9 +41,10 @@ public class DefaultTranslate implements Translate {
      * @param currentLocale
      */
     @Inject
-    protected DefaultTranslate(@PatternSources Map<Integer, PatternSource> patternSources,
-                               CurrentLocale currentLocale) {
+    protected DefaultTranslate(@PatternSources Map<Integer, PatternSource> patternSources, CurrentLocale
+            currentLocale, @SupportedLocales Set<Locale> supportedLocales) {
         super();
+        this.supportedLocales = supportedLocales;
         this.patternSources = new TreeMap<>(patternSources);
         this.currentLocale = currentLocale;
     }
@@ -69,8 +71,7 @@ public class DefaultTranslate implements Translate {
      * <p/>
      * <p/>
      * If the key does not provide a pattern from any of the sources, and key is an Enum, the enum.name() is returned.
-     * Before returning the
-     * enum.name(), underscores are replaced with spaces.
+     * Before returning the enum.name(), underscores are replaced with spaces.
      * <p/>
      * If the key does not provide a pattern from any of the sources, and key is not an Enum, the key.toString() is
      * returned
@@ -83,10 +84,15 @@ public class DefaultTranslate implements Translate {
      * @param arguments
      *         the arguments used to expand the pattern, if required
      *
+     * @throws UnsupportedLocaleException if locale is not in {@link #supportedLocales}
+     *
      * @return the translated value as described above, or "key is null" if {@code key} is null
      */
     @Override
     public String from(I18NKey<?> key, Locale locale, Object... arguments) {
+        if (!supportedLocales.contains(locale)) {
+            throw new UnsupportedLocaleException(locale);
+        }
         if (key == null) {
             return "key is null";
         }

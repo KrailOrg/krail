@@ -46,8 +46,14 @@ public class I18NModule extends AbstractModule {
         bindCurrentLocale();
         bindDefaultLocale();
         bindTranslate();
+        bindPatternSources();
 
         define();
+    }
+
+    protected void bindPatternSources() {
+        bind(JavaMapPatternSource.class).to(DefaultJavaMapPatternSource.class);
+        bind(JavaMapPatternSourceWriter.class).to(DefaultJavaMapPatternSourceWriter.class);
     }
 
 
@@ -77,7 +83,7 @@ public class I18NModule extends AbstractModule {
      */
     protected void define() {
         addSupportedLocale(Locale.UK);
-        addPatternSource(10, JavaMapPatternSource.class);
+        addPatternSource(10, DefaultJavaMapPatternSource.class);
     }
 
     protected void addSupportedLocale(Locale locale) {

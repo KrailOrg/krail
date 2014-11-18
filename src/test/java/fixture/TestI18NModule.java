@@ -15,6 +15,8 @@ package fixture;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NModule;
 
+import java.util.Locale;
+
 /**
  * Different from
  */
@@ -25,5 +27,22 @@ public class TestI18NModule extends I18NModule {
     @Override
     protected void bindCurrentLocale() {
         bind(CurrentLocale.class).toInstance(currentLocale);
+    }
+
+    /**
+     * Override this to define more registered annotations, or registered value annotations, by calling
+     * {@link #registerAnnotation(Class)} or {@link #registerValueAnnotation(Class)}, or make a copy of this module and
+     * use the same structure (multiple instances of the {@link #registeredAnnotations} and
+     * {@link #registerValueAnnotation(Class)} will be merged by Guice}.
+     * <p/>
+     * Here you should also define the locales your application supports, with calls to
+     * {@link #addSupportedLocale(Locale)}.  Make sure this includes the {@link DefaultLocale}
+     */
+    @Override
+    protected void define() {
+        super.define();
+        addSupportedLocale(Locale.GERMANY);
+        addSupportedLocale(Locale.ITALY);
+        addSupportedLocale(new Locale("de", "CH"));
     }
 }

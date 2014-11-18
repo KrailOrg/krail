@@ -12,12 +12,18 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
+import com.google.inject.AbstractModule;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.user.opt.DefaultUserOption;
+import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionStore;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.i18n.TestLabelKey;
 
@@ -50,6 +56,19 @@ public class MasterSitemapNodeTest {
         assertThat(node.getViewClass()).isEqualTo(PublicHomeView.class);
         assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
 
+    }
+
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
+
+            @Override
+            protected void configure() {
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
+
+        };
     }
 
 }

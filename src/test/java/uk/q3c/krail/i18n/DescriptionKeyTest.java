@@ -12,52 +12,46 @@
  */
 package uk.q3c.krail.i18n;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.server.WebBrowser;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.ui.BrowserProvider;
+import uk.q3c.krail.core.user.opt.DefaultUserOption;
+import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionStore;
 
 import java.util.Locale;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
 public class DescriptionKeyTest {
 
-
-    @Mock
-    CurrentLocale currentLocale;
-    Translate translate;
     @Inject
-    @PatternSources
-    Map<Integer, PatternSource> patternSources;
-    @Mock
-    private WebBrowser browser;
-    @Mock
-    private BrowserProvider browserProvider;
+    CurrentLocale currentLocale;
+
+    @Inject
+    Translate translate;
+
 
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
-        translate = new DefaultTranslate(patternSources, currentLocale);
     }
 
 
     @Test
     public void locale_en() {
         // given
-        when(currentLocale.getLocale()).thenReturn(Locale.UK);
-
+currentLocale.setLocale(Locale.UK);
         // when
 
         // then
@@ -68,7 +62,7 @@ public class DescriptionKeyTest {
     @Test
     public void locale_de() {
         // given
-        when(currentLocale.getLocale()).thenReturn(Locale.GERMANY);
+        currentLocale.setLocale(Locale.GERMANY);
         // when
 
         // then
@@ -78,11 +72,24 @@ public class DescriptionKeyTest {
 
     @Test
     public void locale_it() {
-        // given
-        when(currentLocale.getLocale()).thenReturn(Locale.ITALY);
+        // give
+        currentLocale.setLocale(Locale.ITALY);
         // when
 
         // then
         assertThat(translate.from(DescriptionKey.Last_Name)).isEqualTo("il cognome o il nome di famiglia");
+    }
+
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
+
+            @Override
+            protected void configure() {
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
+
+        };
     }
 }

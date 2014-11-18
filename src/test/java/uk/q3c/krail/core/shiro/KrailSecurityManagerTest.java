@@ -33,6 +33,10 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.ui.BasicUI;
 import uk.q3c.krail.core.ui.ScopedUI;
+import uk.q3c.krail.core.user.opt.DefaultUserOption;
+import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionStore;
 import uk.q3c.krail.core.view.component.UserStatusPanel;
 
 import static org.mockito.Matchers.any;
@@ -93,6 +97,8 @@ public class KrailSecurityManagerTest extends ShiroIntegrationTestBase {
             @Override
             protected void configure() {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
         };
     }

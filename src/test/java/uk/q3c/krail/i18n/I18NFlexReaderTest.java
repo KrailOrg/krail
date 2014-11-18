@@ -12,14 +12,20 @@
  */
 package uk.q3c.krail.i18n;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.user.opt.DefaultUserOption;
+import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionStore;
 
 import java.lang.reflect.Field;
 import java.util.Locale;
@@ -61,7 +67,7 @@ public class I18NFlexReaderTest {
     @Test
     public void defaults() throws NoSuchFieldException, SecurityException {
         // given
-        currentLocale.setLocale(Locale.CANADA_FRENCH);
+        currentLocale.setLocale(Locale.UK);
         // when
         reader.setAnnotation(getAnnotation("flex1"));
         // then
@@ -117,6 +123,19 @@ public class I18NFlexReaderTest {
         reader.setAnnotation(getAnnotation("flex3"));
         // then
         assertThat(reader.caption()).isEqualTo("Money");
+    }
+
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
+
+            @Override
+            protected void configure() {
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
+
+        };
     }
 
 }

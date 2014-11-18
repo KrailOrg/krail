@@ -12,21 +12,22 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.collect.ImmutableMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 public abstract class MapResourceBundle<E extends Enum<E>> extends ResourceBundle {
+    private static Logger log = LoggerFactory.getLogger(MapResourceBundle.class);
 
+    private Class<E> keyClass;
+    private EnumMap<E, String> map;
 
-    private Class<E> clazz;
-    private EnumMap<E, String> map ;
-
-    public MapResourceBundle(Class<E> clazz) {
-        this.clazz = clazz;
-        this.map = new EnumMap<E, String>(clazz);
+    public MapResourceBundle(Class<E> keyClass) {
+        this.keyClass = keyClass;
+        this.map = new EnumMap<E, String>(keyClass);
         loadMap();
     }
 
@@ -42,6 +43,32 @@ public abstract class MapResourceBundle<E extends Enum<E>> extends ResourceBundl
         throw new RuntimeException("handleGetObject() replaced in Krail, use getValue() instead");
     }
 
+    /**
+     * Returns the value for {@code key}, but ONLY from this map - the usual lookup rules for Java's {@link
+     * ResourceBundle} are not used.
+     *
+     * @param key
+     *
+     * @return the value for the key, or null if the key is not in the map for this instance
+     */
+    public String getValueExclusive(E key) {
+        if (key == null) {
+            return null;
+        }
+        return getMap().get(key);
+    }
+
+    public EnumMap<E, String> getMap() {
+        return map;
+    }
+
+    /**
+     * Gets the value for {@code key}, using the usual lookup rules for Java's {@link ResourceBundle}
+     *
+     * @param key
+     *
+     * @return
+     */
     public String getValue(E key) {
         if (key == null) {
             return null;
@@ -59,16 +86,25 @@ public abstract class MapResourceBundle<E extends Enum<E>> extends ResourceBundl
 
     }
 
-    public  EnumMap<E, String> getMap() {
-        return map;
-    }
-
+    /**
+     * Puts the key and value into the map (standard map behaviour).
+     *
+     * @param key
+     * @param value
+     */
     public void put(E key, String value) {
         map.put(key, value);
     }
 
-    public Class<E> getClazz() {
-        return clazz;
+
+    public Class<E> getKeyClass() {
+        return keyClass;
+    }
+
+    public void reset() {
+        map.clear();
+        loadMap();
+        log.debug("Values reset from persistence");
     }
 
 }

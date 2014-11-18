@@ -13,27 +13,22 @@
 
 package uk.q3c.krail.i18n;
 
+import java.util.Locale;
+
 /**
  * Created by David Sowerby on 26/10/14.
  */
 public class UnsupportedLocaleException extends RuntimeException {
-    public UnsupportedLocaleException() {
+    private Locale locale;
+
+
+    public UnsupportedLocaleException(Locale locale) {
+        super("Locale " + locale.getDisplayName() + " is not supported");
+        this.locale = locale;
+
     }
 
-    public UnsupportedLocaleException(String message) {
-        super(message);
-    }
+    public UnsupportedLocaleException(String msg) {
 
-    public UnsupportedLocaleException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UnsupportedLocaleException(Throwable cause) {
-        super(cause);
-    }
-
-    public UnsupportedLocaleException(String message, Throwable cause, boolean enableSuppression,
-                                      boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

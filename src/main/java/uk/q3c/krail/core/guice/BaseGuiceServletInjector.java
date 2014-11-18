@@ -36,6 +36,7 @@ import uk.q3c.krail.core.services.ServicesMonitorModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.StandardShiroModule;
 import uk.q3c.krail.core.user.UserModule;
+import uk.q3c.krail.core.user.opt.UserOptionModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.StandardComponentModule;
 import uk.q3c.krail.i18n.I18NModule;
@@ -117,9 +118,20 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
 
         baseModules.add(userModule());
 
+        baseModules.add(userOptionModule());
+
         addAppModules(baseModules);
         addSitemapModules(baseModules);
         return baseModules;
+    }
+
+    /**
+     * Override this if you have provided your own {@link UserOptionModule}
+     *
+     * @return
+     */
+    protected Module userOptionModule() {
+        return new UserOptionModule();
     }
 
     protected Module i18NModule() {

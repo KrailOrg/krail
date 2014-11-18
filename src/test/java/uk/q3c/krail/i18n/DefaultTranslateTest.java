@@ -22,6 +22,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.user.opt.DefaultUserOption;
+import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionStore;
 
 import java.util.Locale;
 
@@ -52,9 +56,9 @@ public class DefaultTranslateTest {
         assertThat(translate.from(LabelKey.Cancel)).isEqualTo("Cancel");
         assertThat(translate.from(LabelKey.Ok)).isEqualTo("Ok");
         // then
-        assertThat(translate.from(LabelKey.Cancel, Locale.GERMAN)).isEqualTo("Stornieren");
+        assertThat(translate.from(LabelKey.Cancel, Locale.GERMANY)).isEqualTo("Stornieren");
         // OK is not redefined in _de
-        assertThat(translate.from(LabelKey.Ok, Locale.GERMAN)).isEqualTo("OK");
+        assertThat(translate.from(LabelKey.Ok, Locale.GERMANY)).isEqualTo("OK");
 
         // this in inherited from Labels_de
         assertThat(translate.from(LabelKey.Cancel, germanSwitzerland)).isEqualTo("Stornieren");
@@ -87,7 +91,10 @@ public class DefaultTranslateTest {
 
             @Override
             protected void configure() {
+
                 bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
 
         };

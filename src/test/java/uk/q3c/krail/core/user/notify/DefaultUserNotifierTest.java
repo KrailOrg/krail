@@ -23,6 +23,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.user.opt.DefaultUserOption;
+import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionStore;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.MessageKey;
@@ -117,6 +121,8 @@ public class DefaultUserNotifierTest {
                                          .toInstance(warningNotification2);
                 informationNotificationBinder.addBinding(LabelKey.Message_Bar)
                                              .toInstance(informationNotification2);
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
 
             }
 

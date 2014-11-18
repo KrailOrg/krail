@@ -13,14 +13,20 @@
 package uk.q3c.krail.core.services;
 
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.user.opt.DefaultUserOption;
+import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionStore;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.TestLabelKey;
 import uk.q3c.krail.i18n.Translate;
@@ -67,6 +73,19 @@ public class AbstractServiceI18NTest {
 
         // then
         assertThat(service.getName()).isEqualTo("Unnamed");
+    }
+
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
+
+            @Override
+            protected void configure() {
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
+
+        };
     }
 
     static class TestService extends AbstractServiceI18N {

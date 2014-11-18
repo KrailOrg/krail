@@ -12,9 +12,11 @@
  */
 package uk.q3c.krail.core.ui.form;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.data.Validator.InvalidValueException;
 import fixture.TestI18NModule;
 import org.junit.Before;
@@ -22,6 +24,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.data.TestEntity;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.user.opt.DefaultUserOption;
+import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionStore;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 
@@ -109,7 +115,7 @@ public class BeanFieldI18NTest {
         // given
         fieldSet.setBean(te);
         // when
-        currentLocale.setLocale(Locale.GERMAN);
+        currentLocale.setLocale(Locale.GERMANY);
         translator.translate(fieldSet);
         // then
         assertThat(fieldSet.getFirstName()
@@ -132,6 +138,19 @@ public class BeanFieldI18NTest {
         fieldSet.getFirstName()
                 .validate();
 
+    }
+
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new AbstractModule() {
+
+            @Override
+            protected void configure() {
+                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+            }
+
+        };
     }
 
 
