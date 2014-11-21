@@ -25,7 +25,8 @@ import static com.google.inject.multibindings.Multibinder.newSetBinder;
 
 public class I18NModule extends AbstractModule {
 
-    private MapBinder<Integer, PatternSource> patternSources;
+    private MapBinder<String, BundleLocator> bundleLocators;
+    private Multibinder<PatternSource> patternSources;
     private Multibinder<String> registeredAnnotations;
     private Multibinder<String> registeredValueAnnotations;
     private Multibinder<Locale> supportedLocales;
@@ -35,7 +36,8 @@ public class I18NModule extends AbstractModule {
         registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
         registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
         supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
-        patternSources = MapBinder.newMapBinder(binder(), Integer.class, PatternSource.class, PatternSources.class);
+        patternSources = newSetBinder(binder(), PatternSource.class, PatternSources.class);
+        bundleLocators = MapBinder.newMapBinder(binder(), String.class, BundleLocator.class);
 
         registerAnnotation(I18N.class);
         registerAnnotation(I18NFlex.class);
@@ -47,6 +49,7 @@ public class I18NModule extends AbstractModule {
         bindDefaultLocale();
         bindTranslate();
         bindPatternSources();
+
 
         define();
     }
@@ -73,18 +76,29 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * Override this to define more registered annotations, or registered value annotations, by calling
-     * {@link #registerAnnotation(Class)} or {@link #registerValueAnnotation(Class)}, or make a copy of this module and
-     * use the same structure (multiple instances of the {@link #registeredAnnotations} and
-     * {@link #registerValueAnnotation(Class)} will be merged by Guice}.
+     * Override this to define more registered annotations, or registered value annotations, by calling {@link
+     * #registerAnnotation(Class)} or {@link #registerValueAnnotation(Class)}, or make a copy of this module and use
+     * the same structure. Multiple instances of the {@link #registeredAnnotations} and {@link
+     * #registerValueAnnotation(Class)} will be merged by Guice.
      * <p/>
-     * Here you should also define the locales your application supports, with calls to
-     * {@link #addSupportedLocale(Locale)}.  Make sure this includes the {@link DefaultLocale}
+     * Here you should also define the locales your application supports, with calls to {@link #addSupportedLocale
+     * (Locale)}.  Make sure your supportedLocales includes your {@link DefaultLocale}
+     * <p/>
+     * The source of your I18N patterns (held in ResourceBundles) should be defined here using calls to {@link
+     * #addBundleCreator(String, Class)}.
+     * <p/>
+     * If you are using just a single module to define your {{@link BundleLocator} implementations,
+     * they will be processed in the order you specify them here.  However, Guice does not guarantee order if multiple
+     * MapBinders are combined (through the use of multiple modules) - the order must then be explicitly specified
+     * using {{@link #setDefaultPatternSourceOrder(String...)}} and/or {@link #setPatternSourceOrder(Class, String...)}
      */
     protected void define() {
         addSupportedLocale(Locale.UK);
-        addPatternSource(10, DefaultJavaMapPatternSource.class);
+        addPatternSource(JavaMapPatternSource.class);
+        addBundleCreator("map", MapBundleLocator.class);
+        addBundleCreator("properties", PropertiesBundleLocator.class);
     }
+
 
     protected void addSupportedLocale(Locale locale) {
         supportedLocales.addBinding()
@@ -92,19 +106,26 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * Add a source for I18NKey patterns. {@code order} determines the order in which multiple sources are accessed.
-     * {@link DefaultTranslate} uses the first result returned, using ascending order (order need not be sequential,
-     * but
-     * must be unique).
+     * Add a source for I18NKey patterns. {@link DefaultTranslate} uses the first result returned, using the order
+     * patternSources are added, unless the order is modified by {@link #setDefaultPatternSourceOrder(String...)}
+     * and/or {@link #setPatternSourceOrder(Class, String...)}
      * <p/>
+     * Note that if multiple Guice modules are used to combine sets of patter sources (which Guice can do
+     * automatically), the order is not guaranteed between modules.
+     *
      * Other implementations of {@link Translate} may behave differently
      *
      * @param order
      * @param patternSource
      */
-    protected void addPatternSource(Integer order, Class<? extends PatternSource> patternSource) {
-        patternSources.addBinding(order)
+    protected void addPatternSource(Class<? extends PatternSource> patternSource) {
+        patternSources.addBinding()
                       .to(patternSource);
+    }
+
+    protected void addBundleCreator(String tag, Class<? extends BundleLocator> implementationClass) {
+        bundleLocators.addBinding(tag)
+                      .to(implementationClass);
     }
 
     /**
@@ -141,5 +162,37 @@ public class I18NModule extends AbstractModule {
 
     protected void addSupportedLocale(String locale) {
         addSupportedLocale(Locale.forLanguageTag(locale));
+    }
+
+    /**
+     * If you are using just a single module to define your {{@link BundleLocator} implementations, they will be
+     * processed in the order they are added using {@link #addPatternSource(Integer, Class)}.
+     * <p/>
+     * However, Guice does not guarantee order if multiple MapBinders are combined (through the use of multiple
+     * modules) - the order must then be explicitly specified using {{@link #setDefaultPatternSourceOrder(String...)
+     * }} and/or {@link #setPatternSourceOrder(Class, String...)}.
+     * <p/>
+     * This method applies the order specified in {@code tags} to ALL key classes, unless overridden by {{@link
+     * #setPatternSourceOrder(Class, String...)}}.
+     * <p/>
+     * If no default is specified then the order that PatternSources have been added to
+     */
+
+    protected void setDefaultPatternSourceOrder(String... tags) {
+
+    }
+
+    /**
+     * This method applies the order specified in {@code tags} to for {@code keyClass} only.  This overrides the
+     * default
+     * setting ALL key classes, unless overridden by {{@link
+     * #setPatternSourceOrder(Class, String...)}}
+     *
+     * @param keyClass
+     * @param tags
+     */
+
+    protected void setPatternSourceOrder(Class<? extends I18NKey> keyClass, String... tags) {
+
     }
 }
