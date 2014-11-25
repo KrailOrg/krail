@@ -4,21 +4,24 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
+ * Reads a {@link ResourceBundle} from a Java class.  The result (if it exists) is expected to be an {@link
+ * EnumResourceBundle}.
+ * <p/>
  * The code for this was lifted directly from {@link ResourceBundle.Control} newBundle and toBundleName methods
  * <p/>
  * Created by David Sowerby on 18/11/14.
  */
-public class MapBundleLocator implements BundleLocator {
+public class ClassBundleReader implements BundleReader {
     @Override
-    public ResourceBundle newBundle(String baseName, Locale locale, ClassLoader loader, boolean reload) {
+    public EnumResourceBundle newBundle(String baseName, Locale locale, ClassLoader loader, boolean reload) {
         String bundleName = this.toBundleName(baseName, locale);
         try {
             Class resourceName = loader.loadClass(bundleName);
-            if (!ResourceBundle.class.isAssignableFrom(resourceName)) {
-                throw new ClassCastException(resourceName.getName() + " cannot be cast to ResourceBundle");
+            if (!EnumResourceBundle.class.isAssignableFrom(resourceName)) {
+                throw new ClassCastException(resourceName.getName() + " cannot be cast to EnumResourceBundle");
             }
 
-            ResourceBundle bundle = (ResourceBundle) resourceName.newInstance();
+            EnumResourceBundle bundle = (EnumResourceBundle) resourceName.newInstance();
             return bundle;
 
         } catch (Exception e) {

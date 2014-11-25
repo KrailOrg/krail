@@ -19,31 +19,31 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.util.ResourceUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
 /**
- * An implementation of {@link PatternSource} which uses Enum Map to provide the pattern for an {@link I18NKey}
+ * The default implementation of {@link PatternSource} to retrieve a localised pattern from an  {{@link
+ * EnumResourceBundle}.
+ * <p/>
  * <p/>
  * Created by David Sowerby on 04/11/14.
  */
-public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
-    private static Logger log = LoggerFactory.getLogger(DefaultJavaMapPatternSource.class);
+public class DefaultPatternSource implements PatternSource {
+    private static Logger log = LoggerFactory.getLogger(DefaultPatternSource.class);
+    private EnumResourceBundleControl bundleControl;
     private Set<Locale> supportedLocales;
     private UserOption userOption;
-    private JavaMapPatternSourceWriter writer;
 
     @Inject
-    protected DefaultJavaMapPatternSource(@SupportedLocales Set<Locale> supportedLocales, UserOption userOption,
-                                          JavaMapPatternSourceWriter writer) {
+    protected DefaultPatternSource(@SupportedLocales Set<Locale> supportedLocales, UserOption userOption, Map<String,
+            BundleReader> bundleReaders) {
         this.supportedLocales = supportedLocales;
         this.userOption = userOption;
-        this.writer = writer;
+        this.bundleControl = new EnumResourceBundleControl(bundleReaders);
     }
 
     /**
@@ -67,7 +67,7 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
     @Override
     public <E extends Enum<E>> Optional<String> retrievePattern(I18NKey key, Locale locale) {
 
-        MapResourceBundle<E> bundle = getBundle(key, locale);
+        EnumResourceBundle<E> bundle = getBundle(key, locale);
 
         if (getAutoStub()) {
             // this method does not overwrite an existing entry
@@ -106,6 +106,7 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
      * @param key
      *         the key the stub will be for
      * @param locale
+     *         the locale the stub should be generated in
      */
     @Override
     public <E extends Enum<E>> void generateStub(I18NKey key, Locale locale) {
@@ -132,23 +133,23 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
      * @param overwrite
      *         if true, overwrite the existing value.  If false, only put the new key-value if the existing one is
      *         missing or empty
-     * @param <E>
+     * @param <E> the Enum type derived from the key
      */
     public <E extends Enum<E>> void put(Locale locale, I18NKey key, String value, boolean overwrite) {
-        MapResourceBundle<E> bundle = getBundle(key, locale);
+        EnumResourceBundle<E> bundle = getBundle(key, locale);
         put(bundle, (E) key, value, overwrite);
     }
 
-    public <E extends Enum<E>> MapResourceBundle<E> getBundle(I18NKey key, Locale locale) {
+    public <E extends Enum<E>> EnumResourceBundle<E> getBundle(I18NKey key, Locale locale) {
         Class bundleClazz = bundleClass(key);
-        MapResourceBundle<E> bundle = (MapResourceBundle) ResourceBundle.getBundle(bundleClazz.getName(), locale);
+        EnumResourceBundle<E> bundle = (EnumResourceBundle) ResourceBundle.getBundle(bundleClazz.getName(), locale,
+                bundleControl);
         return bundle;
     }
 
     /**
      * The {@link MapResourceBundle} used to locate the pattern is determined by the actual parameter value of key
-     * (that
-     * is, a key of type I18N<Labels>  will use the Labels class as the map source)
+     * (that is, a key of type I18N<Labels>  will use the Labels class as the map source)
      */
     private Class bundleClass(I18NKey key) {
         return bundleClass(key.getClass());
@@ -177,7 +178,7 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
      *         missing or empty
      * @param <E>
      */
-    public <E extends Enum<E>> void put(MapResourceBundle<E> bundle, E key, String value, boolean overwrite) {
+    public <E extends Enum<E>> void put(EnumResourceBundle<E> bundle, E key, String value, boolean overwrite) {
 
         if (overwrite) {
             bundle.put(key, value);
@@ -218,9 +219,10 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
      * pre-requisites, typically but not necessarily through UserOption
      */
     @Override
-    public <E extends Enum<E>> void writeOut(Class<? extends I18NKey> keyClass, boolean allKeys) throws IOException {
+    public <E extends Enum<E>> void writeOut(BundleWriter<E> writer, Class<? extends I18NKey> keyClass, boolean
+            allKeys) throws IOException {
 
-        writeOut(keyClass, supportedLocales, allKeys);
+        writeOut(writer, keyClass, supportedLocales, allKeys);
 
     }
 
@@ -233,27 +235,28 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
      * @param locales
      *         the locales to write files for
      * @param allKeys
-     *         if true, all the keys for the keyClass are generated, otherwise only the keys defined in a locale are
-     *         written out for that locale. If allKeys is true, but a key has no value, the value is set according to
-     *         options provided by the implementation
+     *         if true, all the keys for the keyClass are generated, otherwise only the keys which have a non-empty
+     *         value in a locale are
+     *         written out for that locale. If {@code allKeys} is true, but a key does not have a non-empty value, the
+     *         value is set according to the value of {{@link #getGenerateStubWithName()}}
      * @param <E>
-     *         then Enum class represented by the keyClass
+     *         the Enum class represented by the keyClass
      *
      * @throws IOException
      * @see #writeOut(Class, boolean)
      */
     @Override
-    public <E extends Enum<E>> void writeOut(Class<? extends I18NKey> keyClass, Set<Locale> locales, boolean allKeys)
-            throws IOException {
+    public <E extends Enum<E>> void writeOut(BundleWriter<E> writer, Class<? extends I18NKey> keyClass, Set<Locale>
+            locales, boolean allKeys) throws IOException {
         for (Locale locale : locales) {
-            MapResourceBundle<E> bundle = getBundle(keyClass, locale);
+            EnumResourceBundle<E> bundle = getBundle(keyClass, locale);
             Class<E> enumClass = bundle.getKeyClass();
             // if we want all keys, populate any missing from the map
             // and fill as determined by UserOption
 
 
             if (allKeys) {
-                E[] keys = (E[]) enumClass.getEnumConstants();
+                E[] keys = enumClass.getEnumConstants();
                 for (E key : keys) {
                     String fillValue = getGenerateStubWithName() ? key.name()
                                                                       .replace("_", " ") : "";
@@ -263,27 +266,16 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
 
             }
             writer.setBundle(bundle);
-            writer.write(getWritePath());
+            writer.write();
         }
 
     }
 
-    public <E extends Enum<E>> MapResourceBundle<E> getBundle(Class<? extends I18NKey> keyClass, Locale locale) {
+    public <E extends Enum<E>> EnumResourceBundle<E> getBundle(Class<? extends I18NKey> keyClass, Locale locale) {
         Class bundleClazz = bundleClass(keyClass);
-        MapResourceBundle<E> bundle = (MapResourceBundle) ResourceBundle.getBundle(bundleClazz.getName(), locale);
+        EnumResourceBundle<E> bundle = (EnumResourceBundle) EnumResourceBundle.getBundle(bundleClazz.getName(),
+                locale, bundleControl);
         return bundle;
-    }
-
-    public File getWritePath() {
-        String defaultPath = ResourceUtils.userTempDirectory()
-                                          .getAbsolutePath();
-        String option = userOption.getOptionAsString(getClass().getSimpleName(), OptionProp.writePath.name(),
-                defaultPath);
-        return new File(option);
-    }
-
-    public void setWritePath(File path) {
-        userOption.setOption(getClass().getSimpleName(), OptionProp.writePath.name(), path.getAbsolutePath());
     }
 
     /**
@@ -301,7 +293,7 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
     public <E extends Enum<E>> void mergeSource(Class<? extends I18NKey> keyClass, Set<Locale> locales, PatternSource
             otherSource, boolean overwrite) {
         for (Locale locale : locales) {
-            MapResourceBundle<E> bundle = getBundle(keyClass, locale);
+            EnumResourceBundle<E> bundle = getBundle(keyClass, locale);
             mergeSource(locale, bundle.getMap(), overwrite);
         }
     }
@@ -324,7 +316,7 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
         E sampleKey = otherSource.keySet()
                                  .iterator()
                                  .next();
-        MapResourceBundle<E> bundle = getBundle((I18NKey) sampleKey, locale);
+        EnumResourceBundle<E> bundle = getBundle((I18NKey) sampleKey, locale);
 
 
         // the rules for overwriting are determined by {@link #put}
@@ -344,7 +336,7 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
      */
     @Override
     public <E extends Enum<E>> void setKeyValue(I18NKey key, Locale locale, String value) {
-        MapResourceBundle<E> bundle = getBundle(key, locale);
+        EnumResourceBundle<E> bundle = getBundle(key, locale);
         put(bundle, (E) key, value, true);
     }
 
@@ -369,7 +361,7 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
     @Override
     public <E extends Enum<E>> void reset(Class<? extends I18NKey> keyClass, Set<Locale> locales) {
         for (Locale locale : locales) {
-            MapResourceBundle<E> bundle = getBundle(keyClass, locale);
+            EnumResourceBundle<E> bundle = getBundle(keyClass, locale);
             bundle.reset();
             log.debug("Reset values from persistence, {} keys, locale {}", keyClass, locale);
         }
@@ -384,7 +376,7 @@ public class DefaultJavaMapPatternSource implements JavaMapPatternSource {
     }
 
     private enum OptionProp {
-        generateStubWithName, writePath, autoStub
+        generateStubWithName, autoStub
     }
 
 

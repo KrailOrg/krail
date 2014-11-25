@@ -12,6 +12,6 @@
  */
 package uk.q3c.krail.i18n;
 
-public interface I18NKey<E extends MapResourceBundle<?>> {
+public interface I18NKey<E extends EnumResourceBundle<?>> {
 
 }

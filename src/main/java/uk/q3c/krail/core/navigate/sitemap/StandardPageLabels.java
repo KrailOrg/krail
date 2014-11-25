@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 import uk.q3c.krail.i18n.Descriptions;
-import uk.q3c.krail.i18n.MapResourceBundle;
+import uk.q3c.krail.i18n.EnumResourceBundle;
 
 /**
  * The base for the resource bundle of {@link StandardPageLabels}. The separation between them is arbitrary, but helps
@@ -26,7 +26,7 @@ import uk.q3c.krail.i18n.MapResourceBundle;
  *
  * @author David Sowerby 3 Aug 2013
  */
-public class StandardPageLabels extends MapResourceBundle<StandardPageKey> {
+public class StandardPageLabels extends EnumResourceBundle<StandardPageKey> {
 
 
     public StandardPageLabels() {

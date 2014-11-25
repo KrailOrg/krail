@@ -22,7 +22,7 @@ package uk.q3c.krail.i18n;
  *
  * @author David Sowerby 3 Aug 2013
  */
-public class Descriptions extends MapResourceBundle<DescriptionKey> {
+public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 
     public Descriptions() {
         super(DescriptionKey.class);

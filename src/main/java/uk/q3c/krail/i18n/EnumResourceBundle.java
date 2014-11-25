@@ -19,13 +19,13 @@ import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
-public abstract class MapResourceBundle<E extends Enum<E>> extends ResourceBundle {
-    private static Logger log = LoggerFactory.getLogger(MapResourceBundle.class);
+public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBundle {
+    private static Logger log = LoggerFactory.getLogger(EnumResourceBundle.class);
 
     private Class<E> keyClass;
     private EnumMap<E, String> map;
 
-    public MapResourceBundle(Class<E> keyClass) {
+    public EnumResourceBundle(Class<E> keyClass) {
         this.keyClass = keyClass;
         this.map = new EnumMap<E, String>(keyClass);
         loadMap();
@@ -77,7 +77,7 @@ public abstract class MapResourceBundle<E extends Enum<E>> extends ResourceBundl
         if (value != null) {
             return value;
         }
-        @SuppressWarnings("unchecked") MapResourceBundle<E> enumparent = (MapResourceBundle<E>) parent;
+        @SuppressWarnings("unchecked") EnumResourceBundle<E> enumparent = (EnumResourceBundle<E>) parent;
         // returning null so that the enum name() can be used when there is no map entry
         if (enumparent == null) {
             return null;

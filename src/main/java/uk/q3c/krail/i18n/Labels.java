@@ -22,7 +22,7 @@ package uk.q3c.krail.i18n;
  *
  * @author David Sowerby 3 Aug 2013
  */
-public class Labels extends MapResourceBundle<LabelKey> {
+public class Labels extends EnumResourceBundle<LabelKey> {
 
 
     public Labels() {

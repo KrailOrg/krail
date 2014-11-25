@@ -32,7 +32,7 @@ public class DefaultTranslate implements Translate {
 
     private final CurrentLocale currentLocale;
     private final Set<Locale> supportedLocales;
-    private TreeMap<Integer, PatternSource> patternSources;
+    private PatternSource patternSource;
 
     /**
      * Creates a local TreeMap copy (to sort by key)
@@ -41,11 +41,11 @@ public class DefaultTranslate implements Translate {
      * @param currentLocale
      */
     @Inject
-    protected DefaultTranslate(@PatternSources Map<Integer, PatternSource> patternSources, CurrentLocale
+    protected DefaultTranslate(PatternSource patternSource, CurrentLocale
             currentLocale, @SupportedLocales Set<Locale> supportedLocales) {
         super();
+        this.patternSource = patternSource;
         this.supportedLocales = supportedLocales;
-        this.patternSources = new TreeMap<>(patternSources);
         this.currentLocale = currentLocale;
     }
 
@@ -97,14 +97,7 @@ public class DefaultTranslate implements Translate {
             return "key is null";
         }
 
-        Optional<String> pattern = Optional.absent();
-        for (Integer patternIndex : patternSources.keySet()) {
-            pattern = patternSources.get(patternIndex)
-                                    .retrievePattern(key, locale);
-            if (pattern.isPresent()) {
-                break;
-            }
-        }
+        Optional<String> pattern = patternSource.retrievePattern(key, locale);
 
 
         //If no pattern defined use the enum name or toString()

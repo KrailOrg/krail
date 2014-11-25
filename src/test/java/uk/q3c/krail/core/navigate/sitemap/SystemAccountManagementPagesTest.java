@@ -31,6 +31,7 @@ import uk.q3c.krail.core.shiro.StandardShiroModule;
 import uk.q3c.krail.core.ui.BasicUIProvider;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserModule;
+import uk.q3c.krail.core.user.opt.UserOptionModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.StandardComponentModule;
 import uk.q3c.krail.i18n.I18NModule;
@@ -41,8 +42,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class,
-        I18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class,
+@GuiceContext({SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, UserOptionModule.class,
         StandardShiroModule.class, StandardComponentModule.class, VaadinSessionScopeModule.class})
 public class SystemAccountManagementPagesTest {
 

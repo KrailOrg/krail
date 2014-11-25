@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, UserOptionModule.class})
-public class DefaultJavaMapPatternSourceTest {
+public class DefaultPatternSourceTest {
 
     @Inject
     @SupportedLocales
@@ -38,10 +38,13 @@ public class DefaultJavaMapPatternSourceTest {
     @Mock
     VaadinService vaadinService;
 
-    DefaultJavaMapPatternSource source;
+    DefaultPatternSource source;
 
     @Inject
-    JavaMapPatternSourceWriter writer;
+    ClassBundleWriter writer;
+
+    @Inject
+    Map<String, BundleReader> bundleReaders;
 
 
     @Before
@@ -49,7 +52,7 @@ public class DefaultJavaMapPatternSourceTest {
         VaadinService.setCurrent(vaadinService);
         //essential to stop pollution from one test to another
         ResourceBundle.clearCache();
-        source = new DefaultJavaMapPatternSource(supportedLocales, userOption, writer);
+        source = new DefaultPatternSource(supportedLocales, userOption, bundleReaders);
     }
 
     /**
@@ -148,7 +151,7 @@ public class DefaultJavaMapPatternSourceTest {
             FileUtils.deleteQuietly(testOutDir);
         }
         File targetDir = new File(ResourceUtils.userTempDirectory(), "testOut/codeModel");
-        source.setWritePath(targetDir);
+        writer.setWritePath(targetDir);
 
         Set<Locale> locales = new HashSet<>();
         locales.add(Locale.GERMANY);
@@ -162,7 +165,7 @@ public class DefaultJavaMapPatternSourceTest {
         File targetFile_it = new File(targetDir, "Labels_it.java");
 
         //when
-        source.writeOut(LabelKey.class, locales, false);
+        source.writeOut(writer, LabelKey.class, locales, false);
         //then line 4 is the timestamp
         assertThat(FileTestUtil.compare(referenceFile, targetFile, 4)).isEqualTo(Optional.absent());
         assertThat(FileTestUtil.compare(referenceFile_de, targetFile_de, 4)).isEqualTo(Optional.absent());
@@ -178,7 +181,7 @@ public class DefaultJavaMapPatternSourceTest {
             FileUtils.deleteQuietly(testOutDir);
         }
         File targetDir = new File(ResourceUtils.userTempDirectory(), "testOut/codeModel");
-        source.setWritePath(targetDir);
+        writer.setWritePath(targetDir);
 
         Set<Locale> locales = new HashSet<>();
         locales.add(Locale.ITALY);
@@ -186,7 +189,7 @@ public class DefaultJavaMapPatternSourceTest {
         File targetFile_it = new File(targetDir, "Labels_it.java");
 
         //when
-        source.writeOut(LabelKey.class, locales, true);
+        source.writeOut(writer, LabelKey.class, locales, true);
         //then line 4 is the timestamp
         assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.absent());
     }
@@ -200,7 +203,7 @@ public class DefaultJavaMapPatternSourceTest {
             FileUtils.deleteQuietly(testOutDir);
         }
         File targetDir = new File(ResourceUtils.userTempDirectory(), "testOut/codeModel");
-        source.setWritePath(targetDir);
+        writer.setWritePath(targetDir);
         source.setGenerateStubWithName(false);
         Set<Locale> locales = new HashSet<>();
         locales.add(Locale.ITALY);
@@ -208,7 +211,7 @@ public class DefaultJavaMapPatternSourceTest {
         File targetFile_it = new File(targetDir, "Labels_it.java");
 
         //when
-        source.writeOut(LabelKey.class, locales, true);
+        source.writeOut(writer, LabelKey.class, locales, true);
         //then line 4 is the timestamp
         assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.absent());
     }
@@ -221,7 +224,7 @@ public class DefaultJavaMapPatternSourceTest {
             testOutDir.delete();
         }
         File targetDir = new File(ResourceUtils.userTempDirectory(), "testOut/codeModel");
-        source.setWritePath(targetDir);
+        writer.setWritePath(targetDir);
 
         Set<Locale> locales = new HashSet<>();
         locales.add(Locale.GERMANY);
@@ -235,7 +238,7 @@ public class DefaultJavaMapPatternSourceTest {
         File targetFile_it = new File(targetDir, "Labels_it.java");
 
         //when
-        source.writeOut(LabelKey.class, false);
+        source.writeOut(writer, LabelKey.class, false);
         //then line 4 is the timestamp
         assertThat(FileTestUtil.compare(referenceFile, targetFile, 4)).isEqualTo(Optional.absent());
         assertThat(FileTestUtil.compare(referenceFile_de, targetFile_de, 4)).isEqualTo(Optional.absent());
@@ -326,7 +329,7 @@ public class DefaultJavaMapPatternSourceTest {
     @Test
     public void mergeSource_otherPatternSource_overwrite_true() {
         //given
-        DefaultJavaMapPatternSource otherSource = new DefaultJavaMapPatternSource(supportedLocales, userOption, writer);
+        DefaultPatternSource otherSource = new DefaultPatternSource(supportedLocales, userOption, bundleReaders);
         otherSource.put(Locale.ITALY, TestLabelKey.Home, "New Home", true);
         otherSource.put(Locale.ITALY, TestLabelKey.Opt, "New Opt", true);
         Set<Locale> locales = new HashSet<>();
@@ -351,7 +354,7 @@ public class DefaultJavaMapPatternSourceTest {
     @Test
     public void mergeSource_otherPatternSource_overwrite_false() {
         //given
-        DefaultJavaMapPatternSource otherSource = new DefaultJavaMapPatternSource(supportedLocales, userOption, writer);
+        DefaultPatternSource otherSource = new DefaultPatternSource(supportedLocales, userOption, bundleReaders);
         otherSource.put(Locale.ITALY, TestLabelKey.Home, "New Home", true);
         otherSource.put(Locale.ITALY, TestLabelKey.Opt, "New Opt", true);
         otherSource.put(Locale.ITALY, TestLabelKey.Blank, "New Blank", true);

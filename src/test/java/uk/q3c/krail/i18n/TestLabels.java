@@ -19,7 +19,7 @@ package uk.q3c.krail.i18n;
  *
  * @author David Sowerby 9 Feb 2013
  */
-public class TestLabels extends MapResourceBundle<TestLabelKey> {
+public class TestLabels extends EnumResourceBundle<TestLabelKey> {
 
 
     public TestLabels() {

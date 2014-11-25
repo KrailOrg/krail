@@ -20,13 +20,13 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static com.google.inject.multibindings.Multibinder.newSetBinder;
 
 public class I18NModule extends AbstractModule {
 
-    private MapBinder<String, BundleLocator> bundleLocators;
-    private Multibinder<PatternSource> patternSources;
+    private MapBinder<String, BundleReader> bundleReaders;
     private Multibinder<String> registeredAnnotations;
     private Multibinder<String> registeredValueAnnotations;
     private Multibinder<Locale> supportedLocales;
@@ -36,8 +36,7 @@ public class I18NModule extends AbstractModule {
         registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
         registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
         supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
-        patternSources = newSetBinder(binder(), PatternSource.class, PatternSources.class);
-        bundleLocators = MapBinder.newMapBinder(binder(), String.class, BundleLocator.class);
+        bundleReaders = MapBinder.newMapBinder(binder(), String.class, BundleReader.class);
 
         registerAnnotation(I18N.class);
         registerAnnotation(I18NFlex.class);
@@ -48,15 +47,14 @@ public class I18NModule extends AbstractModule {
         bindCurrentLocale();
         bindDefaultLocale();
         bindTranslate();
-        bindPatternSources();
+        bindPatternSource();
 
 
         define();
     }
 
-    protected void bindPatternSources() {
-        bind(JavaMapPatternSource.class).to(DefaultJavaMapPatternSource.class);
-        bind(JavaMapPatternSourceWriter.class).to(DefaultJavaMapPatternSourceWriter.class);
+    protected void bindPatternSource() {
+        bind(PatternSource.class).to(DefaultPatternSource.class);
     }
 
 
@@ -85,18 +83,17 @@ public class I18NModule extends AbstractModule {
      * (Locale)}.  Make sure your supportedLocales includes your {@link DefaultLocale}
      * <p/>
      * The source of your I18N patterns (held in ResourceBundles) should be defined here using calls to {@link
-     * #addBundleCreator(String, Class)}.
+     * #addBundleReader(String, Class)}.
      * <p/>
-     * If you are using just a single module to define your {{@link BundleLocator} implementations,
+     * If you are using just a single module to define your {{@link BundleReader} implementations,
      * they will be processed in the order you specify them here.  However, Guice does not guarantee order if multiple
      * MapBinders are combined (through the use of multiple modules) - the order must then be explicitly specified
      * using {{@link #setDefaultPatternSourceOrder(String...)}} and/or {@link #setPatternSourceOrder(Class, String...)}
      */
     protected void define() {
         addSupportedLocale(Locale.UK);
-        addPatternSource(JavaMapPatternSource.class);
-        addBundleCreator("map", MapBundleLocator.class);
-        addBundleCreator("properties", PropertiesBundleLocator.class);
+        addBundleReader("map", ClassBundleReader.class);
+        //        addBundleReader("properties", PropertiesBundleReader.class);
     }
 
 
@@ -105,27 +102,21 @@ public class I18NModule extends AbstractModule {
                         .toInstance(locale);
     }
 
-    /**
-     * Add a source for I18NKey patterns. {@link DefaultTranslate} uses the first result returned, using the order
-     * patternSources are added, unless the order is modified by {@link #setDefaultPatternSourceOrder(String...)}
-     * and/or {@link #setPatternSourceOrder(Class, String...)}
-     * <p/>
-     * Note that if multiple Guice modules are used to combine sets of patter sources (which Guice can do
-     * automatically), the order is not guaranteed between modules.
-     *
-     * Other implementations of {@link Translate} may behave differently
-     *
-     * @param order
-     * @param patternSource
-     */
-    protected void addPatternSource(Class<? extends PatternSource> patternSource) {
-        patternSources.addBinding()
-                      .to(patternSource);
-    }
 
-    protected void addBundleCreator(String tag, Class<? extends BundleLocator> implementationClass) {
-        bundleLocators.addBinding(tag)
-                      .to(implementationClass);
+    /**
+     * Adds a bundle reader, identified by {@code format}
+     *
+     * @param format It would be neater for Krail just to use injected readers, and remove the need for the
+     * format property - but some {@link ResourceBundle} caching logic - including the construction of a cache key -
+     *               use the value of the format property, so it has been retained.  You can use any identifier
+     *               unique to the BundleReader implementations you are using - no assumptions are made about the
+     *               meaning of the format..
+     *
+     * @param implementationClass the class of the BundleReader implementation you want to use for this format value
+     */
+    protected void addBundleReader(String format, Class<? extends BundleReader> implementationClass) {
+        bundleReaders.addBinding(format)
+                     .to(implementationClass);
     }
 
     /**
@@ -165,7 +156,7 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * If you are using just a single module to define your {{@link BundleLocator} implementations, they will be
+     * If you are using just a single module to define your {{@link BundleReader} implementations, they will be
      * processed in the order they are added using {@link #addPatternSource(Integer, Class)}.
      * <p/>
      * However, Guice does not guarantee order if multiple MapBinders are combined (through the use of multiple

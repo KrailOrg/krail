@@ -21,14 +21,19 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * Krail allows for multiple sources for I18N patterns.  The order in which they are accessed in the search for a
- * translation is determined by {@link I18NModule} or its sub-class.  Implementations may include, for example, using
- * property files, Java files, database ... or any other method the Krail developer wishes to use.
- * <p/>
+ * The {@link PatternSource} builds on standard Java {@link ResourceBundle} functionality and is used by the {@link
+ * Translate} implementation to retrieve localisation patterns. Multiple sources of bundles may be required, for
+ * example, using property files, Java classes, database .. or any other method the Krail developer wishes to use.
+ * These are specified in the {@link I18NModule} or its sub-class, as is the order in which they are accessed in the
+ * search for a translation. <p/>
+ * In addition, {@link PatternSource} implementations support the generation of stubs to assist when building up
+ * localisation values, and the writing out of key-value pairs via a {@link BundleWriter}.
+ *
+ *
  * Supported locales are defined in the {@link I18NModule} or a sub-class of it.
  * <p/>
- * Implementations should assume that only valid locales will be passed to its methods (where valid means that a locale
- * has been included as a supported locale)
+ * Implementations should not assume that only valid locales will be passed to its methods (where valid means that a
+ * locale has been included as a supported locale)
  * <p/>
  * Created by David Sowerby on 04/11/14.
  */
@@ -98,8 +103,8 @@ public interface PatternSource {
      * @see #writeOut(Class, boolean)
      */
 
-    <E extends Enum<E>> void writeOut(Class<? extends I18NKey> keyClass, Set<Locale> locales, boolean allKeys) throws
-            IOException;
+    <E extends Enum<E>> void writeOut(BundleWriter<E> writer, Class<? extends I18NKey> keyClass, Set<Locale> locales,
+                                      boolean allKeys) throws IOException;
 
     /**
      * Write the key-value set(s) for all supported locales, to persistence.  Individual implementations will
@@ -119,7 +124,8 @@ public interface PatternSource {
      * @throws IOException
      * @see #writeOut(Class, Set, boolean)
      */
-    <E extends Enum<E>> void writeOut(Class<? extends I18NKey> keyClass, boolean allKeys) throws IOException;
+    <E extends Enum<E>> void writeOut(BundleWriter<E> writer, Class<? extends I18NKey> keyClass, boolean allKeys)
+            throws IOException;
 
     /**
      * Merge key-value pairs from {@code otherSource} into this source, for the given {@code locale}.  This method is

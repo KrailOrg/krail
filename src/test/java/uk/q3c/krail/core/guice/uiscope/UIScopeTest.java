@@ -14,14 +14,13 @@
 package uk.q3c.krail.core.guice.uiscope;
 
 import com.google.inject.*;
-import com.google.inject.multibindings.MapBinder;
-import com.google.inject.multibindings.Multibinder;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.*;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
+import fixture.TestI18NModule;
+import fixture.TestUIModule;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -29,35 +28,27 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import uk.q3c.krail.core.config.ApplicationConfigurationService;
-import uk.q3c.krail.core.config.DefaultApplicationConfigurationService;
-import uk.q3c.krail.core.config.IniFileConfig;
-import uk.q3c.krail.core.data.KrailDefaultConverterFactory;
+import uk.q3c.krail.core.config.ApplicationConfigurationModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScope;
-import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.core.navigate.*;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.sitemap.*;
-import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
-import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.services.AbstractServiceI18N;
 import uk.q3c.krail.core.services.ServicesMonitorModule;
 import uk.q3c.krail.core.shiro.*;
-import uk.q3c.krail.core.ui.*;
+import uk.q3c.krail.core.ui.BasicUI;
+import uk.q3c.krail.core.ui.BasicUIProvider;
+import uk.q3c.krail.core.ui.ScopedUI;
+import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserModule;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
-import uk.q3c.krail.core.view.*;
+import uk.q3c.krail.core.user.opt.UserOptionModule;
+import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.StandardComponentModule;
-import uk.q3c.krail.i18n.*;
+import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.ResourceUtils;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
-import static com.google.inject.multibindings.Multibinder.newSetBinder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -69,7 +60,7 @@ public class UIScopeTest {
     static ErrorHandler mockedErrorHandler = mock(ErrorHandler.class);
     static ConverterFactory mockedConverterFactory = mock(ConverterFactory.class);
     static Provider<UI> uiProvider;
-    static Map<String, Provider<UI>> uibinder;
+    //    static Map<String, Provider<UI>> uibinder;
     static Subject subject = mock(Subject.class);
     static VaadinService vaadinService;
     public int connectCount;
@@ -103,8 +94,10 @@ public class UIScopeTest {
 
         // when
 
-        injector = Guice.createInjector(new TestModule(), new UIScopeModule(), new ServicesMonitorModule(),
-                new UserModule(), new StandardComponentModule());
+        injector = Guice.createInjector(new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new
+                UIScopeModule(), new ServicesMonitorModule(), new UserOptionModule(), new UserModule(), new
+                StandardComponentModule(), new TestI18NModule(), new StandardShiroModule(), new ShiroVaadinModule(),
+                new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
         // navigator = injector.getInstance(Navigator.class);
@@ -191,76 +184,14 @@ public class UIScopeTest {
 
     static class TestModule extends AbstractModule {
 
-        // private final Scope vaadinSessionScope = mock(VaadinSessionScope.class);
         private final Scope vaadinSessionScope = new VaadinSessionScope();
-        private MapBinder<Integer, PatternSource> patternSources;
-        private Multibinder<String> registeredAnnotations;
-        private Multibinder<String> registeredValueAnnotations;
-        private Multibinder<Locale> supportedLocales;
 
-        @SuppressWarnings("unused")
         @Override
         protected void configure() {
-            registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
-            registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
-            patternSources = MapBinder.newMapBinder(binder(), Integer.class, PatternSource.class, PatternSources.class);
-
-            bind(ApplicationTitle.class).toInstance(new ApplicationTitle(LabelKey.Krail));
-
-            MapBinder<String, UI> uiProviders = MapBinder.newMapBinder(binder(), String.class, UI.class);
             bind(UIProvider.class).to(BasicUIProvider.class);
-            uiProviders.addBinding(BasicUI.class.getName())
-                       .to(BasicUI.class);
-            uibinder = new HashMap<>();
-            uibinder.put(BasicUI.class.getName(), uiProvider);
 
-            bind(PublicHomeView.class).to(DefaultPublicHomeView.class);
-            bind(Navigator.class).to(DefaultNavigator.class);
             bind(TestObject.class).in(UIScoped.class);
-            bind(ErrorView.class).to(DefaultErrorView.class);
-            bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
-            bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-            bind(ErrorHandler.class).to(KrailErrorHandler.class);
-            bind(ConverterFactory.class).to(KrailDefaultConverterFactory.class);
-            bind(UnauthenticatedExceptionHandler.class).to(DefaultUnauthenticatedExceptionHandler.class);
-            bind(UnauthorizedExceptionHandler.class).to(DefaultUnauthorizedExceptionHandler.class);
-            bind(Subject.class).toProvider(MockSubjectProvider.class);
-            bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-            bind(UserOption.class).to(DefaultUserOption.class);
-            bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-            bind(InvalidURIExceptionHandler.class).to(DefaultInvalidURIExceptionHandler.class);
             bind(VaadinSessionProvider.class).to(DefaultVaadinSessionProvider.class);
-            bind(SessionManager.class).to(VaadinSessionManager.class)
-                                      .asEagerSingleton();
-            bind(SubjectIdentifier.class).to(DefaultSubjectIdentifier.class);
-            bind(SitemapService.class).to(MockSitemapService.class);
-            bind(FileSitemapLoader.class).to(DefaultFileSitemapLoader.class);
-            bind(ApplicationConfigurationService.class).to(DefaultApplicationConfigurationService.class);
-            bind(CurrentLocale.class).to(DefaultCurrentLocale.class);
-            MapBinder<Integer, IniFileConfig> iniFileConfigs = MapBinder.newMapBinder(binder(), Integer.class,
-                    IniFileConfig.class);
-            MapBinder<String, KrailView> viewMapping = MapBinder.newMapBinder(binder(), String.class, KrailView.class);
-            bind(ScopedUIProvider.class).to(BasicUIProvider.class);
-            bindScope(VaadinSessionScoped.class, vaadinSessionScope);
-            bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-            bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
-            bind(UserSitemap.class).to(DefaultUserSitemap.class);
-            bind(UserOption.class).to(DefaultUserOption.class);
-            bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-            bind(UserSitemapSorters.class).to(DefaultUserSitemapSorters.class);
-            bind(Translate.class).to(DefaultTranslate.class);
-            bind(Locale.class).annotatedWith(DefaultLocale.class)
-                              .toInstance(Locale.UK);
-            registeredAnnotations.addBinding()
-                                 .toInstance(I18N.class.getName());
-            registeredValueAnnotations.addBinding()
-                                      .toInstance(I18NValue.class.getName());
-            supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
-            supportedLocales.addBinding()
-                            .toInstance(Locale.UK);
-            patternSources.addBinding(10)
-                          .to(DefaultJavaMapPatternSource.class);
-
         }
     }
 
