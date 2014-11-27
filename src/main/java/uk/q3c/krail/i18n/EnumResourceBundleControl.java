@@ -11,17 +11,25 @@ import java.util.*;
  * Created by David Sowerby on 18/11/14.
  */
 public class EnumResourceBundleControl extends ResourceBundle.Control {
-
     private Map<String, BundleReader> bundleReaders;
+    private Class<? extends Enum> enumKeyClass;
+    private String format;
 
     /**
-     *
-     *
-     * @param bundleReaders The readers to to attempt to read a bundle from
+     * @param bundleReaders
+     *         The readers to to attempt to read a bundle from
+     * @param bundleSourceOrderDefault
+     *         The default sort order for bundles sources specified by the {@link I18NModule} or its sub-class
+     * @param userOption
+     *         User options, properties used are specified by {@link #OptionProp}
      */
     @Inject
     public EnumResourceBundleControl(Map<String, BundleReader> bundleReaders) {
         this.bundleReaders = bundleReaders;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
 
     /**
@@ -40,20 +48,47 @@ public class EnumResourceBundleControl extends ResourceBundle.Control {
      * @throws IOException
      */
     @Override
-    public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
-            throws IllegalAccessException, InstantiationException, IOException {
+    public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean
+            reload) throws IllegalAccessException, InstantiationException, IOException {
 
 
         BundleReader reader = bundleReaders.get(format);
-        return reader.newBundle(baseName, locale, loader, reload);
+        return reader.newBundle(enumKeyClass, baseName, locale, loader, reload);
 
 
     }
 
+    /**
+     * This callback is used by {@link resourceBundle} to determine the available "formats" (sources in Krail terms)
+     * and the order in which they are called to provide a bundle.  The order used by Krail is the first found for a
+     * key class, in the following sequence<ol>
+     * <li> UserOption, property sourceOrder, for a specific key class</li>
+     * <li> UserOption, property sourceOrderDefault, for all key classes</li>
+     * <li> {@link #bundleSourceOrder}, which can be defined in the I18NModule, and applies to a specific key
+     * class</li>
+     * <li> {@link #bundleSourceOrderDefault}, which can be defined in the I18Module, and applies to all key
+     * classes</li>
+     * <li> the natural order of #bundleReaders keySet</li>
+     * <p>
+     * </ol>
+     *
+     * @param baseName
+     *
+     * @return
+     */
     @Override
     public List<String> getFormats(String baseName) {
-        return new ArrayList(bundleReaders.keySet());
+        List<String> list = new ArrayList<>();
+        list.add(format);return list;
     }
+
+
+    public <E extends Enum<E>> void setEnumKeyClass(Class<? extends Enum> enumKeyClass) {
+        this.enumKeyClass = enumKeyClass;
+    }
+
+
+
 
     //    needs reload
     //    :

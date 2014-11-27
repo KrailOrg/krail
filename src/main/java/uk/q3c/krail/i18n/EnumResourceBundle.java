@@ -28,10 +28,10 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
     public EnumResourceBundle(Class<E> keyClass) {
         this.keyClass = keyClass;
         this.map = new EnumMap<E, String>(keyClass);
-        loadMap();
+        loadMap((Class<Enum<?>>) keyClass);
     }
 
-    protected abstract void loadMap();
+    protected abstract void loadMap(Class<Enum<?>> enumKeyClass);
 
     @Override
     public Enumeration<String> getKeys() {
@@ -103,7 +103,7 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
 
     public void reset() {
         map.clear();
-        loadMap();
+        loadMap((Class<Enum<?>>) keyClass);
         log.debug("Values reset from persistence");
     }
 

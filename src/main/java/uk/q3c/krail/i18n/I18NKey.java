@@ -14,4 +14,11 @@ package uk.q3c.krail.i18n;
 
 public interface I18NKey<E extends EnumResourceBundle<?>> {
 
+    default String baseName() {
+        return this.getClass()
+                   .getSimpleName()
+                   .substring(0, getClass().getSimpleName()
+                                           .length() - 3);
+    }
+
 }

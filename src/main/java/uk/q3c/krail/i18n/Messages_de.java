@@ -26,7 +26,7 @@ package uk.q3c.krail.i18n;
 public class Messages_de extends Messages {
 
     @Override
-    protected void loadMap() {
+    protected void loadMap(Class<Enum<?>> enumKeyClass) {
         put(MessageKey.invalidURI, "{0} ist keine gültige Seite");
         put(MessageKey.Service_not_Started, "Der Service {0} kann nicht benutzt werden bis er gestartet ist");
         put(MessageKey.LocaleChange, "Sprache und Land nach {0} geändert");

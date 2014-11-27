@@ -13,20 +13,21 @@
 package uk.q3c.krail.i18n;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static com.google.inject.multibindings.Multibinder.newSetBinder;
 
 public class I18NModule extends AbstractModule {
 
     private MapBinder<String, BundleReader> bundleReaders;
+    private MapBinder<String, Set<String>> bundleSourceOrder;
+    private Multibinder<String> bundleSourceOrderDefault;
     private Multibinder<String> registeredAnnotations;
     private Multibinder<String> registeredValueAnnotations;
     private Multibinder<Locale> supportedLocales;
@@ -36,7 +37,15 @@ public class I18NModule extends AbstractModule {
         registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
         registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
         supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
+        bundleSourceOrderDefault = newSetBinder(binder(), String.class, BundleSourceOrderDefault.class);
         bundleReaders = MapBinder.newMapBinder(binder(), String.class, BundleReader.class);
+
+        TypeLiteral<Set<String>> setString = new TypeLiteral<Set<String>>() {
+        };
+        TypeLiteral<String> keyClass = new TypeLiteral<String>() {
+        };
+
+        bundleSourceOrder = MapBinder.newMapBinder(binder(), keyClass, setString, BundleSourceOrder.class);
 
         registerAnnotation(I18N.class);
         registerAnnotation(I18NFlex.class);
@@ -88,12 +97,12 @@ public class I18NModule extends AbstractModule {
      * If you are using just a single module to define your {{@link BundleReader} implementations,
      * they will be processed in the order you specify them here.  However, Guice does not guarantee order if multiple
      * MapBinders are combined (through the use of multiple modules) - the order must then be explicitly specified
-     * using {{@link #setDefaultPatternSourceOrder(String...)}} and/or {@link #setPatternSourceOrder(Class, String...)}
+     * using {{@link #setDefaultBundleSourceOrder(String...)}} and/or {@link #setBundleSourceOrder(Class, String...)}
      */
     protected void define() {
         addSupportedLocale(Locale.UK);
         addBundleReader("map", ClassBundleReader.class);
-        //        addBundleReader("properties", PropertiesBundleReader.class);
+        addBundleReader("properties", PropertiesBundleReader.class);
     }
 
 
@@ -106,13 +115,15 @@ public class I18NModule extends AbstractModule {
     /**
      * Adds a bundle reader, identified by {@code format}
      *
-     * @param format It would be neater for Krail just to use injected readers, and remove the need for the
-     * format property - but some {@link ResourceBundle} caching logic - including the construction of a cache key -
-     *               use the value of the format property, so it has been retained.  You can use any identifier
-     *               unique to the BundleReader implementations you are using - no assumptions are made about the
-     *               meaning of the format..
-     *
-     * @param implementationClass the class of the BundleReader implementation you want to use for this format value
+     * @param format
+     *         It would be neater for Krail just to use injected readers, and remove the need for the
+     *         format property - but some {@link ResourceBundle} caching logic - including the construction of a cache
+     *         key -
+     *         use the value of the format property, so it has been retained.  You can use any identifier
+     *         unique to the BundleReader implementations you are using - no assumptions are made about the
+     *         meaning of the format..
+     * @param implementationClass
+     *         the class of the BundleReader implementation you want to use for this format value
      */
     protected void addBundleReader(String format, Class<? extends BundleReader> implementationClass) {
         bundleReaders.addBinding(format)
@@ -156,34 +167,50 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * If you are using just a single module to define your {{@link BundleReader} implementations, they will be
-     * processed in the order they are added using {@link #addPatternSource(Integer, Class)}.
+     * This method overrides the order of processing sources when looking for a resource bundle.  If this method is not
+     * called, sources will be processed in the order they are added using {@link #addPatternSource(Integer, Class)}.
+     * <p/>
+     * If you are using just a single module to define your {{@link BundleReader} implementations, there would normally
+     * be no need to use this method.
      * <p/>
      * However, Guice does not guarantee order if multiple MapBinders are combined (through the use of multiple
-     * modules) - the order must then be explicitly specified using {{@link #setDefaultPatternSourceOrder(String...)
-     * }} and/or {@link #setPatternSourceOrder(Class, String...)}.
+     * modules) - the order must then be explicitly specified using this method.
      * <p/>
-     * This method applies the order specified in {@code tags} to ALL key classes, unless overridden by {{@link
-     * #setPatternSourceOrder(Class, String...)}}.
+     * This order is used for ALL key classes, unless overridden by {{@link #setBundleSourceOrder(Class, String...)}},
+     * or by UserOption in {@link DefaultPatternSource}
      * <p/>
-     * If no default is specified then the order that PatternSources have been added to
+     * See {@link EnumResourceBundleControl#getFormats(String)} for a full description of the logic of selecting the
+     * order.
+     * <p/>
+     * If you have only one source - you definitely won't need this method
      */
 
-    protected void setDefaultPatternSourceOrder(String... tags) {
-
+    protected void setDefaultBundleSourceOrder(String... tags) {
+        for (String tag : tags) {
+            bundleSourceOrderDefault.addBinding()
+                                    .toInstance(tag);
+        }
     }
 
     /**
-     * This method applies the order specified in {@code tags} to for {@code keyClass} only.  This overrides the
-     * default
-     * setting ALL key classes, unless overridden by {{@link
-     * #setPatternSourceOrder(Class, String...)}}
+     * {@link #setDefaultBundleSourceOrder(String...)} applies to all key classes, and is usually only needed when
+     * combining sources from different modules.
+     * <p/>
+     * See {@link EnumResourceBundleControl#getFormats(String)} for a full description of the logic of selecting the
+     * order.
+     * <p/>
+     * If you have only one source - you definitely won't need this method
      *
-     * @param keyClass
+     * @param baseName
+     *         the ResourceBundle 'baseName', for example "Labels"
      * @param tags
+     *         a set of tags, (or 'formats' in resourceBundle terms).  These should be the all or a subset of the {@link
+     *         #bundleReaders} key set
      */
 
-    protected void setPatternSourceOrder(Class<? extends I18NKey> keyClass, String... tags) {
-
+    protected void setBundleSourceOrder(String baseName, String... tags) {
+        Set<String> tagSet = new LinkedHashSet<>(Arrays.asList(tags));
+        bundleSourceOrder.addBinding(baseName)
+                         .toInstance(tagSet);
     }
 }

@@ -34,7 +34,7 @@ public class StandardPageLabels extends EnumResourceBundle<StandardPageKey> {
     }
 
     @Override
-    protected void loadMap() {
+    protected void loadMap(Class<Enum<?>> enumKeyClass) {
 
     }
 

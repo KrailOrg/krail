@@ -29,7 +29,7 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
     }
 
     @Override
-    protected void loadMap() {
+    protected void loadMap(Class<Enum<?>> enumKeyClass) {
         put(DescriptionKey.Last_Name, "the last name or family name");
         put(DescriptionKey.Last_Name, "the last name or family name");
         put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok");

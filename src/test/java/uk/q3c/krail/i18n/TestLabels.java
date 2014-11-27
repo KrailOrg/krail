@@ -27,7 +27,7 @@ public class TestLabels extends EnumResourceBundle<TestLabelKey> {
     }
 
     @Override
-    protected void loadMap() {
+    protected void loadMap(Class<Enum<?>> enumKeyClass) {
         put(TestLabelKey.Home, "home");
         put(TestLabelKey.pattern_with_embedded_key, "Your {0} request has been refused");
         put(TestLabelKey.Transfers, "transfers");

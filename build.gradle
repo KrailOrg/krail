@@ -8,11 +8,13 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-//build for main V7 library project
+//build for main Krail project
 
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
+
+sourceCompatibility = '1.8'
 
 version = '0.7.1'
 

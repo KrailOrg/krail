@@ -42,7 +42,11 @@ public class ResourceUtils {
         if (VaadinService.getCurrent() != null) {
             File baseDir = VaadinService.getCurrent()
                                         .getBaseDirectory();
-            log.info("Application core directory (from VaadinService) is {}", baseDir);
+            if (baseDir != null) {
+                log.info("Application base directory (from VaadinService) is {}", baseDir.getAbsolutePath());
+            } else {
+                log.warn("Application base directory has not been set");
+            }
             return baseDir;
         }
         throw new IllegalStateException("There is no current VaadinService");

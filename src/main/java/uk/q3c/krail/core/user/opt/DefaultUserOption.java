@@ -41,7 +41,12 @@ public class DefaultUserOption implements UserOption {
         this.userOptionStore = userOptionStore;
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, String> getOptionAsMap(String optionGroup, Enum<?> option, Map<String, String> defaultValue) {
+        return getOptionAsMap(optionGroup, option.name(), defaultValue);
+    }
+
+    @Override
     public Map<String, String> getOptionAsMap(String optionGroup, String option, Map<String, String> defaultValue) {
         Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
         if (optionValue == null) {
@@ -50,7 +55,12 @@ public class DefaultUserOption implements UserOption {
         return (Map<String, String>) optionValue;
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+    public List<String> getOptionAsList(String optionGroup, Enum<?> option, List<String> defaultValue) {
+        return getOptionAsList(optionGroup, option.name(), defaultValue);
+    }
+
+    @Override
     public List<String> getOptionAsList(String optionGroup, String option, List<String> defaultValue) {
         Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
         if (optionValue == null) {
@@ -60,7 +70,7 @@ public class DefaultUserOption implements UserOption {
     }
 
     @Override
-    public int getOptionAsInt(String optionGroup, UserOptionProperty option, int defaultValue) {
+    public int getOptionAsInt(String optionGroup, Enum<?> option, int defaultValue) {
         return getOptionAsInt(optionGroup, option.name(), defaultValue);
     }
 
@@ -74,7 +84,7 @@ public class DefaultUserOption implements UserOption {
     }
 
     @Override
-    public String getOptionAsString(String optionGroup, UserOptionProperty option, String defaultValue) {
+    public String getOptionAsString(String optionGroup, Enum<?> option, String defaultValue) {
         return getOptionAsString(optionGroup, option.name(), defaultValue);
     }
 
@@ -88,7 +98,7 @@ public class DefaultUserOption implements UserOption {
     }
 
     @Override
-    public DateTime getOptionAsDateTime(String optionGroup, UserOptionProperty option, DateTime defaultValue) {
+    public DateTime getOptionAsDateTime(String optionGroup, Enum<?> option, DateTime defaultValue) {
         return getOptionAsDateTime(optionGroup, option.name(), defaultValue);
     }
 
@@ -102,7 +112,7 @@ public class DefaultUserOption implements UserOption {
     }
 
     @Override
-    public double getOptionAsDouble(String optionGroup, UserOptionProperty option, double defaultValue) {
+    public double getOptionAsDouble(String optionGroup, Enum<?> option, double defaultValue) {
         return getOptionAsDouble(optionGroup, option.name(), defaultValue);
     }
 
@@ -116,7 +126,7 @@ public class DefaultUserOption implements UserOption {
     }
 
     @Override
-    public boolean getOptionAsBoolean(String optionGroup, UserOptionProperty option, boolean defaultValue) {
+    public boolean getOptionAsBoolean(String optionGroup, Enum<?> option, boolean defaultValue) {
         return getOptionAsBoolean(optionGroup, option.name(), defaultValue);
     }
 
@@ -139,7 +149,7 @@ public class DefaultUserOption implements UserOption {
     }
 
     @Override
-    public Enum<?> getOptionAsEnum(String optionGroup, UserOptionProperty option, Enum<?> defaultValue) {
+    public Enum<?> getOptionAsEnum(String optionGroup, Enum<?> option, Enum<?> defaultValue) {
         Object optionValue = userOptionStore.getOptionValue(optionGroup, option.name());
         if (optionValue == null) {
             return defaultValue;
@@ -148,7 +158,7 @@ public class DefaultUserOption implements UserOption {
     }
 
     @Override
-    public void setOption(String optionGroup, UserOptionProperty option, Object value) {
+    public void setOption(String optionGroup, Enum<?> option, Object value) {
         setOption(optionGroup, option.name(), value);
     }
 
@@ -156,6 +166,7 @@ public class DefaultUserOption implements UserOption {
     public void setOption(String optionGroup, String option, Object value) {
         userOptionStore.setOptionValue(optionGroup, option, value);
     }
+
 
     @Override
     public void clear() {

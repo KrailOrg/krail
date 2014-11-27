@@ -6,7 +6,6 @@ import org.apache.commons.lang3.ClassUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +17,7 @@ import java.util.Map;
 /**
  * Created by David Sowerby on 25/11/14.
  */
-public class ClassBundleWriter<E extends Enum<E>> implements BundleWriter<E> {
+public class ClassBundleWriter<E extends Enum<E>> extends BundleWriterBase<E> {
 
     public String classJavaDoc;
     private Class<?> clazz;
@@ -27,15 +26,15 @@ public class ClassBundleWriter<E extends Enum<E>> implements BundleWriter<E> {
     private Class<?> keyClass;
     private String pkg;
     private Class<?> superClass;
-    private UserOption userOption;
 
     @Inject
     protected ClassBundleWriter(UserOption userOption) {
-        this.userOption = userOption;
+        super(userOption);
     }
 
     @Override
     public void setBundle(EnumResourceBundle<E> bundle) {
+        super.setBundle(bundle);
         this.clazz = bundle.getClass();
         this.keyClass = bundle.getKeyClass();
         this.superClass = clazz.getSuperclass();
@@ -98,18 +97,6 @@ public class ClassBundleWriter<E extends Enum<E>> implements BundleWriter<E> {
         FileUtils.writeStringToFile(file, buf.toString());
     }
 
-    public File getWritePath() {
-        String defaultPath = ResourceUtils.userTempDirectory()
-                                          .getAbsolutePath();
-        String option = userOption.getOptionAsString(getClass().getSimpleName(), OptionProp.writePath.name(),
-                defaultPath);
-        return new File(option);
-    }
-
-    public void setWritePath(File path) {
-        userOption.setOption(getClass().getSimpleName(), OptionProp.writePath.name(), path.getAbsolutePath());
-    }
-
     private String genericSupperClass() {
         if (superClass.equals(EnumResourceBundle.class)) {
             return superClass.getSimpleName() + "<" + keyClass.getSimpleName() + ">";
@@ -118,7 +105,4 @@ public class ClassBundleWriter<E extends Enum<E>> implements BundleWriter<E> {
 
     }
 
-    private enum OptionProp {
-        writePath
-    }
 }
