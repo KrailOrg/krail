@@ -57,21 +57,20 @@ public class DefaultPatternSource implements PatternSource {
 
 
     /**
-     * Returns the translated String pattern for {@code key}, for {@code locale}, or {@link Optional.isAbsent()} if
-     * there is no pattern for the key.
+     * Returns the translated String pattern for {@code key}, for {@code locale}. Returns {@link Optional.isAbsent()}
+     * if there is no pattern for the key, or if the value for the key an empty String.
      * <p>
      * Each bundle source relevant to {@code key} is tried, as specified by {@link #bundleSourceOrder(I18NKey)}
      * <p>
-     * Available sources are determined by bindings in the I18NModule or its sub-class
-     * <p>
+     *
      *
      * @param key
      *         the key to look up
      * @param locale
      *         the locale the pattern is required for
      *
-     * @return the String pattern for {@code key}, or {@link Optional.isAbsent()} if there is no pattern for the key in
-     * any of the available sources
+     * @return Returns the translated String pattern for {@code key}, for {@code locale}. Returns {@link Optional
+     * .isAbsent()} if there is no pattern for the key, or if the value for the key an empty String.
      */
     @Override
     public <E extends Enum<E> & I18NKey> Optional<String> retrievePattern(E key, Locale locale) {
@@ -82,13 +81,14 @@ public class DefaultPatternSource implements PatternSource {
         for (String source : bundleSourceOrder(key)) {
             EnumResourceBundle<E> bundle = getBundle(source, key, locale);
             String pattern = bundle.getValue((E) key);
-            if (!StringUtils.isEmpty(pattern)) {
+            if (pattern!=null) {
                 result = Optional.of(pattern);
                 break;
             } else {
                 if (getAutoStub()) {
                     // this call does not overwrite an existing entry
                     generateStub(source, key, locale);
+                    return Optional.of(bundle.getValue((E) key));
                 }
             }
         }

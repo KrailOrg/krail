@@ -61,7 +61,7 @@ public class DefaultPatternSourceTest2 {
         Set<String> tags = new LinkedHashSet<>();
         tags.add("class");
         tags.add("boots");
-        bundleSourceOrder.put("TestLabels", tags);
+        bundleSourceOrder.put(TestLabelKey.Blank.bundleName(), tags);
         createPatternSource(TestLabelKey.class);
         //when
 
@@ -81,7 +81,7 @@ public class DefaultPatternSourceTest2 {
         assertThat(orderTestLabelKey).containsExactly("eat", "hat");
 
         //given user option changes for a single bundleName
-        patternSource.setOptionSourceOrder("TestLabels", "fat", "cat");
+        patternSource.setOptionSourceOrder(TestLabelKey.Blank.bundleName(), "fat", "cat");
         //when
         orderAny = patternSource.bundleSourceOrder(LabelKey._nullkey_);
         orderTestLabelKey = patternSource.bundleSourceOrder(TestLabelKey.Blank);

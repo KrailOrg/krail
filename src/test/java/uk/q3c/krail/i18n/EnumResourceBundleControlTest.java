@@ -12,7 +12,6 @@ import uk.q3c.krail.core.user.opt.UserOptionModule;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, UserOptionModule.class})
 public class EnumResourceBundleControlTest {
@@ -29,54 +28,16 @@ public class EnumResourceBundleControlTest {
 
     @Test
     public void getFormats() {
-        //given we just have the readers
-        bundleReaders.put("class", new ClassBundleReader());
-        bundleReaders.put("props", new PropertiesBundleReader());
-        //when
+
+        //given
         createControl(TestLabelKey.class);
-        List<String> orderAny = bundleControl.getFormats("any");
-        //then
-        assertThat(orderAny).containsExactly("class", "props");
+        bundleControl.setSource("wiggly");
 
-        //given we specify a default order in I18NModule
-        bundleSourceOrderDefault.add("props");
-        bundleSourceOrderDefault.add("class");
-        createControl(TestLabelKey.class);
         //when
-        orderAny = bundleControl.getFormats("any");
-        //then
-        assertThat(orderAny).containsExactly("props", "class");
+        List<String> result = bundleControl.getFormats(TestLabelKey.Blank.bundleName());
 
-        //given we change the order for just one bundleName
-        Set<String> tags = new LinkedHashSet<>();
-        tags.add("class");
-        tags.add("boots");
-        bundleSourceOrder.put("TestLabels", tags);
-        createControl(TestLabelKey.class);
-        //when
-        orderAny = bundleControl.getFormats("any");
-        List<String> orderTestLabelKey = bundleControl.getFormats("TestLabels");
         //then
-        assertThat(orderAny).containsExactly("props", "class");
-        assertThat(orderTestLabelKey).containsExactly("class", "boots");
-
-        //given user option changes the default
-        //        bundleControl.setOptionSourceOrderDefault("eat", "hat");
-        //when
-        orderAny = bundleControl.getFormats("any");
-        orderTestLabelKey = bundleControl.getFormats("TestLabels");
-        //then
-        assertThat(orderAny).containsExactly("eat", "hat");
-        assertThat(orderTestLabelKey).containsExactly("eat", "hat");
-
-        //given user option changes for a single bundleName
-        //        bundleControl.setOptionSourceOrder("TestLabels", "fat", "cat");
-        //when
-        orderAny = bundleControl.getFormats("any");
-        orderTestLabelKey = bundleControl.getFormats("TestLabels");
-        //then
-        assertThat(orderAny).containsExactly("eat", "hat");
-        assertThat(orderTestLabelKey).containsExactly("fat", "cat");
+        assertThat(result).containsExactly("wiggly");
 
     }
 
@@ -86,23 +47,4 @@ public class EnumResourceBundleControlTest {
         bundleControl.setEnumKeyClass(keyClass);
     }
 
-    @Test
-    public void getSourceOrder() {
-        //given
-
-        //when
-
-        //then
-        assertThat(true).isFalse();
-    }
-
-    @Test
-    public void getSourceOrderDefault() {
-        //given
-
-        //when
-
-        //then
-        assertThat(true).isFalse();
-    }
 }

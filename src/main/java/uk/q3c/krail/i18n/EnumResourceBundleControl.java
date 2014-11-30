@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * Used with {@link ResourceBundle} to make the selection of I18N sources configurable through Guice.
- * <p/>
+ * <p>
  * Created by David Sowerby on 18/11/14.
  */
 public class EnumResourceBundleControl extends ResourceBundle.Control {
@@ -59,16 +59,9 @@ public class EnumResourceBundleControl extends ResourceBundle.Control {
     }
 
     /**
-     * This callback is used by {@link resourceBundle} to determine the available "formats" (sources in Krail terms)
-     * and the order in which they are called to provide a bundle.  The order used by Krail is the first found for a
-     * key class, in the following sequence<ol>
-     * <li> UserOption, property sourceOrder, for a specific key class</li>
-     * <li> UserOption, property sourceOrderDefault, for all key classes</li>
-     * <li> {@link #bundleSourceOrder}, which can be defined in the I18NModule, and applies to a specific key
-     * class</li>
-     * <li> {@link #bundleSourceOrderDefault}, which can be defined in the I18Module, and applies to all key
-     * classes</li>
-     * <li> the natural order of #bundleReaders keySet</li>
+     * This callback is used by {@link ResourceBundle} to determine the available "formats" (sources in Krail terms)
+     * and the order in which they are called to provide a bundle.  However, Krail overrides this behavour by using
+     * {@link PatternSource}, and the "formats" returned is always a single Krail source.
      * <p>
      * </ol>
      *
@@ -79,15 +72,14 @@ public class EnumResourceBundleControl extends ResourceBundle.Control {
     @Override
     public List<String> getFormats(String baseName) {
         List<String> list = new ArrayList<>();
-        list.add(format);return list;
+        list.add(format);
+        return list;
     }
 
 
     public <E extends Enum<E>> void setEnumKeyClass(Class<? extends Enum> enumKeyClass) {
         this.enumKeyClass = enumKeyClass;
     }
-
-
 
 
     //    needs reload

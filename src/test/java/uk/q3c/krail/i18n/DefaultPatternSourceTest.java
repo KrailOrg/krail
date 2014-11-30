@@ -267,30 +267,24 @@ public class DefaultPatternSourceTest {
         source.setKeyValue("class", TestLabelKey.Blank, Locale.ITALY, "New Blank");
         source.setKeyValue("class", TestLabelKey.Opt, Locale.ITALY, "New Opt");
 
-        String pattern1 = source.retrievePattern(TestLabelKey.Home, Locale.ITALY)
-                                .get();
-        String pattern2 = source.retrievePattern(TestLabelKey.Blank, Locale.ITALY)
-                                .get();
-        String pattern3 = source.retrievePattern(TestLabelKey.Opt, Locale.ITALY)
-                                .get();
+        Optional<String> pattern1 = source.retrievePattern(TestLabelKey.Home, Locale.ITALY);
+        Optional<String> pattern2 = source.retrievePattern(TestLabelKey.Blank, Locale.ITALY);
+        Optional<String> pattern3 = source.retrievePattern(TestLabelKey.Opt, Locale.ITALY);
         //then new values set
-        assertThat(pattern1).isEqualTo("New Home");
-        assertThat(pattern2).isEqualTo("New Blank");
-        assertThat(pattern3).isEqualTo("New Opt");
+        assertThat(pattern1.get()).isEqualTo("New Home");
+        assertThat(pattern2.get()).isEqualTo("New Blank");
+        assertThat(pattern3.get()).isEqualTo("New Opt");
 
         //when reset
         source.reset("class", TestLabelKey.Yes);
-        pattern1 = source.retrievePattern(TestLabelKey.Home, Locale.ITALY)
-                         .get();
-        pattern2 = source.retrievePattern(TestLabelKey.Blank, Locale.ITALY)
-                         .get();
-        pattern3 = source.retrievePattern(TestLabelKey.Opt, Locale.ITALY)
-                         .get();
+        pattern1 = source.retrievePattern(TestLabelKey.Home, Locale.ITALY);
+        pattern2 = source.retrievePattern(TestLabelKey.Blank, Locale.ITALY);
+        pattern3 = source.retrievePattern(TestLabelKey.Opt, Locale.ITALY);
 
         //then original values set
-        assertThat(pattern1).isEqualTo("it_Home");
-        assertThat(pattern2).isEqualTo("");
-        assertThat(pattern3).isEqualTo("option");  // default because now there is no key in italian
+        assertThat(pattern1.get()).isEqualTo("it_Home");
+        assertThat(pattern2.get()).isEqualTo("");
+        assertThat(pattern3.get()).isEqualTo("option");  // default because now there is no key in italian
 
 
     }

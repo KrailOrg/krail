@@ -222,7 +222,7 @@ public class BasicForestTest {
         // when
         addAllNodes();
         // then
-        assertThat(tree.toString()).isEqualTo("\n-0\n--2\n---2.1\n---2.2\n--1\n---1.2\n----1.2.1\n---1.1\n----1.1.1\n");
+        assertThat(tree.toString()).isEqualTo("\n-0\n--1\n---1.1\n----1.1.1\n---1.2\n----1.2.1\n--2\n---2.1\n---2.2\n");
     }
 
     @Test
@@ -234,7 +234,7 @@ public class BasicForestTest {
         tree.text(s0, buf, 0);
         String s = buf.toString();
         // then
-        assertThat(s).isEqualTo("-0\n--2\n---2.1\n---2.2\n--1\n---1.2\n----1.2.1\n---1.1\n----1.1.1\n");
+        assertThat(s).isEqualTo("-0\n--1\n---1.1\n----1.1.1\n---1.2\n----1.2.1\n--2\n---2.1\n---2.2\n");
     }
 
     @Test

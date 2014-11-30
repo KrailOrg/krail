@@ -14,6 +14,7 @@
 package uk.q3c.util;
 
 import edu.uci.ics.jung.graph.DelegateForest;
+import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Tree;
 import org.apache.commons.lang3.StringUtils;
@@ -23,12 +24,19 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * A very simple semantic wrapper for the <a href=http://jung.sourceforge.net/site/index.html> Jung</a> library, to use
- * the more familiar language of trees. Underneath is it a proper implementation of a graph - there are many methods
- * not
- * exposed through this wrapper, but you can access those via {@link #getGraph()}
+ * A very simple semantic wrapper for the <a href=http://jung.sourceforge.net/site/index.html> Jung</a> library, to
+ * use the more familiar language of trees. Underneath is it a proper implementation of a graph - there are many
+ * methods not exposed through this wrapper, but you can access those via {@link #getGraph()}.  Uses a {@link
+ * DirectedOrderedSparseMultigraph} to maintain insertion order
  * <p/>
- * The E (edge) parameter for the underlying graph is a simple Integer
+ * The E (edge) parameter for the underlying graph is a simple Integer.
+ *
+ * Originally this implementation used a default DelegateForest which in turn uses a DirectedSparseGraph - this uses
+ * hash maps, so it would appear that a different hash algorithm is being in Java 8 to Java 7 used, yielding a
+ * different order for this test case.
+ * BasicForest previously made no commitment to maintaining insertion order; however, the failure of this case under
+ * Java 8 suggests that it might be expected to do so.  The implementation has therefore been changed to use a
+ * {@link DirectedOrderedSparseMultigraph} (this uses LinkedHashMaps) to maintain insertion order.
  *
  * @param <V>
  *         the type of object to be contained (the 'node'). Must implement equals
@@ -39,7 +47,7 @@ public class BasicForest<V> {
     private Forest<V, Integer> graph;
 
     public BasicForest() {
-        graph = new DelegateForest<V, Integer>();
+        graph = new DelegateForest<V, Integer>(new DirectedOrderedSparseMultigraph<>());
     }
 
     public boolean hasChild(V parentNode, V childNode) {

@@ -27,7 +27,7 @@ public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWrite
 
     @Override
     public void setBundle(EnumResourceBundle<E> bundle) {
-        this.setBundle(bundle);
+        this.bundle = bundle;
     }
 
     /**
