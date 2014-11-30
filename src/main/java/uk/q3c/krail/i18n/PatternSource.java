@@ -16,7 +16,7 @@ package uk.q3c.krail.i18n;
 import com.google.common.base.Optional;
 
 import java.io.IOException;
-import java.util.EnumMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -50,7 +50,7 @@ public interface PatternSource {
      *
      * @return the String pattern for {@code key}, or {@link Optional.isAbsent()} if there is no pattern for the key
      */
-    <E extends Enum<E>> Optional<String> retrievePattern(I18NKey key, Locale locale);
+    <E extends Enum<E> & I18NKey> Optional<String> retrievePattern(E key, Locale locale);
 
     /**
      * Generates an implementation specific stub for the key - value pair.  This is typically used as part of the
@@ -62,7 +62,7 @@ public interface PatternSource {
      * @param locale
      *         the locale to generate the stub for
      */
-    <E extends Enum<E>> void generateStub(I18NKey key, Locale locale);
+    <E extends Enum<E> & I18NKey> void generateStub(String source, E key, Locale locale);
 
     /**
      * Generates implementation specific stubs for all the {@code locales}.  For some implementations this may be more
@@ -74,7 +74,7 @@ public interface PatternSource {
      * @param locales
      *         set of Locale instances for which to generate a stub
      */
-    <E extends Enum<E>> void generateStub(I18NKey key, Set<Locale> locales);
+    <E extends Enum<E> & I18NKey> void generateStub(String source, E key, Set<Locale> locales);
 
     /**
      * Generates implementation specific stubs for all the supported locales{@code locales}.
@@ -82,7 +82,7 @@ public interface PatternSource {
      * @param key
      *         the the stub(s) will be for
      */
-    <E extends Enum<E>> void generateStub(I18NKey key);
+    <E extends Enum<E> & I18NKey> void generateStub(String source, E key);
 
     /**
      * Write the key-value set(s) to persistence, for all {@code locales}.  Individual implementations will provide
@@ -103,7 +103,7 @@ public interface PatternSource {
      * @see #writeOut(Class, boolean)
      */
 
-    <E extends Enum<E>> void writeOut(BundleWriter<E> writer, Class<? extends I18NKey> keyClass, Set<Locale> locales,
+    <E extends Enum<E> & I18NKey> void writeOut(String source, BundleWriter<E> writer, E sampleKey, Set<Locale> locales,
                                       boolean allKeys) throws IOException;
 
     /**
@@ -124,7 +124,7 @@ public interface PatternSource {
      * @throws IOException
      * @see #writeOut(Class, Set, boolean)
      */
-    <E extends Enum<E>> void writeOut(BundleWriter<E> writer, Class<? extends I18NKey> keyClass, boolean allKeys)
+    <E extends Enum<E> & I18NKey> void writeOut(String source, BundleWriter<E> writer, E sampleKey, boolean allKeys)
             throws IOException;
 
     /**
@@ -141,47 +141,44 @@ public interface PatternSource {
      *
      * @see #mergeSource(Set, PatternSource)
      */
-    <E extends Enum<E>> void mergeSource(Locale locale, EnumMap<E, String> otherSource, boolean overwrite);
+    public <E extends Enum<E> & I18NKey> void mergeSources(E sampleKey, Set<Locale> locales, boolean overwrite,
+                                                           String... sources);
 
-    /**
-     * Merge key-value pairs for {@code keyClass} from {@code otherSource} into this source, for the given {@code
-     * locales}.
-     * <p/>
-     * If {@code overwrite} is true, all values are transferred from otherSource to this source,
-     * overwriting any values that are already in this source. <p/> If {@code overwrite} is false, values from {@code
-     * otherSource} are only written to this source, if the same key in {@code thisSource} is missing or has an empty
-     * value.
-     *
-     * @param keyClass
-     *         the I18NKeys to process
-     * @param locales
-     *         the locales to process
-     * @param otherSource
-     *         the other source of key-value mappings
-     * @param overwrite
-     *         if true, overwrite the key-value pairs in this source; if add keys which are missing from this source or
-     *         overwrite those with an empty value.
-     *
-     * @see #mergeSource(Locale, EnumMap, boolean)
-     */
-    <E extends Enum<E>> void mergeSource(Class<? extends I18NKey> keyClass, Set<Locale> locales, PatternSource
-            otherSource, boolean overwrite);
 
 
     /**
      * Set the value for a key, for a given Locale
      */
-    <E extends Enum<E>> void setKeyValue(I18NKey key, Locale locale, String value);
+    <E extends Enum<E> & I18NKey> void setKeyValue(String source, E key, Locale locale, String value);
 
     /**
      * resets any changes that have been made in memory and reverts to the version from persistence.  Applies to all
      * supported locales
      */
-    <E extends Enum<E>> void reset(Class<? extends I18NKey> keyClass);
+    <E extends Enum<E> & I18NKey> void reset(String source, E sampleKey);
 
     /**
      * resets any changes that have been made in memory and reverts to the version from persistence, for all {@code
      * #locales}
      */
-    <E extends Enum<E>> void reset(Class<? extends I18NKey> keyClass, Set<Locale> locales);
+    <E extends Enum<E> & I18NKey> void reset(String source, E sampleKey, Set<Locale> locales);
+
+    List<String> bundleSourceOrder(I18NKey sampleKey);
+
+    /**
+     * Gets the {@link UserOption} source order for the bundle with {@code baseName}
+     *
+     * @param baseName
+     *         the base name of a bundle, for example, "Labels"
+     *
+     * @return a
+     */
+
+    List<String> getOptionSourceOrder(String baseName);
+
+    List<String> getOptionSourceOrderDefault();
+
+    void setOptionSourceOrderDefault(String... tags);
+
+    void setOptionSourceOrder(String baseName, String... tags);
 }

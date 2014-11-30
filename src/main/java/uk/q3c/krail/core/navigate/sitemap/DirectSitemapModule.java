@@ -58,7 +58,7 @@ public abstract class DirectSitemapModule extends AbstractModule {
      */
     protected abstract void define();
 
-    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey<?> labelKey,
+    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey labelKey,
                             PageAccessControl pageAccessControl) {
         addEntry(uri, viewClass, labelKey, pageAccessControl, null);
     }
@@ -79,7 +79,7 @@ public abstract class DirectSitemapModule extends AbstractModule {
      * @param permission
      *         the permission string for the page. May be null if no permissions are set
      */
-    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey<?> labelKey,
+    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey labelKey,
                             PageAccessControl pageAccessControl, String permission) {
 
         DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, permission);

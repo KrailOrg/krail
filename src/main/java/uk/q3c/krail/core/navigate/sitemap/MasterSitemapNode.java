@@ -59,7 +59,7 @@ import java.util.Set;
 public class MasterSitemapNode implements SitemapNode {
 
     private int id;
-    private I18NKey<?> labelKey;
+    private I18NKey labelKey;
     private PageAccessControl pageAccessControl;
     private int positionIndex;
     /**
@@ -70,7 +70,7 @@ public class MasterSitemapNode implements SitemapNode {
     private String uriSegment;
     private Class<? extends KrailView> viewClass;
 
-    public MasterSitemapNode(String uriSegment, Class<? extends KrailView> viewClass, I18NKey<?> labelKey) {
+    public MasterSitemapNode(String uriSegment, Class<? extends KrailView> viewClass, I18NKey labelKey) {
         super();
         this.uriSegment = uriSegment;
         this.viewClass = viewClass;
@@ -91,7 +91,7 @@ public class MasterSitemapNode implements SitemapNode {
     }
 
     @Override
-    public I18NKey<?> getLabelKey() {
+    public I18NKey getLabelKey() {
         return labelKey;
     }
 
@@ -101,7 +101,7 @@ public class MasterSitemapNode implements SitemapNode {
      * @param labelKey
      * @param locale
      */
-    public void setLabelKey(I18NKey<?> labelKey) {
+    public void setLabelKey(I18NKey labelKey) {
         this.labelKey = labelKey;
     }
 

@@ -20,9 +20,9 @@ import java.util.Locale;
  * Created by David Sowerby on 23/10/14.
  */
 public interface Translate {
-    String from(I18NKey<?> key, Locale locale, Object... arguments);
+    <E extends Enum<E> & I18NKey> String from(I18NKey key, Locale locale, Object... arguments);
 
-    String from(I18NKey<?> key, Object... arguments);
+    <E extends Enum<E> & I18NKey> String from(I18NKey key, Object... arguments);
 
     Collator collator();
 }

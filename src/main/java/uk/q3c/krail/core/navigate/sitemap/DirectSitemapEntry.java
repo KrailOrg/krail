@@ -26,7 +26,7 @@ import uk.q3c.krail.i18n.I18NKey;
  * @author David Sowerby
  */
 public class DirectSitemapEntry {
-    private I18NKey<?> labelKey;
+    private I18NKey labelKey;
     private PageAccessControl pageAccessControl;
     private String roles;
     private Class<? extends KrailView> viewClass;
@@ -36,7 +36,7 @@ public class DirectSitemapEntry {
      * @param labelKey
      * @param pageAccessControl
      */
-    public DirectSitemapEntry(Class<? extends KrailView> viewClass, I18NKey<?> labelKey,
+    public DirectSitemapEntry(Class<? extends KrailView> viewClass, I18NKey labelKey,
                               PageAccessControl pageAccessControl) {
         super();
         this.pageAccessControl = pageAccessControl;
@@ -57,7 +57,7 @@ public class DirectSitemapEntry {
      * @throws PageAccessControlException
      *         is {@link #pageAccessControl} is {@link PageAccessControl#ROLES} and roles is null or empty
      */
-    public DirectSitemapEntry(Class<? extends KrailView> viewClass, I18NKey<?> labelKey,
+    public DirectSitemapEntry(Class<? extends KrailView> viewClass, I18NKey labelKey,
                               PageAccessControl pageAccessControl, String roles) {
         super();
         this.pageAccessControl = pageAccessControl;
@@ -74,11 +74,11 @@ public class DirectSitemapEntry {
         this.viewClass = viewClass;
     }
 
-    public I18NKey<?> getLabelKey() {
+    public I18NKey getLabelKey() {
         return labelKey;
     }
 
-    public void setLabelKey(I18NKey<?> labelKey) {
+    public void setLabelKey(I18NKey labelKey) {
         this.labelKey = labelKey;
     }
 

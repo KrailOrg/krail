@@ -22,14 +22,14 @@ import uk.q3c.krail.i18n.I18NKey;
  * @date 19 Apr 2014
  */
 public class ApplicationTitle {
-    private final I18NKey<?> titleKey;
+    private final I18NKey titleKey;
 
-    public ApplicationTitle(I18NKey<?> titleKey) {
+    public ApplicationTitle(I18NKey titleKey) {
         super();
         this.titleKey = titleKey;
     }
 
-    public I18NKey<?> getTitleKey() {
+    public I18NKey getTitleKey() {
         return titleKey;
     }
 

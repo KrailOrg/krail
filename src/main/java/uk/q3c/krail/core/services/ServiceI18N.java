@@ -16,12 +16,12 @@ import uk.q3c.krail.i18n.I18NKey;
 
 public interface ServiceI18N extends Service {
 
-    I18NKey<?> getNameKey();
+    I18NKey getNameKey();
 
-    void setNameKey(I18NKey<?> nameKey);
+    void setNameKey(I18NKey nameKey);
 
-    I18NKey<?> getDescriptionKey();
+    I18NKey getDescriptionKey();
 
-    void setDescriptionKey(I18NKey<?> descriptionKey);
+    void setDescriptionKey(I18NKey descriptionKey);
 
 }

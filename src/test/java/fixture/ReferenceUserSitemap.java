@@ -153,8 +153,7 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
     }
 
-    public UserSitemapNode createNode(String fullURI, String uriSegment, Class<? extends KrailView> viewClass,
-                                      I18NKey<?> labelKey, PageAccessControl pageAccessControl, String... roles) {
+    public UserSitemapNode createNode(String fullURI, String uriSegment, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl pageAccessControl, String... roles) {
 
         Collator collator = Collator.getInstance();
 

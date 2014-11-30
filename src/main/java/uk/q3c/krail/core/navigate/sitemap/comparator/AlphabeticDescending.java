@@ -33,7 +33,7 @@ public class AlphabeticDescending implements Comparator<UserSitemapNode>, UserSi
     }
 
     @Override
-    public I18NKey<?> nameKey() {
+    public I18NKey nameKey() {
         return LabelKey.Alphabetic_Descending;
     }
 

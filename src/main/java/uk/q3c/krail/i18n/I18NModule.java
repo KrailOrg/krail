@@ -101,7 +101,7 @@ public class I18NModule extends AbstractModule {
      */
     protected void define() {
         addSupportedLocale(Locale.UK);
-        addBundleReader("map", ClassBundleReader.class);
+        addBundleReader("class", ClassBundleReader.class);
         addBundleReader("properties", PropertiesBundleReader.class);
     }
 
@@ -202,14 +202,15 @@ public class I18NModule extends AbstractModule {
      * If you have only one source - you definitely won't need this method
      *
      * @param baseName
-     *         the ResourceBundle 'baseName', for example "Labels"
-     * @param tags
-     *         a set of tags, (or 'formats' in resourceBundle terms).  These should be the all or a subset of the {@link
+     *         the ResourceBundle 'bundleName', for example "Labels"
+     * @param sources
+     *         a set of sources, (or 'formats' in resourceBundle terms).  These should be all, or a subset, of the
+     *         {@link
      *         #bundleReaders} key set
      */
 
-    protected void setBundleSourceOrder(String baseName, String... tags) {
-        Set<String> tagSet = new LinkedHashSet<>(Arrays.asList(tags));
+    protected void setBundleSourceOrder(String baseName, String... sources) {
+        Set<String> tagSet = new LinkedHashSet<>(Arrays.asList(sources));
         bundleSourceOrder.addBinding(baseName)
                          .toInstance(tagSet);
     }

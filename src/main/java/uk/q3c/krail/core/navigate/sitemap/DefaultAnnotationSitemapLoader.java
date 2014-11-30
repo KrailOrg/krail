@@ -87,11 +87,11 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
                                 node.addRole(role);
                             }
                         }
-                        I18NKey<?> keySample = entry.getValue()
+                        I18NKey keySample = entry.getValue()
                                                     .getLabelSample();
                         String keyName = annotation.labelKeyName();
                         try {
-                            I18NKey<?> key = keyFromName(keyName, keySample);
+                            I18NKey key = keyFromName(keyName, keySample);
                             node.setLabelKey(key);
                         } catch (IllegalArgumentException iae) {
                             addError(source, AnnotationSitemapLoader.LABEL_NOT_VALID, clazz, keyName,
@@ -141,11 +141,11 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
      * @throws IllegalArgumentException
      *         if <code>labelKeyClass</code> does not contain a constant of <code>labelKeyName</code>
      */
-    private I18NKey<?> keyFromName(String labelKeyName, I18NKey<?> sampleKey) {
+    private I18NKey keyFromName(String labelKeyName, I18NKey sampleKey) {
 
         Enum<?> enumSample = (Enum<?>) sampleKey;
         Enum<?> labelKey = Enum.valueOf(enumSample.getDeclaringClass(), labelKeyName);
-        return (I18NKey<?>) labelKey;
+        return (I18NKey) labelKey;
 
     }
 

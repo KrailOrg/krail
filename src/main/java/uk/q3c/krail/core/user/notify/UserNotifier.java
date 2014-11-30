@@ -37,7 +37,7 @@ public interface UserNotifier {
      * @param msg
      * @param params
      */
-    void notifyError(I18NKey<?> msg, Object... params);
+    void notifyError(I18NKey msg, Object... params);
 
     /**
      * Calls all {@link WarningNotification} implementations defined by the {@link UserModule} to advise the
@@ -46,7 +46,7 @@ public interface UserNotifier {
      * @param msg
      * @param params
      */
-    void notifyWarning(I18NKey<?> msg, Object... params);
+    void notifyWarning(I18NKey msg, Object... params);
 
     /**
      * Calls all {@link InformationNotification} implementations defined by the {@link UserModule} to advise the
@@ -55,6 +55,6 @@ public interface UserNotifier {
      * @param msg
      * @param params
      */
-    void notifyInformation(I18NKey<?> msg, Object... params);
+    void notifyInformation(I18NKey msg, Object... params);
 
 }

@@ -40,7 +40,7 @@ public abstract class I18NFlexReaderBase {
         }
         try {
             @SuppressWarnings("unchecked") Enum key = Enum.valueOf(keyClass, keyName);
-            I18NKey<?> i18nKey = (I18NKey<?>) key;
+            I18NKey i18nKey = (I18NKey) key;
             return translate.from(i18nKey, locale);
         } catch (Exception e) {
             throw new I18NException("Check that the key class and key make a valid combination");

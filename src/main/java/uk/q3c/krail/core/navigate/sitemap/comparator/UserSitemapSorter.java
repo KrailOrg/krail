@@ -17,5 +17,5 @@ import uk.q3c.krail.i18n.I18NKey;
 
 public interface UserSitemapSorter {
 
-    I18NKey<?> nameKey();
+    I18NKey nameKey();
 }

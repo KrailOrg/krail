@@ -22,7 +22,7 @@ public interface SitemapNode {
 
     public abstract String getUriSegment();
 
-    public abstract I18NKey<?> getLabelKey();
+    I18NKey getLabelKey();
 
     public abstract Class<? extends KrailView> getViewClass();
 

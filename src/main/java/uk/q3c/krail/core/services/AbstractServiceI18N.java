@@ -24,8 +24,8 @@ import uk.q3c.krail.i18n.Translate;
  */
 public abstract class AbstractServiceI18N extends AbstractService implements ServiceI18N {
     private final Translate translate;
-    private I18NKey<?> descriptionKey;
-    private I18NKey<?> nameKey = LabelKey.Unnamed;
+    private I18NKey descriptionKey;
+    private I18NKey nameKey = LabelKey.Unnamed;
 
     @Inject
     protected AbstractServiceI18N(Translate translate) {
@@ -34,22 +34,22 @@ public abstract class AbstractServiceI18N extends AbstractService implements Ser
     }
 
     @Override
-    public I18NKey<?> getNameKey() {
+    public I18NKey getNameKey() {
         return nameKey;
     }
 
     @Override
-    public void setNameKey(I18NKey<?> nameKey) {
+    public void setNameKey(I18NKey nameKey) {
         this.nameKey = nameKey;
     }
 
     @Override
-    public I18NKey<?> getDescriptionKey() {
+    public I18NKey getDescriptionKey() {
         return descriptionKey;
     }
 
     @Override
-    public void setDescriptionKey(I18NKey<?> descriptionKey) {
+    public void setDescriptionKey(I18NKey descriptionKey) {
         this.descriptionKey = descriptionKey;
     }
 

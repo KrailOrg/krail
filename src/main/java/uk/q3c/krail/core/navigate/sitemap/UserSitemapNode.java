@@ -37,7 +37,8 @@ public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode>
      * Updates the {@link #label} and {@link #collationKey} for the {@code locale}
      */
     public void translate(Translate translate, Locale locale, Collator collator) {
-        label = translate.from(masterNode.getLabelKey());
+        I18NKey key = masterNode.getLabelKey();
+        label = translate.from(key);
         collationKey = collator.getCollationKey(label);
     }
 
@@ -66,7 +67,7 @@ public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode>
     }
 
     @Override
-    public I18NKey<?> getLabelKey() {
+    public I18NKey getLabelKey() {
         return masterNode.getLabelKey();
     }
 

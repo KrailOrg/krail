@@ -40,7 +40,7 @@ public class DefaultUserNotifier implements UserNotifier, Serializable {
     }
 
     @Override
-    public void notifyError(I18NKey<?> msg, Object... params) {
+    public void notifyError(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
         for (ErrorNotification notification : errorNotifications.values()) {
             notification.message(translatedMessage);
@@ -48,7 +48,7 @@ public class DefaultUserNotifier implements UserNotifier, Serializable {
     }
 
     @Override
-    public void notifyWarning(I18NKey<?> msg, Object... params) {
+    public void notifyWarning(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
         for (WarningNotification notification : warningNotifications.values()) {
             notification.message(translatedMessage);
@@ -56,7 +56,7 @@ public class DefaultUserNotifier implements UserNotifier, Serializable {
     }
 
     @Override
-    public void notifyInformation(I18NKey<?> msg, Object... params) {
+    public void notifyInformation(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
         for (InformationNotification notification : informationNotifications.values()) {
             notification.message(translatedMessage);

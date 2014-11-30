@@ -27,14 +27,14 @@ public class LabelKeyForName {
     }
 
     @SuppressWarnings({"unchecked"})
-    public I18NKey<?> keyForName(String keyName, Set<String> missingEnums) {
+    public I18NKey keyForName(String keyName, Set<String> missingEnums) {
         if (keyName == null) {
             // don't add to missingEnums, null can be legitimate
             return null;
         }
         try {
             Enum labelKey = Enum.valueOf(labelKeysClass, keyName);
-            I18NKey<?> i18nKey = (I18NKey<?>) labelKey;
+            I18NKey i18nKey = (I18NKey) labelKey;
             return i18nKey;
         } catch (Exception e) {
             // flagAsMissing

@@ -35,8 +35,8 @@ public interface LoginView extends KrailView {
      */
     String getStatusMessage();
 
-    void setStatusMessage(String invalidLogin);
+    void setStatusMessage(I18NKey messageKey);
 
-    void setStatusMessage(I18NKey<?> messageKey);
+    void setStatusMessage(String invalidLogin);
 
 }

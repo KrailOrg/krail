@@ -47,7 +47,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
     private final Set<String> missingLabelKeys;
     private final Set<String> missingPageAccessControl;
     private final Set<String> redirectLoops;
-    private I18NKey<?> defaultKey;
+    private I18NKey defaultKey;
     private Class<? extends KrailView> defaultView;
     private StringBuilder report;
     private MasterSitemap sitemap;
@@ -189,7 +189,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
     }
 
     @Override
-    public SitemapChecker replaceMissingKeyWith(I18NKey<?> defaultKey) {
+    public SitemapChecker replaceMissingKeyWith(I18NKey defaultKey) {
 
         this.defaultKey = defaultKey;
         return this;

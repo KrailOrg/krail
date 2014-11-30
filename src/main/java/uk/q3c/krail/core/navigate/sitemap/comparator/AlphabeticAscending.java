@@ -33,7 +33,7 @@ public class AlphabeticAscending implements Comparator<UserSitemapNode>, UserSit
     }
 
     @Override
-    public I18NKey<?> nameKey() {
+    public I18NKey nameKey() {
         return LabelKey.Alphabetic_Ascending;
     }
 

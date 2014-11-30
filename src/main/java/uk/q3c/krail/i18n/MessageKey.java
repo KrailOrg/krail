@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.i18n;
 
-public enum MessageKey implements I18NKey<Messages> {
+public enum MessageKey implements I18NKey {
     _nullkey_, invalidURI, LocaleChange, Service_not_Started;
 
 

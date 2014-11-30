@@ -38,7 +38,7 @@ public class PropertiesBundleReader extends BundleReaderBase implements BundleRe
     @Override
     public KrailResourceBundle newBundle(Class<? extends Enum> enumKeyClass, String baseName, Locale locale,
                                          ClassLoader loader, boolean reload) throws IOException {
-        log.debug("locating properties based bundle for baseName {}", baseName);
+        log.debug("locating properties based bundle for bundleName {}", baseName);
         final String resourceName1 = this.toResourceName0(baseName, "properties");
         log.debug("resource name is {}", resourceName1);
         KrailResourceBundle bundle = null;

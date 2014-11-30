@@ -32,7 +32,7 @@ public class PositionIndexDescending implements Comparator<UserSitemapNode>, Use
     }
 
     @Override
-    public I18NKey<?> nameKey() {
+    public I18NKey nameKey() {
         return LabelKey.Position_Index_Descending;
     }
 

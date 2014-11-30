@@ -16,7 +16,7 @@ package uk.q3c.krail.i18n;
  * @author David Sowerby 24 Mar 2013
  * @see Labels
  */
-public enum LabelKey implements I18NKey<Labels> {
+public enum LabelKey implements I18NKey {
     _nullkey_,
     Alphabetic_Ascending,
     Alphabetic_Descending,

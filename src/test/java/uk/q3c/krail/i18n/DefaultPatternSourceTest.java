@@ -29,6 +29,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DefaultPatternSourceTest {
 
     @Inject
+    @BundleSourceOrderDefault
+    Set<String> bundleSourceOrderDefault = new LinkedHashSet<>();
+
+    @Inject
+    @BundleSourceOrder
+    Map<String, Set<String>> bundleSourceOrder = new HashMap<>();
+
+    @Inject
     @SupportedLocales
     Set<Locale> supportedLocales;
 
@@ -55,7 +63,8 @@ public class DefaultPatternSourceTest {
         VaadinService.setCurrent(vaadinService);
         //essential to stop pollution from one test to another
         ResourceBundle.clearCache();
-        //        source = new DefaultPatternSource(supportedLocales, userOption, bundleReaders, bundleControl);
+        source = new DefaultPatternSource(supportedLocales, userOption, bundleReaders, bundleControl,
+                bundleSourceOrderDefault, bundleSourceOrder);
     }
 
     /**
@@ -97,7 +106,7 @@ public class DefaultPatternSourceTest {
         //given
         source.setGenerateStubWithName(false);
         //when
-        source.generateStub(TestLabelKey.View1, Locale.GERMANY);
+        source.generateStub("class", TestLabelKey.View1, Locale.GERMANY);
         Optional<String> value = source.retrievePattern(TestLabelKey.View1, Locale.GERMANY);
         //then
         assertThat(value.get()).isEqualTo("");
@@ -108,7 +117,7 @@ public class DefaultPatternSourceTest {
         //given
         source.setGenerateStubWithName(true);
         //when
-        source.generateStub(TestLabelKey.View1, Locale.GERMANY);
+        source.generateStub("class", TestLabelKey.View1, Locale.GERMANY);
         Optional<String> value = source.retrievePattern(TestLabelKey.View1, Locale.GERMANY);
         //then
         assertThat(value.get()).isEqualTo("View1");
@@ -123,7 +132,7 @@ public class DefaultPatternSourceTest {
         Set<Locale> locales = new HashSet<>();
         locales.add(Locale.GERMANY);
         locales.add(Locale.ITALY);
-        source.generateStub(TestLabelKey.View1, locales);
+        source.generateStub("class", TestLabelKey.View1, locales);
         Optional<String> value1 = source.retrievePattern(TestLabelKey.View1, Locale.GERMANY);
         Optional<String> value2 = source.retrievePattern(TestLabelKey.View1, Locale.ITALY);
         //then
@@ -136,7 +145,7 @@ public class DefaultPatternSourceTest {
         //given
         source.setGenerateStubWithName(true);
         //when
-        source.generateStub(TestLabelKey.View1);
+        source.generateStub("class", TestLabelKey.View1);
         Optional<String> value1 = source.retrievePattern(TestLabelKey.View1, Locale.GERMANY);
         Optional<String> value2 = source.retrievePattern(TestLabelKey.View1, Locale.ITALY);
         Optional<String> value3 = source.retrievePattern(TestLabelKey.View1, Locale.UK);
@@ -168,7 +177,7 @@ public class DefaultPatternSourceTest {
         File targetFile_it = new File(targetDir, "Labels_it.java");
 
         //when
-        source.writeOut(writer, LabelKey.class, locales, false);
+        source.writeOut("class", writer, LabelKey.Yes, locales, false);
         //then line 4 is the timestamp
         assertThat(FileTestUtil.compare(referenceFile, targetFile, 4)).isEqualTo(Optional.absent());
         assertThat(FileTestUtil.compare(referenceFile_de, targetFile_de, 4)).isEqualTo(Optional.absent());
@@ -192,7 +201,7 @@ public class DefaultPatternSourceTest {
         File targetFile_it = new File(targetDir, "Labels_it.java");
 
         //when
-        source.writeOut(writer, LabelKey.class, locales, true);
+        source.writeOut("class", writer, LabelKey.Yes, locales, true);
         //then line 4 is the timestamp
         assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.absent());
     }
@@ -214,7 +223,7 @@ public class DefaultPatternSourceTest {
         File targetFile_it = new File(targetDir, "Labels_it.java");
 
         //when
-        source.writeOut(writer, LabelKey.class, locales, true);
+        source.writeOut("class", writer, LabelKey.Yes, locales, true);
         //then line 4 is the timestamp
         assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.absent());
     }
@@ -241,7 +250,7 @@ public class DefaultPatternSourceTest {
         File targetFile_it = new File(targetDir, "Labels_it.java");
 
         //when
-        source.writeOut(writer, LabelKey.class, false);
+        source.writeOut("class", writer, LabelKey.Yes, false);
         //then line 4 is the timestamp
         assertThat(FileTestUtil.compare(referenceFile, targetFile, 4)).isEqualTo(Optional.absent());
         assertThat(FileTestUtil.compare(referenceFile_de, targetFile_de, 4)).isEqualTo(Optional.absent());
@@ -254,9 +263,9 @@ public class DefaultPatternSourceTest {
         //given
 
         //when
-        source.setKeyValue(TestLabelKey.Home, Locale.ITALY, "New Home");
-        source.setKeyValue(TestLabelKey.Blank, Locale.ITALY, "New Blank");
-        source.setKeyValue(TestLabelKey.Opt, Locale.ITALY, "New Opt");
+        source.setKeyValue("class", TestLabelKey.Home, Locale.ITALY, "New Home");
+        source.setKeyValue("class", TestLabelKey.Blank, Locale.ITALY, "New Blank");
+        source.setKeyValue("class", TestLabelKey.Opt, Locale.ITALY, "New Opt");
 
         String pattern1 = source.retrievePattern(TestLabelKey.Home, Locale.ITALY)
                                 .get();
@@ -270,7 +279,7 @@ public class DefaultPatternSourceTest {
         assertThat(pattern3).isEqualTo("New Opt");
 
         //when reset
-        source.reset(TestLabelKey.class);
+        source.reset("class", TestLabelKey.Yes);
         pattern1 = source.retrievePattern(TestLabelKey.Home, Locale.ITALY)
                          .get();
         pattern2 = source.retrievePattern(TestLabelKey.Blank, Locale.ITALY)
@@ -287,14 +296,18 @@ public class DefaultPatternSourceTest {
     }
 
     @Test
-    public void mergeSource_fromMap_OverwriteFalse() {
+    public <E extends TestLabelKey> void mergeSource_fromMap_OverwriteFalse() {
         //given
         EnumMap<TestLabelKey, String> map = new EnumMap<>(TestLabelKey.class);
         map.put(TestLabelKey.Home, "New Home");
         map.put(TestLabelKey.Blank, "New Blank");
         map.put(TestLabelKey.Opt, "New Opt");
+
+
+        EnumMap<TestLabelKey, String> map2 = source.getBundle("class", TestLabelKey.Yes, Locale.ITALY)
+                                                   .getMap();
         //when
-        source.mergeSource(Locale.ITALY, map, false);
+        source.mergeMaps(false, map, map2);
         //then does not overwrite existing
         String pattern = source.retrievePattern(TestLabelKey.Home, Locale.ITALY)
                                .get();
@@ -316,8 +329,10 @@ public class DefaultPatternSourceTest {
         EnumMap<TestLabelKey, String> map = new EnumMap<>(TestLabelKey.class);
         map.put(TestLabelKey.Home, "New Home");
         map.put(TestLabelKey.Opt, "New Opt");
+        EnumMap<TestLabelKey, String> map2 = source.getBundle("class", TestLabelKey.Yes, Locale.ITALY)
+                                                   .getMap();
         //when
-        source.mergeSource(Locale.ITALY, map, true);
+        source.mergeMaps(true, map, map2);
         //then overwrites existing
         String pattern = source.retrievePattern(TestLabelKey.Home, Locale.ITALY)
                                .get();
@@ -341,7 +356,7 @@ public class DefaultPatternSourceTest {
 
         //when
 
-        //        source.mergeSource(TestLabelKey.class, locales, otherSource, true);
+        //        source.mergeSources(TestLabelKey.class, locales, otherSource, true);
 
 
         //then overwrites existing
@@ -366,7 +381,7 @@ public class DefaultPatternSourceTest {
         Set<Locale> locales = new HashSet<>();
         locales.add(Locale.ITALY);
         //when
-        //        source.mergeSource(TestLabelKey.class, locales, otherSource, false);
+        //        source.mergeSources(TestLabelKey.class, locales, otherSource, false);
 
         //then does not overwrite existing
         String pattern = source.retrievePattern(TestLabelKey.Home, Locale.ITALY)
@@ -388,12 +403,12 @@ public class DefaultPatternSourceTest {
         //given
 
         //when
-        source.generateStub(TestLabelKey.Home, Locale.ITALY);
+        source.generateStub("class", TestLabelKey.Home, Locale.ITALY);
         //then
         assertThat(source.retrievePattern(TestLabelKey.Home, Locale.ITALY)
                          .get()).isEqualTo("it_Home");
         //when
-        source.generateStub(TestLabelKey.Blank, Locale.ITALY);
+        source.generateStub("class", TestLabelKey.Blank, Locale.ITALY);
         //then overwrites with name (that's the default for generate stub with name)
         assertThat(source.retrievePattern(TestLabelKey.Blank, Locale.ITALY)
                          .get()).isEqualTo("Blank");

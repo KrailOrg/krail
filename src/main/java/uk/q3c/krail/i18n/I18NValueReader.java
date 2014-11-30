@@ -40,7 +40,7 @@ public class I18NValueReader extends I18NReaderBase implements I18NValueAnnotati
      */
     @Override
     public String value() {
-        I18NKey<?> captionKey = (I18NKey<?>) annotationParam("value");
+        I18NKey captionKey = (I18NKey) annotationParam("value");
         return translate.from(captionKey, locale());
     }
 

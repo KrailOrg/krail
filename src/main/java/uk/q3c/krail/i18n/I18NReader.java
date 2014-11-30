@@ -40,7 +40,7 @@ public class I18NReader extends I18NReaderBase implements I18NAnnotationReader<A
      */
     @Override
     public String caption() {
-        I18NKey<?> captionKey = (I18NKey<?>) annotationParam("caption");
+        I18NKey captionKey = (I18NKey) annotationParam("caption");
         return translate.from(captionKey, locale());
     }
 
@@ -49,7 +49,7 @@ public class I18NReader extends I18NReaderBase implements I18NAnnotationReader<A
      */
     @Override
     public String description() {
-        I18NKey<?> descriptionKey = (I18NKey<?>) annotationParam("description");
+        I18NKey descriptionKey = (I18NKey) annotationParam("description");
         return translate.from(descriptionKey);
     }
 

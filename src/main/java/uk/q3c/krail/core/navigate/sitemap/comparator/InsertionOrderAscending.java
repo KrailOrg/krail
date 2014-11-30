@@ -32,7 +32,7 @@ public class InsertionOrderAscending implements Comparator<UserSitemapNode>, Use
     }
 
     @Override
-    public I18NKey<?> nameKey() {
+    public I18NKey nameKey() {
         return LabelKey.Insertion_Order_Ascending;
     }
 }

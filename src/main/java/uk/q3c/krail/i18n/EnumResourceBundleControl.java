@@ -28,7 +28,7 @@ public class EnumResourceBundleControl extends ResourceBundle.Control {
         this.bundleReaders = bundleReaders;
     }
 
-    public void setFormat(String format) {
+    public void setSource(String format) {
         this.format = format;
     }
 

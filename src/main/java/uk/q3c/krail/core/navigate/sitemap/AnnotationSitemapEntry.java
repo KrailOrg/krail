@@ -16,13 +16,13 @@ import uk.q3c.krail.i18n.I18NKey;
 
 public class AnnotationSitemapEntry {
 
-    private I18NKey<?> labelSample;
+    private I18NKey labelSample;
 
-    public I18NKey<?> getLabelSample() {
+    public I18NKey getLabelSample() {
         return labelSample;
     }
 
-    public void setLabelSample(I18NKey<?> labelSample) {
+    public void setLabelSample(I18NKey labelSample) {
         this.labelSample = labelSample;
     }
 

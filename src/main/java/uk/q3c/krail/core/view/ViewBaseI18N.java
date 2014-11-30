@@ -19,7 +19,7 @@ import uk.q3c.krail.i18n.Translate;
 public abstract class ViewBaseI18N extends ViewBase {
 
     private final Translate translate;
-    private I18NKey<?> nameKey;
+    private I18NKey nameKey;
 
     @Inject
     protected ViewBaseI18N(Translate translate) {
@@ -27,17 +27,20 @@ public abstract class ViewBaseI18N extends ViewBase {
         this.translate = translate;
     }
 
-    public I18NKey<?> getNameKey() {
+    public I18NKey getNameKey() {
         return nameKey;
     }
 
-    public void setNameKey(I18NKey<?> nameKey) {
+    public <E extends Enum<E> & I18NKey> void setNameKey(E nameKey) {
         this.nameKey = nameKey;
     }
 
     @Override
     public String viewName() {
-        return translate.from(nameKey);
+        return translateKey();
     }
 
+    private <E extends Enum<E> & I18NKey> String translateKey() {
+        return translate.from((E) nameKey);
+    }
 }

@@ -80,7 +80,7 @@ public abstract class AnnotationSitemapModule extends AbstractModule {
      */
     protected abstract void define();
 
-    protected void addEntry(String reflectionRoot, I18NKey<?> labelSample) {
+    protected void addEntry(String reflectionRoot, I18NKey labelSample) {
         AnnotationSitemapEntry entry = new AnnotationSitemapEntry();
         entry.setLabelSample(labelSample);
         mapBinder.addBinding(reflectionRoot)

@@ -12,13 +12,20 @@
  */
 package uk.q3c.krail.i18n;
 
-public interface I18NKey<E extends EnumResourceBundle<?>> {
-
-    default String baseName() {
-        return this.getClass()
-                   .getSimpleName()
+public interface I18NKey {
+    /**
+     * Provides a default bundle name by removing the last 3 characters from the key name and replacing with an 's'.
+     * This conforms to the Krail convention of having, for example, LabelKey, referring to Labels.
+     * <p>
+     * This can of course be overridden by implementing classes.
+     *
+     * @return
+     */
+    default String bundleName() {
+        return "uk.q3c.krail.i18n." + this.getClass()
+                                          .getSimpleName()
                    .substring(0, getClass().getSimpleName()
-                                           .length() - 3);
+                                           .length() - 3) + "s";
     }
 
 }

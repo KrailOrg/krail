@@ -14,6 +14,7 @@
 package uk.q3c.krail.i18n;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,23 +22,21 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.UserOption;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.*;
 
 /**
  * The default implementation of {@link PatternSource} to retrieve a localised pattern from an  {{@link
  * EnumResourceBundle}.
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * Created by David Sowerby on 04/11/14.
  */
 public class DefaultPatternSource implements PatternSource {
     public enum OptionProp {autoStub, generateStubWithName, sourceOrder, sourceOrderDefault}
 
     private static Logger log = LoggerFactory.getLogger(DefaultPatternSource.class);
-    private final Map<String, BundleReader> bundleReaders;
     private EnumResourceBundleControl bundleControl;
+    private Map<String, BundleReader> bundleReaders;
     private Map<String, Set<String>> bundleSourceOrder;
     private Set<String> bundleSourceOrderDefault;
     private Set<Locale> supportedLocales;
@@ -45,74 +44,155 @@ public class DefaultPatternSource implements PatternSource {
 
 
     @Inject
-    protected DefaultPatternSource(@SupportedLocales Set<Locale> supportedLocales, UserOption userOption, Map<String, BundleReader> bundleReaders, EnumResourceBundleControl bundleControl, @BundleSourceOrderDefault Set<String> bundleSourceOrderDefault, @BundleSourceOrder Map<String, Set<String>> bundleSourceOrder) {
+    protected DefaultPatternSource(@SupportedLocales Set<Locale> supportedLocales, UserOption userOption, Map<String,
+            BundleReader> bundleReaders, EnumResourceBundleControl bundleControl, @BundleSourceOrderDefault
+    Set<String> bundleSourceOrderDefault, @BundleSourceOrder Map<String, Set<String>> bundleSourceOrder) {
         this.supportedLocales = supportedLocales;
         this.userOption = userOption;
-        this.bundleReaders = bundleReaders;
         this.bundleControl = bundleControl;
         this.bundleSourceOrderDefault = bundleSourceOrderDefault;
         this.bundleSourceOrder = bundleSourceOrder;
+        this.bundleReaders = bundleReaders;
     }
+
 
     /**
      * Returns the translated String pattern for {@code key}, for {@code locale}, or {@link Optional.isAbsent()} if
      * there is no pattern for the key.
-     * <p/>
-     * This implementation uses a map to define the patterns for translation.  The {@link MapResourceBundle} used to
-     * locate the pattern is determined by the actual parameter value of key (that is, a key of type I18N<Labels> will
-     * use the Labels class as the map source).
-     * <p/>
-     * See https://docs.oracle.com/javase/6/docs/api/java/util/ResourceBundle.html for a description of ResourceBundle,
-     * of which {@link MapResourceBundle} is a sub-class.
-     * <p/>
+     * <p>
+     * Each bundle source relevant to {@code key} is tried, as specified by {@link #bundleSourceOrder(I18NKey)}
+     * <p>
+     * Available sources are determined by bindings in the I18NModule or its sub-class
+     * <p>
      *
      * @param key
      *         the key to look up
      * @param locale
+     *         the locale the pattern is required for
      *
-     * @return the String pattern for {@code key}, or {@link Optional.isAbsent()} if there is no pattern for the key
+     * @return the String pattern for {@code key}, or {@link Optional.isAbsent()} if there is no pattern for the key in
+     * any of the available sources
      */
     @Override
-    public <E extends Enum<E>> Optional<String> retrievePattern(I18NKey key, Locale locale) {
+    public <E extends Enum<E> & I18NKey> Optional<String> retrievePattern(E key, Locale locale) {
 
 
-        //        if (getAutoStub()) {
-        //            // this call does not overwrite an existing entry
-        //            generateStub(key, locale);
-        //        }
-        //
-        //        //try each source in turn for a valid pattern
-        //        for (String s : bundleSourceOrder(baseName)) {
-        //            EnumResourceBundle<E> bundle = getBundle(key, locale);
-        //        }
-        //
-        //        String pattern = bundle.getValue((E) key);
-        //        if (pattern == null) {
-        //            return Optional.absent();
-        //        }
-        //        return Optional.of(pattern);
-        return Optional.absent();
+        //try each source in turn for a valid pattern
+        Optional<String> result = Optional.absent();
+        for (String source : bundleSourceOrder(key)) {
+            EnumResourceBundle<E> bundle = getBundle(source, key, locale);
+            String pattern = bundle.getValue((E) key);
+            if (!StringUtils.isEmpty(pattern)) {
+                result = Optional.of(pattern);
+                break;
+            } else {
+                if (getAutoStub()) {
+                    // this call does not overwrite an existing entry
+                    generateStub(source, key, locale);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public <E extends Enum<E> & I18NKey> EnumResourceBundle<E> getBundle(String source, E sampleKey, Locale locale) {
+        // a not very elegant way of getting the key class to the bundle reader
+        Class<? extends Enum> enumClass = sampleKey.getClass();
+        bundleControl.setEnumKeyClass(enumClass);
+        bundleControl.setSource(source);
+
+        EnumResourceBundle<E> bundle = (EnumResourceBundle) EnumResourceBundle.getBundle(sampleKey.bundleName(),
+                locale, bundleControl);
+
+        return bundle;
     }
 
     /**
-     * Generates implementation specific stubs for all the {@code locales}.  For some implementations this may be more
-     * efficient than repeated calls to {@link #generateStub(I18NKey, Locale)}. Does not overwrite an existing key
+     * This native Java {@link ResourceBundle} uses the term 'formats' to describe different sources of localised data,
+     * but this reflects a rather old assumption that the source will be in a file - it excludes the idea of a database
+     * or web service providing the data. Krail therefore prefers the term 'bundleSource'.
+     * <p>
+     * The order in which these sources are requested to provide a bundle is described below.  Krail uses the first
+     * which provides a result:<ol>
+     * <li> UserOption, property sourceOrder, for a specific key class</li>
+     * <li> UserOption, property sourceOrderDefault, for all key classes</li>
+     * <li> {@link #bundleSourceOrder}, which can be defined in the I18NModule, and applies to a specific key
+     * class</li>
+     * <li> {@link #bundleSourceOrderDefault}, which can be defined in the I18Module, and applies to all key
+     * classes</li>
+     * <li> the natural order of #bundleReaders keySet</li>
+     * <p>
+     * </ol>
      *
      * @param key
-     *         the the stub(s) will be for
-     * @param locales
+     *         used to retrieve the key class, which is used to identify key class specific ordering (see {@link
+     *         I18NModule#setBundleSourceOrder}
+     *
+     * @return
      */
     @Override
-    public <E extends Enum<E>> void generateStub(I18NKey key, Set<Locale> locales) {
-        for (Locale locale : locales) {
-            generateStub(key, locale);
+    public List<String> bundleSourceOrder(I18NKey key) {
+
+        List<String> sourceOrder = getOptionSourceOrder(key.bundleName());
+        if (sourceOrder != null) {
+            return sourceOrder;
         }
+
+        sourceOrder = getOptionSourceOrderDefault();
+        if (sourceOrder != null) {
+            return sourceOrder;
+        }
+
+        Set<String> order = bundleSourceOrder.get(key.bundleName());
+        if (order != null) {
+            return new ArrayList<>(order);
+        }
+
+        sourceOrder = new ArrayList<>(bundleSourceOrderDefault);
+        if (!sourceOrder.isEmpty()) {
+            return sourceOrder;
+        }
+
+        return new ArrayList(bundleReaders.keySet());
+
+    }
+
+    @Override
+    public List<String> getOptionSourceOrder(String baseName) {
+        return userOption.getOptionAsList(this.getClass()
+                                              .getSimpleName(), baseNameProperty(baseName), null);
+    }
+
+    private String baseNameProperty(String baseName) {
+        return OptionProp.sourceOrder.name() + "-" + baseName;
+    }
+
+    @Override
+    public List<String> getOptionSourceOrderDefault() {
+        return userOption.getOptionAsList(this.getClass()
+                                              .getSimpleName(), OptionProp.sourceOrderDefault, null);
+    }
+
+    @Override
+    public void setOptionSourceOrderDefault(String... tags) {
+        List<String> list = Arrays.asList(tags);
+        userOption.setOption(this.getClass()
+                                 .getSimpleName(), OptionProp.sourceOrderDefault, list);
+    }
+
+    public boolean getAutoStub() {
+        return userOption.getOptionAsBoolean(getClass().getSimpleName(), OptionProp.autoStub.name(), false);
+    }
+
+    public void setAutoStub(boolean value) {
+        userOption.setOption(getClass().getSimpleName(), OptionProp.autoStub.name(), value);
     }
 
     /**
      * Generates an implementation specific stub for the key - value pair.  This is typically used as part of the
      * process to generate files for translation.  Does not overwrite an existing key
-     * <p/>
+     * <p>
      * If user option #generateStubWithName is true, the value for the key is set to the name of the key, otherwise it
      * is set to an empty String
      *
@@ -122,15 +202,23 @@ public class DefaultPatternSource implements PatternSource {
      *         the locale the stub should be generated in
      */
     @Override
-    public <E extends Enum<E>> void generateStub(I18NKey key, Locale locale) {
+    public <E extends Enum<E> & I18NKey> void generateStub(String source, E key, Locale locale) {
 
         String value = "";
         if (getGenerateStubWithName()) {
             value = ((Enum<?>) key).name()
                                    .replace("_", " ");
         }
-        put(key, locale, value, false);
+        put(source, key, locale, value, false);
 
+    }
+
+    public boolean getGenerateStubWithName() {
+        return userOption.getOptionAsBoolean(getClass().getSimpleName(), OptionProp.generateStubWithName.name(), true);
+    }
+
+    public void setGenerateStubWithName(boolean value) {
+        userOption.setOption(getClass().getSimpleName(), OptionProp.generateStubWithName.name(), value);
     }
 
     /**
@@ -149,41 +237,10 @@ public class DefaultPatternSource implements PatternSource {
      * @param <E>
      *         the Enum type derived from the key
      */
-    public <E extends Enum<E>> void put(I18NKey key, Locale locale, String value, boolean overwrite) {
-        EnumResourceBundle<E> bundle = getBundle(key, locale);
+    public <E extends Enum<E> & I18NKey> void put(String source, E key, Locale locale, String value, boolean
+            overwrite) {
+        EnumResourceBundle<E> bundle = getBundle(source, key, locale);
         put(bundle, (E) key, value, overwrite);
-    }
-
-    public <E extends Enum<E>> EnumResourceBundle<E> getBundle(I18NKey key, Locale locale) {
-        return getBundle(key.getClass(), locale);
-    }
-
-    public <E extends Enum<E>> EnumResourceBundle<E> getBundle(Class<? extends I18NKey> keyClass, Locale locale) {
-        Class bundleClazz = bundleClass(keyClass);
-        // a not very elegant way of getting the key class to the bundle reader
-        Class<E> enumClass = (Class<E>) keyClass;
-        bundleControl.setEnumKeyClass((Class<Enum<?>>) enumClass);
-        try {
-            I18NKey key = keyClass.newInstance();
-            bundleControl.setFormat(key.baseName());
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        EnumResourceBundle<E> bundle = (EnumResourceBundle) EnumResourceBundle.getBundle(bundleClazz.getName(),
-                locale, bundleControl);
-
-        return bundle;
-    }
-
-    private Class bundleClass(Class<? extends I18NKey> keyClass) {
-        Type[] genericInterfaces = keyClass.getGenericInterfaces();
-        ParameterizedType parameterizedType = (ParameterizedType) genericInterfaces[0];
-
-        Type actualType = parameterizedType.getActualTypeArguments()[0];
-        return (Class) actualType;
     }
 
     /**
@@ -201,7 +258,8 @@ public class DefaultPatternSource implements PatternSource {
      *         missing or empty
      * @param <E>
      */
-    public <E extends Enum<E>> void put(EnumResourceBundle<E> bundle, E key, String value, boolean overwrite) {
+    public <E extends Enum<E> & I18NKey> void put(EnumResourceBundle<E> bundle, E key, String value, boolean
+            overwrite) {
 
         if (overwrite) {
             bundle.put(key, value);
@@ -214,20 +272,19 @@ public class DefaultPatternSource implements PatternSource {
         }
     }
 
-    public boolean getGenerateStubWithName() {
-        return userOption.getOptionAsBoolean(getClass().getSimpleName(), OptionProp.generateStubWithName.name(), true);
-    }
-
-    public void setGenerateStubWithName(boolean value) {
-        userOption.setOption(getClass().getSimpleName(), OptionProp.generateStubWithName.name(), value);
-    }
-
     /**
-     * The {@link MapResourceBundle} used to locate the pattern is determined by the actual parameter value of key
-     * (that is, a key of type I18N<Labels>  will use the Labels class as the map source)
+     * Generates implementation specific stubs for all the {@code locales}.  For some implementations this may be more
+     * efficient than repeated calls to {@link #generateStub(I18NKey, Locale)}. Does not overwrite an existing key
+     *
+     * @param key
+     *         the the stub(s) will be for
+     * @param locales
      */
-    private Class bundleClass(I18NKey key) {
-        return bundleClass(key.getClass());
+    @Override
+    public <E extends Enum<E> & I18NKey> void generateStub(String source, E key, Set<Locale> locales) {
+        for (Locale locale : locales) {
+            generateStub(source, key, locale);
+        }
     }
 
     /**
@@ -237,9 +294,9 @@ public class DefaultPatternSource implements PatternSource {
      *         the the stub(s) will be for
      */
     @Override
-    public void generateStub(I18NKey key) {
+    public <E extends Enum<E> & I18NKey> void generateStub(String source, E key) {
         for (Locale locale : supportedLocales) {
-            generateStub(key, locale);
+            generateStub(source, key, locale);
         }
 
     }
@@ -250,10 +307,10 @@ public class DefaultPatternSource implements PatternSource {
      * pre-requisites, typically but not necessarily through UserOption
      */
     @Override
-    public <E extends Enum<E>> void writeOut(BundleWriter<E> writer, Class<? extends I18NKey> keyClass, boolean
+    public <E extends Enum<E> & I18NKey> void writeOut(String source, BundleWriter<E> writer, E sampleKey, boolean
             allKeys) throws IOException {
 
-        writeOut(writer, keyClass, supportedLocales, allKeys);
+        writeOut(source, writer, sampleKey, supportedLocales, allKeys);
 
     }
 
@@ -277,10 +334,10 @@ public class DefaultPatternSource implements PatternSource {
      * @see #writeOut(Class, boolean)
      */
     @Override
-    public <E extends Enum<E>> void writeOut(BundleWriter<E> writer, Class<? extends I18NKey> keyClass, Set<Locale>
+    public <E extends Enum<E> & I18NKey> void writeOut(String source, BundleWriter<E> writer, E sampleKey, Set<Locale>
             locales, boolean allKeys) throws IOException {
         for (Locale locale : locales) {
-            EnumResourceBundle<E> bundle = getBundle(keyClass, locale);
+            EnumResourceBundle<E> bundle = getBundle(source, sampleKey, locale);
             Class<E> enumClass = bundle.getKeyClass();
             // if we want all keys, populate any missing from the map
             // and fill as determined by UserOption
@@ -302,53 +359,81 @@ public class DefaultPatternSource implements PatternSource {
 
     }
 
-
     /**
-     * Merge key-value pairs from {@code otherSource} into this source, for the given {@code locales}.
-     * <p/>
-     * If {@code overwrite} is true, all values are transferred from otherSource to this source, overwriting any
-     * values that are already in this source. <p/> If {@code overwrite} is false, values from {@code otherSource}
-     * are only written to this source where the key is missing or has an empty value (empty String).
+     * Merge key-value pairs "down" through the {@code sources}. The first source is merged into the second, and the
+     * second into the third, and so on, for the given {@code locales}.
+     * <p>
+     * If {@code overwrite} is true, all values are transferred from one source to the next, overwriting values that
+     * are already there. <p/> If {@code overwrite} is false, values from one source are only written to the next
+     * source where the key is missing or has an empty value (empty String).
+     * <p>
+     * At least 2 sources are required for a merge, if less are provided the method returns with nothing done
      *
+     * @param sampleKey
+     *         any key from the I18NKey class required
      * @param locales
-     * @param otherSource
+     *         the locales you wish to merge
+     * @param sources
+     *         the sources which should be merged
      * @param overwrite
+     *         If {@code overwrite} is true, all values are transferred from one source to the next,
+     *         overwriting values that are already there. <p/> If {@code overwrite} is false, values from
+     *         one source are only written to the next source where the key is missing or has an empty value
+     *         (empty String).
      */
     @Override
-    public <E extends Enum<E>> void mergeSource(Class<? extends I18NKey> keyClass, Set<Locale> locales, PatternSource
-            otherSource, boolean overwrite) {
+    public <E extends Enum<E> & I18NKey> void mergeSources(E sampleKey, Set<Locale> locales, boolean overwrite,
+                                                           String... sources) {
+
+        if (sources.length < 2) {
+            log.info("At least 2 sources are required for a merge, you have provided {}", sources.length);
+            return;
+        }
+
+        EnumMap<E, String>[] maps = null;
         for (Locale locale : locales) {
-            EnumResourceBundle<E> bundle = getBundle(keyClass, locale);
-            mergeSource(locale, bundle.getMap(), overwrite);
+            maps = new EnumMap[sources.length];
+            int i = 0;
+            for (String source : sources) {
+                EnumResourceBundle<E> bundle = getBundle(source, sampleKey, locale);
+                maps[i] = bundle.getMap();
+                i++;
+            }
+        }
+        mergeMaps(overwrite, maps);
+    }
+
+    public <E extends Enum<E> & I18NKey> void mergeMaps(boolean overwrite, EnumMap<E, String>... maps) {
+        if (maps.length < 2) {
+            log.info("At least 2 sources are required for a merge, you have provided {}", maps.length);
+            return;
+        }
+
+        for (int i = 0; i < maps.length - 1; i++) {
+            EnumMap<E, String> fromMap = maps[i];
+            EnumMap<E, String> toMap = maps[i + 1];
+            mergeMaps(fromMap, toMap, overwrite);
         }
     }
 
-    /**
-     * Merge key-value pairs from {@code otherSource} into this source, for the given {@code locale}.  This method is
-     * generally used for merging key-value pairs from an external source.  If you are merging another PatternSource
-     * implementation, {@link #mergeSource(Set, PatternSource)} is probably a better option.
-     * <p/>
-     * If {@code overwrite} is true, all values are transferred from otherSource to this source, overwriting any
-     * values that are already in this source. <p/> If {@code overwrite} is false, values from {@code otherSource}
-     * are only written to this source where the key is missing or has an empty value (empty String).
-     *
-     * @param locale
-     * @param otherSource
-     * @param overwrite
-     */
-    @Override
-    public <E extends Enum<E>> void mergeSource(Locale locale, EnumMap<E, String> otherSource, boolean overwrite) {
-        E sampleKey = otherSource.keySet()
-                                 .iterator()
-                                 .next();
-        EnumResourceBundle<E> bundle = getBundle((I18NKey) sampleKey, locale);
+    protected <E extends Enum<E> & I18NKey> void mergeMaps(EnumMap<E, String> fromMap, EnumMap<E, String> toMap,
+                                                           boolean overwrite) {
+        Preconditions.checkNotNull(fromMap);
+        Preconditions.checkNotNull(toMap);
 
-
-        // the rules for overwriting are determined by {@link #put}
-        for (Map.Entry<E, String> otherEntry : otherSource.entrySet()) {
-            put(bundle, otherEntry.getKey(), otherEntry.getValue(), overwrite);
+        for (Map.Entry<E, String> fromEntry : fromMap.entrySet()) {
+            if (overwrite) {
+                toMap.put(fromEntry.getKey(), fromEntry.getValue());
+            } else {
+                String toValue = toMap.get(fromEntry.getKey());
+                if (StringUtils.isEmpty(toValue)) {
+                    toMap.put(fromEntry.getKey(), fromEntry.getValue());
+                }
+            }
         }
+    }
 
+    public <E extends Enum<E> & I18NKey> void mergeMapAndSources(E sampleKey, Set<Locale> locales, boolean overwrite, String... sources) {
 
     }
 
@@ -360,8 +445,11 @@ public class DefaultPatternSource implements PatternSource {
      * @param locale
      */
     @Override
-    public <E extends Enum<E>> void setKeyValue(I18NKey key, Locale locale, String value) {
-        EnumResourceBundle<E> bundle = getBundle(key, locale);
+    public <E extends Enum<E> & I18NKey> void setKeyValue(String source, E key, Locale locale, String value) {
+        Preconditions.checkNotNull(source);
+        Preconditions.checkNotNull(key);
+        Preconditions.checkNotNull(locale);
+        EnumResourceBundle<E> bundle = getBundle(source, key, locale);
         put(bundle, (E) key, value, true);
     }
 
@@ -372,8 +460,10 @@ public class DefaultPatternSource implements PatternSource {
      * @param sampleKey
      */
     @Override
-    public <E extends Enum<E>> void reset(Class<? extends I18NKey> keyClass) {
-        reset(keyClass, supportedLocales);
+    public <E extends Enum<E> & I18NKey> void reset(String source, E sampleKey) {
+        Preconditions.checkNotNull(source);
+        Preconditions.checkNotNull(sampleKey);
+        reset(source, sampleKey, supportedLocales);
     }
 
     /**
@@ -384,86 +474,28 @@ public class DefaultPatternSource implements PatternSource {
      * @param locales
      */
     @Override
-    public <E extends Enum<E>> void reset(Class<? extends I18NKey> keyClass, Set<Locale> locales) {
+    public <E extends Enum<E> & I18NKey> void reset(String source, E sampleKey, Set<Locale> locales) {
+        Preconditions.checkNotNull(source);
+        Preconditions.checkNotNull(sampleKey);
+        Preconditions.checkNotNull(locales);
         for (Locale locale : locales) {
-            EnumResourceBundle<E> bundle = getBundle(keyClass, locale);
+            EnumResourceBundle<E> bundle = getBundle(source, sampleKey, locale);
             bundle.reset();
-            log.debug("Reset values from persistence, {} keys, locale {}", keyClass, locale);
+            log.debug("Reset values from persistence, {} keys, locale {}" + " source: " + source, sampleKey.getClass
+                    (), locale);
         }
     }
 
-    public boolean getAutoStub() {
-        return userOption.getOptionAsBoolean(getClass().getSimpleName(), OptionProp.autoStub.name(), false);
-    }
-
-    public void setAutoStub(boolean value) {
-        userOption.setOption(getClass().getSimpleName(), OptionProp.autoStub.name(), value);
-    }
-
-
-    /**
-     * This callback is used by {@link resourceBundle} to determine the available "formats" (sources in Krail terms)
-     * and the order in which they are called to provide a bundle.  The order used by Krail is the first found for a
-     * key class, in the following sequence<ol>
-     * <li> UserOption, property sourceOrder, for a specific key class</li>
-     * <li> UserOption, property sourceOrderDefault, for all key classes</li>
-     * <li> {@link #bundleSourceOrder}, which can be defined in the I18NModule, and applies to a specific key
-     * class</li>
-     * <li> {@link #bundleSourceOrderDefault}, which can be defined in the I18Module, and applies to all key
-     * classes</li>
-     * <li> the natural order of #bundleReaders keySet</li>
-     * <p>
-     * </ol>
-     *
-     * @param baseName
-     *
-     * @return
-     */
-    private List<String> bundleSourceOrder(String baseName) {
-        List<String> sourceOrder = getSourceOrder(baseName);
-        if (sourceOrder != null) {
-            return sourceOrder;
+    @Override
+    public void setOptionSourceOrder(String baseName, String... tags) {
+        Preconditions.checkNotNull(baseName);
+        if (tags.length < 1) {
+            log.warn("Attempted to setOptionSourceOrder with no source tags.  No change has been made ");
+            return;
         }
 
-        sourceOrder = getSourceOrderDefault();
-        if (sourceOrder != null) {
-            return sourceOrder;
-        }
-
-        Set<String> order = bundleSourceOrder.get(baseName);
-        if (order != null) {
-            return new ArrayList<>(order);
-        }
-
-        sourceOrder = new ArrayList<>(bundleSourceOrderDefault);
-        if (!sourceOrder.isEmpty()) {
-            return sourceOrder;
-        }
-
-        return new ArrayList(bundleReaders.keySet());
-    }
-
-    public List<String> getSourceOrder(String baseName) {
-        return userOption.getOptionAsList(this.getClass()
-                                              .getSimpleName(), baseNameProperty(baseName), null);
-    }
-
-    private String baseNameProperty(String baseName) {
-        return OptionProp.sourceOrder.name() + "-" + baseName;
-    }
-
-    public List<String> getSourceOrderDefault() {
-        return userOption.getOptionAsList(this.getClass()
-                                              .getSimpleName(), OptionProp.sourceOrderDefault, null);
-    }
-
-    public void setSourceOrderDefault(String... tags) {
         List<String> list = Arrays.asList(tags);
-        userOption.setOption(EnumResourceBundleControl.class.getSimpleName(), OptionProp.sourceOrderDefault, list);
-    }
-
-    public void setSourceOrder(String baseName, String... tags) {
-        List<String> list = Arrays.asList(tags);
-        userOption.setOption(EnumResourceBundleControl.class.getSimpleName(), baseNameProperty(baseName), list);
+        userOption.setOption(this.getClass()
+                                 .getSimpleName(), baseNameProperty(baseName), list);
     }
 }

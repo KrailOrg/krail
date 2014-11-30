@@ -54,6 +54,6 @@ public interface SitemapChecker {
      *
      * @return
      */
-    SitemapChecker replaceMissingKeyWith(I18NKey<?> defaultKey);
+    SitemapChecker replaceMissingKeyWith(I18NKey defaultKey);
 
 }

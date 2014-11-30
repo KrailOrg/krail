@@ -74,12 +74,12 @@ public class TestLoginView implements LoginView {
     }
 
     @Override
-    public void setStatusMessage(I18NKey<?> messageKey) {
+    public void setStatusMessage(String invalidLogin) {
+
     }
 
     @Override
-    public void setStatusMessage(String invalidLogin) {
-
+    public void setStatusMessage(I18NKey messageKey) {
     }
 
     @Override
