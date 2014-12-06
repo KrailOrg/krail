@@ -33,10 +33,7 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.ui.BasicUI;
 import uk.q3c.krail.core.ui.ScopedUI;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
+import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.view.component.UserStatusPanel;
 
 import static org.mockito.Matchers.any;
@@ -45,7 +42,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({UIScopeModule.class, TestI18NModule.class})
+@GuiceContext({UIScopeModule.class, TestI18NModule.class, TestUserOptionModule.class})
 public class KrailSecurityManagerTest extends ShiroIntegrationTestBase {
 
     @Mock
@@ -97,8 +94,6 @@ public class KrailSecurityManagerTest extends ShiroIntegrationTestBase {
             @Override
             protected void configure() {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
         };
     }

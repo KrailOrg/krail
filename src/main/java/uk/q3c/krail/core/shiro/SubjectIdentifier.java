@@ -32,4 +32,10 @@ public interface SubjectIdentifier {
 
     Object subjectIdentifier();
 
+    /**
+     * Returns a unique userId for the subject
+     *
+     * @return
+     */
+    String userId();
 }

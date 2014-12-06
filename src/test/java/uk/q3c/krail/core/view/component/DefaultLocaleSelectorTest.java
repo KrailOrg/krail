@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.user.notify.UserNotifier;
+import uk.q3c.krail.core.user.opt.MockUserOption;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.i18n.CurrentLocale;
 
@@ -44,8 +45,8 @@ public class DefaultLocaleSelectorTest {
     @Mock
     UserNotifier userNotifier;
 
-    @Mock
-    UserOption userOption;
+
+    UserOption userOption = new MockUserOption();
 
     private DefaultLocaleSelector selector;
 

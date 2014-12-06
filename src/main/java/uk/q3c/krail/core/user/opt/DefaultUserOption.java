@@ -1,176 +1,118 @@
-/*
- * Copyright (C) 2013 David Sowerby
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
 package uk.q3c.krail.core.user.opt;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.shiro.subject.Subject;
+import uk.q3c.krail.core.shiro.SubjectIdentifier;
+import uk.q3c.krail.core.shiro.SubjectProvider;
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * A set of user options. Although not mandatory, typically the option group and option are the simple class name and
- * field of the object (respectively) requiring the option value. <br>
- * <br>
- * The {@link UserOptionStore} is injected to enable use of different storage methods.
- *
- * @author David Sowerby 15 Jul 2013
+ * Created by David Sowerby on 03/12/14.
  */
-@Singleton
 public class DefaultUserOption implements UserOption {
 
-    private static Logger log = LoggerFactory.getLogger(DefaultUserOption.class);
-    private final UserOptionStore userOptionStore;
+    private final String systemLayer = "99:system";
+    private final UserOptionLayerDefinition layerDefinition;
+    private final SubjectProvider subjectProvider;
+    private Class<? extends UserOptionConsumer> consumerClass;
+    //This might be useful for pre-loading a set of options, but is not implemented yet
+    private Class<? extends Enum> keys;
+    private UserOptionStore optionStore;
+    private SubjectIdentifier subjectIdentifier;
 
     @Inject
-    public DefaultUserOption(UserOptionStore userOptionStore) {
-        super();
-        this.userOptionStore = userOptionStore;
+    protected DefaultUserOption(UserOptionStore optionStore, UserOptionLayerDefinition layerDefinition,
+                                SubjectProvider subjectProvider, SubjectIdentifier subjectIdentifier) {
+        this.optionStore = optionStore;
+        this.layerDefinition = layerDefinition;
+        this.subjectProvider = subjectProvider;
+        this.subjectIdentifier = subjectIdentifier;
     }
 
     @Override
-    public Map<String, String> getOptionAsMap(String optionGroup, Enum<?> option, Map<String, String> defaultValue) {
-        return getOptionAsMap(optionGroup, option.name(), defaultValue);
+    public void configure(UserOptionConsumer consumer, Class<? extends Enum> keys) {
+        this.consumerClass = consumer.getClass();
+        this.keys = keys;
     }
 
     @Override
-    public Map<String, String> getOptionAsMap(String optionGroup, String option, Map<String, String> defaultValue) {
-        Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
-        if (optionValue == null) {
-            return defaultValue;
+    public void configure(Class<? extends UserOptionConsumer> consumerClass, Class<? extends Enum> keys) {
+        this.consumerClass = consumerClass;
+        this.keys = keys;
+    }
+
+    /**
+     * Gets option value for the {@code key} and {@code qualifiers}, combined with the {@link #consumerClass} provided
+     * by
+     * the
+     * {@link #configure(UserOptionConsumer, Class)} method
+     *
+     * @param defaultValue
+     *         the default value to be returned if no value is found in the store.  Also determines the type of the
+     *         return value
+     * @param key
+     *         an enum key for the option
+     * @param qualifiers
+     * @param <T>
+     *
+     * @return
+     */
+    @Override
+    public <T> T get(T defaultValue, Enum<?> key, String... qualifiers) {
+        Joiner joiner = Joiner.on(", ")
+                              .skipNulls();
+        String joinedQualifiers = joiner.join(qualifiers);
+        Subject subject = subjectProvider.get();
+        String layerId;
+
+        Optional<T> value;
+        if (subject.isAuthenticated()) {
+            //try the user level first
+            layerId = subjectIdentifier.userId();
+            value = optionStore.load(defaultValue, layerId, consumerClass.getClass()
+                                                                         .getName(), key.name(), joinedQualifiers);
+            if (value.isPresent()) {
+                return value.get();
+            }
+            //no value at user level, so
+            //iterate through other levels, returning a value if found
+            List<String> layers = layerDefinition.getLayers(subjectIdentifier.userId(), Optional.absent());
+            for (String layer : layers) {
+                value = optionStore.load(defaultValue, layerId, consumerClass.getClass()
+                                                                             .getName(), key.name(), joinedQualifiers);
+                if (value.isPresent()) {
+                    return value.get();
+                }
+            }
+
+            //still no value, try the system level
+            if (value.isPresent()) {
+                return value.get();
+            }
         }
-        return (Map<String, String>) optionValue;
-    }
 
-    @Override
-    public List<String> getOptionAsList(String optionGroup, Enum<?> option, List<String> defaultValue) {
-        return getOptionAsList(optionGroup, option.name(), defaultValue);
-    }
+        //no value found for user related layers, or user not authenticated, try the system level
+        value = optionStore.load(defaultValue, systemLayer, consumerClass.getClass()
+                                                                         .getName(), key.name(), joinedQualifiers);
 
-    @Override
-    public List<String> getOptionAsList(String optionGroup, String option, List<String> defaultValue) {
-        Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
-        if (optionValue == null) {
-            return defaultValue;
+        if (value.isPresent()) {
+            return value.get();
         }
-        return (List<String>) optionValue;
+
+        //still nothing found, return the default value
+        return defaultValue;
     }
 
     @Override
-    public int getOptionAsInt(String optionGroup, Enum<?> option, int defaultValue) {
-        return getOptionAsInt(optionGroup, option.name(), defaultValue);
+    public <T> void set(T value, Enum<?> key, String... qualifiers) {
+
     }
 
     @Override
-    public int getOptionAsInt(String optionGroup, String option, int defaultValue) {
-        Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
-        if (optionValue == null) {
-            return defaultValue;
-        }
-        return (int) optionValue;
+    public void flushCache() {
+        optionStore.flushCache();
     }
-
-    @Override
-    public String getOptionAsString(String optionGroup, Enum<?> option, String defaultValue) {
-        return getOptionAsString(optionGroup, option.name(), defaultValue);
-    }
-
-    @Override
-    public String getOptionAsString(String optionGroup, String option, String defaultValue) {
-        Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
-        if (optionValue == null) {
-            return defaultValue;
-        }
-        return (String) optionValue;
-    }
-
-    @Override
-    public DateTime getOptionAsDateTime(String optionGroup, Enum<?> option, DateTime defaultValue) {
-        return getOptionAsDateTime(optionGroup, option.name(), defaultValue);
-    }
-
-    @Override
-    public DateTime getOptionAsDateTime(String optionGroup, String option, DateTime defaultValue) {
-        Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
-        if (optionValue == null) {
-            return defaultValue;
-        }
-        return (DateTime) optionValue;
-    }
-
-    @Override
-    public double getOptionAsDouble(String optionGroup, Enum<?> option, double defaultValue) {
-        return getOptionAsDouble(optionGroup, option.name(), defaultValue);
-    }
-
-    @Override
-    public double getOptionAsDouble(String optionGroup, String option, double defaultValue) {
-        Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
-        if (optionValue == null) {
-            return defaultValue;
-        }
-        return (double) optionValue;
-    }
-
-    @Override
-    public boolean getOptionAsBoolean(String optionGroup, Enum<?> option, boolean defaultValue) {
-        return getOptionAsBoolean(optionGroup, option.name(), defaultValue);
-    }
-
-    @Override
-    public boolean getOptionAsBoolean(String optionGroup, String option, boolean defaultValue) {
-        Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
-        if (optionValue == null) {
-            return defaultValue;
-        }
-        return (boolean) optionValue;
-    }
-
-    @Override
-    public Enum<?> getOptionAsEnum(String optionGroup, String option, Enum<?> defaultValue) {
-        Object optionValue = userOptionStore.getOptionValue(optionGroup, option);
-        if (optionValue == null) {
-            return defaultValue;
-        }
-        return (Enum<?>) optionValue;
-    }
-
-    @Override
-    public Enum<?> getOptionAsEnum(String optionGroup, Enum<?> option, Enum<?> defaultValue) {
-        Object optionValue = userOptionStore.getOptionValue(optionGroup, option.name());
-        if (optionValue == null) {
-            return defaultValue;
-        }
-        return (Enum<?>) optionValue;
-    }
-
-    @Override
-    public void setOption(String optionGroup, Enum<?> option, Object value) {
-        setOption(optionGroup, option.name(), value);
-    }
-
-    @Override
-    public void setOption(String optionGroup, String option, Object value) {
-        userOptionStore.setOptionValue(optionGroup, option, value);
-    }
-
-
-    @Override
-    public void clear() {
-        userOptionStore.clear();
-    }
-
 }

@@ -40,11 +40,11 @@ public class DefaultSubjectIdentifier implements SubjectIdentifier {
 
     /**
      * If the Subject has authenticated, returns Subject.getPrincipal.toString()
-     * <p/>
+     * <p>
      * If the Subject is remembered, returns Subject.getPrincipal.toString() with a "?" appended
-     * <p/>
+     * <p>
      * If the Subject is neither authenticated or remembered, returns the I18N translated value of LabelKey.Guest
-     * <p/>
+     * <p>
      *
      * @see uk.q3c.krail.core.shiro.SubjectIdentifier#subjectName()
      */
@@ -65,6 +65,21 @@ public class DefaultSubjectIdentifier implements SubjectIdentifier {
     public Object subjectIdentifier() {
         Subject subject = subjectProvider.get();
         return subject.getPrincipal();
+    }
+
+    /**
+     * Assumes that the Shiro Principal returns a unique identifier which can return a String value.  If this is not
+     * the
+     * case, this method will need to be overridden by a method which will provide a String uniquely identifying the
+     * user.
+     *
+     * @return
+     */
+    @Override
+    public String userId() {
+        Subject subject = subjectProvider.get();
+        return subject.getPrincipal()
+                      .toString();
     }
 
 }

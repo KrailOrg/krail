@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionConsumer;
 
 import java.io.IOException;
 import java.util.*;
@@ -31,8 +32,8 @@ import java.util.*;
  * <p>
  * Created by David Sowerby on 04/11/14.
  */
-public class DefaultPatternSource implements PatternSource {
-    public enum OptionProp {autoStub, generateStubWithName, sourceOrder, sourceOrderDefault}
+public class DefaultPatternSource implements PatternSource, UserOptionConsumer {
+    public enum UserOptionProperty {AUTO_STUB, GENERATE_STUB_WITH_NAME, SOURCE_ORDER, SOURCE_ORDER_DEFAULT}
 
     private static Logger log = LoggerFactory.getLogger(DefaultPatternSource.class);
     private EnumResourceBundleControl bundleControl;
@@ -53,6 +54,7 @@ public class DefaultPatternSource implements PatternSource {
         this.bundleSourceOrderDefault = bundleSourceOrderDefault;
         this.bundleSourceOrder = bundleSourceOrder;
         this.bundleReaders = bundleReaders;
+        userOption.configure(this, UserOptionProperty.class);
     }
 
 
@@ -62,7 +64,6 @@ public class DefaultPatternSource implements PatternSource {
      * <p>
      * Each bundle source relevant to {@code key} is tried, as specified by {@link #bundleSourceOrder(I18NKey)}
      * <p>
-     *
      *
      * @param key
      *         the key to look up
@@ -81,7 +82,7 @@ public class DefaultPatternSource implements PatternSource {
         for (String source : bundleSourceOrder(key)) {
             EnumResourceBundle<E> bundle = getBundle(source, key, locale);
             String pattern = bundle.getValue((E) key);
-            if (pattern!=null) {
+            if (pattern != null) {
                 result = Optional.of(pattern);
                 break;
             } else {
@@ -160,33 +161,27 @@ public class DefaultPatternSource implements PatternSource {
 
     @Override
     public List<String> getOptionSourceOrder(String baseName) {
-        return userOption.getOptionAsList(this.getClass()
-                                              .getSimpleName(), baseNameProperty(baseName), null);
+        return userOption.get(null, UserOptionProperty.SOURCE_ORDER, baseName);
     }
 
-    private String baseNameProperty(String baseName) {
-        return OptionProp.sourceOrder.name() + "-" + baseName;
-    }
 
     @Override
     public List<String> getOptionSourceOrderDefault() {
-        return userOption.getOptionAsList(this.getClass()
-                                              .getSimpleName(), OptionProp.sourceOrderDefault, null);
+        return userOption.get(null, UserOptionProperty.SOURCE_ORDER_DEFAULT);
     }
 
     @Override
     public void setOptionSourceOrderDefault(String... tags) {
-        List<String> list = Arrays.asList(tags);
-        userOption.setOption(this.getClass()
-                                 .getSimpleName(), OptionProp.sourceOrderDefault, list);
+        List<String> defaults = Arrays.asList(tags);
+        userOption.set(defaults, UserOptionProperty.SOURCE_ORDER_DEFAULT);
     }
 
     public boolean getAutoStub() {
-        return userOption.getOptionAsBoolean(getClass().getSimpleName(), OptionProp.autoStub.name(), false);
+        return userOption.get(false, UserOptionProperty.AUTO_STUB);
     }
 
     public void setAutoStub(boolean value) {
-        userOption.setOption(getClass().getSimpleName(), OptionProp.autoStub.name(), value);
+        userOption.set(value, UserOptionProperty.AUTO_STUB);
     }
 
     /**
@@ -214,11 +209,11 @@ public class DefaultPatternSource implements PatternSource {
     }
 
     public boolean getGenerateStubWithName() {
-        return userOption.getOptionAsBoolean(getClass().getSimpleName(), OptionProp.generateStubWithName.name(), true);
+        return userOption.get(true, UserOptionProperty.GENERATE_STUB_WITH_NAME);
     }
 
     public void setGenerateStubWithName(boolean value) {
-        userOption.setOption(getClass().getSimpleName(), OptionProp.generateStubWithName.name(), value);
+        userOption.set(value, UserOptionProperty.GENERATE_STUB_WITH_NAME);
     }
 
     /**
@@ -334,8 +329,8 @@ public class DefaultPatternSource implements PatternSource {
      * @see #writeOut(Class, boolean)
      */
     @Override
-    public <E extends Enum<E> & I18NKey> void writeOut(String source, BundleWriter<E> writer, E sampleKey, Set<Locale>
-            locales, boolean allKeys) throws IOException {
+    public <E extends Enum<E> & I18NKey> void writeOut(String source, BundleWriter<E> writer, E sampleKey,
+                                                       Set<Locale> locales, boolean allKeys) throws IOException {
         for (Locale locale : locales) {
             EnumResourceBundle<E> bundle = getBundle(source, sampleKey, locale);
             Class<E> enumClass = bundle.getKeyClass();
@@ -433,7 +428,8 @@ public class DefaultPatternSource implements PatternSource {
         }
     }
 
-    public <E extends Enum<E> & I18NKey> void mergeMapAndSources(E sampleKey, Set<Locale> locales, boolean overwrite, String... sources) {
+    public <E extends Enum<E> & I18NKey> void mergeMapAndSources(E sampleKey, Set<Locale> locales, boolean overwrite,
+                                                                 String... sources) {
 
     }
 
@@ -495,7 +491,10 @@ public class DefaultPatternSource implements PatternSource {
         }
 
         List<String> list = Arrays.asList(tags);
-        userOption.setOption(this.getClass()
-                                 .getSimpleName(), baseNameProperty(baseName), list);
+        userOption.set(list, UserOptionProperty.SOURCE_ORDER, baseName);
+    }
+    @Override
+    public UserOption getUserOption() {
+        return userOption;
     }
 }

@@ -25,8 +25,8 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
 import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.MockUserOption;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.core.user.opt.UserOptionStore;
 import uk.q3c.krail.core.view.LoginView;
@@ -354,7 +354,7 @@ public class DefaultMasterSitemapTest {
             protected void configure() {
                 bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOption.class).to(MockUserOption.class);
                 bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
 

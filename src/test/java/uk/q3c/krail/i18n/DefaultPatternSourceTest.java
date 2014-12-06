@@ -12,8 +12,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionModule;
 import uk.q3c.util.ResourceUtils;
 import uk.q3c.util.testutil.TestResource;
 import util.FileTestUtil;
@@ -25,7 +25,7 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, UserOptionModule.class})
+@GuiceContext({TestI18NModule.class, TestUserOptionModule.class})
 public class DefaultPatternSourceTest {
 
     @Inject
@@ -163,7 +163,7 @@ public class DefaultPatternSourceTest {
             FileUtils.deleteQuietly(testOutDir);
         }
         File targetDir = new File(ResourceUtils.userTempDirectory(), "testOut/codeModel");
-        writer.setWritePath(targetDir);
+        writer.setOptionWritePath(targetDir);
 
         Set<Locale> locales = new HashSet<>();
         locales.add(Locale.GERMANY);
@@ -193,7 +193,7 @@ public class DefaultPatternSourceTest {
             FileUtils.deleteQuietly(testOutDir);
         }
         File targetDir = new File(ResourceUtils.userTempDirectory(), "testOut/codeModel");
-        writer.setWritePath(targetDir);
+        writer.setOptionWritePath(targetDir);
 
         Set<Locale> locales = new HashSet<>();
         locales.add(Locale.ITALY);
@@ -215,7 +215,7 @@ public class DefaultPatternSourceTest {
             FileUtils.deleteQuietly(testOutDir);
         }
         File targetDir = new File(ResourceUtils.userTempDirectory(), "testOut/codeModel");
-        writer.setWritePath(targetDir);
+        writer.setOptionWritePath(targetDir);
         source.setGenerateStubWithName(false);
         Set<Locale> locales = new HashSet<>();
         locales.add(Locale.ITALY);
@@ -236,7 +236,7 @@ public class DefaultPatternSourceTest {
             testOutDir.delete();
         }
         File targetDir = new File(ResourceUtils.userTempDirectory(), "testOut/codeModel");
-        writer.setWritePath(targetDir);
+        writer.setOptionWritePath(targetDir);
 
         Set<Locale> locales = new HashSet<>();
         locales.add(Locale.GERMANY);

@@ -12,11 +12,9 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.ui.Button;
 import fixture.MockCurrentLocale;
 import fixture.TestI18NModule;
@@ -30,10 +28,7 @@ import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.shiro.DefaultSubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
+import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
@@ -45,7 +40,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class})
+@GuiceContext({TestI18NModule.class, TestUserOptionModule.class})
 public class DefaultUserStatusPanelTest {
 
     DefaultUserStatusPanel panel;
@@ -157,17 +152,6 @@ public class DefaultUserStatusPanelTest {
         verify(navigator).navigateTo(StandardPageKey.Log_Out);
     }
 
-    @ModuleProvider
-    protected AbstractModule moduleProvider() {
-        return new AbstractModule() {
 
-            @Override
-            protected void configure() {
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-            }
-
-        };
-    }
 
 }

@@ -45,7 +45,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({UIScopeModule.class, TestI18NModule.class})
+@GuiceContext({UIScopeModule.class, TestI18NModule.class, TestUserOptionModule.class})
 public class DefaultUserNavigationTreeTest {
 
     @Inject
@@ -61,7 +61,7 @@ public class DefaultUserNavigationTreeTest {
     Navigator navigator;
 
     @Inject
-    DefaultUserOption userOption;
+    UserOption userOption;
 
     DefaultUserNavigationTreeBuilder builder;
 
@@ -92,7 +92,7 @@ public class DefaultUserNavigationTreeTest {
         expectedNodes.remove(userSitemap.logoutNode);
 
         // when
-        userNavigationTree.setMaxDepth(1000);
+        userNavigationTree.setOptionMaxDepth(1000);
         // then
         @SuppressWarnings("unchecked") List<UserSitemapNode> itemIds = (List<UserSitemapNode>) userNavigationTree
                 .getItemIds();
@@ -125,7 +125,7 @@ public class DefaultUserNavigationTreeTest {
         expectedNodes.remove(userSitemap.b1Node);
 
         // when
-        userNavigationTree.setMaxDepth(2); // will cause rebuild
+        userNavigationTree.setOptionMaxDepth(2); // will cause rebuild
         // then
         @SuppressWarnings("unchecked") List<UserSitemapNode> itemIds = (List<UserSitemapNode>) userNavigationTree
                 .getItemIds();
@@ -141,12 +141,11 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree = newTree();
 
         // when
-        userNavigationTree.setMaxDepth(3);
+        userNavigationTree.setOptionMaxDepth(3);
         // then
-        assertThat(userNavigationTree.getMaxDepth()).isEqualTo(3);
+        assertThat(userNavigationTree.getOptionMaxDepth()).isEqualTo(3);
         // userOption has been set
-        int result = userOption.getOptionAsInt(DefaultUserNavigationTree.class.getSimpleName(),
-                UserOptionProperty.MAX_DEPTH, -1);
+        int result = userNavigationTree.getUserOption().get(-1, DefaultUserNavigationTree.UserOptionProperty.MAX_DEPTH);
         assertThat(result).isEqualTo(3);
     }
 
@@ -157,12 +156,11 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree = newTree();
 
         // when
-        userNavigationTree.setMaxDepth(2);
+        userNavigationTree.setOptionMaxDepth(2);
         // then
-        assertThat(userNavigationTree.getMaxDepth()).isEqualTo(2);
+        assertThat(userNavigationTree.getOptionMaxDepth()).isEqualTo(2);
         // userOption has been set
-        int result = userOption.getOptionAsInt(DefaultUserNavigationTree.class.getSimpleName(),
-                UserOptionProperty.MAX_DEPTH, -1);
+        int result = userNavigationTree.getUserOption().get(-1, DefaultUserNavigationTree.UserOptionProperty.MAX_DEPTH);
         assertThat(result).isEqualTo(2);
     }
 
@@ -174,13 +172,13 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree = newTree();
         userNavigationTree.build();
         // when
-        userNavigationTree.setSortAscending(false);
+        userNavigationTree.setOptionSortAscending(false);
         // then build has happened
         assertThat(userNavigationTree.isRebuildRequired()).isFalse();
 
         // when
-        userNavigationTree.setSortAscending(true, false);
-        userNavigationTree.setSortType(SortType.INSERTION, false);
+        userNavigationTree.setOptionSortAscending(true, false);
+        userNavigationTree.setOptionSortType(SortType.INSERTION, false);
         // then build has not happened
         assertThat(userNavigationTree.isRebuildRequired()).isTrue();
     }
@@ -204,7 +202,7 @@ public class DefaultUserNavigationTreeTest {
         // given
         userNavigationTree = newTree();
         userNavigationTree.build();
-        userNavigationTree.setSortAscending(false, false);
+        userNavigationTree.setOptionSortAscending(false, false);
         // when
         userNavigationTree.structureChanged();
         // then make sure build has been called
@@ -220,7 +218,7 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree = newTree();
         // then
         assertThat(userNavigationTree.isImmediate()).isTrue();
-        assertThat(userNavigationTree.getMaxDepth()).isEqualTo(10);
+        assertThat(userNavigationTree.getOptionMaxDepth()).isEqualTo(10);
         assertThat(userNavigationTree.isRebuildRequired()).isTrue();
 
     }
@@ -277,7 +275,7 @@ public class DefaultUserNavigationTreeTest {
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedAlphaAscending());
 
         // when
-        userNavigationTree.setSortAscending(false);
+        userNavigationTree.setOptionSortAscending(false);
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
@@ -287,8 +285,8 @@ public class DefaultUserNavigationTreeTest {
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedAlphaDescending());
 
         // when
-        userNavigationTree.setSortAscending(true);
-        userNavigationTree.setSortType(SortType.INSERTION);
+        userNavigationTree.setOptionSortAscending(true);
+        userNavigationTree.setOptionSortType(SortType.INSERTION);
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
@@ -298,8 +296,8 @@ public class DefaultUserNavigationTreeTest {
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedInsertionAscending());
 
         // when
-        userNavigationTree.setSortAscending(false);
-        userNavigationTree.setSortType(SortType.POSITION);
+        userNavigationTree.setOptionSortAscending(false);
+        userNavigationTree.setOptionSortType(SortType.POSITION);
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
@@ -309,8 +307,8 @@ public class DefaultUserNavigationTreeTest {
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedPositionDescending());
 
         // when
-        userNavigationTree.setSortAscending(false);
-        userNavigationTree.setSortType(SortType.INSERTION);
+        userNavigationTree.setOptionSortAscending(false);
+        userNavigationTree.setOptionSortType(SortType.INSERTION);
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
@@ -320,8 +318,8 @@ public class DefaultUserNavigationTreeTest {
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedInsertionDescending());
 
         // when
-        userNavigationTree.setSortAscending(true);
-        userNavigationTree.setSortType(SortType.POSITION);
+        userNavigationTree.setOptionSortAscending(true);
+        userNavigationTree.setOptionSortType(SortType.POSITION);
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
@@ -338,13 +336,12 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree = newTree();
         userNavigationTree.build();
         // when
-        userNavigationTree.setSortAscending(true);
-        userNavigationTree.setSortType(SortType.INSERTION);
+        userNavigationTree.setOptionSortAscending(true);
+        userNavigationTree.setOptionSortType(SortType.INSERTION);
         // then
-        assertThat(userOption.getOptionAsBoolean(DefaultUserNavigationTree.class.getSimpleName(),
-                UserOptionProperty.SORT_ASCENDING, false)).isTrue();
-        assertThat(userOption.getOptionAsEnum(DefaultUserNavigationTree.class.getSimpleName(),
-                UserOptionProperty.SORT_TYPE, SortType.ALPHA)).isEqualTo(SortType.INSERTION);
+        assertThat(userNavigationTree.getUserOption().get(false, DefaultUserNavigationTree.UserOptionProperty
+                .SORT_ASCENDING)).isTrue();
+        assertThat(userNavigationTree.getUserOption().get(SortType.ALPHA,DefaultUserNavigationTree.UserOptionProperty.SORT_TYPE)).isEqualTo(SortType.INSERTION);
 
     }
 
@@ -356,8 +353,6 @@ public class DefaultUserNavigationTreeTest {
             protected void configure() {
 
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
                 bind(UserSitemapSorters.class).to(DefaultUserSitemapSorters.class);
 
             }

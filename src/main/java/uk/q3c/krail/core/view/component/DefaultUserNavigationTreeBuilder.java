@@ -40,7 +40,7 @@ public class DefaultUserNavigationTreeBuilder implements UserNavigationTreeBuild
         target.setCaptionReader(new UserSitemapNodeCaption());
         target.setNodeModifier(new UserNavigationTreeNodeModifier(userNavigationTree));
         treeCopy.setTargetSortComparator(userNavigationTree.getSortComparator());
-        treeCopy.setMaxDepth(userNavigationTree.getMaxDepth());
+        treeCopy.setMaxDepth(userNavigationTree.getOptionMaxDepth());
         List<NodeFilter> filters = new ArrayList<>();
         defineFilters(filters);
         applyFilters(treeCopy, filters);

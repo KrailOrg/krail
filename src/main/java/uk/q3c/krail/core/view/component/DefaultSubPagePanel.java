@@ -22,7 +22,7 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionProperty;
+import uk.q3c.krail.core.user.opt.UserOptionConsumer;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18N;
 
@@ -31,7 +31,9 @@ import java.util.Comparator;
 import java.util.List;
 
 @I18N
-public class DefaultSubPagePanel extends NavigationButtonPanel implements SubPagePanel, UserSitemapChangeListener {
+public class DefaultSubPagePanel extends NavigationButtonPanel implements UserOptionConsumer, SubPagePanel,
+        UserSitemapChangeListener {
+    public enum UserOptionProperty {SORT_ASCENDING, SORT_TYPE}
     private static Logger log = LoggerFactory.getLogger(DefaultSubPagePanel.class);
     private final UserSitemap userSitemap;
     private final UserOption userOption;
@@ -44,27 +46,24 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements SubPag
         this.userSitemap = userSitemap;
         this.userOption = userOption;
         this.sorters = sorters;
-        sorters.setSortAscending(getSortAscending());
-        sorters.setSortType(getSortType());
+        userOption.configure(this, UserOptionProperty.class);
+        sorters.setOptionSortAscending(getOptionSortAscending());
+        sorters.setOptionSortType(getOptionSortType());
     }
 
-    public boolean getSortAscending() {
-        boolean ascending = userOption.getOptionAsBoolean(this.getClass()
-                                                              .getSimpleName(), UserOptionProperty.SORT_ASCENDING,
-                true);
-        return ascending;
+    public boolean getOptionSortAscending() {
+        return userOption.get(true, UserOptionProperty.SORT_ASCENDING);
     }
 
     @Override
-    public void setSortAscending(boolean ascending) {
+    public void setOptionSortAscending(boolean ascending) {
         setSortAscending(ascending, true);
     }
 
     @Override
     public void setSortAscending(boolean ascending, boolean rebuild) {
-        sorters.setSortAscending(ascending);
-        userOption.setOption(this.getClass()
-                                 .getSimpleName(), UserOptionProperty.SORT_ASCENDING, ascending);
+        sorters.setOptionSortAscending(ascending);
+        userOption.set(ascending, UserOptionProperty.SORT_ASCENDING);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -91,23 +90,20 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements SubPag
         return sorters.getSortComparator();
     }
 
-    public SortType getSortType() {
-        SortType sortType = (SortType) userOption.getOptionAsEnum(this.getClass()
-                                                                      .getSimpleName(), UserOptionProperty.SORT_TYPE,
-                SortType.ALPHA);
+    public SortType getOptionSortType() {
+        SortType sortType = userOption.get(SortType.ALPHA, UserOptionProperty.SORT_TYPE);
         return sortType;
     }
 
     @Override
-    public void setSortType(SortType sortType) {
-        setSortType(sortType, true);
+    public void setOptionSortType(SortType sortType) {
+        setOptionSortType(sortType, true);
     }
 
     @Override
-    public void setSortType(SortType sortType, boolean rebuild) {
-        sorters.setSortType(sortType);
-        userOption.setOption(this.getClass()
-                                 .getSimpleName(), UserOptionProperty.SORT_TYPE, sortType);
+    public void setOptionSortType(SortType sortType, boolean rebuild) {
+        sorters.setOptionSortType(sortType);
+        userOption.set(sortType, UserOptionProperty.SORT_TYPE);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -125,6 +121,10 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements SubPag
     public void structureChanged() {
         rebuildRequired = true;
         build();
+    }
 
+    @Override
+    public UserOption getUserOption() {
+        return userOption;
     }
 }

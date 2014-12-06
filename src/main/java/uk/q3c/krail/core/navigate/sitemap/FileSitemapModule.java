@@ -14,12 +14,12 @@ package uk.q3c.krail.core.navigate.sitemap;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
-import uk.q3c.krail.core.guice.BaseGuiceServletInjector;
+import uk.q3c.krail.core.guice.DefaultBindingManager;
 
 /**
  * If you want to create Sitemap entries for your own code from a sitemap properties file, you can either subclass this
  * module and provide the entries in the {@link #define} method, or just simply use this as an example and create your
- * own. The module then needs to be added to your subclass of {@link BaseGuiceServletInjector}. By convention, modules
+ * own. The module then needs to be added to your subclass of {@link DefaultBindingManager}. By convention, modules
  * relating to the Sitemap are added in the addSitemapModules() method.
  * <p/>
  * You can add any number of modules this way, but any duplicated map keys (the keys you specify for

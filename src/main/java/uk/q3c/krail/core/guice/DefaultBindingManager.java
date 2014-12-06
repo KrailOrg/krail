@@ -45,11 +45,11 @@ import javax.servlet.ServletContextEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseGuiceServletInjector extends GuiceServletContextListener {
+public abstract class DefaultBindingManager extends GuiceServletContextListener {
     protected static Injector injector;
-    private static Logger log = LoggerFactory.getLogger(BaseGuiceServletInjector.class);
+    private static Logger log = LoggerFactory.getLogger(DefaultBindingManager.class);
 
-    protected BaseGuiceServletInjector() {
+    protected DefaultBindingManager() {
         super();
     }
 
@@ -66,7 +66,7 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
     }
 
     /**
-     * Module instances for the base should be added in {@link #getModules()}. Module instance for the app using Krail
+     * Module instances for the core should be added in {@link #getModules()}. Module instances for the app using Krail
      * should be added to {@link AppModules#appModules()}
      *
      * @see com.google.inject.servlet.GuiceServletContextListener#getInjector()
@@ -92,37 +92,37 @@ public abstract class BaseGuiceServletInjector extends GuiceServletContextListen
     }
 
     private List<Module> getModules() {
-        List<Module> baseModules = new ArrayList<>();
+        List<Module> coreModules = new ArrayList<>();
 
-        baseModules.add(i18NModule());
-        baseModules.add(applicationConfigurationModule());
-        baseModules.add(new SitemapModule());
+        coreModules.add(i18NModule());
+        coreModules.add(applicationConfigurationModule());
+        coreModules.add(new SitemapModule());
 
-        baseModules.add(new ThreadScopeModule());
-        baseModules.add(new UIScopeModule());
-        baseModules.add(new VaadinSessionScopeModule());
+        coreModules.add(new ThreadScopeModule());
+        coreModules.add(new UIScopeModule());
+        coreModules.add(new VaadinSessionScopeModule());
 
-        baseModules.add(new ServicesMonitorModule());
+        coreModules.add(new ServicesMonitorModule());
 
-        baseModules.add(shiroModule());
-        baseModules.add(shiroVaadinModule());
-        baseModules.add(new ShiroAopModule());
+        coreModules.add(shiroModule());
+        coreModules.add(shiroVaadinModule());
+        coreModules.add(new ShiroAopModule());
 
-        baseModules.add(servletModule());
+        coreModules.add(servletModule());
 
-        baseModules.add(standardPagesModule());
+        coreModules.add(standardPagesModule());
 
-        baseModules.add(viewModule());
+        coreModules.add(viewModule());
 
-        baseModules.add(componentModule());
+        coreModules.add(componentModule());
 
-        baseModules.add(userModule());
+        coreModules.add(userModule());
 
-        baseModules.add(userOptionModule());
+        coreModules.add(userOptionModule());
 
-        addAppModules(baseModules);
-        addSitemapModules(baseModules);
-        return baseModules;
+        addAppModules(coreModules);
+        addSitemapModules(coreModules);
+        return coreModules;
     }
 
     /**

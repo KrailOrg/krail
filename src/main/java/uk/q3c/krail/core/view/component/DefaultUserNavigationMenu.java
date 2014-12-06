@@ -20,10 +20,16 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapChangeListener;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionProperty;
+import uk.q3c.krail.core.user.opt.UserOptionConsumer;
 import uk.q3c.util.ID;
 
-public class DefaultUserNavigationMenu extends MenuBar implements UserNavigationMenu, UserSitemapChangeListener {
+public class DefaultUserNavigationMenu extends MenuBar implements UserOptionConsumer, UserNavigationMenu,
+        UserSitemapChangeListener {
+
+    public enum UserOptionProperty {
+        MAX_DEPTH
+    }
+
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationMenu.class);
     private final UserSitemap userSitemap;
     private final UserOption userOption;
@@ -38,6 +44,7 @@ public class DefaultUserNavigationMenu extends MenuBar implements UserNavigation
         this.userSitemap = sitemap;
         this.userOption = userOption;
         this.builder = builder;
+        userOption.configure(this, UserOptionProperty.class);
         setImmediate(true);
         builder.setUserNavigationMenu(this);
         userSitemap.addListener(this);
@@ -50,13 +57,12 @@ public class DefaultUserNavigationMenu extends MenuBar implements UserNavigation
     }
 
     @Override
-    public int getMaxDepth() {
-        return userOption.getOptionAsInt(getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, 10);
+    public int getOptionMaxDepth() {
+        return userOption.get(10, UserOptionProperty.MAX_DEPTH);
     }
-
     @Override
-    public void setMaxDepth(int depth) {
-        userOption.setOption(getClass().getSimpleName(), UserOptionProperty.MAX_DEPTH, depth);
+    public void setOptionMaxDepth(int depth) {
+        userOption.set(depth, UserOptionProperty.MAX_DEPTH);
         build();
     }
 
@@ -95,4 +101,8 @@ public class DefaultUserNavigationMenu extends MenuBar implements UserNavigation
         build();
     }
 
+    @Override
+    public UserOption getUserOption() {
+        return userOption;
+    }
 }

@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.ui.BrowserProvider;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
+import uk.q3c.krail.core.user.opt.MockUserOption;
 import uk.q3c.krail.core.user.status.DefaultUserStatus;
 
 import java.lang.annotation.Annotation;
@@ -31,7 +31,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -45,8 +45,9 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
     Annotation annotation;
     @Mock
     DefaultUserStatus userStatus;
-    @Mock
-    DefaultUserOption userOption;
+
+
+    MockUserOption userOption;
 
     Locale defaultLocale;
     @Mock
@@ -58,7 +59,10 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
 
     @Before
     public void setup() {
+        userOption = new MockUserOption();
         Locale.setDefault(Locale.UK);
+
+
         when(browserProvider.get()).thenReturn(browser);
         listenerFired = false;
         supportedLocales = new HashSet<>();
@@ -87,20 +91,23 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         //given
         when(browser.getLocale()).thenReturn(Locale.GERMANY);
         when(userStatus.isAuthenticated()).thenReturn(true);
-        setUserOption(Locale.UK);
+
 
 
         //when
         currentLocale = new DefaultCurrentLocale(browserProvider, supportedLocales, defaultLocale, userStatus,
                 userOption);
+        setUserOption(Locale.UK);
 
         //then
         assertThat(currentLocale.getLocale()).isEqualTo(Locale.UK);
     }
 
     private void setUserOption(Locale userPref) {
-        when(userOption.getOptionAsString(eq(DefaultCurrentLocale.class.getSimpleName()), eq("preferredLocale"),
-                anyString())).thenReturn(userPref.toLanguageTag());
+        userOption.set(userPref, DefaultCurrentLocale.UserOptionProperty.PREFERRED_LOCALE);
+        //        when(userOption.getOptionAsString(eq(DefaultCurrentLocale.class.getSimpleName()), eq
+        // ("preferredLocale"),
+        //                anyString())).thenReturn(userPref.toLanguageTag());
     }
 
     @Test
@@ -123,11 +130,12 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         //        given
         when(browser.getLocale()).thenReturn(Locale.CHINA);
         when(userStatus.isAuthenticated()).thenReturn(true);
-        setUserOption(Locale.UK);
+
 
         //when
         currentLocale = new DefaultCurrentLocale(browserProvider, supportedLocales, defaultLocale, userStatus,
                 userOption);
+        setUserOption(Locale.UK);
         //then
         assertThat(currentLocale.getLocale()).isEqualTo(Locale.UK);
     }
@@ -137,11 +145,12 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         //        given
         when(browser.getLocale()).thenReturn(Locale.CHINA);
         when(userStatus.isAuthenticated()).thenReturn(true);
-        setUserOption(Locale.CHINA);
+
 
         //when
         currentLocale = new DefaultCurrentLocale(browserProvider, supportedLocales, defaultLocale, userStatus,
                 userOption);
+        setUserOption(Locale.CHINA);
         //then
         assertThat(currentLocale.getLocale()).isEqualTo(defaultLocale);
     }
@@ -151,11 +160,12 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         //given
         when(browser.getLocale()).thenReturn(Locale.GERMANY);
         when(userStatus.isAuthenticated()).thenReturn(true);
-        setUserOption(Locale.FRANCE);
+
 
         //when
         currentLocale = new DefaultCurrentLocale(browserProvider, supportedLocales, defaultLocale, userStatus,
                 userOption);
+        setUserOption(Locale.FRANCE);
         currentLocale.readFromEnvironment();
 
         //then

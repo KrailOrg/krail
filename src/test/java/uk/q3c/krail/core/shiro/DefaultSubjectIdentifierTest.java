@@ -25,10 +25,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
+import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.i18n.Translate;
 
 import java.util.Locale;
@@ -37,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class})
+@GuiceContext({TestI18NModule.class, TestUserOptionModule.class})
 public class DefaultSubjectIdentifierTest {
 
 
@@ -114,8 +111,6 @@ public class DefaultSubjectIdentifierTest {
             @Override
             protected void configure() {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
 
         };

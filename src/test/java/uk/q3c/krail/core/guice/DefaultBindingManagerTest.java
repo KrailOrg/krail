@@ -38,7 +38,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class BaseGuiceServletInjectorTest {
+public class DefaultBindingManagerTest {
 
     static File iniDir = new File("src/test/java");
     static VaadinService vaadinService;

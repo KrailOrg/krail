@@ -5,12 +5,12 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.user.opt.UserOptionModule;
+import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, UserOptionModule.class})
+@GuiceContext({TestI18NModule.class, TestUserOptionModule.class})
 public class PropertiesBundleWriterTest {
 
     PropertiesBundleWriter writer;

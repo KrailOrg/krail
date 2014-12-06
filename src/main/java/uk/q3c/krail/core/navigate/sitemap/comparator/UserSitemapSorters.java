@@ -26,9 +26,9 @@ import java.util.Comparator;
  */
 public interface UserSitemapSorters {
 
-    void setSortAscending(boolean ascending);
+    void setOptionSortAscending(boolean ascending);
 
-    void setSortType(SortType sortType);
+    void setOptionSortType(SortType sortType);
 
     Comparator<UserSitemapNode> getSortComparator();
 

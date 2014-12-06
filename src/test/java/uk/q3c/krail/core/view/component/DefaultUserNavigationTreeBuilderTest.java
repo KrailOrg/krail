@@ -32,16 +32,14 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
 import uk.q3c.krail.i18n.CurrentLocale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestUserOptionModule.class})
 public class DefaultUserNavigationTreeBuilderTest {
     CurrentLocale currentLocale = new MockCurrentLocale();
 
@@ -53,7 +51,7 @@ public class DefaultUserNavigationTreeBuilderTest {
     @Inject
     DefaultUserSitemapSorters sorters;
     @Inject
-    DefaultUserOption userOption;
+    UserOption userOption;
     @Mock
     Navigator navigator;
     private DefaultUserNavigationTree userNavigationTree;
@@ -80,8 +78,6 @@ public class DefaultUserNavigationTreeBuilderTest {
             @Override
             protected void configure() {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
 
             @Provides

@@ -12,11 +12,9 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.server.FileResource;
@@ -26,10 +24,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOptionProperty;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
+import uk.q3c.krail.core.user.opt.TestUserOptionModule;
+import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.util.testutil.LogMonitor;
 import uk.q3c.util.testutil.TestResource;
 
@@ -43,14 +39,15 @@ import static org.mockito.Mockito.when;
 
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({TestUserOptionModule.class})
 public class LocaleContainerTest {
+
 
     @Mock
     VaadinService vaadinService;
 
     @Inject
-    DefaultUserOption userOption;
+    UserOption userOption;
 
     @Inject
     LogMonitor logMonitor;
@@ -62,6 +59,7 @@ public class LocaleContainerTest {
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
+        userOption.configure(LocaleContainer.class, LocaleContainer.UserOptionProperty.class);
         File baseDir = TestResource.testJavaRootDir("krail");
 
         VaadinService.setCurrent(vaadinService);
@@ -79,7 +77,7 @@ public class LocaleContainerTest {
     public void fillContainer_success() {
         // given
         supportedLocales.add(Locale.GERMANY);
-        userOption.setOption(LocaleContainer.class.getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 48);
+        userOption.set(48, LocaleContainer.UserOptionProperty.LOCALE_FLAG_SIZE);
         // when
         container = new LocaleContainer(supportedLocales, userOption);
         // then
@@ -110,7 +108,7 @@ public class LocaleContainerTest {
     @Test
     public void fillContainer_no_flag_directory() {
         supportedLocales.add(Locale.GERMANY);
-        userOption.setOption(LocaleContainer.class.getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 47);
+        userOption.set(47, LocaleContainer.UserOptionProperty.LOCALE_FLAG_SIZE);
         // when
         container = new LocaleContainer(supportedLocales, userOption);
 
@@ -129,7 +127,7 @@ public class LocaleContainerTest {
     @Test
     public void fillContainer_missingFlag() {
         supportedLocales.add(Locale.CANADA);
-        userOption.setOption(LocaleContainer.class.getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 48);
+        userOption.set(48, LocaleContainer.UserOptionProperty.LOCALE_FLAG_SIZE);
         // when
         container = new LocaleContainer(supportedLocales, userOption);
 
@@ -145,16 +143,6 @@ public class LocaleContainerTest {
         assertThat(property.getValue()).isNull();
     }
 
-    @ModuleProvider
-    protected AbstractModule moduleProvider() {
-        return new AbstractModule() {
 
-            @Override
-            protected void configure() {
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
-            }
-
-        };
-    }
 
 }

@@ -46,22 +46,22 @@ public class DefaultUserSitemapSortersTest {
         // given
 
         // when
-        sorters.setSortAscending(false);
+        sorters.setOptionSortAscending(false);
         // then
         assertThat(sorters.getSortComparator()).isInstanceOf(AlphabeticDescending.class);
         // when
-        sorters.setSortType(SortType.INSERTION);
+        sorters.setOptionSortType(SortType.INSERTION);
         // then
         assertThat(sorters.getSortComparator()).isInstanceOf(InsertionOrderDescending.class);
         // when
-        sorters.setSortAscending(true);
+        sorters.setOptionSortAscending(true);
         // then
         assertThat(sorters.getSortComparator()).isInstanceOf(InsertionOrderAscending.class);
-        sorters.setSortType(SortType.POSITION);
+        sorters.setOptionSortType(SortType.POSITION);
         // then
         assertThat(sorters.getSortComparator()).isInstanceOf(PositionIndexAscending.class);
         // when
-        sorters.setSortAscending(false);
+        sorters.setOptionSortAscending(false);
         // then
         assertThat(sorters.getSortComparator()).isInstanceOf(PositionIndexDescending.class);
     }

@@ -33,10 +33,7 @@ import uk.q3c.krail.core.navigate.sitemap.DefaultFileSitemapLoaderTest.TestFileS
 import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderErrorEntry;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderInfoEntry;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderWarningEntry;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
+import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.view.testviews.subview.MoneyInOutView;
 import uk.q3c.krail.core.view.testviews.subview.TransferView;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
@@ -64,7 +61,8 @@ import static org.assertj.jodatime.api.Assertions.assertThat;
  * @author dsowerby
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestFileSitemapModule.class, TestI18NModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({TestFileSitemapModule.class, TestI18NModule.class, VaadinSessionScopeModule.class,
+        TestUserOptionModule.class})
 public class DefaultFileSitemapLoaderTest {
 
     private static int COMMENT_LINES = 21;
@@ -578,8 +576,6 @@ public class DefaultFileSitemapLoaderTest {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
                 bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
                 bind(UserSitemap.class).to(DefaultUserSitemap.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
 
         };

@@ -1,6 +1,7 @@
 package uk.q3c.krail.i18n;
 
 import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionConsumer;
 import uk.q3c.util.ResourceUtils;
 
 import java.io.File;
@@ -8,10 +9,10 @@ import java.io.File;
 /**
  * Created by David Sowerby on 26/11/14.
  */
-public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWriter<E> {
+public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWriter<E>, UserOptionConsumer {
 
-    protected enum OptionProp {
-        writePath
+    protected enum UserOptionProperty {
+        WRITE_PATH
     }
 
     protected UserOption userOption;
@@ -19,6 +20,7 @@ public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWrite
 
     public BundleWriterBase(UserOption userOption) {
         this.userOption = userOption;
+        userOption.configure(this, UserOptionProperty.class);
     }
 
     public EnumResourceBundle<E> getBundle() {
@@ -33,17 +35,19 @@ public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWrite
     /**
      * @return the writePath userOption, defaulting to the user's temp directory as specified by {@link ResourceUtils}
      */
-    public File getWritePath() {
+    public File getOptionWritePath() {
         String defaultPath = ResourceUtils.userTempDirectory()
                                           .getAbsolutePath();
-        String option = userOption.getOptionAsString(getClass().getSimpleName(), OptionProp.writePath.name(),
-                defaultPath);
+        String option = userOption.get(defaultPath, UserOptionProperty.WRITE_PATH);
         return new File(option);
     }
 
-    public void setWritePath(File path) {
-        userOption.setOption(getClass().getSimpleName(), OptionProp.writePath.name(), path.getAbsolutePath());
+    public void setOptionWritePath(File path) {
+        userOption.set(path.getAbsolutePath(), UserOptionProperty.WRITE_PATH);
     }
 
-
+    @Override
+    public UserOption getUserOption() {
+        return userOption;
+    }
 }

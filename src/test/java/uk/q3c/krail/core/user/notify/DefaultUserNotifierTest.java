@@ -23,10 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
+import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.MessageKey;
@@ -37,7 +34,7 @@ import java.util.Map;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestUserOptionModule.class})
 @SuppressWarnings("rawtypes")
 public class DefaultUserNotifierTest {
 
@@ -121,8 +118,7 @@ public class DefaultUserNotifierTest {
                                          .toInstance(warningNotification2);
                 informationNotificationBinder.addBinding(LabelKey.Message_Bar)
                                              .toInstance(informationNotification2);
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+
 
             }
 

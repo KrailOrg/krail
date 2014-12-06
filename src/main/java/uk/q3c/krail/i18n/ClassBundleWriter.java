@@ -93,7 +93,7 @@ public class ClassBundleWriter<E extends Enum<E>> extends BundleWriterBase<E> {
         buf.append(indent)
            .append("}\n");
         buf.append("}\n");
-        File file = new File(getWritePath(), clazz.getSimpleName() + ".java");
+        File file = new File(getOptionWritePath(), clazz.getSimpleName() + ".java");
         FileUtils.writeStringToFile(file, buf.toString());
     }
 

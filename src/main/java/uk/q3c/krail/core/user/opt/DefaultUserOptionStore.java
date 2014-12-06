@@ -12,94 +12,104 @@
  */
 package uk.q3c.krail.core.user.opt;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A volatile storage mechanism for {@link UserOption} implementations. The option values are simply stored in a map
- * and
- * will therefore disappear when out of scope. To use persistent storage, provide your own implementation - the
- * implementation of this is effectively a DAO.
- *
- * @author David Sowerby 16 Jul 2013
+ * A volatile, in-memory store for user options
  */
 @Singleton
 public class DefaultUserOptionStore implements UserOptionStore {
 
-    private final Map<String, Map<String, Object>> groupMap = new TreeMap<>();
-
-    @Override
-    public Object getOptionValue(String optionGroup, String option) {
-        Map<String, Object> optionMap = optionMap(optionGroup);
-        if (optionMap == null) {
-            return null;
-        }
-        return optionMap.get(option);
-    }
+    private Map<String, Object> map = new ConcurrentHashMap<>();
 
     /**
-     * Used for setting option values, looks for the optionMap for the supplied group and option, and creates one if
-     * none exists
+     * Loads an {@code Optional<T>} option value from the store, or {@link Optional#absent()}} is no valid value found
+     * (including a situation where the type stored cannot be cast to the type to be loaded)
      *
-     * @param optionGroup
-     * @param option
+     * @param sampleValue
+     *         this is used only for typing the return value, it is not a default value as with other parts of the
+     *         UserOption API
+     * @param layerId
+     *         represents a layer in a hierarchy of options - these are prefixed with a numeral indicating the level
+     *         of the layer (for example, a user id might be "0:dsowerby").  Layer 0 is always the user layer, and
+     *         layer 99 is always the system layer and both are always available.  There may or may not be other
+     *         layers in between.  An implementation ensures that the hierarchy is honoured so that the highest layer
+     *         with a specific option value overrides any values for the same option at lower layers. For example, a
+     *         user layer option will always override the same option defined at the system layer.
+     * @param consumerClassName
+     *         the class name of an implementation of UserOptionConsumer which uses a specific option.  For example
+     *         OrderInputForm
+     * @param key
+     *         the option specific key, for example SHOW_ALL_SECTIONS
+     * @param qualifiers
+     *         optional, this is usually dynamically generated qualifier(s) to make a complete unique identity where
+     *         the same option may be used several times within a consumer.  If for example you have an array of
+     *         dynamically generated buttons, which you want the user to be able to individually choose the colours
+     *         of, you may have consumer=com.example.FancyButtonForm, key=BUTTON_COLOUR, qualifiers="2,3"
+     *         <p>
+     *         where "2,3" is the grid position of the button
      *
      * @return
      */
-
-    private Map<String, Object> optionMap(String optionGroup) {
-        Map<String, Object> optionMap = groupMap.get(optionGroup);
-        if (optionMap == null) {
-            optionMap = new TreeMap<>();
-            groupMap.put(optionGroup, optionMap);
+    @Override
+    synchronized public <T> Optional<T> load(T sampleValue, String layerId, String consumerClassName, String key,
+                                             String qualifiers) {
+        Object result = map.get(compositeKey(layerId, consumerClassName, key, qualifiers));
+        try {
+            return Optional.of((T) result);
+        } catch (Exception e) {
+            return Optional.absent();
         }
-        return optionMap;
+
     }
 
+    @Inject
+    protected DefaultUserOptionStore() {
+    }
+
+    private String compositeKey(String layerId, String consumerClassName, String key, String qualifiers) {
+        Joiner joiner = Joiner.on("-")
+                              .skipNulls();
+        return joiner.join(layerId, consumerClassName, key, qualifiers);
+    }
+
+    /**
+     * Stores an {@code Optional<T>} option value in the store
+     *
+     * @param value
+     *         this value to be stored.  This can be of any type supported by the implementation. That is usually
+     *         determined by the underlying persistence layer.
+     *         <p>
+     *         Other parameters are the same as for {@link #load(Object, String, String, String, String)}
+     * @param layerId
+     * @param consumerClassName
+     * @param key
+     * @param qualifiers
+     *
+     * @return
+     *
+     * @throws UserOptionTypeException
+     *         if the value type is not supported
+     */
     @Override
-    public void setOptionValue(String optionGroup, String option, Object value) {
-        Map<String, Object> optionMap = optionMap(optionGroup);
-        optionMap.put(option, value);
+    synchronized public <T> void store(T value, String layerId, String consumerClassName, String key, String
+            qualifiers) {
+
+        map.put(compositeKey(layerId, consumerClassName, key, qualifiers), value);
+
     }
 
+    /**
+     * Flushes the cache (if there is one - that will depend on the implementation)
+     */
     @Override
-    public void clear() {
-        groupMap.clear();
+    synchronized public void flushCache() {
+
     }
-
-    // Keep these - might be useful for a persistent store
-
-    // public void setOption(String optionGroup, String option, List<String> list) {
-    // StringBuilder buf = new StringBuilder();
-    // boolean first = true;
-    // for (String s : list) {
-    // if (!first) {
-    // buf.append("|");
-    // } else {
-    // first = false;
-    // }
-    // buf.append(s);
-    // }
-    //
-    // userOptionStore.optionMap(optionGroup, option).put(option, buf.toString());
-    // }
-    //
-    // public void setOption(String optionGroup, String option, Map<String, String> map) {
-    // StringBuilder buf = new StringBuilder();
-    // boolean first = true;
-    // for (Map.Entry<String, String> entry : map.entrySet()) {
-    // if (!first) {
-    // buf.append("|");
-    // } else {
-    // first = false;
-    // }
-    // buf.append(entry.getKey());
-    // buf.append("=");
-    // buf.append(entry.getValue());
-    // }
-    // userOptionStore.optionMap(optionGroup, option).put(option, buf.toString());
-    // }
-
 }

@@ -32,7 +32,7 @@ public class PropertiesBundleWriter<E extends Enum<E>> extends BundleWriterBase<
             properties.put(entry.getKey()
                                 .name(), entry.getValue());
         }
-        FileOutputStream fos = new FileOutputStream(getWritePath());
+        FileOutputStream fos = new FileOutputStream(getOptionWritePath());
         properties.store(fos, "created by PropertiesBundleWriter");
     }
 

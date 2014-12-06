@@ -20,7 +20,7 @@ import com.vaadin.server.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionProperty;
+import uk.q3c.krail.core.user.opt.UserOptionConsumer;
 import uk.q3c.krail.i18n.SupportedLocales;
 import uk.q3c.util.ResourceUtils;
 
@@ -28,8 +28,14 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Set;
 
-public class LocaleContainer extends IndexedContainer {
+public class LocaleContainer extends IndexedContainer implements UserOptionConsumer {
+    public enum UserOptionProperty {
+        LOCALE_FLAG_SIZE
+    }
 
+    public enum PropertyName {
+        NAME, FLAG
+    }
     private static Logger log = LoggerFactory.getLogger(LocaleContainer.class);
     private final Set<Locale> supportedLocales;
     private final UserOption userOption;
@@ -39,6 +45,7 @@ public class LocaleContainer extends IndexedContainer {
         super();
         this.supportedLocales = supportedLocales;
         this.userOption = userOption;
+        userOption.configure(this, UserOptionProperty.class);
         fillContainer();
     }
 
@@ -61,7 +68,7 @@ public class LocaleContainer extends IndexedContainer {
         File iconsDir = new File(webInfDir, "icons");
         File flagsDir = new File(iconsDir, "flags_iso");
 
-        File flagSizedDir = new File(flagsDir, flagSize().toString());
+        File flagSizedDir = new File(flagsDir, getOptionFlagSize().toString());
 
         for (Locale supportedLocale : supportedLocales) {
             String id = supportedLocale.toLanguageTag();
@@ -91,13 +98,12 @@ public class LocaleContainer extends IndexedContainer {
         sort(new Object[]{PropertyName.NAME}, new boolean[]{true});
     }
 
-    public Integer flagSize() {
-        return userOption.getOptionAsInt(this.getClass()
-                                             .getSimpleName(), UserOptionProperty.LOCALE_FLAG_SIZE, 32);
+    public Integer getOptionFlagSize() {
+        return userOption.get(32, UserOptionProperty.LOCALE_FLAG_SIZE);
     }
 
-    public enum PropertyName {
-        NAME, FLAG
+    @Override
+    public UserOption getUserOption() {
+        return userOption;
     }
-
 }

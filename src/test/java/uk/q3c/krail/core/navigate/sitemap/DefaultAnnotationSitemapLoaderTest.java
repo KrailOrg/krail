@@ -28,10 +28,7 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.AnnotationsModule1;
 import uk.q3c.krail.core.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.AnnotationsModule2;
 import uk.q3c.krail.core.shiro.PageAccessControl;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
+import uk.q3c.krail.core.user.opt.*;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
@@ -47,7 +44,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, TestI18NModule.class,
-        VaadinSessionScopeModule.class})
+        VaadinSessionScopeModule.class, TestUserOptionModule.class})
 public class DefaultAnnotationSitemapLoaderTest {
 
     @Inject
@@ -98,8 +95,6 @@ public class DefaultAnnotationSitemapLoaderTest {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
                 bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
                 bind(UserSitemap.class).to(DefaultUserSitemap.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
 
         };

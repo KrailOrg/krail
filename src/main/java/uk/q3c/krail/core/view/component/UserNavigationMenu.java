@@ -19,9 +19,9 @@ public interface UserNavigationMenu extends Component {
 
     MenuBar getMenuBar();
 
-    int getMaxDepth();
+    int getOptionMaxDepth();
 
-    void setMaxDepth(int depth);
+    void setOptionMaxDepth(int depth);
 
     void build();
 

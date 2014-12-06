@@ -27,7 +27,7 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionProperty;
+import uk.q3c.krail.core.user.opt.UserOptionConsumer;
 import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.core.view.KrailViewChangeListener;
 import uk.q3c.util.ID;
@@ -45,8 +45,13 @@ import java.util.Comparator;
  * @author David Sowerby 17 May 2013
  * @modified David Sowerby
  */
-public class DefaultUserNavigationTree extends Tree implements UserNavigationTree, KrailViewChangeListener,
-        UserSitemapChangeListener {
+public class DefaultUserNavigationTree extends Tree implements UserOptionConsumer, UserNavigationTree,
+        KrailViewChangeListener, UserSitemapChangeListener {
+
+
+    public enum UserOptionProperty {SORT_ASCENDING, SORT_TYPE, MAX_DEPTH}
+
+    ;
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
     private final UserSitemap userSitemap;
     private final Navigator navigator;
@@ -65,6 +70,7 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
         this.userOption = userOption;
         this.builder = builder;
         this.sorters = sorters;
+        userOption.configure(this, UserOptionProperty.class);
         builder.setUserNavigationTree(this);
         setImmediate(true);
         setItemCaptionMode(ItemCaptionMode.EXPLICIT);
@@ -72,17 +78,47 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
         addValueChangeListener(this);
         navigator.addViewChangeListener(this);
         setId(ID.getId(Optional.absent(), this));
-        boolean ascending = userOption.getOptionAsBoolean(this.getClass()
-                                                              .getSimpleName(), UserOptionProperty.SORT_ASCENDING,
-                true);
+        sorters.setOptionSortAscending(getOptionSortAscending());
 
-        SortType sortType = (SortType) userOption.getOptionAsEnum(this.getClass()
-                                                                      .getSimpleName(), UserOptionProperty.SORT_TYPE,
-                SortType.ALPHA);
 
-        setSortAscending(ascending, false);
-        setSortType(sortType, false);
+    }
 
+    public boolean getOptionSortAscending() {
+        return userOption.get(true, UserOptionProperty.SORT_ASCENDING);
+    }
+
+    @Override
+    public void setOptionSortAscending(boolean ascending) {
+        setOptionSortAscending(ascending, true);
+    }
+
+    @Override
+    public void setOptionSortAscending(boolean ascending, boolean rebuild) {
+        sorters.setOptionSortAscending(ascending);
+        userOption.set(ascending, UserOptionProperty.SORT_ASCENDING);
+        rebuildRequired = true;
+        if (rebuild) {
+            build();
+        }
+    }
+
+    public SortType getOptionSortType() {
+        return userOption.get(SortType.ALPHA, UserOptionProperty.SORT_TYPE);
+    }
+
+    @Override
+    public void setOptionSortType(SortType sortType) {
+        setOptionSortType(sortType, true);
+    }
+
+    @Override
+    public void setOptionSortType(SortType sortType, boolean rebuild) {
+        sorters.setOptionSortType(sortType);
+        userOption.set(sortType, UserOptionProperty.SORT_TYPE);
+        rebuildRequired = true;
+        if (rebuild) {
+            build();
+        }
     }
 
     public UserNavigationTreeBuilder getBuilder() {
@@ -102,27 +138,25 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
     }
 
     @Override
-    public int getMaxDepth() {
-        return userOption.getOptionAsInt(this.getClass()
-                                             .getSimpleName(), UserOptionProperty.MAX_DEPTH, 10);
+    public int getOptionMaxDepth() {
+        return userOption.get(10, UserOptionProperty.MAX_DEPTH);
     }
 
     /**
-     * See {@link UserNavigationTree#setMaxDepth(int)}
+     * See {@link UserNavigationTree#setOptionMaxDepth(int)}
      */
     @Override
-    public void setMaxDepth(int maxDepth) {
-        setMaxDepth(maxDepth, true);
+    public void setOptionMaxDepth(int maxDepth) {
+        setOptionMaxDepth(maxDepth, true);
     }
 
     /**
-     * See {@link UserNavigationTree#setMaxDepth(int, boolean)}
+     * See {@link UserNavigationTree#setOptionMaxDepth(int, boolean)}
      */
     @Override
-    public void setMaxDepth(int maxDepth, boolean rebuild) {
+    public void setOptionMaxDepth(int maxDepth, boolean rebuild) {
         if (maxDepth > 0) {
-            userOption.setOption(this.getClass()
-                                     .getSimpleName(), UserOptionProperty.MAX_DEPTH, maxDepth);
+            userOption.set(maxDepth, UserOptionProperty.MAX_DEPTH);
             build();
         } else {
             log.warn("Attempt to set max depth value to {}, but has been ignored.  It must be greater than 0. ");
@@ -226,38 +260,6 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
     }
 
     @Override
-    public void setSortAscending(boolean ascending) {
-        setSortAscending(ascending, true);
-    }
-
-    @Override
-    public void setSortAscending(boolean ascending, boolean rebuild) {
-        sorters.setSortAscending(ascending);
-        userOption.setOption(this.getClass()
-                                 .getSimpleName(), UserOptionProperty.SORT_ASCENDING, ascending);
-        rebuildRequired = true;
-        if (rebuild) {
-            build();
-        }
-    }
-
-    @Override
-    public void setSortType(SortType sortType) {
-        setSortType(sortType, true);
-    }
-
-    @Override
-    public void setSortType(SortType sortType, boolean rebuild) {
-        sorters.setSortType(sortType);
-        userOption.setOption(this.getClass()
-                                 .getSimpleName(), UserOptionProperty.SORT_TYPE, sortType);
-        rebuildRequired = true;
-        if (rebuild) {
-            build();
-        }
-    }
-
-    @Override
     public Comparator<UserSitemapNode> getSortComparator() {
         return sorters.getSortComparator();
     }
@@ -270,4 +272,8 @@ public class DefaultUserNavigationTree extends Tree implements UserNavigationTre
         this.rebuildRequired = rebuildRequired;
     }
 
+    @Override
+    public UserOption getUserOption() {
+        return userOption;
+    }
 }

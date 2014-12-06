@@ -43,7 +43,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({UIScopeModule.class, VaadinSessionScopeModule.class, TestI18NModule.class})
+@GuiceContext({UIScopeModule.class, VaadinSessionScopeModule.class, TestI18NModule.class, TestUserOptionModule.class})
 public class DefaultUserNavigationMenuTest {
 
     @Inject
@@ -56,7 +56,7 @@ public class DefaultUserNavigationMenuTest {
     Navigator navigator;
 
     @Inject
-    DefaultUserOption userOption;
+    UserOption userOption;
 
     @Inject
     Translate translate;
@@ -194,7 +194,7 @@ public class DefaultUserNavigationMenuTest {
         userNavigationMenu = newMenu();
 
         // when
-        userNavigationMenu.setMaxDepth(2);
+        userNavigationMenu.setOptionMaxDepth(2);
         // then
 
         List<String> captions = menuCaptions(null);
@@ -244,12 +244,11 @@ public class DefaultUserNavigationMenuTest {
         userNavigationMenu = newMenu();
 
         // when
-        userNavigationMenu.setMaxDepth(3);
+        userNavigationMenu.setOptionMaxDepth(3);
         // then
-        assertThat(userNavigationMenu.getMaxDepth()).isEqualTo(3);
+        assertThat(userNavigationMenu.getOptionMaxDepth()).isEqualTo(3);
         // userOption has been set
-        int result = userOption.getOptionAsInt(DefaultUserNavigationMenu.class.getSimpleName(),
-                UserOptionProperty.MAX_DEPTH, -1);
+        int result = userNavigationMenu.getUserOption().get(-1,DefaultUserNavigationMenu.UserOptionProperty.MAX_DEPTH);
         assertThat(result).isEqualTo(3);
     }
 
@@ -281,7 +280,7 @@ public class DefaultUserNavigationMenuTest {
         userNavigationMenu = newMenu();
         // then
         assertThat(userNavigationMenu.isImmediate()).isTrue();
-        assertThat(userNavigationMenu.getMaxDepth()).isEqualTo(10);
+        assertThat(userNavigationMenu.getOptionMaxDepth()).isEqualTo(10);
 
     }
 
@@ -341,8 +340,6 @@ public class DefaultUserNavigationMenuTest {
             protected void configure() {
 
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
 
         };

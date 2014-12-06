@@ -13,6 +13,13 @@ public class UserOptionModule extends AbstractModule {
     protected void configure() {
         bindUserOption();
         bindUserOptionStore();
+        bindUserOptionLayerDefinition();
+    }
+    /**
+     * Override this method to provide your own {@link UserOptionLayerDefinition} implementation.
+     */
+    protected void bindUserOptionLayerDefinition() {
+        bind(UserOptionLayerDefinition.class).to(DefaultUserOptionLayerDefinition.class);
     }
 
     /**

@@ -29,10 +29,7 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
+import uk.q3c.krail.core.user.opt.*;
 import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.i18n.CurrentLocale;
 
@@ -44,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class})
+@GuiceContext({TestI18NModule.class, TestUserOptionModule.class})
 public class DefaultSubPagePanelTest {
 
     DefaultSubPagePanel panel;
@@ -70,7 +67,7 @@ public class DefaultSubPagePanelTest {
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
-        userOption.clear();
+//        userOption.clear();
         currentLocale.setLocale(Locale.UK, false);
         userSitemap.populate();
         panel = new DefaultSubPagePanel(navigator, userSitemap, userOption, sorters, currentLocale);
@@ -128,11 +125,11 @@ public class DefaultSubPagePanelTest {
         when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
         panel.moveToNavigationState();
         // when
-        panel.setSortType(SortType.INSERTION);
-        panel.setSortAscending(true);
+        panel.setOptionSortType(SortType.INSERTION);
+        panel.setOptionSortAscending(true);
         // then
-        assertThat(panel.getSortAscending()).isTrue();
-        assertThat(panel.getSortType()).isEqualTo(SortType.INSERTION);
+        assertThat(panel.getOptionSortAscending()).isTrue();
+        assertThat(panel.getOptionSortType()).isEqualTo(SortType.INSERTION);
     }
 
     @Test
@@ -183,8 +180,8 @@ public class DefaultSubPagePanelTest {
     public void sortSelection() {
 
         // given
-        assertThat(panel.getSortAscending()).isTrue();
-        assertThat(panel.getSortType()).isEqualTo(SortType.ALPHA);
+        assertThat(panel.getOptionSortAscending()).isTrue();
+        assertThat(panel.getOptionSortType()).isEqualTo(SortType.ALPHA);
         when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
         LogoutPageFilter filter = new LogoutPageFilter();
         panel.addFilter(filter);
@@ -194,29 +191,29 @@ public class DefaultSubPagePanelTest {
         List<UserSitemapNode> nodes = nodesFromButtons(panel.getButtons());
         assertThat(nodes).containsExactlyElementsOf(userSitemap.publicSortedAlphaAscending());
         // when
-        panel.setSortAscending(false);
+        panel.setOptionSortAscending(false);
         // then
         nodes = nodesFromButtons(panel.getButtons());
         assertThat(nodes).containsExactlyElementsOf(userSitemap.publicSortedAlphaDescending());
         // when
         panel.setSortAscending(true, false);
-        panel.setSortType(SortType.INSERTION);
+        panel.setOptionSortType(SortType.INSERTION);
         // then
         nodes = nodesFromButtons(panel.getButtons());
         assertThat(nodes).containsExactlyElementsOf(userSitemap.publicSortedInsertionAscending());
         // when
-        panel.setSortAscending(false);
+        panel.setOptionSortAscending(false);
         // then
         nodes = nodesFromButtons(panel.getButtons());
         assertThat(nodes).containsExactlyElementsOf(userSitemap.publicSortedInsertionDescending());
         // when
         panel.setSortAscending(true, false);
-        panel.setSortType(SortType.POSITION);
+        panel.setOptionSortType(SortType.POSITION);
         // then
         nodes = nodesFromButtons(panel.getButtons());
         assertThat(nodes).containsExactlyElementsOf(userSitemap.publicSortedPositionAscending());
         // when
-        panel.setSortAscending(false);
+        panel.setOptionSortAscending(false);
         // then
         nodes = nodesFromButtons(panel.getButtons());
         assertThat(nodes).containsExactlyElementsOf(userSitemap.publicSortedPositionDescending());
@@ -231,13 +228,13 @@ public class DefaultSubPagePanelTest {
         panel.addFilter(filter);
         panel.moveToNavigationState();
         // when
-        panel.setSortAscending(false);
+        panel.setOptionSortAscending(false);
         // then build has happened
         assertThat(panel.isRebuildRequired()).isFalse();
 
         // when
         panel.setSortAscending(true, false);
-        panel.setSortType(SortType.INSERTION, false);
+        panel.setOptionSortType(SortType.INSERTION, false);
         // then build has not happened
         assertThat(panel.isRebuildRequired()).isTrue();
     }
@@ -287,8 +284,6 @@ public class DefaultSubPagePanelTest {
             @Override
             protected void configure() {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
 
         };

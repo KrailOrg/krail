@@ -46,7 +46,7 @@ public class DefaultUserNavigationMenuBuilder implements UserNavigationMenuBuild
 
         TreeCopy<UserSitemapNode, MenuItem> treeCopy = new TreeCopy<>(source, target);
         treeCopy.setSortOption(SortOption.SORT_SOURCE_NODES);
-        treeCopy.setMaxDepth(userNavigationMenu.getMaxDepth());
+        treeCopy.setMaxDepth(userNavigationMenu.getOptionMaxDepth());
         treeCopy.setSorted(userNavigationMenu.isSorted());
         treeCopy.setTargetSortComparator(new MenuItemComparator());
 

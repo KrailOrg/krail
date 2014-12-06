@@ -29,7 +29,7 @@ public interface UserNavigationTree extends Component, UserSitemapSorters {
 
     void clear();
 
-    int getMaxDepth();
+    int getOptionMaxDepth();
 
     /**
      * Set the maximum level or depth of the tree you want to be visible. A value of <=0 is ignored. This value is
@@ -37,7 +37,7 @@ public interface UserNavigationTree extends Component, UserSitemapSorters {
      *
      * @param level
      */
-    void setMaxDepth(int maxDepth);
+    void setOptionMaxDepth(int maxDepth);
 
     /**
      * Populate the tree with the entries from the UserSitemap
@@ -50,27 +50,27 @@ public interface UserNavigationTree extends Component, UserSitemapSorters {
      *
      * @param level
      */
-    void setMaxDepth(int maxDepth, boolean rebuild);
+    void setOptionMaxDepth(int maxDepth, boolean rebuild);
 
     /**
      * Sets the sort type but only rebuilds the tree if {@code rebuild} is true. Useful to call with
      * {@code rebuild=false} if you want to make several changes to the tree before rebuilding, otherwise just use
-     * {@link UserSitemapSorters#setSortType(SortType)}
+     * {@link UserSitemapSorters#setOptionSortType(SortType)}
      *
      * @param sortType
      * @param rebuild
      */
-    void setSortType(SortType sortType, boolean rebuild);
+    void setOptionSortType(SortType sortType, boolean rebuild);
 
     /**
      * Sets the sort direction but only rebuilds the tree if {@code rebuild} is true. Useful to call with
      * {@code rebuild=false} if you want to make several changes to the tree before rebuilding, otherwise just use
-     * {@link UserSitemapSorters#setSortAscending(boolean)}
+     * {@link UserSitemapSorters#setOptionSortAscending(boolean)}
      *
      * @param sortType
      * @param rebuild
      */
 
-    void setSortAscending(boolean ascending, boolean rebuild);
+    void setOptionSortAscending(boolean ascending, boolean rebuild);
 
 }

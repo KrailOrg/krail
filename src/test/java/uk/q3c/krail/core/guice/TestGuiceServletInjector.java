@@ -17,7 +17,7 @@ import fixture.TestUIModule;
 
 import java.util.List;
 
-public class TestGuiceServletInjector extends BaseGuiceServletInjector {
+public class TestGuiceServletInjector extends DefaultBindingManager {
 
     private boolean addAppModulesCalled;
 

@@ -1,78 +1,40 @@
-/*
- * Copyright (C) 2013 David Sowerby
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
 package uk.q3c.krail.core.user.opt;
 
-import org.joda.time.DateTime;
-
-import java.util.List;
-import java.util.Map;
-
 /**
- * A set of user options. Although not mandatory, typically the option group and option are the simple class name and
- * field of the object (respectively) requiring the option value. <br>
- * <br>
- * The {@link UserOptionStore} into the constructor of the implementation of this interface to enable use of different
- * storage methods. See {@link DefaultUserOption} for an example <br>
- * <br>
- * all the get methods follow the same principle - a default value is supplied by the caller and returned if there is
- * no
- * value for the required option in the store. This means that the default value is set by the caller from a point
- * close
- * to where that value is used.<br>
- * <br>
- * There is both a String and enum option to specify the option property - enums are better for type safety, but there
- * may also be a need to generated the property name dynamically
- *
- * @author David Sowerby 17 Jul 2013
+ * Created by David Sowerby on 03/12/14.
  */
 public interface UserOption {
+    void configure(UserOptionConsumer consumer, Class<? extends Enum> keys);
 
-    public void setOption(String optionGroup, String option, Object value);
+    void configure(Class<? extends UserOptionConsumer> consumerClass, Class<? extends Enum> keys);
 
-    public void setOption(String optionGroup, Enum<?> option, Object value);
+    /**
+     * @param key
+     *         the option specific key, for example SHOW_ALL_SECTIONS
+     * @param qualifiers
+     *         optional, these are usually dynamically generated qualifier(s) to make a complete unique identity where
+     *         the same option may be used several times within a consumer.  If for example you have an array of
+     *         dynamically generated buttons, which you want the user to be able to individually choose the colours
+     *         of, you may have consumer=com.example.FancyButtonForm, key=BUTTON_COLOUR, qualifiers="2,3"
+     *         <p>
+     *         where "2,3" is the grid position of the button
+     * @param <T>
+     *         a type determined by the sampleValue.  An implementation should assume that an object of any type can be
+     *         passed.       *
+     * @param defaultValue
+     *         the default value to be returned if no value is found in the store.  Also determines the type of the
+     *         return value
+     * @param <T>
+     *         a type determined by the defaultValue.
+     *
+     * @return
+     */
+    <T> T get(T defaultValue, Enum<?> key, String... qualifiers);
 
-    public boolean getOptionAsBoolean(String optionGroup, String option, boolean defaultValue);
+    <T> void set(T value, Enum<?> key, String... qualifiers);
 
-    public boolean getOptionAsBoolean(String optionGroup, Enum<?> option, boolean defaultValue);
-
-    public DateTime getOptionAsDateTime(String optionGroup, String option, DateTime defaultValue);
-
-    public DateTime getOptionAsDateTime(String optionGroup, Enum<?> option, DateTime defaultValue);
-
-    public double getOptionAsDouble(String optionGroup, String option, double defaultValue);
-
-    public double getOptionAsDouble(String optionGroup, Enum<?> option, double defaultValue);
-
-    public Enum<?> getOptionAsEnum(String optionGroup, String option, Enum<?> defaultValue);
-
-    public Enum<?> getOptionAsEnum(String optionGroup, Enum<?> option, Enum<?> defaultValue);
-
-    public int getOptionAsInt(String optionGroup, String option, int defaultValue);
-
-    public int getOptionAsInt(String optionGroup, Enum<?> option, int defaultValue);
-
-    public List<String> getOptionAsList(String optionGroup, String option, List<String> defaultValue);
-
-    public List<String> getOptionAsList(String optionGroup, Enum<?> option, List<String> defaultValue);
-
-    public Map<String, String> getOptionAsMap(String optionGroup, String option, Map<String, String> defaultValue);
-
-    public Map<String, String> getOptionAsMap(String optionGroup, Enum<?> option, Map<String, String> defaultValue);
-
-    public String getOptionAsString(String optionGroup, String option, String defaultValue);
-
-    public String getOptionAsString(String optionGroup, Enum<?> option, String defaultValue);
-
-    public void clear();
-
+    /**
+     * Flushes the cache of the associated option store, for the current user
+     */
+    void flushCache();
 }

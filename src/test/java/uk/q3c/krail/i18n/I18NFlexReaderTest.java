@@ -22,8 +22,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
 import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.MockUserOption;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.core.user.opt.UserOptionStore;
 
@@ -131,7 +131,7 @@ public class I18NFlexReaderTest {
 
             @Override
             protected void configure() {
-                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(UserOption.class).to(MockUserOption.class);
                 bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
 

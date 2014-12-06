@@ -42,10 +42,7 @@ import uk.q3c.krail.core.shiro.PagePermission;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
+import uk.q3c.krail.core.user.opt.*;
 import uk.q3c.krail.core.view.*;
 
 import java.util.LinkedHashMap;
@@ -58,7 +55,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestUserOptionModule.class})
 public class DefaultNavigatorTest {
 
     @Mock
@@ -94,7 +91,7 @@ public class DefaultNavigatorTest {
     private ScopedUIProvider uiProvider;
     @Inject
     private StrictURIFragmentHandler uriHandler;
-    @Mock
+    @Inject
     private UserOption userOption;
     @Inject
     private ReferenceUserSitemap userSitemap;
@@ -779,8 +776,6 @@ public class DefaultNavigatorTest {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
                 bind(MasterSitemap.class).to(DefaultMasterSitemap.class);
                 bind(UserSitemap.class).to(DefaultUserSitemap.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
             }
 
         };

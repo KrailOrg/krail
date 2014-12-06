@@ -67,7 +67,7 @@ public class DefaultUserSitemapSorters implements UserSitemapSorters {
     }
 
     @Override
-    public void setSortAscending(boolean ascending) {
+    public void setOptionSortAscending(boolean ascending) {
         this.ascending = ascending;
         select();
     }
@@ -81,7 +81,7 @@ public class DefaultUserSitemapSorters implements UserSitemapSorters {
     }
 
     @Override
-    public void setSortType(SortType sortType) {
+    public void setOptionSortType(SortType sortType) {
         this.sortType = sortType;
         select();
     }

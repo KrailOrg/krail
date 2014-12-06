@@ -6,8 +6,8 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionModule;
 
 import java.util.*;
 
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by David Sowerby on 28/11/14.
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, UserOptionModule.class})
+@GuiceContext({TestI18NModule.class, TestUserOptionModule.class})
 public class DefaultPatternSourceTest2 {
 
     Map<String, BundleReader> bundleReaders = new LinkedHashMap<>();
