@@ -24,17 +24,10 @@ public enum StandardPageKey implements I18NKey {
     Log_In, // the login page
     Log_Out;
 
-    /**
-     * Provides a default bundle name by removing the last 3 characters from the key name and replacing with an 's'.
-     * This conforms to the Krail convention of having, for example, LabelKey, referring to Labels.
-     * <p>
-     * This can of course be overridden by implementing classes.
-     *
-     * @return
-     */
+
     @Override
     public String bundleName() {
-        return StandardPageLabels.class.getName();
+        return StandardPageLabels.class.getSimpleName();
     }
 
 

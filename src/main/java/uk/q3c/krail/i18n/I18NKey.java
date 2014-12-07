@@ -22,7 +22,7 @@ public interface I18NKey {
      * @return
      */
     default String bundleName() {
-        return "uk.q3c.krail.i18n." + this.getClass()
+        return this.getClass()
                                           .getSimpleName()
                    .substring(0, getClass().getSimpleName()
                                            .length() - 3) + "s";

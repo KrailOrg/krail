@@ -40,8 +40,8 @@ public class DefaultPatternSourceTest2 {
     @Test
     public void bundleSourceOrder() {
         //given we just have the readers
-        bundleReaders.put("class", new ClassBundleReader());
-        bundleReaders.put("props", new PropertiesBundleReader());
+        bundleReaders.put("class", new ClassBundleReader(userOption));
+        bundleReaders.put("props", new PropertiesFromClasspathBundleReader(userOption));
         //when
         createPatternSource(TestLabelKey.class);
         List<String> orderAny = patternSource.bundleSourceOrder(LabelKey._nullkey_);

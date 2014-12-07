@@ -14,6 +14,6 @@ import java.util.ResourceBundle;
  */
 public interface BundleReader {
 
-    ResourceBundle newBundle(Class<? extends Enum> enumKeyClass, String baseName, Locale locale, ClassLoader loader,
+    ResourceBundle newBundle(String source, Class<? extends Enum> enumKeyClass, Locale locale, ClassLoader loader,
                              boolean reload) throws IOException;
 }

@@ -1,7 +1,9 @@
 package uk.q3c.krail.i18n;
 
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.user.opt.UserOption;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,32 +17,66 @@ import java.util.Locale;
 import java.util.Properties;
 
 /**
+ * This default options for this reader assume that the properties files are on the same class path as the key - for
+ * example, with default settings, with a key class of com.example.i18n.LabelKey will expect to find the properties
+ * file
+ * at com.example.i18n.Labels.properties
+ * <p>
+ * For a Gradle project that means placing the properties file in the directory src/main/resources/com/example/i18n
+ * <p>
+ * The default options can be changed by calling userOption and setting the options:
+ * <p>
+ * {@code getUserOption().set(false, UserOptionProperty.USE_KEY_PATH, source);
+ *
+ * getUserOption().set("path.to.properties.files",UserOptionProperty.USE_KEY_PATH,source);
+ * }
  * Created by David Sowerby on 25/11/14.
  */
-public class PropertiesBundleReader extends BundleReaderBase implements BundleReader {
-    private static Logger log = LoggerFactory.getLogger(PropertiesBundleReader.class);
+public class PropertiesFromClasspathBundleReader extends BundleReaderBase implements BundleReader {
+    private static Logger log = LoggerFactory.getLogger(PropertiesFromClasspathBundleReader.class);
     private Properties properties;
+
+    @Inject
+    protected PropertiesFromClasspathBundleReader(UserOption userOption) {
+        super(userOption);
+    }
 
     /**
      * Most of the code for this method is taken from the standard ResourceBundle code for loading from a properties
      * file.  The additional part is to transfer the properties into the EnumMap used by EnumResourceBundle
      *
      * @param enumKeyClass
+     *         the class of enum keys to use
      * @param baseName
+     *         not used
      * @param locale
      * @param loader
+     *         the class loader to use, generally the class loader of the caller
      * @param reload
+     *         not used
      *
      * @return
      *
-     * @throws IOException
+     * @throws BundleReaderException
+     *         if the enumKeyClass has no constants
      */
     @Override
-    public KrailResourceBundle newBundle(Class<? extends Enum> enumKeyClass, String baseName, Locale locale,
+    public KrailResourceBundle newBundle(String source, Class<? extends Enum> enumKeyClass, Locale locale,
                                          ClassLoader loader, boolean reload) throws IOException {
-        log.debug("locating properties based bundle for bundleName {}", baseName);
-        final String resourceName1 = this.toResourceName0(baseName, "properties");
+        I18NKey key;
+        try {
+            key = (I18NKey) enumKeyClass.getEnumConstants()[0];
+        } catch (Exception e) {
+            throw new BundleReaderException("The enum key class requires at least one constant");
+        }
+
+        log.debug("locating properties based bundle for baseName {}", key.bundleName());
+
+        String localisedName = toBundleName(source, key, locale);
+
+        final String resourceName1 = this.toResourceName0(localisedName, "properties");
         log.debug("resource name is {}", resourceName1);
+
         KrailResourceBundle bundle = null;
         if (resourceName1 == null) {
             log.debug("returning null");
@@ -86,7 +122,7 @@ public class PropertiesBundleReader extends BundleReaderBase implements BundleRe
                 log.debug("properties loaded");
                 bundle = new KrailResourceBundle(enumKeyClass);
                 EnumMap map = bundle.getMap();
-                log.debug("copying properties to EnumMap, using enum class {}", enumKeyClass);
+                log.debug("copying properties to EnumMap, using enum class '{}'", enumKeyClass);
                 int i = 0;
                 for (Enum e : enumKeyClass.getEnumConstants()) {
                     String s = properties.getProperty(e.name());

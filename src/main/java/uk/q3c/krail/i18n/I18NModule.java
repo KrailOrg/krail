@@ -102,7 +102,7 @@ public class I18NModule extends AbstractModule {
     protected void define() {
         addSupportedLocale(Locale.UK);
         addBundleReader("class", ClassBundleReader.class);
-        addBundleReader("properties", PropertiesBundleReader.class);
+        addBundleReader("properties", PropertiesFromClasspathBundleReader.class);
     }
 
 

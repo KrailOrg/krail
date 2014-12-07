@@ -28,13 +28,13 @@ import java.util.Set;
  * search for a translation. <p/>
  * In addition, {@link PatternSource} implementations support the generation of stubs to assist when building up
  * localisation values, and the writing out of key-value pairs via a {@link BundleWriter}.
- *
- *
+ * <p>
+ * <p>
  * Supported locales are defined in the {@link I18NModule} or a sub-class of it.
- * <p/>
+ * <p>
  * Implementations should not assume that only valid locales will be passed to its methods (where valid means that a
  * locale has been included as a supported locale)
- * <p/>
+ * <p>
  * Created by David Sowerby on 04/11/14.
  */
 public interface PatternSource {
@@ -54,38 +54,50 @@ public interface PatternSource {
 
     /**
      * Generates an implementation specific stub for the key - value pair.  This is typically used as part of the
-     * process to generate files for translation.  Does not overwrite an existing entry for {@code key}.  The value for
+     * process to generate files for translation.   The value for
      * the stub is determined by the implementation, usually from UserOption.
      *
+     * @param overwrite
+     *         if true, the stub overwrites any exiting value.  If overwrite is false, then a stub is only generated if
+     *         key either does not exist or has an empty value
      * @param key
      *         the key the stub will be for
      * @param locale
      *         the locale to generate the stub for
      */
-    <E extends Enum<E> & I18NKey> void generateStub(String source, E key, Locale locale);
+    <E extends Enum<E> & I18NKey> void generateStub(String source, E key, Locale locale, boolean overwrite);
 
     /**
      * Generates implementation specific stubs for all the {@code locales}.  For some implementations this may be more
      * efficient than repeated calls to {@link #generateStub(I18NKey, Locale)}.  Does not overwrite an existing entry
      * for {@code key}.  The value for the stub is determined by the implementation, usually from UserOption.
      *
+     * @param overwrite
+     *         if true, the stub overwrites any exiting value.  If overwrite is false, then a stub is only generated if
+     *         key either does not exist or has an empty value
      * @param key
      *         the the stub(s) will be for
      * @param locales
      *         set of Locale instances for which to generate a stub
      */
-    <E extends Enum<E> & I18NKey> void generateStub(String source, E key, Set<Locale> locales);
+    <E extends Enum<E> & I18NKey> void generateStub(String source, E key, Set<Locale> locales, boolean overwrite);
 
     /**
-     * Generates implementation specific stubs for all the supported locales{@code locales}.
+     * Generates implementation specific stubs for all the supported locales{@code locales}.Does not overwrite an
+     * existing entry
+     * for {@code key}.  The value for the stub is determined by the implementation, usually from UserOption.
      *
+     * @param overwrite
+     *         if true, the stub overwrites any exiting value.  If overwrite is false, then a stub is only generated if
+     *         key either does not exist or has an empty value
      * @param key
-     *         the the stub(s) will be for
+     *         the key the stub(s) will be for
      */
-    <E extends Enum<E> & I18NKey> void generateStub(String source, E key);
+    <E extends Enum<E> & I18NKey> void generateStub(String source, E key, boolean overwrite);
 
     /**
-     * Write the key-value set(s) to persistence, for all {@code locales}.  Individual implementations will provide
+     * Write the key-value set(s) to persistence, for all {@code locales}.  {@link BundleWriter} implementations must
+     * provide
      * their own methods for setting up file paths, database connection or other pre-requisites.
      *
      * @param keyClass
@@ -93,7 +105,8 @@ public interface PatternSource {
      * @param locales
      *         the locales to write files for
      * @param allKeys
-     *         if true, all the keys for the keyClass are generated, otherwise only the keys defined in a locale are
+     *         if true, output is generated for all the keys of the keyClass, otherwise only the keys defined in a
+     *         locale are
      *         written out for that locale. If allKeys is true, but a key has no value, the value is set according to
      *         options provided by the implementation
      * @param <E>
@@ -103,8 +116,8 @@ public interface PatternSource {
      * @see #writeOut(Class, boolean)
      */
 
-    <E extends Enum<E> & I18NKey> void writeOut(String source, BundleWriter<E> writer, E sampleKey, Set<Locale> locales,
-                                      boolean allKeys) throws IOException;
+    <E extends Enum<E> & I18NKey> void writeOut(String source, BundleWriter<E> writer, E sampleKey, Set<Locale> 
+            locales, boolean allKeys) throws IOException;
 
     /**
      * Write the key-value set(s) for all supported locales, to persistence.  Individual implementations will
@@ -115,8 +128,9 @@ public interface PatternSource {
      * @param locales
      *         the locales to write files for
      * @param allKeys
-     *         if true, all the keys for the keyClass are generated, otherwise only the keys defined in a locale are
-     *         written out for that locale.  If allKeys is true, but a key has no value, the value is set according to
+     *         if true, output is generated for all the keys of the keyClass, otherwise only the keys defined in a
+     *         locale are
+     *         written out for that locale. If allKeys is true, but a key has no value, the value is set according to
      *         options provided by the implementation
      * @param <E>
      *         then Enum class represented by the keyClass
@@ -124,30 +138,29 @@ public interface PatternSource {
      * @throws IOException
      * @see #writeOut(Class, Set, boolean)
      */
-    <E extends Enum<E> & I18NKey> void writeOut(String source, BundleWriter<E> writer, E sampleKey, boolean allKeys)
+    <E extends Enum<E> & I18NKey> void writeOut(String source, BundleWriter<E> writer, E sampleKey, boolean allKeys) 
             throws IOException;
 
     /**
-     * Merge key-value pairs from {@code otherSource} into this source, for the given {@code locale}.  This method is
-     * generally used for merging key-value pairs from an external source.  If you are merging another PatternSource
-     * implementation, {@link #mergeSource(Set, PatternSource)} is probably a better option.
-     * <p/>
-     * If {@code overwrite} is true, all non-null, non-empty values are transferred from otherSource to this source,
-     * overwriting any values that are already in this source. <p/> If {@code overwrite} is false, values from {@code
-     * otherSource} are only written to this source, if the same key in {@code thisSource} has a null or empty value.
+     * Merge key-value pairs "top-down" from one source to the next source, from the sources specified in {@code
+     * sources}, for the given {@code locale}s.  The result that the last source in the {@link sources} will contain a
+     * merge of all the previous sources.
+     * <p>
+     * If {@code overwrite} is true, all non-null, non-empty values are transferred from one source to the next source,
+     * overwriting any values that are already there. <p/> If {@code overwrite} is false, values are only copied from
+     * one source to the next if the second source has no matching key, or the value of that key is null or empty.
      *
      * @param otherSource
      * @param overwrite
      *
      * @see #mergeSource(Set, PatternSource)
      */
-    public <E extends Enum<E> & I18NKey> void mergeSources(E sampleKey, Set<Locale> locales, boolean overwrite,
+    public <E extends Enum<E> & I18NKey> void mergeSources(E sampleKey, Set<Locale> locales, boolean overwrite, 
                                                            String... sources);
 
 
-
     /**
-     * Set the value for a key, for a given Locale
+     * Set the value for a key, for a given {@code source} and {@code locale}
      */
     <E extends Enum<E> & I18NKey> void setKeyValue(String source, E key, Locale locale, String value);
 
@@ -163,6 +176,14 @@ public interface PatternSource {
      */
     <E extends Enum<E> & I18NKey> void reset(String source, E sampleKey, Set<Locale> locales);
 
+    /**
+     * Returns a list of sources in the order they are processed when locating a key value
+     *
+     * @param sampleKey
+     *         any constant from the key class for which the result is needed
+     *
+     * @return
+     */
     List<String> bundleSourceOrder(I18NKey sampleKey);
 
     /**

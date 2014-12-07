@@ -15,21 +15,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, TestUserOptionModule.class})
-public class PropertiesBundleReaderTest {
+public class PropertiesFromClasspathBundleReaderTest {
 
     @Inject
-    PropertiesBundleReader reader;
+    PropertiesFromClasspathBundleReader reader;
 
     @Test
     public void loadBundle() throws IOException {
         //given
 
         //when
-        KrailResourceBundle bundle = reader.newBundle(LabelKey.class, "Labels", Locale.UK, this.getClass()
+        KrailResourceBundle bundle = reader.newBundle("properties", TestLabelKey.class, Locale.ITALIAN, this.getClass()
                                                                                                .getClassLoader(), true);
         //then
         assertThat(bundle).isNotNull();
         assertThat(bundle.getMap()
                          .keySet()).hasSize(1);
+        assertThat(bundle.getValue(TestLabelKey.Yes)).isEqualTo("italian yes from properties");
     }
 }

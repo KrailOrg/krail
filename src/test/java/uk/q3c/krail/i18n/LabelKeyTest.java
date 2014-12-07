@@ -21,6 +21,6 @@ public class LabelKeyTest
         //when
 
         //then
-        assertThat(LabelKey.Alphabetic_Ascending.bundleName()).isEqualTo("uk.q3c.krail.i18n.Labels");
+        assertThat(LabelKey.Alphabetic_Ascending.bundleName()).isEqualTo("Labels");
     }
 }

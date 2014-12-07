@@ -1,6 +1,8 @@
 package uk.q3c.krail.i18n;
 
 import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
@@ -11,6 +13,7 @@ import java.util.*;
  * Created by David Sowerby on 18/11/14.
  */
 public class EnumResourceBundleControl extends ResourceBundle.Control {
+    private static Logger log = LoggerFactory.getLogger(EnumResourceBundleControl.class);
     private Map<String, BundleReader> bundleReaders;
     private Class<? extends Enum> enumKeyClass;
     private String format;
@@ -35,11 +38,11 @@ public class EnumResourceBundleControl extends ResourceBundle.Control {
     /**
      * Retrieves a bundle using the format given
      *
-     * @param baseName
-     * @param locale
-     * @param format
-     * @param loader
-     * @param reload
+     * @param baseName not used
+     * @param locale locale
+     * @param source in ResourceBundle terms 'format' in Krail terms 'source'
+     * @param loader class loader to use, usually the caller's class loader
+     * @param reload instruct the reader to reload from persistence
      *
      * @return
      *
@@ -48,19 +51,19 @@ public class EnumResourceBundleControl extends ResourceBundle.Control {
      * @throws IOException
      */
     @Override
-    public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean
+    public ResourceBundle newBundle(String baseName, Locale locale, String source, ClassLoader loader, boolean
             reload) throws IllegalAccessException, InstantiationException, IOException {
 
-
-        BundleReader reader = bundleReaders.get(format);
-        return reader.newBundle(enumKeyClass, baseName, locale, loader, reload);
-
+        log.debug("Locating reader for source '{}', base name '{}'", source, baseName);
+        BundleReader reader = bundleReaders.get(source);
+        ResourceBundle bundle = reader.newBundle(source, enumKeyClass, locale, loader, reload);
+        return bundle;
 
     }
 
     /**
      * This callback is used by {@link ResourceBundle} to determine the available "formats" (sources in Krail terms)
-     * and the order in which they are called to provide a bundle.  However, Krail overrides this behavour by using
+     * and the order in which they are called to provide a bundle.  However, Krail overrides this behaviour by using
      * {@link PatternSource}, and the "formats" returned is always a single Krail source.
      * <p>
      * </ol>

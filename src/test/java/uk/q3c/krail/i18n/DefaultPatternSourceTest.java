@@ -8,7 +8,6 @@ import com.vaadin.server.VaadinService;
 import fixture.TestI18NModule;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -106,7 +105,7 @@ public class DefaultPatternSourceTest {
         //given
         source.setGenerateStubWithName(false);
         //when
-        source.generateStub("class", TestLabelKey.View1, Locale.GERMANY);
+        source.generateStub("class", TestLabelKey.View1, Locale.GERMANY, true);
         Optional<String> value = source.retrievePattern(TestLabelKey.View1, Locale.GERMANY);
         //then
         assertThat(value.get()).isEqualTo("");
@@ -117,7 +116,7 @@ public class DefaultPatternSourceTest {
         //given
         source.setGenerateStubWithName(true);
         //when
-        source.generateStub("class", TestLabelKey.View1, Locale.GERMANY);
+        source.generateStub("class", TestLabelKey.View1, Locale.GERMANY, true);
         Optional<String> value = source.retrievePattern(TestLabelKey.View1, Locale.GERMANY);
         //then
         assertThat(value.get()).isEqualTo("View1");
@@ -132,7 +131,7 @@ public class DefaultPatternSourceTest {
         Set<Locale> locales = new HashSet<>();
         locales.add(Locale.GERMANY);
         locales.add(Locale.ITALY);
-        source.generateStub("class", TestLabelKey.View1, locales);
+        source.generateStub("class", TestLabelKey.View1, locales, true);
         Optional<String> value1 = source.retrievePattern(TestLabelKey.View1, Locale.GERMANY);
         Optional<String> value2 = source.retrievePattern(TestLabelKey.View1, Locale.ITALY);
         //then
@@ -145,7 +144,7 @@ public class DefaultPatternSourceTest {
         //given
         source.setGenerateStubWithName(true);
         //when
-        source.generateStub("class", TestLabelKey.View1);
+        source.generateStub("class", TestLabelKey.View1, true);
         Optional<String> value1 = source.retrievePattern(TestLabelKey.View1, Locale.GERMANY);
         Optional<String> value2 = source.retrievePattern(TestLabelKey.View1, Locale.ITALY);
         Optional<String> value3 = source.retrievePattern(TestLabelKey.View1, Locale.UK);
@@ -337,72 +336,61 @@ public class DefaultPatternSourceTest {
         assertThat(pattern).isEqualTo("New Opt");
     }
 
-    @Ignore("can only test when we have another type of source")
     @Test
-    public void mergeSource_otherPatternSource_overwrite_true() {
+    public void mergeSource_sources_overwrite_true() {
         //given
-        //        DefaultPatternSource otherSource = new DefaultPatternSource(supportedLocales, userOption,
-        // bundleReaders,bundleControl);
-        //        otherSource.put(Locale.ITALY, TestLabelKey.Home, "New Home", true);
-        //        otherSource.put(Locale.ITALY, TestLabelKey.Opt, "New Opt", true);
         Set<Locale> locales = new HashSet<>();
+        locales.add(Locale.UK);
         locales.add(Locale.ITALY);
 
         //when
 
-        //        source.mergeSources(TestLabelKey.class, locales, otherSource, true);
-
+        source.mergeSources(TestLabelKey.Yes, locales, true, "properties", "class");
+        EnumResourceBundle<TestLabelKey> classBundleUK = source.getBundle("class", TestLabelKey.Yes, Locale.UK);
+        EnumResourceBundle<TestLabelKey> classBundleIT = source.getBundle("class", TestLabelKey.Yes, Locale.ITALIAN);
 
         //then overwrites existing
-        String pattern = source.retrievePattern(TestLabelKey.Home, Locale.ITALY)
-                               .get();
-        assertThat(pattern).isEqualTo("New Home");
-        //then overwrites blank
-        pattern = source.retrievePattern(TestLabelKey.Opt, Locale.ITALY)
-                        .get();
-        assertThat(pattern).isEqualTo("New Opt");
+
+        assertThat(classBundleUK.getValue(TestLabelKey.Yes)).isEqualTo("yes from properties");
+        assertThat(classBundleIT.getValue(TestLabelKey.Yes)).isEqualTo("italian yes from properties");
+
+
     }
 
-    @Ignore("can only test when we have another type of source")
     @Test
-    public void mergeSource_otherPatternSource_overwrite_false() {
+    public void mergeSources_overwrite_false() {
         //given
-        //        DefaultPatternSource otherSource = new DefaultPatternSource(supportedLocales, userOption,
-        // bundleReaders,bundleControl);
-        //        otherSource.put(Locale.ITALY, TestLabelKey.Home, "New Home", true);
-        //        otherSource.put(Locale.ITALY, TestLabelKey.Opt, "New Opt", true);
-        //        otherSource.put(Locale.ITALY, TestLabelKey.Blank, "New Blank", true);
+        //given
         Set<Locale> locales = new HashSet<>();
+        locales.add(Locale.UK);
         locales.add(Locale.ITALY);
+
         //when
-        //        source.mergeSources(TestLabelKey.class, locales, otherSource, false);
 
-        //then does not overwrite existing
-        String pattern = source.retrievePattern(TestLabelKey.Home, Locale.ITALY)
-                               .get();
-        assertThat(pattern).isEqualTo("it_Home");
-        //then overwrites key with blank value
-        pattern = source.retrievePattern(TestLabelKey.Blank, Locale.ITALY)
-                        .get();
-        assertThat(pattern).isEqualTo("New Blank");
+        source.mergeSources(TestLabelKey.Yes, locales, false, "properties", "class");
+        EnumResourceBundle<TestLabelKey> classBundleUK = source.getBundle("class", TestLabelKey.Yes, Locale.UK);
+        EnumResourceBundle<TestLabelKey> classBundleIT = source.getBundle("class", TestLabelKey.Yes, Locale.ITALIAN);
 
-        //then inserts where no key
-        pattern = source.retrievePattern(TestLabelKey.Opt, Locale.ITALY)
-                        .get();
-        assertThat(pattern).isEqualTo("New Opt");
+
+        //then inserts because none exists
+        assertThat(classBundleUK.getValue(TestLabelKey.Yes)).isEqualTo("yes from properties");
+        //then does not overwrite, because a value already exists
+        assertThat(classBundleIT.getValue(TestLabelKey.Yes)).isEqualTo("it_Yes");
+
+
     }
 
     @Test
-    public void stubOnlyNotExisting() {
+    public void stubOnlyThoseNotExisting() {
         //given
 
         //when
-        source.generateStub("class", TestLabelKey.Home, Locale.ITALY);
+        source.generateStub("class", TestLabelKey.Home, Locale.ITALY, false);
         //then
         assertThat(source.retrievePattern(TestLabelKey.Home, Locale.ITALY)
                          .get()).isEqualTo("it_Home");
         //when
-        source.generateStub("class", TestLabelKey.Blank, Locale.ITALY);
+        source.generateStub("class", TestLabelKey.Blank, Locale.ITALY, true);
         //then overwrites with name (that's the default for generate stub with name)
         assertThat(source.retrievePattern(TestLabelKey.Blank, Locale.ITALY)
                          .get()).isEqualTo("Blank");
