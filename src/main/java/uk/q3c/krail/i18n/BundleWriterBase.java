@@ -1,7 +1,7 @@
 package uk.q3c.krail.i18n;
 
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionConsumer;
+import uk.q3c.krail.core.user.opt.UserOptionContext;
 import uk.q3c.util.ResourceUtils;
 
 import java.io.File;
@@ -9,7 +9,7 @@ import java.io.File;
 /**
  * Created by David Sowerby on 26/11/14.
  */
-public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWriter<E>, UserOptionConsumer {
+public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWriter<E>, UserOptionContext {
 
     protected enum UserOptionProperty {
         WRITE_PATH

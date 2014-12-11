@@ -11,16 +11,16 @@ import java.util.Map;
 public class MockUserOption implements UserOption {
 
 
-    private Class<? extends UserOptionConsumer> consumerClass;
+    private Class<? extends UserOptionContext> consumerClass;
     private Map<String, Object> map = new HashMap<>();
 
     @Override
-    public void configure(UserOptionConsumer consumer, Class<? extends Enum> keys) {
+    public void configure(UserOptionContext consumer, Class<? extends Enum> keys) {
         this.consumerClass = consumer.getClass();
     }
 
     @Override
-    public void configure(Class<? extends UserOptionConsumer> consumerClass, Class<? extends Enum> keys) {
+    public void configure(Class<? extends UserOptionContext> consumerClass, Class<? extends Enum> keys) {
         this.consumerClass = consumerClass;
     }
 

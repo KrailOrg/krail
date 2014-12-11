@@ -22,7 +22,7 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionConsumer;
+import uk.q3c.krail.core.user.opt.UserOptionContext;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18N;
 
@@ -31,7 +31,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @I18N
-public class DefaultSubPagePanel extends NavigationButtonPanel implements UserOptionConsumer, SubPagePanel,
+public class DefaultSubPagePanel extends NavigationButtonPanel implements UserOptionContext, SubPagePanel,
         UserSitemapChangeListener {
     public enum UserOptionProperty {SORT_ASCENDING, SORT_TYPE}
     private static Logger log = LoggerFactory.getLogger(DefaultSubPagePanel.class);

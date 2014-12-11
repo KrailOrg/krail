@@ -5,16 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.UserOption;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.util.EnumMap;
-import java.util.Locale;
 import java.util.Properties;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 /**
  * This default options for this reader assume that the properties files are on the same class path as the key - for
@@ -37,109 +30,109 @@ public class PropertiesFromClasspathBundleReader extends BundleReaderBase implem
     private Properties properties;
 
     @Inject
-    protected PropertiesFromClasspathBundleReader(UserOption userOption) {
-        super(userOption);
+    protected PropertiesFromClasspathBundleReader(UserOption userOption, PropertiesFromClasspathBundleControl control) {
+        super(userOption, control);
     }
 
-    /**
-     * Most of the code for this method is taken from the standard ResourceBundle code for loading from a properties
-     * file.  The additional part is to transfer the properties into the EnumMap used by EnumResourceBundle
-     *
-     * @param enumKeyClass
-     *         the class of enum keys to use
-     * @param baseName
-     *         not used
-     * @param locale
-     * @param loader
-     *         the class loader to use, generally the class loader of the caller
-     * @param reload
-     *         not used
-     *
-     * @return
-     *
-     * @throws BundleReaderException
-     *         if the enumKeyClass has no constants
-     */
-    @Override
-    public KrailResourceBundle newBundle(String source, Class<? extends Enum> enumKeyClass, Locale locale,
-                                         ClassLoader loader, boolean reload) throws IOException {
-        I18NKey key;
-        try {
-            key = (I18NKey) enumKeyClass.getEnumConstants()[0];
-        } catch (Exception e) {
-            throw new BundleReaderException("The enum key class requires at least one constant");
-        }
-
-        log.debug("locating properties based bundle for baseName {}", key.bundleName());
-
-        String localisedName = toBundleName(source, key, locale);
-
-        final String resourceName1 = this.toResourceName0(localisedName, "properties");
-        log.debug("resource name is {}", resourceName1);
-
-        KrailResourceBundle bundle = null;
-        if (resourceName1 == null) {
-            log.debug("returning null");
-            return bundle;
-        }
-
-        final ClassLoader classLoader = loader;
-        final boolean reloadFlag = reload;
-        InputStream stream = null;
-
-        try {
-            stream = (InputStream) AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public InputStream run() throws IOException {
-                    InputStream is = null;
-                    if (reloadFlag) {
-                        log.debug("reload is true");
-                        URL url = classLoader.getResource(resourceName1);
-                        log.debug("url is {}", url);
-                        if (url != null) {
-                            URLConnection connection = url.openConnection();
-                            if (connection != null) {
-                                connection.setUseCaches(false);
-                                is = connection.getInputStream();
-                            }
-                        }
-                    } else {
-                        log.debug("reload is false");
-                        is = classLoader.getResourceAsStream(resourceName1);
-                    }
-
-                    return is;
-                }
-            });
-        } catch (PrivilegedActionException var18) {
-            throw (IOException) var18.getException();
-        }
-
-        if (stream != null) {
-            try {
-                log.debug("stream is valid");
-                properties = new Properties();
-                properties.load(stream);
-                log.debug("properties loaded");
-                bundle = new KrailResourceBundle(enumKeyClass);
-                EnumMap map = bundle.getMap();
-                log.debug("copying properties to EnumMap, using enum class '{}'", enumKeyClass);
-                int i = 0;
-                for (Enum e : enumKeyClass.getEnumConstants()) {
-                    String s = properties.getProperty(e.name());
-                    if (s != null) {
-                        map.put(e, s);
-                        i++;
-                    }
-
-                }
-                log.debug("{} properties loaded", i);
-
-            } finally {
-                stream.close();
-            }
-        }
-        return bundle;
-    }
+    //    /**
+    //     * Most of the code for this method is taken from the standard ResourceBundle code for loading from a
+    // properties
+    //     * file.  The additional part is to transfer the properties into the EnumMap used by EnumResourceBundle
+    //     *
+    //     * @param enumKeyClass
+    //     *         the class of enum keys to use
+    //     * @param baseName
+    //     *         not used
+    //     * @param locale
+    //     * @param loader
+    //     *         the class loader to use, generally the class loader of the caller
+    //     * @param reload
+    //     *         not used
+    //     *
+    //     * @return
+    //     *
+    //     * @throws BundleReaderException
+    //     *         if the enumKeyClass has no constants
+    //     */
+    //    public KrailResourceBundle newBundle(String source, Class<? extends Enum> enumKeyClass, Locale locale,
+    //                                         ClassLoader loader, boolean reload) throws IOException {
+    //        I18NKey key;
+    //        try {
+    //            key = (I18NKey) enumKeyClass.getEnumConstants()[0];
+    //        } catch (Exception e) {
+    //            throw new BundleReaderException("The enum key class requires at least one constant");
+    //        }
+    //
+    //        log.debug("locating properties based bundle for baseName {}", key.bundleName());
+    //
+    //        String localisedName = toBundleName(source, key, locale);
+    //
+    //        final String resourceName1 = this.toResourceName0(localisedName, "properties");
+    //        log.debug("resource name is {}", resourceName1);
+    //
+    //        KrailResourceBundle bundle = null;
+    //        if (resourceName1 == null) {
+    //            log.debug("returning null");
+    //            return bundle;
+    //        }
+    //
+    //        final ClassLoader classLoader = loader;
+    //        final boolean reloadFlag = reload;
+    //        InputStream stream = null;
+    //
+    //        try {
+    //            stream = (InputStream) AccessController.doPrivileged(new PrivilegedExceptionAction() {
+    //                public InputStream run() throws IOException {
+    //                    InputStream is = null;
+    //                    if (reloadFlag) {
+    //                        log.debug("reload is true");
+    //                        URL url = classLoader.getResource(resourceName1);
+    //                        log.debug("url is {}", url);
+    //                        if (url != null) {
+    //                            URLConnection connection = url.openConnection();
+    //                            if (connection != null) {
+    //                                connection.setUseCaches(false);
+    //                                is = connection.getInputStream();
+    //                            }
+    //                        }
+    //                    } else {
+    //                        log.debug("reload is false");
+    //                        is = classLoader.getResourceAsStream(resourceName1);
+    //                    }
+    //
+    //                    return is;
+    //                }
+    //            });
+    //        } catch (PrivilegedActionException var18) {
+    //            throw (IOException) var18.getException();
+    //        }
+    //
+    //        if (stream != null) {
+    //            try {
+    //                log.debug("stream is valid");
+    //                properties = new Properties();
+    //                properties.load(stream);
+    //                log.debug("properties loaded");
+    //                bundle = new KrailResourceBundle(enumKeyClass);
+    //                EnumMap map = bundle.getMap();
+    //                log.debug("copying properties to EnumMap, using enum class '{}'", enumKeyClass);
+    //                int i = 0;
+    //                for (Enum e : enumKeyClass.getEnumConstants()) {
+    //                    String s = properties.getProperty(e.name());
+    //                    if (s != null) {
+    //                        map.put(e, s);
+    //                        i++;
+    //                    }
+    //
+    //                }
+    //                log.debug("{} properties loaded", i);
+    //
+    //            } finally {
+    //                stream.close();
+    //            }
+    //        }
+    //        return bundle;
+    //    }
 
     private String toResourceName0(String bundleName, String suffix) {
         return bundleName.contains("://") ? null : this.toResourceName(bundleName, suffix);
@@ -151,6 +144,26 @@ public class PropertiesFromClasspathBundleReader extends BundleReaderBase implem
           .append('.')
           .append(suffix);
         return sb.toString();
+    }
+
+    /**
+     * Only supports String values
+     *
+     * @param bundle
+     * @param key
+     *
+     * @return
+     */
+    @Override
+    protected String getValue(ResourceBundle bundle, Enum<?> key) {
+        PropertyResourceBundle propBundle = (PropertyResourceBundle) bundle;
+        Object v = propBundle.handleGetObject(key.name());
+        if (v instanceof String) {
+            return (String) v;
+        } else {
+            return null;
+        }
+
     }
 }
 

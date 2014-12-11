@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import uk.q3c.util.MessageFormat;
 
@@ -97,22 +96,13 @@ public class DefaultTranslate implements Translate {
             return "key is null";
         }
         E k = typeBridge(key);
-        Optional<String> pattern = patternSource.retrievePattern((E) key, locale);
+        String pattern = patternSource.retrievePattern((E) key, locale);
 
 
-        //If no pattern defined use the enum name or toString()
-        if (!pattern.isPresent()) {
-            if (key instanceof Enum) {
-                pattern = Optional.of(((Enum) key).name()
-                                                  .replace("_", " "));
-            } else {
-                // or toString()
-                pattern = Optional.of(key.toString());
-            }
-        }
+
         //If no arguments, return the pattern as it is
         if ((arguments == null) || (arguments.length == 0)) {
-            return pattern.get();
+            return pattern;
         }
 
         // If any of the arguments are I18NKeys, translate them as well
@@ -124,7 +114,7 @@ public class DefaultTranslate implements Translate {
                 args.add(i, translation);
             }
         }
-        String result = MessageFormat.format(pattern.get(), args.toArray());
+        String result = MessageFormat.format(pattern, args.toArray());
         return result;
     }
 

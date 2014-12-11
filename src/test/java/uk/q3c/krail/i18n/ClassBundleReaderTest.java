@@ -1,5 +1,6 @@
 package uk.q3c.krail.i18n;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -22,16 +23,73 @@ public class ClassBundleReaderTest {
     ClassBundleReader reader;
 
     @Test
-    public void newBundle() {
+    public void valueIsPresent() {
         //given
-        reader = new ClassBundleReader(userOption);
+
+        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Yes, Locale.ITALIAN);
+        reader = new ClassBundleReader(userOption, new ClassBundleControl());
         //when
-        EnumResourceBundle bundle = reader.newBundle("class", TestLabelKey.class, Locale.ITALIAN, this.getClass()
-                                                                                                      .getClassLoader
-                                                                                                              (),
-                false);
+        Optional<String> value_it = reader.getValue(cacheKey, "class");
+
         //then
-        assertThat(bundle).isNotNull();
-        assertThat(bundle.getValue(TestLabelKey.Yes)).isEqualTo("it_Yes");
+        assertThat(value_it.isPresent()).isTrue();
+        assertThat(value_it.get()).isEqualTo("it_Yes");
+    }
+
+    @Test
+    public void valueFromBaseBundle() {
+        //given
+        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Home, Locale.forLanguageTag(""));
+        reader = new ClassBundleReader(userOption, new ClassBundleControl());
+        //when
+        Optional<String> value_en = reader.getValue(cacheKey, "class");
+
+        //then
+        assertThat(value_en.isPresent()).isTrue();
+        assertThat(value_en.get()).isEqualTo("home");
+    }
+
+    @Test
+    public void valueNotPresent() {
+        //given
+        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Transfers, Locale.ITALIAN);
+        reader = new ClassBundleReader(userOption, new ClassBundleControl());
+        //when
+
+        Optional<String> value = reader.getValue(cacheKey, "class");
+        //then
+        assertThat(value.isPresent()).isFalse();
+    }
+
+    /**
+     * Class containing key-value pairs is not in the same package as the key declaration
+     */
+    @Test
+    public void alternativePath() throws ClassNotFoundException {
+        //given
+        Class<?> x = Class.forName("fixture1.TestLbls2");
+        assertThat(x).isNotNull();
+        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey2.Key1, Locale.forLanguageTag(""));
+        reader = new ClassBundleReader(userOption, new ClassBundleControl());
+        reader.getUserOption()
+              .set(false, ClassBundleReader.UserOptionProperty.USE_KEY_PATH, "class");
+        reader.getUserOption()
+              .set("fixture1", ClassBundleReader.UserOptionProperty.PATH, "class");
+
+        //when
+        Optional<String> value = reader.getValue(cacheKey, "class");
+        //then
+        assertThat(value.isPresent()).isTrue();
+    }
+
+    @Test
+    public void bundle_does_not_exist() {
+        //given
+        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Transfers, Locale.ITALY);
+        reader = new ClassBundleReader(userOption, new ClassBundleControl());
+        //when
+        Optional<String> value = reader.getValue(cacheKey, "class");
+        //then
+        assertThat(value.isPresent()).isFalse();
     }
 }

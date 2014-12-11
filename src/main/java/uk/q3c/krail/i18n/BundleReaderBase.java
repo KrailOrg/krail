@@ -1,83 +1,108 @@
 package uk.q3c.krail.i18n;
 
+import com.google.common.base.Optional;
 import org.apache.commons.lang3.ClassUtils;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionConsumer;
+import uk.q3c.krail.core.user.opt.UserOptionContext;
 
-import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Created by David Sowerby on 25/11/14.
  */
-public abstract class BundleReaderBase implements UserOptionConsumer {
+public abstract class BundleReaderBase implements UserOptionContext, BundleReader {
 
     public enum UserOptionProperty {PATH, USE_KEY_PATH}
 
+    private final ResourceBundle.Control control;
+
+
     private UserOption userOption;
 
-    protected BundleReaderBase(UserOption userOption) {
+    protected BundleReaderBase(UserOption userOption, ResourceBundle.Control control) {
         this.userOption = userOption;
+        this.control = control;
         userOption.configure(this, UserOptionProperty.class);
     }
 
-    /**
-     * Taken from Java native ResourceBundle
-     *
-     * @param baseName
-     * @param locale
-     *
-     * @return
-     */
-    protected String toBundleName(String source, I18NKey sampleKey, Locale locale) {
-        String baseName = expandFromKey(source, sampleKey);
-        if (locale == Locale.ROOT) {
-            return baseName;
-        } else {
-            String language = locale.getLanguage();
-            String script = locale.getScript();
-            String country = locale.getCountry();
-            String variant = locale.getVariant();
-            if (language == "" && country == "" && variant == "") {
-                return baseName;
-            } else {
-                StringBuilder sb = new StringBuilder(baseName);
-                sb.append('_');
-                if (script != "") {
-                    if (variant != "") {
-                        sb.append(language)
-                          .append('_')
-                          .append(script)
-                          .append('_')
-                          .append(country)
-                          .append('_')
-                          .append(variant);
-                    } else if (country != "") {
-                        sb.append(language)
-                          .append('_')
-                          .append(script)
-                          .append('_')
-                          .append(country);
-                    } else {
-                        sb.append(language)
-                          .append('_')
-                          .append(script);
-                    }
-                } else if (variant != "") {
-                    sb.append(language)
-                      .append('_')
-                      .append(country)
-                      .append('_')
-                      .append(variant);
-                } else if (country != "") {
-                    sb.append(language)
-                      .append('_')
-                      .append(country);
-                } else {
-                    sb.append(language);
-                }
+    //    /**
+    //     * Taken from Java native ResourceBundle
+    //     *
+    //     * @param baseName
+    //     * @param locale
+    //     *
+    //     * @return
+    //     */
+    //    protected String toBundleName(String source, I18NKey sampleKey, Locale locale) {
+    //        String baseName = expandFromKey(source, sampleKey);
+    //        if (locale == Locale.ROOT) {
+    //            return baseName;
+    //        } else {
+    //            String language = locale.getLanguage();
+    //            String script = locale.getScript();
+    //            String country = locale.getCountry();
+    //            String variant = locale.getVariant();
+    //            if (language == "" && country == "" && variant == "") {
+    //                return baseName;
+    //            } else {
+    //                StringBuilder sb = new StringBuilder(baseName);
+    //                sb.append('_');
+    //                if (script != "") {
+    //                    if (variant != "") {
+    //                        sb.append(language)
+    //                          .append('_')
+    //                          .append(script)
+    //                          .append('_')
+    //                          .append(country)
+    //                          .append('_')
+    //                          .append(variant);
+    //                    } else if (country != "") {
+    //                        sb.append(language)
+    //                          .append('_')
+    //                          .append(script)
+    //                          .append('_')
+    //                          .append(country);
+    //                    } else {
+    //                        sb.append(language)
+    //                          .append('_')
+    //                          .append(script);
+    //                    }
+    //                } else if (variant != "") {
+    //                    sb.append(language)
+    //                      .append('_')
+    //                      .append(country)
+    //                      .append('_')
+    //                      .append(variant);
+    //                } else if (country != "") {
+    //                    sb.append(language)
+    //                      .append('_')
+    //                      .append(country);
+    //                } else {
+    //                    sb.append(language);
+    //                }
+    //
+    //                return sb.toString();
+    //            }
+    //        }
+    //    }
 
-                return sb.toString();
-            }
+    @Override
+    public UserOption getUserOption() {
+        return userOption;
+    }
+
+    @Override
+    public Optional<String> getValue(PatternCacheKey cacheKey, String source) {
+        I18NKey key = (I18NKey) cacheKey.getKey();
+        String baseName = key.bundleName();
+        String expandedBaseName = expandFromKey(source, key);
+        try {
+            ResourceBundle bundle = ResourceBundle.getBundle(expandedBaseName, cacheKey.getLocale(), this.getClass()
+                                                                                                         .getClassLoader(), getControl());
+            String value = getValue(bundle, cacheKey.getKey());
+            return Optional.of(value);
+        } catch (Exception e) {
+            return Optional.absent();
         }
     }
 
@@ -95,8 +120,9 @@ public abstract class BundleReaderBase implements UserOptionConsumer {
         return expanded;
     }
 
-    @Override
-    public UserOption getUserOption() {
-        return userOption;
+    protected abstract String getValue(ResourceBundle bundle, Enum<?> key);
+
+    public ResourceBundle.Control getControl() {
+        return control;
     }
 }

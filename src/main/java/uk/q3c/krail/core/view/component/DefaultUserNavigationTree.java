@@ -27,7 +27,7 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionConsumer;
+import uk.q3c.krail.core.user.opt.UserOptionContext;
 import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.core.view.KrailViewChangeListener;
 import uk.q3c.util.ID;
@@ -45,7 +45,7 @@ import java.util.Comparator;
  * @author David Sowerby 17 May 2013
  * @modified David Sowerby
  */
-public class DefaultUserNavigationTree extends Tree implements UserOptionConsumer, UserNavigationTree,
+public class DefaultUserNavigationTree extends Tree implements UserOptionContext, UserNavigationTree,
         KrailViewChangeListener, UserSitemapChangeListener {
 
 
@@ -100,6 +100,35 @@ public class DefaultUserNavigationTree extends Tree implements UserOptionConsume
         if (rebuild) {
             build();
         }
+    }
+
+    /**
+     * See {@link UserNavigationTree#build()}
+     */
+    @Override
+    public void build() {
+        if (rebuildRequired) {
+            log.debug("rebuilding user navigation tree");
+            clear();
+            builder.build();
+            rebuildRequired = false;
+            if (log.isDebugEnabled()) {
+                Collection<?> t = this.getItemIds();
+                String s = "";
+                for (Object o : t) {
+                    String itemCaption = getItemCaption(o);
+                    s = s + itemCaption + ",";
+                }
+                log.debug(s);
+            }
+        } else {
+            log.debug("rebuild of user navigation tree is not required");
+        }
+    }
+
+    @Override
+    public void clear() {
+        removeAllItems();
     }
 
     public SortType getOptionSortType() {
@@ -161,35 +190,6 @@ public class DefaultUserNavigationTree extends Tree implements UserOptionConsume
         } else {
             log.warn("Attempt to set max depth value to {}, but has been ignored.  It must be greater than 0. ");
         }
-    }
-
-    /**
-     * See {@link UserNavigationTree#build()}
-     */
-    @Override
-    public void build() {
-        if (rebuildRequired) {
-            log.debug("rebuilding user navigation tree");
-            clear();
-            builder.build();
-            rebuildRequired = false;
-            if (log.isDebugEnabled()) {
-                Collection<?> t = this.getItemIds();
-                String s = "";
-                for (Object o : t) {
-                    String itemCaption = getItemCaption(o);
-                    s = s + itemCaption + ",";
-                }
-                log.debug(s);
-            }
-        } else {
-            log.debug("rebuild of user navigation tree is not required");
-        }
-    }
-
-    @Override
-    public void clear() {
-        removeAllItems();
     }
 
     @Override

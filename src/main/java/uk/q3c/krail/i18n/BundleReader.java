@@ -1,7 +1,7 @@
 package uk.q3c.krail.i18n;
 
-import java.io.IOException;
-import java.util.Locale;
+import com.google.common.base.Optional;
+
 import java.util.ResourceBundle;
 
 /**
@@ -14,6 +14,9 @@ import java.util.ResourceBundle;
  */
 public interface BundleReader {
 
-    ResourceBundle newBundle(String source, Class<? extends Enum> enumKeyClass, Locale locale, ClassLoader loader,
-                             boolean reload) throws IOException;
+    //    ResourceBundle newBundle(String source, Class<? extends Enum> enumKeyClass, Locale locale, ClassLoader loader,
+    //                             boolean reload) throws IOException;
+
+
+    Optional<String> getValue(PatternCacheKey cacheKey, String source);
 }

@@ -17,7 +17,7 @@ public class DefaultUserOption implements UserOption {
     private final String systemLayer = "99:system";
     private final UserOptionLayerDefinition layerDefinition;
     private final SubjectProvider subjectProvider;
-    private Class<? extends UserOptionConsumer> consumerClass;
+    private Class<? extends UserOptionContext> consumerClass;
     //This might be useful for pre-loading a set of options, but is not implemented yet
     private Class<? extends Enum> keys;
     private UserOptionStore optionStore;
@@ -33,13 +33,13 @@ public class DefaultUserOption implements UserOption {
     }
 
     @Override
-    public void configure(UserOptionConsumer consumer, Class<? extends Enum> keys) {
+    public void configure(UserOptionContext consumer, Class<? extends Enum> keys) {
         this.consumerClass = consumer.getClass();
         this.keys = keys;
     }
 
     @Override
-    public void configure(Class<? extends UserOptionConsumer> consumerClass, Class<? extends Enum> keys) {
+    public void configure(Class<? extends UserOptionContext> consumerClass, Class<? extends Enum> keys) {
         this.consumerClass = consumerClass;
         this.keys = keys;
     }
@@ -48,7 +48,7 @@ public class DefaultUserOption implements UserOption {
      * Gets option value for the {@code key} and {@code qualifiers}, combined with the {@link #consumerClass} provided
      * by
      * the
-     * {@link #configure(UserOptionConsumer, Class)} method
+     * {@link #configure(UserOptionContext, Class)} method
      *
      * @param defaultValue
      *         the default value to be returned if no value is found in the store.  Also determines the type of the

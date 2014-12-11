@@ -57,9 +57,14 @@ public class I18NModule extends AbstractModule {
         bindDefaultLocale();
         bindTranslate();
         bindPatternSource();
+        bindPatternCacheLoader();
 
 
         define();
+    }
+
+    protected void bindPatternCacheLoader() {
+        bind(PatternCacheLoader.class).to(DefaultPatternCacheLoader.class);
     }
 
     protected void bindPatternSource() {

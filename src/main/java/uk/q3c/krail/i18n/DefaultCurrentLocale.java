@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionConsumer;
+import uk.q3c.krail.core.user.opt.UserOptionContext;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.core.user.status.UserStatusListener;
 import uk.q3c.util.MessageFormat;
@@ -55,7 +55,7 @@ import java.util.Set;
  * @date 5 May 2014
  */
 
-public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, UserOptionConsumer {
+public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, UserOptionContext {
     public enum UserOptionProperty {PREFERRED_LOCALE}
 
     private static Logger log = LoggerFactory.getLogger(DefaultCurrentLocale.class);

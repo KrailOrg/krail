@@ -20,10 +20,10 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapChangeListener;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionConsumer;
+import uk.q3c.krail.core.user.opt.UserOptionContext;
 import uk.q3c.util.ID;
 
-public class DefaultUserNavigationMenu extends MenuBar implements UserOptionConsumer, UserNavigationMenu,
+public class DefaultUserNavigationMenu extends MenuBar implements UserOptionContext, UserNavigationMenu,
         UserSitemapChangeListener {
 
     public enum UserOptionProperty {

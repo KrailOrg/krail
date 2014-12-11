@@ -20,7 +20,7 @@ import com.vaadin.server.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionConsumer;
+import uk.q3c.krail.core.user.opt.UserOptionContext;
 import uk.q3c.krail.i18n.SupportedLocales;
 import uk.q3c.util.ResourceUtils;
 
@@ -28,7 +28,7 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Set;
 
-public class LocaleContainer extends IndexedContainer implements UserOptionConsumer {
+public class LocaleContainer extends IndexedContainer implements UserOptionContext {
     public enum UserOptionProperty {
         LOCALE_FLAG_SIZE
     }
