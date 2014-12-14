@@ -14,7 +14,7 @@ package uk.q3c.krail.i18n;
 
 public class Descriptions_de extends Descriptions {
     @Override
-    protected void loadMap(Class<Enum<?>> enumKeyClass) {
+    protected void loadMap() {
 
         put(DescriptionKey.Last_Name, "Der Nachname oder der Familienname");
         put(DescriptionKey.Confirm_Ok, "Bestätigen Sie, dass dieser Wert in Ordnung ist");

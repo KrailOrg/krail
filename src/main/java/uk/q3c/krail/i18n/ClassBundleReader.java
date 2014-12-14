@@ -33,65 +33,28 @@ public class ClassBundleReader extends BundleReaderBase implements BundleReader 
         super(userOption, control);
     }
 
+    /**
+     * Called {@link #writeStubValue(PatternCacheKey, String)} for sub-classes to write the stub back to persistence
+     * if they can (class and property file implementations cannot write back to their source, so will just ignore
+     * this call)
+     *
+     * @param cacheKey
+     * @param stub
+     *
+     * @return
+     */
+    @Override
+    protected void writeStubValue(PatternCacheKey cacheKey, String stub) {
+
+    }
+
     @Override
     protected String getValue(ResourceBundle bundle, Enum<?> key) {
         EnumResourceBundle enumBundle = (EnumResourceBundle) bundle;
+        enumBundle.setKeyClass(key.getClass());
+        enumBundle.load();
         return enumBundle.getValue(key);
     }
 
-    //    /**
-    //     * Most of the code for this method is taken from the standard ResourceBundle code for loading from a class
-    //     *
-    //     * @param enumKeyClass
-    //     *         the class of enum keys to use
-    //     * @param baseName
-    //     *         not used
-    //     * @param locale
-    //     * @param loader
-    //     *         the class loader to use, generally the class loader of the caller
-    //     * @param reload
-    //     *         not used
-    //     *
-    //     * @return
-    //     *
-    //     * @throws BundleReaderException
-    //     *         if the enumKeyClass has no constants
-    //     */
-    //    protected EnumResourceBundle newBundle(String source, Class<? extends Enum> enumKeyClass, Locale locale,
-    //
-    //                                           ClassLoader loader, boolean reload) {
-    //        I18NKey key;
-    //        try {
-    //            key = (I18NKey) enumKeyClass.getEnumConstants()[0];
-    //        } catch (Exception e) {
-    //            throw new BundleReaderException("The enum key class " + enumKeyClass + " requires at least one
-    // constant");
-    //        }
-    //        String bundleName = this.toBundleName(source, key, locale);
-    //        try {
-    //            Class resourceName = loader.loadClass(bundleName);
-    //            EnumResourceBundle bundle = (EnumResourceBundle) resourceName.newInstance();
-    //            bundle.loadMap(enumKeyClass);
-    //            return bundle;
-    //
-    //        } catch (Exception e) {
-    //            return null;
-    //        }
-    //    }
-    //
 
-
-    //    protected String expandFromKey(String source, I18NKey sampleKey) {
-    //        String baseName = sampleKey.bundleName();
-    //        String packageName;
-    //        if (getUserOption().get(true, UserOptionProperty.USE_KEY_PATH, source)) {
-    //            packageName = ClassUtils.getPackageCanonicalName(sampleKey.getClass());
-    //
-    //        } else {
-    //            packageName = getUserOption().get("", UserOptionProperty.PATH, source);
-    //        }
-    //
-    //        String expanded = packageName.isEmpty() ? baseName : packageName + "." + baseName;
-    //        return expanded;
-    //    }
 }

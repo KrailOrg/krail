@@ -1,5 +1,6 @@
 package uk.q3c.krail.i18n;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ClassUtils;
@@ -9,10 +10,7 @@ import uk.q3c.krail.core.user.opt.UserOption;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by David Sowerby on 25/11/14.
@@ -44,8 +42,21 @@ public class ClassBundleWriter<E extends Enum<E>> extends BundleWriterBase<E> {
                                                        .toString(DateTimeFormat.longDateTime());
     }
 
+    /**
+     * Writes out the class as a sub-class of EnumResourceBundle.  If bundleName is present, uses that as the class
+     * name.  If it is not present, uses the bundleName from the bundle's I18NKey.  If there are no keys defined, uses
+     * 'Unknown' as the class name
+     *
+     * @param locale
+     * @param bundleName
+     *         if present, use as the class name
+     *
+     * @throws IOException
+     */
     @Override
-    public void write() throws IOException {
+    public void write(Locale locale, Optional<String> bundleName) throws IOException {
+        String bundleNameWithLocale = bundleNameWithLocale(locale, bundleName);
+
         StringBuilder buf = new StringBuilder();
         buf.append("package ")
            .append(pkg)
@@ -67,9 +78,9 @@ public class ClassBundleWriter<E extends Enum<E>> extends BundleWriterBase<E> {
            .append("\n*\n*/\n");
 
         buf.append("public class ")
-           .append(clazz.getSimpleName())
+           .append(bundleNameWithLocale)
            .append(" extends ")
-           .append(genericSupperClass())
+           .append(genericSuperClass())
            .append(" {\n\n");
 
         buf.append(indent)
@@ -86,18 +97,20 @@ public class ClassBundleWriter<E extends Enum<E>> extends BundleWriterBase<E> {
                .append(".")
                .append(entry.getKey()
                             .name())
-               .append(", ")
+               .append(", \"")
                .append(entry.getValue())
-               .append(");\n");
+               .append("\");\n");
         }
         buf.append(indent)
            .append("}\n");
         buf.append("}\n");
-        File file = new File(getOptionWritePath(), clazz.getSimpleName() + ".java");
+
+
+        File file = new File(getOptionWritePath(), bundleNameWithLocale + ".java");
         FileUtils.writeStringToFile(file, buf.toString());
     }
 
-    private String genericSupperClass() {
+    private String genericSuperClass() {
         if (superClass.equals(EnumResourceBundle.class)) {
             return superClass.getSimpleName() + "<" + keyClass.getSimpleName() + ">";
         }

@@ -1,5 +1,6 @@
 package uk.q3c.krail.i18n;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.cache.CacheLoader;
 import com.google.inject.Inject;
@@ -15,7 +16,7 @@ import java.util.*;
  */
 public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, String> implements PatternCacheLoader,
         UserOptionContext {
-    public enum UserOptionProperty {SOURCE_ORDER_DEFAULT, SOURCE_ORDER}
+    public enum UserOptionProperty {AUTO_STUB, SOURCE_ORDER_DEFAULT, SOURCE_ORDER, STUB_WITH_KEY_NAME, STUB_VALUE}
 
     private static Logger log = LoggerFactory.getLogger(DefaultPatternCacheLoader.class);
     private Map<String, BundleReader> bundleReaders;
@@ -35,9 +36,17 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     }
 
     /**
-     * Computes or retrieves the value corresponding to {@code key}.
+     * Retrieves the value corresponding to {@code key}. The required Locale (from the {@code cacheKey})
+     * is checked for each source in turn, and if that fails to provide a result then the next candidate Locale is
+     * used, and each source tried again.  If all candidate locales, for all sources, are exhausted and still no
+     * pattern is found, then the name of the key is returned.
+     * <p>
+     * The that sources are accessed is determined by {@link #bundleSourceOrder}
+     * <p>
+     * The standard Java method for identifying candidate locales is used - see ResourceBundle.Control
+     * .getCandidateLocales
      *
-     * @param key
+     * @param cacheKey
      *         the non-null key whose value should be loaded
      *
      * @return the value associated with {@code key}; <b>must not be null</b>
@@ -50,39 +59,69 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
      *         the thread's interrupt status is set
      */
     @Override
-    public String load(PatternCacheKey key) throws Exception {
-        I18NKey i18NKey = (I18NKey) key.getKey()
-                                       .getClass()
-                                       .getEnumConstants()[0];
+    public String load(PatternCacheKey cacheKey) throws Exception {
+        I18NKey i18NKey = (I18NKey) cacheKey.getKey()
+                                            .getClass()
+                                            .getEnumConstants()[0];
 
 
         //        Use standard Java call to get candidates
         KrailResourceBundleControl bundleControl = new KrailResourceBundleControl();
-        List<Locale> candidateLocales = bundleControl.getCandidateLocales(i18NKey.bundleName(), key.getLocale());
-        String result = null;
+        List<Locale> candidateLocales = bundleControl.getCandidateLocales(i18NKey.bundleName(), cacheKey
+                .getRequestedLocale());
+        Optional<String> value = Optional.absent();
 
         for (Locale candidateLocale : candidateLocales) {
+            cacheKey.setActualLocale(candidateLocale);
             //try each source in turn for a valid pattern
-            for (String source : bundleSourceOrder((I18NKey) key.getKey())) {
+            for (String source : bundleSourceOrder((I18NKey) cacheKey.getKey())) {
+                cacheKey.setSource(source);
+
+                //get auto-stub options for the source
+                Boolean autoStub = userOption.get(false, UserOptionProperty.AUTO_STUB, source);
+                Boolean stubWithKeyName = userOption.get(true, UserOptionProperty.STUB_WITH_KEY_NAME, source);
+                String stubValue = userOption.get("undefined", UserOptionProperty.STUB_VALUE, source);
+
+                //get the reader
                 BundleReader reader = bundleReaders.get(source);
-                reader.getValue(key, source);
-                if (result != null) {
+
+                //get value from reader, auto-stubbing as required
+                value = reader.getValue(cacheKey, source, autoStub, stubWithKeyName, stubValue);
+                if (value.isPresent()) {
                     break;
                 }
             }
-            if (result != null) {
+            if (value.isPresent()) {
                 break;
             }
         }
-        if (result == null) {
-            result = key.getKey()
-                        .name();
+        if (!value.isPresent()) {
+            value = Optional.of(cacheKey.getKey()
+                                        .name()
+                                        .replace("_", " "));
         }
-        return result;
-
-
+        return value.get();
     }
 
+    /**
+     * Returns the order in which sources are processed - the first which returns a valid value for a key is used.  The
+     * first non-null of the following is used:
+     * <ol>
+     * <li>the order returned by{@link #getOptionSourceOrder()} (a value from UserOption</li>
+     * <li>the order returned by {@link #getOptionSourceOrderDefault()}  (a value from UserOption</li>
+     * <li>{@link #bundleSourceOrder}, which is defined by {@link I18NModule#setBundleSourceOrder()}</li>
+     * <li>{@link #bundleSourceOrderDefault}, which is defined by {@link I18NModule#setDefaultBundleSourceOrder} </li>
+     * <li>the keys from {@link #bundleReaders} - note that the order for this will be unreliable if bundleReaders has
+     * been defined by multiple Guice modules</li>
+     * <p>
+     * <p>
+     * </ol>
+     *
+     * @param key
+     *         used to identify the bundle, from {@link I18NKey#bundleName()}
+     *
+     * @return a list containing the sources to be processed, in the order that they should be processed
+     */
     @Override
     public List<String> bundleSourceOrder(I18NKey key) {
 
@@ -121,20 +160,42 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     }
 
     @Override
+    public void setOptionSourceOrderDefault(String... sources) {
+        List<String> order = Arrays.asList(sources);
+        userOption.set(order, UserOptionProperty.SOURCE_ORDER_DEFAULT);
+    }
+
+    @Override
     public UserOption getUserOption() {
         return userOption;
     }
 
     @Override
-    public void setOptionSourceOrder(String baseName, String... tags) {
+    public void setOptionSourceOrder(String baseName, String... sources) {
         Preconditions.checkNotNull(baseName);
-        if (tags.length < 1) {
-            log.warn("Attempted to setOptionSourceOrder with no source tags.  No change has been made ");
+        if (sources.length < 1) {
+            log.warn("Attempted to setOptionSourceOrder with no sources.  No change has been made ");
             return;
         }
 
-        List<String> list = Arrays.asList(tags);
+        List<String> list = Arrays.asList(sources);
         userOption.set(list, UserOptionProperty.SOURCE_ORDER, baseName);
     }
+
+    @Override
+    public void setOptionAutoStub(boolean autoStub, String source) {
+        userOption.set(autoStub, UserOptionProperty.AUTO_STUB, source);
+    }
+
+    @Override
+    public void setOptionStubWithKeyName(boolean useKeyName, String source) {
+        userOption.set(useKeyName, UserOptionProperty.STUB_WITH_KEY_NAME, source);
+    }
+
+    @Override
+    public void setOptionStubValue(String stubValue, String source) {
+        userOption.set(stubValue, UserOptionProperty.STUB_VALUE, source);
+    }
+
 
 }

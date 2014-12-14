@@ -16,7 +16,7 @@ public class Descriptions_it extends Descriptions {
 
 
     @Override
-    protected void loadMap(Class<Enum<?>> enumKeyClass) {
+    protected void loadMap() {
         put(DescriptionKey.Last_Name, "il cognome o il nome di famiglia");
         put(DescriptionKey.Confirm_Ok, "Confermare questo valore è Ok");
     }

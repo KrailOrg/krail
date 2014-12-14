@@ -91,21 +91,121 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
         return userOption;
     }
 
+    /**
+     * The same as calling {@link #getValue(PatternCacheKey, String, boolean, boolean, String)} with autoStub==false
+     *
+     * @param cacheKey
+     * @param source
+     *
+     * @return
+     */
     @Override
     public Optional<String> getValue(PatternCacheKey cacheKey, String source) {
+        return getValue(cacheKey, source, false, false, "na");
+    }
+
+    /**
+     * Returns the value for the {@code cacheKey} if there is one, or Optional.absent() if there is no entry for the
+     * key.   The location of the bundle (class or properties file) is extracted from the {@link I18NKey#bundleName()}
+     * and expanded using {@link #expandFromKey(String, I18NKey)}.  (Auto-stub logic provided by {@link
+     * #autoStub(I18NKey, String, boolean, boolean, String)}
+     *
+     * @param cacheKey
+     *         the key to identify the pattern required
+     * @param source
+     *         used to identify the correct UserOption for expandKey
+     * @param autoStub
+     *         if true, and value for key is null, provide a stub value in its place
+     * @param stubWithKeyName
+     *         if {@code autoStub} is true, and the value is null, and this param is true, use the key name as the
+     *         value
+     * @param stubValue
+     *         if {@code autoStub} is true, and the value is null, and {@code stubWithKeyName} is false, use the value
+     *         of this parameter as the value
+     *
+     * @return
+     */
+    @Override
+    public Optional<String> getValue(PatternCacheKey cacheKey, String source, boolean autoStub, boolean
+            stubWithKeyName, String stubValue) {
         I18NKey key = (I18NKey) cacheKey.getKey();
-        String baseName = key.bundleName();
         String expandedBaseName = expandFromKey(source, key);
         try {
-            ResourceBundle bundle = ResourceBundle.getBundle(expandedBaseName, cacheKey.getLocale(), this.getClass()
-                                                                                                         .getClassLoader(), getControl());
+            ResourceBundle bundle = ResourceBundle.getBundle(expandedBaseName, cacheKey.getActualLocale(), this
+                    .getClass()
+                                                                                                               .getClassLoader(), getControl());
             String value = getValue(bundle, cacheKey.getKey());
-            return Optional.of(value);
+            return autoStub(cacheKey, value, autoStub, stubWithKeyName, stubValue);
         } catch (Exception e) {
             return Optional.absent();
         }
     }
 
+    /**
+     * See {@link #getValue(PatternCacheKey, String, boolean, boolean, String)} ()} for auto-stub description.  Calls
+     * {@link #writeStubValue(PatternCacheKey, String)} for sub-classes to write the stub back to persistence if they
+     * can (class and property file implementations cannot write back to their source, so will just ignore this call)
+     *
+     * @param key
+     * @param value
+     * @param autoStub
+     * @param stubWithKeyName
+     * @param stubValue
+     *
+     * @return
+     */
+    @Override
+    public Optional<String> autoStub(PatternCacheKey cacheKey, String value, boolean autoStub, boolean
+            stubWithKeyName, String stubValue) {
+        if (value == null) {
+            if (autoStub) {
+                I18NKey key = (I18NKey) cacheKey.getKey();
+                String stub;
+                if (stubWithKeyName) {
+                    stub = ((Enum<?>) key).name();
+                } else {
+                    stub = stubValue;
+                }
+                writeStubValue(cacheKey, stub);
+                return Optional.of(stub);
+            } else {
+                return Optional.absent();
+            }
+        }
+        return Optional.of(value);
+    }
+
+    /**
+     * Called {@link #writeStubValue(PatternCacheKey, String)} for sub-classes to write the stub back to persistence
+     * if they can (class and property file implementations cannot write back to their source, so will just ignore
+     * this call)
+     *
+     * @param key
+     * @param value
+     * @param autoStub
+     * @param stubWithKeyName
+     * @param stubValue
+     *
+     * @return
+     */
+    protected abstract void writeStubValue(PatternCacheKey cacheKey, String stub);
+
+    /**
+     * Allows the setting of paths for location of class and property files.  The bundle base name is taken from {@link
+     * I18NKey#bundleName()}.
+     * <p>
+     * UserOption entries determine how the bundle name is expanded.  If USE_KEY_PATH is true, the bundle name is
+     * appended to the package path of the {@code sampleKey}
+     * <p>
+     * If USE_KEY_PATH is false, the bundle name is appended to UserOption PATH
+     *
+     * @param source
+     *         the name of the source being used, as provided via {@link I18NModule#addBundleReader(String, Class)}
+     * @param sampleKey
+     *         any key from the I18NKey class, to give access to bundleName()
+     *
+     * @return
+     */
     protected String expandFromKey(String source, I18NKey sampleKey) {
         String baseName = sampleKey.bundleName();
         String packageName;

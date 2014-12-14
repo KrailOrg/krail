@@ -29,7 +29,7 @@ public class ClassBundleReaderTest {
         PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Yes, Locale.ITALIAN);
         reader = new ClassBundleReader(userOption, new ClassBundleControl());
         //when
-        Optional<String> value_it = reader.getValue(cacheKey, "class");
+        Optional<String> value_it = reader.getValue(cacheKey, "class", false, false, "na");
 
         //then
         assertThat(value_it.isPresent()).isTrue();
@@ -42,7 +42,7 @@ public class ClassBundleReaderTest {
         PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Home, Locale.forLanguageTag(""));
         reader = new ClassBundleReader(userOption, new ClassBundleControl());
         //when
-        Optional<String> value_en = reader.getValue(cacheKey, "class");
+        Optional<String> value_en = reader.getValue(cacheKey, "class", false, false, "na");
 
         //then
         assertThat(value_en.isPresent()).isTrue();
@@ -56,7 +56,7 @@ public class ClassBundleReaderTest {
         reader = new ClassBundleReader(userOption, new ClassBundleControl());
         //when
 
-        Optional<String> value = reader.getValue(cacheKey, "class");
+        Optional<String> value = reader.getValue(cacheKey, "class", false, false, "na");
         //then
         assertThat(value.isPresent()).isFalse();
     }
@@ -67,8 +67,6 @@ public class ClassBundleReaderTest {
     @Test
     public void alternativePath() throws ClassNotFoundException {
         //given
-        Class<?> x = Class.forName("fixture1.TestLbls2");
-        assertThat(x).isNotNull();
         PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey2.Key1, Locale.forLanguageTag(""));
         reader = new ClassBundleReader(userOption, new ClassBundleControl());
         reader.getUserOption()
@@ -77,7 +75,7 @@ public class ClassBundleReaderTest {
               .set("fixture1", ClassBundleReader.UserOptionProperty.PATH, "class");
 
         //when
-        Optional<String> value = reader.getValue(cacheKey, "class");
+        Optional<String> value = reader.getValue(cacheKey, "class", false, false, "na");
         //then
         assertThat(value.isPresent()).isTrue();
     }
@@ -88,7 +86,7 @@ public class ClassBundleReaderTest {
         PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Transfers, Locale.ITALY);
         reader = new ClassBundleReader(userOption, new ClassBundleControl());
         //when
-        Optional<String> value = reader.getValue(cacheKey, "class");
+        Optional<String> value = reader.getValue(cacheKey, "class", false, false, "na");
         //then
         assertThat(value.isPresent()).isFalse();
     }

@@ -8,15 +8,60 @@ import java.util.ResourceBundle;
  * Common interface for implementations which locate and read a ResourceBundle from implementation specific sources -
  * for example, Java class, properties files, database. Krail uses this to replace code which normally has to be
  * provided in a {@link ResourceBundle.Control} sub-class.
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * Created by David Sowerby on 18/11/14.
  */
 public interface BundleReader {
 
-    //    ResourceBundle newBundle(String source, Class<? extends Enum> enumKeyClass, Locale locale, ClassLoader loader,
-    //                             boolean reload) throws IOException;
+    /**
+     * Gets a value from the bundle reader, using the {@code cacheKey} to identify it.  The other parameters are all
+     * related to automatically stubbing a value if one does not exist - this allows pre-population of values, or it
+     * can also be used to identify keys which have been called, thus allowing them to be prioritised for translation.
+     * <p>
+     * For class and property file readers, auto-stubbing will only occur if a bundle is found, but there is no entry
+     * for the key.  If the bundle is not found, then no stubbing will occur.  Note also that for these types of
+     * readers, stubbing is transient, as it is not possible to write directly back to source.  You can however use
+     * {@link PatternUtility} to write the bundle out to another location.
+     * <p>
+     * Other reader implementations (database for example) should be able to write the stub back to persistence
+     *
+     * @param cacheKey
+     *         the cacheKey to identify the value required
+     * @param source
+     *         the bundle source to be accessed, as defined by {@link I18NModule#addBundleReader(String, Class)}
+     * @param autoStub
+     *         if true, if the key does not return a value, a stub is automatically generated
+     * @param stubWithKeyName
+     *         if true, and a key is being auto-stubbed, the name of the key is used as the stub value
+     * @param stubValue
+     *         if {@code stubWithKeyName} is false, the value of this parameter is used to stub the value
+     *
+     * @return
+     */
+    Optional<String> getValue(PatternCacheKey cacheKey, String source, boolean autoStub, boolean stubWithKeyName,
+                              String stubValue);
 
+    /**
+     * Depending on the setting of UserOptions, provide value stubs where keys do not have a value assigned
+     *
+     * @param cacheKey
+     * @param value
+     * @param autoStub
+     * @param stubWithKeyName
+     * @param stubValue
+     *
+     * @return
+     */
+    Optional<String> autoStub(PatternCacheKey cacheKey, String value, boolean autoStub, boolean stubWithKeyName,
+                              String stubValue);
 
+    /**
+     * The same as calling {@link #getValue(PatternCacheKey, String, boolean, boolean, String)} with autoStub==false
+     *
+     * @param cacheKey
+     * @param source
+     * @return
+     */
     Optional<String> getValue(PatternCacheKey cacheKey, String source);
 }

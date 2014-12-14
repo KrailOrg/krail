@@ -53,6 +53,7 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
     private final Translate translate;
     private final SubjectIdentifier subjectIdentifier;
     private final UserStatus userStatus;
+    private CurrentLocale currentLocale;
 
     @Inject
     protected DefaultUserStatusPanel(Navigator navigator, SubjectProvider subjectProvider, Translate translate,
@@ -64,6 +65,7 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         this.translate = translate;
         this.subjectIdentifier = subjectIdentifier;
         this.userStatus = userStatus;
+        this.currentLocale = currentLocale;
         currentLocale.addListener(this);
         userStatus.addListener(this);
         setSizeFull();
@@ -96,7 +98,7 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
     }
 
     private void build() {
-        log.debug("building");
+        log.debug("building with Locale={}", currentLocale.getLocale());
         boolean authenticated = subjectProvider.get()
                                                .isAuthenticated();
         String caption = (authenticated) ? translate.from(LabelKey.Log_Out) : translate.from(LabelKey.Log_In);

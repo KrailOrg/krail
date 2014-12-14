@@ -51,7 +51,7 @@ public class MockCurrentLocale implements CurrentLocale, UserStatusListener {
 
         if (locale != this.locale) {
             this.locale = locale;
-            Locale.setDefault(locale);
+            //            Locale.setDefault(locale);
             log.debug("CurrentLocale set to {}", locale);
             if (fireListeners) {
                 fireListeners(locale);

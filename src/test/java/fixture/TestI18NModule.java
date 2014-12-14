@@ -13,7 +13,9 @@
 package fixture;
 
 import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.DefaultPatternSource;
 import uk.q3c.krail.i18n.I18NModule;
+import uk.q3c.krail.i18n.PatternSource;
 
 import java.util.Locale;
 
@@ -44,5 +46,13 @@ public class TestI18NModule extends I18NModule {
         addSupportedLocale(Locale.GERMANY);
         addSupportedLocale(Locale.ITALY);
         addSupportedLocale(new Locale("de", "CH"));
+    }
+
+    /**
+     * Don't use VaadinSessionScope during testing, or the cache has to be cleared between each test
+     */
+    @Override
+    protected void bindPatternSource() {
+        bind(PatternSource.class).to(DefaultPatternSource.class);
     }
 }

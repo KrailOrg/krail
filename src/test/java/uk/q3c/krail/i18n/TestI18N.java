@@ -31,16 +31,16 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface TestI18N {
-    TestLabelKey caption() default TestLabelKey._nullkey_;
+    TestLabelKey caption() default TestLabelKey.nullKey;
 
-    TestLabelKey description() default TestLabelKey._nullkey_;
+    TestLabelKey description() default TestLabelKey.nullKey;
 
     /**
      * Usually only used with Vaadin Labels
      *
      * @return
      */
-    TestLabelKey value() default TestLabelKey._nullkey_;
+    TestLabelKey value() default TestLabelKey.nullKey;
 
     /**
      * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional

@@ -55,7 +55,7 @@ public class DefaultInvalidURIExceptionHandlerTest {
         // when
         handler.invoke(exception);
         // then
-        verify(notifier).notifyInformation(MessageKey.invalidURI, navState.getVirtualPage());
+        verify(notifier).notifyInformation(MessageKey.Invalid_URI, navState.getVirtualPage());
 
     }
 }

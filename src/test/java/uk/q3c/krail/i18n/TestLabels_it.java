@@ -18,7 +18,7 @@ package uk.q3c.krail.i18n;
 public class TestLabels_it extends TestLabels {
 
     @Override
-    protected void loadMap(Class<Enum<?>> enumKeyClass) {
+    protected void loadMap() {
         put(TestLabelKey.Home, "it_Home");
         put(TestLabelKey.Yes, "it_Yes");
         put(TestLabelKey.No, "it_No");

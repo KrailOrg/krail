@@ -23,13 +23,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
-import uk.q3c.krail.core.user.opt.*;
+import uk.q3c.krail.core.user.opt.TestUserOptionModule;
+import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.i18n.CurrentLocale;
 
@@ -41,7 +43,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestUserOptionModule.class})
+@GuiceContext({TestI18NModule.class, TestUserOptionModule.class, VaadinSessionScopeModule.class})
 public class DefaultSubPagePanelTest {
 
     DefaultSubPagePanel panel;

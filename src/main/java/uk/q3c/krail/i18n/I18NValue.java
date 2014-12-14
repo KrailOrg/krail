@@ -38,7 +38,7 @@ public @interface I18NValue {
      *
      * @return
      */
-    LabelKey value() default LabelKey._nullkey_;
+    LabelKey value() default LabelKey.nullKey;
 
     /**
      * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional

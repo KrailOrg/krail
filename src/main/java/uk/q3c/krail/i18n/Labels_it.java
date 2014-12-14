@@ -20,7 +20,7 @@ package uk.q3c.krail.i18n;
 public class Labels_it extends Labels {
 
     @Override
-    protected void loadMap(Class<Enum<?>> enumKeyClass) {
+    protected void loadMap() {
         put(LabelKey.Cancel, "Cancellare");
         put(LabelKey.Enable_Account, "Abilita Account");
         put(LabelKey.Error, "Errore");

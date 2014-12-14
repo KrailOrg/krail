@@ -1,10 +1,12 @@
 package uk.q3c.krail.i18n;
 
+import com.google.common.base.Optional;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.core.user.opt.UserOptionContext;
 import uk.q3c.util.ResourceUtils;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * Created by David Sowerby on 26/11/14.
@@ -21,15 +23,6 @@ public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWrite
     public BundleWriterBase(UserOption userOption) {
         this.userOption = userOption;
         userOption.configure(this, UserOptionProperty.class);
-    }
-
-    public EnumResourceBundle<E> getBundle() {
-        return bundle;
-    }
-
-    @Override
-    public void setBundle(EnumResourceBundle<E> bundle) {
-        this.bundle = bundle;
     }
 
     /**
@@ -49,5 +42,36 @@ public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWrite
     @Override
     public UserOption getUserOption() {
         return userOption;
+    }
+
+    protected String bundleNameWithLocale(Locale locale, Optional<String> bundleName) {
+        String bundleNameWithLocale;
+        if (bundleName.isPresent()) {
+            bundleNameWithLocale = bundleName.get();
+        } else {
+            E[] enumConstants = getBundle().getKeyClass()
+                                           .getEnumConstants();
+            if (enumConstants.length == 0) {
+                bundleNameWithLocale = "Unknown";
+            } else {
+                I18NKey i18NKey = (I18NKey) enumConstants[0];
+                bundleNameWithLocale = i18NKey.bundleName();
+            }
+        }
+        bundleNameWithLocale = bundleNameWithLocale + "_" + locale.toString()
+                                                                  .replace("-", "_");
+        if (bundleNameWithLocale.endsWith("_")) {
+            bundleNameWithLocale = bundleNameWithLocale.substring(0, bundleNameWithLocale.length() - 1);
+        }
+        return bundleNameWithLocale;
+    }
+
+    public EnumResourceBundle<E> getBundle() {
+        return bundle;
+    }
+
+    @Override
+    public void setBundle(EnumResourceBundle<E> bundle) {
+        this.bundle = bundle;
     }
 }

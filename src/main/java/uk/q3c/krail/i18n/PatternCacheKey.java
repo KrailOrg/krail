@@ -9,29 +9,45 @@ public class PatternCacheKey {
 
 
     private final Enum<?> key;
-    private final Locale locale;
+    private final Locale requestedLocale; // the locale actually requested
+    private Locale actualLocale; // the actual locale the value was found in (from candidates). Not part of the key
+    private String source; // the source the value was found, in, not part of the key
 
     /**
-     * A cache key used to uniquely identify an I18N pattern from its I18NKey, locale and an optional context.
-     * The context can be used where bulk loading a set of values - for a form for example - reduces latency from
-     * persistence.
+     * A cache key used to uniquely identify an I18N pattern from its I18NKey and locale.
      *
      * @param key
-     * @param locale
-     * @param context
+     * @param requestedLocale
      */
-    public <E extends Enum<E> & I18NKey> PatternCacheKey(E key, Locale locale) {
+    public <E extends Enum<E> & I18NKey> PatternCacheKey(E key, Locale requestedLocale) {
 
         this.key = key;
-        this.locale = locale;
+        this.requestedLocale = requestedLocale;
+        this.actualLocale = requestedLocale; // initially the same
+    }
+
+    public Locale getActualLocale() {
+        return actualLocale;
+    }
+
+    public void setActualLocale(Locale actualLocale) {
+        this.actualLocale = actualLocale;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public Enum<?> getKey() {
         return key;
     }
 
-    public Locale getLocale() {
-        return locale;
+    public Locale getRequestedLocale() {
+        return requestedLocale;
     }
 
     @Override
@@ -48,7 +64,7 @@ public class PatternCacheKey {
         if (key != null ? !key.equals(that.key) : that.key != null) {
             return false;
         }
-        if (locale != null ? !locale.equals(that.locale) : that.locale != null) {
+        if (requestedLocale != null ? !requestedLocale.equals(that.requestedLocale) : that.requestedLocale != null) {
             return false;
         }
 
@@ -58,7 +74,7 @@ public class PatternCacheKey {
     @Override
     public int hashCode() {
         int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + (locale != null ? locale.hashCode() : 0);
+        result = 31 * result + (requestedLocale != null ? requestedLocale.hashCode() : 0);
         return result;
     }
 }

@@ -7,12 +7,27 @@ import java.util.List;
  */
 public interface PatternCacheLoader {
 
-
+    /**
+     * Returns the order in which sources are processed - the first which returns a valid value for a key is used.  The
+     * way in which the order is decided is determined is defined by the implementation
+     *
+     * @param key
+     *
+     * @return
+     */
     List<String> bundleSourceOrder(I18NKey key);
 
     List<String> getOptionSourceOrder(String baseName);
 
     List<String> getOptionSourceOrderDefault();
 
-    void setOptionSourceOrder(String baseName, String... tags);
+    void setOptionSourceOrderDefault(String... sources);
+
+    void setOptionSourceOrder(String baseName, String... sources);
+
+    void setOptionAutoStub(boolean autoStub, String source);
+
+    void setOptionStubWithKeyName(boolean useKeyName, String source);
+
+    void setOptionStubValue(String stubValue, String source);
 }

@@ -58,17 +58,26 @@ public class I18NModule extends AbstractModule {
         bindTranslate();
         bindPatternSource();
         bindPatternCacheLoader();
+        bindPatternUtility();
 
 
         define();
+    }
+
+    protected void bindPatternUtility() {
+        bind(PatternUtility.class).to(DefaultPatternUtility.class);
     }
 
     protected void bindPatternCacheLoader() {
         bind(PatternCacheLoader.class).to(DefaultPatternCacheLoader.class);
     }
 
+    /**
+     * It is generally advisable to use the same scope for this as for current locale (see {@link #bindCurrentLocale()}
+     */
     protected void bindPatternSource() {
-        bind(PatternSource.class).to(DefaultPatternSource.class);
+        bind(PatternSource.class).to(DefaultPatternSource.class)
+                                 .in(VaadinSessionScoped.class);
     }
 
 
@@ -78,8 +87,7 @@ public class I18NModule extends AbstractModule {
 
     /**
      * Override this method to provide your own implementation of {@link CurrentLocale} or to change the scope used.
-     * Choose
-     * between {@link UIScoped} or {@link VaadinSessionScoped}, depending on whether you want users to set the
+     * Choose between {@link UIScoped} or {@link VaadinSessionScoped}, depending on whether you want users to set the
      * language for each browser tab or each browser instance, respectively.
      */
     protected void bindCurrentLocale() {
@@ -92,13 +100,13 @@ public class I18NModule extends AbstractModule {
      * #registerAnnotation(Class)} or {@link #registerValueAnnotation(Class)}, or make a copy of this module and use
      * the same structure. Multiple instances of the {@link #registeredAnnotations} and {@link
      * #registerValueAnnotation(Class)} will be merged by Guice.
-     * <p/>
+     * <p>
      * Here you should also define the locales your application supports, with calls to {@link #addSupportedLocale
      * (Locale)}.  Make sure your supportedLocales includes your {@link DefaultLocale}
-     * <p/>
+     * <p>
      * The source of your I18N patterns (held in ResourceBundles) should be defined here using calls to {@link
      * #addBundleReader(String, Class)}.
-     * <p/>
+     * <p>
      * If you are using just a single module to define your {{@link BundleReader} implementations,
      * they will be processed in the order you specify them here.  However, Guice does not guarantee order if multiple
      * MapBinders are combined (through the use of multiple modules) - the order must then be explicitly specified
@@ -120,18 +128,14 @@ public class I18NModule extends AbstractModule {
     /**
      * Adds a bundle reader, identified by {@code format}
      *
-     * @param format
-     *         It would be neater for Krail just to use injected readers, and remove the need for the
-     *         format property - but some {@link ResourceBundle} caching logic - including the construction of a cache
-     *         key -
-     *         use the value of the format property, so it has been retained.  You can use any identifier
-     *         unique to the BundleReader implementations you are using - no assumptions are made about the
-     *         meaning of the format..
+     * @param source
+     *         An arbitrary identifier for a reader implementation- no assumptions are made about the
+     *         meaning of the source identifier.
      * @param implementationClass
-     *         the class of the BundleReader implementation you want to use for this format value
+     *         the class of the BundleReader implementation you want to use for this source
      */
-    protected void addBundleReader(String format, Class<? extends BundleReader> implementationClass) {
-        bundleReaders.addBinding(format)
+    protected void addBundleReader(String source, Class<? extends BundleReader> implementationClass) {
+        bundleReaders.addBinding(source)
                      .to(implementationClass);
     }
 
@@ -174,36 +178,36 @@ public class I18NModule extends AbstractModule {
     /**
      * This method overrides the order of processing sources when looking for a resource bundle.  If this method is not
      * called, sources will be processed in the order they are added using {@link #addPatternSource(Integer, Class)}.
-     * <p/>
+     * <p>
      * If you are using just a single module to define your {{@link BundleReader} implementations, there would normally
      * be no need to use this method.
-     * <p/>
+     * <p>
      * However, Guice does not guarantee order if multiple MapBinders are combined (through the use of multiple
      * modules) - the order must then be explicitly specified using this method.
-     * <p/>
+     * <p>
      * This order is used for ALL key classes, unless overridden by {{@link #setBundleSourceOrder(Class, String...)}},
      * or by UserOption in {@link DefaultPatternSource}
-     * <p/>
+     * <p>
      * See {@link EnumResourceBundleControl#getFormats(String)} for a full description of the logic of selecting the
      * order.
-     * <p/>
+     * <p>
      * If you have only one source - you definitely won't need this method
      */
 
-    protected void setDefaultBundleSourceOrder(String... tags) {
-        for (String tag : tags) {
+    protected void setDefaultBundleSourceOrder(String... sources) {
+        for (String source : sources) {
             bundleSourceOrderDefault.addBinding()
-                                    .toInstance(tag);
+                                    .toInstance(source);
         }
     }
 
     /**
      * {@link #setDefaultBundleSourceOrder(String...)} applies to all key classes, and is usually only needed when
      * combining sources from different modules.
-     * <p/>
+     * <p>
      * See {@link EnumResourceBundleControl#getFormats(String)} for a full description of the logic of selecting the
      * order.
-     * <p/>
+     * <p>
      * If you have only one source - you definitely won't need this method
      *
      * @param baseName

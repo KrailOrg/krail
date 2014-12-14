@@ -26,14 +26,14 @@ public class Messages extends EnumResourceBundle<MessageKey> {
 
 
     public Messages() {
-        super(MessageKey.class);
+        super();
     }
 
     @Override
-    protected void loadMap(Class<Enum<?>> enumKeyClass) {
-        put(MessageKey.invalidURI, "{0} is not a valid page");
+    protected void loadMap() {
+        put(MessageKey.Invalid_URI, "{0} is not a valid page");
         put(MessageKey.Service_not_Started, "You cannot use service {0} until it has been started");
-                put(MessageKey.LocaleChange, "Language and Country changed to {0}");
+        put(MessageKey.Locale_Change, "Language and Country changed to {0}");
 
     }
 

@@ -13,7 +13,7 @@
 package uk.q3c.krail.i18n;
 
 public enum DescriptionKey implements I18NKey {
-    _nullkey_,
+    nullKey,
     Account_Already_In_Use,
     Account_is_Disabled,
     Account_Expired,

@@ -107,7 +107,7 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
                 respondToLocaleChange = false;
                 currentLocale.setLocale(newLocale);
                 if (!inhibitMessage) {
-                    userNotifier.notifyInformation(MessageKey.LocaleChange, newLocale.getDisplayName(newLocale));
+                    userNotifier.notifyInformation(MessageKey.Locale_Change, newLocale.getDisplayName(newLocale));
                     respondToLocaleChange = true;
                 }
             }

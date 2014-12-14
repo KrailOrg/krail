@@ -17,7 +17,7 @@ package uk.q3c.krail.i18n;
  * @see Labels
  */
 public enum LabelKey implements I18NKey {
-    _nullkey_,
+    nullKey,
     Alphabetic_Ascending,
     Alphabetic_Descending,
     Application_Configuration_Service,

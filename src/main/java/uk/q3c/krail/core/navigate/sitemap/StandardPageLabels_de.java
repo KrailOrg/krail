@@ -21,7 +21,7 @@ public class StandardPageLabels_de extends StandardPageLabels {
 
 
     @Override
-    protected void loadMap(Class<Enum<?>> enumKeyClass) {
+    protected void loadMap() {
         put(StandardPageKey.Public_Home, "Öffentliche Startseite");
         put(StandardPageKey.Log_In, "Einloggen");
         put(StandardPageKey.Log_Out, "Ausloggen");

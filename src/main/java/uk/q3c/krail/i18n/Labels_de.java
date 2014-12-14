@@ -21,7 +21,7 @@ public class Labels_de extends Labels {
 
 
     @Override
-    protected void loadMap(Class<Enum<?>> enumKeyClass) {
+    protected void loadMap() {
 
 
         put(LabelKey.Cancel, "Stornieren");

@@ -25,11 +25,11 @@ package uk.q3c.krail.i18n;
 public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 
     public Descriptions() {
-        super(DescriptionKey.class);
+        super();
     }
 
     @Override
-    protected void loadMap(Class<Enum<?>> enumKeyClass) {
+    protected void loadMap() {
         put(DescriptionKey.Last_Name, "the last name or family name");
         put(DescriptionKey.Last_Name, "the last name or family name");
         put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok");

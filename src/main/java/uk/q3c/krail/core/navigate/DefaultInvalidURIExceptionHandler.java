@@ -28,7 +28,7 @@ public class DefaultInvalidURIExceptionHandler implements InvalidURIExceptionHan
 
     @Override
     public void invoke(InvalidURIException exception) {
-        notifier.notifyInformation(MessageKey.invalidURI, exception.getTargetURI());
+        notifier.notifyInformation(MessageKey.Invalid_URI, exception.getTargetURI());
     }
 
 }

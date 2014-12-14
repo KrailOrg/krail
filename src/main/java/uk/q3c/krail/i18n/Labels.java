@@ -26,12 +26,12 @@ public class Labels extends EnumResourceBundle<LabelKey> {
 
 
     public Labels() {
-        super(LabelKey.class);
+        super();
     }
 
 
     @Override
-    protected void loadMap(Class<Enum<?>> enumKeyClass) {
+    protected void loadMap() {
 
     }
 }

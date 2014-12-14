@@ -8,12 +8,12 @@ import uk.q3c.krail.i18n.TestLabelKey2;
  */
 public class TestLbls2 extends EnumResourceBundle<TestLabelKey2> {
 
-    public TestLbls2(Class<TestLabelKey2> keyClass) {
-        super(keyClass);
+    public TestLbls2() {
+        super();
     }
 
     @Override
-    protected void loadMap(Class<Enum<?>> enumKeyClass) {
+    protected void loadMap() {
         put(TestLabelKey2.Key1, "key number 1");
     }
 }

@@ -33,9 +33,9 @@ import java.util.Locale;
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.PARAMETER})
 @BindingAnnotation
 public @interface I18N {
-    LabelKey caption() default LabelKey._nullkey_;
+    LabelKey caption() default LabelKey.nullKey;
 
-    DescriptionKey description() default DescriptionKey._nullkey_;
+    DescriptionKey description() default DescriptionKey.nullKey;
 
     /**
      * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional

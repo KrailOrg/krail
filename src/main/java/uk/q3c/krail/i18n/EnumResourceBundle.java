@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.i18n;
 
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,18 +22,32 @@ import java.util.ResourceBundle;
 
 public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBundle {
     public enum UserOptionProperty {AUTO_STUB, GENERATE_STUB_WITH_NAME, SOURCE_ORDER, SOURCE_ORDER_DEFAULT}
+
     private static Logger log = LoggerFactory.getLogger(EnumResourceBundle.class);
 
     private Class<E> keyClass;
+    private boolean loaded = false;
     private EnumMap<E, String> map;
 
-    public EnumResourceBundle(Class<E> keyClass) {
-        this.keyClass = keyClass;
-        this.map = new EnumMap<E, String>(keyClass);
-        loadMap((Class<Enum<?>>) keyClass);
+    public EnumResourceBundle() {
+
     }
 
-    protected abstract void loadMap(Class<Enum<?>> enumKeyClass);
+    /**
+     * Loads data into the map but only if {@link #loaded} is false.  The bundle may have been returned from the
+     * ResourceBundle cache, and may therefore not need reloading
+     */
+    public void load() {
+        Preconditions.checkNotNull(keyClass, "setKeyClass must be called before calling load()");
+        if (!loaded) {
+            this.map = new EnumMap<E, String>(keyClass);
+            loadMap();
+            loaded = true;
+        }
+
+    }
+
+    protected abstract void loadMap();
 
     @Override
     public Enumeration<String> getKeys() {
@@ -52,39 +67,16 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
      *
      * @return the value for the key, or null if the key is not in the map for this instance
      */
-    public String getValueExclusive(E key) {
-        if (key == null) {
-            return null;
-        }
-        return getMap().get(key);
-    }
-
-    public EnumMap<E, String> getMap() {
-        return map;
-    }
-
-    /**
-     * Gets the value for {@code key}, using the usual lookup rules for Java's {@link ResourceBundle}
-     *
-     * @param key
-     *
-     * @return
-     */
     public String getValue(E key) {
         if (key == null) {
             return null;
         }
         String value = getMap().get(key);
-        if (value != null) {
-            return value;
-        }
-        @SuppressWarnings("unchecked") EnumResourceBundle<E> enumparent = (EnumResourceBundle<E>) parent;
-        // returning null so that the enum name() can be used when there is no map entry
-        if (enumparent == null) {
-            return null;
-        }
-        return enumparent.getValue(key);
+        return value;
+    }
 
+    public EnumMap<E, String> getMap() {
+        return map;
     }
 
     /**
@@ -97,14 +89,18 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
         map.put(key, value);
     }
 
-
     public Class<E> getKeyClass() {
         return keyClass;
     }
 
+    public void setKeyClass(Class<E> keyClass) {
+        this.keyClass = keyClass;
+    }
+
     public void reset() {
         map.clear();
-        loadMap((Class<Enum<?>>) keyClass);
+        loaded = false;
+        loadMap();
         log.debug("Values reset from persistence");
     }
 

@@ -20,7 +20,7 @@ package uk.q3c.krail.core.navigate.sitemap;
 public class StandardPageLabels_it extends StandardPageLabels {
 
     @Override
-    protected void loadMap(Class<Enum<?>> enumKeyClass) {
+    protected void loadMap() {
         put(StandardPageKey.Public_Home, "Public Pagina");
     }
 
