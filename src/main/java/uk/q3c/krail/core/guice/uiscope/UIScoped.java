@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.guice.uiscope;
 
-import com.google.inject.BindingAnnotation;
 import com.google.inject.ScopeAnnotation;
 
 import java.lang.annotation.Retention;
@@ -25,7 +24,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE, METHOD})
 @Retention(RUNTIME)
 @ScopeAnnotation
-@BindingAnnotation
 public @interface UIScoped {
 
 }
