@@ -79,9 +79,6 @@ repositories {
 
 dependencies {
 
-    //Code generation
-    compile 'org.apache.velocity:velocity:1.7'
-
     //Dependency Injection
     compile 'com.google.inject:guice:' + guiceVersion
     compile 'com.google.inject.extensions:guice-servlet:' + guiceVersion
