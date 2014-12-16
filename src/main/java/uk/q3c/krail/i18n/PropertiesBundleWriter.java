@@ -1,6 +1,5 @@
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import uk.q3c.krail.core.user.opt.UserOption;
@@ -8,10 +7,7 @@ import uk.q3c.krail.core.user.opt.UserOption;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.EnumMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by David Sowerby on 26/11/14.

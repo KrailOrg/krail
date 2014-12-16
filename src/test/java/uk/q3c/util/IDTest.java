@@ -12,10 +12,11 @@
  */
 package uk.q3c.util;
 
-import com.google.common.base.Optional;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Panel;
 import org.junit.Test;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,7 +33,7 @@ public class IDTest {
         // when
 
         // then
-        assertThat(ID.getId(Optional.absent(), panel, button)).isEqualTo("Panel-Button");
+        assertThat(ID.getId(Optional.empty(), panel, button)).isEqualTo("Panel-Button");
 
     }
 
@@ -44,7 +45,7 @@ public class IDTest {
         // when
 
         // then
-        assertThat(ID.getId(Optional.absent(), panel)).isEqualTo("Panel");
+        assertThat(ID.getId(Optional.empty(), panel)).isEqualTo("Panel");
 
     }
 

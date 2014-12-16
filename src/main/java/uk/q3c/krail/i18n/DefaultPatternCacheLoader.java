@@ -1,6 +1,5 @@
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.cache.CacheLoader;
 import com.google.inject.Inject;
@@ -69,7 +68,7 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
         KrailResourceBundleControl bundleControl = new KrailResourceBundleControl();
         List<Locale> candidateLocales = bundleControl.getCandidateLocales(i18NKey.bundleName(), cacheKey
                 .getRequestedLocale());
-        Optional<String> value = Optional.absent();
+        Optional<String> value = Optional.empty();
 
         for (Locale candidateLocale : candidateLocales) {
             cacheKey.setActualLocale(candidateLocale);

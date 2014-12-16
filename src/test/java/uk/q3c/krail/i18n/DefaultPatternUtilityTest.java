@@ -1,6 +1,5 @@
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -17,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,12 +60,12 @@ public class DefaultPatternUtilityTest {
         Locale.setDefault(Locale.CANADA_FRENCH);
 
         //when
-        utility.writeOut(writer, LabelKey.class, locales, Optional.absent());
+        utility.writeOut(writer, LabelKey.class, locales, Optional.empty());
         //then line 4 is the timestamp
-        assertThat(FileTestUtil.compare(referenceFile, targetFile, 4)).isEqualTo(Optional.absent());
-        assertThat(FileTestUtil.compare(referenceFile_de, targetFile_de, 4)).isEqualTo(Optional.absent());
-        assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.absent());
-        assertThat(FileTestUtil.compare(referenceFile_en_GB, targetFile_en_GB, 4)).isEqualTo(Optional.absent());
+        assertThat(FileTestUtil.compare(referenceFile, targetFile, 4)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compare(referenceFile_de, targetFile_de, 4)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compare(referenceFile_en_GB, targetFile_en_GB, 4)).isEqualTo(Optional.empty());
     }
 
 
@@ -82,9 +82,9 @@ public class DefaultPatternUtilityTest {
         File referenceFile_it = new File(TestResource.testResourceRootDir("krail"), "Labels_it.ref_exc");
         File targetFile_it = new File(targetDir, "Labels_it.java");
         //when
-        utility.writeOutExclusive("class", writer, LabelKey.class, Locale.ITALIAN, Optional.absent());
+        utility.writeOutExclusive("class", writer, LabelKey.class, Locale.ITALIAN, Optional.empty());
         //then
-        assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.absent());
+        assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.empty());
     }
 
     @Test
@@ -102,6 +102,6 @@ public class DefaultPatternUtilityTest {
         //when
         utility.writeOutExclusive("class", writer, LabelKey.class, Locale.ITALIAN, Optional.of("NewBundle"));
         //then
-        assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.absent());
+        assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.empty());
     }
 }

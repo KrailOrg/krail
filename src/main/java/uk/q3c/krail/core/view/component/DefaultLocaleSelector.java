@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -29,6 +28,7 @@ import uk.q3c.krail.i18n.MessageKey;
 import uk.q3c.util.ID;
 
 import java.util.Locale;
+import java.util.Optional;
 
 @I18N
 public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListener {
@@ -60,7 +60,7 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
 
         combo.setWidth(200 + "px");
 
-        combo.setId(ID.getId(Optional.absent(), this, combo));
+        combo.setId(ID.getId(Optional.empty(), this, combo));
         combo.setContainerDataSource(container);
 
         // Sets the combobox to show a certain property as the item caption

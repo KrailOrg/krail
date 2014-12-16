@@ -1,9 +1,9 @@
 package uk.q3c.krail.core.user.opt;
 
-import com.google.common.base.Optional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This default implementation has no knowledge of the application being developed.  If hierarchies are

@@ -1,6 +1,5 @@
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ClassUtils;

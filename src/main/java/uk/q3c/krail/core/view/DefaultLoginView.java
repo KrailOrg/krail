@@ -13,7 +13,6 @@
 
 package uk.q3c.krail.core.view;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.ui.*;
@@ -27,6 +26,8 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.util.ID;
+
+import java.util.Optional;
 
 public class DefaultLoginView extends GridViewBase implements LoginView, ClickListener {
     private final LoginExceptionHandler loginExceptionHandler;
@@ -102,7 +103,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     @Override
     protected void setIds() {
         super.setIds();
-        submitButton.setId(ID.getId(Optional.absent(), this, submitButton));
+        submitButton.setId(ID.getId(Optional.empty(), this, submitButton));
         usernameBox.setId(ID.getId(Optional.of("username"), this, usernameBox));
         passwordBox.setId(ID.getId(Optional.of("password"), this, passwordBox));
         statusMsgLabel.setId(ID.getId(Optional.of("status"), this, statusMsgLabel));
@@ -158,13 +159,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     public TextField getUsernameBox() {

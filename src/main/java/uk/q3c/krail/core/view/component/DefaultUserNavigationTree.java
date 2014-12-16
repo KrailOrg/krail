@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
@@ -34,6 +33,7 @@ import uk.q3c.util.ID;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Optional;
 
 /**
  * A navigation tree for users to find their way around the site. Uses {@link UserSitemap} to provide the structure
@@ -77,7 +77,7 @@ public class DefaultUserNavigationTree extends Tree implements UserOptionContext
         userSitemap.addListener(this);
         addValueChangeListener(this);
         navigator.addViewChangeListener(this);
-        setId(ID.getId(Optional.absent(), this));
+        setId(ID.getId(Optional.empty(), this));
         sorters.setOptionSortAscending(getOptionSortAscending());
 
 

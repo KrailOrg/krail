@@ -1,7 +1,7 @@
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Optional;
 
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**

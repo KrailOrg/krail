@@ -1,13 +1,13 @@
 package uk.q3c.krail.core.user.opt;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import org.apache.shiro.subject.Subject;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by David Sowerby on 03/12/14.
@@ -79,7 +79,7 @@ public class DefaultUserOption implements UserOption {
             }
             //no value at user level, so
             //iterate through other levels, returning a value if found
-            List<String> layers = layerDefinition.getLayers(subjectIdentifier.userId(), Optional.absent());
+            List<String> layers = layerDefinition.getLayers(subjectIdentifier.userId(), Optional.empty());
             for (String layer : layers) {
                 value = optionStore.load(defaultValue, layerId, consumerClass.getClass()
                                                                              .getName(), key.name(), joinedQualifiers);

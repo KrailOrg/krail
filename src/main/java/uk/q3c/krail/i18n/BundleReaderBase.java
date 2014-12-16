@@ -1,10 +1,10 @@
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Optional;
 import org.apache.commons.lang3.ClassUtils;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.core.user.opt.UserOptionContext;
 
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -105,7 +105,7 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
     }
 
     /**
-     * Returns the value for the {@code cacheKey} if there is one, or Optional.absent() if there is no entry for the
+     * Returns the value for the {@code cacheKey} if there is one, or Optional.empty() if there is no entry for the
      * key.   The location of the bundle (class or properties file) is extracted from the {@link I18NKey#bundleName()}
      * and expanded using {@link #expandFromKey(String, I18NKey)}.  (Auto-stub logic provided by {@link
      * #autoStub(I18NKey, String, boolean, boolean, String)}
@@ -137,7 +137,7 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
             String value = getValue(bundle, cacheKey.getKey());
             return autoStub(cacheKey, value, autoStub, stubWithKeyName, stubValue);
         } catch (Exception e) {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 
@@ -169,7 +169,7 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
                 writeStubValue(cacheKey, stub);
                 return Optional.of(stub);
             } else {
-                return Optional.absent();
+                return Optional.empty();
             }
         }
         return Optional.of(value);

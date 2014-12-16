@@ -1,12 +1,12 @@
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Optional;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.core.user.opt.UserOptionContext;
 import uk.q3c.util.ResourceUtils;
 
 import java.io.File;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Created by David Sowerby on 26/11/14.

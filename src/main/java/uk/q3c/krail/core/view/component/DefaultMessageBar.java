@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -23,6 +22,8 @@ import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.ID;
+
+import java.util.Optional;
 
 @UIScoped
 public class DefaultMessageBar extends Panel implements MessageBar {
@@ -44,7 +45,7 @@ public class DefaultMessageBar extends Panel implements MessageBar {
         label.setImmediate(true);
         layout.addComponent(label);
         this.setContent(layout);
-        label.setId(ID.getId(Optional.absent(), this, label));
+        label.setId(ID.getId(Optional.empty(), this, label));
     }
 
     @Override

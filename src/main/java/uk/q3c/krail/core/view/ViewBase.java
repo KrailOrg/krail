@@ -12,12 +12,13 @@
  */
 package uk.q3c.krail.core.view;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.util.ID;
+
+import java.util.Optional;
 
 /**
  * Provides default View behaviour suitable for most view implementations
@@ -52,7 +53,7 @@ public abstract class ViewBase implements KrailView {
      * ids. If you do override it to add your own subclass ids, make sure you call super
      */
     protected void setIds() {
-        getRootComponent().setId(ID.getId(Optional.absent(), this, getRootComponent()));
+        getRootComponent().setId(ID.getId(Optional.empty(), this, getRootComponent()));
     }
 
     @Override

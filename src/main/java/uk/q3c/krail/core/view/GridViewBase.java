@@ -13,12 +13,13 @@
 
 package uk.q3c.krail.core.view;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.util.ID;
+
+import java.util.Optional;
 
 public abstract class GridViewBase extends ViewBase implements KrailView {
     private static Logger log = LoggerFactory.getLogger(GridViewBase.class);
@@ -43,7 +44,7 @@ public abstract class GridViewBase extends ViewBase implements KrailView {
     @Override
     protected void setIds() {
         super.setIds();
-        gridLayout.setId(ID.getId(Optional.absent(), gridLayout));
+        gridLayout.setId(ID.getId(Optional.empty(), gridLayout));
     }
 
     /**

@@ -1,6 +1,7 @@
 package uk.q3c.krail.core.user.opt;
 
-import com.google.common.base.Optional;
+
+import java.util.Optional;
 
 /**
  * Stores and loads option values from a (usually) persistent store.  A simple, in memory, version is provided

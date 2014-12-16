@@ -1,8 +1,8 @@
 package uk.q3c.krail.core.user.opt;
 
-import com.google.common.base.Optional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * User options are structured in layers, so that if desired, a hierarchy can be created.  For example, imagine you

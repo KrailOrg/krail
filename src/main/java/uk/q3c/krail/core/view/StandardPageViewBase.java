@@ -12,11 +12,12 @@
  */
 package uk.q3c.krail.core.view;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import uk.q3c.util.ID;
+
+import java.util.Optional;
 
 public abstract class StandardPageViewBase extends ViewBase {
 
@@ -54,8 +55,8 @@ public abstract class StandardPageViewBase extends ViewBase {
     @Override
     public void setIds() {
         super.setIds();
-        grid.setId(ID.getId(Optional.absent(), this, grid));
-        label.setId(ID.getId(Optional.absent(), this, label));
+        grid.setId(ID.getId(Optional.empty(), this, grid));
+        label.setId(ID.getId(Optional.empty(), this, label));
     }
 
 

@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.ui.Button;
@@ -36,6 +35,7 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.ID;
 
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Represents the "logged in" status of the current {@link Subject}.
@@ -85,9 +85,9 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
     }
 
     private void setIds() {
-        setId(ID.getId(Optional.absent(), this));
-        login_logout_Button.setId(ID.getId(Optional.absent(), this, login_logout_Button));
-        usernameLabel.setId(ID.getId(Optional.absent(), this, usernameLabel));
+        setId(ID.getId(Optional.empty(), this));
+        login_logout_Button.setId(ID.getId(Optional.empty(), this, login_logout_Button));
+        usernameLabel.setId(ID.getId(Optional.empty(), this, usernameLabel));
     }
 
     @Override

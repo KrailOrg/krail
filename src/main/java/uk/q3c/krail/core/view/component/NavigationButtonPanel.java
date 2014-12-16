@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -30,10 +29,7 @@ import uk.q3c.krail.i18n.LocaleChangeListener;
 import uk.q3c.util.ID;
 import uk.q3c.util.NodeFilter;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public abstract class NavigationButtonPanel extends HorizontalLayout implements KrailViewChangeListener,
         LocaleChangeListener, Button.ClickListener {
@@ -53,7 +49,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
         this.setSizeUndefined();
         this.setSpacing(true);
         currentLocale.addListener(this);
-        String id = ID.getId(Optional.absent(), this);
+        String id = ID.getId(Optional.empty(), this);
         setId(id);
     }
 

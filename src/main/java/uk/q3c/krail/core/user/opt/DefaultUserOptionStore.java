@@ -13,11 +13,11 @@
 package uk.q3c.krail.core.user.opt;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -27,6 +27,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DefaultUserOptionStore implements UserOptionStore {
 
     private Map<String, Object> map = new ConcurrentHashMap<>();
+
+    @Inject
+    protected DefaultUserOptionStore() {
+    }
 
     /**
      * Loads an {@code Optional<T>} option value from the store, or {@link Optional#absent()}} is no valid value found
@@ -64,13 +68,9 @@ public class DefaultUserOptionStore implements UserOptionStore {
         try {
             return Optional.of((T) result);
         } catch (Exception e) {
-            return Optional.absent();
+            return Optional.empty();
         }
 
-    }
-
-    @Inject
-    protected DefaultUserOptionStore() {
     }
 
     private String compositeKey(String layerId, String consumerClassName, String key, String qualifiers) {

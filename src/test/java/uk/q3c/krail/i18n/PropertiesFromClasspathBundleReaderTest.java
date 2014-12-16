@@ -1,6 +1,5 @@
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -12,6 +11,7 @@ import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.user.opt.UserOption;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -12,11 +12,12 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import uk.q3c.util.ID;
+
+import java.util.Optional;
 
 public class DefaultUserNavigationPanel extends Panel implements UserNavigationPanel {
 
@@ -27,7 +28,7 @@ public class DefaultUserNavigationPanel extends Panel implements UserNavigationP
     protected DefaultUserNavigationPanel(UserNavigationTree tree) {
         super();
         this.tree = tree;
-        setId(ID.getId(Optional.absent(), this));
+        setId(ID.getId(Optional.empty(), this));
         build();
     }
 

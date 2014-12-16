@@ -1,12 +1,12 @@
 package util;
 
-import com.google.common.base.Optional;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by David Sowerby on 16/11/14.
@@ -54,7 +54,7 @@ public class FileTestUtil {
                     "and 2 have " + list1.size() + " and " + list2.size() + " lines respectively";
             return Optional.of(comment);
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public static class TestResult {

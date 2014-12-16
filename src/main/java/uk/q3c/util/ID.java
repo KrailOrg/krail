@@ -12,7 +12,8 @@
  */
 package uk.q3c.util;
 
-import com.google.common.base.Optional;
+
+import java.util.Optional;
 
 /**
  * Utility class used to standardise id setting (setId methods in Components).

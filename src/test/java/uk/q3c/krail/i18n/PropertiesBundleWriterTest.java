@@ -1,6 +1,5 @@
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -17,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,9 +49,9 @@ public class PropertiesBundleWriterTest {
         File referenceFile_it = new File(TestResource.testResourceRootDir("krail"), "TestLabels_it.properties_ref");
         File targetFile_it = new File(targetDir, "TestLabels_it.properties");
         //when
-        utility.writeOut(writer, TestLabelKey.class, locales, Optional.absent());
+        utility.writeOut(writer, TestLabelKey.class, locales, Optional.empty());
         //then
-        assertThat(FileTestUtil.compare(referenceFile_de, targetFile_de, 1)).isEqualTo(Optional.absent());
-        assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 1)).isEqualTo(Optional.absent());
+        assertThat(FileTestUtil.compare(referenceFile_de, targetFile_de, 1)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 1)).isEqualTo(Optional.empty());
     }
 }
