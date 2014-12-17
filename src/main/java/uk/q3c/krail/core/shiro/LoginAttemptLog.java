@@ -15,8 +15,9 @@ package uk.q3c.krail.core.shiro;
 import com.google.common.collect.ImmutableList;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.joda.time.DateTime;
 import uk.q3c.krail.core.shiro.DefaultLoginAttemptLog.LogEntry;
+
+import java.time.LocalDateTime;
 
 /**
  * An interface representing attempts by a Subject to login. Implementations should record attempts as required, and
@@ -45,7 +46,7 @@ public interface LoginAttemptLog {
      *
      * @return
      */
-    DateTime dateOfLastSuccess(String username);
+    LocalDateTime dateOfLastSuccess(String username);
 
     /**
      * Clears the history of login attempts, but does NOT reset the number of attempts remaining (use

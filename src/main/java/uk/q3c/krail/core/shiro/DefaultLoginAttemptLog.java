@@ -16,8 +16,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Singleton;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.joda.time.DateTime;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +26,12 @@ import java.util.TreeMap;
 @Singleton
 public class DefaultLoginAttemptLog implements LoginAttemptLog {
 
+    public enum LogOutcome {
+        PASS, FAIL, RESET
+    }
     private final Map<String, List<LogEntry>> history = new TreeMap<>();
     private final Map<String, Integer> unsuccessfulAttempts = new TreeMap<>();
-    private final Map<String, DateTime> lastSuccessful = new TreeMap<>();
+    private final Map<String, LocalDateTime> lastSuccessful = new TreeMap<>();
     private int maxAttempts = 3;
 
     @Override
@@ -113,7 +116,7 @@ public class DefaultLoginAttemptLog implements LoginAttemptLog {
     }
 
     @Override
-    public DateTime dateOfLastSuccess(String username) {
+    public LocalDateTime dateOfLastSuccess(String username) {
         return lastSuccessful.get(username);
     }
 
@@ -132,20 +135,16 @@ public class DefaultLoginAttemptLog implements LoginAttemptLog {
         return ImmutableList.copyOf(list);
     }
 
-    public enum LogOutcome {
-        PASS, FAIL, RESET
-    }
-
     public class LogEntry {
-        private final DateTime dateTime;
+        private final LocalDateTime dateTime;
         private final LogOutcome logOutcome;
 
         public LogEntry(LogOutcome logOutcome) {
             this.logOutcome = logOutcome;
-            dateTime = DateTime.now();
+            dateTime = LocalDateTime.now();
         }
 
-        public DateTime getDateTime() {
+        public LocalDateTime getDateTime() {
             return dateTime;
         }
 

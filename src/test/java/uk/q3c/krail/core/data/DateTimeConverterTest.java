@@ -12,10 +12,12 @@
  */
 package uk.q3c.krail.core.data;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 
@@ -39,7 +41,7 @@ public class DateTimeConverterTest {
         // when
 
         // then
-        assertThat(dtc.getModelType()).isEqualTo(DateTime.class);
+        assertThat(dtc.getModelType()).isEqualTo(LocalDateTime.class);
         assertThat(dtc.getPresentationType()).isEqualTo(Date.class);
 
     }
@@ -48,10 +50,12 @@ public class DateTimeConverterTest {
     public void conversion() {
 
         // given
+
         Date d = new Date();
-        DateTime dt = new DateTime(d);
+        Instant instant = Instant.ofEpochMilli(d.getTime());
+        LocalDateTime dt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         // when
-        DateTime dt2 = dtc.convertToModel(d, DateTime.class, Locale.UK);
+        LocalDateTime dt2 = dtc.convertToModel(d, LocalDateTime.class, Locale.UK);
         Date d2 = dtc.convertToPresentation(dt, Date.class, Locale.UK);
         // then
         assertThat(dt).isEqualTo(dt2);

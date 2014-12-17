@@ -13,21 +13,24 @@
 package uk.q3c.krail.core.data;
 
 import com.vaadin.data.util.converter.Converter;
-import org.joda.time.DateTime;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 
 /**
- * Implements a Converter to handle the Joda DateTime type
+ * Implements a Converter to handle the Java 8 LocalDateTime type
  *
+ * * @author David Sowerby 16 Dec 2014
  * @author David Sowerby 1 Apr 2013
  */
-public class DateTimeConverter implements Converter<Date, DateTime> {
+public class DateTimeConverter implements Converter<Date, LocalDateTime> {
 
     @Override
-    public Class<DateTime> getModelType() {
-        return DateTime.class;
+    public Class<LocalDateTime> getModelType() {
+        return LocalDateTime.class;
     }
 
     @Override
@@ -36,16 +39,20 @@ public class DateTimeConverter implements Converter<Date, DateTime> {
     }
 
     @Override
-    public DateTime convertToModel(Date value, Class<? extends DateTime> targetType,
-                                   Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
-        return new DateTime(value);
+    public LocalDateTime convertToModel(Date value, Class<? extends LocalDateTime> targetType, Locale locale) throws
+            com.vaadin.data.util.converter.Converter.ConversionException {
+
+        return value.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
     }
 
     @Override
-    public Date convertToPresentation(DateTime value, Class<? extends Date> targetType,
-                                      Locale locale) throws com.vaadin.data.util.converter.Converter
-            .ConversionException {
-        return value.toDate();
+    public Date convertToPresentation(LocalDateTime value, Class<? extends Date> targetType, Locale locale) throws
+            com.vaadin.data.util.converter.Converter.ConversionException {
+        Instant instant = value.atZone(ZoneId.systemDefault())
+                               .toInstant();
+        return Date.from(instant);
     }
 
 }

@@ -18,23 +18,22 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.services.Service.Status;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.jodatime.api.Assertions.assertThat;
 
 /**
  * Combined testing for all the Service components - almost functional testing
- * <p/>
+ * <p>
  * Dependency map is:
- * <p/>
+ * <p>
  * d - a<br>
  * - - a1<br>
  * - - b<br>
@@ -248,16 +247,22 @@ public class ServiceTest {
         // then
         ServiceStatus status = monitor.getServiceStatus(serviced);
         assertThat(status.getCurrentStatus()).isEqualTo(Status.STARTED);
-        assertThat(status.getLastStartTime()).isNotNull()
-                                             .isBeforeOrEqualTo(DateTime.now());
+        assertThat(status.getLastStartTime()).isNotNull();
+
+        // last start time is now or earlier
+        LocalDateTime s1 = status.getLastStartTime();
+        LocalDateTime s2 = LocalDateTime.now();
+        assertThat(!s1.isAfter(s2)).isTrue();
+
+
         assertThat(status.getLastStopTime()).isNull();
         assertThat(status.getStatusChangeTime()).isNotNull()
                                                 .isEqualTo(status.getLastStartTime());
         assertThat(status.getPreviousStatus()).isEqualTo(Status.INITIAL);
-        DateTime startTime = status.getLastStartTime();
+        LocalDateTime startTime = status.getLastStartTime();
         // when
 
-        while (!startTime.isBeforeNow()) {
+        while (!startTime.isBefore(LocalDateTime.now())) {
             // test was failing randomly, I suspect because it runs too fast for a time difference to occur reliably.
             // This loop is just to make sure there is enough time
         }
@@ -268,8 +273,10 @@ public class ServiceTest {
         assertThat(status.getLastStartTime()).isNotNull()
                                              .isEqualTo(startTime); // shouldn't have changed
         assertThat(status.getLastStopTime()).isNotNull();
-        assertThat(status.getLastStopTime()).isBeforeOrEqualTo(DateTime.now());
-        assertThat(status.getLastStopTime()).isAfter(startTime);
+        assertThat(!LocalDateTime.now()
+                                 .isBefore(status.getLastStopTime())).isTrue();
+        assertThat(status.getLastStopTime()
+                         .isAfter(startTime)).isTrue();
         assertThat(status.getStatusChangeTime()).isNotNull()
                                                 .isEqualTo(status.getLastStopTime());
         assertThat(status.getPreviousStatus()).isEqualTo(Status.STARTED);

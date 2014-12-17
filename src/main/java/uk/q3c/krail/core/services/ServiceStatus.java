@@ -13,16 +13,16 @@
 
 package uk.q3c.krail.core.services;
 
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 public class ServiceStatus {
 
     private Service.Status currentStatus;
-    private DateTime lastStartTime;
-    private DateTime lastStopTime;
+    private LocalDateTime lastStartTime;
+    private LocalDateTime lastStopTime;
     private Service.Status previousStatus;
     private Service service;
-    private DateTime statusChangeTime;
+    private LocalDateTime statusChangeTime;
 
     public Service.Status getStatus() {
         return currentStatus;
@@ -32,19 +32,19 @@ public class ServiceStatus {
         this.currentStatus = status;
     }
 
-    public DateTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return lastStartTime;
     }
 
-    public void setStartTime(DateTime startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.lastStartTime = startTime;
     }
 
-    public DateTime getStopTime() {
+    public LocalDateTime getStopTime() {
         return lastStopTime;
     }
 
-    public void setStopTime(DateTime stopTime) {
+    public void setStopTime(LocalDateTime stopTime) {
         this.lastStopTime = stopTime;
     }
 
@@ -72,27 +72,27 @@ public class ServiceStatus {
         this.previousStatus = previousStatus;
     }
 
-    public DateTime getLastStartTime() {
+    public LocalDateTime getLastStartTime() {
         return lastStartTime;
     }
 
-    public void setLastStartTime(DateTime lastStartTime) {
+    public void setLastStartTime(LocalDateTime lastStartTime) {
         this.lastStartTime = lastStartTime;
     }
 
-    public DateTime getLastStopTime() {
+    public LocalDateTime getLastStopTime() {
         return lastStopTime;
     }
 
-    public void setLastStopTime(DateTime lastStopTime) {
+    public void setLastStopTime(LocalDateTime lastStopTime) {
         this.lastStopTime = lastStopTime;
     }
 
-    public DateTime getStatusChangeTime() {
+    public LocalDateTime getStatusChangeTime() {
         return statusChangeTime;
     }
 
-    public void setStatusChangeTime(DateTime statusChangeTime) {
+    public void setStatusChangeTime(LocalDateTime statusChangeTime) {
         this.statusChangeTime = statusChangeTime;
     }
 

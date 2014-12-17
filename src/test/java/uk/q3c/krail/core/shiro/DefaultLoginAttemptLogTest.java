@@ -17,14 +17,15 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.shiro.DefaultLoginAttemptLog.LogEntry;
 import uk.q3c.krail.core.shiro.DefaultLoginAttemptLog.LogOutcome;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.jodatime.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -81,8 +82,9 @@ public class DefaultLoginAttemptLogTest {
         attemptLog.recordSuccessfulAttempt(token);
         // then
         assertThat(attemptLog.dateOfLastSuccess(username)).isNotNull();
-        DateTime lastLogin = attemptLog.dateOfLastSuccess(username);
-        assertThat(lastLogin).isEqualToIgnoringMillis(DateTime.now());
+        LocalDateTime lastLogin = attemptLog.dateOfLastSuccess(username);
+        assertThat(Duration.between(lastLogin, LocalDateTime.now())
+                           .getSeconds()).isLessThan(2);
         assertThat(attemptLog.attemptsRemaining(username)).isEqualTo(3);
     }
 

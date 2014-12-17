@@ -14,7 +14,8 @@ package uk.q3c.krail.core.data;
 
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.converter.DefaultConverterFactory;
-import org.joda.time.DateTime;
+
+import java.time.LocalDateTime;
 
 public class KrailDefaultConverterFactory extends DefaultConverterFactory {
 
@@ -23,7 +24,7 @@ public class KrailDefaultConverterFactory extends DefaultConverterFactory {
     public <PRESENTATION, MODEL> Converter<PRESENTATION, MODEL> createConverter(Class<PRESENTATION> presentationType,
                                                                                 Class<MODEL> modelType) {
 
-        if (modelType == DateTime.class) {
+        if (modelType == LocalDateTime.class) {
             return (Converter<PRESENTATION, MODEL>) new DateTimeConverter();
         }
 

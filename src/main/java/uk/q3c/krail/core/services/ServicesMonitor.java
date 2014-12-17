@@ -16,11 +16,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MapMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.services.Service.Status;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -65,12 +65,12 @@ public class ServicesMonitor implements ServiceChangeListener {
         ServiceStatus status = services.get(service);
         status.setPreviousStatus(fromStatus);
         status.setCurrentStatus(toStatus);
-        status.setStatusChangeTime(DateTime.now());
+        status.setStatusChangeTime(LocalDateTime.now());
         if (service.isStarted()) {
-            status.setLastStartTime(DateTime.now());
+            status.setLastStartTime(LocalDateTime.now());
         }
         if (service.isStopped()) {
-            status.setLastStopTime(DateTime.now());
+            status.setLastStopTime(LocalDateTime.now());
         }
         services.put(service, status);
     }

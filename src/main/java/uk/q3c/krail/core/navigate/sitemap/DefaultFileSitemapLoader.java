@@ -19,7 +19,6 @@ import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.LabelKeyForName;
@@ -31,6 +30,8 @@ import uk.q3c.krail.i18n.Translate;
 
 import java.io.File;
 import java.text.Collator;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -41,6 +42,13 @@ import java.util.*;
  */
 public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileSitemapLoader {
 
+    private enum SectionName {
+        options, viewPackages, map, redirects;
+    }
+
+    private enum ValidOption {
+        appendView, labelKeys
+    }
     private static Logger log = LoggerFactory.getLogger(DefaultFileSitemapLoader.class);
     private final MasterSitemap sitemap;
     private final Collator collator;
@@ -51,7 +59,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
     private int blankLines;
     private int commentLines;
     private SectionName currentSection;
-    private DateTime endTime;
+    private LocalDateTime endTime;
     private String labelKey;
     private Class<? extends Enum<?>> labelKeysClass;
     private LabelKeyForName lkfn;
@@ -59,7 +67,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
     private Map<SectionName, List<String>> sections;
     private File sourceFile;
     private Map<String, SitemapFile> sources;
-    private DateTime startTime;
+    private LocalDateTime startTime;
 
     @Inject
     public DefaultFileSitemapLoader(CurrentLocale currentLocale, Translate translate, MasterSitemap sitemap) {
@@ -71,7 +79,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
     }
 
     private void init() {
-        startTime = DateTime.now();
+        startTime = LocalDateTime.now();
         endTime = null;
         missingEnums = new HashSet<>();
 
@@ -96,7 +104,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
             addError(source, SECTION_MISSING, missingSections());
         }
 
-        endTime = DateTime.now();
+        endTime = LocalDateTime.now();
     }
 
     /**
@@ -338,6 +346,15 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
 
     }
 
+    //
+    // private int lastIndent(String line) {
+    // int index = 0;
+    // while (line.charAt(index) == '-') {
+    // index++;
+    // }
+    // return index;
+    // }
+
     /**
      * process a line of text from the file into the appropriate section
      *
@@ -383,15 +400,6 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
         return commentLines;
     }
 
-    //
-    // private int lastIndent(String line) {
-    // int index = 0;
-    // while (line.charAt(index) == '-') {
-    // index++;
-    // }
-    // return index;
-    // }
-
     public int getBlankLines() {
         return blankLines;
     }
@@ -425,20 +433,21 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
         return sitemap.getNodeCount();
     }
 
-    public Long runtime() {
-        Long r = endTime.getMillis() - startTime.getMillis();
-        return r;
+    public int runtime() {
+        int diffInNano = Duration.between(startTime, endTime)
+                                 .getNano();
+        return diffInNano;
     }
 
-    public DateTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public DateTime getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(DateTime endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
@@ -530,14 +539,6 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
             sourceNames.add(source.getFilePath());
         }
         return sourceNames;
-    }
-
-    private enum SectionName {
-        options, viewPackages, map, redirects;
-    }
-
-    private enum ValidOption {
-        appendView, labelKeys
     }
 
 }

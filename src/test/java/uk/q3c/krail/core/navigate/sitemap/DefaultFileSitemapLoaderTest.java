@@ -21,7 +21,6 @@ import fixture.TestI18NModule;
 import fixture.testviews2.My_AccountView;
 import fixture.testviews2.OptionsView;
 import org.apache.commons.io.FileUtils;
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,6 +42,7 @@ import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,7 +50,8 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.assertj.jodatime.api.Assertions.assertThat;
+
+//import org.joda.time.DateTime;
 
 /**
  * There are several things set up to help with testing. The sitemap.properties file can be modified using {@link
@@ -105,7 +106,7 @@ public class DefaultFileSitemapLoaderTest {
     public void parse_partialMap() throws IOException {
 
         // given
-        DateTime start = DateTime.now();
+        LocalDateTime start = LocalDateTime.now();
         prepFile();
         // when
         assertThat(propFile.exists()).isTrue();
@@ -152,8 +153,9 @@ public class DefaultFileSitemapLoaderTest {
 
         assertThat(loader.getStartTime()).isNotNull();
         assertThat(loader.getEndTime()).isNotNull();
-        assertThat(loader.getStartTime()
-                         .getMillis()).isGreaterThanOrEqualTo(start.getMillis());
+        //loader start is after start time
+        assertThat(!loader.getStartTime()
+                          .isBefore(start)).isTrue();
         assertThat(loader.getEndTime()
                          .isAfter(loader.getStartTime())).isTrue();
 
