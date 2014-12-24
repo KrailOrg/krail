@@ -16,7 +16,7 @@ repositories {
     jcenter()
 }
 
-'uk.q3c.krail:krail:0.7.1'
+'uk.q3c.krail:krail:0.7.6'
 ```
 #### Maven (not yet available in Maven Central):
 ```
@@ -29,7 +29,7 @@ repositories {
 <dependency>
    <groupId>uk.q3c.krail</groupId>
    <artifactId>krail</artifactId>
-   <version>0.7.1</version>
+   <version>0.7.6</version>
 </dependency>
 ```
 ### Direct
@@ -45,7 +45,7 @@ Fails on Tomcat 8
 10th November 2014:
 
 
-* Vaadin 7.3.4 is integrated with:
+* Vaadin 7.3.7 is integrated with:
 * Guice 3.0, 
 * Shiro 1.2.1, 
 * Apache Commons Configuration
