@@ -29,10 +29,10 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 
 import java.text.Collator;
 import java.util.Locale;

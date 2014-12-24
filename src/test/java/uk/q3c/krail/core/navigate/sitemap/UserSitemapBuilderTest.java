@@ -27,7 +27,7 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapBuilderTest.TestVaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.VaadinSessionProvider;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 
 import java.util.Locale;
 

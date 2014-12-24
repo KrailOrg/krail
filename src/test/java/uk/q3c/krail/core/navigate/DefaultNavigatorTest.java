@@ -42,8 +42,9 @@ import uk.q3c.krail.core.shiro.PagePermission;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
-import uk.q3c.krail.core.user.opt.*;
+import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.core.view.*;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 
 import java.util.LinkedHashMap;
 import java.util.List;

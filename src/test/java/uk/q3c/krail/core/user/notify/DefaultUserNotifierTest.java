@@ -23,11 +23,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.MessageKey;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 
 import java.util.Map;
 

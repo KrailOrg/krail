@@ -31,8 +31,11 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
-import uk.q3c.krail.core.user.opt.*;
+import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.UserOptionStore;
 import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.testutil.MockUserOption;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

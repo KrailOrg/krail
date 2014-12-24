@@ -32,12 +32,12 @@ import uk.q3c.krail.core.navigate.sitemap.DefaultFileSitemapLoaderTest.TestFileS
 import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderErrorEntry;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderInfoEntry;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderWarningEntry;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.view.testviews.subview.MoneyInOutView;
 import uk.q3c.krail.core.view.testviews.subview.TransferView;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.TestLabelKey;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;

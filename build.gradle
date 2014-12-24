@@ -16,35 +16,46 @@ apply plugin: 'eclipse'
 
 sourceCompatibility = '1.8'
 
-version = '0.7.4-draft'
+version = '0.7.6'
 
-project.ext.vaadinVersion = '7.3.4'
+project.ext.vaadinVersion = '7.3.7'
 project.ext.guiceVersion = '3.0'
 project.ext.shiroVersion = '1.2.1'
 
 
-project.ext.exportDir = System.getProperty("user.home") + "/temp/jars/" + project.name
-
-jar {
-    libsDirName = exportDir
-    println("jar exported to:  " + exportDir)
+repositories {
+    maven {
+        url "file:///" + System.getProperty("user.home") + "/localRepo"
+    }
+    jcenter()
+    mavenCentral()
 }
 
-task writeNewPom << {
-    pom {
-        groupId = "uk.q3c.krail"
-        project {
-            inceptionYear '2014'
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://localhost/" + System.getProperty("user.home") + "/localRepo")
+            pom {
+                groupId = "uk.q3c.krail"
+                project {
+                    inceptionYear '2014'
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
                 }
             }
         }
-    }.writeTo(exportDir + "/" + project.name + "-" + version + ".pom")
+    }
 }
+
+
+
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
@@ -58,10 +69,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
-task publish(dependsOn: ['sourcesJar', 'javadocJar', 'jar', 'writeNewPom']) {
-
-
-}
 
 artifacts {
     archives sourcesJar
@@ -72,10 +79,7 @@ javadoc {
     failOnError = false
 }
 
-repositories {
-    mavenCentral()
-    jcenter()
-}
+
 
 dependencies {
 
@@ -92,8 +96,12 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.6.6'
     compile 'org.slf4j:slf4j-log4j12:1.6.6'
 
+    //servlet
+    compile "javax.servlet:javax.servlet-api:3.+"
+
     //testing
-    testCompile 'uk.q3c.util:testUtil:0.7.0'
+    testCompile 'uk.q3c.util:util-testUtil:0.7.1'
+    testCompile 'uk.q3c.krail:krail-testUtil:1.0.2'
     testCompile 'com.mycila:mycila-guice:2.10.ga'
     testCompile 'com.mycila.testing.plugins:mycila-testing-guice:2.8'
     testCompile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
@@ -101,12 +109,6 @@ dependencies {
     testCompile 'junit:junit:4.11'
     testCompile 'org.assertj:assertj-core:1.5.0'
     testCompile 'org.assertj:assertj-guava:1.0.0'
-
-    //servlet
-    compile "javax.servlet:javax.servlet-api:3.+"
-
-    //Testing
-//    testCompile 'com.googlecode.jmockit:jmockit:1.0'
 
     //Utility
     compile 'com.google.guava:guava:13.0.1'

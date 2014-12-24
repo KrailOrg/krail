@@ -24,9 +24,9 @@ import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
-import uk.q3c.krail.core.user.opt.*;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.I18NProcessor;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 
 import java.io.IOException;
 

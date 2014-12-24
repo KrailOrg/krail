@@ -20,13 +20,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestUserOptionModule.class})

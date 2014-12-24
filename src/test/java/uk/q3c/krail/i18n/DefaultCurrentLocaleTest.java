@@ -22,8 +22,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.ui.BrowserProvider;
-import uk.q3c.krail.core.user.opt.MockUserOption;
 import uk.q3c.krail.core.user.status.DefaultUserStatus;
+import uk.q3c.krail.testutil.MockUserOption;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;

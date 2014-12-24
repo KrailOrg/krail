@@ -26,8 +26,8 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 
 import java.util.Locale;
 

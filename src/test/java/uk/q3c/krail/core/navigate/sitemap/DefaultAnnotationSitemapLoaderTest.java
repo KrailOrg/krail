@@ -28,13 +28,13 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.AnnotationsModule1;
 import uk.q3c.krail.core.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.AnnotationsModule2;
 import uk.q3c.krail.core.shiro.PageAccessControl;
-import uk.q3c.krail.core.user.opt.*;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.TestLabelKey;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 
 import java.util.ArrayList;
 import java.util.List;

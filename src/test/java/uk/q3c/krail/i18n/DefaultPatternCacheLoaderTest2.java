@@ -6,7 +6,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

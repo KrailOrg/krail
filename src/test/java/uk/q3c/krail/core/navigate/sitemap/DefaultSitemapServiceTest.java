@@ -46,12 +46,12 @@ import uk.q3c.krail.core.shiro.StandardShiroModule;
 import uk.q3c.krail.core.ui.BasicUIProvider;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserModule;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.StandardComponentModule;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 import uk.q3c.util.ResourceUtils;
 import uk.q3c.util.testutil.TestResource;
 

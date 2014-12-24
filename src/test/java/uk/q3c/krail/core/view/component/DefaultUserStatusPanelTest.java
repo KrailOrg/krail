@@ -29,10 +29,10 @@ import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.shiro.DefaultSubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 
 import java.util.Locale;
 

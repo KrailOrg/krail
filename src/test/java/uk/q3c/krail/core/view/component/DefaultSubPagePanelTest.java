@@ -30,10 +30,10 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 
 import java.util.ArrayList;
 import java.util.List;

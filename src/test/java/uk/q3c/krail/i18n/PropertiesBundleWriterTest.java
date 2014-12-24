@@ -7,7 +7,7 @@ import fixture.TestI18NModule;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 import uk.q3c.util.ResourceUtils;
 import uk.q3c.util.testutil.TestResource;
 import util.FileTestUtil;

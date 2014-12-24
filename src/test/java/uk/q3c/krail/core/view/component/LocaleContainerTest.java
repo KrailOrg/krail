@@ -24,8 +24,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.user.opt.TestUserOptionModule;
 import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.testutil.TestUserOptionModule;
 import uk.q3c.util.testutil.LogMonitor;
 import uk.q3c.util.testutil.TestResource;
 

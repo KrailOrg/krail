@@ -23,9 +23,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.user.notify.UserNotifier;
-import uk.q3c.krail.core.user.opt.MockUserOption;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.testutil.MockUserOption;
 
 import java.util.HashSet;
 import java.util.Locale;
