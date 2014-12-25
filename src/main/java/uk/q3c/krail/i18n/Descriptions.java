@@ -45,6 +45,7 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
         put(DescriptionKey.Account_Locked, "Your account is locked");
         put(DescriptionKey.Too_Many_Login_Attempts, "Login has failed too many times, the account will " + "need to " +
                 "be reset");
+        put(DescriptionKey.Authentication_Failed, "Your login attempt failed");
     }
 
 

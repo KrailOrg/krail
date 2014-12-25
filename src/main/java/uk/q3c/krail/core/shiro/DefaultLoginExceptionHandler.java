@@ -58,4 +58,9 @@ public class DefaultLoginExceptionHandler implements LoginExceptionHandler {
         loginView.setStatusMessage(DescriptionKey.Account_is_Disabled);
     }
 
+    @Override
+    public void authentication(LoginView loginView, UsernamePasswordToken token) {
+        loginView.setStatusMessage(DescriptionKey.Authentication_Failed);
+    }
+
 }

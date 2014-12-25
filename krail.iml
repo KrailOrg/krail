@@ -81,9 +81,9 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.objenesis:objenesis:1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.11" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: uk.q3c.util:util-testUtil:0.7.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.vaadin:vaadin-server:7.3.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.vaadin:vaadin-shared:7.3.7" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: uk.q3c.util:util-testUtil:0.7.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: uk.q3c.krail:krail-testUtil:1.0.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: uk.q3c.krail:krail:0.7.6" level="project" />
   </component>

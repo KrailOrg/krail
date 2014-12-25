@@ -53,8 +53,7 @@ public interface LoginExceptionHandler {
     /**
      * Response to {@link AccountLockedException}. See the javadoc of the exception. Typically, the implementation of
      * this method will navigate to a KrailView which allows the user to request that their account is unlocked,
-     * although
-     * it perhaps just inform the user and do nothing else.
+     * although it perhaps just inform the user and do nothing else.
      *
      * @param loginView
      * @param token
@@ -63,13 +62,10 @@ public interface LoginExceptionHandler {
 
     /**
      * Response to an {@link ExcessiveAttemptsException}, which occurs when a system is configured to raise an
-     * exception
-     * when there is a specified limit to the number of times a user can try and login. A login failure before that
-     * threshold is reached is handled by {@link #unknownAccount(LoginView, UsernamePasswordToken)}. Typically, the
-     * implementation of this method will navigate to a KrailView which allows the user to request a reset after
-     * filling
-     * in
-     * appropriate security answers.
+     * exception when there is a specified limit to the number of times a user can try and login. A login failure
+     * before that threshold is reached is handled by {@link #unknownAccount(LoginView, UsernamePasswordToken)}.
+     * Typically, the implementation of this method will navigate to a KrailView which allows the user to request a
+     * reset after filling in appropriate security answers.
      *
      * @param loginView
      * @param token
@@ -94,5 +90,13 @@ public interface LoginExceptionHandler {
      * @param token
      */
     void disabledAccount(LoginView loginView, UsernamePasswordToken token);
+
+    /**
+     * A catch-all for an authentication failure not captured by one of the more specific methods above
+     *
+     * @param loginView
+     * @param token
+     */
+    void authentication(LoginView loginView, UsernamePasswordToken token);
 
 }

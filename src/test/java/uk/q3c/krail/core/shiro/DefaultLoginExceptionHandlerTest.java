@@ -118,4 +118,15 @@ public class DefaultLoginExceptionHandlerTest {
         // then
         verify(loginView).setStatusMessage(DescriptionKey.Invalid_Login);
     }
+
+    @Test
+    public void authenticationFailed() {
+        // given
+        token = new UsernamePasswordToken("fred", "password");
+        // when
+        handler.authentication(loginView, token);
+        // then
+        verify(loginView).setStatusMessage(DescriptionKey.Authentication_Failed);
+
+    }
 }
