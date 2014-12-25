@@ -17,11 +17,11 @@ import fixture.TestUIModule;
 
 import java.util.List;
 
-public class TestGuiceServletInjector extends DefaultBindingManager {
+public class TestBindingManager extends DefaultBindingManager {
 
     private boolean addAppModulesCalled;
 
-    protected TestGuiceServletInjector() {
+    protected TestBindingManager() {
         super();
     }
 

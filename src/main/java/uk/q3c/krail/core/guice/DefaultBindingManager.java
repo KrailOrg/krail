@@ -57,12 +57,19 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         log.info("Stopping services");
         try {
-            getInjector().getInstance(ServicesMonitor.class)
-                         .stopAllServices();
+            if (injector != null) {
+                injector.getInstance(ServicesMonitor.class)
+                        .stopAllServices();
+            } else {
+                log.debug("Injector has not been constructed, no call made to stop services");
+            }
         } catch (Exception e) {
             log.error("Exception while stopping services", e);
         }
-        super.contextDestroyed(servletContextEvent);
+        //context may not have been crated, and super does not check for it
+        if (servletContextEvent.getServletContext() != null) {
+            super.contextDestroyed(servletContextEvent);
+        }
     }
 
     /**

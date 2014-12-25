@@ -44,7 +44,7 @@ public class DefaultBindingManagerTest {
     static VaadinService vaadinService;
     @Inject
     LogMonitor logMonitor;
-    TestGuiceServletInjector out;
+    TestBindingManager out;
     @Mock
     ServletContextEvent servletContextEvent;
     @Mock
@@ -61,7 +61,7 @@ public class DefaultBindingManagerTest {
 
     @Before
     public void setup() {
-        out = new TestGuiceServletInjector();
+        out = new TestBindingManager();
 
     }
 
@@ -89,6 +89,16 @@ public class DefaultBindingManagerTest {
         verify(service).stop(); // services stopped
         assertThat(logMonitor.infoLogs()).contains("Stopping all services");
 
+    }
+
+    @Test
+    public void destroyContextWithNullInjector() {
+        //given
+        //when
+        out.contextDestroyed(servletContextEvent);
+        //then
+        assertThat(logMonitor.debugLogs()).containsExactly("Injector has not been constructed, no call made to stop "
+                + "services");
     }
 
     @After
