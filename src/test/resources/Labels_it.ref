@@ -27,6 +27,7 @@ public class Labels_it extends EnumResourceBundle<LabelKey> {
         put(LabelKey.Invalid_Page, "Invalid Page");
         put(LabelKey.Insertion_Order_Ascending, "Insertion Order Ascending");
         put(LabelKey.Insertion_Order_Descending, "Insertion Order Descending");
+        put(LabelKey.JPA, "JPA");
         put(LabelKey.Krail, "Krail");
         put(LabelKey.Last_Name, "Cognome");
         put(LabelKey.Log_In, "Log in");
