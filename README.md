@@ -16,7 +16,7 @@ repositories {
     jcenter()
 }
 
-'uk.q3c.krail:krail:0.7.6'
+'uk.q3c.krail:krail:0.7.7'
 ```
 #### Maven (not yet available in Maven Central):
 ```
@@ -29,7 +29,7 @@ repositories {
 <dependency>
    <groupId>uk.q3c.krail</groupId>
    <artifactId>krail</artifactId>
-   <version>0.7.6</version>
+   <version>0.7.7</version>
 </dependency>
 ```
 ### Direct
@@ -42,7 +42,7 @@ Fails on Tomcat 8
 
 ## Status
 
-10th November 2014:
+3rd January 2015:
 
 
 * Vaadin 7.3.7 is integrated with:
@@ -51,7 +51,7 @@ Fails on Tomcat 8
 * Apache Commons Configuration
 * Quartz Scheduler (as an optional library)
 
-It also supports:
+It also provides:
 
 * Vaadin Server Push (with option to disable it)
 * Extensive I18N support
