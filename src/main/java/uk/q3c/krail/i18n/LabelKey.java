@@ -35,6 +35,7 @@ public enum LabelKey implements I18NKey {
     Invalid_Page,
     Insertion_Order_Ascending,
     Insertion_Order_Descending,
+    JPA,
     Krail,
     Last_Name,
     Log_In,

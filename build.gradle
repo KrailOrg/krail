@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 
 sourceCompatibility = '1.8'
 
-version = '0.7.6'
+version = '0.8.0'
 
 project.ext.vaadinVersion = '7.3.7'
 project.ext.guiceVersion = '3.0'
@@ -28,6 +28,11 @@ repositories {
         url "file:///" + System.getProperty("user.home") + "/localRepo"
     }
     jcenter()
+
+    maven {
+        url "http://maven.vaadin.com/vaadin-addons"
+    }
+
     mavenCentral()
 }
 
