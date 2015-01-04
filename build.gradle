@@ -106,7 +106,7 @@ dependencies {
 
     //testing
     testCompile 'uk.q3c.util:util-testUtil:0.7.1'
-    testCompile 'uk.q3c.krail:krail-testUtil:1.0.2'
+    testCompile 'uk.q3c.krail:krail-testUtil:1.0.3'
     testCompile 'com.mycila:mycila-guice:2.10.ga'
     testCompile 'com.mycila.testing.plugins:mycila-testing-guice:2.8'
     testCompile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
