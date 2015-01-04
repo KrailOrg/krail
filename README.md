@@ -2,14 +2,30 @@
 
 Krail (previously known as V7) provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.
 
-It provides site navigation and the means to authenticate and authorise users. 
-Building an application is assisted by specifying the site structure using a Sitemap.  There are 3 methods for specifying the Sitemap: using files(s), annotations, or directly coded in Guice modules (these can also be mixed)
+This core library provides:
+
+* Site navigation, using a sitemap configured by annotation, Guice or file (or any combination thereof)
+* Authentication / Authorisation framework, including page access control
+* Vaadin Server Push (with option to disable it)
+* Extensive I18N support
+* User options
+* Application configuration through ini files etc
+
+Additional libraries, integrated and configured through Guice, provide:
+
+* JPA persistence - [krail-jpa](https://github.com/davidsowerby/krail-jpa), using [Apache Onami persist](http://onami.apache.org/persist/) and EclipseLink
+* Quartz scheduler - [krail-quartz](https://github.com/davidsowerby/krail-quartz), using, of course,  [Quartz Scheduler](http://www.quartz-scheduler.org/)
+
 
 The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information.
 
 
 ## Download
 ### From Central Repository
+
+Not available in Maven Central, only JCenter
+
+
 #### Gradle:
 ```
 repositories {
@@ -18,7 +34,7 @@ repositories {
 
 'uk.q3c.krail:krail:0.7.7'
 ```
-#### Maven (not yet available in Maven Central):
+   
 ```
 <repository>
   <id>jcenter</id>
@@ -49,13 +65,7 @@ Fails on Tomcat 8
 * Guice 3.0, 
 * Shiro 1.2.1, 
 * Apache Commons Configuration
-* Quartz Scheduler (as an optional library)
 
-It also provides:
-
-* Vaadin Server Push (with option to disable it)
-* Extensive I18N support
-* User options
 
 
 Krail is usable, though there are still some bugs and further developments needed.  Vaadin push is now supported.
@@ -69,11 +79,8 @@ There is a [simple demo](https://github.com/davidsowerby/krail-demo) project
 
 There is a [functional test application](https://github.com/davidsowerby/krail-testApp) which can also be used to explore functionality
 
-### quartz
-
-An [integration with Quartz Scheduler](https://github.com/davidsowerby/krail-quartz), constructed as an optional Krail add-on.
 
 ##Project Build
 
-Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).  If you are an Eclipse user, and download the source, you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files. 
+Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).  If you are an Eclipse user, and want to build from the source, you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files.
 
