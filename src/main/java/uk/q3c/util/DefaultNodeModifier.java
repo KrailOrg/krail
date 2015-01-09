@@ -59,9 +59,14 @@ public class DefaultNodeModifier<S, T> implements NodeModifier<S, T> {
         return false;
     }
 
+    /**
+     * Does nothing by default
+     *
+     * @param parentNode
+     * @param comparator
+     */
     @Override
     public void sortChildren(T parentNode, Comparator<T> comparator) {
-        // TODO Auto-generated method stub
 
     }
 

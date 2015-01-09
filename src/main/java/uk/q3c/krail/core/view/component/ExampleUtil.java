@@ -21,6 +21,9 @@ import com.vaadin.server.ThemeResource;
 
 import java.util.Locale;
 
+
+//TODO is this class useful??
+
 public final class ExampleUtil {
     public static final String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut massa eget " +
             "erat dapibus sollicitudin. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere " +
@@ -195,7 +198,6 @@ public final class ExampleUtil {
 
     public static void fillContainerWithEmailAddresses(Container c, int amount) {
         for (int i = 0; i < amount; i++) {
-            // TODO
         }
     }
 

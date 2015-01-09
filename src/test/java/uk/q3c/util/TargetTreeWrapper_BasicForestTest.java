@@ -137,7 +137,6 @@ public class TargetTreeWrapper_BasicForestTest {
 
         @Override
         public void sortChildren(TargetTestNode parentNode, Comparator<TargetTestNode> comparator) {
-            // TODO Auto-generated method stub
 
         }
 

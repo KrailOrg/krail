@@ -23,8 +23,7 @@ The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&st
 ## Download
 ### From Central Repository
 
-Not available in Maven Central, only JCenter
-
+<a href='https://bintray.com/dsowerby/maven/krail/view?source=watch' alt='Get automatic notifications about new "krail" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
 
 #### Gradle:
 ```
@@ -34,7 +33,8 @@ repositories {
 
 'uk.q3c.krail:krail:0.7.7'
 ```
-   
+
+#### Maven:
 ```
 <repository>
   <id>jcenter</id>
@@ -82,5 +82,7 @@ There is a [functional test application](https://github.com/davidsowerby/krail-t
 
 ##Project Build
 
-Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).  If you are an Eclipse user, and want to build from the source, you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files.
+Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin)).  If you are an Eclipse user, and want to build from the source, you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files.
+
+IDEA users can just import as a Gradle project
 

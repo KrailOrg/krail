@@ -63,7 +63,6 @@ public class TestUI extends ScopedUI {
 
     @Override
     protected void processBroadcastMessage(String group, String message) {
-        // TODO Auto-generated method stub
 
     }
 
