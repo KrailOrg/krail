@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id=":krail" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/../release-manager" external.system.id="GRADLE" external.system.module.group="uk.q3c.krail" external.system.module.version="0.7.7" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="web" name="Web">
+      <configuration>
+        <webroots>
+          <root url="file://$MODULE_DIR$/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/build/classes/main" />
     <output-test url="file://$MODULE_DIR$/build/classes/test" />
@@ -14,12 +27,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="q3c-testUtil" scope="TEST" />
-    <orderEntry type="module" module-name="krail-testUtil" scope="TEST" />
     <orderEntry type="library" exported="" name="Gradle: com.google.inject:guice:3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.google.inject.extensions:guice-servlet:3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.google.inject.extensions:guice-assistedinject:3.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.google.inject.extensions:guice-multibindings:3.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: joda-time:joda-time:2.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.slf4j:slf4j-api:1.6.6" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.slf4j:slf4j-log4j12:1.6.6" level="project" />
     <orderEntry type="library" exported="" name="Gradle: javax.servlet:javax.servlet-api:3.1.0" level="project" />
@@ -35,7 +47,6 @@
     <orderEntry type="library" exported="" name="Gradle: org.apache.shiro:shiro-core:1.2.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.apache.shiro:shiro-web:1.2.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.apache.shiro:shiro-guice:1.2.1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.vaadin:vaadin-server:7.3.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: javax.portlet:portlet-api:2.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.atmosphere:atmosphere-runtime:2.1.6" level="project" />
     <orderEntry type="library" exported="" name="Gradle: javax.inject:javax.inject:1" level="project" />
@@ -55,7 +66,6 @@
     <orderEntry type="library" exported="" name="Gradle: org.apache.bval:org.apache.bval.bundle:0.5" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-beanutils:commons-beanutils:1.8.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.vaadin:vaadin-sass-compiler:0.9.10" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.vaadin:vaadin-shared:7.3.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.jsoup:jsoup:1.6.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: asm:asm:3.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: net.sourceforge.collections:collections-generic:4.01" level="project" />
@@ -74,15 +84,20 @@
     <orderEntry type="library" scope="TEST" name="Gradle: com.mycila.testing.plugins:mycila-testing-guice:2.8" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.mycila.testing.plugins:mycila-testing-mockito:2.8" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.mockito:mockito-all:1.9.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.11" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.assertj:assertj-core:1.5.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.assertj:assertj-guava:1.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.mycila.testing:mycila-testing-api:2.8" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.mockito:mockito-core:1.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-all:1.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.mycila:mycila-plugin:1.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.mycila:mycila-log:2.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.objenesis:objenesis:1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.11" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.vaadin:vaadin-server:7.3.7" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.vaadin:vaadin-shared:7.3.7" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: uk.q3c.util:util-testUtil:0.7.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: uk.q3c.krail:krail-testUtil:1.0.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: uk.q3c.krail:krail:0.7.7" level="project" />
   </component>
 </module>
