@@ -1,24 +1,22 @@
-/build/classes
-/build/dependency-cache
-/build/libs
-/build/test-results
-/build/tmp
-/logs
-/bin
 /.gradle
+/.idea
+/.settings
+/bin
+/build
+/gradle
+/logs
+
+/.krail.iml
+
 settings.gradle~
 build.gradle~
 .gitignore~
-/build
-/.settings
 README.md~
-.idea/workspace.xml
-.idea/tasks.xml
 /error-screenshots
 *.properties~
 
 
 
-.idea/libraries/
 
-gradle
+
+
