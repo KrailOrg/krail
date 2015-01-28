@@ -1,1 +1,1 @@
-This version moves most of the build to the [master project](https://github.com/davidsowerby/krail-master)
+This version provides an upgrade to Vaadin 7.3.9 and removes the Gradle project files from Git

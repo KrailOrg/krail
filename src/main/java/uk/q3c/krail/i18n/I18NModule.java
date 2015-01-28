@@ -34,8 +34,8 @@ public class I18NModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        registeredAnnotations = newSetBinder(binder(), String.class, I18N.class);
-        registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValue.class);
+        registeredAnnotations = newSetBinder(binder(), String.class, I18NAnnotation.class);
+        registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValueAnnotation.class);
         supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
         bundleSourceOrderDefault = newSetBinder(binder(), String.class, BundleSourceOrderDefault.class);
         bundleReaders = MapBinder.newMapBinder(binder(), String.class, BundleReader.class);

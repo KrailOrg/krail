@@ -25,8 +25,10 @@ import java.util.Locale;
  * I18N lookup. All parameters are optional, but the value parameter is relevant only for those components which
  * implement {@link Property}. Its value would be ignored otherwise.
  *
+ * see https://sites.google.com/site/q3cjava/internationalisation-i18n
+ *
  * @author David Sowerby 9 Feb 2013
- * @see https://sites.google.com/site/q3cjava/internationalisation-i18n
+ *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.PARAMETER})
@@ -40,11 +42,9 @@ public @interface I18NValue {
 
     /**
      * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional
-     * parameter
-     * is specified, it will be used instead. This allows specific components to be fixed to display content in a
-     * language different to the rest of the application. The format of the string should be as the IETF BCP 47
-     * language
-     * tag string; see {@link Locale#toLanguageTag()}
+     * parameter is specified, it will be used instead. This allows specific components to be fixed to display
+     * content in a language different to the rest of the application. The format of the string should be as the IETF
+     * BCP 47 language tag string; see {@link Locale#toLanguageTag()}
      */
 
     String locale() default "";

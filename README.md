@@ -23,7 +23,8 @@ The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&st
 ## Download
 ### From Central Repository
 
-<a href='https://bintray.com/dsowerby/maven/krail/view?source=watch' alt='Get automatic notifications about new "krail" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
+Not available in Maven Central, only JCenter
+
 
 #### Gradle:
 ```
@@ -33,8 +34,7 @@ repositories {
 
 'uk.q3c.krail:krail:0.7.7'
 ```
-
-#### Maven:
+   
 ```
 <repository>
   <id>jcenter</id>
@@ -58,12 +58,11 @@ Fails on Tomcat 8
 
 ## Status
 
-3rd January 2015:
+28th January 2015:
 
-
-* Vaadin 7.3.7 is integrated with:
-* Guice 3.0, 
-* Shiro 1.2.1, 
+* Vaadin 7.3.9 is integrated with:
+* Guice 3.0,
+* Shiro 1.2.1,
 * Apache Commons Configuration
 
 
@@ -82,7 +81,5 @@ There is a [functional test application](https://github.com/davidsowerby/krail-t
 
 ##Project Build
 
-Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin)).  If you are an Eclipse user, and want to build from the source, you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files.
-
-IDEA users can just import as a Gradle project
+Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).  If you are an Eclipse user, and want to build from the source, you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files.
 

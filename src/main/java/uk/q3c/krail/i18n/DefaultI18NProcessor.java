@@ -53,9 +53,8 @@ public class DefaultI18NProcessor implements I18NProcessor {
     private final I18NValueFlexReader i18nValueFlexReader;
 
     @Inject
-    protected DefaultI18NProcessor(CurrentLocale currentLocale, Translate translate,
-                                   @I18N Set<String> registeredAnnotations,
-                                   @I18NValue Set<String> registeredValueAnnotations, I18NReader i18nReader,
+    protected DefaultI18NProcessor(CurrentLocale currentLocale, Translate translate, @I18NAnnotation Set<String>
+            registeredAnnotations, @I18NValueAnnotation Set<String> registeredValueAnnotations, I18NReader i18nReader,
                                    I18NFlexReader i18nFlexReader, I18NValueReader i18nValueReader,
                                    I18NValueFlexReader i18nValueFlexReader) {
         super();
