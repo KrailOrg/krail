@@ -21,7 +21,7 @@ import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import util.TestUtils;
+import uk.q3c.util.testutil.TestUtils;
 
 import java.io.File;
 

@@ -9,8 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.testutil.TestUserOptionModule;
 import uk.q3c.util.ResourceUtils;
+import uk.q3c.util.testutil.FileTestUtil;
 import uk.q3c.util.testutil.TestResource;
-import util.FileTestUtil;
 
 import java.io.File;
 import java.io.IOException;
