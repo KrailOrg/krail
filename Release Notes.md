@@ -16,6 +16,9 @@ This version provides an upgrade to Vaadin 7.3.9,removes the Gradle project file
 
 #### Detail
 
+Release notes and version.properties generated
+
+---
 *Set version information*
 
 
