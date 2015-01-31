@@ -1,3 +1,39 @@
+#krail
+
+#Download
+<a href='https://bintray.com/dsowerby/maven/krail/view?source=watch' alt='Get automatic notifications about new "krail" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
+##Gradle
+
+```
+repositories {
+	jcenter()
+}
+```
+
+```
+'uk.q3c.krail:krail:0.7.9
+```
+##Maven
+
+```
+<repository>
+	<id>jcenter</id>
+	<url>http://jcenter.bintray.com</url>
+</repository>
+
+```
+
+```
+<dependency>
+	<groupId>uk.q3c.krail</groupId>
+	<artifactId>krail</artifactId>
+	<version>0.7.9</version>
+</dependency>
+```
+##Direct
+
+[ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail/images/download.svg) ](https://bintray.com/dsowerby/maven/krail/_latestVersion)
+
 # Krail
 
 Krail (previously known as V7) provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.
