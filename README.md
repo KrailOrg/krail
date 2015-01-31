@@ -1,5 +1,25 @@
 #krail
 
+Krail (previously known as V7) provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.
+
+This core library provides:
+
+* Site navigation, using a sitemap configured by annotation, Guice or file (or any combination thereof)
+* Authentication / Authorisation framework, including page access control
+* Vaadin Server Push (with option to disable it)
+* Extensive I18N support
+* User options
+* Application configuration through ini files etc
+
+Additional libraries, integrated and configured through Guice, provide:
+
+* JPA persistence - [krail-jpa](https://github.com/davidsowerby/krail-jpa), using [Apache Onami persist](http://onami.apache.org/persist/) and EclipseLink
+* Quartz scheduler - [krail-quartz](https://github.com/davidsowerby/krail-quartz), using, of course,  [Quartz Scheduler](http://www.quartz-scheduler.org/)
+
+
+The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information.
+
+
 #Download
 <a href='https://bintray.com/dsowerby/maven/krail/view?source=watch' alt='Get automatic notifications about new "krail" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
 ##Gradle
@@ -34,59 +54,6 @@ repositories {
 
 [ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail/images/download.svg) ](https://bintray.com/dsowerby/maven/krail/_latestVersion)
 
-# Krail
-
-Krail (previously known as V7) provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.
-
-This core library provides:
-
-* Site navigation, using a sitemap configured by annotation, Guice or file (or any combination thereof)
-* Authentication / Authorisation framework, including page access control
-* Vaadin Server Push (with option to disable it)
-* Extensive I18N support
-* User options
-* Application configuration through ini files etc
-
-Additional libraries, integrated and configured through Guice, provide:
-
-* JPA persistence - [krail-jpa](https://github.com/davidsowerby/krail-jpa), using [Apache Onami persist](http://onami.apache.org/persist/) and EclipseLink
-* Quartz scheduler - [krail-quartz](https://github.com/davidsowerby/krail-quartz), using, of course,  [Quartz Scheduler](http://www.quartz-scheduler.org/)
-
-
-The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information.
-
-
-# Download
-
-Not available in Maven Central, only JCenter
-
-
-#### Gradle:
-```
-repositories {
-    jcenter()
-}
-
-'uk.q3c.krail:krail:0.7.7'
-```
-   
-```
-<repository>
-  <id>jcenter</id>
-  <url>http://jcenter.bintray.com</url>
-</repository>
-
-
-<dependency>
-   <groupId>uk.q3c.krail</groupId>
-   <artifactId>krail</artifactId>
-   <version>0.7.7</version>
-</dependency>
-```
-### Direct
-[ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail/images/download.svg) ](https://bintray.com/dsowerby/maven/krail/_latestVersion)
-
-
 #Limitations
 
 Fails on Tomcat 8
@@ -99,7 +66,6 @@ Fails on Tomcat 8
 * Guice 3.0,
 * Shiro 1.2.1,
 * Apache Commons Configuration
-
 
 
 Krail is usable, though there are still some bugs and further developments needed.  Vaadin push is now supported.
