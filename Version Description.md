@@ -1,1 +1,1 @@
-This version provides an upgrade to Vaadin 7.3.9 and removes the Gradle project files from Git
+This version provides an upgrade to Vaadin 7.3.9,removes the Gradle project files from Git and provides some minor fixes and refactoring
