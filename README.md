@@ -20,8 +20,7 @@ Additional libraries, integrated and configured through Guice, provide:
 The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information.
 
 
-## Download
-### From Central Repository
+# Download
 
 Not available in Maven Central, only JCenter
 
@@ -52,11 +51,11 @@ repositories {
 [ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail/images/download.svg) ](https://bintray.com/dsowerby/maven/krail/_latestVersion)
 
 
-##Limitations
+#Limitations
 
 Fails on Tomcat 8
 
-## Status
+# Status
 
 28th January 2015:
 
@@ -70,16 +69,18 @@ Fails on Tomcat 8
 Krail is usable, though there are still some bugs and further developments needed.  Vaadin push is now supported.
 
 
-### demo
+## demo
 
 There is a [simple demo](https://github.com/davidsowerby/krail-demo) project
 
-### testApp
+## testApp
 
 There is a [functional test application](https://github.com/davidsowerby/krail-testApp) which can also be used to explore functionality
 
 
-##Project Build
+#Project Build
 
-Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).  If you are an Eclipse user, and want to build from the source, you will need to run 'gradle eclipse' to generate .classpath and other Eclipse specific files.
+Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).
+
+If you want to build from source run 'gradle eclipse' or 'gradle idea' to generate the IDE files
 
