@@ -16,14 +16,18 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
+import uk.q3c.util.testutil.FileTestUtil;
 import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,12 +35,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GuiceContext({})
 public class LoaderReportBuilderTest {
 
+    @Rule
+    public TemporaryFolder temporaryFolder=new TemporaryFolder();
+
     File templateFile;
     List<SitemapLoader> loaders;
     LoaderReportBuilder lrb;
+    private File tempDir;
 
     @Before
     public void setup() {
+         tempDir = temporaryFolder.getRoot();
         templateFile = new File(TestResource.testJavaRootDir("krail"), "uk/q3c/krail/core/navigate/sitemap/LoadReportBuilderTest.template");
         loaders = new ArrayList<>();
         loaders.add(new MockAnnotationLoader());
@@ -52,15 +61,20 @@ public class LoaderReportBuilderTest {
     public void buildReport() throws IOException {
 
         // given
-        String template = FileUtils.readFileToString(templateFile);
+
         // when
         lrb = new LoaderReportBuilder(loaders);
         // then
         System.out.println(lrb.getReport()
                               .toString());
+        File reportOutput = new File(tempDir, "temp");
+        FileUtils.writeStringToFile(reportOutput,lrb.getReport().toString());
 
-        assertThat(lrb.getReport()
-                      .toString()).isEqualTo(template);
+
+        Optional<String> result = FileTestUtil.compare(reportOutput, templateFile);
+        String msg = result.isPresent() ? result.get() :"";
+        assertThat(result.isPresent()).overridingErrorMessage(msg).isFalse();
+
 
         // use this to generate a new template if structure changes
         // FileUtils.writeStringToFile(templateFile, lrb.getReport().toString());

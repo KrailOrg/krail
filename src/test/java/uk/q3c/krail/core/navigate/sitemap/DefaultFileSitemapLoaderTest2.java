@@ -84,8 +84,11 @@ public class DefaultFileSitemapLoaderTest2 {
         }
 
         // Note: this currently only works if there are errors
-        assertThat(report).contains("src/test/java/uk/q3c/krail/core/navigate/sitemap_good1.properties");
-        assertThat(report).contains("uk/q3c/krail/core/navigate/sitemap_good1.properties");
+        // Note: this is also OS dependent, so needs to use File to overcome that
+        String expected = new File("src/test/java/uk/q3c/krail/core/navigate/sitemap_good1.properties").getAbsolutePath();
+        assertThat(report).contains(expected);
+        expected = new File("src/test/java/uk/q3c/krail/core/navigate/sitemap_good1.properties").getAbsolutePath();
+        assertThat(report).contains(expected);
         System.out.println(report.toString());
     }
 
