@@ -17,6 +17,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
+import org.apache.bval.guice.ValidationModule;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.guice.aop.ShiroAopModule;
@@ -37,6 +38,7 @@ import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.StandardShiroModule;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.user.opt.UserOptionModule;
+import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.StandardComponentModule;
 import uk.q3c.krail.i18n.I18NModule;
@@ -74,7 +76,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
     /**
      * Module instances for the core should be added in {@link #getModules()}. Module instances for the app using Krail
-     * should be added to {@link AppModules#appModules()}
+     * should be added to {@link #addAppModules(List)}
      *
      * @see com.google.inject.servlet.GuiceServletContextListener#getInjector()
      */
@@ -127,10 +129,27 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
         coreModules.add(userOptionModule());
 
+        addValidationModules(coreModules);
+
         addAppModules(coreModules);
         addSitemapModules(coreModules);
         return coreModules;
     }
+
+    /**
+     * Override this method if you want to use an alternative implementation for the Krail validation integration.  You
+     * will need to keep the Apache Bval {{@link ValidationModule} unless you replace the the javax validation
+     * implementation.
+     *
+     * @param coreModules
+     *
+     * @return
+     */
+    protected void addValidationModules(List<Module> coreModules) {
+        coreModules.add(new ValidationModule());
+        coreModules.add(new KrailValidationModule());
+    }
+
 
     /**
      * Override this if you have provided your own {@link UserOptionModule}
@@ -141,9 +160,20 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         return new UserOptionModule();
     }
 
+    /**
+     * Override this if you have provided your own {@link I18NModule}
+     *
+     * @return
+     */
     protected Module i18NModule() {
         return new I18NModule();
     }
+
+    /**
+     * Override this if you have provided your own {@link ApplicationConfigurationModule}
+     *
+     * @return new instance of ApplicationConfigurationModule
+     */
 
     protected Module applicationConfigurationModule() {
         return new ApplicationConfigurationModule();
@@ -201,9 +231,6 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      * Override this method if you have sub-classed {@link StandardShiroModule} to provide bindings to your Shiro
      * related implementations (for example, {@link Realm} and {@link CredentialsMatcher}
      *
-     * @param servletContext
-     * @param ini
-     *
      * @return
      */
 
@@ -221,9 +248,6 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
     /**
      * Add as many application specific Guice modules as you wish by overriding this method.
-     *
-     * @param baseModules
-     * @param ini
      */
     protected abstract void addAppModules(List<Module> baseModules);
 }

@@ -14,6 +14,22 @@ package uk.q3c.krail.i18n;
 
 public interface I18NKey {
     /**
+     * returns a full string representation of an I18NKey enum constant (for example  uk.q3c.krail.i18n.LabelKey.Yes)
+     * @param key
+     * @return
+     */
+    static String fullName(I18NKey key) {
+        Enum e = (Enum) key;
+        return e.getClass()
+                .getName() + "." + e.name();
+    }
+
+    static <E extends Enum<E> & I18NKey> Class<? extends Enum> enumClass(E k) {
+        Class<? extends Enum> aClass = k.getClass();
+        return aClass;
+    }
+
+    /**
      * Provides a default bundle name by removing the last 3 characters from the key name and replacing with an 's'.
      * This conforms to the Krail convention of having, for example, LabelKey, referring to Labels.
      * <p>

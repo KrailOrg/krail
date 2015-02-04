@@ -9,6 +9,7 @@
 /.krail.iml
 
 settings.gradle~
+.gitattributes~
 build.gradle~
 .gitignore~
 README.md~

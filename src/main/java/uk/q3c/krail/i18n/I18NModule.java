@@ -12,12 +12,15 @@
  */
 package uk.q3c.krail.i18n;
 
+
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
+import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 
+import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
@@ -28,14 +31,16 @@ public class I18NModule extends AbstractModule {
     private MapBinder<String, BundleReader> bundleReaders;
     private MapBinder<String, Set<String>> bundleSourceOrder;
     private Multibinder<String> bundleSourceOrderDefault;
-    private Multibinder<String> registeredAnnotations;
-    private Multibinder<String> registeredValueAnnotations;
+    private Multibinder<Class<? extends Annotation>> registeredAnnotations;
+    private Multibinder<Class<? extends Annotation>> registeredValueAnnotations;
     private Multibinder<Locale> supportedLocales;
 
     @Override
     protected void configure() {
-        registeredAnnotations = newSetBinder(binder(), String.class, I18NAnnotation.class);
-        registeredValueAnnotations = newSetBinder(binder(), String.class, I18NValueAnnotation.class);
+        TypeLiteral<Class<? extends Annotation>> i18nAnnotation = new TypeLiteral<Class<? extends Annotation>>() {
+        };
+        registeredAnnotations = newSetBinder(binder(), i18nAnnotation, I18NAnnotation.class);
+        registeredValueAnnotations = newSetBinder(binder(), i18nAnnotation, I18NValueAnnotation.class);
         supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
         bundleSourceOrderDefault = newSetBinder(binder(), String.class, BundleSourceOrderDefault.class);
         bundleReaders = MapBinder.newMapBinder(binder(), String.class, BundleReader.class);
@@ -110,7 +115,7 @@ public class I18NModule extends AbstractModule {
      * If you are using just a single module to define your {{@link BundleReader} implementations,
      * they will be processed in the order you specify them here.  However, Guice does not guarantee order if multiple
      * MapBinders are combined (through the use of multiple modules) - the order must then be explicitly specified
-     * using {{@link #setDefaultBundleSourceOrder(String...)}} and/or {@link #setBundleSourceOrder(Class, String...)}
+     * using {{@link #setDefaultBundleSourceOrder(String...)}} and/or {@link #setBundleSourceOrder(String, String...)}
      */
     protected void define() {
         addSupportedLocale(Locale.UK);
@@ -119,7 +124,7 @@ public class I18NModule extends AbstractModule {
     }
 
 
-    protected void addSupportedLocale(Locale locale) {
+    protected void addSupportedLocale(@Nonnull Locale locale) {
         supportedLocales.addBinding()
                         .toInstance(locale);
     }
@@ -146,14 +151,14 @@ public class I18NModule extends AbstractModule {
         bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
     }
 
-    protected <T extends Annotation> void registerAnnotation(Class<T> i18Nclass) {
+    protected <T extends Annotation> void registerAnnotation(@Nonnull Class<T> i18Nclass) {
         registeredAnnotations.addBinding()
-                             .toInstance(i18Nclass.getName());
+                             .toInstance(i18Nclass);
     }
 
-    protected <T extends Annotation> void registerValueAnnotation(Class<T> i18Nclass) {
+    protected <T extends Annotation> void registerValueAnnotation(@Nonnull Class<T> i18Nclass) {
         registeredValueAnnotations.addBinding()
-                                  .toInstance(i18Nclass.getName());
+                                  .toInstance(i18Nclass);
     }
 
     /**
@@ -165,36 +170,30 @@ public class I18NModule extends AbstractModule {
                           .toInstance(Locale.UK);
     }
 
-    protected void addSupportedLocale(List<String> locales) {
+    protected void addSupportedLocale(@Nonnull List<String> locales) {
         for (String locale : locales) {
             addSupportedLocale(locale);
         }
     }
 
-    protected void addSupportedLocale(String locale) {
+    protected void addSupportedLocale(@Nonnull String locale) {
         addSupportedLocale(Locale.forLanguageTag(locale));
     }
 
     /**
-     * This method overrides the order of processing sources when looking for a resource bundle.  If this method is not
-     * called, sources will be processed in the order they are added using {@link #addPatternSource(Integer, Class)}.
-     * <p>
      * If you are using just a single module to define your {{@link BundleReader} implementations, there would normally
      * be no need to use this method.
      * <p>
      * However, Guice does not guarantee order if multiple MapBinders are combined (through the use of multiple
      * modules) - the order must then be explicitly specified using this method.
      * <p>
-     * This order is used for ALL key classes, unless overridden by {{@link #setBundleSourceOrder(Class, String...)}},
+     * This order is used for ALL key classes, unless overridden by {{@link #setBundleSourceOrder(String, String...)}},
      * or by UserOption in {@link DefaultPatternSource}
-     * <p>
-     * See {@link EnumResourceBundleControl#getFormats(String)} for a full description of the logic of selecting the
-     * order.
      * <p>
      * If you have only one source - you definitely won't need this method
      */
 
-    protected void setDefaultBundleSourceOrder(String... sources) {
+    protected void setDefaultBundleSourceOrder(@Nonnull String... sources) {
         for (String source : sources) {
             bundleSourceOrderDefault.addBinding()
                                     .toInstance(source);
@@ -205,8 +204,7 @@ public class I18NModule extends AbstractModule {
      * {@link #setDefaultBundleSourceOrder(String...)} applies to all key classes, and is usually only needed when
      * combining sources from different modules.
      * <p>
-     * See {@link EnumResourceBundleControl#getFormats(String)} for a full description of the logic of selecting the
-     * order.
+     *     This method also sets the order in which to poll the I18N pattern sources, but for a particular bundle (I18NKey class)
      * <p>
      * If you have only one source - you definitely won't need this method
      *
@@ -218,7 +216,7 @@ public class I18NModule extends AbstractModule {
      *         #bundleReaders} key set
      */
 
-    protected void setBundleSourceOrder(String baseName, String... sources) {
+    protected void setBundleSourceOrder(@Nonnull String baseName, @Nonnull String... sources) {
         Set<String> tagSet = new LinkedHashSet<>(Arrays.asList(sources));
         bundleSourceOrder.addBinding(baseName)
                          .toInstance(tagSet);

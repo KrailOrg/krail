@@ -1,27 +1,33 @@
 /*
- * Copyright (C) 2013 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package uk.q3c.krail.core.ui.form;
 
+import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Provider;
+import com.google.inject.util.Modules;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.data.Validator;
 import fixture.TestI18NModule;
+import org.apache.bval.guice.ValidationModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.data.TestEntity;
-import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.validation.BeanValidator;
+import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.testutil.TestUserOptionModule;
@@ -29,24 +35,42 @@ import uk.q3c.krail.testutil.TestUserOptionModule;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestUserOptionModule.class})
-public class BeanFieldI18NTest {
+@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestUserOptionModule.class, uk.q3c.krail.testutil
+        .TestI18NModule.class})
+public class BeanFieldGroupBaseTest {
 
     @Inject
-    DefaultI18NProcessor translator;
+    DefaultI18NProcessor i18NProcessor;
 
     @Inject
     CurrentLocale currentLocale;
 
-    TestBeanFieldGroupI18N fieldSet;
+    @Inject
+    Provider<BeanValidator> beanValidatorProvider;
+
+    @Inject
+    UserOption userOption;
+
+    TestBeanFieldGroup fieldSet;
     TestEntity te, te2;
+
+    private Injector injector;
 
     @Before
     public void setup() {
+        injector = Guice.createInjector(new TestI18NModule(), new TestUserOptionModule(), Modules.override(new
+                ValidationModule())
+                                                                                                 .with(new
+                                                                                                         KrailValidationModule()));
+
+        i18NProcessor = injector.getInstance(DefaultI18NProcessor.class);
+        currentLocale = injector.getInstance(CurrentLocale.class);
+        beanValidatorProvider = injector.getProvider(BeanValidator.class);
+
+
         Locale.setDefault(Locale.UK);
-        fieldSet = new TestBeanFieldGroupI18N(translator);
+        fieldSet = new TestBeanFieldGroup(i18NProcessor, beanValidatorProvider, userOption);
         te = new TestEntity();
         te.setFirstName("Mango");
         te.setLastName("Chutney");
@@ -64,7 +88,6 @@ public class BeanFieldI18NTest {
         // when
         fieldSet.setBean(te);
         // then
-        assertThat(fieldSet.getFieldGroup()).isNotNull();
         assertThat(fieldSet.getFirstName()
                            .getValue()).isEqualTo("Mango");
         assertThat(fieldSet.getLastName()
@@ -79,7 +102,6 @@ public class BeanFieldI18NTest {
         // when
         fieldSet.setBean(te2);
         // then
-        assertThat(fieldSet.getFieldGroup()).isNotNull();
         assertThat(fieldSet.getFirstName()
                            .getValue()).isEqualTo("Pickled");
         assertThat(fieldSet.getLastName()
@@ -93,7 +115,7 @@ public class BeanFieldI18NTest {
         currentLocale.setLocale(Locale.UK);
         // when
         fieldSet.setBean(te);
-        translator.translate(fieldSet);
+        i18NProcessor.translate(fieldSet);
         // then
         assertThat(fieldSet.getFirstName()
                            .getCaption()).isEqualTo("First Name");
@@ -111,7 +133,7 @@ public class BeanFieldI18NTest {
         fieldSet.setBean(te);
         // when
         currentLocale.setLocale(Locale.GERMANY);
-        translator.translate(fieldSet);
+        i18NProcessor.translate(fieldSet);
         // then
         assertThat(fieldSet.getFirstName()
                            .getCaption()).isEqualTo("Vorname");
@@ -122,7 +144,7 @@ public class BeanFieldI18NTest {
 
     }
 
-    @Test(expected = InvalidValueException.class)
+    @Test(expected = Validator.InvalidValueException.class)
     public void validationFailure() {
 
         // given
@@ -134,7 +156,6 @@ public class BeanFieldI18NTest {
                 .validate();
 
     }
-
 
 
 }

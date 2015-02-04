@@ -36,7 +36,7 @@ public class DefaultTranslate implements Translate {
     /**
      * Creates a local TreeMap copy (to sort by key)
      *
-     * @param patternSources
+     * @param patternSource
      * @param currentLocale
      */
     @Inject
@@ -131,4 +131,6 @@ public class DefaultTranslate implements Translate {
     private <E extends Enum<E> & I18NKey> E typeBridge(I18NKey k) {
         return (E) k;
     }
+
+
 }

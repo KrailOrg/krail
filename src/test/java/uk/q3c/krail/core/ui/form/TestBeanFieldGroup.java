@@ -12,22 +12,27 @@
  */
 package uk.q3c.krail.core.ui.form;
 
+import com.google.inject.Provider;
 import com.vaadin.ui.TextField;
 import uk.q3c.krail.core.data.TestEntity;
-import uk.q3c.krail.i18n.DefaultI18NProcessor;
+import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.I18N;
+import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.LabelKey;
 
-public class TestBeanFieldGroupI18N extends BeanFieldGroup_I18N<TestEntity> {
+public class TestBeanFieldGroup extends BeanFieldGroupBase<TestEntity> {
 
     @I18N(caption = LabelKey.First_Name)
     private TextField firstName;
+
     @I18N(caption = LabelKey.Last_Name, description = DescriptionKey.Last_Name)
     private TextField lastName;
 
-    protected TestBeanFieldGroupI18N(DefaultI18NProcessor translator) {
-        super(translator);
+
+    protected TestBeanFieldGroup(I18NProcessor i18NProcessor, Provider<BeanValidator> beanValidatorProvider, UserOption userOption) {
+        super(i18NProcessor, beanValidatorProvider,userOption);
     }
 
     public TextField getFirstName() {

@@ -33,30 +33,30 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Utility class to manipulate Vaadin component settings to reflect locale changes. This implementation uses field
  * annotations to specify the keys to use, and this {@link I18NProcessor} implementation then looks up the key values
  * and sets caption, description and value properties of the component.
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * When a locale change occurs in {@link CurrentLocale}, {@link ScopedUI} updates itself and its current view. Other
  * views, which may have already been constructed, are updated as they become active.
- * <p/>
+ * <p>
  * For a full description see https://sites.google.com/site/q3cjava/internationalisation-i18n
  *
  * @author David Sowerby 8 Feb 2013
  */
 public class DefaultI18NProcessor implements I18NProcessor {
     private static Logger log = LoggerFactory.getLogger(DefaultI18NProcessor.class);
-    private final Set<String> registeredAnnotations;
+    private final Set<Class<? extends Annotation>> registeredAnnotations;
     private final Translate translate;
     private final I18NReader i18nReader;
     private final I18NFlexReader i18nFlexReader;
-    private final Set<String> registeredValueAnnotations;
+    private final Set<Class<? extends Annotation>> registeredValueAnnotations;
     private final I18NValueReader i18nValueReader;
     private final I18NValueFlexReader i18nValueFlexReader;
 
     @Inject
-    protected DefaultI18NProcessor(CurrentLocale currentLocale, Translate translate, @I18NAnnotation Set<String>
-            registeredAnnotations, @I18NValueAnnotation Set<String> registeredValueAnnotations, I18NReader i18nReader,
-                                   I18NFlexReader i18nFlexReader, I18NValueReader i18nValueReader,
-                                   I18NValueFlexReader i18nValueFlexReader) {
+    protected DefaultI18NProcessor(CurrentLocale currentLocale, Translate translate, I18NReader i18nReader,
+                                   I18NFlexReader i18nFlexReader, I18NValueReader i18nValueReader, I18NValueFlexReader i18nValueFlexReader, @I18NAnnotation Set<Class<?
+            extends Annotation>> registeredAnnotations, @I18NValueAnnotation Set<Class<? extends Annotation>>
+            registeredValueAnnotations) {
         super();
         this.translate = translate;
         this.registeredAnnotations = registeredAnnotations;
@@ -69,9 +69,8 @@ public class DefaultI18NProcessor implements I18NProcessor {
 
     /**
      * Scans the {@code target} for fields with either a field or class annotation of {@link I18N}. Each marked field
-     * is
-     * then passed to
-     * <p/>
+     * is then passed to
+     * <p>
      * Translate the captions, descriptions and values of {@code target} to the current Locale. This should only be
      * called with a {@code target} which is annotated with {@link I18N}, but no errors occur if it hasn't
      *
@@ -110,8 +109,8 @@ public class DefaultI18NProcessor implements I18NProcessor {
                             log.debug("drilling down into field '{}'", field.getName());
                             translate(drillDown);
                         } else {
-                            log.debug("No drill down, field '{}' is a native Vaadin component of class '{}'",
-                                    field.getName(), field.getType());
+                            log.debug("No drill down, field '{}' is a native Vaadin component of class '{}'", field
+                                    .getName(), field.getType());
                         }
                     } else {
                         String msg = MessageFormat.format("cannot drill down, object for field '{0}' has not been " +
@@ -205,16 +204,15 @@ public class DefaultI18NProcessor implements I18NProcessor {
         boolean capdFound = false;
         boolean valueFound = false;
         for (Annotation annotation : annotations) {
-            String annotationClassName = annotation.annotationType()
-                                                   .getName();
+
             if (!capdFound) {
-                if (registeredAnnotations.contains(annotationClassName)) {
+                if (registeredAnnotations.contains(annotation.annotationType())) {
                     pair.capdAnnotation = annotation;
                     capdFound = true;
                 }
             }
             if (!valueFound) {
-                if (registeredValueAnnotations.contains(annotationClassName)) {
+                if (registeredValueAnnotations.contains(annotation.annotationType())) {
                     pair.valueAnnotation = annotation;
                     valueFound = true;
                 }
@@ -249,16 +247,16 @@ public class DefaultI18NProcessor implements I18NProcessor {
                     throw new I18NException(msg);
                 }
             } catch (Exception e) {
-                String msg = MessageFormat.format("unable to access field '{0}', i18N cannot be applied",
-                        field.getName());
+                String msg = MessageFormat.format("unable to access field '{0}', i18N cannot be applied", field
+                        .getName());
                 throw new I18NException(msg, e);
             }
         }
 
     }
 
-    private <T extends Annotation> void applyAnnotation(AbstractComponent component, Field field,
-                                                        Annotation annotation) {
+    private <T extends Annotation> void applyAnnotation(AbstractComponent component, Field field, Annotation
+            annotation) {
         checkNotNull(component);
         checkNotNull(field);
         checkNotNull(annotation);
