@@ -1,14 +1,12 @@
 /*
- * Copyright (c) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.ui;
@@ -19,11 +17,6 @@ import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.WebBrowser;
 import com.vaadin.ui.UI;
 import uk.q3c.krail.core.data.KrailDefaultConverterFactory;
-import uk.q3c.krail.core.guice.uiscope.UIScoped;
-import uk.q3c.krail.core.navigate.DefaultNavigator;
-import uk.q3c.krail.core.navigate.Navigator;
-import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
-import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.view.component.DefaultUserStatusPanel;
 import uk.q3c.krail.core.view.component.UserStatusPanel;
 import uk.q3c.krail.i18n.I18NKey;
@@ -40,8 +33,8 @@ public abstract class UIModule extends AbstractModule {
 
         bindUIProvider();
         addUIBindings(mapbinder);
-        bindNavigator();
-        bindURIHandler();
+
+
         bindConverterFactory();
         bindLoginStatusMonitor();
 
@@ -76,17 +69,6 @@ public abstract class UIModule extends AbstractModule {
      */
     protected abstract void bindUIProvider();
 
-    /**
-     * Override to bind your choice of URI handler
-     */
-    protected void bindURIHandler() {
-        bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-    }
-
-    protected void bindNavigator() {
-        bind(Navigator.class).to(DefaultNavigator.class)
-                             .in(UIScoped.class);
-    }
 
     /**
      * Override with your UI bindings

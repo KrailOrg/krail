@@ -28,6 +28,7 @@ import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
+import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LabelKey;
@@ -44,7 +45,7 @@ import java.util.Optional;
  * @author David Sowerby 16 Jan 2013
  */
 // TODO I18N
-public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, ClickListener {
+public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, ClickListener, UserStatusChangeSource {
     private static Logger log = LoggerFactory.getLogger(DefaultUserStatusPanel.class);
     private final Label usernameLabel;
     private final Button login_logout_Button;
@@ -80,21 +81,23 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         hl.addComponent(login_logout_Button);
         this.setContent(hl);
         setIds();
-        userStatusChanged();
+        checkUserStatus();
 
     }
 
-    private void setIds() {
-        setId(ID.getId(Optional.empty(), this));
-        login_logout_Button.setId(ID.getId(Optional.empty(), this, login_logout_Button));
-        usernameLabel.setId(ID.getId(Optional.empty(), this, usernameLabel));
+    protected void checkUserStatus() {
+        if (subjectProvider.get()
+                           .isAuthenticated()) {
+            userHasLoggedIn(null);
+        } else {
+            userHasLoggedOut(null);
+        }
     }
 
     @Override
-    public void userStatusChanged() {
-        log.debug("login status change, reset the user status panel");
+    public void userHasLoggedIn(UserStatusChangeSource source) {
+        log.debug("user has logged in, reset the user status panel");
         build();
-
     }
 
     private void build() {
@@ -105,6 +108,18 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         log.debug("Caption is '{}'", caption);
         login_logout_Button.setCaption(caption.toLowerCase());
         usernameLabel.setValue(subjectIdentifier.subjectName());
+    }
+
+    @Override
+    public void userHasLoggedOut(UserStatusChangeSource source) {
+        log.debug("user has logged out, reset the user status panel");
+        build();
+    }
+
+    private void setIds() {
+        setId(ID.getId(Optional.empty(), this));
+        login_logout_Button.setId(ID.getId(Optional.empty(), this, login_logout_Button));
+        usernameLabel.setId(ID.getId(Optional.empty(), this, usernameLabel));
     }
 
     @Override
@@ -129,7 +144,7 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
             subjectProvider.get()
                            .logout();
             navigator.navigateTo(StandardPageKey.Log_Out);
-            userStatus.statusChanged();
+            userStatus.statusChanged(this);
         } else {
             navigator.navigateTo(StandardPageKey.Log_In);
         }
@@ -141,5 +156,4 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         log.debug("locale change to {}", locale);
         build();
     }
-
 }

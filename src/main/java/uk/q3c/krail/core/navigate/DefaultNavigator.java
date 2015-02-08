@@ -29,11 +29,13 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.shiro.UnauthorizedExceptionHandler;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
+import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.core.view.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -42,7 +44,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * example, String, {@link NavigationState} and {@link UserSitemapNode}. Because the USerSitemap only holds pages
  * authorised for the current Subject, there is not need to check for authorisation before navigating (there is still
  * some old code in here which does, but that will be removed)
- * <p/>
+ * <p>
  * There is no need to register as a listener with {@link UserStatus}, the navigator is always called after all other
  * listeners - this is so that navigation components are set up before the navigator moves to a page (which might not
  * be
@@ -54,7 +56,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DefaultNavigator implements Navigator {
     private static Logger log = LoggerFactory.getLogger(DefaultNavigator.class);
 
-    private final List<KrailViewChangeListener> viewChangeListeners = new LinkedList<KrailViewChangeListener>();
+    private final List<KrailViewChangeListener> viewChangeListeners = new LinkedList<>();
     private final URIFragmentHandler uriHandler;
     private final Provider<Subject> subjectProvider;
     private final PageAccessController pageAccessController;
@@ -62,16 +64,18 @@ public class DefaultNavigator implements Navigator {
     private final DefaultViewFactory viewFactory;
     private final SitemapService sitemapService;
     private final UserSitemapBuilder userSitemapBuilder;
+    private final LoginNavigationRule loginNavigationRule;
+    private final LogoutNavigationRule logoutNavigationRule;
     private NavigationState currentNavigationState;
     private KrailView currentView = null;
     private NavigationState previousNavigationState;
     private UserSitemap userSitemap;
 
     @Inject
-    public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService,
-                            SubjectProvider subjectProvider, PageAccessController pageAccessController,
-                            ScopedUIProvider uiProvider, DefaultViewFactory viewFactory,
-                            UserSitemapBuilder userSitemapBuilder) {
+    public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider
+            subjectProvider, PageAccessController pageAccessController, ScopedUIProvider uiProvider,
+                            DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder,
+                            LoginNavigationRule loginNavigationRule, LogoutNavigationRule logoutNavigationRule) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -81,6 +85,8 @@ public class DefaultNavigator implements Navigator {
         this.viewFactory = viewFactory;
         this.userSitemapBuilder = userSitemapBuilder;
 
+        this.loginNavigationRule = loginNavigationRule;
+        this.logoutNavigationRule = logoutNavigationRule;
     }
 
     @Override
@@ -99,7 +105,7 @@ public class DefaultNavigator implements Navigator {
 
     /**
      * Listen to changes of the active view.
-     * <p/>
+     * <p>
      * Registered listeners are invoked in registration order before (
      * {@link ViewChangeListener#beforeViewChange(ViewChangeEvent) beforeViewChange()}) and after (
      * {@link ViewChangeListener#afterViewChange(ViewChangeEvent) afterViewChange()}) a view change occurs.
@@ -130,7 +136,7 @@ public class DefaultNavigator implements Navigator {
 
     /**
      * Takes a URI fragment, checks for any redirects defined by the {@link Sitemap}, then calls
-     * {@link #navigateTo(KrailView, String, String)} to change the view
+     * {@link #navigateTo(NavigationState)} to change the view
      *
      * @see Navigator#navigateTo(java.lang.String)
      */
@@ -155,7 +161,7 @@ public class DefaultNavigator implements Navigator {
      * Events are fired before and after the view change, to the {@link #viewChangeListeners}. Listeners have the
      * option
      * to block the view change by returning false (see {@link #fireBeforeViewChange(KrailViewChangeEvent)}
-     * <p/>
+     * <p>
      *
      * @param navigationState
      *         The navigationState to navigate to. May not be null.
@@ -226,20 +232,20 @@ public class DefaultNavigator implements Navigator {
     }
 
     /**
-     * Checks {@code fragment} to see whether the {@link Sitemap} defines this as a page which should be redirected. If
-     * it is, the full fragment is returned, but modified for the redirected page. If not, the {@code fragment} is
-     * returned unchanged.
+     * Checks {@code navigationState} to see whether the {@link Sitemap} defines this as a page which should be
+     * redirected. If it is, a {@link NavigationState} is returned, modified for the redirected page. If no
+     * redirection is required, the {@code navigationState} is returned unchanged.
      *
-     * @param fragment
+     * @param navigationState the proposed navigation state before considering redirection
      *
-     * @return
+     * @return navigationState reflecting the correct navigation state after considering a possible redirection
      */
     private NavigationState redirectIfNeeded(NavigationState navigationState) {
 
         String page = navigationState.getVirtualPage();
         String redirection = userSitemap.getRedirectPageFor(page);
         // if no redirect found, page is returned
-        if (redirection == page) {
+        if (redirection.equals(page)) {
             return navigationState;
         } else {
             navigationState.setVirtualPage(redirection);
@@ -267,7 +273,7 @@ public class DefaultNavigator implements Navigator {
      * Fires an event before an imminent view change.  At this point the event:<ol> <
      * <li><{@code fromState} represents the current navigation state/li>
      * li>{@code toState} represents the navigation state which will be moved to if the change is successful.</li></ol>
-     * <p/>
+     * <p>
      * Listeners are called in registration order. If any listener cancels the event, {@link
      * KrailViewChangeEvent#cancel()}, the rest of the
      * listeners are not called and the view change is blocked.
@@ -289,7 +295,7 @@ public class DefaultNavigator implements Navigator {
 
     /**
      * Fires an event after the current view has changed.
-     * <p/>
+     * <p>
      * Listeners are called in registration order.
      *
      * @param event
@@ -319,7 +325,7 @@ public class DefaultNavigator implements Navigator {
     /**
      * Returns the NavigationState representing the previous position of the navigator
      *
-     * @return
+     * @return the NavigationState representing the previous position of the navigator
      */
     public NavigationState getPreviousNavigationState() {
         return previousNavigationState;
@@ -354,30 +360,44 @@ public class DefaultNavigator implements Navigator {
         return userSitemap.nodeFor(currentNavigationState);
     }
 
+    @Override
+    public UserSitemapNode getPreviousNode() {
+        return userSitemap.nodeFor(previousNavigationState);
+    }
+
     /**
-     * When a user has successfully logged in, they are routed back to the page they were on before going to the login
-     * page. If they have gone straight to the login page (maybe they bookmarked it), or they were on the logout page,
-     * they will be routed to the 'private home page' (the StandardPage for {@link StandardPageKey#Private_Home})
+     * Applies the login navigation rule to change page if required
+     * @param source
      */
     @Override
-    public void userStatusChanged() {
-        log.debug("user status changed, navigate to appropriate place");
-        if (subjectProvider.get()
-                           .isAuthenticated()) {
-            log.info("user logged in successfully, navigating to appropriate view");
-            // they have logged in
-            SitemapNode previousNode = userSitemap.nodeFor(previousNavigationState);
-            if (previousNode != null && previousNode != userSitemap.standardPageNode(StandardPageKey.Log_Out)) {
-                navigateTo(previousNavigationState);
-            } else {
-                navigateTo(StandardPageKey.Private_Home);
-            }
-        } else {
-            // they have logged out
-            log.info("logging out");
-            subjectProvider.get()
-                           .logout();
-            navigateTo(StandardPageKey.Log_Out);
+    public void userHasLoggedIn(UserStatusChangeSource source) {
+        log.info("user logged in successfully, applying login navigation rule");
+        applyLoginNavigationRule(source);
+    }
+
+    protected void applyLoginNavigationRule(UserStatusChangeSource source) {
+        Optional<NavigationState> newState = loginNavigationRule.changedNavigationState(this, source);
+        if (newState.isPresent()) {
+            navigateTo(newState.get());
+        }
+
+    }
+
+    /**
+     * Applies the logout navigation rule to change page if required
+     *
+     * @param source
+     */
+    @Override
+    public void userHasLoggedOut(UserStatusChangeSource source) {
+        log.info("user logged out, applying logout navigation rule");
+        applyLogoutNavigationRule(source);
+    }
+
+    protected void applyLogoutNavigationRule(UserStatusChangeSource source) {
+        Optional<NavigationState> newState = logoutNavigationRule.changedNavigationState(this, source);
+        if (newState.isPresent()) {
+            navigateTo(newState.get());
         }
     }
 

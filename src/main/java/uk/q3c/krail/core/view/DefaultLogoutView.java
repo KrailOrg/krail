@@ -23,7 +23,8 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
     }
 
     /**
-     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * Called after the view itself has been constructed but before {@link #buildView(KrailViewChangeEvent)} is
+     * called.  Typically checks
      * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
      * configuration which affects the way the view is presented.
      *

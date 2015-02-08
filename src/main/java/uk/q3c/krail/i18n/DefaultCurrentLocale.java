@@ -16,8 +16,10 @@ import com.google.inject.Inject;
 import com.vaadin.server.WebBrowser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.ui.BrowserProvider;
+import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.core.user.opt.UserOptionContext;
 import uk.q3c.krail.core.user.status.UserStatus;
@@ -187,16 +189,18 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
 
     }
 
+    @Override
+    public UserOption getUserOption() {
+        return userOption;
+    }
+
     /**
-     * A locale change is made only if the user is now authenticated (which means they have just logged in).  If they
-     * have just logged out, they may still, no change is made, because they have public pages to view, and they would
-     * probably want to view those in the same language as they had selected while logged in
+     * User has just logged in, look for their preferred Locale from user options.
+     * @param source
      */
     @Override
-    public void userStatusChanged() {
-        if (userStatus.isAuthenticated()) {
+    public void userHasLoggedIn(UserStatusChangeSource source) {
             setLocaleFromUserOption(true);
-        }
     }
 
     /**
@@ -219,9 +223,13 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
         return false;
     }
 
+    /**
+     * User has just logged out, but they may still have public pages to view, and they would
+     * probably want to view those in the same language as they had selected while logged in
+     * @param source
+     */
     @Override
-    public UserOption getUserOption() {
-        return userOption;
-    }
+    public void userHasLoggedOut(UserStatusChangeSource source) {
 
+    }
 }

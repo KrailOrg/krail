@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -15,6 +13,7 @@ package uk.q3c.krail.core.navigate.sitemap;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.core.user.status.UserStatusListener;
 import uk.q3c.util.SourceTreeWrapper_BasicForest;
@@ -43,7 +42,15 @@ public class UserSitemapBuilder implements UserStatusListener {
 
     }
 
+    public UserSitemap getUserSitemap() {
+        return userSitemap;
+    }
+
     @Override
+    public void userHasLoggedIn(UserStatusChangeSource source) {
+        userStatusChanged();
+    }
+
     public synchronized void userStatusChanged() {
         log.debug("user status has changed, rebuild the userSitemap");
         userSitemap.clear();
@@ -59,8 +66,8 @@ public class UserSitemapBuilder implements UserStatusListener {
         }
     }
 
-    public UserSitemap getUserSitemap() {
-        return userSitemap;
+    @Override
+    public void userHasLoggedOut(UserStatusChangeSource source) {
+        userStatusChanged();
     }
-
 }

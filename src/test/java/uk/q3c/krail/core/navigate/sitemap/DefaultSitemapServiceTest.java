@@ -30,13 +30,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
 import uk.q3c.krail.core.config.ConfigKeys;
-import uk.q3c.krail.core.config.InheritingConfiguration;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.navigate.DefaultNavigator;
-import uk.q3c.krail.core.navigate.Navigator;
-import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
-import uk.q3c.krail.core.navigate.URIFragmentHandler;
+import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceTest.TestFileSitemapModule;
 import uk.q3c.krail.core.services.ServiceException;
@@ -65,8 +61,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * This test uses all standard implementations to inject into {@link DefaultSitemapService}. The other test suite,
- * {@link DefaultSitemapServiceTest2} uses a mock for the configuration service
+ * This test uses all standard implementations to inject into {@link DefaultSitemapService}.
  *
  * @author David Sowerby
  */
@@ -74,8 +69,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class,
         ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class,
-        ApplicationConfigurationModule.class, StandardShiroModule.class, StandardComponentModule.class,
-        StandardPagesModule.class, VaadinSessionScopeModule.class, TestUserOptionModule.class})
+        ApplicationConfigurationModule.class, StandardShiroModule.class, StandardComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class, TestUserOptionModule.class, NavigationModule.class})
 public class DefaultSitemapServiceTest {
 
     static VaadinService vaadinService;
@@ -84,8 +78,7 @@ public class DefaultSitemapServiceTest {
     private final int STANDARD_NODE_COUNT = 5;
     @Inject
     DefaultSitemapService service;
-    @Inject
-    InheritingConfiguration applicationConfiguration;
+
     @Inject
     MasterSitemap sitemap;
     HierarchicalINIConfiguration iniConfig;
@@ -276,8 +269,6 @@ public class DefaultSitemapServiceTest {
 
             @Override
             protected void configure() {
-                bind(Navigator.class).to(DefaultNavigator.class);
-                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
                 bind(ScopedUIProvider.class).to(BasicUIProvider.class);
             }
 

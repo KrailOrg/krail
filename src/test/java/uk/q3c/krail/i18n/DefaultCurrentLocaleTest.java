@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.ui.BrowserProvider;
+import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.user.status.DefaultUserStatus;
 import uk.q3c.krail.testutil.MockUserOption;
 
@@ -45,6 +46,9 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
     Annotation annotation;
     @Mock
     DefaultUserStatus userStatus;
+
+    @Mock
+    UserStatusChangeSource source;
 
 
     MockUserOption userOption;
@@ -70,6 +74,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         supportedLocales.add(Locale.GERMANY);
         supportedLocales.add(Locale.FRANCE);
         defaultLocale = Locale.UK;
+
 
     }
 
@@ -175,8 +180,9 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         listenerFired = false;
         currentLocale.addListener(this);
         when(userStatus.isAuthenticated()).thenReturn(false);
+        when(source.identity()).thenReturn("LogoutView");
         //when user logs out
-        currentLocale.userStatusChanged();
+        currentLocale.userHasLoggedOut(source);
 
         //then nothing should happen
         assertThat(currentLocale.getLocale()).isEqualTo(Locale.FRANCE);

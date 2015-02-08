@@ -1,14 +1,12 @@
 /*
- * Copyright (c) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.navigate;
@@ -25,8 +23,6 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 import fixture.ReferenceUserSitemap;
 import fixture.TestI18NModule;
-import fixture.testviews2.TestLoginView;
-import fixture.testviews2.ViewA1;
 import fixture.testviews2.ViewB;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
@@ -42,14 +38,11 @@ import uk.q3c.krail.core.shiro.PagePermission;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
-import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.view.*;
 import uk.q3c.krail.testutil.TestUserOptionModule;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -66,6 +59,8 @@ public class DefaultNavigatorTest {
     @Mock
     KrailViewChangeEvent event;
     @Mock
+    UserStatusChangeSource source;
+    @Mock
     private Page browserPage;
     @Mock
     private ErrorView errorView;
@@ -77,6 +72,14 @@ public class DefaultNavigatorTest {
     private KrailViewChangeListener listener2;
     @Mock
     private KrailViewChangeListener listener3;
+    @Mock
+    private LoginNavigationRule loginNavigationRule;
+    @Mock
+    private UserStatusChangeSource loginSource;
+    @Mock
+    private LogoutNavigationRule logoutNavigationRule;
+    @Mock
+    private UserStatusChangeSource logoutSource;
     private DefaultNavigator navigator;
     @Inject
     private PageAccessController pageAccessController;
@@ -92,8 +95,6 @@ public class DefaultNavigatorTest {
     private ScopedUIProvider uiProvider;
     @Inject
     private StrictURIFragmentHandler uriHandler;
-    @Inject
-    private UserOption userOption;
     @Inject
     private ReferenceUserSitemap userSitemap;
     @Mock
@@ -113,6 +114,7 @@ public class DefaultNavigatorTest {
 
         CurrentInstance.set(UI.class, scopedUI);
 
+
     }
 
     @Test
@@ -128,23 +130,12 @@ public class DefaultNavigatorTest {
     }
 
     private DefaultNavigator createNavigator() {
-        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController,
-                uiProvider, viewFactory, builder);
+        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder, loginNavigationRule, logoutNavigationRule);
         navigator.init();
         return navigator;
     }
 
-    @Test
-    public void logout() {
 
-        // given
-        navigator = createNavigator();
-        // when
-        navigator.navigateTo(StandardPageKey.Log_Out);
-        // then
-        assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.logoutViewClass);
-        verify(scopedUI).changeView(any(LogoutView.class));
-    }
 
     @Test
     public void login() {
@@ -157,38 +148,32 @@ public class DefaultNavigatorTest {
         verify(scopedUI).changeView(any(LoginView.class));
     }
 
+
     @Test
-    public void loginSuccessFul_toPreviousView() {
+    public void logout_rule_invoked() {
 
         // given
         navigator = createNavigator();
+        when(logoutNavigationRule.changedNavigationState(navigator, logoutSource)).thenReturn(Optional.empty());
         // when
-        navigator.navigateTo(userSitemap.a1URI);
-        navigator.navigateTo(StandardPageKey.Log_In);
-        assertThat(navigator.getCurrentView()).isInstanceOf(TestLoginView.class);
-        // // when
-        when(subject.isAuthenticated()).thenReturn(true);
-        navigator.userStatusChanged();
-        // // then
-        assertThat(navigator.getCurrentView()).isInstanceOf(ViewA1.class);
+        navigator.userHasLoggedOut(logoutSource);
+        // then
+        verify(logoutNavigationRule).changedNavigationState(navigator, logoutSource);
     }
 
+
     @Test
-    public void loginSuccessFul_noPreviousView() {
+    public void login_rule_invoked() {
 
         // given
-        navigator = createNavigator();
-        // when
-        navigator.navigateTo(StandardPageKey.Log_In);
-        assertThat(navigator.getCurrentView()).isInstanceOf(TestLoginView.class);
-        verify(scopedUI).changeView(any(KrailView.class));
-        // // when
-        when(subject.isAuthenticated()).thenReturn(true);
-        navigator.userStatusChanged();
-        // // then
-        verify(scopedUI, times(2)).changeView(any(KrailView.class));
-        assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.privateHomeViewClass);
 
+        //        assertThat(loginNavigationRule.changedNavigationState(navigator,loginSource)).isNotNull();
+        navigator = createNavigator();
+        when(loginNavigationRule.changedNavigationState(navigator, loginSource)).thenReturn(Optional.empty());
+        // when
+        navigator.userHasLoggedIn(loginSource);
+        // then
+        verify(loginNavigationRule).changedNavigationState(navigator, loginSource);
     }
 
     @Test
@@ -772,7 +757,6 @@ public class DefaultNavigatorTest {
 
             @Override
             protected void configure() {
-                bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
                 bind(ErrorView.class).to(DefaultErrorView.class);
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
                 bind(MasterSitemap.class).to(DefaultMasterSitemap.class);

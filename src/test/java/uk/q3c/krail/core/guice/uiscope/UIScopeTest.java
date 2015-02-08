@@ -1,14 +1,12 @@
 /*
- * Copyright (c) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.guice.uiscope;
@@ -29,8 +27,8 @@ import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
-import uk.q3c.krail.core.guice.vsscope.VaadinSessionScope;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.services.AbstractServiceI18N;
 import uk.q3c.krail.core.services.ServicesMonitorModule;
@@ -96,8 +94,7 @@ public class UIScopeTest {
 
         injector = Guice.createInjector(new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new
                 UIScopeModule(), new ServicesMonitorModule(), new UserOptionModule(), new UserModule(), new
-                StandardComponentModule(), new TestI18NModule(), new StandardShiroModule(), new ShiroVaadinModule(),
-                new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule());
+                StandardComponentModule(), new TestI18NModule(), new StandardShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new NavigationModule());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
         // navigator = injector.getInstance(Navigator.class);
@@ -183,8 +180,6 @@ public class UIScopeTest {
     }
 
     static class TestModule extends AbstractModule {
-
-        private final Scope vaadinSessionScope = new VaadinSessionScope();
 
         @Override
         protected void configure() {

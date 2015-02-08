@@ -13,6 +13,7 @@
 package uk.q3c.krail.core.view;
 
 import com.vaadin.ui.Button;
+import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.i18n.I18NKey;
 
 /**
@@ -20,7 +21,7 @@ import uk.q3c.krail.i18n.I18NKey;
  *
  * @author David Sowerby 1 Jan 2013
  */
-public interface LoginView extends KrailView {
+public interface LoginView extends KrailView, UserStatusChangeSource {
 
     void setUsername(String username);
 
@@ -35,8 +36,8 @@ public interface LoginView extends KrailView {
      */
     String getStatusMessage();
 
-    void setStatusMessage(I18NKey messageKey);
-
     void setStatusMessage(String invalidLogin);
+
+    void setStatusMessage(I18NKey messageKey);
 
 }

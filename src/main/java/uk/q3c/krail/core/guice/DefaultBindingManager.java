@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.core.guice;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -29,6 +30,7 @@ import uk.q3c.krail.core.config.ApplicationConfigurationModule;
 import uk.q3c.krail.core.guice.threadscope.ThreadScopeModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.StandardPagesModule;
@@ -129,11 +131,23 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
         coreModules.add(userOptionModule());
 
+        coreModules.add(navigationModule());
+
         addValidationModules(coreModules);
 
         addAppModules(coreModules);
         addSitemapModules(coreModules);
         return coreModules;
+    }
+
+    /**
+     * Override this if you have provided your own {@link NavigationModule}
+     *
+     * @return new instance of ApplicationConfigurationModule
+     */
+
+    protected AbstractModule navigationModule() {
+        return new NavigationModule();
     }
 
     /**

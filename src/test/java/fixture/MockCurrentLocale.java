@@ -15,6 +15,7 @@ package fixture;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.user.status.UserStatusListener;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeListener;
@@ -94,7 +95,12 @@ public class MockCurrentLocale implements CurrentLocale, UserStatusListener {
 
 
     @Override
-    public void userStatusChanged() {
+    public void userHasLoggedIn(UserStatusChangeSource source) {
+
+    }
+
+    @Override
+    public void userHasLoggedOut(UserStatusChangeSource source) {
 
     }
 }

@@ -90,7 +90,7 @@ public class DefaultUserStatusPanelTest {
         when(subject.getPrincipal()).thenReturn(null);
 
         // when
-        panel.userStatusChanged();
+        panel.checkUserStatus();
         // then
         assertThat(panel.getActionLabel()).isEqualTo("log in");
         assertThat(panel.getUserId()).isEqualTo("Guest");
@@ -108,7 +108,7 @@ public class DefaultUserStatusPanelTest {
         when(subject.isRemembered()).thenReturn(false);
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.getPrincipal()).thenReturn(null);
-        panel.userStatusChanged();
+        panel.checkUserStatus();
 
         // when
         currentLocale.setLocale(Locale.GERMANY);
@@ -125,7 +125,7 @@ public class DefaultUserStatusPanelTest {
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.getPrincipal()).thenReturn("userId");
         // when
-        panel.userStatusChanged();
+        panel.checkUserStatus();
         // then
         assertThat(panel.getActionLabel()).isEqualTo("log in");
         assertThat(panel.getUserId()).isEqualTo("userId?");
@@ -143,7 +143,7 @@ public class DefaultUserStatusPanelTest {
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.getPrincipal()).thenReturn("userId");
         // when
-        panel.userStatusChanged();
+        panel.checkUserStatus();
         // then
         assertThat(panel.getActionLabel()).isEqualTo("log out");
         assertThat(panel.getUserId()).isEqualTo("userId");
