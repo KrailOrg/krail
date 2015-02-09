@@ -42,7 +42,7 @@ public class I18NModule extends AbstractModule {
         registeredAnnotations = newSetBinder(binder(), i18nAnnotation, I18NAnnotation.class);
         registeredValueAnnotations = newSetBinder(binder(), i18nAnnotation, I18NValueAnnotation.class);
         supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
-        bundleSourceOrderDefault = newSetBinder(binder(), String.class, BundleSourceOrderDefault.class);
+        bundleSourceOrderDefault = newSetBinder(binder(), String.class, BundleReaderOrderDefault.class);
         bundleReaders = MapBinder.newMapBinder(binder(), String.class, BundleReader.class);
 
         TypeLiteral<Set<String>> setString = new TypeLiteral<Set<String>>() {
@@ -50,7 +50,7 @@ public class I18NModule extends AbstractModule {
         TypeLiteral<String> keyClass = new TypeLiteral<String>() {
         };
 
-        bundleSourceOrder = MapBinder.newMapBinder(binder(), keyClass, setString, BundleSourceOrder.class);
+        bundleSourceOrder = MapBinder.newMapBinder(binder(), keyClass, setString, BundleReaderOrder.class);
 
         registerAnnotation(I18N.class);
         registerAnnotation(I18NFlex.class);
@@ -115,7 +115,7 @@ public class I18NModule extends AbstractModule {
      * If you are using just a single module to define your {{@link BundleReader} implementations,
      * they will be processed in the order you specify them here.  However, Guice does not guarantee order if multiple
      * MapBinders are combined (through the use of multiple modules) - the order must then be explicitly specified
-     * using {{@link #setDefaultBundleSourceOrder(String...)}} and/or {@link #setBundleSourceOrder(String, String...)}
+     * using {{@link #setDefaultBundleReaderOrder(String...)}} and/or {@link #setBundleReaderOrder(String, String...)}
      */
     protected void define() {
         addSupportedLocale(Locale.UK);
@@ -187,13 +187,13 @@ public class I18NModule extends AbstractModule {
      * However, Guice does not guarantee order if multiple MapBinders are combined (through the use of multiple
      * modules) - the order must then be explicitly specified using this method.
      * <p>
-     * This order is used for ALL key classes, unless overridden by {{@link #setBundleSourceOrder(String, String...)}},
+     * This order is used for ALL key classes, unless overridden by {{@link #setBundleReaderOrder(String, String...)}},
      * or by UserOption in {@link DefaultPatternSource}
      * <p>
      * If you have only one source - you definitely won't need this method
      */
 
-    protected void setDefaultBundleSourceOrder(@Nonnull String... sources) {
+    protected void setDefaultBundleReaderOrder(@Nonnull String... sources) {
         for (String source : sources) {
             bundleSourceOrderDefault.addBinding()
                                     .toInstance(source);
@@ -201,7 +201,7 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * {@link #setDefaultBundleSourceOrder(String...)} applies to all key classes, and is usually only needed when
+     * {@link #setDefaultBundleReaderOrder(String...)} applies to all key classes, and is usually only needed when
      * combining sources from different modules.
      * <p>
      *     This method also sets the order in which to poll the I18N pattern sources, but for a particular bundle (I18NKey class)
@@ -216,7 +216,7 @@ public class I18NModule extends AbstractModule {
      *         #bundleReaders} key set
      */
 
-    protected void setBundleSourceOrder(@Nonnull String baseName, @Nonnull String... sources) {
+    protected void setBundleReaderOrder(@Nonnull String baseName, @Nonnull String... sources) {
         Set<String> tagSet = new LinkedHashSet<>(Arrays.asList(sources));
         bundleSourceOrder.addBinding(baseName)
                          .toInstance(tagSet);

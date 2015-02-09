@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2015. David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
 package uk.q3c.krail.i18n;
 
 import com.google.common.base.Preconditions;
@@ -11,6 +22,11 @@ import uk.q3c.krail.core.user.opt.UserOptionContext;
 import java.util.*;
 
 /**
+ * Loads the cache by calling each of the readers in turn to provide a pattern.  The order in which they are called is
+ * determined by a combination of {@link UserOption}, {@code bundleReaderOrderDefault} and {@code bundleReaderOrder}.
+ * (see {@link #bundleSourceOrder(I18NKey)} for a description of how the order is derived.
+ * configured in {{@link I18NModule}}
+ * <p>
  * Created by David Sowerby on 08/12/14.
  */
 public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, String> implements PatternCacheLoader,
@@ -18,31 +34,29 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     public enum UserOptionProperty {AUTO_STUB, SOURCE_ORDER_DEFAULT, SOURCE_ORDER, STUB_WITH_KEY_NAME, STUB_VALUE}
 
     private static Logger log = LoggerFactory.getLogger(DefaultPatternCacheLoader.class);
+    private Map<String, Set<String>> bundleReaderOrder;
+    private Set<String> bundleReaderOrderDefault;
     private Map<String, BundleReader> bundleReaders;
-    private Map<String, Set<String>> bundleSourceOrder;
-    private Set<String> bundleSourceOrderDefault;
     private UserOption userOption;
 
     @Inject
-    public DefaultPatternCacheLoader(Map<String, BundleReader> bundleReaders, UserOption userOption,
-                                     @BundleSourceOrder Map<String, Set<String>> bundleSourceOrder,
-                                     @BundleSourceOrderDefault Set<String> bundleSourceOrderDefault) {
+    public DefaultPatternCacheLoader(Map<String, BundleReader> bundleReaders, UserOption userOption, @BundleReaderOrder Map<String, Set<String>> bundleReaderOrder, @BundleReaderOrderDefault Set<String> bundleReaderOrderDefault) {
         this.bundleReaders = bundleReaders;
         this.userOption = userOption;
-        this.bundleSourceOrder = bundleSourceOrder;
-        this.bundleSourceOrderDefault = bundleSourceOrderDefault;
+        this.bundleReaderOrder = bundleReaderOrder;
+        this.bundleReaderOrderDefault = bundleReaderOrderDefault;
         userOption.configure(this, UserOptionProperty.class);
     }
 
     /**
      * Retrieves the value corresponding to {@code key}. The required Locale (from the {@code cacheKey})
-     * is checked for each source in turn, and if that fails to provide a result then the next candidate Locale is
-     * used, and each source tried again.  If all candidate locales, for all sources, are exhausted and still no
+     * is checked for each Reader in turn, and if that fails to provide a result then the next candidate Locale is
+     * used, and each source tried again.  If all candidate locales, for all Readers, are exhausted and still no
      * pattern is found, then the name of the key is returned.
      * <p>
-     * The that sources are accessed is determined by {@link #bundleSourceOrder}
+     * The order that readers are accessed is determined by {@link #bundleReaderOrder}
      * <p>
-     * The standard Java method for identifying candidate locales is used - see ResourceBundle.Control
+     * The native Java method for identifying candidate locales is used - see ResourceBundle.Control
      * .getCandidateLocales
      *
      * @param cacheKey
@@ -103,13 +117,13 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     }
 
     /**
-     * Returns the order in which sources are processed - the first which returns a valid value for a key is used.  The
-     * first non-null of the following is used:
+     * Returns the order in which Readers are processed.  The first non-null of the following is used:
      * <ol>
-     * <li>the order returned by{@link #getOptionSourceOrder()} (a value from UserOption</li>
-     * <li>the order returned by {@link #getOptionSourceOrderDefault()}  (a value from UserOption</li>
-     * <li>{@link #bundleSourceOrder}, which is defined by {@link I18NModule#setBundleSourceOrder()}</li>
-     * <li>{@link #bundleSourceOrderDefault}, which is defined by {@link I18NModule#setDefaultBundleSourceOrder} </li>
+     * <li>the order returned by{@link #getOptionReaderOrder(String)} (a value from {@link UserOption}</li>
+     * <li>the order returned by {@link #getOptionReaderOrderDefault()}  (a value from {@link UserOption}</li>
+     * <li>{@link #bundleReaderOrder}, which is defined by {@link I18NModule#setBundleReaderOrder(String,
+     * String...)}</li>
+     * <li>{@link #bundleReaderOrderDefault}, which is defined by {@link I18NModule#setDefaultBundleReaderOrder} </li>
      * <li>the keys from {@link #bundleReaders} - note that the order for this will be unreliable if bundleReaders has
      * been defined by multiple Guice modules</li>
      * <p>
@@ -124,22 +138,22 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     @Override
     public List<String> bundleSourceOrder(I18NKey key) {
 
-        List<String> sourceOrder = getOptionSourceOrder(key.bundleName());
+        List<String> sourceOrder = getOptionReaderOrder(key.bundleName());
         if (sourceOrder != null) {
             return sourceOrder;
         }
 
-        sourceOrder = getOptionSourceOrderDefault();
+        sourceOrder = getOptionReaderOrderDefault();
         if (sourceOrder != null) {
             return sourceOrder;
         }
 
-        Set<String> order = bundleSourceOrder.get(key.bundleName());
+        Set<String> order = bundleReaderOrder.get(key.bundleName());
         if (order != null) {
             return new ArrayList<>(order);
         }
 
-        sourceOrder = new ArrayList<>(bundleSourceOrderDefault);
+        sourceOrder = new ArrayList<>(bundleReaderOrderDefault);
         if (!sourceOrder.isEmpty()) {
             return sourceOrder;
         }
@@ -149,17 +163,17 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     }
 
     @Override
-    public List<String> getOptionSourceOrder(String baseName) {
+    public List<String> getOptionReaderOrder(String baseName) {
         return userOption.get(null, UserOptionProperty.SOURCE_ORDER, baseName);
     }
 
     @Override
-    public List<String> getOptionSourceOrderDefault() {
+    public List<String> getOptionReaderOrderDefault() {
         return userOption.get(null, UserOptionProperty.SOURCE_ORDER_DEFAULT);
     }
 
     @Override
-    public void setOptionSourceOrderDefault(String... sources) {
+    public void setOptionReaderOrderDefault(String... sources) {
         List<String> order = Arrays.asList(sources);
         userOption.set(order, UserOptionProperty.SOURCE_ORDER_DEFAULT);
     }
@@ -170,10 +184,10 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     }
 
     @Override
-    public void setOptionSourceOrder(String baseName, String... sources) {
+    public void setOptionReaderOrder(String baseName, String... sources) {
         Preconditions.checkNotNull(baseName);
         if (sources.length < 1) {
-            log.warn("Attempted to setOptionSourceOrder with no sources.  No change has been made ");
+            log.warn("Attempted to setOptionReaderOrder with no sources.  No change has been made ");
             return;
         }
 

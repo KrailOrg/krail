@@ -65,7 +65,7 @@ public class DefaultTranslate implements Translate {
     }
 
     /**
-     * Iterates through {@link #patternSources} in ascending order (the order need not be sequential), and returns the
+     * Iterates through {@link #patternSource} in ascending order (the order need not be sequential), and returns the
      * first pattern found for {@code key}.
      * <p/>
      * <p/>
