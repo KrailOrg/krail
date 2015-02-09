@@ -14,7 +14,6 @@ package uk.q3c.krail.core.shiro;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.Singleton;
 import com.vaadin.server.VaadinSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -22,11 +21,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A DI wrapper for {@link SecurityUtils#getSubject()}
+ * Use this instead of using {@link SecurityUtils#getSubject()} directly, to ensure that the Subject instance remains
+ * consistent for the duration of a Vaadin Session
  *
  * @author David Sowerby 15 Jul 2013
  */
-@Singleton
 public class SubjectProvider implements Provider<Subject> {
     private static Logger log = LoggerFactory.getLogger(SubjectProvider.class);
     private final VaadinSessionProvider sessionProvider;
@@ -46,6 +45,8 @@ public class SubjectProvider implements Provider<Subject> {
             if (subject == null) {
                 log.debug("VaadinSession is valid, but does not have a stored Subject, creating a new Subject");
                 subject = new Subject.Builder().buildSubject();
+                log.debug("storing Subject instance in VaadinSession");
+                session.setAttribute(Subject.class, subject);
             }
             return subject;
 

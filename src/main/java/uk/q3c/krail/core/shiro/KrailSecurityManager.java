@@ -13,13 +13,9 @@
 package uk.q3c.krail.core.shiro;
 
 import com.google.inject.Inject;
-import com.vaadin.server.VaadinSession;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,17 +35,17 @@ public class KrailSecurityManager extends DefaultSecurityManager {
         super(realms);
     }
 
-    @Override
-    protected void onSuccessfulLogin(AuthenticationToken token, AuthenticationInfo info, Subject subject) {
-        super.onSuccessfulLogin(token, info, subject);
-        setSubject(subject);
-    }
-
-    protected void setSubject(Subject subject) {
-        VaadinSession session = sessionProvider.get();
-        log.debug("storing Subject instance in VaadinSession");
-        session.setAttribute(Subject.class, subject);
-    }
+    //    @Override
+    //    protected void onSuccessfulLogin(AuthenticationToken token, AuthenticationInfo info, Subject subject) {
+    //        super.onSuccessfulLogin(token, info, subject);
+    //        setSubject(subject);
+    //    }
+    //
+    //    protected void setSubject(Subject subject) {
+    //        VaadinSession session = sessionProvider.get();
+    //        log.debug("storing Subject instance in VaadinSession");
+    //        session.setAttribute(Subject.class, subject);
+    //    }
 
     /**
      * Method injection is needed because the constructor has to complete
