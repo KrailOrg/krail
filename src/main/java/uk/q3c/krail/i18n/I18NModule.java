@@ -21,7 +21,6 @@ import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 
 import javax.annotation.Nonnull;
-import java.lang.annotation.Annotation;
 import java.util.*;
 
 import static com.google.inject.multibindings.Multibinder.newSetBinder;
@@ -31,16 +30,12 @@ public class I18NModule extends AbstractModule {
     private MapBinder<String, BundleReader> bundleReaders;
     private MapBinder<String, Set<String>> bundleSourceOrder;
     private Multibinder<String> bundleSourceOrderDefault;
-    private Multibinder<Class<? extends Annotation>> registeredAnnotations;
-    private Multibinder<Class<? extends Annotation>> registeredValueAnnotations;
+    private Multibinder<String> drillDownExclusions;
     private Multibinder<Locale> supportedLocales;
 
     @Override
     protected void configure() {
-        TypeLiteral<Class<? extends Annotation>> i18nAnnotation = new TypeLiteral<Class<? extends Annotation>>() {
-        };
-        registeredAnnotations = newSetBinder(binder(), i18nAnnotation, I18NAnnotation.class);
-        registeredValueAnnotations = newSetBinder(binder(), i18nAnnotation, I18NValueAnnotation.class);
+        drillDownExclusions = newSetBinder(binder(), String.class, DrillDownExclusions.class);
         supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
         bundleSourceOrderDefault = newSetBinder(binder(), String.class, BundleReaderOrderDefault.class);
         bundleReaders = MapBinder.newMapBinder(binder(), String.class, BundleReader.class);
@@ -52,10 +47,6 @@ public class I18NModule extends AbstractModule {
 
         bundleSourceOrder = MapBinder.newMapBinder(binder(), keyClass, setString, BundleReaderOrder.class);
 
-        registerAnnotation(I18N.class);
-        registerAnnotation(I18NFlex.class);
-        registerValueAnnotation(I18NValue.class);
-        registerValueAnnotation(I18NValueFlex.class);
 
         bindProcessor();
         bindCurrentLocale();
@@ -101,16 +92,14 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * Override this to define more registered annotations, or registered value annotations, by calling {@link
-     * #registerAnnotation(Class)} or {@link #registerValueAnnotation(Class)}, or make a copy of this module and use
-     * the same structure. Multiple instances of the {@link #registeredAnnotations} and {@link
-     * #registerValueAnnotation(Class)} will be merged by Guice.
-     * <p>
      * Here you should also define the locales your application supports, with calls to {@link #addSupportedLocale
      * (Locale)}.  Make sure your supportedLocales includes your {@link DefaultLocale}
      * <p>
-     * The source of your I18N patterns (held in ResourceBundles) should be defined here using calls to {@link
-     * #addBundleReader(String, Class)}.
+     * There are some components you know will never have I18N annotations inside them, and you can exclude them from
+     * I18N scanning by using {@link #excludeFromI18NDrillDown(String)}
+     * <p>
+     * The source(s) of your I18N patterns should be defined here using calls to {@link #addBundleReader(String,
+     * Class)}.
      * <p>
      * If you are using just a single module to define your {{@link BundleReader} implementations,
      * they will be processed in the order you specify them here.  However, Guice does not guarantee order if multiple
@@ -118,6 +107,7 @@ public class I18NModule extends AbstractModule {
      * using {{@link #setDefaultBundleReaderOrder(String...)}} and/or {@link #setBundleReaderOrder(String, String...)}
      */
     protected void define() {
+        excludeFromI18NDrillDown("com.vaadin");
         addSupportedLocale(Locale.UK);
         addBundleReader("class", ClassBundleReader.class);
         addBundleReader("properties", PropertiesFromClasspathBundleReader.class);
@@ -127,6 +117,20 @@ public class I18NModule extends AbstractModule {
     protected void addSupportedLocale(@Nonnull Locale locale) {
         supportedLocales.addBinding()
                         .toInstance(locale);
+    }
+
+    /**
+     * There are some components you know will never have I18N annotations inside them, (anything from Vaadin for
+     * example).  Normally the default is to drill down into a component for I18N, after it has been processed itself.
+     * You can exclude them from drill down by calling this method with enough of a package prefix to identify them
+     * (the
+     * filtering is done by getClass().getName().startsWith()
+     *
+     * @param packagePrefix
+     */
+    protected void excludeFromI18NDrillDown(String packagePrefix) {
+        drillDownExclusions.addBinding()
+                           .toInstance(packagePrefix);
     }
 
 
@@ -151,15 +155,6 @@ public class I18NModule extends AbstractModule {
         bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
     }
 
-    protected <T extends Annotation> void registerAnnotation(@Nonnull Class<T> i18Nclass) {
-        registeredAnnotations.addBinding()
-                             .toInstance(i18Nclass);
-    }
-
-    protected <T extends Annotation> void registerValueAnnotation(@Nonnull Class<T> i18Nclass) {
-        registeredValueAnnotations.addBinding()
-                                  .toInstance(i18Nclass);
-    }
 
     /**
      * This locale is used when all else fails - that is, when the neither the browser locale or user option is valid
@@ -204,7 +199,8 @@ public class I18NModule extends AbstractModule {
      * {@link #setDefaultBundleReaderOrder(String...)} applies to all key classes, and is usually only needed when
      * combining sources from different modules.
      * <p>
-     *     This method also sets the order in which to poll the I18N pattern sources, but for a particular bundle (I18NKey class)
+     * This method also sets the order in which to poll the I18N pattern sources, but for a particular bundle (I18NKey
+     * class)
      * <p>
      * If you have only one source - you definitely won't need this method
      *

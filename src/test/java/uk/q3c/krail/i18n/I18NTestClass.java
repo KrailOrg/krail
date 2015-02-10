@@ -17,58 +17,41 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 public class I18NTestClass {
-
-    @I18N(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
+    @Caption(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
     private final Button buttonWithAnnotation;
-
-    @I18N(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
+    @Caption(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
     private final Label label;
-
-    @I18N(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
+    @Caption(caption = LabelKey.Ok, description = DescriptionKey.Confirm_Ok)
     private final Table table;
-
-    @TestI18N(caption = TestLabelKey.Yes, description = TestLabelKey.Yes, value = TestLabelKey.No)
+    @Caption(caption = LabelKey.Yes, description = DescriptionKey.Please_log_in, locale = "de-DE")
     private final Label demoLabel;
-
-    @I18N(caption = LabelKey.Field)
+    @Caption(caption = LabelKey.Field)
     private final TestCompositeComponent ccs;
-
     // Class annotation
     private final TestCompositeComponent ccc;
-
     @I18N
     private final TestCompositeNonComponent cnc;
-
-    @I18N(caption = LabelKey.Field)
+    @Caption(caption = LabelKey.Field)
     private final TestCompositeComponentNested ccn;
-
-    @I18N(caption = LabelKey.Yes, locale = "de-DE")
+    @Caption(caption = LabelKey.Yes, locale = "de-DE")
     private final Button specificLocale;
-
-    @I18NFlex(captionKeyClass = TestLabelKey.class, captionKeyName = "Transfers", descriptionKeyClass = TestLabelKey
-            .class, descriptionKeyName = "Home")
-    private final Button flex;
-
-    @I18NValue(value = LabelKey.Guest)
+    @Value(value = LabelKey.Guest)
     private final Label value;
-
-    @I18NValueFlex(valueKeyClass = TestLabelKey.class, valueKeyName = "Private")
-    private final Label flexValue;
-
-    @I18NValue(value = LabelKey.Yes, locale = "de-DE")
+    @Value(value = LabelKey.Yes, locale = "de-DE")
+    @Description(description = DescriptionKey.Account_Already_In_Use)
     private final Label valueLocale;
-
-    @I18NValueFlex(valueKeyClass = TestLabelKey.class, valueKeyName = "Yes", locale = "de-DE")
-    private final Label flexValueLocale;
-
     private final Button buttonWithoutAnnotation;
     private final Integer integer;
     private double dubble;
+    @Caption(caption = LabelKey.Authentication, description = DescriptionKey.Please_log_in)
+    @Description(description = DescriptionKey.Account_Already_In_Use)
+    private Button newButton;
 
     protected I18NTestClass() {
         super();
         buttonWithAnnotation = new Button();
         buttonWithoutAnnotation = new Button();
+        newButton = new Button();
         label = new Label();
         demoLabel = new Label();
         integer = new Integer(5);
@@ -80,11 +63,8 @@ public class I18NTestClass {
         ccs = new TestCompositeComponent();
         ccc = new TestCompositeComponent();
         specificLocale = new Button();
-        flex = new Button();
         value = new Label();
-        flexValue = new Label();
         valueLocale = new Label();
-        flexValueLocale = new Label();
     }
 
     private void setupTableColumns() {
@@ -141,24 +121,23 @@ public class I18NTestClass {
         return ccc;
     }
 
-    public Button getFlex() {
-        return flex;
-    }
 
     public Label getValue() {
         return value;
     }
 
-    public Label getFlexValue() {
-        return flexValue;
-    }
 
     public Label getValueLocale() {
         return valueLocale;
     }
 
-    public Label getFlexValueLocale() {
-        return flexValueLocale;
+
+    public Button getNewButton() {
+        return newButton;
+    }
+
+    public void setNewButton(Button newButton) {
+        this.newButton = newButton;
     }
 
 }

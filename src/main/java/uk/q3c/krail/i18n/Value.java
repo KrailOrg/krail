@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.i18n;
 
+import com.vaadin.data.Property;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -19,9 +21,9 @@ import java.lang.annotation.Target;
 import java.util.Locale;
 
 /**
- * Annotation used for marking a Vaadin UI component as needing I18N translation (because it contains components which
- * need translation), even when it is not a component itself - and will therefore not have a @Caption, @Description or
- * @value annotation
+ * Annotation used for marking a Vaadin UI component as needing I18N translation. The parameters provide the keys for
+ * I18N lookup. All parameters are optional, but the value parameter is relevant only for those components which
+ * implement {@link Property}. Its value would be ignored otherwise.
  * <p>
  * See https://sites.google .com/site/q3cjava/internationalisation-i18n
  *
@@ -30,20 +32,19 @@ import java.util.Locale;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.PARAMETER})
 @I18NAnnotation
-public @interface I18N {
-    LabelKey caption() default LabelKey.nullKey;
+public @interface Value {
 
-    DescriptionKey description() default DescriptionKey.nullKey;
+    LabelKey value();
 
     /**
-     * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional
-     * parameter
+     * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional parameter
      * is specified, it will be used instead. This allows specific components to be fixed to display content in a
-     * language different to the rest of the application. The format of the string should be as the IETF BCP 47
-     * language
+     * language different to the rest of the application. The format of the string should be as the IETF BCP 47 language
      * tag string; see {@link Locale#toLanguageTag()}
      */
 
     String locale() default "";
+
+    boolean drillDown() default true;
 
 }

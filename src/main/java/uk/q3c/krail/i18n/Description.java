@@ -24,29 +24,27 @@ import java.util.Locale;
  * Annotation used for marking a Vaadin UI component as needing I18N translation. The parameters provide the keys for
  * I18N lookup. All parameters are optional, but the value parameter is relevant only for those components which
  * implement {@link Property}. Its value would be ignored otherwise.
- *
- * see https://sites.google.com/site/q3cjava/internationalisation-i18n
+ * <p>
+ * See https://sites.google .com/site/q3cjava/internationalisation-i18n
  *
  * @author David Sowerby 9 Feb 2013
- *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.PARAMETER})
-public @interface I18NValue {
-    /**
-     * Usually only used with Vaadin Labels
-     *
-     * @return
-     */
-    LabelKey value() default LabelKey.nullKey;
+@I18NAnnotation
+public @interface Description {
+
+    DescriptionKey description();
 
     /**
-     * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional
-     * parameter is specified, it will be used instead. This allows specific components to be fixed to display
-     * content in a language different to the rest of the application. The format of the string should be as the IETF
-     * BCP 47 language tag string; see {@link Locale#toLanguageTag()}
+     * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional parameter
+     * is specified, it will be used instead. This allows specific components to be fixed to display content in a
+     * language different to the rest of the application. The format of the string should be as the IETF BCP 47 language
+     * tag string; see {@link Locale#toLanguageTag()}
      */
 
     String locale() default "";
+
+    boolean drillDown() default true;
 
 }

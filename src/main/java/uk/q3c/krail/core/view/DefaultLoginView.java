@@ -32,18 +32,18 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     private final Provider<Subject> subjectProvider;
     private final Translate translate;
     private final UserStatus userStatus;
-    @I18N(caption = LabelKey.Log_In)
+    @Caption(caption = LabelKey.Log_In)
     private Panel centrePanel;
     private Label demoInfoLabel;
     private Label demoInfoLabel2;
-    @I18NValue(value = LabelKey.Authentication)
+    @Value(LabelKey.Authentication)
     private Label label;
-    @I18N(caption = LabelKey.Password)
+    @Caption(caption = LabelKey.Password)
     private PasswordField passwordBox;
     private Label statusMsgLabel;
-    @I18N(caption = LabelKey.Submit)
+    @Caption(caption = LabelKey.Submit)
     private Button submitButton;
-    @I18N(caption = LabelKey.User_Name, description = DescriptionKey.Enter_your_user_name)
+    @Caption(caption = LabelKey.User_Name, description = DescriptionKey.Enter_your_user_name)
     private TextField usernameBox;
 
     @Inject
@@ -157,13 +157,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     public TextField getUsernameBox() {

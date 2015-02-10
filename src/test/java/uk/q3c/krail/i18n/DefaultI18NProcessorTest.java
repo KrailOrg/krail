@@ -64,6 +64,14 @@ public class DefaultI18NProcessorTest {
         // when
         processor.translate(testObject);
         // then
+        assertThat(testObject.getNewButton()
+                             .getCaption()).isEqualTo("Authentication");
+        assertThat(testObject.getNewButton()
+                             .getDescription()).isEqualTo("Please log in");
+        assertThat(testObject.getNewButton()
+                             .getLocale()).isEqualTo(Locale.UK);
+
+
         assertThat(testObject.getButtonWithAnnotation()
                              .getCaption()).isEqualTo("Ok");
         assertThat(testObject.getButtonWithAnnotation()
@@ -100,7 +108,7 @@ public class DefaultI18NProcessorTest {
         assertThat(ccs.getLabel()).isNotNull();
         Label label = ccs.getLabel();
         // assertThat(label.getValue()).isEqualTo("Ok");
-        assertThat(label.getDescription()).isEqualTo("Confirm this Value is Ok");
+        assertThat(label.getDescription()).isEqualTo("Confirm this Value is Ok"); //drill down needed
 
         // class annotation
         TestCompositeComponent ccc = testObject.getCcc();
@@ -124,23 +132,15 @@ public class DefaultI18NProcessorTest {
         Button specificLocale = testObject.getSpecificLocale();
         assertThat(specificLocale.getCaption()).isEqualTo("Ja");
 
-        // flex (note that key map changes the case of these)
-        Button flex = testObject.getFlex();
-        assertThat(flex.getCaption()).isEqualTo("transfers");
-        assertThat(flex.getDescription()).isEqualTo("home");
 
         // value
         Label value = testObject.getValue();
         assertThat(value.getValue()).isEqualTo("Guest");
-        // flexValue
-        Label flexValue = testObject.getFlexValue();
-        assertThat(flexValue.getValue()).isEqualTo("Private");
+
         // valueLocale
         Label valueLocale = testObject.getValueLocale();
         assertThat(valueLocale.getValue()).isEqualTo("Ja");
-        // flexValueLocale
-        Label flexValueLocale = testObject.getFlexValueLocale();
-        assertThat(flexValueLocale.getValue()).isEqualTo("Ja");
+
     }
 
     @Test(expected = I18NException.class)
