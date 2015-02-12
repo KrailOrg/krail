@@ -48,6 +48,9 @@ public class DefaultLoginNavigationRuleTest {
     @Mock
     NavigationState homeNavigationState;
     @Mock
+    NavigationState currentNavigationState;
+
+    @Mock
     private UserSitemapNode logoutNode;
     @Mock
     private UserSitemapNode previousNode;
@@ -61,12 +64,13 @@ public class DefaultLoginNavigationRuleTest {
         rule = new DefaultLoginNavigationRule(userSitemap, uriHandler);
         when(userSitemap.standardPageNode(StandardPageKey.Log_In)).thenReturn(loginNode);
         when(userSitemap.standardPageNode(StandardPageKey.Log_Out)).thenReturn(logoutNode);
+        when(navigator.getCurrentNavigationState()).thenReturn(currentNavigationState);
     }
 
     @Test
     public void not_on_login_page() {
         //given
-        when(navigator.getCurrentNode()).thenReturn(aPageNode);
+        when(userSitemap.isLoginUri(navigator.getCurrentNavigationState())).thenReturn(false);
         //when
         Optional<NavigationState> expected = rule.changedNavigationState(navigator, source);
         //then
@@ -76,7 +80,7 @@ public class DefaultLoginNavigationRuleTest {
     @Test
     public void on_login_page_no_previous() {
         //given
-        when(navigator.getCurrentNode()).thenReturn(loginNode);
+        when(userSitemap.isLoginUri(navigator.getCurrentNavigationState())).thenReturn(true);
         when(navigator.getPreviousNode()).thenReturn(null);
         when(uriHandler.navigationState(any(String.class))).thenReturn(homeNavigationState);
         //when
@@ -89,7 +93,8 @@ public class DefaultLoginNavigationRuleTest {
     @Test
     public void login_page_has_previous() {
         //given
-        when(navigator.getCurrentNode()).thenReturn(loginNode);
+
+        when(userSitemap.isLoginUri(navigator.getCurrentNavigationState())).thenReturn(true);
         when(navigator.getPreviousNode()).thenReturn(previousNode);
         when(navigator.getPreviousNavigationState()).thenReturn(previousNavigationState);
         //when
@@ -102,7 +107,7 @@ public class DefaultLoginNavigationRuleTest {
     @Test
     public void on_login_page_previous_was_logout() {
         //given
-        when(navigator.getCurrentNode()).thenReturn(loginNode);
+        when(userSitemap.isLoginUri(navigator.getCurrentNavigationState())).thenReturn(true);
         when(navigator.getPreviousNode()).thenReturn(logoutNode);
         when(uriHandler.navigationState(any(String.class))).thenReturn(homeNavigationState);
         //when

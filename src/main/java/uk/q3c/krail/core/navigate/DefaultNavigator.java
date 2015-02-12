@@ -236,7 +236,8 @@ public class DefaultNavigator implements Navigator {
      * redirected. If it is, a {@link NavigationState} is returned, modified for the redirected page. If no
      * redirection is required, the {@code navigationState} is returned unchanged.
      *
-     * @param navigationState the proposed navigation state before considering redirection
+     * @param navigationState
+     *         the proposed navigation state before considering redirection
      *
      * @return navigationState reflecting the correct navigation state after considering a possible redirection
      */
@@ -355,9 +356,24 @@ public class DefaultNavigator implements Navigator {
         navigateTo(userSitemap.uri(node));
     }
 
+    /**
+     * Returns the node for the current navigation state.  If the node is not fond in the map, a check is also made to
+     * see whether it is the login node (which will not appear in the map once the user has logged in)
+     *
+     * @return
+     */
     @Override
     public UserSitemapNode getCurrentNode() {
-        return userSitemap.nodeFor(currentNavigationState);
+        UserSitemapNode node = userSitemap.nodeFor(currentNavigationState);
+        if (node == null) {
+            if (userSitemap.isLoginUri(currentNavigationState)) {
+                return userSitemap.standardPageNode(StandardPageKey.Log_In);
+            } else {
+                return null;
+            }
+        } else {
+            return node;
+        }
     }
 
     @Override
@@ -367,6 +383,7 @@ public class DefaultNavigator implements Navigator {
 
     /**
      * Applies the login navigation rule to change page if required
+     *
      * @param source
      */
     @Override

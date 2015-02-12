@@ -23,7 +23,6 @@ import uk.q3c.krail.i18n.LabelKey;
 import java.text.Collator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -31,7 +30,7 @@ import java.util.Set;
  * part
  * of the URI, so the node for the page at /private/account/open would contain just 'open'). To obtain the full URI,
  * use
- * {@link MasterSitemap#uri(MasterSitemapNode)}.
+ * {@link MasterSitemap#uri(SitemapNode)}.
  * <p/>
  * {@link #viewClass} is the class of {@link KrailView} to be used in displaying the page, and the {@link
  * #getLabelKey()}
@@ -39,20 +38,19 @@ import java.util.Set;
  * <p/>
  * The {@link #id} is required because the URI segment alone may not be unique, and the view class and labelKey are
  * optional. For the node to be used in a graph, it needs a unique identifier. The id is provided by
- * {@link MasterSitemap#addChild(MasterSitemapNode, MasterSitemapNode)} and
- * {@link MasterSitemap#addNode(MasterSitemapNode)}. This field has an additional purpose in providing a record of
+ * {@link MasterSitemap#addChild(SitemapNode, SitemapNode)}  and
+ * {@link MasterSitemap#addNode(SitemapNode)}. This field has an additional purpose in providing a record of
  * insertion order, so that nodes can be sorted by insertion order if required.
  * <p/>
  * To enable locale sensitive sorting of nodes - for example within a UserNavigationTree - a collation key from
- * {@link Collator} is added by the {@link #setLabelKey(I18NKey, Locale, Collator)} method. This means the collation
- * key
+ * {@link Collator} is added by the {@link #setLabelKey(I18NKey)} method. This means the collation key
  * is generally created only once, but is available for sorting as often as needed. The collation key will only need to
  * be updated if locale or labelKey changes. This approach also takes advantage of the improved performance of the
  * collation key sorting (http://docs.oracle.com/javase/tutorial/i18n/text/perform.html)
  * <p/>
  * The type of user access control applied to the page is determined by {@link #pageAccessControl}. Note that these are
  * mutually exclusive, so a page cannot require both roles and permissions. This control is applied by the
- * {@link Navigator} during page changes, thereby disallowing access to an authorised page.
+ * {@link Navigator} during page changes, thereby disallowing access to an unauthorised page.
  *
  * @author David Sowerby 6 May 2013
  */
@@ -99,7 +97,6 @@ public class MasterSitemapNode implements SitemapNode {
      * Sets {@link LabelKey}, may be null
      *
      * @param labelKey
-     * @param locale
      */
     public void setLabelKey(I18NKey labelKey) {
         this.labelKey = labelKey;
@@ -204,5 +201,24 @@ public class MasterSitemapNode implements SitemapNode {
     public void setPositionIndex(int positionIndex) {
         this.positionIndex = positionIndex;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MasterSitemapNode)) {
+            return false;
+        }
+
+        MasterSitemapNode that = (MasterSitemapNode) o;
+
+        if (id != that.id) {
+            return false;
+        }
+
+        return true;
+    }
+
 
 }

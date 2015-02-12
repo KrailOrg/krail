@@ -49,11 +49,9 @@ public class DefaultLoginNavigationRule implements LoginNavigationRule {
     @Override
     public Optional<NavigationState> changedNavigationState(Navigator navigator, UserStatusChangeSource source) {
 
-        UserSitemapNode currentNode = navigator.getCurrentNode();
-        UserSitemapNode loginNode = userSitemap.standardPageNode(StandardPageKey.Log_In);
 
         //if we are not on the login page we do not need to move
-        if (!currentNode.equals(loginNode)) {
+        if (!userSitemap.isLoginUri(navigator.getCurrentNavigationState())) {
             return Optional.empty();
         }
 

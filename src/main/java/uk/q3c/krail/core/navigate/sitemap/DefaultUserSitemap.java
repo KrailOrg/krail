@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -16,12 +14,13 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
-import uk.q3c.krail.core.user.status.UserStatusListener;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeListener;
 import uk.q3c.krail.i18n.Translate;
 
+import javax.annotation.Nonnull;
 import java.text.Collator;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +32,9 @@ import java.util.Locale;
  * VaadinSessionScoped}.
  * It also maintains locale-aware labels and sort order, so that the navigation components are presented to the user in
  * the language and sort order of their choice.
+ *
+ * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
+ * login). Use the isxxxUri methods to test a uri for a match to a standard page
  *
  * @author David Sowerby
  * @date 17 May 2014
@@ -46,6 +48,8 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
 
     private final List<UserSitemapChangeListener> changeListeners;
 
+    private String loginUri;
+
     @Inject
     public DefaultUserSitemap(Translate translate, URIFragmentHandler uriHandler, CurrentLocale currentLocale) {
         super(uriHandler);
@@ -54,10 +58,18 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
         currentLocale.addListener(this);
     }
 
+    public String getLoginUri() {
+        return loginUri;
+    }
+
+    public void setLoginUri(String loginUri) {
+        this.loginUri = loginUri;
+    }
+
     /**
      * Iterates through contained nodes and resets the label and collation key properties to reflect a change in
      * {@link CurrentLocale}. There is no need to reload all the nodes, no change of page authorisation is dealt with
-     * here - that is handled by {@link UserStatusListener#userStatusChanged()}
+     * here}
      */
     @Override
     public synchronized void localeChanged(Locale locale) {
@@ -160,6 +172,71 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
     @Override
     public void removeListener(UserSitemapChangeListener listener) {
         changeListeners.remove(listener);
+    }
+
+    /**
+     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
+     * login). Use the isxxxUri methods to test a uri for a match to a standard page
+     *
+     * @param navigationState
+     *         the navigation state to test
+     *
+     * @return true if the navigation state represents the login uri
+     */
+    @Override
+    public boolean isLoginUri(@Nonnull NavigationState navigationState) {
+        return isStandardUri(StandardPageKey.Log_In, navigationState);
+    }
+
+    private boolean isStandardUri(StandardPageKey key, NavigationState navigationState) {
+        UserSitemapNode node = standardPageNode(key);
+        if (node == null) {
+            return false;
+        } else {
+            return uri(node).equals(navigationState.getVirtualPage());
+        }
+    }
+
+    /**
+     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
+     * login). Use the isxxxUri methods to test a uri for a match to a standard page
+     *
+     * @param navigationState
+     *         the navigation state to test
+     *
+     * @return true if the navigation state represents the logout uri
+     */
+    @Override
+    public boolean isLogoutUri(@Nonnull NavigationState navigationState) {
+        return isStandardUri(StandardPageKey.Log_Out, navigationState);
+    }
+
+    /**
+     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
+     * login). Use the isxxxUri methods to test a uri for a match to a standard page
+     *
+     * @param navigationState
+     *         the navigation state to test
+     *
+     * @return true if the navigation state represents the private home uri
+     */
+    @Override
+    public boolean isPrivateHomeUri(@Nonnull NavigationState navigationState) {
+        return isStandardUri(StandardPageKey.Private_Home, navigationState);
+    }
+
+    /**
+     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
+     * login). Use the isxxxUri methods to test a uri for a match to a standard page
+     *
+     * @param navigationState
+     *         the navigation state to test
+     *
+     * @return true if the navigation state represents the public home uri
+     */
+    @Override
+    public boolean isPublicHomeUri(@Nonnull NavigationState navigationState) {
+        return isStandardUri(StandardPageKey.Public_Home, navigationState);
     }
 
 }

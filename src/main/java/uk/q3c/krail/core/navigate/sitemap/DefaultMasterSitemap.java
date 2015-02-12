@@ -41,7 +41,6 @@ import java.util.List;
  * the {@link MasterSitemap}
  *
  * @author David Sowerby 19 May 2013
- * @see SitemapURIConverter
  */
 @Singleton
 public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> implements MasterSitemap {
@@ -57,7 +56,7 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
     }
 
     @Override
-    public MasterSitemapNode append(String uri) {
+    public synchronized MasterSitemapNode append(String uri) {
         return append(uriHandler.navigationState(uri));
     }
 
@@ -67,12 +66,12 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
      * nodes are created to fill them (the same idea as forcing directory creation on a file path). An empty (not null)
      * URI is allowed. This represents the site base URI without any further qualification.
      *
-     * @param uri
+     * @param navigationState
      *
      * @return
      */
     @Override
-    public MasterSitemapNode append(NavigationState navigationState) {
+    public synchronized MasterSitemapNode append(NavigationState navigationState) {
 
         // if there is already a node for this navigation state, there is nothing to do, just return it
         if (hasUri(navigationState)) {
@@ -122,24 +121,24 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
     }
 
     @Override
-    protected MasterSitemapNode createNode(String segment) {
+    protected synchronized MasterSitemapNode createNode(String segment) {
         MasterSitemapNode newNode = new MasterSitemapNode();
         newNode.setUriSegment(segment);
         return newNode;
     }
 
     @Override
-    public String getReport() {
+    public synchronized String getReport() {
         return report;
     }
 
     @Override
-    public void setReport(String report) {
+    public synchronized void setReport(String report) {
         this.report = report;
     }
 
     @Override
-    protected void setId(MasterSitemapNode node) {
+    protected synchronized void setId(MasterSitemapNode node) {
         node.setId(nextNodeId());
     }
 

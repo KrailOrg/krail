@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -257,7 +255,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     /**
      * Delegates to {@link BasicForest#getChildren(Object)}
      *
-     * @param newParentNode
+     * @param parentNode
      *
      * @return
      */
@@ -368,14 +366,13 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
 
     /**
      * returns a list of {@link SitemapNode} matching the virtual page of the {@code navigationState} provided. Uses
-     * the
-     * {@link URIFragmentHandler} to get URI path segments and {@link Sitemap} to obtain the node chain.
-     * {@code allowPartialPath} determines how a partial match is handled (see
+     * the {@link URIFragmentHandler} to get URI path segments and {@link Sitemap} to obtain the node chain.
+     *
+     * @param navigationState the navigation state to assess
+     * @param allowPartialPath determines how a partial match is handled (see
      * {@link Sitemap#nodeChainForSegments(List, boolean)} javadoc
      *
-     * @param uri
-     *
-     * @return
+     * @return a list of {@link SitemapNode} matching the virtual page of the {@code navigationState} provided.
      */
     @Override
     public synchronized List<T> nodeChainFor(NavigationState navigationState, boolean allowPartialPath) {
@@ -463,7 +460,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     /**
      * Returns the parent of {@code node}. Will be null if {@code node} has no parent (that is, it is a root node)
      *
-     * @param node
+     * @param childNode
      *
      * @return
      */
@@ -476,7 +473,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * If the virtual page represented by {@code navigationState} has been redirected, return the page it has been
      * redirected to, otherwise, just return the virtual page unchanged. Allows for multiple levels of redirect.
      *
-     * @param browserPage
+     * @param navigationState the navigationState to assess
      *
      * @return
      */
