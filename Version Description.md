@@ -1,1 +1,1 @@
-This version provides an upgrade to Vaadin 7.3.9,removes the Gradle project files from Git and provides some minor fixes and refactoring
+This version integrates JSR303 validation with Krail's I18N framework.  I18N has been simplified by the use of annotated annotations.  Navigation responses to login / logout have been made more flexible with navigation rules.
