@@ -6,8 +6,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Bundle control to allow loading of properties files from the classpath only, and only the requested locale (that
- * is, it does not look at other candidate locales - that is managed through {@link DefaultPatternSource} instead
+ * Bundle control to allow loading from classes only, and only the requested locale (that is, it does not look at other candidate locales - that is managed through {@link DefaultPatternSource} instead
  * <p>
  * Created by David Sowerby on 08/12/14.
  */
