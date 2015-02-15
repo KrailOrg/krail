@@ -5,6 +5,8 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.testutil.TestUserOptionModule;
 
@@ -16,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestUserOptionModule.class})
 public class ClassBundleReaderTest {
-
+    private static Logger log = LoggerFactory.getLogger(ClassBundleReaderTest.class);
     @Inject
     UserOption userOption;
 
@@ -66,8 +68,9 @@ public class ClassBundleReaderTest {
      */
     @Test
     public void alternativePath() throws ClassNotFoundException {
+        log.info("alternativePath");
         //given
-        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey2.Key1, Locale.forLanguageTag(""));
+        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey3.Key1, Locale.forLanguageTag(""));
         reader = new ClassBundleReader(userOption, new ClassBundleControl());
         reader.getUserOption()
               .set(false, ClassBundleReader.UserOptionProperty.USE_KEY_PATH, "class");

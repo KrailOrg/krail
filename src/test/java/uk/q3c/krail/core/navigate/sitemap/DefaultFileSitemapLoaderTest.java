@@ -384,7 +384,7 @@ public class DefaultFileSitemapLoaderTest {
     @Test
     public void invalidLabelKeysClass_does_not_exist() throws IOException {
         // given
-        substitute("labelKeys=uk.q3c.krail.i18n.TestLabelKey", "labelKeys=uk.q3c.krail.i18n.TestLabelKey3");
+        substitute("labelKeys=uk.q3c.krail.i18n.TestLabelKey", "labelKeys=uk.q3c.krail.i18n.TestLabelKey99");
         prepFile();
         // when
         loader.load();

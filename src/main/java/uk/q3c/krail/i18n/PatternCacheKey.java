@@ -77,4 +77,14 @@ public class PatternCacheKey {
         result = 31 * result + (requestedLocale != null ? requestedLocale.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "PatternCacheKey{" +
+                "key=" + key +
+                ", requestedLocale=" + requestedLocale +
+                ", actualLocale=" + actualLocale +
+                ", source='" + source + '\'' +
+                '}';
+    }
 }

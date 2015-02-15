@@ -1,6 +1,8 @@
 package uk.q3c.krail.i18n;
 
 import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.UserOption;
 
 import java.util.ResourceBundle;
@@ -28,6 +30,7 @@ import java.util.ResourceBundle;
  */
 public class ClassBundleReader extends BundleReaderBase implements BundleReader {
 
+    private static Logger log = LoggerFactory.getLogger(ClassBundleReader.class);
     @Inject
     protected ClassBundleReader(UserOption userOption, ClassBundleControl control) {
         super(userOption, control);

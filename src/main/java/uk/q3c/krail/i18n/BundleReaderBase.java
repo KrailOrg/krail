@@ -1,6 +1,8 @@
 package uk.q3c.krail.i18n;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.UserOption;
 import uk.q3c.krail.core.user.opt.UserOptionContext;
 
@@ -12,79 +14,16 @@ import java.util.ResourceBundle;
  */
 public abstract class BundleReaderBase implements UserOptionContext, BundleReader {
 
-    public enum UserOptionProperty {PATH, USE_KEY_PATH}
-
+    private static Logger log = LoggerFactory.getLogger(BundleReaderBase.class);
     private final ResourceBundle.Control control;
-
-
     private UserOption userOption;
+
 
     protected BundleReaderBase(UserOption userOption, ResourceBundle.Control control) {
         this.userOption = userOption;
         this.control = control;
         userOption.configure(this, UserOptionProperty.class);
     }
-
-    //    /**
-    //     * Taken from Java native ResourceBundle
-    //     *
-    //     * @param baseName
-    //     * @param locale
-    //     *
-    //     * @return
-    //     */
-    //    protected String toBundleName(String source, I18NKey sampleKey, Locale locale) {
-    //        String baseName = expandFromKey(source, sampleKey);
-    //        if (locale == Locale.ROOT) {
-    //            return baseName;
-    //        } else {
-    //            String language = locale.getLanguage();
-    //            String script = locale.getScript();
-    //            String country = locale.getCountry();
-    //            String variant = locale.getVariant();
-    //            if (language == "" && country == "" && variant == "") {
-    //                return baseName;
-    //            } else {
-    //                StringBuilder sb = new StringBuilder(baseName);
-    //                sb.append('_');
-    //                if (script != "") {
-    //                    if (variant != "") {
-    //                        sb.append(language)
-    //                          .append('_')
-    //                          .append(script)
-    //                          .append('_')
-    //                          .append(country)
-    //                          .append('_')
-    //                          .append(variant);
-    //                    } else if (country != "") {
-    //                        sb.append(language)
-    //                          .append('_')
-    //                          .append(script)
-    //                          .append('_')
-    //                          .append(country);
-    //                    } else {
-    //                        sb.append(language)
-    //                          .append('_')
-    //                          .append(script);
-    //                    }
-    //                } else if (variant != "") {
-    //                    sb.append(language)
-    //                      .append('_')
-    //                      .append(country)
-    //                      .append('_')
-    //                      .append(variant);
-    //                } else if (country != "") {
-    //                    sb.append(language)
-    //                      .append('_')
-    //                      .append(country);
-    //                } else {
-    //                    sb.append(language);
-    //                }
-    //
-    //                return sb.toString();
-    //            }
-    //        }
-    //    }
 
     @Override
     public UserOption getUserOption() {
@@ -96,7 +35,6 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
      *
      * @param cacheKey
      * @param source
-     *
      * @return
      */
     @Override
@@ -108,7 +46,7 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
      * Returns the value for the {@code cacheKey} if there is one, or Optional.empty() if there is no entry for the
      * key.   The location of the bundle (class or properties file) is extracted from the {@link I18NKey#bundleName()}
      * and expanded using {@link #expandFromKey(String, I18NKey)}.  (Auto-stub logic provided by {@link
-     * #autoStub(I18NKey, String, boolean, boolean, String)}
+     * #autoStub(PatternCacheKey, String, boolean, boolean, String)}
      *
      * @param cacheKey
      *         the key to identify the pattern required
@@ -128,15 +66,15 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
     @Override
     public Optional<String> getValue(PatternCacheKey cacheKey, String source, boolean autoStub, boolean
             stubWithKeyName, String stubValue) {
+        log.debug("getValue for cacheKey {}, source '{}', using control: " + control.getClass().getSimpleName(), cacheKey, source);
         I18NKey key = (I18NKey) cacheKey.getKey();
         String expandedBaseName = expandFromKey(source, key);
         try {
-            ResourceBundle bundle = ResourceBundle.getBundle(expandedBaseName, cacheKey.getActualLocale(), this
-                    .getClass()
-                                                                                                               .getClassLoader(), getControl());
+            ResourceBundle bundle = ResourceBundle.getBundle(expandedBaseName, cacheKey.getActualLocale(), getControl());
             String value = getValue(bundle, cacheKey.getKey());
             return autoStub(cacheKey, value, autoStub, stubWithKeyName, stubValue);
         } catch (Exception e) {
+            log.warn("returning empty value, as getValue() returned exception {} with message '{}'", e, e.getMessage());
             return Optional.empty();
         }
     }
@@ -146,7 +84,7 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
      * {@link #writeStubValue(PatternCacheKey, String)} for sub-classes to write the stub back to persistence if they
      * can (class and property file implementations cannot write back to their source, so will just ignore this call)
      *
-     * @param key
+     * @param cacheKey
      * @param value
      * @param autoStub
      * @param stubWithKeyName
@@ -180,11 +118,8 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
      * if they can (class and property file implementations cannot write back to their source, so will just ignore
      * this call)
      *
-     * @param key
-     * @param value
-     * @param autoStub
-     * @param stubWithKeyName
-     * @param stubValue
+     * @param cacheKey
+     * @param stub
      *
      * @return
      */
@@ -225,4 +160,6 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
     public ResourceBundle.Control getControl() {
         return control;
     }
+
+    public enum UserOptionProperty {PATH, USE_KEY_PATH}
 }
