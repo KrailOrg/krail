@@ -21,7 +21,7 @@ import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.util.testutil.TestUtils;
+import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
 
@@ -71,8 +71,8 @@ public class InheritingConfigurationTest {
     }
 
     private HierarchicalINIConfiguration config(String filename) throws ConfigurationException {
-        File root = TestUtils.projectRootV7();
-        File dir = new File(root, "src/test/java/uk/q3c/krail/core/config");
+        File root = TestResource.testJavaRootDir("krail");
+        File dir = new File(root, "uk/q3c/krail/core/config");
         File file = new File(dir, filename);
         System.out.println(file.getAbsolutePath());
         HierarchicalINIConfiguration config = new HierarchicalINIConfiguration(file);
