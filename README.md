@@ -31,7 +31,7 @@ repositories {
 ```
 
 ```
-'uk.q3c.krail:krail:0.7.9
+'uk.q3c.krail:krail:0.8.0
 ```
 ##Maven
 
@@ -47,7 +47,7 @@ repositories {
 <dependency>
 	<groupId>uk.q3c.krail</groupId>
 	<artifactId>krail</artifactId>
-	<version>0.7.9</version>
+	<version>0.8.0</version>
 </dependency>
 ```
 ##Direct
