@@ -39,7 +39,7 @@ import uk.q3c.krail.core.services.ServicesMonitorModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.StandardShiroModule;
 import uk.q3c.krail.core.user.UserModule;
-import uk.q3c.krail.core.user.opt.UserOptionModule;
+import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.StandardComponentModule;
@@ -129,7 +129,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
         coreModules.add(userModule());
 
-        coreModules.add(userOptionModule());
+        coreModules.add(optionModule());
 
         coreModules.add(navigationModule());
 
@@ -166,12 +166,12 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
 
     /**
-     * Override this if you have provided your own {@link UserOptionModule}
+     * Override this if you have provided your own {@link OptionModule}
      *
      * @return
      */
-    protected Module userOptionModule() {
-        return new UserOptionModule();
+    protected Module optionModule() {
+        return new OptionModule();
     }
 
     /**

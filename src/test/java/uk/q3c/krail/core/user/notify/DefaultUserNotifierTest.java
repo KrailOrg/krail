@@ -27,14 +27,14 @@ import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.MessageKey;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.Map;
 
 import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestUserOptionModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class})
 @SuppressWarnings("rawtypes")
 public class DefaultUserNotifierTest {
 

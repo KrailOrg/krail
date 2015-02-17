@@ -25,8 +25,8 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapChangeListener;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionContext;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.core.view.KrailViewChangeListener;
 import uk.q3c.util.ID;
@@ -45,32 +45,31 @@ import java.util.Optional;
  * @author David Sowerby 17 May 2013
  * @modified David Sowerby
  */
-public class DefaultUserNavigationTree extends Tree implements UserOptionContext, UserNavigationTree,
+public class DefaultUserNavigationTree extends Tree implements OptionContext, UserNavigationTree,
         KrailViewChangeListener, UserSitemapChangeListener {
 
 
-    public enum UserOptionProperty {SORT_ASCENDING, SORT_TYPE, MAX_DEPTH}
+    public enum optionProperty {SORT_ASCENDING, SORT_TYPE, MAX_DEPTH}
 
-    ;
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
     private final UserSitemap userSitemap;
     private final Navigator navigator;
-    private final UserOption userOption;
+    private final Option option;
     private final UserNavigationTreeBuilder builder;
     private final UserSitemapSorters sorters;
     private boolean rebuildRequired = true;
     private boolean suppressValueChangeEvents;
 
     @Inject
-    protected DefaultUserNavigationTree(UserSitemap userSitemap, Navigator navigator, UserOption userOption,
+    protected DefaultUserNavigationTree(UserSitemap userSitemap, Navigator navigator, Option option,
                                         UserNavigationTreeBuilder builder, UserSitemapSorters sorters) {
         super();
         this.userSitemap = userSitemap;
         this.navigator = navigator;
-        this.userOption = userOption;
+        this.option = option;
         this.builder = builder;
         this.sorters = sorters;
-        userOption.configure(this, UserOptionProperty.class);
+        option.configure(this, optionProperty.class);
         builder.setUserNavigationTree(this);
         setImmediate(true);
         setItemCaptionMode(ItemCaptionMode.EXPLICIT);
@@ -84,7 +83,7 @@ public class DefaultUserNavigationTree extends Tree implements UserOptionContext
     }
 
     public boolean getOptionSortAscending() {
-        return userOption.get(true, UserOptionProperty.SORT_ASCENDING);
+        return option.get(true, optionProperty.SORT_ASCENDING);
     }
 
     @Override
@@ -95,7 +94,7 @@ public class DefaultUserNavigationTree extends Tree implements UserOptionContext
     @Override
     public void setOptionSortAscending(boolean ascending, boolean rebuild) {
         sorters.setOptionSortAscending(ascending);
-        userOption.set(ascending, UserOptionProperty.SORT_ASCENDING);
+        option.set(ascending, optionProperty.SORT_ASCENDING);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -132,7 +131,7 @@ public class DefaultUserNavigationTree extends Tree implements UserOptionContext
     }
 
     public SortType getOptionSortType() {
-        return userOption.get(SortType.ALPHA, UserOptionProperty.SORT_TYPE);
+        return option.get(SortType.ALPHA, optionProperty.SORT_TYPE);
     }
 
     @Override
@@ -143,7 +142,7 @@ public class DefaultUserNavigationTree extends Tree implements UserOptionContext
     @Override
     public void setOptionSortType(SortType sortType, boolean rebuild) {
         sorters.setOptionSortType(sortType);
-        userOption.set(sortType, UserOptionProperty.SORT_TYPE);
+        option.set(sortType, optionProperty.SORT_TYPE);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -168,7 +167,7 @@ public class DefaultUserNavigationTree extends Tree implements UserOptionContext
 
     @Override
     public int getOptionMaxDepth() {
-        return userOption.get(10, UserOptionProperty.MAX_DEPTH);
+        return option.get(10, optionProperty.MAX_DEPTH);
     }
 
     /**
@@ -185,7 +184,7 @@ public class DefaultUserNavigationTree extends Tree implements UserOptionContext
     @Override
     public void setOptionMaxDepth(int maxDepth, boolean rebuild) {
         if (maxDepth > 0) {
-            userOption.set(maxDepth, UserOptionProperty.MAX_DEPTH);
+            option.set(maxDepth, optionProperty.MAX_DEPTH);
             build();
         } else {
             log.warn("Attempt to set max depth value to {}, but has been ignored.  It must be greater than 0. ");
@@ -273,7 +272,7 @@ public class DefaultUserNavigationTree extends Tree implements UserOptionContext
     }
 
     @Override
-    public UserOption getUserOption() {
-        return userOption;
+    public Option getOption() {
+        return option;
     }
 }

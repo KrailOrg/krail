@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -27,7 +25,7 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapBuilderTest.TestVaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.VaadinSessionProvider;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.Locale;
 
@@ -35,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestUserOptionModule.class})
+@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class})
 public class UserSitemapBuilderTest extends TestWithSitemap {
 
     @Mock

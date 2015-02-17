@@ -34,7 +34,7 @@ import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.TestLabelKey;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +43,8 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, TestI18NModule.class,
-        VaadinSessionScopeModule.class, TestUserOptionModule.class})
+@GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, TestI18NModule.class, VaadinSessionScopeModule
+        .class, TestOptionModule.class})
 public class DefaultAnnotationSitemapLoaderTest {
 
     @Inject

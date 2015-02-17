@@ -1,14 +1,12 @@
 /*
- * Copyright (c) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.view.component;
@@ -31,11 +29,11 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
+import uk.q3c.krail.core.user.opt.DefaultOptionStore;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionStore;
 import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.testutil.MockUserOption;
+import uk.q3c.krail.testutil.MockOption;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,7 +53,7 @@ public class DefaultUserNavigationMenuBuilderTest {
     DefaultUserSitemapSorters sorters;
 
     @Inject
-    MockUserOption userOption;
+    MockOption option;
 
     @Mock
     Navigator navigator;
@@ -65,7 +63,7 @@ public class DefaultUserNavigationMenuBuilderTest {
     @Before
     public void setUp() throws Exception {
         builder = new DefaultUserNavigationTreeBuilder(userSitemap);
-        userNavigationTree = new DefaultUserNavigationTree(userSitemap, navigator, userOption, builder, sorters);
+        userNavigationTree = new DefaultUserNavigationTree(userSitemap, navigator, option, builder, sorters);
     }
 
     @Test
@@ -84,8 +82,8 @@ public class DefaultUserNavigationMenuBuilderTest {
             @Override
             protected void configure() {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(UserOption.class).to(MockUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+                bind(Option.class).to(MockOption.class);
+                bind(OptionStore.class).to(DefaultOptionStore.class);
             }
 
             @Provides

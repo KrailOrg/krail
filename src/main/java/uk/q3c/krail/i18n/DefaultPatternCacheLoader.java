@@ -16,36 +16,37 @@ import com.google.common.cache.CacheLoader;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionContext;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionContext;
 
 import java.util.*;
 
 /**
  * Loads the cache by calling each of the readers in turn to provide a pattern.  The order in which they are called is
- * determined by a combination of {@link UserOption}, {@code bundleReaderOrderDefault} and {@code bundleReaderOrder}.
+ * determined by a combination of {@link Option}, {@code bundleReaderOrderDefault} and {@code bundleReaderOrder}.
  * (see {@link #bundleSourceOrder(I18NKey)} for a description of how the order is derived.
  * configured in {{@link I18NModule}}
  * <p>
  * Created by David Sowerby on 08/12/14.
  */
 public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, String> implements PatternCacheLoader,
-        UserOptionContext {
-    public enum UserOptionProperty {AUTO_STUB, SOURCE_ORDER_DEFAULT, SOURCE_ORDER, STUB_WITH_KEY_NAME, STUB_VALUE}
+        OptionContext {
+    public enum OptionProperty {AUTO_STUB, SOURCE_ORDER_DEFAULT, SOURCE_ORDER, STUB_WITH_KEY_NAME, STUB_VALUE}
 
     private static Logger log = LoggerFactory.getLogger(DefaultPatternCacheLoader.class);
     private Map<String, Set<String>> bundleReaderOrder;
     private Set<String> bundleReaderOrderDefault;
     private Map<String, BundleReader> bundleReaders;
-    private UserOption userOption;
+    private Option option;
 
     @Inject
-    public DefaultPatternCacheLoader(Map<String, BundleReader> bundleReaders, UserOption userOption, @BundleReaderOrder Map<String, Set<String>> bundleReaderOrder, @BundleReaderOrderDefault Set<String> bundleReaderOrderDefault) {
+    public DefaultPatternCacheLoader(Map<String, BundleReader> bundleReaders, Option option, @BundleReaderOrder
+    Map<String, Set<String>> bundleReaderOrder, @BundleReaderOrderDefault Set<String> bundleReaderOrderDefault) {
         this.bundleReaders = bundleReaders;
-        this.userOption = userOption;
+        this.option = option;
         this.bundleReaderOrder = bundleReaderOrder;
         this.bundleReaderOrderDefault = bundleReaderOrderDefault;
-        userOption.configure(this, UserOptionProperty.class);
+        option.configure(this, OptionProperty.class);
     }
 
     /**
@@ -91,9 +92,9 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
                 cacheKey.setSource(source);
 
                 //get auto-stub options for the source
-                Boolean autoStub = userOption.get(false, UserOptionProperty.AUTO_STUB, source);
-                Boolean stubWithKeyName = userOption.get(true, UserOptionProperty.STUB_WITH_KEY_NAME, source);
-                String stubValue = userOption.get("undefined", UserOptionProperty.STUB_VALUE, source);
+                Boolean autoStub = option.get(false, OptionProperty.AUTO_STUB, source);
+                Boolean stubWithKeyName = option.get(true, OptionProperty.STUB_WITH_KEY_NAME, source);
+                String stubValue = option.get("undefined", OptionProperty.STUB_VALUE, source);
 
                 //get the reader
                 BundleReader reader = bundleReaders.get(source);
@@ -119,8 +120,8 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     /**
      * Returns the order in which Readers are processed.  The first non-null of the following is used:
      * <ol>
-     * <li>the order returned by{@link #getOptionReaderOrder(String)} (a value from {@link UserOption}</li>
-     * <li>the order returned by {@link #getOptionReaderOrderDefault()}  (a value from {@link UserOption}</li>
+     * <li>the order returned by{@link #getOptionReaderOrder(String)} (a value from {@link Option}</li>
+     * <li>the order returned by {@link #getOptionReaderOrderDefault()}  (a value from {@link Option}</li>
      * <li>{@link #bundleReaderOrder}, which is defined by {@link I18NModule#setBundleReaderOrder(String,
      * String...)}</li>
      * <li>{@link #bundleReaderOrderDefault}, which is defined by {@link I18NModule#setDefaultBundleReaderOrder} </li>
@@ -164,23 +165,23 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
 
     @Override
     public List<String> getOptionReaderOrder(String baseName) {
-        return userOption.get(null, UserOptionProperty.SOURCE_ORDER, baseName);
+        return option.get(null, OptionProperty.SOURCE_ORDER, baseName);
     }
 
     @Override
     public List<String> getOptionReaderOrderDefault() {
-        return userOption.get(null, UserOptionProperty.SOURCE_ORDER_DEFAULT);
+        return option.get(null, OptionProperty.SOURCE_ORDER_DEFAULT);
     }
 
     @Override
     public void setOptionReaderOrderDefault(String... sources) {
         List<String> order = Arrays.asList(sources);
-        userOption.set(order, UserOptionProperty.SOURCE_ORDER_DEFAULT);
+        option.set(order, OptionProperty.SOURCE_ORDER_DEFAULT);
     }
 
     @Override
-    public UserOption getUserOption() {
-        return userOption;
+    public Option getOption() {
+        return option;
     }
 
     @Override
@@ -192,22 +193,22 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
         }
 
         List<String> list = Arrays.asList(sources);
-        userOption.set(list, UserOptionProperty.SOURCE_ORDER, baseName);
+        option.set(list, OptionProperty.SOURCE_ORDER, baseName);
     }
 
     @Override
     public void setOptionAutoStub(boolean autoStub, String source) {
-        userOption.set(autoStub, UserOptionProperty.AUTO_STUB, source);
+        option.set(autoStub, OptionProperty.AUTO_STUB, source);
     }
 
     @Override
     public void setOptionStubWithKeyName(boolean useKeyName, String source) {
-        userOption.set(useKeyName, UserOptionProperty.STUB_WITH_KEY_NAME, source);
+        option.set(useKeyName, OptionProperty.STUB_WITH_KEY_NAME, source);
     }
 
     @Override
     public void setOptionStubValue(String stubValue, String source) {
-        userOption.set(stubValue, UserOptionProperty.STUB_VALUE, source);
+        option.set(stubValue, OptionProperty.STUB_VALUE, source);
     }
 
 

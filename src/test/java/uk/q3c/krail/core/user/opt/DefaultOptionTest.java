@@ -19,9 +19,10 @@ import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 
 import static org.mockito.Mockito.when;
-public class DefaultUserOptionTest {
 
-    DefaultUserOption dfo;
+public class DefaultOptionTest {
+
+    DefaultOption dfo;
 
     @Mock
     SubjectProvider subjectProvider;
@@ -30,7 +31,7 @@ public class DefaultUserOptionTest {
     Subject subject;
 
     @Mock
-    UserOptionLayerDefinition layerDefinition;
+    OptionLayerDefinition layerDefinition;
 
     @Mock
     SubjectIdentifier subjectIdentifier;
@@ -38,7 +39,7 @@ public class DefaultUserOptionTest {
     @Before
     public void setup() {
         when(subjectProvider.get()).thenReturn(subject);
-        dfo = new DefaultUserOption(new DefaultUserOptionStore(), layerDefinition, subjectProvider, subjectIdentifier);
+        dfo = new DefaultOption(new DefaultOptionStore(), layerDefinition, subjectProvider, subjectIdentifier);
     }
 
     //    @Test

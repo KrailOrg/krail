@@ -19,6 +19,7 @@ import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.user.opt.Option;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -183,7 +184,7 @@ public class I18NModule extends AbstractModule {
      * modules) - the order must then be explicitly specified using this method.
      * <p>
      * This order is used for ALL key classes, unless overridden by {{@link #setBundleReaderOrder(String, String...)}},
-     * or by UserOption in {@link DefaultPatternSource}
+     * or by {@link Option} in {@link DefaultPatternSource}
      * <p>
      * If you have only one source - you definitely won't need this method
      */

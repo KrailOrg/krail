@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2015. David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
 package uk.q3c.krail.core.user.opt;
 
 import com.google.common.base.Joiner;
@@ -12,20 +23,20 @@ import java.util.Optional;
 /**
  * Created by David Sowerby on 03/12/14.
  */
-public class DefaultUserOption implements UserOption {
+public class DefaultOption implements Option {
 
     private final String systemLayer = "99:system";
-    private final UserOptionLayerDefinition layerDefinition;
+    private final OptionLayerDefinition layerDefinition;
     private final SubjectProvider subjectProvider;
-    private Class<? extends UserOptionContext> consumerClass;
+    private Class<? extends OptionContext> consumerClass;
     //This might be useful for pre-loading a set of options, but is not implemented yet
     private Class<? extends Enum> keys;
-    private UserOptionStore optionStore;
+    private OptionStore optionStore;
     private SubjectIdentifier subjectIdentifier;
 
     @Inject
-    protected DefaultUserOption(UserOptionStore optionStore, UserOptionLayerDefinition layerDefinition,
-                                SubjectProvider subjectProvider, SubjectIdentifier subjectIdentifier) {
+    protected DefaultOption(OptionStore optionStore, OptionLayerDefinition layerDefinition, SubjectProvider
+            subjectProvider, SubjectIdentifier subjectIdentifier) {
         this.optionStore = optionStore;
         this.layerDefinition = layerDefinition;
         this.subjectProvider = subjectProvider;
@@ -33,13 +44,13 @@ public class DefaultUserOption implements UserOption {
     }
 
     @Override
-    public void configure(UserOptionContext consumer, Class<? extends Enum> keys) {
+    public void configure(OptionContext consumer, Class<? extends Enum> keys) {
         this.consumerClass = consumer.getClass();
         this.keys = keys;
     }
 
     @Override
-    public void configure(Class<? extends UserOptionContext> consumerClass, Class<? extends Enum> keys) {
+    public void configure(Class<? extends OptionContext> consumerClass, Class<? extends Enum> keys) {
         this.consumerClass = consumerClass;
         this.keys = keys;
     }
@@ -48,7 +59,7 @@ public class DefaultUserOption implements UserOption {
      * Gets option value for the {@code key} and {@code qualifiers}, combined with the {@link #consumerClass} provided
      * by
      * the
-     * {@link #configure(UserOptionContext, Class)} method
+     * {@link #configure(OptionContext, Class)} method
      *
      * @param defaultValue
      *         the default value to be returned if no value is found in the store.  Also determines the type of the

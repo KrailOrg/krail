@@ -18,34 +18,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapChangeListener;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionContext;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.util.ID;
 
 import java.util.Optional;
 
-public class DefaultUserNavigationMenu extends MenuBar implements UserOptionContext, UserNavigationMenu,
+public class DefaultUserNavigationMenu extends MenuBar implements OptionContext, UserNavigationMenu,
         UserSitemapChangeListener {
 
-    public enum UserOptionProperty {
+    public enum OptionProperty {
         MAX_DEPTH
     }
 
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationMenu.class);
     private final UserSitemap userSitemap;
-    private final UserOption userOption;
+    private final Option option;
     private final UserNavigationMenuBuilder builder;
     private boolean sorted = true;
 
     // private final Translate translate;
 
     @Inject
-    protected DefaultUserNavigationMenu(UserSitemap sitemap, UserOption userOption, UserNavigationMenuBuilder builder) {
+    protected DefaultUserNavigationMenu(UserSitemap sitemap, Option option, UserNavigationMenuBuilder builder) {
         super();
         this.userSitemap = sitemap;
-        this.userOption = userOption;
+        this.option = option;
         this.builder = builder;
-        userOption.configure(this, UserOptionProperty.class);
+        option.configure(this, OptionProperty.class);
         setImmediate(true);
         builder.setUserNavigationMenu(this);
         userSitemap.addListener(this);
@@ -59,11 +59,11 @@ public class DefaultUserNavigationMenu extends MenuBar implements UserOptionCont
 
     @Override
     public int getOptionMaxDepth() {
-        return userOption.get(10, UserOptionProperty.MAX_DEPTH);
+        return option.get(10, OptionProperty.MAX_DEPTH);
     }
     @Override
     public void setOptionMaxDepth(int depth) {
-        userOption.set(depth, UserOptionProperty.MAX_DEPTH);
+        option.set(depth, OptionProperty.MAX_DEPTH);
         build();
     }
 
@@ -103,7 +103,7 @@ public class DefaultUserNavigationMenu extends MenuBar implements UserOptionCont
     }
 
     @Override
-    public UserOption getUserOption() {
-        return userOption;
+    public Option getOption() {
+        return option;
     }
 }

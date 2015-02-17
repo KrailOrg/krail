@@ -21,8 +21,8 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapChangeListener;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionContext;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18N;
 
@@ -31,28 +31,28 @@ import java.util.Comparator;
 import java.util.List;
 
 @I18N
-public class DefaultSubPagePanel extends NavigationButtonPanel implements UserOptionContext, SubPagePanel,
+public class DefaultSubPagePanel extends NavigationButtonPanel implements OptionContext, SubPagePanel,
         UserSitemapChangeListener {
-    public enum UserOptionProperty {SORT_ASCENDING, SORT_TYPE}
+    public enum OptionProperty {SORT_ASCENDING, SORT_TYPE}
     private static Logger log = LoggerFactory.getLogger(DefaultSubPagePanel.class);
     private final UserSitemap userSitemap;
-    private final UserOption userOption;
+    private final Option option;
     private final UserSitemapSorters sorters;
 
     @Inject
-    protected DefaultSubPagePanel(Navigator navigator, UserSitemap userSitemap, UserOption userOption,
+    protected DefaultSubPagePanel(Navigator navigator, UserSitemap userSitemap, Option option,
                                   UserSitemapSorters sorters, CurrentLocale currentLocale) {
         super(navigator, userSitemap, currentLocale);
         this.userSitemap = userSitemap;
-        this.userOption = userOption;
+        this.option = option;
         this.sorters = sorters;
-        userOption.configure(this, UserOptionProperty.class);
+        option.configure(this, OptionProperty.class);
         sorters.setOptionSortAscending(getOptionSortAscending());
         sorters.setOptionSortType(getOptionSortType());
     }
 
     public boolean getOptionSortAscending() {
-        return userOption.get(true, UserOptionProperty.SORT_ASCENDING);
+        return option.get(true, OptionProperty.SORT_ASCENDING);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements UserOp
     @Override
     public void setSortAscending(boolean ascending, boolean rebuild) {
         sorters.setOptionSortAscending(ascending);
-        userOption.set(ascending, UserOptionProperty.SORT_ASCENDING);
+        option.set(ascending, OptionProperty.SORT_ASCENDING);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -91,7 +91,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements UserOp
     }
 
     public SortType getOptionSortType() {
-        SortType sortType = userOption.get(SortType.ALPHA, UserOptionProperty.SORT_TYPE);
+        SortType sortType = option.get(SortType.ALPHA, OptionProperty.SORT_TYPE);
         return sortType;
     }
 
@@ -103,7 +103,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements UserOp
     @Override
     public void setOptionSortType(SortType sortType, boolean rebuild) {
         sorters.setOptionSortType(sortType);
-        userOption.set(sortType, UserOptionProperty.SORT_TYPE);
+        option.set(sortType, OptionProperty.SORT_TYPE);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -124,7 +124,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements UserOp
     }
 
     @Override
-    public UserOption getUserOption() {
-        return userOption;
+    public Option getOption() {
+        return option;
     }
 }

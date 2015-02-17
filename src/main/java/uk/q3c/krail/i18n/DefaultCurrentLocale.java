@@ -20,8 +20,8 @@ import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.UserStatusChangeSource;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionContext;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.core.user.status.UserStatusListener;
 import uk.q3c.util.MessageFormat;
@@ -35,12 +35,13 @@ import java.util.Set;
  * When a CurrentLocale is instantiated, or its {@link #readFromEnvironment()} method is called,it sets the current
  * locale according to the following priorities:
  * <ol>
- * <li>If a user is authenticated, the UserOption for preferred locale is used, if valid</li>
+ * <li>If a user is authenticated, the {@link Option} for preferred locale is used, if valid</li>
  * <li>If a user is not logged in, or the user option was invalid, the browser locale is used</li>
  * <li>If the browser locale is not accessible, or is not a supported locale (as defined in {@link I18NModule} or its
  * sub-class), the {@link #defaultLocale} is used.</li>
  * </ol>
- * When a user logs in after initialisation, the UserOption value for preferred locale is used, and the locale changed
+ * When a user logs in after initialisation, the {@link Option} value for preferred locale is used, and the locale
+ * changed
  * if required.
  * When a user logs out, no change to locale is made, as the user may still have public pages they can view.
  * <p>
@@ -57,28 +58,28 @@ import java.util.Set;
  * @date 5 May 2014
  */
 
-public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, UserOptionContext {
-    public enum UserOptionProperty {PREFERRED_LOCALE}
+public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, OptionContext {
+    public enum OptionProperty {PREFERRED_LOCALE}
 
     private static Logger log = LoggerFactory.getLogger(DefaultCurrentLocale.class);
     private final List<LocaleChangeListener> listeners = new ArrayList<>();
     private BrowserProvider browserProvider;
     private Locale defaultLocale;
     private Locale locale;
+    private Option option;
     private Set<Locale> supportedLocales;
-    private UserOption userOption;
     private UserStatus userStatus;
 
     @Inject
     protected DefaultCurrentLocale(BrowserProvider browserProvider, @SupportedLocales Set<Locale> supportedLocales,
-                                   @DefaultLocale Locale defaultLocale, UserStatus userStatus, UserOption userOption) {
+                                   @DefaultLocale Locale defaultLocale, UserStatus userStatus, Option option) {
         super();
         this.browserProvider = browserProvider;
         this.supportedLocales = supportedLocales;
         this.defaultLocale = defaultLocale;
         this.userStatus = userStatus;
-        this.userOption = userOption;
-        userOption.configure(this, UserOptionProperty.class);
+        this.option = option;
+        option.configure(this, OptionProperty.class);
         userStatus.addListener(this);
         locale = defaultLocale;
         if (!supportedLocales.contains(defaultLocale)) {
@@ -95,7 +96,7 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
     @Override
     public void readFromEnvironment() {
 
-        if (setLocaleFromUserOption(true)) {
+        if (setLocaleFromOption(true)) {
             return;
         }
         if (setLocaleFromBrowser(true)) {
@@ -190,8 +191,8 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
     }
 
     @Override
-    public UserOption getUserOption() {
-        return userOption;
+    public Option getOption() {
+        return option;
     }
 
     /**
@@ -200,11 +201,12 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
      */
     @Override
     public void userHasLoggedIn(UserStatusChangeSource source) {
-            setLocaleFromUserOption(true);
+        setLocaleFromOption(true);
     }
 
     /**
-     * Sets the locale from the value held in UserOption, if available.  UserOption will not be available if the user
+     * Sets the locale from the value held in {@link Option}, if available.  {@link Option} will not be available if
+     * the user
      * is not authenticated.  It is possible that a user option is not supported (unlikely, but support for a language
      * could be withdrawn after the user has chosen it), in which case the locale is set to the first supported locale
      *
@@ -212,9 +214,9 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
      *
      * @return true if the user options was valid, otherwise false
      */
-    private boolean setLocaleFromUserOption(boolean fireListeners) {
+    private boolean setLocaleFromOption(boolean fireListeners) {
         if (userStatus.isAuthenticated()) {
-            Locale selectedLocale = userOption.get(defaultLocale, UserOptionProperty.PREFERRED_LOCALE);
+            Locale selectedLocale = option.get(defaultLocale, OptionProperty.PREFERRED_LOCALE);
             if (supportedLocales.contains(selectedLocale)) {
                 setLocale(selectedLocale, fireListeners);
                 return true;

@@ -25,15 +25,15 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
+import uk.q3c.krail.core.user.opt.DefaultOptionStore;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionStore;
 import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.TestLabelKey;
-import uk.q3c.krail.testutil.MockUserOption;
+import uk.q3c.krail.testutil.MockOption;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -354,8 +354,8 @@ public class DefaultMasterSitemapTest {
             protected void configure() {
                 bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(UserOption.class).to(MockUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+                bind(Option.class).to(MockOption.class);
+                bind(OptionStore.class).to(DefaultOptionStore.class);
             }
 
         };

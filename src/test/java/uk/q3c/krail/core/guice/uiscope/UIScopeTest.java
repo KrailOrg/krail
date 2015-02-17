@@ -38,7 +38,7 @@ import uk.q3c.krail.core.ui.BasicUIProvider;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserModule;
-import uk.q3c.krail.core.user.opt.UserOptionModule;
+import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.StandardComponentModule;
 import uk.q3c.krail.i18n.LabelKey;
@@ -92,8 +92,7 @@ public class UIScopeTest {
 
         // when
 
-        injector = Guice.createInjector(new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new
-                UIScopeModule(), new ServicesMonitorModule(), new UserOptionModule(), new UserModule(), new
+        injector = Guice.createInjector(new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(), new ServicesMonitorModule(), new OptionModule(), new UserModule(), new
                 StandardComponentModule(), new TestI18NModule(), new StandardShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new NavigationModule());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);

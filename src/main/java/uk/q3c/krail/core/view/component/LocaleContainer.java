@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -19,8 +17,8 @@ import com.vaadin.server.FileResource;
 import com.vaadin.server.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionContext;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.i18n.SupportedLocales;
 import uk.q3c.util.ResourceUtils;
 
@@ -28,8 +26,8 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Set;
 
-public class LocaleContainer extends IndexedContainer implements UserOptionContext {
-    public enum UserOptionProperty {
+public class LocaleContainer extends IndexedContainer implements OptionContext {
+    public enum optionProperty {
         LOCALE_FLAG_SIZE
     }
 
@@ -38,14 +36,14 @@ public class LocaleContainer extends IndexedContainer implements UserOptionConte
     }
     private static Logger log = LoggerFactory.getLogger(LocaleContainer.class);
     private final Set<Locale> supportedLocales;
-    private final UserOption userOption;
+    private final Option option;
 
     @Inject
-    protected LocaleContainer(@SupportedLocales Set<Locale> supportedLocales, UserOption userOption) {
+    protected LocaleContainer(@SupportedLocales Set<Locale> supportedLocales, Option option) {
         super();
         this.supportedLocales = supportedLocales;
-        this.userOption = userOption;
-        userOption.configure(this, UserOptionProperty.class);
+        this.option = option;
+        option.configure(this, optionProperty.class);
         fillContainer();
     }
 
@@ -99,11 +97,11 @@ public class LocaleContainer extends IndexedContainer implements UserOptionConte
     }
 
     public Integer getOptionFlagSize() {
-        return userOption.get(32, UserOptionProperty.LOCALE_FLAG_SIZE);
+        return option.get(32, optionProperty.LOCALE_FLAG_SIZE);
     }
 
     @Override
-    public UserOption getUserOption() {
-        return userOption;
+    public Option getOption() {
+        return option;
     }
 }

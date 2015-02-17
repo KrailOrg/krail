@@ -18,8 +18,8 @@ import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Field;
 import uk.q3c.krail.core.data.Entity;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionContext;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.i18n.I18NProcessor;
 
@@ -48,21 +48,20 @@ import java.util.Map;
  * Created by David Sowerby on 03/02/15.
  */
 public abstract class BeanFieldGroupBase<T extends Entity> extends FieldGroup implements BeanFieldGroup<T>,
-        UserOptionContext {
-    public enum UserOptionProperty {USE_FIELD_NAME_IN_VALIDATION_MESSAGE}
+        OptionContext {
+    public enum OptionProperty {USE_FIELD_NAME_IN_VALIDATION_MESSAGE}
 
     private final I18NProcessor i18NProcessor;
     private final Map<Field<?>, BeanValidator<T>> defaultValidators;
     private Class<T> beanType;
     private Provider<BeanValidator> beanValidatorProvider;
-    private UserOption userOption;
+    private Option option;
 
     @Inject
-    public BeanFieldGroupBase(I18NProcessor i18NProcessor, Provider<BeanValidator> beanValidatorProvider, UserOption
-            userOption) {
+    public BeanFieldGroupBase(I18NProcessor i18NProcessor, Provider<BeanValidator> beanValidatorProvider, Option option) {
         this.i18NProcessor = i18NProcessor;
         this.beanValidatorProvider = beanValidatorProvider;
-        this.userOption = userOption;
+        this.option = option;
         this.defaultValidators = new HashMap<>();
     }
 
@@ -106,8 +105,8 @@ public abstract class BeanFieldGroupBase<T extends Entity> extends FieldGroup im
     }
 
     @Override
-    public UserOption getUserOption() {
-        return userOption;
+    public Option getOption() {
+        return option;
     }
 
     /**
@@ -255,12 +254,12 @@ public abstract class BeanFieldGroupBase<T extends Entity> extends FieldGroup im
     }
 
     public boolean getOptionUseFieldNameInValidationMessage() {
-        return userOption.get(false, UserOptionProperty.USE_FIELD_NAME_IN_VALIDATION_MESSAGE, this.getClass()
+        return option.get(false, OptionProperty.USE_FIELD_NAME_IN_VALIDATION_MESSAGE, this.getClass()
                                                                                                   .getSimpleName());
     }
 
     public void setOptionUseFieldNameInValidationMessage(boolean useFieldNames) {
-        userOption.set(useFieldNames, UserOptionProperty.USE_FIELD_NAME_IN_VALIDATION_MESSAGE, this.getClass()
+        option.set(useFieldNames, OptionProperty.USE_FIELD_NAME_IN_VALIDATION_MESSAGE, this.getClass()
                                                                                                    .getSimpleName());
     }
 

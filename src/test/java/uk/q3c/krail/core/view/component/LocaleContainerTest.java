@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -24,8 +22,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.util.testutil.LogMonitor;
 import uk.q3c.util.testutil.TestResource;
 
@@ -39,7 +37,7 @@ import static org.mockito.Mockito.when;
 
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestUserOptionModule.class})
+@GuiceContext({TestOptionModule.class})
 public class LocaleContainerTest {
 
 
@@ -47,7 +45,7 @@ public class LocaleContainerTest {
     VaadinService vaadinService;
 
     @Inject
-    UserOption userOption;
+    Option option;
 
     @Inject
     LogMonitor logMonitor;
@@ -59,7 +57,7 @@ public class LocaleContainerTest {
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
-        userOption.configure(LocaleContainer.class, LocaleContainer.UserOptionProperty.class);
+        option.configure(LocaleContainer.class, LocaleContainer.optionProperty.class);
         File baseDir = TestResource.testJavaRootDir("krail");
 
         VaadinService.setCurrent(vaadinService);
@@ -77,9 +75,9 @@ public class LocaleContainerTest {
     public void fillContainer_success() {
         // given
         supportedLocales.add(Locale.GERMANY);
-        userOption.set(48, LocaleContainer.UserOptionProperty.LOCALE_FLAG_SIZE);
+        option.set(48, LocaleContainer.optionProperty.LOCALE_FLAG_SIZE);
         // when
-        container = new LocaleContainer(supportedLocales, userOption);
+        container = new LocaleContainer(supportedLocales, option);
         // then
         assertThat(container.getItemIds()).hasSameSizeAs(supportedLocales);
 
@@ -108,9 +106,9 @@ public class LocaleContainerTest {
     @Test
     public void fillContainer_no_flag_directory() {
         supportedLocales.add(Locale.GERMANY);
-        userOption.set(47, LocaleContainer.UserOptionProperty.LOCALE_FLAG_SIZE);
+        option.set(47, LocaleContainer.optionProperty.LOCALE_FLAG_SIZE);
         // when
-        container = new LocaleContainer(supportedLocales, userOption);
+        container = new LocaleContainer(supportedLocales, option);
 
         // then
         Item item = itemFor(Locale.GERMANY);
@@ -127,9 +125,9 @@ public class LocaleContainerTest {
     @Test
     public void fillContainer_missingFlag() {
         supportedLocales.add(Locale.CANADA);
-        userOption.set(48, LocaleContainer.UserOptionProperty.LOCALE_FLAG_SIZE);
+        option.set(48, LocaleContainer.optionProperty.LOCALE_FLAG_SIZE);
         // when
-        container = new LocaleContainer(supportedLocales, userOption);
+        container = new LocaleContainer(supportedLocales, option);
 
         // then
         Item item = itemFor(Locale.CANADA);

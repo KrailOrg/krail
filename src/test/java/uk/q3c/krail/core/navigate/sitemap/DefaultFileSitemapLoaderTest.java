@@ -37,7 +37,7 @@ import uk.q3c.krail.core.view.testviews.subview.TransferView;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.TestLabelKey;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
@@ -62,8 +62,8 @@ import static org.assertj.core.api.Assertions.fail;
  * @author dsowerby
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestFileSitemapModule.class, TestI18NModule.class, VaadinSessionScopeModule.class,
-        TestUserOptionModule.class})
+@GuiceContext({TestFileSitemapModule.class, TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule
+        .class})
 public class DefaultFileSitemapLoaderTest {
 
     private static int COMMENT_LINES = 21;

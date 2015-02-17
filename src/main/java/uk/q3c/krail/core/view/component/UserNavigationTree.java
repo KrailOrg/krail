@@ -16,7 +16,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Tree;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
-import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.Option;
 
 public interface UserNavigationTree extends Component, UserSitemapSorters {
 
@@ -33,7 +33,7 @@ public interface UserNavigationTree extends Component, UserSitemapSorters {
 
     /**
      * Set the maximum level or depth of the tree you want to be visible. A value of <=0 is ignored. This value is
-     * stored in {@link UserOption}, and the tree is rebuilt.
+     * stored in {@link Option}, and the tree is rebuilt.
      *
      * @param level
      */
@@ -46,7 +46,7 @@ public interface UserNavigationTree extends Component, UserSitemapSorters {
 
     /**
      * Set the maximum level or depth of the tree you want to be visible. A value of <=0 is ignored. This value is
-     * stored in {@link UserOption}. If {@code rebuild} is true, the tree is rebuilt.
+     * stored in {@link Option}. If {@code rebuild} is true, the tree is rebuilt.
      *
      * @param level
      */

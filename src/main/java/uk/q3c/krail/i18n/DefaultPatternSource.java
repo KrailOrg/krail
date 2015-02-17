@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2015. David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
 package uk.q3c.krail.i18n;
 
 import com.google.common.cache.CacheBuilder;
@@ -6,8 +17,8 @@ import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionContext;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,25 +31,25 @@ import java.util.Locale;
  * Created by David Sowerby on 07/12/14.
  */
 
-public class DefaultPatternSource implements UserOptionContext, PatternSource<LoadingCache<PatternCacheKey, String>> {
-    public enum UserOptionProperty {MAX_CACHE_SIZE}
+public class DefaultPatternSource implements OptionContext, PatternSource<LoadingCache<PatternCacheKey, String>> {
+    public enum OptionProperty {MAX_CACHE_SIZE}
 
 
     private static Logger log = LoggerFactory.getLogger(DefaultPatternSource.class);
     private LoadingCache<PatternCacheKey, String> cache;
-    private UserOption userOption;
+    private Option option;
 
 
     @Inject
 
-    protected DefaultPatternSource(UserOption userOption,
+    protected DefaultPatternSource(Option option,
                                    PatternCacheLoader cacheLoader) {
-        this.userOption = userOption;
-        userOption.configure(this, UserOptionProperty.class);
+        this.option = option;
+        option.configure(this, OptionProperty.class);
         //CacheLoader has no interface so the cast is necessary to allow alternative PatternCacheLLoader implementations
         //although all implementations would need to extend CacheLoader
         cache = CacheBuilder.newBuilder()
-                            .maximumSize(userOption.get(1000, UserOptionProperty.MAX_CACHE_SIZE))
+                            .maximumSize(option.get(1000, OptionProperty.MAX_CACHE_SIZE))
                             .build((CacheLoader) cacheLoader);
 
     }
@@ -74,8 +85,8 @@ public class DefaultPatternSource implements UserOptionContext, PatternSource<Lo
     }
 
     @Override
-    public UserOption getUserOption() {
-        return userOption;
+    public Option getOption() {
+        return option;
     }
 
     @Override

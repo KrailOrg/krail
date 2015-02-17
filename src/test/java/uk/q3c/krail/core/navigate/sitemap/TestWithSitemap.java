@@ -26,8 +26,8 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.SubjectProvider;
-import uk.q3c.krail.core.user.opt.DefaultUserOption;
-import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.DefaultOption;
+import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.i18n.*;
@@ -86,7 +86,6 @@ public abstract class TestWithSitemap {
 
     @Before
     public void setup() {
-        // userOption = new DefaultUserOption(new DefaultUserOptionStore());
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
         currentLocale.removeAllListeners();
@@ -269,7 +268,7 @@ public abstract class TestWithSitemap {
             protected void configure() {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
                 bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
-                bind(UserOption.class).to(DefaultUserOption.class);
+                bind(Option.class).to(DefaultOption.class);
             }
 
         };

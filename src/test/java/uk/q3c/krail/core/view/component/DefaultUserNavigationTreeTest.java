@@ -33,9 +33,9 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
-import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,7 +47,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({UIScopeModule.class, TestI18NModule.class, TestUserOptionModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({UIScopeModule.class, TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class})
 public class DefaultUserNavigationTreeTest {
 
     @Inject
@@ -63,7 +63,7 @@ public class DefaultUserNavigationTreeTest {
     Navigator navigator;
 
     @Inject
-    UserOption userOption;
+    Option option;
 
     DefaultUserNavigationTreeBuilder builder;
 
@@ -109,7 +109,7 @@ public class DefaultUserNavigationTreeTest {
     }
 
     private DefaultUserNavigationTree newTree() {
-        return new DefaultUserNavigationTree(userSitemap, navigator, userOption, builder, sorters);
+        return new DefaultUserNavigationTree(userSitemap, navigator, option, builder, sorters);
     }
 
     @Test
@@ -146,8 +146,9 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree.setOptionMaxDepth(3);
         // then
         assertThat(userNavigationTree.getOptionMaxDepth()).isEqualTo(3);
-        // userOption has been set
-        int result = userNavigationTree.getUserOption().get(-1, DefaultUserNavigationTree.UserOptionProperty.MAX_DEPTH);
+        // option has been set
+        int result = userNavigationTree.getOption()
+                                       .get(-1, DefaultUserNavigationTree.optionProperty.MAX_DEPTH);
         assertThat(result).isEqualTo(3);
     }
 
@@ -161,8 +162,9 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree.setOptionMaxDepth(2);
         // then
         assertThat(userNavigationTree.getOptionMaxDepth()).isEqualTo(2);
-        // userOption has been set
-        int result = userNavigationTree.getUserOption().get(-1, DefaultUserNavigationTree.UserOptionProperty.MAX_DEPTH);
+        // option has been set
+        int result = userNavigationTree.getOption()
+                                       .get(-1, DefaultUserNavigationTree.optionProperty.MAX_DEPTH);
         assertThat(result).isEqualTo(2);
     }
 
@@ -341,9 +343,11 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree.setOptionSortAscending(true);
         userNavigationTree.setOptionSortType(SortType.INSERTION);
         // then
-        assertThat(userNavigationTree.getUserOption().get(false, DefaultUserNavigationTree.UserOptionProperty
+        assertThat(userNavigationTree.getOption()
+                                     .get(false, DefaultUserNavigationTree.optionProperty
                 .SORT_ASCENDING)).isTrue();
-        assertThat(userNavigationTree.getUserOption().get(SortType.ALPHA,DefaultUserNavigationTree.UserOptionProperty.SORT_TYPE)).isEqualTo(SortType.INSERTION);
+        assertThat(userNavigationTree.getOption()
+                                     .get(SortType.ALPHA, DefaultUserNavigationTree.optionProperty.SORT_TYPE)).isEqualTo(SortType.INSERTION);
 
     }
 

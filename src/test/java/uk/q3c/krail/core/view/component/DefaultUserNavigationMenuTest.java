@@ -30,11 +30,11 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
-import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({UIScopeModule.class, VaadinSessionScopeModule.class, TestI18NModule.class, TestUserOptionModule.class})
+@GuiceContext({UIScopeModule.class, VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class})
 public class DefaultUserNavigationMenuTest {
 
     @Inject
@@ -57,7 +57,7 @@ public class DefaultUserNavigationMenuTest {
     Navigator navigator;
 
     @Inject
-    UserOption userOption;
+    Option option;
 
     @Inject
     Translate translate;
@@ -185,7 +185,7 @@ public class DefaultUserNavigationMenuTest {
     }
 
     private DefaultUserNavigationMenu newMenu() {
-        return new DefaultUserNavigationMenu(userSitemap, userOption, builder);
+        return new DefaultUserNavigationMenu(userSitemap, option, builder);
     }
 
     @Test
@@ -248,8 +248,9 @@ public class DefaultUserNavigationMenuTest {
         userNavigationMenu.setOptionMaxDepth(3);
         // then
         assertThat(userNavigationMenu.getOptionMaxDepth()).isEqualTo(3);
-        // userOption has been set
-        int result = userNavigationMenu.getUserOption().get(-1,DefaultUserNavigationMenu.UserOptionProperty.MAX_DEPTH);
+        // option has been set
+        int result = userNavigationMenu.getOption()
+                                       .get(-1, DefaultUserNavigationMenu.OptionProperty.MAX_DEPTH);
         assertThat(result).isEqualTo(3);
     }
 

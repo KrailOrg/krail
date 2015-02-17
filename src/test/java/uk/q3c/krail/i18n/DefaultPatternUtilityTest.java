@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2015. David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
 package uk.q3c.krail.i18n;
 
 import com.google.inject.Inject;
@@ -7,7 +18,7 @@ import fixture.TestI18NModule;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.util.ResourceUtils;
 import uk.q3c.util.testutil.FileTestUtil;
 import uk.q3c.util.testutil.TestResource;
@@ -22,7 +33,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestUserOptionModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class})
 public class DefaultPatternUtilityTest {
 
 

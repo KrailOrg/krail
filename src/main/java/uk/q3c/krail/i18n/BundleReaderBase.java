@@ -1,10 +1,21 @@
+/*
+ * Copyright (c) 2015. David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
 package uk.q3c.krail.i18n;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionContext;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionContext;
 
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -12,22 +23,22 @@ import java.util.ResourceBundle;
 /**
  * Created by David Sowerby on 25/11/14.
  */
-public abstract class BundleReaderBase implements UserOptionContext, BundleReader {
+public abstract class BundleReaderBase implements OptionContext, BundleReader {
 
+    public enum OptionProperty {PATH, USE_KEY_PATH}
     private static Logger log = LoggerFactory.getLogger(BundleReaderBase.class);
     private final ResourceBundle.Control control;
-    private UserOption userOption;
+    private Option option;
 
-
-    protected BundleReaderBase(UserOption userOption, ResourceBundle.Control control) {
-        this.userOption = userOption;
+    protected BundleReaderBase(Option option, ResourceBundle.Control control) {
+        this.option = option;
         this.control = control;
-        userOption.configure(this, UserOptionProperty.class);
+        option.configure(this, OptionProperty.class);
     }
 
     @Override
-    public UserOption getUserOption() {
-        return userOption;
+    public Option getOption() {
+        return option;
     }
 
     /**
@@ -51,7 +62,7 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
      * @param cacheKey
      *         the key to identify the pattern required
      * @param source
-     *         used to identify the correct UserOption for expandKey
+     *         used to identify the correct {@link Option} for expandKey
      * @param autoStub
      *         if true, and value for key is null, provide a stub value in its place
      * @param stubWithKeyName
@@ -129,10 +140,10 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
      * Allows the setting of paths for location of class and property files.  The bundle base name is taken from {@link
      * I18NKey#bundleName()}.
      * <p>
-     * UserOption entries determine how the bundle name is expanded.  If USE_KEY_PATH is true, the bundle name is
+     * {@link Option} entries determine how the bundle name is expanded.  If USE_KEY_PATH is true, the bundle name is
      * appended to the package path of the {@code sampleKey}
      * <p>
-     * If USE_KEY_PATH is false, the bundle name is appended to UserOption PATH
+     * If USE_KEY_PATH is false, the bundle name is appended to {@link Option} PATH
      *
      * @param source
      *         the name of the source being used, as provided via {@link I18NModule#addBundleReader(String, Class)}
@@ -144,11 +155,11 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
     protected String expandFromKey(String source, I18NKey sampleKey) {
         String baseName = sampleKey.bundleName();
         String packageName;
-        if (userOption.get(true, UserOptionProperty.USE_KEY_PATH, source)) {
+        if (option.get(true, OptionProperty.USE_KEY_PATH, source)) {
             packageName = ClassUtils.getPackageCanonicalName(sampleKey.getClass());
 
         } else {
-            packageName = userOption.get("", UserOptionProperty.PATH, source);
+            packageName = option.get("", OptionProperty.PATH, source);
         }
 
         String expanded = packageName.isEmpty() ? baseName : packageName + "." + baseName;
@@ -160,6 +171,4 @@ public abstract class BundleReaderBase implements UserOptionContext, BundleReade
     public ResourceBundle.Control getControl() {
         return control;
     }
-
-    public enum UserOptionProperty {PATH, USE_KEY_PATH}
 }

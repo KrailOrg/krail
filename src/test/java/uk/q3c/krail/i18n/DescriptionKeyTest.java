@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -21,10 +19,10 @@ import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.user.opt.DefaultUserOptionStore;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.core.user.opt.UserOptionStore;
-import uk.q3c.krail.testutil.MockUserOption;
+import uk.q3c.krail.core.user.opt.DefaultOptionStore;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionStore;
+import uk.q3c.krail.testutil.MockOption;
 
 import java.util.Locale;
 
@@ -85,8 +83,8 @@ currentLocale.setLocale(Locale.UK);
 
             @Override
             protected void configure() {
-                bind(UserOption.class).to(MockUserOption.class);
-                bind(UserOptionStore.class).to(DefaultUserOptionStore.class);
+                bind(Option.class).to(MockOption.class);
+                bind(OptionStore.class).to(DefaultOptionStore.class);
             }
 
         };

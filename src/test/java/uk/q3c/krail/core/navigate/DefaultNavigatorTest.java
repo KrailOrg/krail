@@ -40,7 +40,7 @@ import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.view.*;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.*;
 
@@ -49,7 +49,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestUserOptionModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class})
 public class DefaultNavigatorTest {
 
     @Mock

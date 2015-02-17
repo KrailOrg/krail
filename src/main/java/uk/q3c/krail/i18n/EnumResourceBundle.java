@@ -21,7 +21,7 @@ import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBundle {
-    public enum UserOptionProperty {AUTO_STUB, GENERATE_STUB_WITH_NAME, SOURCE_ORDER, SOURCE_ORDER_DEFAULT}
+    public enum OptionProperty {AUTO_STUB, GENERATE_STUB_WITH_NAME, SOURCE_ORDER, SOURCE_ORDER_DEFAULT}
 
     private static Logger log = LoggerFactory.getLogger(EnumResourceBundle.class);
 

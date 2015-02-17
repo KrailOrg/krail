@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2015. David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
 package uk.q3c.krail.i18n;
 
 import com.google.inject.Inject;
@@ -7,8 +18,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -16,11 +27,11 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestUserOptionModule.class})
+@GuiceContext({TestOptionModule.class})
 public class ClassBundleReaderTest {
     private static Logger log = LoggerFactory.getLogger(ClassBundleReaderTest.class);
     @Inject
-    UserOption userOption;
+    Option option;
 
     ClassBundleReader reader;
 
@@ -29,7 +40,7 @@ public class ClassBundleReaderTest {
         //given
 
         PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Yes, Locale.ITALIAN);
-        reader = new ClassBundleReader(userOption, new ClassBundleControl());
+        reader = new ClassBundleReader(option, new ClassBundleControl());
         //when
         Optional<String> value_it = reader.getValue(cacheKey, "class", false, false, "na");
 
@@ -42,7 +53,7 @@ public class ClassBundleReaderTest {
     public void valueFromBaseBundle() {
         //given
         PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Home, Locale.forLanguageTag(""));
-        reader = new ClassBundleReader(userOption, new ClassBundleControl());
+        reader = new ClassBundleReader(option, new ClassBundleControl());
         //when
         Optional<String> value_en = reader.getValue(cacheKey, "class", false, false, "na");
 
@@ -55,7 +66,7 @@ public class ClassBundleReaderTest {
     public void valueNotPresent() {
         //given
         PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Transfers, Locale.ITALIAN);
-        reader = new ClassBundleReader(userOption, new ClassBundleControl());
+        reader = new ClassBundleReader(option, new ClassBundleControl());
         //when
 
         Optional<String> value = reader.getValue(cacheKey, "class", false, false, "na");
@@ -71,11 +82,11 @@ public class ClassBundleReaderTest {
         log.info("alternativePath");
         //given
         PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey3.Key1, Locale.forLanguageTag(""));
-        reader = new ClassBundleReader(userOption, new ClassBundleControl());
-        reader.getUserOption()
-              .set(false, ClassBundleReader.UserOptionProperty.USE_KEY_PATH, "class");
-        reader.getUserOption()
-              .set("fixture1", ClassBundleReader.UserOptionProperty.PATH, "class");
+        reader = new ClassBundleReader(option, new ClassBundleControl());
+        reader.getOption()
+              .set(false, BundleReaderBase.OptionProperty.USE_KEY_PATH, "class");
+        reader.getOption()
+              .set("fixture1", BundleReaderBase.OptionProperty.PATH, "class");
 
         //when
         Optional<String> value = reader.getValue(cacheKey, "class", false, false, "na");
@@ -87,7 +98,7 @@ public class ClassBundleReaderTest {
     public void bundle_does_not_exist() {
         //given
         PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Transfers, Locale.ITALY);
-        reader = new ClassBundleReader(userOption, new ClassBundleControl());
+        reader = new ClassBundleReader(option, new ClassBundleControl());
         //when
         Optional<String> value = reader.getValue(cacheKey, "class", false, false, "na");
         //then

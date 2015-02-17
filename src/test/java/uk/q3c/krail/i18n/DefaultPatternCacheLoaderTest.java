@@ -17,15 +17,15 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.user.opt.UserOption;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestUserOptionModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class})
 public class DefaultPatternCacheLoaderTest {
 
     Map<String, BundleReader> bundleReaders = new LinkedHashMap<>();
@@ -34,7 +34,7 @@ public class DefaultPatternCacheLoaderTest {
 
 
     @Inject
-    UserOption userOption;
+    Option option;
 
 
     DefaultPatternCacheLoader loader;
@@ -43,8 +43,8 @@ public class DefaultPatternCacheLoaderTest {
     @Test
     public void bundleSourceOrder() {
         //given we just have the readers
-        bundleReaders.put("class", new ClassBundleReader(userOption, new ClassBundleControl()));
-        bundleReaders.put("props", new PropertiesFromClasspathBundleReader(userOption, new
+        bundleReaders.put("class", new ClassBundleReader(option, new ClassBundleControl()));
+        bundleReaders.put("props", new PropertiesFromClasspathBundleReader(option, new
                 PropertiesFromClasspathBundleControl()));
         //when
         createLoader();
@@ -100,6 +100,6 @@ public class DefaultPatternCacheLoaderTest {
     }
 
     private void createLoader() {
-        loader = new DefaultPatternCacheLoader(bundleReaders, userOption, bundleSourceOrder, bundleSourceOrderDefault);
+        loader = new DefaultPatternCacheLoader(bundleReaders, option, bundleSourceOrder, bundleSourceOrderDefault);
     }
 }

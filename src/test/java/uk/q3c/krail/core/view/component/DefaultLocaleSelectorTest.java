@@ -1,14 +1,12 @@
 /*
- * Copyright (c) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.view.component;
@@ -23,9 +21,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.user.notify.UserNotifier;
-import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.testutil.MockUserOption;
+import uk.q3c.krail.testutil.MockOption;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -46,7 +44,7 @@ public class DefaultLocaleSelectorTest {
     UserNotifier userNotifier;
 
 
-    UserOption userOption = new MockUserOption();
+    Option option = new MockOption();
 
     private DefaultLocaleSelector selector;
 
@@ -59,7 +57,7 @@ public class DefaultLocaleSelectorTest {
         supportedLocales.add(Locale.UK);
         supportedLocales.add(Locale.GERMANY);
 
-        LocaleContainer container = new LocaleContainer(supportedLocales, userOption);
+        LocaleContainer container = new LocaleContainer(supportedLocales, option);
         selector = new DefaultLocaleSelector(currentLocale, container, userNotifier);
     }
 

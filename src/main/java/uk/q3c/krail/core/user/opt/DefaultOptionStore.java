@@ -24,30 +24,31 @@ import java.util.concurrent.ConcurrentHashMap;
  * A volatile, in-memory store for user options
  */
 @Singleton
-public class DefaultUserOptionStore implements UserOptionStore {
+public class DefaultOptionStore implements OptionStore {
 
     private Map<String, Object> map = new ConcurrentHashMap<>();
 
     @Inject
-    protected DefaultUserOptionStore() {
+    protected DefaultOptionStore() {
     }
 
     /**
-     * Loads an {@code Optional<T>} option value from the store, or {@link Optional#absent()}} is no valid value found
+     * Loads an {@code Optional<T>} option value from the store, or {@link Optional#empty()}} is no valid value found
      * (including a situation where the type stored cannot be cast to the type to be loaded)
      *
      * @param sampleValue
      *         this is used only for typing the return value, it is not a default value as with other parts of the
-     *         UserOption API
+     *         {@link Option} API
      * @param layerId
      *         represents a layer in a hierarchy of options - these are prefixed with a numeral indicating the level
      *         of the layer (for example, a user id might be "0:dsowerby").  Layer 0 is always the user layer, and
-     *         layer 99 is always the system layer and both are always available.  There may or may not be other
-     *         layers in between.  An implementation ensures that the hierarchy is honoured so that the highest layer
-     *         with a specific option value overrides any values for the same option at lower layers. For example, a
-     *         user layer option will always override the same option defined at the system layer.
+     *         layer 99 is always the system layer and both are always defined.  There may or may not be other layers
+     *         in between.  Option values may or may not exist in any layer.  The layer numbers indicate a priority,
+     *         and the lower the number the higher the priority. An implementation ensures that the hierarchy is
+     *         honoured so that an option value is returned for the highest priority available for that option. For
+     *         example, if a user option exists, it will always override the same option defined at the system layer.
      * @param consumerClassName
-     *         the class name of an implementation of UserOptionConsumer which uses a specific option.  For example
+     *         the class name of an implementation of {@link OptionContext} which uses a specific option.  For example
      *         OrderInputForm
      * @param key
      *         the option specific key, for example SHOW_ALL_SECTIONS
@@ -94,7 +95,7 @@ public class DefaultUserOptionStore implements UserOptionStore {
      *
      * @return
      *
-     * @throws UserOptionTypeException
+     * @throws OptionTypeException
      *         if the value type is not supported
      */
     @Override

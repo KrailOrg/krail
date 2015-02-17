@@ -25,18 +25,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.data.TestEntity;
-import uk.q3c.krail.core.user.opt.UserOption;
+import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
-import uk.q3c.krail.testutil.TestUserOptionModule;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestUserOptionModule.class, uk.q3c.krail.testutil
+@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestOptionModule.class, uk.q3c.krail.testutil
         .TestI18NModule.class})
 public class BeanFieldGroupBaseTest {
 
@@ -50,7 +50,7 @@ public class BeanFieldGroupBaseTest {
     Provider<BeanValidator> beanValidatorProvider;
 
     @Inject
-    UserOption userOption;
+    Option option;
 
     TestBeanFieldGroup fieldSet;
     TestEntity te, te2;
@@ -59,7 +59,7 @@ public class BeanFieldGroupBaseTest {
 
     @Before
     public void setup() {
-        injector = Guice.createInjector(new TestI18NModule(), new TestUserOptionModule(), Modules.override(new
+        injector = Guice.createInjector(new TestI18NModule(), new TestOptionModule(), Modules.override(new
                 ValidationModule())
                                                                                                  .with(new
                                                                                                          KrailValidationModule()));
@@ -70,7 +70,7 @@ public class BeanFieldGroupBaseTest {
 
 
         Locale.setDefault(Locale.UK);
-        fieldSet = new TestBeanFieldGroup(i18NProcessor, beanValidatorProvider, userOption);
+        fieldSet = new TestBeanFieldGroup(i18NProcessor, beanValidatorProvider, option);
         te = new TestEntity();
         te.setFirstName("Mango");
         te.setLastName("Chutney");
