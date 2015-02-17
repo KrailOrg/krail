@@ -10,6 +10,7 @@ This core library provides:
 * Extensive I18N support
 * User options
 * Application configuration through ini files etc
+* JSR 303 Validation (integrated with I18N)
 
 Additional libraries, integrated and configured through Guice, provide:
 
@@ -60,9 +61,9 @@ Fails on Tomcat 8
 
 # Status
 
-28th January 2015:
+17th February 2015:
 
-* Vaadin 7.3.9 is integrated with:
+* Vaadin 7.3.10 is integrated with:
 * Guice 3.0,
 * Shiro 1.2.1,
 * Apache Commons Configuration
