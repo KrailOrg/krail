@@ -15,6 +15,9 @@ package uk.q3c.krail.core.user;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 import uk.q3c.krail.core.user.notify.*;
+import uk.q3c.krail.core.user.profile.DefaultUserHierarchy;
+import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
+import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.user.status.DefaultUserStatus;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.i18n.I18NKey;
@@ -25,10 +28,10 @@ public class UserModule extends AbstractModule {
     @Override
     protected void configure() {
 
-        MapBinder<I18NKey, ErrorNotification> errorNotificationBinder = MapBinder.newMapBinder(binder(),
-                I18NKey.class, ErrorNotification.class);
-        MapBinder<I18NKey, WarningNotification> warningNotificationBinder = MapBinder.newMapBinder(binder(),
-                I18NKey.class, WarningNotification.class);
+        MapBinder<I18NKey, ErrorNotification> errorNotificationBinder = MapBinder.newMapBinder(binder(), I18NKey
+                .class, ErrorNotification.class);
+        MapBinder<I18NKey, WarningNotification> warningNotificationBinder = MapBinder.newMapBinder(binder(), I18NKey
+                .class, WarningNotification.class);
         MapBinder<I18NKey, InformationNotification> informationNotificationBinder = MapBinder.newMapBinder(binder(),
                 I18NKey.class, InformationNotification.class);
         bindUserNotifier();
@@ -36,7 +39,17 @@ public class UserModule extends AbstractModule {
         bindWarningNotifications(warningNotificationBinder);
         bindInformationNotifications(informationNotificationBinder);
         bindUserStatus();
+        bindUserHierarchies();
 
+    }
+
+    /**
+     * Bind you own {@link UserHierarchy} implementations, using binding annotations to identify them.  At least one
+     * must marked as default by using the {@link DefaultUserHierarchy} annotation.
+     */
+    protected void bindUserHierarchies() {
+        bind(UserHierarchy.class).annotatedWith(DefaultUserHierarchy.class)
+                                 .to(SimpleUserHierarchy.class);
     }
 
     /**
@@ -44,7 +57,7 @@ public class UserModule extends AbstractModule {
      * notifications, create your own module with a MapBinder instance of the same type signature, and Guice will
      * combine the mapbinders
      *
-     * @param informationNotificationBinder
+     * @param errorNotificationBinder the binder used to collect the bindings together
      */
     @SuppressWarnings("rawtypes")
     protected void bindErrorNotifications(MapBinder<I18NKey, ErrorNotification> errorNotificationBinder) {
@@ -59,7 +72,7 @@ public class UserModule extends AbstractModule {
      * notifications, create your own module with a MapBinder instance of the same type signature, and Guice will
      * combine the mapbinders
      *
-     * @param informationNotificationBinder
+     * @param warningNotificationBinder the binder used to collect the bindings together
      */
     @SuppressWarnings("rawtypes")
     protected void bindWarningNotifications(MapBinder<I18NKey, WarningNotification> warningNotificationBinder) {
@@ -74,11 +87,11 @@ public class UserModule extends AbstractModule {
      * notifications, create your own module with a MapBinder instance of the same type signature, and Guice will
      * combine the mapbinders
      *
-     * @param informationNotificationBinder
+     * @param informationNotificationBinder the binder used to collect the bindings together
      */
     @SuppressWarnings("rawtypes")
-    protected void bindInformationNotifications(MapBinder<I18NKey,
-            InformationNotification> informationNotificationBinder) {
+    protected void bindInformationNotifications(MapBinder<I18NKey, InformationNotification>
+                                                            informationNotificationBinder) {
         informationNotificationBinder.addBinding(LabelKey.Splash)
                                      .to(VaadinInformationNotification.class);
         informationNotificationBinder.addBinding(LabelKey.Message_Bar)

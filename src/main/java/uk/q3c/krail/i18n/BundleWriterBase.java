@@ -15,6 +15,7 @@ import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.util.ResourceUtils;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.Locale;
 import java.util.Optional;
@@ -24,16 +25,13 @@ import java.util.Optional;
  */
 public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWriter<E>, OptionContext {
 
-    protected enum OptionProperty {
-        WRITE_PATH
-    }
 
     protected Option option;
     private EnumResourceBundle<E> bundle;
 
     public BundleWriterBase(Option option) {
         this.option = option;
-        option.configure(this, OptionProperty.class);
+        option.init(this);
     }
 
     /**
@@ -43,14 +41,15 @@ public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWrite
     public File getOptionWritePath() {
         String defaultPath = ResourceUtils.userTempDirectory()
                                           .getAbsolutePath();
-        String option = this.option.get(defaultPath, OptionProperty.WRITE_PATH);
+        String option = this.option.get(defaultPath, LabelKey.Write_Path);
         return new File(option);
     }
 
     public void setOptionWritePath(File path) {
-        option.set(path.getAbsolutePath(), OptionProperty.WRITE_PATH);
+        option.set(path.getAbsolutePath(), LabelKey.Write_Path);
     }
 
+    @Nonnull
     @Override
     public Option getOption() {
         return option;

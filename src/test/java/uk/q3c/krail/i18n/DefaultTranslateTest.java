@@ -21,7 +21,7 @@ import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.user.opt.DefaultOptionStore;
+import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionStore;
 import uk.q3c.krail.testutil.MockOption;
@@ -93,7 +93,7 @@ public class DefaultTranslateTest {
 
                 bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
                 bind(Option.class).to(MockOption.class);
-                bind(OptionStore.class).to(DefaultOptionStore.class);
+                bind(OptionStore.class).to(InMemoryOptionStore.class);
             }
 
         };

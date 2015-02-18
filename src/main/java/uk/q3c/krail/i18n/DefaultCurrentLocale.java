@@ -26,6 +26,7 @@ import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.core.user.status.UserStatusListener;
 import uk.q3c.util.MessageFormat;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -59,7 +60,6 @@ import java.util.Set;
  */
 
 public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, OptionContext {
-    public enum OptionProperty {PREFERRED_LOCALE}
 
     private static Logger log = LoggerFactory.getLogger(DefaultCurrentLocale.class);
     private final List<LocaleChangeListener> listeners = new ArrayList<>();
@@ -79,7 +79,7 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
         this.defaultLocale = defaultLocale;
         this.userStatus = userStatus;
         this.option = option;
-        option.configure(this, OptionProperty.class);
+        option.init(this);
         userStatus.addListener(this);
         locale = defaultLocale;
         if (!supportedLocales.contains(defaultLocale)) {
@@ -190,6 +190,7 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
 
     }
 
+    @Nonnull
     @Override
     public Option getOption() {
         return option;
@@ -216,7 +217,7 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
      */
     private boolean setLocaleFromOption(boolean fireListeners) {
         if (userStatus.isAuthenticated()) {
-            Locale selectedLocale = option.get(defaultLocale, OptionProperty.PREFERRED_LOCALE);
+            Locale selectedLocale = option.get(defaultLocale, LabelKey.Preferred_Locale);
             if (supportedLocales.contains(selectedLocale)) {
                 setLocale(selectedLocale, fireListeners);
                 return true;

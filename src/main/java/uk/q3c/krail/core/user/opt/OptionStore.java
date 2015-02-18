@@ -12,71 +12,88 @@
 package uk.q3c.krail.core.user.opt;
 
 
-import java.util.Optional;
+import uk.q3c.krail.core.user.profile.UserHierarchyException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Stores and loads option values from a (usually) persistent store.  A simple, in memory, version is provided
  * primarily for testing.
- * <p>
  * <p>
  * Created by David Sowerby on 04/12/14.
  */
 public interface OptionStore {
 
     /**
-     * Loads an {@code Optional<T>} option value from the store, or {@link Optional#empty()}} is no valid value found
-     * (including a situation where the type stored cannot be cast to the type to be loaded)
+     * Assign {@value} to the hierarchy, hierarchy rank name and {@link OptionKey} specified
      *
-     * @param sampleValue
-     *         this is used only for typing the return value, it is not a default value as with other parts of the
-     *         {@link Option} API
-     * @param layerId
-     *         represents a layer in a hierarchy of options - these are prefixed with a numeral indicating the level
-     *         of the layer (for example, a user id might be "0:dsowerby").  Layer 0 is always the user layer, and
-     *         layer 99 is always the system layer and both are always defined.  There may or may not be other layers
-     *         in between.  Option values may or may not exist in any layer.  The layer numbers indicate a priority,
-     *         and the lower the number the higher the priority. An implementation ensures that the hierarchy is
-     *         honoured so that an option value is returned for the highest priority available for that option. For
-     *         example, if a user option exists, it will always override the same option defined at the system layer.
-     * @param consumerClassName
-     *         the class name of an implementation of {@link OptionContext} which uses a specific option.  For example
-     *         OrderInputForm
-     * @param key
-     *         the option specific key, for example SHOW_ALL_SECTIONS
-     * @param qualifiers
-     *         optional, this is usually dynamically generated qualifier(s) to make a complete unique identity where
-     *         the same option may be used several times within a consumer.  If for example you have an array of
-     *         dynamically generated buttons, which you want the user to be able to individually choose the colours
-     *         of, you may have consumer=com.example.FancyButtonForm, key=BUTTON_COLOUR, qualifiers="2,3"
-     *         <p>
-     *         where "2,3" is the grid position of the button
-     * @param <T>
-     *         a type determined by the sampleValue.  An implementation should assume that an object of any type can be
-     *         passed.       *
-     *
-     *
-     *
-     * @return
-     */
-
-    <T> Optional<T> load(T sampleValue, String layerId, String consumerClassName, String key, String qualifiers);
-
-    /**
-     * Stores an {@code Optional<T>} option value in the store
-     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankName
+     *         Name of the rank to have its value
+     * @param optionKey
+     *         Unique identifier for the option, in its context
      * @param value
-     *         this value to be stored.  This can be of any type supported by the implementation. That is usually determined by the underlying persistence layer.
-     *         <p>
-     *         Other parameters are the same as for {@link #load(Object, String, String, String, String)}
+     *         the value to assign
+     * @param <T>
+     *         the type of the value
      *
-     * @exception OptionTypeException if the value type is not supported
-     *
-     * @return
+     * @throws UserHierarchyException
+     *         if {@code cacheKey.hierarchyRank} is out of range
      */
-    <T> void store(T value, String layerId, String consumerClassName, String key, String qualifiers);
+    <T> void setValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey, @Nonnull
+    T value);
 
     /**
-     * Flushes the cache (if there is one - that will depend on the implementation)
+     * Gets the {@value} for the hierarchy, hierarchy rank name and {@link OptionKey} specified
+     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankName
+     *         Name of the rank to have its value
+     * @param optionKey
+     *         Unique identifier for the option, in its context
+     *
+     * @return the value if found, otherwise null
      */
-    void flushCache();
+    @Nullable
+    Object getValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey);
+
+    /**
+     * Delete the entry for the hierarchy, hierarchy rank name and {@link OptionKey} specified
+     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankName
+     *         Name of the rank to have its value
+     * @param optionKey
+     *         Unique identifier for the option, in its context
+     *
+     * @return the previous value associated with {@code cacheKey}, or null if there was no mapping for key.
+     */
+    @Nullable
+    Object deleteValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey);
+
+
+    /**
+     * returns a map of values for a hierarchy,for the rank names and {@link OptionKey} specified.  Only ranks with
+     * values are returned, so it is possible for an empty map to be returned.
+     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankNames
+     *         list of names from the hierarchy that values are required for
+     * @param optionKey
+     *         Unique identifier for the option, in its context
+     *
+     * @return returns a map of values for a hierarchy, for a given {@link OptionKey}, an empty map if there are no
+     * values assigned
+     */
+    @Nonnull
+    Map<String, Object> valueMapForOptionKey(@Nonnull String hierarchyName, @Nonnull List<String> rankNames, @Nonnull
+    OptionKey optionKey);
 }
+

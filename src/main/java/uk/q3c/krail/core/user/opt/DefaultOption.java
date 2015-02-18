@@ -11,119 +11,179 @@
 
 package uk.q3c.krail.core.user.opt;
 
-import com.google.common.base.Joiner;
 import com.google.inject.Inject;
-import org.apache.shiro.subject.Subject;
-import uk.q3c.krail.core.shiro.SubjectIdentifier;
-import uk.q3c.krail.core.shiro.SubjectProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.user.opt.cache.OptionCache;
+import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
+import uk.q3c.krail.core.user.profile.DefaultUserHierarchy;
+import uk.q3c.krail.core.user.profile.RankOption;
+import uk.q3c.krail.core.user.profile.UserHierarchy;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.util.KrailCodeException;
 
-import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Optional;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static uk.q3c.krail.core.user.profile.RankOption.*;
+
 /**
+ * Default implementation for {@link Option}, and uses {@link OptionCache}, which is configured to use some form of
+ * persistence. All calls reference an implementation of {@link UserHierarchy}, either directly as a method
+ * parameter, or by defaulting to {@link #defaultHierarchy}.  The get() and set() default to using the highest rank
+ * from {@link UserHierarchy}.  For getting or setting values at a specific hierarchyRank use the getSpecific() and
+ * setSpecific() methods. The delete() method is always specific
+ * <p>
+ * <p>
  * Created by David Sowerby on 03/12/14.
  */
 public class DefaultOption implements Option {
-
-    private final String systemLayer = "99:system";
-    private final OptionLayerDefinition layerDefinition;
-    private final SubjectProvider subjectProvider;
-    private Class<? extends OptionContext> consumerClass;
-    //This might be useful for pre-loading a set of options, but is not implemented yet
-    private Class<? extends Enum> keys;
-    private OptionStore optionStore;
-    private SubjectIdentifier subjectIdentifier;
+    private static Logger log = LoggerFactory.getLogger(DefaultOption.class);
+    private Class<? extends OptionContext> context;
+    private UserHierarchy defaultHierarchy;
+    private OptionCache optionCache;
 
     @Inject
-    protected DefaultOption(OptionStore optionStore, OptionLayerDefinition layerDefinition, SubjectProvider
-            subjectProvider, SubjectIdentifier subjectIdentifier) {
-        this.optionStore = optionStore;
-        this.layerDefinition = layerDefinition;
-        this.subjectProvider = subjectProvider;
-        this.subjectIdentifier = subjectIdentifier;
+    protected DefaultOption(@Nonnull OptionCache optionCache, @Nonnull @DefaultUserHierarchy UserHierarchy
+            defaultHierarchy) {
+        this.defaultHierarchy = defaultHierarchy;
+        this.optionCache = optionCache;
+    }
+
+    @Nonnull
+    public Class<? extends OptionContext> getContext() {
+        return context;
+    }
+
+
+    @Override
+    public void init(@Nonnull OptionContext context) {
+        checkNotNull(context);
+        this.context = context.getClass();
     }
 
     @Override
-    public void configure(OptionContext consumer, Class<? extends Enum> keys) {
-        this.consumerClass = consumer.getClass();
-        this.keys = keys;
+    public void init(@Nonnull Class<? extends OptionContext> context) {
+        checkNotNull(context);
+        this.context = context;
     }
 
+
     @Override
-    public void configure(Class<? extends OptionContext> consumerClass, Class<? extends Enum> keys) {
-        this.consumerClass = consumerClass;
-        this.keys = keys;
+    public <T> void set(T value, I18NKey key, String... qualifiers) {
+        checkInit();
+        optionCache.write(new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 0, new OptionKey(context, key, qualifiers)), Optional.of(value));
     }
 
-    /**
-     * Gets option value for the {@code key} and {@code qualifiers}, combined with the {@link #consumerClass} provided
-     * by
-     * the
-     * {@link #configure(OptionContext, Class)} method
-     *
-     * @param defaultValue
-     *         the default value to be returned if no value is found in the store.  Also determines the type of the
-     *         return value
-     * @param key
-     *         an enum key for the option
-     * @param qualifiers
-     * @param <T>
-     *
-     * @return
-     */
-    @Override
-    public <T> T get(T defaultValue, Enum<?> key, String... qualifiers) {
-        Joiner joiner = Joiner.on(", ")
-                              .skipNulls();
-        String joinedQualifiers = joiner.join(qualifiers);
-        Subject subject = subjectProvider.get();
-        String layerId;
-
-        Optional<T> value;
-        if (subject.isAuthenticated()) {
-            //try the user level first
-            layerId = subjectIdentifier.userId();
-            value = optionStore.load(defaultValue, layerId, consumerClass.getClass()
-                                                                         .getName(), key.name(), joinedQualifiers);
-            if (value.isPresent()) {
-                return value.get();
-            }
-            //no value at user level, so
-            //iterate through other levels, returning a value if found
-            List<String> layers = layerDefinition.getLayers(subjectIdentifier.userId(), Optional.empty());
-            for (String layer : layers) {
-                value = optionStore.load(defaultValue, layerId, consumerClass.getClass()
-                                                                             .getName(), key.name(), joinedQualifiers);
-                if (value.isPresent()) {
-                    return value.get();
-                }
-            }
-
-            //still no value, try the system level
-            if (value.isPresent()) {
-                return value.get();
-            }
+    private void checkInit() {
+        if (context == null) {
+            String msg = getClass().getSimpleName() + " must be initialised.  Typically this is done by calling " +
+                    "option.init in the constructor of the class implementing OptionContext, for example:\n\n option" +
+                    ".init(this)\n\n ";
+            throw new KrailCodeException(msg);
         }
+    }
 
-        //no value found for user related layers, or user not authenticated, try the system level
-        value = optionStore.load(defaultValue, systemLayer, consumerClass.getClass()
-                                                                         .getName(), key.name(), joinedQualifiers);
+    @Override
+    public synchronized <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, @Nonnull I18NKey key,
+                                     @Nullable String... qualifiers) {
+        set(value, hierarchy, 0, context, key, qualifiers);
+    }
 
-        if (value.isPresent()) {
-            return value.get();
+
+    @Override
+    public synchronized <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        checkInit();
+        checkNotNull(hierarchy);
+        checkArgument(hierarchyRank >= 0);
+        checkNotNull(context);
+        checkNotNull(key);
+        optionCache.write(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, new OptionKey(context, key,
+                qualifiers)), Optional.of(value));
+    }
+
+    @Override
+    @Nonnull
+    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        return get(defaultValue, HIGHEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
+    }
+
+    @Override
+    @Nonnull
+    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull RankOption rankOption, @Nonnull UserHierarchy
+            hierarchy, int hierarchyRank, @Nonnull Class<? extends
+            OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        checkInit();
+        checkNotNull(defaultValue);
+        checkNotNull(hierarchy);
+        checkNotNull(context);
+        checkNotNull(key);
+        Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy,
+                rankOption, hierarchyRank, new OptionKey(context, key, qualifiers)));
+        if (optionalValue.isPresent()) {
+            return optionalValue.get();
+        } else {
+            return defaultValue;
         }
+    }
 
-        //still nothing found, return the default value
-        return defaultValue;
+    @Nonnull
+    @Override
+    public <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull Class<? extends
+            OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        return get(defaultValue, LOWEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
     }
 
     @Override
-    public <T> void set(T value, Enum<?> key, String... qualifiers) {
-
+    @Nonnull
+    public synchronized <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull I18NKey key, @Nullable String...
+            qualifiers) {
+        return get(defaultValue, LOWEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
     }
 
     @Override
-    public void flushCache() {
-        optionStore.flushCache();
+    @Nonnull
+    public synchronized <T> T getSpecificRank(@Nonnull T defaultValue, int hierarchyRank, @Nonnull I18NKey key,
+                                              @Nullable String... qualifiers) {
+        return get(defaultValue, SPECIFIC_RANK, defaultHierarchy, hierarchyRank, context, key, qualifiers);
     }
+
+    @Override
+    public <T> T get(@Nonnull T defaultValue, UserHierarchy hierarchy, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        return get(defaultValue, HIGHEST_RANK, hierarchy, 0, context, key, qualifiers);
+    }
+
+    @Override
+    @Nonnull
+    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull I18NKey key,
+                                  @Nullable String... qualifiers) {
+        return get(defaultValue, HIGHEST_RANK, hierarchy, 0, context, key, qualifiers);
+    }
+
+    @Override
+    @Nonnull
+    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        return get(defaultValue, HIGHEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
+    }
+
+
+    @Override
+    @Nullable
+    public Object delete(@Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull Class<? extends
+            OptionContext> context, @Nonnull I18NKey key, @Nullable String
+            ... qualifiers) {
+        checkInit();
+        checkNotNull(hierarchy);
+        checkArgument(hierarchyRank >= 0);
+        checkNotNull(context);
+        checkNotNull(key);
+
+        return optionCache.delete(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, new OptionKey(context,
+                key, qualifiers)));
+    }
+
+
 }

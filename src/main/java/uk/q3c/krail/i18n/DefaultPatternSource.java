@@ -20,9 +20,12 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Manages the retrieval of I18N patterns from potentially multiple sources.  Caches values for keys once they have
@@ -32,7 +35,6 @@ import java.util.Locale;
  */
 
 public class DefaultPatternSource implements OptionContext, PatternSource<LoadingCache<PatternCacheKey, String>> {
-    public enum OptionProperty {MAX_CACHE_SIZE}
 
 
     private static Logger log = LoggerFactory.getLogger(DefaultPatternSource.class);
@@ -45,11 +47,11 @@ public class DefaultPatternSource implements OptionContext, PatternSource<Loadin
     protected DefaultPatternSource(Option option,
                                    PatternCacheLoader cacheLoader) {
         this.option = option;
-        option.configure(this, OptionProperty.class);
+        option.init(this);
         //CacheLoader has no interface so the cast is necessary to allow alternative PatternCacheLLoader implementations
         //although all implementations would need to extend CacheLoader
         cache = CacheBuilder.newBuilder()
-                            .maximumSize(option.get(1000, OptionProperty.MAX_CACHE_SIZE))
+                            .maximumSize(option.get(1000, LabelKey.Maximum_Cache_Size))
                             .build((CacheLoader) cacheLoader);
 
     }
@@ -75,6 +77,8 @@ public class DefaultPatternSource implements OptionContext, PatternSource<Loadin
      */
     @Override
     public <E extends Enum<E> & I18NKey> String retrievePattern(E key, Locale locale) {
+        checkNotNull(key);
+        checkNotNull(locale);
         PatternCacheKey cacheKey = new PatternCacheKey(key, locale);
         return cache.getUnchecked(cacheKey);
     }
@@ -84,6 +88,7 @@ public class DefaultPatternSource implements OptionContext, PatternSource<Loadin
         return cache;
     }
 
+    @Nonnull
     @Override
     public Option getOption() {
         return option;

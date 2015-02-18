@@ -35,6 +35,7 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.S
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.ArrayList;
@@ -148,7 +149,7 @@ public class DefaultUserNavigationTreeTest {
         assertThat(userNavigationTree.getOptionMaxDepth()).isEqualTo(3);
         // option has been set
         int result = userNavigationTree.getOption()
-                                       .get(-1, DefaultUserNavigationTree.optionProperty.MAX_DEPTH);
+                                       .get(-1, LabelKey.Maxiumum_Depth);
         assertThat(result).isEqualTo(3);
     }
 
@@ -164,7 +165,7 @@ public class DefaultUserNavigationTreeTest {
         assertThat(userNavigationTree.getOptionMaxDepth()).isEqualTo(2);
         // option has been set
         int result = userNavigationTree.getOption()
-                                       .get(-1, DefaultUserNavigationTree.optionProperty.MAX_DEPTH);
+                                       .get(-1, LabelKey.Maxiumum_Depth);
         assertThat(result).isEqualTo(2);
     }
 
@@ -344,10 +345,9 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree.setOptionSortType(SortType.INSERTION);
         // then
         assertThat(userNavigationTree.getOption()
-                                     .get(false, DefaultUserNavigationTree.optionProperty
-                .SORT_ASCENDING)).isTrue();
+                                     .get(false, LabelKey.Sort_Ascending)).isTrue();
         assertThat(userNavigationTree.getOption()
-                                     .get(SortType.ALPHA, DefaultUserNavigationTree.optionProperty.SORT_TYPE)).isEqualTo(SortType.INSERTION);
+                                     .get(SortType.ALPHA, LabelKey.Sort_Type)).isEqualTo(SortType.INSERTION);
 
     }
 

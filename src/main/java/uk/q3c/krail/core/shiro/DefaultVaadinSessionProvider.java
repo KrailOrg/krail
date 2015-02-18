@@ -29,7 +29,7 @@ public class DefaultVaadinSessionProvider implements VaadinSessionProvider {
 
         // This may happen in background threads, or testing
         if (session == null) {
-            String msg = "Vaaadin session not present.  If you are testing, use a Mock for this provider";
+            String msg = "Vaadin session not present.  If you are testing, use a Mock for this provider";
             log.warn(msg);
             throw new IllegalStateException(msg);
         }

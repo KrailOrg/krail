@@ -19,21 +19,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.SupportedLocales;
 import uk.q3c.util.ResourceUtils;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.Locale;
 import java.util.Set;
 
 public class LocaleContainer extends IndexedContainer implements OptionContext {
-    public enum optionProperty {
-        LOCALE_FLAG_SIZE
-    }
+
 
     public enum PropertyName {
         NAME, FLAG
     }
+
     private static Logger log = LoggerFactory.getLogger(LocaleContainer.class);
     private final Set<Locale> supportedLocales;
     private final Option option;
@@ -43,18 +44,16 @@ public class LocaleContainer extends IndexedContainer implements OptionContext {
         super();
         this.supportedLocales = supportedLocales;
         this.option = option;
-        option.configure(this, optionProperty.class);
+        option.init(this);
         fillContainer();
     }
 
     /**
-     * Loads the container with text from {@link Locale#getDisplayName(locale)}, and an icon for the country flag if
-     * there is
-     * one. If there is no image flag, the flag property is left as null.  The result is that the combo contains an
-     * entry
-     * for a country in the language of that counter (for example Germany is always Deutsch (Deutschland), regardless
-     * of
-     * the current locale).  This means the user looking for a language will see it in its most familiar form.
+     * Loads the container with text from {@link Locale#getDisplayName(Locale)}, and an icon for the country flag if
+     * there is one. If there is no image flag, the flag property is left as null.  The result is that the combo
+     * contains an entry for a country in the language of that country (for example Germany is always Deutsch
+     * (Deutschland), regardless of the current locale).  This means the user looking for a language will see it in its
+     * most familiar form.
      */
     @SuppressWarnings("unchecked")
     private void fillContainer() {
@@ -97,9 +96,10 @@ public class LocaleContainer extends IndexedContainer implements OptionContext {
     }
 
     public Integer getOptionFlagSize() {
-        return option.get(32, optionProperty.LOCALE_FLAG_SIZE);
+        return option.get(32, LabelKey.Locale_Flag_Size);
     }
 
+    @Nonnull
     @Override
     public Option getOption() {
         return option;

@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -25,7 +26,6 @@ import java.util.ResourceBundle;
  */
 public abstract class BundleReaderBase implements OptionContext, BundleReader {
 
-    public enum OptionProperty {PATH, USE_KEY_PATH}
     private static Logger log = LoggerFactory.getLogger(BundleReaderBase.class);
     private final ResourceBundle.Control control;
     private Option option;
@@ -33,9 +33,10 @@ public abstract class BundleReaderBase implements OptionContext, BundleReader {
     protected BundleReaderBase(Option option, ResourceBundle.Control control) {
         this.option = option;
         this.control = control;
-        option.configure(this, OptionProperty.class);
+        option.init(this);
     }
 
+    @Nonnull
     @Override
     public Option getOption() {
         return option;
@@ -155,11 +156,11 @@ public abstract class BundleReaderBase implements OptionContext, BundleReader {
     protected String expandFromKey(String source, I18NKey sampleKey) {
         String baseName = sampleKey.bundleName();
         String packageName;
-        if (option.get(true, OptionProperty.USE_KEY_PATH, source)) {
+        if (option.get(true, LabelKey.Use_Key_Path, source)) {
             packageName = ClassUtils.getPackageCanonicalName(sampleKey.getClass());
 
         } else {
-            packageName = option.get("", OptionProperty.PATH, source);
+            packageName = option.get("", LabelKey.Path, source);
         }
 
         String expanded = packageName.isEmpty() ? baseName : packageName + "." + baseName;

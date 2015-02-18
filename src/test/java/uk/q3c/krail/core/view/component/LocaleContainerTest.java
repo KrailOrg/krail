@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.util.testutil.LogMonitor;
 import uk.q3c.util.testutil.TestResource;
@@ -57,7 +58,7 @@ public class LocaleContainerTest {
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
-        option.configure(LocaleContainer.class, LocaleContainer.optionProperty.class);
+        option.init(LocaleContainer.class);
         File baseDir = TestResource.testJavaRootDir("krail");
 
         VaadinService.setCurrent(vaadinService);
@@ -75,7 +76,7 @@ public class LocaleContainerTest {
     public void fillContainer_success() {
         // given
         supportedLocales.add(Locale.GERMANY);
-        option.set(48, LocaleContainer.optionProperty.LOCALE_FLAG_SIZE);
+        option.set(48, LabelKey.Locale_Flag_Size);
         // when
         container = new LocaleContainer(supportedLocales, option);
         // then
@@ -106,7 +107,7 @@ public class LocaleContainerTest {
     @Test
     public void fillContainer_no_flag_directory() {
         supportedLocales.add(Locale.GERMANY);
-        option.set(47, LocaleContainer.optionProperty.LOCALE_FLAG_SIZE);
+        option.set(47, LabelKey.Locale_Flag_Size);
         // when
         container = new LocaleContainer(supportedLocales, option);
 
@@ -125,7 +126,7 @@ public class LocaleContainerTest {
     @Test
     public void fillContainer_missingFlag() {
         supportedLocales.add(Locale.CANADA);
-        option.set(48, LocaleContainer.optionProperty.LOCALE_FLAG_SIZE);
+        option.set(48, LabelKey.Locale_Flag_Size);
         // when
         container = new LocaleContainer(supportedLocales, option);
 

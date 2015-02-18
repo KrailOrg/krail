@@ -56,8 +56,10 @@ public enum LabelKey implements I18NKey {
     Refresh_Account,
     Request_Account,
     Reset_Account,
-    Small,
+    Simple_User_Hierarchy,
     Sitemap_Service,
+    Small,
+    Source_Order,
     Splash,
     Submit,
     System_Account,
@@ -65,7 +67,9 @@ public enum LabelKey implements I18NKey {
     Unnamed,
     User_Name,
     Warning,
-    Yes;
+    Maxiumum_Depth, Sort_Ascending, Sort_Type, Locale_Flag_Size, Use_Field_Name_in_Validation_Message, Use_Key_Path,
+    Path, Write_Path, Preferred_Locale, Source_Order_Default, Auto_Stub, Stub_with_Key_Name, Stub_Value,
+    Maximum_Cache_Size, Yes
 
 
 }

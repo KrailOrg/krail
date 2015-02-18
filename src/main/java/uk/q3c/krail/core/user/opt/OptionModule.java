@@ -13,11 +13,17 @@ package uk.q3c.krail.core.user.opt;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.user.opt.cache.DefaultOptionCache;
+import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheLoader;
+import uk.q3c.krail.core.user.opt.cache.OptionCache;
+import uk.q3c.krail.core.user.opt.cache.OptionCacheLoader;
 
 /**
  * Created by David Sowerby on 16/11/14.
  */
 public class OptionModule extends AbstractModule {
+
     /**
      * Configures a {@link Binder} via the exposed methods.
      */
@@ -25,14 +31,41 @@ public class OptionModule extends AbstractModule {
     protected void configure() {
         bindOption();
         bindOptionStore();
-        bindOptionLayerDefinition();
+        bindOptionCache();
+        bindOptionCacheLoader();
+        bindOptionDao();
+        define();
     }
+
+    protected void define() {
+
+    }
+
     /**
-     * Override this method to provide your own {@link OptionLayerDefinition} implementation.
+     * Override this method to provide your own {@link OptionDao} implementation
      */
-    protected void bindOptionLayerDefinition() {
-        bind(OptionLayerDefinition.class).to(DefaultOptionLayerDefinition.class);
+    protected void bindOptionDao() {
+        bind(OptionDao.class).to(InMemoryOptionDao.class);
     }
+
+    /**
+     * Override this method to provide your own {@link OptionCache} implementation. The scope can be changed, but it
+     * seems likely that {@link VaadinSessionScoped} will be most effective, as options are based on a user, and {@link
+     * VaadinSessionScoped} is a user session.  However, for an application with a lot of options for anonymous users,
+     * Singleton may work better
+     */
+    protected void bindOptionCache() {
+        bind(OptionCache.class).to(DefaultOptionCache.class)
+                               .in(VaadinSessionScoped.class);
+    }
+
+    /**
+     * Override this method to provide your own {@link OptionCacheLoader} implementation
+     */
+    protected void bindOptionCacheLoader() {
+        bind(OptionCacheLoader.class).to(DefaultOptionCacheLoader.class);
+    }
+
 
     /**
      * Override this method to provide your own {@link Option} implementation. If all you want to do is change the
@@ -47,6 +80,14 @@ public class OptionModule extends AbstractModule {
      * implementation
      */
     protected void bindOptionStore() {
-        bind(OptionStore.class).to(DefaultOptionStore.class);
+        bind(OptionStore.class).to(InMemoryOptionStore.class);
+    }
+
+
+    protected void configureCache() {
+        GuavaCacheConfiguration config = new GuavaCacheConfiguration();
+
+
+
     }
 }

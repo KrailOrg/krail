@@ -84,9 +84,9 @@ public class ClassBundleReaderTest {
         PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey3.Key1, Locale.forLanguageTag(""));
         reader = new ClassBundleReader(option, new ClassBundleControl());
         reader.getOption()
-              .set(false, BundleReaderBase.OptionProperty.USE_KEY_PATH, "class");
+              .set(false, LabelKey.Use_Key_Path, "class");
         reader.getOption()
-              .set("fixture1", BundleReaderBase.OptionProperty.PATH, "class");
+              .set("fixture1", LabelKey.Path, "class");
 
         //when
         Optional<String> value = reader.getValue(cacheKey, "class", false, false, "na");

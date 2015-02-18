@@ -25,7 +25,9 @@ import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18N;
+import uk.q3c.krail.i18n.LabelKey;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -33,7 +35,6 @@ import java.util.List;
 @I18N
 public class DefaultSubPagePanel extends NavigationButtonPanel implements OptionContext, SubPagePanel,
         UserSitemapChangeListener {
-    public enum OptionProperty {SORT_ASCENDING, SORT_TYPE}
     private static Logger log = LoggerFactory.getLogger(DefaultSubPagePanel.class);
     private final UserSitemap userSitemap;
     private final Option option;
@@ -46,13 +47,13 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
         this.userSitemap = userSitemap;
         this.option = option;
         this.sorters = sorters;
-        option.configure(this, OptionProperty.class);
+        option.init(this);
         sorters.setOptionSortAscending(getOptionSortAscending());
         sorters.setOptionSortType(getOptionSortType());
     }
 
     public boolean getOptionSortAscending() {
-        return option.get(true, OptionProperty.SORT_ASCENDING);
+        return option.get(true, LabelKey.Sort_Ascending);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
     @Override
     public void setSortAscending(boolean ascending, boolean rebuild) {
         sorters.setOptionSortAscending(ascending);
-        option.set(ascending, OptionProperty.SORT_ASCENDING);
+        option.set(ascending, LabelKey.Sort_Ascending);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -91,7 +92,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
     }
 
     public SortType getOptionSortType() {
-        SortType sortType = option.get(SortType.ALPHA, OptionProperty.SORT_TYPE);
+        SortType sortType = option.get(SortType.ALPHA, LabelKey.Sort_Type);
         return sortType;
     }
 
@@ -103,7 +104,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
     @Override
     public void setOptionSortType(SortType sortType, boolean rebuild) {
         sorters.setOptionSortType(sortType);
-        option.set(sortType, OptionProperty.SORT_TYPE);
+        option.set(sortType, LabelKey.Sort_Type);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -123,6 +124,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
         build();
     }
 
+    @Nonnull
     @Override
     public Option getOption() {
         return option;

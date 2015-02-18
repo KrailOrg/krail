@@ -20,12 +20,15 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 /**
  * Use this instead of using {@link SecurityUtils#getSubject()} directly, to ensure that the Subject instance remains
  * consistent for the duration of a Vaadin Session
  *
  * @author David Sowerby 15 Jul 2013
  */
+@ThreadSafe
 public class SubjectProvider implements Provider<Subject> {
     private static Logger log = LoggerFactory.getLogger(SubjectProvider.class);
     private final VaadinSessionProvider sessionProvider;
@@ -37,7 +40,7 @@ public class SubjectProvider implements Provider<Subject> {
     }
 
     @Override
-    public Subject get() {
+    public synchronized Subject get() {
         Subject subject = null;
         try {
             VaadinSession session = sessionProvider.get();
