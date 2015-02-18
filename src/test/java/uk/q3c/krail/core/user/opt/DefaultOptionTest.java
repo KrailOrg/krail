@@ -12,34 +12,70 @@
  */
 package uk.q3c.krail.core.user.opt;
 
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
+import uk.q3c.krail.util.KrailCodeException;
 
 import static org.mockito.Mockito.when;
 
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({})
 public class DefaultOptionTest {
 
-    DefaultOption dfo;
-
+    DefaultOption option;
     @Mock
     SubjectProvider subjectProvider;
-
     @Mock
     Subject subject;
-
     @Mock
     OptionLayerDefinition layerDefinition;
-
     @Mock
     SubjectIdentifier subjectIdentifier;
 
     @Before
     public void setup() {
         when(subjectProvider.get()).thenReturn(subject);
-        dfo = new DefaultOption(new DefaultOptionStore(), layerDefinition, subjectProvider, subjectIdentifier);
+        option = new DefaultOption(new DefaultOptionStore(), layerDefinition, subjectProvider, subjectIdentifier);
+    }
+
+    @Test(expected = KrailCodeException.class)
+    public void not_initialised() {
+        //given
+        TestContext_without_init context = new TestContext_without_init(option);
+        //when
+        context.optionMaxDepth();
+
+        //then
+        //exception
+    }
+
+    private static class TestContext_without_init implements OptionContext {
+
+        public enum OptionProperty {
+            MAX_DEPTH
+        }
+
+        private Option option;
+
+        public TestContext_without_init(Option option) {
+            this.option = option;
+        }
+
+        @Override
+        public Option getOption() {
+            return option;
+        }
+
+        public int optionMaxDepth() {
+            return option.get(3, OptionProperty.MAX_DEPTH);
+        }
     }
 
     //    @Test

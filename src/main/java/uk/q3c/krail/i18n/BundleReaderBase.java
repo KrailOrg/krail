@@ -33,7 +33,7 @@ public abstract class BundleReaderBase implements OptionContext, BundleReader {
     protected BundleReaderBase(Option option, ResourceBundle.Control control) {
         this.option = option;
         this.control = control;
-        option.configure(this, OptionProperty.class);
+        option.init(this, OptionProperty.class);
     }
 
     @Override

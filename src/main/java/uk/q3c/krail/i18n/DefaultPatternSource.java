@@ -45,7 +45,7 @@ public class DefaultPatternSource implements OptionContext, PatternSource<Loadin
     protected DefaultPatternSource(Option option,
                                    PatternCacheLoader cacheLoader) {
         this.option = option;
-        option.configure(this, OptionProperty.class);
+        option.init(this, OptionProperty.class);
         //CacheLoader has no interface so the cast is necessary to allow alternative PatternCacheLLoader implementations
         //although all implementations would need to extend CacheLoader
         cache = CacheBuilder.newBuilder()

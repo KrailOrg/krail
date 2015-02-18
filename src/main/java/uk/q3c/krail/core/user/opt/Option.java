@@ -15,9 +15,9 @@ package uk.q3c.krail.core.user.opt;
  * Created by David Sowerby on 03/12/14.
  */
 public interface Option {
-    void configure(OptionContext consumer, Class<? extends Enum> keys);
+    void init(OptionContext consumer, Class<? extends Enum> keys);
 
-    void configure(Class<? extends OptionContext> consumerClass, Class<? extends Enum> keys);
+    void init(Class<? extends OptionContext> consumerClass, Class<? extends Enum> keys);
 
     /**
      * @param key

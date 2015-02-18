@@ -69,7 +69,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
         this.option = option;
         this.builder = builder;
         this.sorters = sorters;
-        option.configure(this, optionProperty.class);
+        option.init(this, optionProperty.class);
         builder.setUserNavigationTree(this);
         setImmediate(true);
         setItemCaptionMode(ItemCaptionMode.EXPLICIT);

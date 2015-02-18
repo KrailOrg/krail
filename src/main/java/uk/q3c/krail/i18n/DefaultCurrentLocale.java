@@ -79,7 +79,7 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
         this.defaultLocale = defaultLocale;
         this.userStatus = userStatus;
         this.option = option;
-        option.configure(this, OptionProperty.class);
+        option.init(this, OptionProperty.class);
         userStatus.addListener(this);
         locale = defaultLocale;
         if (!supportedLocales.contains(defaultLocale)) {

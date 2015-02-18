@@ -45,7 +45,7 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
         this.userSitemap = sitemap;
         this.option = option;
         this.builder = builder;
-        option.configure(this, OptionProperty.class);
+        option.init(this, OptionProperty.class);
         setImmediate(true);
         builder.setUserNavigationMenu(this);
         userSitemap.addListener(this);
