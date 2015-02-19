@@ -56,8 +56,9 @@ public enum LabelKey implements I18NKey {
     Refresh_Account,
     Request_Account,
     Reset_Account,
-    Small,
+    Simple_User_Hierarchy,
     Sitemap_Service,
+    Small,
     Splash,
     Submit,
     System_Account,
@@ -65,7 +66,7 @@ public enum LabelKey implements I18NKey {
     Unnamed,
     User_Name,
     Warning,
-    Yes;
+    Yes
 
 
 }

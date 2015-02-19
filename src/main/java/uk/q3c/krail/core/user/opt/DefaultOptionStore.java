@@ -15,9 +15,14 @@ package uk.q3c.krail.core.user.opt;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import uk.q3c.krail.core.user.profile.UserHierarchy;
+import uk.q3c.krail.core.user.profile.UserHierarchyException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -26,30 +31,19 @@ import java.util.concurrent.ConcurrentHashMap;
 @Singleton
 public class DefaultOptionStore implements OptionStore {
 
-    private Map<String, Object> map = new ConcurrentHashMap<>();
+    private Map<String, Map<String, Map<String, Object>>> map = new ConcurrentHashMap<>();
+
 
     @Inject
     protected DefaultOptionStore() {
     }
 
+
     /**
-     * Loads an {@code Optional<T>} option value from the store, or {@link Optional#empty()}} is no valid value found
-     * (including a situation where the type stored cannot be cast to the type to be loaded)
+     * Returns a concatenation of the supplied parameters to form a composite String key
      *
-     * @param sampleValue
-     *         this is used only for typing the return value, it is not a default value as with other parts of the
-     *         {@link Option} API
-     * @param layerId
-     *         represents a layer in a hierarchy of options - these are prefixed with a numeral indicating the level
-     *         of the layer (for example, a user id might be "0:dsowerby").  Layer 0 is always the user layer, and
-     *         layer 99 is always the system layer and both are always defined.  There may or may not be other layers
-     *         in between.  Option values may or may not exist in any layer.  The layer numbers indicate a priority,
-     *         and the lower the number the higher the priority. An implementation ensures that the hierarchy is
-     *         honoured so that an option value is returned for the highest priority available for that option. For
-     *         example, if a user option exists, it will always override the same option defined at the system layer.
-     * @param consumerClassName
-     *         the class name of an implementation of {@link OptionContext} which uses a specific option.  For example
-     *         OrderInputForm
+     * @param contextClass
+     *         the object which uses the option
      * @param key
      *         the option specific key, for example SHOW_ALL_SECTIONS
      * @param qualifiers
@@ -60,51 +54,14 @@ public class DefaultOptionStore implements OptionStore {
      *         <p>
      *         where "2,3" is the grid position of the button
      *
-     * @return
+     * @return a concatenation of the supplied parameters to form a composite String key
      */
-    @Override
-    synchronized public <T> Optional<T> load(T sampleValue, String layerId, String consumerClassName, String key,
-                                             String qualifiers) {
-        Object result = map.get(compositeKey(layerId, consumerClassName, key, qualifiers));
-        try {
-            return Optional.of((T) result);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-
-    }
-
-    private String compositeKey(String layerId, String consumerClassName, String key, String qualifiers) {
+    protected String compositeKey(Class<? extends OptionContext> contextClass, Enum<?> key, String... qualifiers) {
         Joiner joiner = Joiner.on("-")
                               .skipNulls();
-        return joiner.join(layerId, consumerClassName, key, qualifiers);
+        return joiner.join(contextClass.getSimpleName(), key.name(), qualifiers);
     }
 
-    /**
-     * Stores an {@code Optional<T>} option value in the store
-     *
-     * @param value
-     *         this value to be stored.  This can be of any type supported by the implementation. That is usually
-     *         determined by the underlying persistence layer.
-     *         <p>
-     *         Other parameters are the same as for {@link #load(Object, String, String, String, String)}
-     * @param layerId
-     * @param consumerClassName
-     * @param key
-     * @param qualifiers
-     *
-     * @return
-     *
-     * @throws OptionTypeException
-     *         if the value type is not supported
-     */
-    @Override
-    synchronized public <T> void store(T value, String layerId, String consumerClassName, String key, String
-            qualifiers) {
-
-        map.put(compositeKey(layerId, consumerClassName, key, qualifiers), value);
-
-    }
 
     /**
      * Flushes the cache (if there is one - that will depend on the implementation)
@@ -113,4 +70,118 @@ public class DefaultOptionStore implements OptionStore {
     synchronized public void flushCache() {
 
     }
+
+
+    /**
+     * Sets the value for a specific key, for the current user, and hierarchy level.  The {@code context}, {@code key} &
+     * {@code qualifiers}
+     * form a composite key
+     *
+     * @param value
+     *         the value to be stored.  This can be of any type supported by the implementation. That is usually
+     *         determined by the underlying persistence layer.
+     * @param hierarchy
+     *         the hierarchy to use
+     * @param hierarchyLevel
+     *         the highest hierarchy level to assign the value to
+     * @param optionKey
+     * an object representing a unique key for the option
+     *
+     * @param <T>
+     *         the type of the option value
+     *         @throw {@link UserHierarchyException} if {@code hierarchyLevel} is out of range
+     */
+    @Override
+    public synchronized <T> void setValue(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyLevel,
+                                          @Nonnull OptionKey optionKey) {
+        checkLevel(hierarchy, hierarchyLevel);
+        if (!map.containsKey(hierarchy.persistenceName())) {
+            map.put(hierarchy.persistenceName(), new HashMap<>());
+        }
+        Map<String, Map<String, Object>> hierarchyMap = map.get(hierarchy.persistenceName());
+        String compositeKey = optionKey.compositeKey();
+        if (!hierarchyMap.containsKey(compositeKey)) {
+            hierarchyMap.put(compositeKey, new HashMap<>());
+        }
+        Map<String, Object> valueMap = hierarchyMap.get(compositeKey);
+        valueMap.put(hierarchy.layerForCurrentUser(hierarchyLevel), value);
+    }
+
+    private void checkLevel(UserHierarchy hierarchy, int hierarchyLevel) {
+        int layersAvailable = hierarchy.layersForCurrentUser()
+                                       .size();
+        if (hierarchyLevel >= (layersAvailable)) {
+            throw new UserHierarchyException("The hierarchy level of " + hierarchyLevel + " requested is greater than" +
+                    " the number of levels available, " + layersAvailable);
+        }
+    }
+
+
+    /**
+     * Gets a value for the specified key.  The {@code context}, {@code key} & {@code qualifiers} form a composite key
+     *
+     * @param defaultValue
+     *         the value to be returned if no value found in persistence
+     * @param hierarchy
+     *         the hierarchy to use
+     * @param hierarchyLevel
+     *         the highest hierarchy level to return - usually level 0, (the user)
+     * @param optionKey
+     * an object representing a unique key for the option
+     * @param <T>
+     *         the type of the option value
+     *
+     * @return the value from the layer 'nearest' the hierarchyLevel (nearest means returning the first value found,
+     * starting at hierarchyLevel down through the layers),
+     */
+    @Override
+    @Nonnull
+    public synchronized <T> T getValue(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, int hierarchyLevel,
+                                       @Nonnull OptionKey optionKey) {
+        checkLevel(hierarchy, hierarchyLevel);
+        Map<String, Map<String, Object>> hierarchyMap = map.get(hierarchy.persistenceName());
+        if (hierarchyMap == null) {
+            return defaultValue;
+        }
+        Map<String, Object> valueMap = hierarchyMap.get(optionKey.compositeKey());
+        if (valueMap == null) {
+            return defaultValue;
+        }
+        List<String> layers = hierarchy.layersForCurrentUser();
+        for (int i = hierarchyLevel; i < layers.size(); i++) {
+            T value = (T) valueMap.get(layers.get(i));
+            if (value != null) {
+                return value;
+            }
+        }
+
+        return defaultValue;
+    }
+
+
+    /**
+     * Deletes a value for the current user, at a specific layer (specified by hierarchyLevel).  The {@code context},
+     * {@code key} & {@code
+     * qualifiers} form a composite key
+     *
+     * @param hierarchy
+     *         the hierarchy to use
+     * @param hierarchyLevel
+     *         the index of the layer entry to delete
+     * @param optionKey
+     * an object representing a unique key for the option
+     *
+     * @return the previous value associated with composite key, or null if there was no mapping for key.
+     */
+    @Nullable
+    @Override
+    public Object deleteValue(@Nonnull UserHierarchy hierarchy, int hierarchyLevel, @Nonnull OptionKey optionKey) {
+        checkLevel(hierarchy, hierarchyLevel);
+        Map<String, Map<String, Object>> hierarchyMap = map.get(hierarchy.persistenceName());
+        Map<String, Object> valueMap = hierarchyMap.get(optionKey.compositeKey());
+        String layer = hierarchy.layerForCurrentUser(hierarchyLevel);
+        return valueMap.remove(layer);
+    }
+
+
 }

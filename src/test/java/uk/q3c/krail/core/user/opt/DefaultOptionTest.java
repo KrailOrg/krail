@@ -1,59 +1,187 @@
 /*
- * Copyright (C) 2013 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package uk.q3c.krail.core.user.opt;
 
+import com.google.common.collect.Lists;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.shiro.SubjectIdentifier;
-import uk.q3c.krail.core.shiro.SubjectProvider;
+import uk.q3c.krail.core.user.profile.UserHierarchy;
+import uk.q3c.krail.core.view.component.LocaleContainer;
 import uk.q3c.krail.util.KrailCodeException;
 
-import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class DefaultOptionTest {
 
+    private enum Key {key1, key2}
     DefaultOption option;
+    DefaultOptionStore store;
     @Mock
-    SubjectProvider subjectProvider;
+            LocaleContainer localeContainer;
+    List<String> allLayers;
+    private Class<? extends OptionContext> contextClass=LocaleContainer.class;
     @Mock
-    Subject subject;
-    @Mock
-    OptionLayerDefinition layerDefinition;
-    @Mock
-    SubjectIdentifier subjectIdentifier;
-
-    @Before
-    public void setup() {
-        when(subjectProvider.get()).thenReturn(subject);
-        option = new DefaultOption(new DefaultOptionStore(), layerDefinition, subjectProvider, subjectIdentifier);
-    }
+    private UserHierarchy hierarchy;
+    private ArrayList<String> singleLayer;
 
     @Test(expected = KrailCodeException.class)
     public void not_initialised() {
         //given
-        TestContext_without_init context = new TestContext_without_init(option);
+        DefaultOption option2 = new DefaultOption(store, hierarchy);
+        TestContext_without_init context = new TestContext_without_init(option2);
         //when
         context.optionMaxDepth();
 
         //then
         //exception
+    }
+
+//
+    @Before
+    public void setup() {
+        store = new DefaultOptionStore();
+        option = new DefaultOption(store,hierarchy);
+        option.init(LocaleContainer.class);
+                when(hierarchy.layerForCurrentUser(0)).thenReturn("fbaton");
+                when(hierarchy.layerForCurrentUser(1)).thenReturn("system");
+                when(hierarchy.persistenceName()).thenReturn("MockHierarchy");
+                allLayers = Lists.newArrayList("fbaton", "system");
+                singleLayer = Lists.newArrayList("system");
+    }
+
+//
+    @Test
+    public void putAndGet() {
+        //given
+        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
+
+        //when
+        option.set(3, Key.key1);
+        //then
+        assertThat(option.get(5,  Key.key1)).isEqualTo(3);
+    }
+
+    @Test
+    public void put_and_get_override() {
+        //given
+        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
+        //when
+        option.set(3,  Key.key1);
+        option.set(7, hierarchy,1,  Key.key1);
+        //then
+        assertThat(option.get(5,  Key.key1)).isEqualTo(3);
+        assertThat(option.get(5, LocaleContainer.class, Key.key1)).isEqualTo(3);
+        assertThat(option.get(5, hierarchy, 1, Key.key1)).isEqualTo(7);
+    }
+
+    @Test
+    public void delete() {
+        //given
+        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
+        //when
+        option.set(3,  Key.key1);
+        option.set(7, hierarchy,1,  Key.key1);
+        option.delete(hierarchy,0,  Key.key1);
+        //then
+        assertThat(option.get(5,  Key.key1)).isEqualTo(7);
+        assertThat(option.get(5, hierarchy, 1,  Key.key1)).isEqualTo(7);
+        assertThat(option.get(5, hierarchy, 0,  Key.key1)).isEqualTo(7);
+        assertThat(option.get(5, hierarchy,  Key.key1)).isEqualTo(7);
+    }
+
+    @Test
+    public void delete2() {
+        //given
+        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
+        //when
+        option.set(3,  Key.key1);
+        option.set(7, hierarchy,1,  Key.key1);
+        option.delete(hierarchy,  Key.key1);
+        //then
+        assertThat(option.get(5,  Key.key1)).isEqualTo(7);
+        assertThat(option.get(5, hierarchy, 1,  Key.key1)).isEqualTo(7);
+        assertThat(option.get(5, hierarchy, 0,  Key.key1)).isEqualTo(7);
+        assertThat(option.get(5, hierarchy,  Key.key1)).isEqualTo(7);
+    }
+
+    @Test
+    public void defaultValue() {
+        //given
+        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
+        //when
+
+        //then
+        assertThat(option.get(5,  Key.key1)).isEqualTo(5);
+    }
+
+    @Test
+    public void defaultValue2() {
+        //given
+        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
+        //when
+        option.set(3,  Key.key2);
+        //then
+        assertThat(option.get(5,  Key.key1)).isEqualTo(5);
+    }
+
+    @Test
+    public void defaultValue3() {
+        //given
+        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
+        //when
+        option.set(3, hierarchy,  Key.key2);
+        option.delete(Key.key2);
+        //then
+        assertThat(option.get(5,  Key.key2)).isEqualTo(5);
+    }
+
+    @Test
+    public void flushCache() {
+        //given
+
+        //when
+option.flushCache();
+        //then does nothing
+        assertThat(true).isTrue();
+    }
+
+    @Test
+    public void init_context_class() {
+        //given
+        DefaultOption option2 = new DefaultOption(store, hierarchy);
+        //when
+option2.init(LocaleContainer.class);
+        //then
+        assertThat(option.getContext()).isEqualTo(LocaleContainer.class);
+    }
+
+    @Test
+    public void init_context_instance() {
+        //given
+        DefaultOption option2 = new DefaultOption(store, hierarchy);
+
+        //when
+option2.init(localeContainer);
+        //then
+        assertThat(option.getContext()).isEqualTo(LocaleContainer.class);
     }
 
     private static class TestContext_without_init implements OptionContext {
@@ -77,121 +205,4 @@ public class DefaultOptionTest {
             return option.get(3, OptionProperty.MAX_DEPTH);
         }
     }
-
-    //    @Test
-    //    public void integer() {
-    //
-    //        // given
-    //
-    //        // when
-    //        dfo.setOption("a", "a", 1);
-    //        // then
-    //        assertThat(dfo.getOptionAsInt("a", "a", 2)).isEqualTo(1);
-    //        // returns default
-    //        assertThat(dfo.getOptionAsInt("a", "b", 3)).isEqualTo(3);
-    //        // when
-    //        dfo.setOption("a", UserOptionProperty.MAX_DEPTH, 7);
-    //        // then
-    //        assertThat(dfo.getOptionAsInt("a", UserOptionProperty.MAX_DEPTH, 2)).isEqualTo(7);
-    //
-    //    }
-    //
-    //    @Test
-    //    public void dbl() {
-    //
-    //        // given
-    //
-    //        // when
-    //        dfo.setOption("a", "a", 1.4);
-    //        // then
-    //        assertThat(dfo.getOptionAsDouble("a", "a", 2)).isEqualTo(1.4);
-    //        // returns default
-    //        assertThat(dfo.getOptionAsDouble("a", "b", 3.3)).isEqualTo(3.3);
-    //
-    //    }
-    //
-    //    @Test
-    //    public void strng() {
-    //
-    //        // given
-    //
-    //        // when
-    //        dfo.setOption("a", "a", "x");
-    //        // then
-    //        assertThat(dfo.getOptionAsString("a", "a", "ff")).isEqualTo("x");
-    //        // returns default
-    //        assertThat(dfo.getOptionAsString("a", "b", "y")).isEqualTo("y");
-    //
-    //    }
-    //
-    //    @Test
-    //    public void dateTime() {
-    //
-    //        // given
-    //        DateTime dt1 = new DateTime();
-    //        DateTime dt2 = dt1.minusDays(2);
-    //        // when
-    //        dfo.setOption("a", "a", dt1);
-    //        // then
-    //        assertThat(dfo.getOptionAsDateTime("a", "a", dt1)
-    //                      .toString()).isEqualTo(dt1.toString());
-    //        // returns default
-    //        assertThat(dfo.getOptionAsDateTime("a", "b", dt2)).isEqualTo(dt2);
-    //
-    //    }
-    //
-    //    @Test
-    //    public void map() {
-    //
-    //        // given
-    //        Map<String, String> map1 = new TreeMap<>();
-    //        map1.put("a", "1");
-    //        map1.put("b", "2");
-    //
-    //        Map<String, String> map2 = new TreeMap<>();
-    //        map2.put("c", "3");
-    //        map2.put("d", "4");
-    //
-    //        // when
-    //        dfo.setOption("group", "map", map1);
-    //        // then
-    //        assertThat(dfo.getOptionAsMap("group", "map", map2)).isEqualTo(map1);
-    //        assertThat(dfo.getOptionAsMap("group", "non-existent map", map2)).isEqualTo(map2);
-    //
-    //    }
-    //
-    //    @Test
-    //    public void list() {
-    //
-    //        // given
-    //        List<String> list1 = new ArrayList<>();
-    //        list1.add("a");
-    //        list1.add("b");
-    //
-    //        List<String> list2 = new ArrayList<>();
-    //        list2.add("c");
-    //        list2.add("d");
-    //
-    //        // when
-    //        dfo.setOption("group", "list", list1);
-    //        // then
-    //        assertThat(dfo.getOptionAsList("group", "list", list2)).isEqualTo(list1);
-    //        assertThat(dfo.getOptionAsList("group", "non-existent lisdt", list2)).isEqualTo(list2);
-    //
-    //    }
-    //
-    //    @Test
-    //    public void bool() {
-    //
-    //        // given
-    //
-    //        // when
-    //        dfo.setOption("a", "a", true);
-    //        // then
-    //        assertThat(dfo.getOptionAsBoolean("a", "a", false)).isEqualTo(true);
-    //        // returns default
-    //        assertThat(dfo.getOptionAsBoolean("a", "b", false)).isEqualTo(false);
-    //
-    //    }
-
 }

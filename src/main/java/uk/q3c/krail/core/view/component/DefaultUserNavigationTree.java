@@ -69,7 +69,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
         this.option = option;
         this.builder = builder;
         this.sorters = sorters;
-        option.init(this, optionProperty.class);
+        option.init(this);
         builder.setUserNavigationTree(this);
         setImmediate(true);
         setItemCaptionMode(ItemCaptionMode.EXPLICIT);
@@ -155,7 +155,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
 
     /**
      * Returns true if the {@code node} is a leaf as far as this {@link DefaultUserNavigationTree} is concerned. It may
-     * be a leaf here, but not in the {@link #userSitemap}, depending on the setting of {@link #maxLevel}
+     * be a leaf here, but not in the {@link #userSitemap}, depending on the setting of {@link #getOptionMaxDepth()}
      *
      * @param node
      *
@@ -240,8 +240,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
 
     /**
      * Although only {@link UserSitemap} labels (and therefore captions) have changed, the tree may need to be
-     * re-sorted
-     * to reflect the change in language, so it is easier just to rebuild the tree
+     * re-sorted to reflect the change in language, so it is easier just to rebuild the tree
      */
     @Override
     public void labelsChanged() {

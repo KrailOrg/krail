@@ -57,7 +57,7 @@ public class LocaleContainerTest {
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
-        option.init(LocaleContainer.class, LocaleContainer.optionProperty.class);
+        option.init(LocaleContainer.class);
         File baseDir = TestResource.testJavaRootDir("krail");
 
         VaadinService.setCurrent(vaadinService);

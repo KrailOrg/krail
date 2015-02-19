@@ -46,7 +46,7 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
         this.option = option;
         this.bundleReaderOrder = bundleReaderOrder;
         this.bundleReaderOrderDefault = bundleReaderOrderDefault;
-        option.init(this, OptionProperty.class);
+        option.init(this);
     }
 
     /**

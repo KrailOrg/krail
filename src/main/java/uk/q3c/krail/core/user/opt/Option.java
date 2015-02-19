@@ -11,13 +11,23 @@
 
 package uk.q3c.krail.core.user.opt;
 
+import uk.q3c.krail.core.user.profile.UserHierarchy;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Created by David Sowerby on 03/12/14.
  */
 public interface Option {
-    void init(OptionContext consumer, Class<? extends Enum> keys);
+    void init(OptionContext consumer);
 
-    void init(Class<? extends OptionContext> consumerClass, Class<? extends Enum> keys);
+    void init(Class<? extends OptionContext> consumerClass);
+
+    /**
+     * Flushes the cache of the associated option store, for the current user
+     */
+    void flushCache();
 
     /**
      * @param key
@@ -40,12 +50,40 @@ public interface Option {
      *
      * @return
      */
-    <T> T get(T defaultValue, Enum<?> key, String... qualifiers);
+    @Nonnull
+    <T> T get(@Nonnull T defaultValue, @Nonnull Enum<?> key, @Nullable String... qualifiers);
+
+
+    @Nonnull
+    <T> T get(@Nonnull T defaultValue, @Nonnull Class<? extends OptionContext> contextClass, @Nonnull Enum<?> key,
+              @Nullable String... qualifiers);
+
+    @Nonnull
+    <T> T get(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull Enum<?> key, @Nullable String...
+            qualifiers);
+
+
+    @Nonnull
+    <T> T get(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, int hierarchyLevel, @Nonnull Enum<?> key,
+              @Nullable String... qualifiers);
 
     <T> void set(T value, Enum<?> key, String... qualifiers);
 
-    /**
-     * Flushes the cache of the associated option store, for the current user
-     */
-    void flushCache();
+
+    <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, @Nonnull Enum<?> key, @Nullable String...
+            qualifiers);
+
+    <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyLevel, @Nonnull Enum<?> key,
+                 @Nullable String... qualifiers);
+
+    @Nullable
+    Object delete(@Nonnull UserHierarchy hierarchy, @Nonnull Enum<?> key, @Nullable String... qualifiers);
+
+    @Nullable
+    Object delete(@Nonnull Enum<?> key, @Nullable String... qualifiers);
+
+    @Nullable
+    Object delete(@Nonnull UserHierarchy hierarchy, int hierarchyLevel, @Nonnull Enum<?> key, @Nullable String...
+            qualifiers);
+
 }

@@ -25,14 +25,8 @@ public class OptionModule extends AbstractModule {
     protected void configure() {
         bindOption();
         bindOptionStore();
-        bindOptionLayerDefinition();
     }
-    /**
-     * Override this method to provide your own {@link OptionLayerDefinition} implementation.
-     */
-    protected void bindOptionLayerDefinition() {
-        bind(OptionLayerDefinition.class).to(DefaultOptionLayerDefinition.class);
-    }
+
 
     /**
      * Override this method to provide your own {@link Option} implementation. If all you want to do is change the

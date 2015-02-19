@@ -33,7 +33,7 @@ public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWrite
 
     public BundleWriterBase(Option option) {
         this.option = option;
-        option.init(this, OptionProperty.class);
+        option.init(this);
     }
 
     /**

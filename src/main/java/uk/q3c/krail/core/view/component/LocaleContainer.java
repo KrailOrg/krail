@@ -44,7 +44,7 @@ public class LocaleContainer extends IndexedContainer implements OptionContext {
         super();
         this.supportedLocales = supportedLocales;
         this.option = option;
-        option.init(this, optionProperty.class);
+        option.init(this);
         fillContainer();
     }
 

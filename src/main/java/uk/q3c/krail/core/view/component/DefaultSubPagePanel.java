@@ -46,7 +46,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
         this.userSitemap = userSitemap;
         this.option = option;
         this.sorters = sorters;
-        option.init(this, OptionProperty.class);
+        option.init(this);
         sorters.setOptionSortAscending(getOptionSortAscending());
         sorters.setOptionSortType(getOptionSortType());
     }

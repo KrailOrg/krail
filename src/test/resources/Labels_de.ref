@@ -48,8 +48,9 @@ public class Labels_de extends EnumResourceBundle<LabelKey> {
         put(LabelKey.Refresh_Account, "Konto aktualisieren");
         put(LabelKey.Request_Account, "Konto anfordern");
         put(LabelKey.Reset_Account, "Konto zurücksetzen");
-        put(LabelKey.Small, "Klein");
+        put(LabelKey.Simple_User_Hierarchy, "Simple User Hierarchy");
         put(LabelKey.Sitemap_Service, "Sitemap Service");
+        put(LabelKey.Small, "Klein");
         put(LabelKey.Splash, "Splash");
         put(LabelKey.Submit, "Absenden");
         put(LabelKey.System_Account, "Systemkonto");
