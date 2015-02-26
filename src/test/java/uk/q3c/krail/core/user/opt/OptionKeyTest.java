@@ -16,13 +16,14 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.view.component.LocaleContainer;
+import uk.q3c.krail.i18n.TestLabelKey;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class OptionKeyTest {
-    private enum Key {key1, key2}
+
 
     private Class<? extends OptionContext> contextClass = LocaleContainer.class;
 
@@ -32,9 +33,9 @@ public class OptionKeyTest {
         //given
 
         //when
-        OptionKey noQualifiers = new OptionKey(LocaleContainer.class, Key.key1);
-        OptionKey oneQualifiers = new OptionKey(LocaleContainer.class, Key.key1, "q1");
-        OptionKey twoQualifiers = new OptionKey(LocaleContainer.class, Key.key1, "q1", "q2");
+        OptionKey noQualifiers = new OptionKey(LocaleContainer.class, TestLabelKey.key1);
+        OptionKey oneQualifiers = new OptionKey(LocaleContainer.class, TestLabelKey.key1, "q1");
+        OptionKey twoQualifiers = new OptionKey(LocaleContainer.class, TestLabelKey.key1, "q1", "q2");
         //then
         assertThat(noQualifiers.compositeKey()).isEqualTo("LocaleContainer-key1");
         assertThat(oneQualifiers.compositeKey()).isEqualTo("LocaleContainer-key1-q1");
@@ -46,7 +47,7 @@ public class OptionKeyTest {
         //given
 
         //when
-        OptionKey noQualifiers = new OptionKey(null, Key.key1);
+        OptionKey noQualifiers = new OptionKey(null, TestLabelKey.key1);
         //then
         assertThat(true).isFalse();
     }

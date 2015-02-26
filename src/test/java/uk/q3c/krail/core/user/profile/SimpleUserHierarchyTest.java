@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
+import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 
 import java.util.List;
@@ -32,6 +33,7 @@ import static org.mockito.Mockito.when;
 public class SimpleUserHierarchyTest {
 
     public static final String USER_ID = "fbaton";
+    public static final String SYSTEM = "system";
     @Mock
     SubjectIdentifier subjectIdentifier;
 
@@ -56,9 +58,9 @@ public class SimpleUserHierarchyTest {
         //given
         when(subject.isAuthenticated()).thenReturn(true);
         //when
-        List<String> actual = hierarchy.layersForCurrentUser();
+        List<String> actual = hierarchy.ranksForCurrentUser();
         //then
-        assertThat(actual).containsExactly(USER_ID, "system");
+        assertThat(actual).containsExactly(USER_ID, SYSTEM);
     }
 
     @Test
@@ -66,8 +68,112 @@ public class SimpleUserHierarchyTest {
         //given
         when(subject.isAuthenticated()).thenReturn(false);
         //when
-        List<String> actual = hierarchy.layersForCurrentUser();
+        List<String> actual = hierarchy.ranksForCurrentUser();
         //then
         assertThat(actual).containsExactly("system");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rankName_rank_too_low() {
+        //given
+
+        //when
+        String actual = hierarchy.rankName(-1);
+        //then
+        //exception
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rankName_rank_too_high_when_authenticated() {
+        //given
+        when(subject.isAuthenticated()).thenReturn(true);
+        //when
+        String actual = hierarchy.rankName(2);
+        //then
+        //exception
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rankName_rank_too_high_when_not_authenticated() {
+        //given
+        when(subject.isAuthenticated()).thenReturn(false);
+        //when
+        String actual = hierarchy.rankName(1);
+        //then
+        //exception
+    }
+
+    @Test
+    public void rankName_when_authenticated() {
+        //given
+        when(subject.isAuthenticated()).thenReturn(true);
+        //when
+        String actual0 = hierarchy.rankName(0);
+        String actual1 = hierarchy.rankName(1);
+        //then
+        assertThat(actual0).isEqualTo(USER_ID);
+        assertThat(actual1).isEqualTo(SYSTEM);
+    }
+
+    @Test
+    public void rankName_when_not_authenticated() {
+        //given
+        when(subject.isAuthenticated()).thenReturn(false);
+        //when
+        String actual0 = hierarchy.rankName(0);
+        //then
+        assertThat(actual0).isEqualTo(SYSTEM);
+    }
+
+    @Test
+    public void displayName() {
+        //given
+        String label = "Simple Hierarchy";
+        when(translate.from(LabelKey.Simple_User_Hierarchy)).thenReturn(label);
+        //when
+        String actual = hierarchy.displayName();
+        //then
+        assertThat(actual).isEqualTo(label);
+    }
+
+    @Test
+    public void highest_authenticated() {
+        //given
+        when(subject.isAuthenticated()).thenReturn(true);
+        //when
+        String actual = hierarchy.highestRankName();
+        //then
+        assertThat(actual).isEqualTo(USER_ID);
+    }
+
+    @Test
+    public void highest_not_authenticated() {
+        //given
+        when(subject.isAuthenticated()).thenReturn(false);
+        //when
+        //when
+        String actual = hierarchy.highestRankName();
+        //then
+        assertThat(actual).isEqualTo(SYSTEM);
+    }
+
+    @Test
+    public void lowest_authenticated() {
+        //given
+        when(subject.isAuthenticated()).thenReturn(true);
+        //when
+        String actual = hierarchy.lowestRankName();
+        //then
+        assertThat(actual).isEqualTo(SYSTEM);
+    }
+
+    @Test
+    public void lowest_not_authenticated() {
+        //given
+        when(subject.isAuthenticated()).thenReturn(false);
+        //when
+        String actual = hierarchy.lowestRankName();
+        //then
+        assertThat(actual).isEqualTo(SYSTEM);
     }
 }

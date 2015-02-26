@@ -11,22 +11,26 @@
 
 package uk.q3c.krail.core.user.profile;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
+import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 
 import javax.annotation.Nonnull;
-import java.util.List;
+import javax.annotation.concurrent.ThreadSafe;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
- * The most basic of {@link UserHierarchy} implementations, with just two layers, the 'system' layer and the 'user'
- * layer.  The latter is represented by {@link SubjectIdentifier#userId()}
+ * The most basic of {@link UserHierarchy} implementations, with just two ranks, the 'system' and the 'user'.  The
+ * user is represented by {@link SubjectIdentifier#userId()}, and is a higher rank than 'system'
  * <p>
  * Created by David Sowerby on 18/02/15.
  */
+@ThreadSafe
 public class SimpleUserHierarchy implements UserHierarchy {
 
 
@@ -36,7 +40,7 @@ public class SimpleUserHierarchy implements UserHierarchy {
     private Translate translate;
 
     @Inject
-    protected SimpleUserHierarchy(SubjectProvider subjectProvider, SubjectIdentifier subjectIdentifier, Translate
+    public SimpleUserHierarchy(SubjectProvider subjectProvider, SubjectIdentifier subjectIdentifier, Translate
             translate) {
         this.subjectProvider = subjectProvider;
         this.subjectIdentifier = subjectIdentifier;
@@ -44,54 +48,68 @@ public class SimpleUserHierarchy implements UserHierarchy {
     }
 
     /**
-     * Returns the layers for the current user, for this option hierarchy.
+     * The descriptive name for this hierarchy, usually for use in the user interface. Should be Locale sensitive
+     *
+     * @return The descriptive name for this hierarchy
+     */
+    @Override
+    @Nonnull
+    public synchronized String displayName() {
+        return translate.from(LabelKey.Simple_User_Hierarchy);
+    }
+
+    /**
+     * Returns the identifier of the {@code hierarchyRank}, for the current user.  From the example given in the
+     * {@link Option} javadoc, above that could be 'Development' if an implementation represented an Organisation,
+     * and the current user is Emily
+     *
+     * @param hierarchyRank
+     *         the rank (index) which is required.
+     *
+     * @return the rank name, for the current user, at the rank specified by {@code hierarchyRank}.
+     *
+     * @throws IllegalArgumentException
+     *         if {@code hierarchyRank} is out of bounds
+     */
+    @Override
+    public synchronized String rankName(int hierarchyRank) {
+        checkArgument(hierarchyRank >= 0, "hierarchyRank must be 0 or greater");
+        ImmutableList<String> ranks = ranksForCurrentUser();
+        try {
+            return ranks.get(hierarchyRank);
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Hierarchy level of " + hierarchyRank + " is too high");
+        }
+    }
+
+    /**
+     * Returns the values for the hierarchy ranks, for the current user, for this {@link UserHierarchy} implementation.
      *
      * @return if the user is authenticated, the userId and 'system'.  If the user is not authenticated, 'system' only
      */
     @Override
     @Nonnull
-    public List<String> layersForCurrentUser() {
+    public synchronized ImmutableList<String> ranksForCurrentUser() {
 
         if (subjectProvider.get()
                            .isAuthenticated()) {
-            return Lists.newArrayList(subjectIdentifier.userId(), SYSTEM);
+            return ImmutableList.of(subjectIdentifier.userId(), SYSTEM);
 
         } else {
             //not authenticated, can only use system level
-            return Lists.newArrayList(SYSTEM);
+            return ImmutableList.of(SYSTEM);
         }
     }
 
-    /**
-     * The descriptive name for this hierarchy, usually for use in the user interface. Should be Locale sensitive
-     *
-     * @return
-     */
     @Override
-    public String displayName() {
-        return translate.from(LabelKey.Simple_User_Hierarchy);
+    public synchronized String highestRankName() {
+        ImmutableList<String> ranks = ranksForCurrentUser();
+        return ranks.get(0);
     }
 
-    /**
-     * Returns the layer, for the current user, at the level specified by {@code hierarchyLevel}.
-     *
-     * @param hierarchyLevel
-     *         the level (index) which is required.
-     *
-     * @return he layer, for the current user, at the level specified by {@code hierarchyLevel}.
-     *
-     * @throws UserHierarchyException
-     *         if {@code hierarchy} is out of bounds
-     */
     @Override
-    public String layerForCurrentUser(int hierarchyLevel) {
-        switch (hierarchyLevel) {
-            case 0:
-                return subjectIdentifier.userId();
-            case 1:
-                return SYSTEM;
-            default:
-                throw new UserHierarchyException("Hierarchy level of " + hierarchyLevel + " is out of bounds ");
-        }
+    public synchronized String lowestRankName() {
+        ImmutableList<String> ranks = ranksForCurrentUser();
+        return ranks.get(ranks.size() - 1);
     }
 }

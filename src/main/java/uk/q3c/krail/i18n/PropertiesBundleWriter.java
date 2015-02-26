@@ -39,9 +39,15 @@ public class PropertiesBundleWriter<E extends Enum<E>> extends BundleWriterBase<
     public void write(Locale locale, Optional<String> bundleName) throws IOException {
         Properties properties = new Properties();
         EnumMap<E, String> entryMap = getBundle().getMap();
-        for (Map.Entry<E, String> entry : entryMap.entrySet()) {
-            properties.put(entry.getKey()
-                                .name(), entry.getValue());
+
+        //copy to SortedMap so that output is sorted by key
+        SortedMap<String, String> sortedMap = new TreeMap<>();
+        entryMap.forEach((k, v) -> {
+            sortedMap.put(k.name(), v);
+        });
+
+        for (Map.Entry<String, String> entry : sortedMap.entrySet()) {
+            properties.put(entry.getKey(), entry.getValue());
         }
 
         String bundleNameWithLocale = bundleNameWithLocale(locale, bundleName);

@@ -22,7 +22,9 @@ import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.i18n.I18NProcessor;
+import uk.q3c.krail.i18n.LabelKey;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +51,6 @@ import java.util.Map;
  */
 public abstract class BeanFieldGroupBase<T extends Entity> extends FieldGroup implements BeanFieldGroup<T>,
         OptionContext {
-    public enum OptionProperty {USE_FIELD_NAME_IN_VALIDATION_MESSAGE}
 
     private final I18NProcessor i18NProcessor;
     private final Map<Field<?>, BeanValidator<T>> defaultValidators;
@@ -105,6 +106,7 @@ public abstract class BeanFieldGroupBase<T extends Entity> extends FieldGroup im
     }
 
     @Override
+    @Nonnull
     public Option getOption() {
         return option;
     }
@@ -254,12 +256,12 @@ public abstract class BeanFieldGroupBase<T extends Entity> extends FieldGroup im
     }
 
     public boolean getOptionUseFieldNameInValidationMessage() {
-        return option.get(false, OptionProperty.USE_FIELD_NAME_IN_VALIDATION_MESSAGE, this.getClass()
+        return option.get(false, LabelKey.Use_Field_Name_in_Validation_Message, this.getClass()
                                                                                                   .getSimpleName());
     }
 
     public void setOptionUseFieldNameInValidationMessage(boolean useFieldNames) {
-        option.set(useFieldNames, OptionProperty.USE_FIELD_NAME_IN_VALIDATION_MESSAGE, this.getClass()
+        option.set(useFieldNames, LabelKey.Use_Field_Name_in_Validation_Message, this.getClass()
                                                                                                    .getSimpleName());
     }
 

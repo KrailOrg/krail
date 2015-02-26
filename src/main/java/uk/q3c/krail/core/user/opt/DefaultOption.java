@@ -12,49 +12,70 @@
 package uk.q3c.krail.core.user.opt;
 
 import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.user.opt.cache.OptionCache;
+import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.DefaultUserHierarchy;
+import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
+import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.util.KrailCodeException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static uk.q3c.krail.core.user.profile.RankOption.*;
 
 /**
- * Default implementation for {@link Option}, and uses {@link OptionStore} for persistence.  Unless specific {@link
- * UserHierarchy} implementations are supplied to the methods, the default {@link UserHierarchy} is used
+ * Default implementation for {@link Option}, and uses {@link OptionCache}, which is configured to use some form of
+ * persistence. All calls reference an implementation of {@link UserHierarchy}, either directly as a method
+ * parameter, or by defaulting to {@link #defaultHierarchy}.  The get() and set() default to using the highest rank
+ * from {@link UserHierarchy}.  For getting or setting values at a specific hierarchyRank use the getSpecific() and
+ * setSpecific() methods. The delete() method is always specific
+ * <p>
  * <p>
  * Created by David Sowerby on 03/12/14.
  */
 public class DefaultOption implements Option {
-
+    private static Logger log = LoggerFactory.getLogger(DefaultOption.class);
     private Class<? extends OptionContext> context;
     private UserHierarchy defaultHierarchy;
-    private OptionStore optionStore;
+    private OptionCache optionCache;
+
     @Inject
-    protected DefaultOption(OptionStore optionStore, @DefaultUserHierarchy UserHierarchy defaultHierarchy) {
-        this.optionStore = optionStore;
+    protected DefaultOption(@Nonnull OptionCache optionCache, @Nonnull @DefaultUserHierarchy UserHierarchy
+            defaultHierarchy) {
         this.defaultHierarchy = defaultHierarchy;
+        this.optionCache = optionCache;
     }
 
+    @Nonnull
     public Class<? extends OptionContext> getContext() {
         return context;
     }
 
+
     @Override
     public void init(@Nonnull OptionContext context) {
+        checkNotNull(context);
         this.context = context.getClass();
     }
 
-
     @Override
-    public void flushCache() {
-        optionStore.flushCache();
+    public void init(@Nonnull Class<? extends OptionContext> context) {
+        checkNotNull(context);
+        this.context = context;
     }
 
+
     @Override
-    public <T> void set(T value, Enum<?> key, String... qualifiers) {
+    public <T> void set(T value, I18NKey key, String... qualifiers) {
         checkInit();
-        optionStore.setValue(value, defaultHierarchy, 0, new OptionKey(context, key, qualifiers));
+        optionCache.write(new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 0, new OptionKey(context, key, qualifiers)), Optional.of(value));
     }
 
     private void checkInit() {
@@ -67,172 +88,102 @@ public class DefaultOption implements Option {
     }
 
     @Override
-    public synchronized <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, @Nonnull Enum<?> key,
+    public synchronized <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, @Nonnull I18NKey key,
                                      @Nullable String... qualifiers) {
-        checkInit();
-        optionStore.setValue(value, hierarchy, 0, new OptionKey(context, key, qualifiers));
-    }
-
-    /**
-     * Sets the value for a specific key, for the current user, and hierarchy level.  The {@code context}, {@code key}
-     * &
-     * {@code qualifiers}
-     * form a composite key
-     *
-     * @param value
-     *         the value to be stored.  This can be of any type supported by the implementation. That is usually
-     *         determined by the underlying persistence layer.
-     * @param hierarchy
-     *         the hierarchy to use
-     * @param hierarchyLevel
-     *         the highest hierarchy level to assign the value to
-     * @param key
-     *         the option specific key, for example SHOW_ALL_SECTIONS
-     * @param qualifiers
-     *         optional, this is usually dynamically generated qualifier(s) to make a complete unique identity where
-     *         the same option may be used several times within a consumer.  If for example you have an array of
-     *         dynamically generated buttons, which you want the user to be able to individually choose the colours
-     *         of, you may have consumer=com.example.FancyButtonForm, key=BUTTON_COLOUR, qualifiers="2,3"
-     *         <p>
-     *         where "2,3" is the grid position of the button
-     * @param <T>
-     *         the type of the option value
-     */
-    @Override
-    public synchronized <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyLevel, @Nonnull
-    Enum<?> key, @Nullable String... qualifiers) {
-        checkInit();
-        optionStore.setValue(value, hierarchy, hierarchyLevel, new OptionKey(context, key, qualifiers));
+        set(value, hierarchy, 0, context, key, qualifiers);
     }
 
 
     @Override
-    public void init(@Nonnull Class<? extends OptionContext> context) {
-        this.context = context;
+    public synchronized <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        checkInit();
+        checkNotNull(hierarchy);
+        checkArgument(hierarchyRank >= 0);
+        checkNotNull(context);
+        checkNotNull(key);
+        optionCache.write(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, new OptionKey(context, key,
+                qualifiers)), Optional.of(value));
     }
 
-    /**
-     * Gets option value for the {@code key} and optional {@code qualifiers}, combined with the {@link OptionContext}
-     * provided by the {@link #init(OptionContext)} method
-     *
-     * @param defaultValue
-     *         the default value to be returned if no value is found in the store.  Also determines the type of the
-     *         return value
-     * @param key
-     *         an enum key for the option
-     * @param qualifiers
-     *         optional qualifiers to make it possible to distinguish between otherwise identical options
-     * @param <T>
-     *         the data type of the option
-     *
-     * @return the value of the option, or the {@code defaultValue} if there is no value in the store for this option
-     */
     @Override
     @Nonnull
-    public <T> T get(@Nonnull T defaultValue, @Nonnull Enum<?> key, @Nullable String... qualifiers) {
-        checkInit();
-
-        return optionStore.getValue(defaultValue, defaultHierarchy, 0, new OptionKey(context, key, qualifiers));
+    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        return get(defaultValue, HIGHEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
     }
 
-    /**
-     * Calls {@link OptionStore#getValue(Object, UserHierarchy, int, OptionKey)} with {@code
-     * hierarchyLevel} set to 0, and the {@code hierarchy} set to the {@link #defaultHierarchy}
-     */
     @Override
     @Nonnull
-    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull Class<? extends OptionContext> contextClass,
-                                  @Nonnull Enum<?> key, @Nullable String... qualifiers) {
+    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull RankOption rankOption, @Nonnull UserHierarchy
+            hierarchy, int hierarchyRank, @Nonnull Class<? extends
+            OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
         checkInit();
-        return optionStore.getValue(defaultValue, defaultHierarchy, 0, new OptionKey(contextClass, key, qualifiers));
+        checkNotNull(defaultValue);
+        checkNotNull(hierarchy);
+        checkNotNull(context);
+        checkNotNull(key);
+        Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy,
+                rankOption, hierarchyRank, new OptionKey(context, key, qualifiers)));
+        if (optionalValue.isPresent()) {
+            return optionalValue.get();
+        } else {
+            return defaultValue;
+        }
     }
 
+    @Nonnull
+    @Override
+    public <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull Class<? extends
+            OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        return get(defaultValue, LOWEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
+    }
 
-    /**
-     * Calls {@link OptionStore#getValue(Object, UserHierarchy, int, OptionKey)} with {@code
-     * hierarchyLevel} set to 0
-     */
     @Override
     @Nonnull
-    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull Enum<?> key,
+    public synchronized <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull I18NKey key, @Nullable String...
+            qualifiers) {
+        return get(defaultValue, LOWEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
+    }
+
+    @Override
+    @Nonnull
+    public synchronized <T> T getSpecificRank(@Nonnull T defaultValue, int hierarchyRank, @Nonnull I18NKey key,
+                                              @Nullable String... qualifiers) {
+        return get(defaultValue, SPECIFIC_RANK, defaultHierarchy, hierarchyRank, context, key, qualifiers);
+    }
+
+    @Override
+    public <T> T get(@Nonnull T defaultValue, UserHierarchy hierarchy, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        return get(defaultValue, HIGHEST_RANK, hierarchy, 0, context, key, qualifiers);
+    }
+
+    @Override
+    @Nonnull
+    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull I18NKey key,
                                   @Nullable String... qualifiers) {
-        checkInit();
-        return optionStore.getValue(defaultValue, hierarchy, 0, new OptionKey(context, key, qualifiers));
+        return get(defaultValue, HIGHEST_RANK, hierarchy, 0, context, key, qualifiers);
     }
 
-    /**
-     * Gets a value for the specified key.  The {@code context}, {@code key} & {@code qualifiers} form a composite key
-     *
-     * @param defaultValue
-     *         the value to be returned if no value found in persistence
-     * @param hierarchy
-     *         the hierarchy to use
-     * @param hierarchyLevel
-     *         the highest hierarchy level to return - usually level 0, (the user)
-     * @param key
-     *         the option specific key, for example SHOW_ALL_SECTIONS
-     * @param qualifiers
-     *         optional, this is usually dynamically generated qualifier(s) to make a complete unique identity where
-     *         the same option may be used several times within a consumer.  If for example you have an array of
-     *         dynamically generated buttons, which you want the user to be able to individually choose the colours
-     *         of, you may have consumer=com.example.FancyButtonForm, key=BUTTON_COLOUR, qualifiers="2,3"
-     *         <p>
-     *         where "2,3" is the grid position of the button
-     * @param <T>
-     *         the type of the option value
-     *
-     * @return the value from the layer 'nearest' the hierarchyLevel (nearest means returning the first value found,
-     * starting at hierarchyLevel down through the layers),
-     */
     @Override
     @Nonnull
-    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, int hierarchyLevel,
-                                  @Nonnull Enum<?> key, @Nullable String... qualifiers) {
-        checkInit();
-        return optionStore.getValue(defaultValue, defaultHierarchy, hierarchyLevel, new OptionKey(context, key,
-                qualifiers));
+    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        return get(defaultValue, HIGHEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
     }
+
 
     @Override
     @Nullable
-    public Object delete(@Nonnull UserHierarchy hierarchy, @Nonnull Enum<?> key, @Nullable String... qualifiers) {
-        checkInit();
-        return optionStore.deleteValue(hierarchy, 0, new OptionKey(context, key, qualifiers));
-    }
-
-    @Override
-    @Nullable
-    public Object delete(@Nonnull Enum<?> key, @Nullable String... qualifiers) {
-        checkInit();
-        return optionStore.deleteValue(defaultHierarchy, 0, new OptionKey(context, key, qualifiers));
-    }
-
-    /**
-     * Deletes a value for the current user, at a specific layer (specified by hierarchyLevel).  The {@code context},
-     * {@code key} & {@code
-     * qualifiers} form a composite key
-     *
-     * @param hierarchy
-     *         the hierarchy to use
-     * @param hierarchyLevel
-     *         the index of the layer entry to delete
-     * @param key
-     *         the option specific key, for example SHOW_ALL_SECTIONS
-     * @param qualifiers
-     *         optional, this is usually dynamically generated qualifier(s) to make a complete unique identity where
-     *         the same option may be used several times within a consumer.  If for example you have an array of
-     *         dynamically generated buttons, which you want the user to be able to individually choose the colours
-     *         of, you may have consumer=com.example.FancyButtonForm, key=BUTTON_COLOUR, qualifiers="2,3"
-     *         <p>
-     *         where "2,3" is the grid position of the button
-     *
-     * @return the previous value associated with composite key, or null if there was no mapping for key.
-     */
-    @Override
-    @Nullable
-    public Object delete(@Nonnull UserHierarchy hierarchy, int hierarchyLevel, @Nonnull Enum<?> key, @Nullable String
+    public Object delete(@Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull Class<? extends
+            OptionContext> context, @Nonnull I18NKey key, @Nullable String
             ... qualifiers) {
         checkInit();
-        return optionStore.deleteValue(defaultHierarchy, hierarchyLevel, new OptionKey(context, key, qualifiers));
+        checkNotNull(hierarchy);
+        checkArgument(hierarchyRank >= 0);
+        checkNotNull(context);
+        checkNotNull(key);
+
+        return optionCache.delete(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, new OptionKey(context,
+                key, qualifiers)));
     }
+
+
 }

@@ -11,198 +11,238 @@
 
 package uk.q3c.krail.core.user.opt;
 
-import com.google.common.collect.Lists;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.user.opt.cache.OptionCache;
+import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
-import uk.q3c.krail.core.view.component.LocaleContainer;
+import uk.q3c.krail.i18n.TestLabelKey;
 import uk.q3c.krail.util.KrailCodeException;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Nonnull;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.q3c.krail.core.user.profile.RankOption.*;
+
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class DefaultOptionTest {
 
-    private enum Key {key1, key2}
     DefaultOption option;
-    DefaultOptionStore store;
+    MockContext contextObject;
+    MockContext2 contextObject2;
+    Class<MockContext> context = MockContext.class;
+    Class<MockContext2> context2 = MockContext2.class;
     @Mock
-            LocaleContainer localeContainer;
-    List<String> allLayers;
-    private Class<? extends OptionContext> contextClass=LocaleContainer.class;
+    private UserHierarchy defaultHierarchy;
     @Mock
-    private UserHierarchy hierarchy;
-    private ArrayList<String> singleLayer;
+    private UserHierarchy hierarchy2;
+    @Mock
+    private OptionCache optionCache;
+    private OptionKey optionKey1;
+    private OptionKey optionKey2;
+
+    @Before
+    public void setup() {
+        contextObject = new MockContext();
+        option = new DefaultOption(optionCache, defaultHierarchy);
+        optionKey1 = new OptionKey(context, TestLabelKey.key1, "q");
+        optionKey2 = new OptionKey(context2, TestLabelKey.key1, "q");
+    }
+
+    @Test
+    public void init_from_class() {
+        //given
+
+        //when
+        option.init(context);
+        //then
+        assertThat(option.getContext()).isEqualTo(MockContext.class);
+    }
+
+    @Test
+    public void init_from_object() {
+        //given
+
+        //when
+        option.init(contextObject);
+        //then
+        assertThat(option.getContext()).isEqualTo(MockContext.class);
+    }
 
     @Test(expected = KrailCodeException.class)
-    public void not_initialised() {
+    public void init_not_done() {
         //given
-        DefaultOption option2 = new DefaultOption(store, hierarchy);
-        TestContext_without_init context = new TestContext_without_init(option2);
-        //when
-        context.optionMaxDepth();
 
+        //when
+        option.get(5, TestLabelKey.key1);
         //then
         //exception
     }
 
-//
-    @Before
-    public void setup() {
-        store = new DefaultOptionStore();
-        option = new DefaultOption(store,hierarchy);
-        option.init(LocaleContainer.class);
-                when(hierarchy.layerForCurrentUser(0)).thenReturn("fbaton");
-                when(hierarchy.layerForCurrentUser(1)).thenReturn("system");
-                when(hierarchy.persistenceName()).thenReturn("MockHierarchy");
-                allLayers = Lists.newArrayList("fbaton", "system");
-                singleLayer = Lists.newArrayList("system");
-    }
-
-//
     @Test
-    public void putAndGet() {
+    public void set_simplest() {
         //given
-        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
-
+        option.init(context);
+        when(defaultHierarchy.rankName(0)).thenReturn("specific");
+        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 0, optionKey1);
         //when
-        option.set(3, Key.key1);
+        option.set(5, TestLabelKey.key1, "q");
         //then
-        assertThat(option.get(5,  Key.key1)).isEqualTo(3);
+        verify(optionCache).write(cacheKey, Optional.of(5));
     }
 
     @Test
-    public void put_and_get_override() {
+    public void set_with_hierarchy() {
         //given
-        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
+        option.init(context);
+        when(hierarchy2.rankName(0)).thenReturn("specific");
+        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 0, optionKey1);
         //when
-        option.set(3,  Key.key1);
-        option.set(7, hierarchy,1,  Key.key1);
+        option.set(5, hierarchy2, TestLabelKey.key1, "q");
         //then
-        assertThat(option.get(5,  Key.key1)).isEqualTo(3);
-        assertThat(option.get(5, LocaleContainer.class, Key.key1)).isEqualTo(3);
-        assertThat(option.get(5, hierarchy, 1, Key.key1)).isEqualTo(7);
+        verify(optionCache).write(cacheKey, Optional.of(5));
+    }
+
+    @Test
+    public void set_with_all_args() {
+        //given
+        option.init(context);
+        when(hierarchy2.rankName(2)).thenReturn("specific");
+        OptionKey optionKey2 = new OptionKey(context2, TestLabelKey.key1, "q");
+        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 2, optionKey2);
+        //when
+        option.set(5, hierarchy2, 2, context2, TestLabelKey.key1, "q");
+        //then
+        verify(optionCache).write(cacheKey, Optional.of(5));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void set_with_all_args_rank_too_low() {
+        //given
+        option.init(context);
+        when(hierarchy2.rankName(2)).thenReturn("specific");
+        OptionKey optionKey2 = new OptionKey(context, TestLabelKey.key1, "q");
+        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 2, optionKey2);
+        //when
+        option.set(5, hierarchy2, -1, context2, TestLabelKey.key1, "q");
+        //then
+    }
+
+    @Test
+    public void get_simplest() {
+        //given
+        option.init(context);
+        when(defaultHierarchy.highestRankName()).thenReturn("high");
+        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey1);
+        when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
+        //when
+        Integer actual = option.get(5, TestLabelKey.key1, "q");
+        //then
+        assertThat(actual).isEqualTo(8);
+    }
+
+    @Test
+    public void get_with_hierarchy() {
+        //given
+        option.init(context);
+        when(hierarchy2.highestRankName()).thenReturn("high");
+        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, HIGHEST_RANK, optionKey1);
+        when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
+        //when
+        Integer actual = option.get(5, hierarchy2, TestLabelKey.key1, "q");
+        //then
+        assertThat(actual).isEqualTo(8);
+    }
+
+    @Test
+    public void get_with_context() {
+        //given
+        option.init(context);
+        when(defaultHierarchy.highestRankName()).thenReturn("high");
+        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey2);
+        when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
+        //when
+        Integer actual = option.get(5, context2, TestLabelKey.key1, "q");
+        //then
+        assertThat(actual).isEqualTo(8);
+    }
+
+    @Test
+    public void get_with_all_args() {
+        //given
+        option.init(context);
+        when(hierarchy2.highestRankName()).thenReturn("high");
+        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, HIGHEST_RANK, optionKey2);
+        when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
+        //when
+        Integer actual = option.get(5, hierarchy2, context2, TestLabelKey.key1, "q");
+        //then
+        assertThat(actual).isEqualTo(8);
+    }
+
+    @Test
+    public void get_none_found() {
+        //given
+        option.init(context);
+        when(defaultHierarchy.highestRankName()).thenReturn("high");
+        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey2);
+        when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.empty());
+        //when
+        Integer actual = option.get(5, context2, TestLabelKey.key1, "q");
+        //then
+        assertThat(actual).isEqualTo(5);
+    }
+
+    @Test
+    public void get_lowest() {
+        //given
+        option.init(context);
+        when(defaultHierarchy.lowestRankName()).thenReturn("low");
+        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, LOWEST_RANK, optionKey2);
+        when(optionCache.get(Optional.of(5), cacheKey)).thenReturn(Optional.of(20));
+        //when
+        Integer actual = option.getLowestRanked(5, defaultHierarchy, context2, TestLabelKey.key1, "q");
+        //then
+        assertThat(actual).isEqualTo(20);
     }
 
     @Test
     public void delete() {
         //given
-        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
+        option.init(context);
+        when(hierarchy2.rankName(1)).thenReturn("specific");
+        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 1, optionKey2);
+        when(optionCache.delete(cacheKey)).thenReturn(Optional.of(3));
         //when
-        option.set(3,  Key.key1);
-        option.set(7, hierarchy,1,  Key.key1);
-        option.delete(hierarchy,0,  Key.key1);
+        Object actual = option.delete(hierarchy2, 1, context2, TestLabelKey.key1, "q");
         //then
-        assertThat(option.get(5,  Key.key1)).isEqualTo(7);
-        assertThat(option.get(5, hierarchy, 1,  Key.key1)).isEqualTo(7);
-        assertThat(option.get(5, hierarchy, 0,  Key.key1)).isEqualTo(7);
-        assertThat(option.get(5, hierarchy,  Key.key1)).isEqualTo(7);
+        assertThat(actual).isEqualTo(Optional.of(3));
+        verify(optionCache).delete(cacheKey);
     }
 
-    @Test
-    public void delete2() {
-        //given
-        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
-        //when
-        option.set(3,  Key.key1);
-        option.set(7, hierarchy,1,  Key.key1);
-        option.delete(hierarchy,  Key.key1);
-        //then
-        assertThat(option.get(5,  Key.key1)).isEqualTo(7);
-        assertThat(option.get(5, hierarchy, 1,  Key.key1)).isEqualTo(7);
-        assertThat(option.get(5, hierarchy, 0,  Key.key1)).isEqualTo(7);
-        assertThat(option.get(5, hierarchy,  Key.key1)).isEqualTo(7);
-    }
+    static class MockContext implements OptionContext {
 
-    @Test
-    public void defaultValue() {
-        //given
-        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
-        //when
-
-        //then
-        assertThat(option.get(5,  Key.key1)).isEqualTo(5);
-    }
-
-    @Test
-    public void defaultValue2() {
-        //given
-        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
-        //when
-        option.set(3,  Key.key2);
-        //then
-        assertThat(option.get(5,  Key.key1)).isEqualTo(5);
-    }
-
-    @Test
-    public void defaultValue3() {
-        //given
-        when(hierarchy.layersForCurrentUser()).thenReturn(allLayers);
-        //when
-        option.set(3, hierarchy,  Key.key2);
-        option.delete(Key.key2);
-        //then
-        assertThat(option.get(5,  Key.key2)).isEqualTo(5);
-    }
-
-    @Test
-    public void flushCache() {
-        //given
-
-        //when
-option.flushCache();
-        //then does nothing
-        assertThat(true).isTrue();
-    }
-
-    @Test
-    public void init_context_class() {
-        //given
-        DefaultOption option2 = new DefaultOption(store, hierarchy);
-        //when
-option2.init(LocaleContainer.class);
-        //then
-        assertThat(option.getContext()).isEqualTo(LocaleContainer.class);
-    }
-
-    @Test
-    public void init_context_instance() {
-        //given
-        DefaultOption option2 = new DefaultOption(store, hierarchy);
-
-        //when
-option2.init(localeContainer);
-        //then
-        assertThat(option.getContext()).isEqualTo(LocaleContainer.class);
-    }
-
-    private static class TestContext_without_init implements OptionContext {
-
-        public enum OptionProperty {
-            MAX_DEPTH
-        }
-
-        private Option option;
-
-        public TestContext_without_init(Option option) {
-            this.option = option;
-        }
-
+        @Nonnull
         @Override
         public Option getOption() {
-            return option;
+            return null;
         }
+    }
 
-        public int optionMaxDepth() {
-            return option.get(3, OptionProperty.MAX_DEPTH);
+    static class MockContext2 implements OptionContext {
+
+        @Nonnull
+        @Override
+        public Option getOption() {
+            return null;
         }
     }
 }

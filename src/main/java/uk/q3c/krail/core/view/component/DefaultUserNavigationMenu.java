@@ -20,16 +20,14 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapChangeListener;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.util.ID;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 
 public class DefaultUserNavigationMenu extends MenuBar implements OptionContext, UserNavigationMenu,
         UserSitemapChangeListener {
-
-    public enum OptionProperty {
-        MAX_DEPTH
-    }
 
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationMenu.class);
     private final UserSitemap userSitemap;
@@ -59,11 +57,11 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
 
     @Override
     public int getOptionMaxDepth() {
-        return option.get(10, OptionProperty.MAX_DEPTH);
+        return option.get(10, LabelKey.Maxiumum_Depth);
     }
     @Override
     public void setOptionMaxDepth(int depth) {
-        option.set(depth, OptionProperty.MAX_DEPTH);
+        option.set(depth, LabelKey.Maxiumum_Depth);
         build();
     }
 
@@ -102,6 +100,7 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
         build();
     }
 
+    @Nonnull
     @Override
     public Option getOption() {
         return option;

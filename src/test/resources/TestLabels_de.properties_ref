@@ -1,5 +1,5 @@
 #created by PropertiesBundleWriter
-#Sun Dec 14 18:11:24 GMT 2014
+#Thu Feb 26 22:06:57 GMT 2015
 ViewB11=ViewB11
 View2=View2
 View1=View1
@@ -20,4 +20,6 @@ Private=Private
 Login=Login
 Public=Public
 My_Account=My Account
+key2=key2
 Transfers=transfers
+key1=key1

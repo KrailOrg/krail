@@ -11,13 +11,22 @@
 
 package uk.q3c.krail.core.user.opt;
 
+import javax.annotation.Nonnull;
+
 /**
- * Any context using {@link Option} is required to implement this interface
+ * Any context using {@link Option} is required to implement this interface, it is used to identify the class which is
+ * using an option, and forms part of a key to define that option
  * <p>
  * Created by David Sowerby on 01/12/14.
  */
 public interface OptionContext {
 
+    /**
+     * Returns the {@link Option} instance being used by this context
+     *
+     * @return the {@link Option} instance being used by this context
+     */
+    @Nonnull
     Option getOption();
 
 

@@ -11,10 +11,10 @@
 
 package uk.q3c.krail.core.user.profile;
 
-import uk.q3c.krail.core.user.opt.OptionStore;
+import com.google.common.collect.ImmutableList;
+import uk.q3c.krail.core.user.opt.Option;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 /**
  * There are many reasons for having hierarchies which depend on some aspect of a user's profile.  For example, on
@@ -26,37 +26,50 @@ import java.util.List;
  * 'fbaton') in the Finance team in Frankfurt, Germany.
  * <p>
  * Ultimately you probably want to give them the choice of what they see on their home page, but you will also want
- * to set good defaults.  You could use a {@link UserHierarchy} to do that by passing it to the {@link OptionStore}
- * when retrieving option values.  By default, Emily could then see information related to her development team, and
- * information about the facilities in Sheffield, while Franck would see information related to Finance, and the
- * facilities of Frankfurt.
+ * to set good defaults.  You could use a {@link UserHierarchy} to do that in conjunction with {@link Option}
  * <p>
- * When they have chosen their own options, however, that selection goes to the "top" of the hierarchy for them,
- * only, and will override any values set at lower levels in the hierarchy.
+ * Initially, if option values have been set at department level, Emily would see information related to her
+ * development team, and information about the facilities in Sheffield, while Franck would see information related to
+ * Finance, and the facilities of Frankfurt.
  * <p>
- * Alternatively, you may for some options only allow them to be changed at the department or even system level - you
- * can do that by not allowing values to be set at any higher level in the hierarchy.
+ * When they have chosen their own options, however, that you would probably want those values to override those set at
+ * department level.
  * <p>
- * {@link UserHierarchy} implementations will often take their information from other systems - an HR or Identity
- * Management system may contain the Organisation hierarchy
+ * This is done by ranking the hierarchy so that in this case, the option values assigned at the user level will
+ * override any assigned at lower ranks - department etc.
  * <p>
+ * How you the ranks are ordered is entirely up to the implementation, but should always be returned with the highest
+ * rank at index 0.
+ * <p>
+ * When used with {@link Option}, there may be some option values which should be set only at the department level, for
+ * example.  That is achieved simply by not allowing anyone access to change their own option values, and for example,
+ * only allowing those with a department admin role to change the department option values.  That of course would be
+ * easily achieved with the Shiro integration within Krail
+ * <p>
+ * {@link UserHierarchy} implementations will often take their information from other systems - for example, an HR or
+ * Identity Management system may contain the Organisation hierarchy (sometimes even different ones for the same
+ * organisation!)
+ * <p>
+ *     Implementations must be thread safe
+ *
  * Created by David Sowerby on 18/02/15.
  */
 public interface UserHierarchy {
 
     /**
-     * Returns a list of layers (just String identifiers) for this hierarchy, for the current user.
+     * Returns a list of values for the hierarchy ranks, for the current user, for this {@link UserHierarchy}
+     * implementation.
      * <p>
      * Implementations must ensure that a valid result is returned even if there is no currently authenticated user -
-     * the user is 'anonymous'
+     * that is, when the user is 'anonymous'
      * <p>
-     * The list is returned indexed in the correct ordering or layers, with the user layer at index 0, and the system
-     * layer at the highest list index.<p>
+     * The returned list is ordered by rank,  with the highest rank at index 0
      *
-     * @return Returns a list of layers (just String identifiers) for this hierarchy, for the current user.
+     * @return a list of String identifiers for this hierarchy, for the current user, ordered by rank, with the highest
+     * rank at index 0.
      */
     @Nonnull
-    List<String> layersForCurrentUser();
+    ImmutableList<String> ranksForCurrentUser();
 
     /**
      * The name to be used when for this hierarchy when stored in persistence (which should not therefore change, or
@@ -73,20 +86,26 @@ public interface UserHierarchy {
     /**
      * The descriptive name for this hierarchy, usually for use in the user interface. Should be Locale sensitive
      *
-     * @return
+     * @return The descriptive name for this hierarchy, usually for use in the user interface. Should be Locale
+     * sensitive
      */
     String displayName();
 
     /**
-     * Returns the layer, for the current user, at the level specified by {@code hierarchyLevel}.
+     * Returns the identifier of the {@code hierarchyRank}, for the current user.  From the example above that could
+     * be 'Development' if an implementation represented an Organisation, and the current user is Emily
      *
-     * @param hierarchyLevel
-     *         the level (index) which is required.
+     * @param hierarchyRank
+     *         the rank (index) which is required.
      *
-     * @return he layer, for the current user, at the level specified by {@code hierarchyLevel}.
+     * @return the layer, for the current user, at the rank specified by {@code hierarchyRank}.
      *
      * @throws UserHierarchyException
      *         if {@code hierarchy} is out of bounds
      */
-    String layerForCurrentUser(int hierarchyLevel);
+    String rankName(int hierarchyRank);
+
+    String highestRankName();
+
+    String lowestRankName();
 }

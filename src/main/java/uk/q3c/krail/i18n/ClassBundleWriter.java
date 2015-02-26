@@ -98,15 +98,17 @@ public class ClassBundleWriter<E extends Enum<E>> extends BundleWriterBase<E> {
         buf.append(indent)
            .append("protected void loadMap() {\n");
 
-        for (Map.Entry<E, String> entry : entryMap.entrySet()) {
+        //transfer to a TreeMap to sort by key
+        SortedMap<String, String> sortedMap = new TreeMap<>();
+        entryMap.forEach((k,v) ->{sortedMap.put(k.name(),v);});
+
+
+        for (Map.Entry<String, String> entry : sortedMap.entrySet()) {
             buf.append(indent2)
                .append("put(")
-               .append(entry.getKey()
-                            .getClass()
-                            .getSimpleName())
+               .append(keyClass.getSimpleName())
                .append(".")
-               .append(entry.getKey()
-                            .name())
+               .append(entry.getKey())
                .append(", \"")
                .append(entry.getValue())
                .append("\");\n");

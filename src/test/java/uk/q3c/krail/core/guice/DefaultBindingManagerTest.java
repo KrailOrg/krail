@@ -62,6 +62,7 @@ public class DefaultBindingManagerTest {
     @Before
     public void setup() {
         out = new TestBindingManager();
+        logMonitor.addClassFilter(DefaultBindingManager.class);
 
     }
 
@@ -87,7 +88,7 @@ public class DefaultBindingManagerTest {
 
         // then
         verify(service).stop(); // services stopped
-        assertThat(logMonitor.infoLogs()).contains("Stopping all services");
+        assertThat(logMonitor.infoLogs()).contains("Stopping services");
 
     }
 

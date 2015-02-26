@@ -15,7 +15,7 @@ package uk.q3c.krail.i18n;
 public enum TestLabelKey implements I18NKey {
 
     nullKey, Home, My_Account, Transfers, Login, MoneyInOut, Private, Public, Opt, Yes, No, View1, View2, ViewA,
-    ViewA1, ViewA11, ViewB, ViewB1, ViewB11, pattern_with_embedded_key, Blank;
+    ViewA1, ViewA11, ViewB, ViewB1, ViewB11, pattern_with_embedded_key, Blank, key1, key2
 
 
 }

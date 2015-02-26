@@ -12,35 +12,88 @@
 package uk.q3c.krail.core.user.opt;
 
 
-import uk.q3c.krail.core.user.profile.UserHierarchy;
+import uk.q3c.krail.core.user.profile.UserHierarchyException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Stores and loads option values from a (usually) persistent store.  A simple, in memory, version is provided
  * primarily for testing.
  * <p>
- * <p>
  * Created by David Sowerby on 04/12/14.
  */
 public interface OptionStore {
 
+    /**
+     * Assign {@value} to the hierarchy, hierarchy rank name and {@link OptionKey} specified
+     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankName
+     *         Name of the rank to have its value
+     * @param optionKey
+     *         Unique identifier for the option, in its context
+     * @param value
+     *         the value to assign
+     * @param <T>
+     *         the type of the value
+     *
+     * @throws UserHierarchyException
+     *         if {@code cacheKey.hierarchyRank} is out of range
+     */
+    <T> void setValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey, @Nonnull
+    T value);
+
+    /**
+     * Gets the {@value} for the hierarchy, hierarchy rank name and {@link OptionKey} specified
+     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankName
+     *         Name of the rank to have its value
+     * @param optionKey
+     *         Unique identifier for the option, in its context
+     *
+     * @return the value if found, otherwise null
+     */
+    @Nullable
+    Object getValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey);
+
+    /**
+     * Delete the entry for the hierarchy, hierarchy rank name and {@link OptionKey} specified
+     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankName
+     *         Name of the rank to have its value
+     * @param optionKey
+     *         Unique identifier for the option, in its context
+     *
+     * @return the previous value associated with {@code cacheKey}, or null if there was no mapping for key.
+     */
+    @Nullable
+    Object deleteValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey);
 
 
     /**
-     * Flushes the cache (if there is one - that will depend on the implementation)
+     * returns a map of values for a hierarchy,for the rank names and {@link OptionKey} specified.  Only ranks with
+     * values are returned, so it is possible for an empty map to be returned.
+     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankNames
+     *         list of names from the hierarchy that values are required for
+     * @param optionKey
+     *         Unique identifier for the option, in its context
+     *
+     * @return returns a map of values for a hierarchy, for a given {@link OptionKey}, an empty map if there are no
+     * values assigned
      */
-    void flushCache();
-
-
-    <T> void setValue(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyLevel, @Nonnull OptionKey
-            optionKey);
-
     @Nonnull
-    <T> T getValue(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, int hierarchyLevel, @Nonnull OptionKey
-            optionKey);
-
-    @Nullable
-    Object deleteValue(@Nonnull UserHierarchy hierarchy, int hierarchyLevel, @Nonnull OptionKey optionKey);
+    Map<String, Object> valueMapForOptionKey(@Nonnull String hierarchyName, @Nonnull List<String> rankNames, @Nonnull
+    OptionKey optionKey);
 }
+

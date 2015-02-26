@@ -20,6 +20,9 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ *
+ * Identifies a {@link UserHierarchy} binding to an implementation as the default
+ *
  * Created by David Sowerby on 19/02/15.
  */
 

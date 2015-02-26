@@ -19,17 +19,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.SupportedLocales;
 import uk.q3c.util.ResourceUtils;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.Locale;
 import java.util.Set;
 
 public class LocaleContainer extends IndexedContainer implements OptionContext {
-    public enum optionProperty {
-        LOCALE_FLAG_SIZE
-    }
+
 
     public enum PropertyName {
         NAME, FLAG
@@ -96,9 +96,10 @@ public class LocaleContainer extends IndexedContainer implements OptionContext {
     }
 
     public Integer getOptionFlagSize() {
-        return option.get(32, optionProperty.LOCALE_FLAG_SIZE);
+        return option.get(32, LabelKey.Locale_Flag_Size);
     }
 
+    @Nonnull
     @Override
     public Option getOption() {
         return option;

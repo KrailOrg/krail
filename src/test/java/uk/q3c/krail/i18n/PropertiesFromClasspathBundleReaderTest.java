@@ -92,9 +92,9 @@ public class PropertiesFromClasspathBundleReaderTest {
         PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey2.Key1, Locale.forLanguageTag(""));
         reader = new PropertiesFromClasspathBundleReader(option, new PropertiesFromClasspathBundleControl());
         reader.getOption()
-              .set(false, BundleReaderBase.OptionProperty.USE_KEY_PATH, "properties");
+              .set(false, LabelKey.Use_Key_Path, "properties");
         reader.getOption()
-              .set("fixture1", BundleReaderBase.OptionProperty.PATH, "properties");
+              .set("fixture1", LabelKey.Path, "properties");
 
         //when
         Optional<String> value = reader.getValue(cacheKey, "properties", false, false, "na");
