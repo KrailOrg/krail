@@ -30,15 +30,15 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
-import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionStore;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.testutil.MockOption;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class})
 public class DefaultUserNavigationMenuBuilderTest {
 
     @Inject
@@ -53,7 +53,7 @@ public class DefaultUserNavigationMenuBuilderTest {
     DefaultUserSitemapSorters sorters;
 
     @Inject
-    Option option;
+    MockOption option;
 
     @Mock
     Navigator navigator;
@@ -82,7 +82,6 @@ public class DefaultUserNavigationMenuBuilderTest {
             @Override
             protected void configure() {
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(Option.class).to(MockOption.class);
                 bind(OptionStore.class).to(InMemoryOptionStore.class);
             }
 

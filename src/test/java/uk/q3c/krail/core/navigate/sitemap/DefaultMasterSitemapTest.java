@@ -21,6 +21,7 @@ import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
@@ -33,7 +34,6 @@ import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.TestLabelKey;
-import uk.q3c.krail.testutil.MockOption;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +43,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
 public class DefaultMasterSitemapTest {
+
+    @Mock
+    Option option;
 
     @Inject
     URIFragmentHandler uriHandler;
@@ -354,7 +357,7 @@ public class DefaultMasterSitemapTest {
             protected void configure() {
                 bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
-                bind(Option.class).to(MockOption.class);
+                bind(Option.class).toInstance(option);
                 bind(OptionStore.class).to(InMemoryOptionStore.class);
             }
 

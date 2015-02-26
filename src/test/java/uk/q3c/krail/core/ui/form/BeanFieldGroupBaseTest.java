@@ -25,11 +25,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.data.TestEntity;
-import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
+import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.Locale;
@@ -50,7 +50,7 @@ public class BeanFieldGroupBaseTest {
     Provider<BeanValidator> beanValidatorProvider;
 
     @Inject
-    Option option;
+    MockOption option;
 
     TestBeanFieldGroup fieldSet;
     TestEntity te, te2;
@@ -59,6 +59,7 @@ public class BeanFieldGroupBaseTest {
 
     @Before
     public void setup() {
+
         injector = Guice.createInjector(new TestI18NModule(), new TestOptionModule(), Modules.override(new
                 ValidationModule())
                                                                                                  .with(new
@@ -71,6 +72,7 @@ public class BeanFieldGroupBaseTest {
 
         Locale.setDefault(Locale.UK);
         fieldSet = new TestBeanFieldGroup(i18NProcessor, beanValidatorProvider, option);
+        option.init(fieldSet);
         te = new TestEntity();
         te.setFirstName("Mango");
         te.setLastName("Chutney");

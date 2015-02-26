@@ -21,15 +21,18 @@ import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
-import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionStore;
 import uk.q3c.krail.testutil.MockOption;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class})
 public class I18NValueTest {
+
+    @Inject
+    MockOption option;
 
     @Inject
     Translate i18NValue;
@@ -79,7 +82,6 @@ public class I18NValueTest {
             @Override
             protected void configure() {
                 bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
-                bind(Option.class).to(MockOption.class);
                 bind(OptionStore.class).to(InMemoryOptionStore.class);
             }
 

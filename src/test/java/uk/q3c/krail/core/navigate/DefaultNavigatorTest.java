@@ -40,6 +40,7 @@ import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.view.*;
+import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.*;
@@ -60,6 +61,8 @@ public class DefaultNavigatorTest {
     KrailViewChangeEvent event;
     @Mock
     UserStatusChangeSource source;
+    @Inject
+    MockOption option;
     @Mock
     private Page browserPage;
     @Mock

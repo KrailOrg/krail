@@ -24,16 +24,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
-import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionStore;
 import uk.q3c.krail.testutil.MockOption;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class})
 public class DefaultI18NProcessorTest {
 
     I18NTestClass testObject;
@@ -42,6 +42,9 @@ public class DefaultI18NProcessorTest {
 
     @Inject
     CurrentLocale currentLocale;
+
+    @Inject
+    MockOption option;
 
     @Inject
     DefaultI18NProcessor processor;
@@ -209,7 +212,6 @@ public class DefaultI18NProcessorTest {
 
             @Override
             protected void configure() {
-                bind(Option.class).to(MockOption.class);
                 bind(OptionStore.class).to(InMemoryOptionStore.class);
             }
 

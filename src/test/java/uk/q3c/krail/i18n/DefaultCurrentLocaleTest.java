@@ -23,8 +23,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.UserStatusChangeSource;
+import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.status.DefaultUserStatus;
-import uk.q3c.krail.testutil.MockOption;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -50,8 +50,8 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
     @Mock
     UserStatusChangeSource source;
 
-
-    MockOption option;
+    @Mock
+    Option option;
 
     Locale defaultLocale;
     @Mock
@@ -63,7 +63,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
 
     @Before
     public void setup() {
-        option = new MockOption();
+
         Locale.setDefault(Locale.UK);
 
 
@@ -107,7 +107,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
     }
 
     private void setOption(Locale userPref) {
-        option.set(userPref, LabelKey.Preferred_Locale);
+        when(option.get(defaultLocale, LabelKey.Preferred_Locale)).thenReturn(userPref);
     }
 
     @Test

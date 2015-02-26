@@ -11,6 +11,7 @@
 
 package uk.q3c.krail.core.view.component;
 
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinService;
@@ -21,9 +22,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.user.notify.UserNotifier;
-import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.testutil.MockOption;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -32,7 +33,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestOptionModule.class})
 public class DefaultLocaleSelectorTest {
 
     @Mock
@@ -43,8 +44,8 @@ public class DefaultLocaleSelectorTest {
     @Mock
     UserNotifier userNotifier;
 
-
-    Option option = new MockOption();
+    @Inject
+    MockOption option;
 
     private DefaultLocaleSelector selector;
 
