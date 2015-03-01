@@ -11,8 +11,11 @@
 
 package uk.q3c.krail.i18n;
 
+import com.google.common.collect.ImmutableSet;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.core.user.opt.OptionDescriptor;
+import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.util.ResourceUtils;
 
 import javax.annotation.Nonnull;
@@ -26,12 +29,12 @@ import java.util.Optional;
 public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWriter<E>, OptionContext {
 
 
+    public static final OptionKey optionWritePath = new OptionKey(BundleWriterBase.class, LabelKey.Write_Path);
     protected Option option;
     private EnumResourceBundle<E> bundle;
 
     public BundleWriterBase(Option option) {
         this.option = option;
-        option.init(this);
     }
 
     /**
@@ -41,12 +44,12 @@ public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWrite
     public File getOptionWritePath() {
         String defaultPath = ResourceUtils.userTempDirectory()
                                           .getAbsolutePath();
-        String option = this.option.get(defaultPath, LabelKey.Write_Path);
+        String option = this.option.get(defaultPath, optionWritePath);
         return new File(option);
     }
 
     public void setOptionWritePath(File path) {
-        option.set(path.getAbsolutePath(), LabelKey.Write_Path);
+        option.set(path.getAbsolutePath(), optionWritePath);
     }
 
     @Nonnull
@@ -84,5 +87,10 @@ public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWrite
     @Override
     public void setBundle(EnumResourceBundle<E> bundle) {
         this.bundle = bundle;
+    }
+
+    @Override
+    public ImmutableSet<OptionDescriptor> optionDescriptors() {
+        return ImmutableSet.of(OptionDescriptor.descriptor(optionWritePath, DescriptionKey.Write_Path));
     }
 }

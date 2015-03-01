@@ -11,6 +11,7 @@
 
 package uk.q3c.krail.core.ui.form;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.data.Item;
@@ -20,7 +21,10 @@ import com.vaadin.ui.Field;
 import uk.q3c.krail.core.data.Entity;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.core.user.opt.OptionDescriptor;
+import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.validation.BeanValidator;
+import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.LabelKey;
 
@@ -57,6 +61,7 @@ public abstract class BeanFieldGroupBase<T extends Entity> extends FieldGroup im
     private Class<T> beanType;
     private Provider<BeanValidator> beanValidatorProvider;
     private Option option;
+    private OptionKey useFieldNameOption;
 
     @Inject
     public BeanFieldGroupBase(I18NProcessor i18NProcessor, Provider<BeanValidator> beanValidatorProvider, Option option) {
@@ -64,6 +69,7 @@ public abstract class BeanFieldGroupBase<T extends Entity> extends FieldGroup im
         this.beanValidatorProvider = beanValidatorProvider;
         this.option = option;
         this.defaultValidators = new HashMap<>();
+        useFieldNameOption = new OptionKey(this, LabelKey.Use_Field_Name_in_Validation_Message);
     }
 
     private static java.lang.reflect.Field getField(Class<?> cls, String propertyId) throws SecurityException,
@@ -103,6 +109,10 @@ public abstract class BeanFieldGroupBase<T extends Entity> extends FieldGroup im
         } else {
             throw new NoSuchFieldException();
         }
+    }
+
+    public OptionKey getUseFieldNameOption() {
+        return useFieldNameOption;
     }
 
     @Override
@@ -249,74 +259,16 @@ public abstract class BeanFieldGroupBase<T extends Entity> extends FieldGroup im
         if (!defaultValidators.containsKey(field)) {
 
             BeanValidator<T> validator = beanValidatorProvider.get();
-            validator.init(beanType, getPropertyId(field).toString(), getOptionUseFieldNameInValidationMessage());
+            validator.init(beanType, getPropertyId(field).toString(), option.get(false, useFieldNameOption));
             field.addValidator(validator);
             defaultValidators.put(field, validator);
         }
     }
 
-    public boolean getOptionUseFieldNameInValidationMessage() {
-        return option.get(false, LabelKey.Use_Field_Name_in_Validation_Message, this.getClass()
-                                                                                                  .getSimpleName());
+
+    @Override
+    public ImmutableSet<OptionDescriptor> optionDescriptors() {
+        return ImmutableSet.of(new OptionDescriptor(useFieldNameOption, DescriptionKey.Use_Field_Name_In_Validation_Message));
     }
-
-    public void setOptionUseFieldNameInValidationMessage(boolean useFieldNames) {
-        option.set(useFieldNames, LabelKey.Use_Field_Name_in_Validation_Message, this.getClass()
-                                                                                                   .getSimpleName());
-    }
-
-
-    //    /**
-    //     * Convenience method to bind Fields from a given "field container" to a
-    //     * given bean with buffering disabled.
-    //     * <p>
-    //     * The returned {@link BeanFieldGroup} can be used for further
-    //     * configuration.
-    //     *
-    //     * @see #bindFieldsBuffered(Object, Object)
-    //     * @see #bindMemberFields(Object)
-    //     * @since 7.2
-    //     * @param bean
-    //     *            the bean to be bound
-    //     * @param objectWithMemberFields
-    //     *            the class that contains {@link Field}s for bean properties
-    //     * @return the bean field group used to make binding
-    //     */
-    //    public BeanFieldGroup<T> bindFieldsUnbuffered(T bean,
-    //                                                             Object objectWithMemberFields) {
-    //        return createAndBindFields(bean, objectWithMemberFields, false);
-    //    }
-    //
-    //    /**
-    //     * Convenience method to bind Fields from a given "field container" to a
-    //     * given bean with buffering enabled.
-    //     * <p>
-    //     * The returned {@link BeanFieldGroup} can be used for further
-    //     * configuration.
-    //     *
-    //     * @see #bindFieldsUnbuffered(Object, Object)
-    //     * @see #bindMemberFields(Object)
-    //     * @since 7.2
-    //     * @param bean
-    //     *            the bean to be bound
-    //     * @param objectWithMemberFields
-    //     *            the class that contains {@link Field}s for bean properties
-    //     * @return the bean field group used to make binding
-    //     */
-    //    public   BeanFieldGroup<T> bindFieldsBuffered(T bean,
-    //                                                           Object objectWithMemberFields) {
-    //        return createAndBindFields(bean, objectWithMemberFields, true);
-    //    }
-    //
-    //    private BeanFieldGroup<T> createAndBindFields(T bean,
-    //                                                             Object objectWithMemberFields, boolean buffered) {
-    //        @SuppressWarnings("unchecked")
-    //        BeanFieldGroup<T> beanFieldGroup = new BeanFieldGroup<T>(
-    //                (Class<T>) bean.getClass());
-    //        beanFieldGroup.setItemDataSource(bean);
-    //        beanFieldGroup.setBuffered(buffered);
-    //        beanFieldGroup.bindMemberFields(objectWithMemberFields);
-    //        return beanFieldGroup;
-    //    }
 
 }

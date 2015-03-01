@@ -29,6 +29,8 @@ public enum DescriptionKey implements I18NKey {
     Sitemap_Service,
     Too_Many_Login_Attempts,
     Unknown_Account,
-    You_have_not_logged_in, Authentication_Failed;
+    Write_Path,
+    You_have_not_logged_in, Authentication_Failed, Use_Field_Name_In_Validation_Message, Maximum_Menu_Depth, Preferred_Locale, Sort_Type, Sort_Ascending,
+    Maximum_Tree_Depth, Flag_Icon_Size
 
 }

@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.i18n;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.vaadin.server.WebBrowser;
 import org.slf4j.Logger;
@@ -22,6 +23,8 @@ import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.core.user.opt.OptionDescriptor;
+import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.core.user.status.UserStatusListener;
 import uk.q3c.util.MessageFormat;
@@ -61,15 +64,16 @@ import java.util.Set;
 
 public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, OptionContext {
 
+    public static final OptionKey optionPreferredLocale = new OptionKey(DefaultCurrentLocale.class, LabelKey.Preferred_Locale);
     private static Logger log = LoggerFactory.getLogger(DefaultCurrentLocale.class);
     private final List<LocaleChangeListener> listeners = new ArrayList<>();
+
     private BrowserProvider browserProvider;
     private Locale defaultLocale;
     private Locale locale;
     private Option option;
     private Set<Locale> supportedLocales;
     private UserStatus userStatus;
-
     @Inject
     protected DefaultCurrentLocale(BrowserProvider browserProvider, @SupportedLocales Set<Locale> supportedLocales,
                                    @DefaultLocale Locale defaultLocale, UserStatus userStatus, Option option) {
@@ -79,7 +83,6 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
         this.defaultLocale = defaultLocale;
         this.userStatus = userStatus;
         this.option = option;
-        option.init(this);
         userStatus.addListener(this);
         locale = defaultLocale;
         if (!supportedLocales.contains(defaultLocale)) {
@@ -89,6 +92,7 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
         }
         //        readFromEnvironment();
     }
+
 
     /**
      * , see the Javadoc for this class
@@ -196,6 +200,11 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
         return option;
     }
 
+    @Override
+    public ImmutableSet<OptionDescriptor> optionDescriptors() {
+        return ImmutableSet.of(OptionDescriptor.descriptor(optionPreferredLocale, DescriptionKey.Preferred_Locale));
+    }
+
     /**
      * User has just logged in, look for their preferred Locale from user options.
      * @param source
@@ -217,7 +226,7 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
      */
     private boolean setLocaleFromOption(boolean fireListeners) {
         if (userStatus.isAuthenticated()) {
-            Locale selectedLocale = option.get(defaultLocale, LabelKey.Preferred_Locale);
+            Locale selectedLocale = option.get(defaultLocale, optionPreferredLocale);
             if (supportedLocales.contains(selectedLocale)) {
                 setLocale(selectedLocale, fireListeners);
                 return true;

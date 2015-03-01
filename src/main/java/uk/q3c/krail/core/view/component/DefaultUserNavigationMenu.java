@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.core.view.component;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.vaadin.ui.MenuBar;
 import org.slf4j.Logger;
@@ -20,6 +21,9 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapChangeListener;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.core.user.opt.OptionDescriptor;
+import uk.q3c.krail.core.user.opt.OptionKey;
+import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.util.ID;
 
@@ -29,13 +33,13 @@ import java.util.Optional;
 public class DefaultUserNavigationMenu extends MenuBar implements OptionContext, UserNavigationMenu,
         UserSitemapChangeListener {
 
+    public static final OptionKey optionKeyMaximumDepth = new OptionKey(DefaultUserNavigationMenu.class, LabelKey.Maxiumum_Depth);
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationMenu.class);
     private final UserSitemap userSitemap;
     private final Option option;
     private final UserNavigationMenuBuilder builder;
-    private boolean sorted = true;
 
-    // private final Translate translate;
+    private boolean sorted = true;
 
     @Inject
     protected DefaultUserNavigationMenu(UserSitemap sitemap, Option option, UserNavigationMenuBuilder builder) {
@@ -43,11 +47,11 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
         this.userSitemap = sitemap;
         this.option = option;
         this.builder = builder;
-        option.init(this);
         setImmediate(true);
         builder.setUserNavigationMenu(this);
         userSitemap.addListener(this);
         setId(ID.getId(Optional.empty(), this));
+
     }
 
     @Override
@@ -57,11 +61,11 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
 
     @Override
     public int getOptionMaxDepth() {
-        return option.get(10, LabelKey.Maxiumum_Depth);
+        return option.get(10, optionKeyMaximumDepth);
     }
     @Override
     public void setOptionMaxDepth(int depth) {
-        option.set(depth, LabelKey.Maxiumum_Depth);
+        option.set(depth, optionKeyMaximumDepth);
         build();
     }
 
@@ -104,5 +108,10 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
     @Override
     public Option getOption() {
         return option;
+    }
+
+    @Override
+    public ImmutableSet<OptionDescriptor> optionDescriptors() {
+        return ImmutableSet.of(new OptionDescriptor(optionKeyMaximumDepth, DescriptionKey.Maximum_Menu_Depth));
     }
 }

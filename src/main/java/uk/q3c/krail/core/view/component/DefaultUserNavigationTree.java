@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.core.view.component;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
@@ -27,8 +28,11 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.S
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.core.user.opt.OptionDescriptor;
+import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.core.view.KrailViewChangeListener;
+import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.util.ID;
 
@@ -47,29 +51,32 @@ import java.util.Optional;
  * @author David Sowerby 17 May 2013
  * @modified David Sowerby
  */
-public class DefaultUserNavigationTree extends Tree implements OptionContext, UserNavigationTree,
-        KrailViewChangeListener, UserSitemapChangeListener {
+public class DefaultUserNavigationTree extends Tree implements OptionContext, UserNavigationTree, KrailViewChangeListener, UserSitemapChangeListener {
 
-
+    public static final OptionKey optionKeySortType = new OptionKey(DefaultUserNavigationTree.class, LabelKey.Sort_Type);
+    public static final OptionKey optionKeySortAscending = new OptionKey(DefaultUserNavigationTree.class, LabelKey.Sort_Ascending);
+    public static final OptionKey optionKeyMaximumDepth = new OptionKey(DefaultUserNavigationTree.class, LabelKey.Maxiumum_Depth);
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
     private final UserSitemap userSitemap;
     private final Navigator navigator;
     private final Option option;
     private final UserNavigationTreeBuilder builder;
     private final UserSitemapSorters sorters;
+
     private boolean rebuildRequired = true;
     private boolean suppressValueChangeEvents;
 
+
     @Inject
-    protected DefaultUserNavigationTree(UserSitemap userSitemap, Navigator navigator, Option option,
-                                        UserNavigationTreeBuilder builder, UserSitemapSorters sorters) {
+    protected DefaultUserNavigationTree(UserSitemap userSitemap, Navigator navigator, Option option, UserNavigationTreeBuilder builder, UserSitemapSorters
+            sorters) {
         super();
         this.userSitemap = userSitemap;
         this.navigator = navigator;
         this.option = option;
         this.builder = builder;
         this.sorters = sorters;
-        option.init(this);
+
         builder.setUserNavigationTree(this);
         setImmediate(true);
         setItemCaptionMode(ItemCaptionMode.EXPLICIT);
@@ -83,7 +90,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     }
 
     public boolean getOptionSortAscending() {
-        return option.get(true, LabelKey.Sort_Ascending);
+        return option.get(true, optionKeySortAscending);
     }
 
     @Override
@@ -94,7 +101,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     @Override
     public void setOptionSortAscending(boolean ascending, boolean rebuild) {
         sorters.setOptionSortAscending(ascending);
-        option.set(ascending, LabelKey.Sort_Ascending);
+        option.set(ascending, optionKeySortAscending);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -131,18 +138,18 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     }
 
     public SortType getOptionSortType() {
-        return option.get(SortType.ALPHA, LabelKey.Sort_Type);
+        return option.get(SortType.ALPHA, optionKeySortType);
     }
 
     @Override
-    public void setOptionSortType(SortType sortType) {
+    public void setOptionKeySortType(SortType sortType) {
         setOptionSortType(sortType, true);
     }
 
     @Override
     public void setOptionSortType(SortType sortType, boolean rebuild) {
-        sorters.setOptionSortType(sortType);
-        option.set(sortType, LabelKey.Sort_Type);
+        sorters.setOptionKeySortType(sortType);
+        option.set(sortType, optionKeySortType);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -167,7 +174,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
 
     @Override
     public int getOptionMaxDepth() {
-        return option.get(10, LabelKey.Maxiumum_Depth);
+        return option.get(10, optionKeyMaximumDepth);
     }
 
     /**
@@ -184,7 +191,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     @Override
     public void setOptionMaxDepth(int maxDepth, boolean rebuild) {
         if (maxDepth > 0) {
-            option.set(maxDepth, LabelKey.Maxiumum_Depth);
+            option.set(maxDepth, optionKeyMaximumDepth);
             build();
         } else {
             log.warn("Attempt to set max depth value to {}, but has been ignored.  It must be greater than 0. ");
@@ -274,5 +281,12 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     @Override
     public Option getOption() {
         return option;
+    }
+
+    @Override
+    public ImmutableSet<OptionDescriptor> optionDescriptors() {
+        return ImmutableSet.of(OptionDescriptor.descriptor(optionKeySortType, DescriptionKey.Sort_Type)
+                                               .desc(optionKeySortAscending, DescriptionKey.Sort_Ascending)
+                                               .desc(optionKeyMaximumDepth, DescriptionKey.Maximum_Tree_Depth));
     }
 }

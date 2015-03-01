@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.i18n;
 
+import static uk.q3c.krail.i18n.DescriptionKey.*;
+
 /**
  * The base for the resource bundle of {@link Descriptions}. The separation between them is arbitrary, but helps break
  * down what could other wise be long lists, and only one of them needs to look up parameter values:
@@ -30,22 +32,29 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
 
     @Override
     protected void loadMap() {
-        put(DescriptionKey.Last_Name, "the last name or family name");
-        put(DescriptionKey.Last_Name, "the last name or family name");
-        put(DescriptionKey.Confirm_Ok, "Confirm this Value is Ok");
-        put(DescriptionKey.No_Permission, "You do not have permission for that action");
-        put(DescriptionKey.Application_Configuration_Service, "This service loads the application " + "configuration " +
+        put(Last_Name, "the last name or family name");
+        put(Last_Name, "the last name or family name");
+        put(Confirm_Ok, "Confirm this Value is Ok");
+        put(No_Permission, "You do not have permission for that action");
+        put(Application_Configuration_Service, "This service loads the application configuration " +
                 "from krail.ini");
-        put(DescriptionKey.Sitemap_Service, "This service creates the Sitemap using options from the " + "application" +
+        put(Sitemap_Service, "This service creates the Sitemap using options from the application" +
                 " configuration");
-        put(DescriptionKey.Unknown_Account, "That username or password was not recognised");
-        put(DescriptionKey.Account_Expired, "Your account has expired");
-        put(DescriptionKey.Account_Already_In_Use, "This account is already in use.  You must log out of " + "that " +
+        put(Unknown_Account, "That username or password was not recognised");
+        put(Account_Expired, "Your account has expired");
+        put(Account_Already_In_Use, "This account is already in use.  You must log out of " + "that " +
                 "session before you can log in again.");
-        put(DescriptionKey.Account_Locked, "Your account is locked");
-        put(DescriptionKey.Too_Many_Login_Attempts, "Login has failed too many times, the account will " + "need to " +
+        put(Account_Locked, "Your account is locked");
+        put(Too_Many_Login_Attempts, "Login has failed too many times, the account will " + "need to " +
                 "be reset");
-        put(DescriptionKey.Authentication_Failed, "Your login attempt failed");
+        put(Authentication_Failed, "Your login attempt failed");
+        put(Use_Field_Name_In_Validation_Message, "If true, the field name is included as part of the validation message");
+        put(Maximum_Menu_Depth, "The maximum depth you want to display in the menu");
+        put(Maximum_Tree_Depth, "The maximum depth you want to display in the tree");
+        put(Preferred_Locale, "The preferred Locale for the current user");
+        put(Sort_Type, "The sort type to apply");
+        put(Sort_Ascending, "If true, sort in ascending order, otherwise in descending order");
+        put(Flag_Icon_Size, "The size of the flag icon to use");
     }
 
 

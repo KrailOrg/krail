@@ -107,7 +107,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
     }
 
     private void setOption(Locale userPref) {
-        when(option.get(defaultLocale, LabelKey.Preferred_Locale)).thenReturn(userPref);
+        when(option.get(defaultLocale, DefaultCurrentLocale.optionPreferredLocale)).thenReturn(userPref);
     }
 
     @Test

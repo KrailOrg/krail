@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.i18n;
 
+import static uk.q3c.krail.i18n.MessageKey.*;
+
 /**
  * The base for the resource bundle of {@link Messages}. The separation between them is arbitrary, but helps break down
  * what could other wise be long lists, and only one of them needs to look up parameter values:
@@ -31,9 +33,22 @@ public class Messages extends EnumResourceBundle<MessageKey> {
 
     @Override
     protected void loadMap() {
-        put(MessageKey.Invalid_URI, "{0} is not a valid page");
-        put(MessageKey.Service_not_Started, "You cannot use service {0} until it has been started");
-        put(MessageKey.Locale_Change, "Language and Country changed to {0}");
+        put(Invalid_URI, "{0} is not a valid page");
+        put(Service_not_Started, "You cannot use service {0} until it has been started");
+        put(Locale_Change, "Language and Country changed to {0}");
+        //use with params Bundle_Path and source at {0}{1}
+        put(Use_Key_Path, "If this option is true, the bundle name for source '{1}' is appended to the package path of the sample key, otherwise the path set" +
+                " by {0} is used.");
+        //use params Use_key_Path and source at {0}{1}
+        put(Bundle_Path, "The path in which to find the bundle, not used if option {0} is true, for source: '{1}'");
+        // param {1} is Option_Stub_Value
+        put(Option_Stub_with_Key_Name, "If true, stubs for source '{0}' are generated using the key name, otherwise {1} is used");
+        //param {0} is Option_Stub_with_Key_Name
+        put(Option_Stub_Value, "If {0} is false, stubs for source '{1}' are generated using the key name");
+        put(Option_Auto_Stub, "If true, and no value is found in source '{0}', create a stub using stub value options");
+        //param {0] is
+        put(Option_Source_Order_Default, "The default source order to be used for a bundle, unless overridden by {0}");
+        put(Option_Source_Order, "The source order to be used for bundle: {0}");
 
     }
 

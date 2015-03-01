@@ -42,6 +42,69 @@ public class GuavaCacheConfiguration {
     private boolean weakKeys;
     private boolean weakValues;
 
+    public Integer getConcurrencyLevel() {
+        return concurrencyLevel;
+    }
+
+    public Long getExpireAfterAccessDuration() {
+        return expireAfterAccessDuration;
+    }
+
+    public TimeUnit getExpireAfterAccessTimeUnit() {
+        return expireAfterAccessTimeUnit;
+    }
+
+    public Long getExpireAfterWriteDuration() {
+        return expireAfterWriteDuration;
+    }
+
+    public TimeUnit getExpireAfterWriteTimeUnit() {
+        return expireAfterWriteTimeUnit;
+    }
+
+    public Integer getInitialCapacity() {
+        return initialCapacity;
+    }
+
+    public Integer getMaximumSize() {
+        return maximumSize;
+    }
+
+    public Long getMaximumWeight() {
+        return maximumWeight;
+    }
+
+    public boolean isRecordStats() {
+        return recordStats;
+    }
+
+    public Long getRefreshAfterWriteDuration() {
+        return refreshAfterWriteDuration;
+    }
+
+    public TimeUnit getRefreshAfterWriteTimeUnit() {
+        return refreshAfterWriteTimeUnit;
+    }
+
+    public RemovalListener<String, Object> getRemovalListener() {
+        return removalListener;
+    }
+
+    public boolean isSoftValues() {
+        return softValues;
+    }
+
+    public Ticker getTicker() {
+        return ticker;
+    }
+
+    public boolean isWeakKeys() {
+        return weakKeys;
+    }
+
+    public boolean isWeakValues() {
+        return weakValues;
+    }
 
     public GuavaCacheConfiguration concurrencyLevel(int level) {
         concurrencyLevel = level;
@@ -118,6 +181,11 @@ public class GuavaCacheConfiguration {
 
     public GuavaCacheConfiguration ticker(Ticker ticker) {
         this.ticker = ticker;
+        return this;
+    }
+
+    public GuavaCacheConfiguration removalListener(RemovalListener removalListener) {
+        this.removalListener = removalListener;
         return this;
     }
 

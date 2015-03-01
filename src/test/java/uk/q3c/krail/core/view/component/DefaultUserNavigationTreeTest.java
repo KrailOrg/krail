@@ -35,7 +35,6 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.S
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.ArrayList;
@@ -149,7 +148,7 @@ public class DefaultUserNavigationTreeTest {
         assertThat(userNavigationTree.getOptionMaxDepth()).isEqualTo(3);
         // option has been set
         int result = userNavigationTree.getOption()
-                                       .get(-1, LabelKey.Maxiumum_Depth);
+                                       .get(-1, DefaultUserNavigationTree.optionKeyMaximumDepth);
         assertThat(result).isEqualTo(3);
     }
 
@@ -165,7 +164,7 @@ public class DefaultUserNavigationTreeTest {
         assertThat(userNavigationTree.getOptionMaxDepth()).isEqualTo(2);
         // option has been set
         int result = userNavigationTree.getOption()
-                                       .get(-1, LabelKey.Maxiumum_Depth);
+                                       .get(-1, DefaultUserNavigationTree.optionKeyMaximumDepth);
         assertThat(result).isEqualTo(2);
     }
 
@@ -291,7 +290,7 @@ public class DefaultUserNavigationTreeTest {
 
         // when
         userNavigationTree.setOptionSortAscending(true);
-        userNavigationTree.setOptionSortType(SortType.INSERTION);
+        userNavigationTree.setOptionKeySortType(SortType.INSERTION);
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
@@ -302,7 +301,7 @@ public class DefaultUserNavigationTreeTest {
 
         // when
         userNavigationTree.setOptionSortAscending(false);
-        userNavigationTree.setOptionSortType(SortType.POSITION);
+        userNavigationTree.setOptionKeySortType(SortType.POSITION);
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
@@ -313,7 +312,7 @@ public class DefaultUserNavigationTreeTest {
 
         // when
         userNavigationTree.setOptionSortAscending(false);
-        userNavigationTree.setOptionSortType(SortType.INSERTION);
+        userNavigationTree.setOptionKeySortType(SortType.INSERTION);
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
@@ -324,7 +323,7 @@ public class DefaultUserNavigationTreeTest {
 
         // when
         userNavigationTree.setOptionSortAscending(true);
-        userNavigationTree.setOptionSortType(SortType.POSITION);
+        userNavigationTree.setOptionKeySortType(SortType.POSITION);
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
@@ -342,12 +341,12 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree.build();
         // when
         userNavigationTree.setOptionSortAscending(true);
-        userNavigationTree.setOptionSortType(SortType.INSERTION);
+        userNavigationTree.setOptionKeySortType(SortType.INSERTION);
         // then
         assertThat(userNavigationTree.getOption()
-                                     .get(false, LabelKey.Sort_Ascending)).isTrue();
+                                     .get(false, DefaultUserNavigationTree.optionKeySortAscending)).isTrue();
         assertThat(userNavigationTree.getOption()
-                                     .get(SortType.ALPHA, LabelKey.Sort_Type)).isEqualTo(SortType.INSERTION);
+                                     .get(SortType.ALPHA, DefaultUserNavigationTree.optionKeySortType)).isEqualTo(SortType.INSERTION);
 
     }
 

@@ -17,7 +17,9 @@ import uk.q3c.krail.i18n.I18NKey;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -31,8 +33,12 @@ public class OptionKey {
 
 
     private Class<? extends OptionContext> context;
-    private I18NKey key;  // TODO could this be I18N name?
+    private I18NKey key;
     private String[] qualifiers;
+
+    public OptionKey(@Nonnull OptionContext context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        this(context.getClass(), key, qualifiers);
+    }
 
     /**
      * @param context
@@ -56,6 +62,17 @@ public class OptionKey {
         this.qualifiers = qualifiers;
     }
 
+    /**
+     * Copy constructor which adds a qualifier to the {@code baseKey}
+     *
+     * @param baseKey the key on which to base the copy
+     * @param qualifiers the qualifiers to append to the base key
+     */
+    protected OptionKey(@Nonnull OptionKey baseKey, String... qualifiers) {
+
+        this(baseKey.getContext(), baseKey.getKey(), qualifiers);
+    }
+
     @Nonnull
     public Class<? extends OptionContext> getContext() {
         return context;
@@ -64,6 +81,27 @@ public class OptionKey {
     @Nonnull
     public I18NKey getKey() {
         return key;
+    }
+
+    /**
+     * returns a copy of this key with qualifiers added (functionally the same as using the copy constructor but looks neater when called)
+     *
+     * @param qualifiers the qualifiers to append to this key
+     *
+     * @return a new instance with the qualifiers appended
+     */
+    public OptionKey qualifiedWith(String... qualifiers) {
+        List<String> allQualifiers = new ArrayList<>();
+
+        if (this.getQualifiers() != null) {
+            allQualifiers.addAll(Arrays.asList(this.getQualifiers()));
+        }
+
+        if (qualifiers != null) {
+            allQualifiers.addAll(Arrays.asList(qualifiers));
+        }
+
+        return new OptionKey(this, allQualifiers.toArray(new String[1]));
     }
 
     @Nullable
@@ -81,7 +119,16 @@ public class OptionKey {
         Joiner joiner = Joiner.on("-")
                               .skipNulls();
         Enum<?> e = (Enum<?>) key;
-        return joiner.join(context.getSimpleName(), e.name(), qualifiers);
+
+        ArrayList<String> params = new ArrayList<>();
+        params.add(context.getSimpleName());
+        params.add(e.name());
+        if (qualifiers != null) {
+            for (String qualifier : qualifiers) {
+                params.add(qualifier);
+            }
+        }
+        return joiner.join(params);
     }
 
     @Override

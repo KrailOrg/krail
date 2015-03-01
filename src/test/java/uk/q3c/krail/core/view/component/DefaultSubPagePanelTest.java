@@ -124,7 +124,7 @@ public class DefaultSubPagePanelTest {
         when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
         panel.moveToNavigationState();
         // when
-        panel.setOptionSortType(SortType.INSERTION);
+        panel.setOptionKeySortType(SortType.INSERTION);
         panel.setOptionSortAscending(true);
         // then
         assertThat(panel.getOptionSortAscending()).isTrue();
@@ -196,7 +196,7 @@ public class DefaultSubPagePanelTest {
         assertThat(nodes).containsExactlyElementsOf(userSitemap.publicSortedAlphaDescending());
         // when
         panel.setSortAscending(true, false);
-        panel.setOptionSortType(SortType.INSERTION);
+        panel.setOptionKeySortType(SortType.INSERTION);
         // then
         nodes = nodesFromButtons(panel.getButtons());
         assertThat(nodes).containsExactlyElementsOf(userSitemap.publicSortedInsertionAscending());
@@ -207,7 +207,7 @@ public class DefaultSubPagePanelTest {
         assertThat(nodes).containsExactlyElementsOf(userSitemap.publicSortedInsertionDescending());
         // when
         panel.setSortAscending(true, false);
-        panel.setOptionSortType(SortType.POSITION);
+        panel.setOptionKeySortType(SortType.POSITION);
         // then
         nodes = nodesFromButtons(panel.getButtons());
         assertThat(nodes).containsExactlyElementsOf(userSitemap.publicSortedPositionAscending());
