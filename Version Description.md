@@ -1,1 +1,1 @@
-This version upgrades to Vaadin 7.3.10, provides system (and any other level) of options through the use of UserHierarchy implementations
+This version upgrades to Vaadin 7.4.0, and provides a flexible configuration options through the use of UserHierarchy implementations.
