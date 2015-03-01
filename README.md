@@ -70,7 +70,7 @@ Fails on Tomcat 8
 * Guava cache
 
 
-Krail is usable, though there are still some bugs and further developments needed.  Vaadin push is now supported.
+Krail is usable, though there are still some bugs and further developments needed.  Vaadin push is supported.
 
 
 ## demo
