@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.core.view.component;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,10 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.S
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.core.user.opt.OptionDescriptor;
+import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.I18N;
 import uk.q3c.krail.i18n.LabelKey;
 
@@ -35,10 +39,13 @@ import java.util.List;
 @I18N
 public class DefaultSubPagePanel extends NavigationButtonPanel implements OptionContext, SubPagePanel,
         UserSitemapChangeListener {
+    public static final OptionKey optionSortType = new OptionKey(DefaultSubPagePanel.class, LabelKey.Sort_Type);
+    public static final OptionKey optionSortAscending = new OptionKey(DefaultSubPagePanel.class, LabelKey.Sort_Ascending);
     private static Logger log = LoggerFactory.getLogger(DefaultSubPagePanel.class);
     private final UserSitemap userSitemap;
     private final Option option;
     private final UserSitemapSorters sorters;
+
 
     @Inject
     protected DefaultSubPagePanel(Navigator navigator, UserSitemap userSitemap, Option option,
@@ -47,13 +54,12 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
         this.userSitemap = userSitemap;
         this.option = option;
         this.sorters = sorters;
-        option.init(this);
         sorters.setOptionSortAscending(getOptionSortAscending());
-        sorters.setOptionSortType(getOptionSortType());
+        sorters.setOptionKeySortType(getOptionSortType());
     }
 
     public boolean getOptionSortAscending() {
-        return option.get(true, LabelKey.Sort_Ascending);
+        return option.get(true, optionSortAscending);
     }
 
     @Override
@@ -64,7 +70,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
     @Override
     public void setSortAscending(boolean ascending, boolean rebuild) {
         sorters.setOptionSortAscending(ascending);
-        option.set(ascending, LabelKey.Sort_Ascending);
+        option.set(ascending, optionSortAscending);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -92,19 +98,19 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
     }
 
     public SortType getOptionSortType() {
-        SortType sortType = option.get(SortType.ALPHA, LabelKey.Sort_Type);
+        SortType sortType = option.get(SortType.ALPHA, optionSortType);
         return sortType;
     }
 
     @Override
-    public void setOptionSortType(SortType sortType) {
+    public void setOptionKeySortType(SortType sortType) {
         setOptionSortType(sortType, true);
     }
 
     @Override
     public void setOptionSortType(SortType sortType, boolean rebuild) {
-        sorters.setOptionSortType(sortType);
-        option.set(sortType, LabelKey.Sort_Type);
+        sorters.setOptionKeySortType(sortType);
+        option.set(sortType, optionSortType);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -129,4 +135,11 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
     public Option getOption() {
         return option;
     }
+
+    @Override
+    public ImmutableSet<OptionDescriptor> optionDescriptors() {
+        return ImmutableSet.of(OptionDescriptor.descriptor(optionSortType, DescriptionKey.Sort_Type)
+                                               .desc(optionSortAscending, DescriptionKey.Sort_Ascending));
+    }
+
 }

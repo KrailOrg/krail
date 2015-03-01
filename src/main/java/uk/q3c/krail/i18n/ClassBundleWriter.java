@@ -130,4 +130,5 @@ public class ClassBundleWriter<E extends Enum<E>> extends BundleWriterBase<E> {
 
     }
 
+
 }

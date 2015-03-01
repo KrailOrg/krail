@@ -10,6 +10,7 @@
  */
 package uk.q3c.krail.core.view.component;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
@@ -19,6 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.core.user.opt.OptionDescriptor;
+import uk.q3c.krail.core.user.opt.OptionKey;
+import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.SupportedLocales;
 import uk.q3c.util.ResourceUtils;
@@ -35,16 +39,17 @@ public class LocaleContainer extends IndexedContainer implements OptionContext {
         NAME, FLAG
     }
 
+    public static final OptionKey optionKeyFlagSize = new OptionKey(LocaleContainer.class, LabelKey.Locale_Flag_Size);
     private static Logger log = LoggerFactory.getLogger(LocaleContainer.class);
     private final Set<Locale> supportedLocales;
     private final Option option;
+
 
     @Inject
     protected LocaleContainer(@SupportedLocales Set<Locale> supportedLocales, Option option) {
         super();
         this.supportedLocales = supportedLocales;
         this.option = option;
-        option.init(this);
         fillContainer();
     }
 
@@ -96,12 +101,21 @@ public class LocaleContainer extends IndexedContainer implements OptionContext {
     }
 
     public Integer getOptionFlagSize() {
-        return option.get(32, LabelKey.Locale_Flag_Size);
+        return option.get(32, optionKeyFlagSize);
     }
 
     @Nonnull
     @Override
     public Option getOption() {
         return option;
+    }
+
+    @Override
+    public ImmutableSet<OptionDescriptor> optionDescriptors() {
+        return ImmutableSet.of(OptionDescriptor.descriptor(optionKeyFlagSize, DescriptionKey.Flag_Icon_Size));
+    }
+
+    public OptionKey getOptionKeyFlagSize() {
+        return optionKeyFlagSize;
     }
 }

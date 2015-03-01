@@ -15,7 +15,9 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionKey;
 
+import javax.annotation.Nonnull;
 import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -46,6 +48,18 @@ public class PropertiesFromClasspathBundleReader extends BundleReaderBase implem
     }
 
 
+    @Override
+    public OptionKey getOptionKeyUseKeyPath() {
+        return optionKeyUseKeyPath.qualifiedWith(this.getClass()
+                                                     .getSimpleName(), "class");
+    }
+
+    @Override
+    protected OptionKey getOptionKeyPath() {
+        return optionKeyPath.qualifiedWith(this.getClass()
+                                               .getSimpleName(), "class");
+    }
+
     private String toResourceName0(String bundleName, String suffix) {
         return bundleName.contains("://") ? null : this.toResourceName(bundleName, suffix);
     }
@@ -69,7 +83,7 @@ public class PropertiesFromClasspathBundleReader extends BundleReaderBase implem
      * @return
      */
     @Override
-    protected void writeStubValue(PatternCacheKey cacheKey, String stub) {
+    protected void writeStubValue(@Nonnull PatternCacheKey cacheKey, @Nonnull String stub) {
 
     }
 

@@ -17,10 +17,7 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.DefaultUserHierarchy;
-import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
-import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.util.KrailCodeException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,7 +39,6 @@ import static uk.q3c.krail.core.user.profile.RankOption.*;
  */
 public class DefaultOption implements Option {
     private static Logger log = LoggerFactory.getLogger(DefaultOption.class);
-    private Class<? extends OptionContext> context;
     private UserHierarchy defaultHierarchy;
     private OptionCache optionCache;
 
@@ -53,76 +49,51 @@ public class DefaultOption implements Option {
         this.optionCache = optionCache;
     }
 
-    @Nonnull
-    public Class<? extends OptionContext> getContext() {
-        return context;
-    }
 
 
-    @Override
-    public void init(@Nonnull OptionContext context) {
-        checkNotNull(context);
-        this.context = context.getClass();
-    }
 
-    @Override
-    public void init(@Nonnull Class<? extends OptionContext> context) {
-        checkNotNull(context);
-        this.context = context;
-    }
 
 
     @Override
-    public <T> void set(T value, I18NKey key, String... qualifiers) {
-        checkInit();
-        optionCache.write(new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 0, new OptionKey(context, key, qualifiers)), Optional.of(value));
-    }
-
-    private void checkInit() {
-        if (context == null) {
-            String msg = getClass().getSimpleName() + " must be initialised.  Typically this is done by calling " +
-                    "option.init in the constructor of the class implementing OptionContext, for example:\n\n option" +
-                    ".init(this)\n\n ";
-            throw new KrailCodeException(msg);
-        }
+    public <T> void set(T value, @Nonnull OptionKey optionKey) {
+        set(value, defaultHierarchy, 0, optionKey);
     }
 
     @Override
-    public synchronized <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, @Nonnull I18NKey key,
-                                     @Nullable String... qualifiers) {
-        set(value, hierarchy, 0, context, key, qualifiers);
-    }
-
-
-    @Override
-    public synchronized <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
-        checkInit();
+    public synchronized <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey optionKey) {
         checkNotNull(hierarchy);
         checkArgument(hierarchyRank >= 0);
-        checkNotNull(context);
-        checkNotNull(key);
-        optionCache.write(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, new OptionKey(context, key,
-                qualifiers)), Optional.of(value));
+        checkNotNull(optionKey);
+        optionCache.write(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey), Optional.of(value));
     }
 
     @Override
-    @Nonnull
-    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull I18NKey key, @Nullable String... qualifiers) {
-        return get(defaultValue, HIGHEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
+    public <T> void set(T value, @Nonnull UserHierarchy hierarchy, @Nonnull OptionKey optionKey) {
+        set(value, hierarchy, 0, optionKey);
     }
 
     @Override
+    public <T> void set(T value, int hierarchyRank, @Nonnull OptionKey optionKey) {
+        set(value, defaultHierarchy, hierarchyRank, optionKey);
+    }
+
     @Nonnull
-    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull RankOption rankOption, @Nonnull UserHierarchy
-            hierarchy, int hierarchyRank, @Nonnull Class<? extends
-            OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
-        checkInit();
+    @Override
+    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull OptionKey optionKey) {
+        return get(defaultValue, defaultHierarchy, optionKey);
+    }
+
+
+    @Override
+    @Nonnull
+    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull OptionKey optionKey) {
         checkNotNull(defaultValue);
         checkNotNull(hierarchy);
-        checkNotNull(context);
-        checkNotNull(key);
-        Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy,
-                rankOption, hierarchyRank, new OptionKey(context, key, qualifiers)));
+        checkNotNull(optionKey);
+        Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy, HIGHEST_RANK, 0, optionKey));
+        if (optionalValue == null) {
+            return defaultValue;
+        }
         if (optionalValue.isPresent()) {
             return optionalValue.get();
         } else {
@@ -130,59 +101,64 @@ public class DefaultOption implements Option {
         }
     }
 
+
     @Nonnull
     @Override
-    public <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull Class<? extends
-            OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
-        return get(defaultValue, LOWEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
+    public synchronized <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull OptionKey optionKey) {
+        return getLowestRanked(defaultValue, defaultHierarchy, optionKey);
     }
 
-    @Override
     @Nonnull
-    public synchronized <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull I18NKey key, @Nullable String...
-            qualifiers) {
-        return get(defaultValue, LOWEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
+    @Override
+    public synchronized <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull OptionKey optionKey) {
+        checkNotNull(defaultValue);
+        checkNotNull(hierarchy);
+        checkNotNull(optionKey);
+        Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy, LOWEST_RANK, 0, optionKey));
+        if (optionalValue == null) {
+            return defaultValue;
+        }
+        if (optionalValue.isPresent()) {
+            return optionalValue.get();
+        } else {
+            return defaultValue;
+        }
     }
 
-    @Override
+
     @Nonnull
-    public synchronized <T> T getSpecificRank(@Nonnull T defaultValue, int hierarchyRank, @Nonnull I18NKey key,
-                                              @Nullable String... qualifiers) {
-        return get(defaultValue, SPECIFIC_RANK, defaultHierarchy, hierarchyRank, context, key, qualifiers);
-    }
-
     @Override
-    public <T> T get(@Nonnull T defaultValue, UserHierarchy hierarchy, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
-        return get(defaultValue, HIGHEST_RANK, hierarchy, 0, context, key, qualifiers);
-    }
+    public synchronized <T> T getSpecificRanked(@Nonnull T defaultValue, int hierarchyRank, @Nonnull OptionKey optionKey) {
 
-    @Override
+        return getSpecificRanked(defaultValue, defaultHierarchy, hierarchyRank, optionKey);
+    }
     @Nonnull
-    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull I18NKey key,
-                                  @Nullable String... qualifiers) {
-        return get(defaultValue, HIGHEST_RANK, hierarchy, 0, context, key, qualifiers);
-    }
-
     @Override
-    @Nonnull
-    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
-        return get(defaultValue, HIGHEST_RANK, defaultHierarchy, 0, context, key, qualifiers);
+    public synchronized <T> T getSpecificRanked(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey optionKey) {
+        checkNotNull(defaultValue);
+        checkNotNull(hierarchy);
+        checkNotNull(optionKey);
+        Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey));
+
+        if (optionalValue == null) {
+            return defaultValue;
+        }
+        if (optionalValue.isPresent()) {
+            return optionalValue.get();
+        } else {
+            return defaultValue;
+        }
     }
 
 
     @Override
     @Nullable
-    public Object delete(@Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull Class<? extends
-            OptionContext> context, @Nonnull I18NKey key, @Nullable String
-            ... qualifiers) {
-        checkInit();
+    public Object delete(@Nonnull UserHierarchy hierarchy, int hierarchyRank, OptionKey optionKey) {
         checkNotNull(hierarchy);
         checkArgument(hierarchyRank >= 0);
-        checkNotNull(context);
-        checkNotNull(key);
+        checkNotNull(optionKey);
 
-        return optionCache.delete(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, new OptionKey(context,
-                key, qualifiers)));
+        return optionCache.delete(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey));
     }
 
 

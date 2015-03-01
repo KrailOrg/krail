@@ -72,7 +72,6 @@ public class BeanFieldGroupBaseTest {
 
         Locale.setDefault(Locale.UK);
         fieldSet = new TestBeanFieldGroup(i18NProcessor, beanValidatorProvider, option);
-        option.init(fieldSet);
         te = new TestEntity();
         te.setFirstName("Mango");
         te.setLastName("Chutney");

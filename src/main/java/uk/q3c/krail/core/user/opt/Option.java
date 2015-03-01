@@ -11,9 +11,7 @@
 
 package uk.q3c.krail.core.user.opt;
 
-import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
-import uk.q3c.krail.i18n.I18NKey;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,74 +26,18 @@ import javax.annotation.Nullable;
  */
 public interface Option {
 
-    /**
-     * Initialise to use the class of {@code context}
-     *
-     * @param context
-     */
-    void init(OptionContext context);
+
+    //---------------------------------------------- get (highest) ----------------------------------------------------------
 
     /**
-     * Initialise to use the {@code context}
-     *
-     * @param context
-     */
-    void init(Class<? extends OptionContext> context);
-
-
-    //---------------------------------------------- get ----------------------------------------------------------
-
-
-    /**
-     * See {@link #get(Object, RankOption, UserHierarchy, int, Class, I18NKey, String...)}, but with an implementation
-     * dependent default
-     * hierarchy & context
-     *
-     * @return the highest rank value for the option
+     * Calls {@link #get(Object, UserHierarchy, OptionKey)} with a default hierarchy
      */
     @Nonnull
-    <T> T get(@Nonnull T defaultValue, @Nonnull I18NKey key, @Nullable String... qualifiers);
+    <T> T get(@Nonnull T defaultValue, @Nonnull OptionKey optionKey);
 
-
-    @Nonnull
-    <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull Class<? extends
-            OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers);
 
     /**
-     * See {@link #get(Object, RankOption, UserHierarchy, int, Class, I18NKey, String...)}, but with an implementation
-     * dependent default
-     * context
-     *
-     * @return the highest rank value for the option
-     *
-     * @see #get(Object, RankOption, UserHierarchy, int, Class, I18NKey, String...)
-     */
-
-    @Nonnull
-    <T> T get(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull I18NKey key, @Nullable String...
-            qualifiers);
-
-    /**
-     * See {@link #get(Object, RankOption, UserHierarchy, int, Class, I18NKey, String...)}, but with an implementation
-     * dependent default hierarchy
-     *
-     * @return the highest rank value for the option
-     */
-    @Nonnull
-    <T> T get(@Nonnull T defaultValue, @Nonnull Class<? extends OptionContext> contextClass, @Nonnull I18NKey key,
-              @Nullable String... qualifiers);
-
-    @Nonnull
-    <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull I18NKey key, @Nullable String... qualifiers);
-
-    @Nonnull
-    <T> T getSpecificRank(@Nonnull T defaultValue, int hierarchyRank, @Nonnull I18NKey key, @Nullable String...
-            qualifiers);
-
-    <T> T get(@Nonnull T defaultValue, UserHierarchy hierarchy, @Nonnull Class<? extends OptionContext> contextClass, @Nonnull I18NKey key, @Nullable String... qualifiers);
-    /**
-     * Returns the highest rank value for the option identified by a composite key comprising the {@code context},
-     * {@code key} & {@code qualifiers} for the {@code hierarchy}, for the current user.  If no value is found, {@code
+     * Returns the highest rank value for the option {@code optionKey}, for the {@code hierarchy}, for the current user.  If no value is found, {@code
      * defaultValue} is returned
      *
      * @param <T>
@@ -107,38 +49,93 @@ public interface Option {
      *         return value
      * @param hierarchy
      *         the hierarchy to use
-     * @param context
-     *         the class which is using the option
-     * @param key
-     *         the option specific key, for example SHOW_ALL_SECTIONS
-     * @param qualifiers
-     *         optional, these are usually dynamically generated qualifier(s) to make a complete unique identity where
-     *         the same option may be used several times within a context.  If for example you have an array of
-     *         dynamically generated buttons, which you want the user to be able to individually choose the colours
-     *         of, you may have context=com.example.FancyButtonForm, key=BUTTON_COLOUR, qualifiers="2,3"
-     *         <p>
-     *         where "2,3" is the grid position of the button
+     * @param optionKey
+     *         identifier for the option, in its context
      *
      * @return the highest rank value for the option or the {@code defaultValue} if none found
      */
     @Nonnull
-    <T> T get(@Nonnull T defaultValue, @Nonnull RankOption rankOption, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull Class<? extends
-            OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers);
+    <T> T get(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull OptionKey optionKey);
+
+    //------------------------------------------- get lowest--------------------------------------------------------
+
+
+    /**
+     * Calls {@link #getLowestRanked(Object, UserHierarchy, OptionKey)} with a default hierarchy
+     */
+    @Nonnull
+    <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull OptionKey optionKey);
+
+    /**
+     * Returns the lowest rank value for the option {@code optionKey}, for the {@code hierarchy}, for the current user.  If no value is found, {@code
+     * defaultValue} is returned
+     *
+     * @param <T>
+     *         a type determined by the defaultValue.  An implementation should assume that an object of any type can
+     *         be
+     *         passed.
+     * @param defaultValue
+     *         the default value to be returned if no value is found in the store.  Also determines the type of the
+     *         return value
+     * @param hierarchy
+     *         the hierarchy to use
+     * @param optionKey
+     *         identifier for the option, in its context
+     *
+     * @return the lowest rank value for the option or the {@code defaultValue} if none found
+     */
+    @Nonnull
+    <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull OptionKey optionKey);
+
+
+    //------------------------------------------- get specific --------------------------------------------------------
+    /**
+     * Calls {@link #getSpecificRanked(Object, UserHierarchy, int, OptionKey)} with a default hierarchy
+     */
+    <T> T getSpecificRanked(@Nonnull T defaultValue, int hierarchyRank, @Nonnull OptionKey optionKey);
+
+
+    /**
+     * Returns the value assigned to a specific rank for the option {@code optionKey}, for the {@code hierarchy}, for the current user.  If no value is
+     * found, {@code
+     * defaultValue} is returned
+     *
+     * @param <T>
+     *         a type determined by the defaultValue.  An implementation should assume that an object of any type can
+     *         be
+     *         passed.
+     * @param defaultValue
+     *         the default value to be returned if no value is found in the store.  Also determines the type of the
+     *         return value
+     * @param hierarchy
+     *         the hierarchy to use
+     * @param optionKey
+     *         identifier for the option, in its context
+     *
+     * @return the value for the option or the {@code defaultValue} if none found
+     */
+    @Nonnull
+    <T> T getSpecificRanked(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey optionKey);
+
 
     //---------------------------------------------- set ----------------------------------------------------------
 
     /**
-     * See {@link #set(Object, UserHierarchy, int, Class, I18NKey, String...)} with an assumed hierarchyRank of 0 (the
-     * highest rank), and an implementation dependent default hierarchy & context
+     * Calls {@link #set(Object, UserHierarchy, int, OptionKey)}  with a default hierarchy and a hierarchy rank of 0 (the highest rank)
      */
-    <T> void set(T value, I18NKey key, String... qualifiers);
+    <T> void set(T value, @Nonnull OptionKey optionKey);
 
     /**
-     * See {@link #set(Object, UserHierarchy, int, Class, I18NKey, String...)} with an assumed hierarchyRank of 0 (the
-     * highest rank), and an implementation dependent default context
+     * Calls {@link #set(Object, UserHierarchy, int, OptionKey)}  with a hierarchy rank of 0 (the highest rank)
      */
-    <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, @Nonnull I18NKey key, @Nullable String...
-            qualifiers);
+    <T> void set(T value, @Nonnull UserHierarchy hierarchy, @Nonnull OptionKey optionKey);
+
+
+    /**
+     * Calls {@link #set(Object, UserHierarchy, int, OptionKey)}  with a default hierarchy
+     */
+
+    <T> void set(T value, int hierarchyRank, @Nonnull OptionKey optionKey);
 
     /**
      * Sets the value for a composite key comprising the {@code context}, {@code key} & {@code qualifiers},
@@ -151,51 +148,27 @@ public interface Option {
      *         the hierarchy to use
      * @param hierarchyRank
      *         the hierarchy rank to assign the value to
-     * @param context
-     *         the class which is using the option
-     * @param key
-     *         the option specific key, for example SHOW_ALL_SECTIONS
-     * @param qualifiers
-     *         optional, this is usually dynamically generated qualifier(s) to make a complete unique identity where
-     *         the same option may be used several times within a context.  If for example you have an array of
-     *         dynamically generated buttons, which you want the user to be able to individually choose the colours
-     *         of, you may have context=com.example.FancyButtonForm, key=BUTTON_COLOUR, qualifiers="2,3"
-     *         <p>
-     *         where "2,3" is the grid position of the button
-     * @param <T>
-     *         the type of the option value
+     * @param optionKey
+     *         identifier for the option, in its context
      */
-    <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull Class<? extends
-            OptionContext> context, @Nonnull I18NKey key, @Nullable String... qualifiers);
 
-    //---------------------------------------------- delete -------------------------------------------------------
+    <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey optionKey);
 
+
+    //--------------------------------------------- delete --------------------------------------------------------
 
     /**
-     * Deletes the value for a composite key comprising the {@code context}, {@code key} & {@code qualifiers},
-     * for the current user, in {@code hierarchy} at {@code hierarchyRank}.
+     * Deletes the value assigned to {@code optionKey} for the current user, in {@code hierarchy} at {@code hierarchyRank}.
      *
      * @param hierarchy
      *         the hierarchy to use
      * @param hierarchyRank
      *         the hierarchy rank to delete the value assignment from
-     * @param context
-     *         the class which is using the option
-     * @param key
-     *         the option specific key, for example SHOW_ALL_SECTIONS
-     * @param qualifiers
-     *         optional, this is usually dynamically generated qualifier(s) to make a complete unique identity where
-     *         the same option may be used several times within a context.  If for example you have an array of
-     *         dynamically generated buttons, which you want the user to be able to individually choose the colours
-     *         of, you may have context=com.example.FancyButtonForm, key=BUTTON_COLOUR, qualifiers="2,3"
-     *         <p>
-     *         where "2,3" is the grid position of the button
+     * @param optionKey
+     *         identifier for the option, in its context
      *
      * @return the previously assigned value of this option, or null if it had no assignment
      */
     @Nullable
-    Object delete(@Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey key, @Nullable String
-            ... qualifiers);
-
-
+    Object delete(@Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey optionKey);
 }

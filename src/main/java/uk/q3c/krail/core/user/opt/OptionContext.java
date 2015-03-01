@@ -11,6 +11,8 @@
 
 package uk.q3c.krail.core.user.opt;
 
+import com.google.common.collect.ImmutableSet;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -30,4 +32,5 @@ public interface OptionContext {
     Option getOption();
 
 
+    ImmutableSet<OptionDescriptor> optionDescriptors();
 }

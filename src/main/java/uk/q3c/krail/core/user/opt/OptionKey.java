@@ -17,7 +17,9 @@ import uk.q3c.krail.i18n.I18NKey;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -33,6 +35,10 @@ public class OptionKey {
     private Class<? extends OptionContext> context;
     private I18NKey key;  // TODO could this be I18N name?
     private String[] qualifiers;
+
+    public OptionKey(@Nonnull OptionContext context, @Nonnull I18NKey key, @Nullable String... qualifiers) {
+        this(context.getClass(), key, qualifiers);
+    }
 
     /**
      * @param context
@@ -56,6 +62,17 @@ public class OptionKey {
         this.qualifiers = qualifiers;
     }
 
+    /**
+     * Copy constructor which adds a qualifier to the {@code baseKey}
+     *
+     * @param baseKey
+     * @param qualifiers
+     */
+    protected OptionKey(@Nonnull OptionKey baseKey, @Nonnull String... qualifiers) {
+
+        this(baseKey.getContext(), baseKey.getKey(), qualifiers);
+    }
+
     @Nonnull
     public Class<? extends OptionContext> getContext() {
         return context;
@@ -64,6 +81,30 @@ public class OptionKey {
     @Nonnull
     public I18NKey getKey() {
         return key;
+    }
+
+    /**
+     * returns a copy of this key with qualifiers added (functionally the same as using the copy constructor but looks neater when called)
+     *
+     * @param qualifiers
+     *
+     * @return
+     */
+    public OptionKey qualifiedWith(String... qualifiers) {
+        List<String> newQuals = Arrays.asList(qualifiers);
+        List<String> prevQuals = prevQuals = Arrays.asList(this.getQualifiers());
+
+        List<String> allQualifiers = new ArrayList<>();
+
+        if (prevQuals != null) {
+            allQualifiers.addAll(prevQuals);
+        }
+
+        if (newQuals != null) {
+            allQualifiers.addAll(newQuals);
+        }
+
+        return new OptionKey(this, allQualifiers.toArray(new String[1]));
     }
 
     @Nullable

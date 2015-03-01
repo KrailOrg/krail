@@ -11,11 +11,14 @@
 
 package uk.q3c.krail.i18n;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.core.user.opt.OptionDescriptor;
+import uk.q3c.krail.core.user.opt.OptionKey;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -26,6 +29,8 @@ import java.util.ResourceBundle;
  */
 public abstract class BundleReaderBase implements OptionContext, BundleReader {
 
+    public static final OptionKey optionKeyPath = new OptionKey(BundleReaderBase.class, LabelKey.Path);
+    public static final OptionKey optionKeyUseKeyPath = new OptionKey(BundleReaderBase.class, LabelKey.Use_Key_Path);
     private static Logger log = LoggerFactory.getLogger(BundleReaderBase.class);
     private final ResourceBundle.Control control;
     private Option option;
@@ -33,7 +38,7 @@ public abstract class BundleReaderBase implements OptionContext, BundleReader {
     protected BundleReaderBase(Option option, ResourceBundle.Control control) {
         this.option = option;
         this.control = control;
-        option.init(this);
+
     }
 
     @Nonnull
@@ -47,6 +52,7 @@ public abstract class BundleReaderBase implements OptionContext, BundleReader {
      *
      * @param cacheKey
      * @param source
+     *
      * @return
      */
     @Override
@@ -76,9 +82,9 @@ public abstract class BundleReaderBase implements OptionContext, BundleReader {
      * @return
      */
     @Override
-    public Optional<String> getValue(PatternCacheKey cacheKey, String source, boolean autoStub, boolean
-            stubWithKeyName, String stubValue) {
-        log.debug("getValue for cacheKey {}, source '{}', using control: " + control.getClass().getSimpleName(), cacheKey, source);
+    public Optional<String> getValue(PatternCacheKey cacheKey, String source, boolean autoStub, boolean stubWithKeyName, String stubValue) {
+        log.debug("getValue for cacheKey {}, source '{}', using control: " + control.getClass()
+                                                                                    .getSimpleName(), cacheKey, source);
         I18NKey key = (I18NKey) cacheKey.getKey();
         String expandedBaseName = expandFromKey(source, key);
         try {
@@ -105,8 +111,7 @@ public abstract class BundleReaderBase implements OptionContext, BundleReader {
      * @return
      */
     @Override
-    public Optional<String> autoStub(PatternCacheKey cacheKey, String value, boolean autoStub, boolean
-            stubWithKeyName, String stubValue) {
+    public Optional<String> autoStub(PatternCacheKey cacheKey, String value, boolean autoStub, boolean stubWithKeyName, String stubValue) {
         if (value == null) {
             if (autoStub) {
                 I18NKey key = (I18NKey) cacheKey.getKey();
@@ -135,7 +140,7 @@ public abstract class BundleReaderBase implements OptionContext, BundleReader {
      *
      * @return
      */
-    protected abstract void writeStubValue(PatternCacheKey cacheKey, String stub);
+    protected abstract void writeStubValue(@Nonnull PatternCacheKey cacheKey, @Nonnull String stub);
 
     /**
      * Allows the setting of paths for location of class and property files.  The bundle base name is taken from {@link
@@ -156,20 +161,31 @@ public abstract class BundleReaderBase implements OptionContext, BundleReader {
     protected String expandFromKey(String source, I18NKey sampleKey) {
         String baseName = sampleKey.bundleName();
         String packageName;
-        if (option.get(true, LabelKey.Use_Key_Path, source)) {
+        //use sub-class names to qualify the options, so they get their own, and not the base class
+        if (option.get(true, getOptionKeyUseKeyPath().qualifiedWith(source))) {
             packageName = ClassUtils.getPackageCanonicalName(sampleKey.getClass());
 
         } else {
-            packageName = option.get("", LabelKey.Path, source);
+            packageName = option.get("", getOptionKeyPath().qualifiedWith(source));
         }
 
         String expanded = packageName.isEmpty() ? baseName : packageName + "." + baseName;
         return expanded;
     }
 
+    protected abstract OptionKey getOptionKeyUseKeyPath();
+
+    protected abstract OptionKey getOptionKeyPath();
+
     protected abstract String getValue(ResourceBundle bundle, Enum<?> key);
 
     public ResourceBundle.Control getControl() {
         return control;
+    }
+
+    @Override
+    public ImmutableSet<OptionDescriptor> optionDescriptors() {
+        return ImmutableSet.of(OptionDescriptor.descriptor(getOptionKeyUseKeyPath(), MessageKey.Use_Key_Path, true)
+                                               .desc(getOptionKeyPath(), MessageKey.Bundle_Path, true));
     }
 }

@@ -37,8 +37,7 @@ public class DefaultPatternCacheLoaderTest2 {
         loader.setOptionStubWithKeyName(true, "class");
         //then
         Boolean optionValue = loader.getOption()
-                                    .get(false, LabelKey.Stub_with_Key_Name,
-                                            "class");
+                                    .get(false, DefaultPatternCacheLoader.optionKeyStubWithKeyName.qualifiedWith("class"));
         assertThat(optionValue).isTrue();
     }
 
@@ -50,7 +49,7 @@ public class DefaultPatternCacheLoaderTest2 {
         loader.setOptionAutoStub(true, "class");
         //then
         Boolean optionValue = loader.getOption()
-                                    .get(false, LabelKey.Auto_Stub, "class");
+                                    .get(false, DefaultPatternCacheLoader.optionKeyAutoStub.qualifiedWith("class"));
         assertThat(optionValue).isTrue();
     }
 
@@ -62,7 +61,7 @@ public class DefaultPatternCacheLoaderTest2 {
         loader.setOptionStubValue("Wiggly", "class");
         //then
         String optionValue = loader.getOption()
-                                   .get("bottoms", LabelKey.Stub_Value, "class");
+                                   .get("bottoms", DefaultPatternCacheLoader.optionKeyStubValue.qualifiedWith("class"));
         assertThat(optionValue).isEqualTo("Wiggly");
     }
 }

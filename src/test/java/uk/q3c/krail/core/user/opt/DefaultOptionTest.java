@@ -11,6 +11,7 @@
 
 package uk.q3c.krail.core.user.opt;
 
+import com.google.common.collect.ImmutableSet;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Before;
@@ -21,7 +22,6 @@ import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.i18n.TestLabelKey;
-import uk.q3c.krail.util.KrailCodeException;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -57,44 +57,16 @@ public class DefaultOptionTest {
         optionKey2 = new OptionKey(context2, TestLabelKey.key1, "q");
     }
 
-    @Test
-    public void init_from_class() {
-        //given
 
-        //when
-        option.init(context);
-        //then
-        assertThat(option.getContext()).isEqualTo(MockContext.class);
-    }
 
-    @Test
-    public void init_from_object() {
-        //given
-
-        //when
-        option.init(contextObject);
-        //then
-        assertThat(option.getContext()).isEqualTo(MockContext.class);
-    }
-
-    @Test(expected = KrailCodeException.class)
-    public void init_not_done() {
-        //given
-
-        //when
-        option.get(5, TestLabelKey.key1);
-        //then
-        //exception
-    }
 
     @Test
     public void set_simplest() {
         //given
-        option.init(context);
         when(defaultHierarchy.rankName(0)).thenReturn("specific");
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 0, optionKey1);
         //when
-        option.set(5, TestLabelKey.key1, "q");
+        option.set(5, optionKey1);
         //then
         verify(optionCache).write(cacheKey, Optional.of(5));
     }
@@ -102,11 +74,10 @@ public class DefaultOptionTest {
     @Test
     public void set_with_hierarchy() {
         //given
-        option.init(context);
         when(hierarchy2.rankName(0)).thenReturn("specific");
         OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 0, optionKey1);
         //when
-        option.set(5, hierarchy2, TestLabelKey.key1, "q");
+        option.set(5, hierarchy2, optionKey1);
         //then
         verify(optionCache).write(cacheKey, Optional.of(5));
     }
@@ -114,12 +85,11 @@ public class DefaultOptionTest {
     @Test
     public void set_with_all_args() {
         //given
-        option.init(context);
         when(hierarchy2.rankName(2)).thenReturn("specific");
         OptionKey optionKey2 = new OptionKey(context2, TestLabelKey.key1, "q");
         OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 2, optionKey2);
         //when
-        option.set(5, hierarchy2, 2, context2, TestLabelKey.key1, "q");
+        option.set(5, hierarchy2, 2, optionKey2);
         //then
         verify(optionCache).write(cacheKey, Optional.of(5));
     }
@@ -127,24 +97,22 @@ public class DefaultOptionTest {
     @Test(expected = IllegalArgumentException.class)
     public void set_with_all_args_rank_too_low() {
         //given
-        option.init(context);
         when(hierarchy2.rankName(2)).thenReturn("specific");
         OptionKey optionKey2 = new OptionKey(context, TestLabelKey.key1, "q");
         OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 2, optionKey2);
         //when
-        option.set(5, hierarchy2, -1, context2, TestLabelKey.key1, "q");
+        option.set(5, hierarchy2, -1, optionKey2);
         //then
     }
 
     @Test
     public void get_simplest() {
         //given
-        option.init(context);
         when(defaultHierarchy.highestRankName()).thenReturn("high");
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey1);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
         //when
-        Integer actual = option.get(5, TestLabelKey.key1, "q");
+        Integer actual = option.get(5, optionKey1);
         //then
         assertThat(actual).isEqualTo(8);
     }
@@ -152,38 +120,25 @@ public class DefaultOptionTest {
     @Test
     public void get_with_hierarchy() {
         //given
-        option.init(context);
         when(hierarchy2.highestRankName()).thenReturn("high");
         OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, HIGHEST_RANK, optionKey1);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
         //when
-        Integer actual = option.get(5, hierarchy2, TestLabelKey.key1, "q");
+        Integer actual = option.get(5, hierarchy2, optionKey1);
         //then
         assertThat(actual).isEqualTo(8);
     }
 
-    @Test
-    public void get_with_context() {
-        //given
-        option.init(context);
-        when(defaultHierarchy.highestRankName()).thenReturn("high");
-        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey2);
-        when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
-        //when
-        Integer actual = option.get(5, context2, TestLabelKey.key1, "q");
-        //then
-        assertThat(actual).isEqualTo(8);
-    }
+
 
     @Test
     public void get_with_all_args() {
         //given
-        option.init(context);
         when(hierarchy2.highestRankName()).thenReturn("high");
-        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, HIGHEST_RANK, optionKey2);
+        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, HIGHEST_RANK, optionKey1);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
         //when
-        Integer actual = option.get(5, hierarchy2, context2, TestLabelKey.key1, "q");
+        Integer actual = option.get(5, hierarchy2, optionKey1);
         //then
         assertThat(actual).isEqualTo(8);
     }
@@ -191,12 +146,11 @@ public class DefaultOptionTest {
     @Test
     public void get_none_found() {
         //given
-        option.init(context);
         when(defaultHierarchy.highestRankName()).thenReturn("high");
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey2);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.empty());
         //when
-        Integer actual = option.get(5, context2, TestLabelKey.key1, "q");
+        Integer actual = option.get(5, optionKey2);
         //then
         assertThat(actual).isEqualTo(5);
     }
@@ -204,12 +158,11 @@ public class DefaultOptionTest {
     @Test
     public void get_lowest() {
         //given
-        option.init(context);
         when(defaultHierarchy.lowestRankName()).thenReturn("low");
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, LOWEST_RANK, optionKey2);
         when(optionCache.get(Optional.of(5), cacheKey)).thenReturn(Optional.of(20));
         //when
-        Integer actual = option.getLowestRanked(5, defaultHierarchy, context2, TestLabelKey.key1, "q");
+        Integer actual = option.getLowestRanked(5, defaultHierarchy, optionKey2);
         //then
         assertThat(actual).isEqualTo(20);
     }
@@ -217,12 +170,11 @@ public class DefaultOptionTest {
     @Test
     public void delete() {
         //given
-        option.init(context);
         when(hierarchy2.rankName(1)).thenReturn("specific");
         OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 1, optionKey2);
         when(optionCache.delete(cacheKey)).thenReturn(Optional.of(3));
         //when
-        Object actual = option.delete(hierarchy2, 1, context2, TestLabelKey.key1, "q");
+        Object actual = option.delete(hierarchy2, 1, optionKey2);
         //then
         assertThat(actual).isEqualTo(Optional.of(3));
         verify(optionCache).delete(cacheKey);
@@ -235,6 +187,11 @@ public class DefaultOptionTest {
         public Option getOption() {
             return null;
         }
+
+        @Override
+        public ImmutableSet<OptionDescriptor> optionDescriptors() {
+            return null;
+        }
     }
 
     static class MockContext2 implements OptionContext {
@@ -242,6 +199,11 @@ public class DefaultOptionTest {
         @Nonnull
         @Override
         public Option getOption() {
+            return null;
+        }
+
+        @Override
+        public ImmutableSet<OptionDescriptor> optionDescriptors() {
             return null;
         }
     }

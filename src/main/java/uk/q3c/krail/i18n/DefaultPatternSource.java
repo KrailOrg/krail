@@ -17,10 +17,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.OptionContext;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -34,26 +31,21 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by David Sowerby on 07/12/14.
  */
 
-public class DefaultPatternSource implements OptionContext, PatternSource<LoadingCache<PatternCacheKey, String>> {
+public class DefaultPatternSource implements PatternSource<LoadingCache<PatternCacheKey, String>> {
 
 
     private static Logger log = LoggerFactory.getLogger(DefaultPatternSource.class);
     private LoadingCache<PatternCacheKey, String> cache;
-    private Option option;
 
 
     @Inject
 
-    protected DefaultPatternSource(Option option,
-                                   PatternCacheLoader cacheLoader) {
-        this.option = option;
-        option.init(this);
+    protected DefaultPatternSource(PatternCacheLoader cacheLoader) {
         //CacheLoader has no interface so the cast is necessary to allow alternative PatternCacheLLoader implementations
         //although all implementations would need to extend CacheLoader
         cache = CacheBuilder.newBuilder()
-                            .maximumSize(option.get(1000, LabelKey.Maximum_Cache_Size))
                             .build((CacheLoader) cacheLoader);
-
+        // TODO will be using a config object
     }
 
 
@@ -88,11 +80,6 @@ public class DefaultPatternSource implements OptionContext, PatternSource<Loadin
         return cache;
     }
 
-    @Nonnull
-    @Override
-    public Option getOption() {
-        return option;
-    }
 
     @Override
     public void clearCache() {

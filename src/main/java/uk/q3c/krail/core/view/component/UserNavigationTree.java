@@ -55,7 +55,7 @@ public interface UserNavigationTree extends Component, UserSitemapSorters {
     /**
      * Sets the sort type but only rebuilds the tree if {@code rebuild} is true. Useful to call with
      * {@code rebuild=false} if you want to make several changes to the tree before rebuilding, otherwise just use
-     * {@link UserSitemapSorters#setOptionSortType(SortType)}
+     * {@link UserSitemapSorters#setOptionKeySortType(SortType)}
      *
      * @param sortType
      * @param rebuild

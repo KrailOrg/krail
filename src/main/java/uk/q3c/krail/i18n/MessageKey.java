@@ -13,7 +13,8 @@
 package uk.q3c.krail.i18n;
 
 public enum MessageKey implements I18NKey {
-    nullKey, Invalid_URI, Locale_Change, Service_not_Started;
+    nullKey, Invalid_URI, Locale_Change, Service_not_Started, Use_Key_Path, Bundle_Path, Option_Auto_Stub,
+    Option_Stub_with_Key_Name, Option_Stub_Value, Option_Source_Order_Default, Option_Source_Order
 
 
 }

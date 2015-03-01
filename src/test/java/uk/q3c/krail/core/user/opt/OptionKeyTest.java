@@ -45,9 +45,9 @@ public class OptionKeyTest {
     @Test(expected = NullPointerException.class)
     public void null_context() {
         //given
-
+        Class<? extends OptionContext> clazz = null;
         //when
-        OptionKey noQualifiers = new OptionKey(null, TestLabelKey.key1);
+        OptionKey noQualifiers = new OptionKey(clazz, TestLabelKey.key1);
         //then
         assertThat(true).isFalse();
     }
@@ -60,5 +60,19 @@ public class OptionKeyTest {
         OptionKey noQualifiers = new OptionKey(LocaleContainer.class, null);
         //then
         assertThat(true).isFalse();
+    }
+
+    @Test
+    public void qualifiedWith() {
+        //given
+        OptionKey noQualifiers = new OptionKey(LocaleContainer.class, TestLabelKey.key1);
+        //when
+        OptionKey qualified = noQualifiers.qualifiedWith("a", "b");
+        //then
+        assertThat(qualified.compositeKey()).isEqualTo("LocaleContainer-key1-a-b");
+        //when
+        OptionKey qualifiedAgain = qualified.qualifiedWith("c", "d");
+        //then
+        assertThat(qualifiedAgain.compositeKey()).isEqualTo("LocaleContainer-key1-a-b-c-d");
     }
 }

@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionKey;
 
 import java.util.ResourceBundle;
 
@@ -45,6 +46,18 @@ public class ClassBundleReader extends BundleReaderBase implements BundleReader 
     @Inject
     protected ClassBundleReader(Option option, ClassBundleControl control) {
         super(option, control);
+    }
+
+    @Override
+    public OptionKey getOptionKeyUseKeyPath() {
+        return optionKeyUseKeyPath.qualifiedWith(this.getClass()
+                                                     .getSimpleName(), "class");
+    }
+
+    @Override
+    protected OptionKey getOptionKeyPath() {
+        return optionKeyPath.qualifiedWith(this.getClass()
+                                               .getSimpleName(), "class");
     }
 
     /**

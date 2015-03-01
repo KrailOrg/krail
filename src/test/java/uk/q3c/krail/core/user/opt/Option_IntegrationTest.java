@@ -31,12 +31,9 @@ import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheProvider;
 import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.view.component.LocaleContainer;
-import uk.q3c.krail.i18n.LabelKey;
-import uk.q3c.krail.i18n.TestLabelKey;
+import uk.q3c.krail.i18n.DefaultCurrentLocale;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.util.KrailCodeException;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -76,6 +73,8 @@ public class Option_IntegrationTest {
     Subject subject2;
     @Mock
     Translate translate;
+    OptionKey key1 = LocaleContainer.optionKeyFlagSize;
+    OptionKey key2 = DefaultCurrentLocale.optionPreferredLocale;
     private Class<? extends OptionContext> contextClass = LocaleContainer.class;
     private UserHierarchy hierarchy;
     private ArrayList<String> singleLayer;
@@ -95,36 +94,19 @@ public class Option_IntegrationTest {
         cacheLoader = new DefaultOptionCacheLoader(daoProvider);
         optionCache = new DefaultOptionCache(daoProvider, cacheProvider);
         option = new DefaultOption(optionCache, hierarchy);
-        option.init(LocaleContainer.class);
     }
 
 
-    @Test(expected = KrailCodeException.class)
-    public void not_initialised() {
-        //given
-        DefaultOption option2 = new DefaultOption(optionCache, hierarchy);
-        TestContext_without_init context = new TestContext_without_init(option2);
-        //when
-        context.optionMaxDepth();
 
-        //then
-        //exception
-    }
-
-
-    //
-
-
-    //
     @Test
     public void putAndGet_user_authenticated() {
         //given
         when(subject1.isAuthenticated()).thenReturn(true);
 
         //when
-        option.set(3, TestLabelKey.key1);
+        option.set(3, key1);
         //then
-        assertThat(option.get(5, TestLabelKey.key1)).isEqualTo(3);
+        assertThat(option.get(5, key1)).isEqualTo(3);
     }
 
     @Test
@@ -133,9 +115,9 @@ public class Option_IntegrationTest {
         when(subject1.isAuthenticated()).thenReturn(false);
 
         //when
-        option.set(3, TestLabelKey.key1);
+        option.set(3, key1);
         //then
-        assertThat(option.get(5, TestLabelKey.key1)).isEqualTo(3);
+        assertThat(option.get(5, key1)).isEqualTo(3);
     }
 
     @Test
@@ -143,11 +125,11 @@ public class Option_IntegrationTest {
         //given
         when(subject1.isAuthenticated()).thenReturn(true);
         //when
-        option.set(3, TestLabelKey.key1);
-        option.set(7, hierarchy, 1, localeContainer.getClass(), TestLabelKey.key1);
+        option.set(3, key1);
+        option.set(7, hierarchy, 1, key1);
         //then
-        assertThat(option.get(5, TestLabelKey.key1)).isEqualTo(3);
-        assertThat(option.get(Optional.of(5), LocaleContainer.class, TestLabelKey.key1)).isEqualTo(3);
+        assertThat(option.get(5, key1)).isEqualTo(3);
+        assertThat(option.get(Optional.of(5), key1)).isEqualTo(3);
     }
 
 
@@ -158,7 +140,7 @@ public class Option_IntegrationTest {
         //when
 
         //then
-        assertThat(option.get(5, TestLabelKey.key1)).isEqualTo(5);
+        assertThat(option.get(5, key1)).isEqualTo(5);
     }
 
     @Test
@@ -166,9 +148,9 @@ public class Option_IntegrationTest {
         //given
         when(subject1.isAuthenticated()).thenReturn(true);
         //when
-        option.set(3, TestLabelKey.key2);
+        option.set(3, key2);
         //then
-        assertThat(option.get(5, TestLabelKey.key1)).isEqualTo(5);
+        assertThat(option.get(5, key1)).isEqualTo(5);
     }
 
     @Test
@@ -182,26 +164,7 @@ public class Option_IntegrationTest {
         assertThat(actual).isInstanceOf(CacheStats.class);
     }
 
-    @Test
-    public void init_context_class() {
-        //given
-        DefaultOption option2 = new DefaultOption(optionCache, hierarchy);
-        //when
-        option2.init(LocaleContainer.class);
-        //then
-        assertThat(option.getContext()).isEqualTo(LocaleContainer.class);
-    }
 
-    @Test
-    public void init_context_instance() {
-        //given
-        DefaultOption option2 = new DefaultOption(optionCache, hierarchy);
-
-        //when
-        option2.init(localeContainer);
-        //then
-        assertThat(option.getContext()).isEqualTo(LocaleContainer.class);
-    }
 
     @Test
     public void multiUser() {
@@ -210,25 +173,24 @@ public class Option_IntegrationTest {
         when(subject1.isAuthenticated()).thenReturn(true);
         when(subjectIdentifier.userId()).thenReturn("fbaton");
         DefaultOption option2 = new DefaultOption(optionCache, hierarchy);
-        option2.init(LocaleContainer.class);
         //when
-        option2.set(3, TestLabelKey.key1);
+        option2.set(3, key1);
         when(subjectProvider.get()).thenReturn(subject2);
         when(subject2.isAuthenticated()).thenReturn(true);
         when(subjectIdentifier.userId()).thenReturn("equick");
         hierarchy = new SimpleUserHierarchy(subjectProvider, subjectIdentifier, translate);
-        option2.set(9, TestLabelKey.key1);
+        option2.set(9, key1);
         //then
         when(subjectProvider.get()).thenReturn(subject1);
         when(subject1.isAuthenticated()).thenReturn(true);
         when(subjectIdentifier.userId()).thenReturn("fbaton");
 
-        Integer actual = option2.get(177, TestLabelKey.key1);
+        Integer actual = option2.get(177, key1);
         assertThat(actual).isEqualTo(3);
-        actual = option2.get(177, TestLabelKey.key1);
-        actual = option2.get(177, TestLabelKey.key1);
-        actual = option2.get(177, TestLabelKey.key1);
-        actual = option2.get(177, TestLabelKey.key1);
+        actual = option2.get(177, key1);
+        actual = option2.get(177, key1);
+        actual = option2.get(177, key1);
+        actual = option2.get(177, key1);
         assertThat(optionCache.cacheSize()).isEqualTo(1);
         assertThat(optionCache.stats()
                               .hitCount()).isEqualTo(4);
@@ -237,20 +199,20 @@ public class Option_IntegrationTest {
         when(subject2.isAuthenticated()).thenReturn(true);
         when(subjectIdentifier.userId()).thenReturn("equick");
 
-        actual = option2.get(277, TestLabelKey.key1);
+        actual = option2.get(277, key1);
         assertThat(actual).isEqualTo(9);
-        actual = option2.get(177, TestLabelKey.key1);
-        actual = option2.get(177, TestLabelKey.key1);
-        actual = option2.get(177, TestLabelKey.key1);
-        actual = option2.get(177, TestLabelKey.key1);
+        actual = option2.get(177, key1);
+        actual = option2.get(177, key1);
+        actual = option2.get(177, key1);
+        actual = option2.get(177, key1);
         assertThat(optionCache.cacheSize()).isEqualTo(2);
         assertThat(optionCache.stats()
                               .hitCount()).isEqualTo(8);
-        actual = option2.getLowestRanked(5, TestLabelKey.key1);
+        actual = option2.getLowestRanked(5, key1);
         assertThat(optionCache.cacheSize()).isEqualTo(3);
         assertThat(optionCache.stats()
                               .hitCount()).isEqualTo(8);
-        actual = option2.getLowestRanked(5, TestLabelKey.key1, "q");
+        actual = option2.getLowestRanked(5, key2);
         assertThat(optionCache.cacheSize()).isEqualTo(4);
         assertThat(optionCache.stats()
                               .hitCount()).isEqualTo(8);
@@ -272,23 +234,5 @@ public class Option_IntegrationTest {
         };
     }
 
-    private static class TestContext_without_init implements OptionContext {
 
-
-        private Option option;
-
-        public TestContext_without_init(Option option) {
-            this.option = option;
-        }
-
-        @Nonnull
-        @Override
-        public Option getOption() {
-            return option;
-        }
-
-        public int optionMaxDepth() {
-            return option.get(3, LabelKey.Maxiumum_Depth);
-        }
-    }
 }

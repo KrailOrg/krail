@@ -45,7 +45,7 @@ public class DefaultPatternSourceTest {
     public void setUp() throws Exception {
         //essential to stop pollution from one test to another
         ResourceBundle.clearCache();
-        source = new DefaultPatternSource(option, patternCacheLoader);
+        source = new DefaultPatternSource(patternCacheLoader);
     }
 
     /**
