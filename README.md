@@ -61,12 +61,13 @@ Fails on Tomcat 8
 
 # Status
 
-17th February 2015:
+1st March 2015:
 
-* Vaadin 7.3.10 is integrated with:
+* Vaadin 7.4.0 is integrated with:
 * Guice 3.0,
 * Shiro 1.2.1,
 * Apache Commons Configuration
+* Guava cache
 
 
 Krail is usable, though there are still some bugs and further developments needed.  Vaadin push is now supported.
