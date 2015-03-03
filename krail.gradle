@@ -11,6 +11,7 @@
 
 description = 'A rapid development framework for web apps using Vaadin, Guice, Shiro et al'
 
+ext.shiroVersion = '1.2.3'
 
 dependencies {
 
@@ -36,17 +37,14 @@ dependencies {
     compile 'javax.validation:validation-api:1.0.0.GA'
 
     //User access control
-    compile 'org.apache.shiro:shiro-core:1.2.1'
-    compile 'org.apache.shiro:shiro-web:1.2.1'
-    compile 'org.apache.shiro:shiro-guice:1.2.1'
+    compile 'org.apache.shiro:shiro-core:' + shiroVersion
+    compile 'org.apache.shiro:shiro-web:' + shiroVersion
+    compile 'org.apache.shiro:shiro-guice:' + shiroVersion
 
     //Vaadin
 
     //The core server part of Vaadin -->
     compile 'com.vaadin:vaadin-server:' + vaadinVersion
-    // needed for Vaadin javadoc only
-//    compile "javax.portlet:portlet-api:2.0"
-//    compile "org.atmosphere:atmosphere-runtime:2.1.6"
 
     //testing
     testCompile project(':q3c-testUtil')
