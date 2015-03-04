@@ -65,6 +65,9 @@ public class DefaultAnnotationSitemapLoaderTest {
         loaders.add(loader);
     }
 
+    /**
+     *
+     */
     @Test
     public void test() {
         // given
@@ -73,7 +76,7 @@ public class DefaultAnnotationSitemapLoaderTest {
         lrb = new LoaderReportBuilder(loaders);
         System.out.println(lrb.getReport());
         // then
-        assertThat(loader.getErrorCount()).isEqualTo(2);
+        assertThat(loader.getErrorCount()).isEqualTo(1);
         assertThat(sitemap.hasUri("a")).isTrue();
         assertThat(sitemap.getRedirectPageFor("a")).isEqualTo("a");
         assertThat(sitemap.getRedirectPageFor("home/redirected")).isEqualTo("a");
@@ -83,6 +86,11 @@ public class DefaultAnnotationSitemapLoaderTest {
         assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Home);
         assertThat(node.getUriSegment()).isEqualTo("a");
 
+        node = sitemap.nodeFor("a/b");
+        assertThat(node.getPageAccessControl()).isNotNull();
+        assertThat(node.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+        assertThat(node.getUriSegment()).isEqualTo("b");
+        assertThat(node.getLabelKey()).isEqualTo(DescriptionKey.Account_Locked);
     }
 
     @ModuleProvider
@@ -124,29 +132,13 @@ public class DefaultAnnotationSitemapLoaderTest {
     static class View1 implements KrailView {
 
 
-        /**
-         * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically
-         * checks
-         * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
-         * configuration which affects the way the view is presented.
-         *
-         * @param event
-         *         contains information about the change to this View
-         */
+
         @Override
         public void beforeBuild(KrailViewChangeEvent event) {
 
         }
 
-        /**
-         * Builds the UI components of the view.  The view implementation may need to check whether components have
-         * already
-         * been constructed, as this method may be called when the View is selected again after initial construction.
-         *
-         * @param event
-         *
-         * @return the root component of the View, which is used to insert into the {@link ScopedUI} view area.
-         */
+
         @Override
         public void buildView(KrailViewChangeEvent event) {
 
@@ -168,13 +160,6 @@ public class DefaultAnnotationSitemapLoaderTest {
         public void init() {
         }
 
-        /**
-         * Called immediately after the construction of the Views components (see {@link buildView}) to enable
-         * setting up
-         * the view from URL parameters
-         *
-         * @param event
-         */
         @Override
         public void afterBuild(KrailViewChangeEvent event) {
 

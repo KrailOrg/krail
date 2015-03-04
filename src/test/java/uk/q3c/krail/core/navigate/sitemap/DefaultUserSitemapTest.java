@@ -62,10 +62,12 @@ public class DefaultUserSitemapTest implements UserSitemapChangeListener {
         // when
         currentLocale.setLocale(Locale.GERMANY);
         // then
-        assertThat(userSitemap.getRoots()).containsOnly(userSitemap.publicNode, userSitemap.privateNode);
-        assertThat(userSitemap.publicNode.getLabel()).isEqualTo("Öffentlich");
-        assertThat(userSitemap.privateNode.getLabel()).isEqualTo("Privat");
-        assertThat(userSitemap.getParent(userSitemap.a11Node)).isEqualTo(userSitemap.a1Node);
+        assertThat(userSitemap.getRoots()).containsOnly(userSitemap.publicNode(), userSitemap.privateNode());
+        assertThat(userSitemap.publicNode()
+                              .getLabel()).isEqualTo("Öffentlich");
+        assertThat(userSitemap.privateNode()
+                              .getLabel()).isEqualTo("Privat");
+        assertThat(userSitemap.getParent(userSitemap.a11Node())).isEqualTo(userSitemap.a1Node());
         assertThat(labelsChanged).isTrue();
     }
 

@@ -11,6 +11,7 @@
 
 package uk.q3c.krail.core.navigate;
 
+import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -188,7 +189,7 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(userSitemap.a11URI);
         // then
         assertThat(navigator.getCurrentView()).isInstanceOf(userSitemap.a11ViewClass);
-        assertThat(navigator.getCurrentNode()).isEqualTo(userSitemap.a11Node);
+        assertThat(navigator.getCurrentNode()).isEqualTo(userSitemap.a11Node());
         assertThat(navigator.getCurrentNavigationState()
                             .getFragment()).isEqualTo(userSitemap.a11URI);
     }
@@ -285,7 +286,7 @@ public class DefaultNavigatorTest {
         // given
         navigator = createNavigator();
         // when
-        navigator.navigateTo(userSitemap.a11Node);
+        navigator.navigateTo(userSitemap.a11Node());
         // then
         assertThat(navigator.getCurrentNavigationState()
                             .getFragment()).isEqualTo(userSitemap.a11URI);
@@ -471,8 +472,9 @@ public class DefaultNavigatorTest {
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
-        userSitemap.a1Node.getMasterNode()
-                          .setPageAccessControl(PageAccessControl.USER);
+        userSitemap.a1Node()
+                   .getMasterNode()
+                   .modifyPageAccessControl(PageAccessControl.USER);
         // when
         navigator.navigateTo(page);
         // then
@@ -483,8 +485,9 @@ public class DefaultNavigatorTest {
         page = userSitemap.a11URI;
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.isRemembered()).thenReturn(true);
-        userSitemap.a11Node.getMasterNode()
-                           .setPageAccessControl(PageAccessControl.USER);
+        userSitemap.a11Node()
+                   .getMasterNode()
+                   .modifyPageAccessControl(PageAccessControl.USER);
         // when
         navigator.navigateTo(page);
         // then
@@ -501,12 +504,26 @@ public class DefaultNavigatorTest {
 
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.isRemembered()).thenReturn(false);
-        userSitemap.a1Node.getMasterNode()
-                          .setPageAccessControl(PageAccessControl.USER);
+        updatePermissionForA1Node(PageAccessControl.USER);
         // when
         navigator.navigateTo(page);
         // then
         // exception thrown
+    }
+
+    /**
+     * Changes the master node permission
+     */
+    private void updatePermissionForA1Node(PageAccessControl pageAccessControl) {
+        MasterSitemapNode masterSitemapNode = userSitemap.a1Node()
+                                                         .getMasterNode()
+                                                         .modifyPageAccessControl(pageAccessControl);
+        UserSitemapNode newNode = new UserSitemapNode(masterSitemapNode);
+        newNode.setCollationKey(userSitemap.a1Node()
+                                           .getCollationKey());
+        newNode.setLabel(userSitemap.a1Node()
+                                    .getLabel());
+        userSitemap.replaceNode(userSitemap.a1Node(), newNode);
     }
 
     @Test
@@ -518,8 +535,9 @@ public class DefaultNavigatorTest {
 
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.isRemembered()).thenReturn(false);
-        userSitemap.a1Node.getMasterNode()
-                          .setPageAccessControl(PageAccessControl.GUEST);
+        userSitemap.a1Node()
+                   .getMasterNode()
+                   .modifyPageAccessControl(PageAccessControl.GUEST);
         // when
         navigator.navigateTo(page);
         // then
@@ -537,8 +555,7 @@ public class DefaultNavigatorTest {
 
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.isRemembered()).thenReturn(true);
-        userSitemap.a1Node.getMasterNode()
-                          .setPageAccessControl(PageAccessControl.GUEST);
+        updatePermissionForA1Node(PageAccessControl.GUEST);
         // when
         navigator.navigateTo(page);
         // then
@@ -553,8 +570,7 @@ public class DefaultNavigatorTest {
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
-        userSitemap.a1Node.getMasterNode()
-                          .setPageAccessControl(PageAccessControl.GUEST);
+        updatePermissionForA1Node(PageAccessControl.GUEST);
         // when
         navigator.navigateTo(page);
         // then
@@ -569,8 +585,9 @@ public class DefaultNavigatorTest {
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
-        userSitemap.a1Node.getMasterNode()
-                          .setPageAccessControl(PageAccessControl.AUTHENTICATION);
+        userSitemap.a1Node()
+                   .getMasterNode()
+                   .modifyPageAccessControl(PageAccessControl.AUTHENTICATION);
         // when
         navigator.navigateTo(page);
         // then
@@ -587,8 +604,7 @@ public class DefaultNavigatorTest {
 
         when(subject.isAuthenticated()).thenReturn(false);
         when(subject.isRemembered()).thenReturn(false);
-        userSitemap.a1Node.getMasterNode()
-                          .setPageAccessControl(PageAccessControl.AUTHENTICATION);
+        updatePermissionForA1Node(PageAccessControl.AUTHENTICATION);
         // when
         navigator.navigateTo(page);
         // then
@@ -603,8 +619,9 @@ public class DefaultNavigatorTest {
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
-        userSitemap.a1Node.getMasterNode()
-                          .setPageAccessControl(PageAccessControl.PERMISSION);
+        userSitemap.a1Node()
+                   .getMasterNode()
+                   .modifyPageAccessControl(PageAccessControl.PERMISSION);
         when(subject.isPermitted(any(PagePermission.class))).thenReturn(true);
         // when
         navigator.navigateTo(page);
@@ -623,8 +640,8 @@ public class DefaultNavigatorTest {
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
-        userSitemap.a1Node.getMasterNode()
-                          .setPageAccessControl(PageAccessControl.PERMISSION);
+
+        updatePermissionForA1Node(PageAccessControl.PERMISSION);
         when(subject.isPermitted(any(PagePermission.class))).thenReturn(false);
         // when
         navigator.navigateTo(page);
@@ -640,13 +657,12 @@ public class DefaultNavigatorTest {
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
-        userSitemap.a1Node.getMasterNode()
-                          .setPageAccessControl(PageAccessControl.ROLES);
-        userSitemap.a1Node.getMasterNode()
-                          .addRole("admin");
-        userSitemap.a1Node.getMasterNode()
-                          .addRole("beast");
-        List<String> permissions = userSitemap.a1Node.getMasterNode()
+
+
+        updatePermissionForA1Node(PageAccessControl.ROLES, Lists.newArrayList("admin", "beast"));
+
+        List<String> permissions = userSitemap.a1Node()
+                                              .getMasterNode()
                                                      .getRoles();
         when(subject.hasAllRoles(permissions)).thenReturn(true);
         // when
@@ -655,6 +671,23 @@ public class DefaultNavigatorTest {
         assertThat(navigator.getCurrentNavigationState()
                             .getFragment()).isEqualTo(page);
 
+    }
+
+    /**
+     * Changes the master node permission
+     */
+    private void updatePermissionForA1Node(PageAccessControl pageAccessControl, List<String> roles) {
+        MasterSitemapNode oldMaster = userSitemap.a1Node()
+                                                 .getMasterNode();
+        MasterSitemapNode masterSitemapNode = new MasterSitemapNode(oldMaster.getId(), oldMaster.getUriSegment(), oldMaster.getViewClass(), oldMaster
+                .getLabelKey(), oldMaster.getPositionIndex(), pageAccessControl, roles);
+
+        UserSitemapNode newNode = new UserSitemapNode(masterSitemapNode);
+        newNode.setCollationKey(userSitemap.a1Node()
+                                           .getCollationKey());
+        newNode.setLabel(userSitemap.a1Node()
+                                    .getLabel());
+        userSitemap.replaceNode(userSitemap.a1Node(), newNode);
     }
 
     @Test(expected = UnauthorizedException.class)
@@ -666,13 +699,10 @@ public class DefaultNavigatorTest {
 
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
-        userSitemap.a1Node.getMasterNode()
-                          .setPageAccessControl(PageAccessControl.ROLES);
-        userSitemap.a1Node.getMasterNode()
-                          .addRole("admin");
-        userSitemap.a1Node.getMasterNode()
-                          .addRole("beast");
-        List<String> permissions = userSitemap.a1Node.getMasterNode()
+        updatePermissionForA1Node(PageAccessControl.ROLES, Lists.newArrayList("admin", "beast"));
+
+        List<String> permissions = userSitemap.a1Node()
+                                              .getMasterNode()
                                                      .getRoles();
         when(subject.hasAllRoles(permissions)).thenReturn(false);
         // when
@@ -829,5 +859,6 @@ public class DefaultNavigatorTest {
             calls.clear();
         }
     }
+
 
 }

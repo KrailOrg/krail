@@ -20,8 +20,11 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PagePermission;
 import uk.q3c.util.BasicForest;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitemap<T> {
@@ -56,7 +59,8 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     /**
      * Delegates to {@link BasicForest#containsNode(Object)}
      *
-     * @param newParentNode
+     * @param node
+     *         the node to look for
      *
      * @return
      */
@@ -137,7 +141,8 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     /**
      * Returns true if the sitemap contains the URI represented by virtual page part of {@code navigationState}.
      *
-     * @param uri
+     * @param navigationState
+     *         the NavigationState which contains the uri to check
      *
      * @return
      */
@@ -368,9 +373,11 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * returns a list of {@link SitemapNode} matching the virtual page of the {@code navigationState} provided. Uses
      * the {@link URIFragmentHandler} to get URI path segments and {@link Sitemap} to obtain the node chain.
      *
-     * @param navigationState the navigation state to assess
-     * @param allowPartialPath determines how a partial match is handled (see
-     * {@link Sitemap#nodeChainForSegments(List, boolean)} javadoc
+     * @param navigationState
+     *         the navigation state to assess
+     * @param allowPartialPath
+     *         determines how a partial match is handled (see
+     *         {@link Sitemap#nodeChainForSegments(List, boolean)} javadoc
      *
      * @return a list of {@link SitemapNode} matching the virtual page of the {@code navigationState} provided.
      */
@@ -473,7 +480,8 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * If the virtual page represented by {@code navigationState} has been redirected, return the page it has been
      * redirected to, otherwise, just return the virtual page unchanged. Allows for multiple levels of redirect.
      *
-     * @param navigationState the navigationState to assess
+     * @param navigationState
+     *         the navigationState to assess
      *
      * @return
      */
@@ -510,11 +518,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     /**
      * Adds the {@code childNode} to the {@code parentNode}. If either of the nodes do not currently exist in the
      * {@link Sitemap} they will be added to it.
-     * <p/>
-     * The node id is set to {@link #nextNodeId()} for any node which is not already in the Sitemap
-     * <p/>
-     * {@code parentNode} may be null<br>
-     * {@code childNode} cannot be null
+     * <p>
      *
      * @param parentNode
      * @param childNode
@@ -522,10 +526,10 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     @Override
     public synchronized void addChild(T parentNode, T childNode) {
         checkNotNull(childNode);
+        // add the parent node if not already there
         if ((parentNode != null) && (!containsNode(parentNode))) {
             forest.addNode(parentNode);
             String newUri = uri(parentNode);
-            setId(parentNode);
             uriMap.put(newUri, parentNode);
         }
 
@@ -534,7 +538,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
             removeNode(childNode);
         }
 
-        setId(childNode);
 
         // add it to structure first, otherwise the uri will be wrong
         forest.addChild(parentNode, childNode);
@@ -542,7 +545,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
 
     }
 
-    protected abstract void setId(T node);
 
     @Override
     public BasicForest<T> getForest() {
@@ -583,4 +585,66 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
         return ImmutableMap.copyOf(uriMap);
     }
 
+    /**
+     * {@link MasterSitemapNode} is immutable, but there are occasions where it needs to be "updated" in the sitemap - which in practice means replacing it.
+     * <p>
+     * If the sitemap already contains {@code childNode}, the {@code parentNode} is ignored, and the child replaces the original directly, transferring parent
+     * and child relationships.
+     * <p>
+     * If the sitemap does not contain {@code childNode}, then it is added to the sitemap and attached to the {@code parentNode}.  The {@code parentNode} may
+     * still be null, if the {@code childNode} is a root.
+     * <p>
+     * {@code parentNode} may be null if child is to be a new root, but if not null must have an id and uriSegment<br>
+     * {@code childNode} cannot be null, and must have an id and uriSegment
+     *
+     * @param parentNode
+     * @param childNode
+     */
+    public void addOrReplaceChild(@Nullable T parentNode, @Nonnull T childNode) {
+        checkNotNull(childNode);
+        checkArgument(childNode.getId() > 0);
+        checkNotNull(childNode.getUriSegment());
+        if (parentNode != null) {
+            checkArgument(parentNode.getId() > 0);
+            checkNotNull(parentNode.getUriSegment());
+        }
+        if (containsNode(childNode)) {
+            T oldNode = this.getForest()
+                            .getNode(childNode);
+            replaceNode(oldNode, childNode);
+        }
+        addChild(parentNode, childNode);
+    }
+
+    /**
+     * Replaces an existing node instance in the Sitemap, moving any connections from the old to the new. If the {@ oldInstance} is a standard page it is
+     * removed {@link #standardPages}. If the {@code newInstance} is a standard page, it is added to {@link #standardPages}
+     * if the node key is a {@link StandardPageKey}.  A standard page is identified by its labelKey being a {@code StandardPageKey}
+     *
+     * @param oldInstance
+     *         the instance to be replaced
+     * @param newInstance
+     *         the instance to put in place
+     */
+    public void replaceNode(@Nonnull T oldInstance, @Nonnull T newInstance) {
+        checkNotNull(oldInstance);
+        checkNotNull(newInstance);
+        final T parent = getParent(oldInstance);
+        final List<T> children = getChildren(oldInstance);
+
+        removeNode(oldInstance);
+
+        addChild(parent, newInstance);
+        if (children != null) {
+            children.forEach(child -> addChild(newInstance, child));
+        }
+
+        if (oldInstance.getLabelKey() instanceof StandardPageKey) {
+            standardPages.remove(oldInstance.getLabelKey());
+        }
+
+        if (newInstance.getLabelKey() instanceof StandardPageKey) {
+            addStandardPage((StandardPageKey) newInstance.getLabelKey(), newInstance);
+        }
+    }
 }

@@ -39,14 +39,15 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
     public boolean load() {
         if (pageMap != null) {
             for (Entry<String, DirectSitemapEntry> entry : pageMap.entrySet()) {
-                MasterSitemapNode node = sitemap.append(entry.getKey());
+                NodeRecord nodeRecord = new NodeRecord(entry.getKey());
                 DirectSitemapEntry value = entry.getValue();
-                node.setLabelKey(value.getLabelKey());
-                node.setPageAccessControl(value.getPageAccessControl());
-                node.setViewClass(value.getViewClass());
-                if (node.getLabelKey() instanceof StandardPageKey) {
+                nodeRecord.setLabelKey(value.getLabelKey());
+                nodeRecord.setPageAccessControl(value.getPageAccessControl());
+                nodeRecord.setViewClass(value.getViewClass());
+                MasterSitemapNode msn = sitemap.append(nodeRecord);
+                if (nodeRecord.getLabelKey() instanceof StandardPageKey) {
                     sitemap.addStandardPage((StandardPageKey) entry.getValue()
-                                                                   .getLabelKey(), node);
+                                                                   .getLabelKey(), msn);
                 }
             }
             processRedirects();
@@ -81,7 +82,7 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
     /**
      * Uses Method injection to enable use of optional parameter
      *
-     * @param map
+     * @param redirects
      */
     @Inject(optional = true)
     protected void setRedirects(Map<String, RedirectEntry> redirects) {

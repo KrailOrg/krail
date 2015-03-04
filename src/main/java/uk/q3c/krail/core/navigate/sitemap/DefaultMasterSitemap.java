@@ -26,17 +26,17 @@ import java.util.List;
  * This
  * map is built by one or more implementations of {@link SitemapLoader}, and is one of the fundamental building blocks
  * of the application, as it maps out pages, URIs and Views.
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * Because of it use as such a fundamental building block, an instance of this class has to be created early in the
  * application start up process. To avoid complex logic and dependencies within Guice modules, the building of the
  * {@link MasterSitemap} is managed by the {@link SitemapService}
- * <p/>
+ * <p>
  * Simple URI redirects can be added using {@link #addRedirect(String, String)}
- * <p/>
+ * <p>
  * If a duplicate entry is received (that is, a second entry for the same URI), the later entry will overwrite the
  * earlier entry
- * <p/>
+ * <p>
  * This MasterSitemap is complemented by instances of {@link UserSitemap}, which provides a user specific view of the
  * the {@link MasterSitemap}
  *
@@ -56,39 +56,23 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
     }
 
     @Override
-    public synchronized MasterSitemapNode append(String uri) {
-        return append(uriHandler.navigationState(uri));
-    }
-
-    /**
-     * creates a {@link MasterSitemapNode} and appends it to the map according to the {@code navigationState} given,
-     * then returns it. If a node already exists at that location it is returned. If there are gaps in the structure,
-     * nodes are created to fill them (the same idea as forcing directory creation on a file path). An empty (not null)
-     * URI is allowed. This represents the site base URI without any further qualification.
-     *
-     * @param navigationState
-     *
-     * @return
-     */
-    @Override
-    public synchronized MasterSitemapNode append(NavigationState navigationState) {
-
-        // if there is already a node for this navigation state, there is nothing to do, just return it
-        if (hasUri(navigationState)) {
-            return nodeFor(navigationState);
-        }
-
+    public synchronized MasterSitemapNode append(NodeRecord nodeRecord) {
         // take a copy to protect the parameter
-        NavigationState navState = uriHandler.navigationState(navigationState.getFragment());
+        NavigationState navState = uriHandler.navigationState(nodeRecord.getUri());
+        if (nodeRecord.getUriSegment() == null) {
+            nodeRecord.setUriSegment(navState.getUriSegment());
+        }
+        // find the node (parent) to attach to, by looping and removing the trailing segment each
+        // time until we find a matching node or run out of segments
+        List<String> segments = new ArrayList(navState.getPathSegments());
+//        segments.remove(segments.size() - 1);
 
-        // loop and remove the trailing segment each time until we find a matching node
-        // or run out of segments
-        List<String> segments = navState.getPathSegments();
         MasterSitemapNode node = null;
         while ((segments.size() > 0) && (node == null)) {
             segments.remove(segments.size() - 1);
             String path = Joiner.on("/")
                                 .join(segments);
+            // TODO should this be outside the loop?
             node = nodeFor(path);
         }
 
@@ -97,7 +81,7 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
         int startIndex = segments.size();
 
         // reset the segments
-        segments = new ArrayList<>(navigationState.getPathSegments());
+        segments = segments = new ArrayList(navState.getPathSegments());
 
         MasterSitemapNode parentNode = null;
 
@@ -105,25 +89,39 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
             parentNode = node;
         }
 
+        // create all the intermediate nodes needed to place the new child correctly
+        // same idea as forceMkDir
+        //intermediate nodes will only have the uri segment and id
         MasterSitemapNode childNode = null;
-        for (int i = startIndex; i < segments.size(); i++) {
+        for (int i = startIndex; i < segments.size() - 1; i++) {
             String segment = segments.get(i);
-            childNode = new MasterSitemapNode();
-            childNode.setUriSegment(segment);
-            addChild(parentNode, childNode);
+            childNode = new MasterSitemapNode(nextNodeId(), segment);
+            addOrReplaceChild(parentNode, childNode);// TODO Can't use addChild - we need to do a replace or add'
             parentNode = childNode;
         }
+
+        childNode = new MasterSitemapNode(nextNodeId(), nodeRecord);
+        addOrReplaceChild(parentNode, childNode);
+        // TODO Can't use addChild - we need to do a replace or add'
+
         if (childNode.getLabelKey() instanceof StandardPageKey) {
             StandardPageKey spk = (StandardPageKey) childNode.getLabelKey();
             standardPages.put(spk, childNode);
         }
         return childNode;
+        // TODO if node already exists replace it but also move children to the new one
+        // TODO Standard page key detection - should check whenever a node is appended / added etc and add to standard page key map
+        // TODO default views, keys, pageControl - are they needed and if so where to define? (removed from SitemapChecker)
+    }
+
+    private int nextNodeId() {
+        nextNodeId++;
+        return nextNodeId;
     }
 
     @Override
     protected synchronized MasterSitemapNode createNode(String segment) {
-        MasterSitemapNode newNode = new MasterSitemapNode();
-        newNode.setUriSegment(segment);
+        MasterSitemapNode newNode = new MasterSitemapNode(nextNodeId(), segment);
         return newNode;
     }
 
@@ -137,14 +135,6 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
         this.report = report;
     }
 
-    @Override
-    protected synchronized void setId(MasterSitemapNode node) {
-        node.setId(nextNodeId());
-    }
 
-    private int nextNodeId() {
-        nextNodeId++;
-        return nextNodeId;
-    }
 
 }

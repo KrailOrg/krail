@@ -12,13 +12,15 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
+import com.google.common.collect.Lists;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.view.PublicHomeView;
+import uk.q3c.krail.core.shiro.PageAccessControl;
+import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.i18n.TestLabelKey;
 import uk.q3c.krail.testutil.TestOptionModule;
 
@@ -32,27 +34,29 @@ public class MasterSitemapNodeTest {
     public void setLabelKey() {
 
         // given
-        MasterSitemapNode node = new MasterSitemapNode();
+
         // when
-        node.setLabelKey(TestLabelKey.Yes);
+        MasterSitemapNode node = new MasterSitemapNode(1, "a", LoginView.class, TestLabelKey.Yes, 3, PageAccessControl.PERMISSION, Lists.newArrayList("a", "b"));
         // then
         assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
+        assertThat(node.getId()).isEqualTo(1);
+        assertThat(node.getUriSegment()).isEqualTo("a");
+        assertThat(node.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
+        assertThat(node.getRoles()).containsExactly("a", "b");
     }
 
     @Test
-    public void constructor() {
-
-        // given
-
-        // when
-        SitemapNode node = new MasterSitemapNode("one", PublicHomeView.class, TestLabelKey.Yes);
-        // then
-        assertThat(node.getUriSegment()).isEqualTo("one");
-        assertThat(node.getViewClass()).isEqualTo(PublicHomeView.class);
-        assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Yes);
-
+    public void modifyPageControl() {
+        //given
+        MasterSitemapNode node = new MasterSitemapNode(1, "a", LoginView.class, TestLabelKey.Yes, 3, PageAccessControl.PERMISSION, Lists.newArrayList("a",
+                "b"));
+        //when
+        MasterSitemapNode modifiedNode = node.modifyPageAccessControl(PageAccessControl.AUTHENTICATION);
+        //then
+        assertThat(modifiedNode.getLabelKey()).isEqualTo(TestLabelKey.Yes);
+        assertThat(modifiedNode.getId()).isEqualTo(1);
+        assertThat(modifiedNode.getUriSegment()).isEqualTo("a");
+        assertThat(modifiedNode.getPageAccessControl()).isEqualTo(PageAccessControl.AUTHENTICATION);
+        assertThat(modifiedNode.getRoles()).containsExactly("a", "b");
     }
-
-
-
 }

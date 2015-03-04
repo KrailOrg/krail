@@ -1,18 +1,17 @@
 /*
- * Copyright (c) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package fixture;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import fixture.testviews2.*;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
@@ -26,15 +25,16 @@ import uk.q3c.krail.i18n.*;
 
 import java.text.CollationKey;
 import java.text.Collator;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Provides a user sitemap with page layout:
- * <p/>
+ * <p>
  * -Public --Logout --ViewA ---ViewA1 ----ViewA11 --Login --Public Home
- * <p/>
+ * <p>
  * -Private --Private Home --ViewB ---ViewB1 ----ViewB11 <br>
  * <br>
  * Insertion order ascending is set to be the same as UK alpha ascending <br>
@@ -45,86 +45,101 @@ import java.util.List;
  */
 public class ReferenceUserSitemap extends DefaultUserSitemap {
 
-    public UserSitemapNode aNode;
     public String aURI = "public/a";
     public Class<? extends KrailView> aViewClass = ViewA.class;
-    public UserSitemapNode a1Node;
     public String a1URI = "public/a/a1";
     public Class<? extends KrailView> a1ViewClass = ViewA1.class;
-    public UserSitemapNode a11Node;
     public String a11URI = "public/a/a1/a11";
     public Class<? extends KrailView> a11ViewClass = ViewA11.class;
-
-    public UserSitemapNode bNode;
     public String bURI = "private/b";
     public Class<? extends KrailView> bViewClass = ViewB.class;
-    public UserSitemapNode b1Node;
     public String b1URI = "private/b/b1";
     public Class<? extends KrailView> b1ViewClass = ViewB1.class;
-    public UserSitemapNode b11Node;
     public String b11URI = "private/b/b1/b11";
     public Class<? extends KrailView> b11ViewClass = ViewB11.class;
-
-    public UserSitemapNode loginNode;
-    public UserSitemapNode logoutNode;
-    public UserSitemapNode privateHomeNode;
-    public UserSitemapNode publicHomeNode;
-    public UserSitemapNode publicNode;
-    public UserSitemapNode privateNode;
-
     public String loginURI = "public/login";
     public String logoutURI = "public/logout";
     public String privateURI = "private";
     public String publicURI = "public";
     public String privateHomeURI = "private/home";
     public String publicHomeURI = "public/home";
-
     public Class<? extends KrailView> loginViewClass = TestLoginView.class;
     public Class<? extends KrailView> logoutViewClass = TestLogoutView.class;
     public Class<? extends KrailView> privateHomeViewClass = TestPrivateHomeView.class;
     public Class<? extends KrailView> publicHomeViewClass = TestPublicHomeView.class;
+    Map<String, Integer> insertionOrder;
+    Map<String, Integer> positionIndexes;
+    private UserSitemapNode a11Node;
+    private UserSitemapNode a1Node;
+    private UserSitemapNode aNode;
+    private UserSitemapNode b11Node;
+    private UserSitemapNode b1Node;
+    private UserSitemapNode bNode;
+    private UserSitemapNode loginNode;
+    private UserSitemapNode logoutNode;
+    private UserSitemapNode privateHomeNode;
+    private UserSitemapNode privateNode;
+    private UserSitemapNode publicHomeNode;
+    private UserSitemapNode publicNode;
 
-    @Inject
-    public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler, CurrentLocale currentLocale) {
-        super(translate, uriHandler, currentLocale);
-
-    }
-
-    public void populate() {
-        createStandardPages();
-        createPages();
-        setupMasterNodes();
-    }
 
     /**
      * Insertion order ascending is set to be the same as UK alpha ascending <br>
      * <br>
      * Position index is set to be the reverse of alphabetic order
      */
-    private void setupMasterNodes() {
-        masterNode(privateNode, 1, 4);
 
-        masterNode(bNode, 3, 3);
-        masterNode(b1Node, 4, 3);
-        masterNode(b11Node, 5, 3);
+    @Inject
+    public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler, CurrentLocale currentLocale) {
+        super(translate, uriHandler, currentLocale);
 
-        masterNode(publicNode, 2, 2);
-        masterNode(loginNode, 6, 8);
-        masterNode(logoutNode, 7, 7);
-        masterNode(publicHomeNode, 8, 6);
-        masterNode(aNode, 9, 5);
+        insertionOrder = new HashMap<>();
+        positionIndexes = new HashMap<>();
 
-        masterNode(a1Node, 10, 5);
 
-        masterNode(a11Node, 11, 5);
+        insertionOrder.put(privateURI, 1);
+        positionIndexes.put(privateURI, 4);
+
+        insertionOrder.put(publicURI, 2);
+        positionIndexes.put(publicURI, 2);
+
+        insertionOrder.put(loginURI, 6);
+        positionIndexes.put(loginURI, 8);
+
+        insertionOrder.put(logoutURI, 7);
+        positionIndexes.put(logoutURI, 7);
+
+        insertionOrder.put(publicHomeURI, 8);
+        positionIndexes.put(publicHomeURI, 6);
+
+        insertionOrder.put(bURI, 3);
+        positionIndexes.put(bURI, 3);
+
+
+        insertionOrder.put(b1URI, 4);
+        positionIndexes.put(b1URI, 3);
+
+        insertionOrder.put(b11URI, 5);
+        positionIndexes.put(b11URI, 3);
+
+        insertionOrder.put(aURI, 9);
+        positionIndexes.put(aURI, 5);
+
+        insertionOrder.put(a1URI, 10);
+        positionIndexes.put(a1URI, 5);
+
+        insertionOrder.put(a11URI, 11);
+        positionIndexes.put(a11URI, 5);
+
+        insertionOrder.put(privateHomeURI, 12);
+        positionIndexes.put(privateHomeURI, 13);
+
 
     }
 
-    private MasterSitemapNode masterNode(UserSitemapNode userNode, int id, int positionIndex) {
-        MasterSitemapNode mnode = userNode.getMasterNode();
-        mnode.setId(id);
-        mnode.setPositionIndex(positionIndex);
-        return mnode;
+    public void populate() {
+        createStandardPages();
+        createPages();
     }
 
     /**
@@ -132,12 +147,9 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
      */
     private void createStandardPages() {
         loginNode = createNode(loginURI, "login", loginViewClass, StandardPageKey.Log_In, PageAccessControl.PUBLIC);
-        logoutNode = createNode(logoutURI, "logout", logoutViewClass, StandardPageKey.Log_Out,
-                PageAccessControl.PUBLIC);
-        privateHomeNode = createNode(privateHomeURI, "home", privateHomeViewClass, StandardPageKey.Private_Home,
-                PageAccessControl.PUBLIC);
-        publicHomeNode = createNode(publicHomeURI, "home", publicHomeViewClass, StandardPageKey.Public_Home,
-                PageAccessControl.PUBLIC);
+        logoutNode = createNode(logoutURI, "logout", logoutViewClass, StandardPageKey.Log_Out, PageAccessControl.PUBLIC);
+        privateHomeNode = createNode(privateHomeURI, "home", privateHomeViewClass, StandardPageKey.Private_Home, PageAccessControl.PUBLIC);
+        publicHomeNode = createNode(publicHomeURI, "home", publicHomeViewClass, StandardPageKey.Public_Home, PageAccessControl.PUBLIC);
 
         publicNode = createNode(publicURI, "public", null, LabelKey.Public, PageAccessControl.PUBLIC);
         privateNode = createNode(privateURI, "private", null, LabelKey.Private, PageAccessControl.PERMISSION);
@@ -153,15 +165,20 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
     }
 
-    public UserSitemapNode createNode(String fullURI, String uriSegment, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl pageAccessControl, String... roles) {
+    public UserSitemapNode createNode(String fullURI, String uriSegment, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl
+            pageAccessControl, String... roles) {
 
         Collator collator = Collator.getInstance();
 
-        MasterSitemapNode masterNode = new MasterSitemapNode(uriSegment, viewClass, labelKey);
-        UserSitemapNode node = new UserSitemapNode(masterNode);
-        masterNode.setPageAccessControl(pageAccessControl);
-        masterNode.setRoles(Arrays.asList(roles));
+        List<String> r = null;
+        if (roles != null) {
+            r = Lists.newArrayList(roles);
+        }
+        Integer id = insertionOrder.get(fullURI);
+        final Integer positionIndex = positionIndexes.get(fullURI);
+        MasterSitemapNode masterNode = new MasterSitemapNode(id, uriSegment, viewClass, labelKey, positionIndex, pageAccessControl, r);
 
+        UserSitemapNode node = new UserSitemapNode(masterNode);
         node.setLabel(getTranslate().from(labelKey));
         CollationKey collationKey = collator.getCollationKey(node.getLabel());
         node.setCollationKey(collationKey);
@@ -187,52 +204,106 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         addChild(b1Node, b11Node);
     }
 
+    private MasterSitemapNode masterNode(UserSitemapNode userNode, int id, int positionIndex) {
+        MasterSitemapNode masterNode = new MasterSitemapNode(id, userNode.getUriSegment(), userNode.getViewClass(), userNode.getLabelKey(), positionIndex,
+                userNode.getPageAccessControl(), userNode.getRoles());
+        return masterNode;
+    }
+
     public List<UserSitemapNode> publicSortedAlphaAscending() {
         List<UserSitemapNode> list = new LinkedList<>();
-        list.add(loginNode);
-        list.add(publicHomeNode);
-        list.add(aNode);
+        list.add(loginNode());
+        list.add(publicHomeNode());
+        list.add(aNode());
         return list;
+    }
+
+    public UserSitemapNode loginNode() {
+        return nodeFor(loginURI);
+    }
+
+    public UserSitemapNode publicHomeNode() {
+        return nodeFor(publicHomeURI);
+    }
+
+    public UserSitemapNode aNode() {
+        return nodeFor(aURI);
     }
 
     public List<UserSitemapNode> publicSortedAlphaDescending() {
         List<UserSitemapNode> list = new LinkedList<>();
-        list.add(aNode);
-        list.add(publicHomeNode);
-        list.add(loginNode);
+        list.add(aNode());
+        list.add(publicHomeNode());
+        list.add(loginNode());
         return list;
     }
 
     public List<UserSitemapNode> publicSortedInsertionAscending() {
         List<UserSitemapNode> list = new LinkedList<>();
-        list.add(loginNode);
-        list.add(publicHomeNode);
-        list.add(aNode);
+        list.add(loginNode());
+        list.add(publicHomeNode());
+        list.add(aNode());
         return list;
     }
 
     public List<UserSitemapNode> publicSortedInsertionDescending() {
         List<UserSitemapNode> list = new LinkedList<>();
-        list.add(aNode);
-        list.add(publicHomeNode);
-        list.add(loginNode);
+        list.add(aNode());
+        list.add(publicHomeNode());
+        list.add(loginNode());
         return list;
     }
 
     public List<UserSitemapNode> publicSortedPositionAscending() {
         List<UserSitemapNode> list = new LinkedList<>();
-        list.add(aNode);
-        list.add(publicHomeNode);
-        list.add(loginNode);
+        list.add(aNode());
+        list.add(publicHomeNode());
+        list.add(loginNode());
         return list;
     }
 
     public List<UserSitemapNode> publicSortedPositionDescending() {
         List<UserSitemapNode> list = new LinkedList<>();
-        list.add(loginNode);
-        list.add(publicHomeNode);
-        list.add(aNode);
+        list.add(loginNode());
+        list.add(publicHomeNode());
+        list.add(aNode());
         return list;
+    }
+
+    public UserSitemapNode logoutNode() {
+        return nodeFor(logoutURI);
+    }
+
+    public UserSitemapNode privateHomeNode() {
+        return nodeFor(privateHomeURI);
+    }
+
+    public UserSitemapNode publicNode() {
+        return nodeFor(publicURI);
+    }
+
+    public UserSitemapNode privateNode() {
+        return nodeFor(privateURI);
+    }
+
+    public UserSitemapNode a1Node() {
+        return nodeFor(a1URI);
+    }
+
+    public UserSitemapNode a11Node() {
+        return nodeFor(a11URI);
+    }
+
+    public UserSitemapNode bNode() {
+        return nodeFor(bURI);
+    }
+
+    public UserSitemapNode b1Node() {
+        return nodeFor(b1URI);
+    }
+
+    public UserSitemapNode b11Node() {
+        return nodeFor(b11URI);
     }
 
 }

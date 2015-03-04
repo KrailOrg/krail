@@ -91,7 +91,7 @@ public class DefaultUserNavigationTreeTest {
         List<UserSitemapNode> expectedNodes = new ArrayList<>(userSitemap.getAllNodes());
 
         // don't want the logout node
-        expectedNodes.remove(userSitemap.logoutNode);
+        expectedNodes.remove(userSitemap.logoutNode());
 
         // when
         userNavigationTree.setOptionMaxDepth(1000);
@@ -101,11 +101,11 @@ public class DefaultUserNavigationTreeTest {
         assertThat(itemIds).containsAll(expectedNodes);
         // ensure no extra ones, there isn't a containsOnly for a list
         assertThat(itemIds).hasSize(expectedNodes.size());
-        assertThat(userNavigationTree.getParent(userSitemap.a11Node)).isEqualTo(userSitemap.a1Node);
-        assertThat(userNavigationTree.getItemCaption(userSitemap.a11Node)).isEqualTo("ViewA11");
-        assertThat(userNavigationTree.getItemCaption(userSitemap.publicHomeNode)).isEqualTo("Public Home");
-        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.a11Node)).isFalse();
-        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.a1Node)).isTrue();
+        assertThat(userNavigationTree.getParent(userSitemap.a11Node())).isEqualTo(userSitemap.a1Node());
+        assertThat(userNavigationTree.getItemCaption(userSitemap.a11Node())).isEqualTo("ViewA11");
+        assertThat(userNavigationTree.getItemCaption(userSitemap.publicHomeNode())).isEqualTo("Public Home");
+        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.a11Node())).isFalse();
+        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.a1Node())).isTrue();
     }
 
     private DefaultUserNavigationTree newTree() {
@@ -119,12 +119,12 @@ public class DefaultUserNavigationTreeTest {
         List<UserSitemapNode> expectedNodes = new ArrayList<>(userSitemap.getAllNodes());
 
         // don't want the logout node
-        expectedNodes.remove(userSitemap.logoutNode);
+        expectedNodes.remove(userSitemap.logoutNode());
         // these beyond required depth
-        expectedNodes.remove(userSitemap.a11Node);
-        expectedNodes.remove(userSitemap.b11Node);
-        expectedNodes.remove(userSitemap.a1Node);
-        expectedNodes.remove(userSitemap.b1Node);
+        expectedNodes.remove(userSitemap.a11Node());
+        expectedNodes.remove(userSitemap.b11Node());
+        expectedNodes.remove(userSitemap.a1Node());
+        expectedNodes.remove(userSitemap.b1Node());
 
         // when
         userNavigationTree.setOptionMaxDepth(2); // will cause rebuild
@@ -172,7 +172,7 @@ public class DefaultUserNavigationTreeTest {
     public void requiresRebuild() {
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
         userNavigationTree = newTree();
         userNavigationTree.build();
         // when
@@ -197,7 +197,7 @@ public class DefaultUserNavigationTreeTest {
         // when
         currentLocale.setLocale(Locale.GERMANY);
         // then
-        assertThat(userNavigationTree.getItemCaption(userSitemap.aNode)).isEqualTo("DE_ViewA");
+        assertThat(userNavigationTree.getItemCaption(userSitemap.aNode())).isEqualTo("DE_ViewA");
     }
 
     @Test
@@ -234,7 +234,7 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree = newTree();
         userNavigationTree.build();
         // when
-        userNavigationTree.setValue(userSitemap.a1Node);
+        userNavigationTree.setValue(userSitemap.a1Node());
         // then
         verify(navigator).navigateTo("public/a/a1");
     }
@@ -251,12 +251,11 @@ public class DefaultUserNavigationTreeTest {
         // then
         Collection<UserSitemapNode> roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                                             .rootItemIds();
-        assertThat(roots).containsExactly(userSitemap.privateNode, userSitemap.publicNode);
+        assertThat(roots).containsExactly(userSitemap.privateNode(), userSitemap.publicNode());
         Collection<UserSitemapNode> children = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                                                .getChildren
-                                                                                                       (userSitemap
-                                                                                                               .publicNode);
-        assertThat(children).containsExactly(userSitemap.loginNode, userSitemap.publicHomeNode, userSitemap.aNode);
+                                                                                                       (userSitemap.publicNode());
+        assertThat(children).containsExactly(userSitemap.loginNode(), userSitemap.publicHomeNode(), userSitemap.aNode());
     }
 
     @SuppressWarnings("unchecked")
@@ -271,11 +270,10 @@ public class DefaultUserNavigationTreeTest {
 
         Collection<UserSitemapNode> roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                                             .rootItemIds();
-        assertThat(roots).containsExactly(userSitemap.privateNode, userSitemap.publicNode);
+        assertThat(roots).containsExactly(userSitemap.privateNode(), userSitemap.publicNode());
         Collection<UserSitemapNode> children = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                                                .getChildren
-                                                                                                       (userSitemap
-                                                                                                               .publicNode);
+                                                                                                       (userSitemap.publicNode());
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedAlphaAscending());
 
         // when
@@ -283,9 +281,9 @@ public class DefaultUserNavigationTreeTest {
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
-        assertThat(roots).containsExactly(userSitemap.publicNode, userSitemap.privateNode);
+        assertThat(roots).containsExactly(userSitemap.publicNode(), userSitemap.privateNode());
         children = (Collection<UserSitemapNode>) userNavigationTree.getTree()
-                                                                   .getChildren(userSitemap.publicNode);
+                                                                   .getChildren(userSitemap.publicNode());
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedAlphaDescending());
 
         // when
@@ -294,9 +292,9 @@ public class DefaultUserNavigationTreeTest {
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
-        assertThat(roots).containsExactly(userSitemap.privateNode, userSitemap.publicNode);
+        assertThat(roots).containsExactly(userSitemap.nodeFor(userSitemap.privateURI), userSitemap.nodeFor(userSitemap.publicURI));
         children = (Collection<UserSitemapNode>) userNavigationTree.getTree()
-                                                                   .getChildren(userSitemap.publicNode);
+                                                                   .getChildren(userSitemap.publicNode());
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedInsertionAscending());
 
         // when
@@ -305,9 +303,9 @@ public class DefaultUserNavigationTreeTest {
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
-        assertThat(roots).containsExactly(userSitemap.privateNode, userSitemap.publicNode);
+        assertThat(roots).containsExactly(userSitemap.privateNode(), userSitemap.publicNode());
         children = (Collection<UserSitemapNode>) userNavigationTree.getTree()
-                                                                   .getChildren(userSitemap.publicNode);
+                                                                   .getChildren(userSitemap.publicNode());
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedPositionDescending());
 
         // when
@@ -316,9 +314,9 @@ public class DefaultUserNavigationTreeTest {
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
-        assertThat(roots).containsExactly(userSitemap.publicNode, userSitemap.privateNode);
+        assertThat(roots).containsExactly(userSitemap.publicNode(), userSitemap.privateNode());
         children = (Collection<UserSitemapNode>) userNavigationTree.getTree()
-                                                                   .getChildren(userSitemap.publicNode);
+                                                                   .getChildren(userSitemap.publicNode());
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedInsertionDescending());
 
         // when
@@ -327,9 +325,9 @@ public class DefaultUserNavigationTreeTest {
         // then
         roots = (Collection<UserSitemapNode>) userNavigationTree.getTree()
                                                                 .rootItemIds();
-        assertThat(roots).containsExactly(userSitemap.publicNode, userSitemap.privateNode);
+        assertThat(roots).containsExactly(userSitemap.publicNode(), userSitemap.privateNode());
         children = (Collection<UserSitemapNode>) userNavigationTree.getTree()
-                                                                   .getChildren(userSitemap.publicNode);
+                                                                   .getChildren(userSitemap.publicNode());
         assertThat(children).containsExactlyElementsOf(userSitemap.publicSortedPositionAscending());
     }
 

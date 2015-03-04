@@ -18,6 +18,7 @@ import fixture.testviews2.ViewA;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
@@ -41,7 +42,7 @@ public class UserSitemapNodeTest {
     @Test
     public void translate() {
         // given
-        MasterSitemapNode masterNode = new MasterSitemapNode("a", ViewA.class, LabelKey.Home_Page);
+        MasterSitemapNode masterNode = new MasterSitemapNode(1, "a", ViewA.class, LabelKey.Home_Page, -1, PageAccessControl.PUBLIC, null);
         userNode = new UserSitemapNode(masterNode);
         currentLocale.setLocale(Locale.GERMANY);
         Collator collator = Collator.getInstance(Locale.GERMANY);

@@ -77,6 +77,8 @@ public class DefaultSitemapChecker implements SitemapChecker {
     public void check() {
         // do this first, because a loop will cause the main check to fail
         redirectCheck();
+        replaceMissingViews();
+        replaceMissingKeys();
         for (MasterSitemapNode node : sitemap.getAllNodes()) {
             String nodeUri = sitemap.uri(node);
             log.debug("Checking {}", nodeUri);
@@ -86,19 +88,11 @@ public class DefaultSitemapChecker implements SitemapChecker {
                         .containsKey(nodeUri)) {
 
                 if (node.getViewClass() == null) {
-                    if (defaultView != null) {
-                        node.setViewClass(defaultView);
-                    } else {
                         missingViewClasses.add(nodeUri);
-                    }
                 }
 
                 if (node.getLabelKey() == null) {
-                    if (defaultKey != null) {
-                        node.setLabelKey(defaultKey);
-                    } else {
                         missingLabelKeys.add(nodeUri);
-                    }
                 }
 
                 if (node.getPageAccessControl() == null) {
@@ -108,7 +102,8 @@ public class DefaultSitemapChecker implements SitemapChecker {
                 // if redirected, take the accessControlPermission from the redirect target
                 // note: Sitemap allows for multiple levels of redirect
                 MasterSitemapNode targetNode = sitemap.nodeFor(sitemap.getRedirectPageFor(nodeUri));
-                node.setPageAccessControl(targetNode.getPageAccessControl());
+                MasterSitemapNode newNode = node.modifyPageAccessControl(targetNode.getPageAccessControl());
+                sitemap.replaceNode(node, newNode);
 
                 // if redirect is from parent to child, the parent must have a label key, or it cannot display, in a
                 // UserNavigationTree for example. Easiest way to check is to take the target node, get the chain
@@ -163,6 +158,32 @@ public class DefaultSitemapChecker implements SitemapChecker {
         log.info(report.toString());
         // otherwise print a report and throw an exception
         throw new SitemapException("Sitemap check failed, see log for failed items");
+    }
+
+    private void replaceMissingViews() {
+        //there's nothing to replace missing items with
+        if (defaultView == null) {
+            return;
+        }
+        for (MasterSitemapNode node : sitemap.getAllNodes()) {
+            if (node.getViewClass() == null) {
+                MasterSitemapNode newNode = node.modifyView(defaultView);
+                sitemap.replaceNode(node, newNode);
+            }
+        }
+    }
+
+    private void replaceMissingKeys() {
+        //there's nothing to replace missing items with
+        if (defaultKey == null) {
+            return;
+        }
+        for (MasterSitemapNode node : sitemap.getAllNodes()) {
+            if (node.getLabelKey() == null) {
+                MasterSitemapNode newNode = node.modifyLabelKey(defaultKey);
+                sitemap.replaceNode(node, newNode);
+            }
+        }
     }
 
     private void redirectCheck() {

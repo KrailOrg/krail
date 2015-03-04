@@ -84,8 +84,11 @@ public abstract class TestWithSitemap {
     Locale locale = Locale.UK;
     Collator collator;
 
+    int id;
+
     @Before
     public void setup() {
+        id = 1;
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
         currentLocale.removeAllListeners();
@@ -122,17 +125,13 @@ public abstract class TestWithSitemap {
                 break;
 
             case 3:
-                masterNode1 = newNode("public");
-                masterNode1.setLabelKey(StandardPageKey.Public_Home);
-                masterNode2 = newNode("logout");
-                masterNode2.setLabelKey(StandardPageKey.Log_Out);
+                masterNode1 = newNode("public", StandardPageKey.Public_Home);
+                masterNode2 = newNode("logout", StandardPageKey.Log_Out);
                 masterSitemap.addChild(masterNode1, masterNode2);
                 break;
             case 4:
-                masterNode1 = newNode("public");
-                masterNode1.setLabelKey(StandardPageKey.Public_Home);
-                masterNode2 = newNode("logout");
-                masterNode2.setLabelKey(StandardPageKey.Log_Out);
+                masterNode1 = newNode("public", StandardPageKey.Public_Home);
+                masterNode2 = newNode("logout", StandardPageKey.Log_Out);
                 masterNode3 = newNode("private");
                 masterNode4 = newNode("wiggly");
                 masterSitemap.addChild(masterNode1, masterNode2);
@@ -145,9 +144,7 @@ public abstract class TestWithSitemap {
                 masterNode6 = newNode("b11");
                 masterSitemap.addChild(masterNode4, masterNode5);
                 masterSitemap.addChild(masterNode5, masterNode6);
-                masterNode1 = new MasterSitemapNode();
-                masterNode1.setUriSegment("a");
-                masterNode1.setPageAccessControl(PageAccessControl.PUBLIC);
+                masterNode1 = new MasterSitemapNode(id++, "a", null, null, -1, PageAccessControl.PUBLIC, null);
                 masterNode2 = newNode("a1");
                 masterNode3 = newNode("a11");
                 masterSitemap.addChild(masterNode1, masterNode2);
@@ -157,25 +154,18 @@ public abstract class TestWithSitemap {
             case 6: // one node is private
                 masterNode4 = newNode("b");
                 masterNode5 = newNode("b1");
-                masterNode6 = newNode("b11");
-                masterNode6.setPageAccessControl(PageAccessControl.PERMISSION);
+                masterNode6 = newNode("b11").modifyPageAccessControl(PageAccessControl.PERMISSION);
                 masterSitemap.addChild(masterNode4, masterNode5);
                 masterSitemap.addChild(masterNode5, masterNode6);
-                masterNode1 = new MasterSitemapNode();
-                masterNode1.setUriSegment("a");
-                masterNode1.setLabelKey(TestLabelKey.Yes);
-                masterNode1.setPageAccessControl(PageAccessControl.PUBLIC);
-                masterNode2 = newNode("a1");
-                masterNode2.setLabelKey(TestLabelKey.Home);
-                masterNode3 = newNode("a11");
-                masterNode3.setLabelKey(TestLabelKey.Yes);
+                masterNode1 = new MasterSitemapNode(id++, "a", null, TestLabelKey.Yes, -1, PageAccessControl.PUBLIC, null);
+                masterNode2 = newNode("a1", TestLabelKey.Home);
+                masterNode3 = newNode("a11", TestLabelKey.Yes);
                 masterSitemap.addChild(masterNode1, masterNode2);
                 masterSitemap.addChild(masterNode2, masterNode3);
                 break;
 
             case 7: // redirect has no page access control
-                masterNode4 = newNode("b");
-                masterNode4.setPageAccessControl(null);
+                masterNode4 = newNode("b").modifyPageAccessControl(null);
                 masterNode5 = newNode("b1");
                 masterNode6 = newNode("b11");
 
@@ -189,12 +179,9 @@ public abstract class TestWithSitemap {
                 break;
 
             case 8:
-                masterNode1 = newNode("1");
-                masterNode1.setLabelKey(LabelKey.Yes);
-                masterNode2 = newNode("2");
-                masterNode2.setLabelKey(LabelKey.No);
-                masterNode3 = newNode("3");
-                masterNode3.setLabelKey(LabelKey.Enable_Account);
+                masterNode1 = newNode("1", LabelKey.Yes);
+                masterNode2 = newNode("2", LabelKey.No);
+                masterNode3 = newNode("3", LabelKey.Enable_Account);
                 masterSitemap.addChild(null, masterNode1);
                 masterSitemap.addChild(null, masterNode2);
                 masterSitemap.addChild(masterNode1, masterNode3);
@@ -211,24 +198,19 @@ public abstract class TestWithSitemap {
     }
 
     protected MasterSitemapNode newNode(String urlSegment) {
-        MasterSitemapNode node0 = new MasterSitemapNode();
-        node0.setLabelKey(TestLabelKey.Home);
-        node0.setUriSegment(urlSegment);
-        node0.setViewClass(PublicHomeView.class);
-        node0.setPageAccessControl(PageAccessControl.PUBLIC);
-        return node0;
+        return new MasterSitemapNode(id++, urlSegment, PublicHomeView.class, TestLabelKey.Home, -1, PageAccessControl.PUBLIC, null);
+    }
+
+    protected MasterSitemapNode newNode(String urlSegment, I18NKey key) {
+        return new MasterSitemapNode(id++, urlSegment, PublicHomeView.class, key, -1, PageAccessControl.PUBLIC, null);
     }
 
     protected void buildStandardPages() {
 
-        loginNode = newNode("login");
-        loginNode.setLabelKey(StandardPageKey.Log_In);
-        logoutNode = newNode("logout");
-        loginNode.setLabelKey(StandardPageKey.Log_Out);
-        publicHomeNode = newNode("public/home");
-        publicHomeNode.setLabelKey(StandardPageKey.Public_Home);
-        privateHomeNode = newNode("private/home");
-        privateHomeNode.setLabelKey(StandardPageKey.Private_Home);
+        loginNode = newNode("login", StandardPageKey.Log_In);
+        logoutNode = newNode("logout", StandardPageKey.Log_Out);
+        publicHomeNode = newNode("public/home", StandardPageKey.Public_Home);
+        privateHomeNode = newNode("private/home", StandardPageKey.Private_Home);
         masterSitemap.addStandardPage(StandardPageKey.Log_In, loginNode);
         masterSitemap.addStandardPage(StandardPageKey.Log_Out, logoutNode);
         masterSitemap.addStandardPage(StandardPageKey.Public_Home, publicHomeNode);

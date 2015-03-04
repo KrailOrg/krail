@@ -215,10 +215,9 @@ public class DefaultFileSitemapLoaderTest {
     public void keyName() {
 
         // given
-        MasterSitemapNode node = new MasterSitemapNode();
-        node.setUriSegment("reset-account");
+        MasterSitemapNode node = new MasterSitemapNode(1, "reset-account");
         // when
-        String keyName = loader.keyName(null, node);
+        String keyName = loader.keyName(null, node.getUriSegment());
         // then
 
         assertThat(keyName).isEqualTo("Reset_Account");
@@ -426,7 +425,7 @@ public class DefaultFileSitemapLoaderTest {
         assertThat(loader.getInfoCount()).isEqualTo(0);
 
         assertThat(loader.missingSections()).isEmpty();
-        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
+        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT + 1);
         assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.core.view.testviews");
         assertThat(loader.getMissingEnums()).isEmpty();
 
@@ -471,7 +470,7 @@ public class DefaultFileSitemapLoaderTest {
         assertThat(loader.getInfoCount()).isEqualTo(0);
 
         assertThat(loader.missingSections()).isEmpty();
-        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT);
+        assertThat(loader.getPagesDefined()).isEqualTo(PAGE_COUNT + 1);
         assertThat(loader.getViewPackages()).containsOnly("fixture.testviews2", "uk.q3c.krail.core.view.testviews");
         assertThat(loader.getMissingEnums()).isEmpty();
 

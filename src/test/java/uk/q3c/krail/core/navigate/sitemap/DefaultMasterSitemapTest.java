@@ -39,6 +39,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.q3c.krail.core.navigate.sitemap.StandardPageKey.Public_Home;
+import static uk.q3c.krail.core.shiro.PageAccessControl.AUTHENTICATION;
+import static uk.q3c.krail.core.shiro.PageAccessControl.PUBLIC;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
@@ -61,9 +64,9 @@ public class DefaultMasterSitemapTest {
     public void url() {
 
         // given
-        MasterSitemapNode grandparent = new MasterSitemapNode("public", PublicHomeView.class, TestLabelKey.Home);
-        MasterSitemapNode parent = new MasterSitemapNode("home", PublicHomeView.class, TestLabelKey.Home);
-        MasterSitemapNode child = new MasterSitemapNode("login", LoginView.class, TestLabelKey.Login);
+        MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
+        MasterSitemapNode parent = new MasterSitemapNode(2, "home", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
+        MasterSitemapNode child = new MasterSitemapNode(3, "login", LoginView.class, TestLabelKey.Login, -1, PUBLIC, null);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
         // when
@@ -78,8 +81,10 @@ public class DefaultMasterSitemapTest {
     public void append() {
 
         // given
+        NodeRecord nr= new NodeRecord("public/home");
         // when
-        MasterSitemapNode node = sitemap.append("public/home");
+
+        MasterSitemapNode node = sitemap.append(nr);
         // then
         assertThat(node).isNotNull();
         assertThat(node.getUriSegment()).isEqualTo("home");
@@ -88,7 +93,8 @@ public class DefaultMasterSitemapTest {
                           .getUriSegment()).isEqualTo("public");
 
         // when
-        node = sitemap.append("public/home/account");
+        nr= new NodeRecord("public/home/account");
+        node = sitemap.append(nr);
 
         // then
         assertThat(node).isNotNull();
@@ -100,7 +106,8 @@ public class DefaultMasterSitemapTest {
                           .getUriSegment()).isEqualTo("public");
 
         // when
-        node = sitemap.append("public/home/transfer");
+        nr= new NodeRecord("public/home/transfer");
+        node = sitemap.append(nr);
 
         // then
         assertThat(node).isNotNull();
@@ -112,7 +119,8 @@ public class DefaultMasterSitemapTest {
                           .getUriSegment()).isEqualTo("public");
 
         // when
-        node = sitemap.append("");
+        nr = new NodeRecord("");
+        node = sitemap.append(nr);
 
         // then
         assertThat(node).isNotNull();
@@ -125,9 +133,9 @@ public class DefaultMasterSitemapTest {
     public void nodeChainForSegments() {
 
         // given
-        sitemap.append("public/home/view1");
-        sitemap.append("public/home/view2");
-        sitemap.append("private/home/wiggly");
+        sitemap.append(new NodeRecord("public/home/view1"));
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("private/home/wiggly"));
         List<String> segments = new ArrayList<>();
         segments.add("public");
         segments.add("home");
@@ -166,9 +174,9 @@ public class DefaultMasterSitemapTest {
     public void nodeChainForSegments_partial() {
 
         // given
-        sitemap.append("public/home/view1");
-        sitemap.append("public/home/view2");
-        sitemap.append("private/home/wiggly");
+        sitemap.append(new NodeRecord("public/home/view1"));
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("private/home/wiggly"));
         List<String> segments = new ArrayList<>();
         segments.add("public");
         segments.add("home");
@@ -189,9 +197,9 @@ public class DefaultMasterSitemapTest {
     public void getRedirectFor() {
 
         // given
-        sitemap.append("public/home/view1");
-        sitemap.append("public/home/view2");
-        sitemap.append("private/home/wiggly");
+        sitemap.append(new NodeRecord("public/home/view1"));
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("private/home/wiggly"));
         sitemap.addRedirect("home", "public/home");
         // when redirect exists
         String page = sitemap.getRedirectPageFor("home");
@@ -206,9 +214,9 @@ public class DefaultMasterSitemapTest {
     public void uris() {
 
         // given
-        sitemap.append("public/home/view1");
-        sitemap.append("public/home/view2");
-        sitemap.append("private/home/wiggly");
+        sitemap.append(new NodeRecord("public/home/view1"));
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("private/home/wiggly"));
 
         // when
 
@@ -222,9 +230,9 @@ public class DefaultMasterSitemapTest {
     public void hasUri() {
 
         // given
-        sitemap.append("public/home/view1");
-        sitemap.append("public/home/view2");
-        sitemap.append("private/home/wiggly");
+        sitemap.append(new NodeRecord("public/home/view1"));
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("private/home/wiggly"));
 
         // when
 
@@ -239,9 +247,9 @@ public class DefaultMasterSitemapTest {
     public void hasURINavState() {
 
         // given
-        sitemap.append("public/home/view1");
-        sitemap.append("public/home/view2");
-        sitemap.append("private/home/wiggly");
+        sitemap.append(new NodeRecord("public/home/view1"));
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("private/home/wiggly"));
         // when
         NavigationState navigationState1 = uriHandler.navigationState("public/home/view1");
         NavigationState navigationState3 = uriHandler.navigationState("public/home/view3");
@@ -255,9 +263,9 @@ public class DefaultMasterSitemapTest {
     public void redirectFor() {
 
         // given
-        sitemap.append("public/home/view1");
-        sitemap.append("public/home/view2");
-        sitemap.append("private/home/wiggly");
+        sitemap.append(new NodeRecord("public/home/view1"));
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("private/home/wiggly"));
         sitemap.addRedirect("public/home/view1", "public/home/view2");
         // when
         MasterSitemapNode node1 = sitemap.nodeFor("public/home/view1");
@@ -275,9 +283,9 @@ public class DefaultMasterSitemapTest {
     public void nodeFor_uri() {
 
         // given
-        sitemap.append("public/home/view1");
-        sitemap.append("public/home/view2");
-        sitemap.append("private/home/wiggly");
+        sitemap.append(new NodeRecord("public/home/view1"));
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("private/home/wiggly"));
         // when
         MasterSitemapNode node1 = sitemap.nodeFor("public/home/view1");
         SitemapNode node2 = sitemap.nodeFor("public/home/view2");
@@ -291,9 +299,9 @@ public class DefaultMasterSitemapTest {
     @Test
     public void nodeFor_navState() {
         // given
-        sitemap.append("public/home/view1");
-        sitemap.append("public/home/view2");
-        sitemap.append("private/home/wiggly");
+        sitemap.append(new NodeRecord("public/home/view1"));
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("private/home/wiggly"));
         // when
         NavigationState navigationState = uriHandler.navigationState("public/home/view2");
         SitemapNode node1 = sitemap.nodeFor(navigationState);
@@ -304,9 +312,9 @@ public class DefaultMasterSitemapTest {
     @Test
     public void nodeFor_emptyString() {
         // given
-        sitemap.append("public/home/view2");
-        sitemap.append("private/home/wiggly");
-        sitemap.append("");
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("private/home/wiggly"));
+        sitemap.append(new NodeRecord(""));
         // when
         MasterSitemapNode node1 = sitemap.nodeFor("");
         // then
@@ -319,9 +327,9 @@ public class DefaultMasterSitemapTest {
     public void nodeNearestFor() {
 
         // given
-        sitemap.append("public/home/view1");
-        sitemap.append("public/home/view2");
-        sitemap.append("private/home/wiggly");
+        sitemap.append(new NodeRecord("public/home/view1"));
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("private/home/wiggly"));
         // when
         MasterSitemapNode node1 = sitemap.nodeNearestFor(uriHandler.navigationState("public/home/view3"));
         SitemapNode node2 = sitemap.nodeNearestFor("public/home/view3");
@@ -337,16 +345,94 @@ public class DefaultMasterSitemapTest {
     public void multiLevelRedirect() {
 
         // given
-        sitemap.append("public/home/view1");
-        sitemap.append("public/home/view2");
-        sitemap.append("public/home/view3");
-        sitemap.append("public/home/view4");
+        sitemap.append(new NodeRecord("public/home/view1"));
+        sitemap.append(new NodeRecord("public/home/view2"));
+        sitemap.append(new NodeRecord("public/home/view3"));
+        sitemap.append(new NodeRecord("public/home/view4"));
         sitemap.addRedirect("public/home/view1", "public/home/view2");
         sitemap.addRedirect("public/home/view2", "public/home/view3");
         // when
 
         // then
         assertThat(sitemap.getRedirectPageFor("public/home/view1")).isEqualTo("public/home/view3");
+    }
+
+    @Test
+    public void replaceNode() {
+        //given
+        MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
+        MasterSitemapNode parent = new MasterSitemapNode(2, "home", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
+        MasterSitemapNode child = new MasterSitemapNode(3, "login", LoginView.class, TestLabelKey.Login, -1, PUBLIC, null);
+        MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, TestLabelKey.Home, -1, AUTHENTICATION, null);
+        sitemap.addChild(grandparent, parent);
+        sitemap.addChild(parent, child);
+        //when
+sitemap.replaceNode(parent,newParent);
+        //then
+        assertThat(sitemap.getParent(child)).isEqualTo(newParent);
+        assertThat(sitemap.getChildren(grandparent)).containsOnly(newParent);
+        assertThat(sitemap.getNodeCount()).isEqualTo(3);
+
+    }
+
+    @Test
+    public void replace_standardKey_change() {
+        //given
+        MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
+        MasterSitemapNode parent = new MasterSitemapNode(2, "home", PublicHomeView.class, Public_Home, -1, PUBLIC, null);
+        MasterSitemapNode child = new MasterSitemapNode(3, "login", LoginView.class, TestLabelKey.Login, -1, PUBLIC, null);
+        MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, Public_Home, -1, AUTHENTICATION, null);
+        sitemap.addChild(grandparent, parent);
+        sitemap.addChild(parent, child);
+        sitemap.addStandardPage(Public_Home, parent);
+        //when
+        sitemap.replaceNode(parent, newParent);
+        //then
+        assertThat(sitemap.getParent(child)).isEqualTo(newParent);
+        assertThat(sitemap.getChildren(grandparent)).containsOnly(newParent);
+        assertThat(sitemap.getNodeCount()).isEqualTo(3);
+        assertThat(sitemap.standardPageNode(Public_Home)
+                          .getPageAccessControl()).isEqualTo(AUTHENTICATION);
+    }
+
+    @Test
+    public void replace_only_old_is_standard_page() {
+        //given
+        MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
+        MasterSitemapNode parent = new MasterSitemapNode(2, "home", PublicHomeView.class, Public_Home, -1, PUBLIC, null);
+        MasterSitemapNode child = new MasterSitemapNode(3, "login", LoginView.class, TestLabelKey.Login, -1, PUBLIC, null);
+        MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, TestLabelKey.Yes, -1, AUTHENTICATION, null);
+        sitemap.addChild(grandparent, parent);
+        sitemap.addChild(parent, child);
+        sitemap.addStandardPage(Public_Home, parent);
+        //when
+        sitemap.replaceNode(parent, newParent);
+
+        //then
+        assertThat(sitemap.getParent(child)).isEqualTo(newParent);
+        assertThat(sitemap.getChildren(grandparent)).containsOnly(newParent);
+        assertThat(sitemap.getNodeCount()).isEqualTo(3);
+        assertThat(sitemap.standardPageNode(Public_Home)).isNull();
+    }
+
+    @Test
+    public void replace_only_new_is_standard_page() {
+        //given
+        MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
+        MasterSitemapNode parent = new MasterSitemapNode(2, "home", PublicHomeView.class, TestLabelKey.Yes, -1, PUBLIC, null);
+        MasterSitemapNode child = new MasterSitemapNode(3, "login", LoginView.class, TestLabelKey.Login, -1, PUBLIC, null);
+        MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, Public_Home, -1, AUTHENTICATION, null);
+        sitemap.addChild(grandparent, parent);
+        sitemap.addChild(parent, child);
+        sitemap.addStandardPage(Public_Home, parent);
+        //when
+        sitemap.replaceNode(parent, newParent);
+        //then
+        assertThat(sitemap.getParent(child)).isEqualTo(newParent);
+        assertThat(sitemap.getChildren(grandparent)).containsOnly(newParent);
+        assertThat(sitemap.getNodeCount()).isEqualTo(3);
+        assertThat(sitemap.standardPageNode(Public_Home)
+                          .getPageAccessControl()).isEqualTo(AUTHENTICATION);
     }
 
     @ModuleProvider

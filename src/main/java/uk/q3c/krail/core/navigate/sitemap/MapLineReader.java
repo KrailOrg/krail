@@ -57,6 +57,7 @@ public class MapLineReader {
             if (lineRecord.getIndentLevel() > currentIndent + 1) {
                 loader.addWarning(source, FileSitemapLoader.LINE_FORMAT_INDENTATION_INCORRECT,
                         lineRecord.getSegment(), lineIndex);
+                lineRecord.setFailed(true);
             }
         }
         return lineRecord;

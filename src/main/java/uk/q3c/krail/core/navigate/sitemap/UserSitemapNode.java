@@ -20,6 +20,13 @@ import java.text.Collator;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * To enable locale sensitive sorting of nodes - for example within a UserNavigationTree - a collation key from
+ * {@link Collator} is added by the {@link #setLabelKey(I18NKey)} method. This means the collation key
+ * is generally created only once, but is available for sorting as often as needed. The collation key will only need to
+ * be updated if locale or labelKey changes. This approach also takes advantage of the improved performance of the
+ * collation key sorting (http://docs.oracle.com/javase/tutorial/i18n/text/perform.html)
+ */
 public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode> {
 
     private final MasterSitemapNode masterNode;

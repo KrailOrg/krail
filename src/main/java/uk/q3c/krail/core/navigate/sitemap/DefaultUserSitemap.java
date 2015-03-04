@@ -119,13 +119,7 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
         return null;
     }
 
-    /**
-     * Does nothing in the {@link UserSitemap}
-     */
-    @Override
-    protected void setId(UserSitemapNode node) {
 
-    }
 
     @Override
     public synchronized void setLoaded(boolean loaded) {

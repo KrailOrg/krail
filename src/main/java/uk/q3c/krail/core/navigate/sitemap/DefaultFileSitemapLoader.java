@@ -28,6 +28,8 @@ import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.text.Collator;
 import java.time.Duration;
@@ -43,12 +45,13 @@ import java.util.*;
 public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileSitemapLoader {
 
     private enum SectionName {
-        options, viewPackages, map, redirects;
+        options, viewPackages, map, redirects
     }
 
     private enum ValidOption {
         appendView, labelKeys
     }
+
     private static Logger log = LoggerFactory.getLogger(DefaultFileSitemapLoader.class);
     private final MasterSitemap sitemap;
     private final Collator collator;
@@ -109,7 +112,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
 
     /**
      * The expected syntax of a redirect is <em> fromPage  :  toPage</em>
-     * <p/>
+     * <p>
      * Lines which do not contain a ':' are ignored<br>
      * Lines containing multiple ':' will only process the first two segments, the rest is ignored
      */
@@ -133,7 +136,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
     private void checkLabelKeys() {
         for (MasterSitemapNode node : sitemap.getAllNodes()) {
             if (node.getLabelKey() == null) {
-                labelKeyForName(null, node);
+                labelKeyForName(null, node.getUriSegment());
             }
         }
     }
@@ -254,42 +257,51 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
         int lineIndex = 1;
         int currentIndent = 0;
         for (String line : sectionLines) {
-            MapLineRecord lineRecord = reader.processLine(this, source, lineIndex, line, currentIndent,
-                    segmentSeparator);
-            uriTracker.track(lineRecord.getIndentLevel(), lineRecord.getSegment());
-            MasterSitemapNode node = sitemap.append(uriTracker.uri());
-            node.setUriSegment(lineRecord.getSegment());
-            findView(source, node, lineRecord.getSegment(), lineRecord.getViewName());
-            labelKeyForName(lineRecord.getKeyName(), node);
+            MapLineRecord lineRecord = reader.processLine(this, source, lineIndex, line, currentIndent, segmentSeparator);
+            if (!lineRecord.isFailed()) {
+                uriTracker.track(lineRecord.getIndentLevel(), lineRecord.getSegment());
 
-            Splitter splitter = Splitter.on(",")
-                                        .trimResults();
-            Iterable<String> roles = splitter.split(lineRecord.getRoles());
-            for (String role : roles) {
-                node.addRole(role);
+                NodeRecord nodeRecord = new NodeRecord(uriTracker.uri());
+                nodeRecord.setUriSegment(lineRecord.getSegment());
+                Class<? extends KrailView> viewClass = findView(source, lineRecord.getSegment(), lineRecord.getViewName());
+                nodeRecord.setViewClass(viewClass);
+                I18NKey labelKey = labelKeyForName(lineRecord.getKeyName(), nodeRecord.getUriSegment());
+                nodeRecord.setLabelKey(labelKey);
+
+                Splitter splitter = Splitter.on(",")
+                                            .trimResults();
+                Iterable<String> roles = splitter.split(lineRecord.getRoles());
+                for (String role : roles) {
+                    nodeRecord.addRole(role);
+                }
+                nodeRecord.setPageAccessControl(lineRecord.getPageAccessControl());
+                currentIndent = lineRecord.getIndentLevel();
+                sitemap.append(nodeRecord);
             }
-            node.setPageAccessControl(lineRecord.getPageAccessControl());
-            currentIndent = lineRecord.getIndentLevel();
             lineIndex++;
+
         }
     }
 
-    public void labelKeyForName(String labelKeyName, MasterSitemapNode node) {
+    public
+    @Nullable
+    I18NKey labelKeyForName(@Nonnull String labelKeyName, String uriSegment) {
         // gets name from segment if necessary
-        String keyName = keyName(labelKeyName, node);
+        String keyName = keyName(labelKeyName, uriSegment);
         // could be null if invalid label keys given
         if (lkfn != null) {
-            node.setLabelKey(lkfn.keyForName(keyName, missingEnums));
+            return lkfn.keyForName(keyName, missingEnums);
         } else {
             missingEnums.add(keyName);
+            return null;
         }
+
     }
 
-    public String keyName(String labelKeyName, SitemapNode node) {
+    public String keyName(String labelKeyName, String uriSegment) {
         String keyName = labelKeyName;
         if (Strings.isNullOrEmpty(keyName)) {
-            keyName = node.getUriSegment()
-                          .replace("-", " ");
+            keyName = uriSegment.replace("-", " ");
             keyName = keyName.replace("_", " ");
             keyName = WordUtils.capitalize(keyName);
             // hyphen not valid in enum, but may be used in segment
@@ -301,16 +313,20 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
     }
 
     /**
-     * Updates the node with the required view. If {@link #appendView} is true the 'View' is appended to the
-     * {@code viewName} before attempting to find its class declaration. If no class can be found, {@code viewName} is
-     * added to {@link #undeclaredViewClasses}
+     * Returns a view class for the given parameters. {@code viewName}. If {@link #appendView} is true the 'View' is appended to the
+     * {@code viewName} before attempting to find its class declaration. <p/>
+     * If view class is null or empty, the segment uri is used as a default name.<p/>
+     * If no class can be found,  a sitemap build error is recorded
      *
-     * @param node
+     * @param source
+     *         the source of the sitemap, used for error recording
      * @param segment
+     *         the uri segment which relates to the page for which this view will be used
      * @param viewName
+     *         a view class for the given parameters.
      */
     @SuppressWarnings("unchecked")
-    private void findView(String source, MasterSitemapNode node, String segment, String viewName) {
+    private Class<? extends KrailView> findView(String source, String segment, @Nullable String viewName) {
 
         // if view is null use the segment
         if (Strings.isNullOrEmpty(viewName)) {
@@ -330,8 +346,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
             try {
                 viewClass = Class.forName(fullViewName);
                 if (KrailView.class.isAssignableFrom(viewClass)) {
-                    node.setViewClass((Class<KrailView>) viewClass);
-                    break;
+                    return ((Class<? extends KrailView>) viewClass);
                 } else {
                     addError(source, VIEW_DOES_NOT_IMPLEMENT_KRAILVIEW, fullViewName);
                 }
@@ -344,6 +359,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
             addError(source, VIEW_NOT_FOUND_IN_SPECIFIED_PACKAGES, viewName);
         }
 
+        return null;
     }
 
     //
@@ -466,7 +482,7 @@ public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileS
     }
 
     /**
-     * Sets the source of the sitemap input. See also {@link #setSource(String)} , and {@link #get()} for loading
+     * Sets the source of the sitemap input. See also {@link #setSources(Map)} , and {@link #getSources()}} for loading
      * order.
      *
      * @param sourceFile

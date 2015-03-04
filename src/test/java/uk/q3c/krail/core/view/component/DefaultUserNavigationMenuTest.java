@@ -302,7 +302,7 @@ public class DefaultUserNavigationMenuTest {
         viewA11.getCommand()
                .menuSelected(viewA11);
         // then
-        verify(navigator).navigateTo(userSitemap.a11Node);
+        verify(navigator).navigateTo(userSitemap.a11Node());
     }
 
     @Test

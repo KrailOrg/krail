@@ -85,7 +85,7 @@ public class BreadcrumbTest {
     public void buildAndViewChange() {
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.a11Node);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.a11Node());
         // when
         breadcrumb.moveToNavigationState();
         // then
@@ -94,29 +94,33 @@ public class BreadcrumbTest {
         assertThat(breadcrumb.getComponentCount()).isEqualTo(4);
         assertThat(breadcrumb.getButtons()
                              .get(0)
-                             .getCaption()).isEqualTo(userSitemap.publicNode.getLabel());
+                             .getCaption()).isEqualTo(userSitemap.publicNode()
+                                                                 .getLabel());
         assertThat(breadcrumb.getButtons()
                              .get(1)
-                             .getCaption()).isEqualTo(userSitemap.aNode.getLabel());
+                             .getCaption()).isEqualTo(userSitemap.aNode()
+                                                                 .getLabel());
         assertThat(breadcrumb.getButtons()
                              .get(2)
-                             .getCaption()).isEqualTo(userSitemap.a1Node.getLabel());
+                             .getCaption()).isEqualTo(userSitemap.a1Node()
+                                                                 .getLabel());
         assertThat(breadcrumb.getButtons()
                              .get(3)
-                             .getCaption()).isEqualTo(userSitemap.a11Node.getLabel());
+                             .getCaption()).isEqualTo(userSitemap.a11Node()
+                                                                 .getLabel());
 
         assertThat(breadcrumb.getButtons()
                              .get(0)
-                             .getNode()).isEqualTo(userSitemap.publicNode);
+                             .getNode()).isEqualTo(userSitemap.publicNode());
         assertThat(breadcrumb.getButtons()
                              .get(1)
-                             .getNode()).isEqualTo(userSitemap.aNode);
+                             .getNode()).isEqualTo(userSitemap.aNode());
         assertThat(breadcrumb.getButtons()
                              .get(2)
-                             .getNode()).isEqualTo(userSitemap.a1Node);
+                             .getNode()).isEqualTo(userSitemap.a1Node());
         assertThat(breadcrumb.getButtons()
                              .get(3)
-                             .getNode()).isEqualTo(userSitemap.a11Node);
+                             .getNode()).isEqualTo(userSitemap.a11Node());
 
         assertThat(breadcrumb.getButtons()
                              .get(0)
@@ -132,7 +136,7 @@ public class BreadcrumbTest {
                              .isVisible()).isTrue();
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.b1Node);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.b1Node());
         // when
         breadcrumb.afterViewChange(null);
         // then
@@ -141,23 +145,26 @@ public class BreadcrumbTest {
         assertThat(breadcrumb.getComponentCount()).isEqualTo(4);
         assertThat(breadcrumb.getButtons()
                              .get(0)
-                             .getCaption()).isEqualTo(userSitemap.privateNode.getLabel());
+                             .getCaption()).isEqualTo(userSitemap.privateNode()
+                                                                 .getLabel());
         assertThat(breadcrumb.getButtons()
                              .get(1)
-                             .getCaption()).isEqualTo(userSitemap.bNode.getLabel());
+                             .getCaption()).isEqualTo(userSitemap.bNode()
+                                                                 .getLabel());
         assertThat(breadcrumb.getButtons()
                              .get(2)
-                             .getCaption()).isEqualTo(userSitemap.b1Node.getLabel());
+                             .getCaption()).isEqualTo(userSitemap.b1Node()
+                                                                 .getLabel());
 
         assertThat(breadcrumb.getButtons()
                              .get(0)
-                             .getNode()).isEqualTo(userSitemap.privateNode);
+                             .getNode()).isEqualTo(userSitemap.privateNode());
         assertThat(breadcrumb.getButtons()
                              .get(1)
-                             .getNode()).isEqualTo(userSitemap.bNode);
+                             .getNode()).isEqualTo(userSitemap.bNode());
         assertThat(breadcrumb.getButtons()
                              .get(2)
-                             .getNode()).isEqualTo(userSitemap.b1Node);
+                             .getNode()).isEqualTo(userSitemap.b1Node());
 
         assertThat(breadcrumb.getButtons()
                              .get(0)
@@ -185,7 +192,7 @@ public class BreadcrumbTest {
     public void localeChanged() {
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.a11Node);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.a11Node());
         LogoutPageFilter filter = new LogoutPageFilter();
         breadcrumb.addFilter(filter);
 

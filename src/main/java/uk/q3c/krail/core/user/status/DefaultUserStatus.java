@@ -85,3 +85,4 @@ public class DefaultUserStatus implements UserStatus {
         listeners.remove(listener);
     }
 }
+// TODO loggin in firelisteners in wrong place

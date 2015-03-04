@@ -38,16 +38,13 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
     }
 
     /**
-     * Scans for {@link View} annotations, starting from {@link #reflectionRoot}. Annotations cannot hold enum
-     * parameters, so the enum name has to be converted from the labelKeyName parameter of the {@link View} annotation.
-     * In order to do that one or more enum classes must be added to {@link #labelKeyClasses}. If a class has the
-     * {@link View} annotation, but does not implement {@link KrailView}, then it is ignored.
+     * Scans for {@link View} annotations, starting from the reflectionRoot (the key for the AnnotationEntry). Annotations cannot hold enum parameters, so
+     * the enum name has to be converted from the labelKeyName parameter of the {@link View} annotation. If a class has the {@link View} annotation, but does
+     * not implement {@link KrailView}, then it is ignored.
      * <p/>
      * <br>
-     * Also scans for the {@link RedirectFrom} annotation, and populates the {@link MasterSitemap} redirects with the
-     * appropriate entries. If a class is annotated with {@link RedirectFrom}, but does not implement {@link
-     * KrailView},
-     * then the annotation is ignored.
+     * Also scans for the {@link RedirectFrom} annotation, and populates the {@link MasterSitemap} redirects with the appropriate entries. If a class is
+     * annotated with {@link RedirectFrom}, but does not implement {@link KrailView}, then the annotation is ignored.
      *
      * @see uk.q3c.krail.core.navigate.sitemap.SitemapLoader#load()
      */
@@ -76,15 +73,15 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
                     if (KrailView.class.isAssignableFrom(clazz)) {
                         viewClass = (Class<? extends KrailView>) clazz;
                         View annotation = viewClass.getAnnotation(View.class);
-                        MasterSitemapNode node = sitemap.append(annotation.uri());
-                        node.setViewClass(viewClass);
-                        node.setPageAccessControl(annotation.pageAccessControl());
+                        NodeRecord nodeRecord = new NodeRecord(annotation.uri());
+                        nodeRecord.setViewClass(viewClass);
+                        nodeRecord.setPageAccessControl(annotation.pageAccessControl());
                         if (StringUtils.isNotEmpty(annotation.roles())) {
                             Splitter splitter = Splitter.on(",")
                                                         .trimResults();
                             Iterable<String> roles = splitter.split(annotation.roles());
                             for (String role : roles) {
-                                node.addRole(role);
+                                nodeRecord.addRole(role);
                             }
                         }
                         I18NKey keySample = entry.getValue()
@@ -92,13 +89,13 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
                         String keyName = annotation.labelKeyName();
                         try {
                             I18NKey key = keyFromName(keyName, keySample);
-                            node.setLabelKey(key);
+                            nodeRecord.setLabelKey(key);
                         } catch (IllegalArgumentException iae) {
                             addError(source, AnnotationSitemapLoader.LABEL_NOT_VALID, clazz, keyName,
                                     keySample.getClass());
 
                         }
-
+                        sitemap.append(nodeRecord);
                     }
                 }
                 // process the RedirectFrom annotations
@@ -131,12 +128,13 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
     }
 
     /**
-     * Returns an {@link I18NKey} enum constant from {@code labelKeyName} using {@code labelKeyClass}.
+     * Returns an {@link I18NKey} enum constant from {@code labelKeyName} using the class from {@code sampleKey}.
      *
      * @param labelKeyName
-     * @param labelKeyClass
+     * @param sampleKey
      *
-     * @return an {@link I18NKey} enum constant from {@code labelKeyName} using {@code labelKeyClass}.
+     * @return an {@link I18NKey} enum constant from {@code labelKeyName} using the class from {@code sampleKey}.
+     *
      *
      * @throws IllegalArgumentException
      *         if <code>labelKeyClass</code> does not contain a constant of <code>labelKeyName</code>

@@ -24,31 +24,15 @@ import uk.q3c.krail.core.view.KrailViewChangeEvent;
  *
  * @author David Sowerby
  */
-@View(uri = "a/b", labelKeyName = "Transfers", pageAccessControl = PageAccessControl.PERMISSION)
+@View(uri = "a/b", labelKeyName = "Account_Locked", pageAccessControl = PageAccessControl.PERMISSION)
 public class TestAnnotatedView implements KrailView {
 
 
-    /**
-     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
-     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
-     * configuration which affects the way the view is presented.
-     *
-     * @param event
-     *         contains information about the change to this View
-     */
     @Override
     public void beforeBuild(KrailViewChangeEvent event) {
 
     }
 
-    /**
-     * Builds the UI components of the view.  The view implementation may need to check whether components have already
-     * been constructed, as this method may be called when the View is selected again after initial construction.
-     *
-     * @param event
-     *
-     * @return the root component of the View, which is used to insert into the {@link ScopedUI} view area.
-     */
     @Override
     public void buildView(KrailViewChangeEvent event) {
 
@@ -70,12 +54,6 @@ public class TestAnnotatedView implements KrailView {
     public void init() {
     }
 
-    /**
-     * Called immediately after the construction of the Views components (see {@link buildView}) to enable setting up
-     * the view from URL parameters
-     *
-     * @param event
-     */
     @Override
     public void afterBuild(KrailViewChangeEvent event) {
 

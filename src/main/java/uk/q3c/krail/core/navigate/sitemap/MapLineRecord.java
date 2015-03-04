@@ -16,6 +16,7 @@ import uk.q3c.krail.core.shiro.PageAccessControl;
 
 public class MapLineRecord {
 
+    private boolean failed = false;
     private int indentLevel;
     private String keyName;
     private PageAccessControl pageAccessControl;
@@ -71,4 +72,11 @@ public class MapLineRecord {
         this.pageAccessControl = pageAccessControl;
     }
 
+    public boolean isFailed() {
+        return failed;
+    }
+
+    public void setFailed(boolean failed) {
+        this.failed = failed;
+    }
 }

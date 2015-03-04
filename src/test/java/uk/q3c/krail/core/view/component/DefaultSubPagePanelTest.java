@@ -76,7 +76,7 @@ public class DefaultSubPagePanelTest {
     public void leaf() {
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.a11Node);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.a11Node());
         // when
         panel.moveToNavigationState();
         // then
@@ -88,13 +88,13 @@ public class DefaultSubPagePanelTest {
     public void multi() {
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
         // when
         panel.moveToNavigationState();
         // then
         List<UserSitemapNode> nodes = nodesFromButtons(panel.getButtons());
         List<UserSitemapNode> expected = userSitemap.publicSortedAlphaAscending();
-        expected.add(userSitemap.logoutNode); // not filtered
+        expected.add(userSitemap.logoutNode()); // not filtered
         assertThat(nodes).containsAll(expected);
         assertThat(nodes).hasSameSizeAs(expected);
     }
@@ -121,7 +121,7 @@ public class DefaultSubPagePanelTest {
     public void options() {
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
         panel.moveToNavigationState();
         // when
         panel.setOptionKeySortType(SortType.INSERTION);
@@ -135,28 +135,27 @@ public class DefaultSubPagePanelTest {
     public void multi_filtered() {
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
         LogoutPageFilter filter = new LogoutPageFilter();
         panel.addFilter(filter);
         // when
         panel.moveToNavigationState();
         // then
         List<UserSitemapNode> nodes = nodesFromButtons(panel.getButtons());
-        assertThat(nodes).containsOnly(userSitemap.loginNode, userSitemap.aNode, userSitemap.publicHomeNode);
+        assertThat(nodes).containsOnly(userSitemap.loginNode(), userSitemap.aNode(), userSitemap.publicHomeNode());
         // when
         panel.removeFilter(filter);
         panel.moveToNavigationState();
         // then
         nodes = nodesFromButtons(panel.getButtons());
-        assertThat(nodes).containsOnly(userSitemap.loginNode, userSitemap.aNode, userSitemap.publicHomeNode,
-                userSitemap.logoutNode);
+        assertThat(nodes).containsOnly(userSitemap.loginNode(), userSitemap.aNode(), userSitemap.publicHomeNode(), userSitemap.logoutNode());
     }
 
     @Test
     public void localeChanged() {
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
         LogoutPageFilter filter = new LogoutPageFilter();
         panel.addFilter(filter);
 
@@ -181,7 +180,7 @@ public class DefaultSubPagePanelTest {
         // given
         assertThat(panel.getOptionSortAscending()).isTrue();
         assertThat(panel.getOptionSortType()).isEqualTo(SortType.ALPHA);
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
         LogoutPageFilter filter = new LogoutPageFilter();
         panel.addFilter(filter);
         // when
@@ -222,7 +221,7 @@ public class DefaultSubPagePanelTest {
     public void requiresRebuild() {
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
         LogoutPageFilter filter = new LogoutPageFilter();
         panel.addFilter(filter);
         panel.moveToNavigationState();
@@ -242,7 +241,7 @@ public class DefaultSubPagePanelTest {
     public void structureChange() {
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
         LogoutPageFilter filter = new LogoutPageFilter();
         panel.addFilter(filter);
         panel.moveToNavigationState();
@@ -256,7 +255,7 @@ public class DefaultSubPagePanelTest {
     public void afterViewChange() {
 
         // given
-        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode);
+        when(navigator.getCurrentNode()).thenReturn(userSitemap.publicNode());
         LogoutPageFilter filter = new LogoutPageFilter();
         panel.addFilter(filter);
         panel.moveToNavigationState();
