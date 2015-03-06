@@ -39,10 +39,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static uk.q3c.krail.core.navigate.sitemap.StandardPageKey.Public_Home;
 import static uk.q3c.krail.core.shiro.PageAccessControl.AUTHENTICATION;
 import static uk.q3c.krail.core.shiro.PageAccessControl.PUBLIC;
-
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class})
 public class DefaultMasterSitemapTest {
@@ -52,6 +52,9 @@ public class DefaultMasterSitemapTest {
 
     @Inject
     URIFragmentHandler uriHandler;
+
+    @Mock
+    NavigationState navState;
 
     DefaultMasterSitemap sitemap;
 
@@ -384,7 +387,7 @@ sitemap.replaceNode(parent,newParent);
         MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, Public_Home, -1, AUTHENTICATION, null);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
-        sitemap.addStandardPage(Public_Home, parent);
+//        sitemap.addStandardPage(Public_Home, parent);
         //when
         sitemap.replaceNode(parent, newParent);
         //then
@@ -404,7 +407,7 @@ sitemap.replaceNode(parent,newParent);
         MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, TestLabelKey.Yes, -1, AUTHENTICATION, null);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
-        sitemap.addStandardPage(Public_Home, parent);
+//        sitemap.addStandardPage(Public_Home, parent);
         //when
         sitemap.replaceNode(parent, newParent);
 
@@ -424,7 +427,7 @@ sitemap.replaceNode(parent,newParent);
         MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, Public_Home, -1, AUTHENTICATION, null);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
-        sitemap.addStandardPage(Public_Home, parent);
+//        sitemap.addStandardPage(Public_Home, parent);
         //when
         sitemap.replaceNode(parent, newParent);
         //then
@@ -433,6 +436,57 @@ sitemap.replaceNode(parent,newParent);
         assertThat(sitemap.getNodeCount()).isEqualTo(3);
         assertThat(sitemap.standardPageNode(Public_Home)
                           .getPageAccessControl()).isEqualTo(AUTHENTICATION);
+    }
+
+    /**
+     * AddChild should add standard page if it is one
+     */
+    @Test
+    public void add_child_standard_page_parent() {
+        //given
+        when(navState.getVirtualPage()).thenReturn("public");
+        MasterSitemapNode parent = new MasterSitemapNode(1, "public", PublicHomeView.class, StandardPageKey.Public_Home, -1, PUBLIC, null);
+        MasterSitemapNode child = new MasterSitemapNode(2, "home", PublicHomeView.class, TestLabelKey.Yes, -1, PUBLIC, null);
+        //when
+        sitemap.addChild(parent, child);
+        //then
+        assertThat(sitemap.getStandardPages()).containsKey(StandardPageKey.Public_Home);
+        assertThat(sitemap.standardPageNode(StandardPageKey.Public_Home)).isEqualTo(parent);
+        assertThat(sitemap.isPublicHomeUri(navState)).isTrue();
+        assertThat(sitemap.isPrivateHomeUri(navState)).isFalse();
+    }
+
+
+    @Test
+    public void add_child_standard_page_child() {
+        //given
+        when(navState.getVirtualPage()).thenReturn("public/home");
+        MasterSitemapNode parent = new MasterSitemapNode(1, "public", PublicHomeView.class,TestLabelKey.Yes , -1, PUBLIC, null);
+        MasterSitemapNode child = new MasterSitemapNode(2, "home", PublicHomeView.class, StandardPageKey.Public_Home, -1, PUBLIC, null);
+        //when
+        sitemap.addChild(parent, child);
+        //then
+        assertThat(sitemap.getStandardPages()).containsKey(StandardPageKey.Public_Home);
+        assertThat(sitemap.standardPageNode(StandardPageKey.Public_Home)).isEqualTo(child);
+        assertThat(sitemap.isPublicHomeUri(navState)).isTrue();
+        assertThat(sitemap.isPrivateHomeUri(navState)).isFalse();
+    }
+
+    @Test
+    public void remove_node_removes_standard_page() {
+        when(navState.getVirtualPage()).thenReturn("public/home");
+        MasterSitemapNode parent = new MasterSitemapNode(1, "public", PublicHomeView.class,TestLabelKey.Yes , -1, PUBLIC, null);
+        MasterSitemapNode child = new MasterSitemapNode(2, "home", PublicHomeView.class, StandardPageKey.Public_Home, -1, PUBLIC, null);
+        //when
+        sitemap.addChild(parent, child);
+        //then
+        assertThat(sitemap.getStandardPages()).containsKey(StandardPageKey.Public_Home);
+        assertThat(sitemap.getStandardPageUris()).containsKey("public/home");
+        //when
+        sitemap.removeNode(child);
+        //then
+        assertThat(sitemap.getStandardPages()).doesNotContainKey(StandardPageKey.Public_Home);
+        assertThat(sitemap.getStandardPageUris()).doesNotContainKey("public/home");
     }
 
     @ModuleProvider

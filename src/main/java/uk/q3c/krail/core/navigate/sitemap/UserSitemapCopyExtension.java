@@ -14,11 +14,15 @@ import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.navigate.LoginNavigationRule;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.SourceTreeWrapper;
 import uk.q3c.util.TargetTreeWrapper;
 import uk.q3c.util.TreeCopy;
 import uk.q3c.util.TreeCopyExtension;
 
+import java.text.Collator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -33,31 +37,43 @@ public class UserSitemapCopyExtension implements TreeCopyExtension<MasterSitemap
     private static Logger log = LoggerFactory.getLogger(UserSitemapCopyExtension.class);
     private final MasterSitemap masterSitemap;
     private final UserSitemap userSitemap;
+    private CurrentLocale currentLocale;
+    private Translate translate;
 
     @Inject
-    protected UserSitemapCopyExtension(MasterSitemap masterSitemap, UserSitemap userSitemap) {
+    protected UserSitemapCopyExtension(MasterSitemap masterSitemap, UserSitemap userSitemap, Translate translate, CurrentLocale currentLocale) {
         this.masterSitemap = masterSitemap;
         this.userSitemap = userSitemap;
+        this.translate = translate;
+        this.currentLocale = currentLocale;
     }
 
     @Override
-    public void invoke(SourceTreeWrapper<MasterSitemapNode> source, TargetTreeWrapper<MasterSitemapNode,
-            UserSitemapNode> target, Map<MasterSitemapNode, UserSitemapNode> nodeMap) {
+    public void invoke(SourceTreeWrapper<MasterSitemapNode> source, TargetTreeWrapper<MasterSitemapNode, UserSitemapNode> target, Map<MasterSitemapNode,
+            UserSitemapNode> nodeMap) {
         log.debug("invoked");
         userSitemap.buildUriMap();
-        copyStandardPages(nodeMap);
+        copyStandardPages();
         loadRedirects();
 
     }
 
-    private void copyStandardPages(Map<MasterSitemapNode, UserSitemapNode> nodeMap) {
+    /**
+     * All the standard pages are always copied, even though they may not appear in the main uriMap.  The standard pages are often used for comparison in
+     * things
+     * like {@link LoginNavigationRule}s, so need always to be available, even though they are not necessarily displayed in navigation components
+     */
+    private void copyStandardPages() {
         log.debug("copying standard pages");
         ImmutableMap<StandardPageKey, MasterSitemapNode> sourcePages = masterSitemap.getStandardPages();
+        Collator collator = Collator.getInstance(currentLocale.getLocale());
 
         for (StandardPageKey spk : sourcePages.keySet()) {
             MasterSitemapNode masterNode = sourcePages.get(spk);
-            UserSitemapNode userNode = nodeMap.get(masterNode);
-            userSitemap.addStandardPage(spk, userNode);
+            UserSitemapNode userNode = new UserSitemapNode(masterNode);
+            userNode.setLabel(translate.from(masterNode.getLabelKey()));
+            userNode.setCollationKey(collator.getCollationKey(userNode.getLabel()));
+            userSitemap.addStandardPage(userNode, masterSitemap.uri(masterNode));
         }
 
     }

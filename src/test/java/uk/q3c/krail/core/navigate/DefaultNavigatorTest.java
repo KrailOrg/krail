@@ -40,6 +40,7 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserStatusChangeSource;
+import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.core.view.*;
 import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestOptionModule;
@@ -64,6 +65,8 @@ public class DefaultNavigatorTest {
     UserStatusChangeSource source;
     @Inject
     MockOption option;
+    @Mock
+    UserStatus userStatus;
     @Mock
     private Page browserPage;
     @Mock
@@ -129,12 +132,14 @@ public class DefaultNavigatorTest {
         // when
         navigator = createNavigator();
         // then
+        verify(userStatus).addListener(navigator);
         verify(sitemapService).start();
         verify(builder).build();
     }
 
     private DefaultNavigator createNavigator() {
-        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder, loginNavigationRule, logoutNavigationRule);
+        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
+                loginNavigationRule, logoutNavigationRule, userStatus);
         navigator.init();
         return navigator;
     }

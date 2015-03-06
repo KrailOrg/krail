@@ -150,7 +150,7 @@ public class DefaultUserStatusPanelTest {
         // when
         loginoutBtn.click();
         // then
-        verify(navigator).navigateTo(StandardPageKey.Log_Out);
+        verify(userStatus).statusChanged(panel);
     }
 
 

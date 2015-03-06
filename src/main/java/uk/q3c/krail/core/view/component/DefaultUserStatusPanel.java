@@ -143,7 +143,6 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         if (authenticated) {
             subjectProvider.get()
                            .logout();
-            navigator.navigateTo(StandardPageKey.Log_Out);
             userStatus.statusChanged(this);
         } else {
             navigator.navigateTo(StandardPageKey.Log_In);

@@ -18,61 +18,88 @@ import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.UserStatusChangeSource;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+/**
+ * The type Default user status.
+ */
 @VaadinSessionScoped
 public class DefaultUserStatus implements UserStatus {
 
     private static Logger log = LoggerFactory.getLogger(DefaultUserStatus.class);
     private final List<UserStatusListener> listeners;
-    private final Navigator navigator;
+    private final List<Navigator> navigators;
     private SubjectProvider subjectProvider;
 
+    /**
+     * Instantiates a new Default user status.
+     *
+     * @param subjectProvider
+     *         the subject provider
+     */
     @Inject
-    protected DefaultUserStatus(Navigator navigator, SubjectProvider subjectProvider) {
+    protected DefaultUserStatus(SubjectProvider subjectProvider) {
         super();
-        this.navigator = navigator;
         this.subjectProvider = subjectProvider;
+        // TODO use weak references?  listeners could disappear, as they are of narrower scope
         listeners = new LinkedList<>();
+        navigators = new LinkedList<>();
     }
 
+    /**
+     * Holds Navigators separately to other listeners, as navigators need to be fired last
+     *
+     * @param listener the listener to add
+     */
     @Override
-    public void addListener(UserStatusListener listener) {
-        listeners.add(listener);
+    public void addListener(@Nonnull UserStatusListener listener) {
+        checkNotNull(listener);
+        if (listener instanceof Navigator) {
+            log.debug("added a {} listener", listener.getClass()
+                                                     .getSimpleName());
+            navigators.add((Navigator) listener);
+        } else {
+            listeners.add(listener);
+            log.debug("added a {} listener", listener.getClass()
+                                                     .getSimpleName());
+        }
     }
+
 
     @Override
     public void statusChanged(UserStatusChangeSource source) {
         fireListeners(isAuthenticated(), source);
-
-        log.debug("user status change listeners have been fired, now invoke the navigator");
-        if (isAuthenticated()) {
-            navigator.userHasLoggedIn(source);
-        } else {
-            navigator.userHasLoggedOut(source);
-        }
     }
 
     /**
      * Fires the listeners
      *
-     * @param loggedIn
-     *         if true, invoke the listeners' userHasLoggedIn methods, otherwise invoke userHasLoggedOut
-     * @param source
+     * @param loggedIn if true, invoke the listeners' userHasLoggedIn methods, otherwise invoke userHasLoggedOut
+     * @param source the source
      */
-    protected void fireListeners(boolean loggedIn, UserStatusChangeSource source) {
+    protected void fireListeners(boolean loggedIn, @Nonnull UserStatusChangeSource source) {
+        checkNotNull(source);
+        if (loggedIn) {
+            log.debug("firing user status change listeners, user has logged in");
+            listeners.forEach(listener -> listener.userHasLoggedIn(source));
 
-        for (UserStatusListener listener : listeners) {
-            if (loggedIn) {
-                log.debug("firing user status change listeners, user has logged in");
-                listener.userHasLoggedIn(source);
-            } else {
-                log.debug("firing user status change listeners, user has logged out");
-                listener.userHasLoggedOut(source);
-            }
+            // do navigators last
+            log.debug("user status change listeners have been fired, now fire the navigators");
+            navigators.forEach(listener -> listener.userHasLoggedIn(source));
+        } else {
+            log.debug("firing user status change listeners, user has logged out");
+            listeners.forEach(listener -> listener.userHasLoggedOut(source));
+
+            // do navigators last
+            log.debug("user status change listeners have been fired, now fire the navigators");
+            navigators.forEach(listener -> listener.userHasLoggedOut(source));
         }
     }
+
 
     @Override
     public boolean isAuthenticated() {
@@ -80,9 +107,10 @@ public class DefaultUserStatus implements UserStatus {
                               .isAuthenticated();
     }
 
+
     @Override
-    public void removeListener(UserStatusListener listener) {
+    public void removeListener(@Nonnull UserStatusListener listener) {
+        checkNotNull(listener);
         listeners.remove(listener);
     }
 }
-// TODO loggin in firelisteners in wrong place

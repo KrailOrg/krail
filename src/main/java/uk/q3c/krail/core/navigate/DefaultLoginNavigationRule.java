@@ -12,6 +12,8 @@
 package uk.q3c.krail.core.navigate;
 
 import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.sitemap.SitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
@@ -24,7 +26,7 @@ import java.util.Optional;
  * Created by David Sowerby on 08/02/15.
  */
 public class DefaultLoginNavigationRule implements LoginNavigationRule {
-
+    private static Logger log = LoggerFactory.getLogger(DefaultLoginNavigationRule.class);
     private URIFragmentHandler uriFragmentHandler;
     private UserSitemap userSitemap;
 
@@ -50,8 +52,10 @@ public class DefaultLoginNavigationRule implements LoginNavigationRule {
     public Optional<NavigationState> changedNavigationState(Navigator navigator, UserStatusChangeSource source) {
 
 
+
         //if we are not on the login page we do not need to move
         if (!userSitemap.isLoginUri(navigator.getCurrentNavigationState())) {
+            log.debug("Not on the login page so no navigation change required");
             return Optional.empty();
         }
 
@@ -60,6 +64,7 @@ public class DefaultLoginNavigationRule implements LoginNavigationRule {
         //We are on the login page
         //there is no previous node, then they must have gone straight to the login page - send them to private home
         if (previousNode == null) {
+            log.debug("There is no recorded previous node (probably gone straight to login) so default to private home");
             return Optional.of(uriFragmentHandler.navigationState(userSitemap.standardPageURI(StandardPageKey
                     .Private_Home)));
         }
@@ -67,6 +72,7 @@ public class DefaultLoginNavigationRule implements LoginNavigationRule {
         //The user was on the logout page before logging in - no point in going back there, send to private home
         UserSitemapNode logoutNode = userSitemap.standardPageNode(StandardPageKey.Log_Out);
         if (previousNode.equals(logoutNode)) {
+            log.debug("logged in from logout page, so default to private home");
             return Optional.of(uriFragmentHandler.navigationState(userSitemap.standardPageURI(StandardPageKey
                     .Private_Home)));
         }

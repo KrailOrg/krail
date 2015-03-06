@@ -45,10 +45,6 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
                 nodeRecord.setPageAccessControl(value.getPageAccessControl());
                 nodeRecord.setViewClass(value.getViewClass());
                 MasterSitemapNode msn = sitemap.append(nodeRecord);
-                if (nodeRecord.getLabelKey() instanceof StandardPageKey) {
-                    sitemap.addStandardPage((StandardPageKey) entry.getValue()
-                                                                   .getLabelKey(), msn);
-                }
             }
             processRedirects();
             return true;

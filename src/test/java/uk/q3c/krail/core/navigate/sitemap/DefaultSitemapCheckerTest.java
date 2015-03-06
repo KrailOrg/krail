@@ -133,47 +133,7 @@ public class DefaultSitemapCheckerTest {
         assertThat(report).contains("node/n");
     }
 
-    @Test
-    public void redirect() {
 
-        // given
-        buildSitemap(1);
-        MasterSitemapNode publicNode = sitemap.nodeFor("public");
-        // TODO fix this
-        //        publicNode.setLabelKey(TestLabelKey.Home);
-        // when
-        checker.check();
-        // then
-
-        assertThat(publicNode).isNotNull();
-        assertThat(publicNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
-    }
-
-    @Test
-    public void redirect_multiLevel() {
-
-        // given
-        buildSitemap(2);
-        MasterSitemapNode publicNode = sitemap.nodeFor("public");
-        // TODO fix this
-        //        publicNode.setLabelKey(TestLabelKey.Public);
-        // when
-        checker.check();
-        // then
-
-        MasterSitemapNode n1 = sitemap.nodeFor(uripublic_Node1);
-        MasterSitemapNode n11 = sitemap.nodeFor(uripublic_Node11);
-
-        assertThat(publicNode).isNotNull();
-        assertThat(publicNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
-
-        assertThat(n1).isNotNull();
-        assertThat(n1.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
-
-        assertThat(n11).isNotNull();
-        assertThat(n11.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
-
-    }
 
     @Test(expected = SitemapException.class)
     public void replaceMissingViews() {

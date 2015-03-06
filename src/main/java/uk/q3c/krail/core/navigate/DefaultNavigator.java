@@ -23,6 +23,7 @@ import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.SubjectProvider;
@@ -53,6 +54,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author David Sowerby
  * @date 18 Apr 2014
  */
+@UIScoped
 public class DefaultNavigator implements Navigator {
     private static Logger log = LoggerFactory.getLogger(DefaultNavigator.class);
 
@@ -74,8 +76,8 @@ public class DefaultNavigator implements Navigator {
     @Inject
     public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider
             subjectProvider, PageAccessController pageAccessController, ScopedUIProvider uiProvider,
-                            DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder,
-                            LoginNavigationRule loginNavigationRule, LogoutNavigationRule logoutNavigationRule) {
+                            DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule loginNavigationRule,
+                            LogoutNavigationRule logoutNavigationRule, UserStatus userStatus) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -87,6 +89,8 @@ public class DefaultNavigator implements Navigator {
 
         this.loginNavigationRule = loginNavigationRule;
         this.logoutNavigationRule = logoutNavigationRule;
+        userStatus.addListener(this);
+
     }
 
     @Override
@@ -389,16 +393,12 @@ public class DefaultNavigator implements Navigator {
     @Override
     public void userHasLoggedIn(UserStatusChangeSource source) {
         log.info("user logged in successfully, applying login navigation rule");
-        applyLoginNavigationRule(source);
-    }
-
-    protected void applyLoginNavigationRule(UserStatusChangeSource source) {
         Optional<NavigationState> newState = loginNavigationRule.changedNavigationState(this, source);
         if (newState.isPresent()) {
             navigateTo(newState.get());
         }
-
     }
+
 
     /**
      * Applies the logout navigation rule to change page if required
@@ -408,15 +408,12 @@ public class DefaultNavigator implements Navigator {
     @Override
     public void userHasLoggedOut(UserStatusChangeSource source) {
         log.info("user logged out, applying logout navigation rule");
-        applyLogoutNavigationRule(source);
-    }
-
-    protected void applyLogoutNavigationRule(UserStatusChangeSource source) {
         Optional<NavigationState> newState = logoutNavigationRule.changedNavigationState(this, source);
         if (newState.isPresent()) {
             navigateTo(newState.get());
         }
     }
+
 
     @Override
     public void navigateTo(StandardPageKey pageKey) {

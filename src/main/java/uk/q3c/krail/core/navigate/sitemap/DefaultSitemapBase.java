@@ -32,6 +32,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     protected final URIFragmentHandler uriHandler;
     protected final Map<String, T> uriMap = new LinkedHashMap<>();
     protected final Map<StandardPageKey, T> standardPages = new HashMap<>();
+    protected final Map<String, StandardPageKey> uriStandardPages = new HashMap<>();
     // Uses LinkedHashMap to retain insertion order
     protected final Map<String, String> redirects = new LinkedHashMap<>();
     protected BasicForest<T> forest;
@@ -195,8 +196,15 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     @Override
     public synchronized void removeNode(T node) {
         String uri = uri(node);
+
+        if (node.getLabelKey() instanceof StandardPageKey) {
+            StandardPageKey pageKey = (StandardPageKey) node.getLabelKey();
+            uriStandardPages.remove(uri);
+            standardPages.remove(pageKey);
+        }
         forest.removeNode(node);
         uriMap.remove(uri);
+
     }
 
     /**
@@ -238,18 +246,20 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     @Override
     public synchronized String standardPageURI(StandardPageKey pageKey) {
         checkNotNull(pageKey);
-        T sitemapNode = standardPages.get(pageKey);
-        if (sitemapNode != null) {
-            return uri(sitemapNode);
-        } else {
-            throw new SitemapException("No node found for StandardPageKey " + pageKey);
+
+        //can't use the uri method as the standard page keys may not be in the main uri map (which define the full uri by virtue of
+        //parent child relationships
+        for (Map.Entry<String, StandardPageKey> entry : uriStandardPages.entrySet()) {
+
+            if (entry.getValue()
+                     .equals(pageKey)) {
+                return entry.getKey();
+            }
         }
 
-    }
 
-    @Override
-    public synchronized T standardPageNode(StandardPageKey pageKey) {
-        return standardPages.get(pageKey);
+        throw new SitemapException("No URI found for StandardPageKey " + pageKey);
+
     }
 
     @Override
@@ -531,6 +541,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
             forest.addNode(parentNode);
             String newUri = uri(parentNode);
             uriMap.put(newUri, parentNode);
+            checkForStandardPage(parentNode);
         }
 
         // remove the child node - it may be moving from one parent to another
@@ -542,24 +553,37 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
         // add it to structure first, otherwise the uri will be wrong
         forest.addChild(parentNode, childNode);
         uriMap.put(uri(childNode), childNode);
-
+        checkForStandardPage(childNode);
     }
-
 
     @Override
     public BasicForest<T> getForest() {
         return forest;
     }
 
+    protected void checkForStandardPage(T node) {
+        checkNotNull(node);
+        if (node.getLabelKey() instanceof StandardPageKey) {
+            addStandardPage(node, uri(node));
+
+        }
+    }
+
     @Override
-    public void addStandardPage(StandardPageKey pageKey, T node) {
+    public void addStandardPage(T node, String uri) {
+        checkArgument(node.getLabelKey() instanceof StandardPageKey, "Key must be a Standard Page Key");
+        StandardPageKey pageKey = (StandardPageKey) node.getLabelKey();
         standardPages.put(pageKey, node);
+        uriStandardPages.put(uri, pageKey);
     }
 
     @Override
     public void clear() {
         forest.clear();
         standardPages.clear();
+        uriMap.clear();
+        uriStandardPages.clear();
+
         redirects.clear();
         loaded = false;
         log.debug("sitemap cleared");
@@ -609,8 +633,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
             checkNotNull(parentNode.getUriSegment());
         }
         if (containsNode(childNode)) {
-            T oldNode = this.getForest()
-                            .getNode(childNode);
+            T oldNode = forest.getNode(childNode);
             replaceNode(oldNode, childNode);
         }
         addChild(parentNode, childNode);
@@ -638,13 +661,76 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
         if (children != null) {
             children.forEach(child -> addChild(newInstance, child));
         }
+    }
 
-        if (oldInstance.getLabelKey() instanceof StandardPageKey) {
-            standardPages.remove(oldInstance.getLabelKey());
-        }
+    /**
+     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
+     * login). Use the isxxxUri methods to test a uri for a match to a standard page
+     *
+     * @param navigationState
+     *         the navigation state to test
+     *
+     * @return true if the navigation state represents the login uri
+     */
+    @Override
+    public boolean isLoginUri(@Nonnull NavigationState navigationState) {
+        checkNotNull(navigationState);
+        return isStandardUri(StandardPageKey.Log_In, navigationState);
+    }
 
-        if (newInstance.getLabelKey() instanceof StandardPageKey) {
-            addStandardPage((StandardPageKey) newInstance.getLabelKey(), newInstance);
-        }
+    private boolean isStandardUri(StandardPageKey key, NavigationState navigationState) {
+        T node = standardPageNode(key);
+        return key.equals(uriStandardPages.get(navigationState.getVirtualPage()));
+    }
+
+    @Override
+    public synchronized T standardPageNode(StandardPageKey pageKey) {
+        return standardPages.get(pageKey);
+    }
+
+    /**
+     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
+     * login). Use the isxxxUri methods to test a uri for a match to a standard page
+     *
+     * @param navigationState
+     *         the navigation state to test
+     *
+     * @return true if the navigation state represents the logout uri
+     */
+    @Override
+    public boolean isLogoutUri(@Nonnull NavigationState navigationState) {
+        return isStandardUri(StandardPageKey.Log_Out, navigationState);
+    }
+
+    /**
+     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
+     * login). Use the isxxxUri methods to test a uri for a match to a standard page
+     *
+     * @param navigationState
+     *         the navigation state to test
+     *
+     * @return true if the navigation state represents the private home uri
+     */
+    @Override
+    public boolean isPrivateHomeUri(@Nonnull NavigationState navigationState) {
+        return isStandardUri(StandardPageKey.Private_Home, navigationState);
+    }
+
+    /**
+     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
+     * login). Use the isxxxUri methods to test a uri for a match to a standard page
+     *
+     * @param navigationState
+     *         the navigation state to test
+     *
+     * @return true if the navigation state represents the public home uri
+     */
+    @Override
+    public boolean isPublicHomeUri(@Nonnull NavigationState navigationState) {
+        return isStandardUri(StandardPageKey.Public_Home, navigationState);
+    }
+
+    public ImmutableMap<String, StandardPageKey> getStandardPageUris() {
+        return ImmutableMap.copyOf(uriStandardPages);
     }
 }

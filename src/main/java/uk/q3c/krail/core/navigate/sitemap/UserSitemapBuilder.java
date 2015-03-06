@@ -13,6 +13,7 @@ package uk.q3c.krail.core.navigate.sitemap;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.core.user.status.UserStatusListener;
@@ -20,6 +21,7 @@ import uk.q3c.util.SourceTreeWrapper_BasicForest;
 import uk.q3c.util.TargetTreeWrapper_BasicForest;
 import uk.q3c.util.TreeCopy;
 
+@VaadinSessionScoped
 public class UserSitemapBuilder implements UserStatusListener {
     private static Logger log = LoggerFactory.getLogger(UserSitemapBuilder.class);
     private final TreeCopy<MasterSitemapNode, UserSitemapNode> treeCopy;

@@ -72,7 +72,6 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
             segments.remove(segments.size() - 1);
             String path = Joiner.on("/")
                                 .join(segments);
-            // TODO should this be outside the loop?
             node = nodeFor(path);
         }
 
@@ -81,7 +80,7 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
         int startIndex = segments.size();
 
         // reset the segments
-        segments = segments = new ArrayList(navState.getPathSegments());
+        segments = new ArrayList(navState.getPathSegments());
 
         MasterSitemapNode parentNode = null;
 
@@ -92,26 +91,22 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
         // create all the intermediate nodes needed to place the new child correctly
         // same idea as forceMkDir
         //intermediate nodes will only have the uri segment and id
-        MasterSitemapNode childNode = null;
+        MasterSitemapNode childNode;
         for (int i = startIndex; i < segments.size() - 1; i++) {
             String segment = segments.get(i);
             childNode = new MasterSitemapNode(nextNodeId(), segment);
-            addOrReplaceChild(parentNode, childNode);// TODO Can't use addChild - we need to do a replace or add'
+            addOrReplaceChild(parentNode, childNode);
             parentNode = childNode;
         }
 
         childNode = new MasterSitemapNode(nextNodeId(), nodeRecord);
         addOrReplaceChild(parentNode, childNode);
-        // TODO Can't use addChild - we need to do a replace or add'
 
         if (childNode.getLabelKey() instanceof StandardPageKey) {
             StandardPageKey spk = (StandardPageKey) childNode.getLabelKey();
             standardPages.put(spk, childNode);
         }
         return childNode;
-        // TODO if node already exists replace it but also move children to the new one
-        // TODO Standard page key detection - should check whenever a node is appended / added etc and add to standard page key map
-        // TODO default views, keys, pageControl - are they needed and if so where to define? (removed from SitemapChecker)
     }
 
     private int nextNodeId() {
@@ -121,8 +116,7 @@ public class DefaultMasterSitemap extends DefaultSitemapBase<MasterSitemapNode> 
 
     @Override
     protected synchronized MasterSitemapNode createNode(String segment) {
-        MasterSitemapNode newNode = new MasterSitemapNode(nextNodeId(), segment);
-        return newNode;
+        return new MasterSitemapNode(nextNodeId(), segment);
     }
 
     @Override

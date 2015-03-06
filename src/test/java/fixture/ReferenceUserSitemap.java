@@ -159,10 +159,10 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         addChild(publicNode, logoutNode);
         addChild(privateNode, privateHomeNode);
 
-        addStandardPage(StandardPageKey.Log_In, loginNode);
-        addStandardPage(StandardPageKey.Log_Out, logoutNode);
-        addStandardPage(StandardPageKey.Public_Home, publicHomeNode);
-        addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
+        //        addStandardPage(StandardPageKey.Log_In, loginNode);
+        //        addStandardPage(StandardPageKey.Log_Out, logoutNode);
+        //        addStandardPage(StandardPageKey.Public_Home, publicHomeNode);
+        //        addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
     }
 
     public UserSitemapNode createNode(String fullURI, String uriSegment, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl

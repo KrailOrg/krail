@@ -50,7 +50,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 @Immutable
 public class MasterSitemapNode implements SitemapNode {
-    // TODO implement equlas
     private final int id;
     private final String uriSegment;
     private final I18NKey labelKey;

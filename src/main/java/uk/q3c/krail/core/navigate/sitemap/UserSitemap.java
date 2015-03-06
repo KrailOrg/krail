@@ -11,10 +11,6 @@
 
 package uk.q3c.krail.core.navigate.sitemap;
 
-import uk.q3c.krail.core.navigate.NavigationState;
-
-import javax.annotation.Nonnull;
-
 /**
  * A user specific view of the {@link MasterSitemap}
  * <p>
@@ -31,11 +27,5 @@ public interface UserSitemap extends Sitemap<UserSitemapNode> {
 
     void removeListener(UserSitemapChangeListener listener);
 
-    boolean isLoginUri(NavigationState navigationState);
 
-    boolean isLogoutUri(@Nonnull NavigationState navigationState);
-
-    boolean isPrivateHomeUri(@Nonnull NavigationState navigationState);
-
-    boolean isPublicHomeUri(@Nonnull NavigationState navigationState);
 }

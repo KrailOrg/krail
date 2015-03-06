@@ -25,11 +25,33 @@ import uk.q3c.krail.core.user.UserStatusChangeSource;
  */
 public interface UserStatus {
 
+    /**
+     * Respond to a change of user status (logged in / logged out)
+     *
+     * @param source
+     *         the source of the changed status, needed because some listeners may want to respond differently depending on the source
+     */
     public void statusChanged(UserStatusChangeSource source);
 
+    /**
+     * Remove a listener
+     *
+     * @param listener the listener to remove
+     */
     public abstract void removeListener(UserStatusListener listener);
 
+    /**
+     * Adds a listener
+     *
+     * @param listener
+     *         the listener to add
+     */
     public abstract void addListener(UserStatusListener listener);
 
+    /**
+     * Returns true if the current user is authenticated
+     *
+     * @return true if the current user is authenticated
+     */
     boolean isAuthenticated();
 }

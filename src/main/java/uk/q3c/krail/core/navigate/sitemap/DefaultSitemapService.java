@@ -15,6 +15,7 @@ package uk.q3c.krail.core.navigate.sitemap;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.config.ApplicationConfiguration;
@@ -33,6 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class DefaultSitemapService extends AbstractServiceI18N implements SitemapService {
 
     private static Logger log = LoggerFactory.getLogger(DefaultSitemapService.class);
@@ -92,7 +94,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 
     /**
      * Loads the Sitemap from all the sources specified in {@link #sourceTypes}. The first call to
-     * {@link #loadSource(String, boolean)} has {@code firstLoad} set to true. Subsequent calls have {@code firstLoad}
+     * {@link #loadSource(SitemapSourceType)} has {@code firstLoad} set to true. Subsequent calls have {@code firstLoad}
      * set to false
      */
     private void loadSources() {

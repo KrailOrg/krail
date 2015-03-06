@@ -147,7 +147,7 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
         // then
         // never shown but needs to be in userSitemap to navigate to
         assertThat(userSitemap.standardPageNode(StandardPageKey.Log_Out)).isNotNull();
-        assertThat(userSitemap.standardPageNode(StandardPageKey.Private_Home)).isNull();
+        assertThat(userSitemap.standardPageNode(StandardPageKey.Private_Home)).isNotNull();
         assertThat(userSitemap.standardPageNode(StandardPageKey.Public_Home)).isNotNull();
         assertThat(userSitemap.standardPageNode(StandardPageKey.Log_In)).isNotNull();
 

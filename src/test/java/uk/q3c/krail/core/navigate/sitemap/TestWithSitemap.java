@@ -211,10 +211,10 @@ public abstract class TestWithSitemap {
         logoutNode = newNode("logout", StandardPageKey.Log_Out);
         publicHomeNode = newNode("public/home", StandardPageKey.Public_Home);
         privateHomeNode = newNode("private/home", StandardPageKey.Private_Home);
-        masterSitemap.addStandardPage(StandardPageKey.Log_In, loginNode);
-        masterSitemap.addStandardPage(StandardPageKey.Log_Out, logoutNode);
-        masterSitemap.addStandardPage(StandardPageKey.Public_Home, publicHomeNode);
-        masterSitemap.addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
+        //        masterSitemap.addStandardPage(StandardPageKey.Log_In, loginNode);
+        //        masterSitemap.addStandardPage(StandardPageKey.Log_Out, logoutNode);
+        //        masterSitemap.addStandardPage(StandardPageKey.Public_Home, publicHomeNode);
+        //        masterSitemap.addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
         masterSitemap.addChild(masterSitemap.nodeFor("public"), publicHomeNode);
         masterSitemap.addChild(masterSitemap.nodeFor("private"), privateHomeNode);
         masterSitemap.addChild(null, loginNode);
@@ -229,7 +229,7 @@ public abstract class TestWithSitemap {
         userSitemap = new DefaultUserSitemap(translate, uriHandler, currentLocale);
         UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
                 masterSitemap, pageAccessController, translate);
-        UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(masterSitemap, userSitemap);
+        UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(masterSitemap, userSitemap, translate, currentLocale);
         userSitemapBuilder = new UserSitemapBuilder(masterSitemap, userSitemap, nodeModifier, copyExtension,
                 userStatus);
         userSitemapBuilder.build();

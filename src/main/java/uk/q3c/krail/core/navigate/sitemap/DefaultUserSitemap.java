@@ -14,13 +14,11 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeListener;
 import uk.q3c.krail.i18n.Translate;
 
-import javax.annotation.Nonnull;
 import java.text.Collator;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,7 +46,6 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
 
     private final List<UserSitemapChangeListener> changeListeners;
 
-    private String loginUri;
 
     @Inject
     public DefaultUserSitemap(Translate translate, URIFragmentHandler uriHandler, CurrentLocale currentLocale) {
@@ -58,13 +55,6 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
         currentLocale.addListener(this);
     }
 
-    public String getLoginUri() {
-        return loginUri;
-    }
-
-    public void setLoginUri(String loginUri) {
-        this.loginUri = loginUri;
-    }
 
     /**
      * Iterates through contained nodes and resets the label and collation key properties to reflect a change in
@@ -168,69 +158,5 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
         changeListeners.remove(listener);
     }
 
-    /**
-     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
-     * login). Use the isxxxUri methods to test a uri for a match to a standard page
-     *
-     * @param navigationState
-     *         the navigation state to test
-     *
-     * @return true if the navigation state represents the login uri
-     */
-    @Override
-    public boolean isLoginUri(@Nonnull NavigationState navigationState) {
-        return isStandardUri(StandardPageKey.Log_In, navigationState);
-    }
-
-    private boolean isStandardUri(StandardPageKey key, NavigationState navigationState) {
-        UserSitemapNode node = standardPageNode(key);
-        if (node == null) {
-            return false;
-        } else {
-            return uri(node).equals(navigationState.getVirtualPage());
-        }
-    }
-
-    /**
-     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
-     * login). Use the isxxxUri methods to test a uri for a match to a standard page
-     *
-     * @param navigationState
-     *         the navigation state to test
-     *
-     * @return true if the navigation state represents the logout uri
-     */
-    @Override
-    public boolean isLogoutUri(@Nonnull NavigationState navigationState) {
-        return isStandardUri(StandardPageKey.Log_Out, navigationState);
-    }
-
-    /**
-     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
-     * login). Use the isxxxUri methods to test a uri for a match to a standard page
-     *
-     * @param navigationState
-     *         the navigation state to test
-     *
-     * @return true if the navigation state represents the private home uri
-     */
-    @Override
-    public boolean isPrivateHomeUri(@Nonnull NavigationState navigationState) {
-        return isStandardUri(StandardPageKey.Private_Home, navigationState);
-    }
-
-    /**
-     * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
-     * login). Use the isxxxUri methods to test a uri for a match to a standard page
-     *
-     * @param navigationState
-     *         the navigation state to test
-     *
-     * @return true if the navigation state represents the public home uri
-     */
-    @Override
-    public boolean isPublicHomeUri(@Nonnull NavigationState navigationState) {
-        return isStandardUri(StandardPageKey.Public_Home, navigationState);
-    }
 
 }
