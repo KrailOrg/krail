@@ -8,13 +8,19 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package uk.q3c.krail.core.user.status;
 
-import uk.q3c.krail.core.user.UserStatusChangeSource;
 
-public interface UserStatusListener {
+/**
+ * Used to identify the source of a login - usually a View implementation, component or possibly even a federated
+ * source.  Enables subscribers to {@link UserStatusBusMessage} to respond differently depending on the source of the change
+ * <p>
+ * Created by David Sowerby on 08/02/15.
+ */
+public interface UserStatusChangeSource {
 
-    void userHasLoggedIn(UserStatusChangeSource source);
-
-    void userHasLoggedOut(UserStatusChangeSource source);
+    default String identity() {
+        return getClass().getSimpleName();
+    }
 }

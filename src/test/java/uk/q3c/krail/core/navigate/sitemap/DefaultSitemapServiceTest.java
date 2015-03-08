@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
 import uk.q3c.krail.core.config.ConfigKeys;
+import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
@@ -67,7 +68,7 @@ import static org.mockito.Mockito.when;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class,
+@GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class,
         ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class, StandardComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, NavigationModule.class})
 public class DefaultSitemapServiceTest {
 

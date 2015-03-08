@@ -25,12 +25,14 @@ import com.vaadin.util.CurrentInstance;
 import fixture.ReferenceUserSitemap;
 import fixture.TestI18NModule;
 import fixture.testviews2.ViewB;
+import net.engio.mbassy.bus.MBassador;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.shiro.PageAccessControl;
@@ -39,8 +41,8 @@ import uk.q3c.krail.core.shiro.PagePermission;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
-import uk.q3c.krail.core.user.UserStatusChangeSource;
-import uk.q3c.krail.core.user.status.UserStatus;
+import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.core.view.*;
 import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestOptionModule;
@@ -65,8 +67,9 @@ public class DefaultNavigatorTest {
     UserStatusChangeSource source;
     @Inject
     MockOption option;
+
     @Mock
-    UserStatus userStatus;
+    MBassador<BusMessage> eventBus;
     @Mock
     private Page browserPage;
     @Mock
@@ -132,14 +135,14 @@ public class DefaultNavigatorTest {
         // when
         navigator = createNavigator();
         // then
-        verify(userStatus).addListener(navigator);
+        verify(eventBus).subscribe(navigator);
         verify(sitemapService).start();
         verify(builder).build();
     }
 
     private DefaultNavigator createNavigator() {
         navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
-                loginNavigationRule, logoutNavigationRule, userStatus);
+                loginNavigationRule, logoutNavigationRule, eventBus);
         navigator.init();
         return navigator;
     }
@@ -165,7 +168,7 @@ public class DefaultNavigatorTest {
         navigator = createNavigator();
         when(logoutNavigationRule.changedNavigationState(navigator, logoutSource)).thenReturn(Optional.empty());
         // when
-        navigator.userHasLoggedOut(logoutSource);
+        navigator.userStatusChange(new UserStatusBusMessage(logoutSource, false));
         // then
         verify(logoutNavigationRule).changedNavigationState(navigator, logoutSource);
     }
@@ -180,7 +183,7 @@ public class DefaultNavigatorTest {
         navigator = createNavigator();
         when(loginNavigationRule.changedNavigationState(navigator, loginSource)).thenReturn(Optional.empty());
         // when
-        navigator.userHasLoggedIn(loginSource);
+        navigator.userStatusChange(new UserStatusBusMessage(loginSource, true));
         // then
         verify(loginNavigationRule).changedNavigationState(navigator, loginSource);
     }

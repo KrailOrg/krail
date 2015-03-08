@@ -17,10 +17,12 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
+import net.engio.mbassy.bus.MBassador;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PageAccessControl;
@@ -28,7 +30,6 @@ import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.opt.DefaultOption;
 import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.i18n.*;
 
@@ -79,8 +80,11 @@ public abstract class TestWithSitemap {
     protected UserSitemapNode userNode4;
     protected UserSitemapNode userNode5;
     protected UserSitemapNode userNode6;
+
     @Mock
-    UserStatus userStatus;
+    MBassador<BusMessage> eventBus;
+
+
     Locale locale = Locale.UK;
     Collator collator;
 
@@ -211,10 +215,6 @@ public abstract class TestWithSitemap {
         logoutNode = newNode("logout", StandardPageKey.Log_Out);
         publicHomeNode = newNode("public/home", StandardPageKey.Public_Home);
         privateHomeNode = newNode("private/home", StandardPageKey.Private_Home);
-        //        masterSitemap.addStandardPage(StandardPageKey.Log_In, loginNode);
-        //        masterSitemap.addStandardPage(StandardPageKey.Log_Out, logoutNode);
-        //        masterSitemap.addStandardPage(StandardPageKey.Public_Home, publicHomeNode);
-        //        masterSitemap.addStandardPage(StandardPageKey.Private_Home, privateHomeNode);
         masterSitemap.addChild(masterSitemap.nodeFor("public"), publicHomeNode);
         masterSitemap.addChild(masterSitemap.nodeFor("private"), privateHomeNode);
         masterSitemap.addChild(null, loginNode);
@@ -230,8 +230,7 @@ public abstract class TestWithSitemap {
         UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
                 masterSitemap, pageAccessController, translate);
         UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(masterSitemap, userSitemap, translate, currentLocale);
-        userSitemapBuilder = new UserSitemapBuilder(masterSitemap, userSitemap, nodeModifier, copyExtension,
-                userStatus);
+        userSitemapBuilder = new UserSitemapBuilder(masterSitemap, userSitemap, nodeModifier, copyExtension, eventBus);
         userSitemapBuilder.build();
 
         userNode1 = userSitemap.userNodeFor(masterNode1);

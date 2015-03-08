@@ -17,8 +17,6 @@ import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.ui.ScopedUI;
-import uk.q3c.krail.core.user.UserStatusChangeSource;
-import uk.q3c.krail.core.user.status.UserStatusListener;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.KrailViewChangeListener;
 
@@ -35,12 +33,11 @@ import java.util.List;
  * view. Listeners are notified before and after a change of view occurs.  <br>
  * <br>
  * The navigator must also respond to a change in user status (logged in or out) - the response is determined by an
- * implementation of {@link LoginNavigationRule} and {@link LogoutNavigationRule}, ({@link
- * #userHasLoggedIn(UserStatusChangeSource)} and {@link #userHasLoggedOut(UserStatusChangeSource)} respectively.
+ * implementation of {@link LoginNavigationRule} and {@link LogoutNavigationRule},
  *
  * @author David Sowerby 20 Jan 2013
  */
-public interface Navigator extends UriFragmentChangedListener, UserStatusListener {
+public interface Navigator extends UriFragmentChangedListener {
 
     void navigateTo(String navigationState);
 

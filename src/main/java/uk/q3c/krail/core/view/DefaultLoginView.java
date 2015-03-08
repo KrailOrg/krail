@@ -17,11 +17,14 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ChameleonTheme;
+import net.engio.mbassy.bus.MBassador;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
-import uk.q3c.krail.core.user.status.UserStatus;
+import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.util.ID;
 
@@ -31,7 +34,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     private final LoginExceptionHandler loginExceptionHandler;
     private final Provider<Subject> subjectProvider;
     private final Translate translate;
-    private final UserStatus userStatus;
+    private final MBassador<BusMessage> eventBus;
     @Caption(caption = LabelKey.Log_In)
     private Panel centrePanel;
     private Label demoInfoLabel;
@@ -47,13 +50,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     private TextField usernameBox;
 
     @Inject
-    protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider,
-                               Translate translate, UserStatus userStatus) {
+    protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider, Translate translate, @SessionBus
+    MBassador<BusMessage> eventBus) {
         super();
         this.loginExceptionHandler = loginExceptionHandler;
         this.subjectProvider = subjectProvider;
         this.translate = translate;
-        this.userStatus = userStatus;
+        this.eventBus = eventBus;
     }
 
     @Override
@@ -114,7 +117,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         try {
             subjectProvider.get()
                            .login(token);
-            userStatus.statusChanged(this);
+            eventBus.publish(new UserStatusBusMessage(this, true));
         } catch (UnknownAccountException uae) {
             loginExceptionHandler.unknownAccount(this, token);
         } catch (IncorrectCredentialsException ice) {

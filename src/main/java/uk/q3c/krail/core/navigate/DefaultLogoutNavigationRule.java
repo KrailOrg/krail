@@ -14,7 +14,7 @@ package uk.q3c.krail.core.navigate;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
-import uk.q3c.krail.core.user.UserStatusChangeSource;
+import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 
 import java.util.Optional;
 

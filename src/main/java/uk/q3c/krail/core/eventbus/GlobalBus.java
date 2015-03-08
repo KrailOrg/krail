@@ -9,19 +9,24 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.user;
+package uk.q3c.krail.core.eventbus;
 
-import uk.q3c.krail.core.user.status.UserStatusListener;
+import com.google.inject.BindingAnnotation;
+import uk.q3c.krail.core.user.opt.cache.OptionCache;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Used to identify the source of a login - usually a View implementation, component or possibly even a federated
- * source.  Enables {@link UserStatusListener}s to respond differently depending on the source of the change
+ * Binding annotation to identify a Guava cache configuration for {@link OptionCache}
  * <p>
- * Created by David Sowerby on 08/02/15.
+ * Created by David Sowerby on 06/02/15.
  */
-public interface UserStatusChangeSource {
-
-    default String identity() {
-        return getClass().getSimpleName();
-    }
+@BindingAnnotation
+@Target({FIELD, PARAMETER, METHOD})
+@Retention(RUNTIME)
+public @interface GlobalBus {
 }

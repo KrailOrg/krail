@@ -9,10 +9,9 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.user.opt.cache;
+package uk.q3c.krail.core.eventbus;
 
 import com.google.inject.BindingAnnotation;
-import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScope;
 
 import java.lang.annotation.Retention;
@@ -22,13 +21,14 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Binding annotation to identify an Event Bus as being global to the application (to distinguish from event buses which have {@link VaadinSessionScope} -
- * the latter are annotated with {@link SessionBus}
+ * Binding annotation to identify an Event Bus as having {@link VaadinSessionScope}, as opposed to the global Event Bus, which is annotated with {@link
+ * GlobalBus}
+ * <p>
  * <p>
  * Created by David Sowerby on 06/02/15.
  */
 @BindingAnnotation
 @Target({FIELD, PARAMETER, METHOD})
 @Retention(RUNTIME)
-public @interface OptionCacheConfig {
+public @interface SessionBus {
 }

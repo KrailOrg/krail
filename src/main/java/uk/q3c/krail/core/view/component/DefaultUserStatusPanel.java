@@ -21,15 +21,20 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.themes.ChameleonTheme;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
-import uk.q3c.krail.core.user.UserStatusChangeSource;
-import uk.q3c.krail.core.user.status.UserStatus;
+import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
@@ -40,11 +45,12 @@ import java.util.Optional;
 
 /**
  * Represents the "logged in" status of the current {@link Subject}.
- * <p/>
+ * <p>
  *
  * @author David Sowerby 16 Jan 2013
  */
 // TODO I18N
+@Listener
 public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, ClickListener, UserStatusChangeSource {
     private static Logger log = LoggerFactory.getLogger(DefaultUserStatusPanel.class);
     private final Label usernameLabel;
@@ -53,22 +59,21 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
     private final Provider<Subject> subjectProvider;
     private final Translate translate;
     private final SubjectIdentifier subjectIdentifier;
-    private final UserStatus userStatus;
-    private CurrentLocale currentLocale;
+    private final MBassador<BusMessage> eventBus;
+    private final CurrentLocale currentLocale;
 
     @Inject
-    protected DefaultUserStatusPanel(Navigator navigator, SubjectProvider subjectProvider, Translate translate,
-                                     SubjectIdentifier subjectIdentifier, UserStatus userStatus,
-                                     CurrentLocale currentLocale) {
+    protected DefaultUserStatusPanel(Navigator navigator, SubjectProvider subjectProvider, Translate translate, SubjectIdentifier subjectIdentifier,
+                                     @SessionBus MBassador<BusMessage> eventBus, CurrentLocale currentLocale) {
         super();
         this.navigator = navigator;
         this.subjectProvider = subjectProvider;
         this.translate = translate;
         this.subjectIdentifier = subjectIdentifier;
-        this.userStatus = userStatus;
+        this.eventBus = eventBus;
         this.currentLocale = currentLocale;
         currentLocale.addListener(this);
-        userStatus.addListener(this);
+        eventBus.subscribe(this);
         setSizeFull();
         addStyleName(ChameleonTheme.PANEL_BORDERLESS);
         usernameLabel = new Label();
@@ -81,26 +86,11 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         hl.addComponent(login_logout_Button);
         this.setContent(hl);
         setIds();
-        checkUserStatus();
-
-    }
-
-    protected void checkUserStatus() {
-        if (subjectProvider.get()
-                           .isAuthenticated()) {
-            userHasLoggedIn(null);
-        } else {
-            userHasLoggedOut(null);
-        }
-    }
-
-    @Override
-    public void userHasLoggedIn(UserStatusChangeSource source) {
-        log.debug("user has logged in, reset the user status panel");
         build();
+
     }
 
-    private void build() {
+    protected void build() {
         log.debug("building with Locale={}", currentLocale.getLocale());
         boolean authenticated = subjectProvider.get()
                                                .isAuthenticated();
@@ -110,16 +100,26 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         usernameLabel.setValue(subjectIdentifier.subjectName());
     }
 
-    @Override
-    public void userHasLoggedOut(UserStatusChangeSource source) {
-        log.debug("user has logged out, reset the user status panel");
-        build();
-    }
-
     private void setIds() {
         setId(ID.getId(Optional.empty(), this));
         login_logout_Button.setId(ID.getId(Optional.empty(), this, login_logout_Button));
         usernameLabel.setId(ID.getId(Optional.empty(), this, usernameLabel));
+    }
+
+    /**
+     * Responds to the {@code busMessage} by rebuilding the panel to reflect a change in user status.  Does nothing if the message was sent from here
+     *
+     * @param busMessage
+     *         the message received from the event bus
+     */
+    @Handler
+    public void userStatusChange(UserStatusBusMessage busMessage) {
+        if (busMessage.getSource() == this) {
+            log.debug("received message from bus, but sent from here, so ignoring");
+        } else {
+            log.debug("user status has changed to authenticated = '{}', reset the user status panel", busMessage.isAuthenticated());
+            build();
+        }
     }
 
     @Override
@@ -143,7 +143,7 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         if (authenticated) {
             subjectProvider.get()
                            .logout();
-            userStatus.statusChanged(this);
+            eventBus.publish(new UserStatusBusMessage(this, false));
         } else {
             navigator.navigateTo(StandardPageKey.Log_In);
         }

@@ -15,8 +15,6 @@ package fixture;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.user.UserStatusChangeSource;
-import uk.q3c.krail.core.user.status.UserStatusListener;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeListener;
 
@@ -28,7 +26,7 @@ import java.util.Locale;
  * For testing all that is usually needed is to return a current locale and fire listeners on a change.  This class
  * gets used by so many things it makes test setup a pain if the full version is used
  */
-public class MockCurrentLocale implements CurrentLocale, UserStatusListener {
+public class MockCurrentLocale implements CurrentLocale {
     private static Logger log = LoggerFactory.getLogger(MockCurrentLocale.class);
     private final List<LocaleChangeListener> listeners = new ArrayList<>();
     private Locale locale;
@@ -94,13 +92,4 @@ public class MockCurrentLocale implements CurrentLocale, UserStatusListener {
     }
 
 
-    @Override
-    public void userHasLoggedIn(UserStatusChangeSource source) {
-
-    }
-
-    @Override
-    public void userHasLoggedOut(UserStatusChangeSource source) {
-
-    }
 }

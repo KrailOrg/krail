@@ -27,6 +27,7 @@ import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
+import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.threadscope.ThreadScopeModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -131,6 +132,8 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
         coreModules.add(optionModule());
 
+        coreModules.add(eventBusModule());
+
         coreModules.add(navigationModule());
 
         addValidationModules(coreModules);
@@ -138,6 +141,15 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         addAppModules(coreModules);
         addSitemapModules(coreModules);
         return coreModules;
+    }
+
+    /**
+     * Override this if you have provided your own {@link EventBusModule} implementation
+     *
+     * @return a new {@link EventBusModule} instance
+     */
+    protected Module eventBusModule() {
+        return new EventBusModule();
     }
 
     /**
@@ -245,7 +257,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      * Override this method if you have sub-classed {@link StandardShiroModule} to provide bindings to your Shiro
      * related implementations (for example, {@link Realm} and {@link CredentialsMatcher}
      *
-     * @return
+     * @return a new {@link StandardShiroModule} instance
      */
 
     protected Module shiroModule() {
@@ -255,8 +267,10 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     /**
      * Override this if you have sub-classed {@link UserModule} to provide bindings to your user related
      * implementations
+     *
+     * @return a new instance of {@link UserModule} or sub-class
      */
-    private Module userModule() {
+    protected UserModule userModule() {
         return new UserModule();
     }
 

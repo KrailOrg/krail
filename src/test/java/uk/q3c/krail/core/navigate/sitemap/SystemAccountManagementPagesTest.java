@@ -20,6 +20,7 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
+import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
@@ -41,8 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class,
         I18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, OptionModule
-        .class, StandardShiroModule.class, StandardComponentModule.class, VaadinSessionScopeModule.class,
-        NavigationModule.class})
+        .class, StandardShiroModule.class, StandardComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, EventBusModule.class})
 public class SystemAccountManagementPagesTest {
 
     @Inject

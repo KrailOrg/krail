@@ -86,8 +86,5 @@ public class OptionModule extends AbstractModule {
 
     protected void configureCache() {
         GuavaCacheConfiguration config = new GuavaCacheConfiguration();
-
-
-
     }
 }

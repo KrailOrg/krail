@@ -1,32 +1,34 @@
 /*
- * Copyright (c) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.view;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.ui.Button;
+import net.engio.mbassy.bus.MBassador;
+import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
-import uk.q3c.krail.core.user.status.UserStatus;
+import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.i18n.Translate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.mockito.Mockito.*;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class DefaultLoginViewTest {
@@ -39,16 +41,20 @@ public class DefaultLoginViewTest {
     @Mock
     LoginExceptionHandler loginExceptionHandler;
 
-    @Mock
-    UserStatus userStatus;
 
+    @Mock
+    MBassador<BusMessage> eventBus;
+    @Mock
+    Subject subject;
+    @Mock
+    private Button.ClickEvent clickEvent;
     @Mock
     private SubjectProvider subjectProvider;
 
-
     @Before
     public void setup() {
-        view = new DefaultLoginView(loginExceptionHandler, subjectProvider, translate, userStatus);
+        when(subjectProvider.get()).thenReturn(subject);
+        view = new DefaultLoginView(loginExceptionHandler, subjectProvider, translate, eventBus);
     }
 
     @Test
@@ -60,5 +66,17 @@ public class DefaultLoginViewTest {
         view.buildView(event);
         //then
         assertThat(view.getRootComponent()).isNotNull();
+    }
+
+    @Test
+    public void submitButton_clicked() {
+        //given
+        KrailViewChangeEvent event = new KrailViewChangeEvent(new NavigationState(), new NavigationState());
+        view.buildView(event);
+        //when
+        view.buttonClick(clickEvent);
+        //then
+        verify(eventBus).publish(any(UserStatusBusMessage.class));
+        // TODO test for specific message
     }
 }

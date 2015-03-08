@@ -18,7 +18,7 @@ import uk.q3c.krail.core.navigate.sitemap.SitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.krail.core.user.UserStatusChangeSource;
+import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 
 import java.util.Optional;
 

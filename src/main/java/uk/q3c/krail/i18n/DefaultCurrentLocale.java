@@ -15,18 +15,21 @@ package uk.q3c.krail.i18n;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.vaadin.server.WebBrowser;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
-import uk.q3c.krail.core.user.UserStatusChangeSource;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.user.opt.OptionKey;
-import uk.q3c.krail.core.user.status.UserStatus;
-import uk.q3c.krail.core.user.status.UserStatusListener;
+import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.util.MessageFormat;
 
 import javax.annotation.Nonnull;
@@ -62,28 +65,29 @@ import java.util.Set;
  * @date 5 May 2014
  */
 
-public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, OptionContext {
+public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
 
     public static final OptionKey optionPreferredLocale = new OptionKey(DefaultCurrentLocale.class, LabelKey.Preferred_Locale);
     private static Logger log = LoggerFactory.getLogger(DefaultCurrentLocale.class);
     private final List<LocaleChangeListener> listeners = new ArrayList<>();
 
-    private BrowserProvider browserProvider;
-    private Locale defaultLocale;
+    private final BrowserProvider browserProvider;
+    private final Locale defaultLocale;
+    private final MBassador<BusMessage> eventBus;
+    private final SubjectProvider subjectProvider;
+    private final Option option;
     private Locale locale;
-    private Option option;
     private Set<Locale> supportedLocales;
-    private UserStatus userStatus;
+
     @Inject
-    protected DefaultCurrentLocale(BrowserProvider browserProvider, @SupportedLocales Set<Locale> supportedLocales,
-                                   @DefaultLocale Locale defaultLocale, UserStatus userStatus, Option option) {
+    protected DefaultCurrentLocale(BrowserProvider browserProvider, @SupportedLocales Set<Locale> supportedLocales, @DefaultLocale Locale defaultLocale, @SessionBus MBassador<BusMessage> eventBus, SubjectProvider subjectProvider, Option option) {
         super();
         this.browserProvider = browserProvider;
         this.supportedLocales = supportedLocales;
         this.defaultLocale = defaultLocale;
-        this.userStatus = userStatus;
+        this.eventBus = eventBus;
+        this.subjectProvider = subjectProvider;
         this.option = option;
-        userStatus.addListener(this);
         locale = defaultLocale;
         if (!supportedLocales.contains(defaultLocale)) {
             String msg = MessageFormat.format("The default locale ({0}) you have specified must also be defined as a " +
@@ -207,41 +211,42 @@ public class DefaultCurrentLocale implements CurrentLocale, UserStatusListener, 
 
     /**
      * User has just logged in, look for their preferred Locale from user options.
-     * @param source
+     *
+     * @param busMessage message provided by the {@link #eventBus}
      */
-    @Override
-    public void userHasLoggedIn(UserStatusChangeSource source) {
+    @Handler
+    public void userStatusChange(UserStatusBusMessage busMessage) {
         setLocaleFromOption(true);
     }
 
     /**
      * Sets the locale from the value held in {@link Option}, if available.  {@link Option} will not be available if
-     * the user
-     * is not authenticated.  It is possible that a user option is not supported (unlikely, but support for a language
-     * could be withdrawn after the user has chosen it), in which case the locale is set to the first supported locale
+     * the user is not authenticated.  It is possible that a user option is not supported (unlikely, but support for a language
+     * could be withdrawn after the user has chosen it), in which case the locale is set to the first supported locale.  This is indicated by returning a
+     * value of false
      *
-     * @param fireListeners
+     * If a user has just logged out, but they may still have public pages to view, and they would
+     * probably want to view those in the same language as they had selected while logged in, so no changes are made
      *
-     * @return true if the user options was valid, otherwise false
+     * @param fireListeners if true, fire the locale change listeners
+     *
+     * @return true if the user options was valid, otherwise false.  Irrelevant for a logout
      */
     private boolean setLocaleFromOption(boolean fireListeners) {
-        if (userStatus.isAuthenticated()) {
+        if (subjectProvider.get()
+                           .isAuthenticated()) {
             Locale selectedLocale = option.get(defaultLocale, optionPreferredLocale);
             if (supportedLocales.contains(selectedLocale)) {
                 setLocale(selectedLocale, fireListeners);
                 return true;
+            } else {
+                return false;
             }
+        } else {
+            // user logged out, nothing to change
+            return false;
         }
-        return false;
-    }
-
-    /**
-     * User has just logged out, but they may still have public pages to view, and they would
-     * probably want to view those in the same language as they had selected while logged in
-     * @param source
-     */
-    @Override
-    public void userHasLoggedOut(UserStatusChangeSource source) {
 
     }
+
 }

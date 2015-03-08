@@ -23,6 +23,7 @@ import fixture.testviews2.ViewA1;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
+import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
@@ -47,8 +48,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule
-        .class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, OptionModule.class,
-        ApplicationConfigurationModule.class, StandardShiroModule.class, StandardComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class})
+        .class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, OptionModule.class, ApplicationConfigurationModule.class,
+        StandardShiroModule.class, StandardComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, EventBusModule.class})
 public class DefaultDirectSitemapLoaderTest {
 
     static String page1 = "private/page1";

@@ -11,36 +11,38 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 import com.google.inject.Inject;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.core.user.UserStatusChangeSource;
-import uk.q3c.krail.core.user.status.UserStatus;
-import uk.q3c.krail.core.user.status.UserStatusListener;
+import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.util.SourceTreeWrapper_BasicForest;
 import uk.q3c.util.TargetTreeWrapper_BasicForest;
 import uk.q3c.util.TreeCopy;
 
 @VaadinSessionScoped
-public class UserSitemapBuilder implements UserStatusListener {
+@Listener
+public class UserSitemapBuilder {
     private static Logger log = LoggerFactory.getLogger(UserSitemapBuilder.class);
     private final TreeCopy<MasterSitemapNode, UserSitemapNode> treeCopy;
     private final UserSitemap userSitemap;
 
     @Inject
-    protected UserSitemapBuilder(MasterSitemap masterSitemap, UserSitemap userSitemap,
-                                 UserSitemapNodeModifier nodeModifier, UserSitemapCopyExtension copyExtension,
-                                 UserStatus userStatus) {
+
+    protected UserSitemapBuilder(MasterSitemap masterSitemap, UserSitemap userSitemap, UserSitemapNodeModifier nodeModifier, UserSitemapCopyExtension copyExtension, @SessionBus MBassador<BusMessage> eventBus) {
 
         this.userSitemap = userSitemap;
-        TargetTreeWrapper_BasicForest<MasterSitemapNode, UserSitemapNode> target = new
-                TargetTreeWrapper_BasicForest<>(userSitemap.getForest());
+        TargetTreeWrapper_BasicForest<MasterSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_BasicForest<>(userSitemap.getForest());
         target.setNodeModifier(nodeModifier);
-        SourceTreeWrapper_BasicForest<MasterSitemapNode> source = new SourceTreeWrapper_BasicForest<>(masterSitemap
-                .getForest());
+        SourceTreeWrapper_BasicForest<MasterSitemapNode> source = new SourceTreeWrapper_BasicForest<>(masterSitemap.getForest());
         treeCopy = new TreeCopy<>(source, target);
         treeCopy.setExtension(copyExtension);
-        userStatus.addListener(this);
+        eventBus
+                        .subscribe(this);
 
     }
 
@@ -48,13 +50,10 @@ public class UserSitemapBuilder implements UserStatusListener {
         return userSitemap;
     }
 
-    @Override
-    public void userHasLoggedIn(UserStatusChangeSource source) {
-        userStatusChanged();
-    }
 
-    public synchronized void userStatusChanged() {
-        log.debug("user status has changed, rebuild the userSitemap");
+    @Handler
+    public synchronized void userStatusChanged(UserStatusBusMessage busMessage) {
+        log.debug("user status is now authenticated = '{}', rebuild the userSitemap", busMessage.isAuthenticated());
         userSitemap.clear();
         build();
 
@@ -68,8 +67,5 @@ public class UserSitemapBuilder implements UserStatusListener {
         }
     }
 
-    @Override
-    public void userHasLoggedOut(UserStatusChangeSource source) {
-        userStatusChanged();
-    }
+
 }

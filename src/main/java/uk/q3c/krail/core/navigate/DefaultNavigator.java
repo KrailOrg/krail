@@ -18,11 +18,16 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.shiro.PageAccessController;
@@ -30,8 +35,7 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.shiro.UnauthorizedExceptionHandler;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
-import uk.q3c.krail.core.user.UserStatusChangeSource;
-import uk.q3c.krail.core.user.status.UserStatus;
+import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.view.*;
 
 import java.util.LinkedList;
@@ -46,15 +50,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * authorised for the current Subject, there is not need to check for authorisation before navigating (there is still
  * some old code in here which does, but that will be removed)
  * <p>
- * There is no need to register as a listener with {@link UserStatus}, the navigator is always called after all other
- * listeners - this is so that navigation components are set up before the navigator moves to a page (which might not
- * be
- * displayed in a navigation component if it is not up to date)
+ *The navigator must always be called after all other listeners - this is so that navigation components are set up before the navigator moves to a page
+ * (which might not be displayed in a navigation component if it is not up to date)
  *
  * @author David Sowerby
  * @date 18 Apr 2014
  */
 @UIScoped
+@Listener
 public class DefaultNavigator implements Navigator {
     private static Logger log = LoggerFactory.getLogger(DefaultNavigator.class);
 
@@ -75,9 +78,9 @@ public class DefaultNavigator implements Navigator {
 
     @Inject
     public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider
-            subjectProvider, PageAccessController pageAccessController, ScopedUIProvider uiProvider,
-                            DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule loginNavigationRule,
-                            LogoutNavigationRule logoutNavigationRule, UserStatus userStatus) {
+            subjectProvider, PageAccessController pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder
+            userSitemapBuilder, LoginNavigationRule loginNavigationRule, LogoutNavigationRule logoutNavigationRule, @SessionBus MBassador<BusMessage>
+            eventBus) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -89,7 +92,8 @@ public class DefaultNavigator implements Navigator {
 
         this.loginNavigationRule = loginNavigationRule;
         this.logoutNavigationRule = logoutNavigationRule;
-        userStatus.addListener(this);
+        eventBus
+                        .subscribe(this);
 
     }
 
@@ -386,31 +390,25 @@ public class DefaultNavigator implements Navigator {
     }
 
     /**
-     * Applies the login navigation rule to change page if required
+     * Applies the login / logout navigation rules.  Handler priority is set so that Navigators respond after other listeners - they must complete before the
+     * Navigator attempts to change page
      *
-     * @param source
+     * @param busMessage message from the event bus
      */
-    @Override
-    public void userHasLoggedIn(UserStatusChangeSource source) {
+    @Handler(priority = -1)
+    public void userStatusChange(UserStatusBusMessage busMessage) {
+        if (busMessage.isAuthenticated()) {
         log.info("user logged in successfully, applying login navigation rule");
-        Optional<NavigationState> newState = loginNavigationRule.changedNavigationState(this, source);
+            Optional<NavigationState> newState = loginNavigationRule.changedNavigationState(this, busMessage.getSource());
         if (newState.isPresent()) {
             navigateTo(newState.get());
         }
-    }
-
-
-    /**
-     * Applies the logout navigation rule to change page if required
-     *
-     * @param source
-     */
-    @Override
-    public void userHasLoggedOut(UserStatusChangeSource source) {
-        log.info("user logged out, applying logout navigation rule");
-        Optional<NavigationState> newState = logoutNavigationRule.changedNavigationState(this, source);
-        if (newState.isPresent()) {
-            navigateTo(newState.get());
+        } else {
+            log.info("user logged out, applying logout navigation rule");
+            Optional<NavigationState> newState = logoutNavigationRule.changedNavigationState(this, busMessage.getSource());
+            if (newState.isPresent()) {
+                navigateTo(newState.get());
+            }
         }
     }
 

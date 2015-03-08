@@ -18,8 +18,6 @@ import uk.q3c.krail.core.user.notify.*;
 import uk.q3c.krail.core.user.profile.DefaultUserHierarchy;
 import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
-import uk.q3c.krail.core.user.status.DefaultUserStatus;
-import uk.q3c.krail.core.user.status.UserStatus;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 
@@ -38,7 +36,6 @@ public class UserModule extends AbstractModule {
         bindErrorNotifications(errorNotificationBinder);
         bindWarningNotifications(warningNotificationBinder);
         bindInformationNotifications(informationNotificationBinder);
-        bindUserStatus();
         bindUserHierarchies();
 
     }
@@ -105,9 +102,6 @@ public class UserModule extends AbstractModule {
         bind(UserNotifier.class).to(DefaultUserNotifier.class);
     }
 
-    protected void bindUserStatus() {
-        bind(UserStatus.class).to(DefaultUserStatus.class);
-    }
 
 
 }
