@@ -13,13 +13,14 @@
 package fixture;
 
 import com.google.inject.Inject;
+import net.engio.mbassy.bus.MBassador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.LocaleChangeListener;
+import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -28,7 +29,9 @@ import java.util.Locale;
  */
 public class MockCurrentLocale implements CurrentLocale {
     private static Logger log = LoggerFactory.getLogger(MockCurrentLocale.class);
-    private final List<LocaleChangeListener> listeners = new ArrayList<>();
+    @Inject
+    @SessionBus
+    private MBassador<BusMessage> eventBus;
     private Locale locale;
 
     @Inject
@@ -48,22 +51,19 @@ public class MockCurrentLocale implements CurrentLocale {
     @Override
     public void setLocale(Locale locale, boolean fireListeners) {
 
+
         if (locale != this.locale) {
             this.locale = locale;
-            //            Locale.setDefault(locale);
+            //                Locale.setDefault(locale);
             log.debug("CurrentLocale set to {}", locale);
             if (fireListeners) {
-                fireListeners(locale);
+                log.debug("publish locale change");
+                eventBus.publish(new LocaleChangeBusMessage(this, locale));
             }
-        }
+            }
 
     }
 
-    private void fireListeners(Locale locale) {
-        for (LocaleChangeListener listener : listeners) {
-            listener.localeChanged(locale);
-        }
-    }
 
     @Override
     public Locale getLocale() {
@@ -75,21 +75,6 @@ public class MockCurrentLocale implements CurrentLocale {
         setLocale(locale, true);
     }
 
-    @Override
-    public void addListener(LocaleChangeListener listener) {
-        listeners.add(listener);
-    }
-
-    @Override
-    public void removeListener(LocaleChangeListener listener) {
-        listeners.remove(listener);
-    }
-
-    @Override
-    public void removeAllListeners() {
-        listeners.clear();
-
-    }
 
 
 }

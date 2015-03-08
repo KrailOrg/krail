@@ -33,8 +33,6 @@ import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.util.MessageFormat;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -60,6 +58,8 @@ import java.util.Set;
  * {@link #defaultLocale} and {@link #supportedLocales} are set in {@link I18NModule} or its sub-class.  An {@link
  * UnsupportedLocaleException} will be thrown if an attempt is made to set a locale which is not in {@link
  * #supportedLocales}, or if {@link #defaultLocale} the is not in {@link #supportedLocales}.
+ * <p>
+ * When a locale change is made a {@link LocaleChangeBusMessage} is despatched via the session event bus
  *
  * @author David Sowerby
  * @date 5 May 2014
@@ -69,7 +69,6 @@ public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
 
     public static final OptionKey optionPreferredLocale = new OptionKey(DefaultCurrentLocale.class, LabelKey.Preferred_Locale);
     private static Logger log = LoggerFactory.getLogger(DefaultCurrentLocale.class);
-    private final List<LocaleChangeListener> listeners = new ArrayList<>();
 
     private final BrowserProvider browserProvider;
     private final Locale defaultLocale;
@@ -134,91 +133,6 @@ public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
         return false;
     }
 
-    @Override
-    public Locale getLocale() {
-        return locale;
-    }
-
-    /**
-     * Explicitly set the locale
-     */
-    @Override
-    public void setLocale(Locale locale) {
-        setLocale(locale, true);
-    }
-
-    /**
-     * Sets the locale and optionally fires listeners.  Typically, a call to this method is from a component which only
-     * allows the selection of a supported locale.  However, if an attempt is made to set a locale which is not defined
-     * in {@link #supportedLocales}, an UnsupportedLocaleException is thrown
-     *
-     * @param locale
-     *         the locale to set
-     * @param fireListeners
-     *         if true, fire registered listeners
-     */
-    @Override
-    public void setLocale(Locale locale, boolean fireListeners) {
-        if (supportedLocales.contains(locale)) {
-
-            if (locale != this.locale) {
-                this.locale = locale;
-                //                Locale.setDefault(locale);
-                log.debug("CurrentLocale set to {}", locale);
-                if (fireListeners) {
-                    log.debug("firing listeners");
-                    fireListeners(locale);
-                }
-            }
-        } else {
-            throw new UnsupportedLocaleException(locale);
-        }
-
-    }
-
-    private void fireListeners(Locale locale) {
-        for (LocaleChangeListener listener : listeners) {
-            listener.localeChanged(locale);
-        }
-    }
-
-    @Override
-    public void addListener(LocaleChangeListener listener) {
-        listeners.add(listener);
-    }
-
-    @Override
-    public void removeListener(LocaleChangeListener listener) {
-        listeners.remove(listener);
-    }
-
-    @Override
-    public void removeAllListeners() {
-        listeners.clear();
-
-    }
-
-    @Nonnull
-    @Override
-    public Option getOption() {
-        return option;
-    }
-
-    @Override
-    public ImmutableSet<OptionDescriptor> optionDescriptors() {
-        return ImmutableSet.of(OptionDescriptor.descriptor(optionPreferredLocale, DescriptionKey.Preferred_Locale));
-    }
-
-    /**
-     * User has just logged in, look for their preferred Locale from user options.
-     *
-     * @param busMessage message provided by the {@link #eventBus}
-     */
-    @Handler
-    public void userStatusChange(UserStatusBusMessage busMessage) {
-        setLocaleFromOption(true);
-    }
-
     /**
      * Sets the locale from the value held in {@link Option}, if available.  {@link Option} will not be available if
      * the user is not authenticated.  It is possible that a user option is not supported (unlikely, but support for a language
@@ -247,6 +161,69 @@ public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
             return false;
         }
 
+    }
+
+    /**
+     * Sets the locale and optionally fires listeners.  Typically, a call to this method is from a component which only
+     * allows the selection of a supported locale.  However, if an attempt is made to set a locale which is not defined
+     * in {@link #supportedLocales}, an UnsupportedLocaleException is thrown
+     *
+     * @param locale
+     *         the locale to set
+     * @param fireListeners
+     *         if true, fire registered listeners
+     */
+    @Override
+    public void setLocale(Locale locale, boolean fireListeners) {
+        if (supportedLocales.contains(locale)) {
+
+            if (locale != this.locale) {
+                this.locale = locale;
+                //                Locale.setDefault(locale);
+                log.debug("CurrentLocale set to {}", locale);
+                if (fireListeners) {
+                    log.debug("publish locale change");
+                    eventBus.publish(new LocaleChangeBusMessage(this, locale));
+                }
+            }
+        } else {
+            throw new UnsupportedLocaleException(locale);
+        }
+
+    }
+
+    @Override
+    public Locale getLocale() {
+        return locale;
+    }
+
+    /**
+     * Explicitly set the locale
+     */
+    @Override
+    public void setLocale(Locale locale) {
+        setLocale(locale, true);
+    }
+
+    @Nonnull
+    @Override
+    public Option getOption() {
+        return option;
+    }
+
+    @Override
+    public ImmutableSet<OptionDescriptor> optionDescriptors() {
+        return ImmutableSet.of(OptionDescriptor.descriptor(optionPreferredLocale, DescriptionKey.Preferred_Locale));
+    }
+
+    /**
+     * User has just logged in, look for their preferred Locale from user options.
+     *
+     * @param busMessage message provided by the {@link #eventBus}
+     */
+    @Handler
+    public void userStatusChange(UserStatusBusMessage busMessage) {
+        setLocaleFromOption(true);
     }
 
 }

@@ -20,9 +20,14 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.config.ConfigurationException;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
@@ -34,8 +39,6 @@ import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.KrailViewHolder;
 import uk.q3c.krail.i18n.*;
 
-import java.util.Locale;
-
 /**
  * The base class for all Krail UIs, it provides an essential part of the {@link UIScoped} mechanism. It also provides
  * support for Vaadin Server Push (but only if you annotate your sub-class with {@link Push}), by capturing broadcast
@@ -46,8 +49,8 @@ import java.util.Locale;
  * @author David Sowerby
  * @date modified 31 Mar 2014
  */
-
-public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastListener, LocaleChangeListener {
+@Listener
+public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastListener {
     private static Logger log = LoggerFactory.getLogger(ScopedUI.class);
     protected final CurrentLocale currentLocale;
     private final Panel viewDisplayPanel;
@@ -65,8 +68,8 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
 
     protected ScopedUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
                        Broadcaster broadcaster, PushMessageRouter pushMessageRouter,
-                       ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale,
-                       I18NProcessor translator) {
+                       ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, @SessionBus
+                       MBassador<BusMessage> eventBus) {
         super();
         this.errorHandler = errorHandler;
         this.navigator = navigator;
@@ -79,7 +82,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
 
         viewDisplayPanel = new Panel();
         registerWithBroadcaster(broadcaster);
-        currentLocale.addListener(this);
+        eventBus.subscribe(this);
     }
 
     protected void registerWithBroadcaster(Broadcaster broadcaster) {
@@ -182,7 +185,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
      * Provides a locale sensitive title for your application (which appears in the browser tab). The title is defined
      * by the {@link #applicationTitle}, which should be specified in your sub-class of {@link UIModule}
      *
-     * @return
+     * @return locale sensitive page title
      */
     protected String pageTitle() {
         I18NKey key = applicationTitle.getTitleKey();
@@ -214,7 +217,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
      * {@code return new VerticalLayout(getViewDisplayPanel()}, which would set the View to take up all the available
      * screen space. {@link BasicUI} is an example of a UI which contains a header and footer bar.
      *
-     * @return
+     * @return the layout in which views are placed
      */
     protected abstract AbstractOrderedLayout screenLayout();
 
@@ -244,9 +247,12 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     /**
      * Responds to a locale change from {@link CurrentLocale} and updates the translation for this UI and the current
      * KrailView
+     *
+     * @param busMessage the message from the event bus.  Not actually used, as translate looks up the current locale
      */
-    @Override
-    public void localeChanged(Locale toLocale) {
+    @SuppressWarnings("UnusedParameters")
+    @Handler
+    public void localeChanged(LocaleChangeBusMessage busMessage) {
         translator.translate(this);
         //during initial set up view has not been created but locale change gets called for other components
         if (getView() != null) {

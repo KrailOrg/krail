@@ -11,18 +11,22 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 import com.google.inject.Inject;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.LocaleChangeListener;
+import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 
 import java.text.Collator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * The {@link MasterSitemap} provides the overall structure of the site, and is Singleton scoped. This class refines
@@ -38,8 +42,8 @@ import java.util.Locale;
  * @date 17 May 2014
  */
 @VaadinSessionScoped
-public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> implements UserSitemap,
-        LocaleChangeListener {
+@Listener
+public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> implements UserSitemap {
     private static Logger log = LoggerFactory.getLogger(DefaultUserSitemap.class);
 
     private final Translate translate;
@@ -48,11 +52,11 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
 
 
     @Inject
-    public DefaultUserSitemap(Translate translate, URIFragmentHandler uriHandler, CurrentLocale currentLocale) {
+    public DefaultUserSitemap(Translate translate, URIFragmentHandler uriHandler, @SessionBus MBassador<BusMessage> eventBus) {
         super(uriHandler);
         this.translate = translate;
         changeListeners = new LinkedList<>();
-        currentLocale.addListener(this);
+        eventBus.subscribe(this); // TODO is this needed if the annotation is there
     }
 
 
@@ -61,9 +65,9 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
      * {@link CurrentLocale}. There is no need to reload all the nodes, no change of page authorisation is dealt with
      * here}
      */
-    @Override
-    public synchronized void localeChanged(Locale locale) {
-        log.debug("responding to locale change to {}", locale);
+    @Handler
+    public synchronized void localeChanged(LocaleChangeBusMessage busMessage) {
+        log.debug("responding to locale change to {}", busMessage.getNewLocale());
         List<UserSitemapNode> nodeList = getAllNodes();
         Collator collator = translate.collator();
         for (UserSitemapNode userNode : nodeList) {

@@ -14,6 +14,9 @@ package fixture;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import fixture.testviews2.*;
+import net.engio.mbassy.bus.MBassador;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.DefaultUserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
@@ -21,7 +24,10 @@ import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
-import uk.q3c.krail.i18n.*;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.i18n.TestLabelKey;
+import uk.q3c.krail.i18n.Translate;
 
 import java.text.CollationKey;
 import java.text.Collator;
@@ -90,8 +96,8 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
      */
 
     @Inject
-    public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler, CurrentLocale currentLocale) {
-        super(translate, uriHandler, currentLocale);
+    public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler, @SessionBus MBassador<BusMessage> eventBus) {
+        super(translate, uriHandler, eventBus);
 
         insertionOrder = new HashMap<>();
         positionIndexes = new HashMap<>();

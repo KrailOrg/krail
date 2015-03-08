@@ -15,14 +15,19 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinService;
-import fixture.MockCurrentLocale;
+import fixture.TestI18NModule;
+import net.engio.mbassy.bus.MBassador;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestOptionModule;
 
@@ -33,19 +38,25 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestOptionModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, TestI18NModule.class})
 public class DefaultLocaleSelectorTest {
 
     @Mock
     VaadinService vaadinService;
 
-    CurrentLocale currentLocale = new MockCurrentLocale();
+    @Inject
+    CurrentLocale currentLocale;
 
     @Mock
     UserNotifier userNotifier;
 
     @Inject
     MockOption option;
+
+    @Inject
+    private
+    @SessionBus
+    MBassador<BusMessage> eventBus;
 
     private DefaultLocaleSelector selector;
 
@@ -59,7 +70,7 @@ public class DefaultLocaleSelectorTest {
         supportedLocales.add(Locale.GERMANY);
 
         LocaleContainer container = new LocaleContainer(supportedLocales, option);
-        selector = new DefaultLocaleSelector(currentLocale, container, userNotifier);
+        selector = new DefaultLocaleSelector(currentLocale, container, userNotifier, eventBus);
     }
 
     @Test
@@ -71,21 +82,20 @@ public class DefaultLocaleSelectorTest {
 
         // then
         assertThat(selector.selectedLocale()).isEqualTo(Locale.UK);
+
     }
 
     @Test
     public void localeChanged() {
 
         // given
-        selector.setRespondToLocaleChange(true);
-        // when
-        selector.localeChanged(Locale.GERMANY);
+        // when source is not the selector itself, so it should be processed
+        selector.localeChanged(new LocaleChangeBusMessage(this, Locale.GERMANY));
         // then
         assertThat(selector.selectedLocale()).isEqualTo(Locale.GERMANY);
         // given
-        selector.setRespondToLocaleChange(false);
-        // when
-        selector.localeChanged(Locale.UK);
+        // when change is from the selector itself, ignore it
+        selector.localeChanged(new LocaleChangeBusMessage(selector, Locale.UK));
         // then
         assertThat(selector.selectedLocale()).isEqualTo(Locale.GERMANY);
     }

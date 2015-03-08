@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -20,6 +18,7 @@ import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
+import net.engio.mbassy.bus.MBassador;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +27,7 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.navigate.Navigator;
@@ -83,11 +83,14 @@ public class ScopedUITest {
     @Mock
     Component viewContent;
 
+    @Mock
+    private MBassador<BusMessage> eventBus;
+
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
-        ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle,
-                translate, currentLocale, translator);
+        ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
+                eventBus);
     }
 
     @Test
@@ -97,7 +100,7 @@ public class ScopedUITest {
         // when
 
         // then
-        verify(currentLocale).addListener(ui);
+        verify(eventBus).subscribe(ui);
         verify(broadcaster).register(Broadcaster.ALL_MESSAGES, ui);
     }
 

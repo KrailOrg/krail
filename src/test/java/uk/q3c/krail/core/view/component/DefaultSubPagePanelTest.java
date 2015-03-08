@@ -17,10 +17,13 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.ReferenceUserSitemap;
 import fixture.TestI18NModule;
+import net.engio.mbassy.bus.MBassador;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
@@ -31,6 +34,7 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.S
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.ArrayList;
@@ -41,7 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class, EventBusModule.class})
 public class DefaultSubPagePanelTest {
 
     DefaultSubPagePanel panel;
@@ -64,12 +68,16 @@ public class DefaultSubPagePanelTest {
     @Mock
     KrailViewChangeEvent event;
 
+    @Mock
+    MBassador<BusMessage> eventBus;
+
+
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK, false);
         userSitemap.populate();
-        panel = new DefaultSubPagePanel(navigator, userSitemap, option, sorters, currentLocale);
+        panel = new DefaultSubPagePanel(navigator, userSitemap, option, sorters, eventBus);
     }
 
     @Test
@@ -168,6 +176,7 @@ public class DefaultSubPagePanelTest {
 
         // when
         currentLocale.setLocale(Locale.GERMANY);
+        panel.localeChanged(new LocaleChangeBusMessage(this, Locale.GERMANY));
         // then
         assertThat(panel.getButtons()
                         .get(0)

@@ -20,6 +20,7 @@ import fixture.ReferenceUserSitemap;
 import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
@@ -36,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author dsowerby
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class})
 public class ReferenceSitemapTest {
 
     private static String[] expected = new String[]{"", "-Public", "--Log Out", "--ViewA", "---ViewA1",

@@ -95,7 +95,6 @@ public abstract class TestWithSitemap {
         id = 1;
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
-        currentLocale.removeAllListeners();
         collator = Collator.getInstance(locale);
         when(subjectProvider.get()).thenReturn(subject);
 
@@ -226,7 +225,7 @@ public abstract class TestWithSitemap {
      * needed before calling this method
      */
     protected void createUserSitemap() {
-        userSitemap = new DefaultUserSitemap(translate, uriHandler, currentLocale);
+        userSitemap = new DefaultUserSitemap(translate, uriHandler, eventBus);
         UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
                 masterSitemap, pageAccessController, translate);
         UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(masterSitemap, userSitemap, translate, currentLocale);

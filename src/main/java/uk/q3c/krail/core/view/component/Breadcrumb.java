@@ -13,8 +13,7 @@
 package uk.q3c.krail.core.view.component;
 
 import com.vaadin.ui.Component;
-import uk.q3c.krail.i18n.LocaleChangeListener;
 
-public interface Breadcrumb extends Component, LocaleChangeListener {
+public interface Breadcrumb extends Component {
     void moveToNavigationState();
 }

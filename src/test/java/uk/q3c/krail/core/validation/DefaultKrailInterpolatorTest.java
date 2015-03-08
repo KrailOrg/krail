@@ -20,6 +20,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.testutil.TestOptionModule;
@@ -33,7 +35,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, ValidationModule.class, KrailValidationModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, ValidationModule.class, KrailValidationModule.class, EventBusModule.class,
+        VaadinSessionScopeModule.class})
 public class DefaultKrailInterpolatorTest {
 
     @Mock

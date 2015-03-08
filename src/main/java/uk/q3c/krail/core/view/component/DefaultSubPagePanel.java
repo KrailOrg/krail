@@ -14,8 +14,11 @@ package uk.q3c.krail.core.view.component;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import net.engio.mbassy.bus.MBassador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapChangeListener;
@@ -26,7 +29,6 @@ import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.user.opt.OptionKey;
-import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.I18N;
 import uk.q3c.krail.i18n.LabelKey;
@@ -48,9 +50,9 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
 
 
     @Inject
-    protected DefaultSubPagePanel(Navigator navigator, UserSitemap userSitemap, Option option,
-                                  UserSitemapSorters sorters, CurrentLocale currentLocale) {
-        super(navigator, userSitemap, currentLocale);
+    protected DefaultSubPagePanel(Navigator navigator, UserSitemap userSitemap, Option option, UserSitemapSorters sorters, @SessionBus MBassador<BusMessage>
+            eventBus) {
+        super(navigator, userSitemap, eventBus);
         this.userSitemap = userSitemap;
         this.option = option;
         this.sorters = sorters;

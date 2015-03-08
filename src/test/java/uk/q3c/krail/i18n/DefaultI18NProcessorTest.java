@@ -23,6 +23,8 @@ import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.OptionStore;
 import uk.q3c.krail.testutil.MockOption;
@@ -33,7 +35,7 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, EventBusModule.class, VaadinSessionScopeModule.class})
 public class DefaultI18NProcessorTest {
 
     I18NTestClass testObject;
@@ -55,7 +57,6 @@ public class DefaultI18NProcessorTest {
         testObject = new I18NTestClass();
         testObject2 = new I18NTestClass2();
         testObject3 = new I18NTestClass3();
-        currentLocale.removeAllListeners();
         currentLocale.setLocale(Locale.UK);
 
     }

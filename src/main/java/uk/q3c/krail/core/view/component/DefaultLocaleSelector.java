@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -18,19 +16,22 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.user.notify.UserNotifier;
-import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.DescriptionKey;
-import uk.q3c.krail.i18n.I18N;
-import uk.q3c.krail.i18n.MessageKey;
+import uk.q3c.krail.i18n.*;
 import uk.q3c.util.ID;
 
 import java.util.Locale;
 import java.util.Optional;
 
 @I18N
+@Listener
 public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListener {
     private static Logger log = LoggerFactory.getLogger(DefaultLocaleSelector.class);
     private final LocaleContainer container;
@@ -40,16 +41,15 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
     private ComboBox combo;
     private boolean fireListeners;
     private boolean inhibitMessage;
-    private boolean respondToLocaleChange = true;
 
     @Inject
-    protected DefaultLocaleSelector(CurrentLocale currentLocale, LocaleContainer container, UserNotifier userNotifier) {
+    protected DefaultLocaleSelector(CurrentLocale currentLocale, LocaleContainer container, UserNotifier userNotifier, @SessionBus MBassador<BusMessage> eventBus) {
         super();
         this.container = container;
         this.currentLocale = currentLocale;
         this.userNotifier = userNotifier;
         //locale may be set somewhere else
-        currentLocale.addListener(this);
+        eventBus.subscribe(this);
         buildUI();
     }
 
@@ -69,22 +69,24 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
 
         // Sets the icon to use with the items
         combo.setItemIconPropertyId(LocaleContainer.PropertyName.FLAG);
-
+        combo.setValue(currentLocale.getLocale()
+                                    .toLanguageTag());
         combo.addValueChangeListener(this);
-        fireListeners = true;
-        localeChanged(currentLocale.getLocale());
-        fireListeners = false;
+
     }
 
-    @Override
-    public void localeChanged(Locale locale) {
-        if (respondToLocaleChange) {
-            log.debug("responding in change to new locale of {}", locale.getDisplayName());
-            inhibitMessage = true;
-            combo.setValue(locale.toLanguageTag());
-            inhibitMessage = false;
-        } else {
+    @Handler
+    public void localeChanged(LocaleChangeBusMessage busMessage) {
+        if (busMessage.getChangeSource() == this) {
             log.debug("response to locale change is disabled");
+        } else {
+            log.debug("responding in change to new locale of {}", busMessage.getNewLocale()
+                                                                            .getDisplayName());
+            inhibitMessage = true;
+            combo.setValue(busMessage.getNewLocale()
+                                     .toLanguageTag());
+            inhibitMessage = false;
+
         }
     }
 
@@ -94,8 +96,7 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
     }
 
     /**
-     * Sets {@link CurrentLocale#setLocale(Locale)} to new value. Inhibits {@link #localeChanged(Locale)} from
-     * responding to this change.
+     * Sets {@link CurrentLocale#setLocale(Locale)} to new value.
      */
     @Override
     public void valueChange(ValueChangeEvent event) {
@@ -104,11 +105,9 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
             // only process change if locale has really changed
             if (newLocale != null && newLocale != currentLocale.getLocale()) {
                 log.debug("locale selection changed");
-                respondToLocaleChange = false;
                 currentLocale.setLocale(newLocale);
                 if (!inhibitMessage) {
                     userNotifier.notifyInformation(MessageKey.Locale_Change, newLocale.getDisplayName(newLocale));
-                    respondToLocaleChange = true;
                 }
             }
         } else {
@@ -123,11 +122,5 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
         return newLocale;
     }
 
-    public boolean isRespondToLocaleChange() {
-        return respondToLocaleChange;
-    }
 
-    public void setRespondToLocaleChange(boolean respondToLocaleChange) {
-        this.respondToLocaleChange = respondToLocaleChange;
-    }
 }

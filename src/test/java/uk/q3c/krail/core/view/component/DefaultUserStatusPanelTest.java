@@ -25,23 +25,25 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.shiro.DefaultSubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
-import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class, EventBusModule.class})
 public class DefaultUserStatusPanelTest {
 
     DefaultUserStatusPanel panel;
@@ -58,7 +60,7 @@ public class DefaultUserStatusPanelTest {
     SubjectProvider subjectProvider;
 
 
-    @Mock
+
     MBassador<BusMessage> eventBus;
 
     SubjectIdentifier subjectIdentifier;
@@ -71,13 +73,13 @@ public class DefaultUserStatusPanelTest {
 
     @Before
     public void setup() {
+        eventBus = new MBassador<>();
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK);
         when(subjectProvider.get()).thenReturn(subject);
         subjectIdentifier = new DefaultSubjectIdentifier(subjectProvider, translate);
 
-        panel = new DefaultUserStatusPanel(navigator, subjectProvider, translate, subjectIdentifier, eventBus,
-                currentLocale);
+        panel = new DefaultUserStatusPanel(navigator, subjectProvider, translate, subjectIdentifier, eventBus, currentLocale);
 
         loginoutBtn = panel.getLogin_logout_Button();
     }
@@ -103,22 +105,6 @@ public class DefaultUserStatusPanelTest {
     }
 
     @Test
-    public void localeChange() {
-
-        // given
-        when(subject.isRemembered()).thenReturn(false);
-        when(subject.isAuthenticated()).thenReturn(false);
-        when(subject.getPrincipal()).thenReturn(null);
-        panel.build();
-
-        // when
-        currentLocale.setLocale(Locale.GERMANY);
-        // then
-        assertThat(panel.getActionLabel()).isEqualTo("einloggen");
-        assertThat(panel.getUserId()).isEqualTo("Gast");
-    }
-
-    @Test
     public void remembered() {
 
         // given
@@ -136,6 +122,24 @@ public class DefaultUserStatusPanelTest {
         verify(navigator).navigateTo(StandardPageKey.Log_In);
     }
 
+
+    @Test
+    public void localeChange() {
+
+        // given
+        when(subject.isRemembered()).thenReturn(false);
+        when(subject.isAuthenticated()).thenReturn(false);
+        when(subject.getPrincipal()).thenReturn(null);
+        panel.build();
+
+        // when
+        currentLocale.setLocale(Locale.GERMANY);
+        panel.localeChanged(new LocaleChangeBusMessage(this, Locale.GERMANY)); //simulated as we are using MockCurrentLocale
+        // then
+        assertThat(panel.getActionLabel()).isEqualTo("einloggen");
+        assertThat(panel.getUserId()).isEqualTo("Gast");
+    }
+
     @Test
     public void authenticated() {
 
@@ -148,11 +152,6 @@ public class DefaultUserStatusPanelTest {
         // then
         assertThat(panel.getActionLabel()).isEqualTo("log out");
         assertThat(panel.getUserId()).isEqualTo("userId");
-        // when
-        loginoutBtn.click();
-        // then
-        verify(eventBus).publish(any(UserStatusBusMessage.class));
-        // TODO make this specific - check that message is correctly set up
     }
 
 

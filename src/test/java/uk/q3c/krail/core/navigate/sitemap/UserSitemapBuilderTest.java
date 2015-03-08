@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
@@ -29,6 +30,7 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapBuilderTest.TestVaadinSessi
 import uk.q3c.krail.core.shiro.VaadinSessionProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
+import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.Locale;
@@ -36,7 +38,7 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class})
+@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class})
 public class UserSitemapBuilderTest extends TestWithSitemap {
 
     @Mock
@@ -191,6 +193,7 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
 
         // when
         currentLocale.setLocale(Locale.GERMANY);
+        ((DefaultUserSitemap) userSitemap).localeChanged(new LocaleChangeBusMessage(this, Locale.GERMANY));
         assertThat(userNode1.getCollationKey()).isNotNull();
         assertThat(userNode1.getLabel()).isEqualTo("Ja");
         assertThat(userNode3.getCollationKey()).isNotNull();

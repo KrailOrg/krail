@@ -37,10 +37,10 @@ import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.ID;
 
-import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -72,7 +72,6 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         this.subjectIdentifier = subjectIdentifier;
         this.eventBus = eventBus;
         this.currentLocale = currentLocale;
-        currentLocale.addListener(this);
         eventBus.subscribe(this);
         setSizeFull();
         addStyleName(ChameleonTheme.PANEL_BORDERLESS);
@@ -150,9 +149,9 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
 
     }
 
-    @Override
-    public void localeChanged(Locale locale) {
-        log.debug("locale change to {}", locale);
+    @Handler
+    public void localeChanged(LocaleChangeBusMessage busMessage) {
+        log.debug("locale change to {}", busMessage.getNewLocale());
         build();
     }
 }

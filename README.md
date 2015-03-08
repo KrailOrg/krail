@@ -7,6 +7,7 @@ This core library provides:
 * Site navigation, using a sitemap configured by annotation, Guice or file (or any combination thereof)
 * Authentication / Authorisation framework, including page access control
 * Vaadin Server Push (with option to disable it)
+* Event Bus
 * Extensive I18N support
 * User options
 * Application configuration through ini files etc
@@ -61,11 +62,12 @@ Fails on Tomcat 8
 
 # Status
 
-1st March 2015:
+8th March 2015:
 
 * Vaadin 7.4.0 is integrated with:
 * Guice 3.0,
 * Shiro 1.2.1,
+* [MBassador Event Bus](https://github.com/bennidi/mbassador)
 * Apache Commons Configuration
 * Guava cache
 

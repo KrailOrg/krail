@@ -25,6 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.data.TestEntity;
+import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.i18n.CurrentLocale;
@@ -36,8 +38,8 @@ import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestOptionModule.class, uk.q3c.krail.testutil
-        .TestI18NModule.class})
+@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestOptionModule.class, TestI18NModule.class, VaadinSessionScopeModule.class,
+        EventBusModule.class,})
 public class BeanFieldGroupBaseTest {
 
     @Inject
@@ -60,7 +62,7 @@ public class BeanFieldGroupBaseTest {
     @Before
     public void setup() {
 
-        injector = Guice.createInjector(new TestI18NModule(), new TestOptionModule(), Modules.override(new
+        injector = Guice.createInjector(new TestI18NModule(), new VaadinSessionScopeModule(), new EventBusModule(), new TestOptionModule(), Modules.override(new
                 ValidationModule())
                                                                                                  .with(new
                                                                                                          KrailValidationModule()));

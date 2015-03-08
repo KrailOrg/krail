@@ -18,6 +18,8 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.WebBrowser;
 import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +42,8 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class DefaultCurrentLocaleTest implements LocaleChangeListener {
+@Listener
+public class DefaultCurrentLocaleTest {
 
     boolean listenerFired = false;
 
@@ -57,7 +60,6 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
     @Mock
     UserStatusChangeSource source;
 
-    @Mock
     MBassador<BusMessage> eventBus;
 
     @Mock
@@ -73,7 +75,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
 
     @Before
     public void setup() {
-
+        eventBus = new MBassador<>();
         Locale.setDefault(Locale.UK);
 
 
@@ -183,7 +185,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
 
         //given
         listenerFired = false;
-        currentLocale.addListener(this);
+        eventBus.subscribe(this);
         when(subject.isAuthenticated()).thenReturn(false);
         when(source.identity()).thenReturn("LogoutView");
         //when user logs out
@@ -215,8 +217,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         when(subject.isAuthenticated()).thenReturn(false);
         currentLocale = createCurrentLocale();
         currentLocale.readFromEnvironment();
-        currentLocale.removeAllListeners();
-        currentLocale.addListener(this);
+        eventBus.subscribe(this);
         listenerFired = false;
         // when
         currentLocale.setLocale(Locale.UK);
@@ -229,8 +230,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
     public void setLocaleNoFire() {
         // given
         currentLocale = createCurrentLocale();
-        currentLocale.removeAllListeners();
-        currentLocale.addListener(this);
+        eventBus.subscribe(this);
         listenerFired = false;
         // when
         currentLocale.setLocale(Locale.FRANCE, false);
@@ -243,8 +243,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
     public void setLocaleFire() {
         // given
         currentLocale = createCurrentLocale();
-        currentLocale.removeAllListeners();
-        currentLocale.addListener(this);
+        eventBus.subscribe(this);
         listenerFired = false;
         currentLocale.setLocale(Locale.UK);
         // when
@@ -259,8 +258,7 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
 
         // given
         currentLocale = createCurrentLocale();
-        currentLocale.removeAllListeners();
-        currentLocale.addListener(this);
+        eventBus.subscribe(this);
         currentLocale.setLocale(Locale.GERMANY);
         listenerFired = false;
         // when
@@ -279,8 +277,8 @@ public class DefaultCurrentLocaleTest implements LocaleChangeListener {
         //then
     }
 
-    @Override
-    public void localeChanged(Locale toLocale) {
+    @Handler
+    public void localeChanged(LocaleChangeBusMessage toLocale) {
         listenerFired = true;
     }
 

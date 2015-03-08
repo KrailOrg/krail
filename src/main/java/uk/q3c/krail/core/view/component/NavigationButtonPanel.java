@@ -17,22 +17,30 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.BaseTheme;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.core.view.KrailViewChangeListener;
-import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.LocaleChangeListener;
+import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.util.ID;
 import uk.q3c.util.NodeFilter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
+@Listener
 public abstract class NavigationButtonPanel extends HorizontalLayout implements KrailViewChangeListener,
-        LocaleChangeListener, Button.ClickListener {
+         Button.ClickListener {
     private static Logger log = LoggerFactory.getLogger(NavigationButtonPanel.class);
     private final List<NavigationButton> buttons = new ArrayList<>();
     private final LinkedList<NodeFilter<UserSitemapNode>> sourceFilters = new LinkedList<>();
@@ -42,13 +50,13 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
     protected boolean rebuildRequired = true;
 
     @Inject
-    protected NavigationButtonPanel(Navigator navigator, UserSitemap sitemap, CurrentLocale currentLocale) {
+    protected NavigationButtonPanel(Navigator navigator, UserSitemap sitemap,@SessionBus MBassador<BusMessage> eventBus) {
         this.navigator = navigator;
         navigator.addViewChangeListener(this);
         this.sitemap = sitemap;
         this.setSizeUndefined();
         this.setSpacing(true);
-        currentLocale.addListener(this);
+        eventBus.subscribe(this);
         String id = ID.getId(Optional.empty(), this);
         setId(id);
     }
@@ -60,8 +68,6 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
     }
 
     protected abstract void build();
-
-    ;
 
     /**
      * Displays buttons to represent the supplied nodes.
@@ -133,9 +139,9 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
         return newList;
     }
 
-    @Override
-    public void localeChanged(Locale toLocale) {
-        log.debug("responding to locale change to {}", toLocale);
+    @Handler
+    public void localeChanged(LocaleChangeBusMessage busMessage) {
+        log.debug("responding to locale change to {}", busMessage.getNewLocale());
         for (NavigationButton button : buttons) {
             button.setCaption(button.getNode()
                                     .getLabel());
