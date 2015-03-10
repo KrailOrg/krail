@@ -15,7 +15,6 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinSession;
-import fixture.TestI18NModule;
 import net.engio.mbassy.bus.MBassador;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +31,7 @@ import uk.q3c.krail.core.shiro.VaadinSessionProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
+import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.Locale;

@@ -13,7 +13,7 @@
 package uk.q3c.krail.core.guice;
 
 import com.google.inject.Module;
-import fixture.TestUIModule;
+import uk.q3c.krail.testutil.TestUIModule;
 
 import java.util.List;
 

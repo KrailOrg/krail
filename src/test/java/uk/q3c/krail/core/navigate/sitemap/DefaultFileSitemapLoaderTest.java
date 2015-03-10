@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.TestI18NModule;
 import fixture.testviews2.My_AccountView;
 import fixture.testviews2.OptionsView;
 import org.apache.commons.io.FileUtils;
@@ -39,6 +38,7 @@ import uk.q3c.krail.core.view.testviews.subview.TransferView;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.TestLabelKey;
+import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.util.testutil.TestResource;
 

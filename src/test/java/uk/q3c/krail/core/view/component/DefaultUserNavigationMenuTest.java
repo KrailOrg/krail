@@ -19,7 +19,6 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.ui.MenuBar.MenuItem;
 import fixture.ReferenceUserSitemap;
-import fixture.TestI18NModule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +33,7 @@ import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.krail.testutil.TestUIScopeModule;
 

@@ -15,7 +15,6 @@ package uk.q3c.krail.core.navigate.sitemap;
 import com.google.common.collect.Lists;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.eventbus.EventBusModule;
@@ -24,6 +23,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.i18n.TestLabelKey;
+import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -16,8 +16,6 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.ui.Button;
-import fixture.MockCurrentLocale;
-import fixture.TestI18NModule;
 import net.engio.mbassy.bus.MBassador;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
@@ -36,6 +34,8 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.testutil.MockCurrentLocale;
+import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.Locale;

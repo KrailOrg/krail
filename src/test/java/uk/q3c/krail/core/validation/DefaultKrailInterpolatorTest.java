@@ -14,7 +14,6 @@ package uk.q3c.krail.core.validation;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import fixture.TestI18NModule;
 import org.apache.bval.guice.ValidationModule;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +24,7 @@ import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import javax.validation.metadata.ConstraintDescriptor;

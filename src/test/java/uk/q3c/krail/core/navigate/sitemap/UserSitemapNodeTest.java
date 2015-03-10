@@ -13,7 +13,6 @@ package uk.q3c.krail.core.navigate.sitemap;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import fixture.TestI18NModule;
 import fixture.testviews2.ViewA;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +23,7 @@ import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.text.Collator;

@@ -18,7 +18,6 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinService;
-import fixture.MockCurrentLocale;
 import net.engio.mbassy.bus.MBassador;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -33,6 +32,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.services.Service.Status;
 import uk.q3c.krail.core.services.ServiceException;
 import uk.q3c.krail.i18n.*;
+import uk.q3c.krail.testutil.MockCurrentLocale;
 import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;

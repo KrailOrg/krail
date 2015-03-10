@@ -23,12 +23,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.data.TestEntity2;
+import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.ui.form.BeanFieldGroup;
 import uk.q3c.krail.core.ui.form.TestBeanFieldGroup2;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,7 +43,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by David Sowerby on 05/02/15.
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestOptionModule.class, TestI18NModule.class})
+@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestOptionModule.class, TestI18NModule.class, EventBusModule.class, TestUIScopeModule
+        .class, VaadinSessionScopeModule.class})
 public class ValidationTest {
 
     @Inject

@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.eventbus.EventBusModule;
@@ -25,6 +24,7 @@ import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
+import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import static org.assertj.core.api.Assertions.assertThat;

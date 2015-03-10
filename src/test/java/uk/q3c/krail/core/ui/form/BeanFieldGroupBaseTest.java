@@ -20,7 +20,6 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.data.Validator;
 import com.vaadin.server.VaadinSession;
-import fixture.TestI18NModule;
 import org.apache.bval.guice.ValidationModule;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +32,7 @@ import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.testutil.MockOption;
+import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.krail.testutil.TestUIScopeModule;
 

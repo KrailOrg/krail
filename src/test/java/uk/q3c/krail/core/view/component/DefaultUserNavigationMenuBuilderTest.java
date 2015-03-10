@@ -18,7 +18,6 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.ReferenceUserSitemap;
-import fixture.TestI18NModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +33,7 @@ import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.OptionStore;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.testutil.MockOption;
+import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.krail.testutil.TestUIScopeModule;
 

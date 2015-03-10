@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.TestI18NModule;
 import fixture.testviews2.ViewA;
 import fixture.testviews2.ViewA1;
 import org.junit.Test;
@@ -30,6 +29,7 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.i18n.TestLabelKey;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 
 import static org.assertj.core.api.Assertions.assertThat;

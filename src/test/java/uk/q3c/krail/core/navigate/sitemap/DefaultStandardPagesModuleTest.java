@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import fixture.TestI18NModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
@@ -35,6 +34,7 @@ import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.StandardComponentModule;
 import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.testutil.TestI18NModule;
 
 import java.util.Map;
 

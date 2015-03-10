@@ -16,8 +16,6 @@ import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.*;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
-import fixture.TestI18NModule;
-import fixture.TestUIModule;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
@@ -44,6 +42,8 @@ import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.StandardComponentModule;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.testutil.TestI18NModule;
+import uk.q3c.krail.testutil.TestUIModule;
 import uk.q3c.util.ResourceUtils;
 
 import java.util.Locale;
