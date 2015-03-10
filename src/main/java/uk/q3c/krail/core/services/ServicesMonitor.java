@@ -16,9 +16,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MapMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.services.Service.Status;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -29,12 +30,13 @@ import java.util.Map;
  * <p/>
  * There is also a {@link #stopAllServices()} method to stop all services if you really need it.
  * <p/>
- * Services are registered automatically by AOP code located in the {@link ServicesMonitorModule}
+ * Services are registered automatically by AOP code located in the {@link ServiceModule}
  * <p/>
  * Acknowledgement: developed from code contributed by https://github.com/lelmarir
  */
 @Singleton
-public class ServicesMonitor implements ServiceChangeListener {
+@Listener
+public class ServicesMonitor {
 
     private static final Logger log = LoggerFactory.getLogger(ServicesMonitor.class);
 
@@ -51,20 +53,25 @@ public class ServicesMonitor implements ServiceChangeListener {
      *
      * @see uk.q3c.krail.core.services.ServicesMonitor#registerService(uk.q3c.krail.core.services.Service)
      */
-    synchronized public void registerService(Service service) {
-        ServiceStatus serviceStatus = new ServiceStatus();
-        services.put(service, serviceStatus);
-        service.addChangeListener(this);
-        log.debug("registered service '{}'", service.getName());
+    //    synchronized public void registerService(Service service) {
+    //        ServiceStatus serviceStatus = new ServiceStatus();
+    //        services.put(service, serviceStatus);
+    //        log.debug("registered service '{}'", service.getName());
+    //
+    //    }
 
-    }
 
-    @Override
-    synchronized public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
-
+    @Handler
+    synchronized public void serviceStatusChange(ServiceBusMessage busMessage) {
+        Service service = busMessage.getService();
+        if (!services.containsKey(service)) {
+            ServiceStatus serviceStatus = new ServiceStatus();
+            services.put(service, serviceStatus);
+            log.debug("registered service '{}'", service.getName());
+        }
         ServiceStatus status = services.get(service);
-        status.setPreviousStatus(fromStatus);
-        status.setCurrentStatus(toStatus);
+        status.setPreviousStatus(busMessage.getFromStatus());
+        status.setCurrentStatus(busMessage.getToStatus());
         status.setStatusChangeTime(LocalDateTime.now());
         if (service.isStarted()) {
             status.setLastStartTime(LocalDateTime.now());
@@ -91,4 +98,7 @@ public class ServicesMonitor implements ServiceChangeListener {
         return services.get(service);
     }
 
+    public void clear() {
+        services.clear();
+    }
 }

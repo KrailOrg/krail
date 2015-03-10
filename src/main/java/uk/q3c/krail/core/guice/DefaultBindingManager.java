@@ -35,8 +35,8 @@ import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.StandardPagesModule;
+import uk.q3c.krail.core.services.ServiceModule;
 import uk.q3c.krail.core.services.ServicesMonitor;
-import uk.q3c.krail.core.services.ServicesMonitorModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.StandardShiroModule;
 import uk.q3c.krail.core.user.UserModule;
@@ -114,7 +114,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         coreModules.add(new UIScopeModule());
         coreModules.add(new VaadinSessionScopeModule());
 
-        coreModules.add(new ServicesMonitorModule());
+        coreModules.add(new ServiceModule());
 
         coreModules.add(shiroModule());
         coreModules.add(shiroVaadinModule());

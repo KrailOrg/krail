@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class EventBusListenerListenerTest {
+public class EventBusModuleTest_InjectionListener {
 
     EventBusModule.EventBusListenerListener listener;
     @Mock

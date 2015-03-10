@@ -13,8 +13,11 @@
 package uk.q3c.krail.core.services;
 
 import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
+import net.engio.mbassy.bus.MBassador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -26,34 +29,39 @@ import java.util.List;
  * depends on Service A, then service B must contain a field referencing Service A, annotated with {@link Dependency}.
  * The following then applies:
  * <ol>
- * <li>option {@link #requiredAtStart()}: If true, Service A will be started automatically before starting Service B.
+ * <li>option {@link Dependency#requiredAtStart()}: If true, Service A will be started automatically before starting Service B.
  * If
  * Service A fails to start, Service B will also fail. If false, Service B will continue to start, and it is up to the
  * developer to ensure that the logic of Service B deals with the the alternative states of Service A. The default is
  * true<br>
  * <br>
- * <li>option {@link #stopOnStop()}: If true, if Service A fails (or is stopped), Service B will also be stopped, by a
+ * <li>option {@link Dependency#stopOnStop()}: If true, if Service A fails (or is stopped), Service B will also be stopped, by a
  * call to its stop() method. If false, Service B does not respond to a failure in Service A. The default is true<br>
  * <br>
- * <li>option {@link #startOnRestart_true()}: If true, if Service B has a status of DEPENDENCY_FAILED, and Service A is
+ * <li>option {@link Dependency#startOnRestart()}: If true, if Service B has a status of DEPENDENCY_FAILED, and Service A is
  * restarted, Service B will automatically attempt to start (it may not succeed if it has other dependencies which have
  * failed). If false, Service B will not respond to this change of status in Service A. The default is true
- * <p/>
+ * <p>
  * Dedicated start and stop listeners are used to respond to dependencies changing their state to started or stopped
  * respectively, and are used to respond to state changes in dependencies. service change listeners are fired every
  * time
  * there is a change of state (and is used by the {@link ServicesMonitor})<br>
  *
+ *     All service events are published on the GlobalBus
+ *
  * @author David Sowerby
  */
 public abstract class AbstractService implements Service, ServiceStartListener, ServiceStopListener {
+
     private static Logger log = LoggerFactory.getLogger(AbstractService.class);
-    private final List<ServiceChangeListener> statusChangeListeners = new ArrayList<>();
     private final List<ServiceStartListener> serviceStartListeners = new ArrayList<>();
     private final List<ServiceStopListener> serviceStopListeners = new ArrayList<>();
     protected Status status = Status.INITIAL;
     private List<DependencyRecord> dependencies;
+    private MBassador<BusMessage> eventBus;
 
+
+    @Inject
     protected AbstractService() {
         super();
     }
@@ -64,13 +72,9 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
     }
 
     @Override
-    public void addChangeListener(ServiceChangeListener listener) {
-        statusChangeListeners.add(listener);
-    }
-
-    @Override
-    public void removeChangeListener(ServiceChangeListener listener) {
-        statusChangeListeners.remove(listener);
+    public void init(MBassador<BusMessage> eventBus) {
+        this.eventBus = eventBus;
+        eventBus.publish(new ServiceBusMessage(this, Status.NON_EXISTENT, Status.INITIAL));
     }
 
     @Override
@@ -96,12 +100,12 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
         return status;
     }
 
+    protected abstract void doStop() throws Exception;
+
     @Override
     public Status getStatus() {
         return status;
     }
-
-    protected abstract void doStop() throws Exception;
 
     @Override
     public void dependencyServiceStarted(Service service) throws Exception {
@@ -130,8 +134,7 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
                     setStatus(Status.DEPENDENCY_FAILED);
                     throw new ServiceException("Dependency " + depRec.service.getName() + " failed to start", e);
                 } else {
-                    log.info("Dependency {} failed to start, but is optional.  Continuing to start {}",
-                            depRec.service.getName(), getName());
+                    log.info("Dependency {} failed to start, but is optional.  Continuing to start {}", depRec.service.getName(), getName());
                 }
 
             }
@@ -196,12 +199,20 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
         serviceStopListeners.remove(listener);
     }
 
+    @Override
+    public void addStartListener(ServiceStartListener listener) {
+        serviceStartListeners.add(listener);
+    }
+
+    @Override
+    public void removeStartListener(ServiceStartListener listener) {
+        serviceStartListeners.remove(listener);
+    }
+
     protected void fireListeners(Status previousStatus) throws Exception {
 
-        log.debug("firing status change listeners in {}.  Status is now {}", this.getName(), this.getStatus());
-        for (ServiceChangeListener listener : statusChangeListeners) {
-            listener.serviceStatusChange(this, previousStatus, status);
-        }
+        log.debug("publishing status change in {}.  Status is now {}", this.getName(), this.getStatus());
+        eventBus.publish(new ServiceBusMessage(this, previousStatus, getStatus()));
 
         // prevents re-entrant use of iterator
         ImmutableList<ServiceStartListener> startListeners = ImmutableList.copyOf(serviceStartListeners);
@@ -222,16 +233,6 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
         }
     }
 
-    @Override
-    public void addStartListener(ServiceStartListener listener) {
-        serviceStartListeners.add(listener);
-    }
-
-    @Override
-    public void removeStartListener(ServiceStartListener listener) {
-        serviceStartListeners.remove(listener);
-    }
-
     private class DependencyRecord {
         Service service;
         boolean requiredAtStart;
@@ -245,6 +246,7 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
         }
 
     }
+
 
     @Override
     public boolean isStopped() {

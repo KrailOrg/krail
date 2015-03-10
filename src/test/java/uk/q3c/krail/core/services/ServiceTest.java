@@ -18,10 +18,19 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.GlobalBus;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.services.Service.Status;
+import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,7 +54,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author David Sowerby
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ServicesMonitorModule.class})
+@GuiceContext({ServiceModule.class, EventBusModule.class, TestUIScopeModule.class, VaadinSessionScopeModule.class})
 public class ServiceTest {
     static Status a1_startStatus = Status.STARTED;
     static Status a1_stopStatus = Status.STOPPED;
@@ -60,6 +69,11 @@ public class ServiceTest {
     @Inject
     ServicesMonitor monitor;
 
+    @Inject
+    @GlobalBus
+    MBassador<BusMessage> globalBus;
+
+
     @Before
     public void setup() {
         a1_startStatus = Status.STARTED;
@@ -67,6 +81,12 @@ public class ServiceTest {
         a1_exceptionOnStart = false;
         a1_exceptionOnStop = false;
         changeMonitor = new ChangeMonitor();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        monitor.stopAllServices();
+        monitor.clear();
     }
 
     @Test
@@ -89,6 +109,8 @@ public class ServiceTest {
     public void start_when_already_started() throws Exception {
 
         // given
+        assertThat(monitor.getRegisteredServices()).containsOnly(serviced, serviced.a, serviced.b, serviced.a1, serviced.c,
+                serviced.c.b);
         injector.getInstance(MockServiceA.class)
                 .start();
 
@@ -224,9 +246,8 @@ public class ServiceTest {
     public void monitorHasRegisteredServices() throws Exception {
 
         // given
-        ServicesMonitor monitor = injector.getInstance(ServicesMonitor.class);
         // when
-        serviced.start();
+//        serviced.start();
         // then
         ImmutableList<Service> registeredServices = monitor.getRegisteredServices();
         for (Service service : registeredServices) {
@@ -241,7 +262,7 @@ public class ServiceTest {
     public void monitorLogsStatusChange() throws Exception {
 
         // given
-        ServicesMonitor monitor = injector.getInstance(ServicesMonitor.class);
+
         // when
         serviced.start();
         // then
@@ -301,14 +322,15 @@ public class ServiceTest {
                           .getCurrentStatus()).isEqualTo(Status.STOPPED);
     }
 
-    static class ChangeMonitor implements ServiceChangeListener {
+    @Listener
+    static class ChangeMonitor  {
         int statusChangeCount;
         List<String> dependencyChanges = new ArrayList<>();
 
-        @Override
-        public void serviceStatusChange(Service service, Status fromStatus, Status toStatus) {
+        @Handler
+        public void serviceStatusChange(ServiceBusMessage busMessage) {
             statusChangeCount++;
-            String chg = service.getName() + ":" + fromStatus + ":" + toStatus;
+            String chg = busMessage.getService().getName() + ":" + busMessage.getFromStatus() + ":" + busMessage.getToStatus();
             dependencyChanges.add(chg);
         }
 

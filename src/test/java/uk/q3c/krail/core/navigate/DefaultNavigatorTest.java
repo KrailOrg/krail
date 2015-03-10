@@ -24,7 +24,6 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 import fixture.ReferenceUserSitemap;
 import fixture.TestI18NModule;
-import fixture.TestUIScopeModule;
 import fixture.testviews2.ViewB;
 import net.engio.mbassy.bus.MBassador;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -48,6 +47,7 @@ import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.core.view.*;
 import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import java.util.*;
 

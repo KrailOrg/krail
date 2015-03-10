@@ -12,18 +12,20 @@
  */
 package uk.q3c.krail.core.services;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.TypeLiteral;
+import com.google.inject.*;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
+import net.engio.mbassy.bus.MBassador;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.GlobalBus;
 import uk.q3c.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
@@ -34,28 +36,43 @@ import java.util.Set;
  *
  * @author David Sowerby
  */
-public class ServicesMonitorModule extends AbstractModule {
+public class ServiceModule extends AbstractModule {
 
-    private static final Logger log = LoggerFactory.getLogger(ServicesMonitorModule.class);
+    private static final Logger log = LoggerFactory.getLogger(ServiceModule.class);
 
-    /**
-     * Needs to be created this way because it is inside the module, but note that the @Provides method at
-     * getServicesManager() ensures that injection scope remains consistent
-     */
-    private final ServicesMonitor servicesManager = new ServicesMonitor();
 
     @Override
     protected void configure() {
 
-        bindListener(new ServiceInterfaceMatcher(), new ServicesListener(servicesManager));
-        bindInterceptor(Matchers.subclassesOf(Service.class), new FinalizeMethodMatcher(),
-                new FinalizeMethodInterceptor());
+        // global bus provider needed for the service.init in the injection listener
+        TypeLiteral<MBassador<BusMessage>> eventBusLiteral = new TypeLiteral<MBassador<BusMessage>>() {
+        };
+        Key<MBassador<BusMessage>> globalBusKey = Key.get(eventBusLiteral, GlobalBus.class);
+        final Provider<MBassador<BusMessage>> globalBusProvider = this.getProvider(globalBusKey);
+
+
+        final Provider<ServicesMonitor> servicesMonitorProvider = this.getProvider(ServicesMonitor.class);
+
+        bindListener(new ServiceInterfaceMatcher(), new ServicesListener(servicesMonitorProvider, globalBusProvider));
+        bindInterceptor(Matchers.subclassesOf(Service.class), new FinalizeMethodMatcher(), new FinalizeMethodInterceptor());
 
     }
 
+    /**
+     * We have to explicitly subscribe the monitor to the global bus here - becuase it is constructed with new() it will not be intercepted by the
+     * InjectionListener in {@link EventBusModule}
+     *
+     * @param globalBus
+     *         the global event bus
+     *
+     * @return a singleton instance of ServicesMonitor
+     */
     @Provides
-    public ServicesMonitor getServicesManager() {
-        return servicesManager;
+    @Singleton
+    public ServicesMonitor getServicesMonitor(@GlobalBus MBassador<BusMessage> globalBus) {
+        ServicesMonitor monitor = new ServicesMonitor();
+        globalBus.subscribe(monitor);
+        return monitor;
     }
 
     /**
@@ -65,10 +82,12 @@ public class ServicesMonitorModule extends AbstractModule {
      * @author David Sowerby
      */
     public class ServicesListener implements TypeListener {
-        private final ServicesMonitor servicesManager;
+        private final Provider<ServicesMonitor> servicesMonitorProvider;
+        private Provider<MBassador<BusMessage>> globalBusProvider;
 
-        public ServicesListener(ServicesMonitor servicesManager) {
-            this.servicesManager = servicesManager;
+        public ServicesListener(Provider<ServicesMonitor> servicesMonitorProvider, Provider<MBassador<BusMessage>> globalBusProvider) {
+            this.servicesMonitorProvider = servicesMonitorProvider;
+            this.globalBusProvider = globalBusProvider;
         }
 
         @Override
@@ -76,10 +95,12 @@ public class ServicesMonitorModule extends AbstractModule {
             InjectionListener<Object> listener = new InjectionListener<Object>() {
                 @Override
                 public void afterInjection(Object injectee) {
-
+                    //this appears not to do anything but it forces construction  of the monitor
+                    //before service.init publishes a bus message
+                    final ServicesMonitor servicesMonitor = servicesMonitorProvider.get();
                     // cast is safe - if not, the matcher is wrong
                     Service service = (Service) injectee;
-                    servicesManager.registerService(service);
+                    service.init(globalBusProvider.get());
 
                 }
             };

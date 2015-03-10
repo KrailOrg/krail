@@ -20,7 +20,6 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.MockCurrentLocale;
 import fixture.ReferenceUserSitemap;
 import fixture.TestI18NModule;
-import fixture.TestUIScopeModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +34,7 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,19 +1,19 @@
 /*
- * Copyright (c) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.services;
 
 import com.google.inject.Provider;
+import net.engio.mbassy.bus.MBassador;
+import uk.q3c.krail.core.eventbus.BusMessage;
 
 /**
  * Implement this interface to provide a Service. A Service is typically something which is wired up using Guice
@@ -30,7 +30,7 @@ import com.google.inject.Provider;
  * provide some service management functionality (see the {@link AbstractService} javadoc.
  * <p/>
  * When an instance of a {@link Service} implementation is created through Guice, it is automatically registered with
- * the {@link ServicesMonitor}. (This is done through a Guice listener in the {@link ServicesMonitorModule}).
+ * the {@link ServicesMonitor}. (This is done through a Guice listener in the {@link ServiceModule}).
  * <p/>
  * The AOP code in the ServicesMonitorModule also intercepts the finalize() method, and calls the stop() method to
  * ensure a service is stopped before being finalized.
@@ -49,6 +49,10 @@ import com.google.inject.Provider;
  * @author David Sowerby
  */
 public interface Service {
+
+    public enum Status {
+        INITIAL, STARTED, FAILED, STOPPED, FAILED_TO_START, FAILED_TO_STOP, NON_EXISTENT, DEPENDENCY_FAILED
+    }
 
     /**
      * You will only need to implement this if you are not using a sub-class of {@link AbstractService}. When you do
@@ -94,15 +98,6 @@ public interface Service {
     boolean isStarted();
 
     /**
-     * Adds a listener which will be notified when any change of service status occurs
-     *
-     * @param listener
-     */
-    void addChangeListener(ServiceChangeListener listener);
-
-    void removeChangeListener(ServiceChangeListener listener);
-
-    /**
      * Adds a listener which will be notified when a service is stopped or fails. Specifically, this occurs when the
      * service changes state from {@link Status#STARTED} to {@link Status#FAILED}, {@link Status#DEPENDENCY_FAILED} or
      * {@link Status#STOPPED}
@@ -127,8 +122,10 @@ public interface Service {
      */
     boolean isStopped();
 
-    public enum Status {
-        INITIAL, STARTED, FAILED, STOPPED, FAILED_TO_START, FAILED_TO_STOP, DEPENDENCY_FAILED
-    }
-
+    /**
+     * Called after the service has been constructed, but the {@link ServiceModule}.  There should never be a need to call this directly.
+     *
+     * @param globalBus
+     */
+    void init(MBassador<BusMessage> globalBus);
 }

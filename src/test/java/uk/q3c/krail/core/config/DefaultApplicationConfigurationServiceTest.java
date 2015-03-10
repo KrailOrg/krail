@@ -19,12 +19,15 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinService;
 import fixture.MockCurrentLocale;
+import net.engio.mbassy.bus.MBassador;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.GlobalBus;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.services.Service.Status;
@@ -55,6 +58,9 @@ public class DefaultApplicationConfigurationServiceTest {
     @Inject
     ApplicationConfiguration configuration;
 
+    @Inject
+    @GlobalBus
+    MBassador<BusMessage> globalBus;
 
     CurrentLocale currentLocale = new MockCurrentLocale();
 
@@ -75,6 +81,7 @@ public class DefaultApplicationConfigurationServiceTest {
         iniFiles = new HashMap<>();
         configuration.clear();
         service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles);
+        service.init(globalBus);
         currentLocale.setLocale(Locale.UK);
     }
 

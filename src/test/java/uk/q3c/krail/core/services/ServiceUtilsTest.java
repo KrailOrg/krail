@@ -17,6 +17,9 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,7 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ServicesMonitorModule.class})
+@GuiceContext({ServiceModule.class, EventBusModule.class, TestUIScopeModule.class, VaadinSessionScopeModule.class})
 public class ServiceUtilsTest {
     @Inject
     MockService_0 service_0;

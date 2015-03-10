@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.services.Service;
+import uk.q3c.krail.core.services.ServiceBusMessage;
 import uk.q3c.krail.core.services.ServicesMonitor;
 import uk.q3c.krail.core.shiro.KrailSecurityManager;
 import uk.q3c.util.testutil.LogMonitor;
@@ -81,7 +82,7 @@ public class DefaultBindingManagerTest {
 
         // given
         ServicesMonitor servicesMonitor = injector.getInstance(ServicesMonitor.class);
-        servicesMonitor.registerService(service);
+        servicesMonitor.serviceStatusChange(new ServiceBusMessage(service, Service.Status.INITIAL, Service.Status.STARTED));
 
         // when
         out.contextDestroyed(servletContextEvent);

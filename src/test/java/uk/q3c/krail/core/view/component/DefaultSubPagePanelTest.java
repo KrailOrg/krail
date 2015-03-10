@@ -17,7 +17,6 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.ReferenceUserSitemap;
 import fixture.TestI18NModule;
-import fixture.TestUIScopeModule;
 import net.engio.mbassy.bus.MBassador;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +36,7 @@ import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import java.util.ArrayList;
 import java.util.List;

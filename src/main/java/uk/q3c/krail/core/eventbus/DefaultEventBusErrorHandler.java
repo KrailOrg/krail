@@ -8,29 +8,24 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package fixture;
 
-import com.google.inject.Key;
-import com.google.inject.Provider;
-import uk.q3c.krail.core.guice.uiscope.UIScope;
+package uk.q3c.krail.core.eventbus;
 
-import java.util.HashMap;
-import java.util.Map;
+import net.engio.mbassy.bus.error.IPublicationErrorHandler;
+import net.engio.mbassy.bus.error.PublicationError;
 
-public class TestUIScope extends UIScope {
-
-    private Map<Key<?>, Object> scopedObjects;
-
-    public TestUIScope() {
-        this.scopedObjects = new HashMap<>();
-    }
-
+/**
+ * Created by David Sowerby on 10/03/15.
+ */
+public class DefaultEventBusErrorHandler implements IPublicationErrorHandler {
+    /**
+     * Handle the given publication error.
+     *
+     * @param error
+     *         The PublicationError to handle.
+     */
     @Override
-    public <T> Provider<T> scope(Key<T> key, Provider<T> unscoped) {
-        return new TestUIScopeProvider<T>(this, key, unscoped);
-    }
-
-    public Map<Key<?>, Object> getScopedObjectMap() {
-        return scopedObjects;
+    public void handleError(PublicationError error) {
+        throw new RuntimeException(error.getCause());
     }
 }

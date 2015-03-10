@@ -17,10 +17,15 @@ import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.Properties;
 import net.engio.mbassy.bus.config.BusConfiguration;
+import net.engio.mbassy.bus.config.ConfigurationErrorHandler;
 import net.engio.mbassy.bus.config.Feature;
 import net.engio.mbassy.bus.config.IBusConfiguration;
+import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import net.engio.mbassy.listener.Listener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.services.Service;
@@ -40,7 +45,7 @@ import java.lang.annotation.Annotation;
  * Created by David Sowerby on 08/03/15.
  */
 public class EventBusModule extends AbstractModule {
-
+    private static Logger log = LoggerFactory.getLogger(EventBusModule.class);
     private IBusConfiguration globalConfig;
     private IBusConfiguration sessionConfig;
     private IBusConfiguration uiConfig;
@@ -64,7 +69,17 @@ public class EventBusModule extends AbstractModule {
 
 
         bindListener(new ListenerAnnotationMatcher(), new BusTypeListener(uiBusProvider, sessionBusProvider, globalBusProvider));
+        bindConfigurationErrorHandler();
+        bindPublicationErrorHandler();
         defineBusConfigurations();
+    }
+
+    protected void bindConfigurationErrorHandler() {
+        bind(ConfigurationErrorHandler.class).to(DefaultEventBusConfigurationErrorHandler.class);
+    }
+
+    protected void bindPublicationErrorHandler() {
+        bind((IPublicationErrorHandler.class)).to(DefaultEventBusErrorHandler.class);
     }
 
 
@@ -78,22 +93,19 @@ public class EventBusModule extends AbstractModule {
 
         uiConfig = new BusConfiguration().addFeature(Feature.SyncPubSub.Default())
                                          .addFeature(Feature.AsynchronousHandlerInvocation.Default())
-                                         .addFeature(Feature.AsynchronousMessageDispatch.Default())
-                                         .setProperty("Bus Name", "UI Bus");
+                                         .addFeature(Feature.AsynchronousMessageDispatch.Default());
         setConfiguration(UIBus.class, uiConfig);
 
 
         sessionConfig = new BusConfiguration().addFeature(Feature.SyncPubSub.Default())
                                               .addFeature(Feature.AsynchronousHandlerInvocation.Default())
-                                              .addFeature(Feature.AsynchronousMessageDispatch.Default())
-                                              .setProperty("Bus Name", "Session Bus");
+                                              .addFeature(Feature.AsynchronousMessageDispatch.Default());
         setConfiguration(SessionBus.class, sessionConfig);
 
 
         globalConfig = new BusConfiguration().addFeature(Feature.SyncPubSub.Default())
                                              .addFeature(Feature.AsynchronousHandlerInvocation.Default())
-                                             .addFeature(Feature.AsynchronousMessageDispatch.Default())
-                                             .setProperty("Bus Name", "Global Bus");
+                                             .addFeature(Feature.AsynchronousMessageDispatch.Default());
         setConfiguration(GlobalBus.class, globalConfig);
 
 
@@ -104,26 +116,47 @@ public class EventBusModule extends AbstractModule {
                                      .toInstance(configuration);
     }
 
-
     @Provides
     @UIBus
     @UIScoped
-    protected MBassador<BusMessage> providesUIBus(@UIBus IBusConfiguration config) {
-        return new MBassador<>(config);
+    protected MBassador<BusMessage> providesUIBus(@UIBus IBusConfiguration config, IPublicationErrorHandler publicationErrorHandler,
+                                                  ConfigurationErrorHandler configurationErrorHandler) {
+        MBassador<BusMessage> eventBus = createBus(config, publicationErrorHandler, configurationErrorHandler);
+        log.debug("instantiated a UI Bus with id {}", (String) eventBus.getRuntime()
+                                                                       .get(Properties.Common.Id));
+        return eventBus;
+    }
+
+    private MBassador<BusMessage> createBus(IBusConfiguration config, IPublicationErrorHandler publicationErrorHandler, ConfigurationErrorHandler
+            configurationErrorHandler) {
+        config.setProperty(Properties.Handler.PublicationError, publicationErrorHandler);
+        config.addConfigurationErrorHandler(configurationErrorHandler);
+        MBassador<BusMessage> eventBus = new MBassador<>(config);
+        eventBus.addErrorHandler(publicationErrorHandler);
+        return eventBus;
     }
 
     @Provides
     @SessionBus
     @VaadinSessionScoped
-    protected MBassador<BusMessage> providesSessionBus(@SessionBus IBusConfiguration config) {
-        return new MBassador<>(config);
+    protected MBassador<BusMessage> providesSessionBus(@SessionBus IBusConfiguration config, IPublicationErrorHandler publicationErrorHandler,
+                                                       ConfigurationErrorHandler configurationErrorHandler) {
+        MBassador<BusMessage> eventBus = createBus(config, publicationErrorHandler, configurationErrorHandler);
+        log.debug("instantiated a Session Bus with id {}", (String) eventBus.getRuntime()
+                                                                            .get(Properties.Common.Id));
+        return eventBus;
     }
 
     @Provides
     @GlobalBus
     @VaadinSessionScoped
-    protected MBassador<BusMessage> providesGlobalBus(@GlobalBus IBusConfiguration config) {
-        return new MBassador<>(config);
+    protected MBassador<BusMessage> providesGlobalBus(@GlobalBus IBusConfiguration config, IPublicationErrorHandler publicationErrorHandler,
+                                                      ConfigurationErrorHandler configurationErrorHandler) {
+
+        MBassador<BusMessage> eventBus = createBus(config, publicationErrorHandler, configurationErrorHandler);
+        log.debug("instantiated a Global Bus with id {}", (String) eventBus.getRuntime()
+                                                                           .get(Properties.Common.Id));
+        return eventBus;
     }
 
     public static class EventBusListenerListener implements InjectionListener {

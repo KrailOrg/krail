@@ -19,8 +19,8 @@ import com.google.inject.util.Modules;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.data.Validator;
+import com.vaadin.server.VaadinSession;
 import fixture.TestI18NModule;
-import fixture.TestUIScopeModule;
 import org.apache.bval.guice.ValidationModule;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +34,7 @@ import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import java.util.Locale;
 
@@ -61,12 +62,13 @@ public class BeanFieldGroupBaseTest {
 
     @Before
     public void setup() {
-
+        VaadinSession.setCurrent(null);
         injector = Guice.createInjector(new TestI18NModule(), new TestUIScopeModule(), new VaadinSessionScopeModule(), new EventBusModule(), new
                 TestOptionModule(), Modules.override(new
                 ValidationModule())
                                                                                                  .with(new
                                                                                                          KrailValidationModule()));
+
 
         i18NProcessor = injector.getInstance(DefaultI18NProcessor.class);
         currentLocale = injector.getInstance(CurrentLocale.class);

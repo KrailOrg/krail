@@ -32,7 +32,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.services.AbstractServiceI18N;
-import uk.q3c.krail.core.services.ServicesMonitorModule;
+import uk.q3c.krail.core.services.ServiceModule;
 import uk.q3c.krail.core.shiro.*;
 import uk.q3c.krail.core.ui.BasicUI;
 import uk.q3c.krail.core.ui.BasicUIProvider;
@@ -79,6 +79,7 @@ public class UIScopeTest {
 
     @Before
     public void setup() {
+        VaadinSession.setCurrent(null);
         Locale.setDefault(Locale.UK);
     }
 
@@ -93,7 +94,9 @@ public class UIScopeTest {
 
         // when
 
-        injector = Guice.createInjector(new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(), new ServicesMonitorModule(), new OptionModule(), new UserModule(), new StandardComponentModule(), new TestI18NModule(), new StandardShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new NavigationModule(), new EventBusModule());
+        injector = Guice.createInjector(new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(), new ServiceModule(),
+                new OptionModule(), new UserModule(), new StandardComponentModule(), new TestI18NModule(), new StandardShiroModule(), new ShiroVaadinModule()
+                , new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new NavigationModule(), new EventBusModule());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
         // navigator = injector.getInstance(Navigator.class);
