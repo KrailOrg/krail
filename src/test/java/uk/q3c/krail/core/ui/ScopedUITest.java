@@ -89,8 +89,7 @@ public class ScopedUITest {
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
-        ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
-                eventBus);
+        ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
     }
 
     @Test
@@ -100,7 +99,6 @@ public class ScopedUITest {
         // when
 
         // then
-        verify(eventBus).subscribe(ui);
         verify(broadcaster).register(Broadcaster.ALL_MESSAGES, ui);
     }
 

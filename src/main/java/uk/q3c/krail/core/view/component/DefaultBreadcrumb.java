@@ -14,11 +14,8 @@ package uk.q3c.krail.core.view.component;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
-import net.engio.mbassy.bus.MBassador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
@@ -33,8 +30,8 @@ public class DefaultBreadcrumb extends NavigationButtonPanel implements KrailVie
     private static Logger log = LoggerFactory.getLogger(DefaultBreadcrumb.class);
 
     @Inject
-    protected DefaultBreadcrumb(Navigator navigator, UserSitemap sitemap, @SessionBus MBassador<BusMessage> eventBus) {
-        super(navigator, sitemap, eventBus);
+    protected DefaultBreadcrumb(Navigator navigator, UserSitemap sitemap) {
+        super(navigator, sitemap);
     }
 
     @Override

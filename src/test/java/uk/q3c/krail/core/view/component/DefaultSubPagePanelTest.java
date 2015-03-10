@@ -17,6 +17,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.ReferenceUserSitemap;
 import fixture.TestI18NModule;
+import fixture.TestUIScopeModule;
 import net.engio.mbassy.bus.MBassador;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +46,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class, EventBusModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestUIScopeModule.class})
 public class DefaultSubPagePanelTest {
 
     DefaultSubPagePanel panel;
@@ -77,7 +78,7 @@ public class DefaultSubPagePanelTest {
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK, false);
         userSitemap.populate();
-        panel = new DefaultSubPagePanel(navigator, userSitemap, option, sorters, eventBus);
+        panel = new DefaultSubPagePanel(navigator, userSitemap, option, sorters);
     }
 
     @Test

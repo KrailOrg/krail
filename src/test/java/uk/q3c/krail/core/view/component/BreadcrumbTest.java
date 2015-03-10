@@ -19,6 +19,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.ReferenceUserSitemap;
 import fixture.TestI18NModule;
+import fixture.TestUIScopeModule;
 import net.engio.mbassy.bus.MBassador;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +48,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class, EventBusModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestUIScopeModule.class})
 public class BreadcrumbTest {
 
     DefaultBreadcrumb breadcrumb;
@@ -87,7 +88,7 @@ public class BreadcrumbTest {
     }
 
     private void createBreadcrumb() {
-        breadcrumb = new DefaultBreadcrumb(navigator, userSitemap, eventBus);
+        breadcrumb = new DefaultBreadcrumb(navigator, userSitemap);
     }
 
     @Test

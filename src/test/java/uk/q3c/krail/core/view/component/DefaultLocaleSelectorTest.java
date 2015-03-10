@@ -16,14 +16,12 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinService;
 import fixture.TestI18NModule;
-import net.engio.mbassy.bus.MBassador;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.EventBusModule;
-import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.i18n.CurrentLocale;
@@ -38,7 +36,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, TestI18NModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class, TestI18NModule.class})
 public class DefaultLocaleSelectorTest {
 
     @Mock
@@ -53,10 +51,7 @@ public class DefaultLocaleSelectorTest {
     @Inject
     MockOption option;
 
-    @Inject
-    private
-    @SessionBus
-    MBassador<BusMessage> eventBus;
+
 
     private DefaultLocaleSelector selector;
 
@@ -70,7 +65,7 @@ public class DefaultLocaleSelectorTest {
         supportedLocales.add(Locale.GERMANY);
 
         LocaleContainer container = new LocaleContainer(supportedLocales, option);
-        selector = new DefaultLocaleSelector(currentLocale, container, userNotifier, eventBus);
+        selector = new DefaultLocaleSelector(currentLocale, container, userNotifier);
     }
 
     @Test

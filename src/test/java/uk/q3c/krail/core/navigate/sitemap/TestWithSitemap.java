@@ -225,11 +225,11 @@ public abstract class TestWithSitemap {
      * needed before calling this method
      */
     protected void createUserSitemap() {
-        userSitemap = new DefaultUserSitemap(translate, uriHandler, eventBus);
+        userSitemap = new DefaultUserSitemap(translate, uriHandler);
         UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
                 masterSitemap, pageAccessController, translate);
         UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(masterSitemap, userSitemap, translate, currentLocale);
-        userSitemapBuilder = new UserSitemapBuilder(masterSitemap, userSitemap, nodeModifier, copyExtension, eventBus);
+        userSitemapBuilder = new UserSitemapBuilder(masterSitemap, userSitemap, nodeModifier, copyExtension);
         userSitemapBuilder.build();
 
         userNode1 = userSitemap.userNodeFor(masterNode1);

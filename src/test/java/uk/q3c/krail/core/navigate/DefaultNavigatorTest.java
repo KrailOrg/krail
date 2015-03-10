@@ -24,6 +24,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 import fixture.ReferenceUserSitemap;
 import fixture.TestI18NModule;
+import fixture.TestUIScopeModule;
 import fixture.testviews2.ViewB;
 import net.engio.mbassy.bus.MBassador;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -55,7 +56,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class, TestUIScopeModule.class})
 public class DefaultNavigatorTest {
 
     @Mock

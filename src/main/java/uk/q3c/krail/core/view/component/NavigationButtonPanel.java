@@ -17,13 +17,10 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.BaseTheme;
-import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
@@ -50,13 +47,12 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
     protected boolean rebuildRequired = true;
 
     @Inject
-    protected NavigationButtonPanel(Navigator navigator, UserSitemap sitemap,@SessionBus MBassador<BusMessage> eventBus) {
+    protected NavigationButtonPanel(Navigator navigator, UserSitemap sitemap) {
         this.navigator = navigator;
         navigator.addViewChangeListener(this);
         this.sitemap = sitemap;
         this.setSizeUndefined();
         this.setSpacing(true);
-        eventBus.subscribe(this);
         String id = ID.getId(Optional.empty(), this);
         setId(id);
     }

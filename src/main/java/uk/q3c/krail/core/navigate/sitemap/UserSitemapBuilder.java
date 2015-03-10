@@ -11,13 +11,10 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 import com.google.inject.Inject;
-import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.util.SourceTreeWrapper_BasicForest;
@@ -33,7 +30,8 @@ public class UserSitemapBuilder {
 
     @Inject
 
-    protected UserSitemapBuilder(MasterSitemap masterSitemap, UserSitemap userSitemap, UserSitemapNodeModifier nodeModifier, UserSitemapCopyExtension copyExtension, @SessionBus MBassador<BusMessage> eventBus) {
+    protected UserSitemapBuilder(MasterSitemap masterSitemap, UserSitemap userSitemap, UserSitemapNodeModifier nodeModifier, UserSitemapCopyExtension
+            copyExtension) {
 
         this.userSitemap = userSitemap;
         TargetTreeWrapper_BasicForest<MasterSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_BasicForest<>(userSitemap.getForest());
@@ -41,8 +39,6 @@ public class UserSitemapBuilder {
         SourceTreeWrapper_BasicForest<MasterSitemapNode> source = new SourceTreeWrapper_BasicForest<>(masterSitemap.getForest());
         treeCopy = new TreeCopy<>(source, target);
         treeCopy.setExtension(copyExtension);
-        eventBus
-                        .subscribe(this);
 
     }
 

@@ -14,9 +14,6 @@ package fixture;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import fixture.testviews2.*;
-import net.engio.mbassy.bus.MBassador;
-import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.DefaultUserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
@@ -96,8 +93,8 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
      */
 
     @Inject
-    public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler, @SessionBus MBassador<BusMessage> eventBus) {
-        super(translate, uriHandler, eventBus);
+    public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler) {
+        super(translate, uriHandler);
 
         insertionOrder = new HashMap<>();
         positionIndexes = new HashMap<>();

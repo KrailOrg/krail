@@ -20,6 +20,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.data.Validator;
 import fixture.TestI18NModule;
+import fixture.TestUIScopeModule;
 import org.apache.bval.guice.ValidationModule;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,8 +39,7 @@ import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestOptionModule.class, TestI18NModule.class, VaadinSessionScopeModule.class,
-        EventBusModule.class,})
+@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestOptionModule.class, TestI18NModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestUIScopeModule.class,})
 public class BeanFieldGroupBaseTest {
 
     @Inject
@@ -62,7 +62,8 @@ public class BeanFieldGroupBaseTest {
     @Before
     public void setup() {
 
-        injector = Guice.createInjector(new TestI18NModule(), new VaadinSessionScopeModule(), new EventBusModule(), new TestOptionModule(), Modules.override(new
+        injector = Guice.createInjector(new TestI18NModule(), new TestUIScopeModule(), new VaadinSessionScopeModule(), new EventBusModule(), new
+                TestOptionModule(), Modules.override(new
                 ValidationModule())
                                                                                                  .with(new
                                                                                                          KrailValidationModule()));

@@ -18,8 +18,6 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
-import net.engio.mbassy.bus.MBassador;
-import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
@@ -53,9 +51,8 @@ public class DefaultApplicationUI extends ScopedUI {
                                    UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb,
                                    SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster,
                                    PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
-                                   Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, UserNotifier
-                                           userNotifier, MBassador<BusMessage> eventBus) {
-        super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, eventBus);
+                                   Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, UserNotifier userNotifier) {
+        super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
         this.navTree = navTree;
         this.breadcrumb = breadcrumb;
         this.userStatus = userStatusPanel;

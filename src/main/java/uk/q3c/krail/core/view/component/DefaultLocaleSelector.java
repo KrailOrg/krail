@@ -16,13 +16,10 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
-import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.util.ID;
@@ -43,13 +40,11 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
     private boolean inhibitMessage;
 
     @Inject
-    protected DefaultLocaleSelector(CurrentLocale currentLocale, LocaleContainer container, UserNotifier userNotifier, @SessionBus MBassador<BusMessage> eventBus) {
+    protected DefaultLocaleSelector(CurrentLocale currentLocale, LocaleContainer container, UserNotifier userNotifier) {
         super();
         this.container = container;
         this.currentLocale = currentLocale;
         this.userNotifier = userNotifier;
-        //locale may be set somewhere else
-        eventBus.subscribe(this);
         buildUI();
     }
 

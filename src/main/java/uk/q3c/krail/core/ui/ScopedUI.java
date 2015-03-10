@@ -20,14 +20,11 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
-import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.config.ConfigurationException;
-import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
@@ -67,9 +64,8 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private KrailView view;
 
     protected ScopedUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-                       Broadcaster broadcaster, PushMessageRouter pushMessageRouter,
-                       ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, @SessionBus
-                       MBassador<BusMessage> eventBus) {
+                       Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale
+            currentLocale, I18NProcessor translator) {
         super();
         this.errorHandler = errorHandler;
         this.navigator = navigator;
@@ -82,7 +78,6 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
 
         viewDisplayPanel = new Panel();
         registerWithBroadcaster(broadcaster);
-        eventBus.subscribe(this);
     }
 
     protected void registerWithBroadcaster(Broadcaster broadcaster) {

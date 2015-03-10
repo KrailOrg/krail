@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.services.Service.Status;
 import uk.q3c.krail.core.services.ServiceException;
@@ -42,7 +43,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({EventBusModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class})
 public class DefaultApplicationConfigurationServiceTest {
 
     static File iniDir;
