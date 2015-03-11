@@ -12,7 +12,8 @@
 package uk.q3c.krail.core.services;
 
 import com.google.inject.Provider;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
+import net.engio.mbassy.listener.Handler;
 import uk.q3c.krail.core.eventbus.BusMessage;
 
 /**
@@ -60,6 +61,9 @@ public interface Service {
      */
     Status start() throws Exception;
 
+    @Handler
+    void serviceStopped(ServiceStoppedMessage busMessage) throws Exception;
+
     /**
      * You will only need to implement this if you are not using a sub-class of {@link AbstractService}. When you do
      * sub-class {@link AbstractService}, override {@link AbstractService#doStop()}
@@ -73,7 +77,10 @@ public interface Service {
      *
      * @return
      */
-    String getName();
+    default String getName() {
+        return this.getClass()
+                   .getName();
+    }
 
     /**
      * The name description for this service. You may also choose to implement by sub-classing
@@ -98,24 +105,6 @@ public interface Service {
     boolean isStarted();
 
     /**
-     * Adds a listener which will be notified when a service is stopped or fails. Specifically, this occurs when the
-     * service changes state from {@link Status#STARTED} to {@link Status#FAILED}, {@link Status#DEPENDENCY_FAILED} or
-     * {@link Status#STOPPED}
-     */
-    void addStopListener(ServiceStopListener listener);
-
-    void removeStopListener(ServiceStopListener listener);
-
-    /**
-     * Adds a listener which is notified when a service changes from any state to {@link Status#STARTED}
-     *
-     * @param listener
-     */
-    void addStartListener(ServiceStartListener listener);
-
-    void removeStartListener(ServiceStartListener listener);
-
-    /**
      * The service is in a stopped state (stopped, failed or dependency failed)
      *
      * @return
@@ -127,5 +116,5 @@ public interface Service {
      *
      * @param globalBus
      */
-    void init(MBassador<BusMessage> globalBus);
+    void init(PubSubSupport<BusMessage> globalBus);
 }

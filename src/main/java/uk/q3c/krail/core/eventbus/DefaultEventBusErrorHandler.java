@@ -13,11 +13,15 @@ package uk.q3c.krail.core.eventbus;
 
 import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import net.engio.mbassy.bus.error.PublicationError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by David Sowerby on 10/03/15.
  */
 public class DefaultEventBusErrorHandler implements IPublicationErrorHandler {
+
+    private static Logger log = LoggerFactory.getLogger(DefaultEventBusErrorHandler.class);
     /**
      * Handle the given publication error.
      *
@@ -26,6 +30,6 @@ public class DefaultEventBusErrorHandler implements IPublicationErrorHandler {
      */
     @Override
     public void handleError(PublicationError error) {
-        throw new RuntimeException(error.getCause());
+        log.error(error.getMessage(), error.getCause());
     }
 }

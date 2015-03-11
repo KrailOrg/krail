@@ -18,7 +18,7 @@ import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
@@ -45,10 +45,10 @@ public class ServiceModule extends AbstractModule {
     protected void configure() {
 
         // global bus provider needed for the service.init in the injection listener
-        TypeLiteral<MBassador<BusMessage>> eventBusLiteral = new TypeLiteral<MBassador<BusMessage>>() {
+        TypeLiteral<PubSubSupport<BusMessage>> eventBusLiteral = new TypeLiteral<PubSubSupport<BusMessage>>() {
         };
-        Key<MBassador<BusMessage>> globalBusKey = Key.get(eventBusLiteral, GlobalBus.class);
-        final Provider<MBassador<BusMessage>> globalBusProvider = this.getProvider(globalBusKey);
+        Key<PubSubSupport<BusMessage>> globalBusKey = Key.get(eventBusLiteral, GlobalBus.class);
+        final Provider<PubSubSupport<BusMessage>> globalBusProvider = this.getProvider(globalBusKey);
 
 
         final Provider<ServicesMonitor> servicesMonitorProvider = this.getProvider(ServicesMonitor.class);
@@ -69,7 +69,7 @@ public class ServiceModule extends AbstractModule {
      */
     @Provides
     @Singleton
-    public ServicesMonitor getServicesMonitor(@GlobalBus MBassador<BusMessage> globalBus) {
+    public ServicesMonitor getServicesMonitor(@GlobalBus PubSubSupport<BusMessage> globalBus) {
         ServicesMonitor monitor = new ServicesMonitor();
         globalBus.subscribe(monitor);
         return monitor;
@@ -83,9 +83,9 @@ public class ServiceModule extends AbstractModule {
      */
     public class ServicesListener implements TypeListener {
         private final Provider<ServicesMonitor> servicesMonitorProvider;
-        private Provider<MBassador<BusMessage>> globalBusProvider;
+        private Provider<PubSubSupport<BusMessage>> globalBusProvider;
 
-        public ServicesListener(Provider<ServicesMonitor> servicesMonitorProvider, Provider<MBassador<BusMessage>> globalBusProvider) {
+        public ServicesListener(Provider<ServicesMonitor> servicesMonitorProvider, Provider<PubSubSupport<BusMessage>> globalBusProvider) {
             this.servicesMonitorProvider = servicesMonitorProvider;
             this.globalBusProvider = globalBusProvider;
         }

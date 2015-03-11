@@ -17,8 +17,8 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
-import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.bus.common.Properties;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,16 +37,16 @@ public class EventBusModuleTest_BusScopeAndNames {
 
     @Inject
     @GlobalBus
-    Provider<MBassador<BusMessage>> globalBusProvider;
+    Provider<PubSubSupport<BusMessage>> globalBusProvider;
 
 
     @Inject
     @SessionBus
-    Provider<MBassador<BusMessage>> sessionBusProvider;
+    Provider<PubSubSupport<BusMessage>> sessionBusProvider;
 
     @Inject
     @UIBus
-    Provider<MBassador<BusMessage>> uiBusProvider;
+    Provider<PubSubSupport<BusMessage>> uiBusProvider;
 
     @Inject
     LogMonitor logMonitor;
@@ -68,9 +68,9 @@ public class EventBusModuleTest_BusScopeAndNames {
         String sessionBusId = null;
         String globalBusId = null;
         //when
-        MBassador<BusMessage> globalBus = globalBusProvider.get();
-        MBassador<BusMessage> sessionBus = sessionBusProvider.get();
-        MBassador<BusMessage> uiBus = uiBusProvider.get();
+        PubSubSupport<BusMessage> globalBus = globalBusProvider.get();
+        PubSubSupport<BusMessage> sessionBus = sessionBusProvider.get();
+        PubSubSupport<BusMessage> uiBus = uiBusProvider.get();
 
         final List<String> logs = logMonitor.debugLogs();
         for (String log : logs) {

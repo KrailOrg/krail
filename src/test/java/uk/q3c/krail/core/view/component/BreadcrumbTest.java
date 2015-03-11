@@ -18,7 +18,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.ReferenceUserSitemap;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,7 +72,7 @@ public class BreadcrumbTest {
 
     @Inject
     @SessionBus
-    MBassador<BusMessage> eventBus;
+    PubSubSupport<BusMessage> eventBus;
 
     @Inject
     ReferenceUserSitemap userSitemap;

@@ -17,7 +17,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ChameleonTheme;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import uk.q3c.krail.core.eventbus.BusMessage;
@@ -34,7 +34,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     private final LoginExceptionHandler loginExceptionHandler;
     private final Provider<Subject> subjectProvider;
     private final Translate translate;
-    private final MBassador<BusMessage> eventBus;
+    private final PubSubSupport<BusMessage> eventBus;
     @Caption(caption = LabelKey.Log_In)
     private Panel centrePanel;
     private Label demoInfoLabel;
@@ -51,7 +51,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 
     @Inject
     protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider, Translate translate, @SessionBus
-    MBassador<BusMessage> eventBus) {
+    PubSubSupport<BusMessage> eventBus) {
         super();
         this.loginExceptionHandler = loginExceptionHandler;
         this.subjectProvider = subjectProvider;
@@ -160,13 +160,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     public TextField getUsernameBox() {

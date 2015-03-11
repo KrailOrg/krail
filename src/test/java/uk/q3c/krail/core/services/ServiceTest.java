@@ -18,13 +18,15 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import net.engio.mbassy.bus.MBassador;
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
-import net.engio.mbassy.listener.Listener;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.eventbus.GlobalBus;
@@ -37,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.q3c.krail.core.services.Service.Status.DEPENDENCY_FAILED;
 
 /**
  * Combined testing for all the Service components - almost functional testing
@@ -69,13 +72,18 @@ public class ServiceTest {
     @Inject
     ServicesMonitor monitor;
 
+
+    @Mock
+    VaadinService vaadinService;
+
     @Inject
     @GlobalBus
-    MBassador<BusMessage> globalBus;
-
+    PubSubSupport<BusMessage> globalBus;
+    // TODO should be a anync bus but is not
 
     @Before
     public void setup() {
+        VaadinSession.setCurrent(new VaadinSession(vaadinService)); // ensures a clean scope
         a1_startStatus = Status.STARTED;
         a1_stopStatus = Status.STOPPED;
         a1_exceptionOnStart = false;
@@ -85,6 +93,7 @@ public class ServiceTest {
 
     @After
     public void tearDown() throws Exception {
+        System.out.println("Test teardown");
         monitor.stopAllServices();
         monitor.clear();
     }
@@ -134,6 +143,7 @@ public class ServiceTest {
         // given
         a1_exceptionOnStart = true;
         // when
+        System.out.println(">>>>>>>>>>>>>>> starting a1");
         serviced.start();
         // then
 
@@ -156,7 +166,7 @@ public class ServiceTest {
         assertThat(serviced.a1.getStatus()).isEqualTo(Status.FAILED_TO_START);
         assertThat(serviced.b.isStarted()).isFalse();
         assertThat(serviced.c.isStarted()).isFalse();
-        assertThat(serviced.getStatus()).isEqualTo(Status.DEPENDENCY_FAILED);
+        assertThat(serviced.getStatus()).isEqualTo(DEPENDENCY_FAILED);
         assertThat(serviced.startCalls).isEqualTo(0);
     }
 
@@ -183,13 +193,19 @@ public class ServiceTest {
 
         // given
         a1_exceptionOnStart = true;
+
+        //when
         try {
             serviced.start();
         } catch (Exception e) {
 
         }
+        assertThat(serviced.getStatus()).isEqualTo(DEPENDENCY_FAILED);
+
+        //given
         a1_exceptionOnStart = false;
         // when
+        System.out.println(">>>>>>>>>>>>>>> starting a1");
         serviced.a1.start();
         // then
         assertThat(serviced.a1.isStarted()).isTrue();
@@ -208,6 +224,7 @@ public class ServiceTest {
         }
         a1_exceptionOnStart = false;
         // when
+        System.out.println(">>>>>>>>>>>>>>> starting a1");
         serviced.a1.start();
         // then
         assertThat(serviced.a1.isStarted()).isTrue();
@@ -322,7 +339,7 @@ public class ServiceTest {
                           .getCurrentStatus()).isEqualTo(Status.STOPPED);
     }
 
-    @Listener
+
     static class ChangeMonitor  {
         int statusChangeCount;
         List<String> dependencyChanges = new ArrayList<>();

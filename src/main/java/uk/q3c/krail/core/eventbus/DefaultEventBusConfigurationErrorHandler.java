@@ -27,6 +27,6 @@ public class DefaultEventBusConfigurationErrorHandler implements ConfigurationEr
      */
     @Override
     public void handle(ConfigurationError error) {
-        // TODO  implement
+        throw new EventBusException("Event bus configuration incorrect, " + error.toString());
     }
 }

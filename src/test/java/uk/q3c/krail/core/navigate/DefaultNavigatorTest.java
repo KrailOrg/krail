@@ -24,14 +24,12 @@ import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 import fixture.ReferenceUserSitemap;
 import fixture.testviews2.ViewB;
-import net.engio.mbassy.bus.MBassador;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.sitemap.*;
@@ -70,8 +68,6 @@ public class DefaultNavigatorTest {
     @Inject
     MockOption option;
 
-    @Mock
-    MBassador<BusMessage> eventBus;
     @Mock
     private Page browserPage;
     @Mock
@@ -137,14 +133,12 @@ public class DefaultNavigatorTest {
         // when
         navigator = createNavigator();
         // then
-        verify(eventBus).subscribe(navigator);
         verify(sitemapService).start();
         verify(builder).build();
     }
 
     private DefaultNavigator createNavigator() {
-        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
-                loginNavigationRule, logoutNavigationRule, eventBus);
+        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder, loginNavigationRule, logoutNavigationRule);
         navigator.init();
         return navigator;
     }

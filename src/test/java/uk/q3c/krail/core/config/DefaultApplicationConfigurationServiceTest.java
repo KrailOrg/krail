@@ -18,7 +18,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinService;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public class DefaultApplicationConfigurationServiceTest {
 
     @Inject
     @GlobalBus
-    MBassador<BusMessage> globalBus;
+    PubSubSupport<BusMessage> globalBus;
 
     CurrentLocale currentLocale = new MockCurrentLocale();
 

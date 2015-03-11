@@ -12,16 +12,23 @@
  */
 package uk.q3c.krail.core.services;
 
-import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.GlobalBus;
+import uk.q3c.krail.core.eventbus.SubscribeTo;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+
+import static uk.q3c.krail.core.services.Service.Status.*;
 
 /**
  * The easiest way to provide a Service is to sub-class either this class or {@link AbstractServiceI18N}. The behaviour
@@ -46,19 +53,27 @@ import java.util.List;
  * respectively, and are used to respond to state changes in dependencies. service change listeners are fired every
  * time
  * there is a change of state (and is used by the {@link ServicesMonitor})<br>
- *
- *     All service events are published on the GlobalBus
+ * <p>
+ * All service events are published on the GlobalBus, and all instances of {@link AbstractService} are subscribed to the GlobalBus; this enables the some of
+ * the logic of service dependencies - for example, when a service needs to respond when a service it depends on stops.
+ * <p>
+ * This also means that it is not necessary to annotate a sub-class of AbstractService with a {@link Listener}, unless: <ol>
+ * <li>you want to specify strong references, </li>
+ * <li>you want to subscribe to another event bus as well the {@link GlobalBus}, in which case you will need both {@link Listener} and {@link SubscribeTo}
+ * annotations</ol>
+ * <p>
+ * See the {@link EventBusModule.DefaultEventBusAutoSubscriber#afterInjection(Object)} javadoc for detail
  *
  * @author David Sowerby
  */
-public abstract class AbstractService implements Service, ServiceStartListener, ServiceStopListener {
+@Listener
+public abstract class AbstractService implements Service {
 
     private static Logger log = LoggerFactory.getLogger(AbstractService.class);
-    private final List<ServiceStartListener> serviceStartListeners = new ArrayList<>();
-    private final List<ServiceStopListener> serviceStopListeners = new ArrayList<>();
-    protected Status status = Status.INITIAL;
+    protected Status status = INITIAL;
     private List<DependencyRecord> dependencies;
-    private MBassador<BusMessage> eventBus;
+    private PubSubSupport<BusMessage> eventBus;
+    private EnumSet<Status> statusOfStopped = EnumSet.of(STOPPED, FAILED, DEPENDENCY_FAILED);
 
 
     @Inject
@@ -68,93 +83,74 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
 
     @Override
     public boolean isStarted() {
-        return status == Status.STARTED;
+        return status == STARTED;
     }
 
     @Override
-    public void init(MBassador<BusMessage> eventBus) {
+    public void init(PubSubSupport<BusMessage> eventBus) {
         this.eventBus = eventBus;
-        eventBus.publish(new ServiceBusMessage(this, Status.NON_EXISTENT, Status.INITIAL));
+        eventBus.subscribe(this);
+        eventBus.publish(new ServiceBusMessage(this, NON_EXISTENT, INITIAL));
+
     }
 
+    /**
+     * Responds to a {@link ServiceStoppedMessage}.  Checks to see whether the service that has stopped is a {@link Dependency} - if it is,  and {@link
+     * Dependency#stopOnStop()} is true, this service also stops.
+     *
+     * @param busMessage
+     *         the message to process, which identifies the service which has stopped
+     *
+     * @throws Exception
+     *         if this service is required to stop but fails to stop correctly
+     */
     @Override
-    public void dependencyServiceStopped(Service service) throws Exception {
-        stop();
+    @Handler
+    public void serviceStopped(ServiceStoppedMessage busMessage) throws Exception {
+        Service service = busMessage.getService();
+        if (service == this) {
+            return;
+        }
+
+
+        boolean dependencyFound = false;
+        for (DependencyRecord dep : getDependencies()) {
+            if (dep.service.equals(service)) {
+                if (dep.stopOnFail) {
+                    log.info("Stopping {} service, because a run time dependency ({}) has stopped", this.getName(), service.getName());
+                    dependencyFound = true;
+                    stop();
+                    break;
+                } else {
+                    dependencyFound = true;
+                    log.debug("Service: {}. Dependency {} has stopped, but is not marked 'stopOnFail', so this service will continue", this.getName(),
+                            service.getName());
+                    break;
+                }
+            }
+        }
+        log.debug("Service: {}. Another service, '{}', has stopped, but is not a dependency, so this service will continue", this.getName(), service.getName());
     }
 
     @Override
     public Status stop() throws Exception {
-        if (status == Status.STOPPED) {
+        if (status == STOPPED) {
             log.debug("Attempting to stop service {}, but it is already stopped. No action taken", getName());
             return status;
         }
         log.info("Stopping service: {}", getName());
         try {
             doStop();
-            setStatus(Status.STOPPED);
+            setStatus(STOPPED);
         } catch (Exception e) {
             log.error("Exception occurred while trying to stop the {}.", getName());
-            setStatus(Status.FAILED_TO_STOP);
+            setStatus(FAILED_TO_STOP);
         }
 
         return status;
     }
 
     protected abstract void doStop() throws Exception;
-
-    @Override
-    public Status getStatus() {
-        return status;
-    }
-
-    @Override
-    public void dependencyServiceStarted(Service service) throws Exception {
-        if (status == Status.DEPENDENCY_FAILED) {
-            start();
-        }
-    }
-
-    @Override
-    public Status start() throws Exception {
-        if (status == Status.STARTED) {
-            log.debug("{} already started, no action taken", getName());
-            return status;
-        }
-        log.info("Starting service: {}", getName());
-        // make sure #dependencies is prepared
-        getDependencies();
-
-        // start all dependencies that should be there at the start
-        for (DependencyRecord depRec : dependencies) {
-            try {
-                log.debug("Starting dependency {} from {}", depRec.service.getName(), getName());
-                depRec.service.start();
-            } catch (Exception e) {
-                if (depRec.requiredAtStart) {
-                    setStatus(Status.DEPENDENCY_FAILED);
-                    throw new ServiceException("Dependency " + depRec.service.getName() + " failed to start", e);
-                } else {
-                    log.info("Dependency {} failed to start, but is optional.  Continuing to start {}", depRec.service.getName(), getName());
-                }
-
-            }
-        }
-
-        // if we get this far we can start this service
-        try {
-
-            doStart();
-            setStatus(Status.STARTED);
-        } catch (Exception e) {
-            String msg = "Exception occurred while trying to start " + getName();
-            log.error(msg);
-            setStatus(Status.FAILED_TO_START);
-            throw new ServiceException(msg, e);
-        }
-        return status;
-    }
-
-    protected abstract void doStart() throws Exception;
 
     private List<DependencyRecord> getDependencies() throws IllegalArgumentException, IllegalAccessException {
         if (dependencies == null) {
@@ -174,12 +170,6 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
                         depRec.requiredAtStart = annotation.requiredAtStart();
                         depRec.startOnRestart = annotation.startOnRestart();
                         depRec.stopOnFail = annotation.stopOnStop();
-                        if (depRec.startOnRestart) {
-                            depRec.service.addStartListener(this);
-                        }
-                        if (depRec.stopOnFail) {
-                            depRec.service.addStopListener(this);
-                        }
                         dependencies.add(depRec);
                         log.debug("Service dependency {} identified", depRec.service.getName());
                     }
@@ -189,49 +179,105 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
         return dependencies;
     }
 
-    @Override
-    public void addStopListener(ServiceStopListener listener) {
-        serviceStopListeners.add(listener);
+    /**
+     * Responds to a {@link ServiceStartedMessage}.  Checks to see whether the service that has started is a {@link Dependency} - if it is, and this service is
+     * in a state of {@link Service.Status#DEPENDENCY_FAILED}, and {@link Dependency#startOnRestart()} is true, then this service will attempt to start
+     *
+     * @param busMessage
+     *         the message to process, which identifies the service which has stopped
+     *
+     * @throws Exception
+     *         if this service is required to start but fails with an exception
+     */
+    @Handler
+    public void serviceStarted(ServiceStartedMessage busMessage) throws Exception {
+        Service service = busMessage.getService();
+        log.debug("Service: {}.  Service started message received from {} ", this.getName(), service.getName());
+
+        if (service == this) {
+            log.debug("Ignoring bus message from itself");
+            return;
+        }
+        if (this.getStatus()
+                .equals(STARTED)) {
+            log.debug("Service: {}. Another service, '{}', has started, but this service is already running, no change is made", this.getName(), service
+                    .getName());
+            return;
+        }
+
+        if (!this.getStatus()
+                 .equals(DEPENDENCY_FAILED)) {
+            log.debug("Service: {}. Another service, '{}', has started, but this service is not in a status of DEPENDENCY_FAILED, and will not therefore " +
+                    "attempt a restart", this.getName(), service.getName());
+            return;
+        }
+
+
+        boolean dependencyFound = false;
+        for (DependencyRecord dep : getDependencies()) {
+            if (dep.service.equals(service)) {
+                if (dep.startOnRestart) {
+                    log.info("Attempting to start {} service, because a run time dependency ({}) has started, and is marked as 'startOnRestart'", this
+                            .getName(), service.getName());
+                    dependencyFound = true;
+                    start();
+                    break;
+                } else {
+                    dependencyFound = true;
+                    log.debug("Service: {}. Dependency {} has started, but is not marked 'startOnRestart', so no change made", this.getName(), service
+                            .getName());
+                    break;
+                }
+            }
+        }
+        log.debug("Service: {}. Another service, '{}', has started, but is not a dependency, so no change is made", this.getName(), service.getName());
     }
 
     @Override
-    public void removeStopListener(ServiceStopListener listener) {
-        serviceStopListeners.remove(listener);
-    }
+    public Status start() throws Exception {
+        if (status == STARTED) {
+            log.debug("{} already started, no action taken", getName());
+            return status;
+        }
+        log.info("Starting service: {}", getName());
 
-    @Override
-    public void addStartListener(ServiceStartListener listener) {
-        serviceStartListeners.add(listener);
-    }
 
-    @Override
-    public void removeStartListener(ServiceStartListener listener) {
-        serviceStartListeners.remove(listener);
-    }
+        // start all dependencies that should be there at the start
+        for (DependencyRecord depRec : getDependencies()) {
+            try {
+                log.debug("Starting dependency {} from {}", depRec.service.getName(), getName());
+                depRec.service.start();
+            } catch (Exception e) {
+                if (depRec.requiredAtStart) {
+                    setStatus(DEPENDENCY_FAILED);
+                    throw new ServiceException("Dependency " + depRec.service.getName() + " failed to start", e);
+                } else {
+                    log.info("Dependency {} failed to start, but is optional.  Continuing to start {}", depRec.service.getName(), getName());
+                }
 
-    protected void fireListeners(Status previousStatus) throws Exception {
-
-        log.debug("publishing status change in {}.  Status is now {}", this.getName(), this.getStatus());
-        eventBus.publish(new ServiceBusMessage(this, previousStatus, getStatus()));
-
-        // prevents re-entrant use of iterator
-        ImmutableList<ServiceStartListener> startListeners = ImmutableList.copyOf(serviceStartListeners);
-        if (previousStatus != Status.INITIAL && status == Status.STARTED) {
-            log.debug("Firing start listeners from {}", getName());
-            for (ServiceStartListener listener : startListeners) {
-                listener.dependencyServiceStarted(this);
             }
         }
 
-        // prevents re-entrant use of iterator
-        ImmutableList<ServiceStopListener> stopListeners = ImmutableList.copyOf(serviceStopListeners);
-        if (previousStatus == Status.STARTED && isStopped()) {
-            log.debug("Firing stop listeners from {}", getName());
-            for (ServiceStopListener listener : stopListeners) {
-                listener.dependencyServiceStopped(this);
-            }
+        // if we get this far we can start this service
+        try {
+
+            doStart();
+            setStatus(STARTED);
+        } catch (Exception e) {
+            String msg = "Exception occurred while trying to start " + getName();
+            log.error(msg);
+            setStatus(FAILED_TO_START);
+            throw new ServiceException(msg, e);
         }
+        return status;
     }
+
+    @Override
+    public Status getStatus() {
+        return status;
+    }
+
+    protected abstract void doStart() throws Exception;
 
     private class DependencyRecord {
         Service service;
@@ -248,9 +294,27 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
     }
 
 
+    protected void publishStatusChange(Status previousStatus) throws Exception {
+
+        log.debug("publishing status change in {}.  Status is now {}", this.getName(), this.getStatus());
+        eventBus.publish(new ServiceBusMessage(this, previousStatus, getStatus()));
+
+        // if we were not started before, tell dependencies we've started now
+        if (!previousStatus.equals(STARTED)) {
+            log.debug("Service {} is publishing service started message", this.getName());
+            eventBus.publish(new ServiceStartedMessage(this));
+        }
+        // if we were started, tell dependencies we've stopped
+        if (previousStatus == STARTED && isStopped()) {
+            log.debug("Service {} is publishing service stopped message", this.getName());
+            eventBus.publish(new ServiceStoppedMessage(this));
+        }
+    }
+
+
     @Override
     public boolean isStopped() {
-        return status == Status.STOPPED || (status == Status.FAILED) || status == Status.DEPENDENCY_FAILED;
+        return statusOfStopped.contains(status);
     }
 
 
@@ -259,7 +323,7 @@ public abstract class AbstractService implements Service, ServiceStartListener, 
             Status previousStatus = this.status;
             this.status = status;
             log.debug(getName() + " has changed status from {} to {}", previousStatus, getStatus());
-            fireListeners(previousStatus);
+            publishStatusChange(previousStatus);
         }
     }
 

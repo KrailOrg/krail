@@ -15,7 +15,7 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Listener;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,26 +31,26 @@ import static org.mockito.Mockito.*;
 @GuiceContext({})
 public class EventBusModuleTest_InjectionListener {
 
-    EventBusModule.EventBusListenerListener listener;
+    DefaultEventBusAutoSubscriber listener;
     @Mock
-    private MBassador<BusMessage> globalBus;
+    private PubSubSupport<BusMessage> globalBus;
     @Mock
-    private Provider<MBassador<BusMessage>> globalBusProvider;
+    private Provider<PubSubSupport<BusMessage>> globalBusProvider;
     @Mock
-    private MBassador<BusMessage> sessionBus;
+    private PubSubSupport<BusMessage> sessionBus;
     @Mock
-    private Provider<MBassador<BusMessage>> sessionBusProvider;
+    private Provider<PubSubSupport<BusMessage>> sessionBusProvider;
     @Mock
-    private MBassador<BusMessage> uiBus;
+    private PubSubSupport<BusMessage> uiBus;
     @Mock
-    private Provider<MBassador<BusMessage>> uiBusProvider;
+    private Provider<PubSubSupport<BusMessage>> uiBusProvider;
 
     @Before
     public void setup() {
         when(uiBusProvider.get()).thenReturn(uiBus);
         when(sessionBusProvider.get()).thenReturn(sessionBus);
         when(globalBusProvider.get()).thenReturn(globalBus);
-        listener = new EventBusModule.EventBusListenerListener(uiBusProvider, sessionBusProvider, globalBusProvider);
+        listener = new DefaultEventBusAutoSubscriber(uiBusProvider, sessionBusProvider, globalBusProvider);
     }
 
     @Test

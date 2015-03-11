@@ -13,11 +13,12 @@
 package uk.q3c.krail.i18n;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.WebBrowser;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.apache.shiro.subject.Subject;
@@ -26,11 +27,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
+import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -41,7 +46,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({EventBusModule.class, TestUIScopeModule.class, VaadinSessionScopeModule.class})
 @Listener
 public class DefaultCurrentLocaleTest {
 
@@ -60,7 +65,9 @@ public class DefaultCurrentLocaleTest {
     @Mock
     UserStatusChangeSource source;
 
-    MBassador<BusMessage> eventBus;
+    @Inject
+    @SessionBus
+    PubSubSupport<BusMessage> eventBus;
 
     @Mock
     Option option;
@@ -75,7 +82,6 @@ public class DefaultCurrentLocaleTest {
 
     @Before
     public void setup() {
-        eventBus = new MBassador<>();
         Locale.setDefault(Locale.UK);
 
 

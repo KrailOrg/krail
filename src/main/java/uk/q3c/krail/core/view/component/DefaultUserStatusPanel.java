@@ -21,7 +21,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.themes.ChameleonTheme;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.apache.shiro.subject.Subject;
@@ -59,12 +59,11 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
     private final Provider<Subject> subjectProvider;
     private final Translate translate;
     private final SubjectIdentifier subjectIdentifier;
-    private final MBassador<BusMessage> eventBus;
+    private final PubSubSupport<BusMessage> eventBus;
     private final CurrentLocale currentLocale;
 
     @Inject
-    protected DefaultUserStatusPanel(Navigator navigator, SubjectProvider subjectProvider, Translate translate, SubjectIdentifier subjectIdentifier,
-                                     @SessionBus MBassador<BusMessage> eventBus, CurrentLocale currentLocale) {
+    protected DefaultUserStatusPanel(Navigator navigator, SubjectProvider subjectProvider, Translate translate, SubjectIdentifier subjectIdentifier, @SessionBus PubSubSupport<BusMessage> eventBus, CurrentLocale currentLocale) {
         super();
         this.navigator = navigator;
         this.subjectProvider = subjectProvider;

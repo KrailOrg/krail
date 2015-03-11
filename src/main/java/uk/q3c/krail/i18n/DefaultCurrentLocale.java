@@ -15,7 +15,7 @@ package uk.q3c.krail.i18n;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.vaadin.server.WebBrowser;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,14 +72,15 @@ public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
 
     private final BrowserProvider browserProvider;
     private final Locale defaultLocale;
-    private final MBassador<BusMessage> eventBus;
+    private final PubSubSupport<BusMessage> eventBus;
     private final SubjectProvider subjectProvider;
     private final Option option;
     private Locale locale;
     private Set<Locale> supportedLocales;
 
     @Inject
-    protected DefaultCurrentLocale(BrowserProvider browserProvider, @SupportedLocales Set<Locale> supportedLocales, @DefaultLocale Locale defaultLocale, @SessionBus MBassador<BusMessage> eventBus, SubjectProvider subjectProvider, Option option) {
+    protected DefaultCurrentLocale(BrowserProvider browserProvider, @SupportedLocales Set<Locale> supportedLocales, @DefaultLocale Locale defaultLocale,
+                                   @SessionBus PubSubSupport<BusMessage> eventBus, SubjectProvider subjectProvider, Option option) {
         super();
         this.browserProvider = browserProvider;
         this.supportedLocales = supportedLocales;
