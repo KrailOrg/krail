@@ -163,7 +163,7 @@ public class EventBusModule extends AbstractModule {
         config.setProperty(Properties.Handler.PublicationError, publicationErrorHandler);
         config.addConfigurationErrorHandler(configurationErrorHandler);
         PubSubSupport<BusMessage> eventBus;
-        eventBus = (useAsync) ? new SyncMessageBus<>(config) : new MBassador<>(config);
+        eventBus = (useAsync) ? new MBassador<>(config) : new SyncMessageBus<>(config);
         ((AbstractPubSubSupport) eventBus).addErrorHandler(publicationErrorHandler);
         log.debug("instantiated a {} Bus with id {}", name, eventBus.getRuntime()
                                                                     .get(Properties.Common.Id));
