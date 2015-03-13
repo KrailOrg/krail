@@ -25,11 +25,12 @@ import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.i18n.I18N;
 
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class EventBusModuleTest_InjectionListener {
+public class DefaultEventBusAutoSubscriberTest {
 
     DefaultEventBusAutoSubscriber listener;
     @Mock
@@ -179,6 +180,30 @@ public class EventBusModuleTest_InjectionListener {
         verify(globalBus, times(0)).subscribe(anyObject());
     }
 
+    @Test
+    public void inherited_subscribeTo_override() {
+        //given
+
+        //when
+        listener.afterInjection(new Child());
+        //then
+        verify(uiBus, times(0)).subscribe(anyObject());
+        verify(sessionBus, times(1)).subscribe(anyObject());
+        verify(globalBus, times(0)).subscribe(anyObject());
+    }
+
+    @Test
+    public void inherited_subscribeTo() {
+        //given
+
+        //when
+        listener.afterInjection(new OtherChild());
+        //then
+        verify(uiBus, times(1)).subscribe(anyObject());
+        verify(sessionBus, times(1)).subscribe(anyObject());
+        verify(globalBus, times(0)).subscribe(anyObject());
+    }
+
     @Listener
     private class TestWithNoSubscribeTo {
     }
@@ -230,4 +255,26 @@ public class EventBusModuleTest_InjectionListener {
     @SubscribeTo()
     private class TestSubscribeTo_With_No_Annotation {
     }
+
+    @Listener
+    @Singleton
+    private class Grandparent {
+
+    }
+
+    @SubscribeTo({UIBus.class, SessionBus.class})
+    private class Parent extends Grandparent {
+
+    }
+
+    @Listener
+    @SubscribeTo(SessionBus.class)
+    private class Child extends Parent {
+
+    }
+
+    private class OtherChild extends Parent {
+
+    }
+
 }

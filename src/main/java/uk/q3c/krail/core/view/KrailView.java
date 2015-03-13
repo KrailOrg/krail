@@ -1,53 +1,46 @@
 /*
- * Copyright (c) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.view;
 
 import com.vaadin.ui.Component;
-import uk.q3c.krail.core.navigate.NavigationState;
-import uk.q3c.krail.core.navigate.Navigator;
+import uk.q3c.krail.core.ui.ScopedUI;
+import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
+import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
 
 /**
  * A view is constructed by the {@link ViewFactory} from a Provider defined in the sitemap building process.  When
- * the view is selected for use, calls are made against {@link KrailViewChangeListener}s added to {@link Navigator},
- * and
- * this interface, in the following order:
+ * the view is selected for use, messages are sent to the event bus, and calls made to this interface, in the following order:
  * <ol>
- * <li>{@link KrailViewChangeListener#beforeViewChange(KrailViewChangeEvent)}</li>
+ * <li>A {@link BeforeViewChangeBusMessage} is published on the @UIBus</li>
  * <li>{@link #init()}</li>
- * <li>{@link #beforeBuild}</li>
- * <li>{@link #buildView}</li>
- * <li>{@link #afterBuild}</li>
- * <li>{@link KrailViewChangeListener#afterViewChange(KrailViewChangeEvent)}</li>
+ * <li>{@link #beforeBuild(ViewChangeBusMessage)}</li>
+ * <li>{@link #buildView(ViewChangeBusMessage)}</li>
+ * <li>{@link #afterBuild(AfterViewChangeBusMessage)}</li>
+ * <li>An {@link AfterViewChangeBusMessage} is published on the @UIBus</li>
  * </ol>
- * where build refers to the creation of UI fields and components which populate the view.  Each method, except
- * readFromEnvironment(),
- * is passed a
- * {@link KrailViewChangeEvent}, which contains the current {@link NavigationState} so that, for example, parameter
- * information can be used to determine how the View is to be built or respond in some other way to URL parameters.
+ * where build refers to the creation of UI fields and components which populate the view.
  */
 public interface KrailView {
 
     /**
-     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * Called after the view itself has been constructed but before {@link #buildView(ViewChangeBusMessage)}} is called.  Typically checks
      * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
      * configuration which affects the way the view is presented.
      *
-     * @param event
+     * @param busMessage
      *         contains information about the change to this View
      */
-    public void beforeBuild(KrailViewChangeEvent event);
+    public void beforeBuild(ViewChangeBusMessage busMessage);
 
     /**
      * Builds the UI components of the view.  MUST set the root component of the View (returned by {@link
@@ -55,10 +48,10 @@ public interface KrailView {
      * need to check whether components have already been constructed, as this method may be called when the View is
      * selected again after initial construction.
      *
-     * @param event
+     * @param busMessage
      *         contains information about the change to this View
      */
-    public void buildView(KrailViewChangeEvent event);
+    public void buildView(ViewChangeBusMessage busMessage);
 
     /**
      * To enable implementations to implement this interface without descending from Component. If the implementation
@@ -83,10 +76,10 @@ public interface KrailView {
     public void init();
 
     /**
-     * Called immediately after the construction of the Views components (see {@link buildView}) to enable setting up
+     * Called immediately after the construction of the Views components (see {@link #buildView(ViewChangeBusMessage)}) to enable setting up
      * the view from URL parameters.  A typical use is to set ids for components if these are being used.
      *
-     * @param navigationState
+     * @param busMessage
      */
-    void afterBuild(KrailViewChangeEvent event);
+    void afterBuild(AfterViewChangeBusMessage busMessage);
 }

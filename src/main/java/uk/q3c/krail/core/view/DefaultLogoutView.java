@@ -14,6 +14,7 @@ package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Panel;
+import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
 public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 
@@ -23,22 +24,23 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
     }
 
     /**
-     * Called after the view itself has been constructed but before {@link #buildView(KrailViewChangeEvent)} is
+     * Called after the view itself has been constructed but before {@link #buildView(ViewChangeBusMessage)} is
      * called.  Typically checks
      * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
      * configuration which affects the way the view is presented.
      *
-     * @param event
+     * @param busMessage
      *         contains information about the change to this View
      */
     @Override
-    public void beforeBuild(KrailViewChangeEvent event) {
+    public void beforeBuild(ViewChangeBusMessage busMessage) {
 
     }
 
+
     @Override
-    public void buildView(KrailViewChangeEvent event) {
-        super.buildView(event);
+    public void buildView(ViewChangeBusMessage busMessage) {
+        super.buildView(busMessage);
         Panel p = new Panel("Logged out");
         p.setSizeFull();
         getLayout().addComponent(p);

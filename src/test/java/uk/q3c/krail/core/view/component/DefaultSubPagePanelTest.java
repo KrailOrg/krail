@@ -31,7 +31,6 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.view.KrailViewChangeEvent;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.testutil.TestI18NModule;
@@ -67,7 +66,7 @@ public class DefaultSubPagePanelTest {
     DefaultUserSitemapSorters sorters;
 
     @Mock
-    KrailViewChangeEvent event;
+    AfterViewChangeBusMessage event;
 
     @Mock
     MBassador<BusMessage> eventBus;

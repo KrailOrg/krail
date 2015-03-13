@@ -16,8 +16,12 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.SubscribeTo;
+import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
@@ -30,8 +34,7 @@ import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.user.opt.OptionKey;
-import uk.q3c.krail.core.view.KrailViewChangeEvent;
-import uk.q3c.krail.core.view.KrailViewChangeListener;
+import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.util.ID;
@@ -51,7 +54,9 @@ import java.util.Optional;
  * @author David Sowerby 17 May 2013
  * @modified David Sowerby
  */
-public class DefaultUserNavigationTree extends Tree implements OptionContext, UserNavigationTree, KrailViewChangeListener, UserSitemapChangeListener {
+@Listener
+@SubscribeTo(UIBus.class)
+public class DefaultUserNavigationTree extends Tree implements OptionContext, UserNavigationTree, UserSitemapChangeListener {
 
     public static final OptionKey optionKeySortType = new OptionKey(DefaultUserNavigationTree.class, LabelKey.Sort_Type);
     public static final OptionKey optionKeySortAscending = new OptionKey(DefaultUserNavigationTree.class, LabelKey.Sort_Ascending);
@@ -82,7 +87,6 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
         setItemCaptionMode(ItemCaptionMode.EXPLICIT);
         userSitemap.addListener(this);
         addValueChangeListener(this);
-        navigator.addViewChangeListener(this);
         setId(ID.getId(Optional.empty(), this));
         sorters.setOptionSortAscending(getOptionSortAscending());
 
@@ -208,22 +212,16 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
         }
     }
 
-    /**
-     * @see KrailViewChangeListener#beforeViewChange(KrailViewChangeEvent)
-     */
-    @Override
-    public void beforeViewChange(KrailViewChangeEvent event) {
-        //       do nothing
-        //
-    }
+
 
     /**
      * After a navigation change, select the appropriate node.
      *
-     * @see KrailViewChangeListener#afterViewChange(KrailViewChangeEvent)
+     * @see KrailView for a description of the call sequence
      */
-    @Override
-    public void afterViewChange(KrailViewChangeEvent event) {
+    @Handler
+    public void afterViewChange(AfterViewChangeBusMessage busMessage) {
+        // TODO could this use the message instead - the order of change then will not matter??
         UserSitemapNode selectedNode = navigator.getCurrentNode();
         UserSitemapNode childNode = selectedNode;
 

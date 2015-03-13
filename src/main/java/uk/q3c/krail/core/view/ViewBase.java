@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.util.ID;
 
 import java.util.Optional;
@@ -42,7 +43,7 @@ public abstract class ViewBase implements KrailView {
      * Calls {@link #setIds() after the View has been constructed}
      */
     @Override
-    public void afterBuild(KrailViewChangeEvent event) {
+    public void afterBuild(AfterViewChangeBusMessage event) {
         setIds();
     }
 

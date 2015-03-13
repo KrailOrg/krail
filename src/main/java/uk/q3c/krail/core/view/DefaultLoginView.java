@@ -25,6 +25,7 @@ import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.util.ID;
 
@@ -60,7 +61,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void buildView(KrailViewChangeEvent event) {
+    public void buildView(ViewChangeBusMessage event) {
         super.buildView(event);
         getGridLayout().setColumns(3);
         getGridLayout().setRows(3);
@@ -160,13 +161,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     public TextField getUsernameBox() {
@@ -178,7 +179,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     /**
-     * Called after the view itself has been constructed but before {@link #buildView(KrailViewChangeEvent)} is
+     * Called after the view itself has been constructed but before {@link #buildView(BeforeViewChangeBusMessage)} is
      * called.  Typically checks
      * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
      * configuration which affects the way the view is presented.
@@ -187,7 +188,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
      *         contains information about the change to this View
      */
     @Override
-    public void beforeBuild(KrailViewChangeEvent event) {
+    public void beforeBuild(ViewChangeBusMessage event) {
 
     }
 

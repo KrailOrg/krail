@@ -18,7 +18,6 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.view.KrailView;
-import uk.q3c.krail.core.view.KrailViewChangeListener;
 
 import java.util.List;
 
@@ -59,10 +58,6 @@ public interface Navigator extends UriFragmentChangedListener {
     NavigationState getPreviousNavigationState();
 
     List<String> getNavigationParams();
-
-    void addViewChangeListener(KrailViewChangeListener listener);
-
-    void removeViewChangeListener(KrailViewChangeListener listener);
 
     /**
      * Removes any historical navigation state

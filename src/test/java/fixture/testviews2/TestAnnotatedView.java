@@ -16,7 +16,8 @@ import com.vaadin.ui.Component;
 import uk.q3c.krail.core.navigate.sitemap.View;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
-import uk.q3c.krail.core.view.KrailViewChangeEvent;
+import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
+import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
 /**
  * This is NOT UIScoped to avoid unnecessary complexity in setting up some of the tests - if you need a UIScoped test
@@ -29,12 +30,12 @@ public class TestAnnotatedView implements KrailView {
 
 
     @Override
-    public void beforeBuild(KrailViewChangeEvent event) {
+    public void beforeBuild(ViewChangeBusMessage busMessage) {
 
     }
 
     @Override
-    public void buildView(KrailViewChangeEvent event) {
+    public void buildView(ViewChangeBusMessage busMessage) {
 
     }
 
@@ -55,7 +56,7 @@ public class TestAnnotatedView implements KrailView {
     }
 
     @Override
-    public void afterBuild(KrailViewChangeEvent event) {
+    public void afterBuild(AfterViewChangeBusMessage busMessage) {
 
     }
 

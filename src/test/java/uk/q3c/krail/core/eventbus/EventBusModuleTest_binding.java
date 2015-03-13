@@ -14,6 +14,8 @@ package uk.q3c.krail.core.eventbus;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.SyncMessageBus;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,8 +29,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EventBusModuleTest_binding {
 
     @Inject
+    @UIBus
+    PubSubSupport<BusMessage> uiBus;
+
+    @Inject
     @SessionBus
-    PubSubSupport<BusMessage> bus;
+    PubSubSupport<BusMessage> sessionBus;
+
+    @Inject
+    @GlobalBus
+    PubSubSupport<BusMessage> globalBus;
 
     @Test
     public void name() {
@@ -37,6 +47,8 @@ public class EventBusModuleTest_binding {
         //when
 
         //then
-        assertThat(bus).isNotNull();
+        assertThat(uiBus).isInstanceOf(SyncMessageBus.class);
+        assertThat(sessionBus).isInstanceOf(SyncMessageBus.class);
+        assertThat(globalBus).isInstanceOf(MBassador.class);
     }
 }

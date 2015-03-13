@@ -20,12 +20,11 @@ import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.krail.core.view.KrailViewChangeListener;
 
 import java.util.List;
 
 @UIScoped
-public class DefaultBreadcrumb extends NavigationButtonPanel implements KrailViewChangeListener,
+public class DefaultBreadcrumb extends NavigationButtonPanel implements
         Button.ClickListener, Breadcrumb {
     private static Logger log = LoggerFactory.getLogger(DefaultBreadcrumb.class);
 

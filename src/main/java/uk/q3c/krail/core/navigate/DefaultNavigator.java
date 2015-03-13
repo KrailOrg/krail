@@ -14,10 +14,9 @@ package uk.q3c.krail.core.navigate;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.apache.shiro.authz.AuthorizationException;
@@ -25,6 +24,8 @@ import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.shiro.PageAccessController;
@@ -33,22 +34,30 @@ import uk.q3c.krail.core.shiro.UnauthorizedExceptionHandler;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
-import uk.q3c.krail.core.view.*;
+import uk.q3c.krail.core.view.BeforeViewChangeBusMessage;
+import uk.q3c.krail.core.view.DefaultViewFactory;
+import uk.q3c.krail.core.view.ErrorView;
+import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
+import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * The navigator is at the heart of navigation process, and provides navigation form a number of data types (for
- * example, String, {@link NavigationState} and {@link UserSitemapNode}. Because the USerSitemap only holds pages
- * authorised for the current Subject, there is not need to check for authorisation before navigating (there is still
- * some old code in here which does, but that will be removed)
+ * The navigator is at the heart of navigation process, and provides navigation for a number of data types (for
+ * example, String, {@link NavigationState} and {@link UserSitemapNode}.
  * <p>
- *The navigator must always be called after all other listeners - this is so that navigation components are set up before the navigator moves to a page
- * (which might not be displayed in a navigation component if it is not up to date)
+ * The navigator implements {@link Page.UriFragmentChangedListener}s to detect changes in URI.
+ * <p>
+ * Although the {@link UserSitemap} contains only authorised pages, an additional level of security is added by checking that a user is authorised before
+ * moving
+ * to another page
+ * <p>
+ * The {@link #eventBus} is used to manage view changes - note that the eventBus must be synchronous for the view change cancellation to work (see {@link
+ * #publishBeforeViewChange(BeforeViewChangeBusMessage)}
  *
  * @author David Sowerby
  * @date 18 Apr 2014
@@ -58,7 +67,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DefaultNavigator implements Navigator {
     private static Logger log = LoggerFactory.getLogger(DefaultNavigator.class);
 
-    private final List<KrailViewChangeListener> viewChangeListeners = new LinkedList<>();
     private final URIFragmentHandler uriHandler;
     private final Provider<Subject> subjectProvider;
     private final PageAccessController pageAccessController;
@@ -70,12 +78,14 @@ public class DefaultNavigator implements Navigator {
     private final LogoutNavigationRule logoutNavigationRule;
     private NavigationState currentNavigationState;
     private KrailView currentView = null;
+    private PubSubSupport<BusMessage> eventBus;
     private NavigationState previousNavigationState;
     private UserSitemap userSitemap;
 
     @Inject
-    public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider
-            subjectProvider, PageAccessController pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule loginNavigationRule, LogoutNavigationRule logoutNavigationRule) {
+    public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
+            pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule
+            loginNavigationRule, LogoutNavigationRule logoutNavigationRule, @UIBus PubSubSupport<BusMessage> eventBus) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -88,6 +98,7 @@ public class DefaultNavigator implements Navigator {
         this.loginNavigationRule = loginNavigationRule;
         this.logoutNavigationRule = logoutNavigationRule;
 
+        this.eventBus = eventBus;
     }
 
     @Override
@@ -104,31 +115,8 @@ public class DefaultNavigator implements Navigator {
         }
     }
 
-    /**
-     * Listen to changes of the active view.
-     * <p>
-     * Registered listeners are invoked in registration order before (
-     * {@link ViewChangeListener#beforeViewChange(ViewChangeEvent) beforeViewChange()}) and after (
-     * {@link ViewChangeListener#afterViewChange(ViewChangeEvent) afterViewChange()}) a view change occurs.
-     *
-     * @param listener
-     *         Listener to invoke during a view change.
-     */
-    @Override
-    public void addViewChangeListener(KrailViewChangeListener listener) {
-        viewChangeListeners.add(listener);
-    }
 
-    /**
-     * Removes a view change listener.
-     *
-     * @param listener
-     *         Listener to remove.
-     */
-    @Override
-    public void removeViewChangeListener(KrailViewChangeListener listener) {
-        viewChangeListeners.remove(listener);
-    }
+
 
     @Override
     public void uriFragmentChanged(UriFragmentChangedEvent event) {
@@ -159,9 +147,8 @@ public class DefaultNavigator implements Navigator {
      * the
      * View is instantiated, and made the current view in the UI via {@link ScopedUI#changeView(KrailView)}.<br>
      * <br>
-     * Events are fired before and after the view change, to the {@link #viewChangeListeners}. Listeners have the
-     * option
-     * to block the view change by returning false (see {@link #fireBeforeViewChange(KrailViewChangeEvent)}
+     * Messages are published to the {{@link #eventBus}} before and after the view change. Message handlers have the
+     * option to block the view change by returning false (see {@link #publishBeforeViewChange(BeforeViewChangeBusMessage)}
      * <p>
      *
      * @param navigationState
@@ -205,9 +192,9 @@ public class DefaultNavigator implements Navigator {
             previousNavigationState = currentNavigationState;
             currentNavigationState = navigationState;
 
-            KrailViewChangeEvent event = new KrailViewChangeEvent(previousNavigationState, navigationState);
+            BeforeViewChangeBusMessage beforeMessage = new BeforeViewChangeBusMessage(previousNavigationState, navigationState);
             // if change is blocked revert to previous state
-            if (!fireBeforeViewChange(event)) {
+            if (!publishBeforeViewChange(beforeMessage)) {
                 currentNavigationState = previousNavigationState;
                 previousNavigationState = previousPreviousNavigationState;
                 return;
@@ -223,9 +210,10 @@ public class DefaultNavigator implements Navigator {
             }
             // now change the view
             KrailView view = viewFactory.get(node.getViewClass());
-            changeView(view, event);
+            AfterViewChangeBusMessage afterMessage = new AfterViewChangeBusMessage(beforeMessage);
+            changeView(view, afterMessage);
             // and tell listeners its changed
-            fireAfterViewChange(event);
+            publishAfterViewChange(afterMessage);
         } else {
             throw new UnauthorizedException(navigationState.getVirtualPage());
         }
@@ -256,57 +244,53 @@ public class DefaultNavigator implements Navigator {
         }
     }
 
-    protected void changeView(KrailView view, KrailViewChangeEvent event) {
+    protected void changeView(KrailView view, ViewChangeBusMessage busMessage) {
         ScopedUI ui = uiProvider.get();
         log.debug("calling view.beforeBuild(event) for {}", view.getClass()
                                                                 .getName());
-        view.beforeBuild(event);
+        view.beforeBuild(busMessage);
         log.debug("calling view.buildView(event) {}", view.getClass()
                                                           .getName());
-        view.buildView(event);
+        view.buildView(busMessage);
         ui.changeView(view);
         log.debug("calling view.afterBuild(event) {}", view.getClass()
                                                            .getName());
-        view.afterBuild(event);
+        view.afterBuild(new AfterViewChangeBusMessage(busMessage));
         currentView = view;
     }
 
     /**
-     * Fires an event before an imminent view change.  At this point the event:<ol> <
+     * Publishes a message to the {@link #eventBus} before an imminent view change.  At this point the {@code message}:<ol> <
      * <li><{@code fromState} represents the current navigation state/li>
      * li>{@code toState} represents the navigation state which will be moved to if the change is successful.</li></ol>
      * <p>
-     * Listeners are called in registration order. If any listener cancels the event, {@link
-     * KrailViewChangeEvent#cancel()}, the rest of the
-     * listeners are not called and the view change is blocked.
+     * Message Handlers are called in an undefined order unless {@link Handler#priority()} is used to specify an order.  If any handler cancels the event,
+     * {@link
+     * BeforeViewChangeBusMessage#cancel()}, false is returned.
      *
-     * @param event
-     *         view change event (not null, view change not yet performed)
+     * @param busMessage
+     *         view change message from the bus (view change not yet performed)
      *
      * @return true if the view change should be allowed, false to silently block the navigation operation
      */
-    protected boolean fireBeforeViewChange(KrailViewChangeEvent event) {
-        for (KrailViewChangeListener l : viewChangeListeners) {
-            l.beforeViewChange(event);
-            if (event.isCancelled()) {
-                return false;
-            }
-        }
-        return true;
+    protected boolean publishBeforeViewChange(BeforeViewChangeBusMessage busMessage) {
+
+        // must be a synchronous bus, or the blocking mechanism will not work
+        eventBus.publish(busMessage);
+        return !busMessage.isCancelled();
+
     }
 
     /**
-     * Fires an event after the current view has changed.
+     *  Publishes a message to the {@link #eventBus} immediately after a view change.
      * <p>
-     * Listeners are called in registration order.
+     * Message Handlers are called in an undefined order unless {@link Handler#priority()} is used to specify an order.
      *
-     * @param event
-     *         view change event (not null)
+     * @param busMessage
+     *         view change message from the bus
      */
-    protected void fireAfterViewChange(KrailViewChangeEvent event) {
-        for (KrailViewChangeListener l : viewChangeListeners) {
-            l.afterViewChange(event);
-        }
+    protected void publishAfterViewChange(AfterViewChangeBusMessage busMessage) {
+        eventBus.publish(busMessage);
     }
 
     @Override
@@ -343,10 +327,10 @@ public class DefaultNavigator implements Navigator {
         log.debug("A {} Error has been thrown, reporting via the Error View", error.getClass()
                                                                                    .getName());
         NavigationState navigationState = uriHandler.navigationState("error");
-        KrailViewChangeEvent event = new KrailViewChangeEvent(previousNavigationState, navigationState);
+        ViewChangeBusMessage viewChangeBusMessage = new ViewChangeBusMessage(previousNavigationState, navigationState);
         ErrorView view = viewFactory.get(ErrorView.class);
         view.setError(error);
-        changeView(view, event);
+        changeView(view, viewChangeBusMessage);
     }
 
     /**
@@ -386,16 +370,17 @@ public class DefaultNavigator implements Navigator {
      * Applies the login / logout navigation rules.  Handler priority is set so that Navigators respond after other listeners - they must complete before the
      * Navigator attempts to change page
      *
-     * @param busMessage message from the event bus
+     * @param busMessage
+     *         message from the event bus
      */
     @Handler(priority = -1)
     public void userStatusChange(UserStatusBusMessage busMessage) {
         if (busMessage.isAuthenticated()) {
-        log.info("user logged in successfully, applying login navigation rule");
+            log.info("user logged in successfully, applying login navigation rule");
             Optional<NavigationState> newState = loginNavigationRule.changedNavigationState(this, busMessage.getSource());
-        if (newState.isPresent()) {
-            navigateTo(newState.get());
-        }
+            if (newState.isPresent()) {
+                navigateTo(newState.get());
+            }
         } else {
             log.info("user logged out, applying logout navigation rule");
             Optional<NavigationState> newState = logoutNavigationRule.changedNavigationState(this, busMessage.getSource());

@@ -21,11 +21,12 @@ import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.SubscribeTo;
+import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.krail.core.view.KrailViewChangeEvent;
-import uk.q3c.krail.core.view.KrailViewChangeListener;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.util.ID;
 import uk.q3c.util.NodeFilter;
@@ -36,7 +37,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Listener
-public abstract class NavigationButtonPanel extends HorizontalLayout implements KrailViewChangeListener,
+@SubscribeTo({UIBus.class, SessionBus.class})
+public abstract class NavigationButtonPanel extends HorizontalLayout implements
          Button.ClickListener {
     private static Logger log = LoggerFactory.getLogger(NavigationButtonPanel.class);
     private final List<NavigationButton> buttons = new ArrayList<>();
@@ -49,7 +51,6 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
     @Inject
     protected NavigationButtonPanel(Navigator navigator, UserSitemap sitemap) {
         this.navigator = navigator;
-        navigator.addViewChangeListener(this);
         this.sitemap = sitemap;
         this.setSizeUndefined();
         this.setSpacing(true);
@@ -144,24 +145,15 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements 
         }
     }
 
-    @Override
-    public void beforeViewChange(KrailViewChangeEvent event) {
-        // do nothing
-    }
 
-    @Override
-    public void afterViewChange(KrailViewChangeEvent event) {
+    @Handler
+    public void afterViewChange(AfterViewChangeBusMessage busMessage) {
         log.debug("Responding to view change");
         rebuildRequired = true;
         build();
     }
 
-    @Override
-    public void detach() {
-        navigator.removeViewChangeListener(this);
-        super.detach();
 
-    }
 
     public List<NavigationButton> getButtons() {
         return buttons;

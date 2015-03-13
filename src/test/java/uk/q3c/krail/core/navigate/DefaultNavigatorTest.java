@@ -20,17 +20,22 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.Page;
-import com.vaadin.ui.UI;
-import com.vaadin.util.CurrentInstance;
 import fixture.ReferenceUserSitemap;
 import fixture.testviews2.ViewB;
+import net.engio.mbassy.bus.common.PubSubSupport;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.SubscribeTo;
+import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.shiro.PageAccessControl;
@@ -42,6 +47,8 @@ import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.core.view.*;
+import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
+import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
@@ -51,7 +58,8 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class, TestUIScopeModule.class})
@@ -62,7 +70,7 @@ public class DefaultNavigatorTest {
     @Inject
     TestViewChangeListener changeListener;
     @Mock
-    KrailViewChangeEvent event;
+    BeforeViewChangeBusMessage event;
     @Mock
     UserStatusChangeSource source;
     @Inject
@@ -74,12 +82,23 @@ public class DefaultNavigatorTest {
     private ErrorView errorView;
     @Mock
     private Provider<ErrorView> errorViewProvider;
-    @Mock
-    private KrailViewChangeListener listener1;
-    @Mock
-    private KrailViewChangeListener listener2;
-    @Mock
-    private KrailViewChangeListener listener3;
+
+    @Inject
+    @UIBus
+    private PubSubSupport<BusMessage> eventBus;
+
+    @Inject
+    @UIBus
+    private PubSubSupport<BusMessage> eventBus2;
+
+    @Inject
+    private FakeListener listener1;
+    @Inject
+    private FakeListener listener2;
+    @Inject
+    private FakeListener listener3;
+    @Inject
+    private MockListener listener4;
     @Mock
     private LoginNavigationRule loginNavigationRule;
     @Mock
@@ -112,6 +131,7 @@ public class DefaultNavigatorTest {
 
     @Before
     public void setup() {
+
         userSitemap.populate();
         when(builder.getUserSitemap()).thenReturn(userSitemap);
         when(uiProvider.get()).thenReturn(scopedUI);
@@ -120,8 +140,12 @@ public class DefaultNavigatorTest {
         when(subjectProvider.get()).thenReturn(subject);
         when(userSitemapProvider.get()).thenReturn(userSitemap);
 
-        CurrentInstance.set(UI.class, scopedUI);
 
+
+    }
+
+    @After
+    public void tearDown() {
 
     }
 
@@ -138,7 +162,8 @@ public class DefaultNavigatorTest {
     }
 
     private DefaultNavigator createNavigator() {
-        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder, loginNavigationRule, logoutNavigationRule);
+        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
+                loginNavigationRule, logoutNavigationRule, eventBus);
         navigator.init();
         return navigator;
     }
@@ -359,17 +384,12 @@ public class DefaultNavigatorTest {
         navigator = createNavigator();
         String page = userSitemap.a11URI;
 
-        // need to return true, or first listener will block the second
-        navigator.addViewChangeListener(listener1);
-        navigator.addViewChangeListener(listener2);
-        navigator.addViewChangeListener(listener3);
         // when
-        navigator.removeViewChangeListener(listener3);
+        NavigationState startState = navigator.getCurrentNavigationState();
         navigator.navigateTo(page);
+        NavigationState endState = navigator.getCurrentNavigationState();
         // then
-        verify(listener1, times(1)).beforeViewChange(any(KrailViewChangeEvent.class));
-        verify(listener2, times(1)).beforeViewChange(any(KrailViewChangeEvent.class));
-        verify(listener3, never()).beforeViewChange(any(KrailViewChangeEvent.class));
+        assertThat(endState).isNotEqualTo(startState);
     }
 
     @Test
@@ -378,36 +398,17 @@ public class DefaultNavigatorTest {
         // given
         navigator = createNavigator();
         String page = userSitemap.a11URI;
-        MockListener listener4 = new MockListener();
         listener4.cancelBefore = true;
 
-        // to block second and subsequent
-        navigator.addViewChangeListener(listener4);
-        navigator.addViewChangeListener(listener2);
-        navigator.addViewChangeListener(listener3);
         // when
+        NavigationState startState = navigator.getCurrentNavigationState();
         navigator.navigateTo(page);
+        NavigationState endState = navigator.getCurrentNavigationState();
         // then
-        verify(listener2, never()).beforeViewChange(any(KrailViewChangeEvent.class));
-        verify(listener3, never()).beforeViewChange(any(KrailViewChangeEvent.class));
+        assertThat(endState).isEqualTo(startState);
     }
 
-    @Test
-    public void attemptToBlockAfter() {
-        //given
-        navigator = createNavigator();
-        String page = userSitemap.a11URI;
-        MockListener listener4 = new MockListener();
-        listener4.cancelAfter = true;
-        navigator.addViewChangeListener(listener4);
-        navigator.addViewChangeListener(listener2);
-        navigator.addViewChangeListener(listener3);
-        //when
-        navigator.navigateTo(page);
-        //then
-        verify(listener2, times(1)).beforeViewChange(any(KrailViewChangeEvent.class));
-        verify(listener3, times(1)).beforeViewChange(any(KrailViewChangeEvent.class));
-    }
+
 
     @Test
     public void redirection() {
@@ -721,7 +722,6 @@ public class DefaultNavigatorTest {
     public void callOrder() {
         //given
         navigator = createNavigator();
-        navigator.addViewChangeListener(changeListener);
         String page = userSitemap.bURI;
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
@@ -739,7 +739,6 @@ public class DefaultNavigatorTest {
     @Test
     public void eventContent() {
         navigator = createNavigator();
-        navigator.addViewChangeListener(changeListener);
         String page = userSitemap.bURI;
         when(subject.isAuthenticated()).thenReturn(true);
         when(subject.isRemembered()).thenReturn(false);
@@ -748,7 +747,7 @@ public class DefaultNavigatorTest {
         navigator.navigateTo(page);
 
         //then
-        KrailViewChangeEvent event = getEvent("beforeViewChange");
+        ViewChangeBusMessage event = getEvent("beforeViewChange");
         assertThat(event.getFromState()).isNull();
         assertThat(event.getToState()
                         .getFragment()).isEqualTo(userSitemap.bURI);
@@ -784,8 +783,8 @@ public class DefaultNavigatorTest {
 
     }
 
-    private KrailViewChangeEvent getEvent(String eventKey) {
-        return changeListener.getEvent(eventKey);
+    private ViewChangeBusMessage getEvent(String eventKey) {
+        return changeListener.getMessage(eventKey);
     }
 
     @ModuleProvider
@@ -803,19 +802,21 @@ public class DefaultNavigatorTest {
         };
     }
 
-    static class MockListener implements KrailViewChangeListener {
+    @Listener
+    @SubscribeTo(UIBus.class)
+    static class MockListener {
         boolean cancelBefore = false;
         boolean cancelAfter = false;
 
-        @Override
-        public void beforeViewChange(KrailViewChangeEvent event) {
+        @Handler
+        public void beforeViewChange(BeforeViewChangeBusMessage event) {
             if (cancelBefore) {
                 event.cancel();
             }
         }
 
-        @Override
-        public void afterViewChange(KrailViewChangeEvent event) {
+        @Handler
+        public void afterViewChange(BeforeViewChangeBusMessage event) {
             if (cancelAfter) {
                 event.cancel();
             }
@@ -823,17 +824,19 @@ public class DefaultNavigatorTest {
     }
 
     @Singleton
-    public static class TestViewChangeListener implements KrailViewChangeListener {
+    @Listener
+    @SubscribeTo(UIBus.class)
+    public static class TestViewChangeListener {
 
-        Map<String, KrailViewChangeEvent> calls = new LinkedHashMap<>();
+        Map<String, ViewChangeBusMessage> calls = new LinkedHashMap<>();
 
         public Set<String> getCalls() {
             return calls.keySet();
         }
 
-        @Override
-        public void beforeViewChange(KrailViewChangeEvent event) {
-            calls.put("beforeViewChange", event);
+        @Handler
+        public void beforeViewChange(BeforeViewChangeBusMessage busMessage) {
+            calls.put("beforeViewChange", busMessage);
         }
 
         /**
@@ -842,20 +845,20 @@ public class DefaultNavigatorTest {
          * unbounded recursion if you decide to change the view again in the
          * listener.
          *
-         * @param event
+         * @param busMessage
          *         view change event
          */
-        @Override
-        public void afterViewChange(KrailViewChangeEvent event) {
-            calls.put("afterViewChange", event);
+        @Handler
+        public void afterViewChange(AfterViewChangeBusMessage busMessage) {
+            calls.put("afterViewChange", busMessage);
         }
 
-        public void addCall(String call, KrailViewChangeEvent event) {
-            calls.put(call, event);
+        public void addCall(String call, ViewChangeBusMessage busMessage) {
+            calls.put(call, busMessage);
         }
 
 
-        public KrailViewChangeEvent getEvent(String eventKey) {
+        public ViewChangeBusMessage getMessage(String eventKey) {
             return calls.get(eventKey);
         }
 
@@ -864,5 +867,22 @@ public class DefaultNavigatorTest {
         }
     }
 
+    @Listener
+    @SubscribeTo(UIBus.class)
+    public static class FakeListener {
+
+        int callsBefore;
+        int callsAfter;
+
+        @Handler
+        public void beforeViewChange(BeforeViewChangeBusMessage event) {
+            callsBefore++;
+        }
+
+        @Handler
+        public void afterViewChange(BeforeViewChangeBusMessage event) {
+            callsAfter++;
+        }
+    }
 
 }

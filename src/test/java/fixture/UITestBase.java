@@ -35,8 +35,6 @@ import uk.q3c.krail.core.ui.BasicUI;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.view.KrailView;
-import uk.q3c.krail.core.view.KrailViewChangeEvent;
-import uk.q3c.krail.core.view.KrailViewChangeListener;
 import uk.q3c.krail.testutil.TestUI;
 
 import static org.mockito.Mockito.mock;
@@ -45,8 +43,7 @@ import static org.mockito.Mockito.when;
 /**
  * THIS IS NOT IN USE - AND PROBABLY WON'T WORK. I HAVE KEPT IT ONLY BECAUSE THERE MAY BE SOME USEFUL IDEAS IN HERE
  * <p/>
- * <p/>
- * Extend this class to test anything related to a Vaadin UI (or in the case of Krail, as {@link ScopedUI}. Note that
+ * <p/>Note that
  * the
  * {@link UIScope} is not prepared until the {@link #uiSetup()} method is called, so subclasses must use providers if
  * they want to inject UIScoped objects - otherwise the injection happens before the UIScope context is ready.
@@ -61,7 +58,7 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({BaseServletModule.class})
-public abstract class UITestBase extends ShiroIntegrationTestBase implements KrailViewChangeListener {
+public abstract class UITestBase extends ShiroIntegrationTestBase {
     protected static Class<? extends ScopedUI> uiClass;
     // this is static to ensure count remains unique across all method calls
     private static int connectCount = 1;
@@ -109,8 +106,6 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements Kra
         when(mockedRequest.getParameter("v-loc")).thenReturn(baseUri + "/");
         when(mockedSession.createConnectorId(Matchers.any(ClientConnector.class))).thenAnswer(new ConnectorIdAnswer());
         ui.setSession(mockedSession);
-        ui.getKrailNavigator()
-          .addViewChangeListener(this);
         // ui.doInit(mockedRequest, 23);
         return ui;
     }
@@ -125,13 +120,6 @@ public abstract class UITestBase extends ShiroIntegrationTestBase implements Kra
         currentView = null;
     }
 
-    @Override
-    public void beforeViewChange(KrailViewChangeEvent event) {
-    }
-
-    @Override
-    public void afterViewChange(KrailViewChangeEvent event) {
-    }
 
     /**
      * Use this method to create TestUI instances, rather than the UIProvider It simulates the creation of a new

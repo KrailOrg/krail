@@ -15,6 +15,7 @@ package uk.q3c.krail.core.view;
 import com.google.inject.Inject;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
+import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.util.ID;
 
 import java.util.Optional;
@@ -30,7 +31,7 @@ public abstract class StandardPageViewBase extends ViewBase {
     }
 
     @Override
-    public void buildView(KrailViewChangeEvent event) {
+    public void buildView(ViewChangeBusMessage busMessage) {
 
         label = new Label("This is the " + this.getClass()
                                                .getSimpleName());
@@ -65,15 +66,15 @@ public abstract class StandardPageViewBase extends ViewBase {
     }
 
     /**
-     * Called after the view itself has been constructed but before {@link #buildView()} is called.  Typically checks
+     * Called after the view itself has been constructed but before {@link #buildView(ViewChangeBusMessage)} ()} is called.  Typically checks
      * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
      * configuration which affects the way the view is presented.
      *
-     * @param event
+     * @param busMessage
      *         contains information about the change to this View
      */
     @Override
-    public void beforeBuild(KrailViewChangeEvent event) {
+    public void beforeBuild(ViewChangeBusMessage busMessage) {
 
     }
 

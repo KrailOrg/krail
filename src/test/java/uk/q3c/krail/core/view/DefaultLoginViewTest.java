@@ -60,7 +60,7 @@ public class DefaultLoginViewTest {
     @Test
     public void buildView() {
         //given
-        KrailViewChangeEvent event = new KrailViewChangeEvent(new NavigationState(), new NavigationState());
+        BeforeViewChangeBusMessage event = new BeforeViewChangeBusMessage(new NavigationState(), new NavigationState());
         //when
 
         view.buildView(event);
@@ -71,7 +71,7 @@ public class DefaultLoginViewTest {
     @Test
     public void submitButton_clicked() {
         //given
-        KrailViewChangeEvent event = new KrailViewChangeEvent(new NavigationState(), new NavigationState());
+        BeforeViewChangeBusMessage event = new BeforeViewChangeBusMessage(new NavigationState(), new NavigationState());
         view.buildView(event);
         //when
         view.buttonClick(clickEvent);
