@@ -27,12 +27,21 @@ import java.util.Optional;
 public abstract class ViewBase implements KrailView {
 
     private static Logger log = LoggerFactory.getLogger(ViewBase.class);
+    private boolean dirty;
     private Component rootComponent;
 
     @Inject
     protected ViewBase() {
         super();
 
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 
     public void init() {

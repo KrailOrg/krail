@@ -13,7 +13,6 @@ package uk.q3c.krail.core.navigate;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
-import uk.q3c.krail.core.guice.uiscope.UIScoped;
 
 /**
  * Created by David Sowerby on 08/02/15.
@@ -28,9 +27,14 @@ public class NavigationModule extends AbstractModule {
         bindNavigator();
         bindURIHandler();
         bindNavigationRules();
+        bindViewChangeRule();
     }
 
-    private void bindNavigationRules() {
+    protected void bindViewChangeRule() {
+        bind(ViewChangeRule.class).to(DefaultViewChangeRule.class);
+    }
+
+    protected void bindNavigationRules() {
         bind(LoginNavigationRule.class).to(DefaultLoginNavigationRule.class);
         bind(LogoutNavigationRule.class).to(DefaultLogoutNavigationRule.class);
     }
@@ -45,7 +49,6 @@ public class NavigationModule extends AbstractModule {
 
 
     protected void bindNavigator() {
-        bind(Navigator.class).to(DefaultNavigator.class)
-                             .in(UIScoped.class);
+        bind(Navigator.class).to(DefaultNavigator.class);
     }
 }

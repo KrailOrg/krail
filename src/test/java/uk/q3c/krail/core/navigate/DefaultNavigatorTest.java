@@ -75,22 +75,20 @@ public class DefaultNavigatorTest {
     UserStatusChangeSource source;
     @Inject
     MockOption option;
-
+    @Inject
+    DefaultViewChangeRule defaultViewChangeRule;
     @Mock
     private Page browserPage;
     @Mock
     private ErrorView errorView;
     @Mock
     private Provider<ErrorView> errorViewProvider;
-
     @Inject
     @UIBus
     private PubSubSupport<BusMessage> eventBus;
-
     @Inject
     @UIBus
     private PubSubSupport<BusMessage> eventBus2;
-
     @Inject
     private FakeListener listener1;
     @Inject
@@ -162,8 +160,7 @@ public class DefaultNavigatorTest {
     }
 
     private DefaultNavigator createNavigator() {
-        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
-                loginNavigationRule, logoutNavigationRule, eventBus);
+        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder, loginNavigationRule, logoutNavigationRule, eventBus, defaultViewChangeRule);
         navigator.init();
         return navigator;
     }

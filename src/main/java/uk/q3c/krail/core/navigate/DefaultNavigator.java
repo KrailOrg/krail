@@ -81,11 +81,11 @@ public class DefaultNavigator implements Navigator {
     private PubSubSupport<BusMessage> eventBus;
     private NavigationState previousNavigationState;
     private UserSitemap userSitemap;
+    private ViewChangeRule viewChangeRule;
 
     @Inject
     public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
-            pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule
-            loginNavigationRule, LogoutNavigationRule logoutNavigationRule, @UIBus PubSubSupport<BusMessage> eventBus) {
+            pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule loginNavigationRule, LogoutNavigationRule logoutNavigationRule, @UIBus PubSubSupport<BusMessage> eventBus, ViewChangeRule viewChangeRule) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -99,6 +99,7 @@ public class DefaultNavigator implements Navigator {
         this.logoutNavigationRule = logoutNavigationRule;
 
         this.eventBus = eventBus;
+        this.viewChangeRule = viewChangeRule;
     }
 
     @Override
@@ -157,6 +158,11 @@ public class DefaultNavigator implements Navigator {
     @Override
     public void navigateTo(NavigationState navigationState) {
         checkNotNull(navigationState);
+        //computer says no
+        if (!viewChangeRule.changeIsAllowed(this, currentView)) {
+            return;
+        }
+
         redirectIfNeeded(navigationState);
 
         // stop unnecessary changes, but also to prevent navigation aware

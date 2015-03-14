@@ -49,7 +49,7 @@ public class VaadinSessionScopeModule extends AbstractModule {
         bind(VaadinSessionProvider.class).to(DefaultVaadinSessionProvider.class);
     }
 
-    public VaadinSessionScope getUiScope() {
+    public VaadinSessionScope getScope() {
         return vaadinSessionScope;
     }
 
