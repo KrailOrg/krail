@@ -14,12 +14,14 @@ package uk.q3c.krail.core.view.component;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import net.engio.mbassy.listener.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
-import uk.q3c.krail.core.navigate.sitemap.UserSitemapChangeListener;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapLabelChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.user.opt.Option;
@@ -36,8 +38,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @I18N
-public class DefaultSubPagePanel extends NavigationButtonPanel implements OptionContext, SubPagePanel,
-        UserSitemapChangeListener {
+public class DefaultSubPagePanel extends NavigationButtonPanel implements OptionContext, SubPagePanel {
     public static final OptionKey optionSortType = new OptionKey(DefaultSubPagePanel.class, LabelKey.Sort_Type);
     public static final OptionKey optionSortAscending = new OptionKey(DefaultSubPagePanel.class, LabelKey.Sort_Ascending);
     private static Logger log = LoggerFactory.getLogger(DefaultSubPagePanel.class);
@@ -115,15 +116,15 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
         }
     }
 
-    @Override
-    public void labelsChanged() {
+    @Handler
+    public void labelsChanged(UserSitemapLabelChangeMessage busMessage) {
         rebuildRequired = true;
         build();
 
     }
 
-    @Override
-    public void structureChanged() {
+    @Handler
+    public void structureChanged(UserSitemapStructureChangeMessage busMessage) {
         rebuildRequired = true;
         build();
     }

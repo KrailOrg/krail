@@ -17,12 +17,13 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PageAccessControl;
@@ -44,22 +45,16 @@ public abstract class TestWithSitemap {
 
     @Inject
     protected CurrentLocale currentLocale;
-
     @Inject
     protected Translate translate;
-
     @Inject
     protected URIFragmentHandler uriHandler;
-
     @Inject
     protected MasterSitemap masterSitemap;
-
     @Mock
     protected SubjectProvider subjectProvider;
-
     @Mock
     protected Subject subject;
-
     @Mock
     protected PageAccessController pageAccessController;
     protected UserSitemapBuilder userSitemapBuilder;
@@ -80,11 +75,9 @@ public abstract class TestWithSitemap {
     protected UserSitemapNode userNode4;
     protected UserSitemapNode userNode5;
     protected UserSitemapNode userNode6;
-
-    @Mock
-    MBassador<BusMessage> eventBus;
-
-
+    @Inject
+    @SessionBus
+    PubSubSupport<BusMessage> sessionBus;
     Locale locale = Locale.UK;
     Collator collator;
 
@@ -225,7 +218,7 @@ public abstract class TestWithSitemap {
      * needed before calling this method
      */
     protected void createUserSitemap() {
-        userSitemap = new DefaultUserSitemap(translate, uriHandler);
+        userSitemap = new DefaultUserSitemap(translate, uriHandler, sessionBus);
         UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
                 masterSitemap, pageAccessController, translate);
         UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(masterSitemap, userSitemap, translate, currentLocale);

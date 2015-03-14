@@ -28,6 +28,7 @@ import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.user.opt.Option;
@@ -255,7 +256,7 @@ public class DefaultSubPagePanelTest {
         panel.addFilter(filter);
         panel.moveToNavigationState();
         // when
-        panel.structureChanged();
+        panel.structureChanged(new UserSitemapStructureChangeMessage());
         // then make sure build has been called
         assertThat(panel.isRebuildRequired()).isFalse();
     }

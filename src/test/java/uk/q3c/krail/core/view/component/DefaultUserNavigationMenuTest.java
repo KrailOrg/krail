@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.eventbus.EventBusAutoSubscriber;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.Navigator;
@@ -62,6 +63,9 @@ public class DefaultUserNavigationMenuTest {
 
     @Inject
     Translate translate;
+
+    @Inject
+    EventBusAutoSubscriber autoSubscriber;
 
 
     DefaultUserNavigationMenuBuilder builder;
@@ -186,7 +190,10 @@ public class DefaultUserNavigationMenuTest {
     }
 
     private DefaultUserNavigationMenu newMenu() {
-        return new DefaultUserNavigationMenu(userSitemap, option, builder);
+        DefaultUserNavigationMenu menu = new DefaultUserNavigationMenu(userSitemap, option, builder);
+        //simulates Guice construction
+        autoSubscriber.afterInjection(menu);
+        return menu;
     }
 
     @Test

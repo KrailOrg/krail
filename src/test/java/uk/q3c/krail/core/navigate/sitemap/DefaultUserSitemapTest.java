@@ -17,6 +17,8 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.ReferenceUserSitemap;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +37,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, TestUIScopeModule.class})
-public class DefaultUserSitemapTest implements UserSitemapChangeListener {
+@Listener
+public class DefaultUserSitemapTest {
 
     @Inject
     ReferenceUserSitemap userSitemap;
@@ -52,7 +55,6 @@ public class DefaultUserSitemapTest implements UserSitemapChangeListener {
         Locale.setDefault(Locale.UK);
         labelsChanged = false;
         structureChanged = false;
-        userSitemap.addChangeListener(this);
     }
 
     @Test
@@ -102,14 +104,14 @@ public class DefaultUserSitemapTest implements UserSitemapChangeListener {
         };
     }
 
-    @Override
-    public void labelsChanged() {
+    @Handler
+    public void labelsChanged(UserSitemapLabelChangeMessage busMessage) {
         labelsChanged = true;
 
     }
 
-    @Override
-    public void structureChanged() {
+    @Handler
+    public void structureChanged(UserSitemapStructureChangeMessage busMessage) {
         structureChanged = true;
 
     }

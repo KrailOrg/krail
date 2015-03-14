@@ -11,18 +11,15 @@
 
 package uk.q3c.krail.core.navigate.sitemap;
 
+import uk.q3c.krail.core.eventbus.BusMessage;
+
 /**
- * A user specific view of the {@link MasterSitemap}
+ * /**
+ * Published when a page is added / removed, or its position has changed. This will happen as a result of permission
+ * changes, logging in /out or potentially the dynamic addition / removal of pages (see
+ * https://github.com/davidsowerby/krail/issues/254).
  * <p>
- * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
- * login). Use the isxxxUri methods to test a uri for a match to a standard page
+ * Created by David Sowerby on 13/03/15.
  */
-public interface UserSitemap extends Sitemap<UserSitemapNode> {
-
-    public abstract UserSitemapNode userNodeFor(SitemapNode masterNode);
-
-    public abstract void buildUriMap();
-
-
-
+public class UserSitemapStructureChangeMessage implements BusMessage {
 }

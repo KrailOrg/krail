@@ -11,18 +11,13 @@
 
 package uk.q3c.krail.core.navigate.sitemap;
 
+import uk.q3c.krail.core.eventbus.BusMessage;
+
 /**
- * A user specific view of the {@link MasterSitemap}
+ * Published when only the labels have changed - this typically happens as a result of switching Locale.
  * <p>
- * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
- * login). Use the isxxxUri methods to test a uri for a match to a standard page
+ * <p>
+ * Created by David Sowerby on 13/03/15.
  */
-public interface UserSitemap extends Sitemap<UserSitemapNode> {
-
-    public abstract UserSitemapNode userNodeFor(SitemapNode masterNode);
-
-    public abstract void buildUriMap();
-
-
-
+public class UserSitemapLabelChangeMessage implements BusMessage {
 }

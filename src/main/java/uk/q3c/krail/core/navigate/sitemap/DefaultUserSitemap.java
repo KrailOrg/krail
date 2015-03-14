@@ -11,10 +11,13 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 import com.google.inject.Inject;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.i18n.CurrentLocale;
@@ -22,7 +25,6 @@ import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 
 import java.text.Collator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -44,15 +46,14 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
     private static Logger log = LoggerFactory.getLogger(DefaultUserSitemap.class);
 
     private final Translate translate;
-
-    private final List<UserSitemapChangeListener> changeListeners;
+    private final PubSubSupport<BusMessage> eventBus;
 
 
     @Inject
-    public DefaultUserSitemap(Translate translate, URIFragmentHandler uriHandler) {
+    public DefaultUserSitemap(Translate translate, URIFragmentHandler uriHandler, @SessionBus PubSubSupport<BusMessage> eventBus) {
         super(uriHandler);
         this.translate = translate;
-        changeListeners = new LinkedList<>();
+        this.eventBus = eventBus;
     }
 
 
@@ -72,15 +73,9 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
             userNode.setLabel(label);
             userNode.setCollationKey(collator.getCollationKey(userNode.getLabel()));
         }
-
-        fireLabelsChanged();
+        eventBus.publish(new UserSitemapLabelChangeMessage());
     }
 
-    private void fireLabelsChanged() {
-        for (UserSitemapChangeListener listener : changeListeners) {
-            listener.labelsChanged();
-        }
-    }
 
     /**
      * Returns the userNode which contains {@code masterNode}. Note that this method is not very efficient for larger
@@ -116,7 +111,7 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
         super.setLoaded(loaded);
         buildUriMap();
         if (loaded) {
-            fireStructureChanged();
+            eventBus.publish(new UserSitemapStructureChangeMessage());
         }
     }
 
@@ -129,34 +124,11 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
 
     }
 
-    private void fireStructureChanged() {
-        for (UserSitemapChangeListener listener : changeListeners) {
-            listener.structureChanged();
-        }
-
-    }
-
-    public void addChangeListener(UserSitemapChangeListener listener) {
-        changeListeners.add(listener);
-    }
-
-    public void removeChangeListener(UserSitemapChangeListener listener) {
-        changeListeners.remove(listener);
-    }
 
     public Translate getTranslate() {
         return translate;
     }
 
-    @Override
-    public void addListener(UserSitemapChangeListener listener) {
-        changeListeners.add(listener);
-    }
-
-    @Override
-    public void removeListener(UserSitemapChangeListener listener) {
-        changeListeners.remove(listener);
-    }
 
 
 }

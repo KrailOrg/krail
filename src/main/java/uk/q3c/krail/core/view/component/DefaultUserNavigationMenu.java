@@ -15,10 +15,15 @@ package uk.q3c.krail.core.view.component;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.vaadin.ui.MenuBar;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.SubscribeTo;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
-import uk.q3c.krail.core.navigate.sitemap.UserSitemapChangeListener;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapLabelChangeMessage;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionDescriptor;
@@ -30,8 +35,9 @@ import uk.q3c.util.ID;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public class DefaultUserNavigationMenu extends MenuBar implements OptionContext, UserNavigationMenu,
-        UserSitemapChangeListener {
+@Listener
+@SubscribeTo(SessionBus.class)
+public class DefaultUserNavigationMenu extends MenuBar implements OptionContext, UserNavigationMenu {
 
     public static final OptionKey optionKeyMaximumDepth = new OptionKey(DefaultUserNavigationMenu.class, LabelKey.Maxiumum_Depth);
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationMenu.class);
@@ -49,7 +55,6 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
         this.builder = builder;
         setImmediate(true);
         builder.setUserNavigationMenu(this);
-        userSitemap.addListener(this);
         setId(ID.getId(Optional.empty(), this));
 
     }
@@ -82,13 +87,13 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
         log.debug("contents cleared");
     }
 
-    @Override
-    public void labelsChanged() {
+    @Handler
+    public void labelsChanged(UserSitemapLabelChangeMessage busMessage) {
         build();
     }
 
-    @Override
-    public void structureChanged() {
+    @Handler
+    public void structureChanged(UserSitemapStructureChangeMessage busMessage) {
         build();
     }
 

@@ -20,14 +20,12 @@ import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.SubscribeTo;
 import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.navigate.Navigator;
-import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
-import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
-import uk.q3c.krail.core.navigate.sitemap.UserSitemapChangeListener;
-import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
+import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.user.opt.Option;
@@ -55,8 +53,8 @@ import java.util.Optional;
  * @modified David Sowerby
  */
 @Listener
-@SubscribeTo(UIBus.class)
-public class DefaultUserNavigationTree extends Tree implements OptionContext, UserNavigationTree, UserSitemapChangeListener {
+@SubscribeTo({UIBus.class, SessionBus.class})
+public class DefaultUserNavigationTree extends Tree implements OptionContext, UserNavigationTree {
 
     public static final OptionKey optionKeySortType = new OptionKey(DefaultUserNavigationTree.class, LabelKey.Sort_Type);
     public static final OptionKey optionKeySortAscending = new OptionKey(DefaultUserNavigationTree.class, LabelKey.Sort_Ascending);
@@ -85,7 +83,6 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
         builder.setUserNavigationTree(this);
         setImmediate(true);
         setItemCaptionMode(ItemCaptionMode.EXPLICIT);
-        userSitemap.addListener(this);
         addValueChangeListener(this);
         setId(ID.getId(Optional.empty(), this));
         sorters.setOptionSortAscending(getOptionSortAscending());
@@ -247,8 +244,8 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
      * Although only {@link UserSitemap} labels (and therefore captions) have changed, the tree may need to be
      * re-sorted to reflect the change in language, so it is easier just to rebuild the tree
      */
-    @Override
-    public void labelsChanged() {
+    @Handler
+    public void labelsChanged(UserSitemapLabelChangeMessage busMessage) {
         rebuildRequired = true;
         build();
     }
@@ -256,8 +253,8 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     /**
      * {@link UserSitemap} structure has changed, we need to rebuild
      */
-    @Override
-    public void structureChanged() {
+    @Handler
+    public void structureChanged(UserSitemapStructureChangeMessage busMessage) {
         rebuildRequired = true;
         build();
     }

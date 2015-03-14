@@ -18,20 +18,19 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.ReferenceUserSitemap;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.EventBusAutoSubscriber;
 import uk.q3c.krail.core.eventbus.EventBusModule;
-import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
@@ -58,11 +57,10 @@ public class DefaultUserNavigationTreeTest {
     ReferenceUserSitemap userSitemap;
 
     @Inject
-    CurrentLocale currentLocale;
+    EventBusAutoSubscriber autoSubscriber;
 
     @Inject
-    @SessionBus
-    PubSubSupport<BusMessage> eventBus;
+    CurrentLocale currentLocale;
 
     @Inject
     UserSitemapSorters sorters;
@@ -117,7 +115,10 @@ public class DefaultUserNavigationTreeTest {
     }
 
     private DefaultUserNavigationTree newTree() {
-        return new DefaultUserNavigationTree(userSitemap, navigator, option, builder, sorters);
+        DefaultUserNavigationTree tree = new DefaultUserNavigationTree(userSitemap, navigator, option, builder, sorters);
+        //simulates Guice construction
+        autoSubscriber.afterInjection(tree);
+        return tree;
     }
 
     @Test
@@ -216,7 +217,7 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree.build();
         userNavigationTree.setOptionSortAscending(false, false);
         // when
-        userNavigationTree.structureChanged();
+        userNavigationTree.structureChanged(new UserSitemapStructureChangeMessage());
         // then make sure build has been called
         assertThat(userNavigationTree.isRebuildRequired()).isFalse();
     }
