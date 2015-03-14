@@ -12,6 +12,7 @@
  */
 package uk.q3c.krail.core.guice.vsscope;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
@@ -100,5 +101,14 @@ public class VaadinSessionScope implements Scope {
     @Override
     public <T> Provider<T> scope(Key<T> key, Provider<T> unscoped) {
         return new VaadinSessionScopeProvider<T>(this, key, unscoped);
+    }
+
+    public ImmutableList<VaadinSession> scopeKeys() {
+        return ImmutableList.copyOf(cache.keySet());
+    }
+
+    public boolean containsInstance(VaadinSession vaadinSession, Object containedInstance) {
+        Map<Key<?>, Object> scopeSet = cache.get(vaadinSession);
+        return scopeSet.containsValue(containedInstance);
     }
 }

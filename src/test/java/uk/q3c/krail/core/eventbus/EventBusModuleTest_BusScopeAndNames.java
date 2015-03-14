@@ -93,6 +93,7 @@ public class EventBusModuleTest_BusScopeAndNames {
         assertThat((String) uiBus.getRuntime()
                                  .get(Properties.Common.Id)).isEqualTo(uiBusId);
 
+
     }
 
     public void teardown() {

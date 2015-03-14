@@ -180,12 +180,11 @@ public class EventBusModule extends AbstractModule {
 
     @Provides
     @GlobalBus
-    @VaadinSessionScoped
+    @Singleton
     protected PubSubSupport<BusMessage> providesGlobalBus(@GlobalBus IBusConfiguration config, @GlobalBus IPublicationErrorHandler publicationErrorHandler,
                                                           @GlobalBus ConfigurationErrorHandler configurationErrorHandler) {
         return createBus(config, publicationErrorHandler, configurationErrorHandler, "Global", true);
     }
-
 
     /**
      * Matches classes implementing {@link Service}
