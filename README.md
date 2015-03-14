@@ -62,7 +62,7 @@ Fails on Tomcat 8
 
 # Status
 
-8th March 2015:
+14th March 2015:
 
 * Vaadin 7.4.0 is integrated with:
 * Guice 3.0,
@@ -72,7 +72,7 @@ Fails on Tomcat 8
 * Guava cache
 
 
-Krail is usable, though there are still some bugs and further developments needed.  Vaadin push is supported.
+Krail is usable, though there is still work to ensure thread safety.  No major changes to the API expected.  Vaadin push is supported.
 
 
 ## demo
