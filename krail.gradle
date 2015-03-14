@@ -9,6 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
+apply plugin: 'war' // needed only for providedCompile
+
 description = 'A rapid development framework for web apps using Vaadin, Guice, Shiro et al'
 
 ext.shiroVersion = '1.2.3'
@@ -24,7 +26,7 @@ dependencies {
     compile 'net.engio:mbassador:1.2.1'
 
     //servlet
-    compile "javax.servlet:javax.servlet-api:3.+"
+    providedCompile "javax.servlet:javax.servlet-api:3.+"
 
     //Utility
     //the easiest way to all the Jung parts
