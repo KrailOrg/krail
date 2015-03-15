@@ -58,21 +58,21 @@ repositories {
 
 #Limitations
 
-Fails on Tomcat 8
+Not fully thread-safe where it needs to be
 
 # Status
 
-14th March 2015:
+18th March 2015:
 
 * Vaadin 7.4.0 is integrated with:
 * Guice 3.0,
-* Shiro 1.2.1,
+* Shiro 1.2.3,
 * [MBassador Event Bus](https://github.com/bennidi/mbassador)
 * Apache Commons Configuration
 * Guava cache
 
 
-Krail is usable, though there is still work to ensure thread safety.  No major changes to the API expected.  Vaadin push is supported.
+Krail is usable, though there is still work to ensure thread safety.  No major changes to the API expected.  Vaadin push is supported.  Tested on Tomcat 7 & 8
 
 
 ## demo
