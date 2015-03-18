@@ -27,6 +27,7 @@ import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
+import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.threadscope.ThreadScopeModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
@@ -43,7 +44,7 @@ import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.core.view.ViewModule;
-import uk.q3c.krail.core.view.component.StandardComponentModule;
+import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.I18NModule;
 
 import javax.servlet.ServletContextEvent;
@@ -136,11 +137,22 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
         coreModules.add(navigationModule());
 
+        coreModules.add(dataModule());
+
         addValidationModules(coreModules);
 
         addAppModules(coreModules);
         addSitemapModules(coreModules);
         return coreModules;
+    }
+
+    /**
+     * Override this if you have provided your own {@link DataModule} implementation
+     *
+     * @return a new {@link DataModule} instance
+     */
+    protected Module dataModule() {
+        return new DataModule();
     }
 
     /**
@@ -216,7 +228,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     }
 
     protected Module componentModule() {
-        return new StandardComponentModule();
+        return new DefaultComponentModule();
     }
 
     /**

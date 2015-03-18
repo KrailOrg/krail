@@ -37,7 +37,7 @@ import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.core.view.PrivateHomeView;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
-import uk.q3c.krail.core.view.component.StandardComponentModule;
+import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.I18NModule;
 import uk.q3c.krail.i18n.LabelKey;
 
@@ -47,8 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestDirectSitemapModule1.class, TestDirectSitemapModule2.class, UIScopeModule.class, EventBusModule.class, ViewModule.class, ShiroVaadinModule
-        .class, I18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class,
-        StandardComponentModule.class, VaadinSessionScopeModule.class, OptionModule.class, NavigationModule.class})
+        .class, I18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, OptionModule.class, NavigationModule.class})
 public class DirectSitemapModuleTest {
 
     @Inject

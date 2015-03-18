@@ -25,6 +25,7 @@ import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
+import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
@@ -39,7 +40,7 @@ import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.view.ViewModule;
-import uk.q3c.krail.core.view.component.StandardComponentModule;
+import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.TestI18NModule;
@@ -94,9 +95,7 @@ public class UIScopeTest {
 
         // when
 
-        injector = Guice.createInjector(new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(), new ServiceModule(),
-                new OptionModule(), new UserModule(), new StandardComponentModule(), new TestI18NModule(), new StandardShiroModule(), new ShiroVaadinModule()
-                , new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new NavigationModule(), new EventBusModule());
+        injector = Guice.createInjector(new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(), new ServiceModule(), new OptionModule(), new UserModule(), new DefaultComponentModule(), new TestI18NModule(), new StandardShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new NavigationModule(), new EventBusModule(), new DataModule());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
         // navigator = injector.getInstance(Navigator.class);

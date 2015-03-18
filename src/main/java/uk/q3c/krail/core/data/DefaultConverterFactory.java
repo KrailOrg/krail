@@ -13,11 +13,10 @@
 package uk.q3c.krail.core.data;
 
 import com.vaadin.data.util.converter.Converter;
-import com.vaadin.data.util.converter.DefaultConverterFactory;
 
 import java.time.LocalDateTime;
 
-public class KrailDefaultConverterFactory extends DefaultConverterFactory {
+public class DefaultConverterFactory extends com.vaadin.data.util.converter.DefaultConverterFactory {
 
     @SuppressWarnings("unchecked")
     @Override

@@ -13,12 +13,8 @@ package uk.q3c.krail.core.ui;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
-import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.WebBrowser;
 import com.vaadin.ui.UI;
-import uk.q3c.krail.core.data.KrailDefaultConverterFactory;
-import uk.q3c.krail.core.view.component.DefaultUserStatusPanel;
-import uk.q3c.krail.core.view.component.UserStatusPanel;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 
@@ -35,9 +31,6 @@ public abstract class UIModule extends AbstractModule {
         addUIBindings(mapbinder);
 
 
-        bindConverterFactory();
-        bindLoginStatusMonitor();
-
     }
 
     private void bindApplicationTitle() {
@@ -53,16 +46,6 @@ public abstract class UIModule extends AbstractModule {
         return LabelKey.Krail;
     }
 
-    private void bindConverterFactory() {
-        bind(ConverterFactory.class).to(KrailDefaultConverterFactory.class);
-    }
-
-    /**
-     * Override to bind your choice of LoginStatusMonitor
-     */
-    protected void bindLoginStatusMonitor() {
-        bind(UserStatusPanel.class).to(DefaultUserStatusPanel.class);
-    }
 
     /**
      * Override to bind your ScopedUIProvider implementation

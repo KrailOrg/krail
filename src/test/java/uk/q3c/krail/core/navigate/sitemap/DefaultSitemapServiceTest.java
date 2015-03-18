@@ -45,7 +45,7 @@ import uk.q3c.krail.core.ui.ScopedUIProvider;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
-import uk.q3c.krail.core.view.component.StandardComponentModule;
+import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.testutil.TestI18NModule;
@@ -69,8 +69,7 @@ import static org.mockito.Mockito.when;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class, ServiceModule.class,
-        ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class, StandardComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, NavigationModule.class})
+@GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class, ServiceModule.class, ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class, DefaultComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, NavigationModule.class})
 public class DefaultSitemapServiceTest {
 
     static VaadinService vaadinService;

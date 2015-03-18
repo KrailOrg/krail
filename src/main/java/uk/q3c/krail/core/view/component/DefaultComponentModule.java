@@ -15,7 +15,7 @@ package uk.q3c.krail.core.view.component;
 import com.google.inject.AbstractModule;
 import uk.q3c.krail.core.guice.DefaultBindingManager;
 
-public class StandardComponentModule extends AbstractModule {
+public class DefaultComponentModule extends AbstractModule {
 
     @Override
     protected void configure() {
@@ -28,6 +28,7 @@ public class StandardComponentModule extends AbstractModule {
         bindApplicationLogo();
         bindApplicationHeader();
         bindLocaleSelector();
+        bindUserStatusPanel();
     }
 
     /**
@@ -108,5 +109,13 @@ public class StandardComponentModule extends AbstractModule {
         bind(UserNavigationTree.class).to(DefaultUserNavigationTree.class);
         bind(UserNavigationTreeBuilder.class).to(DefaultUserNavigationTreeBuilder.class);
     }
+
+    /**
+     * Override to bind your implementation of  UserStatusPanel
+     */
+    protected void bindUserStatusPanel() {
+        bind(UserStatusPanel.class).to(DefaultUserStatusPanel.class);
+    }
+
 
 }
