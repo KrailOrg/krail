@@ -64,7 +64,7 @@ Not fully thread-safe where it needs to be
 
 18th March 2015:
 
-* Vaadin 7.4.0 is integrated with:
+* Vaadin 7.4.2 is integrated with:
 * Guice 3.0,
 * Shiro 1.2.3,
 * [MBassador Event Bus](https://github.com/bennidi/mbassador)
