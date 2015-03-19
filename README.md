@@ -67,7 +67,7 @@ Not fully thread-safe where it needs to be
 * Vaadin 7.4.2 is integrated with:
 * Guice 3.0,
 * Shiro 1.2.3,
-* [MBassador Event Bus](https://github.com/bennidi/mbassador)
+* MBassador (Event Bus)
 * Apache Commons Configuration
 * Guava cache
 
@@ -89,4 +89,28 @@ There is a [functional test application](https://github.com/davidsowerby/krail-t
 Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).
 
 If you want to build from source run 'gradle eclipse' or 'gradle idea' to generate the IDE files
+
+#Acknowlegements
+
+In no particular order:
+
+[Vaadin](https://vaadin.com/home)
+[Guice](https://github.com/google/guice)
+[Apache Shiro](http://shiro.apache.org/)
+[JUnit](http://junit.org/)
+[Guava](https://github.com/google/guava) (cache and utilities)
+[MBassador Event Bus](https://github.com/bennidi/mbassador)
+[Flag Icons](http://www.icondrawer.com/)
+[Apache Commons Configuration](http://commons.apache.org/proper/commons-configuration)
+[Gradle](http://gradle.org/)
+[Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin)
+[Gradle Docker Plugin](https://github.com/bmuschko/gradle-docker-plugin)
+[Gradle Bintray Plugin](https://github.com/bintray/gradle-bintray-plugin)
+[Bintray](https://bintray.com)
+[Docker](https://www.docker.com/)
+[Logback](http://logback.qos.ch/)
+[slf4j](http://www.slf4j.org/)
+[AssertJ](http://joel-costigliola.github.io/assertj/)
+[Mycila](https://github.com/mycila)
+[Mockito](https://github.com/mockito/mockito)
 
