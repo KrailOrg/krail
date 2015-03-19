@@ -72,12 +72,14 @@ public class ServicesMonitor {
         ServiceStatus status = services.get(service);
         status.setPreviousStatus(busMessage.getFromStatus());
         status.setCurrentStatus(busMessage.getToStatus());
-        status.setStatusChangeTime(LocalDateTime.now());
+        //call LocalDateTime.now() just once, otherwise there are tiny differences between change time & start / stop times
+        LocalDateTime serviceChangeTime = LocalDateTime.now();
+        status.setStatusChangeTime(serviceChangeTime);
         if (service.isStarted()) {
-            status.setLastStartTime(LocalDateTime.now());
+            status.setLastStartTime(LocalDateTime.from(serviceChangeTime));
         }
         if (service.isStopped()) {
-            status.setLastStopTime(LocalDateTime.now());
+            status.setLastStopTime(LocalDateTime.from(serviceChangeTime));
         }
         services.put(service, status);
     }

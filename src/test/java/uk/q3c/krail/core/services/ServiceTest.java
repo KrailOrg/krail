@@ -290,7 +290,7 @@ public class ServiceTest {
         // last start time is now or earlier
         LocalDateTime s1 = status.getLastStartTime();
         LocalDateTime s2 = LocalDateTime.now();
-        assertThat(!s1.isAfter(s2)).isTrue();
+        assertThat(s1.isAfter(s2)).isFalse();
 
 
         assertThat(status.getLastStopTime()).isNull();
@@ -311,10 +311,12 @@ public class ServiceTest {
         assertThat(status.getLastStartTime()).isNotNull()
                                              .isEqualTo(startTime); // shouldn't have changed
         assertThat(status.getLastStopTime()).isNotNull();
+        //last stop time is now or earlier
         assertThat(!LocalDateTime.now()
                                  .isBefore(status.getLastStopTime())).isTrue();
-        assertThat(status.getLastStopTime()
-                         .isAfter(startTime)).isTrue();
+
+        // last stop time i start time or later
+        assertThat(startTime.isAfter(status.getLastStopTime())).isFalse();
         assertThat(status.getStatusChangeTime()).isNotNull()
                                                 .isEqualTo(status.getLastStopTime());
         assertThat(status.getPreviousStatus()).isEqualTo(Status.STARTED);
