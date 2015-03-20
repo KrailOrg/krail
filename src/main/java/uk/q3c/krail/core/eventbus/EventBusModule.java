@@ -32,6 +32,8 @@ import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.services.Service;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Configures Event bus implementations for, UIScope, VaadinSessionScope and Singleton scope.  All classes annotated with {@link Listener} are subscribed to a
  * bus, using logic provided by {@link DefaultEventBusAutoSubscriber}, but can be changed by providing an alternative implementation in {@link
@@ -47,7 +49,12 @@ import uk.q3c.krail.core.services.Service;
  * Created by David Sowerby on 08/03/15.
  */
 public class EventBusModule extends AbstractModule {
+    public final static String BUS_SCOPE = "bus_id";
+    public final static String BUS_INDEX = "bus_index";
     private static Logger log = LoggerFactory.getLogger(EventBusModule.class);
+    private AtomicInteger globalBusIndex = new AtomicInteger(1);
+    private AtomicInteger sessionBusIndex = new AtomicInteger(1);
+    private AtomicInteger uiBusIndex = new AtomicInteger(1);
 
     /**
      * Configures a {@link Binder} via the exposed methods.
@@ -155,7 +162,11 @@ public class EventBusModule extends AbstractModule {
     @UIScoped
     protected PubSubSupport<BusMessage> providesUIBus(@UIBus IBusConfiguration config, @UIBus IPublicationErrorHandler publicationErrorHandler, @UIBus
     ConfigurationErrorHandler configurationErrorHandler) {
-        return createBus(config, publicationErrorHandler, configurationErrorHandler, "UI", false);
+        PubSubSupport<BusMessage> bus = createBus(config, publicationErrorHandler, configurationErrorHandler, "UI", false);
+        bus.getRuntime()
+           .add(BUS_SCOPE, "ui")
+           .add(BUS_INDEX, uiBusIndex.getAndIncrement());
+        return bus;
     }
 
     private PubSubSupport<BusMessage> createBus(IBusConfiguration config, IPublicationErrorHandler publicationErrorHandler, ConfigurationErrorHandler
@@ -175,7 +186,11 @@ public class EventBusModule extends AbstractModule {
     @VaadinSessionScoped
     protected PubSubSupport<BusMessage> providesSessionBus(@SessionBus IBusConfiguration config, @SessionBus IPublicationErrorHandler
             publicationErrorHandler, @SessionBus ConfigurationErrorHandler configurationErrorHandler) {
-        return createBus(config, publicationErrorHandler, configurationErrorHandler, "Session", false);
+        PubSubSupport<BusMessage> bus = createBus(config, publicationErrorHandler, configurationErrorHandler, "Session", false);
+        bus.getRuntime()
+           .add(BUS_SCOPE, "session")
+           .add(BUS_INDEX, sessionBusIndex.getAndIncrement());
+        return bus;
     }
 
     @Provides
@@ -183,7 +198,11 @@ public class EventBusModule extends AbstractModule {
     @Singleton
     protected PubSubSupport<BusMessage> providesGlobalBus(@GlobalBus IBusConfiguration config, @GlobalBus IPublicationErrorHandler publicationErrorHandler,
                                                           @GlobalBus ConfigurationErrorHandler configurationErrorHandler) {
-        return createBus(config, publicationErrorHandler, configurationErrorHandler, "Global", true);
+        PubSubSupport<BusMessage> bus = createBus(config, publicationErrorHandler, configurationErrorHandler, "Global", true);
+        bus.getRuntime()
+           .add(BUS_SCOPE, "global")
+           .add(BUS_INDEX, globalBusIndex.getAndIncrement());
+        return bus;
     }
 
     /**
