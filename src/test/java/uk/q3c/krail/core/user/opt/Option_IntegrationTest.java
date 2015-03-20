@@ -28,6 +28,7 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.opt.cache.DefaultOptionCache;
 import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheProvider;
+import uk.q3c.krail.core.user.opt.cache.OptionCacheConfig;
 import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.view.component.LocaleContainer;
@@ -218,7 +219,6 @@ public class Option_IntegrationTest {
                               .hitCount()).isEqualTo(8);
     }
 
-
     @ModuleProvider
     protected AbstractModule moduleProvider() {
         return new AbstractModule() {
@@ -228,7 +228,8 @@ public class Option_IntegrationTest {
                 GuavaCacheConfiguration cacheConfig = new GuavaCacheConfiguration().recordStats();
 
                 bind(OptionDao.class).to(InMemoryOptionDao.class);
-                bind(GuavaCacheConfiguration.class).toInstance(cacheConfig);
+                bind(GuavaCacheConfiguration.class).annotatedWith(OptionCacheConfig.class)
+                                                   .toInstance(cacheConfig);
             }
 
         };

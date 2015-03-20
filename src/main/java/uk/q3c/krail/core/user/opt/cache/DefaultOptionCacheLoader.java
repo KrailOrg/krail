@@ -28,7 +28,7 @@ import static uk.q3c.krail.core.user.profile.RankOption.HIGHEST_RANK;
 import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
 
 /**
- * An {@link OptionCacheLoader} implementation which finds the options appropriate for the key provided (see {@link
+ * Extends {@link CacheLoader} implementation which finds the options appropriate for the key provided (see {@link
  * OptionCacheKey#getRankOption()}) - this may be the value for highest in rank, lowest in rank or a specific rank
  * for the {@link UserHierarchy}.
  * <p>
@@ -40,8 +40,7 @@ import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
  * <p>
  * Created by David Sowerby on 19/02/15.
  */
-public class DefaultOptionCacheLoader extends CacheLoader<OptionCacheKey, Optional<Object>> implements
-        OptionCacheLoader {
+public class DefaultOptionCacheLoader extends CacheLoader<OptionCacheKey, Optional<Object>> {
     private static Logger log = LoggerFactory.getLogger(DefaultOptionCacheLoader.class);
     private Provider<OptionDao> daoProvider;
 

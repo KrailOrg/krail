@@ -14,10 +14,7 @@ package uk.q3c.krail.core.user.opt;
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.core.user.opt.cache.DefaultOptionCache;
-import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheLoader;
-import uk.q3c.krail.core.user.opt.cache.OptionCache;
-import uk.q3c.krail.core.user.opt.cache.OptionCacheLoader;
+import uk.q3c.krail.core.user.opt.cache.*;
 
 /**
  * Created by David Sowerby on 16/11/14.
@@ -31,15 +28,19 @@ public class OptionModule extends AbstractModule {
     protected void configure() {
         bindOption();
         bindOptionStore();
+        bindOptionCacheConfiguration();
         bindOptionCache();
-        bindOptionCacheLoader();
+        bindOptionCacheProvider();
         bindOptionDao();
-        define();
     }
 
-    protected void define() {
-
+    /**
+     * Override this method to provide your own {@link OptionCacheProvider} implementation.
+     */
+    protected void bindOptionCacheProvider() {
+        bind(OptionCacheProvider.class).to(DefaultOptionCacheProvider.class);
     }
+
 
     /**
      * Override this method to provide your own {@link OptionDao} implementation
@@ -59,13 +60,22 @@ public class OptionModule extends AbstractModule {
                                .in(VaadinSessionScoped.class);
     }
 
-    /**
-     * Override this method to provide your own {@link OptionCacheLoader} implementation
-     */
-    protected void bindOptionCacheLoader() {
-        bind(OptionCacheLoader.class).to(DefaultOptionCacheLoader.class);
+    protected void bindOptionCacheConfiguration() {
+        bind(GuavaCacheConfiguration.class).annotatedWith(OptionCacheConfig.class)
+                                           .toInstance(configureCache());
     }
 
+    /**
+     * Override this to configure the option cache
+     *
+     * @return
+     */
+    protected GuavaCacheConfiguration configureCache() {
+        GuavaCacheConfiguration config = new GuavaCacheConfiguration();
+        config.maximumSize(5000)
+              .recordStats();
+        return config;
+    }
 
     /**
      * Override this method to provide your own {@link Option} implementation. If all you want to do is change the
@@ -81,10 +91,5 @@ public class OptionModule extends AbstractModule {
      */
     protected void bindOptionStore() {
         bind(OptionStore.class).to(InMemoryOptionStore.class);
-    }
-
-
-    protected void configureCache() {
-        GuavaCacheConfiguration config = new GuavaCacheConfiguration();
     }
 }

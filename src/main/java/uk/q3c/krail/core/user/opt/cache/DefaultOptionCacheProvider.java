@@ -27,11 +27,11 @@ import java.util.Optional;
  */
 public class DefaultOptionCacheProvider implements OptionCacheProvider {
     private static Logger log = LoggerFactory.getLogger(DefaultOptionCacheProvider.class);
-    private GuavaCacheConfiguration cacheConfiguration;
-    private DefaultOptionCacheLoader cacheLoader;
+    private final GuavaCacheConfiguration cacheConfiguration;
+    private final DefaultOptionCacheLoader cacheLoader;
 
     @Inject
-    protected DefaultOptionCacheProvider(DefaultOptionCacheLoader cacheLoader, GuavaCacheConfiguration
+    protected DefaultOptionCacheProvider(DefaultOptionCacheLoader cacheLoader, @OptionCacheConfig GuavaCacheConfiguration
             cacheConfiguration) {
         this.cacheLoader = cacheLoader;
         this.cacheConfiguration = cacheConfiguration;
@@ -45,4 +45,6 @@ public class DefaultOptionCacheProvider implements OptionCacheProvider {
         return cacheConfiguration.builder()
                                  .build(cacheLoader);
     }
+
+
 }

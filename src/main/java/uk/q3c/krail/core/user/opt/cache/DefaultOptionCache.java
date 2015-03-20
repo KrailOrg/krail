@@ -53,7 +53,7 @@ public class DefaultOptionCache implements OptionCache {
     private final Provider<OptionDao> daoProvider;
 
     @Inject
-    public DefaultOptionCache(Provider<OptionDao> daoProvider, DefaultOptionCacheProvider cacheProvider) {
+    public DefaultOptionCache(Provider<OptionDao> daoProvider, OptionCacheProvider cacheProvider) {
         this.daoProvider = daoProvider;
         cache = cacheProvider.get();
     }
