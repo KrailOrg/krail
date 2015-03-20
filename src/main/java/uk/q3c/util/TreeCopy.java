@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -39,15 +37,14 @@ import java.util.*;
  * but before before adding them to the target). If target nodes are the same as the source nodes, however, it makes no
  * difference whether the sort is performed on source or target nodes.<br>
  * <br>
- * A source or target node sort comparator is set to determine sort order using
- * {@link #setSourceSortComparator(Comparator) or {@link #setTargetSortComparator(Comparator)} - but note that if no
+ * A source or target node sort comparator is set to determine sort order using {@link #setSourceSortComparator(Comparator)}
+ * or {@link #setTargetSortComparator(Comparator)} - but note that if no
  * comparator is provided, nodes must implement {@link Comparable} to provide a natural ordering. <br>
  * <br>
  * An extension may be injected using {@link #setExtension(TreeCopyExtension)}, to enable post-processing. <br>
  * <br>
  * If a target node is of a different type to the source node, call
  * {@link TargetTreeWrapper#setNodeModifier(NodeModifier)} with an implementation to make the conversion. The default
- * is
  * simply returns a reference to the source node;
  *
  * @param <S>
@@ -60,8 +57,10 @@ import java.util.*;
  */
 public class TreeCopy<S, T> {
 
+    public enum SortOption {
+        SORT_SOURCE_NODES, SORT_TARGET_NODES_AFTER_ADD, SORT_TARGET_NODES_BEFORE_ADD
+    }
     private static Logger log = LoggerFactory.getLogger(TreeCopy.class);
-    ;
     private final SourceTreeWrapper<S> source;
     private final TargetTreeWrapper<S, T> target;
     // We need this to keep a lookup - the target list is sorted before being
@@ -332,10 +331,6 @@ public class TreeCopy<S, T> {
 
     public void setSorted(boolean sorted) {
         this.sorted = sorted;
-    }
-
-    public enum SortOption {
-        SORT_SOURCE_NODES, SORT_TARGET_NODES_AFTER_ADD, SORT_TARGET_NODES_BEFORE_ADD
     }
 
 }
