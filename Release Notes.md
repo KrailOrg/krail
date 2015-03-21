@@ -10,7 +10,7 @@ This version upgrades to Vaadin 7.4.2 and closes a number of unrelated tasks and
 -   [257](https://github.com/davidsowerby/krail/issues/257): NavTree and NavMenu sort differently
 -   [260](https://github.com/davidsowerby/krail/issues/260): Fails on Tomcat 8
 -   [294](https://github.com/davidsowerby/krail/issues/294): UIModule content review
--   [324](https://github.com/davidsowerby/krail/issues/324): Time comparison failure - uk.q3c.krail.core.services.ServiceTest.monitorLogsStatusChange
+-   [324](https://github.com/davidsowerby/krail/issues/324): Time comparison failure - ServiceTest.monitorLogsStatusChange
 -   [347](https://github.com/davidsowerby/krail/issues/347): OptionCache not picking up configuration
 -   [352](https://github.com/davidsowerby/krail/issues/352): EventBusModule - scope of GlobalBus
 -   [353](https://github.com/davidsowerby/krail/issues/353): Upgrade to Vaadin 7.4.1
