@@ -92,8 +92,7 @@ If you want to build from source run 'gradle eclipse' or 'gradle idea' to genera
 
 #Acknowlegements
 
-In no particular order:
-
+ej technologies for an an open source licence for their java profiler, [JProfiler](http://www.ej-technologies.com/products/jprofiler/overview.html)  
 [Vaadin](https://vaadin.com/home)
 [Guice](https://github.com/google/guice)
 [Apache Shiro](http://shiro.apache.org/)
