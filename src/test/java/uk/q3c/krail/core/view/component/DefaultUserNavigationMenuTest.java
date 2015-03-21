@@ -333,7 +333,7 @@ public class DefaultUserNavigationMenuTest {
         // when
         currentLocale.setLocale(Locale.GERMANY);
         captions = menuCaptions(null);
-        assertThat(captions).containsExactly("Privat", "Öffentlich");
+        assertThat(captions).containsExactly("Öffentlich", "Privat");
 
         pblic = childWithText("Öffentlich", null);
         captions = menuCaptions(pblic);

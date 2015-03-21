@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -17,8 +15,11 @@ import com.vaadin.ui.MenuBar.MenuItem;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.util.*;
+import uk.q3c.util.SourceTreeWrapper_BasicForest;
+import uk.q3c.util.TargetTreeWrapper_MenuBar;
+import uk.q3c.util.TreeCopy;
 import uk.q3c.util.TreeCopy.SortOption;
+import uk.q3c.util.UserSitemapNodeCaption;
 
 public class DefaultUserNavigationMenuBuilder implements UserNavigationMenuBuilder {
 
@@ -48,7 +49,7 @@ public class DefaultUserNavigationMenuBuilder implements UserNavigationMenuBuild
         treeCopy.setSortOption(SortOption.SORT_SOURCE_NODES);
         treeCopy.setMaxDepth(userNavigationMenu.getOptionMaxDepth());
         treeCopy.setSorted(userNavigationMenu.isSorted());
-        treeCopy.setTargetSortComparator(new MenuItemComparator());
+        //        treeCopy.setTargetSortComparator(new MenuItemComparator());
 
         treeCopy.addSourceFilter(new LogoutPageFilter());
         treeCopy.copy();

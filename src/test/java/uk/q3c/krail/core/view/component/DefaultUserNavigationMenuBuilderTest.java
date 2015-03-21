@@ -31,7 +31,6 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.OptionStore;
-import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
@@ -43,10 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class, TestUIScopeModule.class})
 public class DefaultUserNavigationMenuBuilderTest {
 
-    @Inject
-    CurrentLocale currentLocale;
-
-    DefaultUserNavigationTreeBuilder builder;
+    DefaultUserNavigationMenuBuilder builder;
 
     @Inject
     ReferenceUserSitemap userSitemap;
@@ -60,12 +56,13 @@ public class DefaultUserNavigationMenuBuilderTest {
     @Mock
     Navigator navigator;
 
-    private DefaultUserNavigationTree userNavigationTree;
+    private DefaultUserNavigationMenu userNavigationMenu;
 
     @Before
     public void setUp() throws Exception {
-        builder = new DefaultUserNavigationTreeBuilder(userSitemap);
-        userNavigationTree = new DefaultUserNavigationTree(userSitemap, navigator, option, builder, sorters);
+        builder = new DefaultUserNavigationMenuBuilder(userSitemap, navigator);
+        userNavigationMenu = new DefaultUserNavigationMenu(userSitemap, option, builder);
+        userSitemap.populate();
     }
 
     @Test
@@ -74,8 +71,9 @@ public class DefaultUserNavigationMenuBuilderTest {
         // when
 
         // then
-        assertThat(builder.getUserNavigationTree()).isEqualTo(userNavigationTree);
+        assertThat(builder.getUserNavigationMenu()).isEqualTo(userNavigationMenu);
     }
+
 
     @ModuleProvider
     protected AbstractModule module() {

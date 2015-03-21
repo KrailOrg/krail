@@ -103,7 +103,7 @@ public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode>
 
     @Override
     public int compareTo(UserSitemapNode otherNode) {
-        return label.compareTo(otherNode.label);
+        return collationKey.compareTo(otherNode.collationKey);
     }
 
     public int getPositionIndex() {
