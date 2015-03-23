@@ -65,7 +65,7 @@ Not fully thread-safe where it needs to be
 21st March 2015:
 
 * Vaadin 7.4.2 is integrated with:
-* Guice 3.0,
+* Guice 4.0.beta5, (beta, but used [in production](https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!msg/google-guice/mlgZgKiJyU8/IUgtKwha3YAJ)
 * Shiro 1.2.3,
 * MBassador (Event Bus)
 * Apache Commons Configuration
@@ -92,24 +92,24 @@ If you want to build from source run 'gradle eclipse' or 'gradle idea' to genera
 
 #Acknowlegements
 
-ej technologies for an open source licence for their java profiler, [JProfiler](http://www.ej-technologies.com/products/jprofiler/overview.html)
-[Vaadin](https://vaadin.com/home)
-[Guice](https://github.com/google/guice)
-[Apache Shiro](http://shiro.apache.org/)
-[JUnit](http://junit.org/)
-[Guava](https://github.com/google/guava) (cache and utilities)
-[MBassador Event Bus](https://github.com/bennidi/mbassador)
-[Flag Icons](http://www.icondrawer.com/)
-[Apache Commons Configuration](http://commons.apache.org/proper/commons-configuration)
-[Gradle](http://gradle.org/)
-[Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin)
-[Gradle Docker Plugin](https://github.com/bmuschko/gradle-docker-plugin)
-[Gradle Bintray Plugin](https://github.com/bintray/gradle-bintray-plugin)
-[Bintray](https://bintray.com)
-[Docker](https://www.docker.com/)
-[Logback](http://logback.qos.ch/)
-[slf4j](http://www.slf4j.org/)
-[AssertJ](http://joel-costigliola.github.io/assertj/)
-[Mycila](https://github.com/mycila)
-[Mockito](https://github.com/mockito/mockito)
+ej technologies for an open source licence for their java profiler, [JProfiler](http://www.ej-technologies.com/products/jprofiler/overview.html)<br>
+[Vaadin](https://vaadin.com/home)<br>
+[Guice](https://github.com/google/guice)<br>
+[Apache Shiro](http://shiro.apache.org/)<br>
+[JUnit](http://junit.org/)<br>
+[Guava](https://github.com/google/guava) (cache and utilities)<br>
+[MBassador Event Bus](https://github.com/bennidi/mbassador)<br>
+[Flag Icons](http://www.icondrawer.com/)<br>
+[Apache Commons Configuration](http://commons.apache.org/proper/commons-configuration)<br>
+[Gradle](http://gradle.org/)<br>
+[Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin)<br>
+[Gradle Docker Plugin](https://github.com/bmuschko/gradle-docker-plugin)<br>
+[Gradle Bintray Plugin](https://github.com/bintray/gradle-bintray-plugin)<br>
+[Bintray](https://bintray.com)<br>
+[Docker](https://www.docker.com/)<br>
+[Logback](http://logback.qos.ch/)<br>
+[slf4j](http://www.slf4j.org/)<br>
+[AssertJ](http://joel-costigliola.github.io/assertj/)<br>
+[Mycila](https://github.com/mycila)<br>
+[Mockito](https://github.com/mockito/mockito)<br>
 
