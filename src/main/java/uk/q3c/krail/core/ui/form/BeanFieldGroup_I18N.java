@@ -19,7 +19,8 @@ import com.vaadin.data.util.BeanItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.data.CommitException;
-import uk.q3c.krail.core.data.Entity;
+import uk.q3c.krail.core.data.KrailEntity;
+import uk.q3c.krail.core.data.StatementDao;
 import uk.q3c.krail.i18n.I18NProcessor;
 
 
@@ -27,33 +28,35 @@ import uk.q3c.krail.i18n.I18NProcessor;
  * Wraps a {@link BeanFieldGroup} with methods to provide equivalent functionality, but using Krail's I18N Framework to
  * provide captions and descriptions for the Field components
  *
- * @param <T>
+ * @param <E> the Entity type
  */
-public class BeanFieldGroup_I18N<T extends Entity> {
+public class BeanFieldGroup_I18N<E extends KrailEntity<ID, VER>, ID, VER> {
 
     private static Logger log = LoggerFactory.getLogger(BeanFieldGroup_I18N.class);
     private final I18NProcessor i18NProcessor;
-    private T bean;
-    private BeanFieldGroup<T> fieldGroup;
+    private E bean;
+    private StatementDao<ID, VER> dao;
+    private BeanFieldGroup<E> fieldGroup;
 
     @Inject
-    protected BeanFieldGroup_I18N(I18NProcessor i18NProcessor) {
+    protected BeanFieldGroup_I18N(I18NProcessor i18NProcessor, StatementDao<ID, VER> dao) {
         super();
         this.i18NProcessor = i18NProcessor;
+        this.dao = dao;
     }
 
-    public BeanFieldGroup<T> getFieldGroup() {
+    public BeanFieldGroup<E> getFieldGroup() {
         return fieldGroup;
     }
 
-    public BeanItem<T> getBeanItem() {
+    public BeanItem<E> getBeanItem() {
         return fieldGroup.getItemDataSource();
     }
 
     @SuppressWarnings("unchecked")
-    public void setBeanItem(BeanItem<T> beanItem) {
+    public void setBeanItem(BeanItem<E> beanItem) {
         if (fieldGroup == null) {
-            fieldGroup = (BeanFieldGroup<T>) new BeanFieldGroup<>(beanItem.getBean()
+            fieldGroup = (BeanFieldGroup<E>) new BeanFieldGroup<>(beanItem.getBean()
                                                                           .getClass());
             fieldGroup.buildAndBindMemberFields(this);
             i18NProcessor.translate(this);
@@ -62,9 +65,9 @@ public class BeanFieldGroup_I18N<T extends Entity> {
 
     }
 
-    public void setBean(T bean) {
+    public void setBean(E bean) {
         this.bean = bean;
-        setBeanItem(new BeanItem<T>(bean));
+        setBeanItem(new BeanItem<E>(bean));
     }
 
     /**
@@ -76,7 +79,7 @@ public class BeanFieldGroup_I18N<T extends Entity> {
     public void commit() throws CommitException {
         try {
             fieldGroup.commit();
-            bean.save();
+            dao.save(bean);
         } catch (FieldGroup.CommitException e) {
             log.error("Unable to save changes", e);
             throw new CommitException(e);

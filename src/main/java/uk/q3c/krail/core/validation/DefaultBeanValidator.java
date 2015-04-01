@@ -12,7 +12,7 @@
 package uk.q3c.krail.core.validation;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.data.Entity;
+import uk.q3c.krail.core.data.KrailEntity;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -24,7 +24,7 @@ import java.util.Set;
  * <p>
  * Created by David Sowerby on 04/02/15.
  */
-public class DefaultBeanValidator<T extends Entity> implements BeanValidator<T> {
+public class DefaultBeanValidator<T extends KrailEntity> implements BeanValidator<T> {
 
     private final Validator javaxValidator;
     private final KrailInterpolator krailInterpolator;

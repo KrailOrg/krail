@@ -6,7 +6,9 @@
 /gradle
 /logs
 
-/.krail.iml
+krail.iml
+.classpath
+.project
 
 settings.gradle~
 .gitattributes~

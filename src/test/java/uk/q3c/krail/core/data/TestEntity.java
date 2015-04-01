@@ -12,16 +12,32 @@
  */
 package uk.q3c.krail.core.data;
 
+import javax.persistence.Id;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.beans.PropertyChangeEvent;
-import java.lang.reflect.InvocationTargetException;
 
-public class TestEntity implements Entity {
+public class TestEntity implements KrailEntity<Integer, Integer> {
+
+
     @NotNull
     @Size(min = 2, max = 14)
     private String firstName;
+    @Id
+    private Integer id;
     private String lastName;
+    @Version
+    private Integer version;
+
+    @Override
+    public Integer getVersion() {
+        return version;
+    }
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -39,39 +55,4 @@ public class TestEntity implements Entity {
         this.lastName = lastName;
     }
 
-    @Override
-    public boolean isDirty() {
-        return false;
-    }
-
-    @Override
-    public void setDirty(boolean dirty) {
-
-    }
-
-    @Override
-    public void save() {
-
-    }
-
-    @Override
-    public void delete() throws NoSuchMethodException, InstantiationException, IllegalAccessException,
-            InvocationTargetException {
-
-    }
-
-    @Override
-    public Dao getDao() {
-        return null;
-    }
-
-    @Override
-    public void init(Dao Dao) {
-
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-
-    }
 }

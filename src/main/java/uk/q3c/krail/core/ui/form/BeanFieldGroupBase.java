@@ -18,7 +18,7 @@ import com.vaadin.data.Item;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Field;
-import uk.q3c.krail.core.data.Entity;
+import uk.q3c.krail.core.data.KrailEntity;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionDescriptor;
@@ -53,7 +53,7 @@ import java.util.Map;
  * <p>
  * Created by David Sowerby on 03/02/15.
  */
-public abstract class BeanFieldGroupBase<T extends Entity> extends FieldGroup implements BeanFieldGroup<T>,
+public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGroup implements BeanFieldGroup<T>,
         OptionContext {
 
     private final I18NProcessor i18NProcessor;

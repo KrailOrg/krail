@@ -9,15 +9,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.ui.form;
+package uk.q3c.krail.core.data;
 
-import uk.q3c.krail.core.data.KrailEntity;
 
 /**
- * A BeanFieldGroup is a mapping between a data entity and a "form" (actually a group of UI fields) in which it is
- * presented
- * <p>
- * Created by David Sowerby on 04/02/15.
+ * A block of Dao statements used with {@link BlockDao}
+ *
+ * Created by David Sowerby on 08/04/15.
  */
-public interface BeanFieldGroup<T extends KrailEntity> {
+@FunctionalInterface
+public interface StatementBlock {
+
+    void transact(BlockDao dao);
 }

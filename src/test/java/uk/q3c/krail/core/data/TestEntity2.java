@@ -14,14 +14,15 @@ package uk.q3c.krail.core.data;
 
 import org.apache.bval.constraints.Email;
 
+import javax.persistence.Id;
+import javax.persistence.Version;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.beans.PropertyChangeEvent;
-import java.lang.reflect.InvocationTargetException;
 
-public class TestEntity2 implements Entity {
+public class TestEntity2 implements KrailEntity<Long, Integer> {
+
     @Min(5)
     @Max(10)
     private int age;
@@ -32,13 +33,31 @@ public class TestEntity2 implements Entity {
     private String firstName;
     @Min(value = 20, message = "a custom message")
     private int height;
+    @Id
+    private Long id;
     private String lastName;
     @Min(value = 5, message = "{javax.validation.constraints.Max.message}")
     private int load;
     @uk.q3c.krail.core.validation.Max(1)
     private int speed;
+    @Version
+    private Integer version;
     @Max(value = 5, message = "{uk.q3c.krail.core.validation.TestValidationKey.Too_Big}")
     private int weight;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public Integer getVersion() {
+        return version;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 
     public int getLoad() {
         return load;
@@ -88,41 +107,6 @@ public class TestEntity2 implements Entity {
         this.lastName = lastName;
     }
 
-    @Override
-    public boolean isDirty() {
-        return false;
-    }
-
-    @Override
-    public void setDirty(boolean dirty) {
-
-    }
-
-    @Override
-    public void save() {
-
-    }
-
-    @Override
-    public void delete() throws NoSuchMethodException, InstantiationException, IllegalAccessException,
-            InvocationTargetException {
-
-    }
-
-    @Override
-    public Dao getDao() {
-        return null;
-    }
-
-    @Override
-    public void init(Dao Dao) {
-
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-
-    }
 
     public int getWeight() {
         return weight;

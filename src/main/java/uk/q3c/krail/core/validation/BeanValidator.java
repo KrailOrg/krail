@@ -12,12 +12,12 @@
 package uk.q3c.krail.core.validation;
 
 import com.vaadin.data.Validator;
-import uk.q3c.krail.core.data.Entity;
+import uk.q3c.krail.core.data.KrailEntity;
 
 /**
  * Created by David Sowerby on 04/02/15.
  */
-public interface BeanValidator<T extends Entity> extends Validator {
+public interface BeanValidator<T extends KrailEntity> extends Validator {
 
     void init(Class<T> beanClass, String propertyName, boolean useFieldNameInValidationMessage);
 }

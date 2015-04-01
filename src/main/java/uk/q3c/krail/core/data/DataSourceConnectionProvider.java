@@ -9,15 +9,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.ui.form;
-
-import uk.q3c.krail.core.data.KrailEntity;
+package uk.q3c.krail.core.data;
 
 /**
- * A BeanFieldGroup is a mapping between a data entity and a "form" (actually a group of UI fields) in which it is
- * presented
+ * Provides a connection to a specific Data Source Instance, usually from a connection pool
  * <p>
- * Created by David Sowerby on 04/02/15.
+ * Created by David Sowerby on 03/04/15.
  */
-public interface BeanFieldGroup<T extends KrailEntity> {
+public interface DataSourceConnectionProvider {
 }

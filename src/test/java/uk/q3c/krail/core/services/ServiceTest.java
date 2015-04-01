@@ -79,7 +79,6 @@ public class ServiceTest {
     @Inject
     @GlobalBus
     PubSubSupport<BusMessage> globalBus;
-    // TODO should be a anync bus but is not
 
     @Before
     public void setup() {
