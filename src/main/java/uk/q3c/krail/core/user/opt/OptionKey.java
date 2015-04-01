@@ -115,7 +115,7 @@ public class OptionKey {
      * @return a concatenation of the supplied parameters to form a composite String key
      */
     @Nonnull
-    protected String compositeKey() {
+    public String compositeKey() {
         Joiner joiner = Joiner.on("-")
                               .skipNulls();
         Enum<?> e = (Enum<?>) key;
@@ -148,11 +148,8 @@ public class OptionKey {
         if (!key.equals(optionKey.key)) {
             return false;
         }
-        if (!Arrays.equals(qualifiers, optionKey.qualifiers)) {
-            return false;
-        }
+        return Arrays.equals(qualifiers, optionKey.qualifiers);
 
-        return true;
     }
 
     @Override

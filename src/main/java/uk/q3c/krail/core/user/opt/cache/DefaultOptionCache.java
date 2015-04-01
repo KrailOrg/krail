@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.opt.OptionModule;
+import uk.q3c.krail.core.user.profile.UserHierarchy;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,17 +30,8 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Provides a cache implementation for {@link Option}.  The {@code get()} methods all work on the principle that we
- * want
- * the
- * value of the option from the hierarchy level nearest to the user level (the 'bottom' of the hierarchy.
- * <p>
- * Caching only the 'bottom' value is more efficient than holding all the values.  This is achieved by not including
- * the hierarchy level in the {@link OptionCacheKey}, and the {@link OptionCacheLoader} returning only the 'bottom'
- * level.
- * <p>
- * There are, of course, some occasions where a specific hierarchy level must be accessed.  For these cases, use the
- * {@code getSpecific()} methods.
+ * Provides a cache implementation for {@link Option}.  The {@code get()} methods use the value of the {@link OptionCacheKey} to determines which {@link
+ * UserHierarchy} to use, and whether to take the lowest, highest or specific ranked value.
  * <p>
  * Scope is set in {@link OptionModule} but it is assumed that this class needs to be thread safe.
  * Created by David Sowerby on 19/02/15.
@@ -76,6 +68,7 @@ public class DefaultOptionCache implements OptionCache {
         log.debug("writing value {} for cacheKey {} via option dao ", value, cacheKey);
         daoProvider.get()
                    .write(cacheKey, value);
+        // TODO this does not update the cache
     }
 
     @Override
@@ -91,8 +84,7 @@ public class DefaultOptionCache implements OptionCache {
                 return defaultValue;
             }
         } catch (Throwable e) {
-            log.error("Returning default value of {}, exception or error was thrown during load. Exception was:  {}",
-                    defaultValue, e);
+            log.error("Returning default value of {}, exception or error was thrown during load. Exception was:  {}", defaultValue, e);
             return defaultValue;
         }
         Object value = optionalValue.get();
@@ -101,8 +93,7 @@ public class DefaultOptionCache implements OptionCache {
             //noinspection unchecked
             return (T) value;
         } else {
-            log.error("option value returned is of the wrong type for {}, returning default of {}", optionCacheKey,
-                    defaultValue);
+            log.error("option value returned is of the wrong type for {}, returning default of {}", optionCacheKey, defaultValue);
             return defaultValue;
         }
     }
@@ -114,7 +105,7 @@ public class DefaultOptionCache implements OptionCache {
         checkNotNull(optionCacheKey);
         // delete from store first just in case there's a problem
         Object result = daoProvider.get()
-                                   .delete(optionCacheKey);
+                                   .deleteValue(optionCacheKey);
         cache.invalidate(optionCacheKey);
 
         return result;

@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.opt.cache.OptionKeyException;
+import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
 import java.util.LinkedHashMap;
@@ -30,7 +31,6 @@ import java.util.TreeMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 import static org.mockito.Mockito.*;
-import static uk.q3c.krail.core.user.profile.RankOption.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -43,7 +43,17 @@ public class InMemoryOptionDaoTest {
     InMemoryOptionStore store;
 
     @Mock
-    OptionCacheKey cacheKey;
+    OptionCacheKey cacheKeyHigh;
+
+    @Mock
+    OptionCacheKey cacheKeyLow;
+
+    @Mock
+    OptionCacheKey cacheKeySpecific;
+
+    @Mock
+    OptionCacheKey cacheKeySpecificMissing;
+
     ImmutableList<String> rankNames1 = ImmutableList.of("fbaton", "accounts", "finance", "Q3");
     @Mock
     OptionKey optionKey;
@@ -54,124 +64,126 @@ public class InMemoryOptionDaoTest {
     @Before
     public void setup() {
         when(hierarchy.ranksForCurrentUser()).thenReturn(rankNames1);
-        when(cacheKey.getHierarchy()).thenReturn(hierarchy);
+        when(cacheKeyHigh.getHierarchy()).thenReturn(hierarchy);
+        when(cacheKeyHigh.getRankOption()).thenReturn(RankOption.HIGHEST_RANK);
+        when(cacheKeyHigh.getOptionKey()).thenReturn(optionKey);
+        when(cacheKeyLow.getRankOption()).thenReturn(RankOption.LOWEST_RANK);
+        when(cacheKeyLow.getHierarchy()).thenReturn(hierarchy);
+        when(cacheKeyLow.getOptionKey()).thenReturn(optionKey);
+        when(cacheKeySpecific.getRankOption()).thenReturn(RankOption.SPECIFIC_RANK);
+        when(cacheKeySpecific.getHierarchy()).thenReturn(hierarchy);
+        when(cacheKeySpecific.getOptionKey()).thenReturn(optionKey);
+        when(cacheKeySpecific.getRequestedRankName()).thenReturn("accounts");
+        when(cacheKeySpecificMissing.getRankOption()).thenReturn(RankOption.SPECIFIC_RANK);
+        when(cacheKeySpecificMissing.getHierarchy()).thenReturn(hierarchy);
+        when(cacheKeySpecificMissing.getOptionKey()).thenReturn(optionKey);
+        when(cacheKeySpecificMissing.getRequestedRankName()).thenReturn("a");
+
+
+
         when(hierarchy.persistenceName()).thenReturn(hierarchyName1);
         dao = new InMemoryOptionDao(store);
     }
 
 
-    @Test(expected = OptionKeyException.class)
-    public void values_wrong_key() {
-        //given
-        Map<String, Object> map = new TreeMap<>();
-        when(cacheKey.getRankOption()).thenReturn(SPECIFIC_RANK);
-        //when
-        dao.getValuesForRanks(cacheKey, rankNames1);
-        //then
-    }
-
     @Test
     public void no_values_in_store() {
         //given
-        when(cacheKey.getRankOption()).thenReturn(HIGHEST_RANK);
-        when(cacheKey.getOptionKey()).thenReturn(optionKey);
-        when(cacheKey.getRequestedRankName()).thenReturn("a");
+
         //use a LinkedHashMap map to force an order different to hierarchy, for testing
         Map<String, Object> map = new TreeMap<>();
         when(store.valueMapForOptionKey(anyString(), anyList(), any())).thenReturn(map);
         //when
-        LinkedHashMap<String, Object> actual = dao.getValuesForRanks(cacheKey, rankNames1);
+        LinkedHashMap<String, Object> actual = dao.getValuesForRanks(cacheKeyHigh, rankNames1);
         //then
         assertThat(actual).isEmpty();
+        assertThat(dao.getHighestRankedValue(cacheKeyHigh)).isEqualTo(Optional.empty());
+        assertThat(dao.getLowestRankedValue(cacheKeyLow)).isEqualTo(Optional.empty());
+        assertThat(dao.getValue(cacheKeySpecific)).isEqualTo(Optional.empty());
     }
 
 
     @Test
     public void one_value_in_store() {
         //given
-        when(cacheKey.getRankOption()).thenReturn(HIGHEST_RANK);
-        when(cacheKey.getOptionKey()).thenReturn(optionKey);
-        when(cacheKey.getRequestedRankName()).thenReturn("a");
         //use a LinkedHashMap map to force an order different to hierarchy, for testing
         Map<String, Object> map = new TreeMap<>();
         map.put("accounts", 7);
         when(store.valueMapForOptionKey(anyString(), anyList(), any())).thenReturn(map);
+        when(store.getValue("mock hierarchy", "accounts", optionKey)).thenReturn(5);
         //when
-        LinkedHashMap<String, Object> actual = dao.getValuesForRanks(cacheKey, rankNames1);
+        LinkedHashMap<String, Object> actual = dao.getValuesForRanks(cacheKeyHigh, rankNames1);
         //then
         assertThat(actual).isNotEmpty();
         assertThat(actual).containsExactly(entry("accounts", 7));
+        assertThat(dao.getHighestRankedValue(cacheKeyHigh)).isEqualTo(Optional.of(7));
+        assertThat(dao.getLowestRankedValue(cacheKeyLow)).isEqualTo(Optional.of(7));
+        assertThat(dao.getValue(cacheKeySpecific)).isEqualTo(Optional.of(5));
+        assertThat(dao.getValue(cacheKeySpecificMissing)).isEqualTo(Optional.empty());
     }
 
     @Test
     public void multiple_values_in_store() {
         //given
-        when(cacheKey.getRankOption()).thenReturn(LOWEST_RANK);
-        when(cacheKey.getOptionKey()).thenReturn(optionKey);
-        when(cacheKey.getRequestedRankName()).thenReturn("a");
         //use a LinkedHashMap map to force an order different to hierarchy, for testing
         Map<String, Object> map = new TreeMap<>();
         map.put("accounts", 7);
         map.put("fbaton", 3);
         map.put("finance", 5);
-        map.put("Q3", 12);
+        map.put("Q3", 1);
         when(store.valueMapForOptionKey(anyString(), anyList(), any())).thenReturn(map);
+        when(store.getValue("mock hierarchy", "accounts", optionKey)).thenReturn(7);
         //when
-        LinkedHashMap<String, Object> actual = dao.getValuesForRanks(cacheKey, rankNames1);
+        LinkedHashMap<String, Object> actual = dao.getValuesForRanks(cacheKeyHigh, rankNames1);
         //then
         assertThat(actual).isNotEmpty();
-        assertThat(actual).containsExactly(entry("fbaton", 3), entry("accounts", 7), entry("finance", 5), entry("Q3", 12));
+        assertThat(actual).containsExactly(entry("fbaton", 3), entry("accounts", 7), entry("finance", 5), entry("Q3", 1));
+        assertThat(dao.getHighestRankedValue(cacheKeyHigh)).isEqualTo(Optional.of(3));
+        assertThat(dao.getLowestRankedValue(cacheKeyLow)).isEqualTo(Optional.of(1));
+        assertThat(dao.getValue(cacheKeySpecific)).isEqualTo(Optional.of(7));
+        assertThat(dao.getValue(cacheKeySpecificMissing)).isEqualTo(Optional.empty());
     }
 
 
     @Test
     public void write() {
         //given
-        when(cacheKey.getRankOption()).thenReturn(SPECIFIC_RANK);
-        when(cacheKey.getOptionKey()).thenReturn(optionKey);
-        when(cacheKey.getRequestedRankName()).thenReturn("a");
         //when
-        dao.write(cacheKey, 7);
+        dao.write(cacheKeySpecific, 7);
         //then
-        verify(store).setValue(hierarchyName1, "a", optionKey, 7);
+        verify(store).setValue(hierarchyName1, "accounts", optionKey, 7);
     }
 
     @Test(expected = NullPointerException.class)
     public void writeNull() {
         //given
-        when(cacheKey.getRankOption()).thenReturn(SPECIFIC_RANK);
-        when(cacheKey.getOptionKey()).thenReturn(optionKey);
-        when(cacheKey.getRequestedRankName()).thenReturn("a");
         //when
-        dao.write(cacheKey, null);
+        dao.write(cacheKeySpecific, null);
         //then
     }
 
     @Test(expected = OptionKeyException.class)
     public void write_highest() {
         //given
-        when(cacheKey.getRankOption()).thenReturn(HIGHEST_RANK);
         //when
-        dao.write(cacheKey, 5);
+        dao.write(cacheKeyHigh, 5);
         //then
     }
 
     @Test(expected = OptionKeyException.class)
     public void write_lowest() {
         //given
-        when(cacheKey.getRankOption()).thenReturn(LOWEST_RANK);
         //when
-        dao.write(cacheKey, 5);
+        dao.write(cacheKeyLow, 5);
         //then
     }
 
     @Test
     public void delete_exists() {
         //given
-        when(cacheKey.getRankOption()).thenReturn(SPECIFIC_RANK);
         when(store.deleteValue(anyString(), anyString(), any(OptionKey.class))).thenReturn(5);
         //when
-        Object actual = dao.delete(cacheKey);
+        Object actual = dao.deleteValue(cacheKeySpecific);
         //then
         assertThat(actual).isEqualTo(5);
     }
@@ -179,10 +191,9 @@ public class InMemoryOptionDaoTest {
     @Test
     public void delete_non_existent() {
         //given
-        when(cacheKey.getRankOption()).thenReturn(SPECIFIC_RANK);
         when(store.deleteValue(anyString(), anyString(), any(OptionKey.class))).thenReturn(null);
         //when
-        Object actual = dao.delete(cacheKey);
+        Object actual = dao.deleteValue(cacheKeySpecific);
         //then
         assertThat(actual).isNull();
     }
@@ -190,66 +201,21 @@ public class InMemoryOptionDaoTest {
     @Test(expected = OptionKeyException.class)
     public void delete_highest() {
         //given
-        when(cacheKey.getRankOption()).thenReturn(HIGHEST_RANK);
         //when
-        dao.delete(cacheKey);
+        dao.deleteValue(cacheKeyHigh);
         //then
     }
 
     @Test(expected = OptionKeyException.class)
     public void delete_lowest() {
         //given
-        when(cacheKey.getRankOption()).thenReturn(LOWEST_RANK);
         //when
-        dao.delete(cacheKey);
+        dao.deleteValue(cacheKeyHigh);
         //then
     }
 
-    @Test
-    public void get_exists() {
-        //given
-        when(cacheKey.getRankOption()).thenReturn(SPECIFIC_RANK);
-        when(cacheKey.getOptionKey()).thenReturn(optionKey);
-        when(cacheKey.getRequestedRankName()).thenReturn("a");
-        when(store.getValue(hierarchyName1, "a", optionKey)).thenReturn(7);
-        //when
-        Optional<Object> actual = dao.get(cacheKey);
-        //then
-        assertThat(actual.isPresent()).isTrue();
-        assertThat(actual.get()).isEqualTo(7);
-    }
 
-    @Test(expected = OptionKeyException.class)
-    public void get_highest() {
-        //given
-        when(cacheKey.getRankOption()).thenReturn(HIGHEST_RANK);
-        //when
-        dao.get(cacheKey);
-        //then
-    }
 
-    @Test(expected = OptionKeyException.class)
-    public void get_lowest() {
-        //given
-        when(cacheKey.getRankOption()).thenReturn(LOWEST_RANK);
-        //when
-        dao.get(cacheKey);
-        //then
-    }
-
-    @Test
-    public void get_non_existent() {
-        //given
-        when(cacheKey.getRankOption()).thenReturn(SPECIFIC_RANK);
-        when(cacheKey.getOptionKey()).thenReturn(optionKey);
-        when(cacheKey.getRequestedRankName()).thenReturn("a");
-        //when
-        Optional<Object> actual = dao.get(cacheKey);
-        //then
-        assertThat(actual).isEqualTo(Optional.empty());
-
-        verify(store).getValue(hierarchyName1, "a", optionKey);
-    }
 
 
 }

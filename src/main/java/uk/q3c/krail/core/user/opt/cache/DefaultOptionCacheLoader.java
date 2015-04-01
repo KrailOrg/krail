@@ -21,11 +21,9 @@ import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static uk.q3c.krail.core.user.profile.RankOption.HIGHEST_RANK;
-import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
 
 /**
  * Extends {@link CacheLoader} implementation which finds the options appropriate for the key provided (see {@link
@@ -62,58 +60,27 @@ public class DefaultOptionCacheLoader extends CacheLoader<OptionCacheKey, Option
      *
      * @throws Exception
      *         if unable to load the result
-     * @throws InterruptedException if this method is interrupted. {@code InterruptedException} is treated like any
-     * other {@code Exception} in all respects except that, when it is caught, the thread's interrupt status is set
+     * @throws InterruptedException
+     *         if this method is interrupted. {@code InterruptedException} is treated like any
+     *         other {@code Exception} in all respects except that, when it is caught, the thread's interrupt status is set
      */
     @Override
     @Nonnull
     public Optional<Object> load(@Nonnull final OptionCacheKey cacheKey) throws Exception {
         checkNotNull(cacheKey);
-        log.debug("retrieving values for {}", cacheKey);
-
-        if (cacheKey.getRankOption()
-                    .equals(SPECIFIC_RANK)) {
-
-            Optional<Object> value = daoProvider.get()
-                                                .get(cacheKey);
-            return value;
-
-        } else {
-            List<String> rankNames = cacheKey.getHierarchy()
-                                             .ranksForCurrentUser();
-            final LinkedHashMap<String, Object> valuesForRanks = daoProvider.get()
-                                                                            .getValuesForRanks(cacheKey, rankNames);
-
-            //no results
-            if (valuesForRanks.isEmpty()) {
+        log.debug("retrieving value for {}", cacheKey);
+        OptionDao dao = daoProvider.get();
+        switch (cacheKey.getRankOption()) {
+            case SPECIFIC_RANK:
+                return dao.getValue(cacheKey);
+            case HIGHEST_RANK:
+                return dao.getHighestRankedValue(cacheKey);
+            case LOWEST_RANK:
+                return dao.getLowestRankedValue(cacheKey);
+            default:
                 return Optional.empty();
-            }
-
-
-            //highest rank is lowest index
-            if (cacheKey.getRankOption()
-                        .equals(HIGHEST_RANK)) {
-
-                // no need to check hasNext() we know the map is not empty
-                Map.Entry<String, Object> highestRankEntry = valuesForRanks.entrySet()
-                                                                           .iterator()
-                                                                           .next();
-                return Optional.of(highestRankEntry.getValue());
-            } else {
-
-                //is there a better way of getting to the last one?
-                Iterator<Map.Entry<String, Object>> iter = valuesForRanks.entrySet()
-                                                                         .iterator();
-                String lowestRankName = null;
-                while (iter.hasNext()) {
-                    lowestRankName = iter.next()
-                                         .getKey();
-                }
-                return Optional.of(valuesForRanks.get(lowestRankName));
-            }
 
         }
-
 
     }
 }

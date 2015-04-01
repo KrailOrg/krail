@@ -125,11 +125,8 @@ public class OptionCacheKey {
         if (rankOption != that.rankOption) {
             return false;
         }
-        if (!requestedRankName.equals(that.requestedRankName)) {
-            return false;
-        }
+        return requestedRankName.equals(that.requestedRankName);
 
-        return true;
     }
 
     @Override
@@ -157,10 +154,9 @@ public class OptionCacheKey {
     public String toString() {
         return "OptionCacheKey{" +
                 "hierarchy=" + hierarchy +
-                ", requestedRankName=" + requestedRankName +
+                ", requestedRankName='" + requestedRankName + '\'' +
                 ", optionKey=" + optionKey +
+                ", rankOption=" + rankOption +
                 '}';
     }
-
-
 }

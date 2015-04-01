@@ -105,7 +105,17 @@ public interface UserHierarchy {
      */
     String rankName(int hierarchyRank);
 
+    /**
+     * Returns the name of the highest rank for this hierarchy - usually the user id if the user is logged in
+     *
+     * @return the name of the highest rank for this hierarchy - usually the user id if the user is logged in
+     */
     String highestRankName();
 
+    /**
+     * Returns the name of the lowest rank for this hierarchy - usually 'system' or something similar.
+     *
+     * @return the name of the lowest rank for this hierarchy - usually 'system' or something similar.
+     */
     String lowestRankName();
 }

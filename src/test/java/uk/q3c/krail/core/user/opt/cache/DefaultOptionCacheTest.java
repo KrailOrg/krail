@@ -158,7 +158,7 @@ public class DefaultOptionCacheTest {
         //when
         optionCache.delete(cacheKey);
         //then
-        verify(dao).delete(cacheKey);
+        verify(dao).deleteValue(cacheKey);
         verify(cache).invalidate(cacheKey);
     }
 

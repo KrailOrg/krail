@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.user.opt.InMemoryOptionDao;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
@@ -43,7 +44,7 @@ public class DefaultOptionCacheLoaderTest {
     Provider<OptionDao> daoProvider;
 
     @Mock
-    OptionDao dao;
+    InMemoryOptionDao dao;
 
     @Mock
     OptionCacheKey cacheKey;
@@ -66,7 +67,7 @@ public class DefaultOptionCacheLoaderTest {
     public void load_nothing_from_store_highest() throws Exception {
         //given
         when(cacheKey.getRankOption()).thenReturn(HIGHEST_RANK);
-        when(dao.getValuesForRanks(cacheKey, rankNames1)).thenReturn(resultMap);
+        when(dao.getHighestRankedValue(cacheKey)).thenReturn(Optional.empty());
         //when
         Optional<Object> actual = loader.load(cacheKey);
         //then
@@ -77,8 +78,7 @@ public class DefaultOptionCacheLoaderTest {
     public void load_one_from_store_highest() throws Exception {
         //given
         when(cacheKey.getRankOption()).thenReturn(HIGHEST_RANK);
-        resultMap.put("a", 1);
-        when(dao.getValuesForRanks(cacheKey, rankNames1)).thenReturn(resultMap);
+        when(dao.getHighestRankedValue(cacheKey)).thenReturn(Optional.of(1));
         //when
         Optional<Object> actual = loader.load(cacheKey);
         //then
@@ -86,26 +86,13 @@ public class DefaultOptionCacheLoaderTest {
         assertThat(actual.get()).isEqualTo(1);
     }
 
-    @Test
-    public void load_two_or_more_from_store_highest() throws Exception {
-        //given
-        when(cacheKey.getRankOption()).thenReturn(HIGHEST_RANK);
-        resultMap.put("a", 3);
-        resultMap.put("b", 1);
-        resultMap.put("c", 7);
-        when(dao.getValuesForRanks(cacheKey, rankNames1)).thenReturn(resultMap);
-        //when
-        Optional<Object> actual = loader.load(cacheKey);
-        //then
-        assertThat(actual.isPresent()).isTrue();
-        assertThat(actual.get()).isEqualTo(3);
-    }
+
 
     @Test
     public void load_nothing_from_store_lowest() throws Exception {
         //given
         when(cacheKey.getRankOption()).thenReturn(LOWEST_RANK);
-        when(dao.getValuesForRanks(cacheKey, rankNames1)).thenReturn(resultMap);
+        when(dao.getLowestRankedValue(cacheKey)).thenReturn(Optional.empty());
         //when
         Optional<Object> actual = loader.load(cacheKey);
         //then
@@ -116,8 +103,7 @@ public class DefaultOptionCacheLoaderTest {
     public void load_one_from_store_lowest() throws Exception {
         //given
         when(cacheKey.getRankOption()).thenReturn(LOWEST_RANK);
-        resultMap.put("a", 1);
-        when(dao.getValuesForRanks(cacheKey, rankNames1)).thenReturn(resultMap);
+        when(dao.getLowestRankedValue(cacheKey)).thenReturn(Optional.of(1));
         //when
         Optional<Object> actual = loader.load(cacheKey);
         //then
@@ -125,26 +111,12 @@ public class DefaultOptionCacheLoaderTest {
         assertThat(actual.get()).isEqualTo(1);
     }
 
-    @Test
-    public void load_two_or_more_from_store_lowest() throws Exception {
-        //given
-        when(cacheKey.getRankOption()).thenReturn(LOWEST_RANK);
-        resultMap.put("a", 3);
-        resultMap.put("b", 1);
-        resultMap.put("c", 7);
-        when(dao.getValuesForRanks(cacheKey, rankNames1)).thenReturn(resultMap);
-        //when
-        Optional<Object> actual = loader.load(cacheKey);
-        //then
-        assertThat(actual.isPresent()).isTrue();
-        assertThat(actual.get()).isEqualTo(7);
-    }
 
     @Test
     public void load_specific_exists() throws Exception {
         //given
         when(cacheKey.getRankOption()).thenReturn(SPECIFIC_RANK);
-        when(dao.get(cacheKey)).thenReturn(Optional.of(7));
+        when(dao.getValue(cacheKey)).thenReturn(Optional.of(7));
         //when
         Optional<Object> actual = loader.load(cacheKey);
         //then
@@ -156,7 +128,7 @@ public class DefaultOptionCacheLoaderTest {
     public void load_specific_not_exists() throws Exception {
         //given
         when(cacheKey.getRankOption()).thenReturn(SPECIFIC_RANK);
-        when(dao.get(cacheKey)).thenReturn(Optional.empty());
+        when(dao.getValue(cacheKey)).thenReturn(Optional.empty());
         //when
         Optional<Object> actual = loader.load(cacheKey);
         //then

@@ -13,11 +13,10 @@ package uk.q3c.krail.core.user.opt;
 
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.opt.cache.OptionKeyException;
+import uk.q3c.krail.core.user.profile.RankOption;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -25,26 +24,12 @@ import java.util.Optional;
  */
 public interface OptionDao {
 
-    /**
-     * Returns a map of rankName - values for the {@code cacheKey} - ordered the same way as {@code rankNames}
-     * (generally the order is the hierarchy rank order, but is determined by the caller).   Implementations should
-     * check that the  {@code cacheKey} is valid for this call (it must be set up for a highest rank or lowest rank) and
-     * throw a {@link OptionKeyException} if it is not valid
-     *
-     * @param cacheKey
-     *         identifies the hierarchy and option key
-     * @param rankNames
-     *         The names of the ranks values are required for.  These would generally be as they apply to the current
-     *         user, but the selection of rank names is determined by the caller
-     *
-     * @return a list of values for the user hierarchy and option key provided in the cacheKey, ordered by hierarchy
-     * rank.  An empty list if none found
-     *
-     * @throws OptionKeyException
-     *         if the cacheKey is not valid for this action
-     */
-    @Nonnull
-    LinkedHashMap<String, Object> getValuesForRanks(@Nonnull OptionCacheKey cacheKey, List<String> rankNames);
+    default void checkRankOption(OptionCacheKey cacheKey, RankOption expected) {
+        if (!cacheKey.getRankOption()
+                     .equals(expected)) {
+            throw new OptionKeyException("OptionCacheKey should have RankOption of: " + expected);
+        }
+    }
 
     /**
      * Write {@code value} to persistence for the hierarchy, rank and OptionKey specified by the {@code cacheKey}.
@@ -76,7 +61,7 @@ public interface OptionDao {
      *         if the cacheKey is not valid for this action
      */
     @Nullable
-    Object delete(@Nonnull OptionCacheKey cacheKey);
+    Object deleteValue(@Nonnull OptionCacheKey cacheKey);
 
     /**
      * Gets a value from persistence for the hierarchy, rank and OptionKey specified by the {@code cacheKey}.
@@ -87,5 +72,36 @@ public interface OptionDao {
      *
      * @return an Optional wrapped value if there is one or an Optional.empty() if not
      */
-    Optional<Object> get(@Nonnull OptionCacheKey cacheKey);
+    @Nonnull
+    Optional<Object> getValue(@Nonnull OptionCacheKey cacheKey);
+
+    /**
+     * Returns the highest ranked value available for the {@code cacheKey}
+     *
+     * @param cacheKey
+     *         they key to look for
+     *
+     * @return the highest ranked value available for the {@code cacheKey}
+     *
+     * @throws OptionKeyException
+     *         if cacheKey {@link RankOption} is not equal to {@link RankOption#HIGHEST_RANK}
+     */
+    @Nonnull
+    Optional<Object> getHighestRankedValue(@Nonnull OptionCacheKey cacheKey);
+
+    /**
+     * Returns the lowest ranked value available for the {@code cacheKey}
+     *
+     * @param cacheKey
+     *         they key to look for
+     *
+     * @return the lowest ranked value available for the {@code cacheKey}
+     *
+     * @throws OptionKeyException
+     *         if cacheKey {@link RankOption} is not equal to {@link RankOption#LOWEST_RANK}
+     */
+    @Nonnull
+    Optional<Object> getLowestRankedValue(@Nonnull OptionCacheKey cacheKey);
+
+
 }
