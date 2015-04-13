@@ -28,10 +28,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.eventbus.GlobalBus;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.services.Service.Status;
+import uk.q3c.krail.testutil.TestEventBusModule;
 import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import java.time.LocalDateTime;
@@ -57,7 +57,7 @@ import static uk.q3c.krail.core.services.Service.Status.DEPENDENCY_FAILED;
  * @author David Sowerby
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ServiceModule.class, EventBusModule.class, TestUIScopeModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({ServiceModule.class, TestEventBusModule.class, TestUIScopeModule.class, VaadinSessionScopeModule.class})
 public class ServiceTest {
     static Status a1_startStatus = Status.STARTED;
     static Status a1_stopStatus = Status.STOPPED;
