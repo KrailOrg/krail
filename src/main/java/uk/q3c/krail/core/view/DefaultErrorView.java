@@ -64,9 +64,11 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
         textArea = new TextArea();
         textArea.setSizeFull();
         textArea.setReadOnly(false);
+        textArea.setWordwrap(false);
         if (error != null) {
             String s = StackTraceUtil.getStackTrace(error);
-            textArea.setValue(s);
+            //add a couple of blank lines at the bootom to ensure visibility of the last line
+            textArea.setValue(s + "\n\n");
         } else {
             textArea.setValue("Error view has been called but no error has been set.  This should not happen");
             textArea.setReadOnly(true);
