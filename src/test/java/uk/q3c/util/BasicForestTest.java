@@ -293,4 +293,14 @@ public class BasicForestTest {
         assertThat(tree.getRootFor(s0)).isEqualTo(s0);
         assertThat(tree.getRootFor(s121)).isEqualTo(s0);
     }
+
+    @Test
+    public void getChildren_NoneFound() {
+        //given
+
+        //when
+        List<String> result = tree.getChildren(s1);
+        //then
+        assertThat(result).isEmpty();
+    }
 }
