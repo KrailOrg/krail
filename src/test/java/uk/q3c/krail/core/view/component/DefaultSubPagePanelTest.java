@@ -24,6 +24,7 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
@@ -72,9 +73,13 @@ public class DefaultSubPagePanelTest {
     @Mock
     MBassador<BusMessage> eventBus;
 
+    @Mock
+    NavigationState currentNavigationState;
+
 
     @Before
     public void setup() {
+        when(navigator.getCurrentNavigationState()).thenReturn(currentNavigationState);
         Locale.setDefault(Locale.UK);
         currentLocale.setLocale(Locale.UK, false);
         userSitemap.populate();

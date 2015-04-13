@@ -80,12 +80,15 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
     protected void build() {
         if (rebuildRequired) {
             log.debug("building");
-            UserSitemapNode currentNode = getNavigator().getCurrentNode();
-            log.debug("current node is '{}'", userSitemap.uri(currentNode));
-            List<UserSitemapNode> authorisedSubNodes = userSitemap.getChildren(currentNode);
-            Collections.sort(authorisedSubNodes, getSortComparator());
-            organiseButtons(authorisedSubNodes);
-            rebuildRequired = false;
+            // premature calls can be made befoer the navigator has started up properly
+            if (getNavigator().getCurrentNavigationState() != null) {
+                UserSitemapNode currentNode = getNavigator().getCurrentNode();
+                log.debug("current node is '{}'", userSitemap.uri(currentNode));
+                List<UserSitemapNode> authorisedSubNodes = userSitemap.getChildren(currentNode);
+                Collections.sort(authorisedSubNodes, getSortComparator());
+                organiseButtons(authorisedSubNodes);
+                rebuildRequired = false;
+            }
         } else {
             log.debug("build not required");
         }
