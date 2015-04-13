@@ -30,6 +30,6 @@ public class DefaultEventBusErrorHandler implements IPublicationErrorHandler {
      */
     @Override
     public void handleError(PublicationError error) {
-        log.error(error.getMessage(), error.getCause());
+        throw new RuntimeException(error.getMessage(), error.getCause());
     }
 }
