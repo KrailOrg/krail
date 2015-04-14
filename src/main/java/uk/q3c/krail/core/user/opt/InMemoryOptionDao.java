@@ -11,6 +11,7 @@
 
 package uk.q3c.krail.core.user.opt;
 
+import com.google.common.base.Converter;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -54,6 +55,30 @@ public class InMemoryOptionDao implements OptionDao {
         optionStore.setValue(hierarchyName, rankName, optionKey, value);
     }
 
+    /**
+     * Write method for use with implementations which convert all values to Strings for persistence.  The converter is used to make the transformation from
+     * value to its String representation.
+     * <p>
+     * Write {@code value} to persistence for the hierarchy, rank and OptionKey specified by the {@code cacheKey}.
+     * Implementations should check that the  {@code cacheKey} is valid for a write (it must be set up for a specific
+     * rank) and throw a {@link OptionKeyException} if it is not valid
+     *
+     * @param cacheKey
+     *         specifies the hierarchy, rank and OptionKey to write to
+     * @param converter
+     * @param value
+     *         the value to write
+     *
+     * @throws OptionKeyException
+     *         if the cacheKey is not valid for this action
+     * @see #write(OptionCacheKey, Object)
+     */
+    @Override
+    public <V> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Converter<V, String> converter, @Nonnull V value) {
+        // TODO
+        throw new RuntimeException("Not yet implemented");
+    }
+
     @Override
     public Object deleteValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
@@ -80,6 +105,30 @@ public class InMemoryOptionDao implements OptionDao {
             return Optional.of(result);
         }
 
+    }
+
+    /**
+     * Gets a value from an implementation which stores all values as Strings.  The converter provides the conversion from String to type V
+     * <p>
+     * Gets a value from persistence for the hierarchy, rank and OptionKey specified by the {@code cacheKey}.
+     * Implementations should check that the {@code cacheKey} is valid for a single value get (it must be set up for
+     * a specific rank) and throw a {@link OptionKeyException} if it is not valid
+     *
+     * @param converter
+     * @param cacheKey
+     *         specifies the hierarchy, rank and OptionKey for the entry to delete
+     *
+     * @return an Optional wrapped value if there is one or an Optional.empty() if not
+     *
+     * @throws OptionKeyException
+     *         if the cacheKey is not valid for this action
+     * @see #getValue(OptionCacheKey)
+     */
+    @Nonnull
+    @Override
+    public <V> Optional<V> getValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey) {
+        // TODO
+        throw new RuntimeException("Not yet implemented");
     }
 
     /**
@@ -160,5 +209,10 @@ public class InMemoryOptionDao implements OptionDao {
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public String connectionUrl() {
+        return "In Memory Cache";
     }
 }

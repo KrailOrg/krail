@@ -48,8 +48,7 @@ public class OptionCacheKey {
      * @param optionKey
      *         an object representing a unique key for the option within its context
      */
-    public OptionCacheKey(@Nonnull UserHierarchy hierarchy, @Nonnull RankOption rankOption, @Nonnull OptionKey
-            optionKey) {
+    public OptionCacheKey(@Nonnull UserHierarchy hierarchy, @Nonnull RankOption rankOption, @Nonnull OptionKey optionKey) {
 
         this(hierarchy, rankOption, 0, optionKey);
 
@@ -68,8 +67,7 @@ public class OptionCacheKey {
      * @param optionKey
      *         an object representing a unique key for the option within its context
      */
-    public OptionCacheKey(@Nonnull UserHierarchy hierarchy, @Nonnull RankOption rankOption, int requestedRank,
-                          @Nonnull OptionKey optionKey) {
+    public OptionCacheKey(@Nonnull UserHierarchy hierarchy, @Nonnull RankOption rankOption, int requestedRank, @Nonnull OptionKey optionKey) {
         checkNotNull(hierarchy);
         checkNotNull(rankOption);
         checkNotNull(optionKey);
@@ -99,6 +97,44 @@ public class OptionCacheKey {
             throw new NullPointerException("rank name cannot be set to null");
         }
         return rankName;
+    }
+
+
+    /**
+     * Constructs a copy with {@link #requestedRankName} changed to {@code rankName}.  The {@link #rankOption} may be forced to {@link
+     * RankOption#SPECIFIC_RANK}
+     * with {@code makeSpecific}
+     *
+     * @param cacheKey
+     *         the key to copy
+     * @param rankName
+     *         the new rank name
+     * @param makeSpecific
+     *         if true, the #rankOption is set to RankOption#SPECIFIC_RANK, otherwise it is copied from {@code cacheKey}
+     */
+    public OptionCacheKey(@Nonnull OptionCacheKey cacheKey, @Nonnull String rankName, boolean makeSpecific) {
+        checkNotNull(cacheKey);
+        checkNotNull(rankName);
+        this.requestedRankName = rankName;
+        this.optionKey = cacheKey.getOptionKey();
+        this.hierarchy = cacheKey.getHierarchy();
+        if (makeSpecific) {
+            this.rankOption = RankOption.SPECIFIC_RANK;
+        } else {
+            this.rankOption = cacheKey.getRankOption();
+        }
+    }
+
+    public RankOption getRankOption() {
+        return rankOption;
+    }
+
+    public UserHierarchy getHierarchy() {
+        return hierarchy;
+    }
+
+    public OptionKey getOptionKey() {
+        return optionKey;
     }
 
     public String getRequestedRankName() {
@@ -136,18 +172,6 @@ public class OptionCacheKey {
         result = 31 * result + optionKey.hashCode();
         result = 31 * result + rankOption.hashCode();
         return result;
-    }
-
-    public RankOption getRankOption() {
-        return rankOption;
-    }
-
-    public UserHierarchy getHierarchy() {
-        return hierarchy;
-    }
-
-    public OptionKey getOptionKey() {
-        return optionKey;
     }
 
     @Override
