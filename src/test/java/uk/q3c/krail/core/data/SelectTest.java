@@ -33,7 +33,7 @@ public class SelectTest {
                                     .and("age", 33);
         //then
         System.out.println(select);
-        assertThat(select.toString()).isEqualTo("SELECT t FROM TestEntity t WHERE name='a' AND age=33");
+        assertThat(select.toString()).isEqualTo("SELECT t FROM TestEntity t WHERE t.name='a' AND t.age=33");
     }
 
     @Test
@@ -46,7 +46,7 @@ public class SelectTest {
                                     .and("age", GREATER_THAN, 33);
         //then
         System.out.println(select);
-        assertThat(select.toString()).isEqualTo("SELECT t FROM TestEntity t WHERE name='a' AND age>33");
+        assertThat(select.toString()).isEqualTo("SELECT t FROM TestEntity t WHERE t.name='a' AND t.age>33");
     }
 
 }

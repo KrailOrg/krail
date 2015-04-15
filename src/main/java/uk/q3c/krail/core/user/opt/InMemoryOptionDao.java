@@ -90,6 +90,13 @@ public class InMemoryOptionDao implements OptionDao {
         return optionStore.deleteValue(hierarchyName, rankName, optionKey);
     }
 
+    @Nonnull
+    @Override
+    public <V> Optional<V> getHighestRankedValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey) {
+        // TODO
+        throw new RuntimeException("Not yet implemented");
+    }
+
     @Override
     public Optional<Object> getValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
@@ -209,6 +216,13 @@ public class InMemoryOptionDao implements OptionDao {
             }
         }
         return Optional.empty();
+    }
+
+    @Nonnull
+    @Override
+    public <V> Optional<V> getLowestRankedValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey) {
+        // TODO
+        throw new RuntimeException("Not yet implemented");
     }
 
     @Override

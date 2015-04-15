@@ -53,9 +53,25 @@ public class Select {
         buf.append("FROM ");
     }
 
+    /**
+     * Use this with care - an entity annotation may change the table name
+     *
+     * @param entityClass
+     *
+     * @return
+     *
+     * @see #clazz(String)
+     */
     public Select clazz(@Nonnull Class<?> entityClass) {
         checkNotNull(entityClass);
         buf.append(entityClass.getSimpleName());
+        buf.append(" t");
+        return this;
+    }
+
+    public Select clazz(String tableName) {
+        checkNotNull(tableName);
+        buf.append(tableName);
         buf.append(" t");
         return this;
     }
@@ -68,6 +84,7 @@ public class Select {
     }
 
     private Select fieldCompareValue(String field, Compare compare, Object value) {
+        buf.append("t.");
         buf.append(field);
         buf.append(compare.code);
         if (value instanceof String) {
@@ -119,4 +136,6 @@ public class Select {
         buf.append(" AND ");
         return fieldCompareValue(field, compare, value);
     }
+
+
 }

@@ -84,6 +84,9 @@ public interface OptionDao {
     @Nullable
     Object deleteValue(@Nonnull OptionCacheKey cacheKey);
 
+    @Nonnull
+    <V> Optional<V> getHighestRankedValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey);
+
     /**
      * Gets a value from persistence for the hierarchy, rank and OptionKey specified by the {@code cacheKey}.
      * Implementations should check that the {@code cacheKey} is valid for a single value get (it must be set up for
@@ -152,6 +155,13 @@ public interface OptionDao {
     @Nonnull
     Optional<Object> getLowestRankedValue(@Nonnull OptionCacheKey cacheKey);
 
+    @Nonnull
+    <V> Optional<V> getLowestRankedValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey);
 
+    /**
+     * Returns the connection url
+     *
+     * @return the connection url
+     */
     String connectionUrl();
 }

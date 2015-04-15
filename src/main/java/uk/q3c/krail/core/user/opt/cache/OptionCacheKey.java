@@ -99,34 +99,20 @@ public class OptionCacheKey {
         return rankName;
     }
 
-
     /**
-     * Constructs a copy with {@link #requestedRankName} changed to {@code rankName}.  The {@link #rankOption} may be forced to {@link
-     * RankOption#SPECIFIC_RANK}
-     * with {@code makeSpecific}
+     * copy constructor which changes the RankOption to {@code rankOption}
      *
-     * @param cacheKey
-     *         the key to copy
-     * @param rankName
-     *         the new rank name
-     * @param makeSpecific
-     *         if true, the #rankOption is set to RankOption#SPECIFIC_RANK, otherwise it is copied from {@code cacheKey}
+     * @param cacheKey the key to copy
+     *
+     * @param rankOption the new rankOption to use
      */
-    public OptionCacheKey(@Nonnull OptionCacheKey cacheKey, @Nonnull String rankName, boolean makeSpecific) {
+    public OptionCacheKey(@Nonnull OptionCacheKey cacheKey, @Nonnull RankOption rankOption) {
         checkNotNull(cacheKey);
-        checkNotNull(rankName);
-        this.requestedRankName = rankName;
-        this.optionKey = cacheKey.getOptionKey();
+        checkNotNull(rankOption);
+        this.rankOption = rankOption;
         this.hierarchy = cacheKey.getHierarchy();
-        if (makeSpecific) {
-            this.rankOption = RankOption.SPECIFIC_RANK;
-        } else {
-            this.rankOption = cacheKey.getRankOption();
-        }
-    }
-
-    public RankOption getRankOption() {
-        return rankOption;
+        this.requestedRankName = cacheKey.getRequestedRankName();
+        this.optionKey = cacheKey.getOptionKey();
     }
 
     public UserHierarchy getHierarchy() {
@@ -139,6 +125,31 @@ public class OptionCacheKey {
 
     public String getRequestedRankName() {
         return requestedRankName;
+    }
+
+    /**
+     * Constructs a copy with {@link #requestedRankName} changed to {@code rankName}.  The {@link #rankOption} may be forced to {@link
+     * RankOption#SPECIFIC_RANK}
+     * with {@code makeSpecific}
+     *
+     * @param cacheKey
+     *         the key to copy
+     * @param rankName
+     *         the new rank name
+     * @param rankOption
+     *         the #rankOption to set
+     */
+    public OptionCacheKey(@Nonnull OptionCacheKey cacheKey, @Nonnull String rankName, RankOption rankOption) {
+        checkNotNull(cacheKey);
+        checkNotNull(rankName);
+        this.requestedRankName = rankName;
+        this.optionKey = cacheKey.getOptionKey();
+        this.hierarchy = cacheKey.getHierarchy();
+        this.rankOption = rankOption;
+    }
+
+    public RankOption getRankOption() {
+        return rankOption;
     }
 
     @Override
