@@ -28,10 +28,11 @@ import java.util.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Loads the cache by calling each of the readers in turn to provide a pattern.  The order in which they are called is
+ * Loads the cache from potentially multiple sources by calling each of the readers in turn to provide a pattern.  The order in which they are called is
  * determined by a combination of {@link Option}, {@code bundleReaderOrderDefault} and {@code bundleReaderOrder}.
  * (see {@link #bundleSourceOrder(I18NKey)} for a description of how the order is derived.
- * configured in {{@link I18NModule}}
+ *
+ * The settings for the above are configured in {@link I18NModule}
  * <p>
  * Created by David Sowerby on 08/12/14.
  */

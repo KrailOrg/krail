@@ -94,5 +94,10 @@ public interface CommonDao<ID, VER> {
     @Nonnull
     <E extends KrailEntity<ID, VER>> long count(@Nonnull Class<E> entityClass);
 
+    /**
+     * @return connection String for this Dao
+     *
+     * @see Dao#connectionUrl(Object)
+     */
     String connectionUrl();
 }

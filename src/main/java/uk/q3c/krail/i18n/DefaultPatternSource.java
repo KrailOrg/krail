@@ -25,8 +25,8 @@ import java.util.Locale;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Manages the retrieval of I18N patterns from potentially multiple sources.  Caches values for keys once they have
- * been located.  Note that the scope of this class is set in {@link I18NModule#bindPatternSource()} or its sub-class.
+ * A cached, single access point for I18N patterns, which may ultimately come from multiple sources.  The patterns are actually loaded into the cache by a
+ * {@link PatternCacheLoader}  Note that the scope of this class is set in {@link I18NModule#bindPatternSource()} or its sub-class.
  * <p>
  * Created by David Sowerby on 07/12/14.
  */
@@ -53,7 +53,7 @@ public class DefaultPatternSource implements PatternSource<LoadingCache<PatternC
      * Retrieves a pattern string from cache, or loads the cache with a value from persistence if needed (see {@link
      * DefaultPatternCacheLoader}. This method always returns a value.  Keys without values will have a value
      * assigned of the key.name(), with underscores replaced by spaces.
-     *
+     * <p>
      * Note that this method does not check that the {@code locale} is supported ... it is assumed that by this stage
      * any unsupported locales have been dealt with.  This method will, however, return the name of the key if no
      * entry is found, including when a locale is not supported
@@ -61,7 +61,7 @@ public class DefaultPatternSource implements PatternSource<LoadingCache<PatternC
      * @param key
      *         the I18NKey to identify the pattern
      * @param locale
-     *         the locale for the translation - not that this is not checked to be a supported locale
+     *         the locale for the translation - note that this is not checked to be a supported locale
      * @param <E>
      *         an Enum implementing I18NKey
      *
