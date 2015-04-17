@@ -14,6 +14,8 @@ package uk.q3c.krail.i18n;
 
 import uk.q3c.krail.core.user.opt.Option;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -48,12 +50,12 @@ public interface BundleReader {
      * @param stubWithKeyName
      *         if true, and a key is being auto-stubbed, the name of the key is used as the stub value
      * @param stubValue
-     *         if {@code stubWithKeyName} is false, the value of this parameter is used to stub the value
+     *         if {@code stubWithKeyName} is false, the value of this parameter is used to stub the value and should not then be null
      *
      * @return
      */
-    Optional<String> getValue(PatternCacheKey cacheKey, String source, boolean autoStub, boolean stubWithKeyName,
-                              String stubValue);
+    Optional<String> getValue(@Nonnull PatternCacheKey cacheKey, @Nullable String source, boolean autoStub, boolean stubWithKeyName, @Nullable String
+            stubValue);
 
     /**
      * Depending on the setting of {@link Option}s, provide value stubs where keys do not have a value assigned
@@ -66,15 +68,32 @@ public interface BundleReader {
      *
      * @return
      */
-    Optional<String> autoStub(PatternCacheKey cacheKey, String value, boolean autoStub, boolean stubWithKeyName,
-                              String stubValue);
+    Optional<String> autoStub(@Nonnull PatternCacheKey cacheKey, String value, boolean autoStub, boolean stubWithKeyName, String stubValue);
 
     /**
-     * The same as calling {@link #getValue(PatternCacheKey, String, boolean, boolean, String)} with autoStub==false
+     * The same as calling {@link #getValue(PatternCacheKey, String, boolean, boolean, String)} with autoStub==true,  stubKeyWithName==true, and  is unused)
      *
      * @param cacheKey
+     *         the cacheKey to identify the value
      * @param source
-     * @return
+     *         the source identifier (where to find the patterns).  Must be specified even if only one in use
+     * @param stubValue
+     *         the stub value to use, if a value is not found for {@code cacheKey}
+     *
+     * @return value for {@code cacheKey}, or the {@code stubValue} if none found.  The {@code stubValue} is also written to persistence, if the source supports
+     * that.
      */
-    Optional<String> getValue(PatternCacheKey cacheKey, String source);
+    Optional<String> getValue(@Nonnull PatternCacheKey cacheKey, @Nonnull String source, @Nonnull String stubValue);
+
+
+    /**
+     * Writes a 'stub' value to persistence for {@code cacheKey}
+     *
+     * @param cacheKey
+     *         the cacheKey to identify the value.  May not be supported by all implementations, as not all will be able to write back (for example class based
+     *         resource bundles)
+     * @param stubValue
+     *         the value to write
+     */
+    void writeStubValue(@Nonnull PatternCacheKey cacheKey, @Nonnull String stubValue);
 }

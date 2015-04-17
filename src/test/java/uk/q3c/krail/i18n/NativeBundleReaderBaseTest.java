@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestOptionModule.class})
-public class BundleReaderBaseTest {
+public class NativeBundleReaderBaseTest {
 
     @Inject
     ClassBundleReader reader;

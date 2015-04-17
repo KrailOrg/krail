@@ -40,7 +40,7 @@ import java.util.ResourceBundle;
  * }
  * Created by David Sowerby on 25/11/14.
  */
-public class ClassBundleReader extends BundleReaderBase implements BundleReader {
+public class ClassBundleReader extends NativeBundleReaderBase implements BundleReader {
 
     private static Logger log = LoggerFactory.getLogger(ClassBundleReader.class);
     @Inject
@@ -61,18 +61,16 @@ public class ClassBundleReader extends BundleReaderBase implements BundleReader 
     }
 
     /**
-     * Called {@link #writeStubValue(PatternCacheKey, String)} for sub-classes to write the stub back to persistence
-     * if they can (class and property file implementations cannot write back to their source, so will just ignore
-     * this call)
+     * Called for sub-classes to write the {@code stubValue} to persistence.  This implementation cannot write back to its source, so will just ignore
+     * this call
      *
-     * @param cacheKey
-     * @param stub
+     * @param cacheKey the key to identify the value
+     * @param stubValue the value to write
      *
-     * @return
      */
     @Override
-    protected void writeStubValue(PatternCacheKey cacheKey, String stub) {
-
+    public void writeStubValue(PatternCacheKey cacheKey, String stubValue) {
+        log.debug("This implementation does not support writing values back, call to '{}' ignored.", "writeStubValue");
     }
 
     @Override

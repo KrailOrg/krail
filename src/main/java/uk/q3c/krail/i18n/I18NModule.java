@@ -136,7 +136,8 @@ public class I18NModule extends AbstractModule {
 
 
     /**
-     * Adds a bundle reader, identified by {@code format}
+     * Adds a bundle reader, identified by {@code source} (source is roughly equivalent to 'format' in the native Java I18N support, except that it does not
+     * imply any particular type of source - it is just an identifier)
      *
      * @param source
      *         An arbitrary identifier for a reader implementation- no assumptions are made about the
