@@ -1,104 +1,101 @@
-### Release Notes for krail 0.9.1
+### Release Notes for krail 0.9.2
 
-This version upgrades to Vaadin 7.4.2 and closes a number of unrelated tasks and bugs.
+This version upgrades to Vaadin 7.4.4 and provides improved DAO interfaces for Option and I18N patterns
 
 #### Change log
 
--   [38](https://github.com/davidsowerby/krail/issues/38): dirty view handling
--   [152](https://github.com/davidsowerby/krail/issues/152): providedCompile for javax.servlet
--   [250](https://github.com/davidsowerby/krail/issues/250): Acknowledge flag icons
--   [257](https://github.com/davidsowerby/krail/issues/257): NavTree and NavMenu sort differently
--   [260](https://github.com/davidsowerby/krail/issues/260): Fails on Tomcat 8
--   [294](https://github.com/davidsowerby/krail/issues/294): UIModule content review
--   [324](https://github.com/davidsowerby/krail/issues/324): Time comparison failure - ServiceTest.monitorLogsStatusChange
--   [347](https://github.com/davidsowerby/krail/issues/347): OptionCache not picking up configuration
--   [352](https://github.com/davidsowerby/krail/issues/352): EventBusModule - scope of GlobalBus
--   [353](https://github.com/davidsowerby/krail/issues/353): Upgrade to Vaadin 7.4.1
+-   [301](https://github.com/davidsowerby/krail/issues/301): Database source for I18N
+-   [357](https://github.com/davidsowerby/krail/issues/357): Persistence for Option
+-   [359](https://github.com/davidsowerby/krail/issues/359): Vaadin 7.4.3
+-   [360](https://github.com/davidsowerby/krail/issues/360): Multiple data sources + instances
+-   [362](https://github.com/davidsowerby/krail/issues/362): DefaultEventBusErrorHandler should throw exception
+-   [365](https://github.com/davidsowerby/krail/issues/365): Make error view scrollable
+-   [366](https://github.com/davidsowerby/krail/issues/366): BasicForest NPE when no children
+-   [369](https://github.com/davidsowerby/krail/issues/369): Upgrade to Vaadin 7.4.4
 
 
 #### Dependency changes
 
-   test compile dependency version changed to: q3c-testUtil:0.7.7
-   test compile dependency version changed to: krail-testUtil:1.0.10
+   test compile dependency version changed to: krail-testUtil:1.0.11
+   test compile dependency version changed to: q3c-testUtil:0.7.8
 
 #### Detail
 
-*Version update information*
+*Updated version information*
 
 
 ---
-*READEM updates*
+*Fix [369](https://github.com/davidsowerby/krail/issues/369) Upgrade to Vaadin 7.4.4*
 
 
 ---
-*Added JProfiler to the README acknowledgements*
+*Fix [301](https://github.com/davidsowerby/krail/issues/301) Database source for I18N patterns*
+
+The BundleReader interface has an implementation for a database source (simply using the generic PatternDao to access data), which can be configured within the I18NModule to provide another i18N pattern source.
 
 
 ---
-*Fix [257](https://github.com/davidsowerby/krail/issues/257) Sort order of UserNavigationMenu*
+*See [301](https://github.com/davidsowerby/krail/issues/301) Interfaces for I18NPattern DAOs*
 
-The compareTo method was using the node label for comparison.  This has been corrected to use the collation key
-
-
----
-*Javadoc only*
+JPA implementation provided by [krail-jpa 2](https://github.com/davidsowerby/krail-jpa/issues/2)
 
 
 ---
-*Added an application-provided id for event buses*
+*Fix [360](https://github.com/davidsowerby/krail/issues/360) Fix [357](https://github.com/davidsowerby/krail/issues/357) Multiple persistence Units and persistence for Option*
+
+The implementation of persistence is currently limited to JPA, through the krail-jpa library, but that does support multiple persistence units, identifiable by annotation.   Common generic DAO interfaces have been provided in core Krail to support alternative persistence sources as and when required.  (Some specifically for Option).     [krail-jpa 5](https://github.com/davidsowerby/krail-jpa/issues/5) and [krail-jpa 1](https://github.com/davidsowerby/krail-jpa/issues/1) provide the JPA implementations for these interfaces. Persistence sources may not be completely swappable, but changes required should be minimal.
 
 
 ---
-*Fix [347](https://github.com/davidsowerby/krail/issues/347) OptionCache configuration through OptionModule*
+*DAOs constructed, but no tests yet*
 
 
 ---
-*Fix [250](https://github.com/davidsowerby/krail/issues/250) Acknowledgements added*
+*SubPagePanel handling of Navigator initial state*
+
+ Navigator may not have moved to a valid navigation state before the SubPagePanel.build() is called;  was failing because Navigator.getCurrentNode() was returning null.  The error was being hidden prior to [362](https://github.com/davidsowerby/krail/issues/362)
 
 
 ---
-*Fix [324](https://github.com/davidsowerby/krail/issues/324) Intermittent test failure in ServiceTest*
+*Related to [362](https://github.com/davidsowerby/krail/issues/362), ServiceTest needs TestEventBusModule*
 
-Corrected the use of LocalDateTime.now() in ServiceMonitor.serviceStatusChange() which was introducing a possibility of small, but incorrect, time differences
-
-
----
-*Fix [294](https://github.com/davidsowerby/krail/issues/294) refactor UIModule*
-
-Moved DefaultConverterFactory to a new module, DataModule
-Moved binding for UserStatusPanel to StandardComponentModule
-Renamed StandardComponentModule to DefaultComponentModule
+Re-thrown exceptions from the EventBusErrorHandler causing tests to fail incorrectly
 
 
 ---
-*Fix [353](https://github.com/davidsowerby/krail/issues/353) Vaadin 7.4.2*
+*Fix [366](https://github.com/davidsowerby/krail/issues/366) NPE from BasicForest.getChildren()*
 
-Ticket was for 7.4.1 but 7.4.2 has just been released.  Had to undo the fix of [152](https://github.com/davidsowerby/krail/issues/152), as it was causing mock to fail for VaadinSession.  Raised a new ticket [354](https://github.com/davidsowerby/krail/issues/354).
-rechecked and eliminated some 'force' statements in the Gradle ResolutionStrategy
-
-
----
-*Fix [260](https://github.com/davidsowerby/krail/issues/260) Tomcat 8*
-
-Was previously failing on Tomcat 8, but now works.  No specific action taken to fix it, but suspect it may have been earlier classpath version conflicts.  Updated README
+The underlying graph returns null when none found.  Now converted to an empty list
 
 
 ---
-*Fix [152](https://github.com/davidsowerby/krail/issues/152) ProvidedCompile*
-
-Used the war plugin for providedCompile
+*Fix [365](https://github.com/davidsowerby/krail/issues/365) DefaultErrorView message area made scrollable*
 
 
 ---
-*Fix [38](https://github.com/davidsowerby/krail/issues/38) Dirty view handling*
+*Fix [362](https://github.com/davidsowerby/krail/issues/362) DefaultEventBusHandler throws RuntimeException*
 
-A ViewChangeRule provides an interception point for a Krail developer to apply logic to allow / disallow navigation to a new View.  Typically this would be used to check for a dirty view before allowing progress.  The default implementation always allows progression.
+Previously  was just logging an error, but that can hide failures.
 
 
 ---
-*Fix [352](https://github.com/davidsowerby/krail/issues/352) Corrected scope*
+*Fix [359](https://github.com/davidsowerby/krail/issues/359) Upgrade to Vaadin 7.4.3*
 
-Added facilities to UIScope and VaadinSessionScope to verify whether they contain a specific instance.  Helps check Guice configuration.
+
+---
+*Fix [360](https://github.com/davidsowerby/krail/issues/360) Multiple persistence units*
+
+DAOs provided to support multiple persistence units.  When combined with JPA support provided by [krail-jpa 5](https://github.com/davidsowerby/krail-jpa/issues/5) the developer can support multiple JPA persistence units within an application.  DAOs are generic, and the basis for an entity specific DAO also provided.
+
+
+---
+*See [357](https://github.com/davidsowerby/krail/issues/357) Changes to Option for persistence*
+
+Modified the OptionDao to enable the persistence related elements to be better supported by persistence libraries
+
+
+---
+*Updated README for Guice 4*
 
 
 ---
