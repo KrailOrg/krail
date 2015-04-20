@@ -1,10 +1,10 @@
-/.gradle
-/.idea
-/.settings
-/bin
-/build
-/gradle
-/logs
+.gradle
+.idea
+.settings
+bin
+build
+gradle
+logs
 
 krail.iml
 .classpath
@@ -15,7 +15,7 @@ settings.gradle~
 build.gradle~
 .gitignore~
 README.md~
-/error-screenshots
+
 *.properties~
 
 

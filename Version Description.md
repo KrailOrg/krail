@@ -1,1 +1,1 @@
-This version upgrades to Vaadin 7.4.2 and closes a number of unrelated tasks and bugs.
+This version upgrades to Vaadin 7.4.4 and provides improved DAO interfaces for Option and I18N patterns
