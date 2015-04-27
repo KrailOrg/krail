@@ -45,16 +45,15 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
 
     /**
      * This method captures the parameters from appropriate methods and sets the servlet parameters accordingly.
-     * <p/>
+     * <p>
      * <pre>
      * vaadin {<br>
      * version vaadinVersion<br>
      * widgetset "uk.q3c.krail.demo.widgetset.demoWidgetset"<br>
      * }
      * </pre>
-     * <p/>
-     *
-     * @see https://github.com/johndevs/gradle-vaadin-plugin
+     * <p>
+     * @see <a href="https://github.com/johndevs/gradle-vaadin-plugin"> https://github.com/johndevs/gradle-vaadin-plugin</a>
      * @see com.vaadin.server.VaadinServlet#createDeploymentConfiguration(java.util.Properties)
      */
     @Override
@@ -77,10 +76,14 @@ public class BaseServlet extends VaadinServlet implements SessionInitListener {
      * default widgetset is used. For any other value (as defined by a sub-class implementation), the related widgetset
      * must have been compiled - typically this means that the build definition will also contain an entry for the
      * widgetset. For example, using the Gradle Vaadin plugin, the build.gradle file would contain an entry like
-     * this:<br>
-     * <p/>
+     * this:<br><br>
+     * vaadin {<br><br>
+     * widgetset "uk.q3c.krail.demo.widgetset.demoWidgetset"<br>
+     * <p>
+     * }<br>
+     * <p>
      *
-     * @return
+     * @return the String defining the widgetset to use
      */
     protected String widgetset() {
         return "default";
