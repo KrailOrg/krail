@@ -158,14 +158,14 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         session.setErrorHandler(errorHandler);
         page.setTitle(pageTitle());
 
-        // readFromEnvironment navigator, which also loads the UserSitemap if not already loaded
+        //  also loads the UserSitemap if not already loaded
         getKrailNavigator().init();
 
-        // now that browser is active, and user sitemap loaded, set up currentLocale
-        currentLocale.readFromEnvironment();
-
-
+        //layout this UI, which may also create UYI components
         doLayout();
+
+        // now that browser is active, and user sitemap loaded, and UI constructed, set up currentLocale
+        currentLocale.readFromEnvironment();
         translator.translate(this);
         // Navigate to the correct start point
         String fragment = getPage().getUriFragment();
