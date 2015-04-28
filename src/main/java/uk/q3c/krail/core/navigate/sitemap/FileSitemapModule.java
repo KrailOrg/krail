@@ -29,9 +29,10 @@ import uk.q3c.krail.core.guice.DefaultBindingManager;
  * You can use multiple subclasses of this, Guice will merge all of the bindings into a single MapBinder<String,
  * SitemapFile> for use by the {@link FileSitemapLoader} - so the keys you provide must be unique across the
  * application.
- *
+ * @deprecated see <a href="https://github.com/davidsowerby/krail/issues/375">Issue 375</a>
  * @author David Sowerby
  */
+@Deprecated
 public abstract class FileSitemapModule extends AbstractModule {
 
     private MapBinder<String, SitemapFile> mapBinder;

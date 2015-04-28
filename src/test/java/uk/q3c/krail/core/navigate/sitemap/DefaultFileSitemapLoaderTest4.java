@@ -36,11 +36,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests {@link DefaultFileSitemapLoader} with empty define in module
- *
+ * @deprecated see <a href="https://github.com/davidsowerby/krail/issues/375">Issue 375</a>
  * @author dsowerby
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({uk.q3c.krail.core.navigate.sitemap.DefaultFileSitemapLoaderTest4.TestFileSitemapModule.class, TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class})
+@Deprecated
 public class DefaultFileSitemapLoaderTest4 {
 
     @Inject

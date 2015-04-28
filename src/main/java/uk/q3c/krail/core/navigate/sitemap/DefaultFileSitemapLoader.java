@@ -39,9 +39,10 @@ import java.util.*;
 /**
  * Loads the {@link MasterSitemap} with the entries contained in the files defined by subclasses of
  * {@link FileSitemapModule}
- *
+ *@deprecated see <a href="https://github.com/davidsowerby/krail/issues/375">Issue 375</a>
  * @author David Sowerby
  */
+@Deprecated
 public class DefaultFileSitemapLoader extends SitemapLoaderBase implements FileSitemapLoader {
 
     private enum SectionName {

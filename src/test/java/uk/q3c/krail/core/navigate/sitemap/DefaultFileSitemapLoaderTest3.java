@@ -36,11 +36,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests {@link DefaultFileSitemapLoader} with no files to process
- *
+ *@deprecated see <a href="https://github.com/davidsowerby/krail/issues/375">Issue 375</a>
  * @author dsowerby
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class})
+@Deprecated
 public class DefaultFileSitemapLoaderTest3 {
 
     @Inject

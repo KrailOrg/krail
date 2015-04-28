@@ -47,12 +47,13 @@ import static org.assertj.core.api.Assertions.fail;
 
 /**
  * Tests {@link DefaultFileSitemapLoader} with multiple input files
- *
+ *@deprecated see <a href="https://github.com/davidsowerby/krail/issues/375">Issue 375</a>
  * @author dsowerby
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestFileSitemapModule.class, TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule
         .class})
+@Deprecated
 public class DefaultFileSitemapLoaderTest2 {
 
     List<SitemapLoader> loaders;

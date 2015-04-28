@@ -24,8 +24,12 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * @deprecated see <a href="https://github.com/davidsowerby/krail/issues/375">Issue 375</a>
+ */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestFileSitemapModule1.class, TestFileSitemapModule2.class})
+@Deprecated
 public class FileSitemapModuleTest {
 
     static String f1 = "/home/temp/app";

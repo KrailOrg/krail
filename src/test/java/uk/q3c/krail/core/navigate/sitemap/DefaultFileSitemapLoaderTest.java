@@ -60,12 +60,13 @@ import static org.assertj.core.api.Assertions.fail;
  * #substitute(String, String)}, {@link #deleteLine(String)}, {@link #insertAfter(String, String)} <br> <br> {@link
  * #outputModifiedFile()} will show the changes made<br> <br> The sitemap.getReport() is useful for debugging.<br> <br>
  * Sitemap.toString() will show the page structure
- *
+ *@deprecated see <a href="https://github.com/davidsowerby/krail/issues/375">Issue 375</a>
  * @author dsowerby
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestFileSitemapModule.class, TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule
         .class})
+@Deprecated
 public class DefaultFileSitemapLoaderTest {
 
     private static int COMMENT_LINES = 21;
