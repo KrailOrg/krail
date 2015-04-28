@@ -13,7 +13,6 @@
 package uk.q3c.krail.core.guice;
 
 import com.google.inject.Module;
-import uk.q3c.krail.testutil.TestUIModule;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ public class TestBindingManager extends DefaultBindingManager {
     @Override
     protected void addAppModules(List<Module> baseModules) {
 
-        baseModules.add(new TestUIModule());
         baseModules.add(new DummyModule());
         addAppModulesCalled = true;
     }
