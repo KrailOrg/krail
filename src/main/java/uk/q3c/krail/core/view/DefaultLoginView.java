@@ -161,13 +161,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     public TextField getUsernameBox() {
@@ -178,19 +178,6 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         return passwordBox;
     }
 
-    /**
-     * Called after the view itself has been constructed but before {@link #buildView(BeforeViewChangeBusMessage)} is
-     * called.  Typically checks
-     * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
-     * configuration which affects the way the view is presented.
-     *
-     * @param event
-     *         contains information about the change to this View
-     */
-    @Override
-    public void beforeBuild(ViewChangeBusMessage event) {
-
-    }
 
     @Override
     public String viewName() {

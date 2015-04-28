@@ -64,10 +64,7 @@ public class ViewBaseTest {
     class TestView extends ViewBase {
 
 
-        @Override
-        public void beforeBuild(ViewChangeBusMessage event) {
 
-        }
 
         @Override
         public void buildView(ViewChangeBusMessage event) {
@@ -78,10 +75,6 @@ public class ViewBaseTest {
     class TestView2 extends ViewBase {
 
 
-        @Override
-        public void beforeBuild(ViewChangeBusMessage event) {
-
-        }
 
         @Override
         public void buildView(ViewChangeBusMessage event) {

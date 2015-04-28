@@ -12,17 +12,20 @@
  */
 package uk.q3c.krail.core.view;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
+import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.util.ID;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
- * Provides default View behaviour suitable for most view implementations
+ * Provides default View behaviour suitable for most view implementations.  Override methods as necessary for your needs.
  */
 public abstract class ViewBase implements KrailView {
 
@@ -44,6 +47,9 @@ public abstract class ViewBase implements KrailView {
         this.dirty = dirty;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void init() {
 
     }
@@ -57,10 +63,8 @@ public abstract class ViewBase implements KrailView {
     }
 
     /**
-     * You only need to override / implement this method if you are using TestBench, or another testing tool which
-     * looks
-     * for debug
-     * ids. If you do override it to add your own subclass ids, make sure you call super
+     * You only need to override / implement this method if you are using TestBench, or another testing tool which looks for debug ids. If you do override it
+     * to add your own subclass ids, make sure you call super
      */
     protected void setIds() {
         getRootComponent().setId(ID.getId(Optional.empty(), this, getRootComponent()));
@@ -76,7 +80,8 @@ public abstract class ViewBase implements KrailView {
         return rootComponent;
     }
 
-    public void setRootComponent(Component rootComponent) {
+    public void setRootComponent(@Nonnull Component rootComponent) {
+        Preconditions.checkNotNull(rootComponent);
         this.rootComponent = rootComponent;
     }
 
@@ -85,5 +90,11 @@ public abstract class ViewBase implements KrailView {
         return getClass().getSimpleName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void beforeBuild(ViewChangeBusMessage busMessage) {
 
+    }
 }
