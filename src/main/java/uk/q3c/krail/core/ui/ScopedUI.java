@@ -178,7 +178,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
 
     /**
      * Provides a locale sensitive title for your application (which appears in the browser tab). The title is defined
-     * by the {@link #applicationTitle}, which should be specified in your sub-class of {@link UIModule}
+     * by the {@link #applicationTitle}, which should be specified in your sub-class of {@link DefaultUIModule}
      *
      * @return locale sensitive page title
      */

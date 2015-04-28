@@ -11,22 +11,55 @@
 
 package uk.q3c.krail.core.ui;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
+import com.vaadin.server.WebBrowser;
 import com.vaadin.ui.UI;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.LabelKey;
 
-/**
- * Created by David Sowerby on 27/04/15.
- */
-public class DefaultUIModule extends UIModule {
+public class DefaultUIModule extends AbstractModule {
+
+    @Override
+    protected void configure() {
+        bindApplicationTitle();
+        MapBinder<String, UI> mapbinder = MapBinder.newMapBinder(binder(), String.class, UI.class);
+
+        bind(WebBrowser.class).toProvider(BrowserProvider.class);
+
+        bindUIProvider();
+        addUIBindings(mapbinder);
+
+
+    }
+
+    private void bindApplicationTitle() {
+        ApplicationTitle title = new ApplicationTitle(applicationTitleKey());
+        bind(ApplicationTitle.class).toInstance(title);
+    }
+
+    /**
+     * override this method to provide the I18Nkey which defines your application title (which appears in your browser
+     * tab)
+     */
+    protected I18NKey applicationTitleKey() {
+        return LabelKey.Krail;
+    }
+
+
     /**
      * Override to bind your ScopedUIProvider implementation
      */
-    @Override
     protected void bindUIProvider() {
         bind(ScopedUIProvider.class).to(DefaultApplicationUIProvider.class);
     }
 
-    @Override
+
+    /**
+     * Override with your UI bindings
+     *
+     * @param mapbinder
+     */
     protected void addUIBindings(MapBinder<String, UI> mapbinder) {
         mapbinder.addBinding(DefaultApplicationUI.class.getName())
                  .to(DefaultApplicationUI.class);

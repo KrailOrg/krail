@@ -40,6 +40,7 @@ import uk.q3c.krail.core.services.ServiceModule;
 import uk.q3c.krail.core.services.ServicesMonitor;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.StandardShiroModule;
+import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.validation.KrailValidationModule;
@@ -107,6 +108,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     private List<Module> getModules() {
         List<Module> coreModules = new ArrayList<>();
 
+        coreModules.add(uiModule());
         coreModules.add(i18NModule());
         coreModules.add(applicationConfigurationModule());
         coreModules.add(new SitemapModule());
@@ -144,6 +146,10 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         addAppModules(coreModules);
         addSitemapModules(coreModules);
         return coreModules;
+    }
+
+    protected Module uiModule() {
+        return new DefaultUIModule();
     }
 
     /**
