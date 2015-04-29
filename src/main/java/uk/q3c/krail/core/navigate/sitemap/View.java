@@ -45,6 +45,8 @@ public @interface View {
 
     String labelKeyName();
 
+    int positionIndex() default 1;
+
     /**
      * Comma separated list of roles required in order to have access. Roles must be defined if
      * {@link #pageAccessControl()} is {@link PageAccessControl#ROLES}, but is otherwise not used.

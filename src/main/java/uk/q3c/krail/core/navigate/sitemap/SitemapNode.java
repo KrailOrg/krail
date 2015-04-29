@@ -18,15 +18,21 @@ import java.util.List;
 
 public interface SitemapNode {
 
-    public abstract String getUriSegment();
+    String getUriSegment();
 
     I18NKey getLabelKey();
 
-    public abstract Class<? extends KrailView> getViewClass();
+    Class<? extends KrailView> getViewClass();
 
-    public abstract PageAccessControl getPageAccessControl();
+    PageAccessControl getPageAccessControl();
 
-    public abstract List<String> getRoles();
+    List<String> getRoles();
 
     int getId();
+
+    /**
+     * Returns the index of the position a node should be compared to its siblings
+     * @return The index of the position a node should be compared to its siblings
+     */
+    int getPositionIndex();
 }

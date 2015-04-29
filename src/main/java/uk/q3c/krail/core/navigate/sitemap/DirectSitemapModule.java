@@ -24,10 +24,10 @@ import uk.q3c.krail.i18n.I18NKey;
  * module and provide the entries in the {@link #define} method, or just simply use this as an example and create your
  * own. The module then needs to be added to your subclass of {@link DefaultBindingManager}. By convention, modules
  * relating to the Sitemap are added in the addSitemapModules() method.
- * <p/>
+ * <p>
  * You can add any number of modules this way, but any duplicated map keys (the URI segments) will cause the map
  * injection to fail. There is an option to change this behaviour in MapBinder#permitDuplicates()
- * <p/>
+ * <p>
  * You can use multiple subclasses of this, Guice will merge all of the bindings into a single MapBinder<String,
  * DirectSitemapEntry> for use by the {@link DirectSitemapLoader}
  *
@@ -49,18 +49,67 @@ public abstract class DirectSitemapModule extends AbstractModule {
      * Override this method to define {@link MasterSitemap} entries with one or more calls to {@link #addEntry},
      * something
      * like this:
-     * <p/>
+     * <p>
      * addEntry("public/home", PublicHomeView.class, LabelKey.Home, false, "permission");
-     * <p/>
+     * <p>
      * and redirects with {@link #addRedirect(String, String)}
      *
-     * @see #addEntry(String, Class, I18NKey, boolean, String)
+     * @see #addEntry(String, Class, I18NKey, PageAccessControl)
      */
     protected abstract void define();
 
-    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey labelKey,
-                            PageAccessControl pageAccessControl) {
+    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl pageAccessControl) {
         addEntry(uri, viewClass, labelKey, pageAccessControl, null);
+    }
+
+    /**
+     * Adds an entry to be place in the {@link MasterSitemap} by the {@link DirectSitemapLoader}. Defaults the position index to 1
+     *
+     * @param uri
+     *         the URI for this page
+     * @param viewClass
+     *         the class of the KrailView for this page. This can be null if a redirection will prevent it from
+     *         actually
+     *         being displayed, but it is up to the developer to ensure that the redirection is in place
+     * @param labelKey
+     *         the I18NKey for a localised label for the view
+     * @param pageAccessControl
+     *         the type of page access control to use
+     * @param roles
+     *         the comma separated list of roles which may access this page, may be null. Is ignored if {@code pageAccessControl} is not {@link
+     *         PageAccessControl#ROLES}
+     */
+    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl pageAccessControl, String roles) {
+
+        DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, roles, 1);
+        sitemapBinder.addBinding(uri)
+                     .toInstance(entry);
+
+    }
+
+    /**
+     * Adds an entry to be place in the {@link MasterSitemap} by the {@link DirectSitemapLoader}. Defaults the roles to null
+     *
+     * @param uri
+     *         the URI for this page
+     * @param viewClass
+     *         the class of the KrailView for this page. This can be null if a redirection will prevent it from
+     *         actually
+     *         being displayed, but it is up to the developer to ensure that the redirection is in place
+     * @param labelKey
+     *         the I18NKey for a localised label for the view
+     * @param pageAccessControl
+     *         the type of page access control to use
+     * @param positionIndex
+     *         the position of a page in relation to its siblings.  Used as a sort order, relative numbering does not need to be sequential. A positionIndex
+     *         < 0 indicates that the page should not be displayed in a navigation component
+     */
+    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl pageAccessControl, int positionIndex) {
+
+        DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, null, positionIndex);
+        sitemapBinder.addBinding(uri)
+                     .toInstance(entry);
+
     }
 
     /**
@@ -74,15 +123,19 @@ public abstract class DirectSitemapModule extends AbstractModule {
      *         being displayed, but it is up to the developer to ensure that the redirection is in place
      * @param labelKey
      *         the I18NKey for a localised label for the view
-     * @param publicPage
-     *         true if the page should be available to anyone, including unauthenticated users
-     * @param permission
-     *         the permission string for the page. May be null if no permissions are set
+     * @param pageAccessControl
+     *         the type of page access control to use
+     * @param roles
+     *         the comma separated list of roles which may access this page, may be null. Is ignored if {@code pageAccessControl} is not {@link
+     *         PageAccessControl#ROLES}
+     * @param positionIndex
+     *         the position of a page in relation to its siblings.  Used as a sort order, relative numbering does not need to be sequential. A positionIndex
+     *         < 0 indicates that the page should not be displayed in a navigation component
      */
-    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey labelKey,
-                            PageAccessControl pageAccessControl, String permission) {
+    protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl pageAccessControl, String roles, int
+            positionIndex) {
 
-        DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, permission);
+        DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, roles, positionIndex);
         sitemapBinder.addBinding(uri)
                      .toInstance(entry);
 

@@ -76,6 +76,7 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
                         NodeRecord nodeRecord = new NodeRecord(annotation.uri());
                         nodeRecord.setViewClass(viewClass);
                         nodeRecord.setPageAccessControl(annotation.pageAccessControl());
+                        nodeRecord.setPositionIndex(annotation.positionIndex());
                         if (StringUtils.isNotEmpty(annotation.roles())) {
                             Splitter splitter = Splitter.on(",")
                                                         .trimResults();

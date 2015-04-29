@@ -61,7 +61,7 @@ public class DirectSitemapModuleTest {
         // when
 
         // then
-        assertThat(map).hasSize(3);
+        assertThat(map).hasSize(5);
         DirectSitemapEntry entry = map.get("private/home");
         assertThat(entry.getViewClass()).isEqualTo(PrivateHomeView.class);
         assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
@@ -73,12 +73,28 @@ public class DirectSitemapModuleTest {
         assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
         assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Home_Page);
         assertThat(entry.getRoles()).isNullOrEmpty();
+        assertThat(entry.getPositionIndex()).isEqualTo(1);
 
         entry = map.get("public/login");
         assertThat(entry.getViewClass()).isEqualTo(LoginView.class);
         assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.GUEST);
         assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Log_In);
+        assertThat(entry.getRoles()).isEqualTo("roles");
+        assertThat(entry.getPositionIndex()).isEqualTo(1);
+
+        entry = map.get("private/roles");
+        assertThat(entry.getViewClass()).isEqualTo(LoginView.class);
+        assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.ROLES);
+        assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Log_In);
+        assertThat(entry.getRoles()).isEqualTo("roles");
+        assertThat(entry.getPositionIndex()).isEqualTo(500);
+
+        entry = map.get("private/noroles");
+        assertThat(entry.getViewClass()).isEqualTo(LoginView.class);
+        assertThat(entry.getPageAccessControl()).isEqualTo(PageAccessControl.PUBLIC);
+        assertThat(entry.getLabelKey()).isEqualTo(LabelKey.Log_In);
         assertThat(entry.getRoles()).isNullOrEmpty();
+        assertThat(entry.getPositionIndex()).isEqualTo(300);
 
     }
 
@@ -108,7 +124,9 @@ public class DirectSitemapModuleTest {
         @Override
         protected void define() {
             addEntry("public/home", PublicHomeView.class, LabelKey.Home_Page, PageAccessControl.PUBLIC);
-            addEntry("public/login", LoginView.class, LabelKey.Log_In, PageAccessControl.GUEST);
+            addEntry("public/login", LoginView.class, LabelKey.Log_In, PageAccessControl.GUEST, "roles");
+            addEntry("private/roles", LoginView.class, LabelKey.Log_In, PageAccessControl.ROLES, "roles", 500);
+            addEntry("private/noroles", LoginView.class, LabelKey.Log_In, PageAccessControl.PUBLIC, 300);
         }
 
     }

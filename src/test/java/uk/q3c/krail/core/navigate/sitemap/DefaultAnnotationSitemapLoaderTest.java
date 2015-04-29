@@ -18,6 +18,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.ui.Component;
+import fixture.testviews2.TestAnnotatedView;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,10 +42,12 @@ import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Loads the MasterSitemap using annotations - one class in this file ({@link View1}) and {@link TestAnnotatedView}
+ */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class})
 public class DefaultAnnotationSitemapLoaderTest {
@@ -58,8 +61,7 @@ public class DefaultAnnotationSitemapLoaderTest {
 
     @Inject
     MasterSitemap sitemap;
-    @Inject
-    Map<String, AnnotationSitemapEntry> map;
+
 
     @Before
     public void setup() {
@@ -87,6 +89,7 @@ public class DefaultAnnotationSitemapLoaderTest {
         assertThat(node.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
         assertThat(node.getLabelKey()).isEqualTo(TestLabelKey.Home);
         assertThat(node.getUriSegment()).isEqualTo("a");
+        assertThat(node.getPositionIndex()).isEqualTo(33);
 
         node = sitemap.nodeFor("a/b");
         assertThat(node.getPageAccessControl()).isNotNull();
@@ -129,7 +132,7 @@ public class DefaultAnnotationSitemapLoaderTest {
 
     }
 
-    @View(uri = "a", labelKeyName = "Home", pageAccessControl = PageAccessControl.PERMISSION)
+    @View(uri = "a", labelKeyName = "Home", pageAccessControl = PageAccessControl.PERMISSION, positionIndex = 33)
     @RedirectFrom(sourcePages = {"home/redirected", "home/splat"})
     static class View1 implements KrailView {
 

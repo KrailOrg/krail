@@ -13,9 +13,8 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 /**
- * Implementations take the {@link MasterSitemap} definitions captured by the {@link SitemapAnnotationsModule}, then
- * load them
- * into the {@link MasterSitemap} when invoked by the {@link SitemapService}.
+ * Implementations take the {@link MasterSitemap} definitions captured by the {@link AnnotationSitemapModule}, then load them into the {@link MasterSitemap}
+ * when invoked by the {@link SitemapService}.
  *
  * @author David Sowerby
  * @see DirectSitemapLoader
@@ -23,8 +22,8 @@ package uk.q3c.krail.core.navigate.sitemap;
  */
 public interface AnnotationSitemapLoader extends SitemapLoader {
 
-    static String LABEL_NOT_VALID = "Annotation for View {0}.  {1} is not a valid key value for enum {2}";
-    static String REDIRECT_FROM_IGNORED = "The @RedirectFrom annotation for {0} has been ignored.  A @RedirectFrom "
+    String LABEL_NOT_VALID = "Annotation for View {0}.  {1} is not a valid key value for enum {2}";
+    String REDIRECT_FROM_IGNORED = "The @RedirectFrom annotation for {0} has been ignored.  A @RedirectFrom "
             + "must be accompanied by a @View";
 
 }

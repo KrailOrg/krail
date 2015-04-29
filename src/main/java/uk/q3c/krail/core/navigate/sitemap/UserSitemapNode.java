@@ -106,6 +106,7 @@ public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode>
         return collationKey.compareTo(otherNode.collationKey);
     }
 
+    @Override
     public int getPositionIndex() {
         return masterNode.getPositionIndex();
     }
@@ -121,11 +122,8 @@ public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode>
 
         UserSitemapNode that = (UserSitemapNode) o;
 
-        if (masterNode != null ? !masterNode.equals(that.masterNode) : that.masterNode != null) {
-            return false;
-        }
+        return !(masterNode != null ? !masterNode.equals(that.masterNode) : that.masterNode != null);
 
-        return true;
     }
 
 

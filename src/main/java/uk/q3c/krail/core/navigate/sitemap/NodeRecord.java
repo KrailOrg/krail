@@ -26,7 +26,7 @@ import java.util.List;
 public class NodeRecord {
     private I18NKey labelKey;
     private PageAccessControl pageAccessControl;
-    private int positionIndex = -1;
+    private int positionIndex = 1; // visible by default
     private List<String> roles = new ArrayList<>();
     private String uri;
     private String uriSegment;
