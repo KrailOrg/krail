@@ -146,13 +146,13 @@ public class DefaultUserNavigationMenuTest {
 
         MenuItem viewB1 = childWithText("ViewB1", viewB);
         captions = menuCaptions(viewB1);
-        assertThat(captions).containsOnly("ViewB11");
+
+        //B11 removed by using positionIndex <0
+
+        assertThat(captions).isEmpty();
         assertThat(viewB1.getCommand()).isNull();
 
-        MenuItem viewB11 = childWithText("ViewB11", viewB1);
-        captions = menuCaptions(viewB11);
-        assertThat(captions).containsOnly();
-        assertThat(viewB11.getCommand()).isNotNull();
+
 
     }
 
@@ -194,6 +194,35 @@ public class DefaultUserNavigationMenuTest {
         //simulates Guice construction
         autoSubscriber.afterInjection(menu);
         return menu;
+    }
+
+    @Test
+    public void build_branch_hidden() {
+        //given
+        userNavigationMenu = newMenu();
+        //when
+        userNavigationMenu.build();
+        //re-instate as 'displayable'
+        userSitemap.b11Node()
+                   .setPositionIndex(5);
+        // hide the b branch
+        userSitemap.bNode()
+                   .setPositionIndex(-1);
+        //then
+        List<String> captions = menuCaptions(null);
+        MenuItem prvate = childWithText("Private", null);
+        captions = menuCaptions(prvate);
+        assertThat(captions).containsOnly("Private Home", "ViewB");
+        assertThat(prvate.getCommand()).isNull();
+
+        MenuItem privateHome = childWithText("Private Home", prvate);
+        captions = menuCaptions(privateHome);
+        assertThat(captions).containsOnly();
+        assertThat(privateHome.getCommand()).isNotNull();
+
+        MenuItem viewB = childWithText("ViewB", prvate);
+        assertThat(viewB).isNull();
+
     }
 
     @Test

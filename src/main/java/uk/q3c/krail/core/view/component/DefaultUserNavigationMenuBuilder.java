@@ -15,11 +15,11 @@ import com.vaadin.ui.MenuBar.MenuItem;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.util.SourceTreeWrapper_BasicForest;
-import uk.q3c.util.TargetTreeWrapper_MenuBar;
-import uk.q3c.util.TreeCopy;
+import uk.q3c.util.*;
 import uk.q3c.util.TreeCopy.SortOption;
-import uk.q3c.util.UserSitemapNodeCaption;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DefaultUserNavigationMenuBuilder implements UserNavigationMenuBuilder {
 
@@ -49,10 +49,35 @@ public class DefaultUserNavigationMenuBuilder implements UserNavigationMenuBuild
         treeCopy.setSortOption(SortOption.SORT_SOURCE_NODES);
         treeCopy.setMaxDepth(userNavigationMenu.getOptionMaxDepth());
         treeCopy.setSorted(userNavigationMenu.isSorted());
-        //        treeCopy.setTargetSortComparator(new MenuItemComparator());
-
-        treeCopy.addSourceFilter(new LogoutPageFilter());
+        List<NodeFilter> filters = new ArrayList<>();
+        defineFilters(filters);
+        applyFilters(treeCopy, filters);
         treeCopy.copy();
+    }
+
+    /**
+     * Excludes nodes with positionIndex < 0 and the log out page.  Override this to use different filters
+     *
+     * @param filters
+     *         the filters to apply
+     */
+    protected void defineFilters(List<NodeFilter> filters) {
+        filters.add(new LogoutPageFilter());
+        filters.add(new NoNavFilter());
+    }
+
+    /**
+     * Applies the filters defined by {@link #defineFilters(List)}
+     *
+     * @param treeCopy
+     *         the copy object
+     * @param filters
+     *         the filters to apply
+     */
+    private void applyFilters(TreeCopy<UserSitemapNode, MenuItem> treeCopy, List<NodeFilter> filters) {
+        for (NodeFilter filter : filters) {
+            treeCopy.addSourceFilter(filter);
+        }
     }
 
     @Override

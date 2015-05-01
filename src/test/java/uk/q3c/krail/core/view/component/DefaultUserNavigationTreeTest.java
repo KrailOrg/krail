@@ -99,6 +99,9 @@ public class DefaultUserNavigationTreeTest {
         // don't want the logout node
         expectedNodes.remove(userSitemap.logoutNode());
 
+        //removed by using positionIndex <0
+        expectedNodes.remove(userSitemap.b11Node());
+
         // when
         userNavigationTree.setOptionMaxDepth(1000);
         // then
@@ -119,6 +122,37 @@ public class DefaultUserNavigationTreeTest {
         //simulates Guice construction
         autoSubscriber.afterInjection(tree);
         return tree;
+    }
+
+    /**
+     * The 'b' branch has position index set to < 0 at its root - none of it should there fore appear in the nav tree
+     */
+    @Test
+    public void build_branch_hidden() {
+        //given
+        userNavigationTree = newTree();
+        List<UserSitemapNode> expectedNodes = new ArrayList<>(userSitemap.getAllNodes());
+        // don't want the logout node
+        expectedNodes.remove(userSitemap.logoutNode());
+        expectedNodes.remove(userSitemap.bNode());
+        expectedNodes.remove(userSitemap.b1Node());
+        expectedNodes.remove(userSitemap.b11Node());
+
+        //re-instate as 'displayable'
+        userSitemap.b11Node()
+                   .setPositionIndex(5);
+        // hide the b branch
+        userSitemap.bNode()
+                   .setPositionIndex(-1);
+
+        //when
+        userNavigationTree.setOptionMaxDepth(1000);
+        //then
+        List<UserSitemapNode> itemIds = (List<UserSitemapNode>) userNavigationTree.getItemIds();
+        assertThat(itemIds).containsAll(expectedNodes);
+        // ensure no extra ones, there isn't a containsOnly for a list
+        assertThat(itemIds).hasSize(expectedNodes.size());
+
     }
 
     @Test

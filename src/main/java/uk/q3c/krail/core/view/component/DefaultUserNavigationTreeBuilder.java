@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -33,8 +31,7 @@ public class DefaultUserNavigationTreeBuilder implements UserNavigationTreeBuild
     @Override
     public void build() {
         SourceTreeWrapper<UserSitemapNode> source = new SourceTreeWrapper_BasicForest<>(userSitemap.getForest());
-        TargetTreeWrapper_VaadinTree<UserSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_VaadinTree<>
-                (userNavigationTree.getTree());
+        TargetTreeWrapper_VaadinTree<UserSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_VaadinTree<>(userNavigationTree.getTree());
         TreeCopy<UserSitemapNode, UserSitemapNode> treeCopy = new TreeCopy<>(source, target);
         userNavigationTree.clear();
         target.setCaptionReader(new UserSitemapNodeCaption());
@@ -47,10 +44,23 @@ public class DefaultUserNavigationTreeBuilder implements UserNavigationTreeBuild
         treeCopy.copy();
     }
 
+    /**
+     * Excludes nodes with positionIndex < 0 and the log out page.  Override this to use different filters
+     *
+     * @param filters
+     *         the filters to apply
+     */
     protected void defineFilters(List<NodeFilter> filters) {
         filters.add(new LogoutPageFilter());
+        filters.add(new NoNavFilter());
     }
 
+    /**
+     * Applies the filters defined by {@link #defineFilters(List)}
+     *
+     * @param treeCopy the copy object
+     * @param filters the filters to apply
+     */
     private void applyFilters(TreeCopy<UserSitemapNode, UserSitemapNode> treeCopy, List<NodeFilter> filters) {
         for (NodeFilter filter : filters) {
             treeCopy.addSourceFilter(filter);

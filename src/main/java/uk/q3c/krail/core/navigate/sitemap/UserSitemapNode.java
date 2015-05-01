@@ -22,20 +22,27 @@ import java.util.Locale;
 
 /**
  * To enable locale sensitive sorting of nodes - for example within a UserNavigationTree - a collation key from
- * {@link Collator} is added by the {@link #setLabelKey(I18NKey)} method. This means the collation key
+ * {@link Collator} is added by the {@link #translate(Translate, Locale, Collator)} method. This means the collation key
  * is generally created only once, but is available for sorting as often as needed. The collation key will only need to
  * be updated if locale or labelKey changes. This approach also takes advantage of the improved performance of the
  * collation key sorting (http://docs.oracle.com/javase/tutorial/i18n/text/perform.html)
+ * <p>
+ * The {@link MasterSitemapNode#positionIndex} is copied into this, to offer the developer the potential to provide a different presentation order in
+ * navigation
+ * components, depending on some characteristic of the user.
  */
 public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode> {
 
     private final MasterSitemapNode masterNode;
     private CollationKey collationKey;
     private String label;
+    private int positionIndex = 1;//visible by default;
+
 
     public UserSitemapNode(MasterSitemapNode masterNode) {
         super();
         this.masterNode = masterNode;
+        this.positionIndex = masterNode.getPositionIndex();
     }
 
     /**
@@ -108,7 +115,11 @@ public class UserSitemapNode implements SitemapNode, Comparable<UserSitemapNode>
 
     @Override
     public int getPositionIndex() {
-        return masterNode.getPositionIndex();
+        return positionIndex;
+    }
+
+    public void setPositionIndex(int positionIndex) {
+        this.positionIndex = positionIndex;
     }
 
     @Override

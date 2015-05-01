@@ -126,7 +126,7 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         positionIndexes.put(b1URI, 3);
 
         insertionOrder.put(b11URI, 5);
-        positionIndexes.put(b11URI, 3);
+        positionIndexes.put(b11URI, -1); //This one should not be in nav components
 
         insertionOrder.put(aURI, 9);
         positionIndexes.put(aURI, 5);
