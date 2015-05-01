@@ -59,13 +59,13 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private final Translate translate;
     private final I18NProcessor translator;
     private UIKey instanceKey;
+
     private AbstractOrderedLayout screenLayout;
     private UIScope uiScope;
     private KrailView view;
 
-    protected ScopedUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-                       Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale
-            currentLocale, I18NProcessor translator) {
+    protected ScopedUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, Broadcaster broadcaster, PushMessageRouter
+            pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator) {
         super();
         this.errorHandler = errorHandler;
         this.navigator = navigator;
@@ -75,9 +75,9 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         this.translate = translate;
         this.translator = translator;
         this.currentLocale = currentLocale;
-
         viewDisplayPanel = new Panel();
         registerWithBroadcaster(broadcaster);
+
     }
 
     protected void registerWithBroadcaster(Broadcaster broadcaster) {
@@ -187,6 +187,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         return translate.from(key);
     }
 
+
     /**
      * Uses the {@link #screenLayout} defined by sub-class implementations of {@link #screenLayout()}, expands it to
      * full size, and sets the View display panel to take up all spare space.
@@ -258,5 +259,6 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     public KrailView getView() {
         return view;
     }
+
 
 }

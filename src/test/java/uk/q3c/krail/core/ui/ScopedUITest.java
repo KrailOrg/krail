@@ -33,6 +33,7 @@ import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
+import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NProcessor;
@@ -82,6 +83,8 @@ public class ScopedUITest {
     KrailView toView;
     @Mock
     Component viewContent;
+    @Mock
+    Option option;
 
     @Mock
     private MBassador<BusMessage> eventBus;
@@ -89,7 +92,8 @@ public class ScopedUITest {
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
-        ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+        ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
+                option);
     }
 
     @Test

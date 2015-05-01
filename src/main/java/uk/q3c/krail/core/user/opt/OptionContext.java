@@ -31,6 +31,6 @@ public interface OptionContext {
     @Nonnull
     Option getOption();
 
-
+    @Nonnull
     ImmutableSet<OptionDescriptor> optionDescriptors();
 }

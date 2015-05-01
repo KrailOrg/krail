@@ -11,6 +11,7 @@
 
 package uk.q3c.krail.core.ui;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
@@ -22,17 +23,22 @@ import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.user.notify.UserNotifier;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.view.component.*;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.Translate;
+
+import javax.annotation.Nonnull;
 
 /**
  * A common layout for a business-type application. This is a good place to start even if you replace it eventually.
  *
  * @author David Sowerby
  */
-public class DefaultApplicationUI extends ScopedUI {
+public class DefaultApplicationUI extends ScopedUI implements OptionContext {
 
     private final UserNavigationTree navTree;
     private final Breadcrumb breadcrumb;
@@ -44,14 +50,15 @@ public class DefaultApplicationUI extends ScopedUI {
     private final ApplicationHeader header;
     private final LocaleSelector localeSelector;
     private VerticalLayout baseLayout;
+    private Option option;
 
     @Inject
     protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
                                    ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel,
                                    UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb,
                                    SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster,
-                                   PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
-                                   Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, UserNotifier userNotifier) {
+                                   PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale,
+                                   I18NProcessor translator, LocaleSelector localeSelector, UserNotifier userNotifier, Option option) {
         super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
         this.navTree = navTree;
         this.breadcrumb = breadcrumb;
@@ -63,6 +70,7 @@ public class DefaultApplicationUI extends ScopedUI {
         this.header = header;
         this.localeSelector = localeSelector;
         // this.userNotifier = userNotifier;
+        this.option = option;
     }
 
     @Override
@@ -155,6 +163,22 @@ public class DefaultApplicationUI extends ScopedUI {
 
     public ApplicationHeader getHeader() {
         return header;
+    }
+
+    /**
+     * Returns the {@link Option} instance being used by this context
+     *
+     * @return the {@link Option} instance being used by this context
+     */
+    @Nonnull
+    @Override
+    public Option getOption() {
+        return option;
+    }
+
+    @Override
+    public ImmutableSet<OptionDescriptor> optionDescriptors() {
+        return ImmutableSet.of();
     }
 
 }
