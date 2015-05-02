@@ -200,19 +200,21 @@ public class DefaultUserNavigationMenuTest {
     public void build_branch_hidden() {
         //given
         userNavigationMenu = newMenu();
-        //when
-        userNavigationMenu.build();
+
         //re-instate as 'displayable'
         userSitemap.b11Node()
                    .setPositionIndex(5);
         // hide the b branch
         userSitemap.bNode()
                    .setPositionIndex(-1);
+        //when
+        userNavigationMenu.build();
+
         //then
         List<String> captions = menuCaptions(null);
         MenuItem prvate = childWithText("Private", null);
         captions = menuCaptions(prvate);
-        assertThat(captions).containsOnly("Private Home", "ViewB");
+        assertThat(captions).containsOnly("Private Home");
         assertThat(prvate.getCommand()).isNull();
 
         MenuItem privateHome = childWithText("Private Home", prvate);

@@ -29,9 +29,9 @@ public class NoNavFilter implements NodeFilter<UserSitemapNode> {
     public boolean accept(UserSitemapNode node) {
         boolean accept = node.getPositionIndex() >= 0;
         if (accept) {
-            log.debug("accepted node: {}", node.toString());
+            log.debug("accepted node: {} with position index of {}", node.toString(), node.getPositionIndex());
         } else {
-            log.debug("rejected node: {}", node.toString());
+            log.debug("rejected node: {} with position index of {}", node.toString(), node.getPositionIndex());
         }
         return accept;
     }
