@@ -168,4 +168,16 @@ public class NavigationState implements Serializable {
     public boolean hasParameter(String parameterName) {
         return parameters.containsKey(parameterName);
     }
+
+    public NavigationState virtualPage(final String virtualPage) {
+        setVirtualPage(virtualPage);
+        return this;
+    }
+
+    public NavigationState parameter(String key, String value) {
+        addParameter(key, value);
+        return this;
+    }
+
+
 }
