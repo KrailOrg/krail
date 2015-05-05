@@ -784,6 +784,21 @@ public class DefaultNavigatorTest {
         return changeListener.getMessage(eventKey);
     }
 
+    /**
+     * https://github.com/davidsowerby/krail/issues/382
+     */
+    @Test
+    public void navStateNotUpdated() {
+        //given
+        navigator = createNavigator();
+        NavigationState navState = new NavigationState();
+        navState.setVirtualPage(userSitemap.aURI);
+        //when
+        navigator.navigateTo(navState);
+        //then
+        assertThat(navigator.getCurrentNavigationState()).isEqualTo(navState);
+    }
+
     @ModuleProvider
     protected AbstractModule moduleProvider() {
         return new AbstractModule() {

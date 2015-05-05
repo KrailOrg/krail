@@ -84,8 +84,7 @@ public class DefaultNavigator implements Navigator {
     private ViewChangeRule viewChangeRule;
 
     @Inject
-    public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
-            pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule loginNavigationRule, LogoutNavigationRule logoutNavigationRule, @UIBus PubSubSupport<BusMessage> eventBus, ViewChangeRule viewChangeRule) {
+    public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule loginNavigationRule, LogoutNavigationRule logoutNavigationRule, @UIBus PubSubSupport<BusMessage> eventBus, ViewChangeRule viewChangeRule) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -115,8 +114,6 @@ public class DefaultNavigator implements Navigator {
             throw new IllegalStateException(msg, e);
         }
     }
-
-
 
 
     @Override
@@ -162,6 +159,8 @@ public class DefaultNavigator implements Navigator {
         if (!viewChangeRule.changeIsAllowed(this, currentView)) {
             return;
         }
+        //makes sure the navigation state is up to date, removes the need to do this externally
+        uriHandler.updateFragment(navigationState);
 
         redirectIfNeeded(navigationState);
 
@@ -288,7 +287,7 @@ public class DefaultNavigator implements Navigator {
     }
 
     /**
-     *  Publishes a message to the {@link #eventBus} immediately after a view change.
+     * Publishes a message to the {@link #eventBus} immediately after a view change.
      * <p>
      * Message Handlers are called in an undefined order unless {@link Handler#priority()} is used to specify an order.
      *
