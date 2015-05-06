@@ -12,18 +12,27 @@
  */
 package uk.q3c.util;
 
+import com.google.inject.Inject;
+import com.mycila.testing.junit.MycilaJunitRunner;
+import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Panel;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(MycilaJunitRunner.class)
+@GuiceContext({TestIDModule.class})
 public class IDTest {
 
     Button button = new Button();
     Panel panel = new Panel();
+
+    @Inject
+    IDTestInstance idt;
 
     @Test
     public void getIdComponentArray() {
@@ -62,4 +71,16 @@ public class IDTest {
 
     }
 
+    //    https://github.com/davidsowerby/krail/issues/383
+    @Test
+    public void enhancedClass() {
+        //given
+
+        //when
+        String rawClassName = idt.getClass()
+                                 .getName();
+        //then
+        assertThat(rawClassName).contains("$$");
+        assertThat(ID.getId(Optional.empty(), idt, new Button())).isEqualTo("IDTestInstance-Button");
+    }
 }

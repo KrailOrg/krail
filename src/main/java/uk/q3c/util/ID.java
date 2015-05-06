@@ -50,7 +50,9 @@ public class ID {
             } else {
                 first = false;
             }
-            buf.append(c.getSimpleName());
+            //https://github.com/davidsowerby/krail/issues/383
+            //enhanced classes mess up the class name with $$Enhancer
+            buf.append(ClassnameUtils.simpleNameWithoutEnhance(c));
         }
         if (qualifier.isPresent()) {
             buf.append("-");

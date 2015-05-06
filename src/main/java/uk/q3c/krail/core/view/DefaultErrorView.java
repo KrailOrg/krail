@@ -13,6 +13,8 @@ package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.TextArea;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.util.StackTraceUtil;
 
@@ -21,7 +23,7 @@ import uk.q3c.util.StackTraceUtil;
  */
 
 public class DefaultErrorView extends ViewBase implements ErrorView {
-
+    private static Logger log = LoggerFactory.getLogger(DefaultErrorView.class);
     private Throwable error;
     private TextArea textArea;
     private boolean viewBuilt = false;
@@ -42,6 +44,7 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 
     @Override
     public void setError(Throwable error) {
+        log.error(StackTraceUtil.getStackTrace(error));
         this.error = error;
     }
 
