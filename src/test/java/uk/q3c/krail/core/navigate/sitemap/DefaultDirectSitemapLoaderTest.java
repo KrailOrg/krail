@@ -12,11 +12,9 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
 import fixture.testviews2.OptionsView;
 import fixture.testviews2.ViewA;
 import fixture.testviews2.ViewA1;
@@ -32,8 +30,7 @@ import uk.q3c.krail.core.navigate.sitemap.DefaultDirectSitemapLoaderTest.TestDir
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.StandardShiroModule;
-import uk.q3c.krail.core.ui.BasicUIProvider;
-import uk.q3c.krail.core.ui.ScopedUIProvider;
+import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.view.ViewModule;
@@ -47,8 +44,9 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule
-        .class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, OptionModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, EventBusModule.class})
+@GuiceContext({TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, I18NModule
+        .class, SitemapModule.class, UserModule.class, OptionModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class,
+        DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, EventBusModule.class, DefaultUIModule.class})
 public class DefaultDirectSitemapLoaderTest {
 
     static String page1 = "private/page1";
@@ -78,18 +76,6 @@ public class DefaultDirectSitemapLoaderTest {
         System.out.println(sitemap);
     }
 
-    @ModuleProvider
-    protected AbstractModule moduleProvider() {
-        return new AbstractModule() {
-
-            @Override
-            protected void configure() {
-                bind(ScopedUIProvider.class).to(BasicUIProvider.class);
-
-            }
-
-        };
-    }
 
     public static class TestDirectSitemapModule_A extends DirectSitemapModule {
 

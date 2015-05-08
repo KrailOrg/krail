@@ -12,11 +12,9 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
@@ -26,8 +24,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.StandardShiroModule;
-import uk.q3c.krail.core.ui.BasicUIProvider;
-import uk.q3c.krail.core.ui.ScopedUIProvider;
+import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.view.ViewModule;
@@ -41,8 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class,
-        I18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, OptionModule.class, StandardShiroModule.class,
-        DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, EventBusModule.class})
+        I18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, OptionModule.class, StandardShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, EventBusModule.class, DefaultUIModule.class})
 public class SystemAccountManagementPagesTest {
 
     @Inject
@@ -75,17 +71,6 @@ public class SystemAccountManagementPagesTest {
 
     }
 
-    @ModuleProvider
-    protected AbstractModule moduleProvider() {
-        return new AbstractModule() {
 
-            @Override
-            protected void configure() {
-                bind(ScopedUIProvider.class).to(BasicUIProvider.class);
-
-            }
-
-        };
-    }
 
 }

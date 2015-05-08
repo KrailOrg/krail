@@ -12,11 +12,9 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
@@ -27,8 +25,7 @@ import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.StandardShiroModule;
-import uk.q3c.krail.core.ui.BasicUIProvider;
-import uk.q3c.krail.core.ui.ScopedUIProvider;
+import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.view.ViewModule;
@@ -41,8 +38,9 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({StandardPagesModule.class, UIScopeModule.class, EventBusModule.class, ViewModule.class, ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, OptionModule.class, StandardShiroModule.class, DefaultComponentModule
-        .class, VaadinSessionScopeModule.class, NavigationModule.class})
+@GuiceContext({StandardPagesModule.class, UIScopeModule.class, EventBusModule.class, ViewModule.class, ShiroVaadinModule.class, TestI18NModule.class,
+        SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, OptionModule.class, StandardShiroModule.class, DefaultComponentModule
+        .class, VaadinSessionScopeModule.class, NavigationModule.class, DefaultUIModule.class})
 public class DefaultStandardPagesModuleTest {
 
     @Inject
@@ -83,16 +81,5 @@ public class DefaultStandardPagesModuleTest {
 
     }
 
-    @ModuleProvider
-    protected AbstractModule moduleProvider() {
-        return new AbstractModule() {
 
-            @Override
-            protected void configure() {
-                bind(ScopedUIProvider.class).to(BasicUIProvider.class);
-
-            }
-
-        };
-    }
 }

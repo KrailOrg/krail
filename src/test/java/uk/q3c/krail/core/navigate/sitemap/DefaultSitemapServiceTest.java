@@ -12,11 +12,9 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinService;
 import fixture.TestConfigurationException;
 import org.apache.commons.configuration.ConfigurationException;
@@ -40,8 +38,7 @@ import uk.q3c.krail.core.services.ServiceModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.StandardShiroModule;
-import uk.q3c.krail.core.ui.BasicUIProvider;
-import uk.q3c.krail.core.ui.ScopedUIProvider;
+import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
@@ -69,7 +66,10 @@ import static org.mockito.Mockito.when;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class, ServiceModule.class, ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class, DefaultComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, NavigationModule.class})
+@GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class, ServiceModule.class,
+        ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule
+        .class, DefaultComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, NavigationModule.class,
+        DefaultUIModule.class})
 public class DefaultSitemapServiceTest {
 
     static VaadinService vaadinService;
@@ -117,8 +117,7 @@ public class DefaultSitemapServiceTest {
         assertThat(service.getReport()).isNotNull();
         assertThat(service.isStarted()).isTrue();
         assertThat(sitemap.getNodeCount()).isEqualTo(STANDARD_NODE_COUNT + FILE_NODE_COUNT + DIRECT_NODE_COUNT);
-        assertThat(service.getSourceTypes()).containsOnly(SitemapSourceType.FILE, SitemapSourceType.DIRECT,
-                SitemapSourceType.ANNOTATION);
+        assertThat(service.getSourceTypes()).containsOnly(SitemapSourceType.FILE, SitemapSourceType.DIRECT, SitemapSourceType.ANNOTATION);
         assertThat(sitemap.getReport()).isNotEmpty();
         System.out.println(sitemap.getReport());
     }
@@ -157,8 +156,7 @@ public class DefaultSitemapServiceTest {
         assertThat(service.getNameKey()).isEqualTo(LabelKey.Sitemap_Service);
         assertThat(service.getDescriptionKey()).isEqualTo(DescriptionKey.Sitemap_Service);
         assertThat(service.getName()).isEqualTo("Sitemap Service");
-        assertThat(service.getDescription()).isEqualTo("This service creates the Sitemap using options from the " +
-                "application configuration");
+        assertThat(service.getDescription()).isEqualTo("This service creates the Sitemap using options from the " + "application configuration");
     }
 
     public void sourcesPropertyMissing() throws Exception {
@@ -239,8 +237,7 @@ public class DefaultSitemapServiceTest {
 
         // then
 
-        assertThat(service.absolutePathFor("wiggly.ini")).isEqualTo(new File(ResourceUtils.applicationBaseDirectory()
-                , "wiggly.ini"));
+        assertThat(service.absolutePathFor("wiggly.ini")).isEqualTo(new File(ResourceUtils.applicationBaseDirectory(), "wiggly.ini"));
         assertThat(service.absolutePathFor("/wiggly.ini")).isEqualTo(new File("/wiggly.ini"));
     }
 
@@ -263,17 +260,7 @@ public class DefaultSitemapServiceTest {
 
     }
 
-    @ModuleProvider
-    protected AbstractModule module() {
-        return new AbstractModule() {
 
-            @Override
-            protected void configure() {
-                bind(ScopedUIProvider.class).to(BasicUIProvider.class);
-            }
-
-        };
-    }
 
     public static class TestDirectSitemapModule extends DirectSitemapModule {
 
@@ -290,8 +277,7 @@ public class DefaultSitemapServiceTest {
 
         @Override
         protected void define() {
-            File a = new File(TestResource.testJavaRootDir("krail"), "uk/q3c/krail/core/navigate/sitemap_good" +
-                    ".properties");
+            File a = new File(TestResource.testJavaRootDir("krail"), "uk/q3c/krail/core/navigate/sitemap_good" + ".properties");
             addEntry("a", new SitemapFile(a.getAbsolutePath()));
         }
     }
