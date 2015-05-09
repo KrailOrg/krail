@@ -31,7 +31,7 @@ public abstract class StandardPageViewBase extends ViewBase {
     }
 
     @Override
-    public void buildView(ViewChangeBusMessage busMessage) {
+    public void doBuild(ViewChangeBusMessage busMessage) {
 
         label = new Label("This is the " + this.getClass()
                                                .getSimpleName());

@@ -26,7 +26,7 @@ public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
 
 
     @Override
-    public void buildView(ViewChangeBusMessage busMessage) {
+    public void doBuild(ViewChangeBusMessage busMessage) {
         super.buildView(busMessage);
         Panel p = new Panel("Logged out");
         p.setSizeFull();

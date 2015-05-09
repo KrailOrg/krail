@@ -51,7 +51,7 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 
 
     @Override
-    public void buildView(ViewChangeBusMessage busMessage) {
+    public void doBuild(ViewChangeBusMessage busMessage) {
         textArea = new TextArea();
         textArea.setSizeFull();
         textArea.setReadOnly(false);

@@ -36,10 +36,7 @@ public abstract class GridViewBase extends ViewBase implements KrailView {
     }
 
     /**
-     * You only need to override / implement this method if you are using TestBench, or another testing tool which
-     * looks
-     * for debug
-     * ids. If you do override it to add your own subclass ids, make sure you call super
+     * {@inheritDoc}
      */
     @Override
     protected void setIds() {
@@ -58,6 +55,7 @@ public abstract class GridViewBase extends ViewBase implements KrailView {
      */
     @Override
     public void buildView(ViewChangeBusMessage event) {
+        super.buildView(event);
         setRootComponent(gridLayout);
     }
 }

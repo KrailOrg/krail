@@ -61,8 +61,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void buildView(ViewChangeBusMessage event) {
-        super.buildView(event);
+    public void doBuild(ViewChangeBusMessage event) {
         getGridLayout().setColumns(3);
         getGridLayout().setRows(3);
         getGridLayout().setSizeFull();
@@ -161,13 +160,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     public TextField getUsernameBox() {

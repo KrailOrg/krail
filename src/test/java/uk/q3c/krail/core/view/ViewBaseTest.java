@@ -67,7 +67,7 @@ public class ViewBaseTest {
 
 
         @Override
-        public void buildView(ViewChangeBusMessage event) {
+        public void doBuild(ViewChangeBusMessage event) {
 
         }
     }
@@ -77,7 +77,7 @@ public class ViewBaseTest {
 
 
         @Override
-        public void buildView(ViewChangeBusMessage event) {
+        public void doBuild(ViewChangeBusMessage event) {
             setRootComponent(new Label("blank"));
         }
     }

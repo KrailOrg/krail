@@ -29,6 +29,8 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
  * <li>An {@link AfterViewChangeBusMessage} is published on the @UIBus</li>
  * </ol>
  * where build refers to the creation of UI fields and components which populate the view.
+ *
+ * The easiest way to implement this is to extend {@link ViewBase}
  */
 public interface KrailView {
 
@@ -40,7 +42,7 @@ public interface KrailView {
      * @param busMessage
      *         contains information about the change to this View
      */
-    public void beforeBuild(ViewChangeBusMessage busMessage);
+    void beforeBuild(ViewChangeBusMessage busMessage);
 
     /**
      * Builds the UI components of the view.  MUST set the root component of the View (returned by {@link
@@ -51,7 +53,7 @@ public interface KrailView {
      * @param busMessage
      *         contains information about the change to this View
      */
-    public void buildView(ViewChangeBusMessage busMessage);
+    void buildView(ViewChangeBusMessage busMessage);
 
     /**
      * To enable implementations to implement this interface without descending from Component. If the implementation
@@ -60,20 +62,20 @@ public interface KrailView {
      *
      * @return
      */
-    public Component getRootComponent();
+    Component getRootComponent();
 
     /**
      * A name for the view, typically displayed in a title bar
      *
      * @return
      */
-    public String viewName();
+    String viewName();
 
     /**
      * Called by the {@link ViewFactory} after the construction of a view, and intended for initialisation which does
      * not depend on navigation state.
      */
-    public void init();
+    void init();
 
     /**
      * Called immediately after the construction of the Views components (see {@link #buildView(ViewChangeBusMessage)}) to enable setting up

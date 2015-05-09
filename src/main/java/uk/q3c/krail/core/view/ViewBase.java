@@ -15,6 +15,8 @@ package uk.q3c.krail.core.view;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
@@ -25,12 +27,26 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
- * Provides default View behaviour suitable for most view implementations.  Override methods as necessary for your needs.
+ * Provides default View behaviour suitable for most view implementations.  Override methods as necessary for your needs.  This is the default sequence:
+ * <p>
+ * <ol><li>{@link #init()} does nothing by default, override if you need to prepare the view in some way</li>
+ * <li>{@link #beforeBuild} does nothing by default. Example use might be to reset #componentsConstructed dependent on url parameter values, forcing a rebuild
+ * under certain conditions</li>
+ * <li>{@link #buildView} delegates to sub-classes to provide component construction in {@link #doBuild}, then sets {@link #componentsConstructed}</li>
+ * <li>{@link #afterBuild} calls {@link #setIds} to provide debug Ids</li>
+ * <li>{@link #loadData} responds to the {@link AfterViewChangeBusMessage}, which occurs at the end of the sequence.  Override {@link #loadData} to provide your
+ * data loading process</li>
+ * </ol>
+ * <p>
+ * Note:  The {@link #rootComponent} must be set by sub-classes by an implementation of {@link #doBuild}
  */
+@Listener
 public abstract class ViewBase implements KrailView {
 
     private static Logger log = LoggerFactory.getLogger(ViewBase.class);
+    private boolean componentsConstructed;
     private boolean dirty;
+    private boolean idsAssigned;
     private Component rootComponent;
 
     @Inject
@@ -55,11 +71,14 @@ public abstract class ViewBase implements KrailView {
     }
 
     /**
-     * Calls {@link #setIds() after the View has been constructed}
+     * If {@link #idsAssigned} is false, {@link #setIds()} - the view components have already been constructed in {@link #buildView}
      */
     @Override
     public void afterBuild(AfterViewChangeBusMessage event) {
-        setIds();
+        if (!idsAssigned) {
+            setIds();
+            idsAssigned = true;
+        }
     }
 
     /**
@@ -95,6 +114,24 @@ public abstract class ViewBase implements KrailView {
      */
     @Override
     public void beforeBuild(ViewChangeBusMessage busMessage) {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void buildView(ViewChangeBusMessage busMessage) {
+        if (!componentsConstructed) {
+            doBuild(busMessage);
+        }
+        componentsConstructed = true;
+    }
+
+    protected abstract void doBuild(ViewChangeBusMessage busMessage);
+
+    @Handler
+    protected void loadData(AfterViewChangeBusMessage busMessage) {
 
     }
 }
