@@ -15,8 +15,6 @@ package uk.q3c.krail.core.view;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
-import net.engio.mbassy.listener.Handler;
-import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
@@ -33,14 +31,13 @@ import java.util.Optional;
  * <li>{@link #beforeBuild} does nothing by default. Example use might be to reset #componentsConstructed dependent on url parameter values, forcing a rebuild
  * under certain conditions</li>
  * <li>{@link #buildView} delegates to sub-classes to provide component construction in {@link #doBuild}, then sets {@link #componentsConstructed}</li>
- * <li>{@link #afterBuild} calls {@link #setIds} to provide debug Ids</li>
- * <li>{@link #loadData} responds to the {@link AfterViewChangeBusMessage}, which occurs at the end of the sequence.  Override {@link #loadData} to provide your
+ * <li>{@link #afterBuild} calls {@link #setIds} to provide debug Ids, unless {@link #idsAssigned} is true, and then calls {@link #loadData} </li>
+ * <li>if you need to load data, one good way to do that is to annotate your sub-class with @Listener, and provide a @Andler annoated method to load the data.
  * data loading process</li>
  * </ol>
  * <p>
  * Note:  The {@link #rootComponent} must be set by sub-classes by an implementation of {@link #doBuild}
  */
-@Listener
 public abstract class ViewBase implements KrailView {
 
     private static Logger log = LoggerFactory.getLogger(ViewBase.class);
@@ -74,11 +71,12 @@ public abstract class ViewBase implements KrailView {
      * If {@link #idsAssigned} is false, {@link #setIds()} - the view components have already been constructed in {@link #buildView}
      */
     @Override
-    public void afterBuild(AfterViewChangeBusMessage event) {
+    public void afterBuild(AfterViewChangeBusMessage busMessage) {
         if (!idsAssigned) {
             setIds();
             idsAssigned = true;
         }
+        loadData(busMessage);
     }
 
     /**
@@ -102,6 +100,15 @@ public abstract class ViewBase implements KrailView {
     public void setRootComponent(@Nonnull Component rootComponent) {
         Preconditions.checkNotNull(rootComponent);
         this.rootComponent = rootComponent;
+    }
+
+    /**
+     * Default does nothing, overload to load your data
+     *
+     * @param busMessage
+     */
+    protected void loadData(AfterViewChangeBusMessage busMessage) {
+
     }
 
     @Override
@@ -129,9 +136,4 @@ public abstract class ViewBase implements KrailView {
     }
 
     protected abstract void doBuild(ViewChangeBusMessage busMessage);
-
-    @Handler
-    protected void loadData(AfterViewChangeBusMessage busMessage) {
-
-    }
 }
