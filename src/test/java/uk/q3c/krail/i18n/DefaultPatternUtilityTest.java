@@ -76,10 +76,12 @@ public class DefaultPatternUtilityTest {
         //when
         utility.writeOut(writer, LabelKey.class, locales, Optional.empty());
         //then line 4 is the timestamp
-        assertThat(FileTestUtil.compare(referenceFile, targetFile, 4)).isEqualTo(Optional.empty());
-        assertThat(FileTestUtil.compare(referenceFile_de, targetFile_de, 4)).isEqualTo(Optional.empty());
-        assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.empty());
-        assertThat(FileTestUtil.compare(referenceFile_en_GB, targetFile_en_GB, 4)).isEqualTo(Optional.empty());
+        //first 15 lines covers class declaration and a specimen number of entries
+        //  Test shold only break if an entry is added or deleted near the satart
+        assertThat(FileTestUtil.compareFirst(15, referenceFile, targetFile, 4)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compareFirst(15, referenceFile_de, targetFile_de, 4)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compareFirst(15, referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compareFirst(15, referenceFile_en_GB, targetFile_en_GB, 4)).isEqualTo(Optional.empty());
     }
 
 

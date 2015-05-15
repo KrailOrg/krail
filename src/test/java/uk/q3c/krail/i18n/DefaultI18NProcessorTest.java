@@ -71,8 +71,11 @@ public class DefaultI18NProcessorTest {
         // then
         assertThat(testObject.getNewButton()
                              .getCaption()).isEqualTo("Authentication");
+
+        // no guarantee is made to which is returned when there are multiple overlapping annotations
         assertThat(testObject.getNewButton()
-                             .getDescription()).isEqualTo("Please log in");
+                             .getDescription()).isIn("Please log in", "This account is already in use.  You must log out of that session before you can log " +
+                "in again.");
         assertThat(testObject.getNewButton()
                              .getLocale()).isEqualTo(Locale.UK);
 
@@ -110,16 +113,16 @@ public class DefaultI18NProcessorTest {
         // class annotation overruled by field annotation
         TestCompositeComponent ccs = testObject.getCcs();
         assertThat(ccs.getCaption()).isEqualTo("Field");
-        assertThat(ccs.getLabel()).isNotNull();
-        Label label = ccs.getLabel();
+        assertThat(ccs.getLabelInsideTcc()).isNotNull();
+        Label label = ccs.getLabelInsideTcc();
         // assertThat(label.getValue()).isEqualTo("Ok");
         assertThat(label.getDescription()).isEqualTo("Confirm this Value is Ok"); //drill down needed
 
         // class annotation
         TestCompositeComponent ccc = testObject.getCcc();
         assertThat(ccc.getCaption()).isEqualTo("Class");
-        assertThat(ccc.getLabel()).isNotNull();
-        label = ccc.getLabel();
+        assertThat(ccc.getLabelInsideTcc()).isNotNull();
+        label = ccc.getLabelInsideTcc();
         // assertThat(label.getValue()).isEqualTo("Ok");
         assertThat(label.getDescription()).isEqualTo("Confirm this Value is Ok");
 
@@ -148,23 +151,7 @@ public class DefaultI18NProcessorTest {
 
     }
 
-    @Test(expected = I18NException.class)
-    public void fieldNotConstructed() {
-        // given
 
-        // when
-        processor.translate(testObject2);
-        // then
-    }
-
-    @Test(expected = I18NException.class)
-    public void nestedFieldNotConstructed() {
-        // given
-
-        // when
-        processor.translate(testObject3);
-        // then
-    }
 
     @Test
     public void interpret_de() {
@@ -207,6 +194,7 @@ public class DefaultI18NProcessorTest {
         assertThat(headers).isEqualTo(new String[]{"Klein", "Stornieren", "not i18N"});
 
     }
+
 
     @ModuleProvider
     protected AbstractModule moduleProvider() {

@@ -56,9 +56,19 @@ public class I18NModule extends AbstractModule {
         bindPatternSource();
         bindPatternCacheLoader();
         bindPatternUtility();
+        bindFieldScanner();
+        bindHostClassIdentifier();
 
 
         define();
+    }
+
+    protected void bindHostClassIdentifier() {
+        bind(I18NHostClassIdentifier.class).to(DefaultI18NHostClassIdentifier.class);
+    }
+
+    protected void bindFieldScanner() {
+        bind(I18NFieldScanner.class).to(DefaultI18NFieldScanner.class);
     }
 
     protected void bindPatternUtility() {

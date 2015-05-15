@@ -21,10 +21,10 @@ import com.vaadin.ui.Panel;
  * @author David Sowerby
  * @date 2 May 2014
  */
-@I18N(caption = LabelKey.Class)
+@Caption(caption = LabelKey.Class)
 public class TestCompositeComponent_componentNotConstructed extends Panel {
 
-    @I18N(description = DescriptionKey.Confirm_Ok)
+    @Description(description = DescriptionKey.Confirm_Ok)
     private Label label;
 
     public Label getLabel() {

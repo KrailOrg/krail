@@ -8,14 +8,15 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package uk.q3c.krail.i18n;
 
-import com.vaadin.ui.Button;
-
-public class I18NTestClass2 {
-
-    // keep field as null make sure nothing breaks;
-    @Caption(caption = LabelKey.Cancel)
-    private Button unconstructed;
-
+/**
+ * Any class which contains I18N annotations may also have been subject to byte enhancement.  If it has, the original, un-enhanced class is needed in order to
+ * access the field / class annotations.  IMplementations of this interface must identify the original class, from an enhanced object.
+ * <p>
+ * Created by David Sowerby on 10/05/15.
+ */
+public interface I18NHostClassIdentifier {
+    Class<?> getOriginalClassFor(Object target);
 }

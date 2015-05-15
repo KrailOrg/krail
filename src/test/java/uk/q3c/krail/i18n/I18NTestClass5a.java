@@ -8,14 +8,28 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package uk.q3c.krail.i18n;
 
-import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
 
-public class I18NTestClass2 {
+/**
+ * Inherits from 5
+ * <p>
+ * Created by David Sowerby on 11/05/15.
+ */
+public class I18NTestClass5a extends I18NTestClass5 {
 
-    // keep field as null make sure nothing breaks;
-    @Caption(caption = LabelKey.Cancel)
-    private Button unconstructed;
+    @Caption(caption = LabelKey.Authentication)
+    I18NMonitoredButton tbb;
 
+    @I18N
+    HorizontalLayout layout2Drilled;
+
+    public I18NTestClass5a() {
+        super();
+        tbb = new I18NMonitoredButton();
+        layout2Drilled = new HorizontalLayout(tbb); // try to catch it out
+
+    }
 }

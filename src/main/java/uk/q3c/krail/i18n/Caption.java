@@ -47,6 +47,5 @@ public @interface Caption {
 
     String locale() default "";
 
-    boolean drillDown() default true;
 
 }

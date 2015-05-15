@@ -9,19 +9,23 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.util;
+package uk.q3c.krail.i18n;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.matcher.Matchers;
+import com.vaadin.ui.AbstractComponent;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Needed to enhance a class for AOP, to enable {@link IDTest}
- * <p>
- * Created by David Sowerby on 07/05/15.
+ * Created by David Sowerby on 10/05/15.
  */
-public class TestIDModule extends AbstractModule {
-    @Override
-    protected void configure() {
-        bindInterceptor(Matchers.any(), Matchers.annotatedWith(NotOnWeekends.class), new WeekendBlocker());
-    }
+public interface I18NFieldScanner {
+
+    Map<AbstractComponent, AnnotationInfo> annotatedComponents();
+
+
+    void scan(@Nonnull Object target);
+
+    List<Object> processedDrillDowns();
 }

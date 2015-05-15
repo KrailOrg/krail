@@ -17,16 +17,16 @@ import com.vaadin.ui.TextField;
 import uk.q3c.krail.core.data.TestEntity;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.validation.BeanValidator;
+import uk.q3c.krail.i18n.Caption;
 import uk.q3c.krail.i18n.DescriptionKey;
-import uk.q3c.krail.i18n.I18N;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.LabelKey;
 
 public class TestBeanFieldGroup2 extends BeanFieldGroupBase<TestEntity> {
 
-    @I18N(caption = LabelKey.First_Name)
+    @Caption(caption = LabelKey.First_Name)
     private TextField firstName;
-    @I18N(caption = LabelKey.Last_Name, description = DescriptionKey.Last_Name)
+    @Caption(caption = LabelKey.Last_Name, description = DescriptionKey.Last_Name)
     private TextField lastName;
 
     protected TestBeanFieldGroup2(I18NProcessor i18NProcessor, Provider<BeanValidator> beanValidatorProvider, Option

@@ -31,9 +31,8 @@ import java.util.Locale;
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.PARAMETER})
 @I18NAnnotation
 public @interface I18N {
-    LabelKey caption() default LabelKey.nullKey;
 
-    DescriptionKey description() default DescriptionKey.nullKey;
+    boolean drillDown() default true;
 
     /**
      * The locale for an annotated component is usually taken from {@link CurrentLocale}, but if this optional

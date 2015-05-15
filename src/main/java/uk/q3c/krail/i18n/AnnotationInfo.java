@@ -8,14 +8,32 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package uk.q3c.krail.i18n;
 
-import com.vaadin.ui.Button;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
-public class I18NTestClass2 {
+/**
+ * Created by David Sowerby on 15/05/15.
+ */
+public class AnnotationInfo {
 
-    // keep field as null make sure nothing breaks;
-    @Caption(caption = LabelKey.Cancel)
-    private Button unconstructed;
+    private final Field field;
+    private final List<Annotation> annotations;
 
+    public AnnotationInfo(Field field) {
+        this.field = field;
+        this.annotations = new ArrayList<>();
+    }
+
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    public Field getField() {
+        return field;
+    }
 }

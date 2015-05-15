@@ -34,7 +34,7 @@ public class DefaultLocaleSelector implements LocaleSelector, ValueChangeListene
     private final LocaleContainer container;
     private final CurrentLocale currentLocale;
     private final UserNotifier userNotifier;
-    @I18N(description = DescriptionKey.Select_from_available_languages)
+    @Description(description = DescriptionKey.Select_from_available_languages)
     private ComboBox combo;
     private boolean fireListeners;
     private boolean inhibitMessage;

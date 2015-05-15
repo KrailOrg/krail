@@ -8,14 +8,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.q3c.krail.i18n;
 
-import com.vaadin.ui.Button;
+package uk.q3c.util;
 
-public class I18NTestClass2 {
+import com.google.inject.AbstractModule;
+import com.google.inject.matcher.Matchers;
 
-    // keep field as null make sure nothing breaks;
-    @Caption(caption = LabelKey.Cancel)
-    private Button unconstructed;
-
+/**
+ * Enables testing with AOP enhanced classes
+ * <p>
+ * Created by David Sowerby on 07/05/15.
+ */
+public class TestByteEnhancementModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bindInterceptor(Matchers.any(), Matchers.annotatedWith(NotOnWeekends.class), new WeekendBlocker());
+    }
 }

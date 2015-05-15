@@ -45,6 +45,5 @@ public @interface Value {
 
     String locale() default "";
 
-    boolean drillDown() default true;
 
 }

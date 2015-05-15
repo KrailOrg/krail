@@ -20,13 +20,14 @@ import com.vaadin.ui.Panel;
  * @date 2 May 2014
  */
 @Caption(caption = LabelKey.Class)
+@I18N
 public class TestCompositeComponent extends Panel {
 
     @Description(description = DescriptionKey.Confirm_Ok)
-    private final Label label = new Label();
+    private final Label labelInsideTcc = new Label();
 
-    public Label getLabel() {
-        return label;
+    public Label getLabelInsideTcc() {
+        return labelInsideTcc;
     }
 
 }

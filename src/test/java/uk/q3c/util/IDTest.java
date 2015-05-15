@@ -25,7 +25,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestIDModule.class})
+@GuiceContext({TestByteEnhancementModule.class})
 public class IDTest {
 
     Button button = new Button();

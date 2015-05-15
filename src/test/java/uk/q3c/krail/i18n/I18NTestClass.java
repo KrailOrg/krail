@@ -13,6 +13,7 @@
 package uk.q3c.krail.i18n;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
@@ -32,6 +33,7 @@ public class I18NTestClass {
     @I18N
     private final TestCompositeNonComponent cnc;
     @Caption(caption = LabelKey.Field)
+    @I18N
     private final TestCompositeComponentNested ccn;
     @Caption(caption = LabelKey.Yes, locale = "de-DE")
     private final Button specificLocale;
@@ -43,6 +45,8 @@ public class I18NTestClass {
     private final Button buttonWithoutAnnotation;
     private final Integer integer;
     private double dubble;
+    @Caption(caption = LabelKey.Broadcast_Messages)
+    private Grid grid;
     @Caption(caption = LabelKey.Authentication, description = DescriptionKey.Please_log_in)
     @Description(description = DescriptionKey.Account_Already_In_Use)
     private Button newButton;
@@ -65,6 +69,7 @@ public class I18NTestClass {
         specificLocale = new Button();
         value = new Label();
         valueLocale = new Label();
+        grid = new Grid();
     }
 
     private void setupTableColumns() {
