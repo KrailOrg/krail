@@ -26,10 +26,9 @@ import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionDescriptor;
+import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.view.component.*;
-import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.I18NProcessor;
-import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.i18n.*;
 
 import javax.annotation.Nonnull;
 
@@ -39,6 +38,12 @@ import javax.annotation.Nonnull;
  * @author David Sowerby
  */
 public class DefaultApplicationUI extends ScopedUI implements OptionContext {
+
+    public static final OptionKey optionBreadcrumbVisible = new OptionKey(DefaultApplicationUI.class, LabelKey.Breadcrumb_is_Visible);
+    public static final OptionKey optionNavTreeVisible = new OptionKey(DefaultApplicationUI.class, LabelKey.Navigation_Tree_is_Visible);
+    public static final OptionKey optionMenuVisible = new OptionKey(DefaultApplicationUI.class, LabelKey.Navigation_Menu_is_Visible);
+    public static final OptionKey optionMessageBarVisible = new OptionKey(DefaultApplicationUI.class, LabelKey.Message_bar_is_Visible);
+    public static final OptionKey optionSubPagePanelVisible = new OptionKey(DefaultApplicationUI.class, LabelKey.SubPage_Panel_is_Visible);
 
     private final UserNavigationTree navTree;
     private final Breadcrumb breadcrumb;
@@ -53,12 +58,11 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
     private Option option;
 
     @Inject
-    protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory,
-                                   ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel,
-                                   UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb,
-                                   SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster,
-                                   PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale,
-                                   I18NProcessor translator, LocaleSelector localeSelector, UserNotifier userNotifier, Option option) {
+    protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader
+            header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage,
+                                   MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
+                                   Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, UserNotifier
+                                               userNotifier, Option option) {
         super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
         this.navTree = navTree;
         this.breadcrumb = breadcrumb;
@@ -103,11 +107,25 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
             baseLayout.setExpandRatio(row2, 1f);
 
         }
-        navTree.build();
-        menu.build();
+        processOptions();
+        if (navTree.isVisible()) {
+            navTree.build();
+        }
+        if (menu.isVisible()) {
+            menu.build();
+        }
 
         return baseLayout;
     }
+
+    protected void processOptions() {
+        breadcrumb.setVisible(option.get(true, optionBreadcrumbVisible));
+        menu.setVisible(option.get(true, optionMenuVisible));
+        navTree.setVisible(option.get(true, optionNavTreeVisible));
+        messageBar.setVisible(option.get(true, optionMessageBarVisible));
+        subpage.setVisible(option.get(true, optionSubPagePanelVisible));
+    }
+
 
     private void setSizes() {
         logo.setWidth("100px");
@@ -178,7 +196,10 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
 
     @Override
     public ImmutableSet<OptionDescriptor> optionDescriptors() {
-        return ImmutableSet.of();
+
+        return ImmutableSet.of(OptionDescriptor.descriptor(optionBreadcrumbVisible, DescriptionKey.Breadcrumb_is_Visible), OptionDescriptor.descriptor
+                (optionMessageBarVisible, DescriptionKey.MessageBar_is_Visible), OptionDescriptor.descriptor(optionNavTreeVisible, DescriptionKey
+                .Navigation_Tree_is_Visible), OptionDescriptor.descriptor(optionMenuVisible, DescriptionKey.Navigation_Menu_is_Visible));
     }
 
 }

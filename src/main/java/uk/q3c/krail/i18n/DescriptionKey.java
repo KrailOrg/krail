@@ -31,6 +31,6 @@ public enum DescriptionKey implements I18NKey {
     Unknown_Account,
     Write_Path,
     You_have_not_logged_in, Authentication_Failed, Use_Field_Name_In_Validation_Message, Maximum_Menu_Depth, Preferred_Locale, Sort_Type, Sort_Ascending,
-    Maximum_Tree_Depth, Theme, Flag_Icon_Size
+    Maximum_Tree_Depth, Theme, Breadcrumb_is_Visible, MessageBar_is_Visible, Navigation_Tree_is_Visible, Navigation_Menu_is_Visible, Flag_Icon_Size
 
 }

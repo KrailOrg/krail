@@ -69,7 +69,8 @@ public enum LabelKey implements I18NKey {
     Warning,
     Maxiumum_Depth, Sort_Ascending, Sort_Type, Locale_Flag_Size, Use_Field_Name_in_Validation_Message, Use_Key_Path,
     Path, Write_Path, Preferred_Locale, Source_Order_Default, Auto_Stub, Stub_with_Key_Name, Stub_Value,
-    Maximum_Cache_Size, Edit, Save, Yes
+    Maximum_Cache_Size, Edit, Save, Breadcrumb_is_Visible, Navigation_Tree_is_Visible, Navigation_Menu_is_Visible, Message_bar_is_Visible,
+    SubPage_Panel_is_Visible, Yes
 
 
 }
