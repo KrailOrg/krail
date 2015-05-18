@@ -1,0 +1,7 @@
+site_name: Krail
+
+pages:
+- [index.md, Home]
+- [about.md, About]
+- [tutorial/tutorial1.md, Tutorial]
+theme: readthedocs
