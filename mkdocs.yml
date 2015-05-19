@@ -3,5 +3,5 @@ site_name: Krail
 pages:
 - [index.md, Home]
 - [about.md, About]
-- [tutorial/tutorial1.md, Tutorial]
+- [tutorial/tutorial00.md, Tutorial - Getting Started]
 theme: readthedocs
