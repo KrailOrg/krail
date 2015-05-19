@@ -62,9 +62,9 @@ Not fully thread-safe where it needs to be
 
 # Status
 
-19th April 2015:
+19th May 2015:
 
-* Vaadin 7.4.4 is integrated with:
+* Vaadin 7.4.5 is integrated with:
 * Guice 4.0.beta5, (beta, but used [in production](https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!msg/google-guice/mlgZgKiJyU8/IUgtKwha3YAJ)
 * Shiro 1.2.3,
 * MBassador (Event Bus)
