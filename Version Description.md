@@ -1,1 +1,1 @@
-This version upgrades to Vaadin 7.4.4 and provides improved DAO interfaces for Option and I18N patterns
+This version upgrades to Vaadin 7.4.6 and Guice 4.0.  The I18NProcessor has been updated to reduce the amount it has to process, and clarify when drill down occurs.  The amount of setting up for a simple application has been reduced.  
