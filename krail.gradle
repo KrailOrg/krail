@@ -59,3 +59,7 @@ dependencies {
 
 
 }
+
+bintray {
+    dryRun = false
+}
