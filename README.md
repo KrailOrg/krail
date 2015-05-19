@@ -64,7 +64,7 @@ Not fully thread-safe where it needs to be
 
 19th May 2015:
 
-* Vaadin 7.4.5 is integrated with:
+* Vaadin 7.4.6 is integrated with:
 * Guice 4.0
 * Shiro 1.2.3,
 * MBassador (Event Bus)
@@ -81,7 +81,7 @@ There is a [simple demo](https://github.com/davidsowerby/krail-demo) project
 
 ## testApp
 
-There is a [functional test application](https://github.com/davidsowerby/krail-testApp) which can also be used to explore functionality
+There is a [functional test application](https://github.com/davidsowerby/krail-testApp) which can also be used to explore functionality - it actually contains more than the demo
 
 
 #Project Build
