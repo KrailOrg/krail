@@ -29,6 +29,8 @@ Create a directory for your project (called "tutorial" in this case), and initia
 You will now have an empty build file open.  Cut and paste the following into the file & save it
 ```groovy
     apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.9.7'  
+    apply plugin: 'java'
+    apply plugin: 'war'
     apply plugin: 'eclipse'  
     apply plugin: 'idea'  
 
@@ -39,7 +41,7 @@ You will now have an empty build file open.  Cut and paste the following into th
     }  
 
     dependencies {  
-        'uk.q3c.krail:krail:0.9.3'  
+        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.3')
     }
 ```  
 
@@ -83,6 +85,11 @@ Gradle will prompt for a number of entries - for the purposes of the tutorial, w
 ### IDEA
 
 In IDEA:
+
+Generate IDE Files
+```sh
+gradle idea
+```
 
 Start the import
 
@@ -179,7 +186,7 @@ public class TutorialServletModule extends BaseServletModule {
 ```
 #### Create a Binding Manager
 
-In Krail terminology, the Binding Manager is a cetnral point of Guice configuration.  Guice modules specify how things are bound together, and the Binding Manager brings selects which modules to use.  All Krail applications use their own Binding Manager, but normally sub-classed from ```DefaultBindingManager```.  To create one for the tutorial:
+In Krail terminology, the Binding Manager is a central point of Guice configuration.  Guice modules specify how things are bound together, and the Binding Manager brings selects which modules to use.  All Krail applications use their own Binding Manager, but normally sub-classed from ```DefaultBindingManager```.  To create one for the tutorial:
 
 In the com.example.tutorial.app package, create a class ```TutorialBindingManager```, extended from ```DefaultBindingManager```
 ```
