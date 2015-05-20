@@ -41,7 +41,7 @@ You will now have an empty build file open.  Cut and paste the following into th
     }  
 
     dependencies {  
-        'uk.q3c.krail:krail:0.9.3'  
+        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.3')
     }
 ```  
 
