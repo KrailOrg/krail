@@ -1,6 +1,6 @@
 #krail
 
-Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.
+Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the [Tutorial](http://krail.readthedocs.org/en/latest/tutorial/tutorial00) (still in development but will get you started)
 
 This core library provides:
 
@@ -62,7 +62,7 @@ Not fully thread-safe where it needs to be
 
 # Status
 
-19th May 2015:
+21st May 2015:
 
 * Vaadin 7.4.6 is integrated with:
 * Guice 4.0
