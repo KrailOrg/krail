@@ -114,7 +114,7 @@ public class DefaultSubPagePanelTest {
     }
 
     /**
-     * There may be more buttons than nodes, as buttons are re-used and just made not visible of not needed, so only
+     * There may be more buttons than nodes, as buttons are re-used and just made not visible if not needed, so only
      * copy nodes from buttons which are visible.
      *
      * @param buttons
@@ -288,6 +288,19 @@ public class DefaultSubPagePanelTest {
 
         //then
         assertThat(panel.getId()).isEqualTo("DefaultSubPagePanel");
+    }
+
+    @Test
+    public void rebuildWithCurrentNodeNull() {
+        //given
+        when(navigator.getCurrentNode()).thenReturn(null);
+        LogoutPageFilter filter = new LogoutPageFilter();
+        panel.addFilter(filter);
+        panel.moveToNavigationState();
+        //when
+        panel.structureChanged(new UserSitemapStructureChangeMessage());
+        //then
+        assertThat(panel.rebuildRequired).isFalse(); // we just want to make sure there is no NPE
     }
 
     @ModuleProvider

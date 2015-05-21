@@ -83,7 +83,11 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
             // premature calls can be made befoer the navigator has started up properly
             if (getNavigator().getCurrentNavigationState() != null) {
                 UserSitemapNode currentNode = getNavigator().getCurrentNode();
-                log.debug("current node is '{}'", userSitemap.uri(currentNode));
+                if (currentNode == null) {
+                    log.debug("currentNode is null, it has probably been removed by change of authorisation");
+                } else {
+                    log.debug("current node is '{}'", userSitemap.uri(currentNode));
+                }
                 List<UserSitemapNode> authorisedSubNodes = userSitemap.getChildren(currentNode);
                 Collections.sort(authorisedSubNodes, getSortComparator());
                 organiseButtons(authorisedSubNodes);
