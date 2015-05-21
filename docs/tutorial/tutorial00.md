@@ -342,7 +342,7 @@ You should now see something like this:
 
 There are a few things to see, even in this very basic implementation.    
 
-![Screenshot](/img/basic-screenshot-labelled.png)
+![Screenshot](/img/basic-screenshot2.png)
 
 
 - The "screen" presentation is provided by ```DefaultApplicationUI``` - UI in this context refers to the Vaadin concept of UI, which is generally equivalent to a browser tab. 
@@ -367,7 +367,7 @@ This is achieved using two major components, the ```DefaultRealm``` (a very simp
 Now try this sequence:
 
 - Login
-- Click on "Private" and you will see that it jumps to "Private home" - this is configurable behaviour - it is a redirect so that there does not need to be a view if the "Private" page itslef will never be shown
+- Click on "Private" and you will see that it jumps to "Private home" - this is configurable behaviour - it is a redirect so that there does not need to be a view if the "Private" page itself will never be shown
 - Logout.  You will now be on the logout page (which by default does not appear in the navigation components - also configurable behaviour)
 - Press the browser 'back' button - and a notification will pop up saying that *"private/home is not a valid page"*.  Even though you know this is not the case, this message is deliberate, as it means that if a user tries to guess a url that they are not authorised for, they will not even get confirmation that the page exists. 
 - Look at the message bar and you will see that the same message has appeared there.  We will look at user notifications and how they are handled a bit later.
