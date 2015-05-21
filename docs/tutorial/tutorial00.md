@@ -28,9 +28,7 @@ Create a directory for your project (called "tutorial" in this case), and initia
 ```
 You will now have an empty build file open.  Cut and paste the following into the file & save it
 ```groovy
-    apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.9.7'  
-    apply plugin: 'java'
-    apply plugin: 'war'
+    apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.9.8'  
     apply plugin: 'eclipse'  
     apply plugin: 'idea'  
 
@@ -43,14 +41,22 @@ You will now have an empty build file open.  Cut and paste the following into th
     dependencies {  
         compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.3')
     }
+    
+    configurations.all {
+        resolutionStrategy {
+            // GWT requires an old version of the validation API.  Changing to a newer version breaks widgetset compile but throws no errors
+            force 'javax.validation:validation-api:1.0.0.GA'
+        }
+    }
 ```  
-
-
 
 - The first entry is for a [Vaadin Gradle plugin](https://github.com/johndevs/gradle-vaadin-plugin), and provides some valuable Vaadin specific Gradle tasks
 - The 'eclipse' and 'idea' plugins are optional, but useful for generating IDE specific files.
 - Krail requires Java 8, hence the line "sourceCompatibility = '1.8'"
-- And, of course, you cannot do without Krail ...
+- Of course, you cannot do without Krail ...
+- There are a lot of dependencies involved in building Krail - that is no surprise, when you consider how many things it integrates.  However, that also means that there can be version conflicts to resolve, between the dependencies of the various component parts of Krail. The ResolutionStrategy is there to resolve those version conflicts. GWT requires an older version of the javax validation API - if you don't force the correct version to be used, then the widgetset compile will fail - and worse, it fails without any error messages.
+
+
 
 Now save the file and add it to Git
 
@@ -84,16 +90,9 @@ Gradle will prompt for a number of entries - for the purposes of the tutorial, w
 
 ### IDEA
 
-In IDEA:
+In IDEA, start the import
 
-Generate IDE Files
-```sh
-gradle idea
-```
-
-Start the import
-
-> File | Open and select the tutorial/tutorial.ipr
+> File | Open and select *tutorial/build.gradle*
 
 In the import dialog:
 
@@ -103,7 +102,7 @@ In the import dialog:
 
 IDEA may prompt you to add the project VCS root - say yes if it does.
 
-Delete the src/main/groovy folder completely - we will only be using Java for this Tutorial
+Delete the src/main/groovy and src/test/groovy folders completely - we will only be using Java for this Tutorial
 
 There are a number of files which have not been added to Git - normally we would probably exclude a number of them from version control, but to keep things simple, right click on the project folder and select Git | Add to add all files to Git.
 
@@ -140,7 +139,7 @@ public class TutorialServlet extends BaseServlet {
 }
 ```
 #### Define a Widgetset
-If you are familiar with Vaadin, you will be familiar with widgetsets.  However, if you are not, they can seem a bit of a mystery.  The [Vaadin documentation](https://vaadin.com/book/vaadin7/-/page/intro.html) is generally very good, but one thing which does not seem to be clear is when to use the in-built widgetset and when to specify your own.  We recommend starting with the assumption that you will want to generate your own at some point, and it is just easier to start that way, because Vaadin sometimes has trouble finding the in-built widgetset.  To set this up, we need to modify the Servlet:
+If you are familiar with Vaadin, you will be familiar with widgetsets.  However, if you are not, they can seem a bit of a mystery.  The [Vaadin documentation](https://vaadin.com/book/vaadin7/-/page/intro.html) is generally very good, but one thing which does not seem to be clear is when to use the in-built widgetset and when to specify your own.  We find it easier just to start by defining your own at the project set up stage.  To set this up, we need to modify the Servlet:
 
 ```java
 @Singleton
@@ -158,7 +157,7 @@ public class TutorialServlet extends BaseServlet {
 }
 ```
 
-and in the build.gradle file, add a vaadin closure:
+and in the build.gradle file, add a vaadin closure to declare the widgetset.  (The plugin.logToConsole entry provides a little extra console output during a build.  It is useful, but not essential)
     
 ```groovy
 dependencies {  
@@ -166,8 +165,52 @@ dependencies {
 }
 vaadin {
     widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
+    plugin.logToConsole = true
 }
 ```
+#### Build Issue
+There is one more change we need to make to the build.gradle file.  There is an [open issue](https://github.com/johndevs/gradle-vaadin-plugin/issues/183) against the Gradle Vaadin plugin.  It currently requires that the Vaadin version is declared explcitily to match the version used by Krail - so we need to make one final adjustment to the build.gradle file:
+```
+vaadin {
+    widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
+    plugin.logToConsole = true
+    version '7.4.6'
+}
+```
+For completeness, the full build.gradle file should look like this:
+```
+apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.9.8'
+apply plugin: 'eclipse'  
+apply plugin: 'idea'
+
+
+sourceCompatibility = '1.8'
+
+repositories {  
+    jcenter()  
+}  
+
+dependencies {  
+    compile 'uk.q3c.krail:krail:0.9.3'
+}
+
+
+
+vaadin {
+    widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
+    version '7.4.6'
+    plugin.logToConsole = true
+}
+
+configurations.all {
+    resolutionStrategy {
+        // GWT requires an old version of the validation API.  Changing to a newer version breaks widgetset compile but throws no errors
+        force 'javax.validation:validation-api:1.0.0.GA'
+    }
+}
+```
+
+
 #### Create a Servlet Module
 
 In the com.example.tutorial.app package, create a class ```TutorialServletModule```, extended from ```BaseServletModule```:
@@ -186,7 +229,7 @@ public class TutorialServletModule extends BaseServletModule {
 ```
 #### Create a Binding Manager
 
-In Krail terminology, the Binding Manager is a central point of Guice configuration.  Guice modules specify how things are bound together, and the Binding Manager brings selects which modules to use.  All Krail applications use their own Binding Manager, but normally sub-classed from ```DefaultBindingManager```.  To create one for the tutorial:
+In Krail terminology, the Binding Manager is a central point of Guice configuration.  Guice modules specify how things are bound together, and the Binding Manager selects which modules to use.  All Krail applications use their own Binding Manager, usually sub-classed from ```DefaultBindingManager```.  To create one for the tutorial:
 
 In the com.example.tutorial.app package, create a class ```TutorialBindingManager```, extended from ```DefaultBindingManager```
 ```
@@ -252,7 +295,7 @@ Create a web.xml file in src/main/webapp/WEB-INF - note that the listener refers
 
 That's all the plumbing that is needed to get started - but we do not have any pages yet, so there's nothing to see.  We will take a shortcut for the Tutorial and use some that already exists - you will see how the relationship between Guice modules and pages could be very convenient for building modular applications.
 
-The ```SystemAccountManagementPages``` class in Krail is a set of not very useful pages (it just mean as an example) composed as a Guice module.  We will add that module to the Binding Manager.  Note that we use the ```addSitemapModules()``` method - we could just add all modules in ```addAppModules(),``` the separation is purely for clarity.
+The ```SystemAccountManagementPages``` class in Krail is a set of not very useful pages (it just meant as an example) composed as a Guice module.  We will add that module to the Binding Manager.  Note that we use the ```addSitemapModules()``` method - we could just add all modules in ```addAppModules(),``` the separation is purely for clarity.
 ```
 public class BindingManager extends DefaultBindingManager {
 
@@ -267,11 +310,37 @@ public class BindingManager extends DefaultBindingManager {
     }
 }
 ```
+#### Theme(s)
+You could actually launch the Tutorial application now, but if you did it would look terrible - it has no CSS applied.  To give the application some style we need to apply a Vaadin theme.  It is possible to use themes from the Vaadin theme jar,  but it is advisable to extract them and serve them statically, as recommended by the [Vaadin documentation](https://vaadin.com/book/-/page/themes.creating.html#themes.creating.builtin):
+ 
+>The built-in themes included in the Vaadin library JAR are served dynamically from the JAR by the servlet. Serving themes and widget sets statically by the web server is more efficient. 
 
-Gradle - compileWidgetset
-Setup run configuration
+So let's do that now.
+ 
+- Find the vaadin-themes.jar.  The easiest way is to search the {$user.home}/gradle directory - it should have been downloaded with the other Vaadin jars.  If for any reason it is not there, you can download it from JCenter or Maven Central
+- extract the jar
+- locate the theme folders - you will find them in the VAADIN/themes folder
+- copy folders for the themes you want - for the Tutorial, just copy all of them - into src/main/webapp/VAADIN/themes.
 
-That should work - but getting ClassNotFoundException: com.vaadin.ui.Grid
+For readers less familiar with Vaadin, "reindeer" is the default style, and "valo" is the most recent.
+
+#### Build and Run
+
+The one aspect of the build that tends to give problems is the widgetset compile - it seems very sensitive.  We therefore suggest compiling it first by executing:
+ 
+>gradle vaadinCompileWidgetset 
+
+from either the command line or IDE.  You can see whether it has compiled by checking the src/main/webapp/VAADIN/widgetsets folder - it should have contents.  (A compile failure usually creates a widgetsets folder, but leaves it empty)
+
+We can now build and run the application - set up a run configuration in your IDE to take the war output and run it on Tomcat, or whichever application server you are using.  And press run of course ....
+
+You should now see something like this:
+
+![Screenshot](img/basic-screenshot.png)
+
+# Exploring the Basic Application
+
+
 
     
 
