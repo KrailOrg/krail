@@ -336,7 +336,7 @@ We can now build and run the application - set up a run configuration in your ID
 
 You should now see something like this:
 
-![Screenshot](img/basic-screenshot.png)
+![Screenshot](/img/basic-screenshot.png)
 
 # Exploring the Basic Application
 
