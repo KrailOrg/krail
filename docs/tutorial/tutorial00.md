@@ -340,8 +340,39 @@ You should now see something like this:
 
 # Exploring the Basic Application
 
+There are a few things to see, even in this very basic implementation.    
+
+![Screenshot](/img/basic-screenshot-labelled.png)
 
 
+- The "screen" presentation is provided by ```DefaultApplicationUI``` - UI in this context refers to the Vaadin concept of UI, which is generally equivalent to a browser tab. 
+- ```DefaultApplicationUI``` contains a number of components and both the UI and its components can be replaced, sub-classed or modified.  All the parts described below are pluggable components. 
+- The Application Header is just a panel to hold things like logos
+- The navigation tree, navigation, breadcrumb and sub-page panel menu are all navigation-aware components   You can navigate by clicking on any of them, or just change the URL directly.  These navigation components are tied to a Sitemap,  which defines the structure of the site, and the Views used to represent each page.  You will see how this works when we create some new pages.
+- The Locale selector will not do much yet, as there are no alternative Locales defined - that will be covered later in the Tutorial.
+- The login panel offers a login button and a login status - we will log in in a moment
+- The message bar is just a place for messages to the user.
+- The View area (in blue) is where all the work is done - it is here that you will put forms and tables etc.
+ 
+Of course, as a developer, you will almost certainly have logged in by now, but in case you have not - you can use any user name, and a password of "password", so that you can pretend to be a real user with a memorable password ...
+
+A couple of things have changed now you have logged in:
+
+- You will no longer be on the login page - that's a bit obvious, but it is worth noting that even the rules for where to navigate to after log in is a replaceable element. 
+- There is now an extra page in the navigation components, called 'Private' - this represents a restricted area of the site, where only authorised users can have access.  The other pages are all "public".
+- The login panel shows your user name, and now offers a "logout" button.
+
+This is achieved using two major components, the ```DefaultRealm``` (a very simple implementation of the Apache Shiro Realm) and the ```PageController```, which is a Krail component used to control the display of pages authorised by your Realm implementation.
+
+Now try this sequence:
+
+- Login
+- Click on "Private" and you will see that it jumps to "Private home" - this is configurable behaviour - it is a redirect so that there does not need to be a view if the "Private" page itslef will never be shown
+- Logout.  You will now be on the logout page (which by default does not appear in the navigation components - also configurable behaviour)
+- Press the browser 'back' button - and a notification will pop up saying that *"private/home is not a valid page"*.  Even though you know this is not the case, this message is deliberate, as it means that if a user tries to guess a url that they are not authorised for, they will not even get confirmation that the page exists. 
+- Look at the message bar and you will see that the same message has appeared there.  We will look at user notifications and how they are handled a bit later.
+ 
+All of the Access Control elements will be described in more detail later in the Tutorial.
     
 
 
