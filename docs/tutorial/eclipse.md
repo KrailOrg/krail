@@ -17,7 +17,7 @@ Hit Button Finish (or Next to configure some more Details like Pakage Names)
 
 A new Vaadin-Project will now be created with [ivy-dependency Management](http://ant.apache.org/ivy/) set up
 
-## Apply Krail-Dependency
+## Add Krail-Dependency
 
 Open ```ivysettings.xml``` and add the jcenter repository in the ```<resolvers>``` section:
 ```xml
