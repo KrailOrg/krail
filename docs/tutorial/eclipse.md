@@ -9,10 +9,15 @@ It is recommended to use the [Eclipse IDE for Java EE Developers](https://www.ec
 Install the [Vaadin Plugin for Eclipse](https://vaadin.com/eclipse)
 
 ## Create a new Vaadin Project
-File -> New -> Other ...
+Configure JDK 8 as Runtime in Eclipse
+
+Configure the Tomcat Apache 8 Server Environment [search the web how to](https://www.google.de/?q=eclipse+setup+tomcat+server+8)
+
+File -> New -> Other... 
 Vaadin -> Vaadin 7 Project
 
-Give it a Name and select the Target-Runtime (Apache Tomcat v8) and Java 1.8
+Give the Project a name (e.g.Tutorial) and select the Target-Runtime (Apache Tomcat v8) and Java 1.8
+
 Select the Deployment configuration : Servlet (default)
 
 Hit Button Finish (or Next to configure some more Details like Pakage Names)
