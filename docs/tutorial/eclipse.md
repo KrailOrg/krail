@@ -86,3 +86,9 @@ The whole ```ivy.xml``` file could look like (with krail-kpa add on set up):
 </ivy-module>
 ```
 
+## Clean up generated Vaadin-Class
+For krail we don't need the standard Vaadin-Servlets, so delete it:
+
+Delete the class which extends the Vaadin UI ```public class Tutorial extends UI```
+
+
