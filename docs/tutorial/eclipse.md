@@ -1,6 +1,7 @@
 # Eclipse Set up as Vaadin-Project
 
-A short how-to set up krail as a library in a new Vaadin-Project in Eclipse
+A short how-to set up krail as a library in a new Vaadin-Project in Eclipse.
+This Tutorial use gradle as Dependency Management, so the steps shown here are only meant as hints to get eclipse up and running. All further steps must be adapted, which should not be that difficult.
 
 ## Install Vaadin-Plugin
 Install the [Vaadin Plugin for Eclipse](https://vaadin.com/eclipse)
