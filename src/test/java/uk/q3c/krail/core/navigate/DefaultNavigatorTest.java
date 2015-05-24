@@ -526,6 +526,7 @@ public class DefaultNavigatorTest {
         newNode.setLabel(userSitemap.a1Node()
                                     .getLabel());
         userSitemap.replaceNode(userSitemap.a1Node(), newNode);
+        userSitemap.setA1Node(newNode);
     }
 
     @Test

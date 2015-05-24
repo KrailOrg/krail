@@ -41,8 +41,8 @@ import java.util.Set;
  *
  * @author David Sowerby
  */
-public class DefaultSitemapChecker implements SitemapChecker {
-    private static Logger log = LoggerFactory.getLogger(DefaultSitemapChecker.class);
+public class DefaultSitemapFinisher implements SitemapFinisher {
+    private static Logger log = LoggerFactory.getLogger(DefaultSitemapFinisher.class);
     private final Set<String> missingViewClasses;
     private final Set<String> missingLabelKeys;
     private final Set<String> missingPageAccessControl;
@@ -53,7 +53,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
     private MasterSitemap sitemap;
 
     @Inject
-    protected DefaultSitemapChecker(MasterSitemap sitemap, CurrentLocale currentLocale) {
+    protected DefaultSitemapFinisher(MasterSitemap sitemap, CurrentLocale currentLocale) {
         super();
         this.sitemap = sitemap;
         missingViewClasses = new HashSet<>();
@@ -71,7 +71,7 @@ public class DefaultSitemapChecker implements SitemapChecker {
     }
 
     /**
-     * @see uk.q3c.krail.core.navigate.sitemap.SitemapChecker#check()
+     * @see SitemapFinisher#check()
      */
     @Override
     public void check() {
@@ -204,13 +204,13 @@ public class DefaultSitemapChecker implements SitemapChecker {
     }
 
     @Override
-    public SitemapChecker replaceMissingViewWith(Class<? extends KrailView> defaultView) {
+    public SitemapFinisher replaceMissingViewWith(Class<? extends KrailView> defaultView) {
         this.defaultView = defaultView;
         return this;
     }
 
     @Override
-    public SitemapChecker replaceMissingKeyWith(I18NKey defaultKey) {
+    public SitemapFinisher replaceMissingKeyWith(I18NKey defaultKey) {
 
         this.defaultKey = defaultKey;
         return this;

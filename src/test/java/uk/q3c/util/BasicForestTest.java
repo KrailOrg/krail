@@ -303,4 +303,47 @@ public class BasicForestTest {
         //then
         assertThat(result).isEmpty();
     }
+
+    @Test
+    public void replaceNode() {
+        //given
+        String r1 = "r1";
+        addAllNodesMultiRoot();
+        //when
+        tree.replaceNode(s1, r1);
+        //then
+        assertThat(tree.getRoots()).containsOnly(s0, s2, r1);
+        assertThat(tree.getChildren(s0)).containsOnly();
+        assertThat(tree.getChildren(r1)).containsOnly(s11, s12);
+        assertThat(tree.getChildren(s2)).containsOnly(s21, s22);
+    }
+
+    /**
+     * s0, s1 and s2 all at root
+     */
+    private void addAllNodesMultiRoot() {
+        tree.addNode(s0);
+        tree.addNode(s1);
+        tree.addNode(s2);
+        tree.addChild(s1, s11);
+        tree.addChild(s1, s12);
+        tree.addChild(s11, s111);
+        tree.addChild(s12, s121);
+        tree.addChild(s2, s21);
+        tree.addChild(s2, s22);
+    }
+
+    @Test
+    public void replaceNodeNoChildren() {
+        //given
+        String r1 = "r1";
+        addAllNodesMultiRoot();
+        //when
+        tree.replaceNode(s0, r1);
+        //then
+        assertThat(tree.getRoots()).containsOnly(s1, s2, r1);
+        assertThat(tree.getChildren(s1)).containsOnly(s11, s12);
+        assertThat(tree.getChildren(r1)).containsOnly();
+        assertThat(tree.getChildren(s2)).containsOnly(s21, s22);
+    }
 }

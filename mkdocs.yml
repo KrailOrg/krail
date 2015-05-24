@@ -3,7 +3,15 @@ site_name: Krail
 pages:
 - [index.md, Home]
 - [about.md, About]
-- [tutorial/tutorial00.md, Tutorial - Getting Started]
-- [tutorial/tutorial01.md, Tutorial - Krail Configuration]
-- [tutorial/tutorial07.md, Tutorial - Option and UserHierarchy]
+- [tutorial00.md, Tutorial - Getting Started]
+- [tutorial01.md, Tutorial - Pages and Navigation]
+- [tutorial02.md, Tutorial - UI & Theme]
+- [tutorial03.md, Tutorial - User Notification]
+- [tutorial07.md, Tutorial - Option and UserHierarchy]
+- [devguide01.md, Krail Configuration]
+- [devguide02.md, Pages and Navigation]
+- [devguide03.md, I18N]
+- [devguide07.md, Option and UserHierarchy]
+- [glossary.md, Glossary]
+- [license.md, Licence]
 theme: readthedocs

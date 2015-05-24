@@ -45,7 +45,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
     private final ApplicationConfiguration configuration;
     private final Provider<DirectSitemapLoader> directSitemapLoaderProvider;
     private final Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider;
-    private final SitemapChecker sitemapChecker;
+    private final SitemapFinisher sitemapFinisher;
     private boolean loaded;
     private List<SitemapLoader> loaders;
     private StringBuilder report;
@@ -55,8 +55,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
     protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate,
                                     Provider<FileSitemapLoader> fileSitemapLoaderProvider,
                                     Provider<DirectSitemapLoader> directSitemapLoaderProvider,
-                                    Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider,
-                                    MasterSitemap sitemap, SitemapChecker sitemapChecker,
+                                    Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, MasterSitemap sitemap, SitemapFinisher sitemapFinisher,
                                     ApplicationConfiguration configuration) {
         super(translate);
         this.configurationService = configurationService;
@@ -64,7 +63,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
         this.directSitemapLoaderProvider = directSitemapLoaderProvider;
         this.fileSitemapLoaderProvider = fileSitemapLoaderProvider;
         this.sitemap = sitemap;
-        this.sitemapChecker = sitemapChecker;
+        this.sitemapFinisher = sitemapFinisher;
         this.configuration = configuration;
         configure();
     }
@@ -103,8 +102,8 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
         for (SitemapSourceType source : sourceTypes) {
             loadSource(source);
         }
-        log.debug("Checking Sitemap");
-        sitemapChecker.check();
+        log.debug("Checking Sitemap, sitemap has {} nodes", sitemap.getNodeCount());
+        sitemapFinisher.check();
         log.debug("Sitemap checked, no errors found");
     }
 

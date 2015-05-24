@@ -17,18 +17,21 @@ import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Tree;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A very simple semantic wrapper for the <a href=http://jung.sourceforge.net/site/index.html> Jung</a> library, to
  * use the more familiar language of trees. Underneath is it a proper implementation of a graph - there are many
  * methods not exposed through this wrapper, but you can access those via {@link #getGraph()}.  Uses a {@link
  * DirectedOrderedSparseMultigraph} to maintain insertion order
- * <p/>
+ * <p>
  * The E (edge) parameter for the underlying graph is a simple Integer.
- *
+ * <p>
  * Originally this implementation used a default DelegateForest which in turn uses a DirectedSparseGraph - this uses
  * hash maps, so it would appear that a different hash algorithm is being in Java 8 to Java 7 used, yielding a
  * different order for this test case.
@@ -176,9 +179,13 @@ public class BasicForest<V> {
      * @param leaves
      */
     private void findLeaves(V parentNode, List<V> leaves) {
-        if (leaves == null) return;
+        if (leaves == null) {
+            return;
+        }
         Collection<V> children = graph.getChildren(parentNode);
-        if (children == null) return;
+        if (children == null) {
+            return;
+        }
         if (children.size() == 0) {
             leaves.add(parentNode);
         } else {
@@ -191,8 +198,6 @@ public class BasicForest<V> {
     /**
      * Finds all the leaves for the whole tree, that is, all those with no children, from the root of the tree. Use
      * {@link #findLeaves(Object)} if you want leaves for a subset of the tree
-     *
-     * @param leaves
      *
      * @see #findLeaves(Object)
      */
@@ -314,4 +319,62 @@ public class BasicForest<V> {
         graph.removeVertex(node);
     }
 
+    /**
+     * Useful for immutable vertices, this method replaced the current vertex with a new vertex.  To do so, it has to deep copy to a subgraph, and then copy
+     * back, so not very efficient.  This method is made necessary by Jung's approach to maintaining the integrity of the map - so far I have not found a way
+     * to move an edge from one vertex to another without the associated vertices being deleted. https://github.com/davidsowerby/krail/issues/397
+     *
+     * @param currentVertex
+     *         the vertex to be replaced
+     * @param newVertex
+     *         the vertex to replace it with
+     */
+    public void replaceNode(@Nonnull V currentVertex, @Nonnull V newVertex) {
+        checkNotNull(currentVertex);
+        checkNotNull(newVertex);
+        V parentVertex = getParent(currentVertex);
+        BasicForest<V> subGraph = subGraph(currentVertex, newVertex);
+        graph.removeVertex(currentVertex);
+        addChild(parentVertex, newVertex);
+        mergeSubGraph(subGraph, parentVertex);
+
+    }
+
+    /**
+     * Assumes a single root
+     *
+     * @param sourceSubGraph
+     * @param targetParentVertex
+     */
+    private void mergeSubGraph(BasicForest<V> sourceSubGraph, V targetParentVertex) {
+        if (sourceSubGraph.getNodeCount() > 0) {
+            addChild(targetParentVertex, sourceSubGraph.getRoot());
+            copyChildren(sourceSubGraph, sourceSubGraph.getRoot(), this, sourceSubGraph.getRoot());
+        }
+    }
+
+    /**
+     * Returns a BasicForest with a full depth sub-graph of {@code root}, but with {@code root} itself replaced by {@code newRoot}
+     *
+     * @param root
+     * @param newRoot
+     *
+     * @return
+     */
+    private BasicForest<V> subGraph(V root, V newRoot) {
+        BasicForest<V> subGraph = new BasicForest<V>();
+        copyChildren(this, root, subGraph, newRoot);
+        return subGraph;
+    }
+
+
+    private void copyChildren(BasicForest<V> sourceGraph, V sourceParentVertex, BasicForest<V> targetGraph, V targetParentVertex) {
+        final List<V> children = sourceGraph.getChildren(sourceParentVertex);
+        if (children != null) {
+            for (V child : children) {
+                targetGraph.addChild(targetParentVertex, child);
+                copyChildren(sourceGraph, child, targetGraph, child);
+            }
+        }
+    }
 }

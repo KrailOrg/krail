@@ -335,7 +335,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     /**
      * Adds a redirect from {@code fromPage} to {@code toPage}. No checking is done of the validity or structure of the
      * parameters. {@code toPage} is not checked for existence within the map, this is done by the
-     * {@link SitemapChecker} once assembly of the {@link MasterSitemap} is complete
+     * {@link SitemapFinisher} once assembly of the {@link MasterSitemap} is complete
      *
      * @param fromPage
      * @param toPage
@@ -652,15 +652,16 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     public void replaceNode(@Nonnull T oldInstance, @Nonnull T newInstance) {
         checkNotNull(oldInstance);
         checkNotNull(newInstance);
-        final T parent = getParent(oldInstance);
-        final List<T> children = getChildren(oldInstance);
-
-        removeNode(oldInstance);
-
-        addChild(parent, newInstance);
-        if (children != null) {
-            children.forEach(child -> addChild(newInstance, child));
+        forest.replaceNode(oldInstance, newInstance);
+        if (oldInstance.getLabelKey() instanceof StandardPageKey) {
+            standardPages.remove(oldInstance.getLabelKey());
         }
+        if (newInstance.getLabelKey() instanceof StandardPageKey) {
+            standardPages.put((StandardPageKey) newInstance.getLabelKey(), newInstance);
+            uriStandardPages.put(uri(newInstance), (StandardPageKey) newInstance.getLabelKey());
+        }
+        uriMap.put(uri(newInstance), newInstance);
+
     }
 
     /**

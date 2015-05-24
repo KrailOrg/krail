@@ -47,7 +47,7 @@ public class SitemapModule extends AbstractModule {
     }
 
     protected void bindChecker() {
-        bind(SitemapChecker.class).to(DefaultSitemapChecker.class);
+        bind(SitemapFinisher.class).to(DefaultSitemapFinisher.class);
 
     }
 

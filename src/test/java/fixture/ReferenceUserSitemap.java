@@ -312,4 +312,7 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         return nodeFor(b11URI);
     }
 
+    public void setA1Node(UserSitemapNode a1Node) {
+        this.a1Node = a1Node;
+    }
 }

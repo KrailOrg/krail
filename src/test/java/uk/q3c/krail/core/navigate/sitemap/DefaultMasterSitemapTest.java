@@ -45,6 +45,7 @@ import static org.mockito.Mockito.when;
 import static uk.q3c.krail.core.navigate.sitemap.StandardPageKey.Public_Home;
 import static uk.q3c.krail.core.shiro.PageAccessControl.AUTHENTICATION;
 import static uk.q3c.krail.core.shiro.PageAccessControl.PUBLIC;
+
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, EventBusModule.class, UIScopeModule.class})
 public class DefaultMasterSitemapTest {
@@ -86,7 +87,7 @@ public class DefaultMasterSitemapTest {
     public void append() {
 
         // given
-        NodeRecord nr= new NodeRecord("public/home");
+        NodeRecord nr = new NodeRecord("public/home");
         // when
 
         MasterSitemapNode node = sitemap.append(nr);
@@ -98,7 +99,7 @@ public class DefaultMasterSitemapTest {
                           .getUriSegment()).isEqualTo("public");
 
         // when
-        nr= new NodeRecord("public/home/account");
+        nr = new NodeRecord("public/home/account");
         node = sitemap.append(nr);
 
         // then
@@ -111,7 +112,7 @@ public class DefaultMasterSitemapTest {
                           .getUriSegment()).isEqualTo("public");
 
         // when
-        nr= new NodeRecord("public/home/transfer");
+        nr = new NodeRecord("public/home/transfer");
         node = sitemap.append(nr);
 
         // then
@@ -226,8 +227,8 @@ public class DefaultMasterSitemapTest {
         // when
 
         // then
-        assertThat(sitemap.uris()).containsOnly("public/home/view1", "public/home/view2", "private/home/wiggly",
-                "private/home", "private", "public/home", "public");
+        assertThat(sitemap.uris()).containsOnly("public/home/view1", "public/home/view2", "private/home/wiggly", "private/home", "private", "public/home",
+                "public");
 
     }
 
@@ -368,17 +369,46 @@ public class DefaultMasterSitemapTest {
         MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
         MasterSitemapNode parent = new MasterSitemapNode(2, "home", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
         MasterSitemapNode child = new MasterSitemapNode(3, "login", LoginView.class, TestLabelKey.Login, -1, PUBLIC, null);
-        MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, TestLabelKey.Home, -1, AUTHENTICATION, null);
+        MasterSitemapNode newParent = new MasterSitemapNode(4, "home", PublicHomeView.class, TestLabelKey.Home, -1, AUTHENTICATION, null);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
         //when
-sitemap.replaceNode(parent,newParent);
+        sitemap.replaceNode(parent, newParent);
         //then
         assertThat(sitemap.getParent(child)).isEqualTo(newParent);
         assertThat(sitemap.getChildren(grandparent)).containsOnly(newParent);
         assertThat(sitemap.getNodeCount()).isEqualTo(3);
+        assertThat(sitemap.uriMap.get("public/home")).isEqualTo(newParent);
+        assertThat(sitemap.nodeFor("public/home")).isEqualTo(newParent);
 
     }
+
+    @Test
+    public void replaceNodeAtRoot() {
+        //given
+        MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
+        MasterSitemapNode parent1 = new MasterSitemapNode(2, "home1", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
+        MasterSitemapNode parent2 = new MasterSitemapNode(3, "home2", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
+        MasterSitemapNode child1 = new MasterSitemapNode(4, "login", LoginView.class, TestLabelKey.Login, -1, PUBLIC, null);
+        MasterSitemapNode child2 = new MasterSitemapNode(5, "login", LoginView.class, TestLabelKey.Login, -1, PUBLIC, null);
+        MasterSitemapNode newGrandParent = new MasterSitemapNode(6, "public", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
+        sitemap.addChild(grandparent, parent1);
+        sitemap.addChild(grandparent, parent2);
+        sitemap.addChild(parent1, child1);
+        sitemap.addChild(parent1, child2);
+        //when
+        sitemap.replaceNode(grandparent, newGrandParent);
+        //then
+        assertThat(sitemap.getParent(newGrandParent)).isNull();
+        assertThat(sitemap.getChildren(newGrandParent)).containsOnly(parent1, parent2);
+        assertThat(sitemap.getChildren(parent1)).containsOnly(child1, child2);
+        assertThat(sitemap.getChildren(parent2)).containsOnly();
+        assertThat(sitemap.getChildren(child1)).containsOnly();
+        assertThat(sitemap.getChildren(child2)).containsOnly();
+
+
+    }
+
 
     @Test
     public void replace_standardKey_change() {
@@ -389,7 +419,7 @@ sitemap.replaceNode(parent,newParent);
         MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, Public_Home, -1, AUTHENTICATION, null);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
-//        sitemap.addStandardPage(Public_Home, parent);
+        //        sitemap.addStandardPage(Public_Home, parent);
         //when
         sitemap.replaceNode(parent, newParent);
         //then
@@ -406,10 +436,10 @@ sitemap.replaceNode(parent,newParent);
         MasterSitemapNode grandparent = new MasterSitemapNode(1, "public", PublicHomeView.class, TestLabelKey.Home, -1, PUBLIC, null);
         MasterSitemapNode parent = new MasterSitemapNode(2, "home", PublicHomeView.class, Public_Home, -1, PUBLIC, null);
         MasterSitemapNode child = new MasterSitemapNode(3, "login", LoginView.class, TestLabelKey.Login, -1, PUBLIC, null);
-        MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, TestLabelKey.Yes, -1, AUTHENTICATION, null);
+        MasterSitemapNode newParent = new MasterSitemapNode(4, "home", PublicHomeView.class, TestLabelKey.Yes, -1, AUTHENTICATION, null);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
-//        sitemap.addStandardPage(Public_Home, parent);
+        //        sitemap.addStandardPage(Public_Home, parent);
         //when
         sitemap.replaceNode(parent, newParent);
 
@@ -429,7 +459,7 @@ sitemap.replaceNode(parent,newParent);
         MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, Public_Home, -1, AUTHENTICATION, null);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
-//        sitemap.addStandardPage(Public_Home, parent);
+        //        sitemap.addStandardPage(Public_Home, parent);
         //when
         sitemap.replaceNode(parent, newParent);
         //then
@@ -463,7 +493,7 @@ sitemap.replaceNode(parent,newParent);
     public void add_child_standard_page_child() {
         //given
         when(navState.getVirtualPage()).thenReturn("public/home");
-        MasterSitemapNode parent = new MasterSitemapNode(1, "public", PublicHomeView.class,TestLabelKey.Yes , -1, PUBLIC, null);
+        MasterSitemapNode parent = new MasterSitemapNode(1, "public", PublicHomeView.class, TestLabelKey.Yes, -1, PUBLIC, null);
         MasterSitemapNode child = new MasterSitemapNode(2, "home", PublicHomeView.class, StandardPageKey.Public_Home, -1, PUBLIC, null);
         //when
         sitemap.addChild(parent, child);
@@ -477,7 +507,7 @@ sitemap.replaceNode(parent,newParent);
     @Test
     public void remove_node_removes_standard_page() {
         when(navState.getVirtualPage()).thenReturn("public/home");
-        MasterSitemapNode parent = new MasterSitemapNode(1, "public", PublicHomeView.class,TestLabelKey.Yes , -1, PUBLIC, null);
+        MasterSitemapNode parent = new MasterSitemapNode(1, "public", PublicHomeView.class, TestLabelKey.Yes, -1, PUBLIC, null);
         MasterSitemapNode child = new MasterSitemapNode(2, "home", PublicHomeView.class, StandardPageKey.Public_Home, -1, PUBLIC, null);
         //when
         sitemap.addChild(parent, child);

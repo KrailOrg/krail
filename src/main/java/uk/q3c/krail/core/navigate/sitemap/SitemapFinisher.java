@@ -27,7 +27,7 @@ import uk.q3c.krail.i18n.I18NKey;
  *
  * @author David Sowerby
  */
-public interface SitemapChecker {
+public interface SitemapFinisher {
 
     /**
      * Throws a {@link SitemapException} if the check finishes with one or more nodes not having a view or a key. This
@@ -45,7 +45,7 @@ public interface SitemapChecker {
      *
      * @return
      */
-    SitemapChecker replaceMissingViewWith(Class<? extends KrailView> defaultView);
+    SitemapFinisher replaceMissingViewWith(Class<? extends KrailView> defaultView);
 
     /**
      * If a node has no label key defined, it has its label key set to {@code defaultKey}
@@ -54,6 +54,6 @@ public interface SitemapChecker {
      *
      * @return
      */
-    SitemapChecker replaceMissingKeyWith(I18NKey defaultKey);
+    SitemapFinisher replaceMissingKeyWith(I18NKey defaultKey);
 
 }

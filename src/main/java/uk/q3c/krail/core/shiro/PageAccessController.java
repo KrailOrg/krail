@@ -14,6 +14,8 @@ package uk.q3c.krail.core.shiro;
 
 import com.google.inject.Inject;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
@@ -29,7 +31,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author David Sowerby
  */
 public class PageAccessController {
-
+    private static Logger log = LoggerFactory.getLogger(PageAccessController.class);
     private final MasterSitemap sitemap;
 
     @Inject
@@ -49,6 +51,7 @@ public class PageAccessController {
                                     .getVirtualPage();
         checkNotNull(virtualPage, "virtualPage");
         checkNotNull(masterNode.getPageAccessControl(), "node.getPageAccessControl(), " + masterNode.getUriSegment());
+        log.debug("checking page access rights for {}", virtualPage);
         switch (masterNode.getPageAccessControl()) {
             case AUTHENTICATION:
                 return subject.isAuthenticated();

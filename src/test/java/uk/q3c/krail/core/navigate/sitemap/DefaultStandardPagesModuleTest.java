@@ -53,7 +53,7 @@ public class DefaultStandardPagesModuleTest {
     MasterSitemap sitemap;
 
     @Inject
-    SitemapChecker sitemapChecker;
+    SitemapFinisher sitemapFinisher;
 
     @Test
     public void check() {
@@ -72,7 +72,7 @@ public class DefaultStandardPagesModuleTest {
         SitemapNode privateNode = sitemap.nodeFor("private");
         assertThat(privateNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
         // when
-        sitemapChecker.check();
+        sitemapFinisher.check();
         // then
         assertThat(privateNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
         assertThat(privateNode.getLabelKey()).isEqualTo(LabelKey.Private);

@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class})
-public class DefaultSitemapCheckerTest {
+public class DefaultSitemapFinisherTest {
 
     String uriNodeNoClass = "node/noclass";
     String uriNodeNoKey = "node/nokey";
@@ -45,7 +45,7 @@ public class DefaultSitemapCheckerTest {
     String uripublic_Node11 = "public/node1/1";
 
     @Inject
-    DefaultSitemapChecker checker;
+    DefaultSitemapFinisher checker;
 
     @Inject
     Translate translate;
