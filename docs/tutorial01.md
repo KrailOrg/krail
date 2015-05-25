@@ -39,7 +39,7 @@ You will now have an empty build file open.  Cut and paste the following into th
     }  
 
     dependencies {  
-        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.3')
+        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.4')
     }
     
     configurations.all {
@@ -336,13 +336,13 @@ We can now build and run the application - set up a run configuration in your ID
 
 You should now see something like this:
 
-![Screenshot](/img/basic-screenshot.png)
+![Screenshot](img/basic-screenshot.png)
 
 # Exploring the Basic Application
 
 There are a few things to see, even in this very basic implementation.    
 
-![Screenshot](/img/basic-screenshot2.png)
+![Screenshot](img/basic-screenshot2.png)
 
 
 - The "screen" presentation is provided by ```DefaultApplicationUI``` - UI in this context refers to the Vaadin concept of UI, which is generally equivalent to a browser tab. 
@@ -362,7 +362,7 @@ A couple of things have changed now you have logged in:
 - There is now an extra page in the navigation components, called 'Private' - this represents a restricted area of the site, where only authorised users can have access.  The other pages are all "public".
 - The login panel shows your user name, and now offers a "logout" button.
 
-This is achieved using two major components, the ```DefaultRealm``` (a very simple implementation of the Apache Shiro Realm) and the ```PageController```, which is a Krail component used to control the display of pages authorised by your Realm implementation.
+This is achieved using two major components, the ```DefaultRealm``` (a very simple implementation of the Apache Shiro Realm) and the ```PageController```, which is a Krail component used to control the display of pages authorised by your Realm implementation.  We will come back to these when we look at [User Access Control](tutorial07.md).
 
 Now try this sequence:
 
@@ -370,9 +370,10 @@ Now try this sequence:
 - Click on "Private" and you will see that it jumps to "Private home" - this is configurable behaviour - it is a redirect so that there does not need to be a view if the "Private" page itself will never be shown
 - Logout.  You will now be on the logout page (which by default does not appear in the navigation components - also configurable behaviour)
 - Press the browser 'back' button - and a notification will pop up saying that *"private/home is not a valid page"*.  Even though you know this is not the case, this message is deliberate, as it means that if a user tries to guess a url that they are not authorised for, they will not even get confirmation that the page exists. 
-- Look at the message bar and you will see that the same message has appeared there.  We will look at user notifications and how they are handled a bit later.
+- Look at the message bar and you will see that the same message has appeared there.  We will look at [user notifications](tutorial04.md) and how they are handled a bit later.
  
-All of the Access Control elements will be described in more detail later in the Tutorial.
+
+
     
 
 
