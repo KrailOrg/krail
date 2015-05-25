@@ -22,22 +22,25 @@ import uk.q3c.krail.i18n.LabelKey;
  * @author David Sowerby
  */
 public class SystemAccountManagementPages extends DirectSitemapModule {
+    public SystemAccountManagementPages() {
+        rootURI = "system-account";
+    }
 
     /**
      * @see uk.q3c.krail.core.navigate.sitemap.DirectSitemapModule#define()
      */
     @Override
     protected void define() {
-        addEntry("system-account", SystemAccountView.class, LabelKey.System_Account, PageAccessControl.PUBLIC);
-        addEntry("system-account/request-account", RequestSystemAccountCreateView.class, LabelKey.Request_Account,
+        addEntry("", SystemAccountView.class, LabelKey.System_Account, PageAccessControl.PUBLIC);
+        addEntry("request-account", RequestSystemAccountCreateView.class, LabelKey.Request_Account,
                 PageAccessControl.PUBLIC);
-        addEntry("system-account/enable-account", RequestSystemAccountEnableView.class, LabelKey.Enable_Account,
+        addEntry("enable-account", RequestSystemAccountEnableView.class, LabelKey.Enable_Account,
                 PageAccessControl.PUBLIC);
-        addEntry("system-account/refresh-account", RequestSystemAccountRefreshView.class, LabelKey.Refresh_Account,
+        addEntry("refresh-account", RequestSystemAccountRefreshView.class, LabelKey.Refresh_Account,
                 PageAccessControl.PUBLIC);
-        addEntry("system-account/reset-account", RequestSystemAccountResetView.class, LabelKey.Reset_Account,
+        addEntry("reset-account", RequestSystemAccountResetView.class, LabelKey.Reset_Account,
                 PageAccessControl.PUBLIC);
-        addEntry("system-account/unlock-account", RequestSystemAccountUnlockView.class, LabelKey.Unlock_Account,
+        addEntry("unlock-account", RequestSystemAccountUnlockView.class, LabelKey.Unlock_Account,
                 PageAccessControl.PUBLIC);
 
     }

@@ -49,6 +49,9 @@ public class DirectSitemapModuleTest {
     @Inject
     Map<String, DirectSitemapEntry> map;
 
+    @Inject
+    Map<String, RedirectEntry> redirects;
+
     @Test
     public void addEntry() {
 
@@ -92,23 +95,29 @@ public class DirectSitemapModuleTest {
         assertThat(entry.getRoles()).isNullOrEmpty();
         assertThat(entry.getPositionIndex()).isEqualTo(300);
 
+        assertThat(redirects.get("wherever")
+                            .getRedirectTarget()).isEqualTo("private/landing");
+
     }
 
 
 
     public static class TestDirectSitemapModule1 extends DirectSitemapModule {
 
+
         @Override
         protected void define() {
-            addEntry("private/home", PrivateHomeView.class, LabelKey.Authorisation, PageAccessControl.PERMISSION);
+            rootURI("private");
+            addEntry("home", PrivateHomeView.class, LabelKey.Authorisation, PageAccessControl.PERMISSION);
+            addRedirect("wherever", "landing");
         }
 
     }
 
     public static class TestDirectSitemapModule2 extends DirectSitemapModule {
-
         @Override
         protected void define() {
+            rootURI("");
             addEntry("public/home", PublicHomeView.class, LabelKey.Home_Page, PageAccessControl.PUBLIC);
             addEntry("public/login", LoginView.class, LabelKey.Log_In, PageAccessControl.GUEST, "roles");
             addEntry("private/roles", LoginView.class, LabelKey.Log_In, PageAccessControl.ROLES, "roles", 500);

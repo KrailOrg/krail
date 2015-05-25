@@ -22,9 +22,13 @@ import uk.q3c.krail.i18n.LabelKey;
  */
 public class SystemAdminPages extends DirectSitemapModule {
 
+    public SystemAdminPages() {
+        rootURI = "system-admin";
+    }
+
     @Override
     protected void define() {
-        addEntry("system-admin", SystemAdminView.class, LabelKey.System_Administration, PageAccessControl.PERMISSION);
-        addEntry("system-admin/sitemap-build-report", SitemapReportView.class, LabelKey.Sitemap_Build_Report, PageAccessControl.PERMISSION);
+        addEntry("", SystemAdminView.class, LabelKey.System_Administration, PageAccessControl.PERMISSION);
+        addEntry("sitemap-build-report", SitemapReportView.class, LabelKey.Sitemap_Build_Report, PageAccessControl.PERMISSION);
     }
 }
