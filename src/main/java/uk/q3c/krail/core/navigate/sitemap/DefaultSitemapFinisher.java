@@ -36,7 +36,7 @@ import java.util.Set;
  * <li>Redirects from within the {@link MasterSitemap} have their pageAccessControl attribute set to the
  * pageAccessControl of the redirect target.
  * <li>Redirects to a child (for example from 'private' to 'private/home' must have a label key
- * <p/>
+ * <p>
  * </ol>
  *
  * @author David Sowerby
@@ -90,11 +90,11 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
                         .containsKey(nodeUri)) {
 
                 if (node.getViewClass() == null) {
-                        missingViewClasses.add(nodeUri);
+                    missingViewClasses.add(nodeUri);
                 }
 
                 if (node.getLabelKey() == null) {
-                        missingLabelKeys.add(nodeUri);
+                    missingLabelKeys.add(nodeUri);
                 }
 
                 if (node.getPageAccessControl() == null) {
@@ -128,13 +128,22 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
         report = new StringBuilder();
         report.append("\n================ Sitemap Check ===============\n\n");
         report.append("Direct Modules\n\n");
-        for (String s : sourceModuleNames) {
-            report.append(s + "\n");
+        if (sourceModuleNames != null) {
+            for (String s : sourceModuleNames) {
+                report.append(s + "\n");
+            }
+        } else {
+            report.append("No direct modules identified\n");
         }
         report.append("-----------------------------------------------\n");
         report.append("Annotation Sources\n\n");
-        for (String s : annotationSources) {
-            report.append(s + "\n");
+        if (annotationSources != null) {
+
+            for (String s : annotationSources) {
+                report.append(s + "\n");
+            }
+        } else {
+            report.append("No annotation sources identified\n");
         }
         report.append("-----------------------------------------------\n");
         if (!missingViewClasses.isEmpty()) {
@@ -205,8 +214,7 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
             try {
                 dag.addChild(entry.getKey(), entry.getValue());
             } catch (CycleDetectedException cde) {
-                String msg = MessageFormat.format("Redirecting {0} to {1} would cause a loop", entry.getKey(),
-                        entry.getValue());
+                String msg = MessageFormat.format("Redirecting {0} to {1} would cause a loop", entry.getKey(), entry.getValue());
                 redirectLoops.add(msg);
                 // throw new CycleDetectedException(msg);
             }

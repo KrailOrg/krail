@@ -33,6 +33,7 @@ import uk.q3c.util.ResourceUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Singleton
 public class DefaultSitemapService extends AbstractServiceI18N implements SitemapService {
@@ -133,8 +134,10 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
                 AnnotationSitemapLoader annotationSitemapLoader = annotationSitemapLoaderProvider.get();
                 loaders.add(annotationSitemapLoader);
                 annotationSitemapLoader.load();
-                sitemapFinisher.setAnnotationSources(annotationSitemapLoader.getSources()
-                                                                            .keySet());
+                Map<String, AnnotationSitemapEntry> sources = annotationSitemapLoader.getSources();
+                if (sources != null) {
+                    sitemapFinisher.setAnnotationSources(sources.keySet());
+                }
                 loaded = true;
                 return;
         }
