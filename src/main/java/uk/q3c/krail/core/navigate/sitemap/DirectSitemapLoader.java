@@ -13,6 +13,8 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 
+import java.util.Set;
+
 /**
  * Implementations off this interface take directly coded definitions of {@link MasterSitemap} entries, and load them
  * into the
@@ -29,4 +31,5 @@ package uk.q3c.krail.core.navigate.sitemap;
  */
 public interface DirectSitemapLoader extends SitemapLoader {
 
+    Set<String> sourceModules();
 }

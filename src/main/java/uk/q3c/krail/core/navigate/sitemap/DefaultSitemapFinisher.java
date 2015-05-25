@@ -47,10 +47,12 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
     private final Set<String> missingLabelKeys;
     private final Set<String> missingPageAccessControl;
     private final Set<String> redirectLoops;
+    private Set<String> annotationSources;
     private I18NKey defaultKey;
     private Class<? extends KrailView> defaultView;
     private StringBuilder report;
     private MasterSitemap sitemap;
+    private Set<String> sourceModuleNames;
 
     @Inject
     protected DefaultSitemapFinisher(MasterSitemap sitemap, CurrentLocale currentLocale) {
@@ -125,6 +127,16 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
 
         report = new StringBuilder();
         report.append("\n================ Sitemap Check ===============\n\n");
+        report.append("Direct Modules\n\n");
+        for (String s : sourceModuleNames) {
+            report.append(s + "\n");
+        }
+        report.append("-----------------------------------------------\n");
+        report.append("Annotation Sources\n\n");
+        for (String s : annotationSources) {
+            report.append(s + "\n");
+        }
+        report.append("-----------------------------------------------\n");
         if (!missingViewClasses.isEmpty()) {
             report.append("------------ URIs with missing Views -----------\n");
             for (String view : missingViewClasses) {
@@ -214,6 +226,16 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
 
         this.defaultKey = defaultKey;
         return this;
+    }
+
+    @Override
+    public void setSourceModuleNames(Set<String> names) {
+        this.sourceModuleNames = names;
+    }
+
+    @Override
+    public void setAnnotationSources(Set<String> sources) {
+        this.annotationSources = sources;
     }
 
     public Set<String> getMissingViewClasses() {

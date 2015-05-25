@@ -89,6 +89,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
         if (!loaded) {
             throw new SitemapException("No valid sources found");
         }
+        log.info(report.toString());
     }
 
     /**
@@ -125,12 +126,15 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
                 DirectSitemapLoader directSitemapLoader = directSitemapLoaderProvider.get();
                 loaders.add(directSitemapLoader);
                 directSitemapLoader.load();
+                sitemapFinisher.setSourceModuleNames(directSitemapLoader.sourceModules());
                 loaded = true;
                 return;
             case ANNOTATION:
                 AnnotationSitemapLoader annotationSitemapLoader = annotationSitemapLoaderProvider.get();
                 loaders.add(annotationSitemapLoader);
                 annotationSitemapLoader.load();
+                sitemapFinisher.setAnnotationSources(annotationSitemapLoader.getSources()
+                                                                            .keySet());
                 loaded = true;
                 return;
         }

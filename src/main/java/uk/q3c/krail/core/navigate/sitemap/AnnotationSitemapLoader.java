@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
+import java.util.Map;
+
 /**
  * Implementations take the {@link MasterSitemap} definitions captured by the {@link AnnotationSitemapModule}, then load them into the {@link MasterSitemap}
  * when invoked by the {@link SitemapService}.
@@ -26,4 +28,5 @@ public interface AnnotationSitemapLoader extends SitemapLoader {
     String REDIRECT_FROM_IGNORED = "The @RedirectFrom annotation for {0} has been ignored.  A @RedirectFrom "
             + "must be accompanied by a @View";
 
+    Map<String, AnnotationSitemapEntry> getSources();
 }

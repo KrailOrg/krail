@@ -37,6 +37,11 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
         this.sitemap = sitemap;
     }
 
+    @Override
+    public Map<String, AnnotationSitemapEntry> getSources() {
+        return sources;
+    }
+
     /**
      * Scans for {@link View} annotations, starting from the reflectionRoot (the key for the AnnotationEntry). Annotations cannot hold enum parameters, so
      * the enum name has to be converted from the labelKeyName parameter of the {@link View} annotation. If a class has the {@link View} annotation, but does
@@ -120,6 +125,9 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
                     }
                 }
 
+            }
+            for (String source : sources.keySet()) {
+                addInfo("Scanned for annotations", "Package name: " + source);
             }
             return true;
         } else {

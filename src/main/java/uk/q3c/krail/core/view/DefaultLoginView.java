@@ -31,7 +31,7 @@ import uk.q3c.util.ID;
 
 import java.util.Optional;
 
-public class DefaultLoginView extends GridViewBase implements LoginView, ClickListener {
+public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, ClickListener {
     private final LoginExceptionHandler loginExceptionHandler;
     private final Provider<Subject> subjectProvider;
     private final Translate translate;
@@ -62,9 +62,7 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
 
     @Override
     public void doBuild(ViewChangeBusMessage event) {
-        getGridLayout().setColumns(3);
-        getGridLayout().setRows(3);
-        getGridLayout().setSizeFull();
+        super.doBuild(event);
         centrePanel = new Panel();
         centrePanel.addStyleName(ChameleonTheme.PANEL_BUBBLE);
         centrePanel.setSizeUndefined();
@@ -92,12 +90,8 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
         vl.addComponent(submitButton);
         vl.addComponent(statusMsgLabel);
 
-        getGridLayout().addComponent(centrePanel, 1, 1);
-        getGridLayout().setColumnExpandRatio(0, 1);
-        getGridLayout().setColumnExpandRatio(2, 1);
+        setMiddleCentre(centrePanel);
 
-        getGridLayout().setRowExpandRatio(0, 1);
-        getGridLayout().setRowExpandRatio(2, 1);
 
     }
 
@@ -160,13 +154,13 @@ public class DefaultLoginView extends GridViewBase implements LoginView, ClickLi
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     public TextField getUsernameBox() {

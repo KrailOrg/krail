@@ -28,12 +28,14 @@ import javax.annotation.Nullable;
  */
 public class DirectSitemapEntry {
     private I18NKey labelKey;
+    private String moduleName;
     private PageAccessControl pageAccessControl;
     private int positionIndex;
     private String roles;
     private Class<? extends KrailView> viewClass;
-
     /**
+     * @param moduleName
+     * the name of the Guice module the entry was made in
      * @param viewClass
      *         the class of KrailView used to display the page
      * @param labelKey
@@ -44,9 +46,11 @@ public class DirectSitemapEntry {
      *         the position of a page in relation to its siblings.  Used as a sort order, relative numbering does not need to be sequential. A positionIndex < 0
      *         indicates that the page should not be displayed in a navigation component
      */
-    public DirectSitemapEntry(@Nonnull Class<? extends KrailView> viewClass, @Nonnull I18NKey labelKey, @Nonnull PageAccessControl pageAccessControl, int
+    public DirectSitemapEntry(@Nonnull String moduleName, @Nonnull Class<? extends KrailView> viewClass, @Nonnull I18NKey labelKey, @Nonnull
+    PageAccessControl pageAccessControl, int
             positionIndex) {
         super();
+        this.moduleName = moduleName;
         this.pageAccessControl = pageAccessControl;
         this.viewClass = viewClass;
         this.labelKey = labelKey;
@@ -55,7 +59,8 @@ public class DirectSitemapEntry {
 
     /**
      * Roles are only used if {@link #pageAccessControl} is {@link PageAccessControl#ROLES}, so if you don't need them you can use the other constructor.
-     *
+     ** @param moduleName
+     * the name of the Guice module the entry was made in
      * @param viewClass
      *         the class of KrailView used to display the page
      * @param labelKey
@@ -68,14 +73,20 @@ public class DirectSitemapEntry {
      *         the position of a page in relation to its siblings.  Used as a sort order, relative numbering does not need to be sequential. A positionIndex < 0
      *         indicates that the page should not be displayed in a navigation component
      */
-    public DirectSitemapEntry(@Nonnull Class<? extends KrailView> viewClass, @Nonnull I18NKey labelKey, @Nonnull PageAccessControl pageAccessControl,
+    public DirectSitemapEntry(String moduleName, @Nonnull Class<? extends KrailView> viewClass, @Nonnull I18NKey labelKey, @Nonnull PageAccessControl
+            pageAccessControl,
                               @Nullable String roles, int positionIndex) {
         super();
+        this.moduleName = moduleName;
         this.pageAccessControl = pageAccessControl;
         this.viewClass = viewClass;
         this.labelKey = labelKey;
         this.roles = roles;
         this.positionIndex = positionIndex;
+    }
+
+    public String getModuleName() {
+        return moduleName;
     }
 
     public int getPositionIndex() {

@@ -14,8 +14,10 @@ package uk.q3c.krail.core.navigate.sitemap;
 
 import com.google.inject.Inject;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * If a Map<String, DirectSitemapEntry> binding has been created (using Guice modules sub-classed from
@@ -27,16 +29,23 @@ import java.util.Map.Entry;
 public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements DirectSitemapLoader {
 
     private final MasterSitemap sitemap;
+    //uses method injection in case there are none
     private Map<String, DirectSitemapEntry> pageMap;
     private Map<String, RedirectEntry> redirects;
+    private Set<String> sourceModules;
 
     @Inject
     protected DefaultDirectSitemapLoader(MasterSitemap sitemap) {
         this.sitemap = sitemap;
     }
 
+    public Set<String> sourceModules() {
+        return sourceModules;
+    }
+
     @Override
     public boolean load() {
+        sourceModules = new HashSet<>();
         if (pageMap != null) {
             for (Entry<String, DirectSitemapEntry> entry : pageMap.entrySet()) {
                 NodeRecord nodeRecord = new NodeRecord(entry.getKey());
@@ -46,8 +55,12 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
                 nodeRecord.setViewClass(value.getViewClass());
                 nodeRecord.setPositionIndex(value.getPositionIndex());
                 MasterSitemapNode msn = sitemap.append(nodeRecord);
+                sourceModules.add(value.getModuleName());
             }
             processRedirects();
+            for (String sourceModule : sourceModules) {
+                addInfo("Source Module:", "Module name: " + sourceModule);
+            }
             return true;
         }
         processRedirects();

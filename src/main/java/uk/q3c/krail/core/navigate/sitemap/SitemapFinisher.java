@@ -15,6 +15,8 @@ package uk.q3c.krail.core.navigate.sitemap;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 
+import java.util.Set;
+
 /**
  * Implementations check the Sitemap for inconsistencies, specifically:
  * <ol>
@@ -56,4 +58,7 @@ public interface SitemapFinisher {
      */
     SitemapFinisher replaceMissingKeyWith(I18NKey defaultKey);
 
+    void setSourceModuleNames(Set<String> names);
+
+    void setAnnotationSources(Set<String> sources);
 }

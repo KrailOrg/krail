@@ -81,7 +81,8 @@ public abstract class DirectSitemapModule extends AbstractModule {
      */
     protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl pageAccessControl, String roles) {
 
-        DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, roles, 1);
+        DirectSitemapEntry entry = new DirectSitemapEntry(this.getClass()
+                                                              .getSimpleName(), viewClass, labelKey, pageAccessControl, roles, 1);
         sitemapBinder.addBinding(uri)
                      .toInstance(entry);
 
@@ -106,7 +107,8 @@ public abstract class DirectSitemapModule extends AbstractModule {
      */
     protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl pageAccessControl, int positionIndex) {
 
-        DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, null, positionIndex);
+        DirectSitemapEntry entry = new DirectSitemapEntry(this.getClass()
+                                                              .getSimpleName(), viewClass, labelKey, pageAccessControl, null, positionIndex);
         sitemapBinder.addBinding(uri)
                      .toInstance(entry);
 
@@ -135,7 +137,8 @@ public abstract class DirectSitemapModule extends AbstractModule {
     protected void addEntry(String uri, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl pageAccessControl, String roles, int
             positionIndex) {
 
-        DirectSitemapEntry entry = new DirectSitemapEntry(viewClass, labelKey, pageAccessControl, roles, positionIndex);
+        DirectSitemapEntry entry = new DirectSitemapEntry(this.getClass()
+                                                              .getSimpleName(), viewClass, labelKey, pageAccessControl, roles, positionIndex);
         sitemapBinder.addBinding(uri)
                      .toInstance(entry);
 
