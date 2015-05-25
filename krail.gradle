@@ -14,6 +14,7 @@
 description = 'A rapid development framework for web apps using Vaadin, Guice, Shiro et al'
 
 ext.shiroVersion = '1.2.3'
+version = '0.9.4'
 
 dependencies {
 
