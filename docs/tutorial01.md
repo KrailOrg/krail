@@ -9,7 +9,9 @@ Krail encourages prototyping, by providing a lot of default functionality so tha
 ## Preparation
 This tutorial assumes that you have Gradle already installed.  The Krail build was done wtih Gradle 2.1, though other versions should work.  (There has been one report of an issue with Gradle 2.4)
 
-It is also assumed that you will be using Git for version control, and have it installed
+It is also assumed that you will be using Git for version control, and have it installed.
+
+If you want to skip a step, or just re-create something later, this Tutorial is available on Github - at the end of every section you'll see a stage "Download from Github"
 
 ## Create a build file
 
@@ -19,10 +21,10 @@ Change to your Git root directory, for example:
 ```
     cd /home/david/git
 ```
-Create a directory for your project (called "tutorial" in this case), and initialise it for git.
+Create a directory for your project (called "**krail-tutorial**" in this case), and initialise it for git.
 ```
-    mkdir tutorial
-    cd tutorial
+    mkdir krail-tutorial
+    cd krail-tutorial
     git init
     gedit build.gradle
 ```
@@ -90,21 +92,33 @@ Gradle will prompt for a number of entries - for the purposes of the tutorial, w
 
 ### IDEA
 
-In IDEA, start the import
+- From the command line
+```sh
+gradle idea
+```
+- In IDEA, start the import
 
-> File | Open and select *tutorial/build.gradle*
+> File | Open and select *krail-tutorial/build.gradle*
 
-In the import dialog:
+- In the import dialog:
 
-- Ensure that JDK 1.8 is selected
-- Use "default gradle wrapper"
-- Select "Create directories for empty content roots automatically"
+    - Ensure that JDK 1.8 is selected
+    - Use "default gradle wrapper"
+    - Select "Create directories for empty content roots automatically"
 
 IDEA may prompt you to add the project VCS root - say yes if it does.
 
-Delete the src/main/groovy and src/test/groovy folders completely - we will only be using Java for this Tutorial
 
-There are a number of files which have not been added to Git - normally we would probably exclude a number of them from version control, but to keep things simple, right click on the project folder and select Git | Add to add all files to Git.
+- Delete the src/main/groovy and src/test/groovy folders completely - we will only be using Java for this Tutorial.  There are a couple of generated files in these folders, but they can be deleted.
+
+- To reduce what goes in to Git, let's just add a simple .gitignore file at the project root:
+
+```
+bin
+build
+```
+
+- To keep things simple, right click on the project folder and select Git | Add to add all files to Git.
 
 ## Krail preparation
 
@@ -157,11 +171,11 @@ public class TutorialServlet extends BaseServlet {
 }
 ```
 
-and in the build.gradle file, add a vaadin closure to declare the widgetset.  (The plugin.logToConsole entry provides a little extra console output during a build.  It is useful, but not essential)
+and in the *build.gradle* file, add a vaadin closure to declare the widgetset.  (The plugin.logToConsole entry provides a little extra console output during a build.  It is useful, but not essential)
     
 ```groovy
 dependencies {  
-    compile 'uk.q3c.krail:krail:0.9.3'
+    compile 'uk.q3c.krail:krail:0.9.4'
 }
 vaadin {
     widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
@@ -169,7 +183,7 @@ vaadin {
 }
 ```
 #### Build Issue
-There is one more change we need to make to the build.gradle file.  There is an [open issue](https://github.com/johndevs/gradle-vaadin-plugin/issues/183) against the Gradle Vaadin plugin.  It currently requires that the Vaadin version is declared explcitily to match the version used by Krail - so we need to make one final adjustment to the build.gradle file:
+There is one more change we need to make to the *build.gradle* file.  There is an [open issue](https://github.com/johndevs/gradle-vaadin-plugin/issues/183) against the Gradle Vaadin plugin.  It currently requires that the Vaadin version is declared explcitily to match the version used by Krail - so we need to make one final adjustment to the build.gradle file:
 ```
 vaadin {
     widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
@@ -177,7 +191,7 @@ vaadin {
     version '7.4.6'
 }
 ```
-For completeness, the full build.gradle file should look like this:
+For completeness, the full *build.gradle* file should look like this:
 ```
 apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.9.8'
 apply plugin: 'eclipse'  
@@ -191,7 +205,7 @@ repositories {
 }  
 
 dependencies {  
-    compile 'uk.q3c.krail:krail:0.9.3'
+    compile 'uk.q3c.krail:krail:0.9.4'
 }
 
 
@@ -213,7 +227,7 @@ configurations.all {
 
 #### Create a Servlet Module
 
-In the com.example.tutorial.app package, create a class ```TutorialServletModule```, extended from ```BaseServletModule```:
+In the *com.example.tutorial.app package*, create a class ```TutorialServletModule```, extended from ```BaseServletModule```:
 ```
 package com.example.tutorial.app;
    
@@ -231,7 +245,7 @@ public class TutorialServletModule extends BaseServletModule {
 
 In Krail terminology, the Binding Manager is a central point of Guice configuration.  Guice modules specify how things are bound together, and the Binding Manager selects which modules to use.  All Krail applications use their own Binding Manager, usually sub-classed from ```DefaultBindingManager```.  To create one for the tutorial:
 
-In the com.example.tutorial.app package, create a class ```TutorialBindingManager```, extended from ```DefaultBindingManager```
+In the com.example.tutorial.app package, create a class ```BindingManager```, extended from ```DefaultBindingManager```
 ```
 package com.example.tutorial.app;
 
@@ -257,7 +271,8 @@ public class BindingManager extends DefaultBindingManager {
 Notice that we override ```servletModule()``` to let Guice know about our ```TutorialServletModule```
 
 #### Create web.xml
-Create a web.xml file in src/main/webapp/WEB-INF - note that the listener refers to our ```BindingManager.```  This could be the only xml you will use for the entire project
+- Create a new directory, src/main/webapp/WEB-INF 
+- Then create a *web.xml* file.  Note that the listener refers to our ```BindingManager.```  This could be the only xml you will use for the entire project
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -297,11 +312,32 @@ That's all the plumbing that is needed to get started - but we do not have any p
 
 The ```SystemAccountManagementPages``` class in Krail is a set of not very useful pages (it just meant as an example) composed as a Guice module.  We will add that module to the Binding Manager.  Note that we use the ```addSitemapModules()``` method - we could just add all modules in ```addAppModules(),``` the separation is purely for clarity.
 ```
+    @Override
+    protected void addSitemapModules(List<Module> baseModules) {
+        baseModules.add(new SystemAccountManagementPages());
+    }
+
+```
+The complete ```BindingManager`` now looks like:
+```
+package com.example.tutorial.app;
+
+import com.google.inject.Module;
+import uk.q3c.krail.core.guice.DefaultBindingManager;
+import uk.q3c.krail.core.navigate.sitemap.SystemAccountManagementPages;
+
+import java.util.List;
+
 public class BindingManager extends DefaultBindingManager {
 
     @Override
     protected void addAppModules(List<Module> baseModules) {
 
+    }
+
+    @Override
+    protected Module servletModule() {
+        return new TutorialServletModule();
     }
 
     @Override
@@ -332,9 +368,24 @@ The one aspect of the build that tends to give problems is the widgetset compile
 
 from either the command line or IDE.  You can see whether it has compiled by checking the src/main/webapp/VAADIN/widgetsets folder - it should have contents.  (A compile failure usually creates a widgetsets folder, but leaves it empty)
 
-We can now build and run the application - set up a run configuration in your IDE to take the war output and run it on Tomcat, or whichever application server you are using.  And press run of course ....
+We can now build and run the application - set up a run configuration in your IDE to take the war output and run it on Tomcat or whichever application server you are using:
 
-You should now see something like this:
+####Run Configuration in IDEA
+
+>Run | Edit Configurations | + | Tomcat Server | Local
+Name: Tutorial
+Deployment: + | artifact | tutorial.war
+Application context: /tutorial
+
+- refresh Gradle
+- Build | Rebuild project
+- Run Tutorial
+
+####Run Configuration in Eclipse
+
+> tbd
+
+ .... you should now see something like this:
 
 ![Screenshot](img/basic-screenshot.png)
 
@@ -346,13 +397,13 @@ There are a few things to see, even in this very basic implementation.
 
 
 - The "screen" presentation is provided by ```DefaultApplicationUI``` - UI in this context refers to the Vaadin concept of UI, which is generally equivalent to a browser tab. 
-- ```DefaultApplicationUI``` contains a number of components and both the UI and its components can be replaced, sub-classed or modified.  All the parts described below are pluggable components. 
-- The Application Header is just a panel to hold things like logos
-- The navigation tree, navigation, breadcrumb and sub-page panel menu are all navigation-aware components   You can navigate by clicking on any of them, or just change the URL directly.  These navigation components are tied to a Sitemap,  which defines the structure of the site, and the Views used to represent each page.  You will see how this works when we create some new pages.
-- The Locale selector will not do much yet, as there are no alternative Locales defined - that will be covered later in the Tutorial.
-- The login panel offers a login button and a login status - we will log in in a moment
-- The message bar is just a place for messages to the user.
-- The View area (in blue) is where all the work is done - it is here that you will put forms and tables etc.
+- ```DefaultApplicationUI``` contains a number of components and both the UI and its components can be replaced, sub-classed or modified.  All the parts described below are pluggable components, held by the UI: 
+	- The Application Header is just a panel to hold things like logos
+	- The navigation tree, navigation, breadcrumb and sub-page panel menu are all navigation-aware components   You can navigate by clicking on any of them, or just change the URL directly.  These navigation components are tied to a Sitemap,  which defines the structure of the site, and the Views used to represent each page.  You will see how this works when we create some new pages.
+	- The Locale selector will not do much yet, as there are no alternative Locales defined - that will be covered later in the Tutorial.
+	- The login panel offers a login button and a login status - we will log in in a moment
+	- The message bar is just a place for messages to the user.
+	- The View area (in blue) is where all the work is done - it is here that you will put forms and tables etc.
  
 Of course, as a developer, you will almost certainly have logged in by now, but in case you have not - you can use any user name, and a password of "password", so that you can pretend to be a real user with a memorable password ...
 
@@ -371,9 +422,18 @@ Now try this sequence:
 - Logout.  You will now be on the logout page (which by default does not appear in the navigation components - also configurable behaviour)
 - Press the browser 'back' button - and a notification will pop up saying that *"private/home is not a valid page"*.  Even though you know this is not the case, this message is deliberate, as it means that if a user tries to guess a url that they are not authorised for, they will not even get confirmation that the page exists. 
 - Look at the message bar and you will see that the same message has appeared there.  We will look at [user notifications](tutorial04.md) and how they are handled a bit later.
- 
 
+#Summary
+You have created a basic application, and can have already seen:<br>
 
+- Integration with User Access Control from Apache Shiro
+- a pluggable set of pages
+- Navigation aware components acting together
+- User notifications
+
+# Download from Github
+
+To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step01**
     
 
 
