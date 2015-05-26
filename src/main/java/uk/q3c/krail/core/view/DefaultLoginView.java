@@ -36,16 +36,16 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     private final Provider<Subject> subjectProvider;
     private final Translate translate;
     private final PubSubSupport<BusMessage> eventBus;
-    @Caption(caption = LabelKey.Log_In)
+    @Caption(caption = LabelKey.Log_In, description = DescriptionKey.Please_log_in)
     private Panel centrePanel;
     private Label demoInfoLabel;
     private Label demoInfoLabel2;
     @Value(LabelKey.Authentication)
     private Label label;
-    @Caption(caption = LabelKey.Password)
+    @Caption(caption = LabelKey.Password, description = DescriptionKey.Enter_Your_Password)
     private PasswordField passwordBox;
     private Label statusMsgLabel;
-    @Caption(caption = LabelKey.Submit)
+    @Caption(caption = LabelKey.Submit, description = DescriptionKey.Submit_Your_Login_Details)
     private Button submitButton;
     @Caption(caption = LabelKey.User_Name, description = DescriptionKey.Enter_your_user_name)
     private TextField usernameBox;
@@ -154,13 +154,13 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     public TextField getUsernameBox() {

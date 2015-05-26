@@ -51,7 +51,7 @@ public class DefaultPatternCacheLoaderTest {
                 PropertiesFromClasspathBundleControl()));
         //when
         createLoader();
-        List<String> orderAny = loader.bundleSourceOrder(LabelKey.nullKey);
+        List<String> orderAny = loader.bundleSourceOrder(LabelKey.Large);
         //then
         assertThat(orderAny).containsExactly("class", "props");
 
@@ -61,7 +61,7 @@ public class DefaultPatternCacheLoaderTest {
 
         //when
         createLoader();
-        orderAny = loader.bundleSourceOrder(LabelKey.nullKey);
+        orderAny = loader.bundleSourceOrder(LabelKey.Large);
         //then
         assertThat(orderAny).containsExactly("props", "class");
 
@@ -73,7 +73,7 @@ public class DefaultPatternCacheLoaderTest {
 
         //when
         createLoader();
-        orderAny = loader.bundleSourceOrder(LabelKey.nullKey);
+        orderAny = loader.bundleSourceOrder(LabelKey.Large);
         List<String> orderTestLabelKey = loader.bundleSourceOrder(TestLabelKey.Blank);
         //then
         assertThat(orderAny).containsExactly("props", "class");
@@ -84,7 +84,7 @@ public class DefaultPatternCacheLoaderTest {
         loader.setOptionReaderOrderDefault("eat", "hat");
         //when
         createLoader();
-        orderAny = loader.bundleSourceOrder(LabelKey.nullKey);
+        orderAny = loader.bundleSourceOrder(LabelKey.Large);
         orderTestLabelKey = loader.bundleSourceOrder(TestLabelKey.Blank);
         //then
         assertThat(orderAny).containsExactly("eat", "hat");
@@ -93,7 +93,7 @@ public class DefaultPatternCacheLoaderTest {
         //given user option changes for a single bundleName
         loader.setOptionReaderOrder(TestLabelKey.Blank.bundleName(), "fat", "cat");
         //when
-        orderAny = loader.bundleSourceOrder(LabelKey.nullKey);
+        orderAny = loader.bundleSourceOrder(LabelKey.Large);
         orderTestLabelKey = loader.bundleSourceOrder(TestLabelKey.Blank);
         //then
         assertThat(orderAny).containsExactly("eat", "hat");

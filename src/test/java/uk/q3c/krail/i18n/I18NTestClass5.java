@@ -23,7 +23,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class I18NTestClass5 {
 
-    @Caption(caption = LabelKey.Authentication)
+    @Caption(caption = LabelKey.Authentication, description = DescriptionKey.Please_log_in)
     Button tba;
 
     @I18N(drillDown = false)

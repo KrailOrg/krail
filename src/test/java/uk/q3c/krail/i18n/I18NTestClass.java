@@ -26,16 +26,16 @@ public class I18NTestClass {
     private final Table table;
     @Caption(caption = LabelKey.Yes, description = DescriptionKey.Please_log_in, locale = "de-DE")
     private final Label demoLabel;
-    @Caption(caption = LabelKey.Field)
+    @Caption(caption = LabelKey.Field, description = DescriptionKey.Field)
     private final TestCompositeComponent ccs;
     // Class annotation
     private final TestCompositeComponent ccc;
     @I18N
     private final TestCompositeNonComponent cnc;
-    @Caption(caption = LabelKey.Field)
+    @Caption(caption = LabelKey.Field, description = DescriptionKey.Field)
     @I18N
     private final TestCompositeComponentNested ccn;
-    @Caption(caption = LabelKey.Yes, locale = "de-DE")
+    @Caption(caption = LabelKey.Yes, locale = "de-DE", description = DescriptionKey.Field)
     private final Button specificLocale;
     @Value(value = LabelKey.Guest)
     private final Label value;
@@ -45,7 +45,7 @@ public class I18NTestClass {
     private final Button buttonWithoutAnnotation;
     private final Integer integer;
     private double dubble;
-    @Caption(caption = LabelKey.Broadcast_Messages)
+    @Caption(caption = LabelKey.Broadcast_Messages, description = DescriptionKey.Field)
     private Grid grid;
     @Caption(caption = LabelKey.Authentication, description = DescriptionKey.Please_log_in)
     @Description(description = DescriptionKey.Account_Already_In_Use)

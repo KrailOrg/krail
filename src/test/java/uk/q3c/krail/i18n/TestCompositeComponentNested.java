@@ -15,7 +15,7 @@ package uk.q3c.krail.i18n;
 import com.vaadin.ui.Panel;
 
 public class TestCompositeComponentNested extends Panel {
-    @Caption(caption = LabelKey.Nested)
+    @Caption(caption = LabelKey.Nested, description = DescriptionKey.Field)
     private final TestCompositeComponent ccs = new TestCompositeComponent();
 
     public TestCompositeComponent getCcs() {

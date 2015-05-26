@@ -21,7 +21,7 @@ import com.vaadin.ui.Panel;
  * @author David Sowerby
  * @date 2 May 2014
  */
-@Caption(caption = LabelKey.Class)
+@Caption(caption = LabelKey.Class, description = DescriptionKey.Field)
 public class TestCompositeComponent_componentNotConstructed extends Panel {
 
     @Description(description = DescriptionKey.Confirm_Ok)

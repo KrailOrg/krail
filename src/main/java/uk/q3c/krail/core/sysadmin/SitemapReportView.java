@@ -17,6 +17,7 @@ import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Caption;
+import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
 
 /**
@@ -26,7 +27,7 @@ public class SitemapReportView extends Grid3x3ViewBase {
 
 
     private MasterSitemap masterSitemap;
-    @Caption(caption = LabelKey.Sitemap_Build_Report)
+    @Caption(caption = LabelKey.Sitemap_Build_Report, description = DescriptionKey.Report_generated_by_the_Sitemap_build_process)
     private TextArea reportArea;
 
     @Inject

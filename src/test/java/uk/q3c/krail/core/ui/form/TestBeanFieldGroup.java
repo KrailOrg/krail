@@ -24,7 +24,7 @@ import uk.q3c.krail.i18n.LabelKey;
 
 public class TestBeanFieldGroup extends BeanFieldGroupBase<TestEntity> {
 
-    @Caption(caption = LabelKey.First_Name)
+    @Caption(caption = LabelKey.First_Name, description = DescriptionKey.Field)
     private TextField firstName;
 
     @Caption(caption = LabelKey.Last_Name, description = DescriptionKey.Last_Name)

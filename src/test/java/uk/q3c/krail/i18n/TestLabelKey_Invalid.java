@@ -15,11 +15,10 @@ package uk.q3c.krail.i18n;
 
 public enum TestLabelKey_Invalid {
 
-    _nullkey_,
     home,
     transfers,
     login,
     moneyInOut,
-    opt;
+    opt
 
 }

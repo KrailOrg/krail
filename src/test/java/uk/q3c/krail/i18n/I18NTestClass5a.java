@@ -20,7 +20,7 @@ import com.vaadin.ui.HorizontalLayout;
  */
 public class I18NTestClass5a extends I18NTestClass5 {
 
-    @Caption(caption = LabelKey.Authentication)
+    @Caption(caption = LabelKey.Authentication, description = DescriptionKey.Field)
     I18NMonitoredButton tbb;
 
     @I18N

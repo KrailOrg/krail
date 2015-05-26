@@ -15,7 +15,7 @@ import com.vaadin.ui.Button;
 public class I18NTestClass2 {
 
     // keep field as null make sure nothing breaks;
-    @Caption(caption = LabelKey.Cancel)
+    @Caption(caption = LabelKey.Cancel, description = DescriptionKey.Field)
     private Button unconstructed;
 
 }

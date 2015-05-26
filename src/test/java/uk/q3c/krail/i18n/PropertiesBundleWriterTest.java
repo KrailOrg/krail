@@ -65,7 +65,7 @@ public class PropertiesBundleWriterTest {
         //when
         utility.writeOut(writer, TestLabelKey.class, locales, Optional.empty());
         //then
-        assertThat(FileTestUtil.compare(referenceFile_de, targetFile_de, 1)).isEqualTo(Optional.empty());
-        assertThat(FileTestUtil.compare(referenceFile_it, targetFile_it, 1)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compareFirst(5, referenceFile_de, targetFile_de, 1)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compareFirst(5, referenceFile_it, targetFile_it, 1)).isEqualTo(Optional.empty());
     }
 }
