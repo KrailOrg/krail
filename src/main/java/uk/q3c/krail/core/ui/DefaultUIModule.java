@@ -18,9 +18,19 @@ import com.vaadin.server.WebBrowser;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 
+import javax.annotation.Nonnull;
+
 public class DefaultUIModule extends AbstractModule {
 
+    private I18NKey applicationTitleKey;
+    private Class<? extends ScopedUI> uiClass;
+
     private MapBinder<String, Class<? extends ScopedUI>> uiMapBinder;
+
+    public DefaultUIModule() {
+        uiClass = DefaultApplicationUI.class;
+        applicationTitleKey = LabelKey.Krail;
+    }
 
     @Override
     protected void configure() {
@@ -50,10 +60,10 @@ public class DefaultUIModule extends AbstractModule {
 
     /**
      * Override this method to bind your own UI class(es).  If you wish to use more than one UI class, you will also need to provide a custom {@link
-     * ScopedUIProvider}, and bidnd it by overriding {{@link #bindUIProvider()}}
+     * ScopedUIProvider}, and bind it by overriding {@link #bindUIProvider()}
      */
     protected void define() {
-        addUIBinding(DefaultApplicationUI.class);
+        addUIBinding(uiClass);
     }
 
     protected void addUIBinding(Class<? extends ScopedUI> uIClass) {
@@ -62,16 +72,8 @@ public class DefaultUIModule extends AbstractModule {
     }
 
     private void bindApplicationTitle() {
-        ApplicationTitle title = new ApplicationTitle(applicationTitleKey());
+        ApplicationTitle title = new ApplicationTitle(applicationTitleKey);
         bind(ApplicationTitle.class).toInstance(title);
-    }
-
-    /**
-     * override this method to provide the I18Nkey which defines your application title (which appears in your browser
-     * tab)
-     */
-    protected I18NKey applicationTitleKey() {
-        return LabelKey.Krail;
     }
 
 
@@ -82,5 +84,23 @@ public class DefaultUIModule extends AbstractModule {
         bind(ScopedUIProvider.class);
     }
 
+    /**
+     * Sets a single UI class.  If you need multiple UI classes override {@link #define()} and refer to the javadoc for that method.  Typically this method is
+     * called by:<br><br> new DefaultUIModule().uiClass(aClass)<br><br>
+     *
+     * @param uiClass
+     *         the UI class to use for the whole application
+     *
+     * @return this, for fluency
+     */
+    public DefaultUIModule uiClass(Class<? extends ScopedUI> uiClass) {
+        this.uiClass = uiClass;
+        return this;
+    }
+
+    public DefaultUIModule applicationTitleKey(@Nonnull I18NKey applicationTitleKey) {
+        this.applicationTitleKey = applicationTitleKey;
+        return this;
+    }
 
 }
