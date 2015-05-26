@@ -17,7 +17,7 @@ Because the page name is locale sensitive, we will first need to provide I18N su
 
 ##Introducing I18N
 
-You may think that it is premature to be considering I18N at this stage - especially if you are writing an application which will only use one language. However, Krail treats I18N as a first class citizen, and you will find the result of these steps surprisingly useful even in a single Locale application. You could read the [full I18N description](devguide03.md) now, or just follow these steps, as we will come back to I18N later in the Tutorial.  
+You may think that it is premature to be considering I18N at this stage - especially if you are writing an application which will only use one language. However, Krail treats I18N as a first class citizen, and you will find the result of these steps surprisingly useful even in a single Locale application. You could read the [full I18N description](devguide08.md) now, or just follow these steps, as we will come back to I18N later in the Tutorial.  
 
 ###Create an I18N Annotation
 

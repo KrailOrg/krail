@@ -12,48 +12,36 @@
  */
 package uk.q3c.krail.core.user.notify;
 
-import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.i18n.I18NKey;
 
 /**
  * Provides a common entry point for all notifications to users, at error, warning and information level.
- * <p/>
- * The developer can map which notifications are actually available using the {@link UserModule} (for example,
- * the Vaadin supplied notifications, a MessageBar, popup dialogs etc). These all implement the {@link
- * UserNotification}
- * interface.
- * <p/>
- * User options are supplied to enable users to determine which notifications they prefer - assuming that the developer
- * makes the selection of those options available to the user.
  *
  * @author David Sowerby
  */
 public interface UserNotifier {
 
     /**
-     * Calls all {@link ErrorNotification} implementations defined by the {@link UserModule} to advise the user
-     * of an error condition
+     * Sends a translated {@link ErrorNotificationMessage} via the Session Bus
      *
-     * @param msg
-     * @param params
+     * @param msg the message pattern
+     * @param params parameters for the message pattern
      */
     void notifyError(I18NKey msg, Object... params);
 
     /**
-     * Calls all {@link WarningNotification} implementations defined by the {@link UserModule} to advise the
-     * user of a warning
+     * Sends a translated {@link WarningNotificationMessage} via the Session Bus
      *
-     * @param msg
-     * @param params
+     * @param msg the message pattern
+     * @param params parameters for the message pattern
      */
     void notifyWarning(I18NKey msg, Object... params);
 
     /**
-     * Calls all {@link InformationNotification} implementations defined by the {@link UserModule} to advise the
-     * user of some information
+     * Sends a translated {@link InformationNotificationMessage} via the Session Bus
      *
-     * @param msg
-     * @param params
+     * @param msg the message pattern
+     * @param params parameters for the message pattern
      */
     void notifyInformation(I18NKey msg, Object... params);
 

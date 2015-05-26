@@ -25,7 +25,7 @@ import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.ui.ApplicationTitle;
 import uk.q3c.krail.core.ui.DefaultApplicationUI;
-import uk.q3c.krail.core.user.notify.UserNotifier;
+import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.view.component.*;
 import uk.q3c.krail.i18n.CurrentLocale;
@@ -35,9 +35,9 @@ import uk.q3c.krail.i18n.Translate;
 public class TutorialUI extends DefaultApplicationUI {
     
     @Inject
-    protected TutorialUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, UserNotifier userNotifier, Option option) {
+    protected TutorialUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option) {
         super(navigator, errorHandler, converterFactory, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster,
-                pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, userNotifier, option);
+                pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option);
         option.set(false, DefaultApplicationUI.optionBreadcrumbVisible);
         option.set(false, DefaultApplicationUI.optionMenuVisible);
     }
@@ -61,9 +61,9 @@ At the moment there is no alternative for setting the theme except by using the 
 public class TutorialUI extends DefaultApplicationUI {
 
     @Inject
-    protected TutorialUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, UserNotifier userNotifier, Option option) {
+    protected TutorialUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option) {
         super(navigator, errorHandler, converterFactory, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster,
-                pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, userNotifier, option);
+                pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option);
         option.set(false, DefaultApplicationUI.optionBreadcrumbVisible);
         option.set(false, DefaultApplicationUI.optionMenuVisible);
     }
@@ -75,7 +75,7 @@ public class TutorialUI extends DefaultApplicationUI {
 Valo is the most recent theme from Vaadin.  "Reindeer" is the default, which you have been using until now.  For more information about themes, see the [Vaadin Documentation](https://vaadin.com/book/-/page/themes.html).
 
 #Summary
-This was a short tutorial, covering the creation of a new UI and setting a Theme.
+This was a short tutorial, covering the creation of a new UI, registering it, and setting a Theme.
 
 
 #Download from Github

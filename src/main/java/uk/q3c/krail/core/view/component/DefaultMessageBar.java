@@ -16,9 +16,16 @@ import com.google.inject.Inject;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.SubscribeTo;
+import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
+import uk.q3c.krail.core.user.notify.ErrorNotificationMessage;
+import uk.q3c.krail.core.user.notify.InformationNotificationMessage;
+import uk.q3c.krail.core.user.notify.WarningNotificationMessage;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.ID;
@@ -26,6 +33,8 @@ import uk.q3c.util.ID;
 import java.util.Optional;
 
 @UIScoped
+@Listener
+@SubscribeTo(UIBus.class)
 public class DefaultMessageBar extends Panel implements MessageBar {
     private static Logger log = LoggerFactory.getLogger(DefaultMessageBar.class);
     private final Translate translate;
@@ -48,25 +57,29 @@ public class DefaultMessageBar extends Panel implements MessageBar {
         label.setId(ID.getId(Optional.empty(), this, label));
     }
 
+    @Handler
     @Override
-    public void errorMessage(String message) {
+    public void errorMessage(ErrorNotificationMessage message) {
         log.debug("Received error message '{}'", message);
         String s = translate.from(LabelKey.Error)
-                            .toUpperCase() + ": " + message;
+                            .toUpperCase() + ": " + message.getTranslatedMessage();
         label.setValue(s);
     }
 
+    @Handler
     @Override
-    public void warningMessage(String message) {
+    public void warningMessage(WarningNotificationMessage message) {
         log.debug("Received warning message '{}'", message);
-        String s = translate.from(LabelKey.Warning) + ": " + message;
+        String s = translate.from(LabelKey.Warning) + ": " + message.getTranslatedMessage();
         label.setValue(s);
     }
 
+    @Handler
     @Override
-    public void informationMessage(String message) {
+    public void informationMessage(InformationNotificationMessage message) {
         log.debug("Received information message '{}'", message);
-        label.setValue(message);
+        label.setValue(message.getTranslatedMessage());
     }
+
 
 }

@@ -13,54 +13,45 @@
 package uk.q3c.krail.core.user.notify;
 
 import com.google.inject.Inject;
+import net.engio.mbassy.bus.common.PubSubSupport;
+import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
 import java.io.Serializable;
-import java.util.Map;
 
-@SuppressWarnings("rawtypes")
 public class DefaultUserNotifier implements UserNotifier, Serializable {
     private static final long serialVersionUID = 1L;
+    private PubSubSupport<BusMessage> messageBus;
+    private Translate translate;
 
-    private final Map<I18NKey, ErrorNotification> errorNotifications;
-    private final Map<I18NKey, WarningNotification> warningNotifications;
-    private final Map<I18NKey, InformationNotification> informationNotifications;
-    private final Translate translate;
 
     @Inject
-    protected DefaultUserNotifier(Map<I18NKey, ErrorNotification> errorNotifications, Map<I18NKey,
-            WarningNotification> warningNotifications, Map<I18NKey,
-            InformationNotification> informationNotifications, Translate translate) {
-        this.errorNotifications = errorNotifications;
-        this.warningNotifications = warningNotifications;
-        this.informationNotifications = informationNotifications;
+    protected DefaultUserNotifier(@UIBus PubSubSupport<BusMessage> messageBus, Translate translate) {
+        this.messageBus = messageBus;
         this.translate = translate;
-
     }
 
     @Override
     public void notifyError(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
-        for (ErrorNotification notification : errorNotifications.values()) {
-            notification.message(translatedMessage);
-        }
+        ErrorNotificationMessage message = new ErrorNotificationMessage(translatedMessage);
+        messageBus.publish(message);
     }
 
     @Override
     public void notifyWarning(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
-        for (WarningNotification notification : warningNotifications.values()) {
-            notification.message(translatedMessage);
-        }
+        WarningNotificationMessage message = new WarningNotificationMessage(translatedMessage);
+        messageBus.publish(message);
     }
 
     @Override
     public void notifyInformation(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
-        for (InformationNotification notification : informationNotifications.values()) {
-            notification.message(translatedMessage);
-        }
+        InformationNotificationMessage message = new InformationNotificationMessage(translatedMessage);
+        messageBus.publish(message);
     }
 
 }

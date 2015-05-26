@@ -22,7 +22,7 @@ import com.vaadin.ui.VerticalLayout;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
-import uk.q3c.krail.core.user.notify.UserNotifier;
+import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionDescriptor;
@@ -56,13 +56,13 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
     private final LocaleSelector localeSelector;
     private VerticalLayout baseLayout;
     private Option option;
+    // this appears not to be used but does receive bus messages
+    private VaadinNotification vaadinNotification;
 
     @Inject
     protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader
             header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage,
-                                   MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle,
-                                   Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, UserNotifier
-                                               userNotifier, Option option) {
+                                   MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option) {
         super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
         this.navTree = navTree;
         this.breadcrumb = breadcrumb;
@@ -73,7 +73,7 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
         this.logo = logo;
         this.header = header;
         this.localeSelector = localeSelector;
-        // this.userNotifier = userNotifier;
+        this.vaadinNotification = vaadinNotification;
         this.option = option;
     }
 

@@ -13,13 +13,37 @@
 package uk.q3c.krail.core.view.component;
 
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Notification;
+import uk.q3c.krail.core.user.notify.ErrorNotificationMessage;
+import uk.q3c.krail.core.user.notify.InformationNotificationMessage;
+import uk.q3c.krail.core.user.notify.WarningNotificationMessage;
 
+/**
+ * A component to display notification messages to the user, as an alternative to, or complement of, {@link Notification}
+ */
 public interface MessageBar extends Component {
 
-    void errorMessage(String message);
+    /**
+     * Display the message
+     *
+     * @param message
+     *         the message to display
+     */
+    void errorMessage(ErrorNotificationMessage message);
 
-    void warningMessage(String message);
+    /**
+     * Display the message
+     *
+     * @param message
+     *         the message to display
+     */
+    void warningMessage(WarningNotificationMessage message);
 
-    void informationMessage(String message);
-
+    /**
+     * Display the message
+     *
+     * @param message
+     *         the message to display
+     */
+    void informationMessage(InformationNotificationMessage message);
 }

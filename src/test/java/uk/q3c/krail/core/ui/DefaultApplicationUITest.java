@@ -24,7 +24,7 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
-import uk.q3c.krail.core.user.notify.UserNotifier;
+import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.view.component.*;
 import uk.q3c.krail.i18n.CurrentLocale;
@@ -78,16 +78,14 @@ public class DefaultApplicationUITest {
     @Mock
     private I18NProcessor translator;
     @Mock
-    private UserNotifier userNotifier;
-    @Mock
     private UserStatusPanel userStatusPanel;
-
+    @Mock
+    private VaadinNotification vaadinNotification;
 
     @Before
     public void setup() {
         when(localeSelector.getComponent()).thenReturn(new Label());
-        ui = new DefaultApplicationUI(navigator, errorHandler, converterFactory, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage,
-                messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, userNotifier, option);
+        ui = new DefaultApplicationUI(navigator, errorHandler, converterFactory, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option);
     }
 
     @Test

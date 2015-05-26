@@ -13,31 +13,29 @@
 package uk.q3c.krail.core.user;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.multibindings.MapBinder;
-import uk.q3c.krail.core.user.notify.*;
+import uk.q3c.krail.core.user.notify.DefaultUserNotifier;
+import uk.q3c.krail.core.user.notify.DefaultVaadinNotification;
+import uk.q3c.krail.core.user.notify.UserNotifier;
+import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.user.profile.DefaultUserHierarchy;
 import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
-import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.i18n.LabelKey;
 
 public class UserModule extends AbstractModule {
     @SuppressWarnings("rawtypes")
     @Override
     protected void configure() {
 
-        MapBinder<I18NKey, ErrorNotification> errorNotificationBinder = MapBinder.newMapBinder(binder(), I18NKey
-                .class, ErrorNotification.class);
-        MapBinder<I18NKey, WarningNotification> warningNotificationBinder = MapBinder.newMapBinder(binder(), I18NKey
-                .class, WarningNotification.class);
-        MapBinder<I18NKey, InformationNotification> informationNotificationBinder = MapBinder.newMapBinder(binder(),
-                I18NKey.class, InformationNotification.class);
+
         bindUserNotifier();
-        bindErrorNotifications(errorNotificationBinder);
-        bindWarningNotifications(warningNotificationBinder);
-        bindInformationNotifications(informationNotificationBinder);
+        bindVaadinNotification();
         bindUserHierarchies();
 
+
+    }
+
+    protected void bindVaadinNotification() {
+        bind(VaadinNotification.class).to(DefaultVaadinNotification.class);
     }
 
     /**
@@ -49,51 +47,7 @@ public class UserModule extends AbstractModule {
                                  .to(SimpleUserHierarchy.class);
     }
 
-    /**
-     * Override this method if you want to remove any of the notification implementations. If you want to add
-     * notifications, create your own module with a MapBinder instance of the same type signature, and Guice will
-     * combine the mapbinders
-     *
-     * @param errorNotificationBinder the binder used to collect the bindings together
-     */
-    @SuppressWarnings("rawtypes")
-    protected void bindErrorNotifications(MapBinder<I18NKey, ErrorNotification> errorNotificationBinder) {
-        errorNotificationBinder.addBinding(LabelKey.Splash)
-                               .to(VaadinErrorNotification.class);
-        errorNotificationBinder.addBinding(LabelKey.Message_Bar)
-                               .to(MessageBarErrorNotification.class);
-    }
 
-    /**
-     * Override this method if you want to remove any of the notification implementations. If you want to add
-     * notifications, create your own module with a MapBinder instance of the same type signature, and Guice will
-     * combine the mapbinders
-     *
-     * @param warningNotificationBinder the binder used to collect the bindings together
-     */
-    @SuppressWarnings("rawtypes")
-    protected void bindWarningNotifications(MapBinder<I18NKey, WarningNotification> warningNotificationBinder) {
-        warningNotificationBinder.addBinding(LabelKey.Splash)
-                                 .to(VaadinWarningNotification.class);
-        warningNotificationBinder.addBinding(LabelKey.Message_Bar)
-                                 .to(MessageBarWarningNotification.class);
-    }
-
-    /**
-     * Override this method if you want to remove any of the notification implementations. If you want to add
-     * notifications, create your own module with a MapBinder instance of the same type signature, and Guice will
-     * combine the mapbinders
-     *
-     * @param informationNotificationBinder the binder used to collect the bindings together
-     */
-    @SuppressWarnings("rawtypes")
-    protected void bindInformationNotifications(MapBinder<I18NKey, InformationNotification>
-                                                            informationNotificationBinder) {
-        informationNotificationBinder.addBinding(LabelKey.Splash)
-                                     .to(VaadinInformationNotification.class);
-        informationNotificationBinder.addBinding(LabelKey.Message_Bar)
-                                     .to(MessageBarInformationNotification.class);
-    }
 
     /**
      * Override this method to bind your own UserNotifier implementation
