@@ -389,7 +389,7 @@ Application context: /tutorial
 
 ![Screenshot](img/basic-screenshot.png)
 
-# Exploring the Basic Application
+#Exploring the Basic Application
 
 There are a few things to see, even in this very basic implementation.    
 

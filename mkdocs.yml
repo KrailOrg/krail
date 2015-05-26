@@ -13,6 +13,7 @@ pages:
 - [tutorial08.md, Tutorial - I18N]
 - [tutorial09.md, Tutorial - Persistence - JPA]
 - [tutorial10.md, Tutorial - Services]
+- [tutorial14.md, Tutorial - Guice Scopes]
 - [tutorial11.md, Tutorial - Event Bus]
 - [tutorial12.md, Tutorial - Vaadin Push]
 - [tutorial13.md, Tutorial - Validation]

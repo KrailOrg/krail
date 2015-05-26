@@ -6,7 +6,12 @@ Clearly we will want to add some new pages, but first we must know what constitu
 
 A page is represented by a URI, which maps to a specified ```KrailView``` class.  When the name of the page is presented in a navigation aware component, that name must be Locale sensitive.  Once the page is defined, it becomes part of the Krail ```Sitemap```, which forms the heart of the navigation system.  
 
-There are two ways to add pages to Krail and make use of the [navigation features](devguide02.md), and you can use either one, or both. These are the "direct" method or "annotation" method. (Note: there was a third method using an external file but that is now deprecated).  We will use both current methods.
+There are two ways to add pages to Krail and make use of the [navigation features](devguide02.md), and you can use either one, or both. These are the "direct" method or "annotation" method. We will use both methods. 
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There was a third method using an external file but that is now deprecated</p>
+</div>
 
 Because the page name is locale sensitive, we will first need to provide I18N support.
 
@@ -527,16 +532,39 @@ If you think about the use of the "Contact Detail" page, it does not actually ma
     - Press the "Navigate with Parameters" button
     - The "Contact Detail" page appears as before.
     
-There is a [bug](https://github.com/davidsowerby/krail/issues/400) which causes navigation components to mis-behave when all the sub-pages of a page are excluded from navigation.  the issue offers two workarounds, we will siomply move the "Contact Detail" page to the Sitemap root.
+There is a [bug](https://github.com/davidsowerby/krail/issues/400) which causes navigation components to mis-behave when all the sub-pages of a page are excluded from navigation.  the issue offers two workarounds, we will simply move the "Contact Detail" page to the Sitemap root.
 
-tbd
+- Modify ```MyPublicPages``` again:
+```
+   @Override
+    protected void define() {
+        addEntry("news", NewsView.class, LabelKey.News, PageAccessControl.PUBLIC);
+        addEntry("contact-us", ContactUsView.class, LabelKey.Contact_Us, PageAccessControl.PUBLIC);
+        addEntry("contact-detail", ContactDetailView.class, LabelKey.Contact_Detail, PageAccessControl.PUBLIC,-1);
+    }
+```
+- Update the navigation button in ```ContactUsView```
+```
+   @Override
+    protected void doBuild(ViewChangeBusMessage busMessage) {
+        super.doBuild(busMessage);
+        Button navigateWithParametersBtn = new Button("Navigate with parameters");
+        NavigationState navState = new NavigationState().virtualPage("contact-detail")
+                                                        .parameter("id", "33")
+                                                        .parameter("name", "David");
+        navigateWithParametersBtn.addClickListener(c->navigator.navigateTo(navState));
+        setCentreCell(navigateWithParametersBtn);
+    }
+```
 
 #Summary
-- You have explored two methods of defining new pages, Directed and Annotated.
-- You have seen how to navigate from code
+
+- You have explored two methods of defining new pages, using Direct and Annotated methods.
+- You have created navigation actions from code
 - You have passed parameters to a page, as you typically might to load data
-- You have seen how to "hide" a page from navigation
+- You have excluded a page from navigation, but still make it part of the Sitemap
+- You have "attached" an existing set of pages to a part of the Sitemap different from its default location 
 
 #Download from Github
-tbd
+To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step02**
 
