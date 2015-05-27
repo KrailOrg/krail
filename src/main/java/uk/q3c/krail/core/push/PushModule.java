@@ -11,16 +11,26 @@
 
 package uk.q3c.krail.core.push;
 
+import com.google.inject.AbstractModule;
+
 /**
  * Created by David Sowerby on 27/05/15.
  */
-public interface PushMessageRouter {
-
+public class PushModule extends AbstractModule {
     /**
-     * Pass a message to the router for it then to pass it on to its listeners.  Constructs a {@link PushMessage} and publishes it to the UIBus
-     *
-     * @param group the message group
-     * @param message the message
+     * {@inheritDoc}
      */
-    void messageIn(String group, String message);
+    @Override
+    protected void configure() {
+        bindPushRouter();
+        bindBroadcaster();
+    }
+
+    protected void bindPushRouter() {
+        bind(PushMessageRouter.class).to(DefaultPushMessageRouter.class);
+    }
+
+    protected void bindBroadcaster() {
+        bind(Broadcaster.class).to(DefaultBroadcaster.class);
+    }
 }

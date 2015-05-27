@@ -11,16 +11,25 @@
 
 package uk.q3c.krail.core.push;
 
-/**
- * Created by David Sowerby on 27/05/15.
- */
-public interface PushMessageRouter {
+import uk.q3c.krail.core.eventbus.BusMessage;
 
-    /**
-     * Pass a message to the router for it then to pass it on to its listeners.  Constructs a {@link PushMessage} and publishes it to the UIBus
-     *
-     * @param group the message group
-     * @param message the message
-     */
-    void messageIn(String group, String message);
+/**
+ * Created by David Sowerby on 26/05/15.
+ */
+public class PushMessage implements BusMessage {
+    private String group;
+    private String message;
+
+    public PushMessage(String group, String message) {
+        this.group = group;
+        this.message = message;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

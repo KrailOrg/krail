@@ -31,8 +31,8 @@ import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.navigate.Navigator;
-import uk.q3c.krail.core.push.Broadcaster;
-import uk.q3c.krail.core.push.PushMessageRouter;
+import uk.q3c.krail.core.push.DefaultBroadcaster;
+import uk.q3c.krail.core.push.DefaultPushMessageRouter;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.CurrentLocale;
@@ -58,9 +58,9 @@ public class ScopedUITest {
     @Mock
     ConverterFactory converterFactory;
     @Mock
-    Broadcaster broadcaster;
+    DefaultBroadcaster broadcaster;
     @Mock
-    PushMessageRouter pushMessageRouter;
+    DefaultPushMessageRouter pushMessageRouter;
     @Mock
     ApplicationTitle applicationTitle;
     @Mock
@@ -103,7 +103,7 @@ public class ScopedUITest {
         // when
 
         // then
-        verify(broadcaster).register(Broadcaster.ALL_MESSAGES, ui);
+        verify(broadcaster).register(DefaultBroadcaster.ALL_MESSAGES, ui);
     }
 
     @Test

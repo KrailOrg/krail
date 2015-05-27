@@ -22,8 +22,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.navigate.Navigator;
-import uk.q3c.krail.core.push.Broadcaster;
-import uk.q3c.krail.core.push.PushMessageRouter;
+import uk.q3c.krail.core.push.DefaultBroadcaster;
+import uk.q3c.krail.core.push.DefaultPushMessageRouter;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.view.component.*;
@@ -46,7 +46,7 @@ public class DefaultApplicationUITest {
     @Mock
     private Breadcrumb breadcrumb;
     @Mock
-    private Broadcaster broadcaster;
+    private DefaultBroadcaster broadcaster;
     @Mock
     private ConverterFactory converterFactory;
     @Mock
@@ -70,7 +70,7 @@ public class DefaultApplicationUITest {
     @Inject
     private Option option;
     @Mock
-    private PushMessageRouter pushMessageRouter;
+    private DefaultPushMessageRouter pushMessageRouter;
     @Mock
     private SubPagePanel subpage;
     @Mock

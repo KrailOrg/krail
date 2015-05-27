@@ -36,6 +36,7 @@ import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.StandardPagesModule;
+import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.services.ServiceModule;
 import uk.q3c.krail.core.services.ServicesMonitor;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
@@ -140,12 +141,22 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         coreModules.add(navigationModule());
 
         coreModules.add(dataModule());
+        coreModules.add(pushModule());
 
         addValidationModules(coreModules);
 
         addAppModules(coreModules);
         addSitemapModules(coreModules);
         return coreModules;
+    }
+
+    /**
+     * Override this if you have provided your own {@link PushModule} implementation
+     *
+     * @return a new {@link PushModule} instance
+     */
+    protected Module pushModule() {
+        return new PushModule();
     }
 
     protected Module uiModule() {
