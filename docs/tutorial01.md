@@ -15,7 +15,7 @@ If you want to skip a step, or just re-create something later, this Tutorial is 
 
 ## Create a build file
 
-### Linux
+### Command Line
 
 Change to your Git root directory, for example:
 ```
@@ -44,6 +44,10 @@ You will now have an empty build file open.  Cut and paste the following into th
         compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.4')
     }
     
+    vaadin {
+        version '7.4.6'
+    }
+    
     configurations.all {
         resolutionStrategy {
             // GWT requires an old version of the validation API.  Changing to a newer version breaks widgetset compile but throws no errors
@@ -56,8 +60,8 @@ You will now have an empty build file open.  Cut and paste the following into th
 - The 'eclipse' and 'idea' plugins are optional, but useful for generating IDE specific files.
 - Krail requires Java 8, hence the line "sourceCompatibility = '1.8'"
 - Of course, you cannot do without Krail ...
+- There is an [open issue](https://github.com/johndevs/gradle-vaadin-plugin/issues/183) against the Gradle Vaadin plugin.  It currently requires that the Vaadin version is declared explicitly to match the version used by Krail.
 - There are a lot of dependencies involved in building Krail - that is no surprise, when you consider how many things it integrates.  However, that also means that there can be version conflicts to resolve, between the dependencies of the various component parts of Krail. The ResolutionStrategy is there to resolve those version conflicts. GWT requires an older version of the javax validation API - if you don't force the correct version to be used, then the widgetset compile will fail - and worse, it fails without any error messages.
-
 
 
 Now save the file and add it to Git
@@ -71,10 +75,6 @@ And finally, create a Gradle wrapper:
 gradle wrapper
 ```
 
-
-### Windows
-
-tbd
 
 ## Create the Project
 
@@ -119,6 +119,9 @@ build
 ```
 
 - To keep things simple, right click on the project folder and select Git | Add to add all files to Git.
+
+##Eclipse
+tbd
 
 ## Krail preparation
 
@@ -182,14 +185,8 @@ vaadin {
     plugin.logToConsole = true
 }
 ```
-#### Build Issue
-There is one more change we need to make to the *build.gradle* file.  There is an [open issue](https://github.com/johndevs/gradle-vaadin-plugin/issues/183) against the Gradle Vaadin plugin.  It currently requires that the Vaadin version is declared explcitily to match the version used by Krail - so we need to make one final adjustment to the build.gradle file:
-```
-vaadin {
-    widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
-    plugin.logToConsole = true
-    version '7.4.6'
-}
+#### Complete Build file
+
 ```
 For completeness, the full *build.gradle* file should look like this:
 ```
