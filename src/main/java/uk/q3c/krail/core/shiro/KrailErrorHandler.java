@@ -16,11 +16,14 @@ import com.google.inject.Inject;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.ErrorEvent;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import uk.q3c.krail.core.navigate.InvalidURIException;
 import uk.q3c.krail.core.navigate.InvalidURIExceptionHandler;
 import uk.q3c.krail.core.navigate.Navigator;
+import uk.q3c.krail.core.user.notify.UserNotifier;
+import uk.q3c.krail.core.view.component.LoginFormException;
 
 /**
  * Extends the {@link DefaultErrorHandler} to intercept known V& exceptions, including Shiro related exceptions -
@@ -35,16 +38,18 @@ public class KrailErrorHandler extends DefaultErrorHandler {
     private final UnauthorizedExceptionHandler authorisationHandler;
     private final InvalidURIExceptionHandler invalidUriHandler;
     private final Navigator navigator;
+    private UserNotifier userNotifier;
 
     @Inject
     protected KrailErrorHandler(UnauthenticatedExceptionHandler authenticationHandler,
-                                UnauthorizedExceptionHandler authorisationHandler,
-                                InvalidURIExceptionHandler invalidUriHandler, Navigator navigator) {
+                                UnauthorizedExceptionHandler authorisationHandler, InvalidURIExceptionHandler invalidUriHandler, Navigator navigator,
+                                UserNotifier userNotifier) {
         super();
         this.authenticationHandler = authenticationHandler;
         this.authorisationHandler = authorisationHandler;
         this.invalidUriHandler = invalidUriHandler;
         this.navigator = navigator;
+        this.userNotifier = userNotifier;
     }
 
     @Override
@@ -70,6 +75,21 @@ public class KrailErrorHandler extends DefaultErrorHandler {
         int unauthorised = ExceptionUtils.indexOfThrowable(originalError, UnauthorizedException.class);
         if (unauthorised >= 0) {
             authorisationHandler.invoke();
+            return;
+        }
+
+        // catch-all handle an unauthorised access attempt, exceptions are not always thrown at more specific level
+        unauthorised = ExceptionUtils.indexOfThrowable(originalError, AuthorizationException.class);
+        if (unauthorised >= 0) {
+            authorisationHandler.invoke();
+            return;
+        }
+
+        int loginEmpty = ExceptionUtils.indexOfThrowable(originalError, LoginFormException.class);
+        if (loginEmpty > 0) {
+            LoginFormException lfe = (LoginFormException) ExceptionUtils.getThrowableList(originalError)
+                                                                        .get(loginEmpty);
+            userNotifier.notifyWarning(lfe.getMsgKey(), lfe.getParams());
             return;
         }
 

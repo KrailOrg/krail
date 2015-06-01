@@ -25,6 +25,7 @@ import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.core.view.component.LoginFormException;
 import uk.q3c.krail.i18n.Translate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -74,9 +75,37 @@ public class DefaultLoginViewTest {
         BeforeViewChangeBusMessage event = new BeforeViewChangeBusMessage(new NavigationState(), new NavigationState());
         view.buildView(event);
         //when
+        view.getUsernameBox()
+            .setValue("ds");
+        view.getPasswordBox()
+            .setValue("password");
         view.buttonClick(clickEvent);
         //then
         verify(eventBus).publish(any(UserStatusBusMessage.class));
         // TODO test for specific message
+    }
+
+    @Test(expected = LoginFormException.class)
+    public void username_empty() {
+        //given
+        BeforeViewChangeBusMessage event = new BeforeViewChangeBusMessage(new NavigationState(), new NavigationState());
+        view.buildView(event);
+        //when
+        view.getPasswordBox()
+            .setValue("password");
+        view.buttonClick(clickEvent);
+        //then
+    }
+
+    @Test(expected = LoginFormException.class)
+    public void password_empty() {
+        //given
+        BeforeViewChangeBusMessage event = new BeforeViewChangeBusMessage(new NavigationState(), new NavigationState());
+        view.buildView(event);
+        //when
+        view.getUsernameBox()
+            .setValue("ds");
+        view.buttonClick(clickEvent);
+        //then
     }
 }

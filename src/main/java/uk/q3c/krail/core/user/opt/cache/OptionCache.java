@@ -101,4 +101,9 @@ public interface OptionCache {
      * Performs any pending maintenance operations needed by the cache. See {@link Cache#cleanUp()}
      */
     void cleanup();
+
+    /**
+     * {@link #flush()} followed by {@link #cleanup()}
+     */
+    void clear();
 }

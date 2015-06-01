@@ -65,6 +65,7 @@ public class DefaultOptionPopupTest {
         assertThat(actual).hasSize(0);
     }
 
+
     static class MockContext implements OptionContext {
 
         @Nonnull

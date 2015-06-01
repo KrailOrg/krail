@@ -21,16 +21,22 @@ import org.apache.shiro.realm.activedirectory.ActiveDirectoryRealm;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.realm.ldap.JndiLdapRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 
-public class DefaultRealm extends AuthorizingRealm {
+import javax.annotation.Nonnull;
 
+public class DefaultRealm extends AuthorizingRealm {
+    private static Logger log = LoggerFactory.getLogger(DefaultRealm.class);
     private final LoginAttemptLog loginAttemptLog;
+    private SubjectIdentifier subjectIdentifier;
 
     @Inject
-    protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher) {
+    protected DefaultRealm(LoginAttemptLog loginAttemptLog, CredentialsMatcher matcher, SubjectIdentifier subjectIdentifier) {
         super(matcher);
         this.loginAttemptLog = loginAttemptLog;
+        this.subjectIdentifier = subjectIdentifier;
         setCachingEnabled(false);
     }
 
@@ -41,7 +47,7 @@ public class DefaultRealm extends AuthorizingRealm {
 
     /**
      * This Realm implementation is not expected to be used in a real system, not least because anyone can log in as
-     * long as they have a password of 'password'! <br>
+     * long as they have a password of 'password'! AND it exposes user names and password in the debug log <br>
      * <br>
      * It does however demonstrate the use of {@link LoginAttemptLog} to track login attempts Authorises all users to
      * access the private pages of the {@link MasterSitemap}
@@ -50,21 +56,20 @@ public class DefaultRealm extends AuthorizingRealm {
      */
 
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(@Nonnull AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         String username = upToken.getUsername();
-
-        if (username == null) {
-            throw new AccountException("user name cannot be null");
-        }
-
         String password = String.copyValueOf(upToken.getPassword());
-
-        if (password.equals("password")) {
+        log.debug("Username {}, password: {}", username, password);
+        if (password.equals("password") && (!(username == null) && (!username.isEmpty()))) {
+            log.debug("login succeeds");
             loginAttemptLog.recordSuccessfulAttempt(upToken);
             return new SimpleAuthenticationInfo(username, password, this.getName());
         } else {
-            loginAttemptLog.recordFailedAttempt(upToken);
+            log.debug("login fails");
+            if (username != null) {
+                loginAttemptLog.recordFailedAttempt(upToken);
+            }
             return null;
         }
 
@@ -85,8 +90,10 @@ public class DefaultRealm extends AuthorizingRealm {
      * <br>
      * You can provide your own Realm implementation by overriding {@link StandardShiroModule#bindRealms()}<br>
      * <br>
-     * Authorises all users to access the private pages of the {@link MasterSitemap} (that is, all the pages in the
-     * 'private' branch)
+     * This implementation authorises<ol>
+     * <li>all authenticated users to access the pages of the 'private' or 'system-admin' branches of the {@link MasterSitemap}</li>
+     * <li>users to edit their own options in the SimpleUserHierarchy</li>
+     * </ol>
      *
      * @see org.apache.shiro.realm.AuthorizingRealm#doGetAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection)
      */
@@ -94,12 +101,23 @@ public class DefaultRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        // this very simplistic example gives permission for all pages which do get submitted for authorisation
-        // and are in the 'private' branch
+        // used by PageController - authorisation to see pages in 'private' branch
         String privatePermission = "page:view:private:*";
-        String sysAdminPermission = "page:view:system-admin:*";
         info.addStringPermission(privatePermission);
+        // used by PageController - authorisation to see pages in 'system-admin' branch
+        String sysAdminPermission = "page:view:system-admin:*";
         info.addStringPermission(sysAdminPermission);
+        // used by Option to enable users to edit their own options in SimpleUserHierarchy
+        String userId = subjectIdentifier.userId();
+        String editOwnOptionsPermission = "option:edit:SimpleUserHierarchy:" + userId + ":0:*:*";
+        info.addStringPermission(editOwnOptionsPermission);
+
+        // admin can set any options in SimpleUserHierarchy
+        if (userId.toLowerCase()
+                  .equals("admin")) {
+            String editAnyOption = "option:edit:SimpleUserHierarchy:*:*:*:*";
+            info.addStringPermission(editAnyOption);
+        }
         return info;
     }
 

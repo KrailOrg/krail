@@ -14,6 +14,8 @@ package uk.q3c.krail.core.user.opt;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.shiro.SubjectIdentifier;
+import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.profile.DefaultUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
@@ -24,7 +26,8 @@ public class DefaultOption extends OptionBase {
     private static Logger log = LoggerFactory.getLogger(DefaultOption.class);
 
     @Inject
-    protected DefaultOption(@Nonnull OptionCache optionCache, @Nonnull @DefaultUserHierarchy UserHierarchy hierarchy) {
-        super(optionCache, hierarchy);
+    protected DefaultOption(@Nonnull OptionCache optionCache, @Nonnull @DefaultUserHierarchy UserHierarchy hierarchy, SubjectProvider subjectProvider,
+                            SubjectIdentifier subjectIdentifier) {
+        super(optionCache, hierarchy, subjectProvider, subjectIdentifier);
     }
 }

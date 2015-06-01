@@ -31,6 +31,12 @@ public interface OptionContext {
     @Nonnull
     Option getOption();
 
-
+    /**
+     * Called when an option value is changed in response to a property change - usually a Field which has been modified by the user
+     *
+     * @param event the event representing the change
+     */
     void optionValueChanged(Property.ValueChangeEvent event);
+
+
 }

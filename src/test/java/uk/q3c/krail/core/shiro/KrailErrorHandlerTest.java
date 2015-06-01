@@ -24,6 +24,7 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.navigate.InvalidURIException;
 import uk.q3c.krail.core.navigate.InvalidURIExceptionHandler;
 import uk.q3c.krail.core.navigate.Navigator;
+import uk.q3c.krail.core.user.notify.UserNotifier;
 
 import static org.mockito.Mockito.*;
 
@@ -45,9 +46,12 @@ public class KrailErrorHandlerTest {
     @Mock
     ErrorEvent event;
 
+    @Mock
+    private UserNotifier userNotifier;
+
     @Before
     public void setup() {
-        handler = new KrailErrorHandler(authenticationHandler, authorisationHandler, invalidUriHandler, navigator);
+        handler = new KrailErrorHandler(authenticationHandler, authorisationHandler, invalidUriHandler, navigator, userNotifier);
     }
 
     @Test

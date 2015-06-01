@@ -18,6 +18,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ChameleonTheme;
 import net.engio.mbassy.bus.common.PubSubSupport;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import uk.q3c.krail.core.eventbus.BusMessage;
@@ -25,6 +26,7 @@ import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.core.view.component.LoginFormException;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.util.ID;
@@ -107,7 +109,15 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
 
     @Override
     public void buttonClick(ClickEvent event) {
-        UsernamePasswordToken token = new UsernamePasswordToken(usernameBox.getValue(), passwordBox.getValue());
+        String username = usernameBox.getValue();
+        String password = passwordBox.getValue();
+        if (StringUtils.isEmpty(username)) {
+            throw new LoginFormException(LabelKey.Username_Cannot_be_Empty);
+        }
+        if (StringUtils.isEmpty(password)) {
+            throw new LoginFormException(LabelKey.Password_Cannot_be_Empty);
+        }
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         try {
             subjectProvider.get()
                            .login(token);
@@ -127,7 +137,7 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
         } catch (ConcurrentAccessException cae) {
             loginExceptionHandler.concurrentAccess(this, token);
         } catch (AuthenticationException ae) {
-            loginExceptionHandler.disabledAccount(this, token);
+            loginExceptionHandler.authentication(this, token);
         }
         // unexpected condition - error?
         // an exception would be raised if login failed
@@ -154,13 +164,13 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     public TextField getUsernameBox() {

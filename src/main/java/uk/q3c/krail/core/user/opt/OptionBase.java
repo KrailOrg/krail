@@ -11,10 +11,12 @@
 
 package uk.q3c.krail.core.user.opt;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.shiro.authz.UnauthorizedException;
+import uk.q3c.krail.core.shiro.SubjectIdentifier;
+import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
+import uk.q3c.krail.core.user.opt.cache.OptionPermission;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
 import javax.annotation.Nonnull;
@@ -23,6 +25,7 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static uk.q3c.krail.core.user.opt.cache.OptionPermission.Action;
 import static uk.q3c.krail.core.user.profile.RankOption.*;
 
 /**
@@ -34,19 +37,24 @@ import static uk.q3c.krail.core.user.profile.RankOption.*;
  * <p>
  * To create a hierarchy specific implementation, simply sub-class with the alternative hierarchy injected into it.
  * <p>
+ * Permission is required to execute {@link #set(Object, int, OptionKey)}, {@link #set(Object, OptionKey)} or {@link #delete(int, OptionKey)}.  Permission
+ * required is represented by an instance of {@link OptionPermission}.  If permissions are required to view, these would need to be applied at the user
+ * interface.
  * Created by David Sowerby on 03/12/14.
  */
 
 public abstract class OptionBase implements Option {
 
-
-    private static Logger log = LoggerFactory.getLogger(OptionBase.class);
     private UserHierarchy hierarchy;
     private OptionCache optionCache;
+    private SubjectIdentifier subjectIdentifier;
+    private SubjectProvider subjectProvider;
 
-    protected OptionBase(@Nonnull OptionCache optionCache, @Nonnull UserHierarchy hierarchy) {
+    protected OptionBase(OptionCache optionCache, UserHierarchy hierarchy, SubjectProvider subjectProvider, SubjectIdentifier subjectIdentifier) {
         this.hierarchy = hierarchy;
         this.optionCache = optionCache;
+        this.subjectProvider = subjectProvider;
+        this.subjectIdentifier = subjectIdentifier;
     }
 
     @Override
@@ -56,38 +64,26 @@ public abstract class OptionBase implements Option {
 
     @Override
     public <T> void set(T value, @Nonnull OptionKey<T> optionKey) {
-        set(value, hierarchy, 0, optionKey);
+        set(value, 0, optionKey);
     }
 
     @Override
-    public synchronized <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey<T> optionKey) {
-        checkNotNull(hierarchy);
+    public synchronized <T> void set(@Nonnull T value, int hierarchyRank, @Nonnull OptionKey<T> optionKey) {
         checkArgument(hierarchyRank >= 0);
         checkNotNull(optionKey);
-        optionCache.write(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey), Optional.of(value));
+        OptionPermission permission = new OptionPermission(Action.EDIT, hierarchy, hierarchyRank, optionKey, subjectIdentifier.userId());
+        if (subjectProvider.get()
+                           .isPermitted(permission)) {
+            optionCache.write(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey), Optional.of(value));
+        } else {
+            throw new UnauthorizedException();
+        }
     }
+
 
     @Override
-    public <T> void set(T value, @Nonnull UserHierarchy hierarchy, @Nonnull OptionKey<T> optionKey) {
-        set(value, hierarchy, 0, optionKey);
-    }
-
-    @Override
-    public <T> void set(T value, int hierarchyRank, @Nonnull OptionKey<T> optionKey) {
-        set(value, hierarchy, hierarchyRank, optionKey);
-    }
-
     @Nonnull
-    @Override
     public synchronized <T> T get(@Nonnull OptionKey<T> optionKey) {
-        return get(hierarchy, optionKey);
-    }
-
-
-    @Override
-    @Nonnull
-    public synchronized <T> T get(@Nonnull UserHierarchy hierarchy, @Nonnull OptionKey<T> optionKey) {
-        checkNotNull(hierarchy);
         checkNotNull(optionKey);
         T defaultValue = optionKey.getDefaultValue();
         Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy, HIGHEST_RANK, 0, optionKey));
@@ -105,13 +101,6 @@ public abstract class OptionBase implements Option {
     @Nonnull
     @Override
     public synchronized <T> T getLowestRanked(@Nonnull OptionKey<T> optionKey) {
-        return getLowestRanked(hierarchy, optionKey);
-    }
-
-    @Nonnull
-    @Override
-    public synchronized <T> T getLowestRanked(@Nonnull UserHierarchy hierarchy, @Nonnull OptionKey<T> optionKey) {
-        checkNotNull(hierarchy);
         checkNotNull(optionKey);
         Optional<T> optionalValue = optionCache.get(Optional.of(optionKey.getDefaultValue()), new OptionCacheKey(hierarchy, LOWEST_RANK, 0, optionKey));
         if (optionalValue == null) {
@@ -128,14 +117,6 @@ public abstract class OptionBase implements Option {
     @Nonnull
     @Override
     public synchronized <T> T getSpecificRanked(int hierarchyRank, @Nonnull OptionKey<T> optionKey) {
-
-        return getSpecificRanked(hierarchy, hierarchyRank, optionKey);
-    }
-
-    @Nonnull
-    @Override
-    public synchronized <T> T getSpecificRanked(@Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey<T> optionKey) {
-        checkNotNull(hierarchy);
         checkNotNull(optionKey);
         T defaultValue = optionKey.getDefaultValue();
         Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey));
@@ -153,12 +134,17 @@ public abstract class OptionBase implements Option {
 
     @Override
     @Nullable
-    public <T> T delete(@Nonnull UserHierarchy hierarchy, int hierarchyRank, OptionKey<T> optionKey) {
-        checkNotNull(hierarchy);
+    public <T> T delete(int hierarchyRank, @Nonnull OptionKey<T> optionKey) {
         checkArgument(hierarchyRank >= 0);
         checkNotNull(optionKey);
-
-        return (T) optionCache.delete(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey));
+        OptionPermission permission = new OptionPermission(Action.EDIT, hierarchy, hierarchyRank, optionKey, subjectIdentifier.userId());
+        if (subjectProvider.get()
+                           .isPermitted(permission)) {
+            //noinspection unchecked
+            return (T) optionCache.delete(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey));
+        } else {
+            throw new UnauthorizedException();
+        }
     }
 
 }

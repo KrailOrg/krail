@@ -116,7 +116,14 @@ public class DefaultOptionCache implements OptionCache {
         // delete from store first just in case there's a problem
         Object result = daoProvider.get()
                                    .deleteValue(optionCacheKey);
+
+        //invalidate highest / lowest & specific as these are all now invalid
+        cache.invalidate(new OptionCacheKey(optionCacheKey, RankOption.HIGHEST_RANK));
+        cache.invalidate(new OptionCacheKey(optionCacheKey, RankOption.LOWEST_RANK));
         cache.invalidate(optionCacheKey);
+
+        // explicit call, there is no write called to trigger clean up
+        cache.cleanUp();
 
         return result;
     }
@@ -135,17 +142,26 @@ public class DefaultOptionCache implements OptionCache {
     }
 
     @Override
+    public long cacheSize() {
+        return cache.size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized void clear() {
+        flush();
+        cleanup();
+    }
+
+    @Override
     public synchronized void flush() {
         cache.invalidateAll();
     }
 
     @Override
-    public long cacheSize() {
-        return cache.size();
-    }
-
-    @Override
-    public void cleanup() {
+    public synchronized void cleanup() {
         cache.cleanUp();
     }
 

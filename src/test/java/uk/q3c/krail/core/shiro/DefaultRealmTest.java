@@ -14,7 +14,6 @@ package uk.q3c.krail.core.shiro;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -25,9 +24,10 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class DefaultRealmTest {
@@ -40,9 +40,12 @@ public class DefaultRealmTest {
 
     CredentialsMatcher matcher = new AlwaysPasswordCredentialsMatcher();
 
+    @Mock
+    private SubjectIdentifier subjectIdentifer;
+
     @Before
     public void setup() {
-        realm = new DefaultRealm(attemptLog, matcher);
+        realm = new DefaultRealm(attemptLog, matcher, subjectIdentifer);
     }
 
     @Test
@@ -100,15 +103,15 @@ public class DefaultRealmTest {
 
     }
 
-    @Test(expected = AccountException.class)
+    @Test()
     public void nullUserName() {
 
         // given
         UsernamePasswordToken tk = token(null, "rubbish");
         // when
-        realm.getAuthenticationInfo(tk);
+        AuthenticationInfo info = realm.getAuthenticationInfo(tk);
         // then
-
+        assertThat(info).isNull();
     }
 
     /**
@@ -120,6 +123,7 @@ public class DefaultRealmTest {
         // given
         // when(sitemap.getPrivateRoot()).thenReturn("private");
         // when(sitemap.getPublicRoot()).thenReturn("public");
+        when(subjectIdentifer.userId()).thenReturn("ds");
         PrincipalCollection pc = new SimplePrincipalCollection();
         // when
         AuthorizationInfo info = realm.getAuthorizationInfo(pc);

@@ -14,6 +14,7 @@ package uk.q3c.krail.core.shiro;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.subject.Subject;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
@@ -78,8 +79,12 @@ public class DefaultSubjectIdentifier implements SubjectIdentifier {
     @Override
     public String userId() {
         Subject subject = subjectProvider.get();
-        return subject.getPrincipal()
-                      .toString();
+        String userId = subject.getPrincipal()
+                               .toString();
+        if (StringUtils.isEmpty(userId)) {
+            userId="?";
+        }
+        return userId;
     }
 
 }

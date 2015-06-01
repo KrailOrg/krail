@@ -14,13 +14,18 @@ package uk.q3c.krail.core.user.opt;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.data.Property;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.shiro.SubjectIdentifier;
+import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.DataTypeToUI;
 import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
+import uk.q3c.krail.core.user.opt.cache.OptionPermission;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.i18n.TestLabelKey;
 import uk.q3c.krail.i18n.Translate;
@@ -29,10 +34,8 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static uk.q3c.krail.core.user.profile.RankOption.*;
-
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class DefaultOptionTest {
@@ -42,13 +45,16 @@ public class DefaultOptionTest {
     MockContext2 contextObject2;
     Class<MockContext> context = MockContext.class;
     Class<MockContext2> context2 = MockContext2.class;
-
+    @Mock
+    SubjectProvider subjectProvider;
+    @Mock
+    SubjectIdentifier subjectIdentifier;
+    @Mock
+    Subject subject;
     @Mock
     private DataTypeToUI dataTypeToUI;
     @Mock
     private UserHierarchy defaultHierarchy;
-    @Mock
-    private UserHierarchy hierarchy2;
     @Mock
     private OptionCache optionCache;
     private OptionKey<Integer> optionKey1;
@@ -58,18 +64,31 @@ public class DefaultOptionTest {
 
     @Before
     public void setup() {
+        when(subjectIdentifier.userId()).thenReturn("ds");
+        when(subjectProvider.get()).thenReturn(subject);
+
         contextObject = new MockContext();
-        option = new DefaultOption(optionCache, defaultHierarchy);
+        option = new DefaultOption(optionCache, defaultHierarchy, subjectProvider, subjectIdentifier);
         optionKey1 = new OptionKey<>(5, context, TestLabelKey.key1, "q");
         optionKey2 = new OptionKey<>(5, context2, TestLabelKey.key1, "q");
     }
 
 
-
+    @Test(expected = AuthorizationException.class)
+    public void setNoPermissions() {
+        //given
+        when(subject.isPermitted(any(OptionPermission.class))).thenReturn(false);
+        when(defaultHierarchy.rankName(0)).thenReturn("specific");
+        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 0, optionKey1);
+        //when
+        option.set(5, optionKey1);
+        //then
+    }
 
     @Test
     public void set_simplest() {
         //given
+        when(subject.isPermitted(any(OptionPermission.class))).thenReturn(true);
         when(defaultHierarchy.rankName(0)).thenReturn("specific");
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 0, optionKey1);
         //when
@@ -78,37 +97,16 @@ public class DefaultOptionTest {
         verify(optionCache).write(cacheKey, Optional.of(5));
     }
 
-    @Test
-    public void set_with_hierarchy() {
-        //given
-        when(hierarchy2.rankName(0)).thenReturn("specific");
-        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 0, optionKey1);
-        //when
-        option.set(5, hierarchy2, optionKey1);
-        //then
-        verify(optionCache).write(cacheKey, Optional.of(5));
-    }
-
-    @Test
-    public void set_with_all_args() {
-        //given
-        when(hierarchy2.rankName(2)).thenReturn("specific");
-        OptionKey<Integer> optionKey2 = new OptionKey<>(999, context2, TestLabelKey.key1, TestLabelKey.key1, "q");
-        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 2, optionKey2);
-        //when
-        option.set(5, hierarchy2, 2, optionKey2);
-        //then
-        verify(optionCache).write(cacheKey, Optional.of(5));
-    }
 
     @Test(expected = IllegalArgumentException.class)
     public void set_with_all_args_rank_too_low() {
         //given
-        when(hierarchy2.rankName(2)).thenReturn("specific");
+        when(subject.isPermitted(any(OptionPermission.class))).thenReturn(true);
+        when(defaultHierarchy.rankName(2)).thenReturn("specific");
         OptionKey<Integer> optionKey2 = new OptionKey<>(999, context, TestLabelKey.key1, TestLabelKey.key1, "q");
-        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 2, optionKey2);
+        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 2, optionKey2);
         //when
-        option.set(5, hierarchy2, -1, optionKey2);
+        option.set(5, -1, optionKey2);
         //then
     }
 
@@ -127,11 +125,11 @@ public class DefaultOptionTest {
     @Test
     public void get_with_hierarchy() {
         //given
-        when(hierarchy2.highestRankName()).thenReturn("high");
-        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, HIGHEST_RANK, optionKey1);
+        when(defaultHierarchy.highestRankName()).thenReturn("high");
+        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey1);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
         //when
-        Integer actual = option.get(hierarchy2, optionKey1);
+        Integer actual = option.get(optionKey1);
         //then
         assertThat(actual).isEqualTo(8);
     }
@@ -141,11 +139,11 @@ public class DefaultOptionTest {
     @Test
     public void get_with_all_args() {
         //given
-        when(hierarchy2.highestRankName()).thenReturn("high");
-        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, HIGHEST_RANK, optionKey1);
+        when(defaultHierarchy.highestRankName()).thenReturn("high");
+        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey1);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
         //when
-        Integer actual = option.get(hierarchy2, optionKey1);
+        Integer actual = option.get(optionKey1);
         //then
         assertThat(actual).isEqualTo(8);
     }
@@ -169,7 +167,7 @@ public class DefaultOptionTest {
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, LOWEST_RANK, optionKey2);
         when(optionCache.get(Optional.of(5), cacheKey)).thenReturn(Optional.of(20));
         //when
-        Integer actual = option.getLowestRanked(defaultHierarchy, optionKey2);
+        Integer actual = option.getLowestRanked(optionKey2);
         //then
         assertThat(actual).isEqualTo(20);
     }
@@ -177,14 +175,27 @@ public class DefaultOptionTest {
     @Test
     public void delete() {
         //given
-        when(hierarchy2.rankName(1)).thenReturn("specific");
-        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 1, optionKey2);
+        when(subject.isPermitted(any(OptionPermission.class))).thenReturn(true);
+        when(defaultHierarchy.rankName(1)).thenReturn("specific");
+        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 1, optionKey2);
         when(optionCache.delete(cacheKey)).thenReturn(Optional.of(3));
         //when
-        Object actual = option.delete(hierarchy2, 1, optionKey2);
+        Object actual = option.delete(1, optionKey2);
         //then
         assertThat(actual).isEqualTo(Optional.of(3));
         verify(optionCache).delete(cacheKey);
+    }
+
+    @Test(expected = AuthorizationException.class)
+    public void delete_no_permissions() {
+        //given
+        when(subject.isPermitted(any(OptionPermission.class))).thenReturn(false);
+        when(defaultHierarchy.rankName(1)).thenReturn("specific");
+        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 1, optionKey2);
+        when(optionCache.delete(cacheKey)).thenReturn(Optional.of(3));
+        //when
+        Object actual = option.delete(1, optionKey2);
+        //then
     }
 
 

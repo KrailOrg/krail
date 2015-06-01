@@ -84,4 +84,10 @@ public interface KrailView {
      * @param busMessage
      */
     void afterBuild(AfterViewChangeBusMessage busMessage);
+
+    /**
+     * Notify the view that it needs to rebuild its components.  By default does nothing
+     */
+    default void rebuild() {
+    }
 }

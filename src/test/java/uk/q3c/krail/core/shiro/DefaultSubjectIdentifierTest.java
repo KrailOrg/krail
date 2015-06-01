@@ -49,7 +49,7 @@ public class DefaultSubjectIdentifierTest {
 
     TestPrincipal principal;
 
-    private DefaultSubjectIdentifier converter;
+    private DefaultSubjectIdentifier subjectIdentifier;
 
     @Inject
     private Translate translate;
@@ -57,7 +57,7 @@ public class DefaultSubjectIdentifierTest {
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
-        converter = new DefaultSubjectIdentifier(subjectPro, translate);
+        subjectIdentifier = new DefaultSubjectIdentifier(subjectPro, translate);
         when(subjectPro.get()).thenReturn(subject);
         principal = new TestPrincipal();
     }
@@ -72,8 +72,8 @@ public class DefaultSubjectIdentifierTest {
         // when
 
         // then
-        assertThat(converter.subjectName()).isEqualTo("Guest");
-        assertThat(converter.subjectIdentifier()).isNull();
+        assertThat(subjectIdentifier.subjectName()).isEqualTo("Guest");
+        assertThat(subjectIdentifier.subjectIdentifier()).isNull();
     }
 
     @Test
@@ -86,9 +86,9 @@ public class DefaultSubjectIdentifierTest {
         // when
 
         // then
-        assertThat(converter.subjectName()).isEqualTo("wiggly?");
-        assertThat(converter.subjectIdentifier()).isNotNull();
-        assertThat(converter.subjectIdentifier()).isEqualTo(principal);
+        assertThat(subjectIdentifier.subjectName()).isEqualTo("wiggly?");
+        assertThat(subjectIdentifier.subjectIdentifier()).isNotNull();
+        assertThat(subjectIdentifier.subjectIdentifier()).isEqualTo(principal);
     }
 
     @Test
@@ -101,10 +101,21 @@ public class DefaultSubjectIdentifierTest {
         // when
 
         // then
-        assertThat(converter.subjectName()).isEqualTo("wiggly");
-        assertThat(converter.subjectIdentifier()).isNotNull();
-        assertThat(converter.subjectIdentifier()).isEqualTo(principal);
+        assertThat(subjectIdentifier.subjectName()).isEqualTo("wiggly");
+        assertThat(subjectIdentifier.subjectIdentifier()).isNotNull();
+        assertThat(subjectIdentifier.subjectIdentifier()).isEqualTo(principal);
 
+    }
+
+    @Test
+    public void emptyUserName() {
+        //given
+        principal.name = null;
+        when(subject.getPrincipal()).thenReturn(principal);
+        //when
+
+        //then
+        assertThat(subjectIdentifier.userId()).isEqualTo("?");
     }
 
     @ModuleProvider
@@ -120,7 +131,7 @@ public class DefaultSubjectIdentifierTest {
     }
 
     private class TestPrincipal {
-        private final String name = "wiggly";
+        private String name = "wiggly";
 
         @Override
         public String toString() {

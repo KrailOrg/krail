@@ -51,42 +51,58 @@ public class DefaultOptionPopup implements OptionPopup {
         Option option = context.getOption();
         Window window = new Window();
         window.setCaption(windowCaption(windowCaption));
-        FormLayout layout = new FormLayout();
-        layout.setSizeFull();
 
 
         Map<OptionKey, Class<?>> keys = contextKeys(context);
+        GridLayout baseLayout = new GridLayout(2, keys.size());
+        baseLayout.setSizeUndefined();
 
 
         if (keys.size() == 0) {
 
             Label label = new Label(translate.from(LabelKey.No_Options_to_Show));
-            layout.addComponent(label);
+            baseLayout.addComponent(label, 0, 0);
         } else {
-            window.setWidth("250px");
-            window.setHeight(((keys.size() + 1) * 40) + "px");
-
+            calculateWindowSize(window, keys.size());
+            int row = 0;
             for (OptionKey key : keys.keySet()) {
                 Object value = option.get(key);
                 AbstractField uiField = dataTypeToUI.componentFor(value);
                 uiField.setCaption(translate.from(key.getKey()));
                 uiField.setDescription(translate.from(key.getDescriptionKey()));
-                uiField.setId(ID.getId(Optional.of(((Enum) key.getKey()).name()), uiField));
-                layout.addComponent(uiField);
+                uiField.setId(ID.getId(Optional.of(((Enum) key.getKey()).name()), this, uiField));
                 //noinspection unchecked
                 uiField.setValue(value);
                 uiField.addValueChangeListener(event -> {
                     option.set(uiField.getValue(), key);
                     context.optionValueChanged(event);
                 });
+
+                Button defaultsButton = new Button(translate.from(LabelKey.Reset_to_Default));
+                defaultsButton.setId(ID.getId(Optional.of(((Enum) key.getKey()).name()), this, defaultsButton));
+                defaultsButton.addClickListener((event -> {
+                    option.delete(0, key);
+                    //we create an event to represent the field which whose value will be affected by this change
+                    AbstractField.ValueChangeEvent changeEvent = new AbstractField.ValueChangeEvent(uiField);
+                    context.optionValueChanged(changeEvent);
+                    //update the value of the field - it may have changed
+                    uiField.setValue(option.get(key));
+                }));
+                baseLayout.addComponent(new FormLayout(uiField), 0, row);
+                baseLayout.addComponent(new FormLayout(defaultsButton), 1, row);
+                row++;
             }
         }
         window.setId(ID.getId(Optional.empty(), context, this, window));
         window.setClosable(true);
-        window.setContent(layout);
+        window.setContent(baseLayout);
         window.center();
         UI.getCurrent()
           .addWindow(window);
+    }
+
+    private void calculateWindowSize(Window window, int numOfKeys) {
+        window.setSizeUndefined();
     }
 
     protected String windowCaption(I18NKey i18NKey) {

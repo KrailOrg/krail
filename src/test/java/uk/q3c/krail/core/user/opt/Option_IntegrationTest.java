@@ -42,6 +42,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 /**
@@ -81,7 +82,7 @@ public class Option_IntegrationTest {
     Translate translate;
     OptionKey<Integer> key1 = LocaleContainer.optionKeyFlagSize;
     OptionKey<Locale> key2 = new OptionKey<>(Locale.UK, DefaultCurrentLocale.class, LabelKey.Preferred_Locale, DescriptionKey.Preferred_Locale);
-    OptionKey<Integer> key3 = new OptionKey<Integer>(133, LocaleContainer.class, LabelKey.Alphabetic_Ascending, null);
+    OptionKey<Integer> key3 = new OptionKey<Integer>(133, LocaleContainer.class, LabelKey.Alphabetic_Ascending);
     private Class<? extends OptionContext> contextClass = LocaleContainer.class;
 
     private UserHierarchy hierarchy;
@@ -98,11 +99,13 @@ public class Option_IntegrationTest {
         when(daoProvider.get()).thenReturn(dao);
         when(subjectIdentifier.userId()).thenReturn("fbaton");
         when(subjectProvider.get()).thenReturn(subject1);
+        when(subject1.isPermitted(any(OptionPermission.class))).thenReturn(true);
+        when(subject2.isPermitted(any(OptionPermission.class))).thenReturn(true);
         hierarchy = new SimpleUserHierarchy(subjectProvider, subjectIdentifier, translate);
 
         cacheLoader = new DefaultOptionCacheLoader(daoProvider);
         optionCache = new DefaultOptionCache(daoProvider, cacheProvider);
-        option = new DefaultOption(optionCache, hierarchy);
+        option = new DefaultOption(optionCache, hierarchy, subjectProvider, subjectIdentifier);
     }
 
 
@@ -135,7 +138,7 @@ public class Option_IntegrationTest {
         when(subject1.isAuthenticated()).thenReturn(true);
         //when
         option.set(3, key1);
-        option.set(7, hierarchy, 1, key1);
+        option.set(7, 1, key1);
         //then
         assertThat(option.get(key1)).isEqualTo(3);
         assertThat(option.get(key1)).isEqualTo(3);
@@ -181,7 +184,7 @@ public class Option_IntegrationTest {
         when(subjectProvider.get()).thenReturn(subject1);
         when(subject1.isAuthenticated()).thenReturn(true);
         when(subjectIdentifier.userId()).thenReturn("fbaton");
-        DefaultOption option2 = new DefaultOption(optionCache, hierarchy);
+        DefaultOption option2 = new DefaultOption(optionCache, hierarchy, subjectProvider, subjectIdentifier);
         //when
         option2.set(3, key1);
         when(subjectProvider.get()).thenReturn(subject2);

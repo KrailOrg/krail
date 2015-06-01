@@ -95,5 +95,10 @@ public interface OptionStore {
     @Nonnull
     Map<String, Object> valueMapForOptionKey(@Nonnull String hierarchyName, @Nonnull List<String> rankNames, @Nonnull
     OptionKey optionKey);
+
+    /**
+     * Some implementations may enable clearing the WHOLE option store.  Those that do not throw an {@link UnsupportedOperationException}
+     */
+    void clear();
 }
 

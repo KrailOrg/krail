@@ -136,4 +136,12 @@ public abstract class ViewBase implements KrailView {
     }
 
     protected abstract void doBuild(ViewChangeBusMessage busMessage);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void rebuild() {
+        componentsConstructed = false;
+    }
 }
