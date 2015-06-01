@@ -13,6 +13,7 @@
 package uk.q3c.krail.core.ui.form;
 
 import com.google.inject.Provider;
+import com.vaadin.data.Property;
 import com.vaadin.ui.TextField;
 import uk.q3c.krail.core.data.TestEntity;
 import uk.q3c.krail.core.user.opt.Option;
@@ -40,5 +41,10 @@ public class TestBeanFieldGroup2 extends BeanFieldGroupBase<TestEntity> {
 
     public TextField getLastName() {
         return lastName;
+    }
+
+    @Override
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+
     }
 }

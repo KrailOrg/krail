@@ -11,13 +11,11 @@
 
 package uk.q3c.krail.i18n;
 
-import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.user.opt.OptionKey;
 
 import javax.annotation.Nonnull;
@@ -33,8 +31,9 @@ import java.util.ResourceBundle;
  */
 public abstract class NativeBundleReaderBase extends BundleReaderBase implements OptionContext, BundleReader {
 
-    public static final OptionKey optionKeyPath = new OptionKey(NativeBundleReaderBase.class, LabelKey.Path);
-    public static final OptionKey optionKeyUseKeyPath = new OptionKey(NativeBundleReaderBase.class, LabelKey.Use_Key_Path);
+    public static final OptionKey<String> optionKeyPath = new OptionKey("", NativeBundleReaderBase.class, LabelKey.Path, DescriptionKey.Path);
+    public static final OptionKey<Boolean> optionKeyUseKeyPath = new OptionKey(true, NativeBundleReaderBase.class, LabelKey.Use_Key_Path, DescriptionKey
+            .Use_Key_Path);
     private static Logger log = LoggerFactory.getLogger(NativeBundleReaderBase.class);
     private final ResourceBundle.Control control;
     private Option option;
@@ -45,6 +44,11 @@ public abstract class NativeBundleReaderBase extends BundleReaderBase implements
 
     }
 
+    /**
+     * Returns the Option instance being used by the {@link OptionContext}
+     *
+     * @return the Option instance being used by the {@link OptionContext}
+     */
     @Nonnull
     @Override
     public Option getOption() {
@@ -109,20 +113,21 @@ public abstract class NativeBundleReaderBase extends BundleReaderBase implements
         String baseName = sampleKey.bundleName();
         String packageName;
         //use sub-class names to qualify the options, so they get their own, and not the base class
-        if (option.get(true, getOptionKeyUseKeyPath().qualifiedWith(source))) {
+        if (option.get(getOptionKeyUseKeyPath().qualifiedWith(source))) {
             packageName = ClassUtils.getPackageCanonicalName(sampleKey.getClass());
 
         } else {
-            packageName = option.get("", getOptionKeyPath().qualifiedWith(source));
+
+            packageName = option.get(getOptionKeyPath().qualifiedWith(source));
         }
 
         String expanded = packageName.isEmpty() ? baseName : packageName + "." + baseName;
         return expanded;
     }
 
-    protected abstract OptionKey getOptionKeyUseKeyPath();
+    protected abstract OptionKey<Boolean> getOptionKeyUseKeyPath();
 
-    protected abstract OptionKey getOptionKeyPath();
+    protected abstract OptionKey<String> getOptionKeyPath();
 
     protected abstract String getValue(ResourceBundle bundle, Enum<?> key);
 
@@ -130,9 +135,5 @@ public abstract class NativeBundleReaderBase extends BundleReaderBase implements
         return control;
     }
 
-    @Override
-    public ImmutableSet<OptionDescriptor> optionDescriptors() {
-        return ImmutableSet.of(OptionDescriptor.descriptor(getOptionKeyUseKeyPath(), MessageKey.Use_Key_Path, true)
-                                               .desc(getOptionKeyPath(), MessageKey.Bundle_Path, true));
-    }
+
 }

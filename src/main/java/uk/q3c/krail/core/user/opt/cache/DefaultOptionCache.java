@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.opt.OptionModule;
+import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
 import javax.annotation.Nonnull;
@@ -50,6 +51,11 @@ public class DefaultOptionCache implements OptionCache {
         cache = cacheProvider.get();
     }
 
+    @Override
+    public LoadingCache<OptionCacheKey, Optional<Object>> getCache() {
+        return cache;
+    }
+
     /**
      * Write value to the store, and updates the cache
      *
@@ -68,7 +74,11 @@ public class DefaultOptionCache implements OptionCache {
         log.debug("writing value {} for cacheKey {} via option dao ", value, cacheKey);
         daoProvider.get()
                    .write(cacheKey, value);
-        // TODO this does not update the cache
+
+        //invalidate highest / lowest first - cache does clean up as part of write
+        cache.invalidate(new OptionCacheKey(cacheKey, RankOption.HIGHEST_RANK));
+        cache.invalidate(new OptionCacheKey(cacheKey, RankOption.LOWEST_RANK));
+        cache.put(cacheKey, Optional.of(value));
     }
 
     @Override
@@ -132,6 +142,11 @@ public class DefaultOptionCache implements OptionCache {
     @Override
     public long cacheSize() {
         return cache.size();
+    }
+
+    @Override
+    public void cleanup() {
+        cache.cleanUp();
     }
 
 

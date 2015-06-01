@@ -11,7 +11,6 @@
 
 package uk.q3c.krail.core.ui.form;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.data.Item;
@@ -21,7 +20,6 @@ import com.vaadin.ui.Field;
 import uk.q3c.krail.core.data.KrailEntity;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.i18n.DescriptionKey;
@@ -61,7 +59,8 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
     private Class<T> beanType;
     private Provider<BeanValidator> beanValidatorProvider;
     private Option option;
-    private OptionKey useFieldNameOption;
+    private OptionKey<Boolean> optionUseFieldName = new OptionKey(false, this, LabelKey.Use_Field_Name_in_Validation_Message, DescriptionKey
+            .Use_Field_Name_In_Validation_Message);
 
     @Inject
     public BeanFieldGroupBase(I18NProcessor i18NProcessor, Provider<BeanValidator> beanValidatorProvider, Option option) {
@@ -69,7 +68,6 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
         this.beanValidatorProvider = beanValidatorProvider;
         this.option = option;
         this.defaultValidators = new HashMap<>();
-        useFieldNameOption = new OptionKey(this, LabelKey.Use_Field_Name_in_Validation_Message);
     }
 
     private static java.lang.reflect.Field getField(Class<?> cls, String propertyId) throws SecurityException,
@@ -111,8 +109,8 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
         }
     }
 
-    public OptionKey getUseFieldNameOption() {
-        return useFieldNameOption;
+    public OptionKey getOptionUseFieldName() {
+        return optionUseFieldName;
     }
 
     @Override
@@ -259,16 +257,12 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
         if (!defaultValidators.containsKey(field)) {
 
             BeanValidator<T> validator = beanValidatorProvider.get();
-            validator.init(beanType, getPropertyId(field).toString(), option.get(false, useFieldNameOption));
+            validator.init(beanType, getPropertyId(field).toString(), option.get(optionUseFieldName));
             field.addValidator(validator);
             defaultValidators.put(field, validator);
         }
     }
 
 
-    @Override
-    public ImmutableSet<OptionDescriptor> optionDescriptors() {
-        return ImmutableSet.of(new OptionDescriptor(useFieldNameOption, DescriptionKey.Use_Field_Name_In_Validation_Message));
-    }
 
 }

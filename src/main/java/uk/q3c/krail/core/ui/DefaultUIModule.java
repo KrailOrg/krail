@@ -51,7 +51,6 @@ public class DefaultUIModule extends AbstractModule {
 
 
         bind(WebBrowser.class).toProvider(BrowserProvider.class);
-
         bindUIProvider();
         define();
 
@@ -59,7 +58,8 @@ public class DefaultUIModule extends AbstractModule {
     }
 
     /**
-     * Override this method to bind your own UI class(es).  If you wish to use more than one UI class, you will also need to provide a custom {@link
+     * Override this method to bind your own UI class(es). If you will only be using a single UI class, it is easier to call {@link #uiClass(Class)}, which you
+     * can do from your Binding Manager. If you wish to use more than one UI class, you will also need to provide a custom {@link
      * ScopedUIProvider}, and bind it by overriding {@link #bindUIProvider()}
      */
     protected void define() {

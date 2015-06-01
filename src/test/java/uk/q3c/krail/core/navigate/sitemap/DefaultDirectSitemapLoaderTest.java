@@ -21,6 +21,7 @@ import fixture.testviews2.ViewA1;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
+import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -30,6 +31,7 @@ import uk.q3c.krail.core.navigate.sitemap.DefaultDirectSitemapLoaderTest.TestDir
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.StandardShiroModule;
+import uk.q3c.krail.core.ui.DataTypeModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.user.opt.OptionModule;
@@ -45,8 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, I18NModule
-        .class, SitemapModule.class, UserModule.class, OptionModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class,
-        DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, EventBusModule.class, DefaultUIModule.class})
+        .class, SitemapModule.class, UserModule.class, OptionModule.class, ApplicationConfigurationModule.class, StandardShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, EventBusModule.class, DefaultUIModule.class, DataTypeModule.class, DataModule.class})
 public class DefaultDirectSitemapLoaderTest {
 
     static String page1 = "private/page1";

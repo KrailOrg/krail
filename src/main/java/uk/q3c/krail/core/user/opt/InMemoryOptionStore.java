@@ -141,4 +141,7 @@ public class InMemoryOptionStore implements OptionStore {
     }
 
 
+    public void clear() {
+        map.clear();
+    }
 }

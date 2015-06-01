@@ -32,6 +32,7 @@ public enum DescriptionKey implements I18NKey {
     You_have_not_logged_in, Authentication_Failed, Use_Field_Name_In_Validation_Message, Maximum_Menu_Depth, Preferred_Locale, Sort_Type, Sort_Ascending,
     Maximum_Tree_Depth, Theme, Breadcrumb_is_Visible, MessageBar_is_Visible, Navigation_Tree_is_Visible, Navigation_Menu_is_Visible, Log_In,
     Enter_Your_Password, Submit_Your_Login_Details, Report_generated_by_the_Sitemap_build_process, Enter_your_first_name, Field, Cancel, Edit, Save,
+    Locale_Flag_Size, SubPage_Panel_is_Visible, Auto_Stub, Stub_with_Key_Name, Stub_Value, Source_Order_Default, Source_Order, Path, Use_Key_Path,
     Flag_Icon_Size
 
 }

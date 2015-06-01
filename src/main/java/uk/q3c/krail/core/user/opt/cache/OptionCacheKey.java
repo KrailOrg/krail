@@ -30,23 +30,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Immutable
 public class OptionCacheKey {
 
+
+    private final String userId;
     private final UserHierarchy hierarchy;
     private final String requestedRankName;
     private final OptionKey optionKey;
-    private RankOption rankOption;
+    private final RankOption rankOption;
 
     /**
-     * Constructor with an assumed requestedRank of 0.  Use only with {@link RankOption#HIGHEST_RANK}, {@link
-     * RankOption#LOWEST_RANK} or {{@link RankOption#SPECIFIC_RANK} with a desired rank of 0;
-     *
-     * @param rankOption
-     *         determines whether this key represents the lowest or highest in a hierarchy, or a specific rank.  If
-     *         using a specific rank, use the alternative constructor
-     *         {@link OptionCacheKey#OptionCacheKey(UserHierarchy, RankOption, int, OptionKey)}
-     * @param hierarchy
-     *         the hierarchy to use
-     * @param optionKey
-     *         an object representing a unique key for the option within its context
+     * Calls {@link OptionCacheKey#OptionCacheKey(UserHierarchy, RankOption, int, OptionKey)} with the requested rank assumed to be 0 (highest)
      */
     public OptionCacheKey(@Nonnull UserHierarchy hierarchy, @Nonnull RankOption rankOption, @Nonnull OptionKey optionKey) {
 
@@ -61,8 +53,7 @@ public class OptionCacheKey {
      *         the hierarchy to use
      * @param requestedRank
      *         which rank to look for - only required if {@code rankOption} is {@link RankOption#SPECIFIC_RANK}, for
-     *         {@link
-     *         RankOption#HIGHEST_RANK} or {@link RankOption#LOWEST_RANK} use the alternative constructor:
+     *         {@link RankOption#HIGHEST_RANK} or {@link RankOption#LOWEST_RANK} use the alternative constructor:
      *         {@link OptionCacheKey#OptionCacheKey(UserHierarchy, RankOption, OptionKey)}
      * @param optionKey
      *         an object representing a unique key for the option within its context
@@ -76,6 +67,7 @@ public class OptionCacheKey {
         this.hierarchy = hierarchy;
         this.requestedRankName = requestedRankName(requestedRank);
         this.optionKey = optionKey;
+        this.userId = hierarchy.highestRankName();
     }
 
     @Nonnull
@@ -102,9 +94,10 @@ public class OptionCacheKey {
     /**
      * copy constructor which changes the RankOption to {@code rankOption}
      *
-     * @param cacheKey the key to copy
-     *
-     * @param rankOption the new rankOption to use
+     * @param cacheKey
+     *         the key to copy
+     * @param rankOption
+     *         the new rankOption to use
      */
     public OptionCacheKey(@Nonnull OptionCacheKey cacheKey, @Nonnull RankOption rankOption) {
         checkNotNull(cacheKey);
@@ -113,6 +106,7 @@ public class OptionCacheKey {
         this.hierarchy = cacheKey.getHierarchy();
         this.requestedRankName = cacheKey.getRequestedRankName();
         this.optionKey = cacheKey.getOptionKey();
+        this.userId = cacheKey.getUserId();
     }
 
     public UserHierarchy getHierarchy() {
@@ -125,6 +119,10 @@ public class OptionCacheKey {
 
     public String getRequestedRankName() {
         return requestedRankName;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     /**
@@ -146,6 +144,7 @@ public class OptionCacheKey {
         this.optionKey = cacheKey.getOptionKey();
         this.hierarchy = cacheKey.getHierarchy();
         this.rankOption = rankOption;
+        this.userId = cacheKey.getUserId();
     }
 
     public RankOption getRankOption() {
@@ -172,16 +171,32 @@ public class OptionCacheKey {
         if (rankOption != that.rankOption) {
             return false;
         }
-        return requestedRankName.equals(that.requestedRankName);
+        if (userId != that.userId) {
+            return false;
+        }
+
+        //if a SPECIFIC, we need to compare the rank name as well
+        if (rankOption.equals(RankOption.SPECIFIC_RANK)) {
+
+            return requestedRankName.equals(that.requestedRankName);
+        } else {
+            return true;
+        }
 
     }
 
     @Override
     public int hashCode() {
         int result = hierarchy.hashCode();
-        result = 31 * result + requestedRankName.hashCode();
+
         result = 31 * result + optionKey.hashCode();
         result = 31 * result + rankOption.hashCode();
+        result = 31 * result + userId.hashCode();
+
+        // if a SPECIFIC, include the rank name
+        if (rankOption.equals(RankOption.SPECIFIC_RANK)) {
+            result = 31 * result + requestedRankName.hashCode();
+        }
         return result;
     }
 

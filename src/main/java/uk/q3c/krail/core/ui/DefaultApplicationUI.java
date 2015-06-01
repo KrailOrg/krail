@@ -11,8 +11,8 @@
 
 package uk.q3c.krail.core.ui;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.AbstractOrderedLayout;
@@ -25,7 +25,6 @@ import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.view.component.*;
 import uk.q3c.krail.i18n.*;
@@ -39,11 +38,16 @@ import javax.annotation.Nonnull;
  */
 public class DefaultApplicationUI extends ScopedUI implements OptionContext {
 
-    public static final OptionKey optionBreadcrumbVisible = new OptionKey(DefaultApplicationUI.class, LabelKey.Breadcrumb_is_Visible);
-    public static final OptionKey optionNavTreeVisible = new OptionKey(DefaultApplicationUI.class, LabelKey.Navigation_Tree_is_Visible);
-    public static final OptionKey optionMenuVisible = new OptionKey(DefaultApplicationUI.class, LabelKey.Navigation_Menu_is_Visible);
-    public static final OptionKey optionMessageBarVisible = new OptionKey(DefaultApplicationUI.class, LabelKey.Message_bar_is_Visible);
-    public static final OptionKey optionSubPagePanelVisible = new OptionKey(DefaultApplicationUI.class, LabelKey.SubPage_Panel_is_Visible);
+    protected static final OptionKey<Boolean> optionBreadcrumbVisible = new OptionKey(true, DefaultApplicationUI.class, LabelKey.Breadcrumb_is_Visible,
+            DescriptionKey.Breadcrumb_is_Visible);
+    protected static final OptionKey<Boolean> optionNavTreeVisible = new OptionKey(true, DefaultApplicationUI.class, LabelKey.Navigation_Tree_is_Visible,
+            DescriptionKey.Navigation_Tree_is_Visible);
+    protected static final OptionKey<Boolean> optionMenuVisible = new OptionKey(true, DefaultApplicationUI.class, LabelKey.Navigation_Menu_is_Visible,
+            DescriptionKey.Navigation_Menu_is_Visible);
+    protected static final OptionKey<Boolean> optionMessageBarVisible = new OptionKey(true, DefaultApplicationUI.class, LabelKey.Message_bar_is_Visible,
+            DescriptionKey.MessageBar_is_Visible);
+    protected static final OptionKey<Boolean> optionSubPagePanelVisible = new OptionKey(true, DefaultApplicationUI.class, LabelKey.SubPage_Panel_is_Visible,
+            DescriptionKey.SubPage_Panel_is_Visible);
 
     private final UserNavigationTree navTree;
     private final Breadcrumb breadcrumb;
@@ -108,22 +112,23 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
 
         }
         processOptions();
-        if (navTree.isVisible()) {
-            navTree.build();
-        }
-        if (menu.isVisible()) {
-            menu.build();
-        }
+
 
         return baseLayout;
     }
 
     protected void processOptions() {
-        breadcrumb.setVisible(option.get(true, optionBreadcrumbVisible));
-        menu.setVisible(option.get(true, optionMenuVisible));
-        navTree.setVisible(option.get(true, optionNavTreeVisible));
-        messageBar.setVisible(option.get(true, optionMessageBarVisible));
-        subpage.setVisible(option.get(true, optionSubPagePanelVisible));
+        breadcrumb.setVisible(option.get(optionBreadcrumbVisible));
+        menu.setVisible(option.get(optionMenuVisible));
+        if (menu.isVisible()) {
+            menu.build();
+        }
+        navTree.setVisible(option.get(optionNavTreeVisible));
+        if (navTree.isVisible()) {
+            navTree.build();
+        }
+        messageBar.setVisible(option.get(optionMessageBarVisible));
+        subpage.setVisible(option.get(optionSubPagePanelVisible));
     }
 
 
@@ -195,11 +200,9 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
     }
 
     @Override
-    public ImmutableSet<OptionDescriptor> optionDescriptors() {
-
-        return ImmutableSet.of(OptionDescriptor.descriptor(optionBreadcrumbVisible, DescriptionKey.Breadcrumb_is_Visible), OptionDescriptor.descriptor
-                (optionMessageBarVisible, DescriptionKey.MessageBar_is_Visible), OptionDescriptor.descriptor(optionNavTreeVisible, DescriptionKey
-                .Navigation_Tree_is_Visible), OptionDescriptor.descriptor(optionMenuVisible, DescriptionKey.Navigation_Menu_is_Visible));
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+        processOptions();
     }
+
 
 }

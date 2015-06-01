@@ -12,8 +12,8 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.vaadin.data.Property;
 import com.vaadin.ui.MenuBar;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
@@ -26,7 +26,6 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapLabelChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
@@ -39,7 +38,8 @@ import java.util.Optional;
 @SubscribeTo(SessionBus.class)
 public class DefaultUserNavigationMenu extends MenuBar implements OptionContext, UserNavigationMenu {
 
-    public static final OptionKey optionKeyMaximumDepth = new OptionKey(DefaultUserNavigationMenu.class, LabelKey.Maxiumum_Depth);
+    protected static final OptionKey<Integer> optionKeyMaximumDepth = new OptionKey<>(10, DefaultUserNavigationMenu.class, LabelKey.Maxiumum_Depth,
+            DescriptionKey.Maximum_Menu_Depth);
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationMenu.class);
     private final UserSitemap userSitemap;
     private final Option option;
@@ -66,7 +66,7 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
 
     @Override
     public int getOptionMaxDepth() {
-        return option.get(10, optionKeyMaximumDepth);
+        return option.get(optionKeyMaximumDepth);
     }
     @Override
     public void setOptionMaxDepth(int depth) {
@@ -116,7 +116,9 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
     }
 
     @Override
-    public ImmutableSet<OptionDescriptor> optionDescriptors() {
-        return ImmutableSet.of(new OptionDescriptor(optionKeyMaximumDepth, DescriptionKey.Maximum_Menu_Depth));
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+        build();
     }
+
+
 }

@@ -49,7 +49,7 @@ public class Messages extends EnumResourceBundle<MessageKey> {
         //param {0] is
         put(Option_Source_Order_Default, "The default source order to be used for a bundle, unless overridden by {0}");
         put(Option_Source_Order, "The source order to be used for bundle: {0}");
-
+        put(Button_is_Visible, "The {0} button is visible");
     }
 
 

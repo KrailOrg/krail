@@ -32,6 +32,14 @@ public class OptionModule extends AbstractModule {
         bindOptionCache();
         bindOptionCacheProvider();
         bindOptionDao();
+        bindOptionPopup();
+    }
+
+    /**
+     * Override this method to provide your own {@link OptionPopup} implementation
+     */
+    protected void bindOptionPopup() {
+        bind(OptionPopup.class).to(DefaultOptionPopup.class);
     }
 
     /**

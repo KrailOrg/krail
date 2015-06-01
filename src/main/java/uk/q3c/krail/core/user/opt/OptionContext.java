@@ -11,7 +11,7 @@
 
 package uk.q3c.krail.core.user.opt;
 
-import com.google.common.collect.ImmutableSet;
+import com.vaadin.data.Property;
 
 import javax.annotation.Nonnull;
 
@@ -31,6 +31,6 @@ public interface OptionContext {
     @Nonnull
     Option getOption();
 
-    @Nonnull
-    ImmutableSet<OptionDescriptor> optionDescriptors();
+
+    void optionValueChanged(Property.ValueChangeEvent event);
 }

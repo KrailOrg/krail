@@ -33,6 +33,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.testutil.TestUIScopeModule;
@@ -130,7 +131,9 @@ public class DefaultCurrentLocaleTest {
     }
 
     private void setOption(Locale userPref) {
-        when(option.get(defaultLocale, DefaultCurrentLocale.optionPreferredLocale)).thenReturn(userPref);
+        OptionKey<Locale> optionPreferredLocale = new OptionKey<>(currentLocale.getLocale(), DefaultCurrentLocale.class, LabelKey.Preferred_Locale,
+                DescriptionKey.Preferred_Locale);
+        when(option.get(optionPreferredLocale)).thenReturn(userPref);
     }
 
     @Test

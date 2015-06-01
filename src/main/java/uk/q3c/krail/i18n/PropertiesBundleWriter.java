@@ -12,6 +12,7 @@
 package uk.q3c.krail.i18n;
 
 import com.google.inject.Inject;
+import com.vaadin.data.Property;
 import org.apache.commons.io.FileUtils;
 import uk.q3c.krail.core.user.opt.Option;
 
@@ -60,5 +61,9 @@ public class PropertiesBundleWriter<E extends Enum<E>> extends BundleWriterBase<
         properties.store(fos, "created by PropertiesBundleWriter");
     }
 
+    @Override
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+        //do nothing options only used on demand
+    }
 }
 

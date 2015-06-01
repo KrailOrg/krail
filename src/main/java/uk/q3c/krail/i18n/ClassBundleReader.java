@@ -12,6 +12,7 @@
 package uk.q3c.krail.i18n;
 
 import com.google.inject.Inject;
+import com.vaadin.data.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
@@ -82,4 +83,8 @@ public class ClassBundleReader extends NativeBundleReaderBase implements BundleR
     }
 
 
+    @Override
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+        //do nothing, options are used when needed
+    }
 }

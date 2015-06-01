@@ -41,6 +41,7 @@ import uk.q3c.krail.core.services.ServiceModule;
 import uk.q3c.krail.core.services.ServicesMonitor;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.StandardShiroModule;
+import uk.q3c.krail.core.ui.DataTypeModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.user.opt.OptionModule;
@@ -141,6 +142,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         coreModules.add(navigationModule());
 
         coreModules.add(dataModule());
+        coreModules.add(dataTypeModule());
         coreModules.add(pushModule());
 
         addValidationModules(coreModules);
@@ -149,6 +151,16 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         addSitemapModules(coreModules);
         return coreModules;
     }
+
+    /**
+     * Override this if you have provided your own {@link DataTypeModule} implementation
+     *
+     * @return a new {@link DataTypeModule} instance
+     */
+    protected Module dataTypeModule() {
+        return new DataTypeModule();
+    }
+
 
     /**
      * Override this if you have provided your own {@link PushModule} implementation

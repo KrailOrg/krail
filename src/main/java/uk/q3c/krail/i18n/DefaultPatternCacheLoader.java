@@ -12,14 +12,12 @@
 package uk.q3c.krail.i18n;
 
 import com.google.common.cache.CacheLoader;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.vaadin.data.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.user.opt.OptionKey;
 
 import javax.annotation.Nonnull;
@@ -38,11 +36,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, String> implements PatternCacheLoader, OptionContext {
 
-    public static final OptionKey optionKeyAutoStub = new OptionKey(DefaultPatternCacheLoader.class, LabelKey.Auto_Stub);
-    public static final OptionKey optionKeyStubWithKeyName = new OptionKey(DefaultPatternCacheLoader.class, LabelKey.Stub_with_Key_Name);
-    public static final OptionKey optionKeyStubValue = new OptionKey(DefaultPatternCacheLoader.class, LabelKey.Stub_Value);
-    public static final OptionKey optionKeySourceOrderDefault = new OptionKey(DefaultPatternCacheLoader.class, LabelKey.Source_Order_Default);
-    public static final OptionKey optionKeySourceOrder = new OptionKey(DefaultPatternCacheLoader.class, LabelKey.Source_Order);
+    protected static final OptionKey<Boolean> optionKeyAutoStub = new OptionKey<>(false, DefaultPatternCacheLoader.class, LabelKey.Auto_Stub, DescriptionKey
+            .Auto_Stub);
+    protected static final OptionKey<Boolean> optionKeyStubWithKeyName = new OptionKey<>(true, DefaultPatternCacheLoader.class, LabelKey.Stub_with_Key_Name,
+            DescriptionKey.Stub_with_Key_Name);
+    protected static final OptionKey<String> optionKeyStubValue = new OptionKey<>("undefined", DefaultPatternCacheLoader.class, LabelKey.Stub_Value,
+            DescriptionKey.Stub_Value);
+    private static final OptionKey<List<String>> optionKeySourceOrder = new OptionKey<>(new ArrayList<>(), DefaultPatternCacheLoader.class, LabelKey
+            .Source_Order, DescriptionKey.Source_Order);
+    private static final OptionKey<List<String>> optionKeySourceOrderDefault = new OptionKey<>(new ArrayList<>(), DefaultPatternCacheLoader.class, LabelKey
+            .Source_Order_Default, DescriptionKey.Source_Order_Default);
     private static Logger log = LoggerFactory.getLogger(DefaultPatternCacheLoader.class);
     private Map<String, Set<String>> bundleReaderOrder;
     private Set<String> bundleReaderOrderDefault;
@@ -85,7 +88,7 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
      *         the thread's interrupt status is set
      */
     @Override
-    public String load(PatternCacheKey cacheKey) throws Exception {
+    public String load(@Nonnull PatternCacheKey cacheKey) throws Exception {
 
         //this is only used to get the bundleName, the key itself is not used
         I18NKey i18NKey = (I18NKey) cacheKey.getKey()
@@ -105,9 +108,9 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
                 cacheKey.setSource(source);
 
                 //get auto-stub options for the source
-                Boolean autoStub = option.get(false, optionKeyAutoStub.qualifiedWith(source));
-                Boolean stubWithKeyName = option.get(true, optionKeyStubWithKeyName.qualifiedWith(source));
-                String stubValue = option.get("undefined", optionKeyStubValue.qualifiedWith(source));
+                Boolean autoStub = option.get(optionKeyAutoStub.qualifiedWith(source));
+                Boolean stubWithKeyName = option.get(optionKeyStubWithKeyName.qualifiedWith(source));
+                String stubValue = option.get(optionKeyStubValue.qualifiedWith(source));
 
                 //get the reader
                 BundleReader reader = bundleReaders.get(source);
@@ -181,13 +184,13 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     @Nonnull
     public List<String> getOptionReaderOrder(@Nonnull String baseName) {
         checkNotNull(baseName);
-        return option.get(Lists.newArrayList(), optionKeySourceOrder.qualifiedWith(baseName));
+        return option.get(optionKeySourceOrder.qualifiedWith(baseName));
     }
 
     @Override
     @Nonnull
     public List<String> getOptionReaderOrderDefault() {
-        return option.get(Lists.newArrayList(), optionKeySourceOrderDefault);
+        return option.get(optionKeySourceOrderDefault);
     }
 
     @Override
@@ -203,14 +206,10 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     }
 
     @Override
-    public ImmutableSet<OptionDescriptor> optionDescriptors() {
-
-        return ImmutableSet.of(OptionDescriptor.descriptor(optionKeyAutoStub, MessageKey.Option_Auto_Stub, true)
-                                               .desc(optionKeyStubWithKeyName, MessageKey.Option_Stub_with_Key_Name, true)
-                                               .desc(optionKeyStubValue, MessageKey.Option_Stub_Value, true)
-                                               .desc(optionKeySourceOrderDefault, MessageKey.Option_Source_Order_Default)
-                                               .desc(optionKeySourceOrder, MessageKey.Option_Source_Order, true));
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+        //do nothing options only used on demand
     }
+
 
     @Override
     public void setOptionReaderOrder(String baseName, String... sources) {

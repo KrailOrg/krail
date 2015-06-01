@@ -11,7 +11,9 @@
 
 package uk.q3c.krail.core.user.opt.cache;
 
+import com.google.common.cache.Cache;
 import com.google.common.cache.CacheStats;
+import com.google.common.cache.LoadingCache;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionStore;
 
@@ -25,6 +27,8 @@ import java.util.Optional;
  * Created by David Sowerby on 19/02/15.
  */
 public interface OptionCache {
+
+    LoadingCache<OptionCacheKey, Optional<Object>> getCache();
 
     /**
      * Passes the call to the underlying {@link OptionStore}, and if that is successful, writes the entry to the cache
@@ -85,7 +89,16 @@ public interface OptionCache {
 
     CacheStats stats();
 
+    /**
+     * Invalidates all entries in the cache see {@link Cache#invalidateAll()}.  If you want the results to be immediate you may need to follow this with {@link
+     * #cleanup}
+     */
     void flush();
 
     long cacheSize();
+
+    /**
+     * Performs any pending maintenance operations needed by the cache. See {@link Cache#cleanUp()}
+     */
+    void cleanup();
 }

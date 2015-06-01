@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
@@ -30,7 +29,6 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.S
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.DescriptionKey;
@@ -50,15 +48,18 @@ import java.util.Optional;
  * UIScoped Component (see https://github.com/davidsowerby/krail/issues/177)
  *
  * @author David Sowerby 17 May 2013
- * @modified David Sowerby
+ * @modified David Sowerby 29 May 2015
  */
 @Listener
 @SubscribeTo({UIBus.class, SessionBus.class})
 public class DefaultUserNavigationTree extends Tree implements OptionContext, UserNavigationTree {
 
-    public static final OptionKey optionKeySortType = new OptionKey(DefaultUserNavigationTree.class, LabelKey.Sort_Type);
-    public static final OptionKey optionKeySortAscending = new OptionKey(DefaultUserNavigationTree.class, LabelKey.Sort_Ascending);
-    public static final OptionKey optionKeyMaximumDepth = new OptionKey(DefaultUserNavigationTree.class, LabelKey.Maxiumum_Depth);
+    public static final OptionKey<SortType> optionKeySortType = new OptionKey(SortType.ALPHA, DefaultUserNavigationTree.class, LabelKey.Sort_Type,
+            DescriptionKey.Sort_Type);
+    public static final OptionKey<Boolean> optionKeySortAscending = new OptionKey(true, DefaultUserNavigationTree.class, LabelKey.Sort_Ascending,
+            DescriptionKey.Sort_Ascending);
+    public static final OptionKey<Integer> optionKeyMaximumDepth = new OptionKey(10, DefaultUserNavigationTree.class, LabelKey.Maxiumum_Depth, DescriptionKey
+            .Maximum_Tree_Depth);
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
     private final UserSitemap userSitemap;
     private final Navigator navigator;
@@ -91,7 +92,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     }
 
     public boolean getOptionSortAscending() {
-        return option.get(true, optionKeySortAscending);
+        return option.get(optionKeySortAscending);
     }
 
     @Override
@@ -139,7 +140,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     }
 
     public SortType getOptionSortType() {
-        return option.get(SortType.ALPHA, optionKeySortType);
+        return option.get(optionKeySortType);
     }
 
     @Override
@@ -175,7 +176,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
 
     @Override
     public int getOptionMaxDepth() {
-        return option.get(10, optionKeyMaximumDepth);
+        return option.get(optionKeyMaximumDepth);
     }
 
     /**
@@ -279,9 +280,10 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     }
 
     @Override
-    public ImmutableSet<OptionDescriptor> optionDescriptors() {
-        return ImmutableSet.of(OptionDescriptor.descriptor(optionKeySortType, DescriptionKey.Sort_Type)
-                                               .desc(optionKeySortAscending, DescriptionKey.Sort_Ascending)
-                                               .desc(optionKeyMaximumDepth, DescriptionKey.Maximum_Tree_Depth));
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+        rebuildRequired = true;
+        build();
     }
+
+
 }

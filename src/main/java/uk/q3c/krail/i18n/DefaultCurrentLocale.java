@@ -12,8 +12,8 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.vaadin.data.Property;
 import com.vaadin.server.WebBrowser;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
@@ -27,7 +27,6 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.util.MessageFormat;
@@ -67,7 +66,8 @@ import java.util.Set;
 
 public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
 
-    public static final OptionKey optionPreferredLocale = new OptionKey(DefaultCurrentLocale.class, LabelKey.Preferred_Locale);
+    public static final OptionKey<Locale> optionPreferredLocale = new OptionKey<>(Locale.UK, DefaultCurrentLocale.class, LabelKey.Preferred_Locale,
+            DescriptionKey.Preferred_Locale);
     private static Logger log = LoggerFactory.getLogger(DefaultCurrentLocale.class);
 
     private final BrowserProvider browserProvider;
@@ -150,7 +150,7 @@ public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
     private boolean setLocaleFromOption(boolean fireListeners) {
         if (subjectProvider.get()
                            .isAuthenticated()) {
-            Locale selectedLocale = option.get(defaultLocale, optionPreferredLocale);
+            Locale selectedLocale = option.get(optionPreferredLocale);
             if (supportedLocales.contains(selectedLocale)) {
                 setLocale(selectedLocale, fireListeners);
                 return true;
@@ -213,9 +213,10 @@ public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
     }
 
     @Override
-    public ImmutableSet<OptionDescriptor> optionDescriptors() {
-        return ImmutableSet.of(OptionDescriptor.descriptor(optionPreferredLocale, DescriptionKey.Preferred_Locale));
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+        setLocaleFromOption(true);
     }
+
 
     /**
      * User has just logged in, look for their preferred Locale from user options.

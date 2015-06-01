@@ -30,53 +30,45 @@ public interface Option {
     //---------------------------------------------- get (highest) ----------------------------------------------------------
 
     /**
-     * Calls {@link #get(Object, UserHierarchy, OptionKey)} with a default hierarchy
+     * Calls {@link #get(UserHierarchy, OptionKey)} with a default hierarchy
      */
     @Nonnull
-    <T> T get(@Nonnull T defaultValue, @Nonnull OptionKey optionKey);
+    <T> T get(@Nonnull OptionKey<T> optionKey);
 
 
     /**
-     * Returns the highest rank value for the option {@code optionKey}, for the {@code hierarchy}, for the current user.  If no value is found, {@code
-     * defaultValue} is returned
+     * Returns the highest rank value for the option {@code optionKey}, for the {@code hierarchy}, for the current user.  If no value is found, the default
+     * value from {@code
+     * optionKey} is returned
      *
      * @param <T>
-     *         a type determined by the defaultValue.  An implementation should assume that an object of any type can
-     *         be
-     *         passed.
-     * @param defaultValue
-     *         the default value to be returned if no value is found in the store.  Also determines the type of the
-     *         return value
+     *         a type determined by the the default value from {@code optionKey} .  An implementation should assume that an object of any type can be passed.
      * @param hierarchy
      *         the hierarchy to use
      * @param optionKey
      *         identifier for the option, in its context
      *
-     * @return the highest rank value for the option or the {@code defaultValue} if none found
+     * @return the highest rank value for the option or the default value from {@code optionKey}  if none found
      */
     @Nonnull
-    <T> T get(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull OptionKey optionKey);
+    <T> T get(@Nonnull UserHierarchy hierarchy, @Nonnull OptionKey<T> optionKey);
 
     //------------------------------------------- get lowest--------------------------------------------------------
 
 
     /**
-     * Calls {@link #getLowestRanked(Object, UserHierarchy, OptionKey)} with a default hierarchy
+     * Calls {@link #getLowestRanked(UserHierarchy, OptionKey)} with a default hierarchy
      */
     @Nonnull
-    <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull OptionKey optionKey);
+    <T> T getLowestRanked(@Nonnull OptionKey<T> optionKey);
 
     /**
-     * Returns the lowest rank value for the option {@code optionKey}, for the {@code hierarchy}, for the current user.  If no value is found, {@code
-     * defaultValue} is returned
+     * Returns the lowest rank value for the option {@code optionKey}, for the {@code hierarchy}, for the current user.  If no value is found, the default
+     * value from {@code
+     * optionKey} is returned
      *
      * @param <T>
-     *         a type determined by the defaultValue.  An implementation should assume that an object of any type can
-     *         be
-     *         passed.
-     * @param defaultValue
-     *         the default value to be returned if no value is found in the store.  Also determines the type of the
-     *         return value
+     *         a type determined by the the default value from {@code optionKey} .  An implementation should assume that an object of any type can be passed.
      * @param hierarchy
      *         the hierarchy to use
      * @param optionKey
@@ -85,28 +77,23 @@ public interface Option {
      * @return the lowest rank value for the option or the {@code defaultValue} if none found
      */
     @Nonnull
-    <T> T getLowestRanked(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, @Nonnull OptionKey optionKey);
+    <T> T getLowestRanked(@Nonnull UserHierarchy hierarchy, @Nonnull OptionKey<T> optionKey);
 
 
     //------------------------------------------- get specific --------------------------------------------------------
     /**
-     * Calls {@link #getSpecificRanked(Object, UserHierarchy, int, OptionKey)} with a default hierarchy
+     * Calls {@link #getSpecificRanked(UserHierarchy, int, OptionKey)} with a default hierarchy
      */
-    <T> T getSpecificRanked(@Nonnull T defaultValue, int hierarchyRank, @Nonnull OptionKey optionKey);
+    <T> T getSpecificRanked(int hierarchyRank, @Nonnull OptionKey<T> optionKey);
 
 
     /**
      * Returns the value assigned to a specific rank for the option {@code optionKey}, for the {@code hierarchy}, for the current user.  If no value is
-     * found, {@code
-     * defaultValue} is returned
+     * found, the default value from {@code
+     * optionKey} is returned
      *
      * @param <T>
-     *         a type determined by the defaultValue.  An implementation should assume that an object of any type can
-     *         be
-     *         passed.
-     * @param defaultValue
-     *         the default value to be returned if no value is found in the store.  Also determines the type of the
-     *         return value
+     *         a type determined by the the default value from {@code optionKey} .  An implementation should assume that an object of any type can be passed.
      * @param hierarchy
      *         the hierarchy to use
      * @param optionKey
@@ -115,27 +102,29 @@ public interface Option {
      * @return the value for the option or the {@code defaultValue} if none found
      */
     @Nonnull
-    <T> T getSpecificRanked(@Nonnull T defaultValue, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey optionKey);
+    <T> T getSpecificRanked(@Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey<T> optionKey);
 
 
     //---------------------------------------------- set ----------------------------------------------------------
 
+    UserHierarchy getHierarchy();
+
     /**
      * Calls {@link #set(Object, UserHierarchy, int, OptionKey)}  with a default hierarchy and a hierarchy rank of 0 (the highest rank)
      */
-    <T> void set(T value, @Nonnull OptionKey optionKey);
+    <T> void set(T value, @Nonnull OptionKey<T> optionKey);
 
     /**
      * Calls {@link #set(Object, UserHierarchy, int, OptionKey)}  with a hierarchy rank of 0 (the highest rank)
      */
-    <T> void set(T value, @Nonnull UserHierarchy hierarchy, @Nonnull OptionKey optionKey);
+    <T> void set(T value, @Nonnull UserHierarchy hierarchy, @Nonnull OptionKey<T> optionKey);
 
 
     /**
      * Calls {@link #set(Object, UserHierarchy, int, OptionKey)}  with a default hierarchy
      */
 
-    <T> void set(T value, int hierarchyRank, @Nonnull OptionKey optionKey);
+    <T> void set(T value, int hierarchyRank, @Nonnull OptionKey<T> optionKey);
 
     /**
      * Sets the value for a composite key comprising the {@code context}, {@code key} & {@code qualifiers},
@@ -152,7 +141,7 @@ public interface Option {
      *         identifier for the option, in its context
      */
 
-    <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey optionKey);
+    <T> void set(@Nonnull T value, @Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey<T> optionKey);
 
 
     //--------------------------------------------- delete --------------------------------------------------------
@@ -170,5 +159,7 @@ public interface Option {
      * @return the previously assigned value of this option, or null if it had no assignment
      */
     @Nullable
-    Object delete(@Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey optionKey);
+    <T> T delete(@Nonnull UserHierarchy hierarchy, int hierarchyRank, @Nonnull OptionKey<T> optionKey);
+
+
 }

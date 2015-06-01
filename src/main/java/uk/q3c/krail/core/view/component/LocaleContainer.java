@@ -10,9 +10,9 @@
  */
 package uk.q3c.krail.core.view.component;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Resource;
@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionDescriptor;
 import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
@@ -39,7 +38,8 @@ public class LocaleContainer extends IndexedContainer implements OptionContext {
         NAME, FLAG
     }
 
-    public static final OptionKey optionKeyFlagSize = new OptionKey(LocaleContainer.class, LabelKey.Locale_Flag_Size);
+    public static final OptionKey<Integer> optionKeyFlagSize = new OptionKey<>(32, LocaleContainer.class, LabelKey.Locale_Flag_Size, DescriptionKey
+            .Locale_Flag_Size);
     private static Logger log = LoggerFactory.getLogger(LocaleContainer.class);
     private final Set<Locale> supportedLocales;
     private final Option option;
@@ -101,7 +101,7 @@ public class LocaleContainer extends IndexedContainer implements OptionContext {
     }
 
     public Integer getOptionFlagSize() {
-        return option.get(32, optionKeyFlagSize);
+        return option.get(optionKeyFlagSize);
     }
 
     @Nonnull
@@ -111,9 +111,11 @@ public class LocaleContainer extends IndexedContainer implements OptionContext {
     }
 
     @Override
-    public ImmutableSet<OptionDescriptor> optionDescriptors() {
-        return ImmutableSet.of(OptionDescriptor.descriptor(optionKeyFlagSize, DescriptionKey.Flag_Icon_Size));
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+        this.removeAllItems();
+        fillContainer();
     }
+
 
     public OptionKey getOptionKeyFlagSize() {
         return optionKeyFlagSize;

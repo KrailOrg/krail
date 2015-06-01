@@ -11,17 +11,19 @@
 
 package uk.q3c.krail.core.user.opt;
 
-import com.google.common.collect.ImmutableSet;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.vaadin.data.Property;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.ui.DataTypeToUI;
 import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.i18n.TestLabelKey;
+import uk.q3c.krail.i18n.Translate;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -40,21 +42,26 @@ public class DefaultOptionTest {
     MockContext2 contextObject2;
     Class<MockContext> context = MockContext.class;
     Class<MockContext2> context2 = MockContext2.class;
+
+    @Mock
+    private DataTypeToUI dataTypeToUI;
     @Mock
     private UserHierarchy defaultHierarchy;
     @Mock
     private UserHierarchy hierarchy2;
     @Mock
     private OptionCache optionCache;
-    private OptionKey optionKey1;
-    private OptionKey optionKey2;
+    private OptionKey<Integer> optionKey1;
+    private OptionKey<Integer> optionKey2;
+    @Mock
+    private Translate translate;
 
     @Before
     public void setup() {
         contextObject = new MockContext();
         option = new DefaultOption(optionCache, defaultHierarchy);
-        optionKey1 = new OptionKey(context, TestLabelKey.key1, "q");
-        optionKey2 = new OptionKey(context2, TestLabelKey.key1, "q");
+        optionKey1 = new OptionKey<>(5, context, TestLabelKey.key1, "q");
+        optionKey2 = new OptionKey<>(5, context2, TestLabelKey.key1, "q");
     }
 
 
@@ -86,7 +93,7 @@ public class DefaultOptionTest {
     public void set_with_all_args() {
         //given
         when(hierarchy2.rankName(2)).thenReturn("specific");
-        OptionKey optionKey2 = new OptionKey(context2, TestLabelKey.key1, "q");
+        OptionKey<Integer> optionKey2 = new OptionKey<>(999, context2, TestLabelKey.key1, TestLabelKey.key1, "q");
         OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 2, optionKey2);
         //when
         option.set(5, hierarchy2, 2, optionKey2);
@@ -98,7 +105,7 @@ public class DefaultOptionTest {
     public void set_with_all_args_rank_too_low() {
         //given
         when(hierarchy2.rankName(2)).thenReturn("specific");
-        OptionKey optionKey2 = new OptionKey(context, TestLabelKey.key1, "q");
+        OptionKey<Integer> optionKey2 = new OptionKey<>(999, context, TestLabelKey.key1, TestLabelKey.key1, "q");
         OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, SPECIFIC_RANK, 2, optionKey2);
         //when
         option.set(5, hierarchy2, -1, optionKey2);
@@ -112,7 +119,7 @@ public class DefaultOptionTest {
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey1);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
         //when
-        Integer actual = option.get(5, optionKey1);
+        Integer actual = option.get(optionKey1);
         //then
         assertThat(actual).isEqualTo(8);
     }
@@ -124,7 +131,7 @@ public class DefaultOptionTest {
         OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, HIGHEST_RANK, optionKey1);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
         //when
-        Integer actual = option.get(5, hierarchy2, optionKey1);
+        Integer actual = option.get(hierarchy2, optionKey1);
         //then
         assertThat(actual).isEqualTo(8);
     }
@@ -138,7 +145,7 @@ public class DefaultOptionTest {
         OptionCacheKey cacheKey = new OptionCacheKey(hierarchy2, HIGHEST_RANK, optionKey1);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
         //when
-        Integer actual = option.get(5, hierarchy2, optionKey1);
+        Integer actual = option.get(hierarchy2, optionKey1);
         //then
         assertThat(actual).isEqualTo(8);
     }
@@ -150,7 +157,7 @@ public class DefaultOptionTest {
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey2);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.empty());
         //when
-        Integer actual = option.get(5, optionKey2);
+        Integer actual = option.get(optionKey2);
         //then
         assertThat(actual).isEqualTo(5);
     }
@@ -162,7 +169,7 @@ public class DefaultOptionTest {
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, LOWEST_RANK, optionKey2);
         when(optionCache.get(Optional.of(5), cacheKey)).thenReturn(Optional.of(20));
         //when
-        Integer actual = option.getLowestRanked(5, defaultHierarchy, optionKey2);
+        Integer actual = option.getLowestRanked(defaultHierarchy, optionKey2);
         //then
         assertThat(actual).isEqualTo(20);
     }
@@ -180,6 +187,7 @@ public class DefaultOptionTest {
         verify(optionCache).delete(cacheKey);
     }
 
+
     static class MockContext implements OptionContext {
 
         @Nonnull
@@ -189,12 +197,19 @@ public class DefaultOptionTest {
         }
 
         @Override
-        public ImmutableSet<OptionDescriptor> optionDescriptors() {
-            return null;
+        public void optionValueChanged(Property.ValueChangeEvent event) {
+
         }
+
+
     }
 
     static class MockContext2 implements OptionContext {
+
+        public static final OptionKey<Integer> key3 = new OptionKey<>(125, MockContext2.class, TestLabelKey.Static, TestLabelKey.Large);
+        private static final OptionKey<Integer> key4 = new OptionKey<>(126, MockContext2.class, TestLabelKey.Private_Static, TestLabelKey.Large);
+        public final OptionKey<Integer> key2 = new OptionKey<>(124, this, TestLabelKey.key2, TestLabelKey.Blank);
+        private final OptionKey<Integer> key1 = new OptionKey<>(123, this, TestLabelKey.key1);
 
         @Nonnull
         @Override
@@ -203,8 +218,12 @@ public class DefaultOptionTest {
         }
 
         @Override
-        public ImmutableSet<OptionDescriptor> optionDescriptors() {
-            return null;
+        public void optionValueChanged(Property.ValueChangeEvent event) {
+
         }
+
+
     }
+
+
 }

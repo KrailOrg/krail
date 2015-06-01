@@ -12,6 +12,7 @@
 package uk.q3c.krail.i18n;
 
 import com.google.inject.Inject;
+import com.vaadin.data.Property;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ClassUtils;
 import uk.q3c.krail.core.user.opt.Option;
@@ -131,4 +132,8 @@ public class ClassBundleWriter<E extends Enum<E>> extends BundleWriterBase<E> {
     }
 
 
+    @Override
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+        //do nothing, options are called when needed
+    }
 }
