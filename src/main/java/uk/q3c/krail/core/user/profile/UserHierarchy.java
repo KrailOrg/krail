@@ -13,6 +13,7 @@ package uk.q3c.krail.core.user.profile;
 
 import com.google.common.collect.ImmutableList;
 import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.cache.OptionPermission;
 
 import javax.annotation.Nonnull;
 
@@ -35,23 +36,22 @@ import javax.annotation.Nonnull;
  * When they have chosen their own options, however, that you would probably want those values to override those set at
  * department level.
  * <p>
- * This is done by ranking the hierarchy so that in this case, the option values assigned at the user level will
- * override any assigned at lower ranks - department etc.
+ * This is done by ranking the hierarchy so that in this case, the option values assigned at the user level will override any assigned at lower ranks -
+ * department etc. (Ranks are ordered with 0 as highest rank).  Thus a 3 level hierarchy of user:department:system, user is at level 0, department at 1 and
+ * system at 2.  The user level is considered to override that of the department, and department to override the system level.
  * <p>
- * How you the ranks are ordered is entirely up to the implementation, but should always be returned with the highest
- * rank at index 0.
+ * How the ranks are ordered is entirely implementation dependent, but should always be returned with the user level at index 0.
  * <p>
- * When used with {@link Option}, there may be some option values which should be set only at the department level, for
- * example.  That is achieved simply by not allowing anyone access to change their own option values, and for example,
- * only allowing those with a department admin role to change the department option values.  That of course would be
- * easily achieved with the Shiro integration within Krail
+ * When used with {@link Option}, there may be some option values which should be set only at the department level, for example.  That is achieved simply by
+ * not allowing anyone access to change their own option values, and for example, only allowing those with a department admin role to change the department
+ * option values.  This is achieved using the Shiro integration with Krail, which in turn uses {@link OptionPermission}
  * <p>
  * {@link UserHierarchy} implementations will often take their information from other systems - for example, an HR or
  * Identity Management system may contain the Organisation hierarchy (sometimes even different ones for the same
  * organisation!)
  * <p>
- *     Implementations must be thread safe
- *
+ * Implementations must be thread safe <p>
+ * <p>
  * Created by David Sowerby on 18/02/15.
  */
 public interface UserHierarchy {
