@@ -44,7 +44,7 @@ public enum DescriptionKey implements I18NKey {
 ```
  
  
-- create a new Annotation class called "Caption".  Note the ```@I18NBindingAnnotation``` - this tells Krail that this annotation is used for I18N. 
+- create a new Annotation class called "Caption".  Note the ```@I18NAnnotation``` - this tells Krail that this annotation is used for I18N. 
 ```java
 package com.example.tutorial.i18n;
 
@@ -69,7 +69,7 @@ public @interface Caption {
 
 The methods in this annotation are used by Krail's annotation scanner to capture I18N keys used to look up locale-sensitive values.
 
-The names of these classes can be anything, it is the ```@18NBindingAnnotation``` and ```I18NKey``` interface which are relevant.
+The names of these classes can be anything, it is the ```@18NAnnotation``` and ```I18NKey``` interface which are relevant.
 
 This is all we need for our I18N integration for now, so we can get on with adding pages.
 
@@ -237,7 +237,7 @@ public enum LabelKey implements I18NKey {
 - Run the application and log in again and you will see that "Purchasing" has been added to the Finance page.  
 
 ##Choosing the Method
-You can mix Direct and Annotation sitemap entries however you wish, but that can get a bit confusing to manage.  Which method you choose is mostly a matter of preference, but there is one feature of the ddirect method you should be aware of.
+You can mix Direct and Annotation sitemap entries however you wish, but that can get a bit confusing to manage.  Which method you choose is mostly a matter of preference, but there is one feature of the direct method you should be aware of.
 
 Our direct pages module looks currently looks like this:
 ```

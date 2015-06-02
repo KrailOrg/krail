@@ -1,7 +1,7 @@
 #UI & Themes
 The [Vaadin handbook](https://vaadin.com/book/vaadin7/-/page/application.html) provides a full explanation of its architecture, and the role of the UI component.  
  
-For the purposes of this Tutorial, it is enough to consider the ```UI``` to be a representation of a browser tab.  The ```DefaultApplicationUI``` is provided by Krail as a start point, but you may want to change elements of it or replace it completely.  The first Tutorial section gave an overview of the [DefaultApplicationUI](tutorial01.md#Exploring the Basic Application) if you need a refresher.
+For the purposes of this Tutorial, it is enough to consider the ```UI``` to be a representation of a browser tab.  The ```DefaultApplicationUI``` is provided by Krail as a start point, but you may want to change elements of it or replace it completely.  The first Tutorial section gave an overview of the [DefaultApplicationUI](tutorial01.md#explore) if you need a refresher.
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -70,7 +70,7 @@ public class TutorialUI extends DefaultApplicationUI {
 }
 
 ```
-- Run the application and observe the difference appearance.  
+- Run the application and observe the different appearance.  
 
 Valo is the most recent theme from Vaadin.  "Reindeer" is the default, which you have been using until now.  For more information about themes, see the [Vaadin Documentation](https://vaadin.com/book/-/page/themes.html).
 

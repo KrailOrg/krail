@@ -72,4 +72,5 @@ If you wanted to provide your own methods of presenting user notifications, it i
 #Summary
 This is an almost trivial topic, but does provide an opportunity for a consistent approach to providing notifications to users.  It also enables changing the presentation of those notifications without breaking the consistency.  
 
-
+#Download from Github
+To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step04**

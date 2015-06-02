@@ -31,7 +31,7 @@ Create a directory for your project (called "**krail-tutorial**" in this case), 
 You will now have an empty build file open.  Cut and paste the following into the file & save it
 ```groovy
     apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.9.8'  
-    apply plugin: 'eclipse'  
+    apply plugin: 'eclipse-wtp'  
     apply plugin: 'idea'  
 
     sourceCompatibility = '1.8'  
@@ -191,7 +191,7 @@ vaadin {
 For completeness, the full *build.gradle* file should look like this:
 ```
 apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.9.8'
-apply plugin: 'eclipse'  
+apply plugin: 'eclipse-wtp'  
 apply plugin: 'idea'
 
 
@@ -385,7 +385,7 @@ Application context: /tutorial
  .... you should now see something like this:
 
 ![Screenshot](img/basic-screenshot.png)
-
+<a name="explore"></a>
 #Exploring the Basic Application
 
 There are a few things to see, even in this very basic implementation.    
