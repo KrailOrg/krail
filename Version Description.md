@@ -1,1 +1,2 @@
-This version upgrades to Vaadin 7.4.6 and Guice 4.0.  The I18NProcessor has been updated to reduce the amount it has to process, and clarify when drill down occurs.  The amount of setting up for a simple application has been reduced.  
+This version provides an OptionPopup and integration of Option setting with Shiro access control.
+Notifications and Push messages are now handled via the Event Bus.  The first 4 sections of the Tutorial have been written and reviewed.
