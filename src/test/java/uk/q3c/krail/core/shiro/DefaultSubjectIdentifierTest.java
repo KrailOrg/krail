@@ -118,6 +118,16 @@ public class DefaultSubjectIdentifierTest {
         assertThat(subjectIdentifier.userId()).isEqualTo("?");
     }
 
+    @Test
+    public void nullPrincipal() {
+        //given
+        when(subject.getPrincipal()).thenReturn(null);
+        //when
+
+        //then
+        assertThat(subjectIdentifier.userId()).isEqualTo("?");
+    }
+
     @ModuleProvider
     protected AbstractModule moduleProvider() {
         return new AbstractModule() {

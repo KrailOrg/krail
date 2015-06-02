@@ -79,10 +79,13 @@ public class DefaultSubjectIdentifier implements SubjectIdentifier {
     @Override
     public String userId() {
         Subject subject = subjectProvider.get();
+        if (subject.getPrincipal() == null) {
+            return "?";
+        }
         String userId = subject.getPrincipal()
                                .toString();
         if (StringUtils.isEmpty(userId)) {
-            userId="?";
+            return userId = "?";
         }
         return userId;
     }
