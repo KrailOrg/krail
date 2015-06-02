@@ -1,9 +1,40 @@
-#Options and User Hierarchies
+#Introduction
 
-to be written
+Krail sees Options as the [top layer of configuration](devguide01.md).  The idea of options is to give users as much control as the Krail developer wants to give them, at runtime - so that could be changing the way a screen is laid out, what appears on the scrren - anyhitng which might typically be in a user menu of options or settings. 
 
+#User Hierarchy
+Krail takes the idea of options a step further than simply letting the user choose a value for something - although it does that.
 
-Script something like:
+Imagine you have a system which provides information to staff - but that information may vary depending on, say, their location.  You could quite easily, just let the user select which area's information they see.  That is not a bad idea, but you also want to set some sensible defaults, so that when the system is launched, the users see something relevant to them.
+
+So let's assume we have two users
+
+- Emily Quick, a developer who works in Sheffield, England
+- Franck Baton, an accountant who works in Finance, in Frankfurt, Germany 
+
+When you think about their locations and how that relates to information, you can imagine a useful hierarchy of:
+ 
+- Europe, UK, Sheffield for Emily
+- Europe, Germany, Frankfurt for Franck
+
+Emily & Franck would share the Europe level information, and have more relevant information for their specific locations.
+
+Krail requires two other levels for ALL UserHierarchy implementations, so the full hierarchies would be:
+
+- **system**, Europe, UK, Sheffield, **user** for Emily
+- **system**, Europe, Germany, Frankfurt, **user** for Franck
+
+This simply means that the system level option affects the whole system, and the user level is specific to an individual user.
+
+Now - starting from the system level option, imagine that each subsequent level overrides the previous one, so that the user level is the highest "rank".  A system admin could set up an option as a default for the whole system - a European admin to set a different default for Europe to distinguish from the US, a Germany admin to set a differnt value again specifically for Germany.  Ultimately, however, a user selects their own (if you give them access to do so!) 
+
+That's a lot of explanation so let's start something practical with the Krail default hierarchy:
+
+#SimpleHierarchy
+
+Krail provides a default, two level ```UserHierarchy``` called ```SimpleHierarchy```, comprising just the system and user level. We will demonstrate its use by providing our users with their own news page, wehre they can select which news channels they see.
+
+- 
 
 A short explanation - runtime configurable
 
