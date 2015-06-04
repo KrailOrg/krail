@@ -13,7 +13,6 @@ To use your own UI:
 
 - create a UI, in this example just sub-classing ```DefaultApplicationUI```.  As you can see, it uses a lot of injected objects - hopefully your IDE will create the constructor for you.
 - don't forget the **@Inject** annotation for the constructor - it is very easy to miss when using IDE auto-completion
-- just to make it do something visibly different we have disabled the breadcrumb and menu, with the calls to ```option.set()``` (Options will be covered in more detail [later](tutorial05.md))
 ```
 package com.example.tutorial.app;
 
@@ -38,8 +37,6 @@ public class TutorialUI extends DefaultApplicationUI {
     protected TutorialUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option) {
         super(navigator, errorHandler, converterFactory, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster,
                 pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option);
-        option.set(false, DefaultApplicationUI.optionBreadcrumbVisible);
-        option.set(false, DefaultApplicationUI.optionMenuVisible);
     }
 }
 ```
@@ -51,7 +48,7 @@ public class TutorialUI extends DefaultApplicationUI {
     }
 ```
 - Add the new key to ```LabelKey```, which your IDE will probably do for you.
-- Run the application and confirm that the menu and breadcrumb have disappeared, and the application title has changed in the browser tab
+- Run the application and confirm that the application title has changed in the browser tab
 
 #Themes
 At the moment there is no alternative for setting the theme except by using the **@Theme** annotation provided by Vaadin. On the new ```TutorialUI```
@@ -64,8 +61,7 @@ public class TutorialUI extends DefaultApplicationUI {
     protected TutorialUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option) {
         super(navigator, errorHandler, converterFactory, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster,
                 pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option);
-        option.set(false, DefaultApplicationUI.optionBreadcrumbVisible);
-        option.set(false, DefaultApplicationUI.optionMenuVisible);
+
     }
 }
 
