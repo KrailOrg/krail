@@ -229,14 +229,13 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
     private Option option;
     private OptionPopup optionPopup;
     private Button popupButton;
+    private Button systemOptionButton;
     private Label vacancies;
-    OptionContext context;
 
     @Inject
     public MyNews(Option option, OptionPopup optionPopup) {
         this.option = option;
         this.optionPopup = optionPopup;
-        context = this;
     }
 
     @Override
@@ -249,24 +248,25 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
         itemsForSale.setSizeFull();
         vacancies.setSizeFull();
 
-        popupButton=new Button("options");
-        popupButton.addClickListener(c -> {optionPopup.popup(context, LabelKey.News_Options);});
+        popupButton = new Button("options");
+        popupButton.addClickListener(event -> {
+            optionPopup.popup(this, LabelKey.News_Options);
+        });
+
+        systemOptionButton = new Button("system option");
+        systemOptionButton.addClickListener(event -> {
+            option.set(false, 1, ceoVisible);
+            optionValueChanged(null);
+        });
 
         setMiddleLeft(itemsForSale);
         setCentreCell(ceoNews);
         setMiddleRight(vacancies);
         setBottomCentre(popupButton);
+        setBottomRight(systemOptionButton);
 
         optionValueChanged(null);
     }
-
-
-    @Nonnull
-    @Override
-    public Option getOption() {
-        return option;
-    }
-
 
     @Override
     public void optionValueChanged(Property.ValueChangeEvent event) {
@@ -274,7 +274,14 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
         itemsForSale.setVisible(option.get(itemsForSaleVisible));
         vacancies.setVisible(option.get(vacanciesVisible));
     }
+
+    @Nonnull
+    @Override
+    public Option getOption() {
+        return option;
+    }
 }
+
 
 ```
 
