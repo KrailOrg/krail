@@ -81,9 +81,9 @@ This will be used to show a property overriding another, while also adding new p
     setTopRight(tutorialCompletedProperty);
     setTopLeft(connectionTimeoutProperty);
 ```
-- include them in ```loadConfig()```
+- include them in ```showConfig()```
 ```
-private void loadConfig() {
+private void showConfig() {
     tutorialQualityProperty.setValue("Tutorial quality is: " + applicationConfiguration.getString("tutorial.quality"));
     tutorialCompletedProperty.setValue(applicationConfiguration.getString("tutorial.completed"));
    connectionTimeoutProperty.setValue("The timeout is set to: " + applicationConfiguration.getString("connection.timeout"));
