@@ -18,6 +18,7 @@ pages:
 - [tutorial13.md, Tutorial - Vaadin Push]
 - [tutorial14.md, Tutorial - Validation]
 - [tutorial15.md, Tutorial - Creating User Hierarchies]
+- [tutorial16.md, Tutorial - More on Guice Configuration]
 
 - [devguide01.md, Krail Configuration Overview]
 - [devguide02.md, Pages and Navigation]
