@@ -92,7 +92,10 @@ If you want to build from source run 'gradle eclipse' or 'gradle idea' to genera
 
 #Acknowlegements
 
-Thanks to [Dirk Lietz](https://github.com/Odhrean) for his review and feedback for the Tutorial
+Thanks to:
+ 
+[Dirk Lietz](https://github.com/Odhrean) for his review and feedback for the Tutorial
+[Mike Pilone](http://mikepilone.blogspot.co.uk/) for his blog post on Vaadin Shiro integration
 
 
 ej technologies for an open source licence for their java profiler, [JProfiler](http://www.ej-technologies.com/products/jprofiler/overview.html)<br>
