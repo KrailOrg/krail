@@ -302,7 +302,7 @@ We have demonstrated here that options are associated with users.  What we haven
 
 In fact, at the moment there is no system level, so if there is no user level value, then the default coded value is used.
 
-- Still logged in as user "eq", open the options popop and click "restore to default" for the CEO channel.
+- Still logged in as user "eq", open the options popup and click "restore to default" for the CEO channel.
 - The "CEO News Channel" checkbox becomes checked, and CEO channel re-appears
 
 This is the expected behaviour - we coded a default value of "true" for the ```OptionKey```.  Now to demonstrate changing the system level value:

@@ -12,6 +12,7 @@
 package uk.q3c.krail.core.user.opt.cache;
 
 import org.apache.shiro.authz.permission.WildcardPermission;
+import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
@@ -24,18 +25,20 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Represents a Shiro permission for {@link Option}.  The permission is structured:
  * <p>
- * <b>option:[action]:[hierarchy]:[hierarchy level index]:[context]:[option name]:[qualifier]:[qualifier]</b>
+ * <b>option:[action]:[hierarchy]:[userId]:[hierarchy level index]:[context]:[option name]:[qualifier]:[qualifier]</b>
  * <p>
  * As many qualifiers as necessary can be appended.<ol>
  * <p>
  * <li>[action] is either 'edit' or 'view'</li>
  * <li>[hierarchy] is represented by {@link UserHierarchy#persistenceName()}</li>
+ * <li>[userId] is the userId obtained from {@link SubjectIdentifier#userId()}</li>
  * <li>[hierarchy level index]: is the level index for the hierarchy, so level 0 is at user level.  See {@link UserHierarchy} for more information about
  * levels</li>
  * <li>[context]:[option name]:[qualifier] are taken from {@link OptionKey}</li>
  * <p>
- * </ol><p>
- * <p>
+ * </ol>
+ * <p>Example:<br><br>
+ * <em>option:edit:SimpleUserHierarchy:ds:0:LocaleContainer:Error:q1:q2</em>
  * <p>
  * <p>
  * Created by David Sowerby on 01/06/15.
