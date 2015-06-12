@@ -62,9 +62,9 @@ Not fully thread-safe where it needs to be
 
 # Status
 
-2nd June May 2015:
+12th June 2015:
 
-* Vaadin 7.4.7 is integrated with:
+* Vaadin 7.4.8 is integrated with:
 * Guice 4.0
 * Shiro 1.2.3,
 * MBassador (Event Bus)
@@ -73,7 +73,7 @@ Not fully thread-safe where it needs to be
 
 
 Krail is usable, though there is still work to ensure thread safety.  No major changes to the API expected.  Vaadin push is supported.  Tested on Tomcat 7 & 8
-
+Would not work in a [clustered environment](https://github.com/davidsowerby/krail/issues/425)
 
 ## demo
 

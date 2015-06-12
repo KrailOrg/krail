@@ -45,7 +45,7 @@ You will now have an empty build file open.  Cut and paste the following into th
     }
     
     vaadin {
-        version '7.4.7'
+        version '7.4.8'
     }
     
     configurations.all {
@@ -209,7 +209,7 @@ dependencies {
 
 vaadin {
     widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
-    version '7.4.7'
+    version '7.4.8'
     plugin.logToConsole = true
 }
 
