@@ -57,6 +57,12 @@ private void showConfig() {
 <p class="last">Note the syntax of <i>tutorial.quality</i> - [section name].[property name] - Apache Commons Configuration provides this 'FQN' type syntax - see the Apache documentation for more information </p>
 </div>
 
+- Include this new page in ```MyOtherPages```
+
+```
+addEntry("ini-config", IniConfigView.class, LabelKey.Ini_Config, PageAccessControl.PUBLIC);
+```
+
 #More layers
 
 There may be occasions when adding libraries to an application that further configuration is needed.  You can add as many configuration files as you require.    
@@ -266,7 +272,7 @@ public class IniConfigView extends Grid3x3ViewBase {
 - we have modified the values in one ini file with those from another
 - We have demonstrated ensuring an early fail if a file is missing
  
-Apache Commons Configuration supports much more than just init files, and can support [variety of sources](https://commons.apache.org/proper/commons-configuration/userguide_v1.10/overview.html#Configuration_Sources) - Krail will just accept anything that Apache Commons Configuration provides
+Apache Commons Configuration supports much more than just ini files, and can support [variety of sources](https://commons.apache.org/proper/commons-configuration/userguide_v1.10/overview.html#Configuration_Sources) - Krail will just accept anything that Apache Commons Configuration provides
   
 #Download from Github
 To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step06**
