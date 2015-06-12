@@ -13,7 +13,6 @@
 package uk.q3c.krail.core.shiro;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.subject.Subject;
 import uk.q3c.krail.i18n.LabelKey;
@@ -28,11 +27,11 @@ import uk.q3c.krail.i18n.Translate;
  */
 public class DefaultSubjectIdentifier implements SubjectIdentifier {
 
-    private final Provider<Subject> subjectProvider;
+    private final SubjectProvider subjectProvider;
     private final Translate translate;
 
     @Inject
-    public DefaultSubjectIdentifier(Provider<Subject> subjectProvider, Translate translate) {
+    public DefaultSubjectIdentifier(SubjectProvider subjectProvider, Translate translate) {
         super();
         this.subjectProvider = subjectProvider;
         this.translate = translate;

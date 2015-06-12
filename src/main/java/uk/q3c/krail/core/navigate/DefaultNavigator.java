@@ -380,6 +380,7 @@ public class DefaultNavigator implements Navigator {
      */
     @Handler(priority = -1)
     public void userStatusChange(UserStatusBusMessage busMessage) {
+        log.debug("UserStatusBusMessage received");
         if (busMessage.isAuthenticated()) {
             log.info("user logged in successfully, applying login navigation rule");
             Optional<NavigationState> newState = loginNavigationRule.changedNavigationState(this, busMessage.getSource());

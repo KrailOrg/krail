@@ -88,7 +88,7 @@ public class DefaultRealm extends AuthorizingRealm {
      * There are various implementations already provided by Shiro, including {@link ActiveDirectoryRealm},
      * {@link JdbcRealm} and {@link JndiLdapRealm}<br>
      * <br>
-     * You can provide your own Realm implementation by overriding {@link StandardShiroModule#bindRealms()}<br>
+     * You can provide your own Realm implementation by overriding {@link DefaultShiroModule#bindRealms()}<br>
      * <br>
      * This implementation authorises<ol>
      * <li>all authenticated users to access the pages of the 'private' or 'system-admin' branches of the {@link MasterSitemap}</li>

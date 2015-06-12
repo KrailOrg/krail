@@ -225,6 +225,7 @@ public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
      */
     @Handler
     public void userStatusChange(UserStatusBusMessage busMessage) {
+        log.debug("UserStatusBusMessage received");
         setLocaleFromOption(true);
     }
 

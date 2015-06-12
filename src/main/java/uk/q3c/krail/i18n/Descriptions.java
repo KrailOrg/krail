@@ -55,6 +55,7 @@ public class Descriptions extends EnumResourceBundle<DescriptionKey> {
         put(Sort_Type, "The sort type to apply");
         put(Sort_Ascending, "If true, sort in ascending order, otherwise in descending order");
         put(Flag_Icon_Size, "The size of the flag icon to use");
+        put(Log_out_first, "You will need to log out to do that");
     }
 
 

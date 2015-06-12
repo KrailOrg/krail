@@ -11,12 +11,26 @@
 
 package uk.q3c.krail.core.shiro;
 
-public interface UnauthenticatedExceptionHandler {
+import com.google.inject.Inject;
+import uk.q3c.krail.core.user.notify.UserNotifier;
+import uk.q3c.krail.i18n.DescriptionKey;
 
-    /**
-     * invoke the handler
-     *
-     */
-    void invoke();
+/**
+ * {@inheritDoc}
+ * <p>
+ * Created by David Sowerby on 11/06/15.
+ */
+public class DefaultNotAGuestExceptionHandler implements NotAGuestExceptionHandler {
 
+    private UserNotifier userNotifier;
+
+    @Inject
+    protected DefaultNotAGuestExceptionHandler(UserNotifier userNotifier) {
+        this.userNotifier = userNotifier;
+    }
+
+    @Override
+    public void invoke() {
+        userNotifier.notifyError(DescriptionKey.Log_out_first);
+    }
 }

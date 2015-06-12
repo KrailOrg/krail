@@ -112,6 +112,7 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
      */
     @Handler
     public void userStatusChange(UserStatusBusMessage busMessage) {
+        log.debug("UserStatusBusMessage received, user status is now authenticated = '{}'", busMessage.isAuthenticated());
         if (busMessage.getSource() == this) {
             log.debug("received message from bus, but sent from here, so ignoring");
         } else {
@@ -141,6 +142,8 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         if (authenticated) {
             subjectProvider.get()
                            .logout();
+            log.debug("Publishing UserStatusBusMessage from: '{}'", this.getClass()
+                                                                        .getSimpleName());
             eventBus.publish(new UserStatusBusMessage(this, false));
         } else {
             navigator.navigateTo(StandardPageKey.Log_In);

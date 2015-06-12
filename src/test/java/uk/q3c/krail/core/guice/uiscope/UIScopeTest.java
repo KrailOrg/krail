@@ -66,27 +66,38 @@ public class UIScopeTest {
     protected VaadinSession mockedSession = mock(VaadinSession.class);
     UIKeyProvider uiKeyProvider = new UIKeyProvider();
     UIProvider provider;
+    VaadinSessionProvider vaadinSessionProvider;
+    VaadinSession vaadinSession;
     private Injector injector;
     private ScopedUI ui;
 
     @BeforeClass
     public static void setupClass() {
         vaadinService = mock(VaadinService.class);
+
         when(vaadinService.getBaseDirectory()).thenReturn(ResourceUtils.userTempDirectory());
         VaadinService.setCurrent(vaadinService);
     }
 
     @Before
     public void setup() {
-        VaadinSession.setCurrent(null);
+        vaadinSession = mock(VaadinSession.class);
+        VaadinSession.setCurrent(vaadinSession);
+        when(vaadinSession.getAttribute(Subject.class)).thenReturn(subject);
         Locale.setDefault(Locale.UK);
+        vaadinSessionProvider = mock(VaadinSessionProvider.class);
+        when(vaadinSessionProvider.get()).thenReturn(vaadinSession);
     }
 
     @Test
     public void uiScope2() {
 
         // given
-        SecurityUtils.setSecurityManager(new KrailSecurityManager());
+        KrailSecurityManager securityManager = new KrailSecurityManager();
+        //        securityManager.setVaadinSessionProvider(vaadinSessionProvider);
+
+        SecurityUtils.setSecurityManager(securityManager);
+
         when(subject.isPermitted(anyString())).thenReturn(true);
         when(subject.isPermitted(any(org.apache.shiro.authz.Permission.class))).thenReturn(true);
         when(mockedSession.hasLock()).thenReturn(true);
@@ -94,8 +105,9 @@ public class UIScopeTest {
         // when
 
         injector = Guice.createInjector(new PushModule(), new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(), new
-                ServiceModule(), new OptionModule(), new UserModule(), new DefaultComponentModule(), new TestI18NModule(), new StandardShiroModule(), new
-                ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new NavigationModule(), new EventBusModule(), new DataModule(), new DataTypeModule());
+                ServiceModule(), new OptionModule(), new UserModule(), new DefaultComponentModule(), new TestI18NModule(), new DefaultShiroModule(), new
+                ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new NavigationModule(), new EventBusModule(),
+                new DataModule(), new DataTypeModule());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
         // navigator = injector.getInstance(Navigator.class);

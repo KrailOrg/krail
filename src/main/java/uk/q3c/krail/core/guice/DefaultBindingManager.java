@@ -21,7 +21,6 @@ import com.google.inject.servlet.ServletModule;
 import org.apache.bval.guice.ValidationModule;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.guice.aop.ShiroAopModule;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
@@ -39,8 +38,9 @@ import uk.q3c.krail.core.navigate.sitemap.StandardPagesModule;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.services.ServiceModule;
 import uk.q3c.krail.core.services.ServicesMonitor;
+import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
-import uk.q3c.krail.core.shiro.StandardShiroModule;
+import uk.q3c.krail.core.shiro.aop.KrailShiroAopModule;
 import uk.q3c.krail.core.ui.DataTypeModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
@@ -123,7 +123,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
         coreModules.add(shiroModule());
         coreModules.add(shiroVaadinModule());
-        coreModules.add(new ShiroAopModule());
+        coreModules.add(shiroAopModule());
 
         coreModules.add(servletModule());
 
@@ -151,6 +151,11 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         addSitemapModules(coreModules);
         return coreModules;
     }
+
+    protected Module shiroAopModule() {
+        return new KrailShiroAopModule();
+    }
+
 
     /**
      * Override this if you have provided your own {@link DataTypeModule} implementation
@@ -295,14 +300,14 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     }
 
     /**
-     * Override this method if you have sub-classed {@link StandardShiroModule} to provide bindings to your Shiro
+     * Override this method if you have sub-classed {@link DefaultShiroModule} to provide bindings to your Shiro
      * related implementations (for example, {@link Realm} and {@link CredentialsMatcher}
      *
-     * @return a new {@link StandardShiroModule} instance
+     * @return a new {@link DefaultShiroModule} instance
      */
 
     protected Module shiroModule() {
-        return new StandardShiroModule();
+        return new DefaultShiroModule();
     }
 
     /**

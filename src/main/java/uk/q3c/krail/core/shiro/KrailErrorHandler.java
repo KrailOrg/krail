@@ -22,6 +22,8 @@ import org.apache.shiro.authz.UnauthorizedException;
 import uk.q3c.krail.core.navigate.InvalidURIException;
 import uk.q3c.krail.core.navigate.InvalidURIExceptionHandler;
 import uk.q3c.krail.core.navigate.Navigator;
+import uk.q3c.krail.core.shiro.aop.NotAGuestException;
+import uk.q3c.krail.core.shiro.aop.NotAUserException;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.core.view.component.LoginFormException;
 
@@ -35,17 +37,21 @@ import uk.q3c.krail.core.view.component.LoginFormException;
 public class KrailErrorHandler extends DefaultErrorHandler {
 
     private final UnauthenticatedExceptionHandler authenticationHandler;
+    private final NotAGuestExceptionHandler notAGuestExceptionHandler;
+    private final NotAUserExceptionHandler notAUserExceptionHandler;
     private final UnauthorizedExceptionHandler authorisationHandler;
     private final InvalidURIExceptionHandler invalidUriHandler;
     private final Navigator navigator;
     private UserNotifier userNotifier;
 
     @Inject
-    protected KrailErrorHandler(UnauthenticatedExceptionHandler authenticationHandler,
-                                UnauthorizedExceptionHandler authorisationHandler, InvalidURIExceptionHandler invalidUriHandler, Navigator navigator,
-                                UserNotifier userNotifier) {
+    protected KrailErrorHandler(UnauthenticatedExceptionHandler authenticationHandler, NotAGuestExceptionHandler notAGuestExceptionHandler,
+                                NotAUserExceptionHandler notAUserExceptionHandler, UnauthorizedExceptionHandler authorisationHandler,
+                                InvalidURIExceptionHandler invalidUriHandler, Navigator navigator, UserNotifier userNotifier) {
         super();
         this.authenticationHandler = authenticationHandler;
+        this.notAGuestExceptionHandler = notAGuestExceptionHandler;
+        this.notAUserExceptionHandler = notAUserExceptionHandler;
         this.authorisationHandler = authorisationHandler;
         this.invalidUriHandler = invalidUriHandler;
         this.navigator = navigator;
@@ -64,12 +70,6 @@ public class KrailErrorHandler extends DefaultErrorHandler {
             return;
         }
 
-        // handle an unauthenticated access attempt
-        int unauthenticated = ExceptionUtils.indexOfThrowable(originalError, UnauthenticatedException.class);
-        if (unauthenticated >= 0) {
-            authenticationHandler.invoke();
-            return;
-        }
 
         // handle an unauthorised access attempt
         int unauthorised = ExceptionUtils.indexOfThrowable(originalError, UnauthorizedException.class);
@@ -78,6 +78,28 @@ public class KrailErrorHandler extends DefaultErrorHandler {
             return;
         }
 
+        // handle an unauthenticated access attempt
+        int unauthenticated = ExceptionUtils.indexOfThrowable(originalError, UnauthenticatedException.class);
+        if (unauthenticated >= 0) {
+            authenticationHandler.invoke();
+            return;
+        }
+
+
+        int notAUser = ExceptionUtils.indexOfThrowable(originalError, NotAUserException.class);
+        if (notAUser >= 0) {
+            notAUserExceptionHandler.invoke();
+            return;
+        }
+
+
+        int notAGuest = ExceptionUtils.indexOfThrowable(originalError, NotAGuestException.class);
+        if (notAGuest >= 0) {
+            notAGuestExceptionHandler.invoke();
+            return;
+        }
+
+
         // catch-all handle an unauthorised access attempt, exceptions are not always thrown at more specific level
         unauthorised = ExceptionUtils.indexOfThrowable(originalError, AuthorizationException.class);
         if (unauthorised >= 0) {
@@ -85,6 +107,8 @@ public class KrailErrorHandler extends DefaultErrorHandler {
             return;
         }
 
+
+        // no handler identified, display the exception on the error page
         int loginEmpty = ExceptionUtils.indexOfThrowable(originalError, LoginFormException.class);
         if (loginEmpty > 0) {
             LoginFormException lfe = (LoginFormException) ExceptionUtils.getThrowableList(originalError)

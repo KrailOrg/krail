@@ -47,11 +47,18 @@ public class KrailErrorHandlerTest {
     ErrorEvent event;
 
     @Mock
+    NotAGuestExceptionHandler notAGuestExceptionHandler;
+
+    @Mock
+    NotAUserExceptionHandler notAUserExceptionHandler;
+
+    @Mock
     private UserNotifier userNotifier;
 
     @Before
     public void setup() {
-        handler = new KrailErrorHandler(authenticationHandler, authorisationHandler, invalidUriHandler, navigator, userNotifier);
+        handler = new KrailErrorHandler(authenticationHandler, notAGuestExceptionHandler, notAUserExceptionHandler, authorisationHandler, invalidUriHandler,
+                navigator, userNotifier);
     }
 
     @Test

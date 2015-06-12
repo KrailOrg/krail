@@ -13,11 +13,11 @@ package uk.q3c.krail.core.shiro;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
-import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.SubjectContext;
+import org.apache.shiro.util.ThreadContext;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -29,47 +29,53 @@ import static org.mockito.Mockito.*;
 @GuiceContext({})
 public class SubjectProviderTest extends AbstractShiroTest {
 
-    @Mock
-    VaadinService service;
-
-    @Mock
-    VaadinSession session;
-
-    @Mock
-    VaadinSessionProvider vsp;
 
     SubjectProvider provider;
 
 
-    @BeforeClass
-    public static void beforeClass() {
-        setSecurityManager(new KrailSecurityManager());
-    }
+    @Mock
+    KrailSecurityManager krailSecurityManager;
+
+    @Mock
+    VaadinSession vaadinSession;
+
+    @Mock
+    Subject mockSubject;
+
+
 
     @Before
     public void setup() {
-        when(vsp.get()).thenReturn(session);
-        provider = new SubjectProvider(vsp);
+        VaadinSession.setCurrent(vaadinSession);
+        setSecurityManager(krailSecurityManager);
+        ThreadContext.unbindSubject();
+        provider = new DefaultSubjectProvider(krailSecurityManager);
     }
 
 
     @Test
-    public void get() {
+    public void get_no_previous() {
         //given
-        when(session.hasLock()).thenReturn(true);
-        when(session.getAttribute(Subject.class)).thenReturn(null);
+
         //when
         Subject actual = provider.get();
         //then
-        assertThat(actual).isNotNull();
-        verify(session).setAttribute(eq(Subject.class), any(Subject.class));
+        verify(vaadinSession).getAttribute(SubjectProvider.SUBJECT_ATTRIBUTE);
+        verify(krailSecurityManager).createSubject(any(SubjectContext.class));
+        verify(vaadinSession).setAttribute(SubjectProvider.SUBJECT_ATTRIBUTE, actual);
+
+    }
+
+
+    @Test
+    public void get_with_previous() {
         //given
-        when(session.getAttribute(Subject.class)).thenReturn(actual);
-
+        when(vaadinSession.getAttribute(SubjectProvider.SUBJECT_ATTRIBUTE)).thenReturn(mockSubject);
         //when
-        Subject actual2 = provider.get();
-
+        Subject actual = provider.get();
         //then
-        assertThat(actual2).isEqualTo(actual);
+        assertThat(actual).isEqualTo(mockSubject);
+        verify(krailSecurityManager, never()).createSubject(any(SubjectContext.class));
+        verify(vaadinSession, never()).setAttribute(SubjectProvider.SUBJECT_ATTRIBUTE, actual);
     }
 }

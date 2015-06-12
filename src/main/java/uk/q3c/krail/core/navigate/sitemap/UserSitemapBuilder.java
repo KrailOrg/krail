@@ -16,6 +16,7 @@ import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.util.SourceTreeWrapper_BasicForest;
 import uk.q3c.util.TargetTreeWrapper_BasicForest;
@@ -27,13 +28,13 @@ public class UserSitemapBuilder {
     private static Logger log = LoggerFactory.getLogger(UserSitemapBuilder.class);
     private final TreeCopy<MasterSitemapNode, UserSitemapNode> treeCopy;
     private final UserSitemap userSitemap;
+    private SubjectProvider subjectProvider;
 
     @Inject
-
-    protected UserSitemapBuilder(MasterSitemap masterSitemap, UserSitemap userSitemap, UserSitemapNodeModifier nodeModifier, UserSitemapCopyExtension
-            copyExtension) {
+    protected UserSitemapBuilder(MasterSitemap masterSitemap, UserSitemap userSitemap, UserSitemapNodeModifier nodeModifier, UserSitemapCopyExtension copyExtension, SubjectProvider subjectProvider) {
 
         this.userSitemap = userSitemap;
+        this.subjectProvider = subjectProvider;
         TargetTreeWrapper_BasicForest<MasterSitemapNode, UserSitemapNode> target = new TargetTreeWrapper_BasicForest<>(userSitemap.getForest());
         target.setNodeModifier(nodeModifier);
         SourceTreeWrapper_BasicForest<MasterSitemapNode> source = new SourceTreeWrapper_BasicForest<>(masterSitemap.getForest());
@@ -49,6 +50,7 @@ public class UserSitemapBuilder {
 
     @Handler
     public synchronized void userStatusChanged(UserStatusBusMessage busMessage) {
+        log.debug("UserStatusBusMessage received");
         log.debug("user status is now authenticated = '{}', rebuild the userSitemap", busMessage.isAuthenticated());
         userSitemap.clear();
         build();
@@ -56,7 +58,8 @@ public class UserSitemapBuilder {
     }
 
     public synchronized void build() {
-        log.debug("building or rebuilding the map");
+        log.debug("building or rebuilding the map, user status is {}", subjectProvider.get()
+                                                                                      .isAuthenticated());
         if (!userSitemap.isLoaded()) {
             treeCopy.copy();
             userSitemap.setLoaded(true);

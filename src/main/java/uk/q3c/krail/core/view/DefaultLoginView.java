@@ -21,6 +21,8 @@ import net.engio.mbassy.bus.common.PubSubSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
@@ -34,6 +36,8 @@ import uk.q3c.util.ID;
 import java.util.Optional;
 
 public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, ClickListener {
+    private static Logger log = LoggerFactory.getLogger(DefaultLoginView.class);
+
     private final LoginExceptionHandler loginExceptionHandler;
     private final Provider<Subject> subjectProvider;
     private final Translate translate;
@@ -121,6 +125,8 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
         try {
             subjectProvider.get()
                            .login(token);
+            log.debug("Publishing UserStatusBusMessage from: '{}'", this.getClass()
+                                                                        .getSimpleName());
             eventBus.publish(new UserStatusBusMessage(this, true));
         } catch (UnknownAccountException uae) {
             loginExceptionHandler.unknownAccount(this, token);
@@ -164,13 +170,13 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     public TextField getUsernameBox() {

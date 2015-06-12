@@ -35,9 +35,9 @@ import uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSi
 import uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceTest.TestFileSitemapModule;
 import uk.q3c.krail.core.services.ServiceException;
 import uk.q3c.krail.core.services.ServiceModule;
+import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
-import uk.q3c.krail.core.shiro.StandardShiroModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
 import uk.q3c.krail.core.view.PublicHomeView;
@@ -67,7 +67,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class, ServiceModule.class,
-        ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, StandardShiroModule
+        ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, DefaultShiroModule
         .class, DefaultComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, NavigationModule.class,
         DefaultUIModule.class})
 public class DefaultSitemapServiceTest {

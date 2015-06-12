@@ -9,14 +9,19 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.shiro;
+package uk.q3c.krail.core.shiro.aop;
 
-public interface UnauthenticatedExceptionHandler {
+import org.apache.shiro.ShiroException;
+import org.apache.shiro.authz.annotation.RequiresGuest;
+import org.apache.shiro.subject.Subject;
 
-    /**
-     * invoke the handler
-     *
-     */
-    void invoke();
+/**
+ * Indicates current {@link Subject} is not a Guest in the sense of {@link RequiresGuest}.  Only used by the Shiro annotations AOP
+ * <p>
+ * Created by David Sowerby on 11/06/15.
+ */
+public class NotAGuestException extends ShiroException {
 
+    public NotAGuestException() {
+    }
 }

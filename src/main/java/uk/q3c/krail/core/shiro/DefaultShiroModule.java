@@ -17,19 +17,24 @@ import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.guice.ShiroModule;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.subject.Subject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Bindings for Shiro and user related implementations
  *
  * @author David Sowerby 15 Jul 2013
  */
-public class StandardShiroModule extends ShiroModule {
+public class DefaultShiroModule extends ShiroModule {
 
-    public StandardShiroModule() {
+    private List<Class<? extends Realm>> realms = new ArrayList<>();
+
+    public DefaultShiroModule() {
         super();
     }
 
@@ -42,6 +47,16 @@ public class StandardShiroModule extends ShiroModule {
         bindSubjectIdentifier();
         expose(SubjectIdentifier.class);
         bindSubjectProvider();
+        expose(SubjectProvider.class);
+    }
+
+    private void bindRealms() {
+        if (realms.isEmpty()) {
+            realms.add(DefaultRealm.class);
+        }
+        for (Class<? extends Realm> realmClass : realms) {
+            bindRealm().to(realmClass);
+        }
     }
 
     /**
@@ -49,13 +64,6 @@ public class StandardShiroModule extends ShiroModule {
      */
     protected void bindSubjectIdentifier() {
         bind(SubjectIdentifier.class).to(DefaultSubjectIdentifier.class);
-    }
-
-    /**
-     * Override this to bind your own Realm implementation(s). Multiple calls can be made to bindRealm();
-     */
-    protected void bindRealms() {
-        bindRealm().to(DefaultRealm.class);
     }
 
     /**
@@ -73,7 +81,16 @@ public class StandardShiroModule extends ShiroModule {
     }
 
     protected void bindSubjectProvider() {
-        bind(Subject.class).toProvider(SubjectProvider.class);
+        bind(SubjectProvider.class).to(DefaultSubjectProvider.class);
+        //        bind(Subject.class).toProvider(SubjectProvider.class);
+    }
+
+    /**
+     * Call to add one or more {@link Realm}s.  Multiple calls may be made
+     */
+    public DefaultShiroModule addRealm(Class<? extends Realm>... realms) {
+        this.realms.addAll(Arrays.asList(realms));
+        return this;
     }
 
     @Override

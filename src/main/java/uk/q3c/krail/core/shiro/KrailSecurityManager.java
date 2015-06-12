@@ -23,9 +23,10 @@ import java.util.Collection;
 
 public class KrailSecurityManager extends DefaultSecurityManager {
     private static Logger log = LoggerFactory.getLogger(KrailSecurityManager.class);
+    //    @Inject
+    //    private VaadinSessionProvider vaadinSessionProvider;
 
-    @Inject
-    private VaadinSessionProvider sessionProvider;
+
 
     public KrailSecurityManager() {
         super();
@@ -34,18 +35,6 @@ public class KrailSecurityManager extends DefaultSecurityManager {
     public KrailSecurityManager(Collection<Realm> realms) {
         super(realms);
     }
-
-    //    @Override
-    //    protected void onSuccessfulLogin(AuthenticationToken token, AuthenticationInfo info, Subject subject) {
-    //        super.onSuccessfulLogin(token, info, subject);
-    //        setSubject(subject);
-    //    }
-    //
-    //    protected void setSubject(Subject subject) {
-    //        VaadinSession session = sessionProvider.get();
-    //        log.debug("storing Subject instance in VaadinSession");
-    //        session.setAttribute(Subject.class, subject);
-    //    }
 
     /**
      * Method injection is needed because the constructor has to complete
@@ -58,8 +47,8 @@ public class KrailSecurityManager extends DefaultSecurityManager {
         super.setSessionManager(sessionManager);
     }
 
-    public void setSessionProvider(VaadinSessionProvider sessionProvider) {
-        this.sessionProvider = sessionProvider;
-    }
+    //    public void setVaadinSessionProvider(VaadinSessionProvider vaadinSessionProvider) {
+    //        this.vaadinSessionProvider = vaadinSessionProvider;
+    //    }
 
 }

@@ -12,54 +12,27 @@
  */
 package uk.q3c.krail.core.shiro;
 
-import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.server.VaadinSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.annotation.concurrent.ThreadSafe;
 
 /**
- * Use this instead of using {@link SecurityUtils#getSubject()} directly, to ensure that the Subject instance remains
- * consistent for the duration of a Vaadin Session
+ * Use this instead of using {@link SecurityUtils#getSubject()} - that will fail because of various issues around trheading and session management.
+ * <p>
+ * This is actually a re-badged "VaadinSecurityContext" referred to in Mike's blog (see below)
+ * <p>
+ * With thanks to Mike Pilone http://mikepilone.blogspot.co.uk/2013/07/vaadin-shiro-and-push.html
  *
+ * @author mpilone
  * @author David Sowerby 15 Jul 2013
  */
-@ThreadSafe
-public class SubjectProvider implements Provider<Subject> {
-    private static Logger log = LoggerFactory.getLogger(SubjectProvider.class);
-    private final VaadinSessionProvider sessionProvider;
+public interface SubjectProvider extends Provider<Subject> {
 
-    @Inject
-    protected SubjectProvider(VaadinSessionProvider sessionProvider) {
-        super();
-        this.sessionProvider = sessionProvider;
-    }
+    /**
+     * The attribute name used in the {@link VaadinSession} to store the
+     * {@link Subject}.
+     */
+    String SUBJECT_ATTRIBUTE = SubjectProvider.class.getName() + ".subject";
 
-    @Override
-    public synchronized Subject get() {
-        Subject subject = null;
-        try {
-            VaadinSession session = sessionProvider.get();
-            subject = session.getAttribute(Subject.class);
-            if (subject == null) {
-                log.debug("VaadinSession is valid, but does not have a stored Subject, creating a new Subject");
-                subject = new Subject.Builder().buildSubject();
-                log.debug("storing Subject instance in VaadinSession");
-                session.setAttribute(Subject.class, subject);
-            }
-            return subject;
-
-        } catch (IllegalStateException ise) {
-            // this may happen in background threads which are not using a session, or during testing
-            log.debug("There is no VaadinSession, creating a new Subject");
-            subject = new Subject.Builder().buildSubject();
-            return subject;
-
-        }
-
-    }
 }

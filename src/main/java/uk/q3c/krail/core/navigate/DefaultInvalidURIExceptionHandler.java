@@ -13,10 +13,13 @@
 package uk.q3c.krail.core.navigate;
 
 import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.i18n.MessageKey;
 
 public class DefaultInvalidURIExceptionHandler implements InvalidURIExceptionHandler {
+    private static Logger log = LoggerFactory.getLogger(DefaultInvalidURIExceptionHandler.class);
 
     private final UserNotifier notifier;
 
@@ -28,6 +31,7 @@ public class DefaultInvalidURIExceptionHandler implements InvalidURIExceptionHan
 
     @Override
     public void invoke(InvalidURIException exception) {
+        log.info("invalid uri {}", exception.getTargetURI());
         notifier.notifyInformation(MessageKey.Invalid_URI, exception.getTargetURI());
     }
 

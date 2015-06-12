@@ -11,12 +11,16 @@
 
 package uk.q3c.krail.core.shiro;
 
-public interface UnauthenticatedExceptionHandler {
+import org.apache.shiro.authz.annotation.RequiresUser;
+import org.apache.shiro.subject.Subject;
+import uk.q3c.krail.core.shiro.aop.NotAUserException;
 
-    /**
-     * invoke the handler
-     *
-     */
+/**
+ * Handles a {@link NotAUserException}, which indicates current {@link Subject} is not a User in the sense of {@link RequiresUser}.  Only used by the Shiro
+ * annotations
+ * <p>
+ * Created by David Sowerby on 11/06/15.
+ */
+public interface NotAUserExceptionHandler {
     void invoke();
-
 }

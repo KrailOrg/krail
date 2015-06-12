@@ -9,14 +9,15 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.shiro;
+package uk.q3c.krail.core.shiro.aop;
 
-public interface UnauthenticatedExceptionHandler {
+import org.aopalliance.intercept.MethodInvocation;
 
-    /**
-     * invoke the handler
-     *
-     */
-    void invoke();
+import java.lang.annotation.Annotation;
 
+/**
+ * Created by David Sowerby on 10/06/15.
+ */
+public interface AnnotationResolver {
+    <A extends Annotation> A getAnnotation(MethodInvocation mi, Class<A> clazz);
 }
