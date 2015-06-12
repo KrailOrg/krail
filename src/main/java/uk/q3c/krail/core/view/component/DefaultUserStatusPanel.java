@@ -63,7 +63,8 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
     private final CurrentLocale currentLocale;
 
     @Inject
-    protected DefaultUserStatusPanel(Navigator navigator, SubjectProvider subjectProvider, Translate translate, SubjectIdentifier subjectIdentifier, @SessionBus PubSubSupport<BusMessage> eventBus, CurrentLocale currentLocale) {
+    protected DefaultUserStatusPanel(Navigator navigator, SubjectProvider subjectProvider, Translate translate, SubjectIdentifier subjectIdentifier,
+                                     @SessionBus PubSubSupport<BusMessage> eventBus, CurrentLocale currentLocale) {
         super();
         this.navigator = navigator;
         this.subjectProvider = subjectProvider;
@@ -105,20 +106,15 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
     }
 
     /**
-     * Responds to the {@code busMessage} by rebuilding the panel to reflect a change in user status.  Does nothing if the message was sent from here
+     * Responds to the {@code busMessage} by rebuilding the panel to reflect a change in user status.
      *
      * @param busMessage
      *         the message received from the event bus
      */
     @Handler
     public void userStatusChange(UserStatusBusMessage busMessage) {
-        log.debug("UserStatusBusMessage received, user status is now authenticated = '{}'", busMessage.isAuthenticated());
-        if (busMessage.getSource() == this) {
-            log.debug("received message from bus, but sent from here, so ignoring");
-        } else {
-            log.debug("user status has changed to authenticated = '{}', reset the user status panel", busMessage.isAuthenticated());
-            build();
-        }
+        log.debug("user status has changed to authenticated = '{}', reset the user status panel", busMessage.isAuthenticated());
+        build();
     }
 
     @Override
