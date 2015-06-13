@@ -78,8 +78,6 @@ public class DefaultOptionPopupTest {
         public void optionValueChanged(Property.ValueChangeEvent event) {
 
         }
-
-
     }
 
     static class MockContext2 implements OptionContext {

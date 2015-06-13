@@ -36,9 +36,11 @@ import java.util.Set;
  */
 public class DefaultOptionPopup implements OptionPopup {
     private static Logger log = LoggerFactory.getLogger(DefaultOptionPopup.class);
+    private OptionContext activeContext;
     private Set<Field> contextFields;
     private DataTypeToUI dataTypeToUI;
     private Translate translate;
+    private Window window;
 
     @Inject
     public DefaultOptionPopup(DataTypeToUI dataTypeToUI, Translate translate) {
@@ -48,8 +50,18 @@ public class DefaultOptionPopup implements OptionPopup {
 
     @Override
     public void popup(@Nonnull OptionContext context, I18NKey windowCaption) {
+
+        // changing context, so we need to clear the context fields
+        if (context != activeContext) {
+            contextFields = null;
+            if (window != null) {
+                window.close();
+            }
+        }
+
         Option option = context.getOption();
-        Window window = new Window();
+        window = new Window();
+
         window.setCaption(windowCaption(windowCaption));
 
 
@@ -71,6 +83,7 @@ public class DefaultOptionPopup implements OptionPopup {
                 uiField.setCaption(translate.from(key.getKey()));
                 uiField.setDescription(translate.from(key.getDescriptionKey()));
                 uiField.setId(ID.getId(Optional.of(((Enum) key.getKey()).name()), this, uiField));
+                log.debug("Component id for '{}' set to: '{}'", uiField.getCaption(), uiField.getId());
                 //noinspection unchecked
                 uiField.setValue(value);
                 uiField.addValueChangeListener(event -> {
@@ -99,6 +112,7 @@ public class DefaultOptionPopup implements OptionPopup {
         window.center();
         UI.getCurrent()
           .addWindow(window);
+        this.activeContext = context;
     }
 
     private void calculateWindowSize(Window window, int numOfKeys) {
