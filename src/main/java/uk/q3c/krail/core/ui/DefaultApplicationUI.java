@@ -158,7 +158,8 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
         if (option.get(optionNavTreeVisible)) {
             navTree.build();
             navTree.setVisible(true);
-            ((DefaultUserNavigationTree) navTree).setImmediate(true);
+            navTree.getTree()
+                   .setImmediate(true);
         } else {
             navTree.setVisible(false);
         }
@@ -168,7 +169,8 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
         if (option.get(optionMenuVisible)) {
             menu.build();
             menu.setVisible(true);
-            ((DefaultUserNavigationMenu) menu).setImmediate(true);
+            menu.getMenuBar()
+                .setImmediate(true);
         } else {
             menu.setVisible(false);
         }

@@ -129,8 +129,15 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         Component content = toView.getRootComponent();
         translator.translate(toView);
         content.setSizeFull();
-        viewDisplayPanel.setContent(content);
+        getViewDisplayPanel().setContent(content);
         this.view = toView;
+    }
+
+    public Panel getViewDisplayPanel() {
+        if (viewDisplayPanel == null) {
+            viewDisplayPanel = new Panel();
+        }
+        return viewDisplayPanel;
     }
 
     /**
@@ -185,7 +192,6 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         return translate.from(key);
     }
 
-
     /**
      * Uses the {@link #screenLayout} defined by sub-class implementations of {@link #screenLayout()}, expands it to
      * full size, and sets the View display panel to take up all spare space.
@@ -214,13 +220,6 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
      * @return the layout in which views are placed
      */
     protected abstract AbstractOrderedLayout screenLayout();
-
-    public Panel getViewDisplayPanel() {
-        if (viewDisplayPanel == null) {
-            viewDisplayPanel = new Panel();
-        }
-        return viewDisplayPanel;
-    }
 
     @Override
     public void receiveBroadcast(final String group, final String message) {

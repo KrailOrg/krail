@@ -17,6 +17,8 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,6 +43,10 @@ public class DefaultApplicationUITest {
 
 
     DefaultApplicationUI ui;
+    @Mock
+    MenuBar menuBar;
+    @Mock
+    Tree tree;
     @Mock
     private ApplicationTitle applicationTitle;
     @Mock
@@ -85,6 +91,8 @@ public class DefaultApplicationUITest {
     @Before
     public void setup() {
         when(localeSelector.getComponent()).thenReturn(new Label());
+        when(navTree.getTree()).thenReturn(tree);
+        when(menu.getMenuBar()).thenReturn(menuBar);
         ui = new DefaultApplicationUI(navigator, errorHandler, converterFactory, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator, localeSelector, vaadinNotification, option);
     }
 
