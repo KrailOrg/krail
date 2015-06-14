@@ -375,7 +375,7 @@ protected void requestAPayRise() {
 <p class="last">Guice AOP <a href="https://github.com/google/guice/wiki/AOP#limitations" target="">will not work on private or final methods</a> - it is easy to forget that, especially as your IDE may auto create the method as private.  If a method annotation does not work as expected, that is the first thing to check</p>
 </div>
 
-- We want to restrict who can do method, so we will annotate it with a new permission
+- We want to restrict who can use the method, so we will annotate it with a new permission
 
 ```
 @RequiresPermissions("pay:request-increase")
@@ -399,3 +399,15 @@ addAccount("eq", "eq", "page:view:private:*","option:edit:SimpleUserHierarchy:eq
     - log in as 'fb' or 'admin'
     - navigate to "My News" and press "request a pay rise".
     - you receive a "not permitted" message
+    
+#Summary
+
+We have:
+- Shown how to control access to pages
+- Shown how access control is applied to Options
+- Shown how to control access using code, or annotations
+- Built a very simple credential store with user accounts
+- Demonstrated some uses of Shiro's Wildcard permissions
+
+#Download from Github
+To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step07**
