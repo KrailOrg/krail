@@ -15,10 +15,7 @@ import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
-import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.HorizontalSplitPanel;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
@@ -36,6 +33,7 @@ import javax.annotation.Nonnull;
  *
  * @author David Sowerby
  */
+
 public class DefaultApplicationUI extends ScopedUI implements OptionContext {
 
     protected static final OptionKey<Boolean> optionBreadcrumbVisible = new OptionKey(true, DefaultApplicationUI.class, LabelKey.Breadcrumb_is_Visible,
@@ -59,14 +57,17 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
     private final ApplicationHeader header;
     private final LocaleSelector localeSelector;
     private VerticalLayout baseLayout;
+    private HorizontalLayout headerRow;
+    private VerticalLayout mainArea;
+    private Panel nonSplitPanel;
     private Option option;
+    private HorizontalSplitPanel splitPanel;
     // this appears not to be used but does receive bus messages
     private VaadinNotification vaadinNotification;
 
     @Inject
     protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader
-            header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage,
-                                   MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option) {
+            header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option) {
         super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
         this.navTree = navTree;
         this.breadcrumb = breadcrumb;
@@ -83,56 +84,46 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
 
     @Override
     protected AbstractOrderedLayout screenLayout() {
-        if (baseLayout == null) {
-
-            setSizes();
-
-            baseLayout = new VerticalLayout();
-            baseLayout.setSizeFull();
-
-            HorizontalLayout row0 = new HorizontalLayout(header, localeSelector.getComponent(), userStatus);
-            row0.setWidth("100%");
-            baseLayout.addComponent(row0);
-            baseLayout.addComponent(menu);
-            HorizontalSplitPanel row2 = new HorizontalSplitPanel();
-            row2.setWidth("100%");
-            row2.setSplitPosition(200, Unit.PIXELS);
-
-            row2.setFirstComponent(navTree);
-
-            VerticalLayout mainArea = new VerticalLayout(breadcrumb, getViewDisplayPanel(), subpage);
-            mainArea.setSizeFull();
-            row2.setSecondComponent(mainArea);
-            baseLayout.addComponent(row2);
-            baseLayout.addComponent(messageBar);
-            mainArea.setExpandRatio(getViewDisplayPanel(), 1f);
-
-            row0.setExpandRatio(header, 1f);
-            baseLayout.setExpandRatio(row2, 1f);
-
-        }
-        processOptions();
-
-
+        buildPage();
         return baseLayout;
     }
 
-    protected void processOptions() {
-        breadcrumb.setVisible(option.get(optionBreadcrumbVisible));
-        menu.setVisible(option.get(optionMenuVisible));
-        if (menu.isVisible()) {
-            menu.build();
+    protected void buildPage() {
+        headerRow();
+        messageBar();
+        subPagePanel();
+        getBaseLayout();
+        mainArea();
+        navTree();
+        navMenu();
+        breadcrumb();
+        splitPanel();
+        nonSplitPanel();
+
+        setSizesForInjectComponents();
+        baseLayout.addComponent(headerRow);
+        baseLayout.addComponent(menu);
+        baseLayout.addComponent(splitPanel);
+        baseLayout.addComponent(nonSplitPanel);
+
+        if (option.get(optionNavTreeVisible)) {
+            baseLayout.setExpandRatio(splitPanel, 1f);
+            baseLayout.setExpandRatio(nonSplitPanel, 0f);
+        } else {
+            baseLayout.setExpandRatio(nonSplitPanel, 1f);
+            baseLayout.setExpandRatio(splitPanel, 0f);
         }
-        navTree.setVisible(option.get(optionNavTreeVisible));
-        if (navTree.isVisible()) {
-            navTree.build();
-        }
-        messageBar.setVisible(option.get(optionMessageBarVisible));
-        subpage.setVisible(option.get(optionSubPagePanelVisible));
+        baseLayout.addComponent(messageBar);
     }
 
+    protected void headerRow() {
+        headerRow = new HorizontalLayout(header, localeSelector.getComponent(), userStatus);
+        headerRow.setWidth("100%");
+        headerRow.setExpandRatio(header, 1f);
 
-    private void setSizes() {
+    }
+
+    private void setSizesForInjectComponents() {
         logo.setWidth("100px");
         logo.setHeight("100px");
 
@@ -149,15 +140,88 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
 
         messageBar.setSizeUndefined();
         messageBar.setWidth("100%");
+    }
 
+    protected void messageBar() {
+        messageBar.setVisible(option.get(optionMessageBarVisible));
+    }
+
+    protected void subPagePanel() {
+        subpage.setVisible(option.get(optionSubPagePanelVisible));
+    }
+
+    protected void breadcrumb() {
+        breadcrumb.setVisible(option.get(optionBreadcrumbVisible));
+    }
+
+    protected void navTree() {
+        if (option.get(optionNavTreeVisible)) {
+            navTree.build();
+            navTree.setVisible(true);
+            ((DefaultUserNavigationTree) navTree).setImmediate(true);
+        } else {
+            navTree.setVisible(false);
+        }
+    }
+
+    protected void navMenu() {
+        if (option.get(optionMenuVisible)) {
+            menu.build();
+            menu.setVisible(true);
+            ((DefaultUserNavigationMenu) menu).setImmediate(true);
+        } else {
+            menu.setVisible(false);
+        }
+    }
+
+    protected void mainArea() {
+        if (mainArea == null) {
+            mainArea = new VerticalLayout(breadcrumb, getViewDisplayPanel(), subpage);
+            mainArea.setSizeFull();
+            mainArea.setExpandRatio(getViewDisplayPanel(), 1f);
+        }
+    }
+
+    protected void splitPanel() {
+        if (splitPanel == null) {
+            splitPanel = new HorizontalSplitPanel();
+            splitPanel.setWidth("100%");
+            splitPanel.setSplitPosition(200, Unit.PIXELS);
+        }
+        if (option.get(optionNavTreeVisible)) {
+            splitPanel.setFirstComponent(navTree);
+            splitPanel.setSecondComponent(mainArea);
+            splitPanel.setVisible(true);
+        } else {
+            splitPanel.setVisible(false);
+        }
+    }
+
+    /**
+     * used wqhen nav tree not required, and split panel also therefore not required
+     */
+    protected void nonSplitPanel() {
+        if (nonSplitPanel == null) {
+            nonSplitPanel = new Panel();
+            nonSplitPanel.setSizeFull();
+        }
+        if (!option.get(optionNavTreeVisible)) {
+            nonSplitPanel.setContent(mainArea);
+            nonSplitPanel.setVisible(true);
+        } else {
+            nonSplitPanel.setVisible(false);
+        }
+    }
+
+    public VerticalLayout getBaseLayout() {
+        if (baseLayout == null) {
+            baseLayout = new VerticalLayout();
+        }
+        return baseLayout;
     }
 
     public MessageBar getMessageBar() {
         return messageBar;
-    }
-
-    public VerticalLayout getBaseLayout() {
-        return baseLayout;
     }
 
     public UserNavigationTree getNavTree() {
@@ -201,7 +265,29 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
 
     @Override
     public void optionValueChanged(Property.ValueChangeEvent event) {
-        processOptions();
+        //this causes random elements to disappear - better to need manual browser refresh for now
+        //        super.doLayout();
+        this.markAsDirtyRecursive();
+
+    }
+
+    class Loader implements Runnable {
+
+        @Override
+        public void run() {
+
+
+            // Wrap UI updates in access to properly deal with locking
+            access(new Runnable() {
+                @Override
+                public void run() {
+                    setContent(new Label("This is the real content"));
+
+                    // Stop polling once the update is done
+                    setPollInterval(-1);
+                }
+            });
+        }
     }
 
 

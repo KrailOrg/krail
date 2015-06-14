@@ -50,7 +50,6 @@ import uk.q3c.krail.i18n.*;
 public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastListener {
     private static Logger log = LoggerFactory.getLogger(ScopedUI.class);
     protected final CurrentLocale currentLocale;
-    private final Panel viewDisplayPanel;
     private final ErrorHandler errorHandler;
     private final ConverterFactory converterFactory;
     private final PushMessageRouter pushMessageRouter;
@@ -59,10 +58,10 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private final Translate translate;
     private final I18NProcessor translator;
     private UIKey instanceKey;
-
     private AbstractOrderedLayout screenLayout;
     private UIScope uiScope;
     private KrailView view;
+    private Panel viewDisplayPanel;
 
     protected ScopedUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, Broadcaster broadcaster, PushMessageRouter
             pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator) {
@@ -75,7 +74,6 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         this.translate = translate;
         this.translator = translator;
         this.currentLocale = currentLocale;
-        viewDisplayPanel = new Panel();
         registerWithBroadcaster(broadcaster);
 
     }
@@ -218,6 +216,9 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     protected abstract AbstractOrderedLayout screenLayout();
 
     public Panel getViewDisplayPanel() {
+        if (viewDisplayPanel == null) {
+            viewDisplayPanel = new Panel();
+        }
         return viewDisplayPanel;
     }
 
