@@ -21,6 +21,7 @@ By default, Krail looks for a file krail.ini in WEB-INF:
 ```
 [tutorial]
 quality=good
+completed=false
 ```
 - In the 'pages' package create a new view, 'IniConfigView', extended from ```Grid3x3View``` 
 - Override the ```doBuild()``` method (you will get some compile errors)
@@ -73,7 +74,6 @@ There may be occasions when adding libraries to an application that further conf
 ```
 [tutorial]
 quality=brilliant
-completed=false
 
 [connection]
 timeout=1000
