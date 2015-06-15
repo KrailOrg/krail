@@ -43,6 +43,12 @@ public class PurchasingView extends Grid3x3ViewBase {
 
 }
 ```
+- In ```NewsView.doBuild()``` change the button event to point to the new page location
+```
+navigateToPrivatePage.addClickListener(c -> navigator.navigateTo("finance/accounts"));
+```
+
+
 #User accounts
 
  - create a new package, 'com.example.tutorial.uac'
@@ -174,7 +180,7 @@ page:view:*
 
 An Option follows a similar pattern, provided by ```OptionPermission```
 
-- resource type ('page')
+- resource type ('option')
 - action ('edit')
 - resource instance (an option) structured [hierarchy]:[user id]:[hierarchy level index]:[context]:[option name]:[qualifier]:[qualifier]
 
