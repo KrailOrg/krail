@@ -43,33 +43,7 @@ public enum DescriptionKey implements I18NKey {
 }
 ```
  
- 
-- create a new Annotation class called "Caption".  Note the ```@I18NAnnotation``` - this tells Krail that this annotation is used for I18N. 
-```java
-package com.example.tutorial.i18n;
-
-import uk.q3c.krail.i18n.I18NAnnotation;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.TYPE})
-@I18NAnnotation
-public @interface Caption {
-
-    LabelKey caption();
-
-    DescriptionKey description();
-
-}
-```
-
-The methods in this annotation are used by Krail's annotation scanner to capture I18N keys used to look up locale-sensitive values.
-
-The names of these classes can be anything, it is the ```@18NAnnotation``` and ```I18NKey``` interface which are relevant.
+The names of these classes can be anything, it is the ```I18NKey``` interface which is important.
 
 This is all we need for our I18N integration for now, so we can get on with adding pages.
 
