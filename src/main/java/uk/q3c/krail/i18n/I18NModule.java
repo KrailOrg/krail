@@ -31,12 +31,10 @@ public class I18NModule extends AbstractModule {
     private MapBinder<String, BundleReader> bundleReaders;
     private MapBinder<String, Set<String>> bundleSourceOrder;
     private Multibinder<String> bundleSourceOrderDefault;
-    private Multibinder<String> drillDownExclusions;
     private Multibinder<Locale> supportedLocales;
 
     @Override
     protected void configure() {
-        drillDownExclusions = newSetBinder(binder(), String.class, DrillDownExclusions.class);
         supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
         bundleSourceOrderDefault = newSetBinder(binder(), String.class, BundleReaderOrderDefault.class);
         bundleReaders = MapBinder.newMapBinder(binder(), String.class, BundleReader.class);
@@ -106,9 +104,6 @@ public class I18NModule extends AbstractModule {
      * Here you should also define the locales your application supports, with calls to {@link #addSupportedLocale
      * (Locale)}.  Make sure your supportedLocales includes your {@link DefaultLocale}
      * <p>
-     * There are some components you know will never have I18N annotations inside them, and you can exclude them from
-     * I18N scanning by using {@link #excludeFromI18NDrillDown(String)}
-     * <p>
      * The source(s) of your I18N patterns should be defined here using calls to {@link #addBundleReader(String,
      * Class)}.
      * <p>
@@ -118,7 +113,6 @@ public class I18NModule extends AbstractModule {
      * using {{@link #setDefaultBundleReaderOrder(String...)}} and/or {@link #setBundleReaderOrder(String, String...)}
      */
     protected void define() {
-        excludeFromI18NDrillDown("com.vaadin");
         addSupportedLocale(Locale.UK);
         addBundleReader("class", ClassBundleReader.class);
         addBundleReader("properties", PropertiesFromClasspathBundleReader.class);
@@ -130,19 +124,6 @@ public class I18NModule extends AbstractModule {
                         .toInstance(locale);
     }
 
-    /**
-     * There are some components you know will never have I18N annotations inside them, (anything from Vaadin for
-     * example).  Normally the default is to drill down into a component for I18N, after it has been processed itself.
-     * You can exclude them from drill down by calling this method with enough of a package prefix to identify them
-     * (the
-     * filtering is done by getClass().getName().startsWith()
-     *
-     * @param packagePrefix
-     */
-    protected void excludeFromI18NDrillDown(String packagePrefix) {
-        drillDownExclusions.addBinding()
-                           .toInstance(packagePrefix);
-    }
 
 
     /**
