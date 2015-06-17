@@ -11,9 +11,11 @@
 
 package uk.q3c.krail.i18n;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +32,7 @@ import java.util.ResourceBundle;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({TestOptionModule.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class})
 public class DefaultPatternSourceTest {
 
 
@@ -121,6 +123,13 @@ public class DefaultPatternSourceTest {
         //then
         assertThat(source.getCache()
                          .size()).isEqualTo(1);
+    }
+
+
+    @ModuleProvider
+    protected AbstractModule moduleProvider() {
+        return new TestI18NModule().bundleSource("class", ClassBundleReader.class)
+                                   .bundleSource("properties", PropertiesFromClasspathBundleReader.class);
     }
 }
 

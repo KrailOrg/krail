@@ -44,7 +44,7 @@ public interface BundleReader {
      * @param cacheKey
      *         the cacheKey to identify the value required
      * @param source
-     *         the bundle source to be accessed, as defined by {@link I18NModule#addBundleReader(String, Class)}
+     *         the bundle source to be accessed, as defined by {@link I18NModule#bundleSource(String, Class)}
      * @param autoStub
      *         if true, if the key does not return a value, a stub is automatically generated
      * @param stubWithKeyName

@@ -103,7 +103,7 @@ public abstract class NativeBundleReaderBase extends BundleReaderBase implements
      * If USE_KEY_PATH is false, the bundle name is appended to {@link Option} PATH
      *
      * @param source
-     *         the name of the source being used, as provided via {@link I18NModule#addBundleReader(String, Class)}
+     *         the name of the source being used, as provided via {@link I18NModule#bundleSource(String, Class)}
      * @param sampleKey
      *         any key from the I18NKey class, to give access to bundleName()
      *

@@ -53,8 +53,8 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     private Option option;
 
     @Inject
-    public DefaultPatternCacheLoader(Map<String, BundleReader> bundleReaders, Option option, @BundleReaderOrder Map<String, Set<String>> bundleReaderOrder,
-                                     @BundleReaderOrderDefault Set<String> bundleReaderOrderDefault) {
+    public DefaultPatternCacheLoader(Map<String, BundleReader> bundleReaders, Option option, @BundleSourcesOrder Map<String, Set<String>> bundleReaderOrder,
+                                     @BundleSourcesOrderDefault Set<String> bundleReaderOrderDefault) {
         this.bundleReaders = bundleReaders;
         this.option = option;
         this.bundleReaderOrder = bundleReaderOrder;
@@ -138,9 +138,9 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
      * <ol>
      * <li>the order returned by{@link #getOptionReaderOrder(String)} (a value from {@link Option}</li>
      * <li>the order returned by {@link #getOptionReaderOrderDefault()}  (a value from {@link Option}</li>
-     * <li>{@link #bundleReaderOrder}, which is defined by {@link I18NModule#setBundleReaderOrder(String,
+     * <li>{@link #bundleReaderOrder}, which is defined by {@link I18NModule#bundleSourcesOrder(String,
      * String...)}</li>
-     * <li>{@link #bundleReaderOrderDefault}, which is defined by {@link I18NModule#setDefaultBundleReaderOrder} </li>
+     * <li>{@link #bundleReaderOrderDefault}, which is defined by {@link I18NModule#bundleSourcesOrderDefault} </li>
      * <li>the keys from {@link #bundleReaders} - note that the order for this will be unreliable if bundleReaders has
      * been defined by multiple Guice modules</li>
      * <p>

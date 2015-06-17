@@ -13,7 +13,7 @@ package uk.q3c.krail.i18n;
 
 /**
  * Any class which contains I18N annotations may also have been subject to byte enhancement.  If it has, the original, un-enhanced class is needed in order to
- * access the field / class annotations.  IMplementations of this interface must identify the original class, from an enhanced object.
+ * access the field / class annotations.  Implementations of this interface must identify the original class, from an enhanced object.
  * <p>
  * Created by David Sowerby on 10/05/15.
  */
