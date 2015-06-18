@@ -258,12 +258,183 @@ Naturally, you cannot use variable values with an annotation - by its very natur
 
 #Multi-Language
 
-The whole point of I18N is of course to support multiple languages / Locales.  This section assumes that you are familiar with the standard Java approach to I18N.  For those not familiar with it, there are many online resources if you need them.
+The whole point of I18N is, of course, to support multiple languages / Locales.  By default, ```I18NModule``` defaults everything to **Locale.UK**.  This section assumes that you are familiar with the standard Java approach to I18N.  For those not familiar with it, there are many online resources if you need them.
 
-##Supported Locales
+##Methods of configuration
 
-Krail uses the ```I18NModule``` to define which Locals are supported
+Krail uses the ```I18NModule``` to configure how I18N operates.  There are two fundamental ways to define that configuration (as with most modules):
+ 
+1. Use fluent methods provided by the module, to use at the point of construction in the ```BindingManager```.
+1. Sub-class ```I18NModule```and use the sub-class in the ```BindingManager```
 
-#Changing Krail's Key Values
+It really does not matter which method you use.  We will use method 2 for this example, but then show how method 1 would achieve the same result, but not actually apply it.
 
-we will, however, defer the use of a database for holding I18N values until the [next section](tutorial09.md#persistence-i18n), when we look at persistence in general.
+- in the package 'com.example.tutorial.i18n', create a new class 'TutorialI18NModule' extending from ```I18NModule```
+- override the ```define()``` method
+```java
+package com.example.tutorial.i18n;
+
+import uk.q3c.krail.i18n.I18NModule;
+
+public class TutorialI18NModule extends I18NModule {
+
+    @Override
+    protected void define() {
+    }
+}
+```
+In this method we will define everything we need to.
+
+- set the default locale explicitly, and add another Locale that we want to support. (The default locale is automatically a supported locale)
+
+```
+@Override
+    protected void define() {
+        defaultLocale(Locale.UK);
+        supportedLocales(Locale.GERMANY);
+    }
+}
+```
+- call the new class in ```BindingManager```
+```
+@Override
+protected Module i18NModule() {
+    return new TutorialI18NModule();
+}
+```
+
+
+- in the package 'com.example.tutorial.i18n', create an new class 'Messages_de' extended from ```Messages```
+
+```
+package com.example.tutorial.i18n;
+
+import static com.example.tutorial.i18n.MessageKey.Banner;
+
+public class Messages_de extends Messages {
+    @Override
+    protected void loadMap() {
+        put(Banner, "Die Temperatur ist heute {1}. Der CEO hat bemerkt, dass ihre Nachrichten-Kanal {0}");
+    }
+}
+
+```
+To translate the keys used for parameter *{0}* we need to do the same for ```LabelKeys``` - but do not have a ```Labels``` class, as all translation defaulted to the key name.
+
+- create a new class 'Labels', extended from ```EnumResourceBundle``` 
+- implement ```loadMap()```
+
+```
+package com.example.tutorial.i18n;
+
+import uk.q3c.krail.i18n.EnumResourceBundle;
+
+public class Labels extends EnumResourceBundle<LabelKey> {
+    @Override
+    protected void loadMap() {
+
+    }
+}
+```
+
+- create a new class 'Labels_de' extended from ```Labels```
+- put the translations into the map
+```
+package com.example.tutorial.i18n;
+
+import static com.example.tutorial.i18n.LabelKey.*;
+
+public class Labels_de extends Labels {
+    @Override
+    protected void loadMap() {
+        put(is_selected, "aktiviert ist");
+        put(is_not_selected, "nicht aktiviert ist");
+        put(Options, "die Optionen");
+    }
+}
+```
+- run the application, and:
+    - in the Locale selector, top right of the page, select "Deutsch" (the selector takes its selection list from the supported locales you have defined)
+    - a popup will inform you, in German, of the change
+    - a number, but not all items have changed language (Krail has some translations built in, and these are the ones which have changed. Hopefully, the number of translations will increase over time - if you can contribute, please do)
+    - log in and navigate to 'MyNews'
+    - most of the page will still be in English (we have not provided translations for it all) but the banner and Options button should now be in German.
+    - change the language back to Englis - and the banner stays in German, while the Options button switches back to English.
+    
+Why is this happening?  Well, currently there is nothing to tell this view that it should re-write the banner when there is a change in language.  The **@Caption** annotation handles that automatically, but for a manual translation we need to respond to a language change message.
+ 
+- move the logic for populating the banner to its own method
+```
+private void populateBanner() {
+    LabelKey selection = (option.get(ceoVisible)
+                                .booleanValue()) ? LabelKey.is_selected : LabelKey.is_not_selected;
+    int temperature = (new Random().nextInt(40)) - 10;
+    bannerLabel.setValue(translate.from(MessageKey.Banner, selection, temperature));
+}
+```
+- ```optionValueChanged()``` should now look like this
+
+```
+@Override
+public void optionValueChanged(Property.ValueChangeEvent event) {
+    ceoNews.setVisible(option.get(ceoVisible));
+    itemsForSale.setVisible(option.get(itemsForSaleVisible));
+    vacancies.setVisible(option.get(vacanciesVisible));
+    populateBanner();
+}
+```
+#CurrentLocale and responding to change
+
+A little explanation is now needed.  
+
+```CurrentLocale``` holds the currently selected locale for a user.  It is first populated from a combination of things like Web Browser settings, and whatever you have defined in the ```I18NModule``` - the logic is in described in the ```DefaultCurrentLocale``` javadoc.
+  
+When a change is made to the current locale (in our case, using the ```LocaleSelector```), ```CurrentLocale``` publishes a ```LocaleChangeBusMessage``` via the session [Event Bus](tutorial12.md).  We need to intercept that message, and respond to it by updating the banner.
+
+- make this View an event bus listener and subscribe to the session Event Bus
+
+```
+@Listener @SubscribeTo(SessionBus.class)
+public class MyNews extends Grid3x3ViewBase implements OptionContext {
+```
+- register a handler for the message - the annotation and the message type are the important parts - the method can be called anything
+- call ```populateBanner``` to update its text
+```
+@Handler
+protected void localeChanged(LocaleChangeBusMessage busMessage) {
+    populateBanner();
+}
+```
+- Run the application, log in and navigate to 'MyNews'
+- Changing locale now immediately updates the banner
+
+#Pattern sources
+
+So far we have only used the class-based method for defining I18N patterns.  You can also use the traditional properties files, although using ```String``` keys can lead to mistakes.  You can also use a database source (which could actually be a REST service, as it uses a pluggable DAO).
+
+##Selecting pattern sources
+ 
+Let's add a database source (which for now will actually be an in-memory map, until we [add persistence](tutorial09.md))
+
+- in TutorialI18NModule, define two pattern sources - class and database (previously wewere using the default - class only).  The order they are declared is significant, as that is also the order they queried.
+```
+@Override
+protected void define() {
+    defaultLocale(Locale.UK);
+    supportedLocales(Locale.GERMANY);
+    bundleSource("in-memory store", DatabaseBundleReader.class);
+    bundleSource("class", ClassBundleReader.class);
+   
+}
+```
+- To configure the "database" DAO for this, in the ```BindingManager``` override the ```dataModule()``` method 
+
+```
+@Override
+protected Module dataModule() {
+    return new DataModule().patternDao(InMemoryPatternDao.class);
+}
+```
+ 
+
+
