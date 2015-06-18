@@ -84,6 +84,7 @@ public class DefaultPatternSource implements PatternSource<LoadingCache<PatternC
     @Override
     public void clearCache() {
         cache.invalidateAll();
+        cache.cleanUp();
     }
 
     /**
@@ -102,5 +103,6 @@ public class DefaultPatternSource implements PatternSource<LoadingCache<PatternC
             }
         }
         cache.invalidateAll(keysToRemove);
+        cache.cleanUp();
     }
 }
