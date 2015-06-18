@@ -12,19 +12,23 @@
 package uk.q3c.krail.i18n;
 
 
+import com.google.inject.Inject;
 import uk.q3c.krail.core.user.opt.cache.OptionKeyException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class InMemoryPatternDao implements PatternDao {
 
-    private Map<PatternCacheKey, String> store = new HashMap<>();
+    private InMemoryPatternStore store;
+
+    @Inject
+    public InMemoryPatternDao(InMemoryPatternStore inMemoryPatternStore) {
+        this.store = inMemoryPatternStore;
+    }
 
     /**
      * Write {@code value} to persistence for the I18NKey & Locale provided by (@code cacheKey}
