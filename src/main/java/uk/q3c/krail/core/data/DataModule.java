@@ -12,60 +12,75 @@
 package uk.q3c.krail.core.data;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Binder;
+import com.google.inject.Key;
 import com.vaadin.data.util.converter.ConverterFactory;
 import uk.q3c.krail.i18n.PatternDao;
 
+import javax.annotation.Nonnull;
+import java.lang.annotation.Annotation;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
+ * Provides data related configuration
+ *
  * Created by David Sowerby on 18/03/15.
  */
 public class DataModule extends AbstractModule {
+
+    private Class<? extends Annotation> prepPatternDaoAnnotatedWith;
+    private Class<? extends PatternDao> prepPatternDaoImplementation;
+
     /**
-     * Configures a {@link Binder} via the exposed methods.
+     * {@inheritDoc}
      */
     @Override
     protected void configure() {
+        define();
         bindConverterFactory();
         bindPatternDao();
-        //        bindConfigurations();
-        //        bindConnectionProvider();
-        //        configureDataSources();
+
+    }
+
+    /**
+     * Override this method to directly define configuration required, or {@link #patternDao} from your Binding Manager
+     */
+    protected void define() {
+
     }
 
     /**
      * Override to provide a {@link PatternDao} binding.  An implementation of PatternDao will be required if I18N patterns are sourced from a database (or
-     * potentially REST service).  Binding will probably
-     * require the Key for the implementation, as it is likely to have been bound with an annotation
+     * potentially REST service).  Binding will probably require the Key for the implementation, as it is likely to have been bound with an annotation
      */
     protected void bindPatternDao() {
-        //bind(PatternDao.class).to(Key.get(Key.get(JpaPatternDao.class, Jpa1.class)));
+
+        if (prepPatternDaoAnnotatedWith == null) {
+            bind(PatternDao.class).to(prepPatternDaoImplementation);
+        } else {
+            final Key<? extends PatternDao> key = Key.get(prepPatternDaoImplementation, prepPatternDaoAnnotatedWith);
+            bind(PatternDao.class).to(key);
+        }
+
     }
-
-    //
-    //    /**
-    //     * A {@link DataSourceConfiguration} contains one or more {@link DataSourceInstanceConfiguration} which contains one or more {@link
-    //     * DataSourceConnectionMethod}.  The last is to allow for data bases / sources which have multiple models - for example, OrientDb provides a Graph,
-    //     * Document and Object API.<p>We generally recommend the use of binding annotations to distinguish between multiple implementations of the
-    //     * same interface, but you can also use a @Named annotation (the latter is more prone to typos and is less refactor friendly).
-    //     */
-    //    protected void bindConfigurations() {
-    //
-    //    }
-
-    //    /**
-    //     * Different data sources (for example JPA, OrientDb & REST) are supported, and each may have multiple instances (DEV, TEST PROD etc).  These bindings
-    //     * bring the overall configuration together ... the {@link DataSourceService} uses this configuration to start up / check the presence of required
-    // data
-    //     * sources, and the {@link DataSourceConnectionProvider} to provide a (usually pooled) connection.<p>
-    //     */
-    //    protected void configureDataSources() {
-    //
-    //    }
 
     /**
      * Provides a factory for converting data types for display by Vaadin.  Override this method to provide your own implementation
      */
     protected void bindConverterFactory() {
         bind(ConverterFactory.class).to(DefaultConverterFactory.class);
+    }
+
+    public DataModule patternDao(@Nonnull Class<? extends PatternDao> patternDaoImplementation) {
+        checkNotNull(patternDaoImplementation);
+        prepPatternDaoImplementation = patternDaoImplementation;
+        return this;
+    }
+
+    public DataModule patternDao(@Nonnull Class<? extends PatternDao> patternDaoImplementation, @Nonnull Class<? extends Annotation> annotatedWith) {
+        checkNotNull(patternDaoImplementation);
+        prepPatternDaoImplementation = patternDaoImplementation;
+        prepPatternDaoAnnotatedWith = annotatedWith;
+        return this;
     }
 }

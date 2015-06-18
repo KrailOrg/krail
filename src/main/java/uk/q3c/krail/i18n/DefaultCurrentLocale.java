@@ -29,14 +29,13 @@ import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
-import uk.q3c.util.MessageFormat;
 
 import javax.annotation.Nonnull;
 import java.util.Locale;
 import java.util.Set;
 
 /**
- * When a CurrentLocale is instantiated, or its {@link #readFromEnvironment()} method is called,it sets the current
+ * When a CurrentLocale is instantiated, or its {@link #readFromEnvironment()} method is called, it sets the current
  * locale according to the following priorities:
  * <ol>
  * <li>If a user is authenticated, the {@link Option} for preferred locale is used, if valid</li>
@@ -89,12 +88,6 @@ public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
         this.subjectProvider = subjectProvider;
         this.option = option;
         locale = defaultLocale;
-        if (!supportedLocales.contains(defaultLocale)) {
-            String msg = MessageFormat.format("The default locale ({0}) you have specified must also be defined as a " +
-                    "" + "supported locale in your Guice I18N module", defaultLocale);
-            throw new UnsupportedLocaleException(msg);
-        }
-        //        readFromEnvironment();
     }
 
 

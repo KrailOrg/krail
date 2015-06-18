@@ -67,12 +67,20 @@ public class I18NModule extends AbstractModule {
         bindPatternUtility();
         bindFieldScanner();
         bindHostClassIdentifier();
+        bindDatabaseBundleReader();
 
         bindSupportedLocales();
         bindBundleSources();
         bindBundleSourcesOrderDefault();
         bindBundleSourcesOrder();
 
+    }
+
+    /**
+     * Override this method to provide your own implementation of {@link DatabaseBundleReader}
+     */
+    protected void bindDatabaseBundleReader() {
+        bind(DatabaseBundleReader.class).to(DefaultDatabaseBundleReader.class);
     }
 
     /**
