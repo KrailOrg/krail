@@ -11,6 +11,7 @@ pages:
 - [tutorial06.md, Tutorial - Configuration from Ini file]
 - [tutorial07.md, Tutorial - User Access Control]
 - [tutorial08.md, Tutorial - I18N]
+- [tutorial08a.md, Tutorial - I18N and Vaadin Components]
 - [tutorial09.md, Tutorial - Persistence - JPA]
 - [tutorial10.md, Tutorial - Services]
 - [tutorial11.md, Tutorial - Guice Scopes]

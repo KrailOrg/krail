@@ -67,7 +67,7 @@ Now let us add a banner to the page, which will include some variable informatio
 - in ```doBuild()``` add:  
 ```
 Label bannerLabel = new Label();
-getGridLayout().addComponent(bannerLabel,0,0,2,0);
+getGridLayout().addComponent(bannerLabel,0,0,1,0);
 ```
 
 
@@ -259,7 +259,7 @@ Naturally, you cannot use variable values with an annotation - by its very natur
 #Multi-Language
 
 The whole point of I18N is, of course, to support multiple languages / Locales.  By default, ```I18NModule``` defaults everything to **Locale.UK**.  This section assumes that you are familiar with the standard Java approach to I18N.  For those not familiar with it, there are many online resources if you need them.
-
+<a name="config-methods"></a>
 ##Methods of configuration
 
 Krail uses the ```I18NModule``` to configure how I18N operates.  There are two fundamental ways to define that configuration (as with most modules):
@@ -385,7 +385,7 @@ public void optionValueChanged(Property.ValueChangeEvent event) {
 ```
 #CurrentLocale and responding to change
 
-A little explanation is now needed.  
+You have been using ```CurrentLocale``` without being aware of it - ```Translate``` refers to it when a call is made to ```Translate.from()```.  A little explanation is now needed.  
 
 ```CurrentLocale``` holds the currently selected locale for a user.  It is first populated from a combination of things like Web Browser settings, and whatever you have defined in the ```I18NModule``` - the logic is in described in the ```DefaultCurrentLocale``` javadoc.
   
@@ -416,7 +416,7 @@ So far we have only used the class-based method for defining I18N patterns.  You
  
 Let's add a database source (which for now will actually be an in-memory map, until we [add persistence](tutorial09.md))
 
-- in TutorialI18NModule, define two pattern sources - class and database (previously wewere using the default - class only).  The order they are declared is significant, as that is also the order they queried.
+- in ```TutorialI18NModule```, define two pattern sources - class and database (previously we were using the default - class only).  The order they are declared is significant, as that is also the order they queried.
 ```
 @Override
 protected void define() {
@@ -436,5 +436,126 @@ protected Module dataModule() {
 }
 ```
  
+If you were to run the application now, nothing will have changed.  We have set the order of bundle sources so that "in-memory store" is queried first - of course nothing will be found as it is empty - and the "class", which will return the same as before.
+
+To prove this works, we need to put a value in to the database:
+
+- in 'MyNews' add ```PatternSource``` and a provider for ```PatternDao```
+```
+@Inject
+public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, UserNotifier userNotifier, Translate translate, Provider<PatternDao>
+        patternDaoProvider, PatternSource patternSource) {
+    this.option = option;
+    this.optionPopup = optionPopup;
+    this.subjectProvider = subjectProvider;
+    this.userNotifier = userNotifier;
+    this.translate = translate;
+    this.patternDaoProvider = patternDaoProvider;
+    this.patternSource = patternSource;
+}
+```
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We find that injecting a Dao provider (as opposed to a Dao directly) removes potential issues with persistence sessions, and recommend it as standard practice</p>
+</div>
+
+- provide a way to enter a value for one key
+    - ```in MyNews.doBuild()``` add the code below
+    
+```
+        i18NTextBox = new TextField();
+        i18NTextBox.setCaption("enter a value for LabelKey.is_selected");
+        submitButton = new Button("submit");
+        PatternCacheKey cacheKeyUK = new PatternCacheKey(LabelKey.is_selected, Locale.UK);
+        submitButton.addClickListener(event -> {
+            patternSource.clearCache();
+            patternDaoProvider.get().write(cacheKeyUK, i18NTextBox.getValue());
+            populateBanner();
+        });
+        FormLayout formLayout = new FormLayout(i18NTextBox, submitButton);
+        setTopRight(formLayout);
+
+```
+
+This provides a ```TextField``` to capture some input, and a submit button to submit the value to the I18N "database" and update the banner.  The ```PatternSource``` is only needed to clear the cache (to ensure we capture the new value).
+  
+- Run the application, login and navigate to 'MyNews'
+- Make sure that the CEO New Channel is selected (we only created a value for that option setting)
+- Enter some text, and press 'submit'
+- The banner will update immediately with the text you entered
+ 
+You may recall that we defined the bundle sources like this, and noted that the declaration order is important:
+```
+@Override
+protected void define() {
+   defaultLocale(Locale.UK);
+   supportedLocales(Locale.GERMANY);
+   bundleSource("in-memory store", DatabaseBundleReader.class);
+   bundleSource("class", ClassBundleReader.class);
+  
+}
+ 
+```
+This means that the database source is checked first for a value - if there is one, it is used, and the class source not queried.  We just created a value in the database, so that is the one that is used, and this demonstrates is why the order of declaration is important.
+ 
+If you refer to the Javadoc for ```TutorialI18NModule``` you will see that there are methods which enable very specific settings for the order of sources.  We will not cover that in this Tutorial, but leave you to experiment.  
+
+#Changing Krail Core values
+
+We have just demonstrated changing the value for a specific key - exactly the same technique can be used to change (or add new languages to) Krail core ```I18NKey```s.  This does require exporting the keys to a bundle source with mutable values (probably a database).  Outstanding ticket [#430](https://github.com/davidsowerby/krail/issues/430) will provide support for this in the ```PatternUtility``` class.
+  
+#Methods of configuration revisited
+
+Earlier [in this section](tutorial08.md#config-methods) we elected to sub-class ```I18NModule``` as a way of configuring it, resulting in this ```define()``` method:
+
+```
+@Override
+protected void define() {
+    defaultLocale(Locale.UK);
+    supportedLocales(Locale.GERMANY);
+    bundleSource("in-memory store", DatabaseBundleReader.class);
+    bundleSource("class", ClassBundleReader.class);
+}
+```
+with this BindingManager entry
+```
+@Override
+protected Module i18NModule() {
+    return new TutorialI18NModule();
+}   
+```
+
+Because the I18NModule methods used are all fluent, we could achieve exactly the same by just changing the ```BindingManager``` like this:
+```
+@Override
+protected Module i18NModule() {
+    return new I18NModule().defaultLocale(Locale.UK)
+                           .supportedLocales(Locale.GERMANY)
+                           .bundleSource("in-memory store", DatabaseBundleReader.class)
+                           .bundleSource("class", ClassBundleReader.class);
+}
+```
+ 
+The choice is yours!
+
+ 
+#Summary
+
+There is still more to cover under the "I18N" heading, so the next section will cover more of how to use Krail's I18N with Vaadin components.  In this section we have:
+
+- used ```Translate``` to translate an ```I18NKey``` directly
+- translated a message with parameters
+- created a **@Caption** annotation for use with your own ```I18NKey```s
+- added support for an additional language
+- been introduced to the ```CurrentLocale``` class
+- seen how to respond to a change of Locale message from the Event Bus
+- set up a new bundle source, and determined the order of querying sources
+- cleared the pattern cache
+- configured Guice modules fluently and directly
+
+#Download from Github
+To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step08**
+ 
+
 
 
