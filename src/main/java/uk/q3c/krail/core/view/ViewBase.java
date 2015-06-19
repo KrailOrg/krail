@@ -15,6 +15,7 @@ package uk.q3c.krail.core.view;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
@@ -135,6 +136,13 @@ public abstract class ViewBase implements KrailView {
         componentsConstructed = true;
     }
 
+    /**
+     * Implement this method to construct your components.  You must also set {@link #rootComponent} (this is the component which will be placed in the parent
+     * {@link UI}, and is usually a layout
+     *
+     * @param busMessage
+     *         a message sent by the Event Bus to signify a chnage of View
+     */
     protected abstract void doBuild(ViewChangeBusMessage busMessage);
 
     /**
