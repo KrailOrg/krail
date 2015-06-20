@@ -346,14 +346,14 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
-public class Person implements KrailEntity<Integer,Integer> {
+public class Person implements KrailEntity<Long,Integer> {
 
     @Min(0) @Max(150)
     private int age;
     @Size(min = 3)
     private String firstName;
     @Id
-    private Integer id;
+    private Long id;
 
     @Size(min=3)
     private String lastName;
@@ -381,7 +381,7 @@ public class Person implements KrailEntity<Integer,Integer> {
     }
 
     @Override
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -531,8 +531,8 @@ There is a more information about the Apache Bval validation integration in the 
 
 In this section we have:
 
-- used I18N @Caption and @Value annotations
-- seen how to manage Table and Grid column names for I18N
+- used I18N **@Caption** and **@Value** annotations
+- seen how to manage ```Table``` and ```Grid``` column names for I18N
 - created a re-usable I18N enabled component
 - seen how to override a class I18N annotation 
 - created a form, with I18N integrated validation
