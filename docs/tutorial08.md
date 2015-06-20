@@ -427,14 +427,8 @@ protected void define() {
    
 }
 ```
-- To configure the "database" DAO for this, in the ```BindingManager``` override the ```dataModule()``` method 
+- I18NModule already defines a default, in-memory "database" PatternDao implementation - no changes are therefore needed to ```BindingManager``` 
 
-```
-@Override
-protected Module dataModule() {
-    return new DataModule().patternDao(InMemoryPatternDao.class);
-}
-```
  
 If you were to run the application now, nothing will have changed.  We have set the order of bundle sources so that "in-memory store" is queried first - of course nothing will be found as it is empty - and the "class", which will return the same as before.
 
