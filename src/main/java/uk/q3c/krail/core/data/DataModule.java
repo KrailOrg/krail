@@ -14,6 +14,7 @@ package uk.q3c.krail.core.data;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.vaadin.data.util.converter.ConverterFactory;
+import uk.q3c.krail.i18n.InMemoryPatternDao;
 import uk.q3c.krail.i18n.PatternDao;
 
 import javax.annotation.Nonnull;
@@ -54,7 +55,9 @@ public class DataModule extends AbstractModule {
      * potentially REST service).  Binding will probably require the Key for the implementation, as it is likely to have been bound with an annotation
      */
     protected void bindPatternDao() {
-
+        if (prepPatternDaoImplementation == null) {
+            prepPatternDaoImplementation = InMemoryPatternDao.class;
+        }
         if (prepPatternDaoAnnotatedWith == null) {
             bind(PatternDao.class).to(prepPatternDaoImplementation);
         } else {
