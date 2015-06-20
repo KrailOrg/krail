@@ -108,15 +108,15 @@ public class DefaultI18NFieldScanner implements I18NFieldScanner {
 
 
         for (Field field : declaredFields) {
-            log.debug("Checking field '{}' for I18N annotations", field.getName());
+            log.debug("Capture all field and class annotations for '{}'  ", field.getName());
             Annotation[] fieldAnnotations = field.getDeclaredAnnotations();
             Annotation[] classAnnotations = field.getType()
                                                  .getDeclaredAnnotations();
 
             //do field annotations first, we can ignore class annotations if there are field annotations
             boolean found = evaluateFieldFromAnnotations(target, field, fieldAnnotations);
+            log.debug("I18N field annotations found, class annotations will be ignored");
             if (!found) {
-
                 evaluateFieldFromAnnotations(target, field, classAnnotations);
             }
             evaluateDrillDown(target, field);
@@ -179,23 +179,27 @@ public class DefaultI18NFieldScanner implements I18NFieldScanner {
     private void evaluateDrillDown(Object target, Field field) throws IllegalAccessException {
 
         //try field annotations first;
-        log.debug("evaluating '{}' for drill down", field.getName());
+
         // if I18N(drillDown = true, just add it to drill downs)
         I18N i18N = field.getAnnotation(I18N.class);
         if (i18N != null) {
+            log.debug("evaluating '{}' for @I18N field annotation drill down", field.getName());
             if (i18N.drillDown()) {
                 addDrillDown(target, field);
+                log.debug("'{}' has field annotation @18N(drillDown=true), added to drill downs", field.getName());
                 return;
             } else {
                 log.debug("'{}' has field annotation @18N(drillDown=false), not added to drill downs", field.getName());
                 return;
             }
         }
+        log.debug("No @I18N field annotation found for '{}', check its class for @18N drill down", field.getName());
         Class<?> fieldType = field.getType();
         i18N = fieldType.getAnnotation(I18N.class);
         if (i18N != null) {
             if (i18N.drillDown()) {
                 addDrillDown(target, field);
+                log.debug("'{}' has class annotation @18N(drillDown=true), added to drill downs", field.getName());
                 return;
             } else {
                 log.debug("'{}' has class annotation @18N(drillDown=false), not added to drill downs", field.getName());
