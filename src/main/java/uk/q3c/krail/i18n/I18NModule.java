@@ -14,6 +14,7 @@ package uk.q3c.krail.i18n;
 
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
@@ -23,6 +24,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.user.opt.Option;
 
 import javax.annotation.Nonnull;
+import java.lang.annotation.Annotation;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -38,6 +40,8 @@ public class I18NModule extends AbstractModule {
     private Map<String, Class<? extends BundleReader>> prepBundleSources = new LinkedHashMap<>(); // retain order;
     private Map<String, Set<String>> prepBundleSourcesOrder = new LinkedHashMap<>();
     private Set<String> prepBundleSourcesOrderDefault = new LinkedHashSet<>();
+    private Class<? extends Annotation> prepPatternDaoAnnotatedWith;
+    private Class<? extends PatternDao> prepPatternDaoImplementation;
     private Set<Locale> prepSupportedLocales = new LinkedHashSet<>();
     private Multibinder<Locale> supportedLocales;
 
@@ -73,9 +77,26 @@ public class I18NModule extends AbstractModule {
         bindBundleSources();
         bindBundleSourcesOrderDefault();
         bindBundleSourcesOrder();
+        bindPatternDao();
 
     }
 
+    /**
+     * Override to provide a {@link PatternDao} binding.  An implementation of PatternDao will be required if I18N patterns are sourced from a database (or
+     * potentially REST service).  Binding will probably require the Key for the implementation, as it is likely to have been bound with an annotation
+     */
+    protected void bindPatternDao() {
+        if (prepPatternDaoImplementation == null) {
+            prepPatternDaoImplementation = InMemoryPatternDao.class;
+        }
+        if (prepPatternDaoAnnotatedWith == null) {
+            bind(PatternDao.class).to(prepPatternDaoImplementation);
+        } else {
+            final Key<? extends PatternDao> key = Key.get(prepPatternDaoImplementation, prepPatternDaoAnnotatedWith);
+            bind(PatternDao.class).to(key);
+        }
+
+    }
     /**
      * Override this method to provide your own implementation of {@link DatabaseBundleReader}
      */
@@ -356,6 +377,19 @@ public class I18NModule extends AbstractModule {
         Set<String> tagSet = new LinkedHashSet<>(Arrays.asList(sources));
         prepBundleSourcesOrder.put(baseName, tagSet);
 
+        return this;
+    }
+
+    public I18NModule patternDao(@Nonnull Class<? extends PatternDao> patternDaoImplementation) {
+        checkNotNull(patternDaoImplementation);
+        prepPatternDaoImplementation = patternDaoImplementation;
+        return this;
+    }
+
+    public I18NModule patternDao(@Nonnull Class<? extends PatternDao> patternDaoImplementation, @Nonnull Class<? extends Annotation> annotatedWith) {
+        checkNotNull(patternDaoImplementation);
+        prepPatternDaoImplementation = patternDaoImplementation;
+        prepPatternDaoAnnotatedWith = annotatedWith;
         return this;
     }
 

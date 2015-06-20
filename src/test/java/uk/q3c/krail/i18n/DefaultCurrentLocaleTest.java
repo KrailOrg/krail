@@ -277,15 +277,6 @@ public class DefaultCurrentLocaleTest {
 
     }
 
-    @Test(expected = UnsupportedLocaleException.class)
-    public void invalid_setup_default_locale_not_in_supported_locales() {
-        //given
-        defaultLocale = Locale.CANADA;
-        //when
-        currentLocale = createCurrentLocale();
-        //then
-    }
-
     @Handler
     public void localeChanged(LocaleChangeBusMessage toLocale) {
         listenerFired = true;
