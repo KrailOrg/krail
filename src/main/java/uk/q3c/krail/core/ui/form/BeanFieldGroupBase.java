@@ -33,26 +33,23 @@ import java.util.Map;
 //import com.vaadin.data.validator.BeanValidator;
 
 /**
- * This class is a replacement for {@link com.vaadin.data.fieldgroup.BeanFieldGroup}, and for quite a few methods, is a
- * copy of it.
+ *  * <p>
+ * Unfortunately the way the Vaadin implementation ({@link com.vaadin.data.fieldgroup.BeanFieldGroup}) is written makes it impossible to change the {@link
+ * BeanValidator} implementation. A different {@link BeanValidator} is needed to enable integration with Krail's I18N features.
+ *
+ * This class is a replacement for the Vaadin version, and for quite a few methods, is a copy of it.
  * <p>
- * Sub-class it and add fields, with I18N annotations as required
- * <p>
- * Unfortunately the way the Vaadin implementation of it is written makes it impossible to change the {@link
- * BeanValidator} implementation. A different {@link BeanValidator} is needed to enable integration with Krail's I18N
- * features.
- * <p>
- * <p>
- * Other features are also added to enable the use of Krail's I18N framework to provide captions and descriptions for
- * the Field components
- * <p>
- * <p>
- * Sub-classes should declare the Fields
+ * Sub-class this class, and add fields, with I18N annotations as required.  For data to be taken automatically from the bean to the form components, the
+ * name of the
+ * form component must match the field name of the bean (in Vaadin terms, this becomes the propertyId).
+ *
+ * To load data into this FieldGroup, call {@link #setBean(KrailEntity)}.
+ *
+ * To transfer data back to the entity, call {@link #commit()}
  * <p>
  * Created by David Sowerby on 03/02/15.
  */
-public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGroup implements BeanFieldGroup<T>,
-        OptionContext {
+public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGroup implements BeanFieldGroup<T>, OptionContext {
 
     private final I18NProcessor i18NProcessor;
     private final Map<Field<?>, BeanValidator<T>> defaultValidators;
@@ -70,8 +67,7 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
         this.defaultValidators = new HashMap<>();
     }
 
-    private static java.lang.reflect.Field getField(Class<?> cls, String propertyId) throws SecurityException,
-            NoSuchFieldException {
+    private static java.lang.reflect.Field getField(Class<?> cls, String propertyId) throws SecurityException, NoSuchFieldException {
         if (propertyId.contains(".")) {
             String[] parts = propertyId.split("\\.", 2);
             // Get the type of the field in the "cls" class
@@ -262,7 +258,6 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
             defaultValidators.put(field, validator);
         }
     }
-
 
 
 }
