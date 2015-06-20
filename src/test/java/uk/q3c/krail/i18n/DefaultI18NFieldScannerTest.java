@@ -15,9 +15,11 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -34,7 +36,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, EventBusModule.class, UIScopeModule.class, TestOptionModule.class, VaadinSessionScopeModule.class,
+@GuiceContext({TestI18NModule.class, DataModule.class, EventBusModule.class, UIScopeModule.class, TestOptionModule.class, VaadinSessionScopeModule.class,
         TestByteEnhancementModule.class})
 public class DefaultI18NFieldScannerTest {
 
@@ -73,7 +75,7 @@ public class DefaultI18NFieldScannerTest {
         assertThat(scanner.annotatedComponents()).hasSize(17);
 
         for (AbstractComponent abstractComponent : scanner.annotatedComponents()
-                                  .keySet()) {
+                                                          .keySet()) {
             AnnotationInfo annotationInfo = scanner.annotatedComponents()
                                                    .get(abstractComponent);
             List<Annotation> annotations = annotationInfo.getAnnotations();
@@ -137,7 +139,6 @@ public class DefaultI18NFieldScannerTest {
     }
 
 
-
     @Test
     public void inheritance() {
         I18NTestClass5a tObject = new I18NTestClass5a();
@@ -153,6 +154,125 @@ public class DefaultI18NFieldScannerTest {
     }
 
 
+    @Test
+    public void fieldOverridesClass_Class_HasDrillDown() {
+        //given
+        I18NTestClass7 tObject = new I18NTestClass7();
+        scanner = new DefaultI18NFieldScanner(i18NHostClassIdentifier);
+        //when
+        scanner.scan(tObject);
 
+        //then
+        assertThat(scanner.annotatedComponents()).hasSize(2);// composite plus nested label
+        //the "host" panel
+        AnnotationInfo info = getAnnotationInfoOfType(scanner, CompositeComponent_with_Caption_and_I18N.class);
+        assertThat(info).isNotNull();
+        Caption caption = captionAnnotationFrom(info.getAnnotations());
+        assertThat(caption).isNotNull();
+        assertThat(caption.caption()).isEqualTo(LabelKey.Field);
+        assertThat(caption.description()).isEqualTo(DescriptionKey.Please_log_in);
+
+        // the nested label
+
+        info = getAnnotationInfoOfType(scanner, Label.class);
+        assertThat(info).isNotNull();
+        caption = captionAnnotationFrom(info.getAnnotations());
+        assertThat(caption).isNotNull();
+        assertThat(caption.caption()).isEqualTo(LabelKey.First_Name);
+        assertThat(caption.description()).isEqualTo(DescriptionKey.Enter_your_first_name);
+
+        Value value = valueAnnotationFrom(info.getAnnotations());
+        assertThat(value).isNotNull();
+        assertThat(value.value()).isEqualTo(LabelKey.Unnamed);
+    }
+
+    private <T extends AbstractComponent> AnnotationInfo getAnnotationInfoOfType(DefaultI18NFieldScanner scanner, Class<T> componentClass) {
+        T component = getScannedComponentOfType(scanner, componentClass);
+        if (component == null) {
+            return null;
+        }
+        return scanner.annotatedComponents()
+                      .get(component);
+    }
+
+    private <T extends AbstractComponent> T getScannedComponentOfType(DefaultI18NFieldScanner scanner, Class<T> componentClass) {
+        for (AbstractComponent component : scanner.annotatedComponents()
+                                                  .keySet()) {
+            if (component.getClass()
+                         .equals(componentClass)) {
+                return (T) component;
+            }
+        }
+        return null;
+    }
+
+    private Caption captionAnnotationFrom(List<Annotation> annotationList) {
+        for (Annotation annotation : annotationList) {
+            if (annotation instanceof Caption) {
+                return (Caption) annotation;
+            }
+        }
+        return null;
+    }
+
+    private Value valueAnnotationFrom(List<Annotation> annotationList) {
+        for (Annotation annotation : annotationList) {
+            if (annotation instanceof Value) {
+                return (Value) annotation;
+            }
+        }
+        return null;
+    }
+
+    @Test
+    public void classCaptionAndDrillDown() {
+        //given
+        I18NTestClass8 tObject = new I18NTestClass8();
+        scanner = new DefaultI18NFieldScanner(i18NHostClassIdentifier);
+        //when
+        scanner.scan(tObject);
+
+        //then
+        assertThat(scanner.annotatedComponents()).hasSize(2);// composite plus nested label
+        //the "host" panel
+        AnnotationInfo info = getAnnotationInfoOfType(scanner, CompositeComponent_with_Caption_and_I18N.class);
+        assertThat(info).isNotNull();
+        Caption caption = captionAnnotationFrom(info.getAnnotations());
+        assertThat(caption).isNotNull();
+        assertThat(caption.caption()).isEqualTo(LabelKey.Class);
+        assertThat(caption.description()).isEqualTo(DescriptionKey.Locale_Flag_Size);
+
+        // the nested label
+
+        info = getAnnotationInfoOfType(scanner, Label.class);
+        assertThat(info).isNotNull();
+        caption = captionAnnotationFrom(info.getAnnotations());
+        assertThat(caption).isNotNull();
+        assertThat(caption.caption()).isEqualTo(LabelKey.First_Name);
+        assertThat(caption.description()).isEqualTo(DescriptionKey.Enter_your_first_name);
+
+        Value value = valueAnnotationFrom(info.getAnnotations());
+        assertThat(value).isNotNull();
+        assertThat(value.value()).isEqualTo(LabelKey.Unnamed);
+    }
+
+    @Test
+    public void fieldOverridesDrillDown() {
+        //given
+        I18NTestClass9 tObject = new I18NTestClass9();
+        scanner = new DefaultI18NFieldScanner(i18NHostClassIdentifier);
+        //when
+        scanner.scan(tObject);
+
+        //then
+        assertThat(scanner.annotatedComponents()).hasSize(1);// composite only
+        //the "host" panel
+        AnnotationInfo info = getAnnotationInfoOfType(scanner, CompositeComponent_with_Caption_and_I18N.class);
+        assertThat(info).isNotNull();
+        Caption caption = captionAnnotationFrom(info.getAnnotations());
+        assertThat(caption).isNotNull();
+        assertThat(caption.caption()).isEqualTo(LabelKey.Class);
+        assertThat(caption.description()).isEqualTo(DescriptionKey.Locale_Flag_Size);
+    }
 
 }
