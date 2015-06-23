@@ -285,7 +285,8 @@ public class Option_IntegrationTest {
             protected void configure() {
                 GuavaCacheConfiguration cacheConfig = new GuavaCacheConfiguration().recordStats();
 
-                bind(OptionDao.class).to(InMemoryOptionDao.class);
+                bind(OptionDao.class).annotatedWith(CoreDao.class)
+                                     .to(InMemoryOptionDao.class);
                 bind(GuavaCacheConfiguration.class).annotatedWith(OptionCacheConfig.class)
                                                    .toInstance(cacheConfig);
             }

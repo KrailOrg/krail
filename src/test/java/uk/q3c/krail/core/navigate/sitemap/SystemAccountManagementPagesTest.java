@@ -27,20 +27,19 @@ import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.ui.DataTypeModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
-import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.I18NModule;
 import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class,
-        UserModule.class, DataTypeModule.class, ApplicationConfigurationModule.class, OptionModule.class, DefaultShiroModule.class, DefaultComponentModule
-        .class, VaadinSessionScopeModule.class, NavigationModule.class, EventBusModule.class, DefaultUIModule.class})
+@GuiceContext({SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, DataTypeModule.class, ApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, TestPersistenceModule.class, TestOptionModule.class, EventBusModule.class, DefaultUIModule.class})
 public class SystemAccountManagementPagesTest {
 
     @Inject
@@ -72,7 +71,6 @@ public class SystemAccountManagementPagesTest {
         assertThat(node.getLabelKey()).isEqualTo(LabelKey.System_Account);
 
     }
-
 
 
 }

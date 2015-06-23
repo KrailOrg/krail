@@ -25,6 +25,7 @@ import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.text.Collator;
 import java.util.Locale;
@@ -32,7 +33,8 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class})
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class, UIScopeModule
+        .class})
 public class UserSitemapNodeTest {
 
     @Inject

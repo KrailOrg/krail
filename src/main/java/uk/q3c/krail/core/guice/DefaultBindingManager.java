@@ -35,6 +35,7 @@ import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.StandardPagesModule;
+import uk.q3c.krail.core.persist.InMemoryModule;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.services.ServiceModule;
 import uk.q3c.krail.core.services.ServicesMonitor;
@@ -54,12 +55,21 @@ import javax.servlet.ServletContextEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Collects together all the modules used for bindings, and passes them to the {@link Injector}  during the injector creation process.  The separation into
+ * different groupings of modules is for clarity only - they do not have to be separate for any other reason.
+ */
 public abstract class DefaultBindingManager extends GuiceServletContextListener {
-    protected static Injector injector;
+    private static Injector injector;
     private static Logger log = LoggerFactory.getLogger(DefaultBindingManager.class);
 
     protected DefaultBindingManager() {
         super();
+    }
+
+    public static Injector injector() {
+        return injector;
     }
 
     @Override
@@ -149,6 +159,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
         addAppModules(coreModules);
         addSitemapModules(coreModules);
+        addPersistenceModules(coreModules);
         return coreModules;
     }
 
@@ -213,20 +224,19 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      * will need to keep the Apache Bval {{@link ValidationModule} unless you replace the the javax validation
      * implementation.
      *
-     * @param coreModules
-     *
-     * @return
+     * @param modules
+     *         the list used to collect modules for injector creation
      */
-    protected void addValidationModules(List<Module> coreModules) {
-        coreModules.add(new ValidationModule());
-        coreModules.add(new KrailValidationModule());
+    protected void addValidationModules(List<Module> modules) {
+        modules.add(new ValidationModule());
+        modules.add(new KrailValidationModule());
     }
 
 
     /**
-     * Override this if you have provided your own {@link OptionModule}
+     * Override this if you have provided your own {@link OptionModule}.
      *
-     * @return
+     * @return module instance
      */
     protected Module optionModule() {
         return new OptionModule();
@@ -235,7 +245,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     /**
      * Override this if you have provided your own {@link I18NModule}
      *
-     * @return
+     * @return a Module fr I18N
      */
     protected Module i18NModule() {
         return new I18NModule();
@@ -252,13 +262,13 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     }
 
     /**
-     * Modules used in the creation of the {@link MasterSitemap} do not actually need to be separated, this just makes
-     * a
-     * convenient way of seeing them as a group
+     * Modules used in the creation of the {@link MasterSitemap} do not actually need to be separated, this just makes a convenient way of seeing them as a
+     * group
      *
-     * @param baseModules
+     * @param modules
+     *         the list used to collect modules for injector creation
      */
-    protected void addSitemapModules(List<Module> baseModules) {
+    protected void addSitemapModules(List<Module> modules) {
     }
 
     protected Module componentModule() {
@@ -268,7 +278,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     /**
      * Override this if you have provided your own {@link ServletModule}
      *
-     * @return
+     * @return servlet module instance
      */
     protected Module servletModule() {
         return new BaseServletModule();
@@ -278,7 +288,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      * Override this method if you have sub-classed {@link ShiroVaadinModule} to provide your own bindings for Shiro
      * related exceptions.
      *
-     * @return
+     * @return a module for bindings which realte to Shiro wihtin a Vaadin environment
      */
     protected Module shiroVaadinModule() {
         return new ShiroVaadinModule();
@@ -322,6 +332,20 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
     /**
      * Add as many application specific Guice modules as you wish by overriding this method.
+     *
+     * @param modules
+     *         the list used to collect modules for injector creation
      */
-    protected abstract void addAppModules(List<Module> baseModules);
+    protected abstract void addAppModules(List<Module> modules);
+
+    /**
+     * Add as many persistence related modules as needed.  These modules do not need to be separated, this just forms a convneient grouping for clarity
+     *
+     * @param modules
+     *         the list used to collect modules for injector creation
+     */
+    protected void addPersistenceModules(List<Module> modules) {
+        modules.add(new InMemoryModule().provideCoreOptionDao()
+                                        .provideCorePatternDao());
+    }
 }

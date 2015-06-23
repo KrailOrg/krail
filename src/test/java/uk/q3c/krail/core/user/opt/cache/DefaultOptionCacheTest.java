@@ -49,6 +49,7 @@ public class DefaultOptionCacheTest {
     OptionDao dao;
     @Mock
     private DefaultOptionCacheLoader cacheLoader;
+
     @Mock
     private Provider<OptionDao> daoProvider;
 

@@ -12,7 +12,6 @@
 package uk.q3c.krail.core.ui.form;
 
 import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.util.Modules;
@@ -31,28 +30,25 @@ import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
-import uk.q3c.krail.testutil.MockOption;
-import uk.q3c.krail.testutil.TestI18NModule;
-import uk.q3c.krail.testutil.TestOptionModule;
-import uk.q3c.krail.testutil.TestUIScopeModule;
+import uk.q3c.krail.testutil.*;
 
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestOptionModule.class, TestI18NModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestUIScopeModule.class,})
+@GuiceContext()
 public class BeanFieldGroupBaseTest {
 
-    @Inject
+    //    @Inject
     DefaultI18NProcessor i18NProcessor;
 
-    @Inject
+    //    @Inject
     CurrentLocale currentLocale;
 
-    @Inject
+    //    @Inject
     Provider<BeanValidator> beanValidatorProvider;
 
-    @Inject
+    //    @Inject
     MockOption option;
 
     TestBeanFieldGroup fieldSet;
@@ -63,7 +59,7 @@ public class BeanFieldGroupBaseTest {
     @Before
     public void setup() {
         VaadinSession.setCurrent(null);
-        injector = Guice.createInjector(new TestI18NModule(), new TestUIScopeModule(), new VaadinSessionScopeModule(), new EventBusModule(), new
+        injector = Guice.createInjector(new TestI18NModule(), new TestUIScopeModule(), new TestPersistenceModule(), new VaadinSessionScopeModule(), new EventBusModule(), new
                 TestOptionModule(), Modules.override(new
                 ValidationModule())
                                                                                                  .with(new
@@ -73,6 +69,7 @@ public class BeanFieldGroupBaseTest {
         i18NProcessor = injector.getInstance(DefaultI18NProcessor.class);
         currentLocale = injector.getInstance(CurrentLocale.class);
         beanValidatorProvider = injector.getProvider(BeanValidator.class);
+        option = injector.getInstance(MockOption.class);
 
 
         Locale.setDefault(Locale.UK);

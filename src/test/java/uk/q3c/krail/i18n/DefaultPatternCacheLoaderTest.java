@@ -22,13 +22,15 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule
+        .class})
 public class DefaultPatternCacheLoaderTest {
 
     Map<String, BundleReader> bundleReaders = new LinkedHashMap<>();

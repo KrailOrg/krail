@@ -36,6 +36,7 @@ import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.TestLabelKey;
 import uk.q3c.krail.testutil.TestI18NModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ import static uk.q3c.krail.core.shiro.PageAccessControl.AUTHENTICATION;
 import static uk.q3c.krail.core.shiro.PageAccessControl.PUBLIC;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, EventBusModule.class, UIScopeModule.class})
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestPersistenceModule.class, UIScopeModule.class})
 public class DefaultMasterSitemapTest {
 
     @Mock

@@ -26,6 +26,7 @@ import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import javax.validation.metadata.ConstraintDescriptor;
 import java.util.HashMap;
@@ -36,7 +37,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, ValidationModule.class, KrailValidationModule.class, EventBusModule.class, UIScopeModule.class,
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, ValidationModule.class, KrailValidationModule.class, EventBusModule
+        .class, UIScopeModule.class,
         VaadinSessionScopeModule.class})
 public class DefaultKrailInterpolatorTest {
 

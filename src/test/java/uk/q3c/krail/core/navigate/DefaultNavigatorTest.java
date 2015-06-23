@@ -49,10 +49,7 @@ import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.core.view.*;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.krail.testutil.MockOption;
-import uk.q3c.krail.testutil.TestI18NModule;
-import uk.q3c.krail.testutil.TestOptionModule;
-import uk.q3c.krail.testutil.TestUIScopeModule;
+import uk.q3c.krail.testutil.*;
 
 import java.util.*;
 
@@ -62,7 +59,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class, TestUIScopeModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class,
+        TestUIScopeModule.class})
 public class DefaultNavigatorTest {
 
     @Mock

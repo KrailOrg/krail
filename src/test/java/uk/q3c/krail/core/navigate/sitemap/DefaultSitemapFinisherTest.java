@@ -31,11 +31,13 @@ import uk.q3c.krail.i18n.TestLabelKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestPersistenceModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule
+        .class})
 public class DefaultSitemapFinisherTest {
 
     String uriNodeNoClass = "node/noclass";

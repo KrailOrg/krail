@@ -26,6 +26,7 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,7 +37,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class})
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class, UIScopeModule
+        .class})
 public class DefaultDirectSitemapLoaderTest_none {
 
     @Inject

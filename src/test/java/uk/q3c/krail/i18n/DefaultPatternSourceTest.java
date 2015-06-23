@@ -25,6 +25,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -32,7 +33,7 @@ import java.util.ResourceBundle;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({TestOptionModule.class, EventBusModule.class, TestPersistenceModule.class, UIScopeModule.class, VaadinSessionScopeModule.class})
 public class DefaultPatternSourceTest {
 
 

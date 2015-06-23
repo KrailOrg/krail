@@ -25,9 +25,9 @@ public class TestBindingManager extends DefaultBindingManager {
     }
 
     @Override
-    protected void addAppModules(List<Module> baseModules) {
+    protected void addAppModules(List<Module> modules) {
 
-        baseModules.add(new DummyModule());
+        modules.add(new DummyModule());
         addAppModulesCalled = true;
     }
 

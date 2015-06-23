@@ -29,6 +29,7 @@ import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.io.IOException;
 
@@ -40,7 +41,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author dsowerby
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({uk.q3c.krail.core.navigate.sitemap.DefaultFileSitemapLoaderTest4.TestFileSitemapModule.class, TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class})
+@GuiceContext({uk.q3c.krail.core.navigate.sitemap.DefaultFileSitemapLoaderTest4.TestFileSitemapModule.class, TestPersistenceModule.class, TestI18NModule
+        .class, VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class})
 @Deprecated
 public class DefaultFileSitemapLoaderTest4 {
 

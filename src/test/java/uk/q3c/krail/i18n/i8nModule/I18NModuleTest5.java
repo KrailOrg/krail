@@ -26,6 +26,7 @@ import uk.q3c.krail.i18n.DefaultLocale;
 import uk.q3c.krail.i18n.I18NModule;
 import uk.q3c.krail.i18n.SupportedLocales;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.Locale;
 import java.util.Set;
@@ -36,7 +37,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Error in locale string, supportedLocales
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({EventBusModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, UIScopeModule.class, DefaultShiroModule.class})
+@GuiceContext({EventBusModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModule.class, UIScopeModule.class,
+        DefaultShiroModule.class})
 public class I18NModuleTest5 {
 
     @Inject

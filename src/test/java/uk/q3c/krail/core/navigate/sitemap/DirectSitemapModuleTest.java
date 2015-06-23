@@ -31,7 +31,6 @@ import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.ui.DataTypeModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
-import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.core.view.PrivateHomeView;
 import uk.q3c.krail.core.view.PublicHomeView;
@@ -39,6 +38,8 @@ import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.I18NModule;
 import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.Map;
 
@@ -46,8 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({DataModule.class, TestDirectSitemapModule1.class, TestDirectSitemapModule2.class, DataTypeModule.class, UIScopeModule.class, EventBusModule
-        .class, ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class,
-        DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, OptionModule.class, NavigationModule.class, DefaultUIModule
+        .class, ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, TestPersistenceModule.class, TestOptionModule.class, VaadinSessionScopeModule.class, NavigationModule.class, DefaultUIModule
         .class})
 public class DirectSitemapModuleTest {
 
@@ -130,4 +130,5 @@ public class DirectSitemapModuleTest {
         }
 
     }
+
 }

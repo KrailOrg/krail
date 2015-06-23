@@ -9,16 +9,18 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.data;
+package uk.q3c.krail.core.user.opt;
 
+import com.google.inject.BindingAnnotation;
 
-/**
- * A block of Dao statements used with {@link BlockDao}
- *
- * Created by David Sowerby on 08/04/15.
- */
-@FunctionalInterface
-public interface StatementBlock {
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-    void transact(BlockDao dao);
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@BindingAnnotation
+@Target({FIELD, PARAMETER, METHOD})
+@Retention(RUNTIME)
+public @interface CoreDao {
 }

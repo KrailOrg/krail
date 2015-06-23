@@ -17,9 +17,12 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.user.opt.cache.*;
 
 /**
+ * Configures the use of {@link Option}
+ * <p>
  * Created by David Sowerby on 16/11/14.
  */
 public class OptionModule extends AbstractModule {
+
 
     /**
      * Configures a {@link Binder} via the exposed methods.
@@ -27,13 +30,12 @@ public class OptionModule extends AbstractModule {
     @Override
     protected void configure() {
         bindOption();
-        bindOptionStore();
         bindOptionCacheConfiguration();
         bindOptionCache();
         bindOptionCacheProvider();
-        bindOptionDao();
         bindOptionPopup();
     }
+
 
     /**
      * Override this method to provide your own {@link OptionPopup} implementation
@@ -50,12 +52,7 @@ public class OptionModule extends AbstractModule {
     }
 
 
-    /**
-     * Override this method to provide your own {@link OptionDao} implementation
-     */
-    protected void bindOptionDao() {
-        bind(OptionDao.class).to(InMemoryOptionDao.class);
-    }
+
 
     /**
      * Override this method to provide your own {@link OptionCache} implementation. The scope can be changed, but it
@@ -76,7 +73,7 @@ public class OptionModule extends AbstractModule {
     /**
      * Override this to configure the option cache
      *
-     * @return
+     * @return a GuavaCacheConfiguration instance
      */
     protected GuavaCacheConfiguration configureCache() {
         GuavaCacheConfiguration config = new GuavaCacheConfiguration();
@@ -86,18 +83,11 @@ public class OptionModule extends AbstractModule {
     }
 
     /**
-     * Override this method to provide your own {@link Option} implementation. If all you want to do is change the
-     * storage method, override {@link #bindOptionStore()} instead
+     * Override this method to provide your own {@link Option} implementation.
      */
     protected void bindOption() {
         bind(Option.class).to(DefaultOption.class);
     }
 
-    /**
-     * Override this method to provide your own store implementation for user options. This is in effect a DAO
-     * implementation
-     */
-    protected void bindOptionStore() {
-        bind(OptionStore.class).to(InMemoryOptionStore.class);
-    }
+
 }

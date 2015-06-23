@@ -12,15 +12,13 @@
 package uk.q3c.krail.core.data;
 
 import uk.q3c.krail.core.config.ApplicationConfiguration;
-import uk.q3c.krail.core.user.opt.Option;
 
 /**
  * A common interface to provide configuration for a logical data source.  There may be multiple sources in an application - perhaps a Graph database for
  * user management, a relational database for OLTP, a NOSQL database for logging and a REST API for geolocation lookup.  Implementations of this interface
  * enable the configuration to carried out in a Guice module ({@link DataModule} by default).
  * <p>
- * You may also want to use the {@link ApplicationConfiguration} to enable configuration to be changed without recompiling.  You could also use {@link Option}
- * to provide more dynamic configuration; you could even combine all three methods into an implementation of {@link DataSourceService}
+ * You may also want to use the {@link ApplicationConfiguration} to enable configuration to be changed without recompiling.
  * <p>
  * The Krail core does not contain any implementations for this interface, they are provided by additional libraries, such as krail-jpa and krail-orient
  * <p>

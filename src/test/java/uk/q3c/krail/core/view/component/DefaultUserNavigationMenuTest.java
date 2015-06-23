@@ -36,6 +36,7 @@ import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import java.util.ArrayList;
@@ -46,7 +47,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestUIScopeModule.class, VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class})
+@GuiceContext({TestUIScopeModule.class, VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class,
+        EventBusModule.class})
 public class DefaultUserNavigationMenuTest {
 
     @Inject

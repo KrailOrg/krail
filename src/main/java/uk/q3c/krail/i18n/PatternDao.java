@@ -14,7 +14,6 @@ package uk.q3c.krail.i18n;
 import uk.q3c.krail.core.user.opt.cache.OptionKeyException;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
@@ -40,10 +39,10 @@ public interface PatternDao {
      * @param cacheKey
      *         specifies the I18NKey & Locale to identify the entry to delete
      *
-     * @return the previous value for the entry, or null if there was no previous value
+     * @return the Optional with previous value for the cacheKey, or Optional.empty() if there was no previous value
      */
-    @Nullable
-    String deleteValue(@Nonnull PatternCacheKey cacheKey);
+    @Nonnull
+    Optional<String> deleteValue(@Nonnull PatternCacheKey cacheKey);
 
 
     /**

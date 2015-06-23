@@ -34,20 +34,20 @@ import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.ui.DataTypeModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
-import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.I18NModule;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.TestLabelKey;
+import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, I18NModule
-        .class, SitemapModule.class, UserModule.class, OptionModule.class, ApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, EventBusModule.class, DefaultUIModule.class, DataTypeModule.class, DataModule.class})
+@GuiceContext({TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, TestPersistenceModule.class, TestOptionModule.class, ApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, EventBusModule.class, DefaultUIModule.class, DataTypeModule.class, DataModule.class})
 public class DefaultDirectSitemapLoaderTest {
 
     static String page1 = "private/page1";
@@ -96,4 +96,5 @@ public class DefaultDirectSitemapLoaderTest {
         }
 
     }
+
 }

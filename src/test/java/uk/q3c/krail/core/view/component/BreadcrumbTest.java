@@ -38,6 +38,7 @@ import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import java.text.Collator;
@@ -48,7 +49,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestUIScopeModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, VaadinSessionScopeModule.class, EventBusModule.class,
+        TestUIScopeModule.class})
 public class BreadcrumbTest {
 
     DefaultBreadcrumb breadcrumb;

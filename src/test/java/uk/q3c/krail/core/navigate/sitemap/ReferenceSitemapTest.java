@@ -25,6 +25,7 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import java.util.Arrays;
@@ -38,7 +39,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author dsowerby
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class, TestUIScopeModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestPersistenceModule.class, TestOptionModule.class, EventBusModule.class,
+        TestUIScopeModule.class})
 public class ReferenceSitemapTest {
 
     private static String[] expected = new String[]{"", "-Public", "--Log Out", "--ViewA", "---ViewA1",

@@ -16,17 +16,16 @@ import com.google.inject.Inject;
 import uk.q3c.krail.core.user.opt.cache.OptionKeyException;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class InMemoryPatternDao implements PatternDao {
 
-    private InMemoryPatternStore store;
+    private DefaultInMemoryPatternStore store;
 
     @Inject
-    public InMemoryPatternDao(InMemoryPatternStore inMemoryPatternStore) {
+    public InMemoryPatternDao(DefaultInMemoryPatternStore inMemoryPatternStore) {
         this.store = inMemoryPatternStore;
     }
 
@@ -52,11 +51,16 @@ public class InMemoryPatternDao implements PatternDao {
      *
      * @return the previous value for the entry, or null if there was no previous value
      */
-    @Nullable
+    @Nonnull
     @Override
-    public String deleteValue(@Nonnull PatternCacheKey cacheKey) {
+    public Optional<String> deleteValue(@Nonnull PatternCacheKey cacheKey) {
         checkNotNull(cacheKey);
-        return store.remove(cacheKey);
+        String result = store.remove(cacheKey);
+        if (result == null) {
+            return Optional.empty();
+        } else {
+            return Optional.of(result);
+        }
     }
 
     /**

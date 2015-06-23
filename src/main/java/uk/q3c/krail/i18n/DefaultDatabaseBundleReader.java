@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.data.DataModule;
+import uk.q3c.krail.core.user.opt.CoreDao;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class DefaultDatabaseBundleReader extends BundleReaderBase implements Dat
     private PatternDao patternDao;
 
     @Inject
-    protected DefaultDatabaseBundleReader(PatternDao patternDao) {
+    protected DefaultDatabaseBundleReader(@CoreDao PatternDao patternDao) {
         super();
         this.patternDao = patternDao;
     }

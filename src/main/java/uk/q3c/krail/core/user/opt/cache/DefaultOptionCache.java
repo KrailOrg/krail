@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.user.opt.CoreDao;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.opt.OptionModule;
@@ -46,7 +47,7 @@ public class DefaultOptionCache implements OptionCache {
     private final Provider<OptionDao> daoProvider;
 
     @Inject
-    public DefaultOptionCache(Provider<OptionDao> daoProvider, OptionCacheProvider cacheProvider) {
+    public DefaultOptionCache(@CoreDao Provider<OptionDao> daoProvider, OptionCacheProvider cacheProvider) {
         this.daoProvider = daoProvider;
         cache = cacheProvider.get();
     }

@@ -47,6 +47,7 @@ import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 import uk.q3c.util.ResourceUtils;
 import uk.q3c.util.testutil.TestResource;
 
@@ -67,8 +68,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class, ServiceModule.class,
-        ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, DefaultShiroModule
-        .class, DefaultComponentModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, NavigationModule.class,
+        ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, DefaultShiroModule.class,
+        DefaultComponentModule.class, TestPersistenceModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class, TestOptionModule.class,
+        NavigationModule.class,
         DefaultUIModule.class})
 public class DefaultSitemapServiceTest {
 

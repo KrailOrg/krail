@@ -29,19 +29,19 @@ import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.ui.DataTypeModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
-import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.testutil.TestI18NModule;
+import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({StandardPagesModule.class, UIScopeModule.class, EventBusModule.class, ViewModule.class, ShiroVaadinModule.class, TestI18NModule.class,
-        SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, OptionModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, DataModule.class, DefaultUIModule.class, DataTypeModule.class})
+@GuiceContext({StandardPagesModule.class, UIScopeModule.class, EventBusModule.class, ViewModule.class, ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, TestPersistenceModule.class, TestOptionModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, DataModule.class, DefaultUIModule.class, DataTypeModule.class})
 public class DefaultStandardPagesModuleTest {
 
     @Inject

@@ -33,12 +33,13 @@ import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NProcessor;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class})
+@GuiceContext({TestOptionModule.class, TestPersistenceModule.class})
 public class DefaultApplicationUITest {
 
 

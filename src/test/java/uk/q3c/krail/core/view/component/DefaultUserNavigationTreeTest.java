@@ -38,6 +38,7 @@ import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import java.util.ArrayList;
@@ -50,7 +51,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestUIScopeModule.class, TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class, EventBusModule.class})
+@GuiceContext({TestUIScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, VaadinSessionScopeModule.class,
+        EventBusModule.class})
 public class DefaultUserNavigationTreeTest {
 
     @Inject

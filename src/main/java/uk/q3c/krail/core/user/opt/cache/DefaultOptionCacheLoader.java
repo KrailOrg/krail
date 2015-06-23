@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.user.opt.CoreDao;
 import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
@@ -43,7 +44,7 @@ public class DefaultOptionCacheLoader extends CacheLoader<OptionCacheKey, Option
     private Provider<OptionDao> daoProvider;
 
     @Inject
-    public DefaultOptionCacheLoader(Provider<OptionDao> daoProvider) {
+    public DefaultOptionCacheLoader(@CoreDao Provider<OptionDao> daoProvider) {
         this.daoProvider = daoProvider;
     }
 

@@ -28,6 +28,7 @@ import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -36,7 +37,8 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class, TestI18NModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class, UIScopeModule.class, TestI18NModule
+        .class})
 public class DefaultLocaleSelectorTest {
 
     @Mock

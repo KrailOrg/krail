@@ -60,16 +60,16 @@ public class Select {
      *
      * @return
      *
-     * @see #clazz(String)
+     * @see #from(String)
      */
-    public Select clazz(@Nonnull Class<?> entityClass) {
+    public Select from(@Nonnull Class<?> entityClass) {
         checkNotNull(entityClass);
         buf.append(entityClass.getSimpleName());
         buf.append(" t");
         return this;
     }
 
-    public Select clazz(String tableName) {
+    public Select from(String tableName) {
         checkNotNull(tableName);
         buf.append(tableName);
         buf.append(" t");

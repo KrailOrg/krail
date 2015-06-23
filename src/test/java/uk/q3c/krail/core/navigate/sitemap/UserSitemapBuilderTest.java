@@ -33,13 +33,15 @@ import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule.class})
+@GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class,
+        UIScopeModule.class})
 public class UserSitemapBuilderTest extends TestWithSitemap {
 
     @Mock

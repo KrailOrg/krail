@@ -31,15 +31,13 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.OptionStore;
-import uk.q3c.krail.testutil.MockOption;
-import uk.q3c.krail.testutil.TestI18NModule;
-import uk.q3c.krail.testutil.TestOptionModule;
-import uk.q3c.krail.testutil.TestUIScopeModule;
+import uk.q3c.krail.testutil.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class, TestUIScopeModule.class})
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class,
+        TestUIScopeModule.class})
 public class DefaultUserNavigationMenuBuilderTest {
 
     DefaultUserNavigationMenuBuilder builder;

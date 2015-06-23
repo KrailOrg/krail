@@ -31,6 +31,7 @@ import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 import uk.q3c.krail.testutil.TestUIScopeModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,7 +44,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by David Sowerby on 05/02/15.
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestOptionModule.class, TestI18NModule.class, EventBusModule.class, TestUIScopeModule
+@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestOptionModule.class, TestPersistenceModule.class, TestI18NModule.class, EventBusModule
+        .class, TestUIScopeModule
         .class, VaadinSessionScopeModule.class})
 public class ValidationTest {
 

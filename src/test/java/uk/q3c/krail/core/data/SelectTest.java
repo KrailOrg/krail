@@ -28,7 +28,7 @@ public class SelectTest {
         //given
 
         //when
-        Select select = new Select().clazz(TestEntity.class)
+        Select select = new Select().from(TestEntity.class)
                                     .where("name", "a")
                                     .and("age", 33);
         //then
@@ -41,7 +41,7 @@ public class SelectTest {
         //given
 
         //when
-        Select select = new Select().clazz(TestEntity.class)
+        Select select = new Select().from(TestEntity.class)
                                     .where("name", "a")
                                     .and("age", GREATER_THAN, 33);
         //then

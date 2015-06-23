@@ -17,6 +17,7 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -24,7 +25,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class})
+@GuiceContext({TestOptionModule.class, TestPersistenceModule.class})
 public class NativeBundleReaderBaseTest {
 
     @Inject

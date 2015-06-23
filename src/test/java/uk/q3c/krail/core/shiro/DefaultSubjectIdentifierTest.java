@@ -30,6 +30,7 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import java.util.Locale;
 
@@ -37,7 +38,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, VaadinSessionScopeModule.class, EventBusModule.class, UIScopeModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, VaadinSessionScopeModule.class, EventBusModule.class, UIScopeModule
+        .class})
 public class DefaultSubjectIdentifierTest {
 
 

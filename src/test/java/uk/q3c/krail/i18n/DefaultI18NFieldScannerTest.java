@@ -26,6 +26,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
+import uk.q3c.krail.testutil.TestPersistenceModule;
 import uk.q3c.util.TestByteEnhancementModule;
 
 import java.lang.annotation.Annotation;
@@ -36,7 +37,8 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, DataModule.class, EventBusModule.class, UIScopeModule.class, TestOptionModule.class, VaadinSessionScopeModule.class,
+@GuiceContext({TestI18NModule.class, DataModule.class, EventBusModule.class, UIScopeModule.class, TestOptionModule.class, TestPersistenceModule.class,
+        VaadinSessionScopeModule.class,
         TestByteEnhancementModule.class})
 public class DefaultI18NFieldScannerTest {
 

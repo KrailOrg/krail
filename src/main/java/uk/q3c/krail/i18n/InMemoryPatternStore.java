@@ -11,31 +11,13 @@
 
 package uk.q3c.krail.i18n;
 
-import com.google.inject.Singleton;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * A simplistic in memory store for I18N patterns, useful only for testing
- * <p>
- * Created by David Sowerby on 18/06/15.
+ * Created by David Sowerby on 25/06/15.
  */
-@Singleton
-public class InMemoryPatternStore {
+public interface InMemoryPatternStore {
+    void put(PatternCacheKey cacheKey, String value);
 
-    private Map<PatternCacheKey, String> store = new HashMap<>();
+    String remove(PatternCacheKey cacheKey);
 
-
-    public void put(PatternCacheKey cacheKey, String value) {
-        store.put(cacheKey, value);
-    }
-
-    public String remove(PatternCacheKey cacheKey) {
-        return store.remove(cacheKey);
-    }
-
-    public String get(PatternCacheKey cacheKey) {
-        return store.get(cacheKey);
-    }
+    String get(PatternCacheKey cacheKey);
 }
