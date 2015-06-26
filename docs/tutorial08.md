@@ -427,17 +427,17 @@ protected void define() {
    
 }
 ```
-- I18NModule already defines a default, in-memory "database" PatternDao implementation - no changes are therefore needed to ```BindingManager``` 
+- The ```DefaultBindingManager.addPersistenceModules()``` defines a default, in-memory "database" PatternDao implementation - no changes are therefore needed to ```BindingManager``` 
 
  
 If you were to run the application now, nothing will have changed.  We have set the order of bundle sources so that "in-memory store" is queried first - of course nothing will be found as it is empty - and the "class", which will return the same as before.
 
 To prove this works, we need to put a value in to the database:
 
-- in 'MyNews' add ```PatternSource``` and a provider for ```PatternDao```
+- in 'MyNews' add ```PatternSource``` and a provider for ```PatternDao```.  Note the **@CoreDao** annotation on ```PatternDao``` - the annotation allows multiple persistence sources to be used, but generally you will use **@CoreDao**, as that is the primary source.
 ```
 @Inject
-public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, UserNotifier userNotifier, Translate translate, Provider<PatternDao>
+public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, UserNotifier userNotifier, Translate translate,@CoreDao Provider<PatternDao>
         patternDaoProvider, PatternSource patternSource) {
     this.option = option;
     this.optionPopup = optionPopup;
