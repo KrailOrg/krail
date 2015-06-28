@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.persist.CorePatternDaoProvider;
 
 import java.util.Optional;
 
@@ -30,6 +31,9 @@ public class DefaultDatabaseBundleReaderTest {
 
 
     @Mock
+    CorePatternDaoProvider patternDaoProvider;
+
+    @Mock
     PatternDao patternDao;
 
     @Mock
@@ -39,7 +43,8 @@ public class DefaultDatabaseBundleReaderTest {
 
     @Before
     public void setup() {
-        reader = new DefaultDatabaseBundleReader(patternDao);
+        reader = new DefaultDatabaseBundleReader(patternDaoProvider);
+        when(patternDaoProvider.get()).thenReturn(patternDao);
     }
 
     @Test

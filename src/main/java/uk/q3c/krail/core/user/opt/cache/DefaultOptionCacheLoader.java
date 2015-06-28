@@ -13,10 +13,9 @@ package uk.q3c.krail.core.user.opt.cache;
 
 import com.google.common.cache.CacheLoader;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.user.opt.CoreDao;
+import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
 import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
@@ -39,12 +38,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>
  * Created by David Sowerby on 19/02/15.
  */
-public class DefaultOptionCacheLoader extends CacheLoader<OptionCacheKey, Optional<Object>> {
+public class DefaultOptionCacheLoader extends CacheLoader<OptionCacheKey, Optional<?>> {
     private static Logger log = LoggerFactory.getLogger(DefaultOptionCacheLoader.class);
-    private Provider<OptionDao> daoProvider;
+    private CoreOptionDaoProvider daoProvider;
 
     @Inject
-    public DefaultOptionCacheLoader(@CoreDao Provider<OptionDao> daoProvider) {
+    public DefaultOptionCacheLoader(CoreOptionDaoProvider daoProvider) {
         this.daoProvider = daoProvider;
     }
 
@@ -67,7 +66,7 @@ public class DefaultOptionCacheLoader extends CacheLoader<OptionCacheKey, Option
      */
     @Override
     @Nonnull
-    public Optional<Object> load(@Nonnull final OptionCacheKey cacheKey) throws Exception {
+    public Optional<?> load(@Nonnull final OptionCacheKey cacheKey) throws Exception {
         checkNotNull(cacheKey);
         log.debug("retrieving value for {}", cacheKey);
         OptionDao dao = daoProvider.get();
@@ -82,6 +81,7 @@ public class DefaultOptionCacheLoader extends CacheLoader<OptionCacheKey, Option
                 return Optional.empty();
 
         }
+
 
     }
 }

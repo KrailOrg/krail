@@ -16,11 +16,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -32,7 +32,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @ThreadSafe
 public class InMemoryOptionStore implements OptionStore {
 
-    private Map<String, Map<String, Map<String, Object>>> map = new ConcurrentHashMap<>();
+    private Map<String, Map<String, Map<String, Optional<?>>>> map = new ConcurrentHashMap<>();
 
 
     @Inject
@@ -41,7 +41,7 @@ public class InMemoryOptionStore implements OptionStore {
 
 
     @Override
-    public synchronized <T> void setValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey
+    public synchronized <T extends Optional<?>> void setValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey
             optionKey, @Nonnull T value) {
         checkNotNull(hierarchyName);
         checkNotNull(rankName);
@@ -54,7 +54,7 @@ public class InMemoryOptionStore implements OptionStore {
             map.put(hierarchyName, new ConcurrentHashMap<>());
         }
 
-        Map<String, Map<String, Object>> optionMap = map.get(hierarchyName);
+        Map<String, Map<String, Optional<?>>> optionMap = map.get(hierarchyName);
 
         if (optionMap == null) {
             optionMap = new ConcurrentHashMap<>();
@@ -68,7 +68,7 @@ public class InMemoryOptionStore implements OptionStore {
             optionMap.put(compositeKey, new ConcurrentHashMap<>());
         }
 
-        Map<String, Object> levelValueMap = optionMap.get(compositeKey);
+        Map<String, Optional<?>> levelValueMap = optionMap.get(compositeKey);
 
         //put the value
         levelValueMap.put(rankName, value);
@@ -76,38 +76,43 @@ public class InMemoryOptionStore implements OptionStore {
 
 
     @Override
-    @Nullable
-    public synchronized Object getValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey
+    @Nonnull
+    public synchronized Optional<?> getValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey
             optionKey) {
         checkNotNull(hierarchyName);
         checkNotNull(rankName);
         checkNotNull(optionKey);
-        Map<String, Map<String, Object>> optionMap = map.get(hierarchyName);
+        Map<String, Map<String, Optional<?>>> optionMap = map.get(hierarchyName);
         if (optionMap == null) {
-            return null;
+            return Optional.empty();
         }
 
-        Map<String, Object> valueMap = optionMap.get(optionKey.compositeKey());
-        return valueMap.get(rankName);
+        Map<String, Optional<?>> valueMap = optionMap.get(optionKey.compositeKey());
+        Optional<?> value = valueMap.get(rankName);
+        if (value == null) {
+            return Optional.empty();
+        } else {
+            return value;
+        }
 
     }
 
 
     @Nonnull
     @Override
-    public Map<String, Object> valueMapForOptionKey(@Nonnull String hierarchyName, @Nonnull List<String> rankNames,
+    public Map<String, Optional<?>> valueMapForOptionKey(@Nonnull String hierarchyName, @Nonnull List<String> rankNames,
                                                     @Nonnull OptionKey optionKey) {
         checkNotNull(hierarchyName);
         checkNotNull(rankNames);
         checkNotNull(optionKey);
-        Map<String, Map<String, Object>> optionMap = map.get(hierarchyName);
+        Map<String, Map<String, Optional<?>>> optionMap = map.get(hierarchyName);
         if (optionMap == null) {
             return new HashMap<>();
         }
-        Map<String, Object> valueMap = optionMap.get(optionKey.compositeKey());
+        Map<String, Optional<?>> valueMap = optionMap.get(optionKey.compositeKey());
 
 
-        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Optional<?>> resultMap = new HashMap<>();
         if (valueMap == null) {
             return resultMap;
         }
@@ -122,19 +127,19 @@ public class InMemoryOptionStore implements OptionStore {
 
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    public Object deleteValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey) {
+    public Optional<?> deleteValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey) {
         checkNotNull(hierarchyName);
         checkNotNull(rankName);
         checkNotNull(optionKey);
-        Map<String, Map<String, Object>> optionMap = map.get(hierarchyName);
+        Map<String, Map<String, Optional<?>>> optionMap = map.get(hierarchyName);
         if (optionMap == null) {
-            return null;
+            return Optional.empty();
         }
-        Map<String, Object> valueMap = optionMap.get(optionKey.compositeKey());
+        Map<String, Optional<?>> valueMap = optionMap.get(optionKey.compositeKey());
         if (valueMap == null) {
-            return null;
+            return Optional.empty();
         }
         return valueMap.remove(rankName);
 
@@ -143,5 +148,18 @@ public class InMemoryOptionStore implements OptionStore {
 
     public void clear() {
         map.clear();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int size() {
+        int c = 0;
+        for (Map.Entry<String, Map<String, Map<String, Optional<?>>>> entry : map.entrySet()) {
+            c = c + entry.getValue()
+                         .size();
+        }
+        return c;
     }
 }

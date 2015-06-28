@@ -39,7 +39,7 @@ public class DefaultOptionCacheProvider implements OptionCacheProvider {
 
     @Override
     @Nonnull
-    public LoadingCache<OptionCacheKey, Optional<Object>> get() {
+    public LoadingCache<OptionCacheKey, Optional<?>> get() {
         //noinspection unchecked
         log.debug("returning new instance of cache");
         return cacheConfiguration.builder()

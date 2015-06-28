@@ -20,9 +20,14 @@ import com.google.inject.multibindings.Multibinder;
 import org.apache.commons.lang3.LocaleUtils;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.persist.ActivePatternDao;
+import uk.q3c.krail.core.persist.CorePatternDaoProvider;
+import uk.q3c.krail.core.persist.DefaultCorePatternDaoProvider;
+import uk.q3c.krail.core.user.opt.InMemory;
 import uk.q3c.krail.core.user.opt.Option;
 
 import javax.annotation.Nonnull;
+import java.lang.annotation.Annotation;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -31,6 +36,7 @@ import static com.google.inject.multibindings.Multibinder.newSetBinder;
 
 public class I18NModule extends AbstractModule {
 
+    private Class<? extends Annotation> activeDaoAnnotation;
     private MapBinder<String, BundleReader> bundleSources;
     private MapBinder<String, Set<String>> bundleSourcesOrder;
     private Multibinder<String> bundleSourcesOrderDefault;
@@ -57,7 +63,7 @@ public class I18NModule extends AbstractModule {
 
         bundleSourcesOrder = MapBinder.newMapBinder(binder(), keyClass, setString, BundleSourcesOrder.class);
 
-
+        bindCorePatternDaoProvider();
         bindProcessor();
         bindCurrentLocale();
 
@@ -74,8 +80,27 @@ public class I18NModule extends AbstractModule {
         bindBundleSources();
         bindBundleSourcesOrderDefault();
         bindBundleSourcesOrder();
+        bindDao();
 
 
+    }
+
+    /**
+     * Binds the active Dao, or if none has been defined, uses {@link InMemory}
+     */
+    protected void bindDao() {
+        Class<? extends Annotation> annotationClass = (activeDaoAnnotation == null) ? InMemory.class : activeDaoAnnotation;
+        TypeLiteral<Class<? extends Annotation>> annotationTypeLiteral = new TypeLiteral<Class<? extends Annotation>>() {
+        };
+        bind(annotationTypeLiteral).annotatedWith(ActivePatternDao.class)
+                                   .toInstance(annotationClass);
+    }
+
+    /**
+     * Override this method to provide your own {@link CorePatternDaoProvider} implementation
+     */
+    protected void bindCorePatternDaoProvider() {
+        bind(CorePatternDaoProvider.class).to(DefaultCorePatternDaoProvider.class);
     }
 
 
@@ -94,9 +119,9 @@ public class I18NModule extends AbstractModule {
         if (prepBundleSources.isEmpty()) {
             prepBundleSources.put("class", ClassBundleReader.class);
         }
-        for (String source : prepBundleSources.keySet()) {
-            bundleSources.addBinding(source)
-                         .to(prepBundleSources.get(source));
+        for (Map.Entry<String, Class<? extends BundleReader>> entry : prepBundleSources.entrySet()) {
+            bundleSources.addBinding(entry.getKey())
+                         .to(entry.getValue());
         }
     }
 
@@ -203,9 +228,9 @@ public class I18NModule extends AbstractModule {
     }
 
     protected void bindBundleSourcesOrder() {
-        for (String baseName : prepBundleSourcesOrder.keySet()) {
-            bundleSourcesOrder.addBinding(baseName)
-                              .toInstance(prepBundleSourcesOrder.get(baseName));
+        for (Map.Entry<String, Set<String>> entry : prepBundleSourcesOrder.entrySet()) {
+            bundleSourcesOrder.addBinding(entry.getKey())
+                              .toInstance(entry.getValue());
         }
 
     }
@@ -333,14 +358,13 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     *
      * This method sets the order in which to poll the I18N pattern sources, but for a specific bundle (I18NKey
      * class)
-     *
+     * <p>
      * {@link #bundleSourcesOrderDefault(String...)} applies to all key classes, and is usually only needed when
      * combining sources from different modules.
      * <p>
-
+     * <p>
      * <p>
      * If you have only one source - you definitely won't need this method
      *
@@ -359,6 +383,11 @@ public class I18NModule extends AbstractModule {
         Set<String> tagSet = new LinkedHashSet<>(Arrays.asList(sources));
         prepBundleSourcesOrder.put(baseName, tagSet);
 
+        return this;
+    }
+
+    public I18NModule activeDao(Class<? extends Annotation> annotationClass) {
+        activeDaoAnnotation = annotationClass;
         return this;
     }
 

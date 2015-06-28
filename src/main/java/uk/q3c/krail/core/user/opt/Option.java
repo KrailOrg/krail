@@ -11,6 +11,8 @@
 
 package uk.q3c.krail.core.user.opt;
 
+import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheLoader;
+import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
 import javax.annotation.Nonnull;
@@ -20,7 +22,8 @@ import javax.annotation.Nullable;
  * Implementations represent an Option which can be at any rank in a {@link UserHierarchy}.  All calls reference an
  * implementation of {@link UserHierarchy} held by the implementation.
  *
- *
+ * * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
+ * {@link OptionDao} are wrapped in Optional.
  * <p>
  * Created by David Sowerby on 03/12/14.
  */

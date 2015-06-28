@@ -15,9 +15,9 @@ package uk.q3c.krail.core.user.opt;
 import uk.q3c.krail.core.user.profile.UserHierarchyException;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Stores and loads option values from a (usually) persistent store.  A simple, in memory, version is provided
@@ -44,7 +44,7 @@ public interface OptionStore {
      * @throws UserHierarchyException
      *         if {@code cacheKey.hierarchyRank} is out of range
      */
-    <T> void setValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey, @Nonnull
+    <T extends Optional<?>> void setValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey, @Nonnull
     T value);
 
     /**
@@ -59,8 +59,8 @@ public interface OptionStore {
      *
      * @return the value if found, otherwise null
      */
-    @Nullable
-    Object getValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey);
+    @Nonnull
+    Optional<?> getValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey);
 
     /**
      * Delete the entry for the hierarchy, hierarchy rank name and {@link OptionKey} specified
@@ -74,8 +74,8 @@ public interface OptionStore {
      *
      * @return the previous value associated with {@code cacheKey}, or null if there was no mapping for key.
      */
-    @Nullable
-    Object deleteValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey);
+    @Nonnull
+    Optional<?> deleteValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey);
 
 
     /**
@@ -93,12 +93,17 @@ public interface OptionStore {
      * values assigned
      */
     @Nonnull
-    Map<String, Object> valueMapForOptionKey(@Nonnull String hierarchyName, @Nonnull List<String> rankNames, @Nonnull
+    Map<String, Optional<?>> valueMapForOptionKey(@Nonnull String hierarchyName, @Nonnull List<String> rankNames, @Nonnull
     OptionKey optionKey);
 
     /**
      * Some implementations may enable clearing the WHOLE option store.  Those that do not throw an {@link UnsupportedOperationException}
      */
     void clear();
+
+    /**
+     * The number of entries in the store
+     */
+    int size();
 }
 

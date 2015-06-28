@@ -12,21 +12,25 @@
 package uk.q3c.krail.core.persist;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.Multibinder;
 import uk.q3c.krail.core.user.opt.*;
 import uk.q3c.krail.i18n.DefaultInMemoryPatternStore;
 import uk.q3c.krail.i18n.InMemoryPatternDao;
 import uk.q3c.krail.i18n.InMemoryPatternStore;
 import uk.q3c.krail.i18n.PatternDao;
 
+import java.lang.annotation.Annotation;
+
 /**
  * A pseudo persistence module which actually just stores things in memory maps - useful for testing
  * <p>
  * Created by David Sowerby on 25/06/15.
  */
-public class InMemoryModule extends AbstractModule implements KrailPersistenceModule<InMemoryModule> {
+public class InMemoryModule extends AbstractModule implements KrailPersistenceUnit<InMemoryModule> {
 
-    private boolean provideCoreOptionDao = false;
-    private boolean provideCorePatternDao;
+    private Multibinder<Class<? extends Annotation>> optionDaoProviders;
+    private Multibinder<Class<? extends Annotation>> patternDaoProviders;
     private boolean provideOptionDao = false;
     private boolean providePatternDao;
 
@@ -35,21 +39,25 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceMo
      */
     @Override
     protected void configure() {
+
+        TypeLiteral<Class<? extends Annotation>> annotationClassLiteral = new TypeLiteral<Class<? extends Annotation>>() {
+        };
+
+        patternDaoProviders = Multibinder.newSetBinder(binder(), annotationClassLiteral, PatternDaoProviders.class);
+        optionDaoProviders = Multibinder.newSetBinder(binder(), annotationClassLiteral, OptionDaoProviders.class);
+
+
         bindOptionDao();
         bindPatternDao();
     }
 
 
     protected void bindOptionDao() {
-        if (provideCoreOptionDao) {
-            bind(OptionDao.class).annotatedWith(CoreDao.class)
-                                 .to(InMemoryOptionDao.class);
-        }
         if (provideOptionDao) {
             bind(OptionDao.class).annotatedWith(InMemory.class)
                                  .to(InMemoryOptionDao.class);
-        }
-        if (provideCoreOptionDao || provideOptionDao) {
+            optionDaoProviders.addBinding()
+                              .toInstance(InMemory.class);
             bindOptionStore();
         }
     }
@@ -59,15 +67,13 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceMo
     }
 
     protected void bindPatternDao() {
-        if (provideCorePatternDao) {
-            bind(PatternDao.class).annotatedWith(CoreDao.class)
-                                  .to(InMemoryPatternDao.class);
-        }
+        bind(PatternDao.class).annotatedWith(CoreDao.class)
+                              .to(InMemoryPatternDao.class);
         if (providePatternDao) {
             bind(PatternDao.class).annotatedWith(InMemory.class)
                                   .to(InMemoryPatternDao.class);
-        }
-        if (provideCorePatternDao || providePatternDao) {
+            patternDaoProviders.addBinding()
+                               .toInstance(InMemory.class);
             bindPatternStore();
         }
     }
@@ -76,14 +82,7 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceMo
         bind(InMemoryPatternStore.class).to(DefaultInMemoryPatternStore.class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public InMemoryModule provideCoreOptionDao() {
-        provideCoreOptionDao = true;
-        return this;
-    }
+
 
     /**
      * {@inheritDoc}
@@ -98,17 +97,10 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceMo
      * {@inheritDoc}
      */
     @Override
-    public InMemoryModule provideCorePatternDao() {
-        provideCorePatternDao = true;
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public InMemoryModule providePatternDao() {
         providePatternDao = true;
         return this;
     }
+
+
 }

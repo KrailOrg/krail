@@ -20,6 +20,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.DataTypeToUI;
@@ -55,6 +57,7 @@ public class DefaultOptionTest {
     private DataTypeToUI dataTypeToUI;
     @Mock
     private UserHierarchy defaultHierarchy;
+
     @Mock
     private OptionCache optionCache;
     private OptionKey<Integer> optionKey1;
@@ -66,7 +69,6 @@ public class DefaultOptionTest {
     public void setup() {
         when(subjectIdentifier.userId()).thenReturn("ds");
         when(subjectProvider.get()).thenReturn(subject);
-
         contextObject = new MockContext();
         option = new DefaultOption(optionCache, defaultHierarchy, subjectProvider, subjectIdentifier);
         optionKey1 = new OptionKey<>(5, context, TestLabelKey.key1, "q");
@@ -165,11 +167,20 @@ public class DefaultOptionTest {
         //given
         when(defaultHierarchy.lowestRankName()).thenReturn("low");
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, LOWEST_RANK, optionKey2);
-        when(optionCache.get(Optional.of(5), cacheKey)).thenReturn(Optional.of(20));
+        when(optionCache.get(Optional.of(5), cacheKey)).thenAnswer(answerOf(20));
         //when
         Integer actual = option.getLowestRanked(optionKey2);
         //then
         assertThat(actual).isEqualTo(20);
+    }
+
+    protected Answer<Optional<Integer>> answerOf(Integer value) {
+        return new Answer<Optional<Integer>>() {
+            @Override
+            public Optional<Integer> answer(InvocationOnMock invocation) throws Throwable {
+                return Optional.of(value);
+            }
+        };
     }
 
     @Test
@@ -178,7 +189,7 @@ public class DefaultOptionTest {
         when(subject.isPermitted(any(OptionPermission.class))).thenReturn(true);
         when(defaultHierarchy.rankName(1)).thenReturn("specific");
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 1, optionKey2);
-        when(optionCache.delete(cacheKey)).thenReturn(Optional.of(3));
+        when(optionCache.delete(cacheKey)).thenAnswer(answerOf(3));
         //when
         Object actual = option.delete(1, optionKey2);
         //then
@@ -192,12 +203,11 @@ public class DefaultOptionTest {
         when(subject.isPermitted(any(OptionPermission.class))).thenReturn(false);
         when(defaultHierarchy.rankName(1)).thenReturn("specific");
         OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 1, optionKey2);
-        when(optionCache.delete(cacheKey)).thenReturn(Optional.of(3));
+        when(optionCache.delete(cacheKey)).thenAnswer(answerOf(3));
         //when
         Object actual = option.delete(1, optionKey2);
         //then
     }
-
 
     static class MockContext implements OptionContext {
 

@@ -13,7 +13,6 @@ package uk.q3c.krail.core.user.opt.cache;
 
 import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.After;
@@ -21,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.util.testutil.LogMonitor;
 
@@ -35,6 +35,7 @@ import static org.mockito.Mockito.when;
 @GuiceContext({})
 public class DefaultOptionCacheTest {
 
+
     @Inject
     LogMonitor logMonitor;
 
@@ -42,19 +43,23 @@ public class DefaultOptionCacheTest {
     @Mock
     DefaultOptionCacheProvider cacheProvider;
     @Mock
-    LoadingCache<OptionCacheKey, Optional<Object>> cache;
+    MockCache cache;
+
+    @Mock
+    LoadingCache<OptionCacheKey, Optional<?>> cache2;
     @Mock
     OptionCacheKey cacheKey;
     @Mock
     OptionDao dao;
+    DefaultOptionCache optionCache2;
     @Mock
     private DefaultOptionCacheLoader cacheLoader;
-
     @Mock
-    private Provider<OptionDao> daoProvider;
+    private CoreOptionDaoProvider daoProvider;
 
     @Before
     public void setup() {
+        cache = new MockCache();
         when(daoProvider.get()).thenReturn(dao);
         logMonitor.addClassFilter(DefaultOptionCache.class);
         when(cacheProvider.get()).thenReturn(cache);
@@ -69,21 +74,21 @@ public class DefaultOptionCacheTest {
     @Test
     public void get_has_value() throws ExecutionException {
         //given
-        when(cache.getUnchecked(cacheKey)).thenReturn(Optional.of(11));
+        cache.setValue(cacheKey, Optional.of(11));
         //when
-        Integer actual = optionCache.get(5, cacheKey);
+        Optional<Integer> actual = optionCache.get(Optional.of(5), cacheKey);
         //then
-        assertThat(actual).isEqualTo(11);
+        assertThat(actual.get()).isEqualTo(11);
     }
 
     @Test
     public void get_has_no_value() throws ExecutionException {
         //given
-        when(cache.getUnchecked(cacheKey)).thenReturn(Optional.empty());
+        cache.setValue(cacheKey, Optional.empty());
         //when
-        Integer actual = optionCache.get(5, cacheKey);
+        Optional<Integer> actual = optionCache.get(Optional.of(5), cacheKey);
         //then
-        assertThat(actual).isEqualTo(5);
+        assertThat(actual.get()).isEqualTo(5);
     }
 
     // TODO problems with throwing exceptions
@@ -113,11 +118,11 @@ public class DefaultOptionCacheTest {
     @Test
     public void get_wrong_type() throws ExecutionException {
         //given
-        when(cache.getUnchecked(cacheKey)).thenReturn(Optional.of("aa"));
+        cache.setValue(cacheKey, Optional.of("aa"));
         //when
-        Integer actual = optionCache.get(5, cacheKey);
+        Optional<Integer> actual = optionCache.get(Optional.of(5), cacheKey);
         //then
-        assertThat(actual).isEqualTo(5);
+        assertThat(actual).isEqualTo(Optional.of(5));
         assertThat(logMonitor.errorCount()).isEqualTo(1);
     }
 
@@ -126,9 +131,9 @@ public class DefaultOptionCacheTest {
         //given
         when(cacheKey.getRequestedRankName()).thenReturn("a");
         //when
-        optionCache.write(cacheKey, 10);
+        optionCache.write(cacheKey, Optional.of(10));
         //then
-        verify(dao).write(cacheKey, 10);
+        verify(dao).write(cacheKey, Optional.of(10));
     }
 
     @Test
@@ -144,33 +149,37 @@ public class DefaultOptionCacheTest {
     @Test
     public void get_if_present_present() {
         //given
-        when(cache.getIfPresent(cacheKey)).thenReturn(Optional.of(10));
+        Optional<?> opt = Optional.of(10);
+        cache.setValue(cacheKey, opt);
         //when
-        Object actual = optionCache.getIfPresent(cacheKey);
+        Optional<?> actual = optionCache.getIfPresent(cacheKey);
         //then
         assertThat(actual).isNotNull();
+        assertThat(actual.get()).isEqualTo(10);
     }
 
     @Test
     public void delete() {
         //given
-
+        when(cacheProvider.get()).thenReturn(cache2);
+        optionCache2 = new DefaultOptionCache(daoProvider, cacheProvider);
         //when
-        optionCache.delete(cacheKey);
+        optionCache2.delete(cacheKey);
         //then
         verify(dao).deleteValue(cacheKey);
-        verify(cache).invalidate(cacheKey);
+        verify(cache2).invalidate(cacheKey);
     }
 
     @Test
     public void flush() {
         //given
-
+        when(cacheProvider.get()).thenReturn(cache2);
+        optionCache2 = new DefaultOptionCache(daoProvider, cacheProvider);
         //when
-        optionCache.flush();
+        optionCache2.flush();
 
         //then
-        verify(cache).invalidateAll();
+        verify(cache2).invalidateAll();
     }
     //Moved to integration test, because cannot mock final class CacheStats
     //    @Test

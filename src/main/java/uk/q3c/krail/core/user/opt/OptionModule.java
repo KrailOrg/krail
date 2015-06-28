@@ -13,8 +13,14 @@ package uk.q3c.krail.core.user.opt;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
+import com.google.inject.TypeLiteral;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.persist.ActiveOptionDao;
+import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
+import uk.q3c.krail.core.persist.DefaultCoreOptionDaoProvider;
 import uk.q3c.krail.core.user.opt.cache.*;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Configures the use of {@link Option}
@@ -23,6 +29,8 @@ import uk.q3c.krail.core.user.opt.cache.*;
  */
 public class OptionModule extends AbstractModule {
 
+
+    private Class<? extends Annotation> activeDaoAnnotation;
 
     /**
      * Configures a {@link Binder} via the exposed methods.
@@ -34,6 +42,28 @@ public class OptionModule extends AbstractModule {
         bindOptionCache();
         bindOptionCacheProvider();
         bindOptionPopup();
+        bindCoreOptionDaoProvider();
+        bindDao();
+    }
+
+
+    /**
+     * Binds the active Dao, or if none has been defined, uses {@link InMemory}
+     */
+    protected void bindDao() {
+        Class<? extends Annotation> annotationClass = (activeDaoAnnotation == null) ? InMemory.class : activeDaoAnnotation;
+        TypeLiteral<Class<? extends Annotation>> annotationTypeLiteral = new TypeLiteral<Class<? extends Annotation>>() {
+        };
+        bind(annotationTypeLiteral).annotatedWith(ActiveOptionDao.class)
+                                   .toInstance(annotationClass);
+    }
+
+
+    /**
+     * Override this method to provide your own {@link CoreOptionDaoProvider} implementation
+     */
+    protected void bindCoreOptionDaoProvider() {
+        bind(CoreOptionDaoProvider.class).to(DefaultCoreOptionDaoProvider.class);
     }
 
 
@@ -50,8 +80,6 @@ public class OptionModule extends AbstractModule {
     protected void bindOptionCacheProvider() {
         bind(OptionCacheProvider.class).to(DefaultOptionCacheProvider.class);
     }
-
-
 
 
     /**
@@ -89,5 +117,9 @@ public class OptionModule extends AbstractModule {
         bind(Option.class).to(DefaultOption.class);
     }
 
+    public OptionModule activeDao(Class<? extends Annotation> annotationClass) {
+        activeDaoAnnotation = annotationClass;
+        return this;
+    }
 
 }

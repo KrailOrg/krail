@@ -11,23 +11,25 @@
 
 package uk.q3c.krail.core.persist;
 
-import uk.q3c.krail.core.user.opt.CoreDao;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.i18n.PatternDao;
 
 /**
- * Interface for all Guice modules which can, if configured to do so, provide persistence to the Krail core.
+ * Interface which may be applied to Guice modules or configuration objects, to provide persistence to the Krail core.
  * <p>
- * Created by David Sowerby on 25/06/15.
+ *
+ * @param <M>
+ *         the implementation object, returned for fluency
+ *         Created by David Sowerby on 25/06/15.
  */
-public interface KrailPersistenceModule<M> {
+public interface KrailPersistenceUnit<M> {
 
-    /**
-     * Binds {@link OptionDao} to an implementation, annotated with {@link CoreDao}.  This may occur only once per application
-     *
-     * @return this for fluency
-     */
-    M provideCoreOptionDao();
+    //    /**
+    //     * Binds {@link OptionDao} to an implementation, annotated with {@link CoreDao}.  This may occur only once per application
+    //     *
+    //     * @return this for fluency
+    //     */
+    //    M provideCoreOptionDao();
 
     /**
      * Binds {@link OptionDao} to an implementation, uniquely annotated for that implementation
@@ -36,12 +38,12 @@ public interface KrailPersistenceModule<M> {
      */
     M provideOptionDao();
 
-    /**
-     * Binds {@link PatternDao} to an implementation, annotated with {@link CoreDao}. This may occur only once per application
-     *
-     * @return this for fluency
-     */
-    M provideCorePatternDao();
+    //    /**
+    //     * Binds {@link PatternDao} to an implementation, annotated with {@link CoreDao}. This may occur only once per application
+    //     *
+    //     * @return this for fluency
+    //     */
+    //    M provideCorePatternDao();
 
     /**
      * Binds {@link PatternDao} to an implementation, uniquely annotated for that implementation

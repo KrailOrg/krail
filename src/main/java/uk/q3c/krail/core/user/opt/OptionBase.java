@@ -14,6 +14,7 @@ package uk.q3c.krail.core.user.opt;
 import org.apache.shiro.authz.UnauthorizedException;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
+import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.opt.cache.OptionPermission;
@@ -34,12 +35,15 @@ import static uk.q3c.krail.core.user.profile.RankOption.*;
  * parameter, or by defaulting to {@link #hierarchy}.  The get() and set() default to using the highest rank
  * from {@link UserHierarchy}.  For getting or setting values at a specific hierarchyRank use the getSpecific() and
  * setSpecific() methods. The delete() method is always specific
- * <p>
+ * <br>
  * To create a hierarchy specific implementation, simply sub-class with the alternative hierarchy injected into it.
- * <p>
+ * <br>
  * Permission is required to execute {@link #set(Object, int, OptionKey)}, {@link #set(Object, OptionKey)} or {@link #delete(int, OptionKey)}.  Permission
  * required is represented by an instance of {@link OptionPermission}.  If permissions are required to view, these would need to be applied at the user
- * interface.
+ * interface.<br>
+ * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
+ * {@link OptionDao} are wrapped in Optional.
+ * </p>
  * Created by David Sowerby on 03/12/14.
  */
 

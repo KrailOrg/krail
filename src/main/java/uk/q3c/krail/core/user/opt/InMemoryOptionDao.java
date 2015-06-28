@@ -11,13 +11,11 @@
 
 package uk.q3c.krail.core.user.opt;
 
-import com.google.common.base.Converter;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheLoader;
+import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
-import uk.q3c.krail.core.user.opt.cache.OptionKeyException;
 import uk.q3c.krail.core.user.profile.RankOption;
 
 import javax.annotation.Nonnull;
@@ -30,12 +28,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Data Access Object for {@link InMemoryOptionStore}
- * <p>
+ * <br>
+ * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
+ * {@link OptionDao} are wrapped in Optional.
+ * <br>
  * Created by David Sowerby on 20/02/15.
  */
 public class InMemoryOptionDao implements OptionDao {
 
-    private static Logger log = LoggerFactory.getLogger(InMemoryOptionDao.class);
     private InMemoryOptionStore optionStore;
 
     @Inject
@@ -44,7 +44,7 @@ public class InMemoryOptionDao implements OptionDao {
     }
 
     @Override
-    public void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Object value) {
+    public <V> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         checkNotNull(value);
         String hierarchyName = cacheKey.getHierarchy()
@@ -55,124 +55,63 @@ public class InMemoryOptionDao implements OptionDao {
         optionStore.setValue(hierarchyName, rankName, optionKey, value);
     }
 
-    /**
-     * Write method for use with implementations which convert all values to Strings for persistence.  The converter is used to make the transformation from
-     * value to its String representation.
-     * <p>
-     * Write {@code value} to persistence for the hierarchy, rank and OptionKey specified by the {@code cacheKey}.
-     * Implementations should check that the  {@code cacheKey} is valid for a write (it must be set up for a specific
-     * rank) and throw a {@link OptionKeyException} if it is not valid
-     *
-     * @param cacheKey
-     *         specifies the hierarchy, rank and OptionKey to write to
-     * @param converter
-     * @param value
-     *         the value to write
-     *
-     * @throws OptionKeyException
-     *         if the cacheKey is not valid for this action
-     * @see #write(OptionCacheKey, Object)
-     */
-    @Override
-    public <V> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Converter<V, String> converter, @Nonnull V value) {
-        // TODO
-        throw new RuntimeException("Not yet implemented");
-    }
 
     @Override
-    public Object deleteValue(@Nonnull OptionCacheKey cacheKey) {
+    public Optional<?> deleteValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         String hierarchyName = cacheKey.getHierarchy()
                                        .persistenceName();
 
         String rankName = cacheKey.getRequestedRankName();
         OptionKey optionKey = cacheKey.getOptionKey();
-        return optionStore.deleteValue(hierarchyName, rankName, optionKey);
+        Optional<?> prevValue = optionStore.deleteValue(hierarchyName, rankName, optionKey);
+        return prevValue;
+
+
     }
+
 
     @Nonnull
     @Override
-    public <V> Optional<V> getHighestRankedValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey) {
-        // TODO
-        throw new RuntimeException("Not yet implemented");
-    }
-
-    @Override
-    public Optional<Object> getValue(@Nonnull OptionCacheKey cacheKey) {
+    public Optional<?> getValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         String hierarchyName = cacheKey.getHierarchy()
                                        .persistenceName();
 
         String rankName = cacheKey.getRequestedRankName();
         OptionKey optionKey = cacheKey.getOptionKey();
-        Object result = optionStore.getValue(hierarchyName, rankName, optionKey);
-        if (result == null) {
-            return Optional.empty();
-        } else {
-            return Optional.of(result);
-        }
+        return optionStore.getValue(hierarchyName, rankName, optionKey);
 
     }
 
-    /**
-     * Gets a value from an implementation which stores all values as Strings.  The converter provides the conversion from String to type V
-     * <p>
-     * Gets a value from persistence for the hierarchy, rank and OptionKey specified by the {@code cacheKey}.
-     * Implementations should check that the {@code cacheKey} is valid for a single value get (it must be set up for
-     * a specific rank) and throw a {@link OptionKeyException} if it is not valid
-     *
-     * @param converter
-     * @param cacheKey
-     *         specifies the hierarchy, rank and OptionKey for the entry to delete
-     *
-     * @return an Optional wrapped value if there is one or an Optional.empty() if not
-     *
-     * @throws OptionKeyException
-     *         if the cacheKey is not valid for this action
-     * @see #getValue(OptionCacheKey)
-     */
-    @Nonnull
-    @Override
-    public <V> Optional<V> getValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey) {
-        // TODO
-        throw new RuntimeException("Not yet implemented");
-    }
 
     /**
-     * Returns the highest ranked value available for the {@code cacheKey}
-     *
-     * @param cacheKey
-     *         they key to look for
-     *
-     * @return the highest ranked value available for the {@code cacheKey}
-     *
-     * @throws OptionKeyException
-     *         if cacheKey {@link RankOption} is not equal to {@link RankOption#HIGHEST_RANK}
+     * {@inheritDoc}
      */
     @Nonnull
     @Override
-    public Optional<Object> getHighestRankedValue(@Nonnull OptionCacheKey cacheKey) {
+    public Optional<?> getHighestRankedValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, RankOption.HIGHEST_RANK);
         ImmutableList<String> ranks = cacheKey.getHierarchy()
                                               .ranksForCurrentUser();
-        LinkedHashMap<String, Object> values = getValuesForRanks(cacheKey, ranks);
+        LinkedHashMap<String, Optional<?>> values = getValuesForRanks(cacheKey, ranks);
         for (String rank : ranks) {
             if (values.containsKey(rank)) {
-                return Optional.of(values.get(rank));
+                return values.get(rank);
             }
         }
         return Optional.empty();
     }
 
     @Nonnull
-    protected LinkedHashMap<String, Object> getValuesForRanks(@Nonnull OptionCacheKey cacheKey, List<String> rankNames) {
+    protected LinkedHashMap<String, Optional<?>> getValuesForRanks(@Nonnull OptionCacheKey cacheKey, List<String> rankNames) {
 
 
-        Map<String, Object> valueMapForOptionKey = optionStore.valueMapForOptionKey(cacheKey.getHierarchy()
+        Map<String, Optional<?>> valueMapForOptionKey = optionStore.valueMapForOptionKey(cacheKey.getHierarchy()
                                                                                             .persistenceName(), rankNames, cacheKey.getOptionKey());
 
 
-        LinkedHashMap<String, Object> resultMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Optional<?>> resultMap = new LinkedHashMap<>();
 
         //shortcut to doing nothing
         if (valueMapForOptionKey.isEmpty()) {
@@ -192,41 +131,45 @@ public class InMemoryOptionDao implements OptionDao {
     }
 
     /**
-     * Returns the lowest ranked value available for the {@code cacheKey}
-     *
-     * @param cacheKey
-     *         they key to look for
-     *
-     * @return the lowest ranked value available for the {@code cacheKey}
-     *
-     * @throws OptionKeyException
-     *         if cacheKey {@link RankOption} is not equal to {@link RankOption#LOWEST_RANK}
+     * {@inheritDoc}
      */
     @Nonnull
     @Override
-    public Optional<Object> getLowestRankedValue(@Nonnull OptionCacheKey cacheKey) {
+    public Optional<?> getLowestRankedValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, RankOption.LOWEST_RANK);
         ImmutableList<String> ranks = cacheKey.getHierarchy()
                                               .ranksForCurrentUser();
-        LinkedHashMap<String, Object> values = getValuesForRanks(cacheKey, ranks);
+        LinkedHashMap<String, Optional<?>> values = getValuesForRanks(cacheKey, ranks);
         ImmutableList<String> reversedRanks = ranks.reverse();
         for (String rank : reversedRanks) {
             if (values.containsKey(rank)) {
-                return Optional.of(values.get(rank));
+                return values.get(rank);
             }
         }
         return Optional.empty();
     }
 
-    @Nonnull
-    @Override
-    public <V> Optional<V> getLowestRankedValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey) {
-        // TODO
-        throw new RuntimeException("Not yet implemented");
-    }
 
     @Override
     public String connectionUrl() {
         return "In Memory Cache";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int clear() {
+        int count = optionStore.size();
+        optionStore.clear();
+        return count - optionStore.size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long count() {
+        return optionStore.size();
     }
 }

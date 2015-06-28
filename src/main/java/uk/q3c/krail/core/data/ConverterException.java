@@ -9,17 +9,9 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.user.opt.cache;
+package uk.q3c.krail.core.data;
 
-import com.google.common.cache.LoadingCache;
-
-import javax.annotation.Nonnull;
-import java.util.Optional;
-
-/**
- * Created by David Sowerby on 22/02/15.
- */
-public interface OptionCacheProvider {
-    @Nonnull
-    LoadingCache<OptionCacheKey, Optional<?>> get();
+public class ConverterException extends RuntimeException {
+    public ConverterException(String msg) {
+    }
 }

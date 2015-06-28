@@ -14,10 +14,9 @@ package uk.q3c.krail.core.user.opt.cache;
 import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.user.opt.CoreDao;
+import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.opt.OptionModule;
@@ -32,10 +31,15 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Provides a cache implementation for {@link Option}.  The {@code get()} methods use the value of the {@link OptionCacheKey} to determines which {@link
+ * Provides a cache implementation for {@link Option}.  The {@code get()} methods use the value of the {@link OptionCacheKey} to determine which {@link
  * UserHierarchy} to use, and whether to take the lowest, highest or specific ranked value.
  * <p>
  * Scope is set in {@link OptionModule} but it is assumed that this class needs to be thread safe.
+ *
+ * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
+ * {@link OptionDao} are wrapped in Optional.
+ *
+ *
  * Created by David Sowerby on 19/02/15.
  */
 
@@ -43,17 +47,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DefaultOptionCache implements OptionCache {
 
     private static Logger log = LoggerFactory.getLogger(DefaultOptionCache.class);
-    private final LoadingCache<OptionCacheKey, Optional<Object>> cache;
-    private final Provider<OptionDao> daoProvider;
+    private final LoadingCache<OptionCacheKey, Optional<?>> cache;
+    private final CoreOptionDaoProvider daoProvider;
 
     @Inject
-    public DefaultOptionCache(@CoreDao Provider<OptionDao> daoProvider, OptionCacheProvider cacheProvider) {
+    public DefaultOptionCache(CoreOptionDaoProvider daoProvider, OptionCacheProvider cacheProvider) {
         this.daoProvider = daoProvider;
         cache = cacheProvider.get();
     }
 
     @Override
-    public LoadingCache<OptionCacheKey, Optional<Object>> getCache() {
+    public LoadingCache<OptionCacheKey, Optional<?>> getCache() {
         return cache;
     }
 
@@ -68,7 +72,7 @@ public class DefaultOptionCache implements OptionCache {
      *         the type of the value
      */
     @Override
-    public synchronized <T> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull T value) {
+    public synchronized <T> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<T> value) {
         checkNotNull(cacheKey);
         checkNotNull(value);
         // write to store first just in case there's a problem
@@ -79,32 +83,33 @@ public class DefaultOptionCache implements OptionCache {
         //invalidate highest / lowest first - cache does clean up as part of write
         cache.invalidate(new OptionCacheKey(cacheKey, RankOption.HIGHEST_RANK));
         cache.invalidate(new OptionCacheKey(cacheKey, RankOption.LOWEST_RANK));
-        cache.put(cacheKey, Optional.of(value));
+        cache.put(cacheKey, value);
     }
 
     @Override
     @Nonnull
-    public synchronized <T> T get(@Nonnull T defaultValue, @Nonnull OptionCacheKey optionCacheKey) {
+    public synchronized <T> Optional<T> get(@Nonnull Optional<T> defaultValue, @Nonnull OptionCacheKey optionCacheKey) {
         checkNotNull(optionCacheKey);
         checkNotNull(defaultValue);
         //this will trigger the cacheLoader if not already in the cache
-        Optional<Object> optionalValue;
+        Optional<T> optionalValue;
         try {
-            optionalValue = cache.getUnchecked(optionCacheKey);
+            optionalValue = (Optional<T>) cache.getUnchecked(optionCacheKey);
             if (!optionalValue.isPresent()) {
                 return defaultValue;
             }
         } catch (Throwable e) {
-            log.error("Returning default value of {}, exception or error was thrown during load. Exception was:  {}", defaultValue, e);
+            log.error("Returning default value of {}, exception or error was thrown during load. Exception was:  {}", defaultValue.get(), e);
             return defaultValue;
         }
-        Object value = optionalValue.get();
-        if (value.getClass()
-                 .isAssignableFrom(defaultValue.getClass())) {
-            //noinspection unchecked
-            return (T) value;
+        if (optionalValue.get()
+                         .getClass()
+                         .isAssignableFrom(defaultValue.get()
+                                                       .getClass())) {
+            return optionalValue;
         } else {
-            log.error("option value returned is of the wrong type for {}, returning default of {}", optionCacheKey, defaultValue);
+            log.error("Returning default, option value for {} is of type for {}, but should be of type " + defaultValue.getClass(), optionCacheKey, optionalValue.get()
+                                                                                                                                                                 .getClass());
             return defaultValue;
         }
     }
@@ -112,10 +117,10 @@ public class DefaultOptionCache implements OptionCache {
 
     @Override
     @Nullable
-    public synchronized Object delete(@Nonnull OptionCacheKey optionCacheKey) {
+    public synchronized Optional<?> delete(@Nonnull OptionCacheKey optionCacheKey) {
         checkNotNull(optionCacheKey);
         // delete from store first just in case there's a problem
-        Object result = daoProvider.get()
+        Optional<?> result = daoProvider.get()
                                    .deleteValue(optionCacheKey);
 
         //invalidate highest / lowest & specific as these are all now invalid
@@ -132,7 +137,7 @@ public class DefaultOptionCache implements OptionCache {
 
     @Nullable
     @Override
-    public synchronized Object getIfPresent(@Nonnull OptionCacheKey optionCacheKey) {
+    public synchronized Optional<?> getIfPresent(@Nonnull OptionCacheKey optionCacheKey) {
         checkNotNull(optionCacheKey);
         return cache.getIfPresent(optionCacheKey);
     }

@@ -9,17 +9,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.user.opt.cache;
+package uk.q3c.krail.core.persist;
 
-import com.google.common.cache.LoadingCache;
-
-import javax.annotation.Nonnull;
-import java.util.Optional;
+import uk.q3c.krail.core.user.opt.OptionDao;
 
 /**
- * Created by David Sowerby on 22/02/15.
+ * Interface for a provider which identifies and returns the correct source for {@link OptionDao} for Krail core, and returns an instance
+ * <p>
+ * Created by David Sowerby on 26/06/15.
  */
-public interface OptionCacheProvider {
-    @Nonnull
-    LoadingCache<OptionCacheKey, Optional<?>> get();
+public interface CoreOptionDaoProvider {
+
+    OptionDao get();
 }

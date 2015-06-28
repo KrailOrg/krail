@@ -13,18 +13,23 @@
 package uk.q3c.krail.core.data;
 
 import com.vaadin.data.util.converter.Converter;
+import com.vaadin.data.util.converter.DefaultConverterFactory;
+import uk.q3c.krail.i18n.I18NKey;
 
 import java.time.LocalDateTime;
 
-public class DefaultConverterFactory extends com.vaadin.data.util.converter.DefaultConverterFactory {
+public class KrailConverterFactory extends DefaultConverterFactory {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <PRESENTATION, MODEL> Converter<PRESENTATION, MODEL> createConverter(Class<PRESENTATION> presentationType,
-                                                                                Class<MODEL> modelType) {
+    public <PRESENTATION, MODEL> Converter<PRESENTATION, MODEL> createConverter(Class<PRESENTATION> presentationType, Class<MODEL> modelType) {
 
         if (modelType == LocalDateTime.class) {
             return (Converter<PRESENTATION, MODEL>) new DateTimeConverter();
+        } else if (modelType == I18NKey.class) {
+            return (Converter<PRESENTATION, MODEL>) new I18NKeyConverter();
+        } else if (modelType == Enum.class) {
+            return (Converter<PRESENTATION, MODEL>) new EnumConverter();
         }
 
         return super.createConverter(presentationType, modelType);

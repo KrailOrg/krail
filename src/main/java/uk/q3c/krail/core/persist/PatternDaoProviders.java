@@ -9,17 +9,24 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.user.opt.cache;
+package uk.q3c.krail.core.persist;
 
-import com.google.common.cache.LoadingCache;
+import com.google.inject.BindingAnnotation;
 
-import javax.annotation.Nonnull;
-import java.util.Optional;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Created by David Sowerby on 22/02/15.
+ * Binding annotation to a set of annotations which identify all the active Provider<PatternDao>s available
+ * <p>
+ * <p>
+ * Created by David Sowerby on 06/02/15.
  */
-public interface OptionCacheProvider {
-    @Nonnull
-    LoadingCache<OptionCacheKey, Optional<?>> get();
+@BindingAnnotation
+@Target({FIELD, PARAMETER, METHOD})
+@Retention(RUNTIME)
+public @interface PatternDaoProviders {
 }

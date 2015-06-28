@@ -30,8 +30,13 @@ public class DataModule extends AbstractModule {
     protected void configure() {
         define();
         bindConverterFactory();
+        bindStringPersistenceConverter();
 
 
+    }
+
+    protected void bindStringPersistenceConverter() {
+        bind(StringPersistenceConverter.class).to(DefaultStringPersistenceConverter.class);
     }
 
     /**
@@ -47,7 +52,7 @@ public class DataModule extends AbstractModule {
      * Provides a factory for converting data types for display by Vaadin.  Override this method to provide your own implementation
      */
     protected void bindConverterFactory() {
-        bind(ConverterFactory.class).to(DefaultConverterFactory.class);
+        bind(ConverterFactory.class).to(KrailConverterFactory.class);
     }
 
 

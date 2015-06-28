@@ -15,7 +15,7 @@ import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
@@ -24,6 +24,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.persist.ActiveOptionDao;
+import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
+import uk.q3c.krail.core.persist.DefaultCoreOptionDaoProvider;
+import uk.q3c.krail.core.persist.OptionDaoProviders;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.opt.cache.*;
@@ -31,27 +35,26 @@ import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.view.component.LocaleContainer;
-import uk.q3c.krail.i18n.DefaultCurrentLocale;
-import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.lang.annotation.Annotation;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 /**
- * Running this test throught the debugger sometimes causes random failures - runnning normally doesn't
+ * Running this test through the debugger sometimes causes random failures - running normally doesn't
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class Option_IntegrationTest {
 
+    Set<Class<? extends Annotation>> optionDaoProviders = new HashSet<>();
 
 
     DefaultOptionCacheLoader cacheLoader;
@@ -65,14 +68,14 @@ public class Option_IntegrationTest {
     @Inject
     InMemoryOptionStore optionStore;
 
-    @Mock
-    Provider<OptionDao> daoProvider;
+    @Inject
+    CoreOptionDaoProvider daoProvider;
 
+    @Inject
     InMemoryOptionDao dao;
 
     @Mock
     LocaleContainer localeContainer;
-    List<String> allLayers;
     @Mock
     Subject subject1;
 
@@ -81,12 +84,9 @@ public class Option_IntegrationTest {
     @Mock
     Translate translate;
     OptionKey<Integer> key1 = LocaleContainer.optionKeyFlagSize;
-    OptionKey<Locale> key2 = new OptionKey<>(Locale.UK, DefaultCurrentLocale.class, LabelKey.Preferred_Locale, DescriptionKey.Preferred_Locale);
-    OptionKey<Integer> key3 = new OptionKey<Integer>(133, LocaleContainer.class, LabelKey.Alphabetic_Ascending);
-    private Class<? extends OptionContext> contextClass = LocaleContainer.class;
+    OptionKey<Integer> key3 = new OptionKey<>(133, LocaleContainer.class, LabelKey.Alphabetic_Ascending);
 
     private UserHierarchy hierarchy;
-    private ArrayList<String> singleLayer;
     @Mock
     private SubjectIdentifier subjectIdentifier;
     @Mock
@@ -94,9 +94,8 @@ public class Option_IntegrationTest {
 
     @Before
     public void setup() {
+
         optionStore.clear();
-        dao = new InMemoryOptionDao(optionStore);
-        when(daoProvider.get()).thenReturn(dao);
         when(subjectIdentifier.userId()).thenReturn("fbaton");
         when(subjectProvider.get()).thenReturn(subject1);
         when(subject1.isPermitted(any(OptionPermission.class))).thenReturn(true);
@@ -107,7 +106,6 @@ public class Option_IntegrationTest {
         optionCache = new DefaultOptionCache(daoProvider, cacheProvider);
         option = new DefaultOption(optionCache, hierarchy, subjectProvider, subjectIdentifier);
     }
-
 
 
     @Test
@@ -177,7 +175,6 @@ public class Option_IntegrationTest {
     }
 
 
-
     @Test
     public void multiUser() {
         //given
@@ -199,10 +196,10 @@ public class Option_IntegrationTest {
 
         Integer actual = option2.get(key1);
         assertThat(actual).isEqualTo(3);
-        actual = option2.get(key1);
-        actual = option2.get(key1);
-        actual = option2.get(key1);
-        actual = option2.get(key1);
+        option2.get(key1);
+        option2.get(key1);
+        option2.get(key1);
+        option2.get(key1);
         assertThat(optionCache.cacheSize()).isEqualTo(3);
         assertThat(optionCache.stats()
                               .hitCount()).isEqualTo(4);
@@ -214,13 +211,13 @@ public class Option_IntegrationTest {
         optionCache.cleanup();
         actual = option2.get(key1);
         assertThat(actual).isEqualTo(9);
-        actual = option2.get(key1);
-        actual = option2.get(key1);
-        actual = option2.get(key1);
-        actual = option2.get(key1);
+        option2.get(key1);
+        option2.get(key1);
+        option2.get(key1);
+        option2.get(key1);
 
 
-        final LoadingCache<OptionCacheKey, Optional<Object>> cache = optionCache.getCache();
+        final LoadingCache<OptionCacheKey, Optional<?>> cache = optionCache.getCache();
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         cache.asMap()
              .forEach((k, v) -> System.out.println(">>>>   " + k.toString() + "   :   " + v.toString()));
@@ -229,11 +226,11 @@ public class Option_IntegrationTest {
         assertThat(optionCache.cacheSize()).isEqualTo(4);// TODO
         assertThat(optionCache.stats()
                               .hitCount()).isEqualTo(8);
-        actual = option2.getLowestRanked(key1);
+        option2.getLowestRanked(key1);
         assertThat(optionCache.cacheSize()).isEqualTo(5);// TODO
         assertThat(optionCache.stats()
                               .hitCount()).isEqualTo(8);
-        actual = option2.getLowestRanked(key3);
+        option2.getLowestRanked(key3);
         assertThat(optionCache.cacheSize()).isEqualTo(6);// TODO
         assertThat(optionCache.stats()
                               .hitCount()).isEqualTo(8);
@@ -242,6 +239,7 @@ public class Option_IntegrationTest {
     /**
      * When a value is written to the cache, must invalidate the highest and lowest entry for the same OptionKey
      */
+    @SuppressWarnings("unchecked")
     @Test
     public void write_to_Cache_invalidate() {
         //given
@@ -251,12 +249,12 @@ public class Option_IntegrationTest {
         OptionCacheKey highestKey = new OptionCacheKey(hierarchy, RankOption.HIGHEST_RANK, key3);
         OptionCacheKey lowestKey = new OptionCacheKey(hierarchy, RankOption.LOWEST_RANK, key3);
         OptionCacheKey specificKey = new OptionCacheKey(hierarchy, RankOption.SPECIFIC_RANK, 1, key3);
-        dao.write(specificKey, 236);
+        dao.write(specificKey, Optional.of(236));
         //when
-        optionCache.get(highestKey.getOptionKey()
-                                  .getDefaultValue(), highestKey);
-        optionCache.get(lowestKey.getOptionKey()
-                                 .getDefaultValue(), lowestKey);
+        optionCache.get(Optional.of(highestKey.getOptionKey()
+                                              .getDefaultValue()), highestKey);
+        optionCache.get(Optional.of(lowestKey.getOptionKey()
+                                             .getDefaultValue()), lowestKey);
         Optional<Integer> actualHigh = (Optional<Integer>) optionCache.getIfPresent(highestKey);
         Optional<Integer> actualLow = (Optional<Integer>) optionCache.getIfPresent(lowestKey);
         //then
@@ -266,8 +264,9 @@ public class Option_IntegrationTest {
         assertThat(actualLow.get()).isEqualTo(236);
 
         //when write occurs cache should invalidate highest and lowest
-        optionCache.write(specificKey, 44);
+        optionCache.write(specificKey, Optional.of(44));
         actualHigh = (Optional<Integer>) optionCache.getIfPresent(highestKey);
+        //noinspection unchecked
         actualLow = (Optional<Integer>) optionCache.getIfPresent(lowestKey);
         Optional<Integer> actualSpecific = (Optional<Integer>) optionCache.getIfPresent(specificKey);
         //then highest and lowest invalidated
@@ -289,6 +288,19 @@ public class Option_IntegrationTest {
                                      .to(InMemoryOptionDao.class);
                 bind(GuavaCacheConfiguration.class).annotatedWith(OptionCacheConfig.class)
                                                    .toInstance(cacheConfig);
+                bind(CoreOptionDaoProvider.class).to(DefaultCoreOptionDaoProvider.class);
+                Class<? extends Annotation> annotationClass = InMemory.class;
+                TypeLiteral<Class<? extends Annotation>> annotationTypeLiteral = new TypeLiteral<Class<? extends Annotation>>() {
+                };
+                bind(annotationTypeLiteral).annotatedWith(ActiveOptionDao.class)
+                                           .toInstance(annotationClass);
+                TypeLiteral<Set<Class<? extends Annotation>>> setAnnotationTypeLiteral = new TypeLiteral<Set<Class<? extends Annotation>>>() {
+                };
+                optionDaoProviders.add(InMemory.class);
+                bind(setAnnotationTypeLiteral).annotatedWith(OptionDaoProviders.class)
+                                              .toInstance(optionDaoProviders);
+                bind(OptionDao.class).annotatedWith(InMemory.class)
+                                     .to(InMemoryOptionDao.class);
             }
 
         };

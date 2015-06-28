@@ -15,7 +15,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.OptionStore;
+import uk.q3c.krail.core.user.opt.OptionDao;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,10 +28,10 @@ import java.util.Optional;
  */
 public interface OptionCache {
 
-    LoadingCache<OptionCacheKey, Optional<Object>> getCache();
+    LoadingCache<OptionCacheKey, Optional<?>> getCache();
 
     /**
-     * Passes the call to the underlying {@link OptionStore}, and if that is successful, writes the entry to the cache
+     * Passes the call to the underlying persistence, and if that is successful, writes the entry to the cache
      * as well.
      *
      * @param optionCacheKey
@@ -41,19 +41,19 @@ public interface OptionCache {
      * @param <T>
      *         the type of the value
      */
-    <T> void write(@Nonnull OptionCacheKey optionCacheKey, @Nonnull T value);
+    <T> void write(@Nonnull OptionCacheKey optionCacheKey, @Nonnull Optional<T> value);
 
     /**
-     * If there is a value in the cache (which is actually held as an Optional<T>), then the value of it is returned.
+     * If there is a value in the cache (which is actually held as an Optional<T>), then the Optional is returned.
      * If there is no cache entry, the loader will be invoked ({@link DefaultOptionCacheLoader} by default), which will
-     * populate the cache with a result from the {@link OptionStore} or an {@link Optional#empty()} if no value is
-     * found in the store.
+     * populate the cache with a result from persistence or an {@link Optional#empty()} if no value is
+     * found..
      * <p>
      * The result from the loader is actually the highest ranked value of the hierarchy
      * <p>
      *
      * @param defaultValue
-     *         the value to use if none found
+     *         the value, wrapped in Optional, to use if none found
      * @param optionCacheKey
      *         unique identifier
      * @param <T>
@@ -62,10 +62,10 @@ public interface OptionCache {
      * @return the value for the key, if returns the {@code defaultValue} if none found, or an error or exception occurs
      * while trying to load the cache
      */
-    <T> T get(@Nonnull T defaultValue, @Nonnull OptionCacheKey optionCacheKey);
+    <T> Optional<T> get(@Nonnull Optional<T> defaultValue, @Nonnull OptionCacheKey optionCacheKey);
 
     /**
-     * Pass the delete call to the underlying {@link OptionStore}, then removes the entry from the cache
+     * Pass the delete call to the underlying {@link OptionDao}, then removes the entry from the cache
      *
      * @param optionCacheKey
      *         a unique identifier for the entry to be deleted
@@ -73,7 +73,7 @@ public interface OptionCache {
      * @return the previous value before being deleted
      */
     @Nullable
-    Object delete(@Nonnull OptionCacheKey optionCacheKey);
+    Optional<?> delete(@Nonnull OptionCacheKey optionCacheKey);
 
     /**
      * Returns a value from the cache only if it is present in the cache (that is, no attempt is made to load the cache
@@ -85,7 +85,7 @@ public interface OptionCache {
      * @return Returns a value from the cache only if it is present in the cache, otherwise null
      */
     @Nullable
-    Object getIfPresent(@Nonnull OptionCacheKey optionCacheKey);
+    Optional<?> getIfPresent(@Nonnull OptionCacheKey optionCacheKey);
 
     CacheStats stats();
 

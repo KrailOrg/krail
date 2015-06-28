@@ -167,12 +167,12 @@ private DefaultJpaInstanceConfiguration hsqlConfig() {
     return config;
 }
 ```
-- update the ```BindingManager``` to make it aware of this new module
+- update the ```BindingManager``` to make it aware of this new module.  This will override the use of the default ```InMemoryModule```
 ```
-   @Override
-    protected void addAppModules(List<Module> baseModules) {
-        baseModules.add(new TutorialJpaModule());
-    }
+@Override
+protected void addPersistenceModules(List<Module> modules) {
+    modules.add(new TutorialJpaModule());
+}
 ```
 
 
@@ -454,9 +454,14 @@ private Button hsqlDaoButton;
     - the "add with DAO" buttons work in the same way as the "add with EntityManager" buttons
 
 
+<a name="persistence-option"></a>
+#Persistence for Option
+
+another page
+
+
 <a name="persistence-i18n"></a>
 #Persistence for I18N
 
 
-<a name="persistence-option"></a>
-#Persistence for Option
+

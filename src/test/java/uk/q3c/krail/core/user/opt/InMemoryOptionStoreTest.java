@@ -21,6 +21,7 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -54,37 +55,49 @@ public class InMemoryOptionStoreTest {
         //given
         int value = 6;
         //when
-        store.setValue(hierarchyName1, hierarchyRank1, optionKey1, value);
+        store.setValue(hierarchyName1, hierarchyRank1, optionKey1, Optional.of(value));
         Object actual = store.getValue(hierarchyName1, hierarchyRank1, optionKey1);
         //then
-        assertThat(actual).isEqualTo(value);
+        assertThat(actual).isEqualTo(Optional.of(value));
     }
 
     @Test
     public void delete() {
         //given
         int value = 6;
-        store.setValue(hierarchyName1, hierarchyRank1, optionKey1, value);
+        store.setValue(hierarchyName1, hierarchyRank1, optionKey1, Optional.of(value));
         //when
-        Object returned = store.deleteValue(hierarchyName1, hierarchyRank1, optionKey1);
-        Object actual = store.getValue(hierarchyName1, hierarchyRank1, optionKey1);
+        Optional<?> returned = store.deleteValue(hierarchyName1, hierarchyRank1, optionKey1);
+        Optional<?> actual = store.getValue(hierarchyName1, hierarchyRank1, optionKey1);
         //then
-        assertThat(actual).isNull();
-        assertThat(returned).isEqualTo(value);
+        assertThat(actual.isPresent()).isFalse();
+        assertThat(returned.get()).isEqualTo(value);
+    }
+
+    @Test
+    public void set() {
+        //given
+        int value = 6;
+
+        //when
+        store.setValue(hierarchyName1, hierarchyRank1, optionKey1, Optional.of(value));
+        //then
+        assertThat(store.size()).isEqualTo(1);
     }
 
     @Test
     public void valueMapForOptionKey_some_values() {
         //given
         ArrayList<String> rankNames = Lists.newArrayList("a", "b", "c");
-        store.setValue(hierarchyName1, "a", optionKey1, 1);
-        store.setValue(hierarchyName1, "b", optionKey1, 2);
-        store.setValue(hierarchyName1, "b", optionKey2, 2);
+        store.setValue(hierarchyName1, "a", optionKey1, Optional.of(1));
+        store.setValue(hierarchyName1, "b", optionKey1, Optional.of(2));
+        store.setValue(hierarchyName1, "b", optionKey2, Optional.of(2));
         //when
-        final Map<String, Object> resultMap = store.valueMapForOptionKey(hierarchyName1, rankNames, optionKey1);
+        final Map<String, Optional<?>> resultMap = store.valueMapForOptionKey(hierarchyName1, rankNames, optionKey1);
         //then
         assertThat(resultMap).isNotEmpty();
-        assertThat(resultMap).contains(entry("a", 1), entry("b", 2));
+        assertThat(resultMap).contains(entry("a", Optional.of(1)), entry("b", Optional.of(2)));
+        assertThat(store.size()).isEqualTo(2);
     }
 
     @Test
@@ -92,7 +105,7 @@ public class InMemoryOptionStoreTest {
         //given
         ArrayList<String> rankNames = Lists.newArrayList("a", "b", "c");
         //when
-        final Map<String, Object> resultMap = store.valueMapForOptionKey(hierarchyName1, rankNames, optionKey1);
+        final Map<String, Optional<?>> resultMap = store.valueMapForOptionKey(hierarchyName1, rankNames, optionKey1);
         //then
         assertThat(resultMap).isEmpty();
     }
