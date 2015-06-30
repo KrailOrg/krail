@@ -17,14 +17,18 @@ import com.vaadin.data.util.converter.DefaultConverterFactory;
 import uk.q3c.krail.i18n.I18NKey;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 public class KrailConverterFactory extends DefaultConverterFactory {
 
     @SuppressWarnings("unchecked")
     @Override
     public <PRESENTATION, MODEL> Converter<PRESENTATION, MODEL> createConverter(Class<PRESENTATION> presentationType, Class<MODEL> modelType) {
-
-        if (modelType == LocalDateTime.class) {
+        if (modelType == String.class) {
+            return (Converter<PRESENTATION, MODEL>) new StringConverter();
+        } else if (modelType == Locale.class) {
+            return (Converter<PRESENTATION, MODEL>) new LocaleConverter();
+        } else if (modelType == LocalDateTime.class) {
             return (Converter<PRESENTATION, MODEL>) new DateTimeConverter();
         } else if (modelType == I18NKey.class) {
             return (Converter<PRESENTATION, MODEL>) new I18NKeyConverter();

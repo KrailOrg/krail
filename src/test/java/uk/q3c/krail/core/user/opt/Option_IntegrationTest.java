@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.persist.ActiveOptionDao;
 import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
 import uk.q3c.krail.core.persist.DefaultCoreOptionDaoProvider;
@@ -51,7 +52,7 @@ import static org.mockito.Mockito.when;
  * Running this test through the debugger sometimes causes random failures - running normally doesn't
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({DataModule.class})
 public class Option_IntegrationTest {
 
     Set<Class<? extends Annotation>> optionDaoProviders = new HashSet<>();
@@ -66,7 +67,7 @@ public class Option_IntegrationTest {
     DefaultOptionCacheProvider cacheProvider;
 
     @Inject
-    InMemoryOptionStore optionStore;
+    DefaultInMemoryOptionStore optionStore;
 
     @Inject
     CoreOptionDaoProvider daoProvider;
@@ -301,6 +302,7 @@ public class Option_IntegrationTest {
                                               .toInstance(optionDaoProviders);
                 bind(OptionDao.class).annotatedWith(InMemory.class)
                                      .to(InMemoryOptionDao.class);
+                bind(InMemoryOptionStore.class).to(DefaultInMemoryOptionStore.class);
             }
 
         };

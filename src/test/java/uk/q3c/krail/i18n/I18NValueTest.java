@@ -19,11 +19,12 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.user.opt.DefaultInMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
-import uk.q3c.krail.core.user.opt.OptionStore;
 import uk.q3c.krail.testutil.MockOption;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
@@ -32,8 +33,7 @@ import uk.q3c.krail.testutil.TestPersistenceModule;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule
-        .class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class, DataModule.class})
 public class I18NValueTest {
 
     @Inject
@@ -87,7 +87,7 @@ public class I18NValueTest {
             @Override
             protected void configure() {
                 bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
-                bind(OptionStore.class).to(InMemoryOptionStore.class);
+                bind(InMemoryOptionStore.class).to(DefaultInMemoryOptionStore.class);
             }
 
         };

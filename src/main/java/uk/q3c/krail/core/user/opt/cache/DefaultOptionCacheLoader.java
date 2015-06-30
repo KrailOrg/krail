@@ -16,7 +16,7 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
-import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
+import uk.q3c.krail.core.user.opt.DefaultInMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
@@ -31,7 +31,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * for the {@link UserHierarchy}.
  * <p>
  * A DAO is used to enable selection of different persistence methods, including an in-memory option {@link
- * InMemoryOptionStore} for testing (provided as part of the Krail core).  For a JPA version see the krail-jpa library.
+ * DefaultInMemoryOptionStore} for testing (provided as part of the Krail core).  For a JPA version see the krail-jpa library.
  * <p>
  * This implementation calls for all assigned values in a hierarchy for the current user, before selecting the one
  * with the highest or lowest rank.  This is because it is usually more efficient for I/O to load this way

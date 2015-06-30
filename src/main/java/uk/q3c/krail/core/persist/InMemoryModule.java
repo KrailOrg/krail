@@ -53,28 +53,30 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceUn
 
 
     protected void bindOptionDao() {
+
         if (provideOptionDao) {
+            bindOptionStore();
             bind(OptionDao.class).annotatedWith(InMemory.class)
                                  .to(InMemoryOptionDao.class);
             optionDaoProviders.addBinding()
                               .toInstance(InMemory.class);
-            bindOptionStore();
+
         }
     }
 
     protected void bindOptionStore() {
-        bind(OptionStore.class).to(InMemoryOptionStore.class);
+        bind(InMemoryOptionStore.class).to(DefaultInMemoryOptionStore.class);
     }
 
     protected void bindPatternDao() {
-        bind(PatternDao.class).annotatedWith(CoreDao.class)
-                              .to(InMemoryPatternDao.class);
+
         if (providePatternDao) {
+            bindPatternStore();
             bind(PatternDao.class).annotatedWith(InMemory.class)
                                   .to(InMemoryPatternDao.class);
             patternDaoProviders.addBinding()
                                .toInstance(InMemory.class);
-            bindPatternStore();
+
         }
     }
 

@@ -9,12 +9,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.persist;
+package uk.q3c.krail.core.persist;
+
+import com.vaadin.data.Container;
 
 /**
+ * Common interface for all providers of Vaadin {@link Container} instances
+ * <p>
  * Created by David Sowerby on 29/06/15.
  */
-public enum ContainerType {
+public interface VaadinContainerProvider {
 
-    CACHED
+    <E> Container get(Class<E> entityClass, ContainerType containerType);
 }

@@ -21,15 +21,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
+import uk.q3c.krail.core.user.opt.DefaultInMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.OptionStore;
 import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.i18n.DefaultI18NProcessor;
@@ -48,7 +49,7 @@ import static uk.q3c.krail.core.shiro.PageAccessControl.AUTHENTICATION;
 import static uk.q3c.krail.core.shiro.PageAccessControl.PUBLIC;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestPersistenceModule.class, UIScopeModule.class})
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestPersistenceModule.class, UIScopeModule.class, DataModule.class})
 public class DefaultMasterSitemapTest {
 
     @Mock
@@ -531,7 +532,7 @@ public class DefaultMasterSitemapTest {
                 bind(I18NProcessor.class).to(DefaultI18NProcessor.class);
                 bind(URIFragmentHandler.class).to(StrictURIFragmentHandler.class);
                 bind(Option.class).toInstance(option);
-                bind(OptionStore.class).to(InMemoryOptionStore.class);
+                bind(InMemoryOptionStore.class).to(DefaultInMemoryOptionStore.class);
             }
 
         };

@@ -22,10 +22,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class InMemoryPatternDao implements PatternDao {
 
-    private DefaultInMemoryPatternStore store;
+    private InMemoryPatternStore store;
 
     @Inject
-    public InMemoryPatternDao(DefaultInMemoryPatternStore inMemoryPatternStore) {
+    public InMemoryPatternDao(InMemoryPatternStore inMemoryPatternStore) {
         this.store = inMemoryPatternStore;
     }
 

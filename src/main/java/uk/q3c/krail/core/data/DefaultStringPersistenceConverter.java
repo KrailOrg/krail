@@ -66,7 +66,7 @@ public class DefaultStringPersistenceConverter implements StringPersistenceConve
                                                                              .getClass();
         Converter<String, V> converter = converterFactory.createConverter(String.class, valueClass);
         if (converter == null) {
-            String msg = MessageFormat.format("Data type of {0} is not supported in Option", value.getClass());
+            String msg = MessageFormat.format("Data type of {0} is not supported in Option", valueClass);
             throw new ConverterException(msg);
         }
         return converter;

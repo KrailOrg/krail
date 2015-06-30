@@ -11,6 +11,8 @@
 
 package uk.q3c.krail.i18n;
 
+import com.google.common.collect.ImmutableMap;
+
 /**
  * Created by David Sowerby on 25/06/15.
  */
@@ -20,4 +22,6 @@ public interface InMemoryPatternStore {
     String remove(PatternCacheKey cacheKey);
 
     String get(PatternCacheKey cacheKey);
+
+    ImmutableMap<PatternCacheKey, String> getAsMap();
 }

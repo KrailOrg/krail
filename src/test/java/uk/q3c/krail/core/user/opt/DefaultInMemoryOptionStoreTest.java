@@ -12,12 +12,15 @@
 package uk.q3c.krail.core.user.opt;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.data.DataModule;
+import uk.q3c.krail.core.data.StringPersistenceConverter;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -28,24 +31,23 @@ import static org.assertj.core.api.Assertions.entry;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
-public class InMemoryOptionStoreTest {
+@GuiceContext({DataModule.class})
+public class DefaultInMemoryOptionStoreTest {
     private enum Key {key1, key2}
 
-    InMemoryOptionStore store;
+    DefaultInMemoryOptionStore store;
+    @Inject
+    StringPersistenceConverter stringPersistenceConverter;
     private String hierarchyName1 = "h1";
     private String hierarchyRank1 = "r1";
-
     @Mock
     private OptionKey optionKey1;
-
     @Mock
     private OptionKey optionKey2;
 
-
     @Before
     public void setup() {
-        store = new InMemoryOptionStore();
+        store = new DefaultInMemoryOptionStore(stringPersistenceConverter);
         when(optionKey1.compositeKey()).thenReturn("q-q-1");
         when(optionKey2.compositeKey()).thenReturn("q-q-2");
     }

@@ -1,165 +1,111 @@
 /*
- * Copyright (C) 2013 David Sowerby
- * 
+ * Copyright (c) 2015. David Sowerby
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
 package uk.q3c.krail.core.user.opt;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+
+import uk.q3c.krail.core.user.profile.UserHierarchyException;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.ThreadSafe;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * A volatile, in-memory store for user options
+ * Stores and loads option values from a (usually) persistent store.  A simple, in memory, version is provided
+ * primarily for testing.
+ * <p>
+ * Created by David Sowerby on 04/12/14.
  */
-@Singleton
-@ThreadSafe
-public class InMemoryOptionStore implements OptionStore {
-
-    private Map<String, Map<String, Map<String, Optional<?>>>> map = new ConcurrentHashMap<>();
-
-
-    @Inject
-    protected InMemoryOptionStore() {
-    }
-
-
-    @Override
-    public synchronized <T extends Optional<?>> void setValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey
-            optionKey, @Nonnull T value) {
-        checkNotNull(hierarchyName);
-        checkNotNull(rankName);
-        checkNotNull(optionKey);
-        checkNotNull(value);
-
-
-        // create a map for the hierarchy if it is not there
-        if (!map.containsKey(hierarchyName)) {
-            map.put(hierarchyName, new ConcurrentHashMap<>());
-        }
-
-        Map<String, Map<String, Optional<?>>> optionMap = map.get(hierarchyName);
-
-        if (optionMap == null) {
-            optionMap = new ConcurrentHashMap<>();
-            map.put(hierarchyName, optionMap);
-        }
-
-        String compositeKey = optionKey.compositeKey();
-
-        //if there is no levelValueMap for this option, create it
-        if (!optionMap.containsKey(compositeKey)) {
-            optionMap.put(compositeKey, new ConcurrentHashMap<>());
-        }
-
-        Map<String, Optional<?>> levelValueMap = optionMap.get(compositeKey);
-
-        //put the value
-        levelValueMap.put(rankName, value);
-    }
-
-
-    @Override
-    @Nonnull
-    public synchronized Optional<?> getValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey
-            optionKey) {
-        checkNotNull(hierarchyName);
-        checkNotNull(rankName);
-        checkNotNull(optionKey);
-        Map<String, Map<String, Optional<?>>> optionMap = map.get(hierarchyName);
-        if (optionMap == null) {
-            return Optional.empty();
-        }
-
-        Map<String, Optional<?>> valueMap = optionMap.get(optionKey.compositeKey());
-        Optional<?> value = valueMap.get(rankName);
-        if (value == null) {
-            return Optional.empty();
-        } else {
-            return value;
-        }
-
-    }
-
-
-    @Nonnull
-    @Override
-    public Map<String, Optional<?>> valueMapForOptionKey(@Nonnull String hierarchyName, @Nonnull List<String> rankNames,
-                                                    @Nonnull OptionKey optionKey) {
-        checkNotNull(hierarchyName);
-        checkNotNull(rankNames);
-        checkNotNull(optionKey);
-        Map<String, Map<String, Optional<?>>> optionMap = map.get(hierarchyName);
-        if (optionMap == null) {
-            return new HashMap<>();
-        }
-        Map<String, Optional<?>> valueMap = optionMap.get(optionKey.compositeKey());
-
-
-        Map<String, Optional<?>> resultMap = new HashMap<>();
-        if (valueMap == null) {
-            return resultMap;
-        }
-
-        rankNames.forEach(rankName -> {
-            if (valueMap.containsKey(rankName)) {
-                resultMap.put(rankName, valueMap.get(rankName));
-            }
-        });
-
-        return resultMap;
-
-    }
-
-    @Nonnull
-    @Override
-    public Optional<?> deleteValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey) {
-        checkNotNull(hierarchyName);
-        checkNotNull(rankName);
-        checkNotNull(optionKey);
-        Map<String, Map<String, Optional<?>>> optionMap = map.get(hierarchyName);
-        if (optionMap == null) {
-            return Optional.empty();
-        }
-        Map<String, Optional<?>> valueMap = optionMap.get(optionKey.compositeKey());
-        if (valueMap == null) {
-            return Optional.empty();
-        }
-        return valueMap.remove(rankName);
-
-    }
-
-
-    public void clear() {
-        map.clear();
-    }
+public interface InMemoryOptionStore {
 
     /**
-     * {@inheritDoc}
+     * Assign {@value} to the hierarchy, hierarchy rank name and {@link OptionKey} specified
+     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankName
+     *         Name of the rank to have its value
+     * @param optionKey
+     *         Unique identifier for the option, in its context
+     * @param value
+     *         the value to assign
+     * @param <T>
+     *         the type of the value
+     *
+     * @throws UserHierarchyException
+     *         if {@code cacheKey.hierarchyRank} is out of range
      */
-    @Override
-    public int size() {
-        int c = 0;
-        for (Map.Entry<String, Map<String, Map<String, Optional<?>>>> entry : map.entrySet()) {
-            c = c + entry.getValue()
-                         .size();
-        }
-        return c;
-    }
+    <T extends Optional<?>> void setValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey, @Nonnull
+    T value);
+
+    /**
+     * Gets the {@value} for the hierarchy, hierarchy rank name and {@link OptionKey} specified
+     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankName
+     *         Name of the rank to have its value
+     * @param optionKey
+     *         Unique identifier for the option, in its context
+     *
+     * @return the value if found, otherwise null
+     */
+    @Nonnull
+    Optional<?> getValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey);
+
+    /**
+     * Delete the entry for the hierarchy, hierarchy rank name and {@link OptionKey} specified
+     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankName
+     *         Name of the rank to have its value
+     * @param optionKey
+     *         Unique identifier for the option, in its context
+     *
+     * @return the previous value associated with {@code cacheKey}, or null if there was no mapping for key.
+     */
+    @Nonnull
+    Optional<?> deleteValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey);
+
+
+    /**
+     * returns a map of values for a hierarchy,for the rank names and {@link OptionKey} specified.  Only ranks with
+     * values are returned, so it is possible for an empty map to be returned.
+     *
+     * @param hierarchyName
+     *         the persistent name of the hierarchy
+     * @param rankNames
+     *         list of names from the hierarchy that values are required for
+     * @param optionKey
+     *         Unique identifier for the option, in its context
+     *
+     * @return returns a map of values for a hierarchy, for a given {@link OptionKey}, an empty map if there are no
+     * values assigned
+     */
+    @Nonnull
+    Map<String, Optional<?>> valueMapForOptionKey(@Nonnull String hierarchyName, @Nonnull List<String> rankNames, @Nonnull
+    OptionKey optionKey);
+
+    /**
+     * Some implementations may enable clearing the WHOLE option store.  Those that do not throw an {@link UnsupportedOperationException}
+     */
+    void clear();
+
+    /**
+     * The number of entries in the store
+     */
+    int size();
+
+    List<OptionEntity> asEntities();
 }
+

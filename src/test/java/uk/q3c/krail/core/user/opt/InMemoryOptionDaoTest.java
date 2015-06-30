@@ -42,7 +42,7 @@ public class InMemoryOptionDaoTest {
 
 
     @Mock
-    InMemoryOptionStore store;
+    DefaultInMemoryOptionStore store;
 
     @Mock
     OptionCacheKey cacheKeyHigh;

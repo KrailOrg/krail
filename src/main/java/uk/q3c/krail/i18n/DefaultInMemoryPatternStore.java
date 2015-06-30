@@ -11,6 +11,7 @@
 
 package uk.q3c.krail.i18n;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Singleton;
 
 import java.util.HashMap;
@@ -39,5 +40,10 @@ public class DefaultInMemoryPatternStore implements InMemoryPatternStore {
     @Override
     public String get(PatternCacheKey cacheKey) {
         return store.get(cacheKey);
+    }
+
+    @Override
+    public ImmutableMap<PatternCacheKey, String> getAsMap() {
+        return ImmutableMap.copyOf(store);
     }
 }

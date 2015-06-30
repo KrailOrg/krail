@@ -27,7 +27,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Data Access Object for {@link InMemoryOptionStore}
+ * Data Access Object for {@link DefaultInMemoryOptionStore}
  * <br>
  * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
  * {@link OptionDao} are wrapped in Optional.
