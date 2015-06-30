@@ -16,7 +16,8 @@ import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.i18n.LabelKey;
 
 /**
- * <b>Note:</b> This module and its associated pages is experimental and will probably change a lot
+ * <b>Note:</b> This module and its associated pages is experimental and will probably change a lot.  Installs {@link SystemAdminModule}
+ *
  * <p>
  * Created by David Sowerby on 24/05/15.
  */
@@ -24,6 +25,12 @@ public class SystemAdminPages extends DirectSitemapModule {
 
     public SystemAdminPages() {
         rootURI = "system-admin";
+    }
+
+    @Override
+    protected void configure() {
+        super.configure();
+        install(new SystemAdminModule());
     }
 
     @Override

@@ -47,31 +47,49 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceUn
         optionDaoProviders = Multibinder.newSetBinder(binder(), annotationClassLiteral, OptionDaoProviders.class);
 
 
+        bindStores();
         bindOptionDao();
         bindPatternDao();
+
     }
 
-
-    protected void bindOptionDao() {
-
-        if (provideOptionDao) {
+    private void bindStores() {
+        if (provideOptionDao || providePatternDao) {
             bindOptionStore();
-            bind(OptionDao.class).annotatedWith(InMemory.class)
-                                 .to(InMemoryOptionDao.class);
-            optionDaoProviders.addBinding()
-                              .toInstance(InMemory.class);
-
+            bindPatternStore();
+            bindContainerProvider();
         }
+    }
+
+    protected void bindContainerProvider() {
+
+        bind(VaadinContainerProvider.class).annotatedWith(InMemory.class)
+                                           .to(InMemoryContainerProvider.class);
     }
 
     protected void bindOptionStore() {
         bind(InMemoryOptionStore.class).to(DefaultInMemoryOptionStore.class);
     }
 
+    protected void bindPatternStore() {
+        bind(InMemoryPatternStore.class).to(DefaultInMemoryPatternStore.class);
+    }
+
+    protected void bindOptionDao() {
+
+        if (provideOptionDao) {
+            bind(OptionDao.class).annotatedWith(InMemory.class)
+                                 .to(InMemoryOptionDao.class);
+            optionDaoProviders.addBinding()
+                              .toInstance(InMemory.class);
+
+
+        }
+    }
+
     protected void bindPatternDao() {
 
         if (providePatternDao) {
-            bindPatternStore();
             bind(PatternDao.class).annotatedWith(InMemory.class)
                                   .to(InMemoryPatternDao.class);
             patternDaoProviders.addBinding()
@@ -79,12 +97,6 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceUn
 
         }
     }
-
-    protected void bindPatternStore() {
-        bind(InMemoryPatternStore.class).to(DefaultInMemoryPatternStore.class);
-    }
-
-
 
     /**
      * {@inheritDoc}
