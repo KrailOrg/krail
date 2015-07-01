@@ -9,27 +9,18 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.sysadmin;
+package uk.q3c.krail.core.sysadmin.option;
 
-import com.google.inject.AbstractModule;
-import uk.q3c.krail.core.sysadmin.option.SelectionPanel;
+import com.vaadin.ui.Panel;
 
 /**
- * Configuration for non-page related system admin elements
+ * Panel to select which source to display
  * <p>
- * Created by David Sowerby on 30/06/15.
+ * Created by David Sowerby on 06/07/15.
  */
-public class SystemAdminModule extends AbstractModule {
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void configure() {
-        bind(SelectionPanel.class);
-        bindCombinedContainerProvider();
-    }
+public class SelectionPanel extends Panel {
 
-    protected void bindCombinedContainerProvider() {
-        bind(CombinedContainerProvider.class).to(DefaultCombinedContainerProvider.class);
+    public SelectionPanel() {
+
     }
 }

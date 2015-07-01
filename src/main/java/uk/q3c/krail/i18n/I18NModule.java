@@ -20,8 +20,8 @@ import com.google.inject.multibindings.Multibinder;
 import org.apache.commons.lang3.LocaleUtils;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.core.persist.ActivePatternDao;
 import uk.q3c.krail.core.persist.CorePatternDaoProvider;
+import uk.q3c.krail.core.persist.DefaultActivePatternDao;
 import uk.q3c.krail.core.persist.DefaultCorePatternDaoProvider;
 import uk.q3c.krail.core.user.opt.InMemory;
 import uk.q3c.krail.core.user.opt.Option;
@@ -92,7 +92,7 @@ public class I18NModule extends AbstractModule {
         Class<? extends Annotation> annotationClass = (activeDaoAnnotation == null) ? InMemory.class : activeDaoAnnotation;
         TypeLiteral<Class<? extends Annotation>> annotationTypeLiteral = new TypeLiteral<Class<? extends Annotation>>() {
         };
-        bind(annotationTypeLiteral).annotatedWith(ActivePatternDao.class)
+        bind(annotationTypeLiteral).annotatedWith(DefaultActivePatternDao.class)
                                    .toInstance(annotationClass);
     }
 

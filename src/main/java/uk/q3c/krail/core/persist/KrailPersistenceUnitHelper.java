@@ -36,12 +36,18 @@ public class KrailPersistenceUnitHelper {
     };
     private static TypeLiteral<Provider<OptionDao>> optionTypeLiteral = new TypeLiteral<Provider<OptionDao>>() {
     };
+    private static TypeLiteral<PersistenceInfo<?>> persistenceInfoClassLiteral = new TypeLiteral<PersistenceInfo<?>>() {
+    };
 
-    public static MapBinder<Class<? extends Annotation>, Provider<PatternDao>> patternDaoProviders(Binder binder) {
-        return MapBinder.newMapBinder(binder, annotationClassLiteral, patternTypeLiteral);
+
+
+
+
+    public static MapBinder<Class<? extends Annotation>, PersistenceInfo<?>> patternDaoProviders(Binder binder) {
+        return MapBinder.newMapBinder(binder, annotationClassLiteral, persistenceInfoClassLiteral, PatternDaoProviders.class);
     }
 
-    public static MapBinder<Class<? extends Annotation>, Provider<OptionDao>> optionDaoProviders(Binder binder) {
-        return MapBinder.newMapBinder(binder, annotationClassLiteral, optionTypeLiteral);
+    public static TypeLiteral<Class<? extends Annotation>> annotationClassLiteral() {
+return annotationClassLiteral;
     }
 }

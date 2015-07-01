@@ -13,12 +13,27 @@ package uk.q3c.krail.core.persist;
 
 import uk.q3c.krail.core.user.opt.OptionDao;
 
+import javax.annotation.Nonnull;
+import java.lang.annotation.Annotation;
+
 /**
  * Interface for a provider which identifies and returns the correct source for {@link OptionDao} for Krail core, and returns an instance
  * <p>
  * Created by David Sowerby on 26/06/15.
  */
-public interface CoreOptionDaoProvider {
+public interface OptionSource {
 
-    OptionDao get();
+    OptionDao getActiveDao();
+
+    @Nonnull
+    OptionDao getDao(@Nonnull Class<? extends Annotation> annotationClass);
+
+    PersistenceInfo getActivePersistenceInfo();
+
+    @Nonnull
+    PersistenceInfo getPersistenceInfo(@Nonnull Class<? extends Annotation> annotationClass);
+
+    Class<? extends Annotation> getActiveSource();
+
+    void setActiveSource(Class<? extends Annotation> activeSource);
 }

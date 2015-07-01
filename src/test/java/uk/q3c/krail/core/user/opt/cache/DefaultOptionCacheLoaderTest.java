@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
+import uk.q3c.krail.core.persist.OptionSource;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
 import java.util.LinkedHashMap;
@@ -39,7 +39,7 @@ public class DefaultOptionCacheLoaderTest {
     LinkedHashMap<String, Object> resultMap;
 
     @Mock
-    CoreOptionDaoProvider daoProvider;
+    OptionSource daoProvider;
 
     MockOptionDao dao;
 
@@ -52,7 +52,7 @@ public class DefaultOptionCacheLoaderTest {
     @Before
     public void setup() {
         dao = new MockOptionDao();
-        when(daoProvider.get()).thenReturn(dao);
+        when(daoProvider.getActiveDao()).thenReturn(dao);
         loader = new DefaultOptionCacheLoader(daoProvider);
         resultMap = new LinkedHashMap<>();
         rankNames1 = ImmutableList.of("a", "b", "c");

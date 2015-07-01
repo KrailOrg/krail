@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
+import uk.q3c.krail.core.persist.OptionSource;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.util.testutil.LogMonitor;
 
@@ -55,12 +55,12 @@ public class DefaultOptionCacheTest {
     @Mock
     private DefaultOptionCacheLoader cacheLoader;
     @Mock
-    private CoreOptionDaoProvider daoProvider;
+    private OptionSource daoProvider;
 
     @Before
     public void setup() {
         cache = new MockCache();
-        when(daoProvider.get()).thenReturn(dao);
+        when(daoProvider.getActiveDao()).thenReturn(dao);
         logMonitor.addClassFilter(DefaultOptionCache.class);
         when(cacheProvider.get()).thenReturn(cache);
         optionCache = new DefaultOptionCache(daoProvider, cacheProvider);

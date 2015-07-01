@@ -32,7 +32,7 @@ public interface DataSourceInstanceConfiguration<C> {
      *
      * @return the url for the instance
      */
-    String getUrl();
+    String getConnectionUrl();
 
     /**
      * the user name for this instance

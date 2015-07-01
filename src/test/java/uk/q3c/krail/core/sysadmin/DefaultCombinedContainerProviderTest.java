@@ -23,6 +23,7 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.persist.ContainerType;
+import uk.q3c.krail.core.persist.PersistenceInfo;
 import uk.q3c.krail.core.persist.VaadinContainerProvider;
 import uk.q3c.krail.core.user.opt.InMemory;
 import uk.q3c.krail.core.user.opt.OptionEntity;
@@ -31,8 +32,8 @@ import uk.q3c.krail.i18n.I18NException;
 import uk.q3c.krail.i18n.PatternEntity;
 
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
@@ -51,8 +52,11 @@ public class DefaultCombinedContainerProviderTest {
     @Mock
     VaadinContainerProvider containerProvider;
 
-    Set<Class<? extends Annotation>> optionDaoProviders;
-    Set<Class<? extends Annotation>> patternDaoProviders;
+    Map<Class<? extends Annotation>, PersistenceInfo<?>> optionDaoProviders;
+    Map<Class<? extends Annotation>, PersistenceInfo<?>> patternDaoProviders;
+
+    @Mock
+    PersistenceInfo persistenceInfo;
 
     @Mock
     Container container;
@@ -60,8 +64,8 @@ public class DefaultCombinedContainerProviderTest {
 
     @Before
     public void setup() {
-        optionDaoProviders = new HashSet<>();
-        patternDaoProviders = new HashSet<>();
+        optionDaoProviders = new HashMap<>();
+        patternDaoProviders = new HashMap<>();
         provider = new DefaultCombinedContainerProvider(injector, optionDaoProviders, patternDaoProviders);
     }
 
@@ -81,7 +85,7 @@ public class DefaultCombinedContainerProviderTest {
         Key<VaadinContainerProvider> expectedKey = Key.get(VaadinContainerProvider.class, InMemory.class);
         when(containerProvider.get(OptionEntity.class, ContainerType.CACHED)).thenReturn(container);
         when(injector.getInstance(expectedKey)).thenReturn(containerProvider);
-        optionDaoProviders.add(InMemory.class);
+        optionDaoProviders.put(InMemory.class, persistenceInfo);
         //when
         Container actual = provider.getContainer(InMemory.class, OptionEntity.class);
         //then
@@ -95,7 +99,7 @@ public class DefaultCombinedContainerProviderTest {
         Key<VaadinContainerProvider> expectedKey = Key.get(VaadinContainerProvider.class, InMemory.class);
         when(containerProvider.get(OptionEntity.class, ContainerType.CACHED)).thenReturn(container);
         when(injector.getInstance(expectedKey)).thenReturn(containerProvider);
-        optionDaoProviders.add(InMemory.class);
+        optionDaoProviders.put(InMemory.class, persistenceInfo);
         //when
         provider.getContainer(SessionBus.class, OptionEntity.class);
         //then
@@ -107,7 +111,7 @@ public class DefaultCombinedContainerProviderTest {
         Key<VaadinContainerProvider> expectedKey = Key.get(VaadinContainerProvider.class, InMemory.class);
         when(containerProvider.get(PatternEntity.class, ContainerType.CACHED)).thenReturn(container);
         when(injector.getInstance(expectedKey)).thenReturn(containerProvider);
-        patternDaoProviders.add(InMemory.class);
+        optionDaoProviders.put(InMemory.class, persistenceInfo);
         //when
         Container actual = provider.getContainer(InMemory.class, PatternEntity.class);
         //then
@@ -121,7 +125,7 @@ public class DefaultCombinedContainerProviderTest {
         Key<VaadinContainerProvider> expectedKey = Key.get(VaadinContainerProvider.class, InMemory.class);
         when(containerProvider.get(PatternEntity.class, ContainerType.CACHED)).thenReturn(container);
         when(injector.getInstance(expectedKey)).thenReturn(containerProvider);
-        patternDaoProviders.add(InMemory.class);
+        optionDaoProviders.put(InMemory.class, persistenceInfo);
         //when
         provider.getContainer(SessionBus.class, PatternEntity.class);
         //then

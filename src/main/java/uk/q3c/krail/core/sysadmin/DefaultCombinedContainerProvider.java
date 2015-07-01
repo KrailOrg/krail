@@ -15,10 +15,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.vaadin.data.Container;
-import uk.q3c.krail.core.persist.ContainerType;
-import uk.q3c.krail.core.persist.OptionDaoProviders;
-import uk.q3c.krail.core.persist.PatternDaoProviders;
-import uk.q3c.krail.core.persist.VaadinContainerProvider;
+import uk.q3c.krail.core.persist.*;
 import uk.q3c.krail.core.user.opt.OptionEntity;
 import uk.q3c.krail.core.user.opt.OptionException;
 import uk.q3c.krail.i18n.I18NException;
@@ -26,7 +23,7 @@ import uk.q3c.krail.i18n.PatternEntity;
 
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Default implementation for {@link CombinedContainerProvider}, using an injected {@link Injector}
@@ -37,12 +34,12 @@ public class DefaultCombinedContainerProvider implements CombinedContainerProvid
 
 
     private Injector injector;
-    private Set<Class<? extends Annotation>> optionDaoProviders;
-    private Set<Class<? extends Annotation>> patternDaoProviders;
+    private Map<Class<? extends Annotation>, PersistenceInfo<?>> optionDaoProviders;
+    private Map<Class<? extends Annotation>, PersistenceInfo<?>> patternDaoProviders;
 
     @Inject
-    protected DefaultCombinedContainerProvider(Injector injector, @OptionDaoProviders Set<Class<? extends Annotation>> optionDaoProviders,
-                                               @PatternDaoProviders Set<Class<? extends Annotation>> patternDaoProviders) {
+    protected DefaultCombinedContainerProvider(Injector injector, @OptionDaoProviders Map<Class<? extends Annotation>, PersistenceInfo<?>>
+            optionDaoProviders, @PatternDaoProviders Map<Class<? extends Annotation>, PersistenceInfo<?>> patternDaoProviders) {
         this.injector = injector;
         this.optionDaoProviders = optionDaoProviders;
         this.patternDaoProviders = patternDaoProviders;
@@ -58,7 +55,8 @@ public class DefaultCombinedContainerProvider implements CombinedContainerProvid
                                                                                                                 .getSimpleName());
         }
         if (entityClass.equals(PatternEntity.class)) {
-            if (patternDaoProviders.contains(annotationClass)) {
+            if (patternDaoProviders.keySet()
+                                   .contains(annotationClass)) {
                 Key containerProviderKey = Key.get(VaadinContainerProvider.class, annotationClass);
                 VaadinContainerProvider provider = (VaadinContainerProvider) injector.getInstance(containerProviderKey);
                 return provider.get(entityClass, ContainerType.CACHED);
@@ -68,7 +66,8 @@ public class DefaultCombinedContainerProvider implements CombinedContainerProvid
         }
 
         //must be an OptionEntity
-        if (optionDaoProviders.contains(annotationClass)) {
+        if (optionDaoProviders.keySet()
+                              .contains(annotationClass)) {
             Key containerProviderKey = Key.get(VaadinContainerProvider.class, annotationClass);
             VaadinContainerProvider provider = (VaadinContainerProvider) injector.getInstance(containerProviderKey);
             return provider.get(entityClass, ContainerType.CACHED);

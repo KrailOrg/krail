@@ -22,7 +22,7 @@ import uk.q3c.krail.i18n.PatternDao;
  *         the implementation object, returned for fluency
  *         Created by David Sowerby on 25/06/15.
  */
-public interface KrailPersistenceUnit<M> {
+public interface KrailPersistenceUnit<M> extends PersistenceInfo<M> {
 
     //    /**
     //     * Binds {@link OptionDao} to an implementation, annotated with {@link CoreDao}.  This may occur only once per application

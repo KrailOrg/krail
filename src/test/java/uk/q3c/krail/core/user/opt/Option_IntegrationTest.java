@@ -25,10 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.data.DataModule;
-import uk.q3c.krail.core.persist.ActiveOptionDao;
-import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
-import uk.q3c.krail.core.persist.DefaultCoreOptionDaoProvider;
-import uk.q3c.krail.core.persist.OptionDaoProviders;
+import uk.q3c.krail.core.persist.*;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.opt.cache.*;
@@ -40,9 +37,9 @@ import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -55,8 +52,7 @@ import static org.mockito.Mockito.when;
 @GuiceContext({DataModule.class})
 public class Option_IntegrationTest {
 
-    Set<Class<? extends Annotation>> optionDaoProviders = new HashSet<>();
-
+    Map<Class<? extends Annotation>, PersistenceInfo<?>> optionDaoProviders = new HashMap<>();
 
     DefaultOptionCacheLoader cacheLoader;
     DefaultOption option;
@@ -70,7 +66,7 @@ public class Option_IntegrationTest {
     DefaultInMemoryOptionStore optionStore;
 
     @Inject
-    CoreOptionDaoProvider daoProvider;
+    OptionSource daoProvider;
 
     @Inject
     InMemoryOptionDao dao;
@@ -86,7 +82,8 @@ public class Option_IntegrationTest {
     Translate translate;
     OptionKey<Integer> key1 = LocaleContainer.optionKeyFlagSize;
     OptionKey<Integer> key3 = new OptionKey<>(133, LocaleContainer.class, LabelKey.Alphabetic_Ascending);
-
+    @Mock
+    PersistenceInfo persistenceInfo;
     private UserHierarchy hierarchy;
     @Mock
     private SubjectIdentifier subjectIdentifier;
@@ -289,17 +286,18 @@ public class Option_IntegrationTest {
                                      .to(InMemoryOptionDao.class);
                 bind(GuavaCacheConfiguration.class).annotatedWith(OptionCacheConfig.class)
                                                    .toInstance(cacheConfig);
-                bind(CoreOptionDaoProvider.class).to(DefaultCoreOptionDaoProvider.class);
-                Class<? extends Annotation> annotationClass = InMemory.class;
-                TypeLiteral<Class<? extends Annotation>> annotationTypeLiteral = new TypeLiteral<Class<? extends Annotation>>() {
+                bind(OptionSource.class).to(DefaultOptionSource.class);
+
+                bind(KrailPersistenceUnitHelper.annotationClassLiteral()).annotatedWith(DefaultActiveOptionSource.class)
+                                                                          .toInstance(InMemory.class);
+                TypeLiteral<Map<Class<? extends Annotation>, PersistenceInfo<?>>> setAnnotationTypeLiteral = new TypeLiteral<Map<Class<? extends Annotation>, PersistenceInfo<?>>>() {
                 };
-                bind(annotationTypeLiteral).annotatedWith(ActiveOptionDao.class)
-                                           .toInstance(annotationClass);
-                TypeLiteral<Set<Class<? extends Annotation>>> setAnnotationTypeLiteral = new TypeLiteral<Set<Class<? extends Annotation>>>() {
-                };
-                optionDaoProviders.add(InMemory.class);
+                optionDaoProviders.put(InMemory.class, persistenceInfo);
+
                 bind(setAnnotationTypeLiteral).annotatedWith(OptionDaoProviders.class)
                                               .toInstance(optionDaoProviders);
+
+
                 bind(OptionDao.class).annotatedWith(InMemory.class)
                                      .to(InMemoryOptionDao.class);
                 bind(InMemoryOptionStore.class).to(DefaultInMemoryOptionStore.class);

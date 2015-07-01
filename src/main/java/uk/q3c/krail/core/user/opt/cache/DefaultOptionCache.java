@@ -16,7 +16,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
+import uk.q3c.krail.core.persist.OptionSource;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.opt.OptionModule;
@@ -48,10 +48,10 @@ public class DefaultOptionCache implements OptionCache {
 
     private static Logger log = LoggerFactory.getLogger(DefaultOptionCache.class);
     private final LoadingCache<OptionCacheKey, Optional<?>> cache;
-    private final CoreOptionDaoProvider daoProvider;
+    private final OptionSource daoProvider;
 
     @Inject
-    public DefaultOptionCache(CoreOptionDaoProvider daoProvider, OptionCacheProvider cacheProvider) {
+    public DefaultOptionCache(OptionSource daoProvider, OptionCacheProvider cacheProvider) {
         this.daoProvider = daoProvider;
         cache = cacheProvider.get();
     }
@@ -77,7 +77,7 @@ public class DefaultOptionCache implements OptionCache {
         checkNotNull(value);
         // write to store first just in case there's a problem
         log.debug("writing value {} for cacheKey {} via option dao ", value, cacheKey);
-        daoProvider.get()
+        daoProvider.getActiveDao()
                    .write(cacheKey, value);
 
         //invalidate highest / lowest first - cache does clean up as part of write
@@ -120,7 +120,7 @@ public class DefaultOptionCache implements OptionCache {
     public synchronized Optional<?> delete(@Nonnull OptionCacheKey optionCacheKey) {
         checkNotNull(optionCacheKey);
         // delete from store first just in case there's a problem
-        Optional<?> result = daoProvider.get()
+        Optional<?> result = daoProvider.getActiveDao()
                                    .deleteValue(optionCacheKey);
 
         //invalidate highest / lowest & specific as these are all now invalid

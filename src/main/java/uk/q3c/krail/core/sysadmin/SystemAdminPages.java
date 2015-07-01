@@ -13,6 +13,7 @@ package uk.q3c.krail.core.sysadmin;
 
 import uk.q3c.krail.core.navigate.sitemap.DirectSitemapModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
+import uk.q3c.krail.core.sysadmin.option.OptionView;
 import uk.q3c.krail.i18n.LabelKey;
 
 /**
@@ -37,5 +38,6 @@ public class SystemAdminPages extends DirectSitemapModule {
     protected void define() {
         addEntry("", SystemAdminView.class, LabelKey.System_Administration, PageAccessControl.PERMISSION);
         addEntry("sitemap-build-report", SitemapReportView.class, LabelKey.Sitemap_Build_Report, PageAccessControl.PERMISSION);
+        addEntry("option", OptionView.class, LabelKey.Options, PageAccessControl.PERMISSION);
     }
 }

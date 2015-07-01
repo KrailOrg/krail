@@ -13,6 +13,8 @@
 package uk.q3c.krail.core.guice;
 
 import com.google.inject.Module;
+import uk.q3c.krail.core.user.opt.InMemory;
+import uk.q3c.krail.core.user.opt.OptionModule;
 
 import java.util.List;
 
@@ -35,4 +37,13 @@ public class TestBindingManager extends DefaultBindingManager {
         return addAppModulesCalled;
     }
 
+    /**
+     * Override this if you have provided your own {@link OptionModule}.
+     *
+     * @return module instance
+     */
+    @Override
+    protected Module optionModule() {
+        return new OptionModule().activeSource(InMemory.class);
+    }
 }

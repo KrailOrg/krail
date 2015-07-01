@@ -13,11 +13,11 @@ package uk.q3c.krail.core.user.opt;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
-import com.google.inject.TypeLiteral;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.core.persist.ActiveOptionDao;
-import uk.q3c.krail.core.persist.CoreOptionDaoProvider;
-import uk.q3c.krail.core.persist.DefaultCoreOptionDaoProvider;
+import uk.q3c.krail.core.persist.DefaultActiveOptionSource;
+import uk.q3c.krail.core.persist.DefaultOptionSource;
+import uk.q3c.krail.core.persist.KrailPersistenceUnitHelper;
+import uk.q3c.krail.core.persist.OptionSource;
 import uk.q3c.krail.core.user.opt.cache.*;
 
 import java.lang.annotation.Annotation;
@@ -30,7 +30,7 @@ import java.lang.annotation.Annotation;
 public class OptionModule extends AbstractModule {
 
 
-    private Class<? extends Annotation> activeDaoAnnotation;
+    private Class<? extends Annotation> activeSource;
 
     /**
      * Configures a {@link Binder} via the exposed methods.
@@ -42,28 +42,21 @@ public class OptionModule extends AbstractModule {
         bindOptionCache();
         bindOptionCacheProvider();
         bindOptionPopup();
-        bindCoreOptionDaoProvider();
-        bindDao();
+        bindDefaultActiveSource();
+        bindCurrentOptionSource();
     }
 
-
-    /**
-     * Binds the active Dao, or if none has been defined, uses {@link InMemory}
-     */
-    protected void bindDao() {
-        Class<? extends Annotation> annotationClass = (activeDaoAnnotation == null) ? InMemory.class : activeDaoAnnotation;
-        TypeLiteral<Class<? extends Annotation>> annotationTypeLiteral = new TypeLiteral<Class<? extends Annotation>>() {
-        };
-        bind(annotationTypeLiteral).annotatedWith(ActiveOptionDao.class)
-                                   .toInstance(annotationClass);
+    protected void bindDefaultActiveSource() {
+        bind(KrailPersistenceUnitHelper.annotationClassLiteral()).annotatedWith(DefaultActiveOptionSource.class)
+                                                                 .toInstance(activeSource);
     }
 
-
     /**
-     * Override this method to provide your own {@link CoreOptionDaoProvider} implementation
+     * Provides a Singleton which identifies the currently selected source for {@link Option}.  Override to provide your own implementation of {@link
+     * OptionSource}.
      */
-    protected void bindCoreOptionDaoProvider() {
-        bind(CoreOptionDaoProvider.class).to(DefaultCoreOptionDaoProvider.class);
+    protected void bindCurrentOptionSource() {
+        bind(OptionSource.class).to(DefaultOptionSource.class);
     }
 
 
@@ -117,8 +110,16 @@ public class OptionModule extends AbstractModule {
         bind(Option.class).to(DefaultOption.class);
     }
 
-    public OptionModule activeDao(Class<? extends Annotation> annotationClass) {
-        activeDaoAnnotation = annotationClass;
+    /**
+     * Defines which source should be used to supply {@link Option} values - the source is identified by its binding annotation {@code annotationClass}
+     *
+     * @param annotationClass
+     *         the binding annotation which identifies the source
+     *
+     * @return this for fluency
+     */
+    public OptionModule activeSource(Class<? extends Annotation> annotationClass) {
+        activeSource = annotationClass;
         return this;
     }
 

@@ -80,10 +80,10 @@ public class DefaultPatternUtilityTest {
         //then line 4 is the timestamp
         //first 15 lines covers class declaration and a specimen number of entries
         //  Test shold only break if an entry is added or deleted near the satart
-        assertThat(FileTestUtil.compareFirst(12, referenceFile, targetFile, 4)).isEqualTo(Optional.empty());
-        assertThat(FileTestUtil.compareFirst(12, referenceFile_de, targetFile_de, 4)).isEqualTo(Optional.empty());
-        assertThat(FileTestUtil.compareFirst(12, referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.empty());
-        assertThat(FileTestUtil.compareFirst(12, referenceFile_en_GB, targetFile_en_GB, 4)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compareFirst(10, referenceFile, targetFile, 4)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compareFirst(10, referenceFile_de, targetFile_de, 4)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compareFirst(10, referenceFile_it, targetFile_it, 4)).isEqualTo(Optional.empty());
+        assertThat(FileTestUtil.compareFirst(10, referenceFile_en_GB, targetFile_en_GB, 4)).isEqualTo(Optional.empty());
     }
 
 

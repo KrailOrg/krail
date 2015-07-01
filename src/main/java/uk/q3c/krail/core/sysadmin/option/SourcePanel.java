@@ -1,0 +1,199 @@
+/*
+ * Copyright (c) 2015. David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
+package uk.q3c.krail.core.sysadmin.option;
+
+import com.google.inject.Inject;
+import com.vaadin.data.Property;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
+import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.SubscribeTo;
+import uk.q3c.krail.core.persist.OptionSource;
+import uk.q3c.krail.core.persist.PersistenceInfo;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionContext;
+import uk.q3c.krail.core.user.opt.OptionKey;
+import uk.q3c.krail.i18n.*;
+
+import javax.annotation.Nonnull;
+
+/**
+ * A Panel containing information about a single data source
+ * <p>
+ * Created by David Sowerby on 30/06/15.
+ */
+@I18N
+@Listener
+@SubscribeTo(SessionBus.class)
+public abstract class SourcePanel extends Panel implements OptionContext {
+
+
+    public static final OptionKey<String> defaultCaptionStyleOptionKey = new OptionKey<>(ValoTheme.LABEL_SMALL, SourcePanel.class, LabelKey
+            .Default_Caption_Style, DescriptionKey.Display_style_for_all_captions_unless_overridden);
+    public static final OptionKey<String> defaultValueStyleOptionKey = new OptionKey<>("colored", SourcePanel.class, LabelKey.Default_Value_Style,
+            DescriptionKey.Display_style_for_all_values_unless_overridden);
+
+
+    public static final OptionKey<String> nameCaptionStyleOptionKey = new OptionKey<>("", SourcePanel.class, LabelKey.Name_Caption_Style, DescriptionKey
+            .Display_style_for_the_name_caption);
+    public static final OptionKey<String> nameValueStyleOptionKey = new OptionKey<>("", SourcePanel.class, LabelKey.Name_Style, DescriptionKey
+            .Display_style_for_the_name);
+
+    public static final OptionKey<String> descriptionCaptionStyleOptionKey = new OptionKey<>("", SourcePanel.class, LabelKey.Description_Caption_Style,
+            DescriptionKey.Display_style_for_the_description_caption);
+    public static final OptionKey<String> descriptionValueStyleOptionKey = new OptionKey<>("", SourcePanel.class, LabelKey.Description_Style, DescriptionKey
+            .Display_style_for_the_description);
+
+    public static final OptionKey<String> connectionUrlCaptionStyleOptionKey = new OptionKey<>("", SourcePanel.class, LabelKey.Connection_url_Caption_Style,
+            DescriptionKey.Display_style_for_the_connection_url_caption);
+    public static final OptionKey<String> connectionUrlValueStyleOptionKey = new OptionKey<>("", SourcePanel.class, LabelKey.Connection_url_Style,
+            DescriptionKey.Display_style_for_the_connection_url);
+
+    public static final OptionKey<String> is_volatileCaptionStyleOptionKey = new OptionKey<>("", SourcePanel.class, LabelKey.Is_volatile_Caption_Style,
+            DescriptionKey.Display_style_for_the_is_volatile_caption);
+    public static final OptionKey<String> is_volatileValueStyleOptionKey = new OptionKey<>("", SourcePanel.class, LabelKey.Is_volatile_Style, DescriptionKey
+            .Display_style_for_the_is_volatile);
+
+
+    protected final OptionSource optionSource;
+
+    private final Label descriptionLabel;
+    private final Label connectionUrlLabel;
+    @Caption(caption = LabelKey.Source_Data, description = DescriptionKey.The_data_currently_held_in_this_source)
+    private final TreeTable table;
+    private final Label nameLabel;
+    private final Label nameCaption;
+    private final Label descriptionCaption;
+    private final Label connectionUrlCaption;
+    private final Label volatileCaption;
+    private final Label volatileLabel;
+    protected PersistenceInfo persistenceInfo;
+    private Option option;
+    private Translate translate;
+
+    @Inject
+    protected SourcePanel(Translate translate, OptionSource optionSource, Option option) {
+        this.translate = translate;
+        this.optionSource = optionSource;
+        this.option = option;
+
+        nameCaption = new Label();
+        nameLabel = new Label();
+
+        descriptionCaption = new Label();
+        descriptionLabel = new Label();
+
+        connectionUrlCaption = new Label();
+        connectionUrlLabel = new Label();
+
+        volatileCaption = new Label();
+        volatileLabel = new Label();
+
+
+        table = new TreeTable();
+        VerticalLayout layout = new VerticalLayout(nameCaption, nameLabel, descriptionCaption, descriptionLabel, connectionUrlCaption, connectionUrlLabel,
+                volatileCaption, volatileLabel, table);
+        this.setContent(layout);
+
+
+        headings(null);
+        styles();
+
+    }
+
+    private void styles() {
+        String defaultCaptionStyleName = option.get(defaultCaptionStyleOptionKey);
+        applyStyle(defaultCaptionStyleName, nameCaption, nameCaptionStyleOptionKey);
+        applyStyle(defaultCaptionStyleName, descriptionCaption, descriptionCaptionStyleOptionKey);
+        applyStyle(defaultCaptionStyleName, connectionUrlCaption, connectionUrlCaptionStyleOptionKey);
+        applyStyle(defaultCaptionStyleName, volatileCaption, is_volatileCaptionStyleOptionKey);
+
+        String defaultValueStyleName = option.get(defaultValueStyleOptionKey);
+        applyStyle(defaultValueStyleName, nameLabel, nameValueStyleOptionKey);
+        applyStyle(defaultValueStyleName, descriptionLabel, descriptionValueStyleOptionKey);
+        applyStyle(defaultValueStyleName, connectionUrlLabel, connectionUrlValueStyleOptionKey);
+        applyStyle(defaultValueStyleName, volatileLabel, is_volatileValueStyleOptionKey);
+    }
+
+    private void applyStyle(String defaultCaptionStyleName, AbstractComponent component, OptionKey<String> key) {
+        key.setDefaultValue(defaultCaptionStyleName);
+        String componentStyleName = option.get(key);
+        component.setStyleName(componentStyleName);
+    }
+
+    @Handler
+    public void headings(LocaleChangeBusMessage busMessage) {
+        nameCaption.setValue(translate.from(LabelKey.Name));
+        nameLabel.setDescription(translate.from(DescriptionKey.Name_of_the_source));
+        descriptionCaption.setValue(translate.from(LabelKey.Description));
+        descriptionLabel.setDescription(translate.from(DescriptionKey.Description_of_the_source));
+        connectionUrlCaption.setValue(translate.from(LabelKey.Connection_URL));
+        connectionUrlLabel.setDescription(translate.from(DescriptionKey.The_connection_string_for_this_source));
+        volatileCaption.setValue(translate.from(LabelKey.Is_Volatile));
+        volatileLabel.setDescription(translate.from(DescriptionKey.Data_is_held_in_memory));
+    }
+
+    public Label getVolatileLabel() {
+        return volatileLabel;
+    }
+
+    public Label getNameLabel() {
+        return nameLabel;
+    }
+
+    public Label getConnectionUrlLabel() {
+        return connectionUrlLabel;
+    }
+
+    protected void displayInfo() {
+        doSetPersistenceInfo();
+        nameLabel.setValue(translate.from(persistenceInfo.getName()));
+        descriptionLabel.setValue(translate.from(persistenceInfo.getDescription()));
+        connectionUrlLabel.setValue(persistenceInfo.getConnectionUrl());
+
+        I18NKey valueKey = persistenceInfo.isVolatilePersistence() ? LabelKey.Yes : LabelKey.No;
+        volatileLabel.setValue(translate.from(valueKey));
+    }
+
+    protected abstract void doSetPersistenceInfo();
+
+    public PersistenceInfo getPersistenceInfo() {
+        return persistenceInfo;
+    }
+
+    public Label getDescriptionLabel() {
+        return descriptionLabel;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param event
+     *         the event representing the change
+     */
+
+    @Override
+    public void optionValueChanged(Property.ValueChangeEvent event) {
+        styles();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Nonnull
+    @Override
+    public Option getOption() {
+        return option;
+    }
+}

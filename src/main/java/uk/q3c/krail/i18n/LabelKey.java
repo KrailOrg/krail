@@ -72,7 +72,9 @@ public enum LabelKey implements I18NKey {
     Path, Write_Path, Preferred_Locale, Source_Order_Default, Auto_Stub, Stub_with_Key_Name, Stub_Value,
     Maximum_Cache_Size, Edit, Save, Breadcrumb_is_Visible, Navigation_Tree_is_Visible, Navigation_Menu_is_Visible, Message_bar_is_Visible,
     SubPage_Panel_is_Visible, System_Administration, Sitemap_Build_Report, Information, Notification_Options, Reset_to_Default, Username_Cannot_be_Empty,
-    Password_Cannot_be_Empty, Application_Options, Yes
+    Password_Cannot_be_Empty, Application_Options, Options, Description, Connection_URL, Source_Data, In_Memory, Name, Active_Source, Selected_Source,
+    Option_Source_Selection, Is_Volatile, Name_Caption_Style, Name_Style, Description_Caption_Style, Description_Style, Default_Caption_Style,
+    Default_Value_Style, Connection_url_Caption_Style, Connection_url_Style, Is_volatile_Caption_Style, Is_volatile_Style, Yes
 
 
 }

@@ -33,6 +33,11 @@ public enum DescriptionKey implements I18NKey {
     Maximum_Tree_Depth, Theme, Breadcrumb_is_Visible, MessageBar_is_Visible, Navigation_Tree_is_Visible, Navigation_Menu_is_Visible, Log_In,
     Enter_Your_Password, Submit_Your_Login_Details, Report_generated_by_the_Sitemap_build_process, Enter_your_first_name, Field, Cancel, Edit, Save,
     Locale_Flag_Size, SubPage_Panel_is_Visible, Auto_Stub, Stub_with_Key_Name, Stub_Value, Source_Order_Default, Source_Order, Path, Use_Key_Path,
-    Log_out_first, Flag_Icon_Size
+    Log_out_first, Description_of_the_source, The_connection_string_for_this_source, The_data_currently_held_in_this_source, In_Memory,
+    Data_is_held_in_memory, Name_of_the_source, The_Option_Source_currently_in_use, The_Option_Source_selected_for_display,
+    Select_an_option_source_for_display, The_data_is_stored_in_memory, Display_style_for_the_name_caption, Display_style_for_the_name,
+    Display_style_for_the_description_caption, Display_style_for_the_description, Display_style_for_all_captions_unless_overridden,
+    Display_style_for_all_values_unless_overridden, Display_style_for_the_connection_url_caption, Display_style_for_the_connection_url,
+    Display_style_for_the_is_volatile_caption, Display_style_for_the_is_volatile, Flag_Icon_Size
 
 }

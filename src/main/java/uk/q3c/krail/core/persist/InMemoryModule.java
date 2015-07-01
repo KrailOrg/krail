@@ -13,12 +13,9 @@ package uk.q3c.krail.core.persist;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
-import com.google.inject.multibindings.Multibinder;
+import com.google.inject.multibindings.MapBinder;
 import uk.q3c.krail.core.user.opt.*;
-import uk.q3c.krail.i18n.DefaultInMemoryPatternStore;
-import uk.q3c.krail.i18n.InMemoryPatternDao;
-import uk.q3c.krail.i18n.InMemoryPatternStore;
-import uk.q3c.krail.i18n.PatternDao;
+import uk.q3c.krail.i18n.*;
 
 import java.lang.annotation.Annotation;
 
@@ -29,10 +26,14 @@ import java.lang.annotation.Annotation;
  */
 public class InMemoryModule extends AbstractModule implements KrailPersistenceUnit<InMemoryModule> {
 
-    private Multibinder<Class<? extends Annotation>> optionDaoProviders;
-    private Multibinder<Class<? extends Annotation>> patternDaoProviders;
+    private String connectionUrl = "in memory";
+    private I18NKey description = DescriptionKey.Data_is_held_in_memory;
+    private I18NKey name = LabelKey.In_Memory;
+    private MapBinder<Class<? extends Annotation>, PersistenceInfo<?>> optionDaoProviders;
+    private MapBinder<Class<? extends Annotation>, PersistenceInfo<?>> patternDaoProviders;
     private boolean provideOptionDao = false;
     private boolean providePatternDao;
+    private boolean volatilePersistence = true;
 
     /**
      * {@inheritDoc}
@@ -42,9 +43,13 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceUn
 
         TypeLiteral<Class<? extends Annotation>> annotationClassLiteral = new TypeLiteral<Class<? extends Annotation>>() {
         };
+        TypeLiteral<PersistenceInfo<?>> persistenceInfoClassLiteral = new TypeLiteral<PersistenceInfo<?>>() {
+        };
 
-        patternDaoProviders = Multibinder.newSetBinder(binder(), annotationClassLiteral, PatternDaoProviders.class);
-        optionDaoProviders = Multibinder.newSetBinder(binder(), annotationClassLiteral, OptionDaoProviders.class);
+        patternDaoProviders = KrailPersistenceUnitHelper.patternDaoProviders(binder());
+
+        patternDaoProviders = MapBinder.newMapBinder(binder(), annotationClassLiteral, persistenceInfoClassLiteral, PatternDaoProviders.class);
+        optionDaoProviders = MapBinder.newMapBinder(binder(), annotationClassLiteral, persistenceInfoClassLiteral, OptionDaoProviders.class);
 
 
         bindStores();
@@ -80,8 +85,8 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceUn
         if (provideOptionDao) {
             bind(OptionDao.class).annotatedWith(InMemory.class)
                                  .to(InMemoryOptionDao.class);
-            optionDaoProviders.addBinding()
-                              .toInstance(InMemory.class);
+            optionDaoProviders.addBinding(InMemory.class)
+                              .toInstance(new DefaultPersistenceInfo(this));
 
 
         }
@@ -92,8 +97,8 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceUn
         if (providePatternDao) {
             bind(PatternDao.class).annotatedWith(InMemory.class)
                                   .to(InMemoryPatternDao.class);
-            patternDaoProviders.addBinding()
-                               .toInstance(InMemory.class);
+            patternDaoProviders.addBinding(InMemory.class)
+                               .toInstance(new DefaultPersistenceInfo(this));
 
         }
     }
@@ -116,5 +121,48 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceUn
         return this;
     }
 
+    @Override
+    public I18NKey getName() {
+        return name;
+    }
 
+    @Override
+    public String getConnectionUrl() {
+        return connectionUrl;
+    }
+
+    @Override
+    public I18NKey getDescription() {
+        return description;
+    }
+
+
+    @Override
+    public boolean isVolatilePersistence() {
+        return volatilePersistence;
+    }
+
+    @Override
+    public InMemoryModule name(final I18NKey name) {
+        this.name = name;
+        return this;
+    }
+
+    @Override
+    public InMemoryModule description(final I18NKey description) {
+        this.description = description;
+        return this;
+    }
+
+    @Override
+    public InMemoryModule connectionUrl(final String connectionUrl) {
+        this.connectionUrl = connectionUrl;
+        return this;
+    }
+
+    @Override
+    public InMemoryModule volatilePersistence(final boolean volatilePersistence) {
+        this.volatilePersistence = volatilePersistence;
+        return this;
+    }
 }

@@ -19,7 +19,7 @@ import uk.q3c.krail.i18n.PatternDao;
 import uk.q3c.util.MessageFormat;
 
 import java.lang.annotation.Annotation;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Default implementation for {@link CorePatternDaoProvider}.
@@ -30,10 +30,11 @@ public class DefaultCorePatternDaoProvider implements CorePatternDaoProvider {
 
     private Class<? extends Annotation> activeDaoAnnotation;
     private Injector injector;
-    private Set<Class<? extends Annotation>> patternDaoProviders;
+    private Map<Class<? extends Annotation>, PersistenceInfo<?>> patternDaoProviders;
 
     @Inject
-    protected DefaultCorePatternDaoProvider(Injector injector, @PatternDaoProviders Set<Class<? extends Annotation>> patternDaoProviders, @ActivePatternDao
+    protected DefaultCorePatternDaoProvider(Injector injector, @PatternDaoProviders Map<Class<? extends Annotation>, PersistenceInfo<?>> patternDaoProviders,
+                                            @DefaultActivePatternDao
     Class<? extends Annotation> activeDaoAnnotation) {
         this.injector = injector;
         this.patternDaoProviders = patternDaoProviders;
@@ -42,7 +43,8 @@ public class DefaultCorePatternDaoProvider implements CorePatternDaoProvider {
 
     @Override
     public PatternDao get() {
-        if (!patternDaoProviders.contains(activeDaoAnnotation)) {
+        if (!patternDaoProviders.keySet()
+                                .contains(activeDaoAnnotation)) {
             String msg = MessageFormat.format("The default PatternDao annotation of '{0}' does not match any of the providers.  Do you need to change " +
                     "I18NModule.activeDao() ?", activeDaoAnnotation.getSimpleName());
             throw new ConfigurationException(msg);
