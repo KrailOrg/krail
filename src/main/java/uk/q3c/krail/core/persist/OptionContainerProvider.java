@@ -9,19 +9,17 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.sysadmin.option;
+package uk.q3c.krail.core.persist;
 
-import com.vaadin.ui.Panel;
+import com.vaadin.data.Container;
+import uk.q3c.krail.core.user.opt.Option;
 
 /**
- * Panel to select which source to display
+ * Common interface for persistence sources to provide a Vaadin Container for the {@link Option} class
  * <p>
- * Created by David Sowerby on 06/07/15.
+ * Created by David Sowerby on 09/07/15.
  */
-public class SelectionPanel extends Panel {
+public interface OptionContainerProvider {
 
-
-    protected SelectionPanel() {
-
-    }
+    Container get();
 }

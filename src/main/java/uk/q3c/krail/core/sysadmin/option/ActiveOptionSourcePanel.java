@@ -14,8 +14,11 @@ package uk.q3c.krail.core.sysadmin.option;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.persist.OptionSource;
 import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionPopup;
 import uk.q3c.krail.i18n.I18N;
 import uk.q3c.krail.i18n.Translate;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Displays information for the active option source
@@ -27,9 +30,14 @@ public class ActiveOptionSourcePanel extends SourcePanel {
 
 
     @Inject
-    protected ActiveOptionSourcePanel(Translate translate, OptionSource optionSource, Option option) {
-        super(translate, optionSource, option);
+    protected ActiveOptionSourcePanel(Translate translate, OptionSource optionSource, Option option, OptionPopup optionPopup) {
+        super(translate, optionSource, option, optionPopup);
 
+    }
+
+    @Override
+    protected Class<? extends Annotation> getAnnotationClass() {
+        return optionSource.getActiveSource();
     }
 
     protected void doSetPersistenceInfo() {

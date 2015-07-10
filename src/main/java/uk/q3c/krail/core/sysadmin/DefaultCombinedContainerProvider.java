@@ -17,7 +17,6 @@ import com.google.inject.Key;
 import com.vaadin.data.Container;
 import uk.q3c.krail.core.persist.*;
 import uk.q3c.krail.core.user.opt.OptionEntity;
-import uk.q3c.krail.core.user.opt.OptionException;
 import uk.q3c.krail.i18n.I18NException;
 import uk.q3c.krail.i18n.PatternEntity;
 
@@ -65,15 +64,7 @@ public class DefaultCombinedContainerProvider implements CombinedContainerProvid
             }
         }
 
-        //must be an OptionEntity
-        if (optionDaoProviders.keySet()
-                              .contains(annotationClass)) {
-            Key containerProviderKey = Key.get(VaadinContainerProvider.class, annotationClass);
-            VaadinContainerProvider provider = (VaadinContainerProvider) injector.getInstance(containerProviderKey);
-            return provider.get(entityClass, ContainerType.CACHED);
-        } else {
-            throw new OptionException("There is no Option support with an annotation of " + annotationClass);
-        }
+        return null;
 
 
     }

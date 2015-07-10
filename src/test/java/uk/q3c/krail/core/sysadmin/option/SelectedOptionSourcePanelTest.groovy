@@ -16,12 +16,16 @@ import uk.q3c.krail.core.eventbus.SessionBus
 import uk.q3c.krail.core.persist.OptionSource
 import uk.q3c.krail.core.persist.PersistenceInfo
 import uk.q3c.krail.core.user.opt.InMemory
+import uk.q3c.krail.core.user.opt.Option
+import uk.q3c.krail.core.user.opt.OptionKey
 import uk.q3c.krail.i18n.LabelKey
 import uk.q3c.krail.i18n.Translate
 
 import java.lang.annotation.Annotation
 
 /**
+ * Tests for {@link SelectedOptionSourcePanel} and its super class SourcePanel
+ *
  * Created by David Sowerby on 07/07/15.
  */
 
@@ -32,13 +36,16 @@ class SelectedOptionSourcePanelTest extends Specification {
     OptionSource optionSource = Mock()
     PersistenceInfo persistenceInfo = Mock()
     PersistenceInfo persistenceInfo2 = Mock()
+    Option option = Mock()
 
-    def panel = new SelectedOptionSourcePanel(translate, optionSource);
+    def panel = new SelectedOptionSourcePanel(translate, optionSource, option);
 
 
     def setup() {
         translate.from(LabelKey.Authorisation) >> "Authorisation"
         translate.from(LabelKey.Authentication) >> "Authentication"
+        translate.from(LabelKey.Yes) >> "Yes"
+        translate.from(LabelKey.No) >> "No"
 
         persistenceInfo.getName() >> LabelKey.Authentication
         persistenceInfo.getDescription() >> LabelKey.Authentication
@@ -119,7 +126,43 @@ class SelectedOptionSourcePanelTest extends Specification {
         panel.getNameLabel().getValue() == "Authentication"
         panel.getDescriptionLabel().getValue() == "Authentication"
         panel.getConnectionUrlLabel().getValue() == "url"
-        panel.getVolatileLabel().getValue() == true
+        panel.getVolatileLabel().getValue() == "Yes"
+    }
+
+    def "When styles() called, all components have default style except when overridden"() {
+
+        given:
+
+
+        optionSource.getActiveSource() >>> [InMemory.class, SessionBus.class]
+        optionSource.getPersistenceInfo(InMemory.class) >> persistenceInfo
+
+        // option.get() always returns default value
+        option.get(SourcePanel.connectionUrlValueStyleOptionKey) >> "large"
+        option.get(_) >> { OptionKey optionKey -> optionKey.getDefaultValue() }
+
+
+        when:
+
+        // to trigger style update
+        panel.optionValueChanged(null)
+
+        then:
+
+        def defaultValueStyleName = SourcePanel.defaultValueStyleOptionKey.getDefaultValue();
+
+        panel.getNameLabel().getStyleName() == defaultValueStyleName
+        panel.getDescriptionLabel().getStyleName() == defaultValueStyleName
+        panel.getConnectionUrlLabel().getStyleName() == "large"
+        panel.getVolatileLabel().getStyleName() == defaultValueStyleName
+
+        def defaultCaptionStyleName = SourcePanel.defaultCaptionStyleOptionKey.getDefaultValue();
+
+        panel.getNameCaption().getStyleName() == defaultCaptionStyleName
+        panel.getDescriptionCaption().getStyleName() == defaultCaptionStyleName
+        panel.getConnectionUrlCaption().getStyleName() == defaultCaptionStyleName
+        panel.getVolatileCaption().getStyleName() == defaultCaptionStyleName
+
     }
 
 

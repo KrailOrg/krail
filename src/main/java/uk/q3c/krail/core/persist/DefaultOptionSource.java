@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Singleton;
+import com.vaadin.data.Container;
 import uk.q3c.krail.core.config.ConfigurationException;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.util.MessageFormat;
@@ -88,5 +89,14 @@ public class DefaultOptionSource implements OptionSource {
     public void setActiveSource(Class<? extends Annotation> activeSource) {
         this.activeSource = activeSource;
     }
+
+    @Override
+    public Container getContainer(Class<? extends Annotation> annotationClass) {
+        checkAnnotationKey(annotationClass);
+        Key<OptionContainerProvider> containerProviderKey = Key.get(OptionContainerProvider.class, annotationClass);
+        OptionContainerProvider provider = injector.getInstance(containerProviderKey);
+        return provider.get();
+    }
+
 
 }

@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import uk.q3c.krail.core.persist.OptionSource;
 import uk.q3c.krail.core.persist.PersistenceInfo;
 import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionPopup;
 import uk.q3c.krail.i18n.I18N;
 import uk.q3c.krail.i18n.Translate;
 
@@ -34,13 +35,13 @@ public class SelectedOptionSourcePanel extends SourcePanel {
     private Class<? extends Annotation> selectedSource;
 
     @Inject
-    protected SelectedOptionSourcePanel(Translate translate, OptionSource optionSource, Option option) {
-        super(translate, optionSource, option);
+    protected SelectedOptionSourcePanel(Translate translate, OptionSource optionSource, Option option, OptionPopup optionPopup) {
+        super(translate, optionSource, option, optionPopup);
     }
 
     @Override
-    protected void doSetPersistenceInfo() {
-        persistenceInfo = optionSource.getPersistenceInfo(getSelectedSource());
+    protected Class<? extends Annotation> getAnnotationClass() {
+        return getSelectedSource();
     }
 
     public Class<? extends Annotation> getSelectedSource() {
@@ -54,5 +55,10 @@ public class SelectedOptionSourcePanel extends SourcePanel {
         checkNotNull(selectedSource);
         this.selectedSource = selectedSource;
         displayInfo();
+    }
+
+    @Override
+    protected void doSetPersistenceInfo() {
+        persistenceInfo = optionSource.getPersistenceInfo(getSelectedSource());
     }
 }

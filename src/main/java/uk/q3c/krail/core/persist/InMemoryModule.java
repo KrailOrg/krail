@@ -54,10 +54,20 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceUn
 
         bindStores();
         bindOptionDao();
+        bindOptionContainerProvider();
         bindPatternDao();
 
     }
 
+    protected void bindOptionContainerProvider() {
+        if (provideOptionDao || providePatternDao) {
+            bind(InMemoryOptionContainerProvider.class).to(DefaultInMemoryOptionContainerProvider.class);
+            bind(OptionContainerProvider.class).annotatedWith(InMemory.class)
+                                               .to(InMemoryOptionContainerProvider.class);
+        }
+    }
+
+    // TODO once pattern and option container providers are separated this shold not be necessary - tidy up
     private void bindStores() {
         if (provideOptionDao || providePatternDao) {
             bindOptionStore();
@@ -80,6 +90,10 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceUn
         bind(InMemoryPatternStore.class).to(DefaultInMemoryPatternStore.class);
     }
 
+    /**
+     * binds {@link OptionDao} annotated with {@link InMemory} but only if {@link #provideOptionDao} has been set by a previous call to {@link
+     * #provideOptionDao()}
+     */
     protected void bindOptionDao() {
 
         if (provideOptionDao) {
@@ -92,6 +106,9 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceUn
         }
     }
 
+    /**
+     * binds {@link PatternDao} annotated with {@link InMemory} but only if {@link #providePatternDao} has been set by a previous call to {@link #providePatternDao()}
+     */
     protected void bindPatternDao() {
 
         if (providePatternDao) {

@@ -13,6 +13,7 @@ package uk.q3c.krail.core.sysadmin.option;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Panel;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
@@ -50,7 +51,7 @@ public class OptionView extends ViewBase {
         HorizontalLayout horizontalLayout = new HorizontalLayout(activeOptionSourcePanel, selectionPanel, selectedOptionSourcePanel);
         activeOptionSourcePanel.displayInfo();
         selectedOptionSourcePanel.displayInfo();
-        setRootComponent(horizontalLayout);
+        setRootComponent(new Panel(horizontalLayout));
 
     }
 }

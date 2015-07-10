@@ -9,19 +9,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.sysadmin.option;
-
-import com.vaadin.ui.Panel;
+package uk.q3c.krail.core.persist;
 
 /**
- * Panel to select which source to display
+ * Used solely to enable a Krail developer to replace the default implementation if desired
  * <p>
- * Created by David Sowerby on 06/07/15.
+ * Created by David Sowerby on 09/07/15.
  */
-public class SelectionPanel extends Panel {
-
-
-    protected SelectionPanel() {
-
-    }
+public interface InMemoryOptionContainerProvider extends OptionContainerProvider {
 }

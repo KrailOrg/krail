@@ -11,6 +11,7 @@
 
 package uk.q3c.krail.core.persist;
 
+import com.vaadin.data.Container;
 import uk.q3c.krail.core.user.opt.OptionDao;
 
 import javax.annotation.Nonnull;
@@ -36,4 +37,6 @@ public interface OptionSource {
     Class<? extends Annotation> getActiveSource();
 
     void setActiveSource(Class<? extends Annotation> activeSource);
+
+    Container getContainer(Class<? extends Annotation> annotationClass);
 }

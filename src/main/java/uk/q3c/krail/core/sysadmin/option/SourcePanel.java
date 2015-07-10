@@ -12,6 +12,7 @@
 package uk.q3c.krail.core.sysadmin.option;
 
 import com.google.inject.Inject;
+import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -24,9 +25,11 @@ import uk.q3c.krail.core.persist.PersistenceInfo;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionKey;
+import uk.q3c.krail.core.user.opt.OptionPopup;
 import uk.q3c.krail.i18n.*;
 
 import javax.annotation.Nonnull;
+import java.lang.annotation.Annotation;
 
 /**
  * A Panel containing information about a single data source
@@ -78,15 +81,19 @@ public abstract class SourcePanel extends Panel implements OptionContext {
     private final Label connectionUrlCaption;
     private final Label volatileCaption;
     private final Label volatileLabel;
+    private final Button optionsButton;
     protected PersistenceInfo persistenceInfo;
+    private Container container;
     private Option option;
+    private OptionPopup optionPopup;
     private Translate translate;
 
     @Inject
-    protected SourcePanel(Translate translate, OptionSource optionSource, Option option) {
+    protected SourcePanel(Translate translate, OptionSource optionSource, Option option, OptionPopup optionPopup) {
         this.translate = translate;
         this.optionSource = optionSource;
         this.option = option;
+        this.optionPopup = optionPopup;
 
         nameCaption = new Label();
         nameLabel = new Label();
@@ -100,13 +107,13 @@ public abstract class SourcePanel extends Panel implements OptionContext {
         volatileCaption = new Label();
         volatileLabel = new Label();
 
+        optionsButton = new Button();
+        optionsButton.addClickListener(event -> optionPopup.popup(this, LabelKey.Options));
 
         table = new TreeTable();
         VerticalLayout layout = new VerticalLayout(nameCaption, nameLabel, descriptionCaption, descriptionLabel, connectionUrlCaption, connectionUrlLabel,
-                volatileCaption, volatileLabel, table);
+                volatileCaption, volatileLabel, optionsButton, table);
         this.setContent(layout);
-
-
         headings(null);
         styles();
 
@@ -142,6 +149,7 @@ public abstract class SourcePanel extends Panel implements OptionContext {
         connectionUrlLabel.setDescription(translate.from(DescriptionKey.The_connection_string_for_this_source));
         volatileCaption.setValue(translate.from(LabelKey.Is_Volatile));
         volatileLabel.setDescription(translate.from(DescriptionKey.Data_is_held_in_memory));
+        optionsButton.setCaption(translate.from(LabelKey.Options));
     }
 
     public Label getVolatileLabel() {
@@ -156,6 +164,22 @@ public abstract class SourcePanel extends Panel implements OptionContext {
         return connectionUrlLabel;
     }
 
+    public Label getNameCaption() {
+        return nameCaption;
+    }
+
+    public Label getDescriptionCaption() {
+        return descriptionCaption;
+    }
+
+    public Label getConnectionUrlCaption() {
+        return connectionUrlCaption;
+    }
+
+    public Label getVolatileCaption() {
+        return volatileCaption;
+    }
+
     protected void displayInfo() {
         doSetPersistenceInfo();
         nameLabel.setValue(translate.from(persistenceInfo.getName()));
@@ -164,7 +188,16 @@ public abstract class SourcePanel extends Panel implements OptionContext {
 
         I18NKey valueKey = persistenceInfo.isVolatilePersistence() ? LabelKey.Yes : LabelKey.No;
         volatileLabel.setValue(translate.from(valueKey));
+        loadData();
     }
+
+    protected void loadData() {
+        container = optionSource.getContainer(getAnnotationClass());
+        table.setContainerDataSource(container);
+    }
+
+    protected abstract Class<? extends Annotation> getAnnotationClass();
+
 
     protected abstract void doSetPersistenceInfo();
 
@@ -186,6 +219,11 @@ public abstract class SourcePanel extends Panel implements OptionContext {
     @Override
     public void optionValueChanged(Property.ValueChangeEvent event) {
         styles();
+        refreshData();
+    }
+
+    protected void refreshData() {
+        loadData();
     }
 
     /**
