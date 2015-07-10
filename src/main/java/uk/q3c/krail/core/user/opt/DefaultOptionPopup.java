@@ -108,7 +108,8 @@ public class DefaultOptionPopup implements OptionPopup {
         }
         window.setId(ID.getId(Optional.empty(), context, this, window));
         window.setClosable(true);
-        window.setContent(baseLayout);
+        //use panel to scroll
+        window.setContent(new Panel(baseLayout));
         window.center();
         UI.getCurrent()
           .addWindow(window);
@@ -117,6 +118,7 @@ public class DefaultOptionPopup implements OptionPopup {
 
     private void calculateWindowSize(Window window, int numOfKeys) {
         window.setSizeUndefined();
+        window.setHeight("600px");
     }
 
     protected String windowCaption(I18NKey i18NKey) {
