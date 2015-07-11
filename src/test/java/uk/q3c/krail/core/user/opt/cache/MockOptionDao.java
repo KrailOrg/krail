@@ -33,8 +33,8 @@ public class MockOptionDao implements OptionDao {
     private Map<OptionCacheKey, Optional<?>> lowestRanked = new HashMap<>();
 
     @Override
-    public <V> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
-
+    public <V> Object write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
+        return null;
     }
 
     @Nonnull

@@ -25,8 +25,8 @@ import java.util.Optional;
  * <br>
  * * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
  * {@link OptionDao} are wrapped in Optional.
- *
- *
+ * <p>
+ * <p>
  * Created by David Sowerby on 20/02/15.
  */
 public interface OptionDao {
@@ -50,10 +50,12 @@ public interface OptionDao {
      * @param <V>
      *         the value type
      *
+     * @return the saved entity
+     *
      * @throws OptionKeyException
      *         if the cacheKey is not valid for this action
      */
-    <V> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value);
+    <V> Object write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value);
 
 
     /**

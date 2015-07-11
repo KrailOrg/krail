@@ -43,8 +43,19 @@ public class InMemoryOptionDao implements OptionDao {
         this.optionStore = optionStore;
     }
 
+    /**
+     * Note that the returned value is just the cacheKey - there is no "Entity" to return
+     *
+     * @param cacheKey
+     *         specifies the hierarchy, rank and OptionKey to write to
+     * @param value
+     *         the value to write
+     * @param <V>
+     *
+     * @return
+     */
     @Override
-    public <V> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
+    public <V> Object write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         checkNotNull(value);
         String hierarchyName = cacheKey.getHierarchy()
@@ -53,6 +64,7 @@ public class InMemoryOptionDao implements OptionDao {
         String rankName = cacheKey.getRequestedRankName();
         OptionKey optionKey = cacheKey.getOptionKey();
         optionStore.setValue(hierarchyName, rankName, optionKey, value);
+        return cacheKey;
     }
 
 
