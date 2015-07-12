@@ -12,6 +12,7 @@ This core library provides:
 * User options
 * Application configuration through ini files etc
 * JSR 303 Validation (integrated with I18N)
+* User notifications
 
 Additional libraries, integrated and configured through Guice, provide:
 
@@ -62,9 +63,9 @@ Not fully thread-safe where it needs to be
 
 # Status
 
-26th June 2015:
+12th July 2015:
 
-* Vaadin 7.5.0 is integrated with:
+* Vaadin 7.5.1 is integrated with:
 * Guice 4.0
 * Shiro 1.2.3,
 * MBassador (Event Bus)
@@ -77,7 +78,7 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 
 ## demo
 
-There is a [simple demo](https://github.com/davidsowerby/krail-demo) project - this is rapidly becoming irrelevant.  The [Tutorial](http://krail.readthedocs.org/en/0.9.5/tutorial01/) is much more useful.
+There is a [simple demo](https://github.com/davidsowerby/krail-demo) project - this is rapidly becoming irrelevant.  The [Tutorial](http://krail.readthedocs.org/en/0.9.6/tutorial01/) is much more useful.
 
 ## testApp
 
@@ -118,4 +119,5 @@ ej technologies for an open source licence for their java profiler, [JProfiler](
 [AssertJ](http://joel-costigliola.github.io/assertj/)<br>
 [Mycila](https://github.com/mycila)<br>
 [Mockito](https://github.com/mockito/mockito)<br>
+[spock](https://github.com/spockframework/spock)
 

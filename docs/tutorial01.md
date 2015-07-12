@@ -41,11 +41,11 @@ You will now have an empty build file open.  Cut and paste the following into th
     }  
 
     dependencies {  
-        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.5')
+        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.6')
     }
     
     vaadin {
-        version '7.4.8'
+        version '7.5.1'
     }
     
     configurations.all {
@@ -178,7 +178,7 @@ and in the *build.gradle* file, add a vaadin closure to declare the widgetset.  
     
 ```groovy
 dependencies {  
-    compile 'uk.q3c.krail:krail:0.9.5'
+    compile 'uk.q3c.krail:krail:0.9.6'
 }
 vaadin {
     widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
@@ -202,14 +202,14 @@ repositories {
 }  
 
 dependencies {  
-    compile 'uk.q3c.krail:krail:0.9.5'
+    compile 'uk.q3c.krail:krail:0.9.6'
 }
 
 
 
 vaadin {
     widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
-    version '7.4.8'
+    version '7.5.1'
     plugin.logToConsole = true
 }
 
