@@ -13,6 +13,6 @@
 package uk.q3c.krail.core.navigate.sitemap;
 
 public enum SitemapSourceType {
-    ANNOTATION, DIRECT, FILE
+    ANNOTATION, DIRECT
 
 }

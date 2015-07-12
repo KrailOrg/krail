@@ -16,10 +16,8 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.server.VaadinService;
-import fixture.TestConfigurationException;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -32,7 +30,6 @@ import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
-import uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceTest.TestFileSitemapModule;
 import uk.q3c.krail.core.services.ServiceException;
 import uk.q3c.krail.core.services.ServiceModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
@@ -49,10 +46,8 @@ import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.krail.testutil.TestPersistenceModule;
 import uk.q3c.util.ResourceUtils;
-import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +62,7 @@ import static org.mockito.Mockito.when;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestDirectSitemapModule.class, TestFileSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class, ServiceModule.class,
+@GuiceContext({TestDirectSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class, ServiceModule.class,
         ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, DefaultShiroModule.class,
         DefaultComponentModule.class, TestPersistenceModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class, TestOptionModule.class,
         NavigationModule.class,
@@ -108,43 +103,9 @@ public class DefaultSitemapServiceTest {
         iniConfig.save();
     }
 
-    @Test
-    public void start() throws Exception {
 
-        // given
-        copySitemapPropertiesToTemp();
-        // when
-        service.start();
-        // then
-        assertThat(service.getReport()).isNotNull();
-        assertThat(service.isStarted()).isTrue();
-        assertThat(sitemap.getNodeCount()).isEqualTo(STANDARD_NODE_COUNT + FILE_NODE_COUNT + DIRECT_NODE_COUNT);
-        assertThat(service.getSourceTypes()).containsOnly(SitemapSourceType.FILE, SitemapSourceType.DIRECT, SitemapSourceType.ANNOTATION);
-        assertThat(sitemap.getReport()).isNotEmpty();
-        System.out.println(sitemap.getReport());
-    }
 
-    /**
-     * Copies a 'good' version of sitemap.properties to the
-     */
-    private void copySitemapPropertiesToTemp() {
 
-        File source = new File(TestResource.testJavaRootDir("krail"), "uk/q3c/krail/core/navigate/sitemap_good" + "" +
-                ".properties");
-
-        if (!source.exists()) {
-            throw new TestConfigurationException("Source file missing");
-        }
-        File destination = new File(ResourceUtils.applicationBaseDirectory(), "sitemap.properties");
-        if (destination.exists()) {
-            destination.delete();
-        }
-        try {
-            FileUtils.copyFile(source, destination);
-        } catch (IOException e) {
-            throw new TestConfigurationException("Unable to copy sitemap.properties", e);
-        }
-    }
 
     @Test
     public void nameAndDescription() {
@@ -173,7 +134,7 @@ public class DefaultSitemapServiceTest {
         assertThat(service.getReport()).isNotNull();
         assertThat(service.isStarted()).isTrue();
         assertThat(sitemap.getNodeCount()).isEqualTo(13);
-        assertThat(service.getSourceTypes()).containsOnly(SitemapSourceType.FILE);
+        assertThat(service.getSourceTypes()).containsOnly();
     }
 
     /**
@@ -196,7 +157,7 @@ public class DefaultSitemapServiceTest {
         assertThat(service.getReport()).isNotNull();
         assertThat(service.isStarted()).isTrue();
         assertThat(sitemap.getNodeCount()).isEqualTo(13);
-        assertThat(service.getSourceTypes()).containsOnly(SitemapSourceType.FILE);
+        assertThat(service.getSourceTypes()).containsOnly();
     }
 
     @Test
@@ -204,7 +165,7 @@ public class DefaultSitemapServiceTest {
         // given
         List<String> sources = new ArrayList<>();
         sources.add("wiggly");
-        sources.add("file");
+        sources.add("direct");
         iniConfig.setDelimiterParsingDisabled(true);
         iniConfig.setProperty(ConfigKeys.SITEMAP_SOURCES, sources);
         iniConfig.setDelimiterParsingDisabled(false);
@@ -215,7 +176,7 @@ public class DefaultSitemapServiceTest {
         // then
         assertThat(service.getReport()).isNotNull();
         assertThat(service.isStarted()).isTrue();
-        assertThat(sitemap.getNodeCount()).isEqualTo(4);
+        assertThat(sitemap.getNodeCount()).isEqualTo(7);
     }
 
     @Test
@@ -275,13 +236,6 @@ public class DefaultSitemapServiceTest {
 
     }
 
-    public static class TestFileSitemapModule extends FileSitemapModule {
 
-        @Override
-        protected void define() {
-            File a = new File(TestResource.testJavaRootDir("krail"), "uk/q3c/krail/core/navigate/sitemap_good" + ".properties");
-            addEntry("a", new SitemapFile(a.getAbsolutePath()));
-        }
-    }
 
 }

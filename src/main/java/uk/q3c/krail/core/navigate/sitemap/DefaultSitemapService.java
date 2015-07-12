@@ -30,10 +30,13 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.MessageFormat;
 import uk.q3c.util.ResourceUtils;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class DefaultSitemapService extends AbstractServiceI18N implements SitemapService {
@@ -41,7 +44,6 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
     private static Logger log = LoggerFactory.getLogger(DefaultSitemapService.class);
     @Dependency
     private final ApplicationConfigurationService configurationService;
-    private final Provider<FileSitemapLoader> fileSitemapLoaderProvider;
     private final MasterSitemap sitemap;
     private final ApplicationConfiguration configuration;
     private final Provider<DirectSitemapLoader> directSitemapLoaderProvider;
@@ -54,7 +56,6 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 
     @Inject
     protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate,
-                                    Provider<FileSitemapLoader> fileSitemapLoaderProvider,
                                     Provider<DirectSitemapLoader> directSitemapLoaderProvider,
                                     Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, MasterSitemap sitemap, SitemapFinisher sitemapFinisher,
                                     ApplicationConfiguration configuration) {
@@ -62,7 +63,6 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
         this.configurationService = configurationService;
         this.annotationSitemapLoaderProvider = annotationSitemapLoaderProvider;
         this.directSitemapLoaderProvider = directSitemapLoaderProvider;
-        this.fileSitemapLoaderProvider = fileSitemapLoaderProvider;
         this.sitemap = sitemap;
         this.sitemapFinisher = sitemapFinisher;
         this.configuration = configuration;
@@ -117,12 +117,7 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
     private void loadSource(SitemapSourceType sourceType) {
         log.debug("Loading Sitemap from {}", sourceType);
         switch (sourceType) {
-            case FILE:
-                FileSitemapLoader fileSitemapLoader = fileSitemapLoaderProvider.get();
-                loaders.add(fileSitemapLoader);
-                fileSitemapLoader.load();
-                loaded = true;
-                return;
+
             case DIRECT:
                 DirectSitemapLoader directSitemapLoader = directSitemapLoaderProvider.get();
                 loaders.add(directSitemapLoader);
@@ -149,7 +144,6 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
      */
     private void extractSourcesFromConfig() {
         List<String> defaultValues = new ArrayList<>();
-        defaultValues.add(SitemapSourceType.FILE.name());
         defaultValues.add(SitemapSourceType.DIRECT.name());
         defaultValues.add(SitemapSourceType.ANNOTATION.name());
         List<Object> list = configuration.getList(ConfigKeys.SITEMAP_SOURCES, defaultValues);
@@ -172,8 +166,8 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 
     }
 
-    public File absolutePathFor(String source) {
-
+    synchronized public File absolutePathFor(@Nonnull String source) {
+        checkNotNull(source);
         if (source.startsWith("/")) {
             return new File(source);
         } else {
@@ -187,20 +181,20 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
         loaded = false;
     }
 
-    public StringBuilder getReport() {
+    public synchronized StringBuilder getReport() {
         return report;
     }
 
     @Override
-    public Sitemap<MasterSitemapNode> getSitemap() {
+    public synchronized Sitemap<MasterSitemapNode> getSitemap() {
         return sitemap;
     }
 
-    public boolean isLoaded() {
+    public synchronized boolean isLoaded() {
         return loaded;
     }
 
-    public ImmutableList<SitemapSourceType> getSourceTypes() {
+    public synchronized ImmutableList<SitemapSourceType> getSourceTypes() {
         return ImmutableList.copyOf(sourceTypes);
     }
 

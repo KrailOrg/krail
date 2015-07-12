@@ -19,7 +19,6 @@ import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.eventbus.GlobalBus;
 import uk.q3c.krail.core.eventbus.SubscribeTo;
 
@@ -62,7 +61,6 @@ import static uk.q3c.krail.core.services.Service.Status.*;
  * <li>you want to subscribe to another event bus as well the {@link GlobalBus}, in which case you will need both {@link Listener} and {@link SubscribeTo}
  * annotations</ol>
  * <p>
- * See the {@link EventBusModule.DefaultEventBusAutoSubscriber#afterInjection(Object)} javadoc for detail
  *
  * @author David Sowerby
  */
@@ -272,12 +270,12 @@ public abstract class AbstractService implements Service {
         return status;
     }
 
+    protected abstract void doStart() throws Exception;
+
     @Override
     public Status getStatus() {
         return status;
     }
-
-    protected abstract void doStart() throws Exception;
 
     private class DependencyRecord {
         Service service;
