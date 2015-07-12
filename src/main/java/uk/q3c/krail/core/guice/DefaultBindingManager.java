@@ -45,6 +45,7 @@ import uk.q3c.krail.core.shiro.aop.KrailShiroAopModule;
 import uk.q3c.krail.core.ui.DataTypeModule;
 import uk.q3c.krail.core.ui.DefaultUIModule;
 import uk.q3c.krail.core.user.UserModule;
+import uk.q3c.krail.core.user.opt.InMemory;
 import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.core.view.ViewModule;
@@ -234,12 +235,14 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
 
 
     /**
-     * Override this if you have provided your own {@link OptionModule}.
+     * Sets the default active source to read/write Option values from / to the in memory store
+     *
+     * Override this if you have provided your own {@link OptionModule} or want to change the active source
      *
      * @return module instance
      */
     protected Module optionModule() {
-        return new OptionModule();
+        return new OptionModule().activeSource(InMemory.class);
     }
 
     /**
