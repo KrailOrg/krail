@@ -54,7 +54,7 @@ public interface Dao<ID, VER> {
     <E extends KrailEntity<ID, VER>> Optional<E> findById(@Nonnull Class<E> entityClass, @Nonnull ID entityId);
 
     /**
-     * Retrieves the table name for the {@code entityClass}.  The name is as defined by metadata, or defaults to the entityClass.getSimpleName()
+     * Retrieves the table name for the {@code entityClass}.  The name is as defined by @Table, or defaults to the entityClass.getSimpleName()
      *
 
      *         
