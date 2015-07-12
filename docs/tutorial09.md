@@ -73,7 +73,7 @@ This is one occasion where it is more desirable to sub-class the relevant Guice 
 ```
 package com.example.tutorial.jpa;
 
-import uk.q3c.krail.persist.jpa.JpaModule;
+import uk.q3c.krail.jpa.persist.JpaModule;
 
 public class TutorialJpaModule extends JpaModule {
 
