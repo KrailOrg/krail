@@ -95,4 +95,14 @@ public class InMemoryPatternDao implements PatternDao {
     public String connectionUrl() {
         return "in-memory";
     }
+
+    /**
+     * returns the number of entries
+     *
+     * @return the number of entries
+     */
+    @Override
+    public long count() {
+        return store.count();
+    }
 }

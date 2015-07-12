@@ -24,7 +24,7 @@ import java.util.*;
 /**
  * Created by David Sowerby on 26/11/14.
  */
-public class PropertiesBundleWriter<E extends Enum<E>> extends BundleWriterBase<E> {
+public class PropertiesBundleWriter<E extends Enum<E>> extends BundleWriterBase {
 
 
     @Inject
@@ -39,7 +39,7 @@ public class PropertiesBundleWriter<E extends Enum<E>> extends BundleWriterBase<
     @Override
     public void write(Locale locale, Optional<String> bundleName) throws IOException {
         Properties properties = new Properties();
-        EnumMap<E, String> entryMap = getBundle().getMap();
+        EnumMap<E, String> entryMap = (EnumMap<E, String>) getBundle().getMap();
 
         //copy to SortedMap so that output is sorted by key
         SortedMap<String, String> sortedMap = new TreeMap<>();
@@ -56,9 +56,16 @@ public class PropertiesBundleWriter<E extends Enum<E>> extends BundleWriterBase<
         if (!targetDir.exists()) {
             FileUtils.forceMkdir(targetDir);
         }
-        FileOutputStream fos = new FileOutputStream(new File(targetDir, bundleNameWithLocale + ".properties"));
 
-        properties.store(fos, "created by PropertiesBundleWriter");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(new File(targetDir, bundleNameWithLocale + ".properties"));
+            properties.store(fos, "created by PropertiesBundleWriter");
+        } finally {
+            if (fos != null) {
+                fos.close();
+            }
+        }
     }
 
     @Override

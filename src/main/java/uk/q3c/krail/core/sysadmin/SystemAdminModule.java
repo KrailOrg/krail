@@ -26,10 +26,6 @@ public class SystemAdminModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(SelectionPanel.class);
-        bindCombinedContainerProvider();
     }
 
-    protected void bindCombinedContainerProvider() {
-        bind(CombinedContainerProvider.class).to(DefaultCombinedContainerProvider.class);
-    }
 }

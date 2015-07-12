@@ -24,14 +24,14 @@ import java.util.Optional;
 /**
  * Created by David Sowerby on 26/11/14.
  */
-public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWriter<E>, OptionContext {
+public abstract class BundleWriterBase implements BundleWriter, OptionContext {
 
 
     private static final OptionKey<String> optionWritePath = new OptionKey<>(ResourceUtils.userTempDirectory()
                                                                                           .getAbsolutePath(), BundleWriterBase.class, LabelKey.Write_Path,
             DescriptionKey.Write_Path);
     protected Option option;
-    private EnumResourceBundle<E> bundle;
+    private EnumResourceBundle bundle;
 
     public BundleWriterBase(Option option) {
         this.option = option;
@@ -60,7 +60,7 @@ public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWrite
         if (bundleName.isPresent()) {
             bundleNameWithLocale = bundleName.get();
         } else {
-            E[] enumConstants = getBundle().getKeyClass()
+            Enum[] enumConstants = getBundle().getKeyClass()
                                            .getEnumConstants();
             if (enumConstants.length == 0) {
                 bundleNameWithLocale = "Unknown";
@@ -77,14 +77,25 @@ public abstract class BundleWriterBase<E extends Enum<E>> implements BundleWrite
         return bundleNameWithLocale;
     }
 
-    public EnumResourceBundle<E> getBundle() {
+    public <E extends Enum<E>> EnumResourceBundle<E> getBundle() {
         return bundle;
     }
 
+    /**
+     * Achieves the same as {@link #setBundle(EnumResourceBundle)}, but obtains the enum class from the {@code sampleKey}
+     *
+     * @param sampleKey
+     */
     @Override
-    public void setBundle(EnumResourceBundle<E> bundle) {
-        this.bundle = bundle;
+    public <E extends Enum<E> & I18NKey> void setBundle(E sampleKey) {
+
+        throw new UnsupportedOperationException("Use setBundle(EnumResourceBundle)");
+
     }
 
+    @Override
+    public <E extends Enum<E>> void setBundle(EnumResourceBundle<E> bundle) {
+        this.bundle = bundle;
+    }
 
 }

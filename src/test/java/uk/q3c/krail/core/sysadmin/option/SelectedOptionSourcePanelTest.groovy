@@ -18,6 +18,7 @@ import uk.q3c.krail.core.persist.PersistenceInfo
 import uk.q3c.krail.core.user.opt.InMemory
 import uk.q3c.krail.core.user.opt.Option
 import uk.q3c.krail.core.user.opt.OptionKey
+import uk.q3c.krail.core.user.opt.OptionPopup
 import uk.q3c.krail.i18n.LabelKey
 import uk.q3c.krail.i18n.Translate
 
@@ -37,8 +38,9 @@ class SelectedOptionSourcePanelTest extends Specification {
     PersistenceInfo persistenceInfo = Mock()
     PersistenceInfo persistenceInfo2 = Mock()
     Option option = Mock()
+    OptionPopup optionPopup = Mock()
 
-    def panel = new SelectedOptionSourcePanel(translate, optionSource, option);
+    def panel = new SelectedOptionSourcePanel(translate, optionSource, option, optionPopup);
 
 
     def setup() {

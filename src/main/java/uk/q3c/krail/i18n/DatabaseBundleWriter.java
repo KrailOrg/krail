@@ -9,16 +9,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.persist;
-
-import uk.q3c.krail.i18n.PatternDao;
+package uk.q3c.krail.i18n;
 
 /**
- * Interface for a provider which identifies and returns the correct source for {@link PatternDao} for Krail core, and returns an instance
+ * Extends BundleWriter so that the Krail developer can change the default implementation for databases
  * <p>
- * Created by David Sowerby on 26/06/15.
+ * Created by David Sowerby on 11/07/15.
  */
-public interface CorePatternDaoProvider {
-
-    PatternDao get();
+public interface DatabaseBundleWriter extends BundleWriter {
 }

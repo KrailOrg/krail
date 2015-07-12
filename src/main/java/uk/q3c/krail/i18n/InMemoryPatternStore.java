@@ -24,4 +24,6 @@ public interface InMemoryPatternStore {
     String get(PatternCacheKey cacheKey);
 
     ImmutableMap<PatternCacheKey, String> getAsMap();
+
+    long count();
 }

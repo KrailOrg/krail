@@ -46,4 +46,9 @@ public class DefaultInMemoryPatternStore implements InMemoryPatternStore {
     public ImmutableMap<PatternCacheKey, String> getAsMap() {
         return ImmutableMap.copyOf(store);
     }
+
+    @Override
+    public long count() {
+        return store.size();
+    }
 }

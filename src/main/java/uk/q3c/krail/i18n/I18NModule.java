@@ -20,9 +20,7 @@ import com.google.inject.multibindings.Multibinder;
 import org.apache.commons.lang3.LocaleUtils;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.core.persist.CorePatternDaoProvider;
 import uk.q3c.krail.core.persist.DefaultActivePatternDao;
-import uk.q3c.krail.core.persist.DefaultCorePatternDaoProvider;
 import uk.q3c.krail.core.user.opt.InMemory;
 import uk.q3c.krail.core.user.opt.Option;
 
@@ -63,7 +61,6 @@ public class I18NModule extends AbstractModule {
 
         bundleSourcesOrder = MapBinder.newMapBinder(binder(), keyClass, setString, BundleSourcesOrder.class);
 
-        bindCorePatternDaoProvider();
         bindProcessor();
         bindCurrentLocale();
 
@@ -74,7 +71,7 @@ public class I18NModule extends AbstractModule {
         bindPatternUtility();
         bindFieldScanner();
         bindHostClassIdentifier();
-        bindDatabaseBundleReader();
+        //        bindDatabaseBundleReader();
 
         bindSupportedLocales();
         bindBundleSources();
@@ -96,20 +93,13 @@ public class I18NModule extends AbstractModule {
                                    .toInstance(annotationClass);
     }
 
-    /**
-     * Override this method to provide your own {@link CorePatternDaoProvider} implementation
-     */
-    protected void bindCorePatternDaoProvider() {
-        bind(CorePatternDaoProvider.class).to(DefaultCorePatternDaoProvider.class);
-    }
 
-
-    /**
-     * Override this method to provide your own implementation of {@link DatabaseBundleReader}
-     */
-    protected void bindDatabaseBundleReader() {
-        bind(DatabaseBundleReader.class).to(DefaultDatabaseBundleReader.class);
-    }
+    //    /**
+    //     * Override this method to provide your own implementation of {@link DatabaseBundleReader}
+    //     */
+    //    protected void bindDatabaseBundleReader() {
+    //        bind(DatabaseBundleReader.class).to(DatabaseBundleReaderBase.class);
+    //    }
 
     /**
      * Binds sources to {@link BundleReader} classes as defined by {@link #prepBundleSources}, setting "class",{@link ClassBundleReader} as default if nothing

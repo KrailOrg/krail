@@ -11,13 +11,13 @@
 
 package uk.q3c.krail.i18n;
 
+import com.google.inject.Provider;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.persist.CorePatternDaoProvider;
 
 import java.util.Optional;
 
@@ -27,23 +27,19 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class DefaultDatabaseBundleReaderTest {
-
+public class DatabaseBundleReaderBaseTest {
 
     @Mock
-    CorePatternDaoProvider patternDaoProvider;
-
+    Provider<PatternDao> patternDaoProvider;
     @Mock
     PatternDao patternDao;
-
     @Mock
     PatternCacheKey cacheKey1;
-
-    DefaultDatabaseBundleReader reader;
+    DatabaseBundleReaderBase reader;
 
     @Before
     public void setup() {
-        reader = new DefaultDatabaseBundleReader(patternDaoProvider);
+        reader = new TestDatabaseBundleReader(patternDaoProvider);
         when(patternDaoProvider.get()).thenReturn(patternDao);
     }
 
@@ -78,5 +74,12 @@ public class DefaultDatabaseBundleReaderTest {
         reader.writeStubValue(cacheKey1, value);
         //then
         verify(patternDao).write(cacheKey1, value);
+    }
+
+    class TestDatabaseBundleReader extends DatabaseBundleReaderBase {
+
+        protected TestDatabaseBundleReader(Provider<PatternDao> patternDaoProvider) {
+            super(patternDaoProvider);
+        }
     }
 }

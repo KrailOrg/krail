@@ -12,27 +12,28 @@
 package uk.q3c.krail.i18n;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.data.DataModule;
-import uk.q3c.krail.core.persist.CorePatternDaoProvider;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
- * Default database implementation of BundleReader.  The binding for {@link PatternDao} is in {@link DataModule}
- *
+ * Base implementation of {@link BundleReader} for database sources. Sub-class to provide the appropriate {@code patternDaoProvider}, and include the
+ * sub-class as an
+ * I18N source by calling {@link I18NModule#bundleSource(String, Class)}.
+ * <p>
  * Created by David Sowerby on 16/04/15.
  */
-public class DefaultDatabaseBundleReader extends BundleReaderBase implements DatabaseBundleReader {
-    private static Logger log = LoggerFactory.getLogger(DefaultDatabaseBundleReader.class);
-    private CorePatternDaoProvider patternDaoProvider;
+public abstract class DatabaseBundleReaderBase extends BundleReaderBase implements DatabaseBundleReader {
+    private static Logger log = LoggerFactory.getLogger(DatabaseBundleReaderBase.class);
+    private Provider<PatternDao> patternDaoProvider;
 
     @Inject
-    protected DefaultDatabaseBundleReader(CorePatternDaoProvider patternDaoPrvoider) {
+    protected DatabaseBundleReaderBase(Provider<PatternDao> patternDaoProvider) {
         super();
-        this.patternDaoProvider = patternDaoPrvoider;
+        this.patternDaoProvider = patternDaoProvider;
     }
 
 

@@ -66,4 +66,11 @@ public interface PatternDao {
      * @return the connection url
      */
     String connectionUrl();
+
+    /**
+     * returns the number of entries
+     *
+     * @return the number of entries
+     */
+    long count();
 }
