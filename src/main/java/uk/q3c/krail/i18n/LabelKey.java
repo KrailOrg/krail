@@ -74,7 +74,8 @@ public enum LabelKey implements I18NKey {
     SubPage_Panel_is_Visible, System_Administration, Sitemap_Build_Report, Information, Notification_Options, Reset_to_Default, Username_Cannot_be_Empty,
     Password_Cannot_be_Empty, Application_Options, Options, Description, Connection_URL, Source_Data, In_Memory, Name, Active_Source, Selected_Source,
     Option_Source_Selection, Is_Volatile, Name_Caption_Style, Name_Style, Description_Caption_Style, Description_Style, Default_Caption_Style,
-    Default_Value_Style, Connection_url_Caption_Style, Connection_url_Style, Is_volatile_Caption_Style, Is_volatile_Style, Yes
+    Default_Value_Style, Connection_url_Caption_Style, Connection_url_Style, Is_volatile_Caption_Style, Is_volatile_Style, I18N, Export, Progress, Locales,
+    Retrieving_Locales, Looking_for_Database_Writer, Export_complete, Yes
 
 
 }

@@ -11,17 +11,22 @@
 
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.validation.ValidationKey;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
+ *
+ * Utilities methods to manipulate I18N Patterns
+ *
  * Created by David Sowerby on 14/12/14.
  */
 public class DefaultPatternUtility implements PatternUtility {
@@ -35,31 +40,21 @@ public class DefaultPatternUtility implements PatternUtility {
     }
 
     /**
-     * Write out the keys and values for the combined {@code sources}.  This method calls {@link
-     * PatternSource#retrievePattern (Enum, Locale)} for each key in {@code keyClass}, then writes out all the keys
-     * and values using the {@code writer}.  Keys without values will have a value assigned of the key.name(), with
-     * underscores replaced by spaces, so the output will always list all keys.
-     * <p>
-     * This method effectively merges all the keys for all the sources, using the source ordering provided in {@link
-     * PatternSource}, and fills in any missing values according to the auto-stub {@link Option} settings in the {@link
-     * PatternCacheLoader}
-     *
-     * @param writer
-     *         the BundleWriter implementation to use
-     * @param keyClass
-     * @param locales
-     *         the locales to write out.  For class and property writers multiple locales will output multiple files
-     * @param bundleName
-     *         optionally use a bundle name different to that defined by the {@code keyClass}
+     * {@inheritDoc}
      */
     @Override
-    public <E extends Enum<E> & I18NKey> void writeOut(BundleWriter writer, Class<E> keyClass, Set<Locale> locales,
-                                                       Optional<String> bundleName) throws IOException {
+    public <E extends Enum<E> & I18NKey> void writeOut(@Nonnull BundleWriter writer, @Nonnull Class<E> keyClass, @Nonnull Set<Locale> locales, @Nonnull
+    Optional<String> bundleName) throws IOException {
+
+        checkNotNull(writer);
+        checkNotNull(keyClass);
+        checkNotNull(locales);
+        checkNotNull(bundleName);
         E[] keys = keyClass.getEnumConstants();
 
 
         for (Locale locale : locales) {
-            DirectResourceBundle bundle = new DirectResourceBundle(keyClass);
+            DirectResourceBundle<E> bundle = new DirectResourceBundle<>(keyClass);
             for (E key : keys) {
                 String pattern = patternSource.retrievePattern(key, locale);
                 bundle.put(key, pattern);
@@ -70,25 +65,21 @@ public class DefaultPatternUtility implements PatternUtility {
     }
 
     /**
-     * Write out the keys and values for a specific source and locale,  Only those keys which have a value assigned
-     * (which could be an empty String) are written out.
-     *
-     * @param writer
-     *         the BundleWriter implementation to use @param keyClass
-     * @param locale
-     *         the locale to write out.
-     * @param bundleName
-     *         optionally use a bundle name different to that defined by the {@code keyClass}
+     * {@inheritDoc}
      */
     @Override
-    public <E extends Enum<E> & I18NKey> void writeOutExclusive(String source, BundleWriter writer, Class<E>
-            keyClass, Locale locale, Optional<String> bundleName) throws IOException {
-        Preconditions.checkNotNull(source);
+    public <E extends Enum<E> & I18NKey> void writeOutExclusive(@Nonnull String source, @Nonnull BundleWriter writer, @Nonnull Class<E> keyClass, @Nonnull
+    Locale locale, @Nonnull Optional<String> bundleName) throws IOException {
+        checkNotNull(source);
+        checkNotNull(writer);
+        checkNotNull(keyClass);
+        checkNotNull(locale);
+        checkNotNull(bundleName);
         E[] keys = keyClass.getEnumConstants();
         BundleReader reader = bundleReaders.get(source);
 
 
-        DirectResourceBundle bundle = new DirectResourceBundle(keyClass);
+        DirectResourceBundle<E> bundle = new DirectResourceBundle<>(keyClass);
         for (E key : keys) {
             PatternCacheKey cacheKey = new PatternCacheKey(key, locale);
             Optional<String> value = reader.getValue(cacheKey, source, false, false, source);
@@ -99,5 +90,46 @@ public class DefaultPatternUtility implements PatternUtility {
         writer.setBundle(bundle);
         writer.write(locale, bundleName);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void exportKeysToDatabase(@Nonnull Set<Locale> locales, @Nonnull DatabaseBundleWriter writer) throws IOException {
+        checkNotNull(writer);
+        checkNotNull(locales);
+        export(LabelKey.Yes, locales, writer);
+        export(MessageKey.Invalid_URI, locales, writer);
+        export(DescriptionKey.Auto_Stub, locales, writer);
+        export(ValidationKey.AssertFalse, locales, writer);
+    }
+
+
+    /**
+     * Writes out all the keys for each Locale
+     *
+     * @param sampleKey
+     *         sample key to identify the bundle
+     * @param locales
+     *         the locales that need to be written
+     * @param writer
+     *         the writer to use to write
+     * @param <E>
+     *         an I18NKey
+     *
+     * @throws IOException
+     *         if the write fails
+     */
+    protected <E extends Enum<E> & I18NKey> void export(@Nonnull E sampleKey, @Nonnull Set<Locale> locales, @Nonnull DatabaseBundleWriter writer) throws IOException {
+        checkNotNull(writer);
+        checkNotNull(locales);
+        checkNotNull(sampleKey);
+        for (Locale locale : locales) {
+            writer.setBundle(sampleKey);
+            writer.write(locale, Optional.empty());
+        }
+    }
+
+
 
 }

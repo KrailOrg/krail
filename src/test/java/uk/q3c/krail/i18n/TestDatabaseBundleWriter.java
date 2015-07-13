@@ -11,17 +11,16 @@
 
 package uk.q3c.krail.i18n;
 
-/**
- * Extends BundleWriter so that the Krail developer can change the default implementation for databases
- * <p>
- * Created by David Sowerby on 11/07/15.
- */
-public interface DatabaseBundleWriter extends BundleWriter {
+import com.google.inject.Provider;
 
-    /**
-     * Returns the number of Pattern entries there are in the database
-     *
-     * @return the number of Pattern entries there are in the database
-     */
-    long count();
+/**
+ * Test implementation of a {@link DatabaseBundleWriter}
+ * <p>
+ * Created by David Sowerby on 12/07/15.
+ */
+public class TestDatabaseBundleWriter extends DatabaseBundleWriterBase {
+
+    protected TestDatabaseBundleWriter(Provider<PatternDao> patternDaoProvider, Translate translate) {
+        super(patternDaoProvider, translate);
+    }
 }

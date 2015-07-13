@@ -13,12 +13,14 @@ package uk.q3c.krail.core.sysadmin;
 
 import com.google.inject.AbstractModule;
 import uk.q3c.krail.core.sysadmin.option.SelectionPanel;
+import uk.q3c.krail.util.Experimental;
 
 /**
  * Configuration for non-page related system admin elements
  * <p>
  * Created by David Sowerby on 30/06/15.
  */
+@Experimental
 public class SystemAdminModule extends AbstractModule {
     /**
      * {@inheritDoc}

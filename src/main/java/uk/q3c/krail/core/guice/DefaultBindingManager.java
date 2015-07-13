@@ -18,6 +18,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
+import com.google.inject.util.Modules;
 import org.apache.bval.guice.ValidationModule;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -229,8 +230,10 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      *         the list used to collect modules for injector creation
      */
     protected void addValidationModules(List<Module> modules) {
-        modules.add(new ValidationModule());
-        modules.add(new KrailValidationModule());
+
+        final Module validationModule = Modules.override(new ValidationModule())
+                                               .with(new KrailValidationModule());
+        modules.add(validationModule);
     }
 
 

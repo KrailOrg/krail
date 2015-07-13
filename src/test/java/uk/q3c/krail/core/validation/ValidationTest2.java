@@ -11,10 +11,11 @@
 
 package uk.q3c.krail.core.validation;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.google.inject.Provider;
+import com.google.inject.util.Modules;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
@@ -45,7 +46,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by David Sowerby on 05/02/15.
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({ValidationModule.class, TestOptionModule.class, TestPersistenceModule.class, TestI18NModule.class, EventBusModule.class, TestUIScopeModule
+@GuiceContext({ TestOptionModule.class, TestPersistenceModule.class, TestI18NModule.class, EventBusModule.class, TestUIScopeModule
         .class, VaadinSessionScopeModule
         .class})
 public class ValidationTest2 {
@@ -136,14 +137,20 @@ public class ValidationTest2 {
     }
 
     @ModuleProvider
-    protected AbstractModule moduleProvider() {
-        return new TestModule();
+    protected Module moduleProvider() {
+        return Modules.override(new ValidationModule()).with(new TestModule());
     }
 
     private class TestModule extends KrailValidationModule {
         @Override
         protected void configure() {
             super.configure();
+
+        }
+
+        // use just one for this test
+        @Override
+        protected void substituteJavaxMessagesWithKrailKeys() {
             addJavaxValidationSubstitute(Min.class, TestValidationKey.Too_Big);
         }
     }

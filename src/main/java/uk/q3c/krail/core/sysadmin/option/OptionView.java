@@ -19,6 +19,7 @@ import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Caption;
 import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.util.Experimental;
 
 import static uk.q3c.krail.i18n.DescriptionKey.*;
 
@@ -27,6 +28,7 @@ import static uk.q3c.krail.i18n.DescriptionKey.*;
  * <p>
  * Created by David Sowerby on 30/06/15.
  */
+@Experimental
 public class OptionView extends ViewBase {
 
     @Caption(caption = LabelKey.Active_Source, description = The_Option_Source_currently_in_use)

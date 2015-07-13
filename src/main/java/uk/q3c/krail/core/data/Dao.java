@@ -66,7 +66,7 @@ public interface Dao<ID, VER> {
      * @return the table name
      */
     @Nonnull
-    <E extends KrailEntity<ID, VER>> String tableName(@Nonnull Class<E> entityClass);
+    <E extends KrailEntity<ID, VER>> String entityName(@Nonnull Class<E> entityClass);
 
     /**
      * Deletes {@code entity}, or fails silently if {@code entity} is not in the database.

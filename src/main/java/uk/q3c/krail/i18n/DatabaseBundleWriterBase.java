@@ -60,7 +60,7 @@ public abstract class DatabaseBundleWriterBase implements DatabaseBundleWriter {
         Enum[] constants = enumClass.getEnumConstants();
         for (Enum e : constants) {
             I18NKey i18NKey = (I18NKey) e;
-            String value = translate.from(i18NKey, locale);
+            String value = translate.from(false, i18NKey, locale);
             doWrite(e, locale, value);
         }
     }
@@ -71,5 +71,14 @@ public abstract class DatabaseBundleWriterBase implements DatabaseBundleWriter {
         PatternCacheKey cacheKey = new PatternCacheKey(key1, locale);
         patternDaoProvider.get()
                           .write(cacheKey, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long count() {
+        return patternDaoProvider.get()
+                                 .count();
     }
 }

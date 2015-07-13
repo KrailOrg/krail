@@ -9,19 +9,14 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.i18n;
+package uk.q3c.krail.util;
 
 /**
- * Extends BundleWriter so that the Krail developer can change the default implementation for databases
+ * Identifies code which should be considered Experimental - it is not thoroughly tested, will probably change a lot, and may even disappear altogether.  On
+ * the
+ * other hand it may evolve into something really useful!
  * <p>
- * Created by David Sowerby on 11/07/15.
+ * Created by David Sowerby on 13/07/15.
  */
-public interface DatabaseBundleWriter extends BundleWriter {
-
-    /**
-     * Returns the number of Pattern entries there are in the database
-     *
-     * @return the number of Pattern entries there are in the database
-     */
-    long count();
+public @interface Experimental {
 }

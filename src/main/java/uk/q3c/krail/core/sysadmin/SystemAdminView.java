@@ -20,10 +20,12 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Caption;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.util.Experimental;
 
 /**
  * Created by David Sowerby on 24/05/15.
  */
+@Experimental
 public class SystemAdminView extends Grid3x3ViewBase {
     @Caption(caption = LabelKey.Sitemap_Build_Report, description = DescriptionKey.Report_generated_by_the_Sitemap_build_process)
     private Button buildReportBtn;

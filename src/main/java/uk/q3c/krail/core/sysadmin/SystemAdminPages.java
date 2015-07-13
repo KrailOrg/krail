@@ -15,6 +15,7 @@ import uk.q3c.krail.core.navigate.sitemap.DirectSitemapModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.sysadmin.option.OptionView;
 import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.util.Experimental;
 
 /**
  * <b>Note:</b> This module and its associated pages is experimental and will probably change a lot.  Installs {@link SystemAdminModule}
@@ -22,6 +23,7 @@ import uk.q3c.krail.i18n.LabelKey;
  * <p>
  * Created by David Sowerby on 24/05/15.
  */
+@Experimental
 public class SystemAdminPages extends DirectSitemapModule {
 
     public SystemAdminPages() {
@@ -39,5 +41,6 @@ public class SystemAdminPages extends DirectSitemapModule {
         addEntry("", SystemAdminView.class, LabelKey.System_Administration, PageAccessControl.PERMISSION);
         addEntry("sitemap-build-report", SitemapReportView.class, LabelKey.Sitemap_Build_Report, PageAccessControl.PERMISSION);
         addEntry("option", OptionView.class, LabelKey.Options, PageAccessControl.PERMISSION);
+        addEntry("i18n", I18NView.class, LabelKey.I18N, PageAccessControl.PERMISSION);
     }
 }

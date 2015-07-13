@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import uk.q3c.krail.core.data.KrailEntity;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.MessageInterpolator;
 import javax.validation.Validator;
 import java.util.Set;
 
@@ -27,13 +28,13 @@ import java.util.Set;
 public class DefaultBeanValidator<T extends KrailEntity> implements BeanValidator<T> {
 
     private final Validator javaxValidator;
-    private final KrailInterpolator krailInterpolator;
+    private final MessageInterpolator krailInterpolator;
     private Class<T> beanClass;
     private String propertyName;
     private boolean useFieldNameInValidationMessage;
 
     @Inject
-    public DefaultBeanValidator(Validator javaxValidator, KrailInterpolator krailInterpolator) {
+    public DefaultBeanValidator(Validator javaxValidator, MessageInterpolator krailInterpolator) {
         this.javaxValidator = javaxValidator;
         this.krailInterpolator = krailInterpolator;
     }

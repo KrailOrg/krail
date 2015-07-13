@@ -19,10 +19,12 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Caption;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.util.Experimental;
 
 /**
  * Created by David Sowerby on 24/05/15.
  */
+@Experimental
 public class SitemapReportView extends Grid3x3ViewBase {
 
 

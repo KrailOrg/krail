@@ -12,8 +12,12 @@
 package uk.q3c.krail.core.validation;
 
 import com.google.inject.Inject;
+import com.google.inject.Module;
+import com.google.inject.util.Modules;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
+import org.apache.bval.Validate;
 import org.apache.bval.guice.ValidationModule;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,17 +41,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, ValidationModule.class, KrailValidationModule.class, EventBusModule
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class,  EventBusModule
         .class, UIScopeModule.class,
         VaadinSessionScopeModule.class})
-public class DefaultKrailInterpolatorTest {
+public class KrailInterpolatorTest {
 
     @Mock
     SimpleContext context;
     @Mock
     ConstraintDescriptor constraintDescriptor;
     @Inject
-    private DefaultKrailInterpolator interpolator;
+    private KrailInterpolator interpolator;
 
     @Before
     public void setup() {
@@ -90,4 +94,14 @@ public class DefaultKrailInterpolatorTest {
         //then
         assertThat(actual).isEqualTo("testValue is far too big, it should be less than 5");
     }
+
+
+    @ModuleProvider
+    protected Module validationModule(){
+        return Modules.override(new ValidationModule()).with(new KrailValidationModule()        );
+    }
+
+
+
+
 }

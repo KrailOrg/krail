@@ -15,6 +15,8 @@ package uk.q3c.krail.i18n;
 import com.google.inject.Inject;
 import uk.q3c.util.MessageFormat;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.Collator;
 import java.util.*;
 
@@ -31,17 +33,18 @@ public class DefaultTranslate implements Translate {
 
     private final CurrentLocale currentLocale;
     private final Set<Locale> supportedLocales;
-    private PatternSource patternSource;
+    private final PatternSource patternSource;
 
     /**
-     * Creates a local TreeMap copy (to sort by key)
-     *
      * @param patternSource
+     *         the source for I18N patterns
      * @param currentLocale
+     *         the locale for the current user
+     * @param supportedLocales
+     *         the Locales that this application supports
      */
     @Inject
-    protected DefaultTranslate(PatternSource patternSource, CurrentLocale
-            currentLocale, @SupportedLocales Set<Locale> supportedLocales) {
+    protected DefaultTranslate(PatternSource patternSource, CurrentLocale currentLocale, @SupportedLocales Set<Locale> supportedLocales) {
         super();
         this.patternSource = patternSource;
         this.supportedLocales = supportedLocales;
@@ -50,31 +53,25 @@ public class DefaultTranslate implements Translate {
 
 
     /**
-     * The same as {@link #from(I18NKey, Locale, Object...)}, but using {@link #currentLocale}
-     *
-     * @param key
-     *         the key to look up the I18N pattern
-     * @param arguments
-     *         the arguments used to expand the pattern, if required
-     *
-     * @return the translated value, or "key is null" if {@code key} is null
+     * {@inheritDoc}
      */
+    @Nonnull
     @Override
-    public String from(I18NKey key, Object... arguments) {
+    public String from(@Nullable I18NKey key, Object... arguments) {
         return from(key, currentLocale.getLocale(), arguments);
     }
 
     /**
      * Iterates through {@link #patternSource} in ascending order (the order need not be sequential), and returns the
      * first pattern found for {@code key}.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * If the key does not provide a pattern from any of the sources, and key is an Enum, the enum.name() is returned.
      * Before returning the enum.name(), underscores are replaced with spaces.
-     * <p/>
+     * <p>
      * If the key does not provide a pattern from any of the sources, and key is not an Enum, the key.toString() is
      * returned
-     * <p/>
+     * <p>
      * If arguments are supplied, these are applied to the pattern.  If key is null, a String "key is null"
      * is returned.  Any arguments which are also I18NKey types are also translated
      *
@@ -83,21 +80,24 @@ public class DefaultTranslate implements Translate {
      * @param arguments
      *         the arguments used to expand the pattern, if required
      *
-     * @throws UnsupportedLocaleException if locale is not in {@link #supportedLocales}
-     *
      * @return the translated value as described above, or "key is null" if {@code key} is null
+     *
+     * @throws UnsupportedLocaleException
+     *         if locale is not in {@link #supportedLocales}
      */
+    @Nonnull
     @Override
-    public <E extends Enum<E> & I18NKey> String from(I18NKey key, Locale locale, Object... arguments) {
-        if (!supportedLocales.contains(locale)) {
-            throw new UnsupportedLocaleException(locale);
+    public <E extends Enum<E> & I18NKey> String from(boolean checkLocaleIsSupported, @Nullable I18NKey key, @Nonnull Locale locale, Object... arguments) {
+        if (checkLocaleIsSupported) {
+            if (!supportedLocales.contains(locale)) {
+                throw new UnsupportedLocaleException(locale);
+            }
         }
         if (key == null) {
             return "key is null";
         }
-        E k = typeBridge(key);
-        String pattern = patternSource.retrievePattern((E) key, locale);
-
+        //        E k = typeBridge(key);
+        String pattern = patternSource.retrievePattern((Enum) key, locale);
 
 
         //If no arguments, return the pattern as it is
@@ -106,30 +106,29 @@ public class DefaultTranslate implements Translate {
         }
 
         // If any of the arguments are I18NKeys, translate them as well
-        List<Object> args = new ArrayList(Arrays.asList(arguments));
+        List<Object> args = new ArrayList<>(Arrays.asList(arguments));
         for (int i = 0; i < args.size(); i++) {
             if (args.get(i) instanceof I18NKey) {
-                String translation = from((E) args.get(i));
+                @SuppressWarnings("unchecked") String translation = from((E) args.get(i));
                 args.remove(i);
                 args.add(i, translation);
             }
         }
-        String result = MessageFormat.format(pattern, args.toArray());
-        return result;
+        return MessageFormat.format(pattern, args.toArray());
     }
 
     /**
-     * convenience method to get Collator instance for the {@link CurrentLocale}
-     *
-     * @return
+     * {@inheritDoc}
      */
+    @Override
+    public String from(@Nullable I18NKey key, @Nonnull Locale locale, Object... arguments) {
+        return from(true, key, locale, arguments);
+    }
+
+
     @Override
     public Collator collator() {
         return Collator.getInstance(currentLocale.getLocale());
-    }
-
-    private <E extends Enum<E> & I18NKey> E typeBridge(I18NKey k) {
-        return (E) k;
     }
 
 

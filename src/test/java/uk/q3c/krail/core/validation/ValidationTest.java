@@ -13,9 +13,12 @@ package uk.q3c.krail.core.validation;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.google.inject.Provider;
+import com.google.inject.util.Modules;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
+import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.data.Validator;
 import org.apache.bval.guice.ValidationModule;
 import org.apache.commons.lang.StringUtils;
@@ -44,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by David Sowerby on 05/02/15.
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({KrailValidationModule.class, ValidationModule.class, TestOptionModule.class, TestPersistenceModule.class, TestI18NModule.class, EventBusModule
+@GuiceContext({TestOptionModule.class, TestPersistenceModule.class, TestI18NModule.class, EventBusModule
         .class, TestUIScopeModule
         .class, VaadinSessionScopeModule.class})
 public class ValidationTest {
@@ -197,7 +200,21 @@ public class ValidationTest {
             //then
             assertThat(msg).isEqualTo("not a well-formed email address");
         }
+    }
 
+    @Test
+    public void methodValidation() {
+        //given
 
+        //when
+
+        //then
+        assertThat(true).isFalse();
+    }
+
+    @ModuleProvider
+    protected Module moduleProvider() {
+        return Modules.override(new ValidationModule())
+                      .with(new KrailValidationModule());
     }
 }

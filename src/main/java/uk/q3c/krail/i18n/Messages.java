@@ -50,6 +50,11 @@ public class Messages extends EnumResourceBundle<MessageKey> {
         put(Option_Source_Order_Default, "The default source order to be used for a bundle, unless overridden by {0}");
         put(Option_Source_Order, "The source order to be used for bundle: {0}");
         put(Button_is_Visible, "The {0} button is visible");
+        put(I18NKey_export_failed, "The export of I18N Keys failed with an exception.  The exception message was:\n\n {0} ");
+        put(Invalid_Locale_Langugage_Tag, "'{0}' is not a valid Locale language tag.  See Locale.Builder().setLanguageTag()");
+        put(Keys_exported, "{0} keys were exported across {1} locales ");
+        put(Setup_I18NKey_export, "List the Locales you want to export below, then press {0}. \n\n Note that no check is made that the Locales you select are" + " supported by your application - this is to allow the export before you configure the supported Locales.");
+        put(All_Keys_exported, "All the Krail core keys will be exported - LabelKey, DescriptionKey, MessageKey and ValidationKey");
     }
 
 

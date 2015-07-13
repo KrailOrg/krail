@@ -15,10 +15,13 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
-import com.google.inject.multibindings.Multibinder;
+import org.apache.bval.constraints.Email;
+import org.apache.bval.constraints.NotEmpty;
 import org.apache.bval.guice.ValidationModule;
 import uk.q3c.krail.i18n.I18NKey;
 
+import javax.validation.MessageInterpolator;
+import javax.validation.constraints.*;
 import java.lang.annotation.Annotation;
 
 /**
@@ -30,7 +33,6 @@ import java.lang.annotation.Annotation;
 public class KrailValidationModule extends AbstractModule {
 
 
-    private Multibinder<Class<? extends I18NKey>> fieldNameBundles;
     private MapBinder<Class<? extends Annotation>, I18NKey> javaxValidationSubstitutes;
 
     /**
@@ -38,8 +40,9 @@ public class KrailValidationModule extends AbstractModule {
      */
     @Override
     protected void configure() {
-        TypeLiteral<Class<? extends Annotation>> annotationTypeLiteral = new TypeLiteral<Class<? extends Annotation>>
-                () {
+
+
+        TypeLiteral<Class<? extends Annotation>> annotationTypeLiteral = new TypeLiteral<Class<? extends Annotation>>() {
         };
         TypeLiteral<I18NKey> i18NKeyTypeLiteral = new TypeLiteral<I18NKey>() {
         };
@@ -47,19 +50,51 @@ public class KrailValidationModule extends AbstractModule {
         TypeLiteral<Class<? extends I18NKey>> i18NclassTypeLiteral = new TypeLiteral<Class<? extends I18NKey>>() {
         };
 
-        javaxValidationSubstitutes = MapBinder.newMapBinder(binder(), annotationTypeLiteral, i18NKeyTypeLiteral,
-                JavaxValidationSubstitutes.class);
+        javaxValidationSubstitutes = MapBinder.newMapBinder(binder(), annotationTypeLiteral, i18NKeyTypeLiteral, JavaxValidationSubstitutes.class);
 
-        fieldNameBundles = Multibinder.newSetBinder(binder(), i18NclassTypeLiteral, FieldNameBundles.class);
 
         bindMessageInterpolator();
         bindBeanValidator();
+        substituteJavaxMessagesWithKrailKeys();
         define();
     }
 
+
+    protected void substituteJavaxMessagesWithKrailKeys() {
+        addJavaxValidationSubstitute(Min.class, ValidationKey.Min);
+        addJavaxValidationSubstitute(Max.class, ValidationKey.Max);
+        addJavaxValidationSubstitute(Size.class, ValidationKey.Size);
+        addJavaxValidationSubstitute(Digits.class, ValidationKey.Digits);
+        addJavaxValidationSubstitute(AssertFalse.class, ValidationKey.AssertFalse);
+        addJavaxValidationSubstitute(AssertTrue.class, ValidationKey.AssertTrue);
+        addJavaxValidationSubstitute(DecimalMax.class, ValidationKey.DecimalMax);
+        addJavaxValidationSubstitute(DecimalMin.class, ValidationKey.DecimalMin);
+        addJavaxValidationSubstitute(Email.class, ValidationKey.Email);
+        addJavaxValidationSubstitute(Future.class, ValidationKey.Future);
+        addJavaxValidationSubstitute(Past.class, ValidationKey.Past);
+        addJavaxValidationSubstitute(NotEmpty.class, ValidationKey.NotEmpty);
+        addJavaxValidationSubstitute(NotNull.class, ValidationKey.NotNull);
+        addJavaxValidationSubstitute(Null.class, ValidationKey.Null);
+        addJavaxValidationSubstitute(Pattern.class, ValidationKey.Pattern);
+    }
+
     /**
-     * Override this method to make your calls to {@link #addJavaxValidationSubstitute(Class, I18NKey)} and
-     * {@link #addFieldNameBundle(Class)}
+     * Map a validation annotation to an I18NKey.  This allows the default message key associated with the annotation
+     * to be replaced by a Krail I18N message where desired. Called by {@link #substituteJavaxMessagesWithKrailKeys} to map ALL the BVal annotations to Krail
+     * keys, so it is unlikely there will be a need to call this method directly
+     *
+     * @param annotationClass
+     *         the BVal (or javax) annotation
+     * @param key
+     *         the I18NKey to use as the message pattern
+     */
+    protected void addJavaxValidationSubstitute(Class<? extends Annotation> annotationClass, I18NKey key) {
+        javaxValidationSubstitutes.addBinding(annotationClass)
+                                  .toInstance(key);
+    }
+
+    /**
+     * Override this method to make your calls to {@link #addJavaxValidationSubstitute(Class, I18NKey)}
      */
     protected void define() {
 
@@ -69,33 +104,9 @@ public class KrailValidationModule extends AbstractModule {
         bind(BeanValidator.class).to(DefaultBeanValidator.class);
     }
 
-
     private void bindMessageInterpolator() {
-        bind(KrailInterpolator.class).to(DefaultKrailInterpolator.class);
+        bind(MessageInterpolator.class).to(KrailInterpolator.class);
     }
 
-    /**
-     * Map a validation annotation to an I18NKey.  This allows the default message key associated with the annotation
-     * to be replaced by a Krail I18N message where desired.
-     *
-     * @param annotationClass
-     * @param key
-     */
-    protected void addJavaxValidationSubstitute(Class<? extends Annotation> annotationClass, I18NKey key) {
-        // TODO validate the annotation
-        javaxValidationSubstitutes.addBinding(annotationClass)
-                                  .toInstance(key);
-    }
 
-    /**
-     * If you want to use {{@link I18NKey}s to translate field (property) names as part of the validation messages, add
-     * the bundle class here.  You can specify more than one, but the first one that returns a match for a field name
-     * will be used.
-     *
-     * @param clazz
-     */
-    protected <E extends Enum<E> & I18NKey> void addFieldNameBundle(Class<E> clazz) {
-        fieldNameBundles.addBinding()
-                        .toInstance(clazz);
-    }
 }

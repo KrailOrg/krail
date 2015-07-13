@@ -11,21 +11,30 @@
 
 package uk.q3c.krail.core.validation;
 
-import com.google.inject.BindingAnnotation;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import uk.q3c.krail.i18n.I18NKey;
 
 /**
- * Binding annotation to identify a map of substitutes for javax.validation messages
+ * {@link I18NKey} for Apache Bval validation messages.  The messages themselves have been transposed from BVal to {@link Validations}, with some
+ * translations (See sub-classes of {@link Validations}}
  * <p>
- * Created by David Sowerby on 06/02/15.
+ * Created by David Sowerby on 14/07/15.
  */
-@BindingAnnotation
-@Target({FIELD, PARAMETER, METHOD})
-@Retention(RUNTIME)
-public @interface FieldNameBundles {
+public enum ValidationKey implements I18NKey {
+
+    Null,
+    NotNull,
+    AssertTrue,
+    AssertFalse,
+    Min,
+    Max,
+    Size,
+    Digits,
+    Past,
+    Future,
+    Pattern,
+    DecimalMax,
+    DecimalMin,
+    NotEmpty,
+    Email
+
 }

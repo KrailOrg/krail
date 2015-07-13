@@ -31,7 +31,8 @@ A key class represents a "bundle".
 ##The Bundle
 
 The term "bundle" is used throughout native Java I18N support and Krail uses the term in a similar way.  It represents an arbitrary set of keys and the collection of patterns, of potentially multiple languages, that go with the keys.  An enum implementation I18NKey class therefore represents a set of keys for a bundle.
-Bundle Reader
+
+##Bundle Reader
 
 Patterns potentially come from different sources.  Krail supports the property file system used by native Java.  It also provides a class based implementation, and the Krail JPA module provides a database implementation.  All of these - and others if required - implement a BundleReader interface to read a pattern from a file, class, database - perhaps a web service - or wherever the implementation is designed to work with. 
 
@@ -43,11 +44,11 @@ Patterns potentially come from different sources.  Krail supports the property f
 
 ##Pattern Source
 
-The PatternSource combines inputs from potentially multiple Bundle readers into one source.  This is configurable through I18NModule to query the readers in whatever order is required, if necessary a different order for each Bundle.
+The ```PatternSource``` combines inputs from potentially multiple ```BundleReader```s into one source.  This is configurable through ```I18NModule``` to query the readers in whatever order is required - the first to return a value is used. If necessary a different order for each Bundle, so a database source could be the primary for one bundle and secondary for another.
 
 ##Translate
 
-The Translate class is the final step in bringing the pieces together.  It looks up the pattern for a Locale, via the PatternSource, and combines that with the parameter values it is given.  For the example above the call would be:
+The Translate class is the final step in bringing the pieces together.  It looks up the pattern for a ```Locale```, via the ```PatternSource```, and combines that with the parameter values it is given.  For the example above the call would be:
 
 translate.from (MessageKey.Task_Completion, Locale.UK, 5, "last", 20)
 
@@ -63,10 +64,11 @@ You do not always have to specify the Locale - the default is to use CurrentLoca
 
 ##Current Locale
 
-The CurrentLocale implementation holds the currently selected locale for the user.  The default implementation checks things like the browser locale and user options to decide which locale to use. CurrentLocale can be injected anywhere it is required, and the Translate class will use it if no specific Locale is supplied when calling the from() method.
-Configuration
+The ```CurrentLocale``` implementation holds the currently selected locale for the user.  The default implementation checks things like the browser locale and user options to decide which locale to use. CurrentLocale can be injected anywhere it is required, and the Translate class will use it if no specific Locale is supplied when calling the from() method.
 
-A number of things can be configured in the I18NModule, part of the Guice based configuration - it is worth checking the javadoc for this.  Some configuration is also available via User Options.
+##Configuration
+
+A number of things can be configured in the ```I18NModule```, part of the Guice based configuration - it is worth checking the javadoc for this.  Some configuration is also available via ```Option```.
 
 #Managing Keys
 
@@ -84,7 +86,7 @@ For each there is enum lookup key class:
 - DescriptionKey,
 - MessageKey.
 
-For a class implementation there needs also to be a corresponding map of value (default names of Labels, Descriptions and Messages) extended from EnumResourceBundle.
+For a class implementation there needs also to be a corresponding map of value (default names of Labels, Descriptions and Messages) extended from ```EnumResourceBundle```.
 For a property file implementation there needs to be a file (or set of files for different languages)
 
 Using enums as I18N keys has some advantages, particularly for type checking and refactoring - but it also has a disadvantage.  Enums cannot be extended. To provide your own keys (which you will unless you only use those provided by Krail) you will need to define your own I18NKey implementation, as described in the Tutorial - Extending I18N.
@@ -94,7 +96,7 @@ Using enums as I18N keys has some advantages, particularly for type checking and
 
 ##CurrentLocale
 
-CurrentLocale holds the locale setting for the current VaadinSession.  Once a user has logged in, this becomes the same as holding the locale for a user.  Initially, CurrentLocale holds the locale from the browser.  Once a user logs in, the user's options are checked for a preferred setting.  CurrentLocale also supports listeners to enable notification of change of Locale.  This is done automatically for ScopedUIs, KrailViews and their contained components, but if you use anything else which needs to know of such changes, add them to CurrentLocale as a LocaleChangeListener.
+```CurrentLocale``` holds the locale setting for the current ```VaadinSession```.  Once a user has logged in, this becomes the same as holding the locale for a user.  Initially, CurrentLocale holds the locale from the browser.  Once a user logs in, the user's options are checked for a preferred setting.  CurrentLocale also supports listeners to enable notification of change of Locale.  This is done automatically for ScopedUIs, KrailViews and their contained components, but if you use anything else which needs to know of such changes, add them to CurrentLocale as a LocaleChangeListener.
 
 It is also possible to set  the locale for a specific component, using the annotations described below.
 
