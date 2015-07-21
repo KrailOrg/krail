@@ -14,7 +14,6 @@ package uk.q3c.krail.core.persist;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.google.inject.Singleton;
 import com.vaadin.data.Container;
 import uk.q3c.krail.core.config.ConfigurationException;
 import uk.q3c.krail.core.user.opt.OptionDao;
@@ -31,7 +30,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>
  * Created by David Sowerby on 26/06/15.
  */
-@Singleton
 public class DefaultOptionSource implements OptionSource {
 
     private Class<? extends Annotation> activeSource;
@@ -86,12 +84,12 @@ public class DefaultOptionSource implements OptionSource {
     }
 
     @Override
-    public void setActiveSource(Class<? extends Annotation> activeSource) {
+    public void setActiveSource(@Nonnull Class<? extends Annotation> activeSource) {
         this.activeSource = activeSource;
     }
 
     @Override
-    public Container getContainer(Class<? extends Annotation> annotationClass) {
+    public Container getContainer(@Nonnull Class<? extends Annotation> annotationClass) {
         checkAnnotationKey(annotationClass);
         Key<OptionContainerProvider> containerProviderKey = Key.get(OptionContainerProvider.class, annotationClass);
         OptionContainerProvider provider = injector.getInstance(containerProviderKey);
