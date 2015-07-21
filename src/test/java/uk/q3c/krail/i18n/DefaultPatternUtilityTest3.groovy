@@ -10,9 +10,9 @@
  */
 
 package uk.q3c.krail.i18n
-
 import com.google.inject.Provider
 import spock.lang.Specification
+import uk.q3c.krail.core.validation.ValidationKey
 
 /**
  * Extended Unit test, using a test implementation of {@link DatabaseBundleWriter},  for {@link DefaultPatternUtility#exportKeysToDatabase(java.util.Set, uk.q3c.krail.i18n.DatabaseBundleWriter)}
@@ -37,7 +37,7 @@ class DefaultPatternUtilityTest3 extends Specification {
 
 
     def setup() {
-        translate.from(_, _) >> "anything"
+        translate.from(false, _, _) >> "anything"
         patternDaoProvider.get() >> patternDao
         writer = new TestDatabaseBundleWriter(patternDaoProvider, translate)
         utility = new DefaultPatternUtility(bundleReaders, patternsource)
@@ -54,7 +54,7 @@ class DefaultPatternUtilityTest3 extends Specification {
 
         then:
 
-        ((LabelKey.getEnumConstants().length + DescriptionKey.getEnumConstants().length + MessageKey.getEnumConstants().length) * 2) * patternDao.write(_, 'anything')
+        ((ValidationKey.getEnumConstants().length + LabelKey.getEnumConstants().length + DescriptionKey.getEnumConstants().length + MessageKey.getEnumConstants().length) * 2) * patternDao.write(_, 'anything')
 
     }
 }

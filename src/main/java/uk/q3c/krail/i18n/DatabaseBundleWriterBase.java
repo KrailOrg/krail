@@ -69,8 +69,8 @@ public abstract class DatabaseBundleWriterBase implements DatabaseBundleWriter {
     private <E extends Enum<E> & I18NKey> void doWrite(Enum key, Locale locale, String value) {
         E key1 = (E) key;
         PatternCacheKey cacheKey = new PatternCacheKey(key1, locale);
-        patternDaoProvider.get()
-                          .write(cacheKey, value);
+        PatternDao patternDao = patternDaoProvider.get();
+        patternDao.write(cacheKey, value);
     }
 
     /**

@@ -13,6 +13,10 @@
 package uk.q3c.krail.core.data;
 
 import org.apache.bval.constraints.Email;
+import org.apache.bval.guice.Validate;
+import uk.q3c.krail.core.validation.Adult;
+import uk.q3c.krail.core.validation.MalformedAnnotation;
+import uk.q3c.krail.core.validation.TestValidationKey;
 
 import javax.persistence.Id;
 import javax.persistence.Version;
@@ -31,7 +35,7 @@ public class TestEntity2 implements KrailEntity<Long, Integer> {
     @NotNull
     @Size(min = 2, max = 14)
     private String firstName;
-    @Min(value = 20, message = "a custom message")
+    @Min(value = 20, message = "a custom message with limit {0}")
     private int height;
     @Id
     private Long id;
@@ -42,8 +46,41 @@ public class TestEntity2 implements KrailEntity<Long, Integer> {
     private int speed;
     @Version
     private Integer version;
+    @uk.q3c.krail.core.validation.Max(value = 1, messageKey = TestValidationKey.Must_be_an_Adult)
+    private int volume;
     @Max(value = 5, message = "{uk.q3c.krail.core.validation.TestValidationKey.Too_Big}")
     private int weight;
+    @Max(value = 5, message = "{uk.q3ckrail.core.validation.TestValidationKey.Too_Big}")
+    private int wrinkles;
+    @MalformedAnnotation(value = 20)
+    private int wrongAnnotation;
+
+    public TestEntity2() {
+    }
+
+    public int getWrinkles() {
+        return wrinkles;
+    }
+
+    public void setWrinkles(int wrinkles) {
+        this.wrinkles = wrinkles;
+    }
+
+    public int getWrongAnnotation() {
+        return wrongAnnotation;
+    }
+
+    public void setWrongAnnotation(int wrongAnnotation) {
+        this.wrongAnnotation = wrongAnnotation;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
+    }
 
     @Override
     public Long getId() {
@@ -57,6 +94,10 @@ public class TestEntity2 implements KrailEntity<Long, Integer> {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getLoad() {
@@ -114,5 +155,15 @@ public class TestEntity2 implements KrailEntity<Long, Integer> {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    @Validate
+    public void setANumber(@Min(value = 100) int aNumber) {
+
+    }
+
+    @Validate
+    public void setAnAdult(@Adult(messageKey = TestValidationKey.Must_be_an_Adult, value = 18) int aNumber) {
+
     }
 }

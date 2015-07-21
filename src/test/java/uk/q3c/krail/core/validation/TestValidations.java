@@ -21,6 +21,6 @@ public class TestValidations extends EnumResourceBundle<TestValidationKey> {
 
     @Override
     protected void loadMap() {
-        put(TestValidationKey.Too_Big, "{0} is far too big, it should be less than {1}");
+        put(TestValidationKey.Too_Big, "is far too big, it should be less than {0}");
     }
 }

@@ -12,9 +12,7 @@
 package uk.q3c.krail.core.validation;
 
 /**
- * Custom validation annotation for testing only
- *
- * Created by David Sowerby on 05/02/15.
+ * Used to test correctness of custom anotation
  */
 
 import javax.validation.Constraint;
@@ -30,9 +28,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = {AdultValidator.class})
-public @interface Adult {
-    TestValidationKey messageKey();
+@Constraint(validatedBy = {MalformedValidator.class})
+public @interface MalformedAnnotation {
 
     String message() default "krail";
 
@@ -48,12 +45,12 @@ public @interface Adult {
     /**
      * Defines several <code>@Max</code> annotations on the same element
      *
-     * @see Adult
+     * @see MalformedAnnotation
      */
     @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        Adult[] value();
+        MalformedAnnotation[] value();
     }
 }

@@ -19,5 +19,5 @@ import uk.q3c.krail.core.data.KrailEntity;
  */
 public interface BeanValidator<T extends KrailEntity> extends Validator {
 
-    void init(Class<T> beanClass, String propertyName, boolean useFieldNameInValidationMessage);
+    void init(Class<T> beanClass, String propertyName);
 }

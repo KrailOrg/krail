@@ -12,6 +12,8 @@
 package uk.q3c.krail.core.validation;
 
 /**
+ * Simple implementation of MessageInterpolator.Context
+ *
  * Created by David Sowerby on 06/02/15.
  */
 
@@ -25,7 +27,6 @@ public class SimpleContext implements MessageInterpolator.Context, Serializable 
     private final Object value;
     private final ConstraintDescriptor<?> descriptor;
     private String propertyName;
-    private boolean useFieldNamesInMessages;
 
     /**
      * Create a simple immutable message interpolator context.
@@ -36,21 +37,13 @@ public class SimpleContext implements MessageInterpolator.Context, Serializable 
      * @param descriptor
      *         ConstraintDescriptor corresponding to the constraint being
      */
-    public SimpleContext(String propertyName, Object value, ConstraintDescriptor<?> descriptor, boolean
-            useFieldNamesInMessages) {
+    public SimpleContext(String propertyName, Object value, ConstraintDescriptor<?> descriptor) {
         this.propertyName = propertyName;
         this.value = value;
         this.descriptor = descriptor;
-        this.useFieldNamesInMessages = useFieldNamesInMessages;
     }
 
-    public boolean isUseFieldNamesInMessages() {
-        return useFieldNamesInMessages;
-    }
 
-    public void setUseFieldNamesInMessages(boolean useFieldNamesInMessages) {
-        this.useFieldNamesInMessages = useFieldNamesInMessages;
-    }
 
     public String getPropertyName() {
         return propertyName;

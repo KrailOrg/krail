@@ -31,7 +31,6 @@ public class DefaultBeanValidator<T extends KrailEntity> implements BeanValidato
     private final MessageInterpolator krailInterpolator;
     private Class<T> beanClass;
     private String propertyName;
-    private boolean useFieldNameInValidationMessage;
 
     @Inject
     public DefaultBeanValidator(Validator javaxValidator, MessageInterpolator krailInterpolator) {
@@ -59,8 +58,7 @@ public class DefaultBeanValidator<T extends KrailEntity> implements BeanValidato
             for (Object v : violations) {
                 final ConstraintViolation<?> violation = (ConstraintViolation<?>) v;
                 //interpolator will use CurrentLocale
-                SimpleContext context = new SimpleContext(propertyName, value, violation.getConstraintDescriptor(),
-                        useFieldNameInValidationMessage);
+                SimpleContext context = new SimpleContext(propertyName, value, violation.getConstraintDescriptor());
                 String msg = krailInterpolator.interpolate(violation.getMessageTemplate(), context);
                 causes[i] = new InvalidValueException(msg);
                 ++i;
@@ -77,13 +75,10 @@ public class DefaultBeanValidator<T extends KrailEntity> implements BeanValidato
      *         the bean class under validation
      * @param propertyName
      *         the property (field) name being validated
-     * @param useFieldNameInValidationMessage
-     *         if true, include the property name in the final message.  Only used by Krail messages
      */
     @Override
-    public void init(Class<T> beanClass, String propertyName, boolean useFieldNameInValidationMessage) {
+    public void init(Class<T> beanClass, String propertyName) {
         this.beanClass = beanClass;
         this.propertyName = propertyName;
-        this.useFieldNameInValidationMessage = useFieldNameInValidationMessage;
     }
 }

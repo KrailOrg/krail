@@ -18,6 +18,7 @@ import org.apache.bval.jsr303.ConstraintAnnotationAttributes;
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.config.ConfigurationException;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
@@ -57,8 +58,8 @@ public class KrailInterpolator implements MessageInterpolator {
     private Map<Class<? extends Annotation>, I18NKey> javaxValidationSubstitutes;
 
     @Inject
-    protected KrailInterpolator(CurrentLocale currentLocale, Translate translate, @JavaxValidationSubstitutes
-    Map<Class<? extends Annotation>, I18NKey> javaxValidationSubstitutes) {
+    protected KrailInterpolator(CurrentLocale currentLocale, Translate translate, @JavaxValidationSubstitutes Map<Class<? extends Annotation>, I18NKey>
+            javaxValidationSubstitutes) {
         this.currentLocale = currentLocale;
         this.translate = translate;
 
@@ -68,8 +69,11 @@ public class KrailInterpolator implements MessageInterpolator {
     /**
      * Calls {@link #interpolate(String, Context, Locale)} with {@link CurrentLocale#getLocale()}
      *
-     * @param pattern The pattern to interpolate.
-     * @param context contextual information related to the interpolation
+     * @param pattern
+     *         The pattern to interpolate.
+     * @param context
+     *         contextual information related to the interpolation
+     *
      * @return Interpolated error message.
      */
     @Override
@@ -85,170 +89,84 @@ public class KrailInterpolator implements MessageInterpolator {
      * see: https://sites.google.com/site/q3cjava/validation#TOC-Create-a-Custom-Validation
      * <p><p>
      *
-     * @param patternOrKey The message pattern, or if it enclosed in "{}", the key to a message pattern
-     * @param context      contextual information related to the interpolation
-     * @param locale       the locale targeted for the message
+     * @param patternOrKey
+     *         The message pattern, or if it enclosed in "{}", the key to a message pattern
+     * @param context
+     *         contextual information related to the interpolation
+     * @param locale
+     *         the locale targeted for the message
+     *
      * @return Interpolated error message - a message pattern, translated where possible, with parameters filled in
      */
     @Override
     public String interpolate(String patternOrKey, Context context, Locale locale) {
 
-        Map<String, Object> attributes = context.getConstraintDescriptor()
-                .getAttributes();
 
-
-        // it is a standard javax or BVal annotation, so will be substituted, unless there is a specifically declared custom message
+        //standard annotation with substituted key unless it has a custom message
         if (isJavaxAnnotation(context) || isBValAnnotation(context)) {
-            if (isDefaultMessage(patternOrKey, context)) {
+            if (isCustomMessage(patternOrKey, context)) {
+                return processStandardAnnotationWithCustomMessage(patternOrKey, context, locale);
+            } else {
                 I18NKey i18NKey = krailSubstitute(patternOrKey, context).get();
                 return translateKey(i18NKey, context, locale);
-            } else {
-                //custom message
-                // pattern (no curly braces)
-                if (isPattern(patternOrKey)) {
-                    return formatPattern(patternOrKey);
-                } else {
-                    // I18NKey or fail
-
-                }
             }
-        } else {
-            //custom annotation
         }
-
-        return "rubbish";
-
-        // if it has a Krail I18NKey from messageKey(), just process it (custom annotation)
-//        if (hasKrailMessageKey(context)) {
-//            I18NKey i18NKey = (I18NKey) attributes.get("messageKey");
-//            return translateKey(i18NKey, context, locale);
-//        }
-//
-//        // it is not a Krail key by default, but there could be a substitution
-//        // but substitutions are overruled by explicit messages, so we'll do those first
-//
-//        if (isDefaultMessage(patternOrKey, context)) {
-//
-//            if (hasKrailSubstitute(patternOrKey, context)) {
-//                //get the substitution and process it
-//                I18NKey i18NKey = krailSubstitute(patternOrKey, context).get();
-//                return translateKey(i18NKey, context, locale);
-//            } else {
-//                //it is not a krail key or substitute, it must be using javax standard
-//                return defaultMessageInterpolator.interpolate(patternOrKey, context, locale);
-//            }
-//
-//        } else {//explicit message
-//            if (isPattern(patternOrKey)) {
-//                //pattern is just processed as it is
-//                return formatPattern(patternOrKey);
-//            } else {
-//                //it's a key, but is it Krail or Javax?
-//                if (isJavaxMessageKey(patternOrKey, context)) {
-//                    //javax is delegated to default interpolator
-//                    return defaultMessageInterpolator.interpolate(patternOrKey, context, locale);
-//                } else {
-//                    // find the Krail key from the test
-//                    I18NKey key = findI18NKey(patternOrKey);
-//
-//                    //if we can't find it, return it as it is
-//                    //otherwise translate and return it
-//                    if (key == null) {
-//                        return patternOrKey;
-//                    } else {
-//                        return translateKey(key, context, locale);
-//                    }
-//                }
-//            }
-//        }
-
-
-    }
-
-    protected boolean hasKrailSubstitute(String patternOrKey, Context context) {
-        return krailSubstitute(patternOrKey, context).isPresent();
+        return processCustomAnnotation(patternOrKey, context, locale);
     }
 
 
-    protected boolean hasKrailMessageKey(Context context) {
+    protected String processCustomAnnotation(String patternOrKey, Context context, Locale locale) {
+        Map<String, Object> attributes = context.getConstraintDescriptor()
+                                                .getAttributes();
+        //if it has a valid messageKey() process it
+        if (hasKrailMessageKeyAttribute(context)) {
+            I18NKey i18NKey = (I18NKey) attributes.get("messageKey");
+            if (i18NKey == null) {
+                throw new ConfigurationException("A custom validation annotation must have a messageKey() method and return value of type I18NKey");
+            }
+            return translateKey(i18NKey, context, locale);
+        } else {
+            throw new ConfigurationException("A custom validation annotation must have a messageKey() method and return value of type I18NKey");
+        }
+    }
+
+    protected boolean hasKrailMessageKeyAttribute(Context context) {
         return annotationHasAttribute("messageKey", context);
     }
 
     protected boolean annotationHasAttribute(String attributeName, Context context) {
         return context.getConstraintDescriptor()
-                .getAttributes()
-                .containsKey(attributeName);
+                      .getAttributes()
+                      .containsKey(attributeName);
     }
 
     /**
-     * If all we have is a pattern, the best we can do is try and fill in the parameters, but we can't translate it
+     * Processes a standard javax or BVal annotation with a custom (non-default) message.  This could be a
      *
-     * @param patternOrKey the I18N pattern, or if in curly braces, the I18NKey which will provide the pattern
+     * @param patternOrKey
+     * @param context
+     *
+     * @param locale
      * @return
      */
-    private String formatPattern(String patternOrKey) {
-        return MessageFormat.format(patternOrKey);
-    }
-
-    /**
-     * Returns true if {@code patternOrKey} is a pattern, and is from a standard javax.validation constraint annotation
-     * (therefore not a custom constraint)
-     *
-     * @param patternOrKey the I18N pattern, or a String representation of the I18NKey which will provide the pattern
-     * @param context
-     * @return true if {@code patternOrKey} is a pattern, and is from a standard javax.validation constraint annotation
-     * (therefore not a custom constraint)
-     */
-    protected boolean isJavaxPattern(String patternOrKey, Context context) {
+    protected String processStandardAnnotationWithCustomMessage(String patternOrKey, Context context, Locale locale) {
         if (isPattern(patternOrKey)) {
-            return isJavaxAnnotation(context);
+            return MessageFormat.format(patternOrKey, context.getConstraintDescriptor()
+                                                             .getAttributes()
+                                                             .get("value"));
         }
-        return false;
-    }
 
-    /**
-     * Returns true if the annotation in the {@code context} is in the javax.validation.constraints package
-     *
-     * @param context
-     * @return
-     */
-    protected boolean isJavaxAnnotation(Context context) {
-        String annotationClassName = annotationClass(context).getName();
-        String javaxPackageName = ClassUtils.getPackageCanonicalName(Min.class);
-        return annotationClassName.startsWith(javaxPackageName);
-    }
-
-    /**
-     * Returns true if the annotation in the {@code context} is in the org.apache.bval.constraints package
-     *
-     * @param context
-     * @return
-     */
-    protected boolean isBValAnnotation(Context context) {
-        String annotationClassName = annotationClass(context).getName();
-        String bvalPackageName = ClassUtils.getPackageCanonicalName(Email.class);
-        return annotationClassName.startsWith(bvalPackageName);
-    }
-
-    /**
-     * The annotation held by the descriptor can be a proxy (don't know whether it always is or sometimes), but
-     * annotationType seems to work where getClass() does not
-     *
-     * @param context
-     * @return
-     */
-    protected Class<? extends Annotation> annotationClass(Context context) {
-        Annotation annotation = context.getConstraintDescriptor()
-                .getAnnotation();
-        return annotation.annotationType();
-
+        I18NKey i18NKey = findI18NKey(patternOrKey);
+        return translateKey(i18NKey, context, locale);
     }
 
     /**
      * Returns true if {@code patternOrKey} is a pattern, false if it is a message key (determined by a key being
      * surrounded with curly braces
      *
-     * @param patternOrKey the pattern or key to assess
+     * @param patternOrKey
+     *         the pattern or key to assess
+     *
      * @return returns true if {@code patternOrKey} is a pattern, false if it is a message key
      */
     protected boolean isPattern(String patternOrKey) {
@@ -261,33 +179,87 @@ public class KrailInterpolator implements MessageInterpolator {
     }
 
     /**
-     * Identifies an unsubstituted javax message key
-     *
-     * @param patternOrKey
-     * @return
-     */
-    protected boolean isJavaxMessageKey(String patternOrKey, Context context) {
-        if (!isPattern(patternOrKey)) {
-            if ((patternOrKey.contains("javax.validation.constraints")) || (patternOrKey.contains("org.apache.bval"))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Translates the {@code i18NKey} for the given {@code locale}.
      *
      * @param context
      * @param locale
+     *
      * @return
      */
     protected <E extends Enum<E> & I18NKey> String translateKey(I18NKey i18NKey, Context context, Locale locale) {
 
         Map<String, Object> attributes = context.getConstraintDescriptor()
-                .getAttributes();
+                                                .getAttributes();
         return translate.from(i18NKey, locale, attributes.get("value"));
 
+    }
+
+    /**
+     * Find a an I18NKey from its full string representation (for example uk.q3c.krail.i18n.LabelKey.Yes).  The full
+     * string representation can be obtained using {@link I18NKey#fullName(I18NKey)}
+     *
+     * @param keyName
+     *
+     * @return the I18NKey for the supplied name, or null if not found for any reason
+     */
+    protected I18NKey findI18NKey(String keyName) {
+        String k = keyName.replace("{", "")
+                          .replace("}", "")
+                          .trim();
+        //This is cheating, using ClassUtils to split by '.', these are not package and class names
+        String enumClassName = ClassUtils.getPackageCanonicalName(k);
+        String constantName = ClassUtils.getShortClassName(k);
+        Enum<?> enumConstant;
+        try {
+            Class<Enum> enumClass = (Class<Enum>) Class.forName(enumClassName);
+            enumConstant = Enum.valueOf(enumClass, constantName);
+        } catch (Exception e) {
+            log.warn("Could not find an I18NKey for {}", k);
+            enumConstant = null;
+        }
+        I18NKey key = (I18NKey) enumConstant;
+        return key;
+    }
+
+    /**
+     * Returns true if the annotation in the {@code context} is in the javax.validation.constraints package
+     *
+     * @param context
+     *
+     * @return
+     */
+    protected boolean isJavaxAnnotation(Context context) {
+        String annotationClassName = annotationClass(context).getName();
+        String javaxPackageName = ClassUtils.getPackageCanonicalName(Min.class);
+        return annotationClassName.startsWith(javaxPackageName);
+    }
+
+    /**
+     * The annotation held by the descriptor can be a proxy (don't know whether it always is or sometimes), but
+     * annotationType seems to work where getClass() does not
+     *
+     * @param context
+     *
+     * @return
+     */
+    protected Class<? extends Annotation> annotationClass(Context context) {
+        Annotation annotation = context.getConstraintDescriptor()
+                                       .getAnnotation();
+        return annotation.annotationType();
+
+    }
+
+    /**
+     * Returns true if the annotation in the {@code context} is in the org.apache.bval.constraints package
+     *
+     * @param context
+     *
+     * @return
+     */
+    protected boolean isBValAnnotation(Context context) {
+        String annotationClassName = annotationClass(context).getName();
+        String bvalPackageName = ClassUtils.getPackageCanonicalName(Email.class);
+        return annotationClassName.startsWith(bvalPackageName);
     }
 
     protected Optional<I18NKey> krailSubstitute(String patternOrKey, Context context) {
@@ -302,43 +274,69 @@ public class KrailInterpolator implements MessageInterpolator {
     }
 
     /**
-     * Returns true if the message is the default for the annotation.  False indicates that an explicit message has been set for this annotation instance. Only valid for use with the message attribute (javax or Bval) not the messageKey from a custom annotation
+     * Returns true if the message for the annotation is a custom message.  False indicates that the default message for the annotation is being used.. Only
+     * valid for use with the message attribute (javax or Bval) not the messageKey from a custom annotation
      *
      * @param patternOrKey
      * @param context
+     *
      * @return true if the message is the default for the annotation.  False indicates that an explicit message has been
      * set for this annotation instance. Only valid for use with the message attribute not the messageKey
      */
-    protected boolean isDefaultMessage(String patternOrKey, Context context) {
+    protected boolean isCustomMessage(String patternOrKey, Context context) {
 
         Object defaultValue = ConstraintAnnotationAttributes.MESSAGE.getDefaultValue(annotationClass(context));
-        return patternOrKey.equals(defaultValue);
+        return !(patternOrKey.equals(defaultValue));
+    }
+
+    protected boolean hasKrailSubstitute(String patternOrKey, Context context) {
+        return krailSubstitute(patternOrKey, context).isPresent();
     }
 
     /**
-     * Find a an I18NKey from its full string representation (for example uk.q3c.krail.i18n.LabelKey.Yes).  The full
-     * string representation can be obtained using {@link I18NKey#fullName(I18NKey)}
+     * If all we have is a pattern, the best we can do is try and fill in the parameters, but we can't translate it
      *
-     * @param keyName
-     * @return the I18NKey for the supplied name, or null if not found for any reason
+     * @param patternOrKey
+     *         the I18N pattern, or if in curly braces, the I18NKey which will provide the pattern
+     *
+     * @return
      */
-    protected I18NKey findI18NKey(String keyName) {
-        String k = keyName.replace("{", "")
-                .replace("}", "")
-                .trim();
-        //This is cheating, using ClassUtils to split by '.', these are not package and class names
-        String enumClassName = ClassUtils.getPackageCanonicalName(k);
-        String constantName = ClassUtils.getShortClassName(k);
-        Enum<?> enumConstant;
-        try {
-            Class<Enum> enumClass = (Class<Enum>) Class.forName(enumClassName);
-            enumConstant = Enum.valueOf(enumClass, constantName);
-        } catch (Exception e) {
-            log.warn("Could not find an I18NKey for {}", k);
-            enumConstant = null;
+    private String formatPattern(String patternOrKey) {
+        return MessageFormat.format(patternOrKey);
+    }
+
+    /**
+     * Returns true if {@code patternOrKey} is a pattern, and is from a standard javax.validation constraint annotation
+     * (therefore not a custom constraint)
+     *
+     * @param patternOrKey
+     *         the I18N pattern, or a String representation of the I18NKey which will provide the pattern
+     * @param context
+     *
+     * @return true if {@code patternOrKey} is a pattern, and is from a standard javax.validation constraint annotation
+     * (therefore not a custom constraint)
+     */
+    protected boolean isJavaxPattern(String patternOrKey, Context context) {
+        if (isPattern(patternOrKey)) {
+            return isJavaxAnnotation(context);
         }
-        I18NKey key = (I18NKey) enumConstant;
-        return key;
+        return false;
+    }
+
+    /**
+     * Identifies an unsubstituted javax message key
+     *
+     * @param patternOrKey
+     *
+     * @return
+     */
+    protected boolean isJavaxMessageKey(String patternOrKey, Context context) {
+        if (!isPattern(patternOrKey)) {
+            if ((patternOrKey.contains("javax.validation.constraints")) || (patternOrKey.contains("org.apache.bval"))) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

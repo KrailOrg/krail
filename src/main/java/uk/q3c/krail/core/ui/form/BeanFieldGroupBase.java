@@ -20,11 +20,8 @@ import com.vaadin.ui.Field;
 import uk.q3c.krail.core.data.KrailEntity;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.validation.BeanValidator;
-import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.I18NProcessor;
-import uk.q3c.krail.i18n.LabelKey;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -56,8 +53,6 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
     private Class<T> beanType;
     private Provider<BeanValidator> beanValidatorProvider;
     private Option option;
-    private OptionKey<Boolean> optionUseFieldName = new OptionKey(false, this, LabelKey.Use_Field_Name_in_Validation_Message, DescriptionKey
-            .Use_Field_Name_In_Validation_Message);
 
     @Inject
     public BeanFieldGroupBase(I18NProcessor i18NProcessor, Provider<BeanValidator> beanValidatorProvider, Option option) {
@@ -105,9 +100,6 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
         }
     }
 
-    public OptionKey getOptionUseFieldName() {
-        return optionUseFieldName;
-    }
 
     @Override
     @Nonnull
@@ -253,7 +245,7 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
         if (!defaultValidators.containsKey(field)) {
 
             BeanValidator<T> validator = beanValidatorProvider.get();
-            validator.init(beanType, getPropertyId(field).toString(), option.get(optionUseFieldName));
+            validator.init(beanType, getPropertyId(field).toString());
             field.addValidator(validator);
             defaultValidators.put(field, validator);
         }
