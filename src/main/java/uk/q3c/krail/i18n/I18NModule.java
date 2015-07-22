@@ -21,6 +21,7 @@ import org.apache.commons.lang3.LocaleUtils;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.persist.DefaultActivePatternDao;
+import uk.q3c.krail.core.persist.InMemoryBundleReader;
 import uk.q3c.krail.core.user.opt.InMemory;
 import uk.q3c.krail.core.user.opt.Option;
 
@@ -94,18 +95,11 @@ public class I18NModule extends AbstractModule {
     }
 
 
-    //    /**
-    //     * Override this method to provide your own implementation of {@link DatabaseBundleReader}
-    //     */
-    //    protected void bindDatabaseBundleReader() {
-    //        bind(DatabaseBundleReader.class).to(DatabaseBundleReaderBase.class);
-    //    }
-
     /**
      * Binds sources to {@link BundleReader} classes as defined by {@link #prepBundleSources}, setting "class",{@link ClassBundleReader} as default if nothing
      * defined.
      */
-    protected void bindBundleSources() {
+    public void bindBundleSources() {
         if (prepBundleSources.isEmpty()) {
             prepBundleSources.put("class", ClassBundleReader.class);
         }
@@ -226,24 +220,6 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * Adds a bundle source, identified by {@code source} (source is roughly equivalent to 'format' in the native Java I18N support, except that it does not
-     * imply any particular type of source - it is just an identifier)
-     *
-     * @param source
-     *         An arbitrary identifier for a reader implementation- no assumptions are made about the meaning of the source identifier.
-     * @param implementationClass
-     *         the class used to read a bundle
-     *
-     * @return this for fluency
-     */
-    public I18NModule bundleSource(@Nonnull String source, @Nonnull Class<? extends BundleReader> implementationClass) {
-        checkNotNull(source);
-        checkNotNull(implementationClass);
-        prepBundleSources.put(source, implementationClass);
-        return this;
-    }
-
-    /**
      * This locale is used when all else fails - that is, when the neither the browser locale or user option is valid {@link DefaultCurrentLocale} for more
      * detail. This is also added to {@link #supportedLocales}, so if you only ant to support one Locale, just call this method.
      *
@@ -339,7 +315,7 @@ public class I18NModule extends AbstractModule {
      * @return this for fluency
      */
 
-    protected I18NModule bundleSourcesOrderDefault(@Nonnull String... sources) {
+    public I18NModule bundleSourcesOrderDefault(@Nonnull String... sources) {
         checkNotNull(sources);
         for (String source : sources) {
             prepBundleSourcesOrderDefault.add(source);
@@ -372,7 +348,6 @@ public class I18NModule extends AbstractModule {
         checkNotNull(sources);
         Set<String> tagSet = new LinkedHashSet<>(Arrays.asList(sources));
         prepBundleSourcesOrder.put(baseName, tagSet);
-
         return this;
     }
 
@@ -381,6 +356,32 @@ public class I18NModule extends AbstractModule {
         return this;
     }
 
+    /**
+     * Sets up a "database" reader for use with the in memory store
+     *
+     * @return this for fluency
+     */
+    public I18NModule inMemory() {
+        bundleSource("in memory", InMemoryBundleReader.class);
+        return this;
+    }
 
+    /**
+     * Adds a bundle source, identified by {@code source} (source is roughly equivalent to 'format' in the native Java I18N support, except that it does not
+     * imply any particular type of source - it is just an identifier)
+     *
+     * @param source
+     *         An arbitrary identifier for a reader implementation- no assumptions are made about the meaning of the source identifier.
+     * @param implementationClass
+     *         the class used to read a bundle
+     *
+     * @return this for fluency
+     */
+    public I18NModule bundleSource(@Nonnull String source, @Nonnull Class<? extends BundleReader> implementationClass) {
+        checkNotNull(source);
+        checkNotNull(implementationClass);
+        prepBundleSources.put(source, implementationClass);
+        return this;
+    }
 }
 
