@@ -7,7 +7,7 @@ Krail encourages prototyping, by providing a lot of default functionality so tha
 # Creating a Krail application with Gradle
 
 ## Preparation
-This tutorial assumes that you have Gradle already installed.  The Krail build was done wtih Gradle 2.1, though other versions should work.  (There has been one report of an issue with Gradle 2.4)
+This tutorial assumes that you have Gradle already installed.  The Vaadin Gradle plugin used here requires Gradle 2.5+
 
 It is also assumed that you will be using Git for version control, and have it installed.
 
@@ -30,7 +30,7 @@ Create a directory for your project (called "**krail-tutorial**" in this case), 
 ```
 You will now have an empty build file open.  Cut and paste the following into the file & save it
 ```groovy
-    apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.9.8'  
+    apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.10'  
     apply plugin: 'eclipse-wtp'  
     apply plugin: 'idea'  
 
@@ -42,10 +42,6 @@ You will now have an empty build file open.  Cut and paste the following into th
 
     dependencies {  
         compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.6')
-    }
-    
-    vaadin {
-        version '7.5.1'
     }
     
     configurations.all {
@@ -60,7 +56,6 @@ You will now have an empty build file open.  Cut and paste the following into th
 - The 'eclipse' and 'idea' plugins are optional, but useful for generating IDE specific files.
 - Krail requires Java 8, hence the line "sourceCompatibility = '1.8'"
 - Of course, you cannot do without Krail ...
-- There is an [open issue](https://github.com/johndevs/gradle-vaadin-plugin/issues/183) against the Gradle Vaadin plugin.  It currently requires that the Vaadin version is declared explicitly to match the version used by Krail.
 - There are a lot of dependencies involved in building Krail - that is no surprise, when you consider how many things it integrates.  However, that also means that there can be version conflicts to resolve, between the dependencies of the various component parts of Krail. The ResolutionStrategy is there to resolve those version conflicts. GWT requires an older version of the javax validation API - if you don't force the correct version to be used, then the widgetset compile will fail - and worse, it fails without any error messages.
 
 
@@ -134,6 +129,7 @@ This tutorial does not attempt to describe Guice, or Dependency Injection - whic
 Let's keep all the application configuration in one place and create a package under src/main/java:
 
    >com.example.tutorial.app
+   
 #### Create a Servlet
 You may have noticed when you deleted the groovy folders, that a ```TutorialServlet``` had been generated.  We do need one, but not that one!
 
@@ -190,7 +186,7 @@ vaadin {
 ```
 For completeness, the full *build.gradle* file should look like this:
 ```
-apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.9.8'
+apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.10'
 apply plugin: 'eclipse-wtp'  
 apply plugin: 'idea'
 
@@ -209,7 +205,6 @@ dependencies {
 
 vaadin {
     widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
-    version '7.5.1'
     plugin.logToConsole = true
 }
 
