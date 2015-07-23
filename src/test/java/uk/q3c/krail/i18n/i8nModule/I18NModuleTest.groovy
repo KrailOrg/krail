@@ -11,11 +11,12 @@
 
 package uk.q3c.krail.i18n.i8nModule
 
-import com.google.inject.*
-import spock.lang.Specification
+import com.google.inject.Module
+import com.google.inject.TypeLiteral
 import uk.q3c.krail.core.data.DataModule
 import uk.q3c.krail.core.eventbus.EventBusModule
 import uk.q3c.krail.core.eventbus.SessionBus
+import uk.q3c.krail.core.guice.GuiceModuleTestBase
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.persist.DefaultActivePatternDao
@@ -27,15 +28,13 @@ import uk.q3c.krail.i18n.*
 import uk.q3c.krail.testutil.TestOptionModule
 
 import java.lang.annotation.Annotation
-
 /**
  * Unit tests for {@link I18NModule}
  *
  * Created by David Sowerby on 21/07/15.
  */
-class I18NModuleTest extends Specification {
+class I18NModuleTest extends GuiceModuleTestBase {
 
-    Injector injector
 
 
     def "in memory database reader bound by call to inMemory()"() {
@@ -212,29 +211,8 @@ class I18NModuleTest extends Specification {
         getBinding new TypeLiteral<Set<Locale>>() {}, SupportedLocales.class
     }
 
-    def getBinding(typeLiteral) {
-        //noinspection GroovyAssignabilityCheck
-        Key<?> key = Key.get(typeLiteral)
-        def binding = injector.getBinding(key)
-        binding.provider.get()
-    }
 
-    def getBinding(typeLiteral, annotationClass) {
-        def key = Key.get(typeLiteral, annotationClass)
-        def binding = injector.getBinding(key)
-        binding.provider.get()
-    }
-
-
-    private Injector createInjector(Module moduleUnderTest) {
-        List<Module> modules = new ArrayList<>()
-        addSupportingModules(modules);
-        modules.add(moduleUnderTest);
-        return Guice.createInjector(modules);
-
-    }
-
-    private List<Module> addSupportingModules(List<Module> modules) {
+    List<Module> addSupportingModules(List<Module> modules) {
         modules.add(new TestOptionModule())
         modules.add(new VaadinSessionScopeModule())
         modules.add(new UIScopeModule())

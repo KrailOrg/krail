@@ -351,6 +351,6 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      *         the list used to collect modules for injector creation
      */
     protected void addPersistenceModules(List<Module> modules) {
-        modules.add(new InMemoryModule());
+        modules.add(new InMemoryModule().provideOptionDao());
     }
 }
