@@ -39,6 +39,6 @@ public enum DescriptionKey implements I18NKey {
     Display_style_for_the_description_caption, Display_style_for_the_description, Display_style_for_all_captions_unless_overridden,
     Display_style_for_all_values_unless_overridden, Display_style_for_the_connection_url_caption, Display_style_for_the_connection_url,
     Display_style_for_the_is_volatile_caption, Display_style_for_the_is_volatile, Start_the_export_for_the_chosen_Locales, Export_progress,
-    List_of_Locales_to_export, Flag_Icon_Size
+    List_of_Locales_to_export, Selected_Pattern_Targets, Flag_Icon_Size
 
 }

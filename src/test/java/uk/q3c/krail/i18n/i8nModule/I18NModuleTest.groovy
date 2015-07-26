@@ -12,15 +12,13 @@
 package uk.q3c.krail.i18n.i8nModule
 
 import com.google.inject.Module
+import com.google.inject.Provider
 import com.google.inject.TypeLiteral
 import uk.q3c.krail.core.data.DataModule
 import uk.q3c.krail.core.eventbus.EventBusModule
-import uk.q3c.krail.core.eventbus.SessionBus
 import uk.q3c.krail.core.guice.GuiceModuleTestBase
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
-import uk.q3c.krail.core.persist.DefaultActivePatternDao
-import uk.q3c.krail.core.persist.InMemoryBundleReader
 import uk.q3c.krail.core.persist.InMemoryModule
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.user.opt.InMemory
@@ -37,16 +35,6 @@ class I18NModuleTest extends GuiceModuleTestBase {
 
 
 
-    def "in memory database reader bound by call to inMemory()"() {
-        when:
-
-        injector = createInjector(new I18NModule().inMemory())
-
-
-        then:
-        def Map<String, BundleReader> x = getBinding(new TypeLiteral<Map<String, BundleReader>>() {})
-        x.get("in memory") != null
-    }
 
     def " Using Locale objects, supported locales set, setting defaultLocale also adds to supported locales"() {
         when:
@@ -113,93 +101,96 @@ class I18NModuleTest extends GuiceModuleTestBase {
         thrown IllegalArgumentException
     }
 
-    def "activeDao not defined, defaults to InMemory"() {
+    def "I18N targets explicitly set"() {
         when:
-        injector = createInjector(new I18NModule())
-
-        then:
-        activeDao().equals(InMemory.class)
-    }
-
-    def "activeDao explicitly set"() {
-        when:
-        injector = createInjector(new I18NModule().activeDao(SessionBus.class))
-
-        then:
-        activeDao().equals(SessionBus.class)
-    }
-
-    def "bundle sources explicitly set"() {
-        when:
-        injector = createInjector(new I18NModule().bundleSource("database", InMemoryBundleReader.class).bundleSource("p", PropertiesFromClasspathBundleReader))
+        injector = createInjector(new I18NModule().target(ClassPatternSource.class).target(InMemory.class))
 
         then:
 
-        bundleSources().size() == 2
-        bundleSources().get("database") instanceof InMemoryBundleReader
-        bundleSources().get("p") instanceof PropertiesFromClasspathBundleReader
-        bundleSourcesOrder().isEmpty()
+        targets().size() == 2
+        targets().get(InMemory.class).get() instanceof InMemoryPatternDao
+        targets().get(ClassPatternSource.class).get() instanceof ClassPatternDao
     }
 
-    def "bundle sources not set, default should be 'class'"() {
+    def "I18N targets not set, should be an empty map"() {
         when:
         injector = createInjector(new I18NModule())
 
         then:
 
-        bundleSources().size() == 1
-        bundleSources().get("class") instanceof ClassBundleReader
-        bundleSourcesOrder().isEmpty()
+        targets().size() == 0
     }
 
-    def "set bundles sources default order explicitly"() {
+
+    def "I18N sources explicitly set"() {
         when:
-        injector = createInjector(new I18NModule().bundleSourcesOrderDefault("a", "c", "b"))
+        injector = createInjector(new I18NModule().source(ClassPatternSource.class).source(InMemory.class))
 
         then:
 
-        bundleSourcesOrderDefault().size() == 3
-        Iterator<String> iterator = bundleSourcesOrderDefault().iterator()
-        iterator.next().equals("a")
-        iterator.next().equals("c")
-        iterator.next().equals("b")
+        sources().size() == 2
+        sources().get(InMemory.class).get() instanceof InMemoryPatternDao
+        sources().get(ClassPatternSource.class).get() instanceof ClassPatternDao
+        sourcesOrderByBundle().isEmpty()
     }
 
-
-    def "bundles source order set for individual bundles"() {
+    def "I18N sources not set, default should be 'class'"() {
         when:
-        //noinspection GroovyAssignabilityCheck
-        injector = createInjector(new I18NModule().bundleSourcesOrder("Labels", "c", "b").bundleSourcesOrder("Descriptions", "f", "g", "a"))
+        injector = createInjector(new I18NModule())
 
         then:
 
-        bundleSourcesOrder().get("Labels").size() == 2
-        bundleSourcesOrder().get("Descriptions").size() == 3
-        Iterator<String> iterator = bundleSourcesOrder().get("Labels").iterator()
-        iterator.next().equals("c")
-        iterator.next().equals("b")
-        Iterator<String> iterator2 = bundleSourcesOrder().get("Descriptions").iterator()
-        iterator2.next().equals("f")
-        iterator2.next().equals("g")
-        iterator2.next().equals("a")
+        sources().size() == 1
+        sources().get(ClassPatternSource.class).get() instanceof ClassPatternDao
+        sourcesOrderByBundle().isEmpty()
     }
 
-    def Set<String> bundleSourcesOrderDefault() {
-        getBinding new TypeLiteral<Set<String>>() {}, BundleSourcesOrderDefault.class
-    }
+    def "I18N sources default order explicitly set"() {
+        when:
+        injector = createInjector(new I18NModule().sourcesDefaultOrder(TestPatternSource.class, ClassPatternSource.class, InMemory.class))
 
-    def Map<String, Set<String>> bundleSourcesOrder() {
-        getBinding new TypeLiteral<Map<String, Set<String>>>() {}, BundleSourcesOrder.class
-    }
+        then:
 
-
-    def Map<String, BundleReader> bundleSources() {
-        getBinding new TypeLiteral<Map<String, BundleReader>>() {}
+        sourcesDefaultOrder().size() == 3
+        Iterator<Class<? extends Annotation>> iterator = sourcesDefaultOrder().iterator()
+        iterator.next().equals(TestPatternSource.class)
+        iterator.next().equals(ClassPatternSource.class)
+        iterator.next().equals(InMemory.class)
     }
 
 
-    def Class<? extends Annotation> activeDao() {
-        getBinding new TypeLiteral<Class<? extends Annotation>>() {}, DefaultActivePatternDao.class
+    def "I18N source order set for individual bundles (key classes)"() {
+        when:
+        injector = createInjector(new I18NModule().sourcesOrderByBundle(LabelKey.class, TestPatternSource.class, ClassPatternSource.class).sourcesOrderByBundle(DescriptionKey.class, InMemory.class, TestPatternSource.class, ClassPatternSource.class))
+
+        then:
+
+        sourcesOrderByBundle().get(LabelKey.class).size() == 2
+        sourcesOrderByBundle().get(DescriptionKey.class).size() == 3
+        Iterator<Class<? extends Annotation>> iterator = sourcesOrderByBundle().get(LabelKey.class).iterator()
+        iterator.next().equals(TestPatternSource.class)
+        iterator.next().equals(ClassPatternSource.class)
+        Iterator<Class<? extends Annotation>> iterator2 = sourcesOrderByBundle().get(DescriptionKey.class).iterator()
+        iterator2.next().equals(InMemory.class)
+        iterator2.next().equals(TestPatternSource.class)
+        iterator2.next().equals(ClassPatternSource.class)
+    }
+
+
+    def Set<Class<? extends Annotation>> sourcesDefaultOrder() {
+        getBinding new TypeLiteral<Set<Class<? extends Annotation>>>() {}, PatternSourceOrderDefault.class
+    }
+
+    def Map<Class<? extends I18NKey>, Set<Class<? extends Annotation>>> sourcesOrderByBundle() {
+        getBinding new TypeLiteral<Map<Class<? extends I18NKey>, LinkedHashSet<Class<? extends Annotation>>>>() {}, PatternSourceOrderByBundle.class
+    }
+
+    def Map<Class<? extends Annotation>, Provider<PatternDao>> sources() {
+        getBinding new TypeLiteral<Map<Class<? extends Annotation>, Provider<PatternDao>>>() {}, PatternSources.class
+    }
+
+    def Map<Class<? extends Annotation>, Provider<PatternDao>> targets() {
+        getBinding new TypeLiteral<Map<Class<? extends Annotation>, Provider<PatternDao>>>() {}, PatternTargets.class
     }
 
 

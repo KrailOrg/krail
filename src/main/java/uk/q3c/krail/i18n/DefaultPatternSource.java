@@ -11,39 +11,39 @@
 
 package uk.q3c.krail.i18n;
 
-import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.cache.CacheBuilder.newBuilder;
 
 /**
  * A cached, single access point for I18N patterns, which may ultimately come from multiple sources.  The patterns are actually loaded into the cache by a
  * {@link PatternCacheLoader}  Note that the scope of this class is set in {@link I18NModule#bindPatternSource()} or its sub-class.
+ *
+ * This class does NOT check that Locales requested are supported Locales as defined by {@link I18NModule}.  This is the responsibility of {@link CurrentLocale}
  * <p>
  * Created by David Sowerby on 07/12/14.
  */
 
 public class DefaultPatternSource implements PatternSource<LoadingCache<PatternCacheKey, String>> {
 
-
-    private static Logger log = LoggerFactory.getLogger(DefaultPatternSource.class);
     private LoadingCache<PatternCacheKey, String> cache;
 
 
     @Inject
-
     protected DefaultPatternSource(PatternCacheLoader cacheLoader) {
         //CacheLoader has no interface so the cast is necessary to allow alternative PatternCacheLLoader implementations
         //although all implementations would need to extend CacheLoader
-        cache = CacheBuilder.newBuilder()
+        //noinspection unchecked
+        cache = newBuilder()
                             .build((CacheLoader) cacheLoader);
         // TODO will be using a config object
     }
@@ -68,7 +68,7 @@ public class DefaultPatternSource implements PatternSource<LoadingCache<PatternC
      * @return a pattern for the key and locale, or the name of the key if no value is found for the key
      */
     @Override
-    public <E extends Enum<E> & I18NKey> String retrievePattern(E key, Locale locale) {
+    public <E extends Enum<E> & I18NKey> String retrievePattern(@Nonnull E key, @Nonnull Locale locale) {
         checkNotNull(key);
         checkNotNull(locale);
         PatternCacheKey cacheKey = new PatternCacheKey(key, locale);
@@ -88,12 +88,13 @@ public class DefaultPatternSource implements PatternSource<LoadingCache<PatternC
     }
 
     /**
-     * Clears the cache of all entries for {@code source}.  T
+     * Clears the cache of all entries for {@code source}.
      *
-     * @param source
+     * @param source the PatternSource annotation associated with a cache entry
      */
     @Override
-    public void clearCache(String source) {
+    public void clearCache(@Nonnull Class<? extends Annotation> source) {
+        checkNotNull(source);
         List<PatternCacheKey> keysToRemove = new ArrayList<>();
         for (PatternCacheKey key : cache.asMap()
                                         .keySet()) {

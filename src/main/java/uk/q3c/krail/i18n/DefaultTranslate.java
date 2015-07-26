@@ -83,7 +83,7 @@ public class DefaultTranslate implements Translate {
      * @return the translated value as described above, or "key is null" if {@code key} is null
      *
      * @throws UnsupportedLocaleException
-     *         if locale is not in {@link #supportedLocales}
+     *         if locale is not in {@link #supportedLocales} and checkLocaleIsSupported is true
      */
     @Nonnull
     @Override

@@ -8,20 +8,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 package uk.q3c.krail.i18n;
 
-/**
- * Extends BundleWriter so that the Krail developer can change the default implementation for databases
- * <p>
- * Created by David Sowerby on 11/07/15.
- */
-public interface DatabaseBundleWriter extends BundleWriter {
+import com.google.inject.BindingAnnotation;
 
-    /**
-     * Returns the number of Pattern entries there are in the database
-     *
-     * @return the number of Pattern entries there are in the database
-     */
-    long count();
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+/**
+ * Annotation which identifies the order in which bundles sources should queried, see {@link I18NModule}
+ */
+@BindingAnnotation
+@Target({FIELD, PARAMETER, METHOD})
+@Retention(RUNTIME)
+public @interface PatternSourceOrderByBundle {
+
 }

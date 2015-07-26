@@ -9,19 +9,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.i18n;
-
-import java.util.Locale;
-
+package uk.q3c.krail
 /**
- *
- * Created by David Sowerby on 26/10/14.
+ * Created by David Sowerby on 29/07/15.
  */
-public class UnsupportedLocaleException extends RuntimeException {
 
-    public UnsupportedLocaleException(Locale locale) {
-        super("Locale " + locale.getDisplayName() + " is not supported");
-    }
+@interface UnitTestFor {
 
-
+    Class<?> value()
 }

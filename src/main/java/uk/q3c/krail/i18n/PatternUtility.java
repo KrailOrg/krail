@@ -14,9 +14,8 @@ package uk.q3c.krail.i18n;
 import uk.q3c.krail.core.user.opt.Option;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
+import javax.annotation.Nullable;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -26,52 +25,59 @@ import java.util.Set;
  */
 public interface PatternUtility {
 
+
     /**
-     * Write out the keys and values for the combined {@code sources}.  This method calls {@link
-     * PatternSource#retrievePattern (Enum, Locale)} for each key in {@code keyClass}, then writes out all the keys
-     * and values using the {@code writer}.  Keys without values will have a value assigned of the key.name(), with
-     * underscores replaced by spaces, so the output will always list all keys.
-     * <p>
-     * This method effectively merges all the keys for all the sources, using the source ordering provided in {@link
-     * PatternSource}, and fills in any missing values according to the auto-stub {@link Option} settings in the {@link
-     * PatternCacheLoader}
+     * Export I18N Pattern key value pairs from {@code source} to {@code targetDao} for all bundles and locales specified.  Unlike {@link #export(PatternDao,
+     * Set, Set)}, which uses {@link PatternSource}, this method takes input directly from the source {@link PatternDao} without assessing Locale candidates.
+     * This means that unless {@code autoStub} is true, some keys may not be exported (only keys with a value are exported)
      *
-     * @param writer
-     *         the BundleWriter implementation to use
-     * @param keyClass
+     * @param source
+     *         the {@link PatternDao} to uses as a source
+     * @param target
+     *         the PatternDao to send the output to
+     * @param bundles
+     *         the I18NKey classes to export (each key class is equivalent to a bundle)
      * @param locales
-     *         the locales to write out.  For class and property writers multiple locales will output multiple files
-     * @param bundleName
-     *         optionally use a bundle name different to that defined by the {@code keyClass}
+     *         the Locales to export
+     * @param autoStub
+     * if true, and a value is not found, a stub value is exported.  The value is determined by stubWithKeyName and stubValue
+     * @param stubWithKeyName if true, and autoStub is true and a value is not found, the key name is exported as the value.
+     * @param stubValue if autoStub is true and a value is not found, and stubWithKeyName is false, this value is exported
+     *
+     * @return a count of the keys exported
      */
-    <E extends Enum<E> & I18NKey> void writeOut(BundleWriter writer, Class<E> keyClass, Set<Locale> locales,
-                                                Optional<String> bundleName) throws IOException;
+    long export(@Nonnull PatternDao source, @Nonnull PatternDao target, @Nonnull Set<Class<? extends I18NKey>> bundles, @Nonnull Set<Locale> locales, boolean
+            autoStub, boolean stubWithKeyName, @Nullable String stubValue);
 
     /**
-     * Write out the keys and values for a specific source and locale,  Only those keys which have a value assigned
-     * (which could be an empty String) are written out.
+     * Export I18N Pattern key value pairs from {@link PatternSource} to {@code targetDao} for all bundles and locales specified.  Because this method employs
+     * {@link PatternSource}, the output will be a combination of all sources currently defined by the {@link I18NModule} and the {@link Option} values used by
+     * {@link PatternSource#retrievePattern}
      *
-     * @param writer
-     *         the BundleWriter implementation to use @param keyClass
-     * @param locale
-     *         the locale to write out.
-     * @param bundleName
-     *         optionally use a bundle name different to that defined by the {@code keyClass}
-     */
-    <E extends Enum<E> & I18NKey> void writeOutExclusive(String source, BundleWriter writer, Class<E> keyClass,
-                                                         Locale locale, Optional<String> bundleName) throws IOException;
-
-
-    /**
-     * Exports all keys (and translations where available) to the database writer identified by {@code writer}.
-     *
-     * @param writer
-     *         the writer to use to export
+     * @param target
+     *         the PatternDao to send the output to
+     * @param bundles
+     *         the I18NKey classes to export (each key class is equivalent to a bundle)
      * @param locales
-     *         the locales that entries should be created for
+     *         the Locales to export
+     * @param target
+     *         the PatternDao to send the output to
+     * @param bundles
+     *         the I18NKey classes to export (each key class is equivalent to a bundle)
+     * @param locales
+     *         the Locales to export
      *
-     * @throws IOException
-     *         if the write cannot take place for any reason
+     * @return a count of the keys exported
      */
-    void exportKeysToDatabase(@Nonnull Set<Locale> locales, @Nonnull DatabaseBundleWriter writer) throws IOException;
+    long export(@Nonnull PatternDao target, @Nonnull Set<Class<? extends I18NKey>> bundles, @Nonnull Set<Locale> locales);
+
+    /**
+     * Exports all the core Krail I18NKeys for all supported Locales (as defined by the {@link I18NModule}
+     *
+     * @param target
+     *         the PatternDao to export to
+     *
+     * @return a count of all the keys exported
+     */
+    long exportCoreKeys(@Nonnull PatternDao target);
 }

@@ -12,16 +12,18 @@
  */
 package uk.q3c.krail.i18n;
 
-import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBundle {
-    public enum OptionProperty {AUTO_STUB, GENERATE_STUB_WITH_NAME, SOURCE_ORDER, SOURCE_ORDER_DEFAULT}
 
     private static Logger log = LoggerFactory.getLogger(EnumResourceBundle.class);
 
@@ -33,29 +35,18 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
 
     }
 
-    /**
-     * Loads data into the map but only if {@link #loaded} is false.  The bundle may have been returned from the
-     * ResourceBundle cache, and may therefore not need reloading
-     */
-    public void load() {
-        Preconditions.checkNotNull(keyClass, "setKeyClass must be called before calling load()");
-        if (!loaded) {
-            this.map = new EnumMap<E, String>(keyClass);
-            loadMap();
-            loaded = true;
-        }
-
+    public boolean isLoaded() {
+        return loaded;
     }
 
-    protected abstract void loadMap();
-
+    @Nonnull
     @Override
     public Enumeration<String> getKeys() {
         throw new RuntimeException("getKeys() replaced in Krail, use getMap() instead");
     }
 
     @Override
-    protected Object handleGetObject(String arg0) {
+    protected Object handleGetObject(@Nonnull String arg0) {
         throw new RuntimeException("handleGetObject() replaced in Krail, use getValue() instead");
     }
 
@@ -63,16 +54,16 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
      * Returns the value for {@code key}, but ONLY from this map - the usual lookup rules for Java's {@link
      * ResourceBundle} are not used.
      *
-     * @param key
+     * @param key the key to identify an entry
      *
      * @return the value for the key, or null if the key is not in the map for this instance
      */
-    public String getValue(E key) {
+    @Nullable
+    public String getValue(@Nullable E key) {
         if (key == null) {
             return null;
         }
-        String value = getMap().get(key);
-        return value;
+        return getMap().get(key);
     }
 
     public EnumMap<E, String> getMap() {
@@ -82,10 +73,13 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
     /**
      * Puts the key and value into the map (standard map behaviour).
      *
-     * @param key
-     * @param value
+     * @param key the key to identify an entry
+     *
+     * @param value the value to assign to the key
      */
-    public void put(E key, String value) {
+    public void put(@Nonnull E key, @Nonnull String value) {
+        checkNotNull(key);
+        checkNotNull(value);
         map.put(key, value);
     }
 
@@ -93,15 +87,32 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
         return keyClass;
     }
 
-    public void setKeyClass(Class<E> keyClass) {
+    public void setKeyClass(@Nonnull Class<E> keyClass) {
+        checkNotNull(keyClass);
         this.keyClass = keyClass;
     }
 
     public void reset() {
         map.clear();
         loaded = false;
-        loadMap();
+        load();
         log.debug("Values reset from persistence");
     }
+
+    /**
+     * Loads data into the map but only if {@link #loaded} is false.  The bundle may have been returned from the
+     * ResourceBundle cache, and may therefore not need reloading
+     */
+    public void load() {
+        checkNotNull(keyClass, "setKeyClass must be called before calling load()");
+        if (!loaded) {
+            this.map = new EnumMap<>(keyClass);
+            loadMap();
+            loaded = true;
+        }
+
+    }
+
+    protected abstract void loadMap();
 
 }

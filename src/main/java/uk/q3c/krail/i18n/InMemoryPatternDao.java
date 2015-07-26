@@ -13,7 +13,6 @@ package uk.q3c.krail.i18n;
 
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.user.opt.cache.OptionKeyException;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -30,11 +29,7 @@ public class InMemoryPatternDao implements PatternDao {
     }
 
     /**
-     * Write {@code value} to persistence for the I18NKey & Locale provided by (@code cacheKey}
-     *
-     * @param cacheKey
-     *         specifies the I18NKey & Locale
-     * @param value
+     * {@inheritDoc}
      */
     @Override
     public void write(@Nonnull PatternCacheKey cacheKey, @Nonnull String value) {
@@ -44,12 +39,7 @@ public class InMemoryPatternDao implements PatternDao {
     }
 
     /**
-     * Delete the {@code value} entry from persistence for the I18NKey & Locale provided by (@code cacheKey}
-     *
-     * @param cacheKey
-     *         specifies the I18NKey & Locale to identify the entry to delete
-     *
-     * @return the previous value for the entry, or null if there was no previous value
+     * {@inheritDoc}
      */
     @Nonnull
     @Override
@@ -64,15 +54,7 @@ public class InMemoryPatternDao implements PatternDao {
     }
 
     /**
-     * Gets a value from persistence for the I18NKey & Locale provided by (@code cacheKey}
-     *
-     * @param cacheKey
-     *         specifies the hierarchy, rank and OptionKey for the entry to delete
-     *
-     * @return an Optional wrapped value if there is one or an Optional.empty() if not
-     *
-     * @throws OptionKeyException
-     *         if the cacheKey is not valid for this action
+     * {@inheritDoc}
      */
     @Nonnull
     @Override
@@ -87,9 +69,7 @@ public class InMemoryPatternDao implements PatternDao {
     }
 
     /**
-     * Returns the connection url
-     *
-     * @return the connection url
+     * {@inheritDoc}
      */
     @Override
     public String connectionUrl() {
@@ -97,12 +77,12 @@ public class InMemoryPatternDao implements PatternDao {
     }
 
     /**
-     * returns the number of entries
-     *
-     * @return the number of entries
+     * {@inheritDoc}
      */
     @Override
     public long count() {
         return store.count();
     }
+
+
 }

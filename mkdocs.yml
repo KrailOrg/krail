@@ -26,8 +26,9 @@ pages:
 - [devguide05.md, Developer Guide - Options and UserHierarchies]
 - [devguide08.md, Developer Guide - I18N]
 - [devguide11.md, Developer Guide - Guice Scopes]
-- [devguide14.md, Developer Guide - Validation]
 - [devguide12.md, Developer Guide - Event Bus]
+- [devguide14.md, Developer Guide - Validation]
+- [devguide15.md, Developer Guide - Persistence providers]
 - [glossary.md, Glossary]
 - [license.md, Licence]
 theme: readthedocs

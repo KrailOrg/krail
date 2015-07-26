@@ -507,7 +507,7 @@ Earlier [in this section](tutorial08.md#config-methods) we elected to sub-class 
 protected void define() {
     defaultLocale(Locale.UK);
     supportedLocales(Locale.GERMANY);
-    bundleSource("in-memory store", DatabaseBundleReader.class);
+    bundleSource("in-memory store", InMemoryBundleReader.class);
     bundleSource("class", ClassBundleReader.class);
 }
 ```
@@ -525,7 +525,7 @@ Because the I18NModule methods used are all fluent, we could achieve exactly the
 protected Module i18NModule() {
     return new I18NModule().defaultLocale(Locale.UK)
                            .supportedLocales(Locale.GERMANY)
-                           .bundleSource("in-memory store", DatabaseBundleReader.class)
+                           .bundleSource("in-memory store", InMemoryBundleReader.class)
                            .bundleSource("class", ClassBundleReader.class);
 }
 ```

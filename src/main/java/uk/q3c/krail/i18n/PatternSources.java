@@ -8,19 +8,19 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 package uk.q3c.krail.i18n;
 
-import com.google.inject.Provider;
+import com.google.inject.BindingAnnotation;
 
-/**
- * Test implementation of a {@link DatabaseBundleWriter}
- * <p>
- * Created by David Sowerby on 12/07/15.
- */
-public class TestDatabaseBundleWriter extends DatabaseBundleWriterBase {
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-    protected TestDatabaseBundleWriter(Provider<PatternDao> patternDaoProvider, Translate translate) {
-        super(patternDaoProvider, translate);
-    }
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@BindingAnnotation
+@Target({FIELD, PARAMETER, METHOD})
+@Retention(RUNTIME)
+public @interface PatternSources {
+
 }

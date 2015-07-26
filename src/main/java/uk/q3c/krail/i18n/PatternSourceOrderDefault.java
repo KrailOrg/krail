@@ -18,12 +18,9 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-/**
- * Annotation which identifies the order in which bundles sources should queried, see {@link I18NModule}
- */
 @BindingAnnotation
 @Target({FIELD, PARAMETER, METHOD})
 @Retention(RUNTIME)
-public @interface BundleSourcesOrder {
+public @interface PatternSourceOrderDefault {
 
 }

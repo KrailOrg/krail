@@ -11,16 +11,21 @@
 
 package uk.q3c.krail.i18n;
 
+import com.google.inject.BindingAnnotation;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 /**
- * Implementations load the I18N pattern cache from potentially multiple sources.  Configuration of the order in which sources are accessed is held in {@link
- * I18NModule} and presented to consumers (such as implementations of this interface) via {@link PatternSourceProvider}
- *
- * <b>Note:</b>  A source is generally equivalent to a persistence unit (PU), although class and property file based sources are not conventional persistence
- * units.  A source is represented by an Annotation
+ * Identifies a {@link PatternDao} which handles I18N patterns located in Java classes
  * <p>
- * Created by David Sowerby on 08/12/14.
+ * Created by David Sowerby on 26/07/15.
  */
-public interface PatternCacheLoader {
-
-
+@BindingAnnotation
+@Target({FIELD, PARAMETER, METHOD})
+@Retention(RUNTIME)
+public @interface ClassPatternSource {
 }

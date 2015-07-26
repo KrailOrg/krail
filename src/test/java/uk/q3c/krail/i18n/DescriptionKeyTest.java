@@ -34,7 +34,8 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class, DataModule.class})
+@GuiceContext({TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule
+        .class, DataModule.class})
 public class DescriptionKeyTest {
 
     @Inject
@@ -55,7 +56,7 @@ public class DescriptionKeyTest {
     @Test
     public void locale_en() {
         // given
-currentLocale.setLocale(Locale.UK);
+        currentLocale.setLocale(Locale.UK);
         // when
 
         // then

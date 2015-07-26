@@ -11,8 +11,6 @@
 
 package uk.q3c.krail.i18n;
 
-import uk.q3c.krail.core.user.opt.cache.OptionKeyException;
-
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
@@ -46,15 +44,14 @@ public interface PatternDao {
 
 
     /**
-     * Gets a value from persistence for the I18NKey & Locale provided by (@code cacheKey}
+     * Gets a value from persistence for the I18NKey & Locale provided by (@code cacheKey}.  This method only evaluates a result for the {@link
+     * PatternCacheKey#getActualLocale()} as the logic for checking Locale alternatives is contained within {@link PatternSource}.  Also note that {@link
+     * PatternCacheKey#getActualLocale()} is initially set to the same value as {@link PatternCacheKey#getRequestedLocale()}
      *
      * @param cacheKey
-     *         specifies the hierarchy, rank and OptionKey for the entry to delete
+     *         specifies the I18NKey & Locale to locate a value for
      *
      * @return an Optional wrapped value if there is one or an Optional.empty() if not
-     *
-     * @throws OptionKeyException
-     *         if the cacheKey is not valid for this action
      */
     @Nonnull
     Optional<String> getValue(@Nonnull PatternCacheKey cacheKey);
@@ -73,4 +70,6 @@ public interface PatternDao {
      * @return the number of entries
      */
     long count();
+
+
 }

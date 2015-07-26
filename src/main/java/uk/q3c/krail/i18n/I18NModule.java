@@ -14,15 +14,14 @@ package uk.q3c.krail.i18n;
 
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import org.apache.commons.lang3.LocaleUtils;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.core.persist.DefaultActivePatternDao;
-import uk.q3c.krail.core.persist.InMemoryBundleReader;
-import uk.q3c.krail.core.user.opt.InMemory;
+import uk.q3c.krail.core.persist.KrailPersistenceUnitHelper;
 import uk.q3c.krail.core.user.opt.Option;
 
 import javax.annotation.Nonnull;
@@ -33,34 +32,51 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.inject.multibindings.Multibinder.newSetBinder;
 
+/**
+ * Configures I18N for an application.
+ * <p>
+ * An I18N source is the equivalent of a persistence unit (the class based, EnumResourceBundle provision of I18N is considered to be a single source / PU).
+ * <p>
+ * A source is represented by an annotation, for example {@link ClassPatternSource} - which is provided by this module.  Other persistence providers (for
+ * example krail-jpa) will provide bindings to their own {@link #sources}, which Guice merges into a single map.
+ * <p>
+ * An I18NKey implementation - for example, {@link LabelKey}, and its associated {@link EnumResourceBundle}s, are the equivalent to a Java Resource bundle
+ */
+
 public class I18NModule extends AbstractModule {
 
-    private Class<? extends Annotation> activeDaoAnnotation;
-    private MapBinder<String, BundleReader> bundleSources;
-    private MapBinder<String, Set<String>> bundleSourcesOrder;
-    private Multibinder<String> bundleSourcesOrderDefault;
+    private final TypeLiteral<Class<? extends Annotation>> annotationLiteral = KrailPersistenceUnitHelper.annotationClassLiteral();
+    private final TypeLiteral<PatternDao> patternDaoTypeLiteral = new TypeLiteral<PatternDao>() {
+    };
     private Locale defaultLocale = Locale.UK;
-    private Map<String, Class<? extends BundleReader>> prepBundleSources = new LinkedHashMap<>(); // retain order;
-    private Map<String, Set<String>> prepBundleSourcesOrder = new LinkedHashMap<>();
-    private Set<String> prepBundleSourcesOrderDefault = new LinkedHashSet<>();
-
+    private LinkedHashSet<Class<? extends Annotation>> prepSources = new LinkedHashSet<>(); // retain order;
+    private Set<Class<? extends Annotation>> prepSourcesDefaultOrder = new LinkedHashSet<>();
+    private Map<Class<? extends I18NKey>, LinkedHashSet<Class<? extends Annotation>>> prepSourcesOrderByBundle = new LinkedHashMap<>();
     private Set<Locale> prepSupportedLocales = new LinkedHashSet<>();
+    private LinkedHashSet<Class<? extends Annotation>> prepTargets = new LinkedHashSet<>();
+    private MapBinder<Class<? extends Annotation>, PatternDao> sources;
+    private Multibinder<Class<? extends Annotation>> sourcesDefaultOrder;
+    private MapBinder<Class<? extends I18NKey>, LinkedHashSet<Class<? extends Annotation>>> sourcesOrderByBundle;
     private Multibinder<Locale> supportedLocales;
+    private MapBinder<Class<? extends Annotation>, PatternDao> targets;
 
     @Override
     protected void configure() {
+
+
+        TypeLiteral<LinkedHashSet<Class<? extends Annotation>>> setOfAnnotationsTypeLiteral = new TypeLiteral<LinkedHashSet<Class<? extends Annotation>>>() {
+        };
+        TypeLiteral<Class<? extends I18NKey>> keyClassTypeLiteral = new TypeLiteral<Class<? extends I18NKey>>() {
+        };
+
         supportedLocales = newSetBinder(binder(), Locale.class, SupportedLocales.class);
-        bundleSourcesOrderDefault = newSetBinder(binder(), String.class, BundleSourcesOrderDefault.class);
-        bundleSources = MapBinder.newMapBinder(binder(), String.class, BundleReader.class);
+        sourcesDefaultOrder = newSetBinder(binder(), annotationLiteral, PatternSourceOrderDefault.class);
+        sources = MapBinder.newMapBinder(binder(), annotationLiteral, patternDaoTypeLiteral, PatternSources.class);
+        targets = MapBinder.newMapBinder(binder(), annotationLiteral, patternDaoTypeLiteral, PatternTargets.class);
+        sourcesOrderByBundle = MapBinder.newMapBinder(binder(), keyClassTypeLiteral, setOfAnnotationsTypeLiteral, PatternSourceOrderByBundle.class);
 
         define();
 
-        TypeLiteral<Set<String>> setString = new TypeLiteral<Set<String>>() {
-        };
-        TypeLiteral<String> keyClass = new TypeLiteral<String>() {
-        };
-
-        bundleSourcesOrder = MapBinder.newMapBinder(binder(), keyClass, setString, BundleSourcesOrder.class);
 
         bindProcessor();
         bindCurrentLocale();
@@ -75,37 +91,58 @@ public class I18NModule extends AbstractModule {
         //        bindDatabaseBundleReader();
 
         bindSupportedLocales();
-        bindBundleSources();
-        bindBundleSourcesOrderDefault();
-        bindBundleSourcesOrder();
-        bindDao();
-
-
+        bindSources();
+        bindSourcesDefaultOrder();
+        bindSourceOrderByBundle();
+        bindTargets();
+        bindClassPatternDao();
+        bindPatternDao();
+        bindI18NSourceProvider();
     }
 
     /**
-     * Binds the active Dao, or if none has been defined, uses {@link InMemory}
+     * Binds the entries set by calls to {@link #target} (which may be none)
      */
-    protected void bindDao() {
-        Class<? extends Annotation> annotationClass = (activeDaoAnnotation == null) ? InMemory.class : activeDaoAnnotation;
-        TypeLiteral<Class<? extends Annotation>> annotationTypeLiteral = new TypeLiteral<Class<? extends Annotation>>() {
-        };
-        bind(annotationTypeLiteral).annotatedWith(DefaultActivePatternDao.class)
-                                   .toInstance(annotationClass);
+    protected void bindTargets() {
+        for (Class<? extends Annotation> entry : prepTargets) {
+            Key<PatternDao> key = Key.get(PatternDao.class, entry);
+            targets.addBinding(entry)
+                   .to(key);
+        }
+    }
+
+    /**
+     * Binds the {@link ClassPatternDao} to its default implementation, override to provide your own implementation
+     */
+    protected void bindClassPatternDao() {
+        bind(ClassPatternDao.class).to(DefaultClassPatternDao.class);
+    }
+
+    /**
+     * Binds the {@link PatternDao} to the annotation for {@link ClassPatternDao}.   This enables class based I18N patterns to be used, if {@link
+     * ClassPatternSource} is included within I18NModule as a source.
+     */
+    @SuppressWarnings("UninstantiableBinding") // fooled by bindClassPatternDao causing indirection
+    protected void bindPatternDao() {
+        bind(PatternDao.class).annotatedWith(ClassPatternSource.class)
+                              .to(ClassPatternDao.class);
+
     }
 
 
     /**
-     * Binds sources to {@link BundleReader} classes as defined by {@link #prepBundleSources}, setting "class",{@link ClassBundleReader} as default if nothing
+     * Binds sources to {@link PatternDao} classes as defined by {@link #prepSources}, setting {@link ClassPatternDao} as default if nothing
      * defined.
      */
-    public void bindBundleSources() {
-        if (prepBundleSources.isEmpty()) {
-            prepBundleSources.put("class", ClassBundleReader.class);
+    public void bindSources() {
+
+        if (prepSources.isEmpty()) {
+            prepSources.add(ClassPatternSource.class);
         }
-        for (Map.Entry<String, Class<? extends BundleReader>> entry : prepBundleSources.entrySet()) {
-            bundleSources.addBinding(entry.getKey())
-                         .to(entry.getValue());
+        for (Class<? extends Annotation> entry : prepSources) {
+            Key<PatternDao> key = Key.get(PatternDao.class, entry);
+            sources.addBinding(entry)
+                   .to(key);
         }
     }
 
@@ -141,6 +178,14 @@ public class I18NModule extends AbstractModule {
      */
     protected void bindPatternUtility() {
         bind(PatternUtility.class).to(DefaultPatternUtility.class);
+    }
+
+
+    /**
+     * See javadoc for {@link PatternSourceProvider} for an explanation of what this is for.  Override this method if you provide your own implementation
+     */
+    protected void bindI18NSourceProvider() {
+        bind(PatternSourceProvider.class).to(DefaultPatternSourceProvider.class);
     }
 
     /**
@@ -180,10 +225,9 @@ public class I18NModule extends AbstractModule {
      * If you don't wish to configure this module from your Binding Manager, sub-class and override this method to define calls to {@link
      * #supportedLocales(Locale...)}, {@link #defaultLocale(Locale)} etc - then modify your Binding Manager to use your sub-class
      * <p>
-     * If you are using a single module to define all your bundle sources, they will be processed in the order you specify them by calls to {@link
-     * #bundleSource(String, Class)}.
-     * However, Guice does not guarantee order if multiple MapBinders are combined (through the use of multiple modules) - the order must then be explicitly
-     * specified using {{@link #bundleSourcesOrderDefault(String...)}} and/or {@link #bundleSourcesOrder(String, String...)}
+     * If you are only using more than one I18N source, the order which you want them accessed needs to be specified using {@link #sourcesDefaultOrder}
+     * and/or {@link #sourcesOrderByBundle}.  This is because Guice does not guarantee order if multiple MapBinders are combined (through the use of multiple
+     * modules)
      */
     protected void define() {
     }
@@ -203,24 +247,25 @@ public class I18NModule extends AbstractModule {
                           .toInstance(defaultLocale);
     }
 
-    protected void bindBundleSourcesOrderDefault() {
-        for (String source : prepBundleSourcesOrderDefault) {
-            bundleSourcesOrderDefault.addBinding()
-                                     .toInstance(source);
+    protected void bindSourcesDefaultOrder() {
+        for (Class<? extends Annotation> source : prepSourcesDefaultOrder) {
+            sourcesDefaultOrder.addBinding()
+                               .toInstance(source);
         }
 
     }
 
-    protected void bindBundleSourcesOrder() {
-        for (Map.Entry<String, Set<String>> entry : prepBundleSourcesOrder.entrySet()) {
-            bundleSourcesOrder.addBinding(entry.getKey())
-                              .toInstance(entry.getValue());
+    protected void bindSourceOrderByBundle() {
+        for (Map.Entry<Class<? extends I18NKey>, LinkedHashSet<Class<? extends Annotation>>> entry : prepSourcesOrderByBundle.entrySet()) {
+            sourcesOrderByBundle.addBinding(entry.getKey())
+                                .toInstance(entry.getValue());
         }
 
     }
 
     /**
-     * This locale is used when all else fails - that is, when the neither the browser locale or user option is valid {@link DefaultCurrentLocale} for more
+     * This locale is used when all else fails - that is, when the neither the browser locale or user option is valid. See {@link DefaultCurrentLocale} for
+     * more
      * detail. This is also added to {@link #supportedLocales}, so if you only ant to support one Locale, just call this method.
      *
      * @param localeString
@@ -228,7 +273,8 @@ public class I18NModule extends AbstractModule {
      *
      * @return this for fluency
      *
-     * @throw IllegalArgumentException if the locale string is invalid (see {@link LocaleUtils#toLocale(String)} for format)
+     * @throws IllegalArgumentException
+     *         if the locale string is invalid (see {@link LocaleUtils#toLocale(String)} for format)
      */
     public I18NModule defaultLocale(@Nonnull String localeString) {
         checkNotNull(localeString);
@@ -277,9 +323,7 @@ public class I18NModule extends AbstractModule {
      * @return this for fluency
      */
     public I18NModule supportedLocales(@Nonnull Locale... locales) {
-        for (Locale locale : locales) {
-            prepSupportedLocales.add(locale);
-        }
+        Collections.addAll(prepSupportedLocales, locales);
         return this;
     }
 
@@ -292,7 +336,8 @@ public class I18NModule extends AbstractModule {
      *
      * @return this for fluency
      *
-     * @throw IllegalArgumentException if a locale string is invalid (see {@link LocaleUtils#toLocale(String)} for format)
+     * @throws IllegalArgumentException
+     *         if a locale string is invalid (see {@link LocaleUtils#toLocale(String)} for format)
      */
     public I18NModule supportedLocales(@Nonnull String... localeStrings) {
         for (String localeString : localeStrings) {
@@ -302,85 +347,86 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * If you are using just a single module to define your bundle sources, there is no need to use this method.
+     * If you are using one source for I18N, there is no need to use this method
      * <p>
      * However, Guice does not guarantee order if multiple MapBinders are combined (through the use of multiple modules) - the order must then be explicitly
      * specified using this method.
      * <p>
-     * This order is used for ALL key classes, unless overridden by {{@link #bundleSourcesOrder(String, String...)}},
-     * or by {@link Option} in {@link DefaultPatternSource}
-     * <p>
-     * If you have only one source - you definitely won't need this method
+     * This order is used for ALL key classes, unless overridden by {@link #sourcesOrderByBundle}, or by {@link Option} in {@link
+     * DefaultPatternSource}
      *
      * @return this for fluency
      */
 
-    public I18NModule bundleSourcesOrderDefault(@Nonnull String... sources) {
+    @SafeVarargs
+    public final I18NModule sourcesDefaultOrder(@Nonnull Class<? extends Annotation>... sources) {
         checkNotNull(sources);
-        for (String source : sources) {
-            prepBundleSourcesOrderDefault.add(source);
-        }
+        Collections.addAll(prepSourcesDefaultOrder, sources);
         return this;
     }
 
     /**
-     * This method sets the order in which to poll the I18N pattern sources, but for a specific bundle (I18NKey
-     * class)
+     * This method sets the order in which to poll the I18N pattern sources, but for a specific bundle (I18NKey class)
      * <p>
-     * {@link #bundleSourcesOrderDefault(String...)} applies to all key classes, and is usually only needed when
-     * combining sources from different modules.
-     * <p>
+     * {@link #sourcesDefaultOrder} applies to all key classes (bundles)
      * <p>
      * <p>
      * If you have only one source - you definitely won't need this method
      *
-     * @param baseName
-     *         the ResourceBundle 'bundleName', for example "Labels", as defined by {@link I18NKey#bundleName()}
+     * @param keyClass
+     *         the class of the I18NKey to use (in Java terms the resource 'bundle')
      * @param sources
-     *         a set of sources, (or 'formats' in resourceBundle terms).  These should be all, or a subset, of the
-     *         {@link #bundleSources} key set
+     *         a set of sources, (or 'formats' in resourceBundle terms).  These should be all, or a subset, of  {@link #sources}
      *
      * @return this for fluency
      */
 
-    protected I18NModule bundleSourcesOrder(@Nonnull String baseName, @Nonnull String... sources) {
-        checkNotNull(baseName);
+    @SafeVarargs
+    public final I18NModule sourcesOrderByBundle(@Nonnull Class<? extends I18NKey> keyClass, @Nonnull Class<? extends Annotation>... sources) {
+        checkNotNull(keyClass);
         checkNotNull(sources);
-        Set<String> tagSet = new LinkedHashSet<>(Arrays.asList(sources));
-        prepBundleSourcesOrder.put(baseName, tagSet);
-        return this;
-    }
-
-    public I18NModule activeDao(Class<? extends Annotation> annotationClass) {
-        activeDaoAnnotation = annotationClass;
+        LinkedHashSet<Class<? extends Annotation>> sourceSet = new LinkedHashSet<>(Arrays.asList(sources));
+        prepSourcesOrderByBundle.put(keyClass, sourceSet);
         return this;
     }
 
     /**
-     * Sets up a "database" reader for use with the in memory store
+     * An I18N target is used when writing out I18N patterns.  Typically this is used either by the auto-stub feature of {@link PatternSource} or the {@link
+     * PatternUtility} for moving patterns from one source to another.
+     * <p>
+     * All the targets which may be required should be added with this method (this ensures the bindings are in place).  The selection of which target to use,
+     * if any, is made using the Option settings for {@link PatternSourceProvider}
+     * <p>
+     * <p>
+     * Adds an I18N target, identified by {@code target} (target is roughly equivalent to 'format' in the native Java I18N support, except that it does not
+     * imply any particular type of target - it is just an identifier).  Within Krail the target is expected to be the equivalent of a persistence unit
+     * <p>
+     * Note that if targets are set in multiple Guice modules, they will be merged by Guice into a
+     *
+     * @param target
+     *         A BindingAnnotation identifying a Persistence Unit (or equivalent) that is providing a DAO as a source
      *
      * @return this for fluency
      */
-    public I18NModule inMemory() {
-        bundleSource("in memory", InMemoryBundleReader.class);
+    public final I18NModule target(@Nonnull Class<? extends Annotation> target) {
+        checkNotNull(target);
+        prepTargets.add(target);
         return this;
     }
 
+
     /**
-     * Adds a bundle source, identified by {@code source} (source is roughly equivalent to 'format' in the native Java I18N support, except that it does not
-     * imply any particular type of source - it is just an identifier)
+     * Adds an I18N source, identified by {@code source} (source is roughly equivalent to 'format' in the native Java I18N support, except that it does not
+     * imply any particular type of source - it is just an identifier).  Within Krail the source is expected to be the equivalent of a persistence unit
      *
      * @param source
-     *         An arbitrary identifier for a reader implementation- no assumptions are made about the meaning of the source identifier.
-     * @param implementationClass
-     *         the class used to read a bundle
+     *         A BindingAnnotation identifying a Persistence Unit (or equivalent) that is providing a DAO as a source
      *
      * @return this for fluency
      */
-    public I18NModule bundleSource(@Nonnull String source, @Nonnull Class<? extends BundleReader> implementationClass) {
+    public I18NModule source(@Nonnull Class<? extends Annotation> source) {
         checkNotNull(source);
-        checkNotNull(implementationClass);
-        prepBundleSources.put(source, implementationClass);
+        prepSources.add(source);
         return this;
     }
 }

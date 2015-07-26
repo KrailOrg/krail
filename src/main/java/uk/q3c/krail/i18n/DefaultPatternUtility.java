@@ -11,125 +11,115 @@
 
 package uk.q3c.krail.i18n;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.validation.ValidationKey;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
+import javax.annotation.Nullable;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- *
  * Utilities methods to manipulate I18N Patterns
- *
+ * <p>
  * Created by David Sowerby on 14/12/14.
  */
 public class DefaultPatternUtility implements PatternUtility {
-    private Map<String, BundleReader> bundleReaders;
+
+    private final PatternSourceProvider patternSourceProvider;
     private PatternSource patternSource;
+    private Set<Locale> supportedLocales;
+
 
     @Inject
-    protected DefaultPatternUtility(Map<String, BundleReader> bundleReaders, PatternSource patternSource) {
-        this.bundleReaders = bundleReaders;
+    protected DefaultPatternUtility(PatternSourceProvider patternSourceProvider, PatternSource patternSource, @SupportedLocales Set<Locale> supportedLocales) {
+        this.patternSourceProvider = patternSourceProvider;
         this.patternSource = patternSource;
+        this.supportedLocales = supportedLocales;
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <E extends Enum<E> & I18NKey> void writeOut(@Nonnull BundleWriter writer, @Nonnull Class<E> keyClass, @Nonnull Set<Locale> locales, @Nonnull
-    Optional<String> bundleName) throws IOException {
-
-        checkNotNull(writer);
-        checkNotNull(keyClass);
-        checkNotNull(locales);
-        checkNotNull(bundleName);
-        E[] keys = keyClass.getEnumConstants();
-
-
-        for (Locale locale : locales) {
-            DirectResourceBundle<E> bundle = new DirectResourceBundle<>(keyClass);
-            for (E key : keys) {
-                String pattern = patternSource.retrievePattern(key, locale);
-                bundle.put(key, pattern);
-            }
-            writer.setBundle(bundle);
-            writer.write(locale, bundleName);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <E extends Enum<E> & I18NKey> void writeOutExclusive(@Nonnull String source, @Nonnull BundleWriter writer, @Nonnull Class<E> keyClass, @Nonnull
-    Locale locale, @Nonnull Optional<String> bundleName) throws IOException {
-        checkNotNull(source);
-        checkNotNull(writer);
-        checkNotNull(keyClass);
-        checkNotNull(locale);
-        checkNotNull(bundleName);
-        E[] keys = keyClass.getEnumConstants();
-        BundleReader reader = bundleReaders.get(source);
-
-
-        DirectResourceBundle<E> bundle = new DirectResourceBundle<>(keyClass);
-        for (E key : keys) {
-            PatternCacheKey cacheKey = new PatternCacheKey(key, locale);
-            Optional<String> value = reader.getValue(cacheKey, source, false, false, source);
-            if (value.isPresent()) {
-                bundle.put(key, value.get());
-            }
-        }
-        writer.setBundle(bundle);
-        writer.write(locale, bundleName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void exportKeysToDatabase(@Nonnull Set<Locale> locales, @Nonnull DatabaseBundleWriter writer) throws IOException {
-        checkNotNull(writer);
-        checkNotNull(locales);
-        export(LabelKey.Yes, locales, writer);
-        export(MessageKey.Invalid_URI, locales, writer);
-        export(DescriptionKey.Auto_Stub, locales, writer);
-        export(ValidationKey.AssertFalse, locales, writer);
-    }
-
-
-    /**
-     * Writes out all the keys for each Locale
+     * Export I18N Pattern key value pairs from {@code source} to {@code targetDao} for all bundles and locales specified.  Unlike {@link #export(PatternDao,
+     * Set, Set)}, which uses
+     * {@link PatternSource}, this method takes input directly from the source {@link PatternDao} without assessing Locale candidates
      *
-     * @param sampleKey
-     *         sample key to identify the bundle
+     * @param source
+     * @param target
+     *         the PatternDao to send the output to
+     * @param bundles
+     *         the I18NKey classes to export (each key class is equivalent to a bundle)
      * @param locales
-     *         the locales that need to be written
-     * @param writer
-     *         the writer to use to write
-     * @param <E>
-     *         an I18NKey
+     *         the Locales to export
      *
-     * @throws IOException
-     *         if the write fails
+     * @return a count of the keys processed
      */
-    protected <E extends Enum<E> & I18NKey> void export(@Nonnull E sampleKey, @Nonnull Set<Locale> locales, @Nonnull DatabaseBundleWriter writer) throws IOException {
-        checkNotNull(writer);
+    @Override
+    public long export(@Nonnull PatternDao source, @Nonnull PatternDao target, @Nonnull Set<Class<? extends I18NKey>> bundles, @Nonnull Set<Locale> locales,
+                       boolean autoStub, boolean stubWithKeyName, @Nullable String stubValue) {
+        checkNotNull(source);
+        checkNotNull(target);
+        checkNotNull(bundles);
         checkNotNull(locales);
-        checkNotNull(sampleKey);
+        int c = 0;
         for (Locale locale : locales) {
-            writer.setBundle(sampleKey);
-            writer.write(locale, Optional.empty());
+            for (Class<? extends I18NKey> bundleClass : bundles) {
+                I18NKey[] keys = bundleClass.getEnumConstants();
+                for (I18NKey key : keys) {
+                    PatternCacheKey cacheKey = new PatternCacheKey(key, locale);
+                    Optional<String> pattern = source.getValue(cacheKey);
+                    if (pattern.isPresent()) {
+                        target.write(cacheKey, pattern.get());
+                        c++;
+                    } else if (autoStub) {
+                        target.write(cacheKey, stubValue((Enum) key, stubWithKeyName, stubValue));
+                        c++;
+                    }
+                }
+            }
         }
+        return c;
     }
 
+    protected String stubValue(Enum key, boolean stubWithKeyName, String stubValue) {
+        return ((stubWithKeyName) ? key.name() : stubValue).replace("_", " ");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long exportCoreKeys(@Nonnull PatternDao target) {
+        ImmutableSet<Class<? extends I18NKey>> bundles = ImmutableSet.of(LabelKey.class, DescriptionKey.class, MessageKey.class, ValidationKey.class);
+        return export(target, bundles, supportedLocales);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long export(@Nonnull PatternDao target, @Nonnull Set<Class<? extends I18NKey>> bundles, @Nonnull Set<Locale> locales) {
+        checkNotNull(target);
+        checkNotNull(bundles);
+        checkNotNull(locales);
+        int c = 0;
+        for (Locale locale : locales) {
+            for (Class<? extends I18NKey> bundleClass : bundles) {
+                I18NKey[] keys = bundleClass.getEnumConstants();
+                for (I18NKey key : keys) {
+
+                    String pattern = patternSource.retrievePattern((Enum) key, locale);
+                    PatternCacheKey cacheKey = new PatternCacheKey(key, locale);
+                    target.write(cacheKey, pattern);
+                    c++;
+                }
+            }
+        }
+        return c;
+    }
 
 
 }

@@ -11,6 +11,7 @@
 
 package uk.q3c.krail.i18n;
 
+import java.lang.annotation.Annotation;
 import java.util.Locale;
 
 /**
@@ -43,5 +44,5 @@ public interface PatternSource<C extends Object> {
      *
      * @param source
      */
-    void clearCache(String source);
+    void clearCache(Class<? extends Annotation> source);
 }

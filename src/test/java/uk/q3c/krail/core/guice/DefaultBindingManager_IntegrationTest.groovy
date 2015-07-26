@@ -14,8 +14,12 @@ package uk.q3c.krail.core.guice
 import com.google.inject.Module
 import com.google.inject.TypeLiteral
 import uk.q3c.krail.core.persist.DefaultActiveOptionSource
+import uk.q3c.krail.core.persist.InMemoryOptionContainerProvider
 import uk.q3c.krail.core.persist.KrailPersistenceUnitHelper
+import uk.q3c.krail.core.persist.OptionContainerProvider
 import uk.q3c.krail.core.user.opt.InMemory
+import uk.q3c.krail.core.user.opt.InMemoryOptionDao
+import uk.q3c.krail.core.user.opt.OptionDao
 import uk.q3c.krail.core.validation.JavaxValidationSubstitutes
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.i18n.I18NKey
@@ -39,7 +43,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
         }
     }
 
-    def "InMemory option dao is bound by default"() {
+    def "InMemory option dao is active dao by default"() {
         when:
 
         DefaultBindingManager bindingManager = new TestDefaultBindingManager()
@@ -47,7 +51,29 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
 
         then:
 
-        optionDao().equals(InMemory.class)
+        activeOptionDao().equals(InMemory.class)
+    }
+
+    def "OptionContainerProvider is bound to InMemoryOptionContainerProvider with InMemory annotation"() {
+        when:
+
+        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
+        injector = bindingManager.getInjector()
+
+        then:
+
+        optionContainerProvider() instanceof InMemoryOptionContainerProvider
+    }
+
+    def "OptionDao is bound to InMemoryOptionDao with InMemory annotation"() {
+        when:
+
+        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
+        injector = bindingManager.getInjector()
+
+        then:
+
+        optionDao() instanceof InMemoryOptionDao
     }
 
 
@@ -75,6 +101,11 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
         activeOptionSource().equals(InMemory.class)
     }
 
+
+    def OptionDao optionDao() {
+        getBinding OptionDao, InMemory.class
+    }
+
     def Class<? extends Annotation> activeOptionSource() {
         getBinding new TypeLiteral<Class<? extends Annotation>>() {}, DefaultActiveOptionSource
     }
@@ -87,11 +118,13 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
         getBinding new TypeLiteral<Map<Class<? extends Annotation>, I18NKey>>() {}, JavaxValidationSubstitutes
     }
 
-    def Class<? extends Annotation> optionDao() {
+    def Class<? extends Annotation> activeOptionDao() {
         getBinding KrailPersistenceUnitHelper.annotationClassLiteral(), DefaultActiveOptionSource.class
     }
 
-
+    def OptionContainerProvider optionContainerProvider() {
+        getBinding OptionContainerProvider, InMemory.class
+    }
     @Override
     List<Module> addSupportingModules(List<Module> modules) {
 

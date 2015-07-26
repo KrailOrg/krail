@@ -11,8 +11,17 @@
 
 package uk.q3c.krail.i18n;
 
-/**
- * Created by David Sowerby on 16/04/15.
- */
-public interface DatabaseBundleReader extends BundleReader {
+
+public class PatternWriteException extends RuntimeException {
+
+    public PatternWriteException(String msg) {
+        super(msg);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public PatternWriteException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
