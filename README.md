@@ -63,11 +63,11 @@ Not fully thread-safe where it needs to be
 
 # Status
 
-12th July 2015:
+4th August 2015:
 
 * Vaadin 7.5.1 is integrated with:
 * Guice 4.0
-* Shiro 1.2.3,
+* Shiro 1.2.4,
 * MBassador (Event Bus)
 * Apache Commons Configuration
 * Guava cache

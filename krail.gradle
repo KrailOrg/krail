@@ -13,7 +13,7 @@
 
 description = 'A rapid development framework for web apps using Vaadin, Guice, Shiro et al'
 
-ext.shiroVersion = '1.2.3'
+ext.shiroVersion = '1.2.4'
 version = '0.9.6'
 
 dependencies {
