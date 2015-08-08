@@ -4,14 +4,9 @@ Clearly we will want to add some new pages, but first we must know what constitu
 
 ##Defining a Page
 
-A page is represented by a URI, which maps to a specified ```KrailView``` class.  When the name of the page is presented in a navigation aware component, that name must be Locale sensitive.  Once the page is defined, it becomes part of the Krail ```Sitemap```, which forms the heart of the navigation system.  
+A page is represented by a URI, which maps to a specified ```KrailView``` class.  The name of the page is presented to the user in navigation aware components, so that name must be Locale sensitive.  Once the page is defined, it becomes part of the Krail ```Sitemap```, which forms the heart of the navigation system.  
 
 There are two ways to add pages to Krail and make use of the [navigation features](devguide02.md), and you can use either one, or both. These are the "direct" method or "annotation" method. We will use both methods. 
-
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">There was a third method using an external file but that is now deprecated</p>
-</div>
 
 Because the page name is locale sensitive, we will first need to provide I18N support.
 <a name="I18NIntro"></a>
@@ -102,7 +97,7 @@ You will have compile errors, but let's look at what these entries mean.
 
 - The first parameter is the URI segment, and we generally keep to all lowercase.  The second and third entries are subpages, so need a qualified path.
 - The second parameter is the class to use as a View - we haven't created them yet.
-- The third parameter is the page name, is locale-sensitive and therefore an I18NKey
+- The third parameter is the page name, is locale-sensitive and therefore an ```I18NKey```
 - The fourth parameter determines what sort of access control is applied to the page.  We want "private" pages, so they are set to PERMISSION 
 
 We'll make it easier by extending the ```Grid3x3ViewBase```base class from the Krail core - this just gives us a 3x3 grid to place components in.
@@ -241,6 +236,7 @@ public class MyPages extends DirectSitemapModule{
     }
 }
 ```
+
 - update MyPages so it is as above
 - run the application and you will see that the pages appear in the same way as before
 
@@ -269,9 +265,17 @@ public class PurchasingView extends Grid3x3ViewBase {
 
 - Run the application and check that new URI is being used.
 
+
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This can only be done with Direct pages.  Although it might be possible to do something similar with annotated pages by mapping packages to URIs, there are currently no plans to do so</p>
+<p class="last">If you do want to set the rootURI directly in the module, you need to do so in the constructor, or it will prevent the fluent method shown above from working</p>
+</div>
+
+
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This moving of blocks of pages is available only with Direct pages.  Although it might be possible to do something similar with annotated pages by mapping packages to URIs, there are currently no plans to do so</p>
 </div>
 
 ##Debugging the Sitemap
@@ -287,7 +291,7 @@ protected void addSitemapModules(List<Module> baseModules) {
    baseModules.add(new SystemAdminPages());
 }
 ```
-- Run the application and **log in**, and you will find a System Admin branch and a single page with a report.
+- Run the application and **log in**, and navigate to System Administration / Sitemap Build Report.
 
 #Navigation
 ## Add some public pages
@@ -338,6 +342,21 @@ public enum LabelKey implements I18NKey {
     Accounts, Payroll, Finance, News, Contact_Us, Purchasing
 }
 ```
+
+- Finally, update the ```BindingManager``` to include this new set of pages:
+
+```
+ @Override
+    protected void addSitemapModules(List<Module> baseModules) {
+        baseModules.add(new SystemAccountManagementPages());
+        baseModules.add(new MyPages().rootURI("private/finance-department"));
+        baseModules.add(new AnnotatedPagesModule());
+        baseModules.add(new SystemAdminPages());
+        baseModules.add(new MyPublicPages());
+    }
+```
+
+
 ##Getting the Navigator
 We will do just a little bit more with these views to help demonstrate navigation - we'll just add some buttons to direct us to different URIs.  First, though, we need access to Krail's ```Navigator```.  We will inject it into both views, using constructor injection:
 ```
@@ -506,7 +525,7 @@ If you think about the use of the "Contact Detail" page, it does not actually ma
     - Press the "Navigate with Parameters" button
     - The "Contact Detail" page appears as before.
     
-There is a [bug](https://github.com/davidsowerby/krail/issues/400) which causes navigation components to mis-behave when all the sub-pages of a page are excluded from navigation.  the issue offers two workarounds, we will simply move the "Contact Detail" page to the Sitemap root.
+There is a [bug](https://github.com/davidsowerby/krail/issues/400) which causes navigation components to mis-behave when all the sub-pages of a page are excluded from navigation.  The issue offers two workarounds, but we will simply move the "Contact Detail" page to the Sitemap root.
 
 - Modify ```MyPublicPages``` again:
 ```
