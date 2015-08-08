@@ -140,18 +140,18 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
 ```
 Options are nothing more than key-value pairs, but we want the keys to be unique across the whole application, and we want them to have a default value so that there is always a value, and, therefore, always predictable behaviour. We will also want them to be presented to users so they can choose a value - which means the option needs a Locale-sensitive name and description. The ```OptionKey``` provides all of these features.
 
-- define a key for each news channel.  
+- define a key for each news channel.  They do not have to be public and static, but it can be useful if they are
 
 ```java
-    private final OptionKey<Boolean> ceoVisible = new OptionKey<>(true, this, LabelKey.CEO_News_Channel);
-    private final OptionKey<Boolean> itemsForSaleVisible = new OptionKey<>(true, this, LabelKey.Items_For_Sale_Channel);
-    private final OptionKey<Boolean> vacanciesVisible = new OptionKey<>(true, this, LabelKey.Vacancies_Channel);
+    public static final OptionKey<Boolean> ceoVisible = new OptionKey<>(true, MyNews.class, LabelKey.CEO_News_Channel);
+    public static final OptionKey<Boolean> itemsForSaleVisible = new OptionKey<>(true, MyNews.class, LabelKey.Items_For_Sale_Channel);
+    public static final OptionKey<Boolean> vacanciesVisible = new OptionKey<>(true, MyNews.class, LabelKey.Vacancies_Channel);
 ```
 The real key - the one that is used in persistence - is made up of the context, the name key and qualifiers (if used).  The context is there to help ensure easily managed uniqueness. Qualifiers are not used in this example, and are only really necessary if you want something like "Push Button 1", "Push Button 2" - you can use the qualifier for the final digit.    
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">An option value is just an object to Krail. Supported data types will be determined by your choice of persistence</p>
+<p class="last">An option value is just an object to Krail. Supported data types will be determined by your choice of persistence.  However, the core does provide an OptionStringConverter to help with the process of translating to String for persistence</p>
 </div>
 
 We will make use of these keys in the ```optionValueChanged``` method, to hide or show the news channels:
@@ -221,9 +221,9 @@ import javax.annotation.Nonnull;
 
 public class MyNews extends Grid3x3ViewBase implements OptionContext {
 
-    private final OptionKey<Boolean> ceoVisible = new OptionKey<>(true, this, LabelKey.CEO_News_Channel);
-    private final OptionKey<Boolean> itemsForSaleVisible = new OptionKey<>(true, this, LabelKey.Items_For_Sale_Channel);
-    private final OptionKey<Boolean> vacanciesVisible = new OptionKey<>(true, this, LabelKey.Vacancies_Channel);
+    public static final OptionKey<Boolean> ceoVisible = new OptionKey<>(true, MyNews.class, LabelKey.CEO_News_Channel);
+    public static final OptionKey<Boolean> itemsForSaleVisible = new OptionKey<>(true, MyNews.class, LabelKey.Items_For_Sale_Channel);
+    public static final OptionKey<Boolean> vacanciesVisible = new OptionKey<>(true, MyNews.class, LabelKey.Vacancies_Channel);
     private Label ceoNews;
     private Label itemsForSale;
     private Option option;
@@ -253,17 +253,11 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
             optionPopup.popup(this, LabelKey.News_Options);
         });
 
-        systemOptionButton = new Button("system option");
-        systemOptionButton.addClickListener(event -> {
-            option.set(false, 1, ceoVisible);
-            optionValueChanged(null);
-        });
-
         setMiddleLeft(itemsForSale);
         setCentreCell(ceoNews);
         setMiddleRight(vacancies);
         setBottomCentre(popupButton);
-        setBottomRight(systemOptionButton);
+      
 
         optionValueChanged(null);
     }
@@ -338,7 +332,18 @@ This is demonstrating that the "Override" principle mentioned earlier.  If a use
 #Using Hierarchies
 
 If you think about it, this hierarchy principle could be used in other scenarios. You could have hierarchies based on geographic location - maybe *city, country, region*.  Or another based on job - maybe *function, department, team, role*.
-The structure of these may be available from other systems - HR, Identity Management, Facilities systems -or you could define them yourself.  You can have as many hierarchies as you wish, and we will come back to this subject later to [create a hierarchy](tutorial15.md) of our own.  
+The structure of these may be available from other systems - HR, Identity Management, Facilities systems - or you could define them yourself.  You can have as many hierarchies as you wish, and we will come back to this subject later to [create a hierarchy](tutorial15.md) of our own.  
+
+#Option Data Types
+
+When using the default in memory store, Krail can use any data type for an option.  However, most persistence providers will want to confine Option values to a single table, and ```OptionStringConverter``` provides support for that, by translating ```Option``` values to ```String``` and back again.   
+
+This supports most primitive data types , ```Enum``` and ```I18NKey```.  Collections cannot be used directly, but are supported through ```OptionList```.
+
+```AnnotationOptionList``` enables the use of a list of ```Annotation``` classes.
+ 
+ 
+See ```DefaultOptionStringConverter``` for the complete list of supported types.
  
  
 #Summary
