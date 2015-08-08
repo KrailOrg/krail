@@ -11,7 +11,7 @@ For the purposes of this Tutorial, it is enough to consider the ```UI``` to be a
 ##Replacing a UI
 To use your own UI:
 
-- create a UI, in this example just sub-classing ```DefaultApplicationUI```.  As you can see, it uses a lot of injected objects - hopefully your IDE will create the constructor for you.
+- in the package *com.example.tutorial.app*, create a class TutorialUI, and sub-class ```DefaultApplicationUI```.  As you can see, it uses a lot of injected objects - hopefully your IDE will create the constructor for you.
 - don't forget the **@Inject** annotation for the constructor - it is very easy to miss when using IDE auto-completion
 ```
 package com.example.tutorial.app;
