@@ -70,7 +70,7 @@ If you look at the constructor for ```TutorialUI``` you will see the ```MessageB
 If you wanted to provide your own methods of presenting user notifications, it is very easy to do, while still keeping the consistency of a single despatch point for user notifications. In fact, we will use it as an example in the [Event Bus](tutorial12.md) section. 
 
 #Summary
-This is an almost trivial topic, but does provide an opportunity for a consistent approach to providing notifications to users.  It also enables changing the presentation of those notifications without breaking the consistency.  
+This seems an almost trivial topic, we would strongly recommend using ```UserNotifier``` from the start.  This will not oly give you consistency, but enable you very simply change how notifications are presented to users later - while still keeping consistency.  
 
 #Download from Github
 To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step04**
