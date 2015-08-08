@@ -30,7 +30,7 @@ Create a directory for your project (called "**krail-tutorial**" in this case), 
 ```
 You will now have an empty build file open.  Cut and paste the following into the file & save it
 ```groovy
-    apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.10'  
+    apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.10.1'  
     apply plugin: 'eclipse-wtp'  
     apply plugin: 'idea'  
 
@@ -78,10 +78,6 @@ The Vaadin Gradle plugin makes things easier for us.  From the command line:
 ```sh
 gradle vaadinCreateProject
 ```
-Gradle will prompt for a number of entries - for the purposes of the tutorial, we will use these:
-
-- Application Name: *Tutorial*  
-- Application Package: *com.example.tutorial*  
 
 ## Import the Project to your IDE
 
@@ -183,37 +179,34 @@ vaadin {
 ```
 #### Complete Build file
 
+The full *build.gradle* file should look like this:
+
 ```
-For completeness, the full *build.gradle* file should look like this:
-```
-apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.10'
-apply plugin: 'eclipse-wtp'  
-apply plugin: 'idea'
+    apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.10.1'  
+    apply plugin: 'eclipse-wtp'  
+    apply plugin: 'idea'  
 
+    sourceCompatibility = '1.8'  
 
-sourceCompatibility = '1.8'
+    repositories {  
+        jcenter()  
+    }  
 
-repositories {  
-    jcenter()  
-}  
-
-dependencies {  
-    compile 'uk.q3c.krail:krail:0.9.6'
-}
-
-
-
-vaadin {
-    widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
-    plugin.logToConsole = true
-}
-
-configurations.all {
-    resolutionStrategy {
-        // GWT requires an old version of the validation API.  Changing to a newer version breaks widgetset compile but throws no errors
-        force 'javax.validation:validation-api:1.0.0.GA'
+    dependencies {  
+        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.6')
     }
-}
+
+    vaadin {
+        widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
+        plugin.logToConsole = true
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            // GWT requires an old version of the validation API.  Changing to a newer version breaks widgetset compile but throws no errors
+            force 'javax.validation:validation-api:1.0.0.GA'
+        }
+    }
 ```
 
 
@@ -272,7 +265,7 @@ Notice that we override ```servletModule()``` to let Guice know about our ```Tut
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          id="WebApp_ID" version="3.0">
-    <display-name>Krail Demo</display-name>
+    <display-name>Krail Tutorial</display-name>
     <context-param>
         <description>
             Vaadin production mode
@@ -310,7 +303,7 @@ The ```SystemAccountManagementPages``` class in Krail is a set of not very usefu
     }
 
 ```
-The complete ```BindingManager`` now looks like:
+The complete ```BindingManager``` now looks like:
 ```
 package com.example.tutorial.app;
 
@@ -341,7 +334,7 @@ public class BindingManager extends DefaultBindingManager {
 #### Theme(s)
 You could actually launch the Tutorial application now, but if you did it would look terrible - it has no CSS applied.  To give the application some style we need to apply a Vaadin theme.  It is possible to use themes from the Vaadin theme jar,  but it is advisable to extract them and serve them statically, as recommended by the [Vaadin documentation](https://vaadin.com/book/-/page/themes.creating.html#themes.creating.builtin):
  
->The built-in themes included in the Vaadin library JAR are served dynamically from the JAR by the servlet. Serving themes and widget sets statically by the web server is more efficient. 
+> *The built-in themes included in the Vaadin library JAR are served dynamically from the JAR by the servlet. Serving themes and widget sets statically by the web server is more efficient.* 
 
 So let's do that now.
  
@@ -355,8 +348,10 @@ For readers less familiar with Vaadin, "reindeer" is the default style, and "val
 #### Build and Run
 
 The one aspect of the build that tends to give problems is the widgetset compile - it seems very sensitive.  We therefore suggest compiling it first by executing:
- 
->gradle vaadinCompileWidgetset 
+
+
+>  gradle vaadinCompileWidgetset
+
 
 from either the command line or IDE.  You can see whether it has compiled by checking the src/main/webapp/VAADIN/widgetsets folder - it should have contents.  (A compile failure usually creates a widgetsets folder, but leaves it empty)
 
@@ -364,9 +359,10 @@ We can now build and run the application - set up a run configuration in your ID
 
 ####Run Configuration in IDEA
 
->Run | Edit Configurations | + | Tomcat Server | Local
-Name: Tutorial
-Deployment: + | artifact | tutorial.war
+>Run | Edit Configurations<br>
+  + | Tomcat Server | Local<br>
+Name: Tutorial<br>
+Deployment: + | artifact | tutorial.war<br>
 Application context: /tutorial
 
 - refresh Gradle
