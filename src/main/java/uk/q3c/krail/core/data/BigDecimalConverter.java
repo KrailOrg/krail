@@ -14,36 +14,35 @@ package uk.q3c.krail.core.data;
 
 import com.vaadin.data.util.converter.Converter;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 
 /**
- * Implements a Converter to handle {@link Locale}
+ * Implements a Converter to handle {@link BigDecimal}
  */
-public class LocaleConverter implements Converter<String, Locale> {
-
+public class BigDecimalConverter implements Converter<String, BigDecimal> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Locale convertToModel(String value, Class<? extends Locale> targetType, Locale locale) throws ConversionException {
-        return Locale.forLanguageTag(value);
+    public BigDecimal convertToModel(String value, Class<? extends BigDecimal> targetType, Locale locale) throws ConversionException {
+        return new BigDecimal(value);
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String convertToPresentation(BigDecimal value, Class<? extends String> targetType, Locale locale) throws ConversionException {
+        return value.toString();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String convertToPresentation(Locale value, Class<? extends String> targetType, Locale locale) throws ConversionException {
-        return value.toLanguageTag();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class<Locale> getModelType() {
-        return Locale.class;
+    public Class<BigDecimal> getModelType() {
+        return BigDecimal.class;
     }
 
     /**

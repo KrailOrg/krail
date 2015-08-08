@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.data.DataModule;
-import uk.q3c.krail.core.data.StringPersistenceConverter;
+import uk.q3c.krail.core.data.OptionStringConverter;
 import uk.q3c.krail.core.user.opt.DefaultInMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.InMemoryOptionDao;
 import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
@@ -51,11 +51,11 @@ public class InMemoryContainerTest {
     @Mock
     UserHierarchy userHierarchy;
     @Inject
-    private StringPersistenceConverter stringPersistenceConverter;
+    private OptionStringConverter optionStringConverter;
 
     @Before
     public void setup() {
-        optionStore = new DefaultInMemoryOptionStore(stringPersistenceConverter);
+        optionStore = new DefaultInMemoryOptionStore(optionStringConverter);
         optionDao = new InMemoryOptionDao(optionStore);
         patternStore = new DefaultInMemoryPatternStore();
         patternDao = new InMemoryPatternDao(patternStore);

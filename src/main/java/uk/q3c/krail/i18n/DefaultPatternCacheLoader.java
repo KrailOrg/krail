@@ -111,7 +111,9 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
                 Boolean autoStub = option.get(optionKeyAutoStub.qualifiedWith(source.getSimpleName()));
                 /* autosSub to the selected target */
                 if (autoStub) {
-                    sourceProvider.selectedTargets().forEach(t -> {
+                    sourceProvider.selectedTargets()
+                                  .getList()
+                                  .forEach(t -> {
                         Optional<PatternDao> target = sourceProvider.targetFor(t);
                         if (target.isPresent()) {
                             target.get().write(cacheKey, stubValue(source, cacheKey));

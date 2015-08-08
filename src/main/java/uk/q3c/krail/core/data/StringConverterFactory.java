@@ -11,8 +11,10 @@
 
 package uk.q3c.krail.core.data;
 
-public class ConverterException extends RuntimeException {
-    public ConverterException(String msg) {
-        super(msg);
-    }
+/**
+ * Implementations provide conversion to and from String to other data types
+ * <p>
+ * Created by David Sowerby on 06/08/15.
+ */
+public interface StringConverterFactory {
 }

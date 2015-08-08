@@ -12,12 +12,12 @@
 package uk.q3c.krail.i18n;
 
 import com.google.common.collect.ImmutableSet;
+import uk.q3c.krail.core.user.opt.AnnotationOptionList;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionKey;
 
 import java.lang.annotation.Annotation;
-import java.util.LinkedHashSet;
 import java.util.Optional;
 
 /**
@@ -45,13 +45,13 @@ import java.util.Optional;
  */
 public interface PatternSourceProvider extends OptionContext {
 
-    OptionKey<LinkedHashSet<Class<? extends Annotation>>> optionKeySourceOrder = new OptionKey<>(new LinkedHashSet<>(), PatternSourceProvider.class, LabelKey
+    OptionKey<AnnotationOptionList> optionKeySourceOrder = new OptionKey<>(new AnnotationOptionList(), PatternSourceProvider.class, LabelKey
             .Source_Order, DescriptionKey.Source_Order);
 
-    OptionKey<LinkedHashSet<Class<? extends Annotation>>> optionKeySourceOrderDefault = new OptionKey<>(new LinkedHashSet<>(), PatternSourceProvider.class,
+    OptionKey<AnnotationOptionList> optionKeySourceOrderDefault = new OptionKey<>(new AnnotationOptionList(), PatternSourceProvider.class,
             LabelKey.Source_Order_Default, DescriptionKey.Source_Order_Default);
 
-    OptionKey<LinkedHashSet<Class<? extends Annotation>>> optionKeySelectedTargets = new OptionKey<>(new LinkedHashSet<>(), PatternSourceProvider.class,
+    OptionKey<AnnotationOptionList> optionKeySelectedTargets = new OptionKey<>(new AnnotationOptionList(), PatternSourceProvider.class,
             LabelKey.Selected_Pattern_Targets, DescriptionKey.Selected_Pattern_Targets);
 
 
@@ -61,6 +61,10 @@ public interface PatternSourceProvider extends OptionContext {
 
     ImmutableSet<Class<? extends Annotation>> orderedSources(I18NKey i18NKey);
 
-
-    LinkedHashSet<Class<? extends Annotation>> selectedTargets();
+    /**
+     * Returns targets selected, but removes any which are not declared as targets in the {@link I18NModule}
+     *
+     * @return targets selected, but removes any which are not declared as targets in the {@link I18NModule}
+     */
+    AnnotationOptionList selectedTargets();
 }

@@ -11,8 +11,15 @@
 
 package uk.q3c.krail.core.data;
 
-public class ConverterException extends RuntimeException {
-    public ConverterException(String msg) {
+/**
+ * Created by David Sowerby on 07/08/15.
+ */
+public class ConversionException extends RuntimeException {
+    public ConversionException(String msg, Exception e) {
+        super(msg, e);
+    }
+
+    public ConversionException(String msg) {
         super(msg);
     }
 }

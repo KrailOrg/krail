@@ -12,17 +12,16 @@
 package uk.q3c.krail.i18n;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.data.Property;
+import uk.q3c.krail.core.user.opt.AnnotationOptionList;
 import uk.q3c.krail.core.user.opt.Option;
 
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -107,14 +106,14 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
     @Nonnull
     public ImmutableSet<Class<? extends Annotation>> orderedSources(@Nonnull I18NKey key) {
         checkNotNull(key);
-        Set<Class<? extends Annotation>> sourceOrder = getSourceOrderFromOption(key.bundleName());
+        AnnotationOptionList sourceOrder = getSourceOrderFromOption(key.bundleName());
         if (!sourceOrder.isEmpty()) {
-            return verifySourceOrder(sourceOrder);
+            return verifySourceOrder(sourceOrder.getList());
         }
 
         sourceOrder = getSourceOrderDefaultFromOption();
         if (!sourceOrder.isEmpty()) {
-            return verifySourceOrder(sourceOrder);
+            return verifySourceOrder(sourceOrder.getList());
         }
 
         LinkedHashSet<Class<? extends Annotation>> order = this.sourceOrderByBundle.get(key.getClass());
@@ -122,9 +121,8 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
             return verifySourceOrder(order);
         }
 
-        sourceOrder = sourceOrderDefault;
-        if (!sourceOrder.isEmpty()) {
-            return verifySourceOrder(sourceOrder);
+        if (!sourceOrderDefault.isEmpty()) {
+            return verifySourceOrder(sourceOrderDefault);
         }
 
         // just return as defined in sources
@@ -140,7 +138,7 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
      *
      * @return the finals source order, adjusted if necessary, as described in javadoc for {@link #orderedSources}
      */
-    private ImmutableSet<Class<? extends Annotation>> verifySourceOrder(@Nonnull Set<Class<? extends Annotation>> sourceOrder) {
+    private ImmutableSet<Class<? extends Annotation>> verifySourceOrder(@Nonnull Collection<Class<? extends Annotation>> sourceOrder) {
         // if all and only sources contained, just return
         if (sourceOrder.size() == sources.size() && sourceOrder.containsAll(sources.keySet())) {
             return ImmutableSet.copyOf(sourceOrder);
@@ -171,29 +169,31 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
     }
 
     @Nonnull
-    private LinkedHashSet<Class<? extends Annotation>> getSourceOrderFromOption(@Nonnull String bundleName) {
+    private AnnotationOptionList getSourceOrderFromOption(@Nonnull String bundleName) {
         checkNotNull(bundleName);
         return option.get(optionKeySourceOrder.qualifiedWith(bundleName));
     }
 
     @Nonnull
-    private LinkedHashSet<Class<? extends Annotation>> getSourceOrderDefaultFromOption() {
+    private AnnotationOptionList getSourceOrderDefaultFromOption() {
         return option.get(optionKeySourceOrderDefault);
     }
 
     @Override
-    public LinkedHashSet<Class<? extends Annotation>> selectedTargets() {
-        LinkedHashSet<Class<? extends Annotation>> optionTargets = option.get(optionKeySelectedTargets);
-        //use a copy to iterate over, othherwise removing from iterated set
+    public AnnotationOptionList selectedTargets() {
+        AnnotationOptionList optionTargets = option.get(optionKeySelectedTargets);
+        //use a copy to iterate over, otherwise removing from iterated set
         if (!optionTargets.isEmpty()) {
-            LinkedHashSet<Class<? extends Annotation>> copyTargets = new LinkedHashSet<>(optionTargets);
-            copyTargets.forEach(t -> {
+            List<Class<? extends Annotation>> copyTargets = new ArrayList<>(optionTargets.getList());
+            optionTargets.getList()
+                         .forEach(t -> {
                 if (!targets.containsKey(t)) {
-                    optionTargets.remove(t);
+                    copyTargets.remove(t);
                 }
-            }); return optionTargets;
+                         });
+            return new AnnotationOptionList(copyTargets);
         }
-        return new LinkedHashSet<>(targets.keySet());
+        return new AnnotationOptionList(Lists.newArrayList(targets.keySet()));
     }
 
 

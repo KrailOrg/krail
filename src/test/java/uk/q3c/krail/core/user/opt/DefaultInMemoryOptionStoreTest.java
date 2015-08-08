@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.data.DataModule;
-import uk.q3c.krail.core.data.StringPersistenceConverter;
+import uk.q3c.krail.core.data.OptionStringConverter;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class DefaultInMemoryOptionStoreTest {
 
     DefaultInMemoryOptionStore store;
     @Inject
-    StringPersistenceConverter stringPersistenceConverter;
+    OptionStringConverter optionStringConverter;
     private String hierarchyName1 = "h1";
     private String hierarchyRank1 = "r1";
     @Mock
@@ -47,7 +47,7 @@ public class DefaultInMemoryOptionStoreTest {
 
     @Before
     public void setup() {
-        store = new DefaultInMemoryOptionStore(stringPersistenceConverter);
+        store = new DefaultInMemoryOptionStore(optionStringConverter);
         when(optionKey1.compositeKey()).thenReturn("q-q-1");
         when(optionKey2.compositeKey()).thenReturn("q-q-2");
     }

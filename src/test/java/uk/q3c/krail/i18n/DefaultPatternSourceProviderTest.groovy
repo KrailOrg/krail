@@ -11,10 +11,11 @@
 
 package uk.q3c.krail.i18n
 
-import com.google.common.collect.Lists
 import com.google.inject.Provider
+import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
+import uk.q3c.krail.core.user.opt.AnnotationOptionList
 import uk.q3c.krail.core.user.opt.Option
 import uk.q3c.krail.i18n.i8nModule.TestPatternSource
 import uk.q3c.krail.i18n.i8nModule.TestPatternSource1
@@ -53,8 +54,8 @@ class DefaultPatternSourceProviderTest extends Specification {
         sources.put(TestPatternSource1.class, testPatternDaoProvider);
         sources.put(ClassPatternSource.class, classPatternDaoProvider);
         sources.put(TestPatternSource.class, testPatternDaoProvider);
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new LinkedHashSet<Class<? extends Annotation>>()
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new LinkedHashSet<Class<? extends Annotation>>()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
         LinkedHashSet<Class<? extends Annotation>> expected = new LinkedHashSet<>()
         expected.addAll(TestPatternSource1, ClassPatternSource, TestPatternSource)
@@ -68,8 +69,8 @@ class DefaultPatternSourceProviderTest extends Specification {
         sources.put(ClassPatternSource.class, classPatternDaoProvider);
         sources.put(TestPatternSource.class, testPatternDaoProvider);
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new LinkedHashSet<Class<? extends Annotation>>()
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new LinkedHashSet<Class<? extends Annotation>>()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
 
         LinkedHashSet<Class<? extends Annotation>> expected = new LinkedHashSet<>()
         expected.addAll(ClassPatternSource, TestPatternSource1, TestPatternSource)
@@ -92,8 +93,8 @@ class DefaultPatternSourceProviderTest extends Specification {
         sourceOrderDefault.add(TestPatternSource)
         sourceOrderDefault.add(TestPatternSource1)
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new LinkedHashSet<Class<? extends Annotation>>()
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new LinkedHashSet<Class<? extends Annotation>>()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
@@ -113,8 +114,8 @@ class DefaultPatternSourceProviderTest extends Specification {
 
         sourceOrderDefault.add(ClassPatternSource)
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new LinkedHashSet<Class<? extends Annotation>>()
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new LinkedHashSet<Class<? extends Annotation>>()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
@@ -134,8 +135,8 @@ class DefaultPatternSourceProviderTest extends Specification {
         sourceOrderDefault.add(TestPatternSource)
         sourceOrderDefault.add(TestPatternSource1)
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new LinkedHashSet<Class<? extends Annotation>>()
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new LinkedHashSet<Class<? extends Annotation>>()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
@@ -153,10 +154,10 @@ class DefaultPatternSourceProviderTest extends Specification {
         sources.put(ClassPatternSource.class, classPatternDaoProvider);
         sources.put(TestPatternSource.class, testPatternDaoProvider);
 
-        LinkedHashSet<Class<? extends Annotation>> fromOption = new LinkedHashSet<>(Lists.newArrayList(ClassPatternSource.class, TestPatternSource1.class))
+        AnnotationOptionList fromOption = new AnnotationOptionList(ClassPatternSource.class, TestPatternSource1.class)
 
         option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> fromOption
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new LinkedHashSet<Class<? extends Annotation>>()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
@@ -173,10 +174,10 @@ class DefaultPatternSourceProviderTest extends Specification {
         sources.put(ClassPatternSource.class, classPatternDaoProvider);
         sources.put(TestPatternSource.class, testPatternDaoProvider);
 
-        LinkedHashSet<Class<? extends Annotation>> fromOption = new LinkedHashSet<>(Lists.newArrayList(ClassPatternSource.class, TestPatternSource1.class))
+        AnnotationOptionList fromOption = new AnnotationOptionList(ClassPatternSource.class, TestPatternSource1.class)
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new LinkedHashSet<Class<? extends Annotation>>()
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new LinkedHashSet<Class<? extends Annotation>>() >> fromOption
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> fromOption
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
@@ -193,10 +194,10 @@ class DefaultPatternSourceProviderTest extends Specification {
         sources.put(TestPatternSource1.class, testPatternDaoProvider);
 
 
-        LinkedHashSet<Class<? extends Annotation>> fromOption = new LinkedHashSet<>(Lists.newArrayList(ClassPatternSource.class, TestPatternSource1.class))
+        AnnotationOptionList fromOption = new AnnotationOptionList(ClassPatternSource.class, TestPatternSource1.class)
 
         option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> fromOption
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new LinkedHashSet<Class<? extends Annotation>>()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
@@ -213,9 +214,9 @@ class DefaultPatternSourceProviderTest extends Specification {
         sources.put(TestPatternSource1.class, testPatternDaoProvider);
 
 
-        LinkedHashSet<Class<? extends Annotation>> fromOption = new LinkedHashSet<>(Lists.newArrayList(ClassPatternSource.class, TestPatternSource1.class))
+        AnnotationOptionList fromOption = new AnnotationOptionList(ClassPatternSource.class, TestPatternSource1.class)
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new LinkedHashSet<Class<? extends Annotation>>()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
         option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> fromOption
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
@@ -261,7 +262,7 @@ class DefaultPatternSourceProviderTest extends Specification {
         targets.put(TestPatternSource, testPatternDaoProvider)
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
-        LinkedHashSet<Class<? extends Annotation>> fromOption = new LinkedHashSet<>()
+        AnnotationOptionList fromOption = new AnnotationOptionList()
         option.get(PatternSourceProvider.optionKeySelectedTargets) >> fromOption
 
         LinkedHashSet<Class<? extends Annotation>> expected = new LinkedHashSet<>()
@@ -269,7 +270,7 @@ class DefaultPatternSourceProviderTest extends Specification {
 
         expect:
 
-        provider.selectedTargets() == expected
+        ListUtils.isEqualList(provider.selectedTargets().getList(), expected)
     }
 
     def "targets set by option, override those set by Guice"() {
@@ -278,14 +279,14 @@ class DefaultPatternSourceProviderTest extends Specification {
         targets.put(TestPatternSource, testPatternDaoProvider)
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
-        LinkedHashSet<Class<? extends Annotation>> fromOption = new LinkedHashSet<>()
-        fromOption.addAll(TestPatternSource, ClassPatternSource)
+        AnnotationOptionList fromOption = new AnnotationOptionList(TestPatternSource, ClassPatternSource)
         option.get(PatternSourceProvider.optionKeySelectedTargets) >> fromOption
 
 
         expect:
 
-        provider.selectedTargets() == fromOption
+        provider.selectedTargets().size() == fromOption.size()
+        provider.selectedTargets().getList().containsAll(fromOption.getList())
     }
 
     def "targets set by option, override those set by Guice, element not in Guice set is removed"() {
@@ -294,13 +295,13 @@ class DefaultPatternSourceProviderTest extends Specification {
         targets.put(TestPatternSource, testPatternDaoProvider)
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
-        LinkedHashSet<Class<? extends Annotation>> fromOption = new LinkedHashSet<>()
-        fromOption.addAll(TestPatternSource.class, TestPatternSource1.class, ClassPatternSource.class)
+        AnnotationOptionList fromOption = new AnnotationOptionList(TestPatternSource.class, TestPatternSource1.class, ClassPatternSource.class)
         option.get(PatternSourceProvider.optionKeySelectedTargets) >> fromOption
 
 
         expect:
+        provider.selectedTargets().size() == targets.size()
+        provider.selectedTargets().getList().containsAll(targets.keySet())
 
-        provider.selectedTargets() == targets.keySet()
     }
 }

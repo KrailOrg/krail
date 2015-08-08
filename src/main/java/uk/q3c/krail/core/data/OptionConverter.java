@@ -11,8 +11,14 @@
 
 package uk.q3c.krail.core.data;
 
-public class ConverterException extends RuntimeException {
-    public ConverterException(String msg) {
-        super(msg);
-    }
+import javax.annotation.Nonnull;
+
+/**
+ * Created by David Sowerby on 06/08/15.
+ */
+public interface OptionConverter<V> {
+
+    V convertToModel(String value) throws ConversionException;
+
+    String convertToString(@Nonnull V value);
 }

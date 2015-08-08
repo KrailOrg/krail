@@ -15,22 +15,23 @@ import com.vaadin.data.util.converter.Converter;
 import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 
-import java.util.Optional;
+import javax.annotation.Nonnull;
 
 /**
- * Conversion utility where values are converted to String before persisting
+ * Utility to convert Option values to and from String - usually used in persisting Option values where the persistence provider needs a single data type (for
+ * example a single column in an RDBMS)
  * <p>
  * Created by David Sowerby on 27/06/15.
  */
-public interface StringPersistenceConverter {
+public interface OptionStringConverter {
 
     /**
-     * Returns a value converted from the String held in persistence.  The value type is determined by the {@link OptionKey#getDefaultValue()}
+     * Returns a value converted from the String.  The value type is determined by the {@link OptionKey#getDefaultValue()}
      *
      * @param cacheKey
      *         the cacheKey to identify the value
-     * @param valueFromPersistence
-     *         the String value held in persistence
+     * @param valueString
+     *         the String representation of the value
      *
      * @return null if no entry for cacheKey is found, otherwise a value converted from persistence
      *
@@ -39,10 +40,10 @@ public interface StringPersistenceConverter {
      * @throws Converter.ConversionException
      *         if the conversion itself fails
      */
-    Optional<?> convertFromPersistence(OptionCacheKey cacheKey, String valueFromPersistence);
+    <V> V convertStringToValue(OptionCacheKey cacheKey, String valueString);
 
     /**
-     * Converts the supplied {@code value} to String for persistence
+     * Converts the supplied {@code value} to String
      *
      * @param value
      *         the value to be converted
@@ -56,5 +57,7 @@ public interface StringPersistenceConverter {
      * @throws Converter.ConversionException
      *         if the conversion itself fails
      */
-    <V> Optional<String> convertToPersistence(Optional<V> value);
+    <V> String convertValueToString(V value);
+
+    <V> V convertStringToValue(@Nonnull Class<? extends V> valueClass, @Nonnull String valueString);
 }

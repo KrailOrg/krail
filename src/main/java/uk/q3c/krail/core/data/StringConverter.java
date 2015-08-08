@@ -20,7 +20,7 @@ import java.util.Locale;
  * <p>
  * Created by David Sowerby on 30/06/15.
  */
-public class StringConverter implements Converter<String, String> {
+public class StringConverter<L> implements Converter<String, String> {
     /**
      * {@inheritDoc}
      */

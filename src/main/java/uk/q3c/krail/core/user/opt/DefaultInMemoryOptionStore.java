@@ -14,7 +14,7 @@ package uk.q3c.krail.core.user.opt;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import uk.q3c.krail.core.data.StringPersistenceConverter;
+import uk.q3c.krail.core.data.OptionStringConverter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
@@ -31,12 +31,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DefaultInMemoryOptionStore implements InMemoryOptionStore {
 
     private Map<String, Map<String, Map<String, Optional<?>>>> map = new ConcurrentHashMap<>();
-    private StringPersistenceConverter stringPersistenceConverter;
+    private OptionStringConverter optionStringConverter;
 
 
     @Inject
-    public DefaultInMemoryOptionStore(StringPersistenceConverter stringPersistenceConverter) {
-        this.stringPersistenceConverter = stringPersistenceConverter;
+    public DefaultInMemoryOptionStore(OptionStringConverter optionStringConverter) {
+        this.optionStringConverter = optionStringConverter;
     }
 
 
@@ -176,8 +176,7 @@ public class DefaultInMemoryOptionStore implements InMemoryOptionStore {
                     entity.setUserHierarchyName(hierarchyName);
                     entity.setRankName(rankName);
                     Optional<?> value = optionEntry.getValue();
-                    entity.setValue(stringPersistenceConverter.convertToPersistence(value)
-                                                              .get());
+                    entity.setValue(optionStringConverter.convertValueToString(value.get()));
                     list.add(entity);
                 }
             }

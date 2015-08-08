@@ -13,6 +13,7 @@ package uk.q3c.krail.core.data;
 
 import com.google.inject.AbstractModule;
 import com.vaadin.data.util.converter.ConverterFactory;
+import com.vaadin.data.util.converter.DefaultConverterFactory;
 
 /**
  * Provides data related configuration
@@ -36,7 +37,7 @@ public class DataModule extends AbstractModule {
     }
 
     protected void bindStringPersistenceConverter() {
-        bind(StringPersistenceConverter.class).to(DefaultStringPersistenceConverter.class);
+        bind(OptionStringConverter.class).to(DefaultOptionStringConverter.class);
     }
 
     /**
@@ -52,7 +53,7 @@ public class DataModule extends AbstractModule {
      * Provides a factory for converting data types for display by Vaadin.  Override this method to provide your own implementation
      */
     protected void bindConverterFactory() {
-        bind(ConverterFactory.class).to(KrailConverterFactory.class);
+        bind(ConverterFactory.class).to(DefaultConverterFactory.class);
     }
 
 
