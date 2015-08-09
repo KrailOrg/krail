@@ -92,7 +92,7 @@ Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://g
 
 If you want to build from source run 'gradle eclipse' or 'gradle idea' to generate the IDE files
 
-#Acknowlegements
+#Acknowledgements
 
 Thanks to:
  
