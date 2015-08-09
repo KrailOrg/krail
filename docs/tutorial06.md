@@ -23,7 +23,7 @@ By default, Krail looks for a file krail.ini in WEB-INF:
 quality=good
 completed=false
 ```
-- In the 'pages' package create a new view, 'IniConfigView', extended from ```Grid3x3View``` 
+- In the 'pages' package create a new view, 'IniConfigView', extended from ```Grid3x3ViewBase``` 
 - Override the ```doBuild()``` method (you will get some compile errors)
 ```
   @Override
@@ -39,14 +39,14 @@ completed=false
 ```
 All this does is set up a button to show the config, and a label to display it.  Loading the config into an instance of ```ApplicationConfiguration``` actually happens at application startup. 
 
-- inject ```ApplicationConfiguration``` (this is a singleton, and therefore just one instance for the whole application)
+- inject ```ApplicationConfiguration``` (which, as a matter of interest, is a singleton, and therefore just one instance for the whole application)
 ```
     @Inject
     protected IniConfigView(ApplicationConfiguration applicationConfiguration) {
         this.applicationConfiguration = applicationConfiguration;
     }
 ```
-- implement the ```showConfig()``` method (which we could also put in to the lambda)
+- implement the ```showConfig()``` method (which could equally be placed directly in the lambda expression for ```showConfigButton```)
 
 ```
 private void showConfig() {
@@ -55,7 +55,7 @@ private void showConfig() {
 ```
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Note the syntax of <i>tutorial.quality</i> - [section name].[property name] - Apache Commons Configuration provides this 'FQN' type syntax - see the Apache documentation for more information </p>
+<p class="last">Note the syntax of <i>tutorial.quality</i>, that is: [section name].[property name] - Apache Commons Configuration provides this 'FQN' type syntax - see the Apache documentation for more information </p>
 </div>
 
 - Include this new page in ```MyOtherPages```
@@ -66,7 +66,7 @@ addEntry("ini-config", IniConfigView.class, LabelKey.Ini_Config, PageAccessContr
 
 #More layers
 
-There may be occasions when adding libraries to an application that further configuration is needed.  You can add as many configuration files as you require.    
+When an application uses comprises multiple libraries, there may be occasions when mutliple sets of configuration are required. You can add as many configuration files as you require.   
 
 ##Adding another ini file
 
@@ -80,7 +80,9 @@ timeout=1000
 ```
 This will be used to show a property overriding another, while also adding new properties.  To display the values
 
-- add Vaadin components to ```doBuild()```:
+##Display the properties
+
+- add Vaadin components to ```doBuild()``` so we can display the property values:
 ```java
     connectionTimeoutProperty = new Label();
     tutorialCompletedProperty = new Label();
@@ -96,6 +98,9 @@ private void showConfig() {
 }`
 
 ```
+
+
+##Configure Guice
 
 We now need to set up the Guice configuration so it knows about the additional file.  This will be made easier once [issue 416](https://github.com/davidsowerby/krail/issues/416) has been completed, but for now we need to sub-class the appropriate Guice module, and then tell the ```BindingManager``` about it
 
@@ -143,11 +148,14 @@ If an ini file is essential for the operation of your application, ```addConfig(
  
 - add another entry to ```TutorialIniConfigModule```, but do not create the corresponding file
 ```
-    addConfig("essential.ini",2,false);
+addConfig("essential.ini",2,false);
 ```
 - run the application and it will fail early with a ```FileNotFoundException```
+- change the 'optional' parameter to true and the application will run
 
-- remove the line you just added, to clean up
+```
+addConfig("essential.ini",2,true);
+```
 
 The final versions of the files should be:
 
@@ -157,11 +165,11 @@ package com.example.tutorial.ini;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
 
 public class TutorialIniConfigModule extends ApplicationConfigurationModule {
-
     @Override
     protected void bindConfigs() {
         super.bindConfigs();
         addConfig("moreConfig.ini",1,false);
+        addConfig("essential.ini",2,true);
     }
 }
 ```
@@ -269,8 +277,9 @@ public class IniConfigView extends Grid3x3ViewBase {
 #Summary
 
 - We have loaded an ini file
-- we have modified the values in one ini file with those from another
+- we have demonstrated the principle of overriding the the values in one ini file with those from another
 - We have demonstrated ensuring an early fail if a file is missing
+- We have demonstrate making the presence of an ini file optional
  
 Apache Commons Configuration supports much more than just ini files, and can support [variety of sources](https://commons.apache.org/proper/commons-configuration/userguide_v1.10/overview.html#Configuration_Sources) - Krail will just accept anything that Apache Commons Configuration provides
   
