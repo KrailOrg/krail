@@ -59,7 +59,8 @@ repositories {
 
 #Limitations
 
-Not fully thread-safe where it needs to be
+Not fully thread-safe where it needs to be<br>
+Would not work in a [clustered environment](https://github.com/davidsowerby/krail/issues/425)
 
 # Status
 
@@ -74,7 +75,7 @@ Not fully thread-safe where it needs to be
 
 
 Krail is usable, though there is still work to ensure thread safety.  No major changes to the API expected.  Vaadin push is supported.  Tested on Tomcat 7 & 8
-Would not work in a [clustered environment](https://github.com/davidsowerby/krail/issues/425)
+
 
 ## demo
 
@@ -95,8 +96,8 @@ If you want to build from source run 'gradle eclipse' or 'gradle idea' to genera
 
 Thanks to:
  
-[Dirk Lietz](https://github.com/Odhrean) for his review and feedback for the Tutorial
-[Mike Pilone](http://mikepilone.blogspot.co.uk/) for his blog post on Vaadin Shiro integration
+[Dirk Lietz](https://github.com/Odhrean) for his review and feedback for the Tutorial<br>
+[Mike Pilone](http://mikepilone.blogspot.co.uk/) for his blog post on Vaadin Shiro integration<br>
 
 
 ej technologies for an open source licence for their java profiler, [JProfiler](http://www.ej-technologies.com/products/jprofiler/overview.html)<br>
