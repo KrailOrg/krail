@@ -1,1 +1,1 @@
-This version updates to Vaadin 7.4.8, corrects some errors in the Shiro integration, provides some minor fixes and adds new sections to the Tutorial
+This version updates to Vaadin 7.5.3.  Integration of ```Option``` and I18N with persistence is substantially simplified, and a substantial number of small fixes and enhancements included.

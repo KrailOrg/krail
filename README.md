@@ -1,6 +1,6 @@
 #krail
 
-Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the [Tutorial](http://krail.readthedocs.org/en/0.9.5/tutorial01/) (still in development but will get you started)
+Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the comprehensive [Tutorial](http://krail.readthedocs.org/en/latest/) (still in development but a large part of it is complete)
 
 This core library provides:
 
@@ -20,7 +20,7 @@ Additional libraries, integrated and configured through Guice, provide:
 * Quartz scheduler - [krail-quartz](https://github.com/davidsowerby/krail-quartz), using, of course,  [Quartz Scheduler](http://www.quartz-scheduler.org/)
 
 
-The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [documentation](https://sites.google.com/site/q3cjava/home) provide more information.
+The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [Tutorial](http://krail.readthedocs.org/en/latest/) provide more information.
 
 
 #Download
@@ -78,7 +78,7 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 
 ## demo
 
-There is a [simple demo](https://github.com/davidsowerby/krail-demo) project - this is rapidly becoming irrelevant.  The [Tutorial](http://krail.readthedocs.org/en/0.9.6/tutorial01/) is much more useful.
+There is a [simple demo](https://github.com/davidsowerby/krail-demo) project - this is rapidly becoming irrelevant.  The Tutorial (see above) is much more useful.
 
 ## testApp
 
