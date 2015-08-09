@@ -5,11 +5,11 @@ You have seen some aspects of Krail's User Access Control already, and are proba
 What we will do, however, is demonstrate some of the features of Shiro, within a Krail context:
 
 - **Implementing a Realm**. Implement a trivial Realm to provide authentication and authorisation
-- **Page Control**.  This is Krail specific use of Shiro features to determine whether a user has permission to access a page
+- **Page Access Control**.  This is Krail specific use of Shiro features to determine whether a user has permission to access a page
 - **Coded access**.  Checking from code whether a user has permissions to do something
 - **Access Control annotations**.  This will demonstrate the use of Shiro's annotations, as an alternative to using coded access
 
-Krail does not yet provide any user management capability (the management of users, groups & roles etc) as this is often provided via LDAP, Active Directory or Identity Management systems.  There is an [open ticket](https://github.com/davidsowerby/krail/issues/226) for it, so it may one day be developed.
+Krail does not yet provide any user management capability (the management of users, groups & roles etc) as this is often provided via LDAP, Active Directory or Identity Management systems.  There is an [open ticket](https://github.com/davidsowerby/krail/issues/226) for it, so it may be developed one day.
 
 
 #Example
@@ -184,12 +184,7 @@ An Option follows a similar pattern, provided by ```OptionPermission```
 - action ('edit')
 - resource instance (an option) structured [hierarchy]:[user id]:[hierarchy level index]:[context]:[option name]:[qualifier]:[qualifier]
 
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The javadoc for OptionPermission is incorrect, it misses out the userId.  See #419</p>
-</div>
-
-Thus the option permissions given to 'eq' and 'fb' enable to edit only their own options in the ```SimpleUserHierarchy```.  This is set by giving permission only for their own userId, at hierarchy level index = 0  
+Thus the option permissions given to 'eq' and 'fb' only allow them to edit their own options in the ```SimpleUserHierarchy```.  This is set by giving permission only at the user level, hierarchy level index = 0  
 
 Again the 'admin' user is all-powerful, with permission to edit any option:
 
@@ -376,10 +371,12 @@ protected void requestAPayRise() {
     userNotifier.notifyInformation(DescriptionKey.You_just_asked_for_a_pay_increase);
 }
 ```
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Guice AOP <a href="https://github.com/google/guice/wiki/AOP#limitations" target="">will not work on private or final methods</a> - it is easy to forget that, especially as your IDE may auto create the method as private.  If a method annotation does not work as expected, that is the first thing to check</p>
+
+<div class="warning">
+<p class="first admonition-title">Warning</p>
+Guice AOP <a href="https://github.com/google/guice/wiki/AOP#limitations" target="">will not work on private or final methods</a> - it is easy to forget that, especially as your IDE may auto create the method as private.  If a method annotation does not work as expected, that is the first thing to check</p>
 </div>
+
 
 - We want to restrict who can use the method, so we will annotate it with a new permission
 
@@ -409,11 +406,12 @@ addAccount("eq", "eq", "page:view:private:*","option:edit:SimpleUserHierarchy:eq
 #Summary
 
 We have:
-- Shown how to control access to pages
-- Shown how access control is applied to Options
-- Shown how to control access using code, or annotations
-- Built a very simple credential store with user accounts
-- Demonstrated some uses of Shiro's Wildcard permissions
+- Shown how to control access to pages<br>
+- Shown how access control is applied to Options<br>
+- Shown how to control access using code<br>
+- Shown how to control access using annotations<br>
+- Built a very simple credential store with user accounts<br>
+- Demonstrated some uses of Shiro's Wildcard permissions<br>
 
 #Download from Github
 To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step07**
