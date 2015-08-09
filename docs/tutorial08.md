@@ -26,12 +26,14 @@ popupButton = new Button("options");
 - first, inject ```Translate``` into the constructor
 
 ```
-@Inject
-public MyNews(Option option, OptionPopup optionPopup, Translate translate) {
-    this.option = option;
-    this.optionPopup = optionPopup;
-    this.translate = translate;
-}
+ @Inject
+    public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, UserNotifier userNotifier, Translate translate) {
+        this.option = option;
+        this.optionPopup = optionPopup;
+        this.subjectProvider = subjectProvider;
+        this.userNotifier = userNotifier;
+        this.translate = translate;
+    }
 ```  
 - In ```doBuild()```, replace:
 ```java
@@ -193,14 +195,14 @@ public void optionValueChanged(Property.ValueChangeEvent event) {
 }
 ```
 
-
+- Rerun the application, login and select 'My News' page, and try changing the option to display the CEO new channel
 
 
 #Translation from Annotations
 
-Especially when using Vaadin components, it is often more convenient to use an ```Annotation``` instead of calling ```Translate``` directly - this keeps the ```I18NKey```s with the fields using them.
+When using Vaadin components, it is often more convenient to use an ```Annotation``` instead of calling ```Translate``` directly - this keeps the ```I18NKey```s with the fields using them.
 
-To achieve this, we need an annotation that is specific to our ```I18NKey``` implementations (this is because of the limitations Java places on ```Annotation``` parameters)
+To achieve this, we need an annotation that is specific to our ```I18NKey``` implementations (we cannot use annotations from Krail core, because of the limitations Java places on ```Annotation``` parameters)
 
 - in the package 'com.example.tutorial.i18n', create a new Annotation class called "Caption".  Note the ```@I18NAnnotation``` - this tells Krail's ```I18NAnnotationProcessor``` that this annotation is used for I18N. 
 
@@ -253,12 +255,14 @@ private Button popupButton;
     
 ##Limitation
 
-Naturally, you cannot use variable values with an annotation - by its very nature, ```Annotation``` will only take static values. For anything dynamic, therefore, you will need to use a direct call to ```Translate```.
+Naturally, you cannot use variable values with an annotation - by its very nature, ```Annotation``` will only take static values. For I18N patterns which requires dynamic values, therefore, you will need to use a direct call to ```Translate```.
 
 
 #Multi-Language
 
-The whole point of I18N is, of course, to support multiple languages / Locales.  By default, ```I18NModule``` defaults everything to **Locale.UK**.  This section assumes that you are familiar with the standard Java approach to I18N.  For those not familiar with it, there are many online resources if you need them.
+Even though Krail's approach to handling I18N is actually very useful even in a single language application, the whole point of I18N is, of course, to support multiple languages / Locales.  
+
+By default, ```I18NModule``` defaults everything to **Locale.UK**.  This section assumes that you are familiar with the standard Java approach to I18N.  For those not familiar with it, there are many online resources if you need them.
 <a name="config-methods"></a>
 ##Methods of configuration
 
@@ -359,7 +363,7 @@ public class Labels_de extends Labels {
     - a number, but not all items have changed language (Krail has some translations built in, and these are the ones which have changed. Hopefully, the number of translations will increase over time - if you can contribute, please do)
     - log in and navigate to 'MyNews'
     - most of the page will still be in English (we have not provided translations for it all) but the banner and Options button should now be in German.
-    - change the language back to Englis - and the banner stays in German, while the Options button switches back to English.
+    - change the language back to English - and the banner stays in German, while the Options button switches back to English.
     
 Why is this happening?  Well, currently there is nothing to tell this view that it should re-write the banner when there is a change in language.  The **@Caption** annotation handles that automatically, but for a manual translation we need to respond to a language change message.
  
@@ -410,34 +414,38 @@ protected void localeChanged(LocaleChangeBusMessage busMessage) {
 
 #Pattern sources
 
-So far we have only used the class-based method for defining I18N patterns.  You can also use the traditional properties files, although using ```String``` keys can lead to mistakes.  You can also use a database source (which could actually be a REST service, as it uses a pluggable DAO).
+So far we have used the class-based method for defining I18N patterns.  Krail originally supported the traditional properties files, but that has now been withdrawn as we saw no benefit to using it.  
+
+You can, however, use any source which identified by an annotation - a database, REST service or any other service which can provide patterns via a pluggable DAO.  Krail provides an in-memory map as a source, annotated with **@InMemory**.  Being in memory, it is not very useful except for testing - later you will see a [JPA implementation](tutorial09.md))
 
 ##Selecting pattern sources
  
 Let's add a database source (which for now will actually be an in-memory map, until we [add persistence](tutorial09.md))
 
-- in ```TutorialI18NModule```, define two pattern sources - class and database (previously we were using the default - class only).  The order they are declared is significant, as that is also the order they queried.
+- in ```TutorialI18NModule```, define two pattern sources - class and in-memory (previously we were using the default - class only).  The order they are declared is significant, as that is also the order they queried.
 ```
 @Override
 protected void define() {
     defaultLocale(Locale.UK);
     supportedLocales(Locale.GERMANY);
-    bundleSource("in-memory store", DatabaseBundleReader.class);
-    bundleSource("class", ClassBundleReader.class);
+    source(InMemory.class);
+    source(ClassPatternSource.class);
    
 }
 ```
-- The ```DefaultBindingManager.addPersistenceModules()``` defines a default, in-memory "database" PatternDao implementation - no changes are therefore needed to ```BindingManager``` 
+- The ```DefaultBindingManager.addPersistenceModules()``` defines a default, in-memory store with a PatternDao implementation - no changes are therefore needed to ```BindingManager``` to include this. 
 
  
 If you were to run the application now, nothing will have changed.  We have set the order of bundle sources so that "in-memory store" is queried first - of course nothing will be found as it is empty - and the "class", which will return the same as before.
 
-To prove this works, we need to put a value in to the database:
+To prove this works, we need to put a value in to the in-memory store:
 
-- in 'MyNews' add ```PatternSource``` and a provider for ```PatternDao```.  Note the **@CoreDao** annotation on ```PatternDao``` - the annotation allows multiple persistence sources to be used, but generally you will use **@CoreDao**, as that is the primary source.
+- in 'MyNews' add ```PatternSource``` and a provider for ```PatternDao```.  Note the **@InMemory** annotation on ```PatternDao```. 
+
+We do not generally need to access the ```PatternDao``` directly, except putting values into store - the Krail core takes care of reading patterns from the sources you have defined in the ```I18NModule```
 ```
 @Inject
-public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, UserNotifier userNotifier, Translate translate,@CoreDao Provider<PatternDao>
+public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, UserNotifier userNotifier, Translate translate,@InMemory Provider<PatternDao>
         patternDaoProvider, PatternSource patternSource) {
     this.option = option;
     this.optionPopup = optionPopup;
@@ -471,12 +479,19 @@ public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectPro
 
 ```
 
-This provides a ```TextField``` to capture some input, and a submit button to submit the value to the I18N "database" and update the banner.  The ```PatternSource``` is only needed to clear the cache (to ensure we capture the new value).
+- change the entry for the banner to use only the first two columns (so that we can use the top right cell)
+
+```
+   getGridLayout().addComponent(bannerLabel, 0, 0, 1, 0);
+```
+
+This provides a ```TextField``` to capture some input, and a submit button to submit the value to the in memory store and update the banner.  The ```PatternSource``` is only needed to clear the cache (to ensure we capture the new value).
   
 - Run the application, login and navigate to 'MyNews'
 - Make sure that the CEO New Channel is selected (we only created a value for that option setting)
 - Enter some text, and press 'submit'
 - The banner will update immediately with the text you entered
+- change the Locale selector to "Deutsch" and note that the German translation is still used - we only set a value for Locale.UK
  
 You may recall that we defined the bundle sources like this, and noted that the declaration order is important:
 ```
@@ -484,19 +499,19 @@ You may recall that we defined the bundle sources like this, and noted that the 
 protected void define() {
    defaultLocale(Locale.UK);
    supportedLocales(Locale.GERMANY);
-   bundleSource("in-memory store", DatabaseBundleReader.class);
-   bundleSource("class", ClassBundleReader.class);
+   source(InMemory.class);
+   source(ClassPatternSource.class);
   
 }
  
 ```
-This means that the database source is checked first for a value - if there is one, it is used, and the class source not queried.  We just created a value in the database, so that is the one that is used, and this demonstrates is why the order of declaration is important.
+This means that the **@InMemory** source is checked first for a value - if there is one, it is used, and the **ClassPatternSource** is not queried.  We just created a value in the in-memory store, so that is the one that is used -this demonstrates is why the order of declaration is important.
  
 If you refer to the Javadoc for ```TutorialI18NModule``` you will see that there are methods which enable very specific settings for the order of sources.  We will not cover that in this Tutorial, but leave you to experiment.  
 
 #Changing Krail Core values
 
-We have just demonstrated changing the value for a specific key - exactly the same technique can be used to change (or add new languages to) Krail core ```I18NKey```s.  This does require exporting the keys to a bundle source with mutable values (probably a database).  Outstanding ticket [#430](https://github.com/davidsowerby/krail/issues/430) will provide support for this in the ```PatternUtility``` class.
+We have just demonstrated changing the value for a specific key - exactly the same technique can be used to change (or add new languages to) Krail core ```I18NKey```s.  This does require exporting the keys to a bundle source with mutable values (probably a database).  The ```PatternUtility``` class provides methods to support that process.
   
 #Methods of configuration revisited
 
@@ -507,8 +522,8 @@ Earlier [in this section](tutorial08.md#config-methods) we elected to sub-class 
 protected void define() {
     defaultLocale(Locale.UK);
     supportedLocales(Locale.GERMANY);
-    bundleSource("in-memory store", InMemoryBundleReader.class);
-    bundleSource("class", ClassBundleReader.class);
+    source(InMemory.class);
+    source(ClassPatternSource.class);
 }
 ```
 with this BindingManager entry
@@ -525,8 +540,8 @@ Because the I18NModule methods used are all fluent, we could achieve exactly the
 protected Module i18NModule() {
     return new I18NModule().defaultLocale(Locale.UK)
                            .supportedLocales(Locale.GERMANY)
-                           .bundleSource("in-memory store", InMemoryBundleReader.class)
-                           .bundleSource("class", ClassBundleReader.class);
+                           .source(InMemory.class)
+                           .source(ClassPatternSource.class);
 }
 ```
  
