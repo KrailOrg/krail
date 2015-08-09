@@ -12,9 +12,9 @@ We will build a new page:
 
 - in ```MyOtherPages``` add a new page entry
 ```
-addEntry("i18n", I18NView.class, LabelKey.I18N, PageAccessControl.PUBLIC);
+addEntry("i18n", I18NDemoView.class, LabelKey.I18N, PageAccessControl.PUBLIC);
 ```
-- in package 'com.example.tutorial.pages', create a new class 'I18NView' extended from ```ViewBase```
+- in package 'com.example.tutorial.pages', create a new class 'I18NDemoView' extended from ```ViewBase```
 - implement the ```doBuild()``` method
 - create the enum constant *LabelKey.I18N*
 
@@ -24,7 +24,7 @@ package com.example.tutorial.pages;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
-public class I18NView extends ViewBase {
+public class I18NDemoView extends ViewBase {
     @Override
     protected void doBuild(ViewChangeBusMessage busMessage) {
     }
@@ -88,18 +88,20 @@ The mix of components we will use should cover all the situations you will encou
 ```
 package com.example.tutorial.pages;
 
-import com.example.tutorial.i18n.Caption;
-import com.example.tutorial.i18n.DescriptionKey;
-import com.example.tutorial.i18n.LabelKey;
 import com.vaadin.ui.*;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
-public class I18NView extends ViewBase {
+public class I18NDemoView extends ViewBase {
+
+    private Grid grid;
+    private Label label;
+    private Table table;
+    private TextField textField;
 
     @Override
     protected void doBuild(ViewChangeBusMessage busMessage) {
-        textField = new TextField();
+         textField = new TextField();
         label = new Label();
         table = new Table();
         grid = new Grid();
@@ -130,7 +132,7 @@ import com.vaadin.ui.*;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
-public class I18NView extends ViewBase {
+public class I18NDemoView extends ViewBase {
     @Caption(caption = LabelKey.News, description = DescriptionKey.Interesting_Things)
     private Grid grid;
     @Caption(caption = LabelKey.News, description = DescriptionKey.Interesting_Things)
@@ -227,7 +229,7 @@ private Label label;
 
 A ```Table``` has column headers which may need translation. If a ```Table``` propertyId is an ```I18NKey``` it will be translated - otherwise it is ignored by the Krail ```I18NProcessor```. 
 
-- add a 'setupTable' method to ```I18NView```
+- add a 'setupTable' method to ```I18NDemoView```
 
 ```
 private void setupTable() {
@@ -304,7 +306,7 @@ public class ButtonBar extends Panel {
 }
 ```
 
-- add two instances of this class to our ```I18NView.doBuild()```.  Note that the second still needs to be a field (and not a local variable) for the ```I18NProcessor``` to find the class annotations.
+- add two instances of this class to our ```I18NDemoView.doBuild()```.  Note that the second still needs to be a field (and not a local variable) for the ```I18NProcessor``` to find the class annotations.
 - include them in the layout
 ```
 buttonBar1 = new ButtonBar();
@@ -495,17 +497,17 @@ You will recognise the fields and captions from the earlier part of this Tutoria
 
 The constructor simply extends ```BeanFieldGroupBase``` and your IDE will probably auto-complete the necessary parameters.  Don't forget the **@Inject** annotation though.
 
-Within the constructor we simply build the presentation compoents, and define the submit button to invoke the commit() method, which will transfer data from the presentation layer back to the model - in this case the person bean.
+Within the constructor we simply build the presentation components, and define the submit button to invoke the commit() method, which will transfer data from the presentation layer back to the model - in this case the person bean.
 
 Finally, the getLayout() method just enables a consumer class to identify the base component to place within a View.
 
 There is an [open ticket](https://github.com/davidsowerby/krail/issues/431) to provide more support for Forms.
 
-- Now we need to use the form, by injecting it in to ```I18NView```
+- Now we need to use the form, by injecting it in to ```I18NDemoView```
 
 ```
 @Inject
-protected I18NView(PersonForm  personForm) {
+protected I18NDemoView(PersonForm  personForm) {
     this.personForm = personForm;
 }
 ```
@@ -537,8 +539,8 @@ In this section we have:
 - seen how to override a class I18N annotation 
 - created a form, with I18N integrated validation
 
-#Download from Github
-To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step08a**
+#Download from GitHub
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step08a**
 
 
 
