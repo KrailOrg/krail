@@ -1,34 +1,39 @@
 site_name: Krail
 
 pages:
-- [index.md, Home]
-- [about.md, About]
-- [tutorial01.md, Tutorial - Getting Started]
-- [tutorial02.md, Tutorial - Pages and Navigation]
-- [tutorial03.md, Tutorial - UI & Theme]
-- [tutorial04.md, Tutorial - User Notification]
-- [tutorial05.md, Tutorial - Options and UserHierarchies]
-- [tutorial06.md, Tutorial - Configuration from Ini file]
-- [tutorial07.md, Tutorial - User Access Control]
-- [tutorial08.md, Tutorial - I18N]
-- [tutorial08a.md, Tutorial - I18N and Vaadin Components]
-- [tutorial09.md, Tutorial - Persistence - JPA]
-- [tutorial10.md, Tutorial - Services]
-- [tutorial11.md, Tutorial - Guice Scopes]
-- [tutorial12.md, Tutorial - Event Bus]
-- [tutorial13.md, Tutorial - Vaadin Push]
-- [tutorial14.md, Tutorial - Validation]
-- [tutorial15.md, Tutorial - Creating User Hierarchies]
-- [tutorial16.md, Tutorial - More on Guice Configuration]
+- Home: 'index.md'
+- About: 'about.md'
+- Tutorial:
+  - 'Getting Started': 'tutorial01.md'
+  - 'Pages and Navigation': 'tutorial02.md'
+  - 'UI & Theme': 'tutorial03.md'
+  - 'User Notification': 'tutorial04.md'
+  - 'Options and UserHierarchies': 'tutorial05.md'
+  - 'Configuration from Ini file': 'tutorial06.md'
+  - 'User Access Control': 'tutorial07.md'
+  - 'I18N': 'tutorial08.md'
+  - 'I18N and Vaadin Components': 'tutorial08a.md'
+  - 'Persistence - JPA': 'tutorial09.md'
+  - 'Services': 'tutorial10.md'
+  - 'Guice Scopes': 'tutorial11.md'
+  - 'Event Bus': 'tutorial12.md'
+  - 'Vaadin Push': 'tutorial13.md'
+  - 'Validation': 'tutorial14.md'
+  - 'Creating User Hierarchies': 'tutorial15.md'
+  - 'More on Guice Configuration': 'tutorial16.md'
+- Developer Guide:
+  - 'Krail Configuration Overview': 'devguide01.md'
+  - 'Pages and Navigation': 'devguide02.md'
+  - 'Options and UserHierarchies': 'devguide05.md'
+  - 'Developer Guide - I18N': 'devguide08.md'
+  - 'Guice Scopes': 'devguide11.md'
+  - 'Event Bus': 'devguide12.md'
+  - 'Validation': 'devguide14.md'
+  - 'Persistence providers': 'devguide15.md'
+- Glossary: 'glossary.md'
+- Licence: 'license.md'
 
-- [devguide01.md, Developer Guide - Krail Configuration Overview]
-- [devguide02.md, Developer Guide - Pages and Navigation]
-- [devguide05.md, Developer Guide - Options and UserHierarchies]
-- [devguide08.md, Developer Guide - I18N]
-- [devguide11.md, Developer Guide - Guice Scopes]
-- [devguide12.md, Developer Guide - Event Bus]
-- [devguide14.md, Developer Guide - Validation]
-- [devguide15.md, Developer Guide - Persistence providers]
-- [glossary.md, Glossary]
-- [license.md, Licence]
 theme: readthedocs
+
+
+
