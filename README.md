@@ -64,9 +64,9 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 
 # Status
 
-19th October 2015:
+24th October 2015:
 
-* Vaadin 7.5.7 is integrated with:
+* Vaadin 7.5.8 is integrated with:
 * Guice 4.0
 * Shiro 1.2.4,
 * MBassador (Event Bus)
