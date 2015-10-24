@@ -33,9 +33,11 @@ import java.lang.annotation.Target;
 public @interface Dependency {
 
     /**
-     * If true, this dependency must be started before the one which depends on it can start
+     * If true, this dependency must be started before the one which depends on it can start.  If false, an attempt to start it will be made before starting
+     * this service, but will not cause this service to fail (in other words, it is an optional dependency)
      *
-     * @return If true, this dependency must be started before the one which depends on it can start
+     * @return If true, this dependency must be started before the one which depends on it can start.  If false, an attempt to start it will be made before
+     * starting this service, but will not cause this service to fail (in other words, it is an optional dependency)
      */
     boolean requiredAtStart() default true;
 
@@ -47,7 +49,7 @@ public @interface Dependency {
     boolean stopOnStop() default true;
 
     /**
-     * If true, a service which depends on this one, and is in a state of {@link Service.Status#DEPENDENCY_FAILED} should attempt to start when this one starts
+     * If true, a service which depends on this one, and is in a state of {@link Service.State#DEPENDENCY_FAILED} should attempt to start when this one starts
      *
      * @return If true, a service which depends on this one should attempt to start when this one starts
      */

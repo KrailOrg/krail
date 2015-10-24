@@ -52,7 +52,7 @@ public class ID {
             }
             //https://github.com/davidsowerby/krail/issues/383
             //enhanced classes mess up the class name with $$Enhancer
-            buf.append(ClassnameUtils.simpleNameWithoutEnhance(c));
+            buf.append(ClassNameUtils.simpleClassNameEnhanceRemoved(c));
         }
         if (qualifier.isPresent()) {
             buf.append("-");

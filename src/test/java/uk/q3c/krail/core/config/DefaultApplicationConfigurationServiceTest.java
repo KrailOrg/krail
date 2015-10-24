@@ -29,7 +29,7 @@ import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.eventbus.GlobalBus;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.services.Service.Status;
+import uk.q3c.krail.core.services.Service.State;
 import uk.q3c.krail.core.services.ServiceException;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.krail.testutil.MockCurrentLocale;
@@ -128,12 +128,12 @@ public class DefaultApplicationConfigurationServiceTest {
         service.start();
         // then (one configuration is the in memory one added automatically)
         assertThat(configuration.getNumberOfConfigurations()).isEqualTo(3);
-        assertThat(service.getStatus()).isEqualTo(Status.STARTED);
+        assertThat(service.getState()).isEqualTo(State.STARTED);
         assertThat(configuration.getString("in memory")).isEqualTo("memory");
         // then
         service.stop();
         assertThat(configuration.getNumberOfConfigurations()).isEqualTo(1);
-        assertThat(service.getStatus()).isEqualTo(Status.STOPPED);
+        assertThat(service.getState()).isEqualTo(State.STOPPED);
         assertThat(configuration.getString("in memory")).isNull();
     }
 

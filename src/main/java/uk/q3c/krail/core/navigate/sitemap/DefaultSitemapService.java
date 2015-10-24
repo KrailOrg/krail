@@ -22,8 +22,9 @@ import uk.q3c.krail.core.config.ApplicationConfiguration;
 import uk.q3c.krail.core.config.ApplicationConfigurationService;
 import uk.q3c.krail.core.config.ConfigKeys;
 import uk.q3c.krail.core.config.InheritingConfiguration;
-import uk.q3c.krail.core.services.AbstractServiceI18N;
+import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.Dependency;
+import uk.q3c.krail.core.services.Service;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
@@ -39,7 +40,7 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
-public class DefaultSitemapService extends AbstractServiceI18N implements SitemapService {
+public class DefaultSitemapService extends AbstractService implements SitemapService, Service {
 
     private static Logger log = LoggerFactory.getLogger(DefaultSitemapService.class);
     @Dependency
@@ -76,11 +77,11 @@ public class DefaultSitemapService extends AbstractServiceI18N implements Sitema
 
     @Override
     protected void doStart() throws Exception {
-        if (getStatus().equals(Status.DEPENDENCY_FAILED)) {
+        if (getState().equals(State.DEPENDENCY_FAILED)) {
             String msg = MessageFormat.format("Unable to start {0}, because it depends on {1}", getName(),
                     configurationService.getName());
             log.error(msg);
-            setStatus(Status.DEPENDENCY_FAILED);
+            setState(State.DEPENDENCY_FAILED);
             throw new SitemapException(msg);
         }
         loadSources();

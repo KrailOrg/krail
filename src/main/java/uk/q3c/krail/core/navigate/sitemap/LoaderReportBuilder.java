@@ -15,7 +15,7 @@ package uk.q3c.krail.core.navigate.sitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderErrorEntry;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderInfoEntry;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderWarningEntry;
-import uk.q3c.util.ClassnameUtils;
+import uk.q3c.util.ClassNameUtils;
 import uk.q3c.util.MessageFormat;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public class LoaderReportBuilder {
         } else {
 
             for (SitemapLoader loader : loaders) {
-                String loaderName = ClassnameUtils.simpleNameWithoutEnhance(loader.getClass());
+                String loaderName = ClassNameUtils.simpleClassNameEnhanceRemoved(loader.getClass());
                 fillWidth('=', loaderName);
                 summary(loader.getErrorCount(), loader.getWarningCount(), loader.getInfoCount());
 

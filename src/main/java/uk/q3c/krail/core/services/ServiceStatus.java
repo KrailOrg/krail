@@ -1,14 +1,12 @@
 /*
- * Copyright (c) 2014 David Sowerby
+ * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.services;
@@ -17,19 +15,19 @@ import java.time.LocalDateTime;
 
 public class ServiceStatus {
 
-    private Service.Status currentStatus;
+    private Service.State currentState;
     private LocalDateTime lastStartTime;
     private LocalDateTime lastStopTime;
-    private Service.Status previousStatus;
+    private Service.State previousState;
     private Service service;
     private LocalDateTime statusChangeTime;
 
-    public Service.Status getStatus() {
-        return currentStatus;
+    public Service.State getStatus() {
+        return currentState;
     }
 
-    public void setStatus(Service.Status status) {
-        this.currentStatus = status;
+    public void setStatus(Service.State state) {
+        this.currentState = state;
     }
 
     public LocalDateTime getStartTime() {
@@ -56,20 +54,20 @@ public class ServiceStatus {
         this.service = service;
     }
 
-    public Service.Status getCurrentStatus() {
-        return currentStatus;
+    public Service.State getCurrentState() {
+        return currentState;
     }
 
-    public void setCurrentStatus(Service.Status currentStatus) {
-        this.currentStatus = currentStatus;
+    public void setCurrentState(Service.State currentState) {
+        this.currentState = currentState;
     }
 
-    public Service.Status getPreviousStatus() {
-        return previousStatus;
+    public Service.State getPreviousState() {
+        return previousState;
     }
 
-    public void setPreviousStatus(Service.Status previousStatus) {
-        this.previousStatus = previousStatus;
+    public void setPreviousState(Service.State previousState) {
+        this.previousState = previousState;
     }
 
     public LocalDateTime getLastStartTime() {

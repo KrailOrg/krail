@@ -31,7 +31,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.push.PushModule;
-import uk.q3c.krail.core.services.AbstractServiceI18N;
+import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.ServiceModule;
 import uk.q3c.krail.core.shiro.*;
 import uk.q3c.krail.core.ui.*;
@@ -153,7 +153,7 @@ public class UIScopeTest {
         return (ScopedUIProvider) provider;
     }
 
-    static class MockSitemapService extends AbstractServiceI18N implements SitemapService {
+    static class MockSitemapService extends AbstractService implements SitemapService {
 
         @Inject
         protected MockSitemapService(Translate translate) {

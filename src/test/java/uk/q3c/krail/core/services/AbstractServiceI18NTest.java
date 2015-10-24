@@ -75,8 +75,7 @@ public class AbstractServiceI18NTest {
     }
 
 
-
-    static class TestService extends AbstractServiceI18N {
+    static class TestService extends AbstractService implements Service {
         @Inject
         protected TestService(Translate translate) {
             super(translate);

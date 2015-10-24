@@ -18,24 +18,24 @@ import uk.q3c.krail.core.eventbus.BusMessage;
  */
 public class ServiceBusMessage implements BusMessage {
     private final Service service;
-    private final Service.Status fromStatus;
-    private final Service.Status toStatus;
+    private final Service.State fromState;
+    private final Service.State toState;
 
-    public ServiceBusMessage(Service service, Service.Status fromStatus, Service.Status toStatus) {
+    public ServiceBusMessage(Service service, Service.State fromState, Service.State toState) {
         this.service = service;
-        this.fromStatus = fromStatus;
-        this.toStatus = toStatus;
+        this.fromState = fromState;
+        this.toState = toState;
     }
 
     public Service getService() {
         return service;
     }
 
-    public Service.Status getFromStatus() {
-        return fromStatus;
+    public Service.State getFromState() {
+        return fromState;
     }
 
-    public Service.Status getToStatus() {
-        return toStatus;
+    public Service.State getToState() {
+        return toState;
     }
 }

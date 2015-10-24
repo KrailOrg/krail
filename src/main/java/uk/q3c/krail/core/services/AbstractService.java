@@ -21,13 +21,16 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.GlobalBus;
 import uk.q3c.krail.core.eventbus.SubscribeTo;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.i18n.Translate;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import static uk.q3c.krail.core.services.Service.Status.*;
+import static uk.q3c.krail.core.services.Service.State.*;
 
 /**
  * The easiest way to provide a Service is to sub-class either this class or {@link AbstractServiceI18N}. The behaviour
@@ -68,20 +71,24 @@ import static uk.q3c.krail.core.services.Service.Status.*;
 public abstract class AbstractService implements Service {
 
     private static Logger log = LoggerFactory.getLogger(AbstractService.class);
-    protected Status status = INITIAL;
+    private final Translate translate;
+    protected State state = INITIAL;
     private List<DependencyRecord> dependencies;
+    private I18NKey descriptionKey;
     private PubSubSupport<BusMessage> eventBus;
-    private EnumSet<Status> statusOfStopped = EnumSet.of(STOPPED, FAILED, DEPENDENCY_FAILED);
-
+    private I18NKey nameKey = LabelKey.Unnamed;
+    private EnumSet<State> stateOfStopped = EnumSet.of(STOPPED, FAILED, DEPENDENCY_FAILED);
 
     @Inject
-    protected AbstractService() {
+    protected AbstractService(Translate translate) {
         super();
+        this.translate=translate;
+
     }
 
     @Override
     public boolean isStarted() {
-        return status == STARTED;
+        return state == STARTED;
     }
 
     @Override
@@ -131,21 +138,21 @@ public abstract class AbstractService implements Service {
     }
 
     @Override
-    public Status stop() throws Exception {
-        if (status == STOPPED) {
+    public State stop() throws Exception {
+        if (state == STOPPED) {
             log.debug("Attempting to stop service {}, but it is already stopped. No action taken", getName());
-            return status;
+            return state;
         }
         log.info("Stopping service: {}", getName());
         try {
             doStop();
-            setStatus(STOPPED);
+            setState(STOPPED);
         } catch (Exception e) {
             log.error("Exception occurred while trying to stop the {}.", getName());
-            setStatus(FAILED_TO_STOP);
+            setState(FAILED_TO_STOP);
         }
 
-        return status;
+        return state;
     }
 
     protected abstract void doStop() throws Exception;
@@ -177,9 +184,14 @@ public abstract class AbstractService implements Service {
         return dependencies;
     }
 
+    @Override
+    public String getName() {
+        return translate.from(nameKey);
+    }
+
     /**
      * Responds to a {@link ServiceStartedMessage}.  Checks to see whether the service that has started is a {@link Dependency} - if it is, and this service is
-     * in a state of {@link Service.Status#DEPENDENCY_FAILED}, and {@link Dependency#startOnRestart()} is true, then this service will attempt to start
+     * in a state of {@link State#DEPENDENCY_FAILED}, and {@link Dependency#startOnRestart()} is true, then this service will attempt to start
      *
      * @param busMessage
      *         the message to process, which identifies the service which has stopped
@@ -196,14 +208,14 @@ public abstract class AbstractService implements Service {
             log.debug("Ignoring bus message from itself");
             return;
         }
-        if (this.getStatus()
+        if (this.getState()
                 .equals(STARTED)) {
             log.debug("Service: {}. Another service, '{}', has started, but this service is already running, no change is made", this.getName(), service
                     .getName());
             return;
         }
 
-        if (!this.getStatus()
+        if (!this.getState()
                  .equals(DEPENDENCY_FAILED)) {
             log.debug("Service: {}. Another service, '{}', has started, but this service is not in a status of DEPENDENCY_FAILED, and will not therefore " +
                     "attempt a restart", this.getName(), service.getName());
@@ -232,10 +244,10 @@ public abstract class AbstractService implements Service {
     }
 
     @Override
-    public Status start() throws Exception {
-        if (status == STARTED) {
+    public State start() throws Exception {
+        if (state == STARTED) {
             log.debug("{} already started, no action taken", getName());
-            return status;
+            return state;
         }
         log.info("Starting service: {}", getName());
 
@@ -247,7 +259,7 @@ public abstract class AbstractService implements Service {
                 depRec.service.start();
             } catch (Exception e) {
                 if (depRec.requiredAtStart) {
-                    setStatus(DEPENDENCY_FAILED);
+                    setState(DEPENDENCY_FAILED);
                     throw new ServiceException("Dependency " + depRec.service.getName() + " failed to start", e);
                 } else {
                     log.info("Dependency {} failed to start, but is optional.  Continuing to start {}", depRec.service.getName(), getName());
@@ -260,21 +272,79 @@ public abstract class AbstractService implements Service {
         try {
 
             doStart();
-            setStatus(STARTED);
+            setState(STARTED);
         } catch (Exception e) {
             String msg = "Exception occurred while trying to start " + getName();
             log.error(msg);
-            setStatus(FAILED_TO_START);
+            setState(FAILED_TO_START);
             throw new ServiceException(msg, e);
         }
-        return status;
+        return state;
     }
 
-    protected abstract void doStart() throws Exception;
+    protected abstract void doStart() throws Exception;    @Override
+    public State getState() {
+        return state;
+    }
 
     @Override
-    public Status getStatus() {
-        return status;
+    public I18NKey getNameKey() {
+        return nameKey;
+    }
+
+    @Override
+    public void setNameKey(I18NKey nameKey) {
+        this.nameKey = nameKey;
+    }    protected void publishStatusChange(State previousState) throws Exception {
+
+        log.debug("publishing status change in {}.  Status is now {}", this.getName(), this.getState());
+        eventBus.publish(new ServiceBusMessage(this, previousState, getState()));
+
+        // if we were not started before, tell dependencies we've started now
+        if (!previousState.equals(STARTED)) {
+            log.debug("Service {} is publishing service started message", this.getName());
+            eventBus.publish(new ServiceStartedMessage(this));
+        }
+        // if we were started, tell dependencies we've stopped
+        if (previousState == STARTED && isStopped()) {
+            log.debug("Service {} is publishing service stopped message", this.getName());
+            eventBus.publish(new ServiceStoppedMessage(this));
+        }
+    }
+
+    @Override
+    public I18NKey getDescriptionKey() {
+        return descriptionKey;
+    }    @Override
+    public boolean isStopped() {
+        return stateOfStopped.contains(state);
+    }
+
+    @Override
+    public void setDescriptionKey(I18NKey descriptionKey) {
+        this.descriptionKey = descriptionKey;
+    }    protected void setState(State state) throws Exception {
+        if (state != this.state) {
+            State previousState = this.state;
+            this.state = state;
+            log.debug(getName() + " has changed status from {} to {}", previousState, getState());
+            publishStatusChange(previousState);
+        }
+    }
+
+    /**
+     * returns the translation for {@code #descriptionKey}, or an empty String if {@link #descriptionKey} is null -
+     * this
+     * makes the descriptionKey optional
+     *
+     * @see uk.q3c.krail.core.services.Service#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        if (descriptionKey == null) {
+            return "";
+        }
+        return translate.from(descriptionKey);
     }
 
     private class DependencyRecord {
@@ -292,38 +362,11 @@ public abstract class AbstractService implements Service {
     }
 
 
-    protected void publishStatusChange(Status previousStatus) throws Exception {
-
-        log.debug("publishing status change in {}.  Status is now {}", this.getName(), this.getStatus());
-        eventBus.publish(new ServiceBusMessage(this, previousStatus, getStatus()));
-
-        // if we were not started before, tell dependencies we've started now
-        if (!previousStatus.equals(STARTED)) {
-            log.debug("Service {} is publishing service started message", this.getName());
-            eventBus.publish(new ServiceStartedMessage(this));
-        }
-        // if we were started, tell dependencies we've stopped
-        if (previousStatus == STARTED && isStopped()) {
-            log.debug("Service {} is publishing service stopped message", this.getName());
-            eventBus.publish(new ServiceStoppedMessage(this));
-        }
-    }
 
 
-    @Override
-    public boolean isStopped() {
-        return statusOfStopped.contains(status);
-    }
 
 
-    protected void setStatus(Status status) throws Exception {
-        if (status != this.status) {
-            Status previousStatus = this.status;
-            this.status = status;
-            log.debug(getName() + " has changed status from {} to {}", previousStatus, getStatus());
-            publishStatusChange(previousStatus);
-        }
-    }
+
 
 
 }

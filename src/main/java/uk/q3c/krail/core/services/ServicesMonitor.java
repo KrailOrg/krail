@@ -70,8 +70,8 @@ public class ServicesMonitor {
             log.debug("registered service '{}'", service.getName());
         }
         ServiceStatus status = services.get(service);
-        status.setPreviousStatus(busMessage.getFromStatus());
-        status.setCurrentStatus(busMessage.getToStatus());
+        status.setPreviousState(busMessage.getFromState());
+        status.setCurrentState(busMessage.getToState());
         //call LocalDateTime.now() just once, otherwise there are tiny differences between change time & start / stop times
         LocalDateTime serviceChangeTime = LocalDateTime.now();
         status.setStatusChangeTime(serviceChangeTime);

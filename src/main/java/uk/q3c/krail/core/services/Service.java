@@ -15,6 +15,7 @@ import com.google.inject.Provider;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.i18n.I18NKey;
 
 /**
  * Implement this interface to provide a Service. A Service is typically something which is wired up using Guice
@@ -26,9 +27,9 @@ import uk.q3c.krail.core.eventbus.BusMessage;
  * creation cycle - the initial configuration through Guice modules, followed by a controlled start to activate /
  * consume resources.
  * <p/>
- * The easiest way is to create an implementation is to sub-class either {@link AbstractService} or
- * {@link AbstractServiceI18N}. Sub-classing one of these, combined with the {@link Dependency} annotation, will also
- * provide some service management functionality (see the {@link AbstractService} javadoc.
+ * The easiest way is to create an implementation is to sub-class either {@link AbstractService}, which when combined
+ * with the {@link Dependency} annotation, will also provide some service management functionality
+ * (see the {@link AbstractService} javadoc.
  * <p/>
  * When an instance of a {@link Service} implementation is created through Guice, it is automatically registered with
  * the {@link ServicesMonitor}. (This is done through a Guice listener in the {@link ServiceModule}).
@@ -51,7 +52,7 @@ import uk.q3c.krail.core.eventbus.BusMessage;
  */
 public interface Service {
 
-    public enum Status {
+    enum State {
         INITIAL, STARTED, FAILED, STOPPED, FAILED_TO_START, FAILED_TO_STOP, NON_EXISTENT, DEPENDENCY_FAILED
     }
 
@@ -59,7 +60,7 @@ public interface Service {
      * You will only need to implement this if you are not using a sub-class of {@link AbstractService}. When you do
      * sub-class {@link AbstractService}, override {@link AbstractService#doStart()}
      */
-    Status start() throws Exception;
+    State start() throws Exception;
 
     @Handler
     void serviceStopped(ServiceStoppedMessage busMessage) throws Exception;
@@ -68,12 +69,12 @@ public interface Service {
      * You will only need to implement this if you are not using a sub-class of {@link AbstractService}. When you do
      * sub-class {@link AbstractService}, override {@link AbstractService#doStop()}
      */
-    Status stop() throws Exception;
+    State stop() throws Exception;
 
     /**
      * The name for this service. The implementation may wish to include an instance identifier if it is not of
      * Singleton scope, but this is not essential; the name is not used for anything except as a label. You may also
-     * choose to implement by sub-classing {@link AbstractServiceI18N}, which will handle I18N keys and translation
+     * choose to implement by sub-classing {@link AbstractService}, which will handle I18N keys and translation
      *
      * @return
      */
@@ -84,7 +85,7 @@ public interface Service {
 
     /**
      * The name description for this service. You may also choose to implement by sub-classing
-     * {@link AbstractServiceI18N}, which will handle I18N keys and translation
+     * {@link AbstractService}, which will handle I18N keys and translation
      *
      * @return
      */
@@ -95,7 +96,7 @@ public interface Service {
      *
      * @return
      */
-    Status getStatus();
+    State getState();
 
     /**
      * Returns true if and only if status == Service.Status.STARTED)
@@ -117,4 +118,12 @@ public interface Service {
      * @param globalBus
      */
     void init(PubSubSupport<BusMessage> globalBus);
+
+    I18NKey getNameKey();
+
+    void setNameKey(I18NKey nameKey);
+
+    I18NKey getDescriptionKey();
+
+    void setDescriptionKey(I18NKey descriptionKey);
 }

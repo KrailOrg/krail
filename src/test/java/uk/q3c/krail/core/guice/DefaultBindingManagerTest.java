@@ -82,7 +82,7 @@ public class DefaultBindingManagerTest {
 
         // given
         ServicesMonitor servicesMonitor = injector.getInstance(ServicesMonitor.class);
-        servicesMonitor.serviceStatusChange(new ServiceBusMessage(service, Service.Status.INITIAL, Service.Status.STARTED));
+        servicesMonitor.serviceStatusChange(new ServiceBusMessage(service, Service.State.INITIAL, Service.State.STARTED));
 
         // when
         out.contextDestroyed(servletContextEvent);

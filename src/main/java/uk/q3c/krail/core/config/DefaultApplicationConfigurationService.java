@@ -20,7 +20,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.services.AbstractServiceI18N;
+import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.Service;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.LabelKey;
@@ -53,8 +53,7 @@ import java.util.TreeSet;
  * @author David Sowerby
  */
 @Singleton
-public class DefaultApplicationConfigurationService extends AbstractServiceI18N implements
-        ApplicationConfigurationService {
+public class DefaultApplicationConfigurationService extends AbstractService implements ApplicationConfigurationService, Service {
 
     private static Logger log = LoggerFactory.getLogger(DefaultApplicationConfigurationService.class);
 
@@ -104,7 +103,7 @@ public class DefaultApplicationConfigurationService extends AbstractServiceI18N 
                 if (!iniConfig.isOptional()) {
                     String msg = ("Configuration Service failed to start, unable to load required configuration file:" +
                             " " + file.getAbsolutePath());
-                    status = Status.FAILED_TO_START;
+                    state = State.FAILED_TO_START;
                     log.error(msg);
                     throw new ConfigurationException(ce);
                 } else {
