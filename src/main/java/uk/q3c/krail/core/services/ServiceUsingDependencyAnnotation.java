@@ -11,29 +11,13 @@
 
 package uk.q3c.krail.core.services;
 
-import javax.annotation.concurrent.Immutable;
-
 /**
- * Object that captures service identity and state
+ * Used to identify a {@link Service} which uses the {@link Dependency} annotation.  Annotation scanning is applied in
+ * the {@link ServicesModule}.  Scanning is applied only to instances which implement this interface - it could be
+ * applied to all {@link Service} instances, but that would incur unnecessary overhead for developers who prefer to use
+ * Guice to configure dependencies
  * <p>
- * Created by David Sowerby on 31/10/15.
+ * Created by David Sowerby on 12/11/15.
  */
-@Immutable
-public class ServiceStatus {
-
-    private final ServiceKey serviceKey;
-    private final Service.State state;
-
-    public ServiceStatus(ServiceKey serviceKey, Service.State state) {
-        this.serviceKey = serviceKey;
-        this.state = state;
-    }
-
-    public ServiceKey getServiceKey() {
-        return serviceKey;
-    }
-
-    public Service.State getState() {
-        return state;
-    }
+public interface ServiceUsingDependencyAnnotation extends Service {
 }

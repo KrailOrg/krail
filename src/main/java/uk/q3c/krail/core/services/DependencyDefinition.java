@@ -14,26 +14,32 @@ package uk.q3c.krail.core.services;
 import javax.annotation.concurrent.Immutable;
 
 /**
- * Object that captures service identity and state
+ * Used to define dependencies between {@link Service}s in the {@link ServicesModule}
  * <p>
- * Created by David Sowerby on 31/10/15.
+ * Created by david on 11/11/15.
  */
 @Immutable
-public class ServiceStatus {
+public class DependencyDefinition {
 
-    private final ServiceKey serviceKey;
-    private final Service.State state;
+    private final ServiceKey dependant;
+    private final ServiceKey dependency;
+    private final Dependency.Type type;
 
-    public ServiceStatus(ServiceKey serviceKey, Service.State state) {
-        this.serviceKey = serviceKey;
-        this.state = state;
+    public DependencyDefinition(ServiceKey dependant, ServiceKey dependency, Dependency.Type type) {
+        this.dependant = dependant;
+        this.dependency = dependency;
+        this.type = type;
     }
 
-    public ServiceKey getServiceKey() {
-        return serviceKey;
+    public Dependency.Type getType() {
+        return type;
     }
 
-    public Service.State getState() {
-        return state;
+    public ServiceKey getDependency() {
+        return dependency;
+    }
+
+    public ServiceKey getDependant() {
+        return dependant;
     }
 }

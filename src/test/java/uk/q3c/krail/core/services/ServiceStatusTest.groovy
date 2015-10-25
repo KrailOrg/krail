@@ -9,24 +9,26 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.services;
+package uk.q3c.krail.core.services
 
-import uk.q3c.krail.core.eventbus.BusMessage;
+import spock.lang.Specification
+import uk.q3c.krail.UnitTestFor
 
-/**
- * A bus message to indicate that a service has stopped.  Use particularly to manage dependencies between Service implementations
- * <p>
- * Created by David Sowerby on 11/03/15.
- */
-public class ServiceStoppedMessage implements BusMessage {
+import static uk.q3c.krail.core.services.Service.State.FAILED_TO_START
 
-    private final Service service;
+@UnitTestFor(ServiceStatus)
+class ServiceStatusTest extends Specification {
 
-    public ServiceStoppedMessage(Service service) {
-        this.service = service;
-    }
+    ServiceKey serviceKey = Mock(ServiceKey)
 
-    public Service getService() {
-        return service;
+    def "construct"() {
+        given:
+
+        ServiceStatus status = new ServiceStatus(serviceKey, FAILED_TO_START)
+
+        expect:
+
+        status.getServiceKey() == serviceKey
+        status.getState() == FAILED_TO_START
     }
 }

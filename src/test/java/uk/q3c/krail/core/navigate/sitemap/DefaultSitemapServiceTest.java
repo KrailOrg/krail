@@ -30,8 +30,10 @@ import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
-import uk.q3c.krail.core.services.ServiceException;
-import uk.q3c.krail.core.services.ServiceModule;
+import uk.q3c.krail.core.services.Service;
+import uk.q3c.krail.core.services.ServiceStatus;
+import uk.q3c.krail.core.services.ServicesGraph;
+import uk.q3c.krail.core.services.ServicesModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
@@ -62,7 +64,7 @@ import static org.mockito.Mockito.when;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestDirectSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class, ServiceModule.class,
+@GuiceContext({TestDirectSitemapModule.class, UIScopeModule.class, ViewModule.class, EventBusModule.class, ServicesModule.class,
         ShiroVaadinModule.class, TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, DefaultShiroModule.class,
         DefaultComponentModule.class, TestPersistenceModule.class, StandardPagesModule.class, VaadinSessionScopeModule.class, TestOptionModule.class,
         NavigationModule.class,
@@ -75,6 +77,9 @@ public class DefaultSitemapServiceTest {
     private final int STANDARD_NODE_COUNT = 5;
     @Inject
     DefaultSitemapService service;
+
+    @Inject
+    ServicesGraph servicesGraph;
 
     @Inject
     MasterSitemap sitemap;
@@ -94,6 +99,7 @@ public class DefaultSitemapServiceTest {
         iniConfig = new HierarchicalINIConfiguration(inifile);
         iniConfig.clear();
         iniConfig.save();
+        servicesGraph.addService(service.getServiceKey());
     }
 
     @After
@@ -204,7 +210,6 @@ public class DefaultSitemapServiceTest {
         assertThat(service.absolutePathFor("/wiggly.ini")).isEqualTo(new File("/wiggly.ini"));
     }
 
-    @Test(expected = ServiceException.class)
     public void invalidSource_noGoodOnes() throws Exception {
 
         // given
@@ -218,9 +223,9 @@ public class DefaultSitemapServiceTest {
         System.out.println(iniConfig.getProperty(ConfigKeys.SITEMAP_SOURCES));
 
         // when
-        service.start();
+        ServiceStatus status = service.start();
         // then
-
+        assertThat(status.getState()).isEqualTo(Service.State.FAILED_TO_START);
     }
 
 

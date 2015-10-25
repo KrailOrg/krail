@@ -38,8 +38,8 @@ import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.StandardPagesModule;
 import uk.q3c.krail.core.persist.InMemoryModule;
 import uk.q3c.krail.core.push.PushModule;
-import uk.q3c.krail.core.services.ServiceModule;
-import uk.q3c.krail.core.services.ServicesMonitor;
+import uk.q3c.krail.core.services.ServicesController;
+import uk.q3c.krail.core.services.ServicesModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.shiro.aop.KrailShiroAopModule;
@@ -79,7 +79,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         log.info("Stopping services");
         try {
             if (injector != null) {
-                injector.getInstance(ServicesMonitor.class)
+                injector.getInstance(ServicesController.class)
                         .stopAllServices();
             } else {
                 log.debug("Injector has not been constructed, no call made to stop services");
@@ -131,7 +131,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         coreModules.add(new UIScopeModule());
         coreModules.add(new VaadinSessionScopeModule());
 
-        coreModules.add(new ServiceModule());
+        coreModules.add(new ServicesModule());
 
         coreModules.add(shiroModule());
         coreModules.add(shiroVaadinModule());

@@ -16,15 +16,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to assist in the management of {@link Service} dependencies, and is valid only when applied to a field of a
- * {@link Service}, when that field is also a {@link Service}.
- * <p/>
- * System behaviour is determined by the options selected, and the code for that is provided by {@link AbstractService}
- * - please see the Javadoc of {@link AbstractService} for details.
- * <p/>
- * <b>WARNING:<b> It is entirely possible to create a loop using this annotation, where Service A depends on Service B
- * which depends on Service A. There is currently no detection for this situation. See
- * https://github.com/davidsowerby/krail/issues/240
+ * This annotation specifies dependencies between service instances and is valid only when applied to the field of Service
+ *
+ * <em>Note:</em>In order for @Dependency
+ * The annotation It is captured by the {@link * ServiceDependencyScanner} and its values translated for use with the {@link ServicesGraph}
+ * <p>
  *
  * @author David Sowerby
  */
@@ -32,27 +28,28 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Dependency {
 
-    /**
-     * If true, this dependency must be started before the one which depends on it can start.  If false, an attempt to start it will be made before starting
-     * this service, but will not cause this service to fail (in other words, it is an optional dependency)
-     *
-     * @return If true, this dependency must be started before the one which depends on it can start.  If false, an attempt to start it will be made before
-     * starting this service, but will not cause this service to fail (in other words, it is an optional dependency)
-     */
-    boolean requiredAtStart() default true;
+    Type type = Type.ALWAYS_REQUIRED;
 
     /**
-     * If true, a service which depends on this one should stop if this one stops
+     * If true, this dependency is required to be running and its full meaning qualified by {@link #always()}.  If
+     * false, the dependency is optional.  See {@link ServicesGraph#optionallyUses(ServiceKey, ServiceKey)}
      *
-     * @return If true, a service which depends on this one should stop if this one stops
+     * @return If true, this dependency is required to be running and its full meaning qualified by {@link #always()}.
+     * If false, the dependency is optional.  See {@link ServicesGraph#optionallyUses(ServiceKey, ServiceKey)}
      */
-    boolean stopOnStop() default true;
+    boolean required() default true;
 
     /**
-     * If true, a service which depends on this one, and is in a state of {@link Service.State#DEPENDENCY_FAILED} should attempt to start when this one starts
+     * This value is ignored if {@link #required()} is false.<br><br> If this value is true, this dependency is required
+     * to be running at all times in order for the declaring service to run.  See {@link
+     * ServicesGraph#alwaysDependsOn(ServiceKey, ServiceKey)}.  If this value is false, this dependency is required only
+     * in order to start the declaring service. See {@link ServicesGraph#requiresOnlyAtStart(ServiceKey, ServiceKey)}.
      *
-     * @return If true, a service which depends on this one should attempt to start when this one starts
+     * @return If true, the dependency is always required, otherwise it is required only to start the declaring service.
      */
-    boolean startOnRestart() default true;
+    boolean always() default true;
+
+    enum Type {ALWAYS_REQUIRED, REQUIRED_ONLY_AT_START, OPTIONAL}
+
 
 }

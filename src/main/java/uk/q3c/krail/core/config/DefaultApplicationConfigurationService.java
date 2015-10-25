@@ -22,11 +22,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.Service;
+import uk.q3c.krail.core.services.ServicesController;
 import uk.q3c.krail.i18n.DescriptionKey;
+import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.ResourceUtils;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
@@ -53,7 +56,8 @@ import java.util.TreeSet;
  * @author David Sowerby
  */
 @Singleton
-public class DefaultApplicationConfigurationService extends AbstractService implements ApplicationConfigurationService, Service {
+@ThreadSafe
+public class DefaultApplicationConfigurationService extends AbstractService implements ApplicationConfigurationService {
 
     private static Logger log = LoggerFactory.getLogger(DefaultApplicationConfigurationService.class);
 
@@ -62,21 +66,14 @@ public class DefaultApplicationConfigurationService extends AbstractService impl
     private final Map<Integer, IniFileConfig> iniFiles;
 
     @Inject
-    protected DefaultApplicationConfigurationService(Translate translate, ApplicationConfiguration configuration,
-                                                     Map<Integer, IniFileConfig> iniFiles) {
-        super(translate);
+    protected DefaultApplicationConfigurationService(Translate translate, ApplicationConfiguration configuration, Map<Integer, IniFileConfig> iniFiles,
+                                                     ServicesController servicesController) {
+        super(translate, servicesController);
         this.configuration = configuration;
         this.iniFiles = iniFiles;
-        configure();
-    }
-
-    /**
-     * Override this method if you want to change the name or description keys.
-     */
-    protected void configure() {
-        setNameKey(LabelKey.Application_Configuration_Service);
         setDescriptionKey(DescriptionKey.Application_Configuration_Service);
     }
+
 
     /**
      * The {@link #iniFiles} map is processed in ascending key order. If a file does not exist or fails to load for any
@@ -103,7 +100,6 @@ public class DefaultApplicationConfigurationService extends AbstractService impl
                 if (!iniConfig.isOptional()) {
                     String msg = ("Configuration Service failed to start, unable to load required configuration file:" +
                             " " + file.getAbsolutePath());
-                    state = State.FAILED_TO_START;
                     log.error(msg);
                     throw new ConfigurationException(ce);
                 } else {
@@ -125,4 +121,9 @@ public class DefaultApplicationConfigurationService extends AbstractService impl
         configuration.clear();
     }
 
+
+    @Override
+    public synchronized I18NKey getNameKey() {
+        return LabelKey.Application_Configuration_Service;
+    }
 }

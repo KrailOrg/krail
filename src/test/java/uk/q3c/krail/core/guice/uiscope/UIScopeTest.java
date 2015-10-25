@@ -32,7 +32,8 @@ import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.services.AbstractService;
-import uk.q3c.krail.core.services.ServiceModule;
+import uk.q3c.krail.core.services.ServicesController;
+import uk.q3c.krail.core.services.ServicesModule;
 import uk.q3c.krail.core.shiro.*;
 import uk.q3c.krail.core.ui.*;
 import uk.q3c.krail.core.user.UserModule;
@@ -40,6 +41,7 @@ import uk.q3c.krail.core.user.opt.InMemory;
 import uk.q3c.krail.core.user.opt.OptionModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
+import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.TestI18NModule;
@@ -106,7 +108,7 @@ public class UIScopeTest {
 
         // when
 
-        injector = Guice.createInjector(new PushModule(), new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(), new ServiceModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestI18NModule(), new DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new TestPersistenceModule(), new NavigationModule(), new EventBusModule(),
+        injector = Guice.createInjector(new PushModule(), new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(), new ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestI18NModule(), new DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new TestPersistenceModule(), new NavigationModule(), new EventBusModule(),
                 new DataModule(), new DataTypeModule());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
@@ -156,9 +158,8 @@ public class UIScopeTest {
     static class MockSitemapService extends AbstractService implements SitemapService {
 
         @Inject
-        protected MockSitemapService(Translate translate) {
-            super(translate);
-            setNameKey(LabelKey.Sitemap_Service);
+        protected MockSitemapService(Translate translate, ServicesController servicesController) {
+            super(translate, servicesController);
         }
 
         @Override
@@ -177,6 +178,10 @@ public class UIScopeTest {
             return mock(MasterSitemap.class);
         }
 
+            @Override
+        public I18NKey getNameKey() {
+            return LabelKey.Sitemap_Service;
+        }
     }
 
     static class TestObject {

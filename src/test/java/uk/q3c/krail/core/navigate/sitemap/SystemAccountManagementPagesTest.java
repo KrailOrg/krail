@@ -22,6 +22,7 @@ import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
+import uk.q3c.krail.core.services.ServicesModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.ShiroVaadinModule;
 import uk.q3c.krail.core.ui.DataTypeModule;
@@ -39,7 +40,10 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, DataTypeModule.class, ApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, TestPersistenceModule.class, TestOptionModule.class, EventBusModule.class, DefaultUIModule.class})
+@GuiceContext({ServicesModule.class, SystemAccountManagementPages.class, UIScopeModule.class, ViewModule.class, ShiroVaadinModule.class, I18NModule.class,
+        SitemapModule.class, UserModule.class, DataTypeModule.class, ApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule
+        .class, VaadinSessionScopeModule.class, NavigationModule.class, TestPersistenceModule.class, TestOptionModule.class, EventBusModule.class,
+        DefaultUIModule.class})
 public class SystemAccountManagementPagesTest {
 
     @Inject

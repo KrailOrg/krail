@@ -11,22 +11,9 @@
 
 package uk.q3c.krail.core.services;
 
-import uk.q3c.krail.core.eventbus.BusMessage;
+public class ServiceKeyException extends RuntimeException {
 
-/**
- * A bus message to indicate that a service has started.  Use particularly to manage dependencies between Service implementations
- * <p>
- * Created by David Sowerby on 11/03/15.
- */
-public class ServiceStartedMessage implements BusMessage {
-
-    private final Service service;
-
-    public ServiceStartedMessage(Service service) {
-        this.service = service;
-    }
-
-    public Service getService() {
-        return service;
+    public ServiceKeyException(String message) {
+        super(message);
     }
 }

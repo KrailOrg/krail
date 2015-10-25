@@ -29,8 +29,9 @@ import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.eventbus.GlobalBus;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.services.DefaultServicesController;
 import uk.q3c.krail.core.services.Service.State;
-import uk.q3c.krail.core.services.ServiceException;
+import uk.q3c.krail.core.services.ServiceStatus;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.krail.testutil.MockCurrentLocale;
 import uk.q3c.util.testutil.TestResource;
@@ -58,6 +59,9 @@ public class DefaultApplicationConfigurationServiceTest {
     @Inject
     ApplicationConfiguration configuration;
 
+    @Mock
+    DefaultServicesController servicesController;
+
     @Inject
     @GlobalBus
     PubSubSupport<BusMessage> globalBus;
@@ -80,9 +84,10 @@ public class DefaultApplicationConfigurationServiceTest {
         Locale.setDefault(Locale.UK);
         iniFiles = new HashMap<>();
         configuration.clear();
-        service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles);
+        service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles, servicesController);
         service.init(globalBus);
         currentLocale.setLocale(Locale.UK);
+        when(servicesController.startDependenciesFor(service)).thenReturn(true);
     }
 
     @Test
@@ -137,14 +142,14 @@ public class DefaultApplicationConfigurationServiceTest {
         assertThat(configuration.getString("in memory")).isNull();
     }
 
-    @Test(expected = ServiceException.class)
     public void fileMissing_notOptional() throws Exception {
 
         // given
         addConfig("rubbish.ini", 0, false);
         // when
-        service.start();
+        ServiceStatus status = service.start();
         // then
+        assertThat(status.getState()).isEqualTo(State.FAILED_TO_START);
         assertThat(configuration.getNumberOfConfigurations()).isEqualTo(1);
     }
 

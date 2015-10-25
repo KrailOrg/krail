@@ -14,26 +14,31 @@ package uk.q3c.krail.core.services;
 import javax.annotation.concurrent.Immutable;
 
 /**
- * Object that captures service identity and state
+ * Graph edge describing the relationship between services.  An instance of this edge describes a dependency, and is
+ * assumed to be directed from the dependant (the successor) to the service upon which it depends (the predecessor).
  * <p>
- * Created by David Sowerby on 31/10/15.
+ * Created by David Sowerby on 25/10/15.
  */
 @Immutable
-public class ServiceStatus {
+public class ServiceEdge {
 
-    private final ServiceKey serviceKey;
-    private final Service.State state;
+    private final Dependency.Type type;
 
-    public ServiceStatus(ServiceKey serviceKey, Service.State state) {
-        this.serviceKey = serviceKey;
-        this.state = state;
+
+    public ServiceEdge(Dependency.Type type) {
+        this.type = type;
     }
 
-    public ServiceKey getServiceKey() {
-        return serviceKey;
+    public boolean requiredOnlyAtStart() {
+        return type == Dependency.Type.REQUIRED_ONLY_AT_START;
     }
 
-    public Service.State getState() {
-        return state;
+
+    public boolean optional() {
+        return type == Dependency.Type.OPTIONAL;
+    }
+
+    public boolean alwaysRequired() {
+        return type == Dependency.Type.ALWAYS_REQUIRED;
     }
 }

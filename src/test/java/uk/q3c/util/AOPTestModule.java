@@ -23,8 +23,8 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.services.DefaultServicesMonitor;
 import uk.q3c.krail.core.services.Service;
-import uk.q3c.krail.core.services.ServicesMonitor;
 
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -51,7 +51,7 @@ public class AOPTestModule extends AbstractModule {
 
     /**
      * This listener is constructed using the {@link Service} interface to identify service implementation instances..
-     * All instances of {@link Service} implementations are registered with the {@link ServicesMonitor}
+     * All instances of {@link Service} implementations are registered with the {@link DefaultServicesMonitor}
      *
      * @author David Sowerby
      */

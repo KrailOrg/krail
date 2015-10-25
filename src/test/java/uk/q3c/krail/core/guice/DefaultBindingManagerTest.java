@@ -24,10 +24,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.services.DefaultServicesController;
 import uk.q3c.krail.core.services.Service;
-import uk.q3c.krail.core.services.ServiceBusMessage;
-import uk.q3c.krail.core.services.ServicesMonitor;
+import uk.q3c.krail.core.services.ServiceKey;
+import uk.q3c.krail.core.services.ServicesController;
 import uk.q3c.krail.core.shiro.KrailSecurityManager;
+import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.util.testutil.LogMonitor;
 
 import javax.servlet.ServletContext;
@@ -35,7 +37,8 @@ import javax.servlet.ServletContextEvent;
 import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
@@ -45,13 +48,16 @@ public class DefaultBindingManagerTest {
     static VaadinService vaadinService;
     @Inject
     LogMonitor logMonitor;
-    TestBindingManager out;
+    TestBindingManager bindingManager;
     @Mock
     ServletContextEvent servletContextEvent;
     @Mock
     ServletContext servletContext;
     @Mock
     Service service;
+    @Mock
+    ServicesController servicesController;
+
 
     @BeforeClass
     public static void setupClass() {
@@ -62,7 +68,7 @@ public class DefaultBindingManagerTest {
 
     @Before
     public void setup() {
-        out = new TestBindingManager();
+        bindingManager = new TestBindingManager();
         logMonitor.addClassFilter(DefaultBindingManager.class);
 
     }
@@ -72,24 +78,23 @@ public class DefaultBindingManagerTest {
 
         // given
         when(servletContextEvent.getServletContext()).thenReturn(servletContext);
-        out.contextInitialized(servletContextEvent);
+        bindingManager.contextInitialized(servletContextEvent);
+        when(service.getServiceKey()).thenReturn(new ServiceKey(LabelKey.Yes));
+        logMonitor.addClassFilter(DefaultServicesController.class);
+
         // when
-        Injector injector = out.getInjector();
+        Injector injector = bindingManager.getInjector();
         // then
         assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(KrailSecurityManager.class);
-        assertThat(out.isAddAppModulesCalled()).isEqualTo(true);
+        assertThat(bindingManager.isAddAppModulesCalled()).isEqualTo(true);
         assertThat(injector).isNotNull();
 
-        // given
-        ServicesMonitor servicesMonitor = injector.getInstance(ServicesMonitor.class);
-        servicesMonitor.serviceStatusChange(new ServiceBusMessage(service, Service.State.INITIAL, Service.State.STARTED));
-
         // when
-        out.contextDestroyed(servletContextEvent);
+        bindingManager.contextDestroyed(servletContextEvent);
 
         // then
-        verify(service).stop(); // services stopped
-        assertThat(logMonitor.infoLogs()).contains("Stopping services");
+        assertThat(logMonitor.infoLogs()).contains("Stopping all services");
+
 
     }
 
@@ -97,15 +102,15 @@ public class DefaultBindingManagerTest {
     public void destroyContextWithNullInjector() {
         //given
         //when
-        out.contextDestroyed(servletContextEvent);
+        bindingManager.contextDestroyed(servletContextEvent);
         //then
-        assertThat(logMonitor.debugLogs()).containsExactly("Injector has not been constructed, no call made to stop "
-                + "services");
+        assertThat(logMonitor.debugLogs()).containsExactly("Injector has not been constructed, no call made to stop " + "services");
     }
 
     @After
     public void teardown() {
         logMonitor.close();
     }
+
 
 }

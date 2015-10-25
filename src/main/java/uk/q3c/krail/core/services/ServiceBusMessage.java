@@ -14,6 +14,8 @@ package uk.q3c.krail.core.services;
 import uk.q3c.krail.core.eventbus.BusMessage;
 
 /**
+ * A message sent via the event bus relating to a {@link Service}
+ *
  * Created by David Sowerby on 10/03/15.
  */
 public class ServiceBusMessage implements BusMessage {

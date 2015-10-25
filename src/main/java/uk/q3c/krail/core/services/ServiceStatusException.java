@@ -14,29 +14,8 @@ package uk.q3c.krail.core.services;
 
 public class ServiceStatusException extends RuntimeException {
 
-    public ServiceStatusException() {
-        super();
-
-    }
-
-    public ServiceStatusException(String message, Throwable cause, boolean enableSuppression,
-                                  boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-
-    }
-
-    public ServiceStatusException(String message, Throwable cause) {
-        super(message, cause);
-
-    }
-
     public ServiceStatusException(String message) {
         super(message);
-
-    }
-
-    public ServiceStatusException(Throwable cause) {
-        super(cause);
 
     }
 

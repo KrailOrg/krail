@@ -10,7 +10,6 @@
  */
 
 package uk.q3c.util
-
 import com.google.inject.Inject
 import net.engio.mbassy.bus.common.PubSubSupport
 import spock.guice.UseModules
@@ -18,10 +17,11 @@ import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.eventbus.BusMessage
 import uk.q3c.krail.core.services.Service
-import uk.q3c.krail.core.services.ServiceStoppedMessage
+import uk.q3c.krail.core.services.ServiceKey
+import uk.q3c.krail.core.services.ServiceStatus
 import uk.q3c.krail.i18n.I18NKey
-
 /**
+
  * Created by David on 22/10/15.
  */
 @UnitTestFor(ClassNameUtils)
@@ -38,18 +38,31 @@ class ClassNameUtilsTest extends Specification {
         }
 
         @Override
-        Service.State start() throws Exception {
+        ServiceStatus start() throws Exception {
+            return null
+        }
+
+
+
+        @Override
+        ServiceStatus stop() throws Exception {
+            return null
+        }
+
+
+        @Override
+        ServiceStatus fail() {
             return null
         }
 
         @Override
-        void serviceStopped(ServiceStoppedMessage busMessage) throws Exception {
-
+        ServiceStatus stop(Service.State reasonForStop) {
+            return null
         }
 
         @Override
-        Service.State stop() throws Exception {
-            return null
+        String getName() {
+            return super.getName()
         }
 
         @Override
@@ -82,8 +95,10 @@ class ClassNameUtilsTest extends Specification {
             return null
         }
 
+
+
         @Override
-        void setNameKey(I18NKey nameKey) {
+        void setInstance(int instance) {
 
         }
 
@@ -95,6 +110,16 @@ class ClassNameUtilsTest extends Specification {
         @Override
         void setDescriptionKey(I18NKey descriptionKey) {
 
+        }
+
+        @Override
+        ServiceKey getServiceKey() {
+            return super.getServiceKey()
+        }
+
+        @Override
+        int getInstance() {
+            return 0
         }
     }
 

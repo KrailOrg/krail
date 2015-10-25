@@ -24,11 +24,11 @@ import uk.q3c.krail.core.config.ConfigKeys;
 import uk.q3c.krail.core.config.InheritingConfiguration;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.Dependency;
-import uk.q3c.krail.core.services.Service;
+import uk.q3c.krail.core.services.ServicesController;
 import uk.q3c.krail.i18n.DescriptionKey;
+import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.util.MessageFormat;
 import uk.q3c.util.ResourceUtils;
 
 import javax.annotation.Nonnull;
@@ -40,7 +40,7 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
-public class DefaultSitemapService extends AbstractService implements SitemapService, Service {
+public class DefaultSitemapService extends AbstractService implements SitemapService {
 
     private static Logger log = LoggerFactory.getLogger(DefaultSitemapService.class);
     @Dependency
@@ -56,34 +56,22 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
     private List<SitemapSourceType> sourceTypes;
 
     @Inject
-    protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate,
-                                    Provider<DirectSitemapLoader> directSitemapLoaderProvider,
-                                    Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, MasterSitemap sitemap, SitemapFinisher sitemapFinisher,
-                                    ApplicationConfiguration configuration) {
-        super(translate);
+    protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate, Provider<DirectSitemapLoader>
+            directSitemapLoaderProvider, Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, MasterSitemap sitemap, SitemapFinisher
+            sitemapFinisher, ApplicationConfiguration configuration, ServicesController servicesController) {
+        super(translate, servicesController);
         this.configurationService = configurationService;
         this.annotationSitemapLoaderProvider = annotationSitemapLoaderProvider;
         this.directSitemapLoaderProvider = directSitemapLoaderProvider;
         this.sitemap = sitemap;
         this.sitemapFinisher = sitemapFinisher;
         this.configuration = configuration;
-        configure();
-    }
-
-    protected void configure() {
-        setNameKey(LabelKey.Sitemap_Service);
         setDescriptionKey(DescriptionKey.Sitemap_Service);
     }
 
+
     @Override
-    protected void doStart() throws Exception {
-        if (getState().equals(State.DEPENDENCY_FAILED)) {
-            String msg = MessageFormat.format("Unable to start {0}, because it depends on {1}", getName(),
-                    configurationService.getName());
-            log.error(msg);
-            setState(State.DEPENDENCY_FAILED);
-            throw new SitemapException(msg);
-        }
+    protected void doStart() {
         loadSources();
         LoaderReportBuilder lrb = new LoaderReportBuilder(loaders);
         report = lrb.getReport();
@@ -199,4 +187,9 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
         return ImmutableList.copyOf(sourceTypes);
     }
 
+
+    @Override
+    public I18NKey getNameKey() {
+        return LabelKey.Sitemap_Service;
+    }
 }
