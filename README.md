@@ -100,7 +100,9 @@ Thanks to:
 [Mike Pilone](http://mikepilone.blogspot.co.uk/) for his blog post on Vaadin Shiro integration<br>
 
 
-ej technologies for an open source licence for their java profiler, [JProfiler](http://www.ej-technologies.com/products/jprofiler/overview.html)<br>
+ej technologies for an open source licence for their java profiler,
+
+[JProfiler](http://www.ej-technologies.com/products/jprofiler/overview.html)<br>
 [Vaadin](https://vaadin.com/home)<br>
 [Guice](https://github.com/google/guice)<br>
 [Apache Shiro](http://shiro.apache.org/)<br>
