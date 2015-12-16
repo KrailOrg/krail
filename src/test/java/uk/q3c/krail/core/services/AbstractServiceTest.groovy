@@ -14,6 +14,7 @@ package uk.q3c.krail.core.services
 import com.google.inject.Inject
 import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
+import uk.q3c.krail.core.eventbus.GlobalBusProvider
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.LabelKey
 import uk.q3c.krail.i18n.Translate
@@ -31,12 +32,16 @@ class AbstractServiceTest extends Specification {
 
     TestService service;
 
-    def servicesController = Mock(ServicesController)
+    def servicesModel = Mock(ServicesModel)
+    def GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
+    def eventBus = Mock(PubSubSupport)
 
     def setup() {
-        service = new TestService(translate, servicesController)
+        globalBusProvider.getGlobalBus() >> eventBus
+        service = new TestService(translate, servicesModel, globalBusProvider)
         service.setThrowStartException(false)
         service.setThrowStopException(false)
+
     }
 
     def "name translated"() {
@@ -76,8 +81,6 @@ class AbstractServiceTest extends Specification {
     def "start sets state to STARTING, then START if dependencies start ok"() {
         given:
 
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
         translate.from(LabelKey.Authorisation) >> "Authorisation"
 
         when:
@@ -86,7 +89,7 @@ class AbstractServiceTest extends Specification {
 
         then:
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STARTING) })
-        1 * servicesController.startDependenciesFor(service) >> true
+        1 * servicesModel.startDependenciesFor(service) >> true
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STARTED) })
         service.getState().equals(STARTED)
 
@@ -95,9 +98,8 @@ class AbstractServiceTest extends Specification {
     def "start sets state to STARTING, then FAILED_TO_START if dependencies do not start ok"() {
         given:
 
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
         translate.from(LabelKey.Authorisation) >> "Authorisation"
+        servicesModel.startDependenciesFor(service) >> false
 
         when:
 
@@ -105,7 +107,7 @@ class AbstractServiceTest extends Specification {
 
         then:
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STARTING) })
-        1 * servicesController.startDependenciesFor(service) >> false
+        1 * servicesModel.startDependenciesFor(service) >> false
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(DEPENDENCY_FAILED) })
         service.getState().equals(DEPENDENCY_FAILED)
     }
@@ -113,8 +115,7 @@ class AbstractServiceTest extends Specification {
     def "doStart() throws an exception, state is FAILED_TO_START"() {
         given:
 
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
+
         service.throwStartException = true
         translate.from(LabelKey.Authorisation) >> "Authorisation"
 
@@ -124,7 +125,7 @@ class AbstractServiceTest extends Specification {
 
         then:
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STARTING) })
-        1 * servicesController.startDependenciesFor(service) >> true
+        1 * servicesModel.startDependenciesFor(service) >> true
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(FAILED_TO_START) })
         service.getState().equals(FAILED_TO_START)
     }
@@ -132,8 +133,6 @@ class AbstractServiceTest extends Specification {
     def "stop sets state to STOPPED"() {
         given:
 
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
         service.throwStopException = false
         translate.from(LabelKey.Authorisation) >> "Authorisation"
 
@@ -144,18 +143,16 @@ class AbstractServiceTest extends Specification {
         then:
 
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesController.stopDependantsOf(service, false)
+        1 * servicesModel.stopDependantsOf(service, false)
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPED) })
         service.getState().equals(STOPPED)
-        status.getServiceKey().equals(service.getServiceKey())
+        status.getService().equals(service)
         status.getState().equals(STOPPED)
     }
 
     def "doStop() throws an exception, sets state to FAILED_TO_STOP"() {
         given:
 
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
         service.throwStopException = true
         translate.from(LabelKey.Authorisation) >> "Authorisation"
 
@@ -166,18 +163,16 @@ class AbstractServiceTest extends Specification {
         then:
 
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesController.stopDependantsOf(service, false)
+        1 * servicesModel.stopDependantsOf(service, false)
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(FAILED_TO_STOP) })
         service.getState().equals(FAILED_TO_STOP)
-        status.getServiceKey().equals(service.getServiceKey())
+        status.getService().equals(service)
         status.getState().equals(FAILED_TO_STOP)
     }
 
     def "stop with dependency failed sets state to DEPENDENCY_FAILED"() {
         given:
 
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
         service.throwStopException = false
         translate.from(LabelKey.Authorisation) >> "Authorisation"
 
@@ -188,18 +183,16 @@ class AbstractServiceTest extends Specification {
         then:
 
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesController.stopDependantsOf(service, false)
+        1 * servicesModel.stopDependantsOf(service, false)
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(DEPENDENCY_FAILED) })
         service.getState().equals(DEPENDENCY_FAILED)
-        status.getServiceKey().equals(service.getServiceKey())
+        status.getService().equals(service)
         status.getState().equals(DEPENDENCY_FAILED)
     }
 
     def "stop with dependency stopped sets state to DEPENDENCY_STOPPED"() {
         given:
 
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
         service.throwStopException = false
         translate.from(LabelKey.Authorisation) >> "Authorisation"
 
@@ -210,18 +203,16 @@ class AbstractServiceTest extends Specification {
         then:
 
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesController.stopDependantsOf(service, false)
+        1 * servicesModel.stopDependantsOf(service, false)
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(DEPENDENCY_STOPPED) })
         service.getState().equals(DEPENDENCY_STOPPED)
-        status.getServiceKey().equals(service.getServiceKey())
         status.getState().equals(DEPENDENCY_STOPPED)
+        status.getService().equals(service)
     }
 
     def "stop with FAILED sets state to FAILED"() {
         given:
 
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
         service.throwStopException = false
         translate.from(LabelKey.Authorisation) >> "Authorisation"
 
@@ -232,19 +223,17 @@ class AbstractServiceTest extends Specification {
         then:
 
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesController.stopDependantsOf(service, false)
+        1 * servicesModel.stopDependantsOf(service, false)
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(FAILED) })
         service.getState().equals(FAILED)
-        status.getServiceKey().equals(service.getServiceKey())
         status.getState().equals(FAILED)
+        status.getService().equals(service)
     }
 
 
     def "fail() is same as stop() with FAILED parameter"() {
         given:
 
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
         service.throwStopException = false
         translate.from(LabelKey.Authorisation) >> "Authorisation"
 
@@ -255,18 +244,16 @@ class AbstractServiceTest extends Specification {
         then:
 
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesController.stopDependantsOf(service, false)
+        1 * servicesModel.stopDependantsOf(service, false)
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(FAILED) })
         service.getState().equals(FAILED)
-        status.getServiceKey().equals(service.getServiceKey())
         status.getState().equals(FAILED)
+        status.getService().equals(service)
     }
 
     def "fail during fail() is sets state to FAILED_TO_STOP"() {
         given:
 
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
         service.throwStopException = true
         translate.from(LabelKey.Authorisation) >> "Authorisation"
 
@@ -277,19 +264,17 @@ class AbstractServiceTest extends Specification {
         then:
 
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesController.stopDependantsOf(service, false)
+        1 * servicesModel.stopDependantsOf(service, false)
         1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(FAILED_TO_STOP) })
         service.getState().equals(FAILED_TO_STOP)
-        status.getServiceKey().equals(service.getServiceKey())
         status.getState().equals(FAILED_TO_STOP)
+        status.getService().equals(service)
     }
 
 
     def "stop() with invalid parameter throws IllegalArgumentException"() {
         given:
 
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
         service.throwStopException = false
         translate.from(LabelKey.Authorisation) >> "Authorisation"
 
@@ -305,8 +290,6 @@ class AbstractServiceTest extends Specification {
     def "start() when already started should exit"() {
 
         given:
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
 
 
         when:
@@ -315,15 +298,12 @@ class AbstractServiceTest extends Specification {
         service.start()
 
         then:
-        1 * servicesController.startDependenciesFor(service) >> true
+        1 * servicesModel.startDependenciesFor(service) >> true
 
     }
 
     def "stop() when already stopped should exit"() {
 
-        given:
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
 
 
         when:
@@ -332,16 +312,13 @@ class AbstractServiceTest extends Specification {
         service.stop()
 
         then:
-        1 * servicesController.stopDependantsOf(service, false)
-        0 * servicesController.stopDependantsOf(service, true)
+        1 * servicesModel.stopDependantsOf(service, false)
+        0 * servicesModel.stopDependantsOf(service, true)
 
     }
 
     def "fail() when already stopped should exit"() {
 
-        given:
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
 
 
         when:
@@ -350,17 +327,14 @@ class AbstractServiceTest extends Specification {
         service.fail()
 
         then:
-        1 * servicesController.stopDependantsOf(service, false)
-        0 * servicesController.stopDependantsOf(service, true)
+        1 * servicesModel.stopDependantsOf(service, false)
+        0 * servicesModel.stopDependantsOf(service, true)
 
     }
 
 
     def "get and setInstance()"() {
 
-        given:
-        def eventBus = Mock(PubSubSupport)
-        service.init(eventBus)
 
 
         when:
@@ -379,8 +353,8 @@ class AbstractServiceTest extends Specification {
         boolean throwStopException = false;
 
         @Inject
-        protected TestService(Translate translate, ServicesController servicesController) {
-            super(translate, servicesController);
+        protected TestService(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
+            super(translate, servicesModel, globalBusProvider);
         }
 
         @Override

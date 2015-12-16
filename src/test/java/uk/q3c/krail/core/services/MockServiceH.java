@@ -9,26 +9,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.services
+package uk.q3c.krail.core.services;
 
-import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 
-import static uk.q3c.krail.core.services.Service.State.FAILED_TO_START
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.TestLabelKey;
 
-@UnitTestFor(ServiceStatus)
-class ServiceStatusTest extends Specification {
-
-    Service service = Mock(Service)
-
-    def "construct"() {
-        given:
-
-        ServiceStatus status = new ServiceStatus(service, FAILED_TO_START)
-
-        expect:
-
-        status.getService() == service
-        status.getState() == FAILED_TO_START
+public class MockServiceH extends MockService {
+    @Override
+    public I18NKey getNameKey() {
+        return TestLabelKey.ServiceH;
     }
+
 }

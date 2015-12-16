@@ -11,11 +11,9 @@
 
 package uk.q3c.util
 import com.google.inject.Inject
-import net.engio.mbassy.bus.common.PubSubSupport
 import spock.guice.UseModules
 import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
-import uk.q3c.krail.core.eventbus.BusMessage
 import uk.q3c.krail.core.services.Service
 import uk.q3c.krail.core.services.ServiceKey
 import uk.q3c.krail.core.services.ServiceStatus
@@ -85,10 +83,7 @@ class ClassNameUtilsTest extends Specification {
             return false
         }
 
-        @Override
-        void init(PubSubSupport<BusMessage> globalBus) {
 
-        }
 
         @Override
         I18NKey getNameKey() {

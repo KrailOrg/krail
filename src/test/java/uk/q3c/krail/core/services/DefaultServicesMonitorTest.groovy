@@ -15,6 +15,7 @@ import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.eventbus.BusMessage
+import uk.q3c.krail.core.eventbus.GlobalBusProvider
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.LabelKey
 import uk.q3c.krail.i18n.Translate
@@ -27,14 +28,15 @@ import static uk.q3c.krail.core.services.Service.State.*
 class DefaultServicesMonitorTest extends Specification {
 
     PubSubSupport<BusMessage> globalBus = Mock(PubSubSupport)
-    ServicesController servicesController = Mock(ServicesController)
+    GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
+    ServicesModel servicesModel = Mock(ServicesModel)
     Translate translate = Mock(Translate)
     Service serviceA
 
     def setup() {
-        serviceA = new AbstractServiceTest.TestService(translate, servicesController)
-        serviceA.init(globalBus)
-        servicesController.startDependenciesFor(serviceA) >> true
+        globalBusProvider.getGlobalBus() >> globalBus
+        serviceA = new AbstractServiceTest.TestService(translate, servicesModel, globalBusProvider)
+        servicesModel.startDependenciesFor(serviceA) >> true
     }
 
 
@@ -80,8 +82,8 @@ class DefaultServicesMonitorTest extends Specification {
 
     class TestService extends AbstractService {
 
-        protected TestService(Translate translate, ServicesController servicesController) {
-            super(translate, servicesController)
+        protected TestService(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
+            super(translate, servicesModel, globalBusProvider)
         }
 
         @Override

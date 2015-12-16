@@ -33,8 +33,16 @@ class AbstractServiceModuleTest extends Specification {
         }
     }
 
+    class TestServiceModule2 extends AbstractServiceModule {
+        @Override
+        protected void configure() {
+            addDependency(serviceKeyA, serviceKeyB, Dependency.Type.REQUIRED_ONLY_AT_START)
+            addDependency(serviceKeyA, serviceKeyC, Dependency.Type.OPTIONAL)
+        }
+    }
 
-    def ""() {
+
+    def "properly configured"() {
         given:
 
         TypeLiteral<Set<DependencyDefinition>> lit = new TypeLiteral<Set<DependencyDefinition>>() {}
@@ -53,4 +61,20 @@ class AbstractServiceModuleTest extends Specification {
         s.size() == 2
 
     }
+
+    def "missed super.configure() "() {
+        given:
+
+        TypeLiteral<Set<DependencyDefinition>> lit = new TypeLiteral<Set<DependencyDefinition>>() {}
+        Key key = Key.get(lit)
+
+        when:
+        Injector injector = Guice.createInjector(new TestServiceModule2())
+
+        then:
+
+        thrown(com.google.inject.CreationException)
+
+    }
+
 }

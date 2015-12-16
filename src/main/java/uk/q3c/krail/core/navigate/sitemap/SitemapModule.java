@@ -12,19 +12,22 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import com.google.inject.AbstractModule;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
+import uk.q3c.krail.core.services.AbstractServiceModule;
+import uk.q3c.krail.i18n.LabelKey;
 
-public class SitemapModule extends AbstractModule {
+public class SitemapModule extends AbstractServiceModule {
 
     @Override
     protected void configure() {
+        super.configure();
         bindMasterSitemap();
         bindUserSitemap();
         bindService();
         bindLoaders();
         bindChecker();
+        registerService(LabelKey.Sitemap_Service, SitemapService.class);
     }
 
     private void bindMasterSitemap() {

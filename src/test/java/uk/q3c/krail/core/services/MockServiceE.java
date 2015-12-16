@@ -11,13 +11,14 @@
 
 package uk.q3c.krail.core.services;
 
-/**
- * Used to identify a {@link Service} which uses the {@link Dependency} annotation.  Annotation scanning is applied in
- * the {@link ServicesModule}.  Scanning is applied only to instances which implement this interface - it could be
- * applied to all {@link Service} instances, but that would incur unnecessary overhead for developers who prefer to use
- * Guice to configure dependencies
- * <p>
- * Created by David Sowerby on 12/11/15.
- */
-public interface ServiceUsingDependencyAnnotation extends Service {
+
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.TestLabelKey;
+
+public class MockServiceE extends MockService {
+    @Override
+    public I18NKey getNameKey() {
+        return TestLabelKey.ServiceE;
+    }
+
 }

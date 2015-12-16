@@ -35,15 +35,15 @@ import uk.q3c.krail.core.services.Service;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Configures Event bus implementations for, UIScope, VaadinSessionScope and Singleton scope.  All classes annotated with {@link Listener} are subscribed to a
- * bus, using logic provided by {@link DefaultEventBusAutoSubscriber}, but can be changed by providing an alternative implementation in {@link
- * EventBusModule.BusTypeListener}:
+ * Configures Event bus implementations for, UIScope, VaadinSessionScope and Singleton scope.  All classes annotated
+ * with {@link Listener} are subscribed to a bus, using logic provided by {@link DefaultEventBusAutoSubscriber}, but can
+ * be changed by providing an alternative implementation in {@link EventBusModule.BusTypeListener}:
  * <p>
- * If there is also a {@link SubscribeTo} annotation, the values of that annotation are used to subscribe to one or more buses.
+ * If there is also a {@link SubscribeTo} annotation, the values of that annotation are used to subscribe to one or more
+ * buses.
  * <p>
- * If there is no {@link SubscribeTo} annotation, a {@link Singleton} scoped object will be subscribed to the {@link GlobalBus}, all other objects with a
- * {@link
- * Listener} annotation is subscribed to a {@link SessionBus}
+ * If there is no {@link SubscribeTo} annotation, a {@link Singleton} scoped object will be subscribed to the {@link
+ * GlobalBus}, all other objects with a {@link Listener} annotation is subscribed to a {@link SessionBus}
  * <p>
  * <p>
  * Created by David Sowerby on 08/03/15.
@@ -77,6 +77,17 @@ public class EventBusModule extends AbstractModule {
         bindListener(new ListenerAnnotationMatcher(), new BusTypeListener(uiBusProvider, sessionBusProvider, globalBusProvider));
         bindConfigurationErrorHandlers();
         bindPublicationErrorHandlers();
+        bindBusProviders();
+    }
+
+    /**
+     * Use bus providers where you want to enforce the use of a particular bus by sub-classes.  This avoids an annotated
+     * constructor parameter in a super-class being ignored / overridden in a sub-class
+     */
+    protected void bindBusProviders() {
+        bind(GlobalBusProvider.class).to(DefaultGlobalBusProvider.class);
+        bind(SessionBusProvider.class).to(DefaultSessionBusProvider.class);
+        bind(UIBusProvider.class).to(DefaultUIBusProvider.class);
     }
 
 
@@ -112,8 +123,8 @@ public class EventBusModule extends AbstractModule {
     }
 
     /**
-     * Refer to the MBassador documentation
-     * at https://github.com/bennidi/mbassador/wiki/Configuration for more information about the configuration itself.
+     * Refer to the MBassador documentation at https://github.com/bennidi/mbassador/wiki/Configuration for more
+     * information about the configuration itself.
      *
      * @return configuration for the UIBus
      */
@@ -127,8 +138,8 @@ public class EventBusModule extends AbstractModule {
     }
 
     /**
-     * Refer to the MBassador documentation
-     * at https://github.com/bennidi/mbassador/wiki/Configuration for more information about the configuration itself.
+     * Refer to the MBassador documentation at https://github.com/bennidi/mbassador/wiki/Configuration for more
+     * information about the configuration itself.
      *
      * @return configuration for the SessionBus
      */
@@ -142,8 +153,8 @@ public class EventBusModule extends AbstractModule {
     }
 
     /**
-     * Refer to the MBassador documentation
-     * at https://github.com/bennidi/mbassador/wiki/Configuration for more information about the configuration itself.
+     * Refer to the MBassador documentation at https://github.com/bennidi/mbassador/wiki/Configuration for more
+     * information about the configuration itself.
      *
      * @return configuration for the GlobalBus
      */
@@ -229,8 +240,8 @@ public class EventBusModule extends AbstractModule {
         }
 
         /**
-         * The logic for auto subscribing can be changed by providing an alternative implementation of EventBusAutoSubscriber, but it has to be created using
-         * 'new' here, because the Injector is not yet complete
+         * The logic for auto subscribing can be changed by providing an alternative implementation of
+         * EventBusAutoSubscriber, but it has to be created using 'new' here, because the Injector is not yet complete
          *
          * @param type
          * @param encounter

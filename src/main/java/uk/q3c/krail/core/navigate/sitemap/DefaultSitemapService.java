@@ -22,9 +22,10 @@ import uk.q3c.krail.core.config.ApplicationConfiguration;
 import uk.q3c.krail.core.config.ApplicationConfigurationService;
 import uk.q3c.krail.core.config.ConfigKeys;
 import uk.q3c.krail.core.config.InheritingConfiguration;
+import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.Dependency;
-import uk.q3c.krail.core.services.ServicesController;
+import uk.q3c.krail.core.services.ServicesModel;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
@@ -58,8 +59,9 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
     @Inject
     protected DefaultSitemapService(ApplicationConfigurationService configurationService, Translate translate, Provider<DirectSitemapLoader>
             directSitemapLoaderProvider, Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, MasterSitemap sitemap, SitemapFinisher
-            sitemapFinisher, ApplicationConfiguration configuration, ServicesController servicesController) {
-        super(translate, servicesController);
+                                            sitemapFinisher, ApplicationConfiguration configuration, ServicesModel servicesModel, GlobalBusProvider
+            globalBusProvider) {
+        super(translate, servicesModel, globalBusProvider);
         this.configurationService = configurationService;
         this.annotationSitemapLoaderProvider = annotationSitemapLoaderProvider;
         this.directSitemapLoaderProvider = directSitemapLoaderProvider;
@@ -101,7 +103,7 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
     /**
      * Loads the Sitemap with all sources of the specified {@code source type}.
      *
-     * @param sourceType
+     * @param sourceType the source type to use
      */
     private void loadSource(SitemapSourceType sourceType) {
         log.debug("Loading Sitemap from {}", sourceType);
@@ -123,7 +125,6 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
                     sitemapFinisher.setAnnotationSources(sources.keySet());
                 }
                 loaded = true;
-                return;
         }
     }
 

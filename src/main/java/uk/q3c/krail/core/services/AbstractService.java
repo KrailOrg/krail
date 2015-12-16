@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.GlobalBus;
+import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.eventbus.SubscribeTo;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
@@ -55,18 +56,19 @@ public abstract class AbstractService implements Service {
 
     private static Logger log = LoggerFactory.getLogger(AbstractService.class);
     private final Translate translate;
-    private final ServicesController servicesController;
     protected State state = INITIAL;
+    private ServicesModel servicesModel;
     //    private List<DependencyRecord> dependencies;
     private I18NKey descriptionKey;
     private PubSubSupport<BusMessage> eventBus;
     private int instance = 0;
 
     @Inject
-    protected AbstractService(Translate translate, ServicesController servicesController) {
+    protected AbstractService(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
         super();
         this.translate = translate;
-        this.servicesController = servicesController;
+        this.servicesModel = servicesModel;
+        eventBus = globalBusProvider.getGlobalBus();
     }
 
     @Override
@@ -74,10 +76,6 @@ public abstract class AbstractService implements Service {
         return state == STARTED;
     }
 
-    @Override
-    public synchronized void init(PubSubSupport<BusMessage> eventBus) {
-        this.eventBus = eventBus;
-    }
 
     @Override
     public synchronized ServiceStatus stop() {
@@ -90,11 +88,11 @@ public abstract class AbstractService implements Service {
         checkArgument(Service.stopReasons.contains(reasonForStop));
         if (isStopped()) {
             log.debug("Attempting to stop service {}, but it is already stopped. No action taken", getName());
-            return new ServiceStatus(getServiceKey(), state);
+            return new ServiceStatus(this, state);
         }
         log.info("Stopping service: {}", getName());
         setState(STOPPING);
-        servicesController.stopDependantsOf(this, false);
+        servicesModel.stopDependantsOf(this, false);
         try {
             doStop();
             setState(reasonForStop);
@@ -104,7 +102,7 @@ public abstract class AbstractService implements Service {
         }
 
 
-        return new ServiceStatus(getServiceKey(), state);
+        return new ServiceStatus(this, state);
     }
 
     protected abstract void doStop() throws Exception;
@@ -129,11 +127,11 @@ public abstract class AbstractService implements Service {
     public synchronized ServiceStatus start() {
         if (state == STARTED) {
             log.debug("{} already started, no action taken", getName());
-            return new ServiceStatus(getServiceKey(), state);
+            return new ServiceStatus(this, state);
         }
         log.info("Starting service: {}", getName());
         setState(STARTING);
-        if (servicesController.startDependenciesFor(this)) {
+        if (servicesModel.startDependenciesFor(this)) {
             try {
                 doStart();
                 setState(STARTED);
@@ -146,7 +144,7 @@ public abstract class AbstractService implements Service {
             setState(DEPENDENCY_FAILED);
         }
 
-        return new ServiceStatus(getServiceKey(), state);
+        return new ServiceStatus(this, state);
     }
 
     protected abstract void doStart() throws Exception;
@@ -154,6 +152,15 @@ public abstract class AbstractService implements Service {
     @Override
     public synchronized State getState() {
         return state;
+    }
+
+    protected void setState(State state) {
+        if (state != this.state) {
+            State previousState = this.state;
+            this.state = state;
+            log.debug(getName() + " has changed status from {} to {}", previousState, getState());
+            publishStatusChange(previousState);
+        }
     }
 
     @Override
@@ -164,15 +171,6 @@ public abstract class AbstractService implements Service {
     @Override
     public synchronized void setDescriptionKey(I18NKey descriptionKey) {
         this.descriptionKey = descriptionKey;
-    }
-
-    protected void setState(State state) {
-        if (state != this.state) {
-            State previousState = this.state;
-            this.state = state;
-            log.debug(getName() + " has changed status from {} to {}", previousState, getState());
-            publishStatusChange(previousState);
-        }
     }
 
     @Override

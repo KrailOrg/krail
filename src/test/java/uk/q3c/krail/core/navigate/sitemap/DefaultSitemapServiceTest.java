@@ -32,7 +32,7 @@ import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
 import uk.q3c.krail.core.services.Service;
 import uk.q3c.krail.core.services.ServiceStatus;
-import uk.q3c.krail.core.services.ServicesGraph;
+import uk.q3c.krail.core.services.ServicesModel;
 import uk.q3c.krail.core.services.ServicesModule;
 import uk.q3c.krail.core.shiro.DefaultShiroModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
@@ -79,7 +79,7 @@ public class DefaultSitemapServiceTest {
     DefaultSitemapService service;
 
     @Inject
-    ServicesGraph servicesGraph;
+    ServicesModel servicesModel;
 
     @Inject
     MasterSitemap sitemap;
@@ -99,7 +99,7 @@ public class DefaultSitemapServiceTest {
         iniConfig = new HierarchicalINIConfiguration(inifile);
         iniConfig.clear();
         iniConfig.save();
-        servicesGraph.addService(service.getServiceKey());
+        servicesModel.addService(service.getServiceKey());
     }
 
     @After

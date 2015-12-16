@@ -12,78 +12,56 @@
  */
 package uk.q3c.krail.core.services;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matchers;
-import com.google.inject.multibindings.Multibinder;
 import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.GlobalBus;
 import uk.q3c.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import static com.google.inject.multibindings.Multibinder.newSetBinder;
-
 /**
- * Provides bindings and AOP in support of {@link Service}s
+ * Provides bindings and AOP in support of {@link Service}s.  Inherits from {@link AbstractServiceModule} to ensure there is always a map binding for
+ * registered services, even if it is empty
  * <p>
  * <p>
  * Acknowledgement: developed originally from code contributed by https://github.com/lelmarir
  *
  * @author David Sowerby
  */
-public class ServicesModule extends AbstractModule {
-
-    private static final Logger log = LoggerFactory.getLogger(ServicesModule.class);
-    //has no contents in this module, but prevents Guice from complaining that there is no Set<DependencyDefinition>.  An empty set is legitimate, and other modules won't declare unless needed
-    private Multibinder<DependencyDefinition> dependencies;
-
+public class ServicesModule extends AbstractServiceModule {
 
     @Override
     protected void configure() {
-        dependencies = newSetBinder(binder(), DependencyDefinition.class);
-        bindServicesController();
-        bindServicesGraph();
+        super.configure();
+        bindServicesModel();
         bindServiceDependencyScanner();
 
-        // global bus provider and servicesGraph provider needed for the service.init in the injection listener
-        TypeLiteral<PubSubSupport<BusMessage>> eventBusLiteral = new TypeLiteral<PubSubSupport<BusMessage>>() {
-        };
-        Key<PubSubSupport<BusMessage>> globalBusKey = Key.get(eventBusLiteral, GlobalBus.class);
-        final Provider<PubSubSupport<BusMessage>> globalBusProvider = this.getProvider(globalBusKey);
-
-
-//        final Provider<ServicesMonitor> servicesMonitorProvider = this.getProvider(ServicesMonitor.class);
-        final Provider<ServicesGraph> servicesGraphProvider = this.getProvider(ServicesGraph.class);
-
-        bindListener(new ServiceInterfaceMatcher(), new ServicesListener(servicesGraphProvider, globalBusProvider));
-        bindInterceptor(Matchers.subclassesOf(Service.class), new FinalizeMethodMatcher(), new FinalizeMethodInterceptor());
-
+        final Provider<ServicesModel> servicesModelProvider = this.getProvider(ServicesModel.class);
         final Provider<ServiceDependencyScanner> scannerProvider = this.getProvider(ServiceDependencyScanner.class);
-        bindListener(new ServiceUsingDependencyAnnotationMatcher(), new ServicesUsingDependencyListener(scannerProvider));
+
+        bindListener(new ServiceInterfaceMatcher(), new ServicesListener(servicesModelProvider, scannerProvider));
+        bindInterceptor(Matchers.subclassesOf(Service.class), new FinalizeMethodMatcher(), new FinalizeMethodInterceptor());
+
+
         bindInterceptor(Matchers.subclassesOf(Service.class), new FinalizeMethodMatcher(), new FinalizeMethodInterceptor());
 
     }
 
-    protected void bindServicesController() {
-        bind(ServicesController.class).to(DefaultServicesController.class);
+    protected void bindServicesModel() {
+        bind(ServicesModel.class).to(DefaultServicesModel.class);
+        bind(ServicesClassGraph.class).to(DefaultServicesClassGraph.class);
+        bind(ServicesInstanceGraph.class).to(DefaultServicesInstanceGraph.class);
     }
 
-    protected void bindServicesGraph() {
-        bind(ServicesGraph.class).to(DefaultServicesGraph.class);
-    }
+
+
 
     protected void bindServiceDependencyScanner() {
         bind(ServiceDependencyScanner.class).to(DefaultServiceDependencyScanner.class
@@ -97,13 +75,15 @@ public class ServicesModule extends AbstractModule {
      * @author David Sowerby
      */
     private static class ServicesListener implements TypeListener {
-        private Provider<PubSubSupport<BusMessage>> globalBusProvider;
-        private Provider<ServicesGraph> servicesGraphProvider;
+        private Provider<ServiceDependencyScanner> scannerProvider;
+        private Provider<ServicesModel> servicesModelProvider;
 
-        public ServicesListener(Provider<ServicesGraph> servicesGraphProvider, Provider<PubSubSupport<BusMessage>> globalBusProvider) {
-            this.servicesGraphProvider = servicesGraphProvider;
-            this.globalBusProvider = globalBusProvider;
+        public ServicesListener(Provider<ServicesModel> servicesModelProvider,
+                                Provider<ServiceDependencyScanner> scannerProvider) {
+            this.servicesModelProvider = servicesModelProvider;
+            this.scannerProvider = scannerProvider;
         }
+
 
         @Override
         public <I> void hear(final TypeLiteral<I> type, TypeEncounter<I> encounter) {
@@ -112,10 +92,11 @@ public class ServicesModule extends AbstractModule {
                 public void afterInjection(Object injectee) {
                     // cast is safe - if not, the matcher is wrong
                     Service service = (Service) injectee;
-                    ServicesGraph servicesGraph = servicesGraphProvider.get();
-                    servicesGraph.registerService(service);
-//                    use init because it avoids having to pass the eventBus through constructor injection for every Service, which also risks getting the wrong bus passed in.
-                    service.init(globalBusProvider.get());
+                    //get dependencies from annotations
+                    scannerProvider.get()
+                                   .scan((Service) injectee);
+                    ServicesModel servicesModel = servicesModelProvider.get();
+                    servicesModel.addService(service);
 
                 }
             };
@@ -166,44 +147,8 @@ public class ServicesModule extends AbstractModule {
         }
     }
 
-    /**
-     * Scans the intercepted {@link ServiceUsingDependencyAnnotation} with {@link ServiceDependencyScanner} to update
-     * the {@link ServicesGraph}
-     */
-    private static class ServicesUsingDependencyListener implements TypeListener {
 
-        private Provider<ServiceDependencyScanner> scannerProvider;
 
-        public ServicesUsingDependencyListener(Provider<ServiceDependencyScanner> scannerProvider) {
-            this.scannerProvider = scannerProvider;
-        }
 
-        @Override
-        public <I> void hear(TypeLiteral<I> type, TypeEncounter<I> encounter) {
-            InjectionListener<Object> listener = new InjectionListener<Object>() {
-                @Override
-                public void afterInjection(Object injectee) {
-                    // cast is safe - if not, the matcher is wrong
-                    scannerProvider.get().scan((Service) injectee);
-                }
-            };
-            encounter.register(listener);
-        }
-    }
-
-    private static class ServiceUsingDependencyAnnotationMatcher extends AbstractMatcher<TypeLiteral<?>> {
-        @Override
-        public boolean matches(TypeLiteral<?> t) {
-            Class<?> rawType = t.getRawType();
-            Set<Class<?>> interfaces = ReflectionUtils.allInterfaces(rawType);
-
-            for (Class<?> intf : interfaces) {
-                if (intf.equals(ServiceUsingDependencyAnnotation.class)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
 
 }

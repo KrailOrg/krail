@@ -52,7 +52,7 @@ public class MockService implements Service {
             e.printStackTrace();
         }
         state = failToStart ? FAILED_TO_START : STARTED;
-        return new ServiceStatus(getServiceKey(), state);
+        return new ServiceStatus(this, state);
     }
 
 
@@ -69,7 +69,7 @@ public class MockService implements Service {
             e.printStackTrace();
         }
         state = failToStop ? FAILED_TO_STOP : reasonToStop;
-        return new ServiceStatus(getServiceKey(), state);
+        return new ServiceStatus(this, state);
     }
 
     @Override
@@ -98,10 +98,6 @@ public class MockService implements Service {
         return Service.stoppedStates.contains(state);
     }
 
-    @Override
-    public void init(PubSubSupport<BusMessage> globalBus) {
-        this.globalBus = globalBus;
-    }
 
     @Override
     public I18NKey getNameKey() {

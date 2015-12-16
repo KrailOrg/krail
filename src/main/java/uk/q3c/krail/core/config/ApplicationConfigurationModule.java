@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.core.config;
 
+import uk.q3c.krail.i18n.LabelKey;
+
 /**
  * The Guice module used to configure the application configuration service
  *
@@ -23,6 +25,7 @@ public class ApplicationConfigurationModule extends ConfigurationModuleBase {
     protected void configure() {
         super.configure();
         bindApplicationConfigurationService();
+        registerService(LabelKey.Application_Configuration_Service, ApplicationConfigurationService.class);
     }
 
     /**
@@ -36,5 +39,6 @@ public class ApplicationConfigurationModule extends ConfigurationModuleBase {
     protected void bindConfigs() {
         addConfig("krail.ini", 0, true);
     }
+
 
 }

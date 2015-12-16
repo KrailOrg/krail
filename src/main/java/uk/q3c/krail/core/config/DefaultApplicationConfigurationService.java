@@ -20,9 +20,10 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.Service;
-import uk.q3c.krail.core.services.ServicesController;
+import uk.q3c.krail.core.services.ServicesModel;
 import uk.q3c.krail.i18n.DescriptionKey;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LabelKey;
@@ -67,8 +68,8 @@ public class DefaultApplicationConfigurationService extends AbstractService impl
 
     @Inject
     protected DefaultApplicationConfigurationService(Translate translate, ApplicationConfiguration configuration, Map<Integer, IniFileConfig> iniFiles,
-                                                     ServicesController servicesController) {
-        super(translate, servicesController);
+                                                     ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
+        super(translate, servicesModel, globalBusProvider);
         this.configuration = configuration;
         this.iniFiles = iniFiles;
         setDescriptionKey(DescriptionKey.Application_Configuration_Service);

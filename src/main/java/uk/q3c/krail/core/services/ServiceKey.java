@@ -11,12 +11,14 @@
 
 package uk.q3c.krail.core.services;
 
+import com.google.common.base.Preconditions;
 import uk.q3c.krail.i18n.I18NKey;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 /**
- * A ky object to uniquely identify a {@link Service} instance
+ * A ky object to uniquely identify a {@link Service} class without needing to use the Class itself
  *
  * Created by David Sowerby on 24/10/15.
  */
@@ -24,24 +26,12 @@ import javax.annotation.concurrent.Immutable;
 public class ServiceKey {
 
     private final I18NKey key;
-    private final int instance;
 
-    public ServiceKey(I18NKey key, int instance) {
+    public ServiceKey(@Nonnull I18NKey key) {
+        Preconditions.checkNotNull(key);
         this.key = key;
-        this.instance = instance;
     }
 
-    public ServiceKey(I18NKey key) {
-        this.key = key;
-        this.instance = 0;
-    }
-
-    /**
-     * Returns true only if o is another ServiceKey and has the same key and instance
-     *
-     * @param o the other ServiceKey
-     * @return true only if o is another ServiceKey and has the same key and instance
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,20 +39,17 @@ public class ServiceKey {
 
         ServiceKey that = (ServiceKey) o;
 
-        if (instance != that.instance) return false;
-        return !(key != null ? !key.equals(that.key) : that.key != null);
+        return key.equals(that.key);
 
     }
 
     @Override
     public int hashCode() {
-        int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + instance;
-        return result;
+        return key.hashCode();
     }
 
     @Override
     public String toString() {
-        return ((Enum) key).name() + ":" + instance;
+        return ((Enum) key).name();
     }
 }

@@ -12,8 +12,8 @@
  */
 package uk.q3c.krail.core.config;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
+import uk.q3c.krail.core.services.AbstractServiceModule;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -32,11 +32,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author David Sowerby
  */
-public abstract class ConfigurationModuleBase extends AbstractModule {
+public abstract class ConfigurationModuleBase extends AbstractServiceModule {
     private MapBinder<Integer, IniFileConfig> iniFileConfigs;
 
     @Override
     protected void configure() {
+        super.configure();
         iniFileConfigs = MapBinder.newMapBinder(binder(), Integer.class, IniFileConfig.class);
         bindConfigs();
     }

@@ -11,37 +11,32 @@
 
 package uk.q3c.krail.core.services;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.i18n.TestLabelKey;
 import uk.q3c.krail.i18n.Translate;
 
-public class TestService extends AbstractService {
+/**
+ * Unnecessarily injects serviceB
+ */
+@Singleton
+public class TestServiceE extends AbstractService {
 
     @Dependency
-    Service serviceA;
+    TestServiceB serviceB;
 
-    @Dependency(required = false)
-    Service serviceB;
-
-    @Dependency(always = false)
-    Service serviceC;
-
-    @Dependency(required = false, always = false)
-    Service serviceD;
-
-    protected TestService(Translate translate, ServicesModel servicesModel, Service serviceA, Service serviceB, Service serviceC, Service serviceD,
-                          GlobalBusProvider globalBusProvider) {
+    @Inject
+    protected TestServiceE(Translate translate, ServicesModel servicesModel, TestServiceB serviceB,
+                           GlobalBusProvider globalBusProvider) {
         super(translate, servicesModel, globalBusProvider);
-        this.serviceA = serviceA;
         this.serviceB = serviceB;
-        this.serviceC = serviceC;
-        this.serviceD = serviceD;
     }
 
     @Override
     public I18NKey getNameKey() {
-        return LabelKey.Yes;
+        return TestLabelKey.ServiceE;
     }
 
     @Override

@@ -20,31 +20,25 @@ class ServiceKeyTest extends Specification {
 
     def "to String"() {
         given:
-        ServiceKey key = new ServiceKey(LabelKey.Yes, 33)
+        ServiceKey key = new ServiceKey(LabelKey.Yes)
 
         expect:
-        key.toString().equals("Yes:33")
+        key.toString().equals("Yes")
     }
 
     def "equals"() {
         given:
-        ServiceKey key1 = new ServiceKey(LabelKey.Yes, 33)
-        ServiceKey key2 = new ServiceKey(LabelKey.Yes, 33)
-        ServiceKey key3 = new ServiceKey(LabelKey.Yes, 32)
-        ServiceKey key4 = new ServiceKey(LabelKey.No, 33)
+        ServiceKey key1 = new ServiceKey(LabelKey.Yes)
+        ServiceKey key2 = new ServiceKey(LabelKey.Yes)
+        ServiceKey key3 = new ServiceKey(LabelKey.Yes)
+        ServiceKey key4 = new ServiceKey(LabelKey.No)
 
         expect:
         key1.equals(key2)
-        !key2.equals(key3)
+        key2.equals(key3)
         !key2.equals(key4)
     }
 
-    def "constructor without instance"() {
-        given:
-        ServiceKey key = new ServiceKey(LabelKey.Yes)
 
-        expect:
-        key.toString().equals("Yes:0")
-    }
 
 }

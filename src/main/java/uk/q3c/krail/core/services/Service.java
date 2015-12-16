@@ -11,8 +11,6 @@
 
 package uk.q3c.krail.core.services;
 
-import net.engio.mbassy.bus.common.PubSubSupport;
-import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.i18n.I18NKey;
 
 import java.util.EnumSet;
@@ -133,21 +131,13 @@ public interface Service {
      */
     boolean isStopped();
 
-    /**
-     * Called after the service has been constructed by the {@link ServicesModule}, to supply the {@code globalBus}.  There should never be a need to call this
-     * directly except for testing.
-     *
-     * @param globalBus
-     *         the event bus used to transfer Service state messages
-     */
-    void init(PubSubSupport<BusMessage> globalBus);
 
     I18NKey getDescriptionKey();
 
     void setDescriptionKey(I18NKey descriptionKey);
 
     default ServiceKey getServiceKey() {
-        return new ServiceKey(getNameKey(), getInstance());
+        return new ServiceKey(getNameKey());
     }
 
     /**

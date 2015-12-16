@@ -11,6 +11,8 @@
 
 package uk.q3c.krail.core.services;
 
+import uk.q3c.krail.i18n.I18NKey;
+
 import javax.annotation.concurrent.Immutable;
 
 /**
@@ -24,6 +26,12 @@ public class DependencyDefinition {
     private final ServiceKey dependant;
     private final ServiceKey dependency;
     private final Dependency.Type type;
+
+    public DependencyDefinition(I18NKey dependant, I18NKey dependency, Dependency.Type type) {
+        this.dependant = new ServiceKey(dependant);
+        this.dependency = new ServiceKey(dependency);
+        this.type = type;
+    }
 
     public DependencyDefinition(ServiceKey dependant, ServiceKey dependency, Dependency.Type type) {
         this.dependant = dependant;

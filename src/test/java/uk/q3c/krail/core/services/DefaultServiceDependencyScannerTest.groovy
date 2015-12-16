@@ -12,6 +12,7 @@
 package uk.q3c.krail.core.services
 import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
+import uk.q3c.krail.core.eventbus.GlobalBusProvider
 import uk.q3c.krail.i18n.LabelKey
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.testutil.LogMonitor
@@ -27,8 +28,9 @@ class DefaultServiceDependencyScannerTest extends Specification {
     Service mockC = Mock(Service)
     Service mockD = Mock(Service)
 
-    def controller = Mock(ServicesController)
+    def model = Mock(ServicesModel)
     def translate = Mock(Translate)
+    GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
     LogMonitor logMonitor
 
 
@@ -50,18 +52,17 @@ class DefaultServiceDependencyScannerTest extends Specification {
     def "scan valid dependencies, @Dependency on non-Service field ignored"() {
         given:
 
-        def graph = Mock(ServicesGraph)
-        def scanner = new DefaultServiceDependencyScanner(graph)
-        def service = new TestService(translate, controller, mockA, mockB, mockC, mockD)
+        def scanner = new DefaultServiceDependencyScanner(model)
+        def service = new TestService(translate, model, mockA, mockB, mockC, mockD, globalBusProvider)
 
         when:
         scanner.scan(service)
 
         then:
-        1 * graph.alwaysDependsOn(service.getServiceKey(), mockA.getServiceKey())
-        1 * graph.optionallyUses(service.getServiceKey(), mockB.getServiceKey())
-        1 * graph.requiresOnlyAtStart(service.getServiceKey(), mockC.getServiceKey())
-        1 * graph.optionallyUses(service.getServiceKey(), mockD.getServiceKey())
+        1 * model.alwaysDependsOn(service.getServiceKey(), mockA.getServiceKey())
+        1 * model.optionallyUses(service.getServiceKey(), mockB.getServiceKey())
+        1 * model.requiresOnlyAtStart(service.getServiceKey(), mockC.getServiceKey())
+        1 * model.optionallyUses(service.getServiceKey(), mockD.getServiceKey())
         logMonitor.warnLogs().isEmpty()
 
     }
@@ -70,18 +71,17 @@ class DefaultServiceDependencyScannerTest extends Specification {
     def "scan with Dependency field null"() {
         given:
 
-        def graph = Mock(ServicesGraph)
-        def scanner = new DefaultServiceDependencyScanner(graph)
-        def service = new TestService(translate, controller, null, mockB, mockC, mockD)
+        def scanner = new DefaultServiceDependencyScanner(model)
+        def service = new TestService(translate, model, null, mockB, mockC, mockD, globalBusProvider)
 
         when:
         scanner.scan(service)
 
         then:
-//        1 * graph.alwaysDependsOn(service.getServiceKey(), mockA.getServiceKey())
-        1 * graph.optionallyUses(service.getServiceKey(), mockB.getServiceKey())
-        1 * graph.requiresOnlyAtStart(service.getServiceKey(), mockC.getServiceKey())
-        1 * graph.optionallyUses(service.getServiceKey(), mockD.getServiceKey())
+//        1 * model.alwaysDependsOn(service.getServiceKey(), mockA.getServiceKey())
+        1 * model.optionallyUses(service.getServiceKey(), mockB.getServiceKey())
+        1 * model.requiresOnlyAtStart(service.getServiceKey(), mockC.getServiceKey())
+        1 * model.optionallyUses(service.getServiceKey(), mockD.getServiceKey())
         logMonitor.warnLogs().contains("Field is annotated with @Dependency but is null, dependency not set");
     }
 

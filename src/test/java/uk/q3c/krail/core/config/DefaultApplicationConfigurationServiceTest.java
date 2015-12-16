@@ -18,18 +18,16 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.VaadinService;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.EventBusModule;
-import uk.q3c.krail.core.eventbus.GlobalBus;
+import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.services.DefaultServicesController;
+import uk.q3c.krail.core.services.DefaultServicesModel;
 import uk.q3c.krail.core.services.Service.State;
 import uk.q3c.krail.core.services.ServiceStatus;
 import uk.q3c.krail.i18n.*;
@@ -60,11 +58,10 @@ public class DefaultApplicationConfigurationServiceTest {
     ApplicationConfiguration configuration;
 
     @Mock
-    DefaultServicesController servicesController;
+    DefaultServicesModel servicesModel;
 
     @Inject
-    @GlobalBus
-    PubSubSupport<BusMessage> globalBus;
+    GlobalBusProvider globalBusProvider;
 
     CurrentLocale currentLocale = new MockCurrentLocale();
 
@@ -84,10 +81,9 @@ public class DefaultApplicationConfigurationServiceTest {
         Locale.setDefault(Locale.UK);
         iniFiles = new HashMap<>();
         configuration.clear();
-        service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles, servicesController);
-        service.init(globalBus);
+        service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles, servicesModel, globalBusProvider);
         currentLocale.setLocale(Locale.UK);
-        when(servicesController.startDependenciesFor(service)).thenReturn(true);
+        when(servicesModel.startDependenciesFor(service)).thenReturn(true);
     }
 
     @Test

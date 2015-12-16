@@ -21,16 +21,16 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public class ServiceStatus {
 
-    private final ServiceKey serviceKey;
+    private final Service service;
     private final Service.State state;
 
-    public ServiceStatus(ServiceKey serviceKey, Service.State state) {
-        this.serviceKey = serviceKey;
+    public ServiceStatus(Service service, Service.State state) {
+        this.service = service;
         this.state = state;
     }
 
-    public ServiceKey getServiceKey() {
-        return serviceKey;
+    public Service getService() {
+        return service;
     }
 
     public Service.State getState() {

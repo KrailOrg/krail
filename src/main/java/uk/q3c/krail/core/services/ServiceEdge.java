@@ -24,9 +24,12 @@ public class ServiceEdge {
 
     private final Dependency.Type type;
 
-
     public ServiceEdge(Dependency.Type type) {
         this.type = type;
+    }
+
+    public Dependency.Type getType() {
+        return type;
     }
 
     public boolean requiredOnlyAtStart() {

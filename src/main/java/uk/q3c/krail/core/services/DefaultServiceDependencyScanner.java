@@ -14,11 +14,11 @@ import java.lang.reflect.Field;
  */
 public class DefaultServiceDependencyScanner implements ServiceDependencyScanner {
     private static Logger log = LoggerFactory.getLogger(DefaultServiceDependencyScanner.class);
-    private ServicesGraph servicesGraph;
+    private ServicesModel servicesModel;
 
     @Inject
-    protected DefaultServiceDependencyScanner(ServicesGraph servicesGraph) {
-        this.servicesGraph = servicesGraph;
+    protected DefaultServiceDependencyScanner(ServicesModel servicesModel) {
+        this.servicesModel = servicesModel;
     }
 
     @Override
@@ -40,12 +40,12 @@ public class DefaultServiceDependencyScanner implements ServiceDependencyScanner
                         } else {
                             if (annotation.required()) {
                                 if (annotation.always()) {
-                                    servicesGraph.alwaysDependsOn(service.getServiceKey(), dependency.getServiceKey());
+                                    servicesModel.alwaysDependsOn(service.getServiceKey(), dependency.getServiceKey());
                                 } else {
-                                    servicesGraph.requiresOnlyAtStart(service.getServiceKey(), dependency.getServiceKey());
+                                    servicesModel.requiresOnlyAtStart(service.getServiceKey(), dependency.getServiceKey());
                                 }
                             } else {
-                                servicesGraph.optionallyUses(service.getServiceKey(), dependency.getServiceKey());
+                                servicesModel.optionallyUses(service.getServiceKey(), dependency.getServiceKey());
                             }
                         }
                     }
