@@ -387,7 +387,7 @@ There are a few things to see, even in this very basic implementation.
 - The "screen" presentation is provided by ```DefaultApplicationUI``` - UI in this context refers to the Vaadin concept of UI, which is generally equivalent to a browser tab. 
 - ```DefaultApplicationUI``` contains a number of components and both the UI and its components can be replaced, sub-classed or modified.  All the parts described below are pluggable components, held by the UI: 
 	- The Application Header is just a panel to hold things like logos
-	- The navigation tree, navigation, breadcrumb and sub-page panel menu are all navigation-aware components   You can navigate by clicking on any of them, or just change the URL directly.  These navigation components are tied to a Sitemap,  which defines the structure of the site, and the Views used to represent each page.  You will see how this works when we create some new pages.
+	- The navigation tree, navigation menu, breadcrumb and sub-page panel menu are all navigation-aware components.   You can navigate pages by clicking on any of them, or just change the URL directly.  These navigation components are tied to a Sitemap,  which defines the structure of the site, and the Views used to represent each page.  You will see how this works when we create some new pages.
 	- The Locale selector will not do much yet, as there are no alternative Locales defined - that will be covered later in the Tutorial.
 	- The login panel offers a login button and a login status - we will log in in a moment
 	- The message bar is just a place for messages to the user.
