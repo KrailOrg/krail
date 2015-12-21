@@ -18,22 +18,13 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
- * Provides a model of dependencies between Services.  Dependencies, of types specified by {@link Dependency.Type}  are
- * defined at {@link Service} class level, but are also held at {@link Service} instance level.  This enables, for example, a dependant
- * to be stopped automatically if one of its dependencies stops. <br><br>
- * Dependencies can be declared either using @{@link Dependency} annotations or by Guice configuration. (
- * ServicesModule} or at runtime through the {@link ServicesGraphRuntimeUserInterface}<br> <br> Note that when a call is
- * made to any method, when a {@link ServiceKey} parameter does not exist in the graph, that {@link ServiceKey} is added
- * to the graph automatically.   For example, a call to {@link #findOptionalDependencies} with a ServiceKey which has
- * not yet been added to the graph, will add the key, and return an empty list.
- * <p>
- * Throws a {@link CycleDetectedException} If a dependency is created which causes a loop (Service A depends on B which
- * depends on A)
- * <p>
- * /** Implementation works in conjunction with {@link AbstractService} to ensure that dependencies between services are
- * managed appropriately.  The dependencies are defined by configuring {@link ServicesModel}.  {@link AbstractService}
- * delegates calls to start() and stop() to this interface, as should any Service implementation which continues to use
- * this interface
+ * Provides a model of Services and dependencies between them.  Dependencies types are specified by {@link Dependency.Type}.<br><br>
+ * The model holds a classGraph and an instanceGraph.<br><br>
+ * The developer defines dependencies at class level, using Guice (see {@link AbstractServiceModule}) or {@link Dependency} annotations.  When a Service
+ * instance is created by Guice, it is also held by the model in the instance graph, and the model ensures that instances of required dependencies are also
+ * available or created.
+
+ * If a dependency is created which causes a loop (Service A depends on B which depends on A), a {@link CycleDetectedException} is thrown
  * <p>
  * Created by David Sowerby on 24/10/15.
  */
@@ -124,17 +115,6 @@ public interface ServicesModel {
      * @return an immutable list of currently contained service instances
      */
     ImmutableList<Service> registeredServiceInstances();
-
-
-//    /**
-//     * It is unlikely that a developer would need to call this method directly, as generally the find**** methods are
-//     * more relevant.  This method returns 0 or more dependencies as Service instances for the {@code dependant}.
-//     *
-//     * @param dependant the Service for which dependencies are required.
-//     * @return instances of services which {@code dependant} depends on
-//     */
-//    List<Service> getDependencyInstances(Service dependant);
-
 
     /**
      * Starts any dependencies which are required in order to start {@code service}.  These are a union of {@link

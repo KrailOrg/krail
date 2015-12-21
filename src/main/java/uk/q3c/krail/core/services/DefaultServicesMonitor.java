@@ -27,7 +27,9 @@ import uk.q3c.krail.core.eventbus.GlobalBus;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-
+/**
+ * Uses the GlobalBus to monitor changes to Service status
+ */
 @Singleton
 @Listener
 public class DefaultServicesMonitor implements ServicesMonitor {

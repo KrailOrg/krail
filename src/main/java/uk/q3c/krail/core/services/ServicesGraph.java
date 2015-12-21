@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * A wrapper on a Jung graph used specifically for modelling relationships between either Service classes or Service instances in {@link ServicesModel}
+ * A wrapper on a Jung graph used specifically for modelling relationships between either {@link Service} classes (represented by a {@link ServiceKey}) or
+ * Service instances in
+ * {@link ServicesModel}
  * <p>
  * <p>
  * <T>  is expected to be either {@link ServiceKey}  or a {@link Service} instance
