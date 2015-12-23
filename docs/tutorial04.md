@@ -72,5 +72,5 @@ If you wanted to provide your own methods of presenting user notifications, it i
 #Summary
 This seems an almost trivial topic, we would strongly recommend using ```UserNotifier``` from the start.  This will not oly give you consistency, but enable you very simply change how notifications are presented to users later - while still keeping consistency.  
 
-#Download from Github
-To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step04**
+#Download from GitHub
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step04**

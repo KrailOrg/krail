@@ -413,5 +413,5 @@ We have:
 - Built a very simple credential store with user accounts<br>
 - Demonstrated some uses of Shiro's Wildcard permissions<br>
 
-#Download from Github
-To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step07**
+#Download from GitHub
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step07**

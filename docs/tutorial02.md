@@ -558,6 +558,6 @@ There is a [bug](https://github.com/davidsowerby/krail/issues/400) which causes 
 - You have excluded a page from navigation, but still make it part of the Sitemap
 - You have "attached" an existing set of pages to a part of the Sitemap different from its default location 
 
-#Download from Github
-To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step02**
+#Download from GitHub
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step02**
 

@@ -283,5 +283,5 @@ public class IniConfigView extends Grid3x3ViewBase {
  
 Apache Commons Configuration supports much more than just ini files, and can support [variety of sources](https://commons.apache.org/proper/commons-configuration/userguide_v1.10/overview.html#Configuration_Sources) - Krail will just accept anything that Apache Commons Configuration provides
   
-#Download from Github
-To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step06**
+#Download from GitHub
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step06**

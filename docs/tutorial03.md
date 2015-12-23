@@ -74,5 +74,5 @@ Valo is the most recent theme from Vaadin.  "Reindeer" is the default, which you
 This was a short tutorial, covering the creation of a new UI, registering it, and setting a Theme.
 
 
-#Download from Github
-To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step03**
+#Download from GitHub
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step03**

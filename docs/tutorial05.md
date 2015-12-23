@@ -356,5 +356,5 @@ We have:
 - shown that ```OptionKey``` provides a full key definition, enabling the ```OptionPopup``` to populate without any further coding
 
  
-#Download from Github
-To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step05**
+#Download from GitHub
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step05**

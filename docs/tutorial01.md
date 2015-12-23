@@ -11,7 +11,7 @@ This tutorial assumes that you have Gradle already installed.  The Vaadin Gradle
 
 It is also assumed that you will be using Git for version control, and have it installed.
 
-If you want to skip a step, or just re-create something later, this Tutorial is available on Github - at the end of every section you'll see a stage "Download from Github"
+If you want to skip a step, or just re-create something later, this Tutorial is available on GitHub - at the end of every section you'll see a stage "Download from GitHub"
 
 ## Create a build file
 
@@ -419,9 +419,9 @@ You have created a basic application, and can have already seen:<br>
 - Navigation aware components acting together
 - User notifications
 
-# Download from Github
+# Download from GitHub
 
-To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step01**
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step01**
     
 
 

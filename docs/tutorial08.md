@@ -562,8 +562,8 @@ There is still more to cover under the "I18N" heading, so the next section will 
 - cleared the pattern cache
 - configured Guice modules fluently and directly
 
-#Download from Github
-To get to this point straight from Github, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step08**
+#Download from GitHub
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step08**
  
 
 
