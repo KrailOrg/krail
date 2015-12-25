@@ -340,7 +340,10 @@ public class DefaultServicesModel implements ServicesModel {
             log.debug("returning instance for {}", serviceKey);
             return instance;
         } else {
-            throw new ServiceRegistrationException("no service has been registered for " + serviceKey);
+            throw new ServiceRegistrationException("no service has been registered for " + serviceKey + ", have you forgotten to register a service in a " +
+                    "Guice " +
+                    "module, or forgotten to add a Guice module to the BindingManager?" +
+                    " ");
         }
     }
 

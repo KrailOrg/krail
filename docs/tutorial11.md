@@ -31,6 +31,6 @@ All of the above scopes may be applied as described [here](https://github.com/go
 <br>
 <br>
 <br>
-
+--------------------
 
 *Note that the standard web annotation of **@SessionScoped** appears to work except when using with Vaadin Push - but has not been tested thoroughly.

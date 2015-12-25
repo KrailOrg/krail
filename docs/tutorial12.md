@@ -97,6 +97,11 @@ public abstract class MessageReceiver extends Panel {
     }
 }
 ```
+
+The **@Handler** annotation ensures the ```addMsg()``` method intercepts all ```TutorialMessage``` events which are passed by the bus(es) which the class is subscribed to.  We will subscribe in the following sub-classes, so that each one intercepts ```TutorialMessage``` events for a specific bus - but you can subscribe to multiple buses. 
+
+
+
 ##Receiver for each bus
 
 - create three sub-classes, ```GlobalMessageReceiver```, ```SessionMessageReceiver``` and ```UIMessageReceiver``` each extending ```MessageReceiver```, in *com.example.tutorial.eventbus*
