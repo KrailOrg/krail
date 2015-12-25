@@ -37,7 +37,7 @@ In this Tutorial we will use both for the purposes of demonstration, but in prac
 
 ##State changes
 
-Whenever the state of a ```Service``` changes, a```ServiceBusMessage``` is published via the GlobalBus (see the [EventBus section](tutorial12.md)).  This could easily be utilised to provide a service monitor (a simplistic version of one is provided by Krail, the ```DefaultServicesMonitor```), or to generate notifications of failures for example.
+Whenever the state of a ```Service``` changes, a```ServiceBusMessage``` is published via the GlobalBus (see the [EventBus section](tutorial-event-bus.md)).  This could easily be utilised to provide a service monitor (a simplistic version of one is provided by Krail, the ```DefaultServicesMonitor```), or to generate notifications of failures for example.
 
 #The Example
 
@@ -358,7 +358,7 @@ public class ServicesView extends Grid3x3ViewBase {
 - create the enum constants
 
 Here we set up some buttons to start and stop services in ```createButtons()```<br>
-We use the [Event Bus](tutorial12.md) to create a simple monitor for state changes in ```createStateMonitor()```
+We use the [Event Bus](tutorial-event-bus.md) to create a simple monitor for state changes in ```createStateMonitor()```
 
 - run the application and try pressing 'Start Service A' - a message will appear in the state changes log
 

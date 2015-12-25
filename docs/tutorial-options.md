@@ -318,7 +318,7 @@ This is the expected behaviour - we coded a default value of "true" for the ```O
 - Try pressing "system option".  You will be told that you do not have permission for that action.
 - Click on the splash message to clear it
 
-We will come to [User Access Control](tutorial07.md) in detail later, but for now it is enough to know that ```DefaultRealm``` - which provides the authorisation rules - allows users to set their own options, but only allows the 'admin' user to set system level options. 
+We will come to [User Access Control](tutorial-uac.md) in detail later, but for now it is enough to know that ```DefaultRealm``` - which provides the authorisation rules - allows users to set their own options, but only allows the 'admin' user to set system level options. 
 
 - Log out, and log back in as 'admin'.  Yes it is the same password.
 - Navigate to "My News" and press "system option" again.
@@ -332,7 +332,7 @@ This is demonstrating that the "Override" principle mentioned earlier.  If a use
 #Using Hierarchies
 
 If you think about it, this hierarchy principle could be used in other scenarios. You could have hierarchies based on geographic location - maybe *city, country, region*.  Or another based on job - maybe *function, department, team, role*.
-The structure of these may be available from other systems - HR, Identity Management, Facilities systems - or you could define them yourself.  You can have as many hierarchies as you wish, and we will come back to this subject later to [create a hierarchy](tutorial15.md) of our own.  
+The structure of these may be available from other systems - HR, Identity Management, Facilities systems - or you could define them yourself.  You can have as many hierarchies as you wish, and we will come back to this subject later to [create a hierarchy](tutorial-create-hierarchy.md) of our own.  
 
 #Option Data Types
 

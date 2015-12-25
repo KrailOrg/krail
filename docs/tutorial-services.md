@@ -5,7 +5,7 @@
 Krail integrates the event bus provided by [MBassador](https://github.com/bennidi/mbassador).  For more information about the integration itself, see the this project's [contribution to the MBassador documentation](https://github.com/bennidi/mbassador/wiki/Guice-Integration).
  
 There is no point duplicating MBassador's documentation here, but in brief, MBassador enables the use of synchronous or asynchronous event (message) buses.  MBassador is a sophisticated, high performance event bus, and it is strongly recommended that you read its documentation to get the best from it.<br><br>
-There is a logical correlation between an event bus and a Guice scope, and that is what Krail provides - an event bus for Singleton, VaadinSession and UI scopes as described in the [Guice Scopes](tutorial11.md) chapter.  These can be accessed by:
+There is a logical correlation between an event bus and a Guice scope, and that is what Krail provides - an event bus for Singleton, VaadinSession and UI scopes as described in the [Guice Scopes](tutorial-guice-scopes.md) chapter.  These can be accessed by:
 
 - annotation (**@UiBus**, **@SessionBus**, **@GlobalBus**)
 - provider (```UIBusProvider```, ```SessionBusProvider```, ```GlobalBusProvider```)
@@ -22,10 +22,10 @@ If you have followed the Tutorial up to this point you will now be a complete ex
 - Amend the ```OtherPages``` module by adding the following line to the ```define()``` method:
 
 ```java
-addEntry("events-services", EventsAndServicesView.class, LabelKey.Events_and_Services, PageAccessControl.PERMISSION);
+addEntry("events", EventsView.class, LabelKey.Events, PageAccessControl.PERMISSION);
 ```
 - create the enum constant for the page
-- create the view ```EventsAndServicesView``` in *com.example.tutorial.pages* (code is provided later)
+- create the view ```EventsView``` in *com.example.tutorial.pages* (code is provided later)
 - create a package `com.example.tutorial.eventbus`
 - in this new package, create a ```TutorialMessage``` class
 
@@ -157,7 +157,7 @@ globalBusProvider.getGlobalBus().subscribe(this)
 
 # Completing the View
 
-- cut and paste the code below into ```EventsAndServicesView``` 
+- cut and paste the code below into ```EventsView``` 
 
 ```
 package com.example.tutorial.pages;
@@ -174,7 +174,7 @@ import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
-public class EventsAndServicesView extends Grid3x3ViewBase {
+public class EventsView extends Grid3x3ViewBase {
     private final UIBusProvider uiBusProvider;
     private final GlobalBusProvider globalBusProvider;
     @Caption(caption = LabelKey.Singleton, description = DescriptionKey.Singleton)
@@ -192,7 +192,7 @@ public class EventsAndServicesView extends Grid3x3ViewBase {
 
 
     @Inject
-    protected EventsAndServicesView(UIBusProvider uiBusProvider, SessionBusProvider sessionBusProvider, GlobalBusProvider globalBusProvider,
+    protected EventsView(UIBusProvider uiBusProvider, SessionBusProvider sessionBusProvider, GlobalBusProvider globalBusProvider,
                                     GlobalMessageReceiver singletonMessageReceiver, SessionMessageReceiver sessionMessageReceiver, UIMessageReceiver uiMessageReceiver) {
         this.uiBusProvider = uiBusProvider;
         this.sessionBusProvider = sessionBusProvider;
@@ -274,7 +274,7 @@ A ```MessageReceiver``` is injected for each bus (remember these need to be inst
 - Messages will appear in all 3 text areas
 - Switch to tab 2 (there will be no messages visible yet)
 
-If you know Vaadin, you will be familiar with this situation - the Vaadin client is unaware that changes have been made on the server, so the display has not been updated.  It will only update when the client is prompted to get an update from the server.  (We will come back to this when we address [Vaadin Push](tutorial13.md)).  For our purposes, we just click the Refresh button.  This actually does nothing except cause the client to poll the server for updates.
+If you know Vaadin, you will be familiar with this situation - the Vaadin client is unaware that changes have been made on the server, so the display has not been updated.  It will only update when the client is prompted to get an update from the server.  (We will come back to this when we address [Vaadin Push](tutorial-push.md)).  For our purposes, we just click the Refresh button.  This actually does nothing except cause the client to poll the server for updates.
 
 - click Refresh
 - the Singleton and Session text areas will contain a message from the same source, but the UI area will be empty

@@ -146,7 +146,7 @@ Run the application again.  When the application starts the new pages will not b
 
 - Log in (any username, password='password'), and you will see the pages, under 'Private', in the navigation tree and menu. 
 
-You may be wondering whether these pages need to be under the 'Private' branch.  At the moment they do, but only because of the very simple access control rules supplied by ```DefaultRealm```.  You can actually define any logical structure, and we will see how to control permissions in the [User Access Control](tutorial07.md) section of the Tutorial.
+You may be wondering whether these pages need to be under the 'Private' branch.  At the moment they do, but only because of the very simple access control rules supplied by ```DefaultRealm```.  You can actually define any logical structure, and we will see how to control permissions in the [User Access Control](tutorial-uac.md) section of the Tutorial.
 
 ##Add a Page - Annotation method
 The second method of defining a page is to use an annotation on a ```KrailView``` implementation.  To begin with, we need to tell Krail where to look for annotated views - this reduces the amount of scanning Krail has to do at start up.  To do that we:

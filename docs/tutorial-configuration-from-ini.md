@@ -2,7 +2,7 @@
 
 In the previous section we covered the use of options, and mentioned that Krail sees Options as the [top layer of configuration](devguide01.md).
 
-So that means the Tutorial has so far covered the top layer and part of the bottom layer.  The "bottom layer" includes the configuration we have done using Guice and Guice modules, but there is a little more to cover on that [later](tutorial16.md).
+This Tutorial has so far covered the top layer and part of the bottom layer.  The "bottom layer" includes the configuration we have done using Guice and Guice modules, but includes anything which requires a recompile (for example, annotations)
   
 The middle layer is the one provided by the facility to load ini files (and other formats), and that is what we will explore in this section
 
@@ -10,7 +10,7 @@ The middle layer is the one provided by the facility to load ini files (and othe
 
 Krail integrates [Apache Commons Configuration](https://commons.apache.org/proper/commons-configuration/) to provide support for this form of loading configuration, which extends well beyond just ini files.  (See the Apache documentation for more information).   
 
-More specifically, Krail captures configuration information in an instance of ```ApplicationConfiguration```, which allows a set of configuration values to override a previous set (when they have the same property names).  This is similar in principle to the way [options](tutorial05.md) work.
+More specifically, Krail captures configuration information in an instance of ```ApplicationConfiguration```, which allows a set of configuration values to override a previous set (when they have the same property names).  This is similar in principle to the way [options](tutorial-options.md) work.
 
 #Example
 

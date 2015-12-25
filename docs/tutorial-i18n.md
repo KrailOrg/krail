@@ -1,6 +1,6 @@
 #Introduction
 
-We had a very [brief introduction](tutorial02.md#I18NIntro) to Krail's implementation of I18N in an earlier section of the Tutorial, and this gave us the ```LabelKey``` and ```DescriptionKey``` **enum** classes.
+We had a very [brief introduction](tutorial-pages-navigation.md#I18NIntro) to Krail's implementation of I18N in an earlier section of the Tutorial, and this gave us the ```LabelKey``` and ```DescriptionKey``` **enum** classes.
 
 In this section we will cover most of the rest of Krail's I18N functionality. 
 
@@ -88,7 +88,7 @@ This is just a convention - which we will use in this Tutorial - but it is entir
 
 ###Creating a Key class
 
-Assuming you have followed this Tutorial from the start, you have already seen how to [create a key class](tutorial02.md#I18NIntro).  We are going to add another now:
+Assuming you have followed this Tutorial from the start, you have already seen how to [create a key class](tutoriall-pages-navigation.md#I18NIntro).  We are going to add another now:
 
 - in the 'com.example.tutorial.i18n' package, create an Enum class called 'MessageKey'.  It should implement the ```I18NKey``` interface
 - create a MessageKey constant **Banner**
@@ -393,7 +393,7 @@ You have been using ```CurrentLocale``` without being aware of it - ```Translate
 
 ```CurrentLocale``` holds the currently selected locale for a user.  It is first populated from a combination of things like Web Browser settings, and whatever you have defined in the ```I18NModule``` - the logic is in described in the ```DefaultCurrentLocale``` javadoc.
   
-When a change is made to the current locale (in our case, using the ```LocaleSelector```), ```CurrentLocale``` publishes a ```LocaleChangeBusMessage``` via the session [Event Bus](tutorial12.md).  We need to intercept that message, and respond to it by updating the banner.
+When a change is made to the current locale (in our case, using the ```LocaleSelector```), ```CurrentLocale``` publishes a ```LocaleChangeBusMessage``` via the session [Event Bus](tutorial-event-bus.md).  We need to intercept that message, and respond to it by updating the banner.
 
 - make this View an event bus listener and subscribe to the session Event Bus
 
@@ -416,11 +416,11 @@ protected void localeChanged(LocaleChangeBusMessage busMessage) {
 
 So far we have used the class-based method for defining I18N patterns.  Krail originally supported the traditional properties files, but that has now been withdrawn as we saw no benefit to using it.  
 
-You can, however, use any source which identified by an annotation - a database, REST service or any other service which can provide patterns via a pluggable DAO.  Krail provides an in-memory map as a source, annotated with **@InMemory**.  Being in memory, it is not very useful except for testing - later you will see a [JPA implementation](tutorial09.md))
+You can, however, use any source which identified by an annotation - a database, REST service or any other service which can provide patterns via a pluggable DAO.  Krail provides an in-memory map as a source, annotated with **@InMemory**.  Being in memory, it is not very useful except for testing - later you will see a [JPA implementation](tutorial-persistence-jpa.md))
 
 ##Selecting pattern sources
  
-Let's add a database source (which for now will actually be an in-memory map, until we [add persistence](tutorial09.md))
+Let's add a database source (which for now will actually be an in-memory map, until we [add persistence](tutorial-persistence-jpa.md))
 
 - in ```TutorialI18NModule```, define two pattern sources - class and in-memory (previously we were using the default - class only).  The order they are declared is significant, as that is also the order they queried.
 ```
@@ -515,7 +515,7 @@ We have just demonstrated changing the value for a specific key - exactly the sa
   
 #Methods of configuration revisited
 
-Earlier [in this section](tutorial08.md#config-methods) we elected to sub-class ```I18NModule``` as a way of configuring it, resulting in this ```define()``` method:
+Earlier [in this section](tutorial-i18n-vaadin-components.md#config-methods) we elected to sub-class ```I18NModule``` as a way of configuring it, resulting in this ```define()``` method:
 
 ```
 @Override

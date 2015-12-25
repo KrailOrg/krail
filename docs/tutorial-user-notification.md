@@ -67,7 +67,7 @@ If you look at the constructor for ```TutorialUI``` you will see the ```MessageB
 - Run the application and go to the "News Page", press the "Send Notification" button, and the message will appear as a Vaadin 'Splash' notification and in the message bar at the bottom of the screen.
 
 #Different methods of presentation
-If you wanted to provide your own methods of presenting user notifications, it is very easy to do, while still keeping the consistency of a single despatch point for user notifications. In fact, we will use it as an example in the [Event Bus](tutorial12.md) section. 
+If you wanted to provide your own methods of presenting user notifications, it is very easy to do, while still keeping the consistency of a single despatch point for user notifications. In fact, we will use it as an example in the [Event Bus](tutorial-event-bus.md) section. 
 
 #Summary
 This seems an almost trivial topic, we would strongly recommend using ```UserNotifier``` from the start.  This will not oly give you consistency, but enable you very simply change how notifications are presented to users later - while still keeping consistency.  
