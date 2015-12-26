@@ -1,306 +1,424 @@
-#Event Bus
+#Services
 
 #Introduction
 
-Krail integrates the event bus provided by [MBassador](https://github.com/bennidi/mbassador).  For more information about the integration itself, see the this project's [contribution to the MBassador documentation](https://github.com/bennidi/mbassador/wiki/Guice-Integration).
- 
-There is no point duplicating MBassador's documentation here, but in brief, MBassador enables the use of synchronous or asynchronous event (message) buses.  MBassador is a sophisticated, high performance event bus, and it is strongly recommended that you read its documentation to get the best from it.<br><br>
-There is a logical correlation between an event bus and a Guice scope, and that is what Krail provides - an event bus for Singleton, VaadinSession and UI scopes as described in the [Guice Scopes](tutorial-guice-scopes.md) chapter.  These can be accessed by:
+The Guice documentation strongly recommends making Guice modules [fast and side effect free](https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree).  It also provides an example interface for starting and stopping services.
 
-- annotation (**@UiBus**, **@SessionBus**, **@GlobalBus**)
-- provider (```UIBusProvider```, ```SessionBusProvider```, ```GlobalBusProvider```)
-
-#The Tutorial task
-
-We will create 3 buttons to publish messages, and 3 receivers for events of each scope (UI, Session and Global).  By sending messages via the different buses we will be able to see how scope affects where the messages are received.  
+Krail extends that idea with a more comprehensive lifecycle for a Service, and also adds dependency management.  For example, in order to start a Database Service, it may be necessary to load a file or web-service based configuration first using a Configuration Service to obtain database connection details.
 
 
-#Create a page
+##Lifecycle
 
-If you have followed the Tutorial up to this point you will now be a complete expert in creating pages.  However, just in case you have stepped in to the Tutorial part way through (do developers really do that?), this is what you need to do:
+The lifecycle is defined by ```Service.State``` and comprises states:
 
-- Amend the ```OtherPages``` module by adding the following line to the ```define()``` method:
+- INITIAL
+- STARTING, STARTED
+- STOPPING, STOPPED
+- FAILED, FAILED_TO_START, FAILED_TO_STOP 
+- DEPENDENCY_STOPPED, DEPENDENCY_FAILED
 
-```java
-addEntry("events", EventsView.class, LabelKey.Events, PageAccessControl.PERMISSION);
+The transient states of STARTING and STOPPING are there because some services may take a while to fully start or stop. 
+
+##Dependencies
+Krail provides different dependency types:
+
+- **always required** - if service A always requires service B, then service B must be running for service A to start - and if service B stops, service A should also stop
+- **required only at start** - if service A requires service B only at the start, then if service B subsequently stops, service A will keep running
+- **optional** - if service A optionally depends on service B, then service A must be able to deal with the absence of service B
+
+##Defining Dependencies
+
+Dependencies can be defined by:
+
+- Guice modules
+- **@Dependency** annotations
+
+In this Tutorial we will use both for the purposes of demonstration, but in practice it may be better to stick to one method.
+
+##State changes
+
+Whenever the state of a ```Service``` changes, a```ServiceBusMessage``` is published via the GlobalBus (see the [EventBus section](tutorial-event-bus.md)).  This could easily be utilised to provide a service monitor (a simplistic version of one is provided by Krail, the ```DefaultServicesMonitor```), or to generate notifications of failures for example.
+
+#The Example
+
+Our scenario is of 4 Services with dependencies between them.  We will configure the dependencies using Guice and annotations. We will then demonstrate how the dependencies interact.
+
+##Create the Services
+
+- create a new package *com.example.tutorial.service*
+- in that package, create the following 4 service classes.  This is the simplest way of creating a Service, by extending ```AbstractService```
+
 ```
-- create the enum constant for the page
-- create the view ```EventsView``` in *com.example.tutorial.pages* (code is provided later)
-- create a package `com.example.tutorial.eventbus`
-- in this new package, create a ```TutorialMessage``` class
-
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">An event (message) can be any object that implements the BusMessage interface</p>
-</div>
+package com.example.tutorial.service;
 
 
-- Our ```TutorialMessage``` will carry a String message and the sender.  Copy the following:
+import com.example.tutorial.i18n.LabelKey;
+import com.google.inject.Inject;
+import uk.q3c.krail.core.eventbus.GlobalBusProvider;
+import uk.q3c.krail.core.services.AbstractService;
+import uk.q3c.krail.core.services.ServicesModel;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.Translate;
 
-```
-package com.example.tutorial.eventbus;
-
-import uk.q3c.krail.core.eventbus.BusMessage;
-
-public class TutorialMessage implements BusMessage {
-
-    private final String msg;
-    private Object sender;
-
-    public TutorialMessage(String msg, Object sender) {
-        this.msg = msg;
-        this.sender = sender;
+@Singleton
+public class ServiceA extends AbstractService {
+    
+    @Inject
+    protected ServiceA(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
+        super(translate, servicesModel, globalBusProvider);
     }
 
-    public String getMsg() {
-        return msg + " from " + Integer.toHexString(sender.hashCode());
+    @Override
+    protected void doStop() throws Exception {
+        
+    }
+
+    @Override
+    protected void doStart() throws Exception {
+
+    }
+
+    @Override
+    public I18NKey getNameKey() {
+        return LabelKey.ServiceA;
     }
 }
 ```
-#Message receivers
 
-We will create a simple component to accept messages from a bus and display them in a ```TextArea```, and use this as a base class for each message receiver.
+```
+package com.example.tutorial.service;
 
-##Base class
 
-- create a new class, ```MessageReceiver``` in *com.example.tutorial.eventbus*
+import com.example.tutorial.i18n.LabelKey;
+import com.google.inject.Inject;
+import uk.q3c.krail.core.eventbus.GlobalBusProvider;
+import uk.q3c.krail.core.services.AbstractService;
+import uk.q3c.krail.core.services.ServicesModel;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.Translate;
+
+@Singleton
+public class ServiceB extends AbstractService {
+
+    @Inject
+    protected ServiceB(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
+        super(translate, servicesModel, globalBusProvider);
+    }
+
+    @Override
+    protected void doStop() throws Exception {
+
+    }
+
+    @Override
+    protected void doStart() throws Exception {
+
+    }
+
+    @Override
+    public I18NKey getNameKey() {
+        return LabelKey.ServiceB;
+    }
+}
+
+```
+
+```
+package com.example.tutorial.service;
+
+
+import com.example.tutorial.i18n.LabelKey;
+import com.google.inject.Inject;
+import uk.q3c.krail.core.eventbus.GlobalBusProvider;
+import uk.q3c.krail.core.services.AbstractService;
+import uk.q3c.krail.core.services.ServicesModel;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.Translate;
+
+@Singleton
+public class ServiceC extends AbstractService {
+
+    @Inject
+    protected ServiceC(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
+        super(translate, servicesModel, globalBusProvider);
+    }
+
+    @Override
+    protected void doStop() throws Exception {
+
+    }
+
+    @Override
+    protected void doStart() throws Exception {
+
+    }
+
+    @Override
+    public I18NKey getNameKey() {
+        return LabelKey.ServiceC;
+    }
+}
+
+```
+
+```
+package com.example.tutorial.service;
+
+
+import com.example.tutorial.i18n.LabelKey;
+import com.google.inject.Inject;
+import uk.q3c.krail.core.eventbus.GlobalBusProvider;
+import uk.q3c.krail.core.services.AbstractService;
+import uk.q3c.krail.core.services.ServicesModel;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.Translate;
+
+@Singleton
+public class ServiceD extends AbstractService {
+
+    @Inject
+    protected ServiceD(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
+        super(translate, servicesModel, globalBusProvider);
+    }
+
+    @Override
+    protected void doStop() throws Exception {
+
+    }
+
+    @Override
+    protected void doStart() throws Exception {
+
+    }
+
+    @Override
+    public I18NKey getNameKey() {
+        return LabelKey.ServiceD;
+    }
+}
+
+```
+
+Note that each has a different name key - this is also used by getServiceKey(), which is used to uniquely identify a Service class.  This approach is used to overcome the changes in class name which occur when using enhancers such as Guice AOP.  This means that each Service class must have a unique name key.
+
+As Services often are, these are all Singletons, although they do not have to be.
+
+##Registering Services
+ 
+All Service classes must be registered. We can do that very simply by sub-classing ```AbstractServiceModule``` and using the methods it provides
+
+
+- create a new class ```TutorialServicesModule``` in *com.example.tutorial.service*
 - copy the code below
 
-
 ```
-package com.example.tutorial.eventbus;
+package com.example.tutorial.service;
 
+import com.example.tutorial.i18n.LabelKey;
+import uk.q3c.krail.core.services.AbstractServiceModule;
 
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.TextArea;
-import net.engio.mbassy.listener.Handler;
+public class TutorialServicesModule extends AbstractServiceModule {
 
-public abstract class MessageReceiver extends Panel {
-    private final TextArea textField;
-
-    public MessageReceiver() {
-        this.setSizeFull();
-        this.textField = new TextArea();
-        textField.setSizeFull();
-        textField.setRows(8);
-        setContent(textField);
-    }
-
-    public String getText() {
-        return textField.getValue();
-    }
-
-    @Handler
-    public void addMsg(TutorialMessage tutorialMessage) {
-        String s = getText();
-        textField.setValue(s+"\n"+tutorialMessage.getMsg());
+    @Override
+    protected void configure() {
+        super.configure();
+        registerService(LabelKey.ServiceA, ServiceA.class);
+        registerService(LabelKey.ServiceB, ServiceB.class);
+        registerService(LabelKey.ServiceC, ServiceC.class);
+        registerService(LabelKey.ServiceD, ServiceD.class);
     }
 }
 ```
+- create the enum constant
+- add a ```TutorialServicesModule``` instance to the ```BindingManager```:
 
-The **@Handler** annotation ensures the ```addMsg()``` method intercepts all ```TutorialMessage``` events which are passed by the bus(es) which the class is subscribed to.  We will subscribe in the following sub-classes, so that each one intercepts ```TutorialMessage``` events for a specific bus - but you can subscribe to multiple buses. 
-
-
-
-##Receiver for each bus
-
-- create three sub-classes, ```GlobalMessageReceiver```, ```SessionMessageReceiver``` and ```UIMessageReceiver``` each extending ```MessageReceiver```, in *com.example.tutorial.eventbus*
-
-```
-package com.example.tutorial.eventbus;
-
-import net.engio.mbassy.listener.Listener;
-import uk.q3c.krail.core.eventbus.GlobalBus;
-import uk.q3c.krail.core.eventbus.SubscribeTo;
-
-@Listener @SubscribeTo(GlobalBus.class)
-public class GlobalMessageReceiver extends MessageReceiver {
-}
-```
-
-```
-package com.example.tutorial.eventbus;
-
-import net.engio.mbassy.listener.Handler;
-import net.engio.mbassy.listener.Listener;
-import uk.q3c.krail.core.eventbus.SessionBus;
-import uk.q3c.krail.core.eventbus.SubscribeTo;
-
-@Listener @SubscribeTo(SessionBus.class)
-public class SessionMessageReceiver extends MessageReceiver {
-
-}
-
-```
-
-```
-package com.example.tutorial.eventbus;
-
-import net.engio.mbassy.listener.Listener;
-import uk.q3c.krail.core.eventbus.SubscribeTo;
-import uk.q3c.krail.core.eventbus.UIBus;
-
-@Listener @SubscribeTo(UIBus.class)
-public class UIMessageReceiver extends MessageReceiver {
-}
-
-```
-
-The **@Listener** annotation marks the class as an ```MBassador``` bus subscriber.  The **@SubscribeTo** annotation is a Krail annotation to identify which bus or buses the class should be subscribed to.  The **@SubscribeTo** annotation is processed by Guice AOP, therefore the class must be instantiated by Guice for it to work. 
-
-You could achieve the same by injecting a bus and directly subscribing:
-   
 ```java
-globalBusProvider.getGlobalBus().subscribe(this)
+    @Override
+    protected void addAppModules(List<Module> baseModules) {
+        baseModules.add(new TutorialServicesModule());
+    }
 ```
- 
 
-# Completing the View
 
-- cut and paste the code below into ```EventsView``` 
+##Monitor the Service status
+
+Fur the purposes of the Tutorial, we wil create a simple page to monitor the status of the Services.
+
+- In ```MyOtherPages``` add the entry:
+
+```java
+addEntry("services", ServicesView.class, LabelKey.Services, PageAccessControl.PUBLIC);
+```
+- create ```ServicesView``` in the *com.example.tutorial.pages* package
 
 ```
 package com.example.tutorial.pages;
 
-import com.example.tutorial.eventbus.*;
 import com.example.tutorial.i18n.Caption;
 import com.example.tutorial.i18n.DescriptionKey;
 import com.example.tutorial.i18n.LabelKey;
+import com.example.tutorial.service.ServiceA;
+import com.example.tutorial.service.ServiceB;
+import com.example.tutorial.service.ServiceC;
+import com.example.tutorial.service.ServiceD;
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
-import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.core.eventbus.SessionBusProvider;
-import uk.q3c.krail.core.eventbus.UIBusProvider;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.VerticalLayout;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
+import uk.q3c.krail.core.eventbus.GlobalBus;
+import uk.q3c.krail.core.eventbus.SubscribeTo;
+import uk.q3c.krail.core.services.ServiceBusMessage;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.Translate;
 
-public class EventsView extends Grid3x3ViewBase {
-    private final UIBusProvider uiBusProvider;
-    private final GlobalBusProvider globalBusProvider;
-    @Caption(caption = LabelKey.Singleton, description = DescriptionKey.Singleton)
-    private Button singletonSendBtn;
-    @Caption(caption = LabelKey.Session, description = DescriptionKey.Session)
-    private Button sessionSendBtn;
-    @Caption(caption = LabelKey.UI, description = DescriptionKey.UI)
-    private Button uiSendBtn;
-    @Caption(caption = LabelKey.Refresh, description = DescriptionKey.Refresh)
-    private Button refreshBtn;
-    private SessionBusProvider sessionBusProvider;
-    private GlobalMessageReceiver singletonMessageReceiver;
-    private MessageReceiver sessionMessageReceiver;
-    private MessageReceiver uiMessageReceiver;
+@Listener
+@SubscribeTo(GlobalBus.class)
+public class ServicesView extends Grid3x3ViewBase {
 
+    private ServiceA serviceA;
+    private ServiceB serviceB;
+    private final ServiceC serviceC;
+    private final ServiceD serviceD;
+
+    @Caption(caption = LabelKey.Start_Service_A, description = DescriptionKey.Start_Service_A)
+    private Button startABtn;
+    @Caption(caption = LabelKey.Stop_Service_D, description = DescriptionKey.Stop_Service_D)
+    private Button stopDBtn;
+    @Caption(caption = LabelKey.Stop_Service_C, description = DescriptionKey.Stop_Service_C)
+    private Button stopCBtn;
+    @Caption(caption = LabelKey.Stop_Service_B, description = DescriptionKey.Stop_Service_B)
+    private Button stopBBtn;
+    private Translate translate;
+    @Caption(caption = LabelKey.State_Changes,description = DescriptionKey.State_Changes)
+    private TextArea stateChangeLog;
+    @Caption(caption = LabelKey.Clear,description = DescriptionKey.Clear)
+    private Button clearBtn;
 
     @Inject
-    protected EventsView(UIBusProvider uiBusProvider, SessionBusProvider sessionBusProvider, GlobalBusProvider globalBusProvider,
-                                    GlobalMessageReceiver singletonMessageReceiver, SessionMessageReceiver sessionMessageReceiver, UIMessageReceiver uiMessageReceiver) {
-        this.uiBusProvider = uiBusProvider;
-        this.sessionBusProvider = sessionBusProvider;
-        this.singletonMessageReceiver = singletonMessageReceiver;
-        this.sessionMessageReceiver = sessionMessageReceiver;
-        this.uiMessageReceiver = uiMessageReceiver;
-        this.globalBusProvider = globalBusProvider;
+    protected ServicesView(Translate translate,ServiceA serviceA, ServiceB serviceB, ServiceC serviceC, ServiceD serviceD) {
+        this.translate = translate;
+        this.serviceA = serviceA;
+        this.serviceB = serviceB;
+        this.serviceC = serviceC;
+        this.serviceD = serviceD;
     }
 
     @Override
     protected void doBuild(ViewChangeBusMessage busMessage) {
         super.doBuild(busMessage);
-        constructEventSendButtons();
-        layoutReceivers();
-        refreshBtn = new Button();
-        setTopRight(refreshBtn);
+        createButtons();
+        createStateMonitor();
+
     }
 
-    private void layoutReceivers() {
-        setTopCentre(singletonMessageReceiver);
-        setMiddleCentre(sessionMessageReceiver);
-        setBottomCentre(uiMessageReceiver);
+    private void createStateMonitor() {
+        stateChangeLog = new TextArea();
+        stateChangeLog.setSizeFull();
+        stateChangeLog.setRows(8);
+        setMiddleCentre(stateChangeLog);
+        clearBtn = new Button();
+        clearBtn.addClickListener(click->stateChangeLog.clear());
+        setBottomCentre(clearBtn);
     }
 
-    private void constructEventSendButtons() {
-        singletonSendBtn = new Button();
-        sessionSendBtn = new Button();
-        uiSendBtn = new Button();
-        singletonSendBtn.addClickListener(click -> {
-            String m = "Singleton";
-            globalBusProvider.getGlobalBus()
-                             .publish(new TutorialMessage(m,this));
-        });
-        sessionSendBtn.addClickListener(click -> {
-            String m = "Session";
-            sessionBusProvider.getSessionBus()
-                             .publish(new TutorialMessage(m,this));
-        });
-        uiSendBtn.addClickListener(click -> {
-            String m = "UI";
-            uiBusProvider.getUIBus()
-                             .publish(new TutorialMessage(m,this));
-        });
-        setTopLeft(singletonSendBtn);
-        setMiddleLeft(sessionSendBtn);
-        setBottomLeft(uiSendBtn);
+    @Handler
+    protected void handleStateChange(ServiceBusMessage serviceBusMessage) {
+        String serviceName = translate.from(serviceBusMessage.getService()
+                                                          .getNameKey());
+        String logEntry = serviceName + " changed from " + serviceBusMessage.getFromState()
+                                                                            .name() + " to " + serviceBusMessage.getToState().name();
+        String newline = stateChangeLog.getValue().isEmpty() ? "" : "\n";
+        stateChangeLog.setValue(stateChangeLog.getValue()+newline+logEntry);
+    }
 
+    private void createButtons() {
+        startABtn = new Button();
+        startABtn.addClickListener(click -> serviceA.start());
 
+        stopDBtn = new Button();
+        stopDBtn.addClickListener(click -> serviceD.stop());
+
+        stopCBtn = new Button();
+        stopCBtn.addClickListener(click -> serviceC.stop());
+
+        stopBBtn = new Button();
+        stopBBtn.addClickListener(click -> serviceB.stop());
+
+        Panel panel = new Panel();
+        VerticalLayout layout = new VerticalLayout(startABtn, stopDBtn, stopCBtn, stopBBtn);
+        panel.setContent(layout);
+        setTopLeft(panel);
     }
 }
+```
+- create the enum constants
 
+Here we set up some buttons to start and stop services in ```createButtons()```<br>
+We use the [Event Bus](tutorial-event-bus.md) to create a simple monitor for state changes in ```createStateMonitor()```
+
+- run the application and try pressing 'Start Service A' - a message will appear in the state changes log
+
+##Defining Dependencies
+
+So far, all the Services operate independently - there are no dependencies specified.  Let us assume we want service A to depend on the other 3 services, each with a different one of the 3 dependency types.  We will also mix up using Guice and **Dependency** annotations, though you would probably use only one method to avoid confusion. 
+
+###Dependencies with Guice
+
+- add the following to the ```configure()``` method in the ```TutorialServicesModule```:
+
+```java
+addDependency(LabelKey.ServiceA,LabelKey.ServiceB, Dependency.Type.ALWAYS_REQUIRED);
+addDependency(LabelKey.ServiceA,LabelKey.ServiceC, Dependency.Type.REQUIRED_ONLY_AT_START);
+```
+
+###Dependencies by Annotation
+
+In ```ServiceA``` we inject ```ServiceD``` and store in a field in order to annotate it as a dependency (which you would need anyway if you wish to access ```ServiceD```).
+
+- Modify ServiceA
+
+```java
+
+    @Dependency(required = false)
+    private ServiceD serviceD;
+
+    @Inject
+    protected ServiceA(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider, ServiceD serviceD) {
+        super(translate, servicesModel, globalBusProvider);
+        this.serviceD = serviceD;
+    }
 
 ```
 
-- create the enum constants
+This marks the dependency, ServiceD, as optional
 
-The ```constructEventSendButtons()``` method provides a button for each bus to send a message.
-
-A bus for each scope is injected into the constructor using BusProviders
-
-The Refresh button appears to do nothing, but that will become clear later. 
-
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Buses can be injected using annotations (@GlobalBus etc) or providers (GlobalBusProvider etc).  Either will achieve the same result.  However, it is worth remembering that an annotated method parameter can be overridden in a sub-class using a different annotation</p>
-</div>
-
-A ```MessageReceiver``` is injected for each bus (remember these need to be instantiated by Guice) 
- 
-
-#Demonstrating the result
+##Testing Dependencies
 
 - run the application
-- open a browser, which we will call browser 1 tab 1
-- login as *'admin'*, *'password'*
-- navigate to the *Events & Services* page
-- open a second browser tab at the same URL - we will call this browser 1 tab 2 (now that surprised you!)
-- in browser 1 tab 1 press each of the 3 buttons, Singleton, Session and UI
-- Messages will appear in all 3 text areas
-- Switch to tab 2 (there will be no messages visible yet)
+- navigate to the 'Services' page
+- press 'Start Service A'
+- Note that all 4 services show in the state changes log as 'STARTED' - ```ServiceA``` has automatically called all its dependencies to start.  The order they start in is arbitrary, as they are started in parallel threads, but ```ServiceA``` will not start until all its required dependencies have started.
+- press 'Clear'
+- press 'Start Service A' again - nothing happens.  Attempts to start/stop a service which is already started/stopped are ignored. 
+- press 'Stop ServiceD' - only ```ServiceD``` stops
+- press 'Stop ServiceC' - only ```ServiceC``` stops
+- press 'Stop ServiceB' - ```ServiceB``` and ```ServiceA``` stop.  ```ServiceA``` has a state of DEPENDENCY_STOPPED
 
-If you know Vaadin, you will be familiar with this situation - the Vaadin client is unaware that changes have been made on the server, so the display has not been updated.  It will only update when the client is prompted to get an update from the server.  (We will come back to this when we address [Vaadin Push](tutorial-push.md)).  For our purposes, we just click the Refresh button.  This actually does nothing except cause the client to poll the server for updates.
+When ```ServiceD``` and ```ServiceC``` are stopped they do not affect ```ServiceA```, as they are declared as "optional" and "required only at start".
+When ```ServiceB``` is stopped, however, ```ServiceA``` also stops because that dependency was declared as "always required"
 
-- click Refresh
-- the Singleton and Session text areas will contain a message from the same source, but the UI area will be empty
-
-This demonstrates the scope of the event buses.  The UI bus is of UIScope - which means it relates to a browser tab (unless embedded).  The session scope relates to a browser instance, and therefore appears in both tabs, and a singleton scope applies to an application and also appears in both tabs.
-
-- open a second browser instance (if you are using Chrome, be aware that Chrome does odd things with browser instances - to be certain you have a separate instance, it is better to use Firefox as the second instance)
-- in browser 2, login as *'admin'*, *'password'*
-- navigate to the *Events & Services* page
-- switch back to browser 1 tab 1 and press each of the 3 buttons, Singleton, Session and UI again
-- switch browser 2 tab 1
-- press Refresh
-- Only the Singleton text area will contain a message
-
-This is what we expect - a Vaadin session relates to a browser instance, so a session message will not appear in browser 2 - only the Singleton will
 
 
 #Summary
 
-We have covered the 3 defined event buses provided by Krail, with Singleton, Session and UI scope
-We have seen how to subscribe to a bus
-We have seen how to publish to a bus
-We have identified a challenge with refreshing the Vaadin client
+- We have created services by sub-classing ```AbstractService```
+- We have defined dependencies between services using Guice
+- We have defined dependencies between services using the **@Dependency** annotation
+- We have demonstrated the interaction between services, when starting and stopping services with different dependency types
 
 #Download from GitHub
-To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step10**
-
- 
-
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step11**
