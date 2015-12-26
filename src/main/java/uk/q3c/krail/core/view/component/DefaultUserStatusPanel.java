@@ -28,7 +28,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
@@ -64,13 +64,13 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
 
     @Inject
     protected DefaultUserStatusPanel(Navigator navigator, SubjectProvider subjectProvider, Translate translate, SubjectIdentifier subjectIdentifier,
-                                     @SessionBus PubSubSupport<BusMessage> eventBus, CurrentLocale currentLocale) {
+                                     SessionBusProvider eventBusProvider, CurrentLocale currentLocale) {
         super();
         this.navigator = navigator;
         this.subjectProvider = subjectProvider;
         this.translate = translate;
         this.subjectIdentifier = subjectIdentifier;
-        this.eventBus = eventBus;
+        this.eventBus = eventBusProvider.getSessionBus();
         this.currentLocale = currentLocale;
         //        eventBus.subscribe(this);
         setSizeFull();

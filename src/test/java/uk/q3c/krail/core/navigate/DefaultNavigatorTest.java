@@ -32,10 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.EventBusModule;
-import uk.q3c.krail.core.eventbus.SubscribeTo;
-import uk.q3c.krail.core.eventbus.UIBus;
+import uk.q3c.krail.core.eventbus.*;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.shiro.PageAccessControl;
@@ -82,8 +79,7 @@ public class DefaultNavigatorTest {
     @Mock
     private Provider<ErrorView> errorViewProvider;
     @Inject
-    @UIBus
-    private PubSubSupport<BusMessage> eventBus;
+    private UIBusProvider eventBusProvider;
     @Inject
     @UIBus
     private PubSubSupport<BusMessage> eventBus2;
@@ -158,7 +154,8 @@ public class DefaultNavigatorTest {
     }
 
     private DefaultNavigator createNavigator() {
-        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder, loginNavigationRule, logoutNavigationRule, eventBus, defaultViewChangeRule);
+        navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
+                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule);
         navigator.init();
         return navigator;
     }

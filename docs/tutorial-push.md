@@ -178,4 +178,5 @@ public class UIMessageReceiver extends MessageReceiver {
 - we have intercepted the push message after it has been re-distributed via the UI Bus
 
 
-
+#Download from GitHub
+To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step12**

@@ -17,13 +17,11 @@ import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PageAccessControl;
@@ -75,9 +73,9 @@ public abstract class TestWithSitemap {
     protected UserSitemapNode userNode4;
     protected UserSitemapNode userNode5;
     protected UserSitemapNode userNode6;
+
     @Inject
-    @SessionBus
-    PubSubSupport<BusMessage> sessionBus;
+    SessionBusProvider sessionBusProvider;
     Locale locale = Locale.UK;
     Collator collator;
 
@@ -218,7 +216,7 @@ public abstract class TestWithSitemap {
      * needed before calling this method
      */
     protected void createUserSitemap() {
-        userSitemap = new DefaultUserSitemap(translate, uriHandler, sessionBus);
+        userSitemap = new DefaultUserSitemap(translate, uriHandler, sessionBusProvider);
         UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
                 masterSitemap, pageAccessController, translate);
         UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(masterSitemap, userSitemap, translate, currentLocale);

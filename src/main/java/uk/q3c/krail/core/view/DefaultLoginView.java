@@ -24,7 +24,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
@@ -57,13 +57,13 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     private TextField usernameBox;
 
     @Inject
-    protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider, Translate translate, @SessionBus
-    PubSubSupport<BusMessage> eventBus) {
+    protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider, Translate translate, SessionBusProvider
+            eventBusProvider) {
         super();
         this.loginExceptionHandler = loginExceptionHandler;
         this.subjectProvider = subjectProvider;
         this.translate = translate;
-        this.eventBus = eventBus;
+        this.eventBus = eventBusProvider.getSessionBus();
     }
 
     @Override
@@ -170,13 +170,13 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     public TextField getUsernameBox() {

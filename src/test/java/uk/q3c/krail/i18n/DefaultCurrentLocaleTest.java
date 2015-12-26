@@ -18,7 +18,6 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.server.WebBrowser;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.apache.shiro.subject.Subject;
@@ -26,9 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.EventBusModule;
-import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
@@ -67,8 +65,7 @@ public class DefaultCurrentLocaleTest {
     UserStatusChangeSource source;
 
     @Inject
-    @SessionBus
-    PubSubSupport<BusMessage> eventBus;
+    SessionBusProvider eventBusProvider;
 
     @Mock
     Option option;
@@ -111,7 +108,7 @@ public class DefaultCurrentLocaleTest {
     }
 
     private DefaultCurrentLocale createCurrentLocale() {
-        return new DefaultCurrentLocale(browserProvider, supportedLocales, defaultLocale, eventBus, subjectProvider, option);
+        return new DefaultCurrentLocale(browserProvider, supportedLocales, defaultLocale, eventBusProvider, subjectProvider, option);
     }
 
     @Test
@@ -194,7 +191,8 @@ public class DefaultCurrentLocaleTest {
 
         //given
         listenerFired = false;
-        eventBus.subscribe(this);
+        eventBusProvider.getSessionBus()
+                        .subscribe(this);
         when(subject.isAuthenticated()).thenReturn(false);
         when(source.identity()).thenReturn("LogoutView");
         //when user logs out
@@ -226,7 +224,8 @@ public class DefaultCurrentLocaleTest {
         when(subject.isAuthenticated()).thenReturn(false);
         currentLocale = createCurrentLocale();
         currentLocale.readFromEnvironment();
-        eventBus.subscribe(this);
+        eventBusProvider.getSessionBus()
+                        .subscribe(this);
         listenerFired = false;
         // when
         currentLocale.setLocale(Locale.UK);
@@ -239,7 +238,8 @@ public class DefaultCurrentLocaleTest {
     public void setLocaleNoFire() {
         // given
         currentLocale = createCurrentLocale();
-        eventBus.subscribe(this);
+        eventBusProvider.getSessionBus()
+                        .subscribe(this);
         listenerFired = false;
         // when
         currentLocale.setLocale(Locale.FRANCE, false);
@@ -252,7 +252,8 @@ public class DefaultCurrentLocaleTest {
     public void setLocaleFire() {
         // given
         currentLocale = createCurrentLocale();
-        eventBus.subscribe(this);
+        eventBusProvider.getSessionBus()
+                        .subscribe(this);
         listenerFired = false;
         currentLocale.setLocale(Locale.UK);
         // when
@@ -267,7 +268,8 @@ public class DefaultCurrentLocaleTest {
 
         // given
         currentLocale = createCurrentLocale();
-        eventBus.subscribe(this);
+        eventBusProvider.getSessionBus()
+                        .subscribe(this);
         currentLocale.setLocale(Locale.GERMANY);
         listenerFired = false;
         // when

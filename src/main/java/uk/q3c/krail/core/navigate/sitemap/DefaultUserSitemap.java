@@ -17,7 +17,7 @@ import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.i18n.CurrentLocale;
@@ -50,10 +50,10 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
 
 
     @Inject
-    public DefaultUserSitemap(Translate translate, URIFragmentHandler uriHandler, @SessionBus PubSubSupport<BusMessage> eventBus) {
+    public DefaultUserSitemap(Translate translate, URIFragmentHandler uriHandler, SessionBusProvider eventBusProvider) {
         super(uriHandler);
         this.translate = translate;
-        this.eventBus = eventBus;
+        this.eventBus = eventBusProvider.getSessionBus();
     }
 
 

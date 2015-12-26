@@ -25,7 +25,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.UIBus;
+import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.shiro.PageAccessController;
@@ -84,7 +84,9 @@ public class DefaultNavigator implements Navigator {
     private ViewChangeRule viewChangeRule;
 
     @Inject
-    public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule loginNavigationRule, LogoutNavigationRule logoutNavigationRule, @UIBus PubSubSupport<BusMessage> eventBus, ViewChangeRule viewChangeRule) {
+    public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
+            pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule
+                                    loginNavigationRule, LogoutNavigationRule logoutNavigationRule, UIBusProvider eventBusProvider, ViewChangeRule viewChangeRule) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -97,7 +99,7 @@ public class DefaultNavigator implements Navigator {
         this.loginNavigationRule = loginNavigationRule;
         this.logoutNavigationRule = logoutNavigationRule;
 
-        this.eventBus = eventBus;
+        this.eventBus = eventBusProvider.getUIBus();
         this.viewChangeRule = viewChangeRule;
     }
 

@@ -42,7 +42,7 @@ class DefaultServicesMonitorTest extends Specification {
 
     def "initial message, 'registers' service, records state, then change reflected correctly, then clear()"() {
         given:
-        DefaultServicesMonitor monitor = new DefaultServicesMonitor(globalBus)
+        DefaultServicesMonitor monitor = new DefaultServicesMonitor(globalBusProvider)
         serviceA.start()
 
         when:

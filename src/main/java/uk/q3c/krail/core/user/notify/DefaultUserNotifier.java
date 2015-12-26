@@ -15,7 +15,7 @@ package uk.q3c.krail.core.user.notify;
 import com.google.inject.Inject;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.UIBus;
+import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -23,13 +23,13 @@ import java.io.Serializable;
 
 public class DefaultUserNotifier implements UserNotifier, Serializable {
     private static final long serialVersionUID = 1L;
-    private PubSubSupport<BusMessage> messageBus;
+    private PubSubSupport<BusMessage> eventBus;
     private Translate translate;
 
 
     @Inject
-    protected DefaultUserNotifier(@UIBus PubSubSupport<BusMessage> messageBus, Translate translate) {
-        this.messageBus = messageBus;
+    protected DefaultUserNotifier(UIBusProvider uiBusProvider, Translate translate) {
+        this.eventBus = uiBusProvider.getUIBus();
         this.translate = translate;
     }
 
@@ -37,21 +37,21 @@ public class DefaultUserNotifier implements UserNotifier, Serializable {
     public void notifyError(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
         ErrorNotificationMessage message = new ErrorNotificationMessage(translatedMessage);
-        messageBus.publish(message);
+        eventBus.publish(message);
     }
 
     @Override
     public void notifyWarning(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
         WarningNotificationMessage message = new WarningNotificationMessage(translatedMessage);
-        messageBus.publish(message);
+        eventBus.publish(message);
     }
 
     @Override
     public void notifyInformation(I18NKey msg, Object... params) {
         String translatedMessage = translate.from(msg, params);
         InformationNotificationMessage message = new InformationNotificationMessage(translatedMessage);
-        messageBus.publish(message);
+        eventBus.publish(message);
     }
 
 }

@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.EventBusModule;
+import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.Navigator;
@@ -66,6 +67,9 @@ public class DefaultUserStatusPanelTest {
 
     MBassador<BusMessage> eventBus;
 
+    @Mock
+    SessionBusProvider sessionBusProvider;
+
     SubjectIdentifier subjectIdentifier;
 
     @Inject
@@ -81,8 +85,8 @@ public class DefaultUserStatusPanelTest {
         currentLocale.setLocale(Locale.UK);
         when(subjectProvider.get()).thenReturn(subject);
         subjectIdentifier = new DefaultSubjectIdentifier(subjectProvider, translate);
-
-        panel = new DefaultUserStatusPanel(navigator, subjectProvider, translate, subjectIdentifier, eventBus, currentLocale);
+        when(sessionBusProvider.getSessionBus()).thenReturn(eventBus);
+        panel = new DefaultUserStatusPanel(navigator, subjectProvider, translate, subjectIdentifier, sessionBusProvider, currentLocale);
 
         loginoutBtn = panel.getLogin_logout_Button();
     }

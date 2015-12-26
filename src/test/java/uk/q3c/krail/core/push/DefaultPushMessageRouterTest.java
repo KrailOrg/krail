@@ -18,23 +18,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.UIBusProvider;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class DefaultPushMessageRouterTest {
 
     DefaultPushMessageRouter pmr;
-
-
+    @Mock
+    UIBusProvider uiBusProvider;
     @Mock
     private PubSubSupport<BusMessage> uiBus;
 
     @Before
     public void setup() {
-        pmr = new DefaultPushMessageRouter(uiBus);
+        when(uiBusProvider.getUIBus()).thenReturn(uiBus);
+        pmr = new DefaultPushMessageRouter(uiBusProvider);
     }
 
     @Test

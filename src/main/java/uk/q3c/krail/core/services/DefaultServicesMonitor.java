@@ -16,13 +16,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MapMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.GlobalBus;
+import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -39,10 +37,11 @@ public class DefaultServicesMonitor implements ServicesMonitor {
     private final Map<Service, ServiceStatusRecord> services;
 
     @Inject
-    public DefaultServicesMonitor(@GlobalBus PubSubSupport<BusMessage> globalBus) {
+    public DefaultServicesMonitor(GlobalBusProvider globalBusProvider) {
         this.services = new MapMaker().weakKeys()
                                       .makeMap();
-        globalBus.subscribe(this);
+        globalBusProvider.getGlobalBus()
+                         .subscribe(this);
     }
 
     @Handler

@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.Translate;
 
@@ -29,13 +30,16 @@ public class DefaultUserNotifierTest {
 
     DefaultUserNotifier notifier;
     @Mock
+    UIBusProvider messageBusProvider;
+    @Mock
     private PubSubSupport<BusMessage> messageBus;
     @Mock
     private Translate translate;
 
     @Before
     public void setup() {
-        notifier = new DefaultUserNotifier(messageBus, translate);
+        when(messageBusProvider.getUIBus()).thenReturn(messageBus);
+        notifier = new DefaultUserNotifier(messageBusProvider, translate);
     }
     @Test
     public void error() {

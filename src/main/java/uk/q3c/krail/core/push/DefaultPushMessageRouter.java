@@ -13,7 +13,7 @@ package uk.q3c.krail.core.push;
 import com.google.inject.Inject;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.UIBus;
+import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 
 @UIScoped
@@ -23,8 +23,8 @@ public class DefaultPushMessageRouter implements PushMessageRouter {
     private PubSubSupport<BusMessage> uiBus;
 
     @Inject
-    protected DefaultPushMessageRouter(@UIBus PubSubSupport<BusMessage> uiBus) {
-        this.uiBus = uiBus;
+    protected DefaultPushMessageRouter(UIBusProvider uiBusProvider) {
+        this.uiBus = uiBusProvider.getUIBus();
     }
 
     @Override

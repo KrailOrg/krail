@@ -14,13 +14,14 @@ package uk.q3c.krail.core.view;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.ui.Button;
-import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
@@ -44,7 +45,11 @@ public class DefaultLoginViewTest {
 
 
     @Mock
-    MBassador<BusMessage> eventBus;
+    SessionBusProvider eventBusProvider;
+
+    @Mock
+    PubSubSupport<BusMessage> eventBus;
+
     @Mock
     Subject subject;
     @Mock
@@ -54,8 +59,9 @@ public class DefaultLoginViewTest {
 
     @Before
     public void setup() {
+        when(eventBusProvider.getSessionBus()).thenReturn(eventBus);
         when(subjectProvider.get()).thenReturn(subject);
-        view = new DefaultLoginView(loginExceptionHandler, subjectProvider, translate, eventBus);
+        view = new DefaultLoginView(loginExceptionHandler, subjectProvider, translate, eventBusProvider);
     }
 
     @Test

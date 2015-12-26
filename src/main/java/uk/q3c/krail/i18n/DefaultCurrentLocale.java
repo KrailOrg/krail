@@ -20,7 +20,7 @@ import net.engio.mbassy.listener.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.BusMessage;
-import uk.q3c.krail.core.eventbus.SessionBus;
+import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.shiro.SubjectProvider;
@@ -79,12 +79,12 @@ public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
 
     @Inject
     protected DefaultCurrentLocale(BrowserProvider browserProvider, @SupportedLocales Set<Locale> supportedLocales, @DefaultLocale Locale defaultLocale,
-                                   @SessionBus PubSubSupport<BusMessage> eventBus, SubjectProvider subjectProvider, Option option) {
+                                   SessionBusProvider eventBusProvider, SubjectProvider subjectProvider, Option option) {
         super();
         this.browserProvider = browserProvider;
         this.supportedLocales = supportedLocales;
         this.defaultLocale = defaultLocale;
-        this.eventBus = eventBus;
+        this.eventBus = eventBusProvider.getSessionBus();
         this.subjectProvider = subjectProvider;
         this.option = option;
         locale = defaultLocale;
