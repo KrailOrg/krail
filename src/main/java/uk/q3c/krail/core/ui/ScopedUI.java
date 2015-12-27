@@ -36,6 +36,10 @@ import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.KrailViewHolder;
 import uk.q3c.krail.i18n.*;
 
+import javax.annotation.Nonnull;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * The base class for all Krail UIs, it provides an essential part of the {@link UIScoped} mechanism. It also provides
  * support for Vaadin Server Push (but only if you annotate your sub-class with {@link Push}), by capturing broadcast
@@ -44,7 +48,6 @@ import uk.q3c.krail.i18n.*;
  * full description of the Krail server push implementation see: https://sites.google.com/site/q3cjava/server-push
  *
  * @author David Sowerby
- * @date modified 31 Mar 2014
  */
 @Listener
 public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastListener {
@@ -57,6 +60,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     private final ApplicationTitle applicationTitle;
     private final Translate translate;
     private final I18NProcessor translator;
+    private Broadcaster broadcaster;
     private UIKey instanceKey;
     private AbstractOrderedLayout screenLayout;
     private UIScope uiScope;
@@ -69,16 +73,17 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         this.errorHandler = errorHandler;
         this.navigator = navigator;
         this.converterFactory = converterFactory;
+        this.broadcaster = broadcaster;
         this.pushMessageRouter = pushMessageRouter;
         this.applicationTitle = applicationTitle;
         this.translate = translate;
         this.translator = translator;
         this.currentLocale = currentLocale;
-        registerWithBroadcaster(broadcaster);
+        registerWithBroadcaster();
 
     }
 
-    protected void registerWithBroadcaster(Broadcaster broadcaster) {
+    protected void registerWithBroadcaster() {
         broadcaster.register(Broadcaster.ALL_MESSAGES, this);
     }
 
@@ -86,11 +91,13 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         return instanceKey;
     }
 
-    protected void setInstanceKey(UIKey instanceKey) {
+    protected void setInstanceKey(@Nonnull UIKey instanceKey) {
+        checkNotNull(instanceKey);
         this.instanceKey = instanceKey;
     }
 
-    protected void setScope(UIScope uiScope) {
+    protected void setScope(@Nonnull UIScope uiScope) {
+        checkNotNull(uiScope);
         this.uiScope = uiScope;
     }
 
@@ -99,6 +106,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         if (uiScope != null) {
             uiScope.releaseScope(instanceKey);
         }
+        broadcaster.unregister(Broadcaster.ALL_MESSAGES, this);
         super.detach();
     }
 
@@ -119,14 +127,14 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     }
 
     @Override
-    public void changeView(KrailView toView) {
-        if (log.isDebugEnabled()) {
-            String to = (toView == null) ? "null" : toView.getClass()
-                                                          .getSimpleName();
-            log.debug("changing view to {}", to);
-        }
+    public void changeView(@Nonnull KrailView toView) {
+        checkNotNull(toView);
+        log.debug("changing view to {}", toView.viewName());
 
         Component content = toView.getRootComponent();
+        if (content == null) {
+            throw new ConfigurationException("The root component for " + view.viewName() + " cannot be null");
+        }
         translator.translate(toView);
         content.setSizeFull();
         getViewDisplayPanel().setContent(content);
@@ -222,14 +230,13 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     protected abstract AbstractOrderedLayout screenLayout();
 
     @Override
-    public void receiveBroadcast(final String group, final String message) {
-        access(new Runnable() {
-            @Override
-            public void run() {
-                log.debug("receiving message: {}", message);
-                processBroadcastMessage(group, message);
+    public void receiveBroadcast(@Nonnull final String group, @Nonnull final String message) {
+        checkNotNull(group);
+        checkNotNull(message);
+        access(() -> {
+            log.debug("receiving message: {}", message);
+            processBroadcastMessage(group, message);
 
-            }
         });
     }
 

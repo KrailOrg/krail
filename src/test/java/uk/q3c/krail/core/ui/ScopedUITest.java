@@ -31,6 +31,7 @@ import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.navigate.Navigator;
+import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.DefaultBroadcaster;
 import uk.q3c.krail.core.push.DefaultPushMessageRouter;
 import uk.q3c.krail.core.user.opt.Option;
@@ -58,7 +59,7 @@ public class ScopedUITest {
     @Mock
     ConverterFactory converterFactory;
     @Mock
-    DefaultBroadcaster broadcaster;
+    Broadcaster broadcaster;
     @Mock
     DefaultPushMessageRouter pushMessageRouter;
     @Mock
@@ -140,6 +141,7 @@ public class ScopedUITest {
         ui.detach();
         // then
         verify(uiScope).releaseScope(ui.getInstanceKey());
+        verify(broadcaster).unregister(Broadcaster.ALL_MESSAGES, ui);
     }
 
     @Test(expected = MethodReconfigured.class)
@@ -174,6 +176,7 @@ public class ScopedUITest {
     public void changeView() {
         // given
         when(toView.getRootComponent()).thenReturn(viewContent);
+        when(toView.viewName()).thenReturn("toView");
         // when
         ui.changeView(toView);
         // then

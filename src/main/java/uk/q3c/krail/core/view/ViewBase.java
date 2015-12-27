@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.view;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
@@ -24,6 +23,8 @@ import uk.q3c.util.ID;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Provides default View behaviour suitable for most view implementations.  Override methods as necessary for your needs.  This is the default sequence:
@@ -99,7 +100,7 @@ public abstract class ViewBase implements KrailView {
     }
 
     public void setRootComponent(@Nonnull Component rootComponent) {
-        Preconditions.checkNotNull(rootComponent);
+        checkNotNull(rootComponent);
         this.rootComponent = rootComponent;
     }
 

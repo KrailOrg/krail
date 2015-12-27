@@ -18,12 +18,15 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.config.ApplicationConfiguration;
 import uk.q3c.krail.core.config.ConfigKeys;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class DefaultBroadcaster implements Broadcaster {
@@ -40,18 +43,14 @@ public class DefaultBroadcaster implements Broadcaster {
         executorService = Executors.newSingleThreadExecutor();
     }
 
-    /**
-     * Register a listener to receive messages for {@code group}. If you want the listener to receive all messages call with {@code group}= {@link
-     * DefaultPushMessageRouter#ALL_MESSAGES}. If you want to register for more than one group, make multiple calls.`
-     *
-     * @param group the group to listen to
-     * @param listener the lsitener that wants to receive messages for this group
-     */
+
     @Override
-    public synchronized Broadcaster register(String group, BroadcastListener listener) {
+    public synchronized Broadcaster register(@Nonnull String group, @Nonnull BroadcastListener listener) {
+        checkNotNull(group);
+        checkNotNull(listener);
         log.debug("adding listener: {}", listener.getClass()
                                                  .getName());
-        if (group == ALL_MESSAGES) {
+        if (group.equals(ALL_MESSAGES)) {
             allGroup.add(listener);
         } else {
             List<BroadcastListener> listenerGroup = groups.get(group);
@@ -64,12 +63,12 @@ public class DefaultBroadcaster implements Broadcaster {
         return this;
     }
 
-    /**
-     * Unregister a listener to receive messages for {@code group}.
-     */
+
     @Override
-    public synchronized Broadcaster unregister(String group, BroadcastListener listener) {
-        if (group == ALL_MESSAGES) {
+    public synchronized Broadcaster unregister(@Nonnull String group, @Nonnull BroadcastListener listener) {
+        checkNotNull(group);
+        checkNotNull(listener);
+        if (group.equals(ALL_MESSAGES)) {
             allGroup.remove(listener);
         } else {
             List<BroadcastListener> listenerGroup = groups.get(group);
@@ -80,32 +79,20 @@ public class DefaultBroadcaster implements Broadcaster {
         return this;
     }
 
-    /**
-     * Send a message to registered listeners
-     *  @param group the message group
-     * @param message the message
-     */
+
     @Override
-    public synchronized Broadcaster broadcast(final String group, final String message) {
+    public synchronized Broadcaster broadcast(@Nonnull final String group, @Nonnull final String message) {
+        checkNotNull(group);
+        checkNotNull(message);
         if (applicationConfiguration.getBoolean(ConfigKeys.SERVER_PUSH_ENABLED, true)) {
             log.debug("broadcasting message: {}", message);
             List<BroadcastListener> listenerGroup = groups.get(group);
             if (listenerGroup != null) {
                 for (final BroadcastListener listener : listenerGroup)
-                    executorService.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            listener.receiveBroadcast(group, message);
-                        }
-                    });
+                    executorService.execute(() -> listener.receiveBroadcast(group, message));
             }
             for (final BroadcastListener listener : allGroup)
-                executorService.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.receiveBroadcast(group, message);
-                    }
-                });
+                executorService.execute(() -> listener.receiveBroadcast(group, message));
         } else {
             log.debug("server push is disabled, message not broadcast");
         }

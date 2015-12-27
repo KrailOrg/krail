@@ -29,7 +29,7 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
  * <li>An {@link AfterViewChangeBusMessage} is published on the @UIBus</li>
  * </ol>
  * where build refers to the creation of UI fields and components which populate the view.
- *
+ * <p>
  * The easiest way to implement this is to extend {@link ViewBase}
  */
 public interface KrailView {
@@ -39,8 +39,7 @@ public interface KrailView {
      * whether a valid URI parameters are being passed to the view, or uses the URI parameters to set up some
      * configuration which affects the way the view is presented.
      *
-     * @param busMessage
-     *         contains information about the change to this View
+     * @param busMessage contains information about the change to this View
      */
     void beforeBuild(ViewChangeBusMessage busMessage);
 
@@ -50,8 +49,7 @@ public interface KrailView {
      * need to check whether components have already been constructed, as this method may be called when the View is
      * selected again after initial construction.
      *
-     * @param busMessage
-     *         contains information about the change to this View
+     * @param busMessage contains information about the change to this View
      */
     void buildView(ViewChangeBusMessage busMessage);
 
@@ -69,7 +67,9 @@ public interface KrailView {
      *
      * @return
      */
-    String viewName();
+    default String viewName() {
+        return getClass().getSimpleName();
+    }
 
     /**
      * Called by the {@link ViewFactory} after the construction of a view, and intended for initialisation which does
