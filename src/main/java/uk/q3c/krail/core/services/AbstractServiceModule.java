@@ -29,7 +29,7 @@ import static com.google.inject.multibindings.Multibinder.newSetBinder;
  * <p>
  * Created by David Sowerby on 13/11/15.
  */
-public class AbstractServiceModule extends AbstractModule {
+public abstract class AbstractServiceModule extends AbstractModule {
     TypeLiteral<Class<? extends Service>> serviceClassLiteral;
     private Multibinder<DependencyDefinition> dependencies;
     //other modules may add to this
@@ -46,7 +46,14 @@ public class AbstractServiceModule extends AbstractModule {
         };
         registeredServices = MapBinder.newMapBinder(binder(), ServiceKey.class, Service.class);
         serviceKeyMap = MapBinder.newMapBinder(binder(), serviceKeyLiteral, serviceClassLiteral);
+        registerServices();
+        defineDependencies();
     }
+
+
+    protected abstract void registerServices();
+
+    protected abstract void defineDependencies();
 
 
     /**

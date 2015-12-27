@@ -25,7 +25,17 @@ public class ApplicationConfigurationModule extends ConfigurationModuleBase {
     protected void configure() {
         super.configure();
         bindApplicationConfigurationService();
+
+    }
+
+    @Override
+    protected void registerServices() {
         registerService(LabelKey.Application_Configuration_Service, ApplicationConfigurationService.class);
+    }
+
+    @Override
+    protected void defineDependencies() {
+//There are none
     }
 
     /**

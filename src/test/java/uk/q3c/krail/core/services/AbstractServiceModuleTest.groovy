@@ -25,24 +25,42 @@ class AbstractServiceModuleTest extends Specification {
 
 
     class TestServiceModule extends AbstractServiceModule {
+
         @Override
-        protected void configure() {
-            super.configure()
+        protected void registerServices() {
+            registerService(serviceKeyA, MockServiceA)
+            registerService(serviceKeyB, MockServiceB)
+        }
+
+        @Override
+        protected void defineDependencies() {
             addDependency(serviceKeyA, serviceKeyB, Dependency.Type.REQUIRED_ONLY_AT_START)
             addDependency(serviceKeyA, serviceKeyC, Dependency.Type.OPTIONAL)
         }
     }
 
-    class TestServiceModule2 extends AbstractServiceModule {
-        @Override
-        protected void configure() {
-            addDependency(serviceKeyA, serviceKeyB, Dependency.Type.REQUIRED_ONLY_AT_START)
-            addDependency(serviceKeyA, serviceKeyC, Dependency.Type.OPTIONAL)
-        }
+
+    def "services registered"() {
+        given:
+
+        TypeLiteral<Map<ServiceKey, Service>> mapTypeLiteral = new TypeLiteral<Map<ServiceKey, Service>>() {}
+        Key key = Key.get(mapTypeLiteral)
+
+        when:
+        Injector injector = Guice.createInjector(new TestServiceModule())
+
+        then:
+
+        injector.getBinding(key) != null
+
+        Binding<Map<ServiceKey, Service>> x = injector.getBinding(key)
+        Map<ServiceKey, Service> s = injector.getProvider(key).get()
+
+        s.size() == 2
     }
 
 
-    def "properly configured"() {
+    def "dependencies bound"() {
         given:
 
         TypeLiteral<Set<DependencyDefinition>> lit = new TypeLiteral<Set<DependencyDefinition>>() {}
@@ -62,19 +80,5 @@ class AbstractServiceModuleTest extends Specification {
 
     }
 
-    def "missed super.configure() "() {
-        given:
-
-        TypeLiteral<Set<DependencyDefinition>> lit = new TypeLiteral<Set<DependencyDefinition>>() {}
-        Key key = Key.get(lit)
-
-        when:
-        Injector injector = Guice.createInjector(new TestServiceModule2())
-
-        then:
-
-        thrown(com.google.inject.CreationException)
-
-    }
 
 }

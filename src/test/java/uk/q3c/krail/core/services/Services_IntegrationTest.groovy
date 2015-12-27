@@ -23,17 +23,20 @@ class Services_IntegrationTest extends Specification {
 
     class TestServiceModule extends AbstractServiceModule {
 
+
         @Override
-        protected void configure() {
-            super.configure()
+        protected void registerServices() {
             registerService(ServiceA, TestServiceA.class)
             registerService(ServiceB, TestServiceB.class)
             registerService(ServiceC, TestServiceC.class)
             registerService(ServiceD, TestServiceD.class)
             registerService(ServiceE, TestServiceE.class)
+        }
+
+        @Override
+        protected void defineDependencies() {
             this.addDependency(ServiceB, ServiceC, Dependency.Type.ALWAYS_REQUIRED)
             this.addDependency(ServiceD, ServiceC, Dependency.Type.ALWAYS_REQUIRED)
-
         }
     }
 

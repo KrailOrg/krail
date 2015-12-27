@@ -15,6 +15,7 @@ package uk.q3c.krail.core.navigate.sitemap;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.services.AbstractServiceModule;
+import uk.q3c.krail.core.services.Dependency;
 import uk.q3c.krail.i18n.LabelKey;
 
 public class SitemapModule extends AbstractServiceModule {
@@ -27,7 +28,16 @@ public class SitemapModule extends AbstractServiceModule {
         bindService();
         bindLoaders();
         bindChecker();
+    }
+
+    @Override
+    protected void registerServices() {
         registerService(LabelKey.Sitemap_Service, SitemapService.class);
+    }
+
+    @Override
+    protected void defineDependencies() {
+        addDependency(LabelKey.Sitemap_Service, LabelKey.Application_Configuration_Service, Dependency.Type.REQUIRED_ONLY_AT_START);
     }
 
     private void bindMasterSitemap() {

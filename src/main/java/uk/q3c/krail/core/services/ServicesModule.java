@@ -54,13 +54,21 @@ public class ServicesModule extends AbstractServiceModule {
 
     }
 
+    @Override
+    protected void registerServices() {
+        // There are none
+    }
+
+    @Override
+    protected void defineDependencies() {
+        // There are none
+    }
+
     protected void bindServicesModel() {
         bind(ServicesModel.class).to(DefaultServicesModel.class);
         bind(ServicesClassGraph.class).to(DefaultServicesClassGraph.class);
         bind(ServicesInstanceGraph.class).to(DefaultServicesInstanceGraph.class);
     }
-
-
 
 
     protected void bindServiceDependencyScanner() {
@@ -109,7 +117,7 @@ public class ServicesModule extends AbstractServiceModule {
         @Override
         public boolean matches(Method method) {
             return method.getName()
-                    .equals("finalize");
+                         .equals("finalize");
         }
     }
 
@@ -146,9 +154,6 @@ public class ServicesModule extends AbstractServiceModule {
             return false;
         }
     }
-
-
-
 
 
 }
