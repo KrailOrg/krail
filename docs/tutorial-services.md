@@ -4,7 +4,7 @@
 
 The Guice documentation strongly recommends making Guice modules [fast and side effect free](https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree).  It also provides an example interface for starting and stopping services.
 
-Krail extends that idea with a more comprehensive lifecycle for a Service, and also adds dependency management.  For example, in order to start a Database Service, it may be necessary to load a file or web-service based configuration first using a Configuration Service to obtain database connection details.
+Krail extends that idea with a more comprehensive lifecycle for a Service, and also adds dependency management.  For example, in order to start a Database Service, it may be necessary to load configuration values from a file or web service first.
 
 
 ##Lifecycle

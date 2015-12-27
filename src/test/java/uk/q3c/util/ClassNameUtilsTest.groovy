@@ -98,6 +98,11 @@ class ClassNameUtilsTest extends Specification {
         }
 
         @Override
+        ServiceStatus reset() {
+            return null
+        }
+
+        @Override
         I18NKey getDescriptionKey() {
             return null
         }

@@ -90,6 +90,10 @@ public abstract class AbstractService implements Service {
             log.debug("Attempting to stop service {}, but it is already stopped. No action taken", getName());
             return new ServiceStatus(this, state);
         }
+        if (state.equals(INITIAL)) {
+            log.debug("Currently in INITIAL state, stop or fail ignored");
+            return new ServiceStatus(this, state);
+        }
         log.info("Stopping service: {}", getName());
         setState(STOPPING);
         servicesModel.stopDependantsOf(this, false);
@@ -122,6 +126,16 @@ public abstract class AbstractService implements Service {
     public synchronized ServiceStatus fail() {
         return stop(FAILED);
     }
+
+    @Override
+    public synchronized ServiceStatus reset() {
+        if (isStarted() || state.equals(STARTING)) {
+            return new ServiceStatus(this, state);
+        }
+        setState(INITIAL);
+        return new ServiceStatus(this, state);
+    }
+
 
     @Override
     public synchronized ServiceStatus start() {

@@ -127,6 +127,11 @@ public class MockService implements Service {
         this.instance = instance;
     }
 
+    @Override
+    public ServiceStatus reset() {
+        return null;
+    }
+
     public MockService failToStart(final boolean failToStart) {
         this.failToStart = failToStart;
         return this;

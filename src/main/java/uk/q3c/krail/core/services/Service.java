@@ -154,4 +154,10 @@ public interface Service {
 
     void setInstance(int instance);
 
+    /**
+     * Resets a service from a failed or stopped state to INITIAL.  Does nothing if the service is STARTED or STARTING
+     *
+     * @return a ServiceStatus of INITIAL
+     */
+    ServiceStatus reset();
 }

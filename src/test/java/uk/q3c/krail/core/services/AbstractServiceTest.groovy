@@ -130,11 +130,54 @@ class AbstractServiceTest extends Specification {
         service.getState().equals(FAILED_TO_START)
     }
 
+    def "reset returns to INITIAL"() {
+        given:
+        service.setState(DEPENDENCY_FAILED)
+
+        when:
+        ServiceStatus result = service.reset()
+
+        then:
+
+        result.getState().equals(INITIAL)
+        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(INITIAL) })
+
+    }
+
+
+    def "Cannot reset from STARTING"() {
+        given:
+        service.setState(STARTING)
+
+        when:
+        ServiceStatus result = service.reset()
+
+        then:
+
+        result.getState().equals(STARTING)
+        0 * eventBus.publish(_)
+    }
+
+
+    def "Cannot reset from STARTED"() {
+        given:
+        service.setState(STARTED)
+
+        when:
+        ServiceStatus result = service.reset()
+
+        then:
+
+        result.getState().equals(STARTED)
+        0 * eventBus.publish(_)
+    }
+
     def "stop sets state to STOPPED"() {
         given:
 
         service.throwStopException = false
         translate.from(LabelKey.Authorisation) >> "Authorisation"
+        service.state = STARTED
 
         when:
 
@@ -155,6 +198,7 @@ class AbstractServiceTest extends Specification {
 
         service.throwStopException = true
         translate.from(LabelKey.Authorisation) >> "Authorisation"
+        service.state = STARTED
 
         when:
 
@@ -175,6 +219,7 @@ class AbstractServiceTest extends Specification {
 
         service.throwStopException = false
         translate.from(LabelKey.Authorisation) >> "Authorisation"
+        service.state = STARTED
 
         when:
 
@@ -195,6 +240,7 @@ class AbstractServiceTest extends Specification {
 
         service.throwStopException = false
         translate.from(LabelKey.Authorisation) >> "Authorisation"
+        service.state = STARTED
 
         when:
 
@@ -215,6 +261,7 @@ class AbstractServiceTest extends Specification {
 
         service.throwStopException = false
         translate.from(LabelKey.Authorisation) >> "Authorisation"
+        service.state = STARTED
 
         when:
 
@@ -236,6 +283,7 @@ class AbstractServiceTest extends Specification {
 
         service.throwStopException = false
         translate.from(LabelKey.Authorisation) >> "Authorisation"
+        service.state = STARTED
 
         when:
 
@@ -256,6 +304,7 @@ class AbstractServiceTest extends Specification {
 
         service.throwStopException = true
         translate.from(LabelKey.Authorisation) >> "Authorisation"
+        service.state = STARTED
 
         when:
 
@@ -304,7 +353,8 @@ class AbstractServiceTest extends Specification {
 
     def "stop() when already stopped should exit"() {
 
-
+        given:
+        service.state = STARTED
 
         when:
 
@@ -318,8 +368,8 @@ class AbstractServiceTest extends Specification {
     }
 
     def "fail() when already stopped should exit"() {
-
-
+        given:
+        service.state = STARTED
 
         when:
 
@@ -336,7 +386,6 @@ class AbstractServiceTest extends Specification {
     def "get and setInstance()"() {
 
 
-
         when:
 
         service.setInstance(33)
@@ -344,6 +393,29 @@ class AbstractServiceTest extends Specification {
         then:
         service.getInstance() == 33
 
+    }
+
+    def "stop() is ignored when in INITIAL state"() {
+        when:
+
+        ServiceStatus result = service.stop()
+
+        then:
+
+        0 * eventBus.publish(_)
+        result.state.equals(INITIAL)
+
+    }
+
+    def "fail() is ignored when in INITIAL state"() {
+        when:
+
+        ServiceStatus result = service.fail()
+
+        then:
+
+        0 * eventBus.publish(_)
+        result.state.equals(INITIAL)
     }
 
 
