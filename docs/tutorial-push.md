@@ -12,24 +12,11 @@ Krail implements the process described in the [Vaadin Handbook](https://vaadin.c
 - ScopedUI automatically registers with the Broadcaster, so that any UI can push a message
 - ScopedUI listens for broadcast messages and distributes them via the UI Event Bus as instances of ```PushMessage```
 
-Krail does NOT currently include push as part of the default build, although this may change, see [ticket 490](https://github.com/davidsowerby/krail/issues/490)
-
 #Fixing the Refresh Problem
 
-##Modify the Build
+##Modify the UI
 
-- In *build.gradle* add a dependency on Vaadin push (using the same version as Krail core):
-
-```groovy
-compile 'com.vaadin:vaadin-push:' + '7.5.10'
-```
-
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">using the Vaadin version directly like this is inconvenient and subject to <a href="https://github.com/davidsowerby/krail/issues/490" >ticket 490</a></p>
-</div>
-
-- Add the **@Push** annotation to the ```TutorialUI``` class
+- Add a **@Push** annotation to the ```TutorialUI```
 
 ```java
 @Theme("valo")

@@ -88,7 +88,7 @@ This is just a convention - which we will use in this Tutorial - but it is entir
 
 ###Creating a Key class
 
-Assuming you have followed this Tutorial from the start, you have already seen how to [create a key class](tutoriall-pages-navigation.md#I18NIntro).  We are going to add another now:
+Assuming you have followed this Tutorial from the start, you have already seen how to [create a key class](tutorial-pages-navigation.md#I18NIntro).  We are going to add another now:
 
 - in the 'com.example.tutorial.i18n' package, create an Enum class called 'MessageKey'.  It should implement the ```I18NKey``` interface
 - create a MessageKey constant **Banner**

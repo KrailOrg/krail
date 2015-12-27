@@ -216,27 +216,23 @@ package com.example.tutorial.service;
 
 import com.example.tutorial.i18n.LabelKey;
 import uk.q3c.krail.core.services.AbstractServiceModule;
+import uk.q3c.krail.core.services.Dependency;
 
 public class TutorialServicesModule extends AbstractServiceModule {
 
     @Override
-    protected void configure() {
-        super.configure();
+    protected void registerServices() {
         registerService(LabelKey.ServiceA, ServiceA.class);
         registerService(LabelKey.ServiceB, ServiceB.class);
         registerService(LabelKey.ServiceC, ServiceC.class);
         registerService(LabelKey.ServiceD, ServiceD.class);
     }
-}
-```
-- create the enum constant
-- add a ```TutorialServicesModule``` instance to the ```BindingManager```:
 
-```java
     @Override
-    protected void addAppModules(List<Module> baseModules) {
-        baseModules.add(new TutorialServicesModule());
+    protected void defineDependencies() {
+       
     }
+}
 ```
 
 
@@ -368,7 +364,7 @@ So far, all the Services operate independently - there are no dependencies speci
 
 ###Dependencies with Guice
 
-- add the following to the ```configure()``` method in the ```TutorialServicesModule```:
+- add the following to the ```defineDependencies()``` method in the ```TutorialServicesModule```:
 
 ```java
 addDependency(LabelKey.ServiceA,LabelKey.ServiceB, Dependency.Type.ALWAYS_REQUIRED);
