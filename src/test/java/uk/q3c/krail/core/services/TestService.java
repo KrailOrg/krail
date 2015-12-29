@@ -21,13 +21,13 @@ public class TestService extends AbstractService {
     @Dependency
     Service serviceA;
 
-    @Dependency(required = false)
+    @Dependency(optional = true)
     Service serviceB;
 
     @Dependency(always = false)
     Service serviceC;
 
-    @Dependency(required = false, always = false)
+    @Dependency(optional = true, always = false)
     Service serviceD;
 
     protected TestService(Translate translate, ServicesModel servicesModel, Service serviceA, Service serviceB, Service serviceC, Service serviceD,

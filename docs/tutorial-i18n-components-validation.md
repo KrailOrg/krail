@@ -241,7 +241,7 @@ private void setupTable() {
 ```
 ##Grid
 
-In a very simlar way to Table, Grid may need column headings translated.  If a ```Grid``` propertyId is an ```I18NKey``` it will be translated - otherwise it is ignored by the Krail ```I18NProcessor```. 
+In a very similar way to Table, Grid may need column headings translated.  If a ```Grid``` propertyId is an ```I18NKey``` it will be translated - otherwise it is ignored by the Krail ```I18NProcessor```. 
 
 - add a 'setupGrid()' method
 
@@ -524,10 +524,10 @@ VerticalLayout layout = new VerticalLayout(personForm.getLayout(), buttonBar1, b
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Apache Bval provides language bundles for Locales de, en, es and it.  If you require others you will currently need to provide your own translations</p>
+<p class="last">Apache BVal provides language bundles for Locales de, en, es and it.  If you require others you will currently need to provide your own translations</p>
 </div>
 
-There is a more information about the Apache Bval validation integration in the [Developer Guide](devguide14.md)
+There is a more information about the Apache Bval validation integration in the [Developer Guide](devguide-validation.md)
 
 #Summary
 

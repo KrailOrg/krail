@@ -28,28 +28,27 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Dependency {
 
+    enum Type {ALWAYS_REQUIRED, REQUIRED_ONLY_AT_START, OPTIONAL}
     Type type = Type.ALWAYS_REQUIRED;
 
     /**
-     * If true, this dependency is required to be running and its full meaning qualified by {@link #always()}.  If
-     * false, the dependency is optional.  See {@link ServicesGraph#optionallyUses(ServiceKey, ServiceKey)}
+     * If false, this dependency is required to be running. Its full meaning qualified by {@link #always()}.  If
+     * true, the dependency is optional.  See {@link ServicesModel#optionallyUses(ServiceKey, ServiceKey)}
      *
-     * @return If true, this dependency is required to be running and its full meaning qualified by {@link #always()}.
-     * If false, the dependency is optional.  See {@link ServicesGraph#optionallyUses(ServiceKey, ServiceKey)}
+     * @return If false, this dependency is required to be running. Its full meaning qualified by {@link #always()}.  If
+     * true, the dependency is optional.  See {@link ServicesModel#optionallyUses(ServiceKey, ServiceKey)}
      */
-    boolean required() default true;
+    boolean optional() default false;
 
     /**
-     * This value is ignored if {@link #required()} is false.<br><br> If this value is true, this dependency is required
+     * This value is ignored if {@link #optional()} is true.<br><br>If {@link #optional()} is false, and this value is true, this dependency is required
      * to be running at all times in order for the declaring service to run.  See {@link
-     * ServicesGraph#alwaysDependsOn(ServiceKey, ServiceKey)}.  If this value is false, this dependency is required only
-     * in order to start the declaring service. See {@link ServicesGraph#requiresOnlyAtStart(ServiceKey, ServiceKey)}.
+     * ServicesModel#alwaysDependsOn(ServiceKey, ServiceKey)}. If {@link #optional()} is false, and this value is false, this dependency is required only
+     * in order to start the declaring service. See {@link ServicesModel#requiresOnlyAtStart(ServiceKey, ServiceKey)}.
      *
      * @return If true, the dependency is always required, otherwise it is required only to start the declaring service.
      */
     boolean always() default true;
-
-    enum Type {ALWAYS_REQUIRED, REQUIRED_ONLY_AT_START, OPTIONAL}
 
 
 }

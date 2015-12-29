@@ -1,6 +1,6 @@
 #Introduction
 
-Krail uses the [Apache Bval](http://bval.apache.org/) implementation of [JSR303](https://jcp.org/en/jsr/detail?id=303) to provide validation.  It also integrates Apache Bval with the Krail I18N framework, so that all I18N requirements can be managed through the same process.  These are some of the things you may want to do with validation.
+Krail uses the [Apache BVal](http://bval.apache.org/) implementation of [JSR303](https://jcp.org/en/jsr/detail?id=303) to provide validation.  It also integrates Apache BVal with the Krail I18N framework, so that all I18N requirements can be managed through the same process.  These are some of the things you may want to do with validation.
 
 Validation is invoked automatically through Krail's implementation of ```BeanFieldGroup``` (basically a form without the layout), once its fields have been annotated.
 

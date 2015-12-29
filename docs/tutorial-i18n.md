@@ -515,7 +515,7 @@ We have just demonstrated changing the value for a specific key - exactly the sa
   
 #Methods of configuration revisited
 
-Earlier [in this section](tutorial-i18n-vaadin-components.md#config-methods) we elected to sub-class ```I18NModule``` as a way of configuring it, resulting in this ```define()``` method:
+Earlier [in this section](tutorial-i18n-components-validation.md#config-methods) we elected to sub-class ```I18NModule``` as a way of configuring it, resulting in this ```define()``` method:
 
 ```
 @Override

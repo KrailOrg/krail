@@ -38,7 +38,7 @@ public class DefaultServiceDependencyScanner implements ServiceDependencyScanner
                         if (dependency == null) {
                             log.warn("Field is annotated with @Dependency but is null, dependency not set");
                         } else {
-                            if (annotation.required()) {
+                            if (!annotation.optional()) {
                                 if (annotation.always()) {
                                     servicesModel.alwaysDependsOn(service.getServiceKey(), dependency.getServiceKey());
                                 } else {
