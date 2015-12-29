@@ -1,6 +1,6 @@
 #krail
 
-Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the comprehensive [Tutorial](http://krail.readthedocs.org/en/latest/) (still in development but a large part of it is complete)
+Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the comprehensive [Tutorial](http://krail.readthedocs.org/en/latest/), which also makes a reasonable demo.  (You can clone directly from the [Tutorial repo](https://github.com/davidsowerby/krail-tutorial))
 
 This core library provides:
 
@@ -64,7 +64,7 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 
 # Status
 
-20th December 2015:
+29th December 2015:
 
 * Vaadin 7.5.10 is integrated with:
 * Guice 4.0
@@ -77,18 +77,16 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 Krail is usable, though there is still work to ensure thread safety.  No major changes to the API expected.  Vaadin push is supported.  Tested on Tomcat 7 & 8
 
 
-## demo
-
-There is a [simple demo](https://github.com/davidsowerby/krail-demo) project - this is rapidly becoming irrelevant.  The Tutorial (see above) is much more useful.
-
 ## testApp
 
-There is a [functional test application](https://github.com/davidsowerby/krail-testApp) which can also be used to explore functionality - it actually contains more than the demo
+There is a [functional test application](https://github.com/davidsowerby/krail-testApp) which can also be used to explore functionality - though the [Tutorial](http://krail.readthedocs.org/en/latest/) may be better for that
 
 
 #Project Build
 
 Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).
+
+The build is a multi-project gradle build with a [master](https://github.com/davidsowerby/krail-master)
 
 If you want to build from source run 'gradle eclipse' or 'gradle idea' to generate the IDE files
 
