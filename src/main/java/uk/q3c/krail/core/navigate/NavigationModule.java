@@ -28,6 +28,7 @@ public class NavigationModule extends AbstractModule {
         bindURIHandler();
         bindNavigationRules();
         bindViewChangeRule();
+        bindInvalidURIHandler();
     }
 
     protected void bindViewChangeRule() {
@@ -50,5 +51,13 @@ public class NavigationModule extends AbstractModule {
 
     protected void bindNavigator() {
         bind(Navigator.class).to(DefaultNavigator.class);
+    }
+
+
+    /**
+     * the {@link Navigator} calls this handler in response to an attempt to navigate to an invalid URI.
+     */
+    protected void bindInvalidURIHandler() {
+        bind(InvalidURIHandler.class).to(DefaultInvalidURIHandler.class);
     }
 }

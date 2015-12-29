@@ -76,6 +76,7 @@ public class DefaultNavigator implements Navigator {
     private final UserSitemapBuilder userSitemapBuilder;
     private final LoginNavigationRule loginNavigationRule;
     private final LogoutNavigationRule logoutNavigationRule;
+    private final InvalidURIHandler invalidURIHandler;
     private NavigationState currentNavigationState;
     private KrailView currentView = null;
     private PubSubSupport<BusMessage> eventBus;
@@ -86,7 +87,8 @@ public class DefaultNavigator implements Navigator {
     @Inject
     public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
             pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule
-                                    loginNavigationRule, LogoutNavigationRule logoutNavigationRule, UIBusProvider eventBusProvider, ViewChangeRule viewChangeRule) {
+                                    loginNavigationRule, LogoutNavigationRule logoutNavigationRule, UIBusProvider eventBusProvider, ViewChangeRule
+                                    viewChangeRule, InvalidURIHandler invalidURIHandler) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -98,6 +100,7 @@ public class DefaultNavigator implements Navigator {
 
         this.loginNavigationRule = loginNavigationRule;
         this.logoutNavigationRule = logoutNavigationRule;
+        this.invalidURIHandler = invalidURIHandler;
 
         this.eventBus = eventBusProvider.getUIBus();
         this.viewChangeRule = viewChangeRule;
@@ -151,8 +154,7 @@ public class DefaultNavigator implements Navigator {
      * option to block the view change by returning false (see {@link #publishBeforeViewChange(BeforeViewChangeBusMessage)}
      * <p>
      *
-     * @param navigationState
-     *         The navigationState to navigate to. May not be null.
+     * @param navigationState The navigationState to navigate to. May not be null.
      */
     @Override
     public void navigateTo(NavigationState navigationState) {
@@ -169,7 +171,7 @@ public class DefaultNavigator implements Navigator {
         // stop unnecessary changes, but also to prevent navigation aware
         // components from causing a loop by responding to a change of URI (they should suppress events when they do,
         // but may not)
-        if (navigationState == currentNavigationState) {
+        if (navigationState.equals(currentNavigationState)) {
             log.debug("fragment unchanged, no navigation required");
             return;
         }
@@ -185,9 +187,8 @@ public class DefaultNavigator implements Navigator {
 
         UserSitemapNode node = userSitemap.nodeFor(navigationState);
         if (node == null) {
-            InvalidURIException exception = new InvalidURIException("URI not found");
-            exception.setTargetURI(navigationState.getVirtualPage());
-            throw exception;
+            invalidURIHandler.invoke(this, navigationState.getVirtualPage());
+            return;
         }
 
         Subject subject = subjectProvider.get();
@@ -232,9 +233,7 @@ public class DefaultNavigator implements Navigator {
      * redirected. If it is, a {@link NavigationState} is returned, modified for the redirected page. If no
      * redirection is required, the {@code navigationState} is returned unchanged.
      *
-     * @param navigationState
-     *         the proposed navigation state before considering redirection
-     *
+     * @param navigationState the proposed navigation state before considering redirection
      * @return navigationState reflecting the correct navigation state after considering a possible redirection
      */
     private NavigationState redirectIfNeeded(NavigationState navigationState) {
@@ -275,9 +274,7 @@ public class DefaultNavigator implements Navigator {
      * {@link
      * BeforeViewChangeBusMessage#cancel()}, false is returned.
      *
-     * @param busMessage
-     *         view change message from the bus (view change not yet performed)
-     *
+     * @param busMessage view change message from the bus (view change not yet performed)
      * @return true if the view change should be allowed, false to silently block the navigation operation
      */
     protected boolean publishBeforeViewChange(BeforeViewChangeBusMessage busMessage) {
@@ -293,8 +290,7 @@ public class DefaultNavigator implements Navigator {
      * <p>
      * Message Handlers are called in an undefined order unless {@link Handler#priority()} is used to specify an order.
      *
-     * @param busMessage
-     *         view change message from the bus
+     * @param busMessage view change message from the bus
      */
     protected void publishAfterViewChange(AfterViewChangeBusMessage busMessage) {
         eventBus.publish(busMessage);
@@ -377,8 +373,7 @@ public class DefaultNavigator implements Navigator {
      * Applies the login / logout navigation rules.  Handler priority is set so that Navigators respond after other listeners - they must complete before the
      * Navigator attempts to change page
      *
-     * @param busMessage
-     *         message from the event bus
+     * @param busMessage message from the event bus
      */
     @Handler(priority = -1)
     public void userStatusChange(UserStatusBusMessage busMessage) {

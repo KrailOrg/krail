@@ -15,24 +15,28 @@ package uk.q3c.krail.core.navigate;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.i18n.MessageKey;
 
-public class DefaultInvalidURIExceptionHandler implements InvalidURIExceptionHandler {
-    private static Logger log = LoggerFactory.getLogger(DefaultInvalidURIExceptionHandler.class);
+public class DefaultInvalidURIHandler implements InvalidURIHandler {
+    private static Logger log = LoggerFactory.getLogger(DefaultInvalidURIHandler.class);
 
     private final UserNotifier notifier;
 
     @Inject
-    protected DefaultInvalidURIExceptionHandler(UserNotifier notifier) {
+    protected DefaultInvalidURIHandler(UserNotifier notifier) {
         super();
         this.notifier = notifier;
     }
 
     @Override
-    public void invoke(InvalidURIException exception) {
-        log.info("invalid uri {}", exception.getTargetURI());
-        notifier.notifyInformation(MessageKey.Invalid_URI, exception.getTargetURI());
+    public void invoke(Navigator navigator, String targetUri) {
+        log.info("invalid uri {}", targetUri);
+        if (navigator.getCurrentNavigationState() == null) {
+            navigator.navigateTo(StandardPageKey.Public_Home);
+        }
+        notifier.notifyInformation(MessageKey.Invalid_URI, targetUri);
     }
 
 }

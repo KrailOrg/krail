@@ -21,8 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.navigate.InvalidURIException;
-import uk.q3c.krail.core.navigate.InvalidURIExceptionHandler;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 
@@ -37,8 +35,6 @@ public class KrailErrorHandlerTest {
     UnauthenticatedExceptionHandler authenticationHandler;
     @Mock
     UnauthorizedExceptionHandler authorisationHandler;
-    @Mock
-    InvalidURIExceptionHandler invalidUriHandler;
 
     @Mock
     Navigator navigator;
@@ -57,22 +53,11 @@ public class KrailErrorHandlerTest {
 
     @Before
     public void setup() {
-        handler = new KrailErrorHandler(authenticationHandler, notAGuestExceptionHandler, notAUserExceptionHandler, authorisationHandler, invalidUriHandler,
+        handler = new KrailErrorHandler(authenticationHandler, notAGuestExceptionHandler, notAUserExceptionHandler, authorisationHandler,
                 navigator, userNotifier);
     }
 
-    @Test
-    public void invalidUri() {
 
-        // given
-        InvalidURIException exception = new InvalidURIException();
-        when(event.getThrowable()).thenReturn(exception);
-        // when
-        handler.error(event);
-        // then
-        verify(invalidUriHandler).invoke(exception);
-
-    }
 
     @Test
     public void authentication() {

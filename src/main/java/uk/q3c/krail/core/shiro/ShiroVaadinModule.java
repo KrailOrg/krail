@@ -18,8 +18,6 @@ import com.vaadin.server.ErrorHandler;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authz.annotation.RequiresUser;
-import uk.q3c.krail.core.navigate.DefaultInvalidURIExceptionHandler;
-import uk.q3c.krail.core.navigate.InvalidURIExceptionHandler;
 
 public class ShiroVaadinModule extends AbstractModule {
 
@@ -33,7 +31,6 @@ public class ShiroVaadinModule extends AbstractModule {
         bindUnauthenticatedHandler();
         bindUnauthorisedHandler();
         bindLoginExceptionsHandler();
-        bindInvalidURIHandler();
         bindNotAUserHandler();
         bindNotAGuestHandler();
 
@@ -51,13 +48,6 @@ public class ShiroVaadinModule extends AbstractModule {
         bind(NotAUserExceptionHandler.class).to(DefaultNotAUserExceptionHandler.class);
     }
 
-    /**
-     * the {@link DefaultErrorHandler} calls this handler in response to an attempt to navigate to an invalid URI. If
-     * you have defined your own ErrorHandler you may of course do something different
-     */
-    protected void bindInvalidURIHandler() {
-        bind(InvalidURIExceptionHandler.class).to(DefaultInvalidURIExceptionHandler.class);
-    }
 
     /**
      * error handler for the VaadinSession, handles Krail (and therefore Shiro) exceptions

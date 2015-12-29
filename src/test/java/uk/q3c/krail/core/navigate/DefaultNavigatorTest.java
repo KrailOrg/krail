@@ -41,11 +41,13 @@ import uk.q3c.krail.core.shiro.PagePermission;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.ui.ScopedUIProvider;
+import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.core.view.*;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.MessageKey;
 import uk.q3c.krail.testutil.*;
 
 import java.util.*;
@@ -72,6 +74,9 @@ public class DefaultNavigatorTest {
     MockOption option;
     @Inject
     DefaultViewChangeRule defaultViewChangeRule;
+    @Mock
+    UserNotifier userNotifier;
+    InvalidURIHandler invalidURIHandler;
     @Mock
     private Page browserPage;
     @Mock
@@ -131,7 +136,7 @@ public class DefaultNavigatorTest {
         when(errorViewProvider.get()).thenReturn(errorView);
         when(subjectProvider.get()).thenReturn(subject);
         when(userSitemapProvider.get()).thenReturn(userSitemap);
-
+        invalidURIHandler = new DefaultInvalidURIHandler(userNotifier);
 
 
     }
@@ -155,11 +160,10 @@ public class DefaultNavigatorTest {
 
     private DefaultNavigator createNavigator() {
         navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
-                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule);
+                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule, invalidURIHandler);
         navigator.init();
         return navigator;
     }
-
 
 
     @Test
@@ -231,7 +235,7 @@ public class DefaultNavigatorTest {
 
     }
 
-    @Test(expected = InvalidURIException.class)
+    @Test
     public void navigateTo_invalidURI() {
 
         // given
@@ -241,38 +245,23 @@ public class DefaultNavigatorTest {
         // when
         navigator.navigateTo(page);
         // then
+        assertThat(navigator.getCurrentNavigationState()
+                            .getVirtualPage()).isEqualTo("public/home");
 
     }
 
     @Test
-    public void navigate_to_invalid_URI_exception_target_uri() {
+    public void navigate_to_invalid_URI() {
         //given
         navigator = createNavigator();
         String page = "public/view3";
         // when
-        try {
-            navigator.navigateTo(page);
-        } catch (InvalidURIException iue) {
-            //then
-            assertThat(iue.getTargetURI()).isEqualTo(page);
-        }
+        navigator.navigateTo(page);
+        //then
+        verify(userNotifier).notifyInformation(MessageKey.Invalid_URI, page);
 
     }
 
-    public void navigateTo_invalidURI_checkView() {
-
-        // given
-        navigator = createNavigator();
-        String page = "public/view3";
-        // when
-        try {
-            navigator.navigateTo(page);
-        } catch (Exception e) {
-            // then
-            assertThat(navigator.getCurrentView()).isEqualTo(errorView);
-        }
-
-    }
 
     @Test
     public void getNavigationState() {
@@ -399,7 +388,6 @@ public class DefaultNavigatorTest {
         // then
         assertThat(endState).isEqualTo(startState);
     }
-
 
 
     @Test
@@ -661,7 +649,7 @@ public class DefaultNavigatorTest {
 
         List<String> permissions = userSitemap.a1Node()
                                               .getMasterNode()
-                                                     .getRoles();
+                                              .getRoles();
         when(subject.hasAllRoles(permissions)).thenReturn(true);
         // when
         navigator.navigateTo(page);
@@ -701,7 +689,7 @@ public class DefaultNavigatorTest {
 
         List<String> permissions = userSitemap.a1Node()
                                               .getMasterNode()
-                                                     .getRoles();
+                                              .getRoles();
         when(subject.hasAllRoles(permissions)).thenReturn(false);
         // when
         navigator.navigateTo(page);
@@ -853,8 +841,7 @@ public class DefaultNavigatorTest {
          * unbounded recursion if you decide to change the view again in the
          * listener.
          *
-         * @param busMessage
-         *         view change event
+         * @param busMessage view change event
          */
         @Handler
         public void afterViewChange(AfterViewChangeBusMessage busMessage) {

@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.navigate;
 
-public interface InvalidURIExceptionHandler {
+public interface InvalidURIHandler {
 
-    public void invoke(InvalidURIException exception);
+    void invoke(Navigator navigator, String targetUri);
 }

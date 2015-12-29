@@ -19,8 +19,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
-import uk.q3c.krail.core.navigate.InvalidURIException;
-import uk.q3c.krail.core.navigate.InvalidURIExceptionHandler;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.shiro.aop.NotAGuestException;
 import uk.q3c.krail.core.shiro.aop.NotAUserException;
@@ -40,20 +38,19 @@ public class KrailErrorHandler extends DefaultErrorHandler {
     private final NotAGuestExceptionHandler notAGuestExceptionHandler;
     private final NotAUserExceptionHandler notAUserExceptionHandler;
     private final UnauthorizedExceptionHandler authorisationHandler;
-    private final InvalidURIExceptionHandler invalidUriHandler;
+    //    private final InvalidURIHandler invalidUriHandler;
     private final Navigator navigator;
     private UserNotifier userNotifier;
 
     @Inject
     protected KrailErrorHandler(UnauthenticatedExceptionHandler authenticationHandler, NotAGuestExceptionHandler notAGuestExceptionHandler,
                                 NotAUserExceptionHandler notAUserExceptionHandler, UnauthorizedExceptionHandler authorisationHandler,
-                                InvalidURIExceptionHandler invalidUriHandler, Navigator navigator, UserNotifier userNotifier) {
+                                Navigator navigator, UserNotifier userNotifier) {
         super();
         this.authenticationHandler = authenticationHandler;
         this.notAGuestExceptionHandler = notAGuestExceptionHandler;
         this.notAUserExceptionHandler = notAUserExceptionHandler;
         this.authorisationHandler = authorisationHandler;
-        this.invalidUriHandler = invalidUriHandler;
         this.navigator = navigator;
         this.userNotifier = userNotifier;
     }
@@ -61,14 +58,6 @@ public class KrailErrorHandler extends DefaultErrorHandler {
     @Override
     public void error(ErrorEvent event) {
         Throwable originalError = event.getThrowable();
-
-        // handle an attempt to navigate to an invalid page
-        int invalidURI = ExceptionUtils.indexOfThrowable(originalError, InvalidURIException.class);
-        if (invalidURI >= 0) {
-            InvalidURIException e = (InvalidURIException) ExceptionUtils.getThrowables(originalError)[invalidURI];
-            invalidUriHandler.invoke(e);
-            return;
-        }
 
 
         // handle an unauthorised access attempt
