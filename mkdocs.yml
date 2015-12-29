@@ -19,6 +19,7 @@ pages:
   - 'Services': 'tutorial-services.md'
   - 'Vaadin Push': 'tutorial-push.md'
   - 'Validation': 'tutorial-validation.md'
+  - 'Eclipse IDE': 'tutorial-eclipse.md'
   - 'Create User Hierarchy': 'tutorial-create-hierarchy.md'
 - Developer Guide:
   - 'Krail Configuration Overview': 'devguide01.md'

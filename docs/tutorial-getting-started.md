@@ -112,7 +112,8 @@ build
 - To keep things simple, right click on the project folder and select Git | Add to add all files to Git.
 
 ##Eclipse
-tbd
+
+Please see [this contribution](tutorial-eclipse.md)
 
 ## Krail preparation
 
