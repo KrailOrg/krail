@@ -2,7 +2,6 @@ site_name: Krail
 
 pages:
 - Home: 'index.md'
-- About: 'about.md'
 - Tutorial:
   - 'Getting Started': 'tutorial-getting-started.md'
   - 'Pages and Navigation': 'tutorial-pages-navigation.md'

@@ -1,1 +1,2 @@
-This version updates to Vaadin 7.5.3.  Integration of ```Option``` and I18N with persistence is substantially simplified, and a substantial number of small fixes and enhancements included.
+This version updates to Vaadin 7.5.10.  The Services model has been completely re-written, and introduces the ability to configure Service dependencies via Guice.
+The Tutorial is complete. The demo has been removed (the Tutorial is far more useful). A number of small fixes / enhancements applied.  All major functionality is complete, and the aim is now to concentrate on a quality review prior to publishing the first release candidate 
