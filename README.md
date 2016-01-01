@@ -1,16 +1,16 @@
 #krail
 
-Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the comprehensive [Tutorial](http://krail.readthedocs.org/en/latest/), which also makes a reasonable demo.  (You can clone directly from the [Tutorial repo](https://github.com/davidsowerby/krail-tutorial))
+Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the comprehensive [Tutorial](http://krail.readthedocs.org/en/master/), which also makes a reasonable demo.  (You can clone directly from the [Tutorial repo](https://github.com/davidsowerby/krail-tutorial))
 
 This core library provides:
 
-* Site navigation, using a sitemap configured by annotation, Guice or file (or any combination thereof)
+* Site navigation, using a sitemap configured by annotation or Guice
 * Authentication / Authorisation framework, including page access control
 * Vaadin Server Push (with option to disable it)
 * Event Bus
 * Extensive I18N support
 * User options
-* Application configuration through ini files etc
+* Application configuration through ini files, database etc
 * JSR 303 Validation (integrated with I18N)
 * User notifications
 
@@ -20,7 +20,7 @@ Additional libraries, integrated and configured through Guice, provide:
 * Quartz scheduler - [krail-quartz](https://github.com/davidsowerby/krail-quartz), using, of course,  [Quartz Scheduler](http://www.quartz-scheduler.org/)
 
 
-The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [Tutorial](http://krail.readthedocs.org/en/latest/) provide more information.
+The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [Tutorial](http://krail.readthedocs.org/en/master/) provide more information.
 
 
 #Download
