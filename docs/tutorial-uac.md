@@ -195,37 +195,33 @@ option:edit:*
 #Authentication
 
 Shiro has the concept of a ```Realm```, where the rules for Authentication and Authorisation are defined - by you, as they will be application specific.  Shiro offers a number of ways to [implement Realm](https://shiro.apache.org/static/1.2.2/apidocs/org/apache/shiro/realm/Realm.html), and here we will just provide a trivial example, combining authentication and authorisation into one ``` Realm```
+
+We will sub-class ```AuthorizingRealmBase```, as that provides a mechanism for enabling the cache via Guice.
  
-- in the package, 'com.example.tutorial.uac' create a class "TutorialRealm", extending ```AuthorizingRealm```
+- in the package, 'com.example.tutorial.uac' create a class "TutorialRealm", extending ```AuthorizingRealmBase```
 
 ```
 package com.example.tutorial.uac;
 
-import org.apache.shiro.realm.AuthorizingRealm;
+import uk.q3c.krail.core.shiro.AuthorizingRealmBase;
 
-public class TutorialRealm extends AuthorizingRealm {
-
-  
+public class TutorialRealm extends AuthorizingRealmBase {
+    
 }
 ```
 
-- We want to use our ```TrivialCredentialsStore```, so create an instance the constructor
-- Disable caching, as we do not need a cache
+- We want to use our ```TrivialCredentialsStore```, so we will inject that into the constructor
+- Caching obviously is not needed for this trivial case, but we will pass ```Optional<CacheManager>``` to ```AuthorizingRealmBase```.  This will allow us to demonstrate enabling the cache from Guice.
 
 ```
-import com.example.tutorial.uac.TrivialCredentialsStore;
-import com.google.inject.Inject;
-import org.apache.shiro.realm.AuthorizingRealm;
-
-public class TutorialRealm extends AuthorizingRealm {
+public class TutorialRealm extends AuthorizingRealmBase {
 
     private TrivialCredentialsStore credentialsStore;
 
     @Inject
-    protected TutorialRealm(TrivialCredentialsStore credentialsStore) {
-        super();
+    protected TutorialRealm(Optional<CacheManager> cacheManagerOpt, TrivialCredentialsStore credentialsStore) {
+        super(cacheManagerOpt);
         this.credentialsStore = credentialsStore;
-        setCachingEnabled(false);
     }
 }
 ```
@@ -269,13 +265,21 @@ This logic returns a populated ```SimpleAuthorizationInfo``` instance if the use
 #Using the Realm
 
 - override the ```shiroModule()``` method in the ```BindingManager``` to use the new ```Realm```
+- enable the cache as shown
  
 ```
-@Override
-protected Module shiroModule() {
-    return new DefaultShiroModule().addRealm(TutorialRealm.class);
-}
+    @Override
+    protected Module shiroModule() {
+        return new DefaultShiroModule().addRealm(TutorialRealm.class).enableCache();
+    }
 ```
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Krail uses the <code>MemoryConstrainedCacheManager</code> by default but this can be changed by overriding <code>DefaultShiroModule.bindCacheManager()</code></p>
+</div>
+
+
 - run the application and check to see if we have met our requirements:
    
     - log in as 'eq', with password 'eq'

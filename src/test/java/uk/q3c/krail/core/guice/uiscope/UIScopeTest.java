@@ -1,22 +1,24 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.guice.uiscope;
 
 import com.google.inject.*;
-import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.*;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -51,6 +53,7 @@ import uk.q3c.krail.testutil.TestUIModule;
 import uk.q3c.util.ResourceUtils;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -59,17 +62,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class UIScopeTest {
-
-    static ErrorHandler mockedErrorHandler = mock(ErrorHandler.class);
-    static ConverterFactory mockedConverterFactory = mock(ConverterFactory.class);
-    static Provider<UI> uiProvider;
-    //    static Map<String, Provider<UI>> uibinder;
+    static Optional<CacheManager> cacheManagerOpt = Optional.empty();
     static Subject subject = mock(Subject.class);
     static VaadinService vaadinService;
     public int connectCount;
     protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
     protected VaadinSession mockedSession = mock(VaadinSession.class);
-    UIKeyProvider uiKeyProvider = new UIKeyProvider();
     UIProvider provider;
     VaadinSessionProvider vaadinSessionProvider;
     VaadinSession vaadinSession;
@@ -98,7 +96,7 @@ public class UIScopeTest {
     public void uiScope2() {
 
         // given
-        KrailSecurityManager securityManager = new KrailSecurityManager();
+        KrailSecurityManager securityManager = new KrailSecurityManager(cacheManagerOpt);
         //        securityManager.setVaadinSessionProvider(vaadinSessionProvider);
 
         SecurityUtils.setSecurityManager(securityManager);
