@@ -36,7 +36,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:' + commonsLangVersion
     compile 'commons-io:commons-io:2.4'
     compile 'commons-configuration:commons-configuration:1.10'
-    compile 'org.reflections:reflections:0.9.9-RC1'
+    compile 'org.reflections:reflections:0.9.10'
     compile 'net.jodah:typetools:0.4.2'
 
     //Validation
