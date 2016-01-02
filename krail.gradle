@@ -37,7 +37,7 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
     compile 'commons-configuration:commons-configuration:1.10'
     compile 'org.reflections:reflections:0.9.10'
-    compile 'net.jodah:typetools:0.4.2'
+    compile 'net.jodah:typetools:0.4.3'
 
     //Validation
     compile 'org.apache.bval:bval-jsr303:0.5'
