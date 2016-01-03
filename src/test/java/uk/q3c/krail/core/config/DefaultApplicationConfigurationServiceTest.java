@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.config;
 
@@ -32,6 +32,8 @@ import uk.q3c.krail.core.services.Service.State;
 import uk.q3c.krail.core.services.ServiceStatus;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.krail.testutil.MockCurrentLocale;
+import uk.q3c.krail.util.ResourceUtils;
+import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
@@ -45,7 +47,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class, UtilsModule.class})
 public class DefaultApplicationConfigurationServiceTest {
 
     static File iniDir;
@@ -65,6 +67,9 @@ public class DefaultApplicationConfigurationServiceTest {
 
     CurrentLocale currentLocale = new MockCurrentLocale();
 
+    @Inject
+    ResourceUtils resourceUtils;
+
     @Mock
     I18NProcessor i18NProcessor;
 
@@ -81,7 +86,7 @@ public class DefaultApplicationConfigurationServiceTest {
         Locale.setDefault(Locale.UK);
         iniFiles = new HashMap<>();
         configuration.clear();
-        service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles, servicesModel, globalBusProvider);
+        service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles, servicesModel, globalBusProvider, resourceUtils);
         currentLocale.setLocale(Locale.UK);
         when(servicesModel.startDependenciesFor(service)).thenReturn(true);
     }

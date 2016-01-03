@@ -52,6 +52,7 @@ import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.I18NModule;
+import uk.q3c.krail.util.UtilsModule;
 
 import javax.servlet.ServletContextEvent;
 import java.util.ArrayList;
@@ -157,12 +158,17 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
         coreModules.add(dataTypeModule());
         coreModules.add(pushModule());
 
+        addUtilModules(coreModules);
         addValidationModules(coreModules);
 
         addAppModules(coreModules);
         addSitemapModules(coreModules);
         addPersistenceModules(coreModules);
         return coreModules;
+    }
+
+    protected void addUtilModules(List<Module> coreModules){
+        coreModules.add(new UtilsModule());
     }
 
     protected Module shiroAopModule() {

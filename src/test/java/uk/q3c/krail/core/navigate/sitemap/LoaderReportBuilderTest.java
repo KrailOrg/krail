@@ -1,17 +1,18 @@
 /*
- * Copyright (C) 2013 David Sowerby
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ *
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
+ *
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
+import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.apache.commons.io.FileUtils;
@@ -20,6 +21,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.util.UtilsModule;
+import uk.q3c.util.ClassNameUtils;
 import uk.q3c.util.testutil.FileTestUtil;
 import uk.q3c.util.testutil.TestResource;
 
@@ -32,11 +35,14 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@GuiceContext({UtilsModule.class})
 public class LoaderReportBuilderTest {
 
     @Rule
     public TemporaryFolder temporaryFolder=new TemporaryFolder();
+
+    @Inject
+    ClassNameUtils classNameUtils;
 
     File templateFile;
     List<SitemapLoader> loaders;
@@ -63,7 +69,7 @@ public class LoaderReportBuilderTest {
         // given
 
         // when
-        lrb = new LoaderReportBuilder(loaders);
+        lrb = new LoaderReportBuilder(loaders, classNameUtils);
         // then
         System.out.println(lrb.getReport()
                               .toString());
@@ -86,11 +92,11 @@ public class LoaderReportBuilderTest {
         public boolean load() {
             addError("a", "Pattern with no params");
             addError("b", "Pattern with {0} params", 1);
-            addError("b", "Pattern with {0} params, just as an {1}", new Object[]{2, "example"});
-            addWarning("c", "Pattern with {0} params, just as an {1}", new Object[]{2, "example"});
+            addError("b", "Pattern with {0} params, just as an {1}", 2, "example");
+            addWarning("c", "Pattern with {0} params, just as an {1}", 2, "example");
             addInfo("a", "Pattern with {0} params", 1);
             addInfo("a", "Pattern with {0} params", 1);
-            addInfo("a", "Pattern with {0} params, just as an {1}", new Object[]{2, "example"});
+            addInfo("a", "Pattern with {0} params, just as an {1}", 2, "example");
             return false;
         }
     }
@@ -101,11 +107,11 @@ public class LoaderReportBuilderTest {
         public boolean load() {
             addError("a", "Pattern with no params");
             addError("b", "Pattern with {0} params", 1);
-            addError("b", "Pattern with {0} params, just as an {1}", new Object[]{2, "example"});
-            addWarning("c", "Pattern with {0} params, just as an {1}", new Object[]{2, "example"});
+            addError("b", "Pattern with {0} params, just as an {1}", 2, "example");
+            addWarning("c", "Pattern with {0} params, just as an {1}", 2, "example");
             addInfo("a", "Pattern with {0} params", 1);
             addInfo("a", "Pattern with {0} params", 1);
-            addInfo("a", "Pattern with {0} params, just as an {1}", new Object[]{2, "example"});
+            addInfo("a", "Pattern with {0} params, just as an {1}", 2, "example");
             return false;
         }
     }

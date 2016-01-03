@@ -50,7 +50,9 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestPersistenceModule;
 import uk.q3c.krail.testutil.TestUIModule;
-import uk.q3c.util.ResourceUtils;
+import uk.q3c.krail.util.DefaultResourceUtils;
+import uk.q3c.krail.util.ResourceUtils;
+import uk.q3c.krail.util.UtilsModule;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -65,6 +67,7 @@ public class UIScopeTest {
     static Optional<CacheManager> cacheManagerOpt = Optional.empty();
     static Subject subject = mock(Subject.class);
     static VaadinService vaadinService;
+    static ResourceUtils resourceUtils;
     public int connectCount;
     protected VaadinRequest mockedRequest = mock(VaadinRequest.class);
     protected VaadinSession mockedSession = mock(VaadinSession.class);
@@ -76,9 +79,10 @@ public class UIScopeTest {
 
     @BeforeClass
     public static void setupClass() {
+        resourceUtils = new DefaultResourceUtils();
         vaadinService = mock(VaadinService.class);
 
-        when(vaadinService.getBaseDirectory()).thenReturn(ResourceUtils.userTempDirectory());
+        when(vaadinService.getBaseDirectory()).thenReturn(resourceUtils.userTempDirectory());
         VaadinService.setCurrent(vaadinService);
     }
 
@@ -108,7 +112,7 @@ public class UIScopeTest {
         // when
 
         injector = Guice.createInjector(new PushModule(), new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(), new ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestI18NModule(), new DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new TestPersistenceModule(), new NavigationModule(), new EventBusModule(),
-                new DataModule(), new DataTypeModule());
+                new DataModule(), new DataTypeModule(), new UtilsModule());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
         // navigator = injector.getInstance(Navigator.class);

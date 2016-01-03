@@ -1,18 +1,21 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.guice
 
 import com.google.inject.Module
 import com.google.inject.TypeLiteral
+import spock.guice.UseModules
 import uk.q3c.krail.core.persist.DefaultActiveOptionSource
 import uk.q3c.krail.core.persist.InMemoryOptionContainerProvider
 import uk.q3c.krail.core.persist.KrailPersistenceUnitHelper
@@ -23,6 +26,7 @@ import uk.q3c.krail.core.user.opt.OptionDao
 import uk.q3c.krail.core.validation.JavaxValidationSubstitutes
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.i18n.I18NKey
+import uk.q3c.krail.util.UtilsModule
 
 import javax.validation.MessageInterpolator
 import java.lang.annotation.Annotation
@@ -32,6 +36,7 @@ import java.lang.annotation.Annotation
  *
  * Created by David Sowerby on 22/07/15.
  */
+@UseModules([UtilsModule])
 class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
 
 
