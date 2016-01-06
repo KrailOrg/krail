@@ -60,9 +60,8 @@ public class SystemAccountManagementPagesTest {
     public void check() {
 
         // given
-
         // when
-        loader.load();
+        loader.load(sitemap);
         // then
 
         assertThat(sitemap.hasUri("system-account")).isTrue();

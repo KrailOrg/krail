@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
@@ -21,21 +21,23 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.i18n.I18NKey;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements AnnotationSitemapLoader {
 
     private static Logger log = LoggerFactory.getLogger(DefaultAnnotationSitemapLoader.class);
-    private final MasterSitemap sitemap;
     private Map<String, AnnotationSitemapEntry> sources;
 
     @Inject
-    protected DefaultAnnotationSitemapLoader(MasterSitemap sitemap) {
+    protected DefaultAnnotationSitemapLoader() {
         super();
-        this.sitemap = sitemap;
     }
+
 
     @Override
     public Map<String, AnnotationSitemapEntry> getSources() {
@@ -51,11 +53,11 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
      * Also scans for the {@link RedirectFrom} annotation, and populates the {@link MasterSitemap} redirects with the appropriate entries. If a class is
      * annotated with {@link RedirectFrom}, but does not implement {@link KrailView}, then the annotation is ignored.
      *
-     * @see uk.q3c.krail.core.navigate.sitemap.SitemapLoader#load()
      */
     @SuppressWarnings("unchecked")
     @Override
-    public boolean load() {
+    public boolean load(@Nonnull MasterSitemap sitemap) {
+        checkNotNull(sitemap);
         clearCounts();
         if (sources != null) {
 
@@ -139,8 +141,6 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
     /**
      * Returns an {@link I18NKey} enum constant from {@code labelKeyName} using the class from {@code sampleKey}.
      *
-     * @param labelKeyName
-     * @param sampleKey
      *
      * @return an {@link I18NKey} enum constant from {@code labelKeyName} using the class from {@code sampleKey}.
      *
@@ -149,11 +149,8 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
      *         if <code>labelKeyClass</code> does not contain a constant of <code>labelKeyName</code>
      */
     private I18NKey keyFromName(String labelKeyName, I18NKey sampleKey) {
-
-        Enum<?> enumSample = (Enum<?>) sampleKey;
-        Enum<?> labelKey = Enum.valueOf(enumSample.getDeclaringClass(), labelKeyName);
+        Enum<?> labelKey = Enum.valueOf(((Enum) sampleKey).getDeclaringClass(), labelKeyName);
         return (I18NKey) labelKey;
-
     }
 
     @Inject(optional = true)

@@ -67,7 +67,7 @@ public class DefaultStandardPagesModuleTest {
         // given
 
         // when
-        loader.load();
+        loader.load(sitemap);
         // then
 
         assertThat(sitemap.hasUri("private/home")).isTrue();
@@ -78,7 +78,7 @@ public class DefaultStandardPagesModuleTest {
         SitemapNode privateNode = sitemap.nodeFor("private");
         assertThat(privateNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
         // when
-        sitemapFinisher.check();
+        sitemapFinisher.check(sitemap);
         // then
         assertThat(privateNode.getPageAccessControl()).isEqualTo(PageAccessControl.PERMISSION);
         assertThat(privateNode.getLabelKey()).isEqualTo(LabelKey.Private);

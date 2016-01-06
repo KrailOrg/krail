@@ -1,23 +1,26 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
 import com.google.inject.Inject;
 
+import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * If a Map<String, DirectSitemapEntry> binding has been created (using Guice modules sub-classed from
@@ -28,15 +31,15 @@ import java.util.Set;
  */
 public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements DirectSitemapLoader {
 
-    private final MasterSitemap sitemap;
+
     //uses method injection in case there are none
     private Map<String, DirectSitemapEntry> pageMap;
     private Map<String, RedirectEntry> redirects;
     private Set<String> sourceModules;
 
+
     @Inject
-    protected DefaultDirectSitemapLoader(MasterSitemap sitemap) {
-        this.sitemap = sitemap;
+    protected DefaultDirectSitemapLoader() {
     }
 
     public Set<String> sourceModules() {
@@ -44,7 +47,8 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
     }
 
     @Override
-    public boolean load() {
+    public boolean load(@Nonnull MasterSitemap sitemap) {
+        checkNotNull(sitemap);
         sourceModules = new HashSet<>();
         if (pageMap != null) {
             for (Entry<String, DirectSitemapEntry> entry : pageMap.entrySet()) {
@@ -54,23 +58,25 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
                 nodeRecord.setPageAccessControl(value.getPageAccessControl());
                 nodeRecord.setViewClass(value.getViewClass());
                 nodeRecord.setPositionIndex(value.getPositionIndex());
-                MasterSitemapNode msn = sitemap.append(nodeRecord);
+                sitemap.append(nodeRecord);
                 sourceModules.add(value.getModuleName());
             }
-            processRedirects();
+            processRedirects(sitemap);
             for (String sourceModule : sourceModules) {
                 addInfo("Source Module:", "Module name: " + sourceModule);
             }
             return true;
         }
-        processRedirects();
+        processRedirects(sitemap);
         return false;
     }
 
     /**
-     * Transfers directly defined URI redirects to the {@link MasterSitemap}
+     * Transfers directly defined URI redirects to the {@code sitemap}
+     *
+     * @param sitemap the sitemap to pass the redirects to
      */
-    protected void processRedirects() {
+    protected void processRedirects(MasterSitemap sitemap) {
         if (redirects != null) {
             for (Entry<String, RedirectEntry> entry : redirects.entrySet()) {
                 sitemap.addRedirect(entry.getKey(), entry.getValue()
@@ -80,9 +86,8 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
     }
 
     /**
-     * Uses Method injection to enable use of optional parameter
      *
-     * @param map
+     * @param map map of {@link DirectSitemapEntry} entries configured through Guice - which may not have happened, hence use of optional
      */
     @Inject(optional = true)
     protected void setMap(Map<String, DirectSitemapEntry> map) {
@@ -90,9 +95,8 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
     }
 
     /**
-     * Uses Method injection to enable use of optional parameter
      *
-     * @param redirects
+     * @param redirects map of redirect entries configured through Guice - which may not have happened, hence use of optional
      */
     @Inject(optional = true)
     protected void setRedirects(Map<String, RedirectEntry> redirects) {

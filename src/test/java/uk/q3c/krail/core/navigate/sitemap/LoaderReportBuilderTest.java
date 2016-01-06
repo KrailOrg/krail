@@ -21,11 +21,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.ClassNameUtils;
 import uk.q3c.util.testutil.FileTestUtil;
 import uk.q3c.util.testutil.TestResource;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,10 +41,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LoaderReportBuilderTest {
 
     @Rule
-    public TemporaryFolder temporaryFolder=new TemporaryFolder();
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Inject
     ClassNameUtils classNameUtils;
+
+    @Mock
+    MasterSitemap sitemap;
 
     File templateFile;
     List<SitemapLoader> loaders;
@@ -51,14 +56,14 @@ public class LoaderReportBuilderTest {
 
     @Before
     public void setup() {
-         tempDir = temporaryFolder.getRoot();
+        tempDir = temporaryFolder.getRoot();
         templateFile = new File(TestResource.testJavaRootDir("krail"), "uk/q3c/krail/core/navigate/sitemap/LoadReportBuilderTest.template");
         loaders = new ArrayList<>();
         loaders.add(new MockAnnotationLoader());
         loaders.add(new MockDirectLoader());
 
         for (SitemapLoader loader : loaders) {
-            loader.load();
+            loader.load(sitemap);
         }
 
     }
@@ -74,22 +79,25 @@ public class LoaderReportBuilderTest {
         System.out.println(lrb.getReport()
                               .toString());
         File reportOutput = new File(tempDir, "temp");
-        FileUtils.writeStringToFile(reportOutput,lrb.getReport().toString());
+        FileUtils.writeStringToFile(reportOutput, lrb.getReport()
+                                                     .toString());
 
 
         Optional<String> result = FileTestUtil.compare(reportOutput, templateFile);
-        String msg = result.isPresent() ? result.get() :"";
-        assertThat(result.isPresent()).overridingErrorMessage(msg).isFalse();
+        String msg = result.isPresent() ? result.get() : "";
+        assertThat(result.isPresent()).overridingErrorMessage(msg)
+                                      .isFalse();
 
 
         // use this to generate a new template if structure changes
         // FileUtils.writeStringToFile(templateFile, lrb.getReport().toString());
     }
 
+    @SuppressWarnings("Duplicates")
     class MockAnnotationLoader extends SitemapLoaderBase {
 
         @Override
-        public boolean load() {
+        public boolean load(@Nonnull MasterSitemap sitemap) {
             addError("a", "Pattern with no params");
             addError("b", "Pattern with {0} params", 1);
             addError("b", "Pattern with {0} params, just as an {1}", 2, "example");
@@ -101,10 +109,12 @@ public class LoaderReportBuilderTest {
         }
     }
 
+
+    @SuppressWarnings("Duplicates")
     class MockDirectLoader extends SitemapLoaderBase {
 
         @Override
-        public boolean load() {
+        public boolean load(MasterSitemap sitemap) {
             addError("a", "Pattern with no params");
             addError("b", "Pattern with {0} params", 1);
             addError("b", "Pattern with {0} params, just as an {1}", 2, "example");

@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
@@ -20,25 +22,27 @@ import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.NodeModifier;
 
+import javax.annotation.Nonnull;
 import java.text.Collator;
 import java.util.Comparator;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, UserSitemapNode> {
     private static Logger log = LoggerFactory.getLogger(UserSitemapNodeModifier.class);
 
     private final SubjectProvider subjectProvider;
-    private final MasterSitemap masterSitemap;
     private final PageAccessController pageAccessController;
     private final Collator collator;
     private final Translate translate;
+    private MasterSitemap masterSitemap;
 
     @Inject
     public UserSitemapNodeModifier(SubjectProvider subjectProvider, CurrentLocale currentLocale,
-                                   MasterSitemap masterSitemap, PageAccessController pageAccessController,
+                                   PageAccessController pageAccessController,
                                    Translate translate) {
         super();
         this.subjectProvider = subjectProvider;
-        this.masterSitemap = masterSitemap;
         this.pageAccessController = pageAccessController;
         this.collator = Collator.getInstance(currentLocale.getLocale());
         this.translate = translate;
@@ -52,20 +56,18 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
      * Nodes which have a null label key are ignored, as they cannot be displayed. The logout page is never loaded. The
      * login page is only shown if the user is not authenticated.<br>
      * <br>
-     * Nodes are sorted according to the required order, as specified by (the {@link #sorted}<br>
-     * <br>
      * The label and collation key for the node are created using {@link CurrentLocale}, which may be different for
      * different users; so both this class and CurrentLocale are {@link VaadinSessionScoped}
      *
-     * @param subject
-     * @param collator
-     * @param masterNode
+     * {@link #setMasterSitemap} must be called first
      *
-     * @return
+     * @param masterNode the MasterSitemapNode that the UserSitemapNode must reference
+     *
+     * @return created UserSitemapNode with reference to {@code masterNode}
      */
     @Override
-    public UserSitemapNode create(UserSitemapNode parentUserNode, MasterSitemapNode masterNode) {
-
+    public UserSitemapNode create(UserSitemapNode parentUserNode, @Nonnull MasterSitemapNode masterNode) {
+        checkNotNull(masterNode);
         log.debug("creating a node for master node {}", masterNode);
         // if there is no labelKey (usually when page is redirected), cannot be shown
         if (masterNode.getLabelKey() == null) {
@@ -80,7 +82,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
                 return null;
             }
         }
-        if (pageAccessController.isAuthorised(subjectProvider.get(), masterNode)) {
+        if (pageAccessController.isAuthorised(subjectProvider.get(), masterSitemap, masterNode)) {
             log.debug("User is authorised for page {}, creating a node for it", masterSitemap.uri(masterNode));
             UserSitemapNode userNode = new UserSitemapNode(masterNode);
             userNode.setLabel(translate.from(masterNode.getLabelKey()));
@@ -93,7 +95,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
     }
 
     @Override
-    public MasterSitemapNode sourceNodeFor(UserSitemapNode target) {
+    public MasterSitemapNode sourceNodeFor(@Nonnull UserSitemapNode target) {
         return target.getMasterNode();
     }
 
@@ -101,7 +103,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
      * Not used in this implementation
      */
     @Override
-    public void setLeaf(UserSitemapNode targetNode, boolean isLeaf) {
+    public void setLeaf(@Nonnull UserSitemapNode targetNode, boolean isLeaf) {
 
     }
 
@@ -110,7 +112,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
      */
 
     @Override
-    public void setCaption(UserSitemapNode targetNode, String caption) {
+    public void setCaption(@Nonnull UserSitemapNode targetNode, String caption) {
 
     }
 
@@ -123,8 +125,13 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
      * Not used in this implementation
      */
     @Override
-    public void sortChildren(UserSitemapNode parentNode, Comparator<UserSitemapNode> comparator) {
+    public void sortChildren(UserSitemapNode parentNode, @Nonnull Comparator<UserSitemapNode> comparator) {
 
+    }
+
+
+    public void setMasterSitemap(MasterSitemap masterSitemap) {
+        this.masterSitemap = masterSitemap;
     }
 
 }

@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
@@ -27,6 +29,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapBuilderTest.TestVaadinSessionScopeModule;
+import uk.q3c.krail.core.services.ServicesModule;
 import uk.q3c.krail.core.shiro.VaadinSessionProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
@@ -34,6 +37,7 @@ import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.krail.testutil.TestPersistenceModule;
+import uk.q3c.krail.util.UtilsModule;
 
 import java.util.Locale;
 
@@ -41,7 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, TestVaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class,
-        UIScopeModule.class})
+        UIScopeModule.class, SitemapModule.class, ServicesModule.class, UtilsModule.class})
 public class UserSitemapBuilderTest extends TestWithSitemap {
 
     @Mock
@@ -59,6 +63,7 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
     @Mock
     private UserStatusChangeSource userStatusChangeSource;
 
+
     @Override
     @Before
     public void setup() {
@@ -71,20 +76,17 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
     @Test
     public void pageNotAuthorised() {
         // given
-        when(subject.isAuthenticated()).thenReturn(false);
+
         buildMasterSitemap(8);
-        when(pageAccessController.isAuthorised(subject, masterNode1)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, masterNode2)).thenReturn(false);
-        when(pageAccessController.isAuthorised(subject, masterNode3)).thenReturn(true);
+        when(subject.isAuthenticated()).thenReturn(false);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode1)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode2)).thenReturn(false);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode3)).thenReturn(true);
 
         // when
         createUserSitemap();
 
         // then
-        assertThat(pageAccessController.isAuthorised(subject, masterNode1)).isEqualTo(true);
-        assertThat(pageAccessController.isAuthorised(subject, masterNode2)).isEqualTo(false);
-        assertThat(pageAccessController.isAuthorised(subject, masterNode3)).isEqualTo(true);
-
         assertThat(userSitemap.getAllNodes()).hasSize(2);
         assertThat(userSitemapContains(masterNode1)).isTrue();
         assertThat(userSitemapContains(masterNode2)).isFalse();
@@ -105,9 +107,9 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
     public void redirects() {
         // given
         buildMasterSitemap(8);
-        when(pageAccessController.isAuthorised(subject, masterNode1)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, masterNode2)).thenReturn(false);
-        when(pageAccessController.isAuthorised(subject, masterNode3)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode1)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode2)).thenReturn(false);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode3)).thenReturn(true);
         // when
         createUserSitemap();
         // then
@@ -119,9 +121,9 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
     public void uriMap() {
         // given
         buildMasterSitemap(8);
-        when(pageAccessController.isAuthorised(subject, masterNode1)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, masterNode2)).thenReturn(false);
-        when(pageAccessController.isAuthorised(subject, masterNode3)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode1)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode2)).thenReturn(false);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode3)).thenReturn(true);
         createUserSitemap();
         // when
 
@@ -134,33 +136,32 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
     public void userStatusChanged() {
         // given
         buildMasterSitemap(8);
-        when(pageAccessController.isAuthorised(subject, masterNode1)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, masterNode2)).thenReturn(false);
-        when(pageAccessController.isAuthorised(subject, masterNode3)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode1)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode2)).thenReturn(false);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode3)).thenReturn(true);
         createUserSitemap();
         // when
-        when(pageAccessController.isAuthorised(subject, masterNode2)).thenReturn(true);
-        masterSitemap.addRedirect("bb", "2");
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode2)).thenReturn(true);
         //it doesn't matter what the user status actually is, just that it has changed
         userSitemapBuilder.userStatusChanged(new UserStatusBusMessage(userStatusChangeSource,true));
         // then
         assertThat(userSitemap.getUriMap()
                               .keySet()).containsOnly("1", "1/3", "2");
         assertThat(userSitemap.getRedirects()
-                              .keySet()).containsOnly("a", "bb");
+                              .keySet()).containsOnly("a");
     }
 
     @Test
     public void standardPages() {
         // given
         buildMasterSitemap(8);
-        when(pageAccessController.isAuthorised(subject, masterNode1)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, masterNode2)).thenReturn(false);
-        when(pageAccessController.isAuthorised(subject, masterNode3)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, privateHomeNode)).thenReturn(false);
-        when(pageAccessController.isAuthorised(subject, publicHomeNode)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, loginNode)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, logoutNode)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode1)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode2)).thenReturn(false);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode3)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, privateHomeNode)).thenReturn(false);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, publicHomeNode)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, loginNode)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, logoutNode)).thenReturn(true);
 
         // when
         createUserSitemap();
@@ -178,13 +179,13 @@ public class UserSitemapBuilderTest extends TestWithSitemap {
         // given
         buildMasterSitemap(8);
         currentLocale.setLocale(Locale.UK);
-        when(pageAccessController.isAuthorised(subject, masterNode1)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, masterNode2)).thenReturn(false);
-        when(pageAccessController.isAuthorised(subject, masterNode3)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, privateHomeNode)).thenReturn(false);
-        when(pageAccessController.isAuthorised(subject, publicHomeNode)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, loginNode)).thenReturn(true);
-        when(pageAccessController.isAuthorised(subject, logoutNode)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode1)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode2)).thenReturn(false);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, masterNode3)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, privateHomeNode)).thenReturn(false);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, publicHomeNode)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, loginNode)).thenReturn(true);
+        when(pageAccessController.isAuthorised(subject, masterSitemap, logoutNode)).thenReturn(true);
 
         // when
         createUserSitemap();

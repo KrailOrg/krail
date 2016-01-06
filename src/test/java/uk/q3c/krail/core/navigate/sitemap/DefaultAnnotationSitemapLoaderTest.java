@@ -83,7 +83,7 @@ public class DefaultAnnotationSitemapLoaderTest {
     public void test() {
         // given
         // when
-        loader.load();
+        loader.load(sitemap);
         lrb = new LoaderReportBuilder(loaders, classNameUtils);
         System.out.println(lrb.getReport());
         // then

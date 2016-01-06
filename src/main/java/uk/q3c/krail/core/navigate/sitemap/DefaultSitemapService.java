@@ -16,12 +16,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.config.ApplicationConfiguration;
 import uk.q3c.krail.core.config.ConfigKeys;
 import uk.q3c.krail.core.config.InheritingConfiguration;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
+import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.ServicesModel;
 import uk.q3c.krail.i18n.DescriptionKey;
@@ -31,40 +33,40 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.util.ClassNameUtils;
 
-import javax.annotation.Nonnull;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class DefaultSitemapService extends AbstractService implements SitemapService {
 
     private static Logger log = LoggerFactory.getLogger(DefaultSitemapService.class);
-    private final MasterSitemap sitemap;
+    private final Provider<MasterSitemap> sitemapProvider;
     private final ApplicationConfiguration configuration;
     private final ResourceUtils resourceUtils;
     private final ClassNameUtils classNameUtils;
     private final Provider<DirectSitemapLoader> directSitemapLoaderProvider;
     private final Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider;
     private final SitemapFinisher sitemapFinisher;
+    private MasterSitemapQueue masterSitemapQueue;
     private boolean loaded;
     private List<SitemapLoader> loaders;
     private StringBuilder report;
     private List<SitemapSourceType> sourceTypes;
 
+    @SuppressFBWarnings({"FCBL_FIELD_COULD_BE_LOCAL"})  // ResourceUtils have to be injected
     @Inject
     protected DefaultSitemapService(Translate translate, Provider<DirectSitemapLoader>
-            directSitemapLoaderProvider, Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, MasterSitemap sitemap, SitemapFinisher
-                                            sitemapFinisher, ApplicationConfiguration configuration, ServicesModel servicesModel, GlobalBusProvider
-                                            globalBusProvider, ResourceUtils resourceUtils, ClassNameUtils classNameUtils) {
+            directSitemapLoaderProvider, Provider<AnnotationSitemapLoader> annotationSitemapLoaderProvider, Provider<MasterSitemap> sitemapProvider,
+                                    SitemapFinisher sitemapFinisher, MasterSitemapQueue masterSitemapQueue, ApplicationConfiguration configuration,
+                                    ServicesModel servicesModel, GlobalBusProvider globalBusProvider, ResourceUtils resourceUtils, ClassNameUtils
+                                            classNameUtils) {
         super(translate, servicesModel, globalBusProvider);
         this.annotationSitemapLoaderProvider = annotationSitemapLoaderProvider;
         this.directSitemapLoaderProvider = directSitemapLoaderProvider;
-        this.sitemap = sitemap;
+        this.sitemapProvider = sitemapProvider;
         this.sitemapFinisher = sitemapFinisher;
+        this.masterSitemapQueue = masterSitemapQueue;
         this.configuration = configuration;
         this.resourceUtils = resourceUtils;
         this.classNameUtils = classNameUtils;
@@ -74,29 +76,33 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
 
     @Override
     protected void doStart() {
-        loadSources();
+        //start with a new and empty model
+        MasterSitemap sitemap = sitemapProvider.get();
+        loadSources(sitemap);
         LoaderReportBuilder lrb = new LoaderReportBuilder(loaders, classNameUtils);
         report = lrb.getReport();
         sitemap.setReport(report.toString());
         if (!loaded) {
             throw new SitemapException("No valid sources found");
         }
-        log.info(report.toString());
+        sitemap.lock();
+        masterSitemapQueue.addModel(sitemap);
+        log.info("{}", report.toString());
     }
 
     /**
      * Loads the Sitemap from all the sources specified in {@link #sourceTypes}. The first call to
-     * {@link #loadSource(SitemapSourceType)} has {@code firstLoad} set to true. Subsequent calls have {@code firstLoad}
+     * {@link #loadSource(SitemapSourceType, MasterSitemap)} has {@code firstLoad} set to true. Subsequent calls have {@code firstLoad}
      * set to false
      */
-    private void loadSources() {
+    private void loadSources(MasterSitemap sitemap) {
         extractSourcesFromConfig();
         loaders = new ArrayList<>();
         for (SitemapSourceType source : sourceTypes) {
-            loadSource(source);
+            loadSource(source, sitemap);
         }
         log.debug("Checking Sitemap, sitemap has {} nodes", sitemap.getNodeCount());
-        sitemapFinisher.check();
+        sitemapFinisher.check(sitemap);
         log.debug("Sitemap checked, no errors found");
     }
 
@@ -104,22 +110,23 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
      * Loads the Sitemap with all sources of the specified {@code source type}.
      *
      * @param sourceType the source type to use
+     * @param sitemap    the sitemap to load
      */
-    private void loadSource(SitemapSourceType sourceType) {
+    private void loadSource(SitemapSourceType sourceType, MasterSitemap sitemap) {
         log.debug("Loading Sitemap from {}", sourceType);
         switch (sourceType) {
 
             case DIRECT:
                 DirectSitemapLoader directSitemapLoader = directSitemapLoaderProvider.get();
                 loaders.add(directSitemapLoader);
-                directSitemapLoader.load();
+                directSitemapLoader.load(sitemap);
                 sitemapFinisher.setSourceModuleNames(directSitemapLoader.sourceModules());
                 loaded = true;
                 return;
             case ANNOTATION:
                 AnnotationSitemapLoader annotationSitemapLoader = annotationSitemapLoaderProvider.get();
                 loaders.add(annotationSitemapLoader);
-                annotationSitemapLoader.load();
+                annotationSitemapLoader.load(sitemap);
                 Map<String, AnnotationSitemapEntry> sources = annotationSitemapLoader.getSources();
                 if (sources != null) {
                     sitemapFinisher.setAnnotationSources(sources.keySet());
@@ -144,7 +151,7 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
                                                                       .toUpperCase());
                 sourceTypes.add(source);
             } catch (IllegalArgumentException iae) {
-                log.warn("'{}' is not a valid Sitemap source type", o.toString(), ConfigKeys.SITEMAP_SOURCES);
+                log.warn("'{}' is not a valid Sitemap source type", o.toString());
 
             }
         }
@@ -156,15 +163,6 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
 
     }
 
-    synchronized public File absolutePathFor(@Nonnull String source) {
-        checkNotNull(source);
-        if (source.startsWith("/")) {
-            return new File(source);
-        } else {
-            return new File(resourceUtils.applicationBaseDirectory(), source);
-        }
-
-    }
 
     @Override
     protected void doStop() {
@@ -173,11 +171,6 @@ public class DefaultSitemapService extends AbstractService implements SitemapSer
 
     public synchronized StringBuilder getReport() {
         return report;
-    }
-
-    @Override
-    public synchronized Sitemap<MasterSitemapNode> getSitemap() {
-        return sitemap;
     }
 
     public synchronized boolean isLoaded() {

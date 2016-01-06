@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
@@ -37,6 +39,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     protected final Map<String, String> redirects = new LinkedHashMap<>();
     protected BasicForest<T> forest;
     private boolean loaded;
+    private boolean locked;
 
     protected DefaultSitemapBase(URIFragmentHandler uriHandler) {
         super();
@@ -45,11 +48,21 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
 
     }
 
+    @Override
+    public boolean isLocked() {
+        return locked;
+    }
+
+    @Override
+    public void lock() {
+        checkLock();
+        this.locked = true;
+    }
+
     /**
      * Delegates to {@link BasicForest#getRootFor(Object)}
      *
      * @param node
-     *
      * @return
      */
     @Override
@@ -60,9 +73,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     /**
      * Delegates to {@link BasicForest#containsNode(Object)}
      *
-     * @param node
-     *         the node to look for
-     *
+     * @param node the node to look for
      * @return
      */
     @Override
@@ -74,7 +85,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * Returns the full URI for {@code node}
      *
      * @param node
-     *
      * @return
      */
     @Override
@@ -116,13 +126,16 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * Delegates to {@link BasicForest#getChildCount(Object)}
      *
      * @param node
-     *
      * @return
      */
 
     @Override
     public synchronized int getChildCount(T node) {
-        return forest.getChildCount(node);
+        try {
+            return forest.getChildCount(node);
+        } catch (NullPointerException npe) {
+            throw new SitemapException("Cannot count children of non-existent node", npe);
+        }
     }
 
     /**
@@ -130,7 +143,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * ignored
      *
      * @param uri
-     *
      * @return
      */
     @Override
@@ -142,22 +154,18 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     /**
      * Returns true if the sitemap contains the URI represented by virtual page part of {@code navigationState}.
      *
-     * @param navigationState
-     *         the NavigationState which contains the uri to check
-     *
+     * @param navigationState the NavigationState which contains the uri to check
      * @return
      */
     @Override
     public synchronized boolean hasUri(NavigationState navigationState) {
-        return uriMap.keySet()
-                     .contains(navigationState.getVirtualPage());
+        return uriMap.containsKey(navigationState.getVirtualPage());
     }
 
     /**
      * Returns a {@link NavigationState} object representing the URI for the {@code node}
      *
      * @param node
-     *
      * @return
      */
     @Override
@@ -174,7 +182,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * Returns a {@link PagePermission} object for {@code node}
      *
      * @param node
-     *
      * @return
      */
     @Override
@@ -189,14 +196,15 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      */
     @Override
     public synchronized void addNode(T node) {
+        checkLock();
         checkNotNull(node);
         addChild(null, node);
     }
 
     @Override
     public synchronized void removeNode(T node) {
+        checkLock();
         String uri = uri(node);
-
         if (node.getLabelKey() instanceof StandardPageKey) {
             StandardPageKey pageKey = (StandardPageKey) node.getLabelKey();
             uriStandardPages.remove(uri);
@@ -213,7 +221,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * all is found
      *
      * @param uri
-     *
      * @return
      */
     @Override
@@ -227,7 +234,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * no match at all is found
      *
      * @param navigationState
-     *
      * @return
      */
     @Override
@@ -251,8 +257,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
         //parent child relationships
         for (Map.Entry<String, StandardPageKey> entry : uriStandardPages.entrySet()) {
 
-            if (entry.getValue()
-                     .equals(pageKey)) {
+            if (entry.getValue() == pageKey) {
                 return entry.getKey();
             }
         }
@@ -271,7 +276,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * Delegates to {@link BasicForest#getChildren(Object)}
      *
      * @param parentNode
-     *
      * @return
      */
     @Override
@@ -284,7 +288,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * Returns the {@link SitemapNode} associated with {@code uri}, or null if none found
      *
      * @param uri
-     *
      * @return
      */
     @Override
@@ -297,7 +300,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * Returns the {@link SitemapNode} associated with {@code navigationState}, or null if none found
      *
      * @param navigationState
-     *
      * @return
      */
     @Override
@@ -339,11 +341,11 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      *
      * @param fromPage
      * @param toPage
-     *
      * @return
      */
     @Override
     public synchronized Sitemap<T> addRedirect(String fromPage, String toPage) {
+        checkLock();
         redirects.put(fromPage, toPage);
         return this;
     }
@@ -371,7 +373,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * {@link Sitemap#nodeChainForSegments(List, boolean)} javadoc
      *
      * @param uri
-     *
      * @return
      */
     @Override
@@ -383,19 +384,15 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * returns a list of {@link SitemapNode} matching the virtual page of the {@code navigationState} provided. Uses
      * the {@link URIFragmentHandler} to get URI path segments and {@link Sitemap} to obtain the node chain.
      *
-     * @param navigationState
-     *         the navigation state to assess
-     * @param allowPartialPath
-     *         determines how a partial match is handled (see
-     *         {@link Sitemap#nodeChainForSegments(List, boolean)} javadoc
-     *
+     * @param navigationState  the navigation state to assess
+     * @param allowPartialPath determines how a partial match is handled (see
+     *                         {@link Sitemap#nodeChainForSegments(List, boolean)} javadoc
      * @return a list of {@link SitemapNode} matching the virtual page of the {@code navigationState} provided.
      */
     @Override
     public synchronized List<T> nodeChainFor(NavigationState navigationState, boolean allowPartialPath) {
         List<String> segments = navigationState.getPathSegments();
-        List<T> nodeChain = nodeChainForSegments(segments, allowPartialPath);
-        return nodeChain;
+        return nodeChainForSegments(segments, allowPartialPath);
     }
 
     /**
@@ -406,7 +403,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * <li>if {@code allowPartialPath} is false an empty list is returned
      *
      * @param segments
-     *
      * @return
      */
 
@@ -459,7 +455,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * includes {@code node}
      *
      * @param node
-     *
      * @return
      */
     @Override
@@ -478,7 +473,6 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * Returns the parent of {@code node}. Will be null if {@code node} has no parent (that is, it is a root node)
      *
      * @param childNode
-     *
      * @return
      */
     @Override
@@ -490,9 +484,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * If the virtual page represented by {@code navigationState} has been redirected, return the page it has been
      * redirected to, otherwise, just return the virtual page unchanged. Allows for multiple levels of redirect.
      *
-     * @param navigationState
-     *         the navigationState to assess
-     *
+     * @param navigationState the navigationState to assess
      * @return
      */
     @Override
@@ -506,12 +498,10 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * {@code page}. Allows for multiple levels of redirect
      *
      * @param page
-     *
      * @return
      */
     @Override
     public synchronized String getRedirectPageFor(String page) {
-
         String p = redirects.get(page);
         if (p == null) {
             return page;
@@ -535,6 +525,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      */
     @Override
     public synchronized void addChild(T parentNode, T childNode) {
+        checkLock();
         checkNotNull(childNode);
         // add the parent node if not already there
         if ((parentNode != null) && (!containsNode(parentNode))) {
@@ -565,12 +556,12 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
         checkNotNull(node);
         if (node.getLabelKey() instanceof StandardPageKey) {
             addStandardPage(node, uri(node));
-
         }
     }
 
     @Override
     public void addStandardPage(T node, String uri) {
+        checkLock();
         checkArgument(node.getLabelKey() instanceof StandardPageKey, "Key must be a Standard Page Key");
         StandardPageKey pageKey = (StandardPageKey) node.getLabelKey();
         standardPages.put(pageKey, node);
@@ -579,6 +570,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
 
     @Override
     public void clear() {
+        checkLock();
         forest.clear();
         standardPages.clear();
         uriMap.clear();
@@ -596,6 +588,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
 
     @Override
     public void setLoaded(boolean loaded) {
+        checkLock();
         this.loaded = loaded;
     }
 
@@ -625,6 +618,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * @param childNode
      */
     public void addOrReplaceChild(@Nullable T parentNode, @Nonnull T childNode) {
+        checkLock();
         checkNotNull(childNode);
         checkArgument(childNode.getId() > 0);
         checkNotNull(childNode.getUriSegment());
@@ -644,12 +638,11 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * removed {@link #standardPages}. If the {@code newInstance} is a standard page, it is added to {@link #standardPages}
      * if the node key is a {@link StandardPageKey}.  A standard page is identified by its labelKey being a {@code StandardPageKey}
      *
-     * @param oldInstance
-     *         the instance to be replaced
-     * @param newInstance
-     *         the instance to put in place
+     * @param oldInstance the instance to be replaced
+     * @param newInstance the instance to put in place
      */
     public void replaceNode(@Nonnull T oldInstance, @Nonnull T newInstance) {
+        checkLock();
         checkNotNull(oldInstance);
         checkNotNull(newInstance);
         forest.replaceNode(oldInstance, newInstance);
@@ -668,9 +661,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
      * login). Use the isxxxUri methods to test a uri for a match to a standard page
      *
-     * @param navigationState
-     *         the navigation state to test
-     *
+     * @param navigationState the navigation state to test
      * @return true if the navigation state represents the login uri
      */
     @Override
@@ -680,8 +671,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
     }
 
     private boolean isStandardUri(StandardPageKey key, NavigationState navigationState) {
-        T node = standardPageNode(key);
-        return key.equals(uriStandardPages.get(navigationState.getVirtualPage()));
+        return key == (uriStandardPages.get(navigationState.getVirtualPage()));
     }
 
     @Override
@@ -693,9 +683,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
      * login). Use the isxxxUri methods to test a uri for a match to a standard page
      *
-     * @param navigationState
-     *         the navigation state to test
-     *
+     * @param navigationState the navigation state to test
      * @return true if the navigation state represents the logout uri
      */
     @Override
@@ -707,9 +695,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
      * login). Use the isxxxUri methods to test a uri for a match to a standard page
      *
-     * @param navigationState
-     *         the navigation state to test
-     *
+     * @param navigationState the navigation state to test
      * @return true if the navigation state represents the private home uri
      */
     @Override
@@ -721,9 +707,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
      * login). Use the isxxxUri methods to test a uri for a match to a standard page
      *
-     * @param navigationState
-     *         the navigation state to test
-     *
+     * @param navigationState the navigation state to test
      * @return true if the navigation state represents the public home uri
      */
     @Override
@@ -733,5 +717,14 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
 
     public ImmutableMap<String, StandardPageKey> getStandardPageUris() {
         return ImmutableMap.copyOf(uriStandardPages);
+    }
+
+    /**
+     * @throws SitemapLockedException is {@link #locked} is true
+     */
+    protected void checkLock() {
+        if (locked) {
+            throw new SitemapLockedException("Sitemap is locked, available for read only");
+        }
     }
 }

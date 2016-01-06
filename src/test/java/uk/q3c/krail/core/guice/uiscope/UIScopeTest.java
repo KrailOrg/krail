@@ -32,7 +32,8 @@ import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
-import uk.q3c.krail.core.navigate.sitemap.*;
+import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
+import uk.q3c.krail.core.navigate.sitemap.SitemapService;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.ServicesModel;
@@ -111,7 +112,11 @@ public class UIScopeTest {
 
         // when
 
-        injector = Guice.createInjector(new PushModule(), new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(), new ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestI18NModule(), new DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new TestPersistenceModule(), new NavigationModule(), new EventBusModule(),
+        injector = Guice.createInjector(new PushModule(), new TestModule(), new ApplicationConfigurationModule(), new ViewModule(), new UIScopeModule(), new
+                        ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestI18NModule
+                (), new
+                        DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new
+                        TestPersistenceModule(), new NavigationModule(), new EventBusModule(),
                 new DataModule(), new DataTypeModule(), new UtilsModule());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
@@ -176,12 +181,6 @@ public class UIScopeTest {
         }
 
         @Override
-        public Sitemap<MasterSitemapNode> getSitemap() {
-
-            return mock(MasterSitemap.class);
-        }
-
-            @Override
         public I18NKey getNameKey() {
             return LabelKey.Sitemap_Service;
         }

@@ -12,6 +12,14 @@ Krail integrates [Apache Commons Configuration](https://commons.apache.org/prope
 
 More specifically, Krail captures configuration information in an instance of ```ApplicationConfiguration```, which allows a set of configuration values to override a previous set (when they have the same property names).  This is similar in principle to the way [options](tutorial-options.md) work.
 
+<div class="warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><code>ApplicationConfiguration</code> is a <b>@Singleton</b>, and therefore it should be threadsafe.  However, the work to make it so has not been done as version 2.0 of Apache Commons Configuration provides that facility - but has not yet been released.  At the time of writing this it was at 2.0-beta2, but not published to Maven central.  
+
+In the meantime, <code>ApplicationConfiguration</code> should be treated as read-only apart from the initial loading - or the developer will need to make their own arrangements for ensuring thread safety when updating values after loading</p>
+</div>
+
+
 #Example
 
 By default, Krail looks for a file krail.ini in WEB-INF:
@@ -66,7 +74,7 @@ addEntry("ini-config", IniConfigView.class, LabelKey.Ini_Config, PageAccessContr
 
 #More layers
 
-When an application uses comprises multiple libraries, there may be occasions when mutliple sets of configuration are required. You can add as many configuration files as you require.   
+When an application uses comprises multiple libraries, there may be occasions when multiple sets of configuration are required. You can add as many configuration files as you require.   
 
 ##Adding another ini file
 

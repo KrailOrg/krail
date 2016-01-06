@@ -30,6 +30,7 @@ import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.NavigationModule;
 import uk.q3c.krail.core.navigate.sitemap.DefaultSitemapServiceTest.TestDirectSitemapModule;
+import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 import uk.q3c.krail.core.services.Service;
 import uk.q3c.krail.core.services.ServiceStatus;
 import uk.q3c.krail.core.services.ServicesModel;
@@ -82,7 +83,7 @@ public class DefaultSitemapServiceTest {
     @Inject
     ServicesModel servicesModel;
     @Inject
-    MasterSitemap sitemap;
+    MasterSitemapQueue masterSitemapQueue;
     HierarchicalINIConfiguration iniConfig;
 
     @BeforeClass
@@ -139,7 +140,8 @@ public class DefaultSitemapServiceTest {
         // then
         assertThat(service.getReport()).isNotNull();
         assertThat(service.isStarted()).isTrue();
-        assertThat(sitemap.getNodeCount()).isEqualTo(13);
+        assertThat(masterSitemapQueue.getCurrentModel()
+                                     .getNodeCount()).isEqualTo(13);
         assertThat(service.getSourceTypes()).containsOnly();
     }
 
@@ -162,7 +164,8 @@ public class DefaultSitemapServiceTest {
         // then
         assertThat(service.getReport()).isNotNull();
         assertThat(service.isStarted()).isTrue();
-        assertThat(sitemap.getNodeCount()).isEqualTo(13);
+        assertThat(masterSitemapQueue.getCurrentModel()
+                                     .getNodeCount()).isEqualTo(13);
         assertThat(service.getSourceTypes()).containsOnly();
     }
 
@@ -182,7 +185,8 @@ public class DefaultSitemapServiceTest {
         // then
         assertThat(service.getReport()).isNotNull();
         assertThat(service.isStarted()).isTrue();
-        assertThat(sitemap.getNodeCount()).isEqualTo(7);
+        assertThat(masterSitemapQueue.getCurrentModel()
+                                     .getNodeCount()).isEqualTo(7);
     }
 
     @Test
@@ -197,18 +201,7 @@ public class DefaultSitemapServiceTest {
 
     }
 
-    @Test
-    public void absolutePathFor() {
-
-        // given
-
-        // when
-
-        // then
-
-        assertThat(service.absolutePathFor("wiggly.ini")).isEqualTo(new File(resourceUtils.applicationBaseDirectory(), "wiggly.ini"));
-        assertThat(service.absolutePathFor("/wiggly.ini")).isEqualTo(new File("/wiggly.ini"));
-    }
+//
 
     public void invalidSource_noGoodOnes() throws Exception {
 

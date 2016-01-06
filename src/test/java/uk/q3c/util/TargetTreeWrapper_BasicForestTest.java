@@ -1,14 +1,14 @@
 /*
- * Copyright (c) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.util;
@@ -16,8 +16,11 @@ package uk.q3c.util;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Comparator;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TargetTreeWrapper_BasicForestTest {
@@ -108,7 +111,8 @@ public class TargetTreeWrapper_BasicForestTest {
     static class TestNodeModifier implements NodeModifier<SourceTestNode, TargetTestNode> {
 
         @Override
-        public TargetTestNode create(TargetTestNode parentNode, SourceTestNode sourceNode) {
+        public TargetTestNode create(TargetTestNode parentNode, @Nonnull SourceTestNode sourceNode) {
+            checkNotNull(sourceNode);
             TargetTestNode newNode = new TargetTestNode(sourceNode.name);
             newNode.sourceNode = sourceNode;
             return newNode;
@@ -120,23 +124,24 @@ public class TargetTreeWrapper_BasicForestTest {
         }
 
         @Override
-        public SourceTestNode sourceNodeFor(TargetTestNode targetNode) {
+        public SourceTestNode sourceNodeFor(@Nonnull TargetTestNode targetNode) {
+            checkNotNull(targetNode);
             return targetNode.sourceNode;
         }
 
         @Override
-        public void setLeaf(TargetTestNode targetNode, boolean isLeaf) {
+        public void setLeaf(@Nonnull TargetTestNode targetNode, boolean isLeaf) {
             // do nothing
 
         }
 
         @Override
-        public void setCaption(TargetTestNode targetNode, String caption) {
+        public void setCaption(@Nonnull TargetTestNode targetNode, String caption) {
             targetNode.name = caption;
         }
 
         @Override
-        public void sortChildren(TargetTestNode parentNode, Comparator<TargetTestNode> comparator) {
+        public void sortChildren(@Nullable TargetTestNode parentNode, @Nonnull Comparator<TargetTestNode> comparator) {
 
         }
 

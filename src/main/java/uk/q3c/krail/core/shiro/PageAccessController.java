@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.shiro;
 
@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
+import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,23 +32,25 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author David Sowerby
  */
-public class PageAccessController {
+public class PageAccessController implements Serializable {
     private static Logger log = LoggerFactory.getLogger(PageAccessController.class);
-    private final MasterSitemap sitemap;
+    private final MasterSitemapQueue sitemapQueue;
 
     @Inject
-    protected PageAccessController(MasterSitemap sitemap) {
+    protected PageAccessController(MasterSitemapQueue sitemapQueue) {
         super();
-        this.sitemap = sitemap;
+        this.sitemapQueue = sitemapQueue;
     }
 
-    public boolean isAuthorised(Subject subject, UserSitemapNode userNode) {
-        return isAuthorised(subject, userNode.getMasterNode());
+    public boolean isAuthorised(Subject subject, MasterSitemap sitemap, UserSitemapNode userNode) {
+        return isAuthorised(subject, sitemap, userNode.getMasterNode());
     }
 
-    public boolean isAuthorised(Subject subject, MasterSitemapNode masterNode) {
+    public boolean isAuthorised(Subject subject, MasterSitemap sitemap, MasterSitemapNode masterNode) {
         checkNotNull(masterNode, "node");
         checkNotNull(subject, "subject");
+        //get reference early and keep it use provider directly - the sitemap instance could change
+
         String virtualPage = sitemap.navigationState(masterNode)
                                     .getVirtualPage();
         checkNotNull(virtualPage, "virtualPage");
@@ -69,7 +73,7 @@ public class PageAccessController {
         return false;
     }
 
-    public List<MasterSitemapNode> authorisedChildNodes(Subject subject, MasterSitemapNode parentNode) {
+    public List<MasterSitemapNode> authorisedChildNodes(Subject subject, MasterSitemap sitemap, MasterSitemapNode parentNode) {
         checkNotNull(subject);
         if (parentNode == null) {
             return new ArrayList<>();
@@ -77,7 +81,7 @@ public class PageAccessController {
         List<MasterSitemapNode> subnodes = sitemap.getChildren(parentNode);
         ArrayList<MasterSitemapNode> authorisedSubNodes = new ArrayList<MasterSitemapNode>();
         for (MasterSitemapNode node : subnodes) {
-            if (isAuthorised(subject, node)) {
+            if (isAuthorised(subject, sitemap, node)) {
                 authorisedSubNodes.add(node);
             }
         }

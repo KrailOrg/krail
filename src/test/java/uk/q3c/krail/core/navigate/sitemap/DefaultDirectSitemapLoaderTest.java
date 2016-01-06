@@ -65,13 +65,14 @@ public class DefaultDirectSitemapLoaderTest {
     @Inject
     MasterSitemap sitemap;
 
+
     @Test
     public void load() {
 
         // given
 
         // when
-        boolean result = loader.load();
+        boolean result = loader.load(sitemap);
         // then
 
         assertThat(sitemap.getNodeCount()).isEqualTo(5);

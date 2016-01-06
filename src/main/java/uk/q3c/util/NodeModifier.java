@@ -1,19 +1,22 @@
 /*
- * Copyright (C) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.util;
 
 import com.vaadin.ui.MenuBar.MenuItem;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -22,10 +25,9 @@ import java.util.Comparator;
  * @param <S>
  * @param <T>
  *
- * @author David Sowerby
- * @date 27 May 2014
+ * @author David Sowerby 27 May 2014
  */
-public interface NodeModifier<S, T> {
+public interface NodeModifier<S, T> extends Serializable {
 
     /**
      * Create a target node from a source node. May return null if creating the target node is invalid in some
@@ -35,60 +37,55 @@ public interface NodeModifier<S, T> {
      * If you have a choice, it is usually better not to attach a new child to its parent during create, as it allows
      * target nodes to be sorted before being attached to the parent. <br>
      * <br>
-     * The return value for {@link #attachOnCreate()} must return true if a node is attached to its parent during
-     * create.
+     *  {@link #attachOnCreate()} must return true if a node is to be attached to its parent during create.
      *
-     * @param source
+     * @param sourceNode the node to copy from
      *
-     * @return
+     * @return the newly created target node
      */
-    T create(T parentNode, S sourceNode);
+    T create(@Nullable T parentNode, @Nonnull S sourceNode);
 
     /**
      * Return true if a node is attached to its parent on create, otherwise false. If true, consider whether the
-     * {@link TreeCopy#setSortOption()} should sort the source nodes, or sort after adding the target nodes - it will
+     * {@link TreeCopy#setSortOption(TreeCopy.SortOption)} SortOption()} should sort the source nodes, or sort after adding the target nodes - it will
      * not be possible to sort the target nodes before they are added.
      *
-     * @return
+     * @return true if a node is attached to its parent on create, otherwise false.
      */
     boolean attachOnCreate();
 
     /**
-     * Returns a source node given a target node. The easiest way to implement this is to have the target node contain
-     * a
-     * reference to its source node. If the target node is the same as the source node, simply return {@code
-     * targetNode}
+     * Returns a source node given a target node. The easiest way to implement this is to have the target node contain a reference to its source node. If the
+     * target node is the same as the source node, simply return {@code targetNode}
      *
-     * @param target
+     * @param targetNode the targetNode to identify the source node from
      *
-     * @return
+     * @return a source node given a target node
      */
 
-    S sourceNodeFor(T targetNode);
+    S sourceNodeFor(@Nonnull T targetNode);
 
     /**
      * Some implementations need to mark a node as a leaf. If not needed, implement as an empty method
      *
-     * @param Target
+     * @param targetNode the target node to mark
      */
-    void setLeaf(T targetNode, boolean isLeaf);
+    void setLeaf(@Nonnull T targetNode, boolean isLeaf);
 
     /**
-     * Some implementations, usually in the user interface, require a caption or label. If not required, implement as
-     * an
-     * empty method
+     * Some implementations, usually in the user interface, require a caption or label. If not required, implement as an empty method
      *
-     * @param targetNode
-     * @param caption
+     * @param targetNode the target node
+     * @param caption the caption to set in the target node
      */
-    void setCaption(T targetNode, String caption);
+    void setCaption(@Nonnull T targetNode, @Nullable String caption);
 
     /**
-     * Sort the children of the {@code targetNode} using {@code comparator}
+     * Sort the children of the {@code parentNode} using {@code comparator}
      *
-     * @param parentNode
-     * @param comparator
+     * @param parentNode the parent whose children are to be sorted
+     * @param comparator the comparator to use for the sort
      */
-    void sortChildren(T parentNode, Comparator<T> comparator);
+    void sortChildren(@Nullable T parentNode, @Nonnull Comparator<T> comparator);
 
 }

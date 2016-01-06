@@ -11,28 +11,22 @@
  *
  */
 
-package uk.q3c.krail.core.eventbus;
+package uk.q3c.krail.core.navigate.sitemap.set;
 
 import com.google.inject.Inject;
-import net.engio.mbassy.bus.common.PubSubSupport;
+import com.google.inject.Singleton;
+import uk.q3c.krail.core.config.ApplicationConfiguration;
+import uk.q3c.krail.core.eventbus.GlobalBusProvider;
+import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 
-
-public class DefaultUIBusProvider implements UIBusProvider {
-
-    private PubSubSupport<BusMessage> uiBus;
+/**
+ * Created by David Sowerby on 05 Jan 2016
+ */
+@Singleton
+public class DefaultMasterSitemapQueue extends DefaultSitemapQueue<MasterSitemap> implements MasterSitemapQueue {
 
     @Inject
-    protected DefaultUIBusProvider(@UIBus PubSubSupport<BusMessage> uiBus) {
-        this.uiBus = uiBus;
-    }
-
-    @Override
-    public PubSubSupport<BusMessage> getUIBus() {
-        return uiBus;
-    }
-
-    @Override
-    public PubSubSupport<BusMessage> get() {
-        return uiBus;
+    protected DefaultMasterSitemapQueue(GlobalBusProvider globalBusProvider, ApplicationConfiguration applicationConfiguration) {
+        super(globalBusProvider, applicationConfiguration);
     }
 }

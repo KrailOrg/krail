@@ -11,20 +11,12 @@
  *
  */
 
-package uk.q3c.krail.core.eventbus;
+package uk.q3c.krail.core.navigate.sitemap.set;
 
-import net.engio.mbassy.bus.common.PubSubSupport;
+import uk.q3c.krail.core.eventbus.BusMessage;
 
 /**
- * Equivalent to injecting PubSubSupport with @GlobalBus annotation.  Used to prevent accidental overloading with wrong
- * bus.
- * <p>
- * Created by David Sowerby on 17/11/15.
+ * Created by David Sowerby on 06 Jan 2016
  */
-public interface GlobalBusProvider extends BusProvider {
-    /**
-     * Use {@link #get()} instead
-     */
-    @Deprecated
-    PubSubSupport<BusMessage> getGlobalBus();
+public class SitemapChangedMessage implements BusMessage {
 }

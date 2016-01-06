@@ -12,9 +12,6 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderErrorEntry;
-import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderInfoEntry;
-import uk.q3c.krail.core.navigate.sitemap.SitemapLoader.LoaderWarningEntry;
 import uk.q3c.util.ClassNameUtils;
 import uk.q3c.util.MessageFormat;
 
@@ -23,7 +20,6 @@ import java.util.Map;
 
 public class LoaderReportBuilder {
 
-    private final int width = 80;
 
     private final List<SitemapLoader> loaders;
     private final StringBuilder report;
@@ -38,10 +34,11 @@ public class LoaderReportBuilder {
     }
 
     private void buildReport() {
+        final int width = 80;
 
-        fillWidth('~');
-        fillWidth(' ', "Sitemap Report");
-        fillWidth('~');
+        fillWidth(width, '~');
+        fillWidth(width, ' ', "Sitemap Report");
+        fillWidth(width, '~');
 
         // get the summary scores
         int errors = 0;
@@ -53,81 +50,53 @@ public class LoaderReportBuilder {
             infos += loader.getInfoCount();
         }
         summary(errors, warnings, infos);
-        report.append("\n");
+        report.append('\n');
         if (errors + warnings + infos == 0) {
-            fillWidth('-');
-            report.append("\n");
-            fillWidth(' ', "Complete success - absolutely nothing to report");
-            report.append("\n");
+            fillWidth(width, '-');
+            report.append('\n');
+            fillWidth(width, ' ', "Complete success - absolutely nothing to report");
+            report.append('\n');
         } else {
 
             for (SitemapLoader loader : loaders) {
                 String loaderName = classNameUtils.simpleClassNameEnhanceRemoved(loader.getClass());
-                fillWidth('=', loaderName);
+                fillWidth(width, '=', loaderName);
                 summary(loader.getErrorCount(), loader.getWarningCount(), loader.getInfoCount());
 
-                report.append("\n");
-                fillWidth('-', "errors");
-                Map<String, List<LoaderErrorEntry>> errorMap = loader.getErrors();
-                for (String source : errorMap.keySet()) {
-                    List<LoaderErrorEntry> errorList = errorMap.get(source);
-                    if (errorList.size() > 0) {
-                        report.append("Source: ");
-                        report.append(source);
-                        report.append("\n");
-
-                        for (LoaderErrorEntry lee : errorList) {
-                            String msg = MessageFormat.format(lee.msgPattern, lee.msgParams);
-                            report.append("\t");
-                            report.append(msg);
-                            report.append("\n");
-                        }
-                    }
-                }
-                report.append("\n");
-                fillWidth('-', "warnings");
-                Map<String, List<LoaderWarningEntry>> warningMap = loader.getWarnings();
-                for (String source : warningMap.keySet()) {
-                    List<LoaderWarningEntry> warningList = warningMap.get(source);
-                    if (warningList.size() > 0) {
-                        report.append("Source: ");
-                        report.append(source);
-                        report.append("\n");
-
-                        for (LoaderWarningEntry lee : warningList) {
-                            String msg = MessageFormat.format(lee.msgPattern, lee.msgParams);
-                            report.append("\t");
-                            report.append(msg);
-                            report.append("\n");
-                        }
-                    }
-                }
-                report.append("\n");
-                fillWidth('-', "infos");
-                Map<String, List<LoaderInfoEntry>> infoMap = loader.getInfos();
-                for (String source : infoMap.keySet()) {
-                    List<LoaderInfoEntry> infoList = infoMap.get(source);
-                    if (infoList.size() > 0) {
-                        report.append("Source: ");
-                        report.append(source);
-                        report.append("\n");
-
-                        for (LoaderInfoEntry lee : infoList) {
-                            String msg = MessageFormat.format(lee.msgPattern, lee.msgParams);
-                            report.append("\t");
-                            report.append(msg);
-                            report.append("\n");
-                        }
-                    }
-                }
-
+                report.append('\n');
+                fillWidth(width, '-', "errors");
+                logBlock(loader.getErrors());
+                report.append('\n');
+                fillWidth(width, '-', "warnings");
+                logBlock(loader.getWarnings());
+                report.append('\n');
+                fillWidth(width, '-', "infos");
+                logBlock(loader.getInfos());
                 report.append("\n\n");
             }
         }
 
-        fillWidth('~');
-        fillWidth(' ', "End of Sitemap Report");
-        fillWidth('~');
+        fillWidth(width, '~');
+        fillWidth(width, ' ', "End of Sitemap Report");
+        fillWidth(width, '~');
+    }
+
+    private void logBlock(Map<String, List<SitemapLoader.LogEntry>> entryMap) {
+        for (Map.Entry<String, List<SitemapLoader.LogEntry>> source : entryMap.entrySet()) {
+            if (!source.getValue()
+                       .isEmpty()) {
+                report.append("Source: ");
+                report.append(source.getKey());
+                report.append('\n');
+
+                for (SitemapLoader.LogEntry lee : source.getValue()) {
+                    String msg = MessageFormat.format(lee.msgPattern, lee.msgParams);
+                    report.append('\t');
+                    report.append(msg);
+                    report.append('\n');
+                }
+            }
+        }
     }
 
     private void summary(int errors, int warnings, int infos) {
@@ -138,21 +107,22 @@ public class LoaderReportBuilder {
         report.append(warnings);
         report.append("\n\tinfos :\t");
         report.append(infos);
-        report.append("\n");
+        report.append('\n');
     }
 
-    private void fillWidth(char c) {
+    private void fillWidth(int width, char c) {
+
         for (int i = 0; i < width; i++) {
             report.append(c);
         }
-        report.append("\n");
+        report.append('\n');
     }
 
-    private void fillWidth(char c, String label) {
+    private void fillWidth(int width, char c, String label) {
         for (int i = 0; i < width; i++) {
             report.append(c);
         }
-        String label2 = " " + label + " ";
+        String label2 = ' ' + label + ' ';
         int labelWidth = label2.length();
         int midPoint = report.length() - (width / 2) - 1;
         int labelStart = midPoint - (labelWidth / 2);
@@ -161,17 +131,19 @@ public class LoaderReportBuilder {
             report.setCharAt(i, label2.charAt(j));
             i++;
         }
-        report.append("\n");
+        report.append('\n');
     }
 
     public LoaderReportBuilder startSection(int level, String sectionName) {
-        report.append("\n");
+        report.append('\n');
         switch (level) {
             case 0:
                 report.append(" ==== ");
                 report.append(sectionName);
                 report.append("==== \n\n");
                 break;
+            default:
+                report.append("==== \n\n");
         }
 
         return this;

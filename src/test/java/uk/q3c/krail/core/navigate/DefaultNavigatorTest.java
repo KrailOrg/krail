@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.navigate;
@@ -35,6 +37,8 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.*;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.navigate.sitemap.*;
+import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
+import uk.q3c.krail.core.services.ServicesModule;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.PagePermission;
@@ -49,6 +53,7 @@ import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.MessageKey;
 import uk.q3c.krail.testutil.*;
+import uk.q3c.krail.util.UtilsModule;
 
 import java.util.*;
 
@@ -59,7 +64,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class,
-        TestUIScopeModule.class})
+        TestUIScopeModule.class, SitemapModule.class, ServicesModule.class, UtilsModule.class})
 public class DefaultNavigatorTest {
 
     @Mock
@@ -77,6 +82,10 @@ public class DefaultNavigatorTest {
     @Mock
     UserNotifier userNotifier;
     InvalidURIHandler invalidURIHandler;
+    @Mock
+    MasterSitemapQueue masterSitemapQueue;
+    @Inject
+    MasterSitemap masterSitemap;
     @Mock
     private Page browserPage;
     @Mock
@@ -136,6 +145,7 @@ public class DefaultNavigatorTest {
         when(errorViewProvider.get()).thenReturn(errorView);
         when(subjectProvider.get()).thenReturn(subject);
         when(userSitemapProvider.get()).thenReturn(userSitemap);
+        when(masterSitemapQueue.getCurrentModel()).thenReturn(masterSitemap);
         invalidURIHandler = new DefaultInvalidURIHandler(userNotifier);
 
 
@@ -160,7 +170,7 @@ public class DefaultNavigatorTest {
 
     private DefaultNavigator createNavigator() {
         navigator = new DefaultNavigator(uriHandler, sitemapService, subjectProvider, pageAccessController, uiProvider, viewFactory, builder,
-                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule, invalidURIHandler);
+                loginNavigationRule, logoutNavigationRule, eventBusProvider, defaultViewChangeRule, invalidURIHandler, masterSitemapQueue);
         navigator.init();
         return navigator;
     }

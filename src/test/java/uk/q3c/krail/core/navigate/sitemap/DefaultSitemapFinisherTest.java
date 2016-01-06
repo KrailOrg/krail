@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
@@ -28,7 +28,6 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.i18n.TestLabelKey;
-import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.TestI18NModule;
 import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.krail.testutil.TestPersistenceModule;
@@ -40,8 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         .class})
 public class DefaultSitemapFinisherTest {
 
-    String uriNodeNoClass = "node/noclass";
-    String uriNodeNoKey = "node/nokey";
+
 
     String uripublic_Node1 = "public/node1";
     String uripublic_Node11 = "public/node1/1";
@@ -50,16 +48,12 @@ public class DefaultSitemapFinisherTest {
     DefaultSitemapFinisher checker;
 
     @Inject
-    Translate translate;
-
-    @Inject
     DefaultMasterSitemap sitemap;
 
     private MasterSitemapNode baseNode;
-    private MasterSitemapNode node1;
-    private MasterSitemapNode node11;
     private MasterSitemapNode nodeNoClass;
     private MasterSitemapNode nodeNoKey;
+
 
     @Test(expected = SitemapException.class)
     public void checkOnly() {
@@ -67,7 +61,7 @@ public class DefaultSitemapFinisherTest {
         // given
         buildSitemap(0);
         // when
-        checker.check();
+        checker.check(sitemap);
         // then
 
     }
@@ -75,7 +69,7 @@ public class DefaultSitemapFinisherTest {
     /**
      * the root node "node" will have nothing set except the segment
      *
-     * @param index
+     * @param index which build to use
      */
     private void buildSitemap(int index) {
         switch (index) {
@@ -100,18 +94,18 @@ public class DefaultSitemapFinisherTest {
                 nr.setViewClass(ViewA1.class);
                 nr.setPageAccessControl(PageAccessControl.PERMISSION);
                 sitemap.addRedirect("public", uripublic_Node1);
-                node1 = sitemap.append(nr);
+                sitemap.append(nr);
             case 2:
                 nr = new NodeRecord(uripublic_Node1);
                 nr.setLabelKey(TestLabelKey.No);
                 nr.setViewClass(ViewA1.class);
-                node1 = sitemap.append(nr);
+                sitemap.append(nr);
 
                 nr = new NodeRecord(uripublic_Node11);
                 nr.setLabelKey(TestLabelKey.No);
                 nr.setViewClass(ViewA1.class);
                 nr.setPageAccessControl(PageAccessControl.PERMISSION);
-                node11 = sitemap.append(nr);
+                sitemap.append(nr);
 
                 sitemap.addRedirect("public", uripublic_Node1);
                 sitemap.addRedirect(uripublic_Node1, uripublic_Node11);
@@ -126,7 +120,7 @@ public class DefaultSitemapFinisherTest {
         // when
         String report = null;
         try {
-            checker.check();
+            checker.check(sitemap);
         } catch (SitemapException se) {
             report = checker.getReport()
                             .toString();
@@ -146,7 +140,7 @@ public class DefaultSitemapFinisherTest {
         buildSitemap(0);
         // when
         checker.replaceMissingViewWith(ViewA.class)
-               .check();
+               .check(sitemap);
         // then
 
     }
@@ -158,7 +152,7 @@ public class DefaultSitemapFinisherTest {
         buildSitemap(0);
         // when
         checker.replaceMissingKeyWith(TestLabelKey.Home)
-               .check();
+               .check(sitemap);
         // then
 
     }
@@ -171,7 +165,7 @@ public class DefaultSitemapFinisherTest {
         // when
         checker.replaceMissingViewWith(ViewA.class)
                .replaceMissingKeyWith(TestLabelKey.Home)
-               .check();
+               .check(sitemap);
         // then
         assertThat(checker.getMissingLabelKeys()).isEmpty();
         assertThat(checker.getMissingViewClasses()).isEmpty();
@@ -196,7 +190,7 @@ public class DefaultSitemapFinisherTest {
         sitemap.addRedirect("p/2", "p/1");
 
         // when
-        checker.check();
+        checker.check(sitemap);
         // then
 
     }
@@ -214,7 +208,7 @@ public class DefaultSitemapFinisherTest {
         sitemap.addRedirect("a/2", "a/1");
 
         // when
-        checker.check();
+        checker.check(sitemap);
         // then
 
     }
@@ -231,7 +225,7 @@ public class DefaultSitemapFinisherTest {
         sitemap.addRedirect("p/3", "p/2");
 
         // when
-        checker.check();
+        checker.check(sitemap);
         // then
 
     }

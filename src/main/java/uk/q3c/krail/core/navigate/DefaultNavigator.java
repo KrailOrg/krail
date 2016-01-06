@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.navigate;
 
@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.server.Page;
 import com.vaadin.server.Page.UriFragmentChangedEvent;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
@@ -28,6 +29,7 @@ import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.navigate.sitemap.*;
+import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.shiro.UnauthorizedExceptionHandler;
@@ -77,6 +79,8 @@ public class DefaultNavigator implements Navigator {
     private final LoginNavigationRule loginNavigationRule;
     private final LogoutNavigationRule logoutNavigationRule;
     private final InvalidURIHandler invalidURIHandler;
+    private MasterSitemapQueue masterSitemapQueue;
+    private MasterSitemap masterSitemap;
     private NavigationState currentNavigationState;
     private KrailView currentView = null;
     private PubSubSupport<BusMessage> eventBus;
@@ -88,7 +92,7 @@ public class DefaultNavigator implements Navigator {
     public DefaultNavigator(URIFragmentHandler uriHandler, SitemapService sitemapService, SubjectProvider subjectProvider, PageAccessController
             pageAccessController, ScopedUIProvider uiProvider, DefaultViewFactory viewFactory, UserSitemapBuilder userSitemapBuilder, LoginNavigationRule
                                     loginNavigationRule, LogoutNavigationRule logoutNavigationRule, UIBusProvider eventBusProvider, ViewChangeRule
-                                    viewChangeRule, InvalidURIHandler invalidURIHandler) {
+                                    viewChangeRule, InvalidURIHandler invalidURIHandler, MasterSitemapQueue masterSitemapQueue) {
         super();
         this.uriHandler = uriHandler;
         this.uiProvider = uiProvider;
@@ -101,15 +105,22 @@ public class DefaultNavigator implements Navigator {
         this.loginNavigationRule = loginNavigationRule;
         this.logoutNavigationRule = logoutNavigationRule;
         this.invalidURIHandler = invalidURIHandler;
+        this.masterSitemapQueue = masterSitemapQueue;
 
-        this.eventBus = eventBusProvider.getUIBus();
+        this.eventBus = eventBusProvider.get();
         this.viewChangeRule = viewChangeRule;
+
+
     }
 
+    @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CHECKED")
     @Override
     public void init() {
         try {
             sitemapService.start();
+            //take a reference and keep it in case current model changes
+            this.masterSitemap = masterSitemapQueue.getCurrentModel();
+            userSitemapBuilder.setMasterSitemap(masterSitemap);
             userSitemapBuilder.build();
             userSitemap = userSitemapBuilder.getUserSitemap();
 
@@ -192,7 +203,7 @@ public class DefaultNavigator implements Navigator {
         }
 
         Subject subject = subjectProvider.get();
-        boolean authorised = pageAccessController.isAuthorised(subject, node);
+        boolean authorised = pageAccessController.isAuthorised(subject, masterSitemap, node);
         if (authorised) {
 
             // need this in case the change is blocked by a listener
@@ -230,23 +241,19 @@ public class DefaultNavigator implements Navigator {
 
     /**
      * Checks {@code navigationState} to see whether the {@link Sitemap} defines this as a page which should be
-     * redirected. If it is, a {@link NavigationState} is returned, modified for the redirected page. If no
+     * redirected. If it is,  {@code navigationState} is modified, modified for the redirected page. If no
      * redirection is required, the {@code navigationState} is returned unchanged.
      *
      * @param navigationState the proposed navigation state before considering redirection
-     * @return navigationState reflecting the correct navigation state after considering a possible redirection
      */
-    private NavigationState redirectIfNeeded(NavigationState navigationState) {
+    private void redirectIfNeeded(NavigationState navigationState) {
 
         String page = navigationState.getVirtualPage();
         String redirection = userSitemap.getRedirectPageFor(page);
-        // if no redirect found, page is returned
-        if (redirection.equals(page)) {
-            return navigationState;
-        } else {
+        // if no redirect found, do nothing
+        if (!redirection.equals(page)) {
             navigationState.setVirtualPage(redirection);
             navigationState.setFragment(uriHandler.fragment(navigationState));
-            return navigationState;
         }
     }
 

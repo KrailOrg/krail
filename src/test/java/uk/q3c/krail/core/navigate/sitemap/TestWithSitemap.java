@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
@@ -79,7 +79,12 @@ public abstract class TestWithSitemap {
     Locale locale = Locale.UK;
     Collator collator;
 
+//    @Inject
+//    MasterSitemapQueue masterSitemapQueue;
+
+
     int id;
+
 
     @Before
     public void setup() {
@@ -188,6 +193,8 @@ public abstract class TestWithSitemap {
                 break;
 
         }
+        masterSitemap.lock();
+//        masterSitemapQueue.addModel(masterSitemap);
 
     }
 
@@ -218,9 +225,10 @@ public abstract class TestWithSitemap {
     protected void createUserSitemap() {
         userSitemap = new DefaultUserSitemap(translate, uriHandler, sessionBusProvider);
         UserSitemapNodeModifier nodeModifier = new UserSitemapNodeModifier(subjectProvider, currentLocale,
-                masterSitemap, pageAccessController, translate);
-        UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(masterSitemap, userSitemap, translate, currentLocale);
-        userSitemapBuilder = new UserSitemapBuilder(masterSitemap, userSitemap, nodeModifier, copyExtension, subjectProvider);
+                pageAccessController, translate);
+        UserSitemapCopyExtension copyExtension = new UserSitemapCopyExtension(userSitemap, translate, currentLocale);
+        userSitemapBuilder = new UserSitemapBuilder(userSitemap, nodeModifier, copyExtension, subjectProvider);
+        userSitemapBuilder.setMasterSitemap(masterSitemap);
         userSitemapBuilder.build();
 
         userNode1 = userSitemap.userNodeFor(masterNode1);

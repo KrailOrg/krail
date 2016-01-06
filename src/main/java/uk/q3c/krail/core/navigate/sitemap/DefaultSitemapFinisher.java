@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
@@ -23,10 +23,13 @@ import uk.q3c.util.CycleDetectedException;
 import uk.q3c.util.DynamicDAG;
 import uk.q3c.util.MessageFormat;
 
+import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Checks the Sitemap for inconsistencies after it has been loaded. The following are considered:
@@ -51,36 +54,26 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
     private I18NKey defaultKey;
     private Class<? extends KrailView> defaultView;
     private StringBuilder report;
-    private MasterSitemap sitemap;
     private Set<String> sourceModuleNames;
 
     @Inject
-    protected DefaultSitemapFinisher(MasterSitemap sitemap, CurrentLocale currentLocale) {
+    protected DefaultSitemapFinisher(CurrentLocale currentLocale) {
         super();
-        this.sitemap = sitemap;
         missingViewClasses = new HashSet<>();
         missingLabelKeys = new HashSet<>();
         missingPageAccessControl = new HashSet<>();
         redirectLoops = new HashSet<>();
     }
 
-    public MasterSitemap getSitemap() {
-        return sitemap;
-    }
 
-    public void setSitemap(MasterSitemap sitemap) {
-        this.sitemap = sitemap;
-    }
 
-    /**
-     * @see SitemapFinisher#check()
-     */
     @Override
-    public void check() {
-        // do this first, because a loop will cause the main check to fail
-        redirectCheck();
-        replaceMissingViews();
-        replaceMissingKeys();
+    public void check(@Nonnull MasterSitemap sitemap) {
+        checkNotNull(sitemap);
+        // do this first, because a redirection loop will cause the main check to fail
+        redirectCheck(sitemap);
+        replaceMissingViews(sitemap);
+        replaceMissingKeys(sitemap);
         for (MasterSitemapNode node : sitemap.getAllNodes()) {
             String nodeUri = sitemap.uri(node);
             log.debug("Checking {}", nodeUri);
@@ -130,7 +123,8 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
         report.append("Direct Modules\n\n");
         if (sourceModuleNames != null) {
             for (String s : sourceModuleNames) {
-                report.append(s + "\n");
+                report.append(s);
+                report.append('\n');
             }
         } else {
             report.append("No direct modules identified\n");
@@ -140,7 +134,8 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
         if (annotationSources != null) {
 
             for (String s : annotationSources) {
-                report.append(s + "\n");
+                report.append(s);
+                report.append('\n');
             }
         } else {
             report.append("No annotation sources identified\n");
@@ -150,21 +145,21 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
             report.append("------------ URIs with missing Views -----------\n");
             for (String view : missingViewClasses) {
                 report.append(view);
-                report.append("\n");
+                report.append('\n');
             }
         }
         if (!missingLabelKeys.isEmpty()) {
             report.append("--------- URIs with missing label keys -----------\n");
             for (String key : missingLabelKeys) {
                 report.append(key);
-                report.append("\n");
+                report.append('\n');
             }
         }
         if (!missingPageAccessControl.isEmpty()) {
             report.append("--------- URIs with missing page access control -----------\n");
             for (String key : missingPageAccessControl) {
                 report.append(key);
-                report.append("\n");
+                report.append('\n');
             }
         }
 
@@ -172,16 +167,16 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
             report.append("--------- redirect loops -----------\n");
             for (String key : redirectLoops) {
                 report.append(key);
-                report.append("\n");
+                report.append('\n');
             }
         }
 
-        log.info(report.toString());
+        log.info("{}", report.toString());
         // otherwise print a report and throw an exception
         throw new SitemapException("Sitemap check failed, see log for failed items");
     }
 
-    private void replaceMissingViews() {
+    private void replaceMissingViews(MasterSitemap sitemap) {
         //there's nothing to replace missing items with
         if (defaultView == null) {
             return;
@@ -194,7 +189,7 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
         }
     }
 
-    private void replaceMissingKeys() {
+    private void replaceMissingKeys(MasterSitemap sitemap) {
         //there's nothing to replace missing items with
         if (defaultKey == null) {
             return;
@@ -207,7 +202,7 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
         }
     }
 
-    private void redirectCheck() {
+    private void redirectCheck(MasterSitemap sitemap) {
         DynamicDAG<String> dag = new DynamicDAG<>();
         ImmutableMap<String, String> redirectMap = sitemap.getRedirects();
         for (Entry<String, String> entry : redirectMap.entrySet()) {
@@ -224,25 +219,28 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
     }
 
     @Override
-    public SitemapFinisher replaceMissingViewWith(Class<? extends KrailView> defaultView) {
+    public SitemapFinisher replaceMissingViewWith(@Nonnull Class<? extends KrailView> defaultView) {
+        checkNotNull(defaultView);
         this.defaultView = defaultView;
         return this;
     }
 
     @Override
-    public SitemapFinisher replaceMissingKeyWith(I18NKey defaultKey) {
-
+    public SitemapFinisher replaceMissingKeyWith(@Nonnull I18NKey defaultKey) {
+        checkNotNull(defaultKey);
         this.defaultKey = defaultKey;
         return this;
     }
 
     @Override
-    public void setSourceModuleNames(Set<String> names) {
+    public void setSourceModuleNames(@Nonnull Set<String> names) {
+        checkNotNull(names);
         this.sourceModuleNames = names;
     }
 
     @Override
-    public void setAnnotationSources(Set<String> sources) {
+    public void setAnnotationSources(@Nonnull Set<String> sources) {
+        checkNotNull(sources);
         this.annotationSources = sources;
     }
 
