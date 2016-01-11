@@ -1,3 +1,16 @@
+/*
+ *
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
+ *
+ */
+
 package uk.q3c.krail.core.services;
 
 import com.google.common.collect.ImmutableList;
@@ -8,6 +21,7 @@ import org.slf4j.Logger;
 import uk.q3c.util.CycleDetectedException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,6 +33,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * <p>
  * Created by David Sowerby on 03 Dec 2015
  */
+@ThreadSafe
 public abstract class AbstractServicesGraph<T> implements ServicesGraph<T> {
     private static final EnumMap<Selection, EnumSet<Dependency.Type>> selectionCriteria;
     private static Logger log = getLogger(AbstractServicesGraph.class);
@@ -41,7 +56,7 @@ public abstract class AbstractServicesGraph<T> implements ServicesGraph<T> {
      * @param referenceVertex  the vertex at the centre of the 'query'
      * @param wantDependencies if true, select dependency edges, otherwise select dependant edges
      * @param selection        the Dependency.Type(s) to include
-     * @return list of vertices at the opposite end of the edges from {@code referenceVertex}
+     * @return list of vertices at the opposite end of the edges from {@code referenceVertex}, or an empty list if there are no edges
      */
     private List<T> findRelations(T referenceVertex, boolean wantDependencies, Selection selection) {
 
@@ -57,7 +72,7 @@ public abstract class AbstractServicesGraph<T> implements ServicesGraph<T> {
 
 
     @Override
-    public List<T> findDependencies(@Nonnull T dependant, @Nonnull Selection selection) {
+    public synchronized List<T> findDependencies(@Nonnull T dependant, @Nonnull Selection selection) {
         checkNotNull(dependant);
         checkNotNull(selection);
         return findRelations(
@@ -65,7 +80,7 @@ public abstract class AbstractServicesGraph<T> implements ServicesGraph<T> {
     }
 
     @Override
-    public List<T> findDependants(@Nonnull T dependency, @Nonnull Selection selection) {
+    public synchronized List<T> findDependants(@Nonnull T dependency, @Nonnull Selection selection) {
         checkNotNull(dependency);
         checkNotNull(selection);
         return findRelations(dependency, false, selection);
@@ -83,7 +98,7 @@ public abstract class AbstractServicesGraph<T> implements ServicesGraph<T> {
     }
 
     @Override
-    public boolean addService(@Nonnull T service) {
+    public synchronized boolean addService(@Nonnull T service) {
         checkNotNull(service);
         log.debug("adding service");
         if (graph.containsVertex(service)) {
@@ -93,35 +108,42 @@ public abstract class AbstractServicesGraph<T> implements ServicesGraph<T> {
     }
 
     @Override
-    public boolean removeService(@Nonnull T service) {
+    public synchronized boolean removeService(@Nonnull T service) {
         checkNotNull(service);
         log.debug("removing service");
         return graph.removeVertex(service);
     }
 
     @Override
-    public boolean contains(T service) {
+    public synchronized boolean contains(@Nonnull T service) {
+        checkNotNull(service);
         return graph
                 .getVertices()
                 .contains(service);
     }
 
     @Override
-    public Optional<ServiceEdge> getEdge(T dependant, T dependency) {
+    public synchronized Optional<ServiceEdge> getEdge(@Nonnull T dependant, @Nonnull T dependency) {
+        checkNotNull(dependant);
+        checkNotNull(dependency);
         ServiceEdge result = graph.findEdge(dependant, dependency);
         return result == null ? Optional.empty() : Optional.of(result);
     }
 
     @Override
-    public void createDependency(@Nonnull T dependant, @Nonnull T dependency, @Nonnull Dependency.Type type) {
+    public synchronized void createDependency(@Nonnull T dependant, @Nonnull T dependency, @Nonnull Dependency.Type type) {
         checkNotNull(dependant);
         checkNotNull(dependency);
         checkNotNull(type);
         if (hasDependency(dependant, dependency)) {
-            throw new DuplicateDependencyException("There can only be one dependency between the two services");
+            throw new DuplicateDependencyException("There can only be one dependency between the same two services");
         }
-        graph.addVertex(dependant);
-        graph.addVertex(dependency);
+        if (!graph.containsVertex(dependant)) {
+            graph.addVertex(dependant);
+        }
+        if (!graph.containsVertex(dependency)) {
+            graph.addVertex(dependency);
+        }
         ServiceEdge edge = new ServiceEdge(type);
         graph.addEdge(edge, dependant, dependency);
         if (detectCycle(dependant, dependency)) {
@@ -130,19 +152,19 @@ public abstract class AbstractServicesGraph<T> implements ServicesGraph<T> {
     }
 
     @Override
-    public ImmutableList<T> getServices() {
+    public synchronized ImmutableList<T> getServices() {
         return ImmutableList.copyOf(graph.getVertices());
     }
 
     @Override
-    public boolean hasDependency(@Nonnull T dependant, @Nonnull T dependency) {
+    public synchronized boolean hasDependency(@Nonnull T dependant, @Nonnull T dependency) {
         checkNotNull(dependant);
         checkNotNull(dependency);
         return findDependencies(dependant, Selection.ALL).contains(dependency);
     }
 
     @Override
-    public boolean hasDependant(@Nonnull T dependency, @Nonnull T dependant) {
+    public synchronized boolean hasDependant(@Nonnull T dependency, @Nonnull T dependant) {
         checkNotNull(dependant);
         checkNotNull(dependency);
         return findDependants(dependency, Selection.ALL).contains(dependant);
@@ -178,12 +200,12 @@ public abstract class AbstractServicesGraph<T> implements ServicesGraph<T> {
     }
 
     @Override
-    public int size() {
+    public synchronized int size() {
         return graph.getVertexCount();
     }
 
     @Override
-    public boolean isOptionalDependency(@Nonnull T dependency, @Nonnull T dependant) {
+    public synchronized boolean isOptionalDependency(@Nonnull T dependency, @Nonnull T dependant) {
         checkNotNull(dependant);
         checkNotNull(dependency);
         List<T> optionalDependencies = findRelations(dependant, true, Selection.OPTIONAL);

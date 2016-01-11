@@ -10,27 +10,13 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
+package uk.q3c.krail.core.services;
 
-package uk.q3c.krail.core.services
-import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
+public class ServiceActionException extends RuntimeException {
 
-import static uk.q3c.krail.core.services.Service.State.STOPPED
+    public ServiceActionException(String message) {
+        super(message);
 
-@UnitTestFor(ServiceStatus)
-class ServiceStatusTest extends Specification {
-
-    Service service = Mock(Service)
-
-    def "construct"() {
-        given:
-
-        ServiceStatus status = new ServiceStatus(service, STOPPED, Service.Cause.FAILED)
-
-        expect:
-
-        status.getService() == service
-        status.getState() == STOPPED
-        status.getCause() == Service.Cause.FAILED
     }
+
 }

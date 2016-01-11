@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ *
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
+ *
  */
 package uk.q3c.krail.core.user.opt;
 
@@ -99,7 +99,8 @@ public class DefaultInMemoryOptionStore implements InMemoryOptionStore {
 
     @Nonnull
     @Override
-    public Map<String, Optional<?>> valueMapForOptionKey(@Nonnull String hierarchyName, @Nonnull List<String> rankNames, @Nonnull OptionKey optionKey) {
+    public synchronized Map<String, Optional<?>> valueMapForOptionKey(@Nonnull String hierarchyName, @Nonnull List<String> rankNames, @Nonnull OptionKey
+            optionKey) {
         checkNotNull(hierarchyName);
         checkNotNull(rankNames);
         checkNotNull(optionKey);
@@ -127,7 +128,7 @@ public class DefaultInMemoryOptionStore implements InMemoryOptionStore {
 
     @Nonnull
     @Override
-    public Optional<?> deleteValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey) {
+    public synchronized Optional<?> deleteValue(@Nonnull String hierarchyName, @Nonnull String rankName, @Nonnull OptionKey optionKey) {
         checkNotNull(hierarchyName);
         checkNotNull(rankName);
         checkNotNull(optionKey);
@@ -144,7 +145,7 @@ public class DefaultInMemoryOptionStore implements InMemoryOptionStore {
     }
 
 
-    public void clear() {
+    public synchronized void clear() {
         map.clear();
     }
 
@@ -152,7 +153,7 @@ public class DefaultInMemoryOptionStore implements InMemoryOptionStore {
      * {@inheritDoc}
      */
     @Override
-    public int size() {
+    public synchronized int size() {
         int c = 0;
         for (Map.Entry<String, Map<String, Map<String, Optional<?>>>> entry : map.entrySet()) {
             c = c + entry.getValue()
@@ -162,7 +163,7 @@ public class DefaultInMemoryOptionStore implements InMemoryOptionStore {
     }
 
     @Override
-    public List<OptionEntity> asEntities() {
+    public synchronized List<OptionEntity> asEntities() {
         List<OptionEntity> list = new ArrayList<>();
         for (Map.Entry<String, Map<String, Map<String, Optional<?>>>> hierarchyEntry : map.entrySet()) {
             String hierarchyName = hierarchyEntry.getKey();

@@ -1,19 +1,19 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.services;
 
 import uk.q3c.krail.i18n.I18NKey;
-
-import java.util.EnumSet;
 
 /**
  * Implement this interface to provide a Service. A Service is typically something which is wired up using Guice
@@ -43,37 +43,40 @@ import java.util.EnumSet;
  * of injection.
  * <li>If the dependency's constructor is lightweight as it should be, it should also be unnecessary to inject a Provider<Service>
  * </ol>
+ * Details of the lifecycle can be found at http://krail.readthedocs.org/en/master/devguide-services/
  *
  * @author David Sowerby
  */
 public interface Service {
 
     enum State {
-        INITIAL, STARTING, STARTED, FAILED, STOPPING, STOPPED, FAILED_TO_START, FAILED_TO_STOP, DEPENDENCY_STOPPED, DEPENDENCY_FAILED
+        INITIAL, STARTING, RUNNING, STOPPING, STOPPED, RESETTING, FAILED
     }
 
-    EnumSet<State> stoppedStates = EnumSet.complementOf(EnumSet.of(State.INITIAL, State.STARTING, State.STARTED));
-    EnumSet<State> stopReasons = EnumSet.of(State.STOPPED, State.DEPENDENCY_FAILED, State.DEPENDENCY_STOPPED, State.FAILED);
+    enum Cause {
+        FAILED, STOPPED, FAILED_TO_START, FAILED_TO_STOP, DEPENDENCY_STOPPED, STARTED, DEPENDENCY_FAILED, FAILED_TO_RESET, RESET
+    }
 
 
     /**
      * You will only need to implement this if you are not using a sub-class of
      * {@link AbstractService}. When you do sub-class {@link AbstractService}, override {@link AbstractService#doStart()}. Exceptions should be caught and
-     * handled within the implementation of this method - generally this will cause the state to be set to {@link State#FAILED_TO_START}
+     * handled within the implementation of this method - generally this will set the cause to {@link Cause#FAILED_TO_START}
      *
+     * @throws ServiceStatusException if called when service is currently in a state which does not allow a start
      */
     ServiceStatus start();
 
 
     /**
      * Equivalent to calling
-     * {@link #stop(State)} with a value of {@link State#STOPPED}.  Implementations must handle all exceptions and set the state to {@link State#FAILED_TO_STOP}
+     * {@link #stop(State)} with a value of {@link State#STOPPED}.  Implementations must handle all exceptions and set the state to {@link Cause#FAILED_TO_STOP}
      */
     ServiceStatus stop();
 
     /**
      * Attempts to stop the Service, and sets the state to
-     * {@link State#FAILED}.   Implementations must handle all exceptions and set the state to {@link State#FAILED_TO_STOP}
+     * {@link Cause#FAILED}.   Implementations must handle all exceptions and if appropriate set cause to {@link Cause#FAILED_TO_STOP}
      *
      * @return state after the call
      */
@@ -83,14 +86,14 @@ public interface Service {
      * You will only need to implement this if you are not using a sub-class of {@link AbstractService}. When you do sub-class {@link AbstractService},
      * override {@link AbstractService#doStop()}.  Implementations must handle all exceptions and set the state to {@link State#FAILED_TO_STOP}
      *
-     * @param reasonForStop
-     *         the caller uses this to indicate the reason this method has been called.  Only the states contained in {@link #stopReasons} are valid. These
-     *         mean:<ol><li>STOPPED: the user elected to stop this Service directly</li><li>DEPENDENCY_STOPPED: A dependency which this Service needs in order
-     *         to run, has stopped</li><li>DEPENDENCY_FAILED: A dependency which this Service needs in order to run, has failed</li></ol>:
+     * @param cause the caller uses this to indicate the cause of the stop.
      *
-     *
+     *                      valid. These
+     *                      mean:<ol><li>STOPPED: the user elected to stop this Service directly</li><li>DEPENDENCY_STOPPED: A dependency which this Service
+     *                      needs in order
+     *                      to run, has stopped</li><li>DEPENDENCY_FAILED: A dependency which this Service needs in order to run, has failed</li></ol>:
      */
-    ServiceStatus stop(State reasonForStop);
+    ServiceStatus stop(Cause cause);
 
     /**
      * Returns the translated name for this service. The implementation may wish to include an instance identifier if it is not of
@@ -118,6 +121,13 @@ public interface Service {
     State getState();
 
     /**
+     * Returns the cause of the last state change
+     *
+     * @return Returns the cause of the last state change
+     */
+    Cause getCause();
+
+    /**
      * Returns true if and only if status == Service.Status.STARTED)
      *
      * @return true if and only if status == Service.Status.STARTED)
@@ -125,12 +135,25 @@ public interface Service {
     boolean isStarted();
 
     /**
-     * Returns true if the service is in a stopped state as defined by {@link #stoppedStates}
+     * Returns true if the service is in a stopped state
      *
-     * @return true if the service is in a stopped state as defined by {@link #stoppedStates}
+     * @return true if the service is in a stopped state
      */
     boolean isStopped();
 
+    /**
+     * Notify this service that one of its required dependencies has failed
+     *
+     * @return the resultant {@link ServiceStatus}
+     */
+    ServiceStatus dependencyFail();
+
+    /**
+     * Notify this service that one of its required dependencies has stopped
+     *
+     * @return the resultant {@link ServiceStatus}
+     */
+    ServiceStatus dependencyStop();
 
     I18NKey getDescriptionKey();
 
@@ -141,21 +164,32 @@ public interface Service {
     }
 
     /**
-     * Implementations (even sub-classes of {@link AbstractService} must define a key which when combined with {@link #getInstance()}, provides a unique
+     * Implementations (even sub-classes of {@link AbstractService} must define a key which when combined with {@link #getInstanceNumber()}, provides a unique
      * identity for this Service.  It is an I18NKey because it is expected that this name will be presented to end users (even if only to application sys
      * admins)
      *
-     * @return a key which when combined with {@link #getInstance()}, provides a unique identity for this Service
+     * @return a key which when combined with {@link #getInstanceNumber()}, provides a unique identity for this Service
      */
     I18NKey getNameKey();
 
 
-    int getInstance();
-
-    void setInstance(int instance);
+    /**
+     * Not used by default, but can be used to identify a specific instance of a {@link Service}
+     *
+     * @return 0 by default
+     */
+    int getInstanceNumber();
 
     /**
-     * Resets a service from a failed or stopped state to INITIAL.  Does nothing if the service is STARTED or STARTING
+     * /**
+     * Not used by default, but can be used to identify a specific instance of a {@link Service}
+     *
+     * @param instance number to set
+     */
+    void setInstanceNumber(int instance);
+
+    /**
+     * Resets a service from a stopped or failed state to INITIAL.  Does nothing if the service is STARTED, STARTING or STOPPING
      *
      * @return a ServiceStatus of INITIAL
      */

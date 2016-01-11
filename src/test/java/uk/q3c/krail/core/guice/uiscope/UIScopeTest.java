@@ -36,7 +36,7 @@ import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.SitemapService;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.services.AbstractService;
-import uk.q3c.krail.core.services.ServicesModel;
+import uk.q3c.krail.core.services.RelatedServicesExecutor;
 import uk.q3c.krail.core.services.ServicesModule;
 import uk.q3c.krail.core.shiro.*;
 import uk.q3c.krail.core.ui.*;
@@ -166,8 +166,9 @@ public class UIScopeTest {
     static class MockSitemapService extends AbstractService implements SitemapService {
 
         @Inject
-        protected MockSitemapService(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
-            super(translate, servicesModel, globalBusProvider);
+        protected MockSitemapService(Translate translate, GlobalBusProvider globalBusProvider, RelatedServicesExecutor
+                servicesExecutor) {
+            super(translate, globalBusProvider, servicesExecutor);
         }
 
         @Override

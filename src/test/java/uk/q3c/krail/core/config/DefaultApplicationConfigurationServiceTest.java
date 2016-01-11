@@ -28,6 +28,8 @@ import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.services.DefaultServicesModel;
+import uk.q3c.krail.core.services.RelatedServicesExecutor;
+import uk.q3c.krail.core.services.Service.Cause;
 import uk.q3c.krail.core.services.Service.State;
 import uk.q3c.krail.core.services.ServiceStatus;
 import uk.q3c.krail.i18n.*;
@@ -62,6 +64,9 @@ public class DefaultApplicationConfigurationServiceTest {
     @Mock
     DefaultServicesModel servicesModel;
 
+    @Mock
+    RelatedServicesExecutor servicesExecutor;
+
     @Inject
     GlobalBusProvider globalBusProvider;
 
@@ -86,9 +91,10 @@ public class DefaultApplicationConfigurationServiceTest {
         Locale.setDefault(Locale.UK);
         iniFiles = new HashMap<>();
         configuration.clear();
-        service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles, servicesModel, globalBusProvider, resourceUtils);
+        service = new DefaultApplicationConfigurationService(translate, configuration, iniFiles, globalBusProvider, resourceUtils,
+                servicesExecutor);
         currentLocale.setLocale(Locale.UK);
-        when(servicesModel.startDependenciesFor(service)).thenReturn(true);
+        when(servicesExecutor.execute(RelatedServicesExecutor.Action.START, Cause.STARTED)).thenReturn(true);
     }
 
     @Test
@@ -98,6 +104,7 @@ public class DefaultApplicationConfigurationServiceTest {
         // when
         service.start();
         // then (one configuration is the in memory one added automatically)
+        assertThat(service.isStarted()).isTrue();
         assertThat(configuration.getNumberOfConfigurations()).isEqualTo(2);
         assertThat(configuration.getBoolean("test")).isTrue();
         assertThat(configuration.getString("dbUser")).isEqualTo("monty");
@@ -134,7 +141,7 @@ public class DefaultApplicationConfigurationServiceTest {
         service.start();
         // then (one configuration is the in memory one added automatically)
         assertThat(configuration.getNumberOfConfigurations()).isEqualTo(3);
-        assertThat(service.getState()).isEqualTo(State.STARTED);
+        assertThat(service.getState()).isEqualTo(State.RUNNING);
         assertThat(configuration.getString("in memory")).isEqualTo("memory");
         // then
         service.stop();
@@ -150,7 +157,8 @@ public class DefaultApplicationConfigurationServiceTest {
         // when
         ServiceStatus status = service.start();
         // then
-        assertThat(status.getState()).isEqualTo(State.FAILED_TO_START);
+        assertThat(status.getState()).isEqualTo(State.STOPPED);
+        assertThat(status.getClass()).isEqualTo(Cause.FAILED_TO_START);
         assertThat(configuration.getNumberOfConfigurations()).isEqualTo(1);
     }
 

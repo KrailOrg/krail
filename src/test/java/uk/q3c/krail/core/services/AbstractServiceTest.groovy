@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.services
@@ -19,7 +21,9 @@ import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.LabelKey
 import uk.q3c.krail.i18n.Translate
 
-import static uk.q3c.krail.core.services.Service.State.*
+import static uk.q3c.krail.core.services.RelatedServicesExecutor.Action
+import static uk.q3c.krail.core.services.Service.Cause
+import static uk.q3c.krail.core.services.Service.State
 
 /**
  * Created by David Sowerby on 08/11/15.
@@ -35,10 +39,11 @@ class AbstractServiceTest extends Specification {
     def servicesModel = Mock(ServicesModel)
     def GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
     def eventBus = Mock(PubSubSupport)
+    RelatedServicesExecutor servicesExecutor = Mock(RelatedServicesExecutor)
 
     def setup() {
-        globalBusProvider.getGlobalBus() >> eventBus
-        service = new TestService(translate, servicesModel, globalBusProvider)
+        globalBusProvider.get() >> eventBus
+        service = new TestService(translate, globalBusProvider, servicesExecutor)
         service.setThrowStartException(false)
         service.setThrowStopException(false)
 
@@ -78,344 +83,316 @@ class AbstractServiceTest extends Specification {
         service.getDescription().equals("")
     }
 
-    def "start sets state to STARTING, then START if dependencies start ok"() {
+    def "start"(State initialState, Action action, boolean serviceFail, boolean allDepsOk, Cause callWithCause, State transientState, State finalState, Cause finalCause) {
+
         given:
 
-        translate.from(LabelKey.Authorisation) >> "Authorisation"
+        service.state = initialState
+        service.throwStartException serviceFail
 
         when:
 
-        service.start()
+        ServiceStatus status = service.start(callWithCause)
 
         then:
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STARTING) })
-        1 * servicesModel.startDependenciesFor(service) >> true
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STARTED) })
-        service.getState().equals(STARTED)
+        1 * eventBus.publish({ ServiceBusMessage m -> m.toState == transientState && m.cause == callWithCause })
+        1 * servicesExecutor.execute(action, callWithCause) >> allDepsOk
+        1 * eventBus.publish({ ServiceBusMessage m -> m.toState == finalState && m.cause == finalCause })
+        service.getState() == finalState
+        service.getCause() == finalCause
+        status.state == finalState
+        status.cause == finalCause
+        status.service == service
+
+
+        where:
+        initialState  | action       | serviceFail | allDepsOk | callWithCause | transientState | finalState    | finalCause
+//        State.INITIAL | Action.START | false       | true      | Cause.STARTED | State.STARTING | State.RUNNING | Cause.STARTED
+//        State.STOPPED | Action.START | false       | true      | Cause.STARTED | State.STARTING | State.RUNNING | Cause.STARTED
+        State.STOPPED | Action.START | true        | true      | Cause.STARTED | State.STARTING | State.FAILED  | Cause.FAILED_TO_START
+//        State.INITIAL | Action.START | false       | false     | Cause.STARTED | State.STARTING | State.INITIAL | Cause.DEPENDENCY_FAILED
+//        State.STOPPED | Action.START | false       | false     | Cause.STARTED | State.STARTING | State.STOPPED | Cause.DEPENDENCY_FAILED
 
     }
 
-    def "start sets state to STARTING, then FAILED_TO_START if dependencies do not start ok"() {
+    def "stop"(State initialState, Action action, boolean serviceFail, boolean allDepsOk, Cause callWithCause, State transientState, State finalState, Cause finalCause) {
+
         given:
 
-        translate.from(LabelKey.Authorisation) >> "Authorisation"
-        servicesModel.startDependenciesFor(service) >> false
+        service.state = initialState
+        service.throwStopException serviceFail
 
         when:
 
-        service.start()
+        ServiceStatus status = service.stop(callWithCause)
 
         then:
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STARTING) })
-        1 * servicesModel.startDependenciesFor(service) >> false
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(DEPENDENCY_FAILED) })
-        service.getState().equals(DEPENDENCY_FAILED)
-    }
+        1 * eventBus.publish({ ServiceBusMessage m -> m.toState == transientState && m.cause == callWithCause })
+        1 * servicesExecutor.execute(action, callWithCause) >> true
+        1 * eventBus.publish({ ServiceBusMessage m -> m.toState == finalState && m.cause == finalCause })
+        service.getState() == finalState
+        service.getCause() == finalCause
+        status.state == finalState
+        status.cause == finalCause
+        status.service == service
 
-    def "doStart() throws an exception, state is FAILED_TO_START"() {
-        given:
 
-
-        service.throwStartException = true
-        translate.from(LabelKey.Authorisation) >> "Authorisation"
-
-        when:
-
-        service.start()
-
-        then:
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STARTING) })
-        1 * servicesModel.startDependenciesFor(service) >> true
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(FAILED_TO_START) })
-        service.getState().equals(FAILED_TO_START)
-    }
-
-    def "reset returns to INITIAL"() {
-        given:
-        service.setState(DEPENDENCY_FAILED)
-
-        when:
-        ServiceStatus result = service.reset()
-
-        then:
-
-        result.getState().equals(INITIAL)
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(INITIAL) })
-
+        where:
+        initialState  | action      | serviceFail | allDepsOk | callWithCause            | transientState | finalState    | finalCause
+        State.RUNNING | Action.STOP | false       | true      | Cause.STOPPED            | State.STOPPING | State.STOPPED | Cause.STOPPED
+        State.RUNNING | Action.STOP | false       | true      | Cause.FAILED             | State.STOPPING | State.FAILED  | Cause.FAILED
+        State.RUNNING | Action.STOP | false       | true      | Cause.DEPENDENCY_STOPPED | State.STOPPING | State.STOPPED | Cause.DEPENDENCY_STOPPED
+        State.RUNNING | Action.STOP | false       | true      | Cause.DEPENDENCY_FAILED  | State.STOPPING | State.STOPPED | Cause.DEPENDENCY_FAILED
+        State.RUNNING | Action.STOP | true        | true      | Cause.STOPPED            | State.STOPPING | State.FAILED  | Cause.FAILED_TO_STOP
+        State.RUNNING | Action.STOP | true        | true      | Cause.FAILED             | State.STOPPING | State.FAILED  | Cause.FAILED
+        State.RUNNING | Action.STOP | true        | true      | Cause.DEPENDENCY_STOPPED | State.STOPPING | State.FAILED  | Cause.FAILED_TO_STOP
+        State.RUNNING | Action.STOP | true        | true      | Cause.DEPENDENCY_FAILED  | State.STOPPING | State.FAILED  | Cause.FAILED_TO_STOP
     }
 
 
-    def "Cannot reset from STARTING"() {
+    def "ignored start calls"(State initialState, Action action) {
+
         given:
-        service.setState(STARTING)
+
+        service.state = initialState
+        Cause initialCause = service.getCause()
 
         when:
-        ServiceStatus result = service.reset()
+
+        ServiceStatus status = service.start()
 
         then:
+        0 * servicesExecutor.execute(action, Cause.STARTED)
+        service.getState() == initialState
+        service.getCause() == initialCause
+        status.state == initialState
+        status.cause == initialCause
+        status.service == service
 
-        result.getState().equals(STARTING)
-        0 * eventBus.publish(_)
+
+        where:
+        initialState   | action
+        State.STARTING | Action.START
+        State.RUNNING  | Action.START
+    }
+
+    def "disallowed start calls throw exception"(State initialState, Action action) {
+
+        given:
+
+        service.state = initialState
+        Cause initialCause = service.getCause()
+
+        when:
+
+        ServiceStatus status = service.start()
+
+        then:
+        thrown(ServiceStatusException)
+
+
+        where:
+        initialState   | action
+        State.STOPPING | Action.START
+        State.FAILED   | Action.START
     }
 
 
-    def "Cannot reset from STARTED"() {
+    def "ignored stop calls"(State initialState, Action action, Cause callWithCause) {
+
         given:
-        service.setState(STARTED)
+
+        service.state = initialState
+        Cause initialCause = service.getCause()
 
         when:
-        ServiceStatus result = service.reset()
+
+        ServiceStatus status = service.stop(callWithCause)
 
         then:
+        0 * servicesExecutor.execute(action, callWithCause)
+        service.getState() == initialState
+        service.getCause() == initialCause
+        status.state == initialState
+        status.cause == initialCause
+        status.service == service
 
-        result.getState().equals(STARTED)
-        0 * eventBus.publish(_)
+
+        where:
+        initialState    | action      | callWithCause
+        State.STOPPED   | Action.STOP | Cause.STOPPED
+        State.STOPPED   | Action.STOP | Cause.FAILED
+        State.STOPPED   | Action.STOP | Cause.DEPENDENCY_STOPPED
+        State.STOPPED   | Action.STOP | Cause.DEPENDENCY_FAILED
+        State.FAILED    | Action.STOP | Cause.STOPPED
+        State.FAILED    | Action.STOP | Cause.FAILED
+        State.FAILED    | Action.STOP | Cause.DEPENDENCY_STOPPED
+        State.FAILED    | Action.STOP | Cause.DEPENDENCY_FAILED
+        State.STOPPING  | Action.STOP | Cause.STOPPED
+        State.STOPPING  | Action.STOP | Cause.FAILED
+        State.STOPPING  | Action.STOP | Cause.DEPENDENCY_STOPPED
+        State.STOPPING  | Action.STOP | Cause.DEPENDENCY_FAILED
+        State.RESETTING | Action.STOP | Cause.STOPPED
+        State.RESETTING | Action.STOP | Cause.FAILED
+        State.RESETTING | Action.STOP | Cause.DEPENDENCY_STOPPED
+        State.RESETTING | Action.STOP | Cause.DEPENDENCY_FAILED
     }
 
-    def "stop sets state to STOPPED"() {
-        given:
-
-        service.throwStopException = false
-        translate.from(LabelKey.Authorisation) >> "Authorisation"
-        service.state = STARTED
-
-        when:
-
-        def status = service.stop()
-
-        then:
-
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesModel.stopDependantsOf(service, false)
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPED) })
-        service.getState().equals(STOPPED)
-        status.getService().equals(service)
-        status.getState().equals(STOPPED)
-    }
-
-    def "doStop() throws an exception, sets state to FAILED_TO_STOP"() {
-        given:
-
-        service.throwStopException = true
-        translate.from(LabelKey.Authorisation) >> "Authorisation"
-        service.state = STARTED
-
-        when:
-
-        def status = service.stop()
-
-        then:
-
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesModel.stopDependantsOf(service, false)
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(FAILED_TO_STOP) })
-        service.getState().equals(FAILED_TO_STOP)
-        status.getService().equals(service)
-        status.getState().equals(FAILED_TO_STOP)
-    }
-
-    def "stop with dependency failed sets state to DEPENDENCY_FAILED"() {
-        given:
-
-        service.throwStopException = false
-        translate.from(LabelKey.Authorisation) >> "Authorisation"
-        service.state = STARTED
-
-        when:
-
-        def status = service.stop(DEPENDENCY_FAILED)
-
-        then:
-
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesModel.stopDependantsOf(service, false)
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(DEPENDENCY_FAILED) })
-        service.getState().equals(DEPENDENCY_FAILED)
-        status.getService().equals(service)
-        status.getState().equals(DEPENDENCY_FAILED)
-    }
-
-    def "stop with dependency stopped sets state to DEPENDENCY_STOPPED"() {
-        given:
-
-        service.throwStopException = false
-        translate.from(LabelKey.Authorisation) >> "Authorisation"
-        service.state = STARTED
-
-        when:
-
-        def status = service.stop(DEPENDENCY_STOPPED)
-
-        then:
-
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesModel.stopDependantsOf(service, false)
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(DEPENDENCY_STOPPED) })
-        service.getState().equals(DEPENDENCY_STOPPED)
-        status.getState().equals(DEPENDENCY_STOPPED)
-        status.getService().equals(service)
-    }
-
-    def "stop with FAILED sets state to FAILED"() {
-        given:
-
-        service.throwStopException = false
-        translate.from(LabelKey.Authorisation) >> "Authorisation"
-        service.state = STARTED
-
-        when:
-
-        def status = service.stop(FAILED)
-
-        then:
-
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesModel.stopDependantsOf(service, false)
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(FAILED) })
-        service.getState().equals(FAILED)
-        status.getState().equals(FAILED)
-        status.getService().equals(service)
+    def "disallowed stop calls throw exception"() {
+        //there are none
+        expect: true
     }
 
 
-    def "fail() is same as stop() with FAILED parameter"() {
-        given:
-
-        service.throwStopException = false
-        translate.from(LabelKey.Authorisation) >> "Authorisation"
-        service.state = STARTED
-
-        when:
-
-        def status = service.fail()
-
-        then:
-
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesModel.stopDependantsOf(service, false)
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(FAILED) })
-        service.getState().equals(FAILED)
-        status.getState().equals(FAILED)
-        status.getService().equals(service)
-    }
-
-    def "fail during fail() is sets state to FAILED_TO_STOP"() {
-        given:
-
-        service.throwStopException = true
-        translate.from(LabelKey.Authorisation) >> "Authorisation"
-        service.state = STARTED
-
-        when:
-
-        def status = service.fail()
-
-        then:
-
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(STOPPING) })
-        1 * servicesModel.stopDependantsOf(service, false)
-        1 * eventBus.publish({ ServiceBusMessage m -> m.toState.equals(FAILED_TO_STOP) })
-        service.getState().equals(FAILED_TO_STOP)
-        status.getState().equals(FAILED_TO_STOP)
-        status.getService().equals(service)
-    }
-
-
-    def "stop() with invalid parameter throws IllegalArgumentException"() {
-        given:
-
-        service.throwStopException = false
-        translate.from(LabelKey.Authorisation) >> "Authorisation"
-
-        when:
-
-        def status = service.stop(STARTED)
-
-        then:
-
-        thrown IllegalArgumentException
-    }
-
-    def "start() when already started should exit"() {
+    def "reset"(State initialState, Action action, boolean serviceFail, State transientState, State finalState, Cause finalCause) {
 
         given:
 
+        service.state = initialState
+        service.throwResetException serviceFail
 
         when:
 
-        service.start()
-        service.start()
+        ServiceStatus status = service.reset()
 
         then:
-        1 * servicesModel.startDependenciesFor(service) >> true
+        1 * eventBus.publish({ ServiceBusMessage m -> m.toState == transientState && m.cause == Cause.RESET })
+        1 * eventBus.publish({ ServiceBusMessage m -> m.toState == finalState && m.cause == finalCause })
+        service.getState() == finalState
+        service.getCause() == finalCause
+        status.state == finalState
+        status.cause == finalCause
+        status.service == service
+
+
+        where:
+        initialState  | action      | serviceFail | transientState  | finalState    | finalCause
+        State.STOPPED | Action.STOP | false       | State.RESETTING | State.INITIAL | Cause.RESET
+        State.FAILED  | Action.STOP | false       | State.RESETTING | State.INITIAL | Cause.RESET
+        State.STOPPED | Action.STOP | true        | State.RESETTING | State.FAILED  | Cause.FAILED_TO_RESET
+        State.FAILED  | Action.STOP | true        | State.RESETTING | State.FAILED  | Cause.FAILED_TO_RESET
 
     }
 
-    def "stop() when already stopped should exit"() {
+    def "ignored reset calls"(State initialState) {
 
         given:
-        service.state = STARTED
+
+        service.state = initialState
+        Cause initialCause = service.getCause()
 
         when:
 
-        service.stop()
-        service.stop()
+        ServiceStatus status = service.reset()
 
         then:
-        1 * servicesModel.stopDependantsOf(service, false)
-        0 * servicesModel.stopDependantsOf(service, true)
+        service.getState() == initialState
+        service.getCause() == initialCause
+        status.state == initialState
+        status.cause == initialCause
+        status.service == service
 
+
+        where:
+        initialState    | _
+        State.INITIAL   | _
+        State.RESETTING | _
     }
 
-    def "fail() when already stopped should exit"() {
+    def "disallowed reset calls throw exception"(State initialState) {
+
         given:
-        service.state = STARTED
+
+        service.state = initialState
+        Cause initialCause = service.getCause()
 
         when:
 
-        service.stop()
+        ServiceStatus status = service.reset()
+
+        then:
+        thrown(ServiceStatusException)
+
+
+        where:
+        initialState   | _
+        State.STOPPING | _
+        State.RUNNING  | _
+        State.STARTING | _
+    }
+
+    def "fail short call"() {
+        given:
+
+        service.state = State.RUNNING
+
+        when:
+
         service.fail()
 
         then:
-        1 * servicesModel.stopDependantsOf(service, false)
-        0 * servicesModel.stopDependantsOf(service, true)
+
+        1 * servicesExecutor.execute(Action.STOP, Cause.FAILED) >> true
+    }
+
+    def "dependencyFail"() {
+
+        given:
+
+        service.state = State.RUNNING
+
+        when:
+
+        service.dependencyFail()
+
+        then:
+
+        1 * servicesExecutor.execute(Action.STOP, Cause.DEPENDENCY_FAILED) >> true
+    }
+
+    def "dependencyStop"() {
+
+        given:
+
+        service.state = State.RUNNING
+
+        when:
+
+        service.dependencyStop()
+
+        then:
+
+        1 * servicesExecutor.execute(Action.STOP, Cause.DEPENDENCY_STOPPED) >> true
 
     }
 
-
-    def "get and setInstance()"() {
+    def "start short call"() {
 
 
         when:
 
-        service.setInstance(33)
+        service.start()
 
         then:
-        service.getInstance() == 33
+
+        1 * servicesExecutor.execute(Action.START, Cause.STARTED) >> true
 
     }
 
-    def "stop() is ignored when in INITIAL state"() {
+    def "stop"() {
+
+        given:
+
+        service.state = State.RUNNING
+
         when:
 
-        ServiceStatus result = service.stop()
+        service.stop()
 
         then:
 
-        0 * eventBus.publish(_)
-        result.state.equals(INITIAL)
+        1 * servicesExecutor.execute(Action.STOP, Cause.STOPPED) >> true
 
-    }
-
-    def "fail() is ignored when in INITIAL state"() {
-        when:
-
-        ServiceStatus result = service.fail()
-
-        then:
-
-        0 * eventBus.publish(_)
-        result.state.equals(INITIAL)
     }
 
 
@@ -423,10 +400,11 @@ class AbstractServiceTest extends Specification {
 
         boolean throwStartException = false;
         boolean throwStopException = false;
+        boolean throwResetException = false;
 
         @Inject
-        protected TestService(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
-            super(translate, servicesModel, globalBusProvider);
+        protected TestService(Translate translate, GlobalBusProvider globalBusProvider, RelatedServicesExecutor servicesExecutor) {
+            super(translate, globalBusProvider, servicesExecutor);
         }
 
         @Override
@@ -444,8 +422,29 @@ class AbstractServiceTest extends Specification {
         }
 
         @Override
+        public void doReset() {
+            if (throwResetException) {
+                throw new RuntimeException("Test Exception thrown")
+            }
+        }
+
+        @Override
         I18NKey getNameKey() {
             return LabelKey.Authorisation
         }
+
+        public void throwStartException(boolean throwStartException) {
+            this.throwStartException = throwStartException;
+        }
+
+        public void throwStopException(boolean throwStopException) {
+            this.throwStopException = throwStopException
+        }
+
+        public void throwResetException(boolean throwResetException) {
+            this.throwResetException = throwResetException
+        }
     }
+
+
 }

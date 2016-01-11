@@ -57,7 +57,7 @@ class DefaultClassNameUtilsTest extends Specification {
         }
 
         @Override
-        ServiceStatus stop(Service.State reasonForStop) {
+        ServiceStatus stop(Service.Cause reasonForStop) {
             return null
         }
 
@@ -77,6 +77,11 @@ class DefaultClassNameUtilsTest extends Specification {
         }
 
         @Override
+        Service.Cause getCause() {
+            return null
+        }
+
+        @Override
         boolean isStarted() {
             return false
         }
@@ -86,7 +91,15 @@ class DefaultClassNameUtilsTest extends Specification {
             return false
         }
 
+        @Override
+        ServiceStatus dependencyFail() {
+            return null
+        }
 
+        @Override
+        ServiceStatus dependencyStop() {
+            return null
+        }
 
         @Override
         I18NKey getNameKey() {
@@ -94,9 +107,7 @@ class DefaultClassNameUtilsTest extends Specification {
         }
 
 
-
-        @Override
-        void setInstance(int instance) {
+        void setInstanceNumber(int instance) {
 
         }
 
@@ -120,8 +131,8 @@ class DefaultClassNameUtilsTest extends Specification {
             return super.getServiceKey()
         }
 
-        @Override
-        int getInstance() {
+
+        int getInstanceNumber() {
             return 0
         }
     }

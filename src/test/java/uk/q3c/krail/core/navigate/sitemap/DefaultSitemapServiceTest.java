@@ -218,7 +218,9 @@ public class DefaultSitemapServiceTest {
         // when
         ServiceStatus status = service.start();
         // then
-        assertThat(status.getState()).isEqualTo(Service.State.FAILED_TO_START);
+        assertThat(status.getState()).isEqualTo(Service.State.STOPPED);
+        assertThat(status.getCause()).isEqualTo(Service.Cause.FAILED_TO_START);
+
     }
 
 

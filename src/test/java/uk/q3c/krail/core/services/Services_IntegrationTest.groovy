@@ -143,7 +143,7 @@ class Services_IntegrationTest extends Specification {
         when:
 
         serviceD.start();
-        List<DependencyInstanceDefinition> dependencies = model.findInstanceDependencies(serviceD)
+        List<DependencyInstanceDefinition> dependencies = model.findInstanceDependencyDefinitions(serviceD)
 
         then:
         dependencies.size() == 1

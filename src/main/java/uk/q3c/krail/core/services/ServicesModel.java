@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.services;
@@ -117,45 +119,41 @@ public interface ServicesModel {
     ImmutableList<Service> registeredServiceInstances();
 
     /**
-     * Starts any dependencies which are required in order to start {@code service}.  These are a union of {@link
-     * ServicesModel#alwaysDependsOn (ServiceKey, ServiceKey)} and {@link ServicesModel#requiresOnlyAtStart(ServiceKey,
-     * ServiceKey)}.
-     *
-     * @param dependant the service to start the dependencies for
-     * @return true if all required dependencies attain a state of {@link Service.State#STARTED}, false if any
-     * dependency fails to do so
-     */
-    boolean startDependenciesFor(Service dependant);
-
-    /**
-     * Stops all dependants which have declared that {@code dependency} must be running in order for them to continue
-     * running (see {@link ServicesModel#alwaysDependsOn(ServiceKey, ServiceKey)}).
-     *
-     * @param dependency       the dependency which requires its dependants to be stopped
-     * @param dependencyFailed if true, the dependency has called this method because it failed, if false, the
-     *                         dependency has been stopped
-     */
-    void stopDependantsOf(Service dependency, boolean dependencyFailed);
-
-    /**
      * Stops all services.  Usually only used during shutdown
      */
     void stopAllServices();
 
     /**
-     * Returns a list of {@link DependencyInstanceDefinition}s describing the dependencies and their relationship with {@code service}
+     * Returns a list of {@link DependencyInstanceDefinition}s describing the dependencies and their relationship with {@code service}.  If you only want the
+     * services (and not the dependency information), {@link #findInstanceDependencies} is a bit more efficient.
      *
      * @param service the service for which to obtain dependencies
      * @return list of {@link DependencyInstanceDefinition}s describing the dependencies and their relationship with {@code service}
      */
-    List<DependencyInstanceDefinition> findInstanceDependencies(@Nonnull Service service);
+    List<DependencyInstanceDefinition> findInstanceDependencyDefinitions(@Nonnull Service service);
 
     ServicesInstanceGraph getInstanceGraph();
 
     ServicesClassGraph getClassGraph();
 
-    Service getInstanceOf(ServiceKey fieldClass);
+    ImmutableList<ServiceKey> registeredServices();
 
-    ImmutableList<ServiceKey> getRegisteredServices();
+    /**
+     * Returns a list of immediate dependencies for {@code service}.  If you also want the dependency type as well, use
+     * {@link #findInstanceDependencyDefinitions}
+     *
+     * @param service the service for which the dependencies are required
+     * @return a list of immediate dependencies for {@code service}
+     */
+    List<Service> findInstanceDependencies(Service service);
+
+    /**
+     * Returns a list of immediate dependencies for {@code service}, which are of the type specified by {@code selection}  If you also want the dependency type
+     * as well, use {@link #findInstanceDependencyDefinitions}
+     *
+     * @param service the service for which the dependencies are required
+     * @return a list of immediate dependencies for {@code service}
+     */
+    List<Service> findInstanceDependencies(@Nonnull Service service, @Nonnull ServicesGraph.Selection selection);
 }
 

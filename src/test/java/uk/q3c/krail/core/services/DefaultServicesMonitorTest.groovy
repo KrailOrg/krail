@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.services
@@ -31,12 +33,13 @@ class DefaultServicesMonitorTest extends Specification {
     GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
     ServicesModel servicesModel = Mock(ServicesModel)
     Translate translate = Mock(Translate)
+    RelatedServicesExecutor servicesExecutor = Mock(RelatedServicesExecutor)
     Service serviceA
 
     def setup() {
-        globalBusProvider.getGlobalBus() >> globalBus
-        serviceA = new AbstractServiceTest.TestService(translate, servicesModel, globalBusProvider)
-        servicesModel.startDependenciesFor(serviceA) >> true
+        servicesExecutor.execute(_, _) >> true
+        globalBusProvider.get() >> globalBus
+        serviceA = new AbstractServiceTest.TestService(translate, globalBusProvider, servicesExecutor)
     }
 
 
@@ -47,21 +50,21 @@ class DefaultServicesMonitorTest extends Specification {
 
         when:
 
-        monitor.serviceStatusChange(new ServiceBusMessage(serviceA, INITIAL, STARTED))
+        monitor.serviceStatusChange(new ServiceBusMessage(serviceA, INITIAL, RUNNING, Service.Cause.STARTED))
 
         then:
 
         monitor.getMonitoredServices().contains(serviceA)
         ServiceStatusRecord status = monitor.getServiceStatus(serviceA)
         status.getService().equals(serviceA)
-        status.getCurrentState().equals(STARTED)
+        status.getCurrentState().equals(RUNNING)
         LocalDateTime startTime = status.getLastStartTime()
         status.getLastStartTime() != null
         status.getLastStartTime().equals(status.getStatusChangeTime())
 
         when:
         serviceA.stop()
-        monitor.serviceStatusChange(new ServiceBusMessage(serviceA, STARTED, STOPPED))
+        monitor.serviceStatusChange(new ServiceBusMessage(serviceA, RUNNING, STOPPED, Service.Cause.STOPPED))
         status = monitor.getServiceStatus(serviceA)
 
         then:

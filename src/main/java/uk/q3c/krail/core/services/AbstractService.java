@@ -1,18 +1,19 @@
 /*
- * Copyright (C) 2013 David Sowerby
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ *
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
+ *
  */
 package uk.q3c.krail.core.services;
 
 import com.google.inject.Inject;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
@@ -27,7 +28,6 @@ import uk.q3c.krail.i18n.Translate;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static uk.q3c.krail.core.services.Service.State.*;
 
 /**
@@ -57,56 +57,84 @@ public abstract class AbstractService implements Service {
     private static Logger log = LoggerFactory.getLogger(AbstractService.class);
     private final Translate translate;
     protected State state = INITIAL;
-    private ServicesModel servicesModel;
-    //    private List<DependencyRecord> dependencies;
+    private RelatedServicesExecutor servicesExecutor;
     private I18NKey descriptionKey;
+    private I18NKey nameKey;
     private PubSubSupport<BusMessage> eventBus;
-    private int instance = 0;
+    private int instanceNumber = 0;
+    private Cause cause;
 
     @Inject
-    protected AbstractService(Translate translate, ServicesModel servicesModel, GlobalBusProvider globalBusProvider) {
+    protected AbstractService(Translate translate, GlobalBusProvider globalBusProvider, RelatedServicesExecutor servicesExecutor) {
         super();
         this.translate = translate;
-        this.servicesModel = servicesModel;
-        eventBus = globalBusProvider.getGlobalBus();
+        this.servicesExecutor = servicesExecutor;
+        servicesExecutor.setService(this);
+        eventBus = globalBusProvider.get();
+    }
+
+    @Override
+    public I18NKey getNameKey() {
+        return nameKey;
+    }
+
+    protected void setNameKey(@Nonnull I18NKey nameKey) {
+        this.nameKey = nameKey;
+    }
+
+    @Override
+    public synchronized Cause getCause() {
+        return cause;
     }
 
     @Override
     public synchronized boolean isStarted() {
-        return state == STARTED;
+        return state == RUNNING;
     }
 
-
     @Override
-    public synchronized ServiceStatus stop() {
-        return stop(STOPPED);
+    public ServiceStatus stop() {
+        return stop(Cause.STOPPED);
     }
 
     @Nonnull
     @Override
-    public synchronized ServiceStatus stop(@Nonnull Service.State reasonForStop) {
-        checkArgument(Service.stopReasons.contains(reasonForStop));
-        if (isStopped()) {
-            log.debug("Attempting to stop service {}, but it is already stopped. No action taken", getName());
-            return new ServiceStatus(this, state);
+    public synchronized ServiceStatus stop(@Nonnull Cause cause) {
+        if (state == STOPPED || state == STOPPING || state == FAILED || state == RESETTING) {
+            log.debug("Attempting to stop service {}, but it is already stopped or resetting. No action taken", getName());
+            return new ServiceStatus(this, this.state, this.cause);
         }
-        if (state.equals(INITIAL)) {
+        if (state == INITIAL) {
             log.debug("Currently in INITIAL state, stop or fail ignored");
-            return new ServiceStatus(this, state);
+            return new ServiceStatus(this, this.state, this.cause);
         }
         log.info("Stopping service: {}", getName());
-        setState(STOPPING);
-        servicesModel.stopDependantsOf(this, false);
+        setState(STOPPING, cause);
+        //boolean dependantsRequiringThisAreStopped
+        servicesExecutor.execute(RelatedServicesExecutor.Action.STOP, cause); // also stop / fail dependants which
+        // always require this service
         try {
             doStop();
-            setState(reasonForStop);
+            setState(stopStateFromCause(cause), cause);
         } catch (Exception e) {
-            log.error("Exception occurred while trying to stop the {}.", getName());
-            setState(FAILED_TO_STOP);
+            log.error("Exception occurred while trying to stop {}.", getName());
+            if (cause == Cause.FAILED) {
+                //service has already failed, not just failed to stop
+                setState(stopStateFromCause(Cause.FAILED), Cause.FAILED);
+            } else {
+                setState(stopStateFromCause(Cause.FAILED_TO_STOP), Cause.FAILED_TO_STOP);
+            }
         }
 
 
-        return new ServiceStatus(this, state);
+        return new ServiceStatus(this, this.state, this.cause);
+    }
+
+    private State stopStateFromCause(Cause cause) {
+        if (cause == Cause.FAILED || cause == Cause.FAILED_TO_STOP) {
+            return FAILED;
+        }
+        return STOPPED;
     }
 
     protected abstract void doStop() throws Exception;
@@ -116,49 +144,82 @@ public abstract class AbstractService implements Service {
         return translate.from(getNameKey());
     }
 
-
     @Override
     public synchronized boolean isStopped() {
-        return stoppedStates.contains(state);
+        return state == STOPPED;
     }
 
     @Override
-    public synchronized ServiceStatus fail() {
-        return stop(FAILED);
+    public ServiceStatus fail() {
+        return stop(Cause.FAILED);
     }
 
     @Override
     public synchronized ServiceStatus reset() {
-        if (isStarted() || state.equals(STARTING)) {
-            return new ServiceStatus(this, state);
+        if (state == INITIAL || state == RESETTING) {
+            return new ServiceStatus(this, this.state, this.cause);
         }
-        setState(INITIAL);
-        return new ServiceStatus(this, state);
+        if (state != STOPPED && state != FAILED) {
+            throw new ServiceStatusException("Must be in a STOPPED state before reset()");
+        }
+        log.info("Resetting service: {}", getName());
+        setState(State.RESETTING, Cause.RESET);
+        try {
+            doReset();
+            setState(INITIAL, Cause.RESET);
+            return new ServiceStatus(this, this.state, this.cause);
+        } catch (Exception e) {
+            log.error("Exception while trying to reset {}", getName(), e);
+            setState(State.FAILED, Cause.FAILED_TO_RESET);
+            return new ServiceStatus(this, this.state, this.cause);
+        }
+
     }
 
+    /**
+     * Often not needed to do anything - but override if it does
+     */
+    @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
+    protected void doReset() {
 
-    @Override
-    public synchronized ServiceStatus start() {
-        if (state == STARTED) {
+    }
+
+    protected synchronized ServiceStatus start(Cause cause) {
+        if (state == RUNNING || state == STARTING) {
             log.debug("{} already started, no action taken", getName());
-            return new ServiceStatus(this, state);
+            return new ServiceStatus(this, this.state, this.cause);
         }
+        if (state == STOPPING) {
+            throw new ServiceStatusException("Cannot start() when state is " + state.name());
+        }
+        if (state == FAILED) {
+            throw new ServiceStatusException("Cannot start() when state is " + state.name() + ".  Call reset() first");
+        }
+
+        State beginningState = getState();
         log.info("Starting service: {}", getName());
-        setState(STARTING);
-        if (servicesModel.startDependenciesFor(this)) {
+        setState(STARTING, cause);
+        if (servicesExecutor.execute(RelatedServicesExecutor.Action.START, cause)) {
             try {
                 doStart();
-                setState(STARTED);
+                setState(RUNNING, cause);
+                this.cause = cause;
             } catch (Exception e) {
                 String msg = "Exception occurred while trying to start " + getName();
                 log.error(msg, e);
-                setState(FAILED_TO_START);
+                setState(FAILED, Cause.FAILED_TO_START);
             }
         } else {
-            setState(DEPENDENCY_FAILED);
+            //revert to beginning state, as we could not complete
+            setState(beginningState, Cause.DEPENDENCY_FAILED);
         }
 
-        return new ServiceStatus(this, state);
+        return new ServiceStatus(this, this.state, this.cause);
+    }
+
+    @Override
+    public ServiceStatus start() {
+        return start(Cause.STARTED);
     }
 
     protected abstract void doStart() throws Exception;
@@ -168,13 +229,25 @@ public abstract class AbstractService implements Service {
         return state;
     }
 
-    protected void setState(State state) {
+    //    @SuppressFBWarnings("IS2_INCONSISTENT_SYNC") // disagree with FB on this.  This method is private, and is only access via synchronized methods
+    private synchronized void setState(State state, Cause cause) {
         if (state != this.state) {
             State previousState = this.state;
             this.state = state;
-            log.debug(getName() + " has changed status from {} to {}", previousState, getState());
-            publishStatusChange(previousState);
+            this.cause = cause;
+            log.debug("{} has changed status from {} to {}", getName(), previousState, getState());
+            publishStatusChange(previousState, cause);
         }
+    }
+
+    @Override
+    public ServiceStatus dependencyFail() {
+        return stop(Cause.DEPENDENCY_FAILED);
+    }
+
+    @Override
+    public ServiceStatus dependencyStop() {
+        return stop(Cause.DEPENDENCY_STOPPED);
     }
 
     @Override
@@ -195,20 +268,18 @@ public abstract class AbstractService implements Service {
         return translate.from(descriptionKey);
     }
 
-    @Override
-    public synchronized int getInstance() {
-        return instance;
+    public synchronized int getInstanceNumber() {
+        return instanceNumber;
     }
 
-    @Override
-    public synchronized void setInstance(int instance) {
-        this.instance = instance;
+    public synchronized void setInstanceNumber(int instanceNumber) {
+        this.instanceNumber = instanceNumber;
     }
 
 
-    protected void publishStatusChange(State previousState) {
+    protected void publishStatusChange(State previousState, Cause cause) {
         log.debug("publishing status change in {}.  Status is now {}", this.getName(), this.getState());
-        eventBus.publish(new ServiceBusMessage(this, previousState, getState()));
+        eventBus.publish(new ServiceBusMessage(this, previousState, getState(), cause));
     }
 
 

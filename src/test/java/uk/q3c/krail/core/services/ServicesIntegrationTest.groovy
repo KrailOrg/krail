@@ -39,6 +39,6 @@ class ServicesIntegrationTest extends Specification {
 
     def "construction"() {
         expect:
-        model.getRegisteredServices() != null
+        model.registeredServices() != null
     }
 }

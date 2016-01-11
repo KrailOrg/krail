@@ -9,15 +9,20 @@ Krail extends that idea with a more comprehensive lifecycle for a Service, and a
 
 ##Lifecycle
 
-The lifecycle is defined by ```Service.State``` and comprises states:
+The lifecycle is defined by ```Service.State``` and the standard cycle comprises states:
 
-- INITIAL
-- STARTING, STARTED
-- STOPPING, STOPPED
-- FAILED, FAILED_TO_START, FAILED_TO_STOP 
-- DEPENDENCY_STOPPED, DEPENDENCY_FAILED
+- INITIAL, STARTING, RUNNING, STOPPING, STOPPED plus a state of FAILED
 
-The transient states of STARTING and STOPPING are there because some services may take a while to fully start or stop. 
+The transient states of STARTING and STOPPING are there because some services may take a while to fully start or stop.
+
+###Causes
+
+```Service``` also defines ```Cause```, which is used to identify the cause of a state change (mostly for stopping / failing):
+
+- FAILED, STOPPED, FAILED_TO_START, FAILED_TO_STOP, DEPENDENCY_STOPPED, STARTED, DEPENDENCY_FAILED, FAILED_TO_RESET
+
+The [developer guide](devguide-services.md#state-changes-and-causes) gives more information about how the various method calls to Service affect state and cause;
+
 
 ##Dependencies
 Krail provides different dependency types:
@@ -238,7 +243,7 @@ public class TutorialServicesModule extends AbstractServiceModule {
 
 ##Monitor the Service status
 
-Fur the purposes of the Tutorial, we wil create a simple page to monitor the status of the Services.
+Fur the purposes of the Tutorial, we will create a simple page to monitor the status of the Services.
 
 - In ```MyOtherPages``` add the entry:
 
@@ -406,8 +411,6 @@ This marks the dependency, ServiceD, as optional
 
 When ```ServiceD``` and ```ServiceC``` are stopped they do not affect ```ServiceA```, as they are declared as "optional" and "required only at start".
 When ```ServiceB``` is stopped, however, ```ServiceA``` also stops because that dependency was declared as "always required"
-
-
 
 #Summary
 
