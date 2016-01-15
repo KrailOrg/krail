@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ *
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
+ *
  */
 package uk.q3c.krail.core.config;
 
@@ -18,10 +18,14 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 
+import javax.annotation.Nonnull;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Changes the standard behaviour of {@link CompositeConfiguration}, so that the configurations can be overridden by a
  * configuration added later. So for example, config1 is added first and contains a property "a.k1=1" and config2 is
- * then added with a property "a.k1=2", then a value of 2 will be returned by a call to {@link #getProperty("a.k1")}
+ * then added with a property "a.k1=2", then a value of 2 will be returned by a call to <i>getProperty("a.k1")</i>
  * <p/>
  * A change to the in-memory configuration (by using {@link CompositeConfiguration#setProperty(String, Object))} will
  * always take precedence, even if another configuration is added after setProperty has been called
@@ -45,7 +49,8 @@ public class InheritingConfiguration extends CompositeConfiguration {
      * @return object associated with the given configuration key.
      */
     @Override
-    public Object getProperty(String key) {
+    public Object getProperty(@Nonnull String key) {
+        checkNotNull(key);
         Configuration firstMatchingConfiguration = getSourceUsed(key);
 
         if (firstMatchingConfiguration != null) {
@@ -59,11 +64,12 @@ public class InheritingConfiguration extends CompositeConfiguration {
      * Returns the source (the configuration object) actually used to fulfil the value of {@code key}, or null if there
      * is no matching key. This is different to the {@link CompositeConfiguration#getSource(String)} behaviour.
      *
-     * @param key
+     * @param key the property key to look for
      *
-     * @return
+     * @return the Configuration object used to provide the value for the key, or null if the key is not found
      */
-    public Configuration getSourceUsed(String key) {
+    public Configuration getSourceUsed(@Nonnull String key) {
+        checkNotNull(key);
         Configuration firstMatchingConfiguration = null;
         int c = getNumberOfConfigurations();
         for (int i = c - 1; i >= 0; i--) {
@@ -82,12 +88,12 @@ public class InheritingConfiguration extends CompositeConfiguration {
      * be
      * ignored.
      *
-     * @param sectionName
+     * @param sectionName the sectioName to return
      *
-     * @return
+     * @return the section if found, null if not
      */
-    public SubnodeConfiguration getSection(String sectionName) {
-
+    public SubnodeConfiguration getSection(@Nonnull String sectionName) {
+        checkNotNull(sectionName);
         int c = getNumberOfConfigurations();
         for (int i = c - 1; i >= 0; i--) {
             Configuration cfg = getConfiguration(i);

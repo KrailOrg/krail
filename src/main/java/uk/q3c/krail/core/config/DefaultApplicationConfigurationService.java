@@ -16,7 +16,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +87,7 @@ public class DefaultApplicationConfigurationService extends AbstractService impl
      *         if an error occurs while loading a file
      */
     @Override
-    protected void doStart() throws ConfigurationException {
+    protected void doStart() {
         Set<Integer> keySorter = new TreeSet<>(iniFiles.keySet()).descendingSet();
         for (Integer k : keySorter) {
             IniFileConfig iniConfig = iniFiles.get(k);
@@ -102,10 +101,9 @@ public class DefaultApplicationConfigurationService extends AbstractService impl
                 log.debug("adding configuration from {} at index {}", file.getAbsolutePath(), k);
             } catch (Exception ce) {
                 if (!iniConfig.isOptional()) {
-                    String msg = ("Configuration Service failed to start, unable to load required configuration file:" +
-                            " " + file.getAbsolutePath());
-                    log.error(msg);
-                    throw new ConfigurationException(ce);
+                    String msg = ("Configuration Service failed to start, unable to load required configuration file: {}");
+                    log.error(msg, file.getAbsolutePath());
+                    throw new ConfigurationException(msg + file.getAbsolutePath(), ce);
                 } else {
                     log.info("Optional configuration file not found at {}, but as it is optional, " +
                             "" + "continuing without it", file);

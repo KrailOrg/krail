@@ -25,6 +25,7 @@ public class ApplicationConfigurationModule extends ConfigurationModuleBase {
     protected void configure() {
         super.configure();
         bindApplicationConfigurationService();
+        bindApplicationConfiguration();
         define();
     }
 
@@ -50,6 +51,13 @@ public class ApplicationConfigurationModule extends ConfigurationModuleBase {
      */
     protected void bindApplicationConfigurationService() {
         bind(ApplicationConfigurationService.class).to(DefaultApplicationConfigurationService.class);
+    }
+
+    /**
+     * Override this method to provide our own implementation of {@link ApplicationConfiguration}
+     */
+    protected void bindApplicationConfiguration() {
+        bind(ApplicationConfiguration.class).to(DefaultApplicationConfiguration.class);
     }
 
     @Override

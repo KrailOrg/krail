@@ -32,6 +32,7 @@ import uk.q3c.krail.core.services.RelatedServicesExecutor;
 import uk.q3c.krail.core.services.Service.Cause;
 import uk.q3c.krail.core.services.Service.State;
 import uk.q3c.krail.core.services.ServiceStatus;
+import uk.q3c.krail.core.services.ServicesModule;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.krail.testutil.MockCurrentLocale;
 import uk.q3c.krail.util.ResourceUtils;
@@ -49,7 +50,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class, UtilsModule.class})
+@GuiceContext({EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class, UtilsModule.class, ApplicationConfigurationModule.class,
+        ServicesModule.class})
 public class DefaultApplicationConfigurationServiceTest {
 
     static File iniDir;
@@ -95,6 +97,9 @@ public class DefaultApplicationConfigurationServiceTest {
                 servicesExecutor);
         currentLocale.setLocale(Locale.UK);
         when(servicesExecutor.execute(RelatedServicesExecutor.Action.START, Cause.STARTED)).thenReturn(true);
+        File ff = new File(resourceUtils.configurationDirectory(), "test.krail.ini");
+        //noinspection ResultOfMethodCallIgnored
+        ff.setReadable(true);
     }
 
     @Test
@@ -128,6 +133,22 @@ public class DefaultApplicationConfigurationServiceTest {
         assertThat(configuration.getNumberOfConfigurations()).isEqualTo(3);
         assertThat(configuration.getBoolean("test")).isTrue();
         assertThat(configuration.getString("dbUser")).isEqualTo("python");
+
+    }
+
+
+    @Test
+    public void loadFileError() throws Exception {
+        // give
+        File ff = new File(resourceUtils.configurationDirectory(), "test.krail.ini");
+        //noinspection ResultOfMethodCallIgnored
+        ff.setReadable(false);
+        addConfig("krail.ini", 100, false);
+        addConfig("test.krail.ini", 99, false);
+        // when
+        service.start();
+        // then service shows as failed becuase required config missing
+        assertThat(service.getState()).isEqualTo(State.FAILED);
 
     }
 

@@ -10,25 +10,21 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
+
 package uk.q3c.krail.core.config;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
-import javax.annotation.concurrent.NotThreadSafe;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.SubnodeConfiguration;
 
 /**
- * As this is a Singleton, it should be threadsafe.  However, the work to make it so has not been done as version 2.0 of Apache Commons Configuration
- * provides that facility - but has not yet been released.  At the time of writing this it was at 2.0-beta2, but not published to Maven central.  See:
- * <p>
- * https://commons.apache.org/proper/commons-configuration/userguide/howto_concurrency.html
+ * Created by David Sowerby on 15 Jan 2016
  */
-@NotThreadSafe
-@Singleton
-public class ApplicationConfiguration extends InheritingConfiguration {
-    @Inject
-    protected ApplicationConfiguration() {
-        super();
-    }
+public interface ApplicationConfiguration extends Configuration {
 
+
+    void addConfiguration(Configuration config);
+
+    int getNumberOfConfigurations();
+
+    SubnodeConfiguration getSection(String configSectionName);
 }
