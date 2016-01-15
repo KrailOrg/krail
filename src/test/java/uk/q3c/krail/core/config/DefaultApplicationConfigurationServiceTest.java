@@ -120,8 +120,8 @@ public class DefaultApplicationConfigurationServiceTest {
     @Test
     public void loadTwoFiles() throws Exception {
         // given
-        addConfig("krail.ini", 0, false);
-        addConfig("test.krail.ini", 1, false);
+        addConfig("krail.ini", 100, false);
+        addConfig("test.krail.ini", 99, false);
         // when
         service.start();
         // then (one configuration is the in memory one added automatically)

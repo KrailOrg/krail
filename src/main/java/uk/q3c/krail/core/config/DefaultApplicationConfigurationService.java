@@ -89,7 +89,7 @@ public class DefaultApplicationConfigurationService extends AbstractService impl
      */
     @Override
     protected void doStart() throws ConfigurationException {
-        Set<Integer> keySorter = new TreeSet<>(iniFiles.keySet());
+        Set<Integer> keySorter = new TreeSet<>(iniFiles.keySet()).descendingSet();
         for (Integer k : keySorter) {
             IniFileConfig iniConfig = iniFiles.get(k);
             File file = new File(resourceUtils.configurationDirectory(), iniConfig.getFilename());

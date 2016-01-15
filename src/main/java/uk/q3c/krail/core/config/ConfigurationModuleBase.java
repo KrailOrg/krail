@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ *
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
+ *
  */
 package uk.q3c.krail.core.config;
 
@@ -49,19 +49,19 @@ public abstract class ConfigurationModuleBase extends AbstractServiceModule {
 
     /**
      * Adds an ini file configuration at the specified index. A config will override properties with the same key from
-     * a
-     * config at a lower index.
+     * a config at a lower index.
      *
-     * @param filename
-     * @param index
-     * @param optional
+     * @param filename the filename for the config file
+     * @param priority the priority of this file (level 0 is at the 'top' - meaning it will override any properties of the same name which exist at 'lower'
+     *                 levels
+     * @param optional if false, a failure will occur if the file is not available / readable
      *
      * @see InheritingConfiguration
      */
-    protected void addConfig(String filename, int index, boolean optional) {
+    protected void addConfig(String filename, int priority, boolean optional) {
         checkNotNull(filename);
         IniFileConfig ifc = new IniFileConfig(filename, optional);
-        iniFileConfigs.addBinding(new Integer(index))
+        iniFileConfigs.addBinding(new Integer(priority))
                       .toInstance(ifc);
     }
 

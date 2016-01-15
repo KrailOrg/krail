@@ -86,9 +86,11 @@ quality=brilliant
 [connection]
 timeout=1000
 ```
-This will be used to show a property overriding another, while also adding new properties.  To display the values
+This will be used to show a property overriding another, while also adding new properties. 
 
 ##Display the properties
+
+To display the values
 
 - add Vaadin components to ```doBuild()``` so we can display the property values:
 ```java
@@ -124,17 +126,12 @@ public class TutorialIniConfigModule extends ApplicationConfigurationModule {
   @Override
     protected void bindConfigs() {
         super.bindConfigs();
-        addConfig("moreConfig.ini",1,false);
+        addConfig("moreConfig.ini",98,false);
     }
 }
 ```
 
-Be aware that the order that the files are processed is important if they contain the same (fully qualified) property names. If you look at the javadoc for ```addConfig()``` you will see that the second parameter determines the order (priority) of loading.
-
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The ordering of priority for ApplicationConfiguration is the reverse of that used by Option (where 0 = highest).  This is confusing and will be changed by #415</p>
-</div>
+Be aware that the order that the files are processed is important if they contain the same (fully qualified) property names. If you look at the javadoc for ```addConfig()``` you will see that the second parameter determines the order (priority) of loading, with a lower value being the highest priority (0 is therefore the highest priority)
 
 - update the BindingManager to use the new module
 
@@ -156,13 +153,13 @@ If an ini file is essential for the operation of your application, ```addConfig(
  
 - add another entry to ```TutorialIniConfigModule```, but do not create the corresponding file
 ```
-addConfig("essential.ini",2,false);
+addConfig("essential.ini",99,false);
 ```
 - run the application and it will fail early with a ```FileNotFoundException```
 - change the 'optional' parameter to true and the application will run
 
 ```
-addConfig("essential.ini",2,true);
+addConfig("essential.ini",99,true);
 ```
 
 The final versions of the files should be:
@@ -176,8 +173,8 @@ public class TutorialIniConfigModule extends ApplicationConfigurationModule {
     @Override
     protected void bindConfigs() {
         super.bindConfigs();
-        addConfig("moreConfig.ini",1,false);
-        addConfig("essential.ini",2,true);
+        addConfig("moreConfig.ini",98,false);
+        addConfig("essential.ini",99,true);
     }
 }
 ```
