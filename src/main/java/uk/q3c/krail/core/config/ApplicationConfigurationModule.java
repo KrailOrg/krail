@@ -25,7 +25,14 @@ public class ApplicationConfigurationModule extends ConfigurationModuleBase {
     protected void configure() {
         super.configure();
         bindApplicationConfigurationService();
+        define();
+    }
 
+    /**
+     * Override if you want to sub-class and define, rather than use {@link #addConfig(String, int, boolean)}
+     */
+    protected void define() {
+        addConfig("krail.ini", 100, true);
     }
 
     @Override
@@ -47,7 +54,8 @@ public class ApplicationConfigurationModule extends ConfigurationModuleBase {
 
     @Override
     protected void bindConfigs() {
-        addConfig("krail.ini", 100, true);
+        getPrepIniFileConfigs().forEach((pty, cfg) -> getIniFileConfigs().addBinding(pty)
+                                                                         .toInstance(cfg));
     }
 
 

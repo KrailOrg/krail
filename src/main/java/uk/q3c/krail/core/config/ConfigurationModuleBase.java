@@ -15,25 +15,37 @@ package uk.q3c.krail.core.config;
 import com.google.inject.multibindings.MapBinder;
 import uk.q3c.krail.core.services.AbstractServiceModule;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A base class to define configuration files to be loaded into a {@link InheritingConfiguration} (for example
  * {@link ApplicationConfiguration}.
- * <p/>
+ * <p>
  * An integer index is used to specify the order in which the files are assess (see {@link InheritingConfiguration} for
  * an explanation)
- * <p/>
+ * <p>
  * You can use multiple modules based on this class (or create your own to populate an equivalent MapBinder) and Guice
  * will merge the map binders together. It is up to the developer to ensure that indexes are unique (but do not need to
  * bee contiguous).
- * <p/>
+ * <p>
  * Alternatively, it may be easier to use just one module and specify the files all in one place.
  *
  * @author David Sowerby
  */
 public abstract class ConfigurationModuleBase extends AbstractServiceModule {
     private MapBinder<Integer, IniFileConfig> iniFileConfigs;
+    private Map<Integer, IniFileConfig> prepIniFileConfigs = new HashMap<>();
+
+    public MapBinder<Integer, IniFileConfig> getIniFileConfigs() {
+        return iniFileConfigs;
+    }
+
+    public Map<Integer, IniFileConfig> getPrepIniFileConfigs() {
+        return prepIniFileConfigs;
+    }
 
     @Override
     protected void configure() {
@@ -55,14 +67,13 @@ public abstract class ConfigurationModuleBase extends AbstractServiceModule {
      * @param priority the priority of this file (level 0 is at the 'top' - meaning it will override any properties of the same name which exist at 'lower'
      *                 levels
      * @param optional if false, a failure will occur if the file is not available / readable
-     *
+     * @return this for fluency
      * @see InheritingConfiguration
      */
-    protected void addConfig(String filename, int priority, boolean optional) {
+    protected ConfigurationModuleBase addConfig(String filename, int priority, boolean optional) {
         checkNotNull(filename);
-        IniFileConfig ifc = new IniFileConfig(filename, optional);
-        iniFileConfigs.addBinding(new Integer(priority))
-                      .toInstance(ifc);
+        prepIniFileConfigs.put(priority, new IniFileConfig(filename, optional));
+        return this;
     }
 
 }

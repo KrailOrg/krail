@@ -112,35 +112,18 @@ private void showConfig() {
 
 ##Configure Guice
 
-We now need to set up the Guice configuration so it knows about the additional file.  This will be made easier once [issue 416](https://github.com/davidsowerby/krail/issues/416) has been completed, but for now we need to sub-class the appropriate Guice module, and then tell the ```BindingManager``` about it
+We now need to set up the Guice configuration so it knows about the additional file.  You can sub-class ```ApplicationConfigurationModule``` , and then tell the ```BindingManager``` about it, or more easily, simply add the configs as part of the the ```BindingManager``` entry like this:
 
-- create a new package *com.example.tutorial.ini*  
-- in this package, create a new class "TutorialIniConfigModule" and extend ```ApplicationConfigurationModule```
-- add the config for *moreConfig.ini*
 ```
-package com.example.tutorial.ini;
-
-import uk.q3c.krail.core.config.ApplicationConfigurationModule;
-
-public class TutorialIniConfigModule extends ApplicationConfigurationModule {
-  @Override
-    protected void bindConfigs() {
-        super.bindConfigs();
-        addConfig("moreConfig.ini",98,false);
-    }
+@Override
+protected Module applicationConfigurationModule() {
+    return new ApplicationConfigurationModule().addConfig("moreConfig.ini",98,false);
 }
 ```
 
 Be aware that the order that the files are processed is important if they contain the same (fully qualified) property names. If you look at the javadoc for ```addConfig()``` you will see that the second parameter determines the order (priority) of loading, with a lower value being the highest priority (0 is therefore the highest priority)
 
-- update the BindingManager to use the new module
 
-```
-@Override
-protected Module applicationConfigurationModule() {
-    return new TutorialIniConfigModule();
-}
-```
 - Run the application and select the "Ini Config" page
 - Press "Show config" and you will see the values provided by *krail.ini* and *moreConfig.ini* combined:
 
