@@ -14,6 +14,7 @@ package uk.q3c.krail.util;
 
 import com.google.common.base.Preconditions;
 import com.vaadin.server.VaadinService;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ import javax.annotation.Nonnull;
 import java.io.File;
 
 public class DefaultResourceUtils implements ResourceUtils {
-    private static Logger log = LoggerFactory.getLogger(ResourceUtils.class);
+    private static Logger log = LoggerFactory.getLogger(DefaultResourceUtils.class);
 
 
     @Override
@@ -52,6 +53,7 @@ public class DefaultResourceUtils implements ResourceUtils {
     }
 
 
+    @SuppressFBWarnings("PATH_TRAVERSAL_IN")
     @Override
     public File userHomeDirectory() {
         return new File(System.getProperty("user.home"));

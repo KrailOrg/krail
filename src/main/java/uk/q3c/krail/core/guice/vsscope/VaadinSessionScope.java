@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ *
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
+ *
  */
 package uk.q3c.krail.core.guice.vsscope;
 
@@ -18,11 +18,13 @@ import com.google.inject.Provider;
 import com.google.inject.Scope;
 import com.google.inject.servlet.SessionScoped;
 import com.vaadin.server.VaadinSession;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Provides a Guice scope based on a {@link VaadinSession}. This was necessary because the standard
@@ -31,9 +33,9 @@ import java.util.Map;
  *
  * @author David Sowerby 2014
  */
+@SuppressFBWarnings("CD_CIRCULAR_DEPENDENCY")
 public class VaadinSessionScope implements Scope {
-
-    private static Logger log = LoggerFactory.getLogger(VaadinSessionScope.class);
+    private static Logger log = getLogger(VaadinSessionScope.class);
 
     private static volatile VaadinSessionScope current;
 
@@ -59,7 +61,7 @@ public class VaadinSessionScope implements Scope {
         return scope;
     }
 
-    <T> Map<Key<?>, Object> getScopedObjectMap(VaadinSession vaadinSession) {
+    Map<Key<?>, Object> getScopedObjectMap(VaadinSession vaadinSession) {
         // return an existing cache instance
         if (cache.containsKey(vaadinSession)) {
             Map<Key<?>, Object> scopedObjects = cache.get(vaadinSession);
@@ -108,7 +110,7 @@ public class VaadinSessionScope implements Scope {
     }
 
     public boolean containsInstance(VaadinSession vaadinSession, Object containedInstance) {
-        Map<Key<?>, Object> scopeSet = cache.get(vaadinSession);
-        return scopeSet.containsValue(containedInstance);
+        return cache.get(vaadinSession)
+                    .containsValue(containedInstance);
     }
 }

@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.user.opt;
@@ -18,6 +20,7 @@ import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.opt.cache.OptionPermission;
+import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
 import javax.annotation.Nonnull;
@@ -89,8 +92,12 @@ public abstract class OptionBase implements Option {
     @Nonnull
     public synchronized <T> T get(@Nonnull OptionKey<T> optionKey) {
         checkNotNull(optionKey);
+        return getRankedValue(optionKey, HIGHEST_RANK);
+    }
+
+    private <T> T getRankedValue(@Nonnull OptionKey<T> optionKey, RankOption rank) {
         T defaultValue = optionKey.getDefaultValue();
-        Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy, HIGHEST_RANK, 0, optionKey));
+        Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy, rank, 0, optionKey));
         if (optionalValue == null) {
             return defaultValue;
         }
@@ -101,20 +108,11 @@ public abstract class OptionBase implements Option {
         }
     }
 
-
     @Nonnull
     @Override
     public synchronized <T> T getLowestRanked(@Nonnull OptionKey<T> optionKey) {
         checkNotNull(optionKey);
-        Optional<T> optionalValue = optionCache.get(Optional.of(optionKey.getDefaultValue()), new OptionCacheKey(hierarchy, LOWEST_RANK, 0, optionKey));
-        if (optionalValue == null) {
-            return optionKey.getDefaultValue();
-        }
-        if (optionalValue.isPresent()) {
-            return optionalValue.get();
-        } else {
-            return optionKey.getDefaultValue();
-        }
+        return getRankedValue(optionKey, LOWEST_RANK);
     }
 
 

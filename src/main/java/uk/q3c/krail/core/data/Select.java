@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.data;
@@ -48,7 +50,7 @@ public class Select {
         buf = new StringBuilder("SELECT t ");
         buf.append(selection);
         if (!selection.isEmpty()) {
-            buf.append(" ");
+            buf.append(' ');
         }
         buf.append("FROM ");
     }
@@ -88,9 +90,9 @@ public class Select {
         buf.append(field);
         buf.append(compare.code);
         if (value instanceof String) {
-            buf.append("'");
+            buf.append('\'');
             buf.append(value);
-            buf.append("'");
+            buf.append('\'');
         } else {
             buf.append(value);
         }
@@ -106,6 +108,10 @@ public class Select {
 
     @Override
     public String toString() {
+        return statement();
+    }
+
+    public String statement() {
         return buf.toString();
     }
 

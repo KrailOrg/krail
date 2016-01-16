@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.ui.form;
@@ -17,6 +19,7 @@ import com.vaadin.data.Item;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Field;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.data.KrailEntity;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
@@ -62,7 +65,8 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
         this.defaultValidators = new HashMap<>();
     }
 
-    private static java.lang.reflect.Field getField(Class<?> cls, String propertyId) throws SecurityException, NoSuchFieldException {
+    @SuppressFBWarnings("CLI_CONSTANT_LIST_INDEX")
+    private static java.lang.reflect.Field getField(Class<?> cls, String propertyId) throws NoSuchFieldException {
         if (propertyId.contains(".")) {
             String[] parts = propertyId.split("\\.", 2);
             // Get the type of the field in the "cls" class
@@ -85,7 +89,7 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
         }
     }
 
-    private static String getFieldName(Class<?> cls, String propertyId) throws SecurityException, NoSuchFieldException {
+    private static String getFieldName(Class<?> cls, String propertyId) throws NoSuchFieldException {
         for (java.lang.reflect.Field field1 : cls.getDeclaredFields()) {
             if (propertyId.equals(minifyFieldName(field1.getName()))) {
                 return field1.getName();

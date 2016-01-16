@@ -28,7 +28,7 @@ public class DefaultClassNameUtils implements ClassNameUtils {
 
             // could be an inner class
             if (simpleName.contains("$")) {
-                int index = simpleName.indexOf("$");
+                int index = simpleName.indexOf('$');
                 simpleName = simpleName.substring(index + 1, simpleName.length());
             }
 

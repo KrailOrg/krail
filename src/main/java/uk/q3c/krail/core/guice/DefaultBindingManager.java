@@ -19,6 +19,7 @@ import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 import com.google.inject.util.Modules;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.bval.guice.ValidationModule;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -121,7 +122,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
     }
 
     private List<Module> getModules() {
-        List<Module> coreModules = new ArrayList<>();
+        List<Module> coreModules = new ArrayList<>(30);
 
         coreModules.add(uiModule());
         coreModules.add(i18NModule());
@@ -280,6 +281,7 @@ public abstract class DefaultBindingManager extends GuiceServletContextListener 
      * @param modules
      *         the list used to collect modules for injector creation
      */
+    @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
     protected void addSitemapModules(List<Module> modules) {
     }
 

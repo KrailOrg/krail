@@ -14,6 +14,7 @@ package uk.q3c.krail.core.config;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
@@ -86,6 +87,7 @@ public class DefaultApplicationConfigurationService extends AbstractService impl
      * @throws ConfigurationException
      *         if an error occurs while loading a file
      */
+    @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_HAS_CHECKED")
     @Override
     protected void doStart() {
         Set<Integer> keySorter = new TreeSet<>(iniFiles.keySet()).descendingSet();

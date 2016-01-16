@@ -79,7 +79,7 @@ public class DefaultLoginAttemptLog implements LoginAttemptLog {
         if (failedAttempts == null) {
             failedAttempts = 0;
         }
-        unsuccessfulAttempts.put(upToken.getUsername(), new Integer(failedAttempts + 1));
+        unsuccessfulAttempts.put(upToken.getUsername(), Integer.valueOf(failedAttempts + 1));
         int attemptsLeft = attemptsRemaining(upToken.getUsername());
         if (attemptsLeft == 0) {
             throw new ExcessiveAttemptsException("Login failed after maximum attempts");
@@ -137,7 +137,7 @@ public class DefaultLoginAttemptLog implements LoginAttemptLog {
         return ImmutableList.copyOf(list);
     }
 
-    public class LogEntry {
+    public static class LogEntry {
         private final LocalDateTime dateTime;
         private final LogOutcome logOutcome;
 

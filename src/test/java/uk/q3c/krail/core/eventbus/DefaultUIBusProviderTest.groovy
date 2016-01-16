@@ -11,30 +11,26 @@
  *
  */
 
-package uk.q3c.krail.core.view.component;
+package uk.q3c.krail.core.eventbus
 
-import uk.q3c.krail.i18n.I18NKey;
+import net.engio.mbassy.bus.common.PubSubSupport
+import spock.lang.Specification
 
 /**
- * Created by David Sowerby on 02/06/15.
+ * Created by David Sowerby on 17 Jan 2016
  */
-public class LoginFormException extends RuntimeException {
-    private final I18NKey msgKey;
-    private final Object[] params;
+class DefaultUIBusProviderTest extends Specification {
 
+    PubSubSupport<BusMessage> uiBus = Mock(PubSubSupport)
+    DefaultUIBusProvider provider
 
-    public LoginFormException(I18NKey msgKey, Object... params) {
-        this.msgKey = msgKey;
-        this.params = params;
+    def setup() {
+        provider = new DefaultUIBusProvider(uiBus)
     }
 
-    public I18NKey getMsgKey() {
-        return msgKey;
-    }
-
-    public Object[] getParams() {
-        Object[] outArray = new Object[params.length];
-        System.arraycopy(params, 0, outArray, 0, params.length);
-        return outArray;
+    def "get and getUIBus"() {
+        expect:
+        provider.get() == uiBus
+        provider.getUIBus() == uiBus
     }
 }

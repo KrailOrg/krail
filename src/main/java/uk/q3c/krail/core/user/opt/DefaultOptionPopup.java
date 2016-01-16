@@ -1,18 +1,22 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.user.opt;
 
 import com.google.inject.Inject;
+import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +28,6 @@ import uk.q3c.util.ID;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -34,18 +37,21 @@ import java.util.Set;
  * <p>
  * Created by David Sowerby on 29/05/15.
  */
+@SuppressFBWarnings("URV_CHANGE_RETURN_TYPE")
 public class DefaultOptionPopup implements OptionPopup {
     private static Logger log = LoggerFactory.getLogger(DefaultOptionPopup.class);
     private OptionContext activeContext;
     private Set<Field> contextFields;
     private DataTypeToUI dataTypeToUI;
     private Translate translate;
+    private OptionKeyLocator optionKeyLocator;
     private Window window;
 
     @Inject
-    public DefaultOptionPopup(DataTypeToUI dataTypeToUI, Translate translate) {
+    public DefaultOptionPopup(DataTypeToUI dataTypeToUI, Translate translate, OptionKeyLocator optionKeyLocator) {
         this.dataTypeToUI = dataTypeToUI;
         this.translate = translate;
+        this.optionKeyLocator = optionKeyLocator;
     }
 
     @Override
@@ -70,19 +76,20 @@ public class DefaultOptionPopup implements OptionPopup {
         baseLayout.setSizeUndefined();
 
 
-        if (keys.size() == 0) {
+        if (keys.isEmpty()) {
 
             Label label = new Label(translate.from(LabelKey.No_Options_to_Show));
             baseLayout.addComponent(label, 0, 0);
         } else {
-            calculateWindowSize(window, keys.size());
+            calculateWindowSize(window);
             int row = 0;
             for (OptionKey key : keys.keySet()) {
                 Object value = option.get(key);
                 AbstractField uiField = dataTypeToUI.componentFor(value);
                 uiField.setCaption(translate.from(key.getKey()));
                 uiField.setDescription(translate.from(key.getDescriptionKey()));
-                uiField.setId(ID.getId(Optional.of(((Enum) key.getKey()).name()), this, uiField));
+                Optional<String> optionKeyName = Optional.of(((Enum) key.getKey()).name());
+                uiField.setId(ID.getId(optionKeyName, this, uiField));
                 log.debug("Component id for '{}' set to: '{}'", uiField.getCaption(), uiField.getId());
                 //noinspection unchecked
                 uiField.setValue(value);
@@ -92,7 +99,7 @@ public class DefaultOptionPopup implements OptionPopup {
                 });
 
                 Button defaultsButton = new Button(translate.from(LabelKey.Reset_to_Default));
-                defaultsButton.setId(ID.getId(Optional.of(((Enum) key.getKey()).name()), this, defaultsButton));
+                defaultsButton.setId(ID.getId(optionKeyName, this, defaultsButton));
                 defaultsButton.addClickListener((event -> {
                     option.delete(0, key);
                     //we create an event to represent the field which whose value will be affected by this change
@@ -116,7 +123,7 @@ public class DefaultOptionPopup implements OptionPopup {
         this.activeContext = context;
     }
 
-    private void calculateWindowSize(Window window, int numOfKeys) {
+    private void calculateWindowSize(Sizeable window) {
         window.setSizeUndefined();
         window.setHeight("600px");
     }
@@ -131,21 +138,7 @@ public class DefaultOptionPopup implements OptionPopup {
     @Nonnull
     @Override
     public Map<OptionKey, Class<?>> contextKeys(OptionContext context) {
-        captureContextFields(context);
-        Map<OptionKey, Class<?>> keys = new HashMap<>();
-        for (java.lang.reflect.Field field : contextFields) {
-            field.setAccessible(true);
-
-            try {
-                OptionKey key = (OptionKey) field.get(context);
-                if (key != null) {
-                    keys.put(key, field.getType());
-                }
-            } catch (IllegalAccessException e) {
-                log.error("Unable to access field {}", field.getName());
-            }
-        }
-        return keys;
+        return optionKeyLocator.contextKeyMap(context);
     }
 
     private void captureContextFields(OptionContext context) {

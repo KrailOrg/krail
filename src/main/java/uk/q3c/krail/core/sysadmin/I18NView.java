@@ -1,19 +1,20 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.sysadmin;
 
 import com.google.common.base.Splitter;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextArea;
@@ -47,20 +48,16 @@ public class I18NView extends Grid3x3ViewBase {
     private Button exportButton;
     @Caption(caption = LabelKey.Progress, description = DescriptionKey.Export_progress)
     private Label exportStatus;
-    private Injector injector;
     private Label instructions1;
     private Label instructions2;
     @Caption(caption = LabelKey.Locales, description = DescriptionKey.List_of_Locales_to_export)
     private TextArea localeList;
-    private PatternUtility patternUtility;
     private Translate translate;
     private UserNotifier userNotifier;
 
     @Inject
-    protected I18NView(PatternUtility patternUtility, UserNotifier userNotifier, Injector injector, Translate translate) {
-        this.patternUtility = patternUtility;
+    protected I18NView(UserNotifier userNotifier, Translate translate) {
         this.userNotifier = userNotifier;
-        this.injector = injector;
         this.translate = translate;
     }
 
@@ -109,7 +106,7 @@ public class I18NView extends Grid3x3ViewBase {
     public void localeChanged(LocaleChangeBusMessage busMessage) {
 
         instructions1.setValue(translate.from(MessageKey.Setup_I18NKey_export, LabelKey.Export));
-        instructions2.setValue("\n" + translate.from(MessageKey.All_Keys_exported));
+        instructions2.setValue('\n' + translate.from(MessageKey.All_Keys_exported));
     }
 
     //    private Optional<DatabaseBundleWriter> findWriter() {

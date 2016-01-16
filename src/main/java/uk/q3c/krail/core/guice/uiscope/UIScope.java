@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ *
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
+ *
  */
 package uk.q3c.krail.core.guice.uiscope;
 
@@ -58,7 +58,7 @@ public class UIScope implements Scope {
         return scope;
     }
 
-    <T> Map<Key<?>, Object> getScopedObjectMap(UIKey uiKey) {
+    Map<Key<?>, Object> getScopedObjectMap(UIKey uiKey) {
         // return an existing cache instance
         if (cache.containsKey(uiKey)) {
             Map<Key<?>, Object> scopedObjects = cache.get(uiKey);
@@ -112,7 +112,7 @@ public class UIScope implements Scope {
     }
 
     public boolean containsInstance(UIKey uiKey, Object containedInstance) {
-        Map<Key<?>, Object> scopeSet = cache.get(uiKey);
-        return scopeSet.containsValue(containedInstance);
+        return cache.get(uiKey)
+                    .containsValue(containedInstance);
     }
 }

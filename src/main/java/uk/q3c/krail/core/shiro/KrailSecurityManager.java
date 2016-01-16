@@ -51,7 +51,7 @@ public class KrailSecurityManager extends DefaultSecurityManager {
         super.setSessionManager(sessionManager);
     }
 
-    protected void setupCacheManager(Optional<CacheManager> cacheManagerOpt) {
+    protected final void setupCacheManager(Optional<CacheManager> cacheManagerOpt) {
         if (cacheManagerOpt.isPresent()) {
             setCacheManager(cacheManagerOpt.get());
             log.debug("CacheManager set");

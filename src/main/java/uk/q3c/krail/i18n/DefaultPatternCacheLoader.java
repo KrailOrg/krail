@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.i18n;
@@ -33,10 +35,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by David Sowerby on 08/12/14.
  */
 public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, String> implements PatternCacheLoader, OptionContext {
-    public static final OptionKey<Boolean> optionKeyAutoStub = new OptionKey<>(false, DefaultPatternSourceProvider.class, LabelKey.Auto_Stub, DescriptionKey
-            .Auto_Stub);
-    public static final OptionKey<Boolean> optionKeyStubWithKeyName = new OptionKey<>(true, DefaultPatternSourceProvider.class, LabelKey.Stub_with_Key_Name,
-            DescriptionKey.Stub_with_Key_Name);
+    public static final OptionKey<Boolean> optionKeyAutoStub = new OptionKey<>(Boolean.FALSE, DefaultPatternSourceProvider.class, LabelKey.Auto_Stub,
+            DescriptionKey.Auto_Stub);
+    public static final OptionKey<Boolean> optionKeyStubWithKeyName = new OptionKey<>(Boolean.TRUE, DefaultPatternSourceProvider.class, LabelKey
+            .Stub_with_Key_Name, DescriptionKey.Stub_with_Key_Name);
     public static final OptionKey<String> optionKeyStubValue = new OptionKey<>("undefined", DefaultPatternSourceProvider.class, LabelKey.Stub_Value,
             DescriptionKey.Stub_Value);
     private Option option;
@@ -64,17 +66,12 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
      * <p>
      * The native Java method for identifying candidate locales is used - see ResourceBundle.Control .getCandidateLocales
      *
-     * @param cacheKey
-     *         the non-null key whose value should be loaded
-     *
+     * @param cacheKey the non-null key whose value should be loaded
      * @return the value associated with {@code key}; <b>must not be null</b>
-     *
-     * @throws Exception
-     *         if unable to load the result
-     * @throws InterruptedException
-     *         if this method is interrupted. {@code InterruptedException} is
-     *         treated like any other {@code Exception} in all respects except that, when it is caught,
-     *         the thread's interrupt status is set
+     * @throws Exception            if unable to load the result
+     * @throws InterruptedException if this method is interrupted. {@code InterruptedException} is
+     *                              treated like any other {@code Exception} in all respects except that, when it is caught,
+     *                              the thread's interrupt status is set
      */
     @Override
     public String load(@Nonnull PatternCacheKey cacheKey) throws Exception {
@@ -114,11 +111,12 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
                     sourceProvider.selectedTargets()
                                   .getList()
                                   .forEach(t -> {
-                        Optional<PatternDao> target = sourceProvider.targetFor(t);
-                        if (target.isPresent()) {
-                            target.get().write(cacheKey, stubValue(source, cacheKey));
-                        }
-                    });
+                                      Optional<PatternDao> target = sourceProvider.targetFor(t);
+                                      if (target.isPresent()) {
+                                          target.get()
+                                                .write(cacheKey, stubValue(source, cacheKey));
+                                      }
+                                  });
                 }
 
             }
@@ -130,7 +128,7 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
         if (!value.isPresent()) {
             value = Optional.of(cacheKey.getKey()
                                         .name()
-                                        .replace("_", " "));
+                                        .replace('_', ' '));
             cacheKey.setSource(null);
         }
         return value.get();
@@ -139,16 +137,14 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     /**
      * When auto-stubbing the value used can either be the key name or a value specified by {@link #optionKeyStubValue}
      *
-     * @param source the pattern source
-     *
+     * @param source   the pattern source
      * @param cacheKey the key to identify the entry
-     *
      * @return the value to assign to the key
      */
-    protected String stubValue(Class<? extends Annotation> source, PatternCacheKey cacheKey){
+    protected String stubValue(Class<? extends Annotation> source, PatternCacheKey cacheKey) {
         Boolean stubWithKeyName = option.get(optionKeyStubWithKeyName.qualifiedWith(source.getSimpleName()));
         return (stubWithKeyName) ? cacheKey.getKey()
-                                                       .name() : option.get(optionKeyStubValue.qualifiedWith(source.getSimpleName()));
+                                           .name() : option.get(optionKeyStubValue.qualifiedWith(source.getSimpleName()));
     }
 
     /**

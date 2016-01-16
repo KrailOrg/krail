@@ -42,8 +42,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Java 8 suggests that it might be expected to do so.  The implementation has therefore been changed to use a
  * {@link DirectedOrderedSparseMultigraph} (this uses LinkedHashMaps) to maintain insertion order.
  *
- * @param <V>
- *         the type of object to be contained (the 'node'). Must implement equals
+ * @param <V> the type of object to be contained (the 'node'). Must implement equals
  */
 public class BasicForest<V> implements Serializable {
 
@@ -69,7 +68,6 @@ public class BasicForest<V> implements Serializable {
      * exist, the first node of the branch is taken as a root node (that is, it has no parent).
      *
      * @param branch
-     *
      * @return
      */
     public V addBranch(List<V> branch) {
@@ -131,7 +129,6 @@ public class BasicForest<V> implements Serializable {
      * Returns the node contained in the tree which matches (equals) the supplied {@code node}
      *
      * @param node
-     *
      * @return
      */
     public V getNode(V node) {
@@ -141,8 +138,7 @@ public class BasicForest<V> implements Serializable {
         if (n < 0) {
             return null;
         }
-        V found = list.get(n);
-        return found;
+        return list.get(n);
     }
 
     public List<V> getChildren(V parentNode) {
@@ -159,7 +155,6 @@ public class BasicForest<V> implements Serializable {
      * list includes the {@code parentNode}
      *
      * @param parentNode
-     *
      * @return
      */
     public List<V> getSubtreeNodes(V parentNode) {
@@ -189,7 +184,7 @@ public class BasicForest<V> implements Serializable {
         if (children == null) {
             return;
         }
-        if (children.size() == 0) {
+        if (children.isEmpty()) {
             leaves.add(parentNode);
         } else {
             for (V v : children) {
@@ -249,7 +244,7 @@ public class BasicForest<V> implements Serializable {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         for (V rootNode : getRoots()) {
-            buf.append("\n");
+            buf.append('\n');
             text(rootNode, buf, 0);
         }
         return buf.toString();
@@ -258,7 +253,8 @@ public class BasicForest<V> implements Serializable {
     public void text(V node, StringBuilder buf, int level) {
         String indent = StringUtils.repeat("-", level + 1);
         buf.append(indent);
-        buf.append(node.toString() + "\n");
+        buf.append(node);
+        buf.append('\n');
         for (V child : getChildren(node)) {
             text(child, buf, level + 1);
         }
@@ -327,10 +323,8 @@ public class BasicForest<V> implements Serializable {
      * back, so not very efficient.  This method is made necessary by Jung's approach to maintaining the integrity of the map - so far I have not found a way
      * to move an edge from one vertex to another without the associated vertices being deleted. https://github.com/davidsowerby/krail/issues/397
      *
-     * @param currentVertex
-     *         the vertex to be replaced
-     * @param newVertex
-     *         the vertex to replace it with
+     * @param currentVertex the vertex to be replaced
+     * @param newVertex     the vertex to replace it with
      */
     public void replaceNode(@Nonnull V currentVertex, @Nonnull V newVertex) {
         checkNotNull(currentVertex);
@@ -351,8 +345,9 @@ public class BasicForest<V> implements Serializable {
      */
     private void mergeSubGraph(BasicForest<V> sourceSubGraph, V targetParentVertex) {
         if (sourceSubGraph.getNodeCount() > 0) {
-            addChild(targetParentVertex, sourceSubGraph.getRoot());
-            copyChildren(sourceSubGraph, sourceSubGraph.getRoot(), this, sourceSubGraph.getRoot());
+            V sourceSubGraphRoot = sourceSubGraph.getRoot();
+            addChild(targetParentVertex, sourceSubGraphRoot);
+            copyChildren(sourceSubGraph, sourceSubGraphRoot, this, sourceSubGraph.getRoot());
         }
     }
 
@@ -361,7 +356,6 @@ public class BasicForest<V> implements Serializable {
      *
      * @param root
      * @param newRoot
-     *
      * @return
      */
     private BasicForest<V> subGraph(V root, V newRoot) {

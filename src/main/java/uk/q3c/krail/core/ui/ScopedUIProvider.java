@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.ui;
 
@@ -18,6 +20,7 @@ import com.vaadin.server.UICreateEvent;
 import com.vaadin.server.UIProvider;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
@@ -25,6 +28,7 @@ import uk.q3c.krail.core.guice.uiscope.UIKeyProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -35,7 +39,8 @@ import java.util.Map;
  *
  * @author David Sowerby, Will Temperley
  */
-public class ScopedUIProvider extends UIProvider implements Provider<ScopedUI> {
+@SuppressFBWarnings("SE_BAD_FIELD")
+public class ScopedUIProvider extends UIProvider implements Provider<ScopedUI>, Serializable {
     private static Logger log = LoggerFactory.getLogger(ScopedUIProvider.class);
     protected UIKeyProvider uiKeyProvider;
     protected Injector injector;
@@ -62,7 +67,7 @@ public class ScopedUIProvider extends UIProvider implements Provider<ScopedUI> {
      */
     @Override
     public Class<? extends UI> getUIClass(UIClassSelectionEvent event) {
-        if (uiMapBinder.size() == 0) {
+        if (uiMapBinder.isEmpty()) {
             throw new UIProviderException("At least one UI must be defined in the UIModule, uiBinder");
         }
         if (uiMapBinder.size() > 1) {

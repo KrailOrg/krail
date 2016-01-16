@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.core.guice.uiscope;
 
@@ -14,19 +16,22 @@ import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ui.ScopedUI;
 
 import java.util.Map;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @param <T>
  *
  * @author David Sowerby
  */
+@SuppressFBWarnings({"CD_CIRCULAR_DEPENDENCY"})
 class UIScopeProvider<T> implements Provider<T> {
-    private static Logger log = LoggerFactory.getLogger(UIScopeProvider.class);
+    private static Logger log = getLogger(UIScopeProvider.class);
     private final UIScope uiScope;
     private final Key<T> key;
     private final Provider<T> unscoped;
@@ -72,7 +77,7 @@ class UIScopeProvider<T> implements Provider<T> {
             }
         }
 
-        log.debug("looking for cache for key: " + uiKey);
+        log.debug("looking for cache for key: {}", uiKey);
         Map<Key<?>, Object> scopedObjects = this.uiScope.getScopedObjectMap(uiKey);
 
         // retrieve an existing instance if possible
@@ -80,16 +85,16 @@ class UIScopeProvider<T> implements Provider<T> {
         @SuppressWarnings("unchecked") T current = (T) scopedObjects.get(key);
 
         if (current != null) {
-            log.debug("returning existing instance of " + current.getClass()
-                                                                 .getSimpleName());
+            log.debug("returning existing instance of {}", current.getClass()
+                                                                  .getSimpleName());
             return current;
         }
 
         // or create the first instance and cache it
         current = unscoped.get();
         scopedObjects.put(key, current);
-        log.debug("new instance of " + current.getClass()
-                                              .getSimpleName() + " created, as none in cache");
+        log.debug("new instance of {} created, as none in cache", current.getClass()
+                                                                         .getSimpleName());
         return current;
     }
 }

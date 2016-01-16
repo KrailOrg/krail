@@ -33,6 +33,6 @@ public class DefaultSessionBusProvider implements SessionBusProvider {
 
     @Override
     public PubSubSupport<BusMessage> get() {
-        return null;
+        return sessionBus;
     }
 }

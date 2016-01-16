@@ -12,10 +12,9 @@
  */
 package uk.q3c.util;
 
-import java.io.Serializable;
 import java.util.Comparator;
 
-public class TargetTreeWrapper_BasicForest<S, T> extends TargetTreeWrapperBase<S, T> implements Serializable {
+public class TargetTreeWrapper_BasicForest<S, T> extends TargetTreeWrapperBase<S, T>  {
 
     private final BasicForest<T> forest;
 

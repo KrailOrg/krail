@@ -17,11 +17,12 @@ import uk.q3c.krail.core.navigate.sitemap.Sitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLockedException;
 
 import javax.annotation.Nonnull;
+import java.io.Serializable;
 
 /**
  * Created by David Sowerby on 05 Jan 2016
  */
-public interface SitemapQueue<T extends Sitemap> {
+public interface SitemapQueue<T extends Sitemap> extends Serializable {
 
     /**
      * Returns the {@link Sitemap} currently at the head of the queue.  This call will block if there is no head (that is, the queue is empty), and release

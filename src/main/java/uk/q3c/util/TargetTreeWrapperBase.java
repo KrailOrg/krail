@@ -12,11 +12,12 @@
  */
 package uk.q3c.util;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public abstract class TargetTreeWrapperBase<S, T> implements TargetTreeWrapper<S, T> {
+public abstract class TargetTreeWrapperBase<S, T> implements TargetTreeWrapper<S, T>, Serializable {
     protected NodeModifier<S, T> nodeModifier;
     private CaptionReader<S> captionReader;
 

@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.user.opt.cache;
@@ -35,11 +37,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * UserHierarchy} to use, and whether to take the lowest, highest or specific ranked value.
  * <p>
  * Scope is set in {@link OptionModule} but it is assumed that this class needs to be thread safe.
- *
+ * <p>
  * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
  * {@link OptionDao} are wrapped in Optional.
- *
- *
+ * <p>
+ * <p>
  * Created by David Sowerby on 19/02/15.
  */
 
@@ -64,12 +66,9 @@ public class DefaultOptionCache implements OptionCache {
     /**
      * Write value to the store, and updates the cache
      *
-     * @param cacheKey
-     *         unique identifier
-     * @param value
-     *         the value to set
-     * @param <T>
-     *         the type of the value
+     * @param cacheKey unique identifier
+     * @param value    the value to set
+     * @param <T>      the type of the value
      */
     @Override
     public synchronized <T> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<T> value) {
@@ -108,8 +107,9 @@ public class DefaultOptionCache implements OptionCache {
                                                        .getClass())) {
             return optionalValue;
         } else {
-            log.error("Returning default, option value for {} is of type for {}, but should be of type " + defaultValue.getClass(), optionCacheKey, optionalValue.get()
-                                                                                                                                                                 .getClass());
+            log.error("Returning default, option value for {} is of type for {}, but should be of type {}", optionCacheKey, optionalValue.get()
+                                                                                                                                         .getClass(),
+                    defaultValue.getClass());
             return defaultValue;
         }
     }
@@ -121,7 +121,7 @@ public class DefaultOptionCache implements OptionCache {
         checkNotNull(optionCacheKey);
         // delete from store first just in case there's a problem
         Optional<?> result = daoProvider.getActiveDao()
-                                   .deleteValue(optionCacheKey);
+                                        .deleteValue(optionCacheKey);
 
         //invalidate highest / lowest & specific as these are all now invalid
         cache.invalidate(new OptionCacheKey(optionCacheKey, RankOption.HIGHEST_RANK));

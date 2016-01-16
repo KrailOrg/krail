@@ -21,6 +21,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ChameleonTheme;
 import com.vaadin.ui.themes.ValoTheme;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
@@ -67,9 +68,10 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
         this.loginExceptionHandler = loginExceptionHandler;
         this.subjectProvider = subjectProvider;
         this.translate = translate;
-        this.eventBus = eventBusProvider.getSessionBus();
+        this.eventBus = eventBusProvider.get();
     }
 
+    @SuppressFBWarnings({"FCBL_FIELD_COULD_BE_LOCAL", "FCBL_FIELD_COULD_BE_LOCAL"})
     @Override
     public void doBuild(ViewChangeBusMessage event) {
         super.doBuild(event);

@@ -65,7 +65,7 @@ public class DefaultRealm extends AuthorizingRealmBase {
         String username = upToken.getUsername();
         String password = String.copyValueOf(upToken.getPassword());
         log.debug("Username {}, password: {}", username, password);
-        if (password.equals("password") && (!(username == null) && (!username.isEmpty()))) {
+        if ("password".equals(password) && (!(username == null) && (!username.isEmpty()))) {
             log.debug("login succeeds");
             loginAttemptLog.recordSuccessfulAttempt(upToken);
             return new SimpleAuthenticationInfo(username, password, this.getName());
@@ -117,8 +117,7 @@ public class DefaultRealm extends AuthorizingRealmBase {
         info.addStringPermission(editOwnOptionsPermission);
 
         // admin can set any options in SimpleUserHierarchy
-        if (userId.toLowerCase()
-                  .equals("admin")) {
+        if ("admin".equals(userId.toLowerCase())) {
             String editAnyOption = "option:edit:SimpleUserHierarchy:*:*:*:*";
             info.addStringPermission(editAnyOption);
         }

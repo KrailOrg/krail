@@ -1,18 +1,21 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.i18n;
 
 import com.google.inject.Inject;
 import com.vaadin.data.Property;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +46,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
     public static final String CONNECTION_URL = "Class based";
     public static final OptionKey<String> optionPathToValues = new OptionKey<>("", DefaultClassPatternDao.class, LabelKey.Path, DescriptionKey.Path);
-    public static final OptionKey<Boolean> optionKeyUseKeyPath = new OptionKey<>(true, DefaultClassPatternDao.class, LabelKey.Use_Key_Path, DescriptionKey
+    public static final OptionKey<Boolean> optionKeyUseKeyPath = new OptionKey<>(Boolean.TRUE, DefaultClassPatternDao.class, LabelKey.Use_Key_Path,
+            DescriptionKey
             .Use_Key_Path);
     private static Logger log = LoggerFactory.getLogger(DefaultClassPatternDao.class);
     protected Class<? extends Annotation> source;
@@ -80,6 +84,7 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CHECKED")
     @Override
     public void write(@Nonnull PatternCacheKey cacheKey, @Nonnull String value) {
         checkNotNull(cacheKey);
@@ -131,8 +136,8 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
     public Optional<String> getValue(@Nonnull PatternCacheKey cacheKey) {
         checkNotNull(cacheKey);
         // source is used to qualify the Option
-        log.debug("getValue for cacheKey {}, source '{}', using control: " + getControl().getClass()
-                                                                                         .getSimpleName(), cacheKey, source);
+        log.debug("getValue for cacheKey {}, source '{}', using control: {}", cacheKey, source, getControl().getClass()
+                                                                                                            .getSimpleName());
         I18NKey key = (I18NKey) cacheKey.getKey();
         String expandedBaseName = expandFromKey(key);
         try {
@@ -177,14 +182,14 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
 
         } else {
             String pathOptionValue = option.get(optionPathToValues.qualifiedWith(getSourceString()));
-            if (pathOptionValue.isEmpty() || pathOptionValue.equals(".")) {
+            if (pathOptionValue.isEmpty() || ".".equals(pathOptionValue)) {
                 packageName = ClassUtils.getPackageCanonicalName(sampleKey.getClass());
             } else {
                 packageName = pathOptionValue;
             }
         }
 
-        return packageName.isEmpty() ? baseName : packageName + "." + baseName;
+        return packageName.isEmpty() ? baseName : packageName + '.' + baseName;
     }
 
     public String getSourceString() {

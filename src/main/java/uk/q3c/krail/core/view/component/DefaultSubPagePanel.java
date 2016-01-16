@@ -42,7 +42,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DefaultSubPagePanel extends NavigationButtonPanel implements OptionContext, SubPagePanel {
     public static final OptionKey<SortType> optionSortType = new OptionKey<>(SortType.ALPHA, DefaultSubPagePanel.class, LabelKey.Sort_Type, DescriptionKey
             .Sort_Type);
-    public static final OptionKey<Boolean> optionSortAscending = new OptionKey<>(true, DefaultSubPagePanel.class, LabelKey.Sort_Ascending, DescriptionKey
+    public static final OptionKey<Boolean> optionSortAscending = new OptionKey<>(Boolean.TRUE, DefaultSubPagePanel.class, LabelKey.Sort_Ascending,
+            DescriptionKey
             .Sort_Ascending);
     private static Logger log = LoggerFactory.getLogger(DefaultSubPagePanel.class);
     private final UserSitemap userSitemap;
@@ -60,7 +61,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
         sorters.setOptionKeySortType(getOptionSortType());
     }
 
-    public boolean getOptionSortAscending() {
+    public final boolean getOptionSortAscending() {
         return option.get(optionSortAscending);
     }
 
@@ -106,7 +107,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
         return sorters.getSortComparator();
     }
 
-    public SortType getOptionSortType() {
+    public final SortType getOptionSortType() {
         return option.get(optionSortType);
     }
 

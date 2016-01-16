@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.user.opt.cache;
@@ -70,27 +72,6 @@ public class OptionCacheKey {
         this.userId = hierarchy.highestRankName();
     }
 
-    @Nonnull
-    private String requestedRankName(int requestedRank) {
-        String rankName = null;
-        switch (rankOption) {
-            case HIGHEST_RANK:
-                rankName = hierarchy.highestRankName();
-                break;
-            case LOWEST_RANK:
-                rankName = hierarchy.lowestRankName();
-                break;
-            case SPECIFIC_RANK:
-                rankName = hierarchy.rankName(requestedRank);
-                break;
-        }
-
-        if (rankName == null) {
-            throw new NullPointerException("rank name cannot be set to null");
-        }
-        return rankName;
-    }
-
     /**
      * copy constructor which changes the RankOption to {@code rankOption}
      *
@@ -107,22 +88,6 @@ public class OptionCacheKey {
         this.requestedRankName = cacheKey.getRequestedRankName();
         this.optionKey = cacheKey.getOptionKey();
         this.userId = cacheKey.getUserId();
-    }
-
-    public UserHierarchy getHierarchy() {
-        return hierarchy;
-    }
-
-    public OptionKey getOptionKey() {
-        return optionKey;
-    }
-
-    public String getRequestedRankName() {
-        return requestedRankName;
-    }
-
-    public String getUserId() {
-        return userId;
     }
 
     /**
@@ -145,6 +110,42 @@ public class OptionCacheKey {
         this.hierarchy = cacheKey.getHierarchy();
         this.rankOption = rankOption;
         this.userId = cacheKey.getUserId();
+    }
+
+    @Nonnull
+    private String requestedRankName(int requestedRank) {
+        String rankName = null;
+        switch (rankOption) {
+            case HIGHEST_RANK:
+                rankName = hierarchy.highestRankName();
+                break;
+            case LOWEST_RANK:
+                rankName = hierarchy.lowestRankName();
+                break;
+            case SPECIFIC_RANK:
+                rankName = hierarchy.rankName(requestedRank);
+                break;
+            default:
+                throw new NullPointerException("rank name cannot be set to null");
+        }
+
+        return rankName;
+    }
+
+    public UserHierarchy getHierarchy() {
+        return hierarchy;
+    }
+
+    public OptionKey getOptionKey() {
+        return optionKey;
+    }
+
+    public String getRequestedRankName() {
+        return requestedRankName;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public RankOption getRankOption() {
@@ -176,7 +177,7 @@ public class OptionCacheKey {
         }
 
         //if a SPECIFIC, we need to compare the rank name as well
-        if (rankOption.equals(RankOption.SPECIFIC_RANK)) {
+        if (rankOption == RankOption.SPECIFIC_RANK) {
 
             return requestedRankName.equals(that.requestedRankName);
         } else {
@@ -194,7 +195,7 @@ public class OptionCacheKey {
         result = 31 * result + userId.hashCode();
 
         // if a SPECIFIC, include the rank name
-        if (rankOption.equals(RankOption.SPECIFIC_RANK)) {
+        if (rankOption == RankOption.SPECIFIC_RANK) {
             result = 31 * result + requestedRankName.hashCode();
         }
         return result;

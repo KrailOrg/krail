@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.ui;
@@ -16,6 +18,7 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.*;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
@@ -36,15 +39,19 @@ import javax.annotation.Nonnull;
 
 public class DefaultApplicationUI extends ScopedUI implements OptionContext {
 
-    protected static final OptionKey<Boolean> optionBreadcrumbVisible = new OptionKey(true, DefaultApplicationUI.class, LabelKey.Breadcrumb_is_Visible,
+    protected static final OptionKey<Boolean> optionBreadcrumbVisible = new OptionKey<>(Boolean.TRUE, DefaultApplicationUI.class, LabelKey
+            .Breadcrumb_is_Visible,
             DescriptionKey.Breadcrumb_is_Visible);
-    protected static final OptionKey<Boolean> optionNavTreeVisible = new OptionKey(true, DefaultApplicationUI.class, LabelKey.Navigation_Tree_is_Visible,
+    protected static final OptionKey<Boolean> optionNavTreeVisible = new OptionKey<>(Boolean.TRUE, DefaultApplicationUI.class, LabelKey
+            .Navigation_Tree_is_Visible,
             DescriptionKey.Navigation_Tree_is_Visible);
-    protected static final OptionKey<Boolean> optionMenuVisible = new OptionKey(true, DefaultApplicationUI.class, LabelKey.Navigation_Menu_is_Visible,
+    protected static final OptionKey<Boolean> optionMenuVisible = new OptionKey<>(Boolean.TRUE, DefaultApplicationUI.class, LabelKey.Navigation_Menu_is_Visible,
             DescriptionKey.Navigation_Menu_is_Visible);
-    protected static final OptionKey<Boolean> optionMessageBarVisible = new OptionKey(true, DefaultApplicationUI.class, LabelKey.Message_bar_is_Visible,
+    protected static final OptionKey<Boolean> optionMessageBarVisible = new OptionKey<>(Boolean.TRUE, DefaultApplicationUI.class, LabelKey
+            .Message_bar_is_Visible,
             DescriptionKey.MessageBar_is_Visible);
-    protected static final OptionKey<Boolean> optionSubPagePanelVisible = new OptionKey(true, DefaultApplicationUI.class, LabelKey.SubPage_Panel_is_Visible,
+    protected static final OptionKey<Boolean> optionSubPagePanelVisible = new OptionKey<>(Boolean.TRUE, DefaultApplicationUI.class, LabelKey
+            .SubPage_Panel_is_Visible,
             DescriptionKey.SubPage_Panel_is_Visible);
 
     private final UserNavigationTree navTree;
@@ -56,15 +63,16 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
     private final ApplicationLogo logo;
     private final ApplicationHeader header;
     private final LocaleSelector localeSelector;
+    // this appears not to be used but does receive bus messages
+    private final VaadinNotification vaadinNotification;
     private VerticalLayout baseLayout;
     private HorizontalLayout headerRow;
     private VerticalLayout mainArea;
     private Panel nonSplitPanel;
     private Option option;
     private HorizontalSplitPanel splitPanel;
-    // this appears not to be used but does receive bus messages
-    private VaadinNotification vaadinNotification;
 
+    @SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
     @Inject
     protected DefaultApplicationUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader
             header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option) {

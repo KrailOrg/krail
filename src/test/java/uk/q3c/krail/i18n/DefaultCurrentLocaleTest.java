@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.i18n;
 
@@ -191,7 +191,7 @@ public class DefaultCurrentLocaleTest {
 
         //given
         listenerFired = false;
-        eventBusProvider.getSessionBus()
+        eventBusProvider.get()
                         .subscribe(this);
         when(subject.isAuthenticated()).thenReturn(false);
         when(source.identity()).thenReturn("LogoutView");
@@ -224,7 +224,7 @@ public class DefaultCurrentLocaleTest {
         when(subject.isAuthenticated()).thenReturn(false);
         currentLocale = createCurrentLocale();
         currentLocale.readFromEnvironment();
-        eventBusProvider.getSessionBus()
+        eventBusProvider.get()
                         .subscribe(this);
         listenerFired = false;
         // when
@@ -238,7 +238,7 @@ public class DefaultCurrentLocaleTest {
     public void setLocaleNoFire() {
         // given
         currentLocale = createCurrentLocale();
-        eventBusProvider.getSessionBus()
+        eventBusProvider.get()
                         .subscribe(this);
         listenerFired = false;
         // when
@@ -252,7 +252,7 @@ public class DefaultCurrentLocaleTest {
     public void setLocaleFire() {
         // given
         currentLocale = createCurrentLocale();
-        eventBusProvider.getSessionBus()
+        eventBusProvider.get()
                         .subscribe(this);
         listenerFired = false;
         currentLocale.setLocale(Locale.UK);
@@ -268,7 +268,7 @@ public class DefaultCurrentLocaleTest {
 
         // given
         currentLocale = createCurrentLocale();
-        eventBusProvider.getSessionBus()
+        eventBusProvider.get()
                         .subscribe(this);
         currentLocale.setLocale(Locale.GERMANY);
         listenerFired = false;

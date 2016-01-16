@@ -13,7 +13,10 @@
 package uk.q3c.util;
 
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Utility class used to standardise id setting (setId methods in Components).
@@ -32,7 +35,8 @@ import java.util.Optional;
 public class ID {
 
 
-    public static String getId(Optional<?> qualifier, Object... components) {
+    public static String getId(@Nonnull Optional<?> qualifier, Object... components) {
+        checkNotNull(qualifier);
         Class<?>[] classes = new Class<?>[components.length];
         for (int i = 0; i < components.length; i++) {
             classes[i] = components[i].getClass();
@@ -41,23 +45,24 @@ public class ID {
     }
 
 
-    public static String getIdc(Optional<?> qualifier, Class<?>... componentClasses) {
+    public static String getIdc(@Nonnull Optional<?> qualifier, Class<?>... componentClasses) {
+        checkNotNull(qualifier);
         StringBuilder buf = new StringBuilder();
         boolean first = true;
+        DefaultClassNameUtils classNameUtil = new DefaultClassNameUtils();
         for (Class<?> c : componentClasses) {
             if (!first) {
-                buf.append("-");
+                buf.append('-');
             } else {
                 first = false;
             }
             //https://github.com/davidsowerby/krail/issues/383
             //enhanced classes mess up the class name with $$Enhancer
-            buf.append(new DefaultClassNameUtils().simpleClassNameEnhanceRemoved(c));
+            buf.append(classNameUtil.simpleClassNameEnhanceRemoved(c));
         }
         if (qualifier.isPresent()) {
-            buf.append("-");
-            buf.append(qualifier.get()
-                                .toString());
+            buf.append('-');
+            buf.append(qualifier.get());
         }
         return buf.toString();
     }

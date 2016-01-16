@@ -1,20 +1,21 @@
 /*
- * Copyright (C) 2013 David Sowerby
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ *
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
+ *
  */
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
@@ -22,6 +23,7 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.util.ID;
 
 import javax.annotation.Nonnull;
+import java.io.Serializable;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -40,7 +42,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>
  * Note:  The {@link #rootComponent} must be set by sub-classes by an implementation of {@link #doBuild}
  */
-public abstract class ViewBase implements KrailView {
+public abstract class ViewBase implements KrailView, Serializable {
 
     private static Logger log = LoggerFactory.getLogger(ViewBase.class);
     private boolean componentsConstructed;
@@ -65,6 +67,7 @@ public abstract class ViewBase implements KrailView {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
     public void init() {
 
     }
@@ -109,6 +112,7 @@ public abstract class ViewBase implements KrailView {
      *
      * @param busMessage
      */
+    @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
     protected void loadData(AfterViewChangeBusMessage busMessage) {
 
     }
@@ -121,6 +125,7 @@ public abstract class ViewBase implements KrailView {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
     @Override
     public void beforeBuild(ViewChangeBusMessage busMessage) {
 

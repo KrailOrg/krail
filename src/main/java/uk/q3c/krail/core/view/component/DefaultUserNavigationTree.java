@@ -15,6 +15,7 @@ package uk.q3c.krail.core.view.component;
 import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Tree;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
@@ -56,11 +57,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @SubscribeTo({UIBus.class, SessionBus.class})
 public class DefaultUserNavigationTree extends Tree implements OptionContext, UserNavigationTree {
 
-    public static final OptionKey<SortType> optionKeySortType = new OptionKey(SortType.ALPHA, DefaultUserNavigationTree.class, LabelKey.Sort_Type,
+    public static final OptionKey<SortType> optionKeySortType = new OptionKey<>(SortType.ALPHA, DefaultUserNavigationTree.class, LabelKey.Sort_Type,
             DescriptionKey.Sort_Type);
-    public static final OptionKey<Boolean> optionKeySortAscending = new OptionKey(true, DefaultUserNavigationTree.class, LabelKey.Sort_Ascending,
+    public static final OptionKey<Boolean> optionKeySortAscending = new OptionKey<>(Boolean.TRUE, DefaultUserNavigationTree.class, LabelKey.Sort_Ascending,
             DescriptionKey.Sort_Ascending);
-    public static final OptionKey<Integer> optionKeyMaximumDepth = new OptionKey(10, DefaultUserNavigationTree.class, LabelKey.Maxiumum_Depth, DescriptionKey
+    public static final OptionKey<Integer> optionKeyMaximumDepth = new OptionKey<>(10, DefaultUserNavigationTree.class, LabelKey.Maxiumum_Depth, DescriptionKey
             .Maximum_Tree_Depth);
     private static Logger log = LoggerFactory.getLogger(DefaultUserNavigationTree.class);
     private final UserSitemap userSitemap;
@@ -93,7 +94,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
 
     }
 
-    public boolean getOptionSortAscending() {
+    public final boolean getOptionSortAscending() {
         return option.get(optionKeySortAscending);
     }
 
@@ -115,6 +116,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     /**
      * See {@link UserNavigationTree#build()}
      */
+    @SuppressFBWarnings("LO_APPENDED_STRING_IN_FORMAT_STRING") // no other way to do it
     @Override
     public void build() {
         if (rebuildRequired) {
@@ -124,12 +126,13 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
             rebuildRequired = false;
             if (log.isDebugEnabled()) {
                 Collection<?> t = this.getItemIds();
-                String s = "";
+                StringBuilder buf = new StringBuilder();
                 for (Object o : t) {
                     String itemCaption = getItemCaption(o);
-                    s = s + itemCaption + ",";
+                    buf.append(itemCaption);
+                    buf.append(',');
                 }
-                log.debug(s);
+                log.debug(buf.toString());
             }
         } else {
             log.debug("rebuild of user navigation tree is not required");

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -36,7 +37,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DefaultBroadcaster implements Broadcaster {
 
     private static Logger log = LoggerFactory.getLogger(DefaultBroadcaster.class);
-    private final ExecutorService executorService;
     private final Map<String, List<BroadcastListener>> groups = new HashMap<>();
     private final List<BroadcastListener> allGroup = new ArrayList<>();
     private final ApplicationConfiguration applicationConfiguration;
@@ -44,7 +44,6 @@ public class DefaultBroadcaster implements Broadcaster {
     @Inject
     protected DefaultBroadcaster(ApplicationConfiguration applicationConfiguration) {
         this.applicationConfiguration = applicationConfiguration;
-        executorService = Executors.newSingleThreadExecutor();
     }
 
 
@@ -54,7 +53,7 @@ public class DefaultBroadcaster implements Broadcaster {
         checkNotNull(listener);
         log.debug("adding listener: {}", listener.getClass()
                                                  .getName());
-        if (group.equals(ALL_MESSAGES)) {
+        if (ALL_MESSAGES.equals(group)) {
             allGroup.add(listener);
         } else {
             List<BroadcastListener> listenerGroup = groups.get(group);
@@ -72,7 +71,7 @@ public class DefaultBroadcaster implements Broadcaster {
     public synchronized Broadcaster unregister(@Nonnull String group, @Nonnull BroadcastListener listener) {
         checkNotNull(group);
         checkNotNull(listener);
-        if (group.equals(ALL_MESSAGES)) {
+        if (ALL_MESSAGES.equals(group)) {
             allGroup.remove(listener);
         } else {
             List<BroadcastListener> listenerGroup = groups.get(group);
@@ -88,6 +87,7 @@ public class DefaultBroadcaster implements Broadcaster {
     public synchronized Broadcaster broadcast(@Nonnull final String group, @Nonnull final String message) {
         checkNotNull(group);
         checkNotNull(message);
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
         if (applicationConfiguration.getBoolean(ConfigKeys.SERVER_PUSH_ENABLED, true)) {
             log.debug("broadcasting message: {}", message);
             List<BroadcastListener> listenerGroup = groups.get(group);
@@ -100,7 +100,30 @@ public class DefaultBroadcaster implements Broadcaster {
         } else {
             log.debug("server push is disabled, message not broadcast");
         }
+        closeExecutor(executorService);
         return this;
     }
+
+    /**
+     * Stops the @{code executor} with appropriate timeouts and logging
+     *
+     * @param executor the Executor to be shut down.
+     */
+    protected void closeExecutor(ExecutorService executor) {
+        try {
+            log.debug("Closing Executor, attempt to shutdown executor");
+            executor.shutdown();
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            log.error("Thread interrupted while shutting down Executor");
+        } finally {
+            if (!executor.isTerminated()) {
+                log.error("forcing shutdown");
+            }
+            executor.shutdownNow();
+            log.info("Services Executor shutdown finished");
+        }
+    }
+
 
 }

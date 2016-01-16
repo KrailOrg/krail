@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +34,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class PageAccessController implements Serializable {
     private static Logger log = LoggerFactory.getLogger(PageAccessController.class);
-    private final MasterSitemapQueue sitemapQueue;
 
     @Inject
-    protected PageAccessController(MasterSitemapQueue sitemapQueue) {
+    protected PageAccessController() {
         super();
-        this.sitemapQueue = sitemapQueue;
     }
 
     public boolean isAuthorised(Subject subject, MasterSitemap sitemap, UserSitemapNode userNode) {
@@ -73,11 +71,11 @@ public class PageAccessController implements Serializable {
         return false;
     }
 
-    public List<MasterSitemapNode> authorisedChildNodes(Subject subject, MasterSitemap sitemap, MasterSitemapNode parentNode) {
+    public List<MasterSitemapNode> authorisedChildNodes(@Nonnull Subject subject, @Nonnull MasterSitemap sitemap,
+                                                        @Nonnull MasterSitemapNode parentNode) {
         checkNotNull(subject);
-        if (parentNode == null) {
-            return new ArrayList<>();
-        }
+        checkNotNull(sitemap);
+        checkNotNull(parentNode);
         List<MasterSitemapNode> subnodes = sitemap.getChildren(parentNode);
         ArrayList<MasterSitemapNode> authorisedSubNodes = new ArrayList<MasterSitemapNode>();
         for (MasterSitemapNode node : subnodes) {

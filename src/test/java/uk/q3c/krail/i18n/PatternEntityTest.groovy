@@ -11,30 +11,31 @@
  *
  */
 
-package uk.q3c.krail.core.view.component;
+package uk.q3c.krail.i18n
 
-import uk.q3c.krail.i18n.I18NKey;
+import spock.lang.Specification
 
 /**
- * Created by David Sowerby on 02/06/15.
+ * Created by David Sowerby on 16 Jan 2016
  */
-public class LoginFormException extends RuntimeException {
-    private final I18NKey msgKey;
-    private final Object[] params;
+class PatternEntityTest extends Specification {
+
+    PatternEntity entity;
+
+    def "create decodes the I18NKey"() {
+        given:
+
+        PatternCacheKey cacheKey1 = new PatternCacheKey(LabelKey.Yes, Locale.UK)
+
+        when:
+
+        entity = new PatternEntity(cacheKey1, "x")
 
 
-    public LoginFormException(I18NKey msgKey, Object... params) {
-        this.msgKey = msgKey;
-        this.params = params;
-    }
+        then:
 
-    public I18NKey getMsgKey() {
-        return msgKey;
-    }
-
-    public Object[] getParams() {
-        Object[] outArray = new Object[params.length];
-        System.arraycopy(params, 0, outArray, 0, params.length);
-        return outArray;
+        entity.getI18nkey().equals("uk.q3c.krail.i18n.LabelKey.Yes")
     }
 }
+
+

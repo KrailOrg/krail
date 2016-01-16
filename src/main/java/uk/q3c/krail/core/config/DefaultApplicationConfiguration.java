@@ -14,6 +14,7 @@ package uk.q3c.krail.core.config;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -26,6 +27,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 @NotThreadSafe
 @Singleton
 public class DefaultApplicationConfiguration extends InheritingConfiguration implements ApplicationConfiguration {
+    @SuppressFBWarnings("SCII_SPOILED_CHILD_INTERFACE_IMPLEMENTOR")
     @Inject
     protected DefaultApplicationConfiguration() {
         super();

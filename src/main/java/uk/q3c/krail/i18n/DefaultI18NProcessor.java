@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.i18n;
 
@@ -18,6 +18,7 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Table;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ui.ScopedUI;
@@ -91,6 +92,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
      * @param target
      *         the field to be evaluated now
      */
+    @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS")
     protected void translate(@Nonnull List<Object> processedFields, @Nullable Object target) {
         if (target == null) {
             return;
@@ -108,8 +110,9 @@ public class DefaultI18NProcessor implements I18NProcessor {
 
     protected void processComponents(Map<AbstractComponent, AnnotationInfo> componentAnnotations, Object target) throws NoSuchFieldException,
             IllegalAccessException {
-        for (AbstractComponent component : componentAnnotations.keySet()) {
-            AnnotationInfo annotationInfo = componentAnnotations.get(component);
+        for (Map.Entry<AbstractComponent, AnnotationInfo> entry : componentAnnotations.entrySet()) {
+            AbstractComponent component = entry.getKey();
+            AnnotationInfo annotationInfo = entry.getValue();
             AnnotationValues annotationValues = annotationValues(annotationInfo.getAnnotations());
             if (component instanceof Table) {
                 processTable((Table) component, annotationValues, annotationInfo);
@@ -322,7 +325,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
     }
 
 
-    private class AnnotationValues {
+    private static class AnnotationValues {
         Optional<I18NKey> captionKey = Optional.empty();
         Optional<I18NKey> descriptionKey = Optional.empty();
         Optional<I18NKey> valueKey = Optional.empty();

@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.i18n;
 
@@ -87,7 +87,7 @@ public class DefaultTranslate implements Translate {
      */
     @Nonnull
     @Override
-    public <E extends Enum<E> & I18NKey> String from(boolean checkLocaleIsSupported, @Nullable I18NKey key, @Nonnull Locale locale, Object... arguments) {
+    public String from(boolean checkLocaleIsSupported, @Nullable I18NKey key, @Nonnull Locale locale, Object... arguments) {
         if (checkLocaleIsSupported) {
             if (!supportedLocales.contains(locale)) {
                 throw new UnsupportedLocaleException(locale);
@@ -109,7 +109,7 @@ public class DefaultTranslate implements Translate {
         List<Object> args = new ArrayList<>(Arrays.asList(arguments));
         for (int i = 0; i < args.size(); i++) {
             if (args.get(i) instanceof I18NKey) {
-                @SuppressWarnings("unchecked") String translation = from((E) args.get(i));
+                @SuppressWarnings("unchecked") String translation = from((I18NKey) args.get(i));
                 args.remove(i);
                 args.add(i, translation);
             }
