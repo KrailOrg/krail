@@ -48,7 +48,7 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
     public static final OptionKey<String> optionPathToValues = new OptionKey<>("", DefaultClassPatternDao.class, LabelKey.Path, DescriptionKey.Path);
     public static final OptionKey<Boolean> optionKeyUseKeyPath = new OptionKey<>(Boolean.TRUE, DefaultClassPatternDao.class, LabelKey.Use_Key_Path,
             DescriptionKey
-            .Use_Key_Path);
+                    .Use_Key_Path);
     private static Logger log = LoggerFactory.getLogger(DefaultClassPatternDao.class);
     protected Class<? extends Annotation> source;
     private ClassBundleControl control;
@@ -86,7 +86,7 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
      */
     @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CHECKED")
     @Override
-    public void write(@Nonnull PatternCacheKey cacheKey, @Nonnull String value) {
+    public Object write(@Nonnull PatternCacheKey cacheKey, @Nonnull String value) {
         checkNotNull(cacheKey);
         checkNotNull(value);
         if (writeFile == null) {
@@ -111,12 +111,14 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
         encoder.onMalformedInput(CodingErrorAction.REPORT);
         encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
 
-
+        String output = buf.toString();
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(writeFile), encoder))) {
-            writer.write(buf.toString());
+            writer.write(output);
+            return output;
         } catch (Exception e) {
             throw new PatternWriteException("failed to write pattern", e);
         }
+
     }
 
     /**
@@ -167,9 +169,7 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
      * <p>
      * If {@link #optionKeyUseKeyPath} is false, the bundle name is appended to {@link #optionPathToValues}
      *
-     * @param sampleKey
-     *         any key from the I18NKey class, to give access to bundleName()
-     *
+     * @param sampleKey any key from the I18NKey class, to give access to bundleName()
      * @return a path constructed from the {@code sampleKey} and {@link Option} values
      */
     protected String expandFromKey(@Nonnull I18NKey sampleKey) {

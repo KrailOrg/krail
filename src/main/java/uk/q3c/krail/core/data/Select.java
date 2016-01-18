@@ -14,6 +14,8 @@
 package uk.q3c.krail.core.data;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -39,6 +41,7 @@ public class Select {
         }
     }
 
+    private Map<String, Object> params;
     private StringBuilder buf;
 
     public Select() {
@@ -47,6 +50,7 @@ public class Select {
 
     public Select(@Nonnull String selection) {
         checkNotNull(selection);
+        params = new HashMap<>();
         buf = new StringBuilder("SELECT t ");
         buf.append(selection);
         if (!selection.isEmpty()) {
@@ -59,9 +63,7 @@ public class Select {
      * Use this with care - an entity annotation may change the table name
      *
      * @param entityClass
-     *
      * @return
-     *
      * @see #from(String)
      */
     public Select from(@Nonnull Class<?> entityClass) {
@@ -86,16 +88,12 @@ public class Select {
     }
 
     private Select fieldCompareValue(String field, Compare compare, Object value) {
+        params.put(field + "Param", value);
         buf.append("t.");
         buf.append(field);
         buf.append(compare.code);
-        if (value instanceof String) {
-            buf.append('\'');
-            buf.append(value);
-            buf.append('\'');
-        } else {
-            buf.append(value);
-        }
+        buf.append(field);
+        buf.append("Param");
         return this;
     }
 
@@ -120,7 +118,6 @@ public class Select {
      *
      * @param field
      * @param value
-     *
      * @return
      */
     public Select and(@Nonnull String field, @Nonnull Object value) {
@@ -133,7 +130,6 @@ public class Select {
     /**
      * @param field
      * @param value
-     *
      * @return
      */
     public Select and(@Nonnull String field, Compare compare, @Nonnull Object value) {
@@ -144,4 +140,7 @@ public class Select {
     }
 
 
+    public Object getParam(String paramKey) {
+        return params.get(paramKey);
+    }
 }

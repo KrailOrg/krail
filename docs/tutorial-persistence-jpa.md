@@ -508,7 +508,7 @@ import uk.q3c.krail.core.user.opt.*;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.jpa.persist.JpaContainerProvider;
-import uk.q3c.krail.jpa.user.opt.OptionEntity_LongInt;
+import uk.q3c.krail.jpa.user.opt.JpaOptionEntity;
 
 import javax.annotation.Nonnull;
 
@@ -621,7 +621,7 @@ protected Module optionModule() {
 ```xml
 <persistence-unit name="derbyDb">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>uk.q3c.krail.jpa.user.opt.OptionEntity_LongInt</class>
+    <class>uk.q3c.krail.jpa.user.opt.JpaOptionEntity</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
     </properties>
@@ -704,8 +704,8 @@ protected Module i18NModule() {
 ```xml
 <persistence-unit name="derbyDb">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>uk.q3c.krail.jpa.user.opt.OptionEntity_LongInt</class>
-    <class>uk.q3c.krail.jpa.i18n.PatternEntity_LongInt</class>
+    <class>uk.q3c.krail.jpa.user.opt.JpaOptionEntity</class>
+    <class>uk.q3c.krail.jpa.i18n.JpaPatternEntity</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
     </properties>
