@@ -13,11 +13,14 @@
 
 package uk.q3c.krail.core.shiro.aop;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.aop.RoleAnnotationHandler;
+import uk.q3c.krail.core.shiro.SubjectProvider;
 
 import java.util.Arrays;
 
@@ -29,10 +32,10 @@ import java.util.Arrays;
  */
 public class RolesMethodInterceptor extends ShiroMethodInterceptor<RequiresRoles> {
 
+    @Inject
+    public RolesMethodInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver> annotationResolverProvider) {
 
-    public RolesMethodInterceptor() {
-
-        super(RequiresRoles.class, UnauthorizedException.class);
+        super(RequiresRoles.class, UnauthorizedException.class, subjectProviderProvider, annotationResolverProvider);
     }
 
 

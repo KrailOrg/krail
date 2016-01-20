@@ -13,12 +13,14 @@
 
 package uk.q3c.krail.core.shiro.aop;
 
-import org.apache.shiro.authz.AuthorizationException;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.aop.PermissionAnnotationHandler;
 import org.apache.shiro.subject.Subject;
+import uk.q3c.krail.core.shiro.SubjectProvider;
 
 /**
  * AOP MethodInterceptor to detect whether a user has the required permissions.  Detection logic is a copy of the native Shiro version in {@link
@@ -28,9 +30,9 @@ import org.apache.shiro.subject.Subject;
  */
 public class PermissionsMethodInterceptor extends ShiroMethodInterceptor<RequiresPermissions> {
 
-
-    public PermissionsMethodInterceptor() {
-        super(RequiresPermissions.class, UnauthorizedException.class);
+    @Inject
+    public PermissionsMethodInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver> annotationResolverProvider) {
+        super(RequiresPermissions.class, UnauthorizedException.class, subjectProviderProvider, annotationResolverProvider);
     }
 
 
@@ -39,7 +41,7 @@ public class PermissionsMethodInterceptor extends ShiroMethodInterceptor<Require
 
         String[] perms = rpAnnotation.value();
         Subject subject = getSubject();
-        try {
+//        try {
             if (perms.length == 1) {
                 subject.checkPermission(perms[0]);
                 return;
@@ -62,8 +64,8 @@ public class PermissionsMethodInterceptor extends ShiroMethodInterceptor<Require
                 }
 
             }
-        } catch (AuthorizationException ae) {
-            exception();
-        }
+//        } catch (AuthorizationException ae) {
+//            exception();
+//        }
     }
 }

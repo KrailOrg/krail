@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.shiro.aop;
 
-import com.google.inject.Inject;
+import com.google.inject.Provider;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -31,15 +31,15 @@ public abstract class ShiroMethodInterceptor<A extends Annotation> implements Me
     private static Logger log = LoggerFactory.getLogger(ShiroMethodInterceptor.class);
     protected Class<A> annotationClass;
     protected Class<? extends RuntimeException> exceptionToThrow;
-    @Inject
-    private AnnotationResolver annotationResolver;
-    @Inject
-    private SubjectProvider subjectProvider;
+    private Provider<AnnotationResolver> annotationResolverProvider;
+    private Provider<SubjectProvider> subjectProviderProvider;
 
-    public ShiroMethodInterceptor(Class<A> annotationClass, Class<? extends RuntimeException> exceptionToThrow) {
-
+    public ShiroMethodInterceptor(Class<A> annotationClass, Class<? extends RuntimeException> exceptionToThrow, Provider<SubjectProvider>
+            subjectProviderProvider, Provider<AnnotationResolver> annotationResolverProvider) {
         this.annotationClass = annotationClass;
         this.exceptionToThrow = exceptionToThrow;
+        this.subjectProviderProvider = subjectProviderProvider;
+        this.annotationResolverProvider = annotationResolverProvider;
     }
 
 
@@ -60,13 +60,14 @@ public abstract class ShiroMethodInterceptor<A extends Annotation> implements Me
     }
 
     public AnnotationResolver getAnnotationResolver() {
-        return annotationResolver;
+        return annotationResolverProvider.get();
     }
 
     protected abstract void assertAuthorized(A annotation);
 
     public Subject getSubject() {
-        return subjectProvider.get();
+        return subjectProviderProvider.get()
+                                      .get();
     }
 
     @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS")

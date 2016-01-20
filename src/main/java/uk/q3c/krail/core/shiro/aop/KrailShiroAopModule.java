@@ -13,7 +13,9 @@
 
 package uk.q3c.krail.core.shiro.aop;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
 import com.vaadin.server.VaadinSession;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -64,7 +66,10 @@ public class KrailShiroAopModule extends AbstractModule {
     protected void configure() {
         bindResolver();
         define();
-        bindInterceptors();
+
+        final Provider<SubjectProvider> servicesModelProvider = this.getProvider(SubjectProvider.class);
+        final Provider<AnnotationResolver> annotationResolverProvider = this.getProvider(AnnotationResolver.class);
+        bindInterceptors(servicesModelProvider, annotationResolverProvider);
     }
 
     /**
@@ -85,49 +90,54 @@ public class KrailShiroAopModule extends AbstractModule {
 
     }
 
-    protected void bindInterceptors() {
+    protected void bindInterceptors(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver> annotationResolverProvider) {
         if (selectedAnnotations.contains(RequiresPermissions.class)) {
-            bindMethodInterceptor((RequiresPermissions.class), permissionsInterceptor());
+            bindMethodInterceptor((RequiresPermissions.class), permissionsInterceptor(subjectProviderProvider, annotationResolverProvider));
         }
         if (selectedAnnotations.contains(RequiresUser.class)) {
-            bindMethodInterceptor((RequiresUser.class), userInterceptor());
+            bindMethodInterceptor((RequiresUser.class), userInterceptor(subjectProviderProvider, annotationResolverProvider));
         }
         if (selectedAnnotations.contains(RequiresGuest.class)) {
-            bindMethodInterceptor((RequiresGuest.class), guestInterceptor());
+            bindMethodInterceptor((RequiresGuest.class), guestInterceptor(subjectProviderProvider, annotationResolverProvider));
         }
         if (selectedAnnotations.contains(RequiresAuthentication.class)) {
-            bindMethodInterceptor((RequiresAuthentication.class), authenticatedInterceptor());
+            bindMethodInterceptor((RequiresAuthentication.class), authenticatedInterceptor(subjectProviderProvider, annotationResolverProvider));
         }
 
         if (selectedAnnotations.contains(RequiresRoles.class)) {
-            bindMethodInterceptor((RequiresRoles.class), rolesInterceptor());
+            bindMethodInterceptor((RequiresRoles.class), rolesInterceptor(subjectProviderProvider, annotationResolverProvider));
         }
 
     }
 
     private void bindMethodInterceptor(Class<? extends Annotation> shiroAnnotationClass, MethodInterceptor methodInterceptor) {
-        requestInjection(methodInterceptor);
+//        requestInjection(methodInterceptor);
         bindInterceptor(Matchers.any(), Matchers.annotatedWith(shiroAnnotationClass), methodInterceptor);
     }
 
-    protected PermissionsMethodInterceptor permissionsInterceptor() {
-        return new PermissionsMethodInterceptor();
+    protected PermissionsMethodInterceptor permissionsInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver>
+            annotationResolverProvider) {
+        return new PermissionsMethodInterceptor(subjectProviderProvider, annotationResolverProvider);
     }
 
-    protected RolesMethodInterceptor rolesInterceptor() {
-        return new RolesMethodInterceptor();
+    protected RolesMethodInterceptor rolesInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver>
+            annotationResolverProvider) {
+        return new RolesMethodInterceptor(subjectProviderProvider, annotationResolverProvider);
     }
 
-    protected AuthenticatedMethodInterceptor authenticatedInterceptor() {
-        return new AuthenticatedMethodInterceptor();
+    protected AuthenticatedMethodInterceptor authenticatedInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver>
+            annotationResolverProvider) {
+        return new AuthenticatedMethodInterceptor(subjectProviderProvider, annotationResolverProvider);
     }
 
-    protected UserMethodInterceptor userInterceptor() {
-        return new UserMethodInterceptor();
+    protected UserMethodInterceptor userInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver>
+            annotationResolverProvider) {
+        return new UserMethodInterceptor(subjectProviderProvider, annotationResolverProvider);
     }
 
-    protected GuestMethodInterceptor guestInterceptor() {
-        return new GuestMethodInterceptor();
+    protected GuestMethodInterceptor guestInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver>
+            annotationResolverProvider) {
+        return new GuestMethodInterceptor(subjectProviderProvider, annotationResolverProvider);
     }
 
     protected void bindResolver() {
@@ -142,5 +152,12 @@ public class KrailShiroAopModule extends AbstractModule {
         select(RequiresAuthentication.class);
         select(RequiresUser.class);
         return this;
+    }
+
+    /**
+     * Useful only for testing
+     */
+    public ImmutableSet<Class<? extends Annotation>> getSelectedAnnotations() {
+        return ImmutableSet.copyOf(selectedAnnotations);
     }
 }
