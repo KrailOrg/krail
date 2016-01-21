@@ -12,6 +12,7 @@
  */
 package uk.q3c.util;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -23,6 +24,9 @@ public abstract class TargetTreeWrapperBase<S, T> implements TargetTreeWrapper<S
 
     @Override
     public CaptionReader<S> getCaptionReader() {
+        if (captionReader == null) {
+            throw new TreeCopyException("CaptionReader has not been set");
+        }
         return captionReader;
     }
 
@@ -32,7 +36,7 @@ public abstract class TargetTreeWrapperBase<S, T> implements TargetTreeWrapper<S
     }
 
     /**
-     * Delegates to the NodeModifer if there is one, otherwise does nothing
+     * Delegates to the NodeModifier if there is one, otherwise does nothing
      */
     @Override
     public void setLeaf(T node, boolean isLeaf) {
@@ -42,29 +46,32 @@ public abstract class TargetTreeWrapperBase<S, T> implements TargetTreeWrapper<S
     }
 
     /**
-     * Delegates to the NodeModifer if there is one, otherwise attempts to cast the {@code sourceChildNode} as the
+     * Delegates to the NodeModifier if there is one, otherwise attempts to cast the {@code sourceChildNode} as the
      * target (which will cause a TreeCopyException if target and source types are incompatible)
      */
     @Override
     public T createNode(T parentNode, S sourceChildNode) {
         checkNotNull(sourceChildNode);
-        checkNotNull(nodeModifier);
         return getNodeModifier().create(parentNode, sourceChildNode);
     }
 
     @Override
     public NodeModifier<S, T> getNodeModifier() {
+        if (nodeModifier == null) {
+            throw new TreeCopyException("nodeModifier has not been set");
+        }
         return nodeModifier;
     }
 
     @Override
-    public void setNodeModifier(NodeModifier<S, T> nodeModifier) {
+    public void setNodeModifier(@Nonnull NodeModifier<S, T> nodeModifier) {
+        checkNotNull(nodeModifier);
         this.nodeModifier = nodeModifier;
     }
 
     @Override
     public void sortChildren(T parentNode, Comparator<T> comparator) {
-        nodeModifier.sortChildren(parentNode, comparator);
+        getNodeModifier().sortChildren(parentNode, comparator);
     }
 
 }

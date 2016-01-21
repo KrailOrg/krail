@@ -13,7 +13,6 @@
 
 package uk.q3c.krail.core.sysadmin;
 
-import com.google.common.base.Splitter;
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
@@ -31,11 +30,8 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.krail.util.Experimental;
 
-import javax.annotation.Nonnull;
-import java.util.*;
-
 /**
- * Enables the export of I18NKeys to a database
+ * Enables the export of I18NKeys to a database - or at least it will one day
  * Created by David Sowerby on 13/07/15.
  */
 @Experimental
@@ -54,11 +50,26 @@ public class I18NView extends Grid3x3ViewBase {
     private TextArea localeList;
     private Translate translate;
     private UserNotifier userNotifier;
-
     @Inject
     protected I18NView(UserNotifier userNotifier, Translate translate) {
         this.userNotifier = userNotifier;
         this.translate = translate;
+    }
+
+    public Button getExportButton() {
+        return exportButton;
+    }
+
+    public TextArea getLocaleList() {
+        return localeList;
+    }
+
+    public Label getInstructions1() {
+        return instructions1;
+    }
+
+    public Label getInstructions2() {
+        return instructions2;
     }
 
     /**
@@ -82,6 +93,8 @@ public class I18NView extends Grid3x3ViewBase {
 
 
     protected void export() {
+
+        userNotifier.notifyInformation(LabelKey.This_feature_has_not_been_implemented);
         //        exportStatus.setValue("");
         //        Optional<DatabaseBundleWriter> writerOpt = findWriter();
         //        Set<Locale> locales = retrieveLocales();
@@ -126,26 +139,26 @@ public class I18NView extends Grid3x3ViewBase {
     //        return Optional.empty();
     //    }
 
-    @Nonnull
-    protected Set<Locale> retrieveLocales() {
-        exportStatus.setValue(translate.from(LabelKey.Retrieving_Locales));
-        String userInput = localeList.getValue();
-        List<String> localeTags = Splitter.on("\n")
-                                          .trimResults()
-                                          .omitEmptyStrings()
-                                          .splitToList(userInput);
-        Set<Locale> locales = new HashSet<>();
-        localeTags.forEach(tag -> {
-            try {
-                Locale locale = new Locale.Builder().setLanguageTag(tag)
-                                                    .build();
-                locales.add(locale);
-            } catch (IllformedLocaleException e) {
-                userNotifier.notifyWarning(MessageKey.Invalid_Locale_Langugage_Tag, tag);
-            }
-        });
-        return locales;
-    }
+//    @Nonnull
+//    protected Set<Locale> retrieveLocales() {
+//        exportStatus.setValue(translate.from(LabelKey.Retrieving_Locales));
+//        String userInput = localeList.getValue();
+//        List<String> localeTags = Splitter.on("\n")
+//                                          .trimResults()
+//                                          .omitEmptyStrings()
+//                                          .splitToList(userInput);
+//        Set<Locale> locales = new HashSet<>();
+//        localeTags.forEach(tag -> {
+//            try {
+//                Locale locale = new Locale.Builder().setLanguageTag(tag)
+//                                                    .build();
+//                locales.add(locale);
+//            } catch (IllformedLocaleException e) {
+//                userNotifier.notifyWarning(MessageKey.Invalid_Locale_Langugage_Tag, tag);
+//            }
+//        });
+//        return locales;
+//    }
 
 
 }

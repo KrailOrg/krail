@@ -57,7 +57,7 @@ public class TargetTreeWrapper_MenuBarTest {
         // then
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = TreeCopyException.class)
     public void createNode__noModifierSet() {
 
         // given

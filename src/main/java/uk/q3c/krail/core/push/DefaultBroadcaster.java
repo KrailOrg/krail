@@ -13,6 +13,7 @@
 
 package uk.q3c.krail.core.push;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
@@ -51,6 +53,7 @@ public class DefaultBroadcaster implements Broadcaster {
     public synchronized Broadcaster register(@Nonnull String group, @Nonnull BroadcastListener listener) {
         checkNotNull(group);
         checkNotNull(listener);
+        checkArgument(!group.isEmpty(), "Group should not be an empty String");
         log.debug("adding listener: {}", listener.getClass()
                                                  .getName());
         if (ALL_MESSAGES.equals(group)) {
@@ -87,6 +90,7 @@ public class DefaultBroadcaster implements Broadcaster {
     public synchronized Broadcaster broadcast(@Nonnull final String group, @Nonnull final String message) {
         checkNotNull(group);
         checkNotNull(message);
+        checkArgument(!group.isEmpty(), "Group should not be an empty String");
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         if (applicationConfiguration.getBoolean(ConfigKeys.SERVER_PUSH_ENABLED, true)) {
             log.debug("broadcasting message: {}", message);
@@ -102,6 +106,21 @@ public class DefaultBroadcaster implements Broadcaster {
         }
         closeExecutor(executorService);
         return this;
+    }
+
+    @Override
+    @Nonnull
+    public ImmutableList<BroadcastListener> getListenerGroup(@Nonnull String group) {
+        checkNotNull(group);
+        checkArgument(!group.isEmpty(), "Group should not be an empty String");
+        if (Broadcaster.ALL_MESSAGES.equals(group)) {
+            return ImmutableList.copyOf(allGroup);
+        }
+        List<BroadcastListener> listenerGroup = groups.get(group);
+        if (listenerGroup == null) {
+            return ImmutableList.of();
+        }
+        return ImmutableList.copyOf(listenerGroup);
     }
 
     /**

@@ -14,6 +14,7 @@
 package uk.q3c.krail.core.shiro.aop
 
 import com.google.inject.Provider
+import org.apache.shiro.authz.AuthorizationException
 import org.apache.shiro.authz.annotation.RequiresRoles
 import org.apache.shiro.subject.Subject
 import spock.lang.Specification
@@ -43,26 +44,70 @@ class RolesMethodInterceptorTest extends Specification {
     }
 
 
-    def "requires roles a AND b, user1 Ok, user2 not"() {
+    def "requires multiple roles (a AND b), user1 Ok, user2 not"() {
         given:
         RequiresRoles annotation = new InterceptorTestClass().getAnnotation('requiresRoles')
-        subject1.hasRole("a") >> true
-        subject1.hasRole("b") >> true
-        subject2.hasRole("a") >> true
-        subject2.hasRole("b") >> false
+        subjectProvider.get() >>> [subject1, subject2]
+        subject1.checkRoles(["a", "b"])
+        subject2.checkRoles(["a", "b"]) >> { throw new AuthorizationException("x") }
 
         when:
-        boolean result1 = interceptor.assertAuthorized(annotation)
-        boolean result2 = interceptor.assertAuthorized(annotation)
+        interceptor.assertAuthorized(annotation)
 
         then:
-        subjectProvider.get() >>> [subject1, subject2]
-        result1
-        !result2
+        noExceptionThrown()
+
+        when:
+        interceptor.assertAuthorized(annotation)
+
+        then:
+        thrown(RuntimeException)
+
     }
 
+    def "requires single roles (a), user1 Ok, user2 not"() {
+        given:
+        RequiresRoles annotation = new InterceptorTestClass().getAnnotation('requiresRole')
+        subjectProvider.get() >>> [subject1, subject2]
+        subject1.checkRole("a")
+        subject2.checkRole("a") >> { throw new AuthorizationException("x") }
+
+        when:
+        interceptor.assertAuthorized(annotation)
+
+        then:
+        noExceptionThrown()
+
+        when:
+        interceptor.assertAuthorized(annotation)
+
+        then:
+        thrown(RuntimeException)
+
+    }
+
+
     def "requires roles a OR b user1 Ok, user2 not"() {
-        expect: false
+        given:
+        RequiresRoles annotation = new InterceptorTestClass().getAnnotation('requiresRolesOr')
+        subjectProvider.get() >>> [subject1, subject2]
+        subject1.hasRole("a") >> true
+        subject1.hasRole("b") >> false
+        subject2.hasRole("a") >> false
+        subject2.hasRole("b") >> false
+        subject2.checkRole("a") >> { throw new AuthorizationException("x") }
+
+        when:
+        interceptor.assertAuthorized(annotation)
+
+        then:
+        noExceptionThrown()
+
+        when:
+        interceptor.assertAuthorized(annotation)
+
+        then:
+        thrown(RuntimeException)
     }
 
 

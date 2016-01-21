@@ -11,22 +11,43 @@
  *
  */
 
-package uk.q3c.util;
+package uk.q3c.krail.core.push
 
-public class CycleDetectedException extends RuntimeException {
+import spock.lang.Specification
 
-    public CycleDetectedException() {
-        super();
+/**
+ * Created by David Sowerby on 19 Jan 2016
+ */
+class PushMessageTest extends Specification {
 
+    def "NPE for null message"() {
+
+        when:
+        new PushMessage("a", null)
+
+        then:
+
+        thrown(NullPointerException)
     }
 
+    def "NPE for null group"() {
 
+        when:
+        new PushMessage(null, "A")
 
-    public CycleDetectedException(String message) {
-        super(message);
+        then:
 
+        thrown(NullPointerException)
     }
 
+    def "getters"() {
+        when:
 
+        PushMessage msg = new PushMessage("a", "b")
 
+        then:
+
+        msg.getGroup().equals("a")
+        msg.getMessage().equals("b")
+    }
 }

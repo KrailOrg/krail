@@ -28,8 +28,28 @@ public class InterceptorTestClass {
 
     }
 
-    @RequiresPermissions("a")
+    @RequiresRoles("a")
+    public void requiresRole() {
+
+    }
+
+    @RequiresRoles(value = {"a", "b"}, logical = Logical.OR)
+    public void requiresRolesOr() {
+
+    }
+
+    @RequiresPermissions({"a", "b"})
     public void requiresPermissions() {
+
+    }
+
+    @RequiresPermissions("a")
+    public void requiresPermission() {
+
+    }
+
+    @RequiresPermissions(value = {"a", "b"}, logical = Logical.OR)
+    public void requiresPermissionsOr() {
 
     }
 
@@ -57,7 +77,7 @@ public class InterceptorTestClass {
                 return methods[i].getDeclaredAnnotations()[0];
             }
         }
-        throw new RuntimeException("test set up problem");
+        throw new RuntimeException("test set up problem, method name not recognised");
     }
 
 

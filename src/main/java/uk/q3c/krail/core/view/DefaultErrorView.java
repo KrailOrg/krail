@@ -15,10 +15,10 @@ package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.TextArea;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.util.StackTraceUtil;
 
 /**
  * @author David Sowerby 4 Aug 2013
@@ -45,7 +45,7 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
 
     @Override
     public void setError(Throwable error) {
-        log.error(StackTraceUtil.getStackTrace(error));
+        log.error(ExceptionUtils.getStackTrace(error));
         this.error = error;
     }
 
@@ -58,9 +58,9 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
         textArea.setReadOnly(false);
         textArea.setWordwrap(false);
         if (error != null) {
-            String s = StackTraceUtil.getStackTrace(error);
-            //add a couple of blank lines at the bootom to ensure visibility of the last line
-            textArea.setValue(s + "\n\n");
+            String s=ExceptionUtils.getStackTrace(error)+( "\n\n");
+            //add a couple of blank lines at the bottom to ensure visibility of the last line
+            textArea.setValue(s);
         } else {
             textArea.setValue("Error view has been called but no error has been set.  This should not happen");
             textArea.setReadOnly(true);

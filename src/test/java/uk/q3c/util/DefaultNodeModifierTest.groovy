@@ -11,22 +11,40 @@
  *
  */
 
-package uk.q3c.util;
+package uk.q3c.util
 
-public class CycleDetectedException extends RuntimeException {
+import spock.lang.Specification
 
-    public CycleDetectedException() {
-        super();
+/**
+ * Created by David Sowerby on 18 Jan 2016
+ */
+class DefaultNodeModifierTest extends Specification {
 
+
+    DefaultNodeModifier nodeModifier
+
+    def setup() {
+        nodeModifier = new DefaultNodeModifier()
     }
 
+    def "sourceNodeFor NPE if null param"() {
+        when:
+        nodeModifier.sourceNodeFor(null)
 
-
-    public CycleDetectedException(String message) {
-        super(message);
-
+        then:
+        thrown(NullPointerException)
     }
 
+    def "sourceNodeFor returns param"() {
+        given:
+
+
+        when:
+        nodeModifier.sourceNodeFor(null)
+
+        then:
+        thrown(NullPointerException)
+    }
 
 
 }

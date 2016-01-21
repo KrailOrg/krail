@@ -13,6 +13,7 @@
 package uk.q3c.util;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Comparator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -56,7 +57,6 @@ public class DefaultNodeModifier<S, T> implements NodeModifier<S, T> {
      */
     @Override
     public void setCaption(@Nonnull T targetNode, String caption) {
-
     }
 
     @Override
@@ -68,7 +68,7 @@ public class DefaultNodeModifier<S, T> implements NodeModifier<S, T> {
      * Does nothing by default
      */
     @Override
-    public void sortChildren(@Nonnull T parentNode, @Nonnull Comparator<T> comparator) {
+    public void sortChildren(@Nullable T parentNode, @Nonnull Comparator<T> comparator) {
 
     }
 

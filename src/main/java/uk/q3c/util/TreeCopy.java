@@ -75,11 +75,14 @@ public class TreeCopy<S, T> {
     private boolean sorted = true;
     private Comparator<S> sourceSortComparator;
     private Comparator<T> targetSortComparator;
-
     public TreeCopy(SourceTreeWrapper<S> source, TargetTreeWrapper<S, T> target) {
         super();
         this.source = source;
         this.target = target;
+    }
+
+    public LinkedList<NodeFilter<S>> getSourceFilters() {
+        return new LinkedList<>(sourceFilters);
     }
 
     public int getMaxDepth() {
@@ -171,19 +174,6 @@ public class TreeCopy<S, T> {
         if (extension != null) {
             extension.invoke(source, target, sourceToTargetNodeMap);
         }
-
-        // sort the list into the order determined by the comparator
-        // if (sortComparator != null) {
-        //
-        // Collections.sort(targetNodeMap, sortComparator);
-        // }
-
-        // Nodes are sorted, add to the target in sort order
-        // It is up to the target implementation to maintain the order
-        // for (T childNode : targetToSourceNodeMap.keySet()) {
-        // target.addNode(parentNode, sourceChildNode);
-        // }
-
     }
 
     /**

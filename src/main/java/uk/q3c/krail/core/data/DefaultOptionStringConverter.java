@@ -65,8 +65,8 @@ public class DefaultOptionStringConverter implements OptionStringConverter {
         } else if (modelType == Locale.class) {
             return ((Locale) value).toLanguageTag();
         } else if (modelType == LocalDateTime.class) {
-            return ((LocalDateTime) value).format(DateTimeFormatter.ISO_INSTANT);
-        } else if (modelType == I18NKey.class) {
+            return ((LocalDateTime) value).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        } else if (I18NKey.class.isAssignableFrom(modelType)) {
             return new I18NKeyConverter().convertToString((I18NKey) value);
         } else if (modelType.isEnum()) {
             return new EnumConverter().convertToString((Enum) value);
@@ -117,10 +117,10 @@ public class DefaultOptionStringConverter implements OptionStringConverter {
         } else if (valueClass == Locale.class) {
             return (V) Locale.forLanguageTag(valueString);
         } else if (valueClass == LocalDateTime.class) {
-            return (V) LocalDateTime.parse(valueString, DateTimeFormatter.ISO_INSTANT);
+            return (V) LocalDateTime.parse(valueString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         } else if (valueClass == I18NKey.class) {
             return (V) new I18NKeyConverter().convertToModel(valueString);
-        } else if (valueClass.isEnum()) {
+        } else if (valueClass == Enum.class) {
             return (V) new EnumConverter().convertToModel(valueString);
         } else if (valueClass == BigDecimal.class) {
             return (V) new BigDecimal(valueString);

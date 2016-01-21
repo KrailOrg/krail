@@ -1,27 +1,32 @@
 /*
- * Copyright (C) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.util;
 
+import com.mycila.testing.junit.MycilaJunitRunner;
 import com.vaadin.ui.Tree;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
+@RunWith(MycilaJunitRunner.class)
 public class TreeCopyTest {
 
     private TreeCopy<NodeTypeA, NodeTypeA> copy;
@@ -37,6 +42,9 @@ public class TreeCopyTest {
     private SourceTreeWrapper<NodeTypeA> source;
     private TargetTreeWrapper<NodeTypeA, NodeTypeA> target;
     private Tree vaadinTree;
+
+    @Mock
+    private TargetTreeWrapper<NodeTypeA, NodeTypeA> mockTarget;
 
     @Before
     public void setup() {
@@ -132,6 +140,50 @@ public class TreeCopyTest {
         @SuppressWarnings("unchecked") Collection<NodeTypeA> nodes = (Collection<NodeTypeA>) vaadinTree.getChildren
                 (nodeA);
         assertThat(nodes).containsExactly(nodeA1, nodeA3, nodeA2);
+    }
+
+
+    @Test
+    public void sortTargetNodesAfterAdd() {
+        // given
+        populateSource2(source);
+        when(mockTarget.createNode(null, nodeA)).thenReturn(nodeA1);
+        when(mockTarget.createNode(nodeA, nodeA2)).thenReturn(nodeA11);
+        when(mockTarget.createNode(null, nodeB)).thenReturn(nodeB1);
+        when(mockTarget.createNode(nodeA, nodeA3)).thenReturn(nodeB11);
+
+
+        copy = new TreeCopy<>(source, mockTarget);
+        Comparator<NodeTypeA> targetSortComparator = mock(Comparator.class);
+        copy.setTargetSortComparator(targetSortComparator);
+        copy.setSortOption(TreeCopy.SortOption.SORT_TARGET_NODES_AFTER_ADD);
+        // when
+        copy.copy();
+        // then
+        verify(mockTarget, times(2)).addChild(any(NodeTypeA.class), any(NodeTypeA.class));
+        verify(mockTarget).sortChildren(null, targetSortComparator);
+    }
+
+    @Test
+    public void sortTargetNodesAfterAdd_NotSorted() {
+        // given
+        populateSource2(source);
+        when(mockTarget.createNode(null, nodeA)).thenReturn(nodeA1);
+        when(mockTarget.createNode(nodeA, nodeA2)).thenReturn(nodeA11);
+        when(mockTarget.createNode(null, nodeB)).thenReturn(nodeB1);
+        when(mockTarget.createNode(nodeA, nodeA3)).thenReturn(nodeB11);
+
+
+        copy = new TreeCopy<>(source, mockTarget);
+        Comparator<NodeTypeA> targetSortComparator = mock(Comparator.class);
+        copy.setTargetSortComparator(targetSortComparator);
+        copy.setSortOption(TreeCopy.SortOption.SORT_TARGET_NODES_AFTER_ADD);
+        copy.setSorted(false);
+        // when
+        copy.copy();
+        // then
+        verify(mockTarget, times(2)).addChild(any(NodeTypeA.class), any(NodeTypeA.class));
+        verify(mockTarget, times(0)).sortChildren(null, targetSortComparator);
     }
 
     private void populateSource2(SourceTreeWrapper<NodeTypeA> source) {
@@ -235,5 +287,6 @@ public class TreeCopyTest {
         }
 
     }
+
 
 }

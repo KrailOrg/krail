@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2013 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.krail.i18n;
 
@@ -75,7 +75,7 @@ public enum LabelKey implements I18NKey {
     Password_Cannot_be_Empty, Application_Options, Options, Description, Connection_URL, Source_Data, In_Memory, Name, Active_Source, Selected_Source,
     Option_Source_Selection, Is_Volatile, Name_Caption_Style, Name_Style, Description_Caption_Style, Description_Style, Default_Caption_Style,
     Default_Value_Style, Connection_url_Caption_Style, Connection_url_Style, Is_volatile_Caption_Style, Is_volatile_Style, I18N, Export, Progress, Locales,
-    Retrieving_Locales, Looking_for_Database_Writer, Export_complete, Selected_Pattern_Targets, Yes
+    Retrieving_Locales, Looking_for_Database_Writer, Export_complete, Selected_Pattern_Targets, This_feature_has_not_been_implemented, Yes
 
 
 }
