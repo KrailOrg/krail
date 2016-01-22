@@ -14,9 +14,9 @@ So we have a user defined value for an option and a coded default.  But now supp
 
 This is nothing more than a simple hierarchy, represented in Krail by ```UserHierarchy```.  If we simply say that values at the user level override those at system level, then we almost have what we want.  And only allowing authorised users to change some of the ```Option values```, those become system level options.  So for this simple, 2 level hierarchy, the logic for retrieving an option value is quite simply to take the first non-null value we find from the following order:
 
-user level
-system level
-coded default
+- user level
+- system level
+- coded default
 
 #Controlling the Options
 
@@ -33,11 +33,11 @@ That is easily achievable with your own implementation of ```OptionLayerDefiniti
 The principles described above remain the same, however - so for this example, ```Option``` will return the first non-null value found from a location hierarchy of:
   
 
-user
-city
-continent
-system
-coded default
+- user
+- city
+- continent
+- system
+- coded default
 
 There can be up to 98 layers between user and system levels, though we can think of no sane reason for wanting that many.
 
