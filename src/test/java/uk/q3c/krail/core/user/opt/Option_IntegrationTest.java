@@ -27,7 +27,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.data.DataModule;
-import uk.q3c.krail.core.persist.*;
+import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnitHelper;
+import uk.q3c.krail.core.persist.common.common.OptionDaoProviders;
+import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
+import uk.q3c.krail.core.persist.common.option.DefaultActiveOptionSource;
+import uk.q3c.krail.core.persist.common.option.DefaultOptionSource;
+import uk.q3c.krail.core.persist.common.option.OptionSource;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.opt.cache.*;
@@ -35,8 +42,6 @@ import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.view.component.LocaleContainer;
-import uk.q3c.krail.i18n.LabelKey;
-import uk.q3c.krail.i18n.Translate;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -291,7 +296,7 @@ public class Option_IntegrationTest {
                 bind(OptionSource.class).to(DefaultOptionSource.class);
 
                 bind(KrailPersistenceUnitHelper.annotationClassLiteral()).annotatedWith(DefaultActiveOptionSource.class)
-                                                                          .toInstance(InMemory.class);
+                                                                         .toInstance(InMemory.class);
                 TypeLiteral<Map<Class<? extends Annotation>, PersistenceInfo<?>>> setAnnotationTypeLiteral = new TypeLiteral<Map<Class<? extends Annotation>, PersistenceInfo<?>>>() {
                 };
                 optionDaoProviders.put(InMemory.class, persistenceInfo);

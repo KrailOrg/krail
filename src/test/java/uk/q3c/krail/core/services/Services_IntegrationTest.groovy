@@ -24,7 +24,7 @@ import uk.q3c.krail.testutil.TestOptionModule
 import uk.q3c.krail.testutil.TestPersistenceModule
 import uk.q3c.krail.util.UtilsModule
 
-import static uk.q3c.krail.i18n.TestLabelKey.*
+import static uk.q3c.krail.core.i18n.TestLabelKey.*
 
 /**
  *

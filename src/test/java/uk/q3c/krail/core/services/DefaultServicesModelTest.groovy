@@ -18,10 +18,10 @@ import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.eventbus.BusMessage
 import uk.q3c.krail.core.eventbus.GlobalBusProvider
-import uk.q3c.krail.i18n.Translate
+import uk.q3c.krail.core.i18n.Translate
 
 import static org.assertj.core.api.Assertions.assertThat
-import static uk.q3c.krail.i18n.TestLabelKey.*
+import static uk.q3c.krail.core.i18n.TestLabelKey.*
 /**
  *
  * Created by david on 27/10/15.

@@ -24,10 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.SubscribeTo;
+import uk.q3c.krail.core.i18n.*;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.krail.i18n.*;
 import uk.q3c.krail.util.Experimental;
 
 /**

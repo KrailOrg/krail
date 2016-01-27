@@ -25,11 +25,11 @@ import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.EventBusModule
-import uk.q3c.krail.core.persist.InMemoryModule
+import uk.q3c.krail.core.i18n.Caption
+import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.shiro.KrailSecurityManager
 import uk.q3c.krail.core.shiro.SubjectProvider
-import uk.q3c.krail.i18n.Caption
 import uk.q3c.krail.testutil.TestI18NModule
 import uk.q3c.krail.testutil.TestOptionModule
 import uk.q3c.krail.testutil.TestUIScopeModule

@@ -37,6 +37,7 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.*;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.i18n.MessageKey;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 import uk.q3c.krail.core.services.ServicesModule;
@@ -52,7 +53,6 @@ import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.core.view.*;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.krail.i18n.MessageKey;
 import uk.q3c.krail.testutil.*;
 import uk.q3c.krail.util.UtilsModule;
 

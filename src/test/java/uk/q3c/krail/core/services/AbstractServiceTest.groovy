@@ -17,9 +17,9 @@ import com.google.inject.Inject
 import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.GlobalBusProvider
-import uk.q3c.krail.i18n.I18NKey
-import uk.q3c.krail.i18n.LabelKey
-import uk.q3c.krail.i18n.Translate
+import uk.q3c.krail.core.i18n.I18NKey
+import uk.q3c.krail.core.i18n.LabelKey
+import uk.q3c.krail.core.i18n.Translate
 
 import static uk.q3c.krail.core.services.RelatedServicesExecutor.Action
 import static uk.q3c.krail.core.services.Service.Cause

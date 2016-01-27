@@ -17,7 +17,7 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import spock.lang.Specification
 import uk.q3c.krail.core.config.ApplicationConfigurationModule
-import uk.q3c.krail.core.persist.InMemoryModule
+import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
 import uk.q3c.krail.core.services.ServicesModule
 import uk.q3c.krail.testutil.*
 import uk.q3c.krail.util.UtilsModule

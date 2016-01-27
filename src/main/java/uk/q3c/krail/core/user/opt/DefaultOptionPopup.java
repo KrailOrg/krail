@@ -20,10 +20,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.ui.DataTypeToUI;
-import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.i18n.LabelKey;
-import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.ID;
 
 import javax.annotation.Nonnull;

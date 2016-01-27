@@ -15,7 +15,7 @@ package uk.q3c.krail.core.services;
 
 import com.google.inject.Inject;
 import org.slf4j.Logger;
-import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.core.i18n.Translate;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

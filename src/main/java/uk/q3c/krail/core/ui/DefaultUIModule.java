@@ -17,8 +17,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.vaadin.server.WebBrowser;
-import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.LabelKey;
 
 import javax.annotation.Nonnull;
 

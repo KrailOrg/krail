@@ -22,8 +22,8 @@ import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.GlobalBus;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.eventbus.SubscribeTo;
-import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.Translate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;

@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
+import uk.q3c.krail.core.i18n.*;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PageAccessControl;
@@ -30,7 +31,6 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.opt.DefaultOption;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.view.PublicHomeView;
-import uk.q3c.krail.i18n.*;
 
 import java.text.Collator;
 import java.util.Locale;

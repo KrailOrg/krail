@@ -22,13 +22,13 @@ import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.SubscribeTo;
-import uk.q3c.krail.core.persist.OptionSource;
-import uk.q3c.krail.core.persist.PersistenceInfo;
+import uk.q3c.krail.core.i18n.*;
+import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
+import uk.q3c.krail.core.persist.common.option.OptionSource;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.user.opt.OptionPopup;
-import uk.q3c.krail.i18n.*;
 
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;

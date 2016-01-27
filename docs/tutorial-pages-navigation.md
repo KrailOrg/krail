@@ -22,7 +22,7 @@ You may think that it is premature to be considering I18N at this stage - especi
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.I18NKey;
 
 public enum LabelKey implements I18NKey {
 }
@@ -32,7 +32,7 @@ public enum LabelKey implements I18NKey {
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.I18NKey;
 
 public enum DescriptionKey implements I18NKey {
 }
@@ -124,7 +124,7 @@ By default, if Krail's ```I18NProcessor``` cannot find the value of an ```I18NKe
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.I18NKey;
 
 public enum LabelKey implements I18NKey {
     Accounts, Payroll, Finance

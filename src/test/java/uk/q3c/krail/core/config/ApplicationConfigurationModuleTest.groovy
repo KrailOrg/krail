@@ -17,7 +17,7 @@ import com.google.common.collect.Lists
 import com.google.inject.*
 import spock.lang.Specification
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
-import uk.q3c.krail.core.persist.InMemoryModule
+import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
 import uk.q3c.krail.core.services.ServicesModule
 import uk.q3c.krail.testutil.TestEventBusModule
 import uk.q3c.krail.testutil.TestI18NModule

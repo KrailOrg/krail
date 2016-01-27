@@ -14,10 +14,10 @@
 package uk.q3c.krail.core.sysadmin
 
 import spock.lang.Specification
+import uk.q3c.krail.core.i18n.LabelKey
+import uk.q3c.krail.core.i18n.MessageKey
+import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.user.notify.UserNotifier
-import uk.q3c.krail.i18n.LabelKey
-import uk.q3c.krail.i18n.MessageKey
-import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.testutil.CaptionChecker
 import uk.q3c.krail.util.Experimental
 

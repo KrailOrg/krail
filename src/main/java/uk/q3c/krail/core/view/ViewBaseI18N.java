@@ -13,8 +13,8 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.Translate;
 
 public abstract class ViewBaseI18N extends ViewBase {
 

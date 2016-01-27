@@ -12,10 +12,10 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
+import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
-import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.i18n.Translate;
 
 import java.text.CollationKey;
 import java.text.Collator;

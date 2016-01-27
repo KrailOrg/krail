@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.config;
 
-import uk.q3c.krail.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.LabelKey;
 
 /**
  * The Guice module used to configure the application configuration service

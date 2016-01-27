@@ -15,11 +15,11 @@ package uk.q3c.krail.core.user.profile;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
+import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.i18n.LabelKey;
-import uk.q3c.krail.i18n.Translate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;

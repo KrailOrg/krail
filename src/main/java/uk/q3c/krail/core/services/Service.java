@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.services;
 
-import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.I18NKey;
 
 /**
  * Implement this interface to provide a Service. A Service is typically something which is wired up using Guice

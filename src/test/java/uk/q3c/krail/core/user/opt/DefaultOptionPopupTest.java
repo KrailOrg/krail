@@ -20,9 +20,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.i18n.TestLabelKey;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.ui.DataTypeToUI;
-import uk.q3c.krail.i18n.TestLabelKey;
-import uk.q3c.krail.i18n.Translate;
 
 import javax.annotation.Nonnull;
 import java.util.Map;

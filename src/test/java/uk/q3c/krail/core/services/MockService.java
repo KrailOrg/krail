@@ -14,8 +14,8 @@
 package uk.q3c.krail.core.services;
 
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.i18n.LabelKey;
-import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.Translate;
 
 /**
  * Created by David Sowerby on 01/11/15.

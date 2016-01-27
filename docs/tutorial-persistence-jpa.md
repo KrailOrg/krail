@@ -73,7 +73,7 @@ This is one occasion where it is more desirable to sub-class the relevant Guice 
 ```
 package com.example.tutorial.jpa;
 
-import uk.q3c.krail.jpa.persist.JpaModule;
+import JpaModule;
 
 public class TutorialJpaModule extends JpaModule {
 
@@ -260,7 +260,7 @@ import com.example.tutorial.jpa.HsqlJpa;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.krail.jpa.persist.JpaContainerProvider;
+import JpaContainerProvider;
 
 public class JpaView extends ViewBase {
 
@@ -501,14 +501,14 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
-import uk.q3c.krail.core.persist.ContainerType;
-import uk.q3c.krail.core.persist.InMemoryContainer;
-import uk.q3c.krail.core.persist.VaadinContainerProvider;
+import uk.q3c.krail.core.persist.common.common.ContainerType;
+import uk.q3c.krail.core.persist.inmemory.common.InMemoryContainer;
+import uk.q3c.krail.core.persist.common.common.VaadinContainerProvider;
 import uk.q3c.krail.core.user.opt.*;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.krail.jpa.persist.JpaContainerProvider;
-import uk.q3c.krail.jpa.user.opt.JpaOptionEntity;
+import JpaContainerProvider;
+import JpaOptionEntity;
 
 import javax.annotation.Nonnull;
 
@@ -621,7 +621,7 @@ protected Module optionModule() {
 ```xml
 <persistence-unit name="derbyDb">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>uk.q3c.krail.jpa.user.opt.JpaOptionEntity</class>
+    <class>JpaOptionEntity</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
     </properties>
@@ -704,8 +704,8 @@ protected Module i18NModule() {
 ```xml
 <persistence-unit name="derbyDb">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>uk.q3c.krail.jpa.user.opt.JpaOptionEntity</class>
-    <class>uk.q3c.krail.jpa.i18n.JpaPatternEntity</class>
+    <class>JpaOptionEntity</class>
+    <class>JpaPatternEntity</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
     </properties>

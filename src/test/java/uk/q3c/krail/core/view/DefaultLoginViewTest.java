@@ -24,12 +24,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.view.component.LoginFormException;
-import uk.q3c.krail.i18n.Translate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;

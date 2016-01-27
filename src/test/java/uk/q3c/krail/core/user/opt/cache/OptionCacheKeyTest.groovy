@@ -14,12 +14,12 @@
 package uk.q3c.krail.core.user.opt.cache
 
 import spock.lang.Specification
+import uk.q3c.krail.core.i18n.DescriptionKey
+import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.user.opt.OptionKey
 import uk.q3c.krail.core.user.profile.RankOption
 import uk.q3c.krail.core.user.profile.UserHierarchy
 import uk.q3c.krail.core.view.component.LocaleContainer
-import uk.q3c.krail.i18n.DescriptionKey
-import uk.q3c.krail.i18n.LabelKey
 
 /**
  * Created by David Sowerby on 22 Jan 2016

@@ -27,9 +27,9 @@ import uk.q3c.krail.core.ui.DefaultApplicationUI;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.view.component.*;
-import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.I18NProcessor;
-import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.core.i18n.CurrentLocale;
+import uk.q3c.krail.core.i18n.I18NProcessor;
+import uk.q3c.krail.core.i18n.Translate;
 
 public class TutorialUI extends DefaultApplicationUI {
     

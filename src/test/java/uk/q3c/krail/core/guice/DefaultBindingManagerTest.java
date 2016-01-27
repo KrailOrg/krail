@@ -24,12 +24,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.services.DefaultServicesModel;
 import uk.q3c.krail.core.services.Service;
 import uk.q3c.krail.core.services.ServiceKey;
 import uk.q3c.krail.core.services.ServicesModel;
 import uk.q3c.krail.core.shiro.KrailSecurityManager;
-import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.testutil.LogMonitor;
 

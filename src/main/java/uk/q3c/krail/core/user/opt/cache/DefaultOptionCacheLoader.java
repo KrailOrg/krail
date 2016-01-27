@@ -17,7 +17,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.persist.OptionSource;
+import uk.q3c.krail.core.persist.common.option.OptionSource;
 import uk.q3c.krail.core.user.opt.DefaultInMemoryOptionStore;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.profile.UserHierarchy;

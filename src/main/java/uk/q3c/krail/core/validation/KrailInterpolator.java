@@ -21,9 +21,9 @@ import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.config.ConfigurationException;
-import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.core.i18n.CurrentLocale;
+import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.util.MessageFormat;
 
 import javax.validation.MessageInterpolator;
@@ -197,7 +197,7 @@ public class KrailInterpolator implements MessageInterpolator {
     }
 
     /**
-     * Find a an I18NKey from its full string representation (for example uk.q3c.krail.i18n.LabelKey.Yes).  The full
+     * Find a an I18NKey from its full string representation (for example uk.q3c.krail.core.i18n.LabelKey.Yes).  The full
      * string representation can be obtained using {@link I18NKey#fullName(I18NKey)}
      *
      * @param keyName

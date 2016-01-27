@@ -24,6 +24,8 @@ import uk.q3c.krail.core.eventbus.SessionBus;
 import uk.q3c.krail.core.eventbus.SubscribeTo;
 import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
+import uk.q3c.krail.core.i18n.DescriptionKey;
+import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
@@ -32,8 +34,6 @@ import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionContext;
 import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.view.KrailView;
-import uk.q3c.krail.i18n.DescriptionKey;
-import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.util.ID;
 
 import javax.annotation.Nonnull;

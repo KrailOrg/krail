@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.user.opt;
 
-import uk.q3c.krail.core.persist.InMemoryContainer;
+import uk.q3c.krail.core.persist.inmemory.common.InMemoryContainer;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 
 import javax.annotation.Nonnull;

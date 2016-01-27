@@ -21,10 +21,10 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.i18n.CurrentLocale;
+import uk.q3c.krail.core.i18n.LocaleChangeBusMessage;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
-import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.i18n.LocaleChangeBusMessage;
-import uk.q3c.krail.i18n.Translate;
 
 import java.text.Collator;
 import java.util.List;

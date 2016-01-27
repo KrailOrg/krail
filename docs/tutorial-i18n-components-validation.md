@@ -49,7 +49,7 @@ put(LabelKey.Yes, "Ja");
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.i18n.EnumResourceBundle;
+import uk.q3c.krail.core.i18n.EnumResourceBundle;
 
 import static com.example.tutorial.i18n.DescriptionKey.*;
 
@@ -197,7 +197,7 @@ For the Tutorial, we will create a **@Value** annotation, which has only a ```va
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.i18n.I18NAnnotation;
+import uk.q3c.krail.core.i18n.I18NAnnotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -286,7 +286,7 @@ package com.example.tutorial.i18n;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
-import uk.q3c.krail.i18n.I18N;
+import uk.q3c.krail.core.i18n.I18N;
 
 @Caption(caption = LabelKey.News, description = DescriptionKey.Interesting_Things)
 @I18N
@@ -426,8 +426,8 @@ import com.vaadin.ui.themes.ValoTheme;
 import uk.q3c.krail.core.ui.form.BeanFieldGroupBase;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.validation.BeanValidator;
-import uk.q3c.krail.i18n.I18N;
-import uk.q3c.krail.i18n.I18NProcessor;
+import uk.q3c.krail.core.i18n.I18N;
+import uk.q3c.krail.core.i18n.I18NProcessor;
 
 import static com.example.tutorial.i18n.DescriptionKey.*;
 import static com.example.tutorial.i18n.LabelKey.*;

@@ -21,13 +21,13 @@ import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
+import uk.q3c.krail.core.i18n.DescriptionKey;
+import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.RelatedServicesExecutor;
 import uk.q3c.krail.core.services.Service;
-import uk.q3c.krail.i18n.DescriptionKey;
-import uk.q3c.krail.i18n.I18NKey;
-import uk.q3c.krail.i18n.LabelKey;
-import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.util.ResourceUtils;
 
 import javax.annotation.concurrent.ThreadSafe;

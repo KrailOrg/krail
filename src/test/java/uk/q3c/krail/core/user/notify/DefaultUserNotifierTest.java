@@ -22,8 +22,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
-import uk.q3c.krail.i18n.LabelKey;
-import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.Translate;
 
 import static org.mockito.Mockito.*;
 @RunWith(MycilaJunitRunner.class)
