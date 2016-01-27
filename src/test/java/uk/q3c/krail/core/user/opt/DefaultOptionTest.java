@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.user.opt;
@@ -69,6 +71,7 @@ public class DefaultOptionTest {
     public void setup() {
         when(subjectIdentifier.userId()).thenReturn("ds");
         when(subjectProvider.get()).thenReturn(subject);
+        when(defaultHierarchy.highestRankName()).thenReturn("ds");
         contextObject = new MockContext();
         option = new DefaultOption(optionCache, defaultHierarchy, subjectProvider, subjectIdentifier);
         optionKey1 = new OptionKey<>(5, context, TestLabelKey.key1, "q");
@@ -81,7 +84,7 @@ public class DefaultOptionTest {
         //given
         when(subject.isPermitted(any(OptionPermission.class))).thenReturn(false);
         when(defaultHierarchy.rankName(0)).thenReturn("specific");
-        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 0, optionKey1);
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 0, optionKey1);
         //when
         option.set(5, optionKey1);
         //then
@@ -92,7 +95,7 @@ public class DefaultOptionTest {
         //given
         when(subject.isPermitted(any(OptionPermission.class))).thenReturn(true);
         when(defaultHierarchy.rankName(0)).thenReturn("specific");
-        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 0, optionKey1);
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 0, optionKey1);
         //when
         option.set(5, optionKey1);
         //then
@@ -106,7 +109,7 @@ public class DefaultOptionTest {
         when(subject.isPermitted(any(OptionPermission.class))).thenReturn(true);
         when(defaultHierarchy.rankName(2)).thenReturn("specific");
         OptionKey<Integer> optionKey2 = new OptionKey<>(999, context, TestLabelKey.key1, TestLabelKey.key1, "q");
-        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 2, optionKey2);
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 2, optionKey2);
         //when
         option.set(5, -1, optionKey2);
         //then
@@ -116,7 +119,7 @@ public class DefaultOptionTest {
     public void get_simplest() {
         //given
         when(defaultHierarchy.highestRankName()).thenReturn("high");
-        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey1);
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, HIGHEST_RANK, optionKey1);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
         //when
         Integer actual = option.get(optionKey1);
@@ -128,7 +131,7 @@ public class DefaultOptionTest {
     public void get_with_hierarchy() {
         //given
         when(defaultHierarchy.highestRankName()).thenReturn("high");
-        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey1);
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, HIGHEST_RANK, optionKey1);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
         //when
         Integer actual = option.get(optionKey1);
@@ -142,7 +145,7 @@ public class DefaultOptionTest {
     public void get_with_all_args() {
         //given
         when(defaultHierarchy.highestRankName()).thenReturn("high");
-        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey1);
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, HIGHEST_RANK, optionKey1);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
         //when
         Integer actual = option.get(optionKey1);
@@ -154,7 +157,7 @@ public class DefaultOptionTest {
     public void get_none_found() {
         //given
         when(defaultHierarchy.highestRankName()).thenReturn("high");
-        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, HIGHEST_RANK, optionKey2);
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, HIGHEST_RANK, optionKey2);
         when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.empty());
         //when
         Integer actual = option.get(optionKey2);
@@ -166,8 +169,8 @@ public class DefaultOptionTest {
     public void get_lowest() {
         //given
         when(defaultHierarchy.lowestRankName()).thenReturn("low");
-        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, LOWEST_RANK, optionKey2);
-        when(optionCache.get(Optional.of(5), cacheKey)).thenAnswer(answerOf(20));
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, LOWEST_RANK, optionKey2);
+        when(optionCache.get(any(), any())).thenAnswer(answerOf(20));
         //when
         Integer actual = option.getLowestRanked(optionKey2);
         //then
@@ -188,8 +191,8 @@ public class DefaultOptionTest {
         //given
         when(subject.isPermitted(any(OptionPermission.class))).thenReturn(true);
         when(defaultHierarchy.rankName(1)).thenReturn("specific");
-        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 1, optionKey2);
-        when(optionCache.delete(cacheKey)).thenAnswer(answerOf(3));
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 1, optionKey2);
+        when(optionCache.delete(any())).thenAnswer(answerOf(3));
         //when
         Object actual = option.delete(1, optionKey2);
         //then
@@ -202,7 +205,7 @@ public class DefaultOptionTest {
         //given
         when(subject.isPermitted(any(OptionPermission.class))).thenReturn(false);
         when(defaultHierarchy.rankName(1)).thenReturn("specific");
-        OptionCacheKey cacheKey = new OptionCacheKey(defaultHierarchy, SPECIFIC_RANK, 1, optionKey2);
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 1, optionKey2);
         when(optionCache.delete(cacheKey)).thenAnswer(answerOf(3));
         //when
         Object actual = option.delete(1, optionKey2);

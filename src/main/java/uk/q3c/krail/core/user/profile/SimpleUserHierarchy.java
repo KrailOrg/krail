@@ -114,4 +114,10 @@ public class SimpleUserHierarchy implements UserHierarchy {
         ImmutableList<String> ranks = ranksForCurrentUser();
         return ranks.get(ranks.size() - 1);
     }
+
+    @Override
+    public synchronized int lowestRank() {
+        ImmutableList<String> ranks = ranksForCurrentUser();
+        return ranks.size() - 1;
+    }
 }

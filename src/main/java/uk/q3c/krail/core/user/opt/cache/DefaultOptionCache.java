@@ -71,7 +71,7 @@ public class DefaultOptionCache implements OptionCache {
      * @param <T>      the type of the value
      */
     @Override
-    public synchronized <T> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<T> value) {
+    public synchronized <T> void write(@Nonnull OptionCacheKey<T> cacheKey, @Nonnull Optional<T> value) {
         checkNotNull(cacheKey);
         checkNotNull(value);
         // write to store first just in case there's a problem
@@ -87,7 +87,7 @@ public class DefaultOptionCache implements OptionCache {
 
     @Override
     @Nonnull
-    public synchronized <T> Optional<T> get(@Nonnull Optional<T> defaultValue, @Nonnull OptionCacheKey optionCacheKey) {
+    public synchronized <T> Optional<T> get(@Nonnull Optional<T> defaultValue, @Nonnull OptionCacheKey<T> optionCacheKey) {
         checkNotNull(optionCacheKey);
         checkNotNull(defaultValue);
         //this will trigger the cacheLoader if not already in the cache
@@ -117,7 +117,7 @@ public class DefaultOptionCache implements OptionCache {
 
     @Override
     @Nullable
-    public synchronized Optional<?> delete(@Nonnull OptionCacheKey optionCacheKey) {
+    public synchronized Optional<?> delete(@Nonnull OptionCacheKey<?> optionCacheKey) {
         checkNotNull(optionCacheKey);
         // delete from store first just in case there's a problem
         Optional<?> result = daoProvider.getActiveDao()
@@ -137,7 +137,7 @@ public class DefaultOptionCache implements OptionCache {
 
     @Nullable
     @Override
-    public synchronized Optional<?> getIfPresent(@Nonnull OptionCacheKey optionCacheKey) {
+    public synchronized Optional<?> getIfPresent(@Nonnull OptionCacheKey<?> optionCacheKey) {
         checkNotNull(optionCacheKey);
         return cache.getIfPresent(optionCacheKey);
     }

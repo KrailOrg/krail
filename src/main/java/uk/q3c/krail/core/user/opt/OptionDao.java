@@ -33,7 +33,7 @@ import java.util.Optional;
  */
 public interface OptionDao {
 
-    default void checkRankOption(OptionCacheKey cacheKey, RankOption expected) {
+    default void checkRankOption(OptionCacheKey<?> cacheKey, RankOption expected) {
         if (cacheKey.getRankOption() != expected) {
             throw new OptionKeyException("OptionCacheKey should have RankOption of: " + expected);
         }
@@ -44,19 +44,13 @@ public interface OptionDao {
      * Implementations should check that the  {@code cacheKey} is valid for a write (it must be set up for a specific
      * rank) and throw a {@link OptionKeyException} if it is not valid
      *
-     * @param cacheKey
-     *         specifies the hierarchy, rank and OptionKey to write to
-     * @param value
-     *         the value to write
-     * @param <V>
-     *         the value type
-     *
+     * @param cacheKey specifies the hierarchy, rank and OptionKey to write to
+     * @param value    the value to write
+     * @param <V>      the value type
      * @return the saved entity
-     *
-     * @throws OptionKeyException
-     *         if the cacheKey is not valid for this action
+     * @throws OptionKeyException if the cacheKey is not valid for this action
      */
-    <V> Object write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value);
+    <V> Object write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull Optional<V> value);
 
 
     /**
@@ -64,16 +58,12 @@ public interface OptionDao {
      * cacheKey}. Implementations should check that the {@code cacheKey} is valid for a delete (it must be set up for
      * a specific rank) and throw a {@link OptionKeyException} if it is not valid
      *
-     * @param cacheKey
-     *         specifies the hierarchy, rank and OptionKey for the entry to delete
-     *
+     * @param cacheKey specifies the hierarchy, rank and OptionKey for the entry to delete
      * @return the previous value for the entry, or Optional.empty() if there was no previous value
-     *
-     * @throws OptionKeyException
-     *         if the cacheKey is not valid for this action
+     * @throws OptionKeyException if the cacheKey is not valid for this action
      */
     @Nonnull
-    Optional<?> deleteValue(@Nonnull OptionCacheKey cacheKey);
+    <V> Optional<?> deleteValue(@Nonnull OptionCacheKey<V> cacheKey);
 
 
     /**
@@ -81,45 +71,33 @@ public interface OptionDao {
      * Implementations should check that the {@code cacheKey} is valid for a single value get (it must be set up for
      * a specific rank) and throw a {@link OptionKeyException} if it is not valid
      *
-     * @param cacheKey
-     *         specifies the hierarchy, rank and OptionKey for the entry to delete
-     *
+     * @param cacheKey specifies the hierarchy, rank and OptionKey for the entry to delete
      * @return an Optional wrapped value if there is one or an Optional.empty() if not
-     *
-     * @throws OptionKeyException
-     *         if the cacheKey is not valid for this action
+     * @throws OptionKeyException if the cacheKey is not valid for this action
      */
     @Nonnull
-    Optional<?> getValue(@Nonnull OptionCacheKey cacheKey);
+    <V> Optional<?> getValue(@Nonnull OptionCacheKey<V> cacheKey);
 
 
     /**
      * Returns the highest ranked value available for the {@code cacheKey}
      *
-     * @param cacheKey
-     *         the key to look for
-     *
+     * @param cacheKey the key to look for
      * @return the highest ranked value available for the {@code cacheKey}, or Optional.empty() if none found
-     *
-     * @throws OptionKeyException
-     *         if cacheKey {@link RankOption} is not equal to {@link RankOption#HIGHEST_RANK}
+     * @throws OptionKeyException if cacheKey {@link RankOption} is not equal to {@link RankOption#HIGHEST_RANK}
      */
     @Nonnull
-    Optional<?> getHighestRankedValue(@Nonnull OptionCacheKey cacheKey);
+    <V> Optional<?> getHighestRankedValue(@Nonnull OptionCacheKey<V> cacheKey);
 
     /**
      * Returns the lowest ranked value available for the {@code cacheKey}
      *
-     * @param cacheKey
-     *         they key to look for
-     *
+     * @param cacheKey they key to look for
      * @return the lowest ranked value available for the {@code cacheKey}
-     *
-     * @throws OptionKeyException
-     *         if cacheKey {@link RankOption} is not equal to {@link RankOption#LOWEST_RANK}
+     * @throws OptionKeyException if cacheKey {@link RankOption} is not equal to {@link RankOption#LOWEST_RANK}
      */
     @Nonnull
-    Optional<?> getLowestRankedValue(@Nonnull OptionCacheKey cacheKey);
+    <V> Optional<?> getLowestRankedValue(@Nonnull OptionCacheKey<V> cacheKey);
 
 
     /**

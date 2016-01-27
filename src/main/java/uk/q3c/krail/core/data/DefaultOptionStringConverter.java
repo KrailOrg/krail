@@ -74,7 +74,7 @@ public class DefaultOptionStringConverter implements OptionStringConverter {
             return value.toString();
         } else if (OptionList.class.isAssignableFrom(modelType)) {
             return new OptionListConverter(this).convertToString((OptionList) value);
-        }else if(AnnotationOptionList.class.isAssignableFrom(modelType)) {
+        } else if (AnnotationOptionList.class.isAssignableFrom(modelType)) {
             return new AnnotationOptionListConverter().convertToString((AnnotationOptionList) value);
         }
         String msg = MessageFormat.format("Data type of {0} is not supported in Option", value.getClass());
@@ -85,15 +85,15 @@ public class DefaultOptionStringConverter implements OptionStringConverter {
     @SuppressWarnings("unchecked")
     @Override
     @Nonnull
-    public <V> V convertStringToValue(@Nonnull OptionCacheKey cacheKey, @Nonnull String valueString) {
-        V defaultValue = (V) cacheKey.getOptionKey()
-                                     .getDefaultValue();
+    public <V> V convertStringToValue(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull String valueString) {
+        V defaultValue = cacheKey.getOptionKey()
+                                 .getDefaultValue();
         Class<? extends V> valueClass = (Class<? extends V>) defaultValue.getClass();
         if (defaultValue instanceof OptionList) {
             return (V) new OptionListConverter(this).convertToModel((OptionList) defaultValue, valueString);
         }
         if (defaultValue instanceof AnnotationOptionList) {
-            return (V) new AnnotationOptionListConverter().convertToModel( valueString);
+            return (V) new AnnotationOptionListConverter().convertToModel(valueString);
         }
 
         return convertStringToValue(valueClass, valueString);
@@ -120,7 +120,7 @@ public class DefaultOptionStringConverter implements OptionStringConverter {
             return (V) LocalDateTime.parse(valueString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         } else if (valueClass == I18NKey.class) {
             return (V) new I18NKeyConverter().convertToModel(valueString);
-        } else if (valueClass == Enum.class) {
+        } else if (valueClass.isEnum()) {
             return (V) new EnumConverter().convertToModel(valueString);
         } else if (valueClass == BigDecimal.class) {
             return (V) new BigDecimal(valueString);

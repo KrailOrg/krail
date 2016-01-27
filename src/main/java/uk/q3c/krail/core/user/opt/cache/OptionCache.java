@@ -40,7 +40,7 @@ public interface OptionCache {
      * @param value          the value to bw written
      * @param <T>            the type of the value
      */
-    <T> void write(@Nonnull OptionCacheKey optionCacheKey, @Nonnull Optional<T> value);
+    <T> void write(@Nonnull OptionCacheKey<T> optionCacheKey, @Nonnull Optional<T> value);
 
     /**
      * If there is a value in the cache (which is actually held as an Optional<T>), then the Optional is returned.
@@ -56,7 +56,7 @@ public interface OptionCache {
      * @return the value for the key, if returns the {@code defaultValue} if none found, or an error or exception occurs
      * while trying to load the cache
      */
-    <T> Optional<T> get(@Nonnull Optional<T> defaultValue, @Nonnull OptionCacheKey optionCacheKey);
+    <T> Optional<T> get(@Nonnull Optional<T> defaultValue, @Nonnull OptionCacheKey<T> optionCacheKey);
 
     /**
      * Pass the delete call to the underlying {@link OptionDao}, then removes the entry from the cache
@@ -65,7 +65,7 @@ public interface OptionCache {
      * @return the previous value before being deleted
      */
     @Nullable
-    Optional<?> delete(@Nonnull OptionCacheKey optionCacheKey);
+    Optional<?> delete(@Nonnull OptionCacheKey<?> optionCacheKey);
 
     /**
      * Returns a value from the cache only if it is present in the cache (that is, no attempt is made to load the cache
@@ -75,7 +75,7 @@ public interface OptionCache {
      * @return Returns a value from the cache only if it is present in the cache, otherwise null
      */
     @Nullable
-    Optional<?> getIfPresent(@Nonnull OptionCacheKey optionCacheKey);
+    Optional<?> getIfPresent(@Nonnull OptionCacheKey<?> optionCacheKey);
 
     CacheStats stats();
 

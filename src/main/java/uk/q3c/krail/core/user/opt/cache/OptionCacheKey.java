@@ -30,57 +30,62 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by David Sowerby on 19/02/15.
  */
 @Immutable
-public class OptionCacheKey {
+public class OptionCacheKey<T> {
 
 
     private final String userId;
     private final UserHierarchy hierarchy;
     private final String requestedRankName;
-    private final OptionKey optionKey;
+    private final OptionKey<T> optionKey;
     private final RankOption rankOption;
 
     /**
-     * Calls {@link OptionCacheKey#OptionCacheKey(UserHierarchy, RankOption, int, OptionKey)} with the requested rank assumed to be 0 (highest)
+     * Calls {@link OptionCacheKey#OptionCacheKey(UserHierarchy, RankOption, int, OptionKey)} with the the lowest rank where rankOption is
+     * {@link RankOption#LOWEST_RANK}, otherwie is called with rank of 0
      */
-    public OptionCacheKey(@Nonnull UserHierarchy hierarchy, @Nonnull RankOption rankOption, @Nonnull OptionKey optionKey) {
-
-        this(hierarchy, rankOption, 0, optionKey);
-
+    public OptionCacheKey(@Nonnull UserHierarchy hierarchy, @Nonnull RankOption rankOption, @Nonnull OptionKey<T> optionKey) {
+        this(hierarchy, rankOption, rankOption == RankOption.LOWEST_RANK ? hierarchy.lowestRank() : 0, optionKey);
     }
 
     /**
-     * @param rankOption
-     *         determines whether this key represents the lowest or highest in a hierarchy, or a specific rank
-     * @param hierarchy
-     *         the hierarchy to use
-     * @param requestedRank
-     *         which rank to look for - only required if {@code rankOption} is {@link RankOption#SPECIFIC_RANK}, for
-     *         {@link RankOption#HIGHEST_RANK} or {@link RankOption#LOWEST_RANK} use the alternative constructor:
-     *         {@link OptionCacheKey#OptionCacheKey(UserHierarchy, RankOption, OptionKey)}
-     * @param optionKey
-     *         an object representing a unique key for the option within its context
+     * @param rankOption    determines whether this key represents the lowest or highest in a hierarchy, or a specific rank
+     * @param hierarchy     the hierarchy to use
+     * @param requestedRank which rank to look for - only required if {@code rankOption} is {@link RankOption#SPECIFIC_RANK}, for
+     *                      {@link RankOption#HIGHEST_RANK} or {@link RankOption#LOWEST_RANK} use the alternative constructor:
+     *                      {@link OptionCacheKey#OptionCacheKey(UserHierarchy, RankOption, OptionKey)}
+     * @param optionKey     an object representing a unique key for the option within its context
      */
-    public OptionCacheKey(@Nonnull UserHierarchy hierarchy, @Nonnull RankOption rankOption, int requestedRank, @Nonnull OptionKey optionKey) {
+    public OptionCacheKey(@Nonnull UserHierarchy hierarchy, @Nonnull RankOption rankOption, int requestedRank, @Nonnull OptionKey<T> optionKey) {
         checkNotNull(hierarchy);
         checkNotNull(rankOption);
         checkNotNull(optionKey);
         checkArgument(requestedRank >= 0);
         this.rankOption = rankOption;
         this.hierarchy = hierarchy;
-        this.requestedRankName = requestedRankName(requestedRank);
+        this.requestedRankName = hierarchy.rankName(requestedRank);
         this.optionKey = optionKey;
         this.userId = hierarchy.highestRankName();
     }
 
     /**
+     * Constructs a copy with rank and RankOption changed
+     *
+     * @param cacheKey   the key to copy
+     * @param rank       the new rank
+     * @param rankOption the #rankOption to set
+     */
+    public OptionCacheKey(@Nonnull OptionCacheKey<T> cacheKey, int rank, @Nonnull RankOption rankOption) {
+        this(cacheKey.getHierarchy(), rankOption, rank, cacheKey.getOptionKey());
+    }
+
+
+    /**
      * copy constructor which changes the RankOption to {@code rankOption}
      *
-     * @param cacheKey
-     *         the key to copy
-     * @param rankOption
-     *         the new rankOption to use
+     * @param cacheKey   the key to copy
+     * @param rankOption the new rankOption to use
      */
-    public OptionCacheKey(@Nonnull OptionCacheKey cacheKey, @Nonnull RankOption rankOption) {
+    public OptionCacheKey(@Nonnull OptionCacheKey<T> cacheKey, @Nonnull RankOption rankOption) {
         checkNotNull(cacheKey);
         checkNotNull(rankOption);
         this.rankOption = rankOption;
@@ -88,6 +93,7 @@ public class OptionCacheKey {
         this.requestedRankName = cacheKey.getRequestedRankName();
         this.optionKey = cacheKey.getOptionKey();
         this.userId = cacheKey.getUserId();
+
     }
 
     /**
@@ -95,16 +101,14 @@ public class OptionCacheKey {
      * RankOption#SPECIFIC_RANK}
      * with {@code makeSpecific}
      *
-     * @param cacheKey
-     *         the key to copy
-     * @param rankName
-     *         the new rank name
-     * @param rankOption
-     *         the #rankOption to set
+     * @param cacheKey   the key to copy
+     * @param rankName   the new rank name
+     * @param rankOption the #rankOption to set
      */
-    public OptionCacheKey(@Nonnull OptionCacheKey cacheKey, @Nonnull String rankName, RankOption rankOption) {
+    public OptionCacheKey(@Nonnull OptionCacheKey<T> cacheKey, @Nonnull String rankName, @Nonnull RankOption rankOption) {
         checkNotNull(cacheKey);
         checkNotNull(rankName);
+        checkNotNull(rankOption);
         this.requestedRankName = rankName;
         this.optionKey = cacheKey.getOptionKey();
         this.hierarchy = cacheKey.getHierarchy();
@@ -112,31 +116,12 @@ public class OptionCacheKey {
         this.userId = cacheKey.getUserId();
     }
 
-    @Nonnull
-    private String requestedRankName(int requestedRank) {
-        String rankName = null;
-        switch (rankOption) {
-            case HIGHEST_RANK:
-                rankName = hierarchy.highestRankName();
-                break;
-            case LOWEST_RANK:
-                rankName = hierarchy.lowestRankName();
-                break;
-            case SPECIFIC_RANK:
-                rankName = hierarchy.rankName(requestedRank);
-                break;
-            default:
-                throw new NullPointerException("rank name cannot be set to null");
-        }
-
-        return rankName;
-    }
 
     public UserHierarchy getHierarchy() {
         return hierarchy;
     }
 
-    public OptionKey getOptionKey() {
+    public OptionKey<T> getOptionKey() {
         return optionKey;
     }
 
@@ -161,7 +146,7 @@ public class OptionCacheKey {
             return false;
         }
 
-        OptionCacheKey that = (OptionCacheKey) o;
+        OptionCacheKey<?> that = (OptionCacheKey) o;
 
         if (!hierarchy.equals(that.hierarchy)) {
             return false;
@@ -172,13 +157,12 @@ public class OptionCacheKey {
         if (rankOption != that.rankOption) {
             return false;
         }
-        if (userId != that.userId) {
+        if (!userId.equals(that.userId)) {
             return false;
         }
 
         //if a SPECIFIC, we need to compare the rank name as well
         if (rankOption == RankOption.SPECIFIC_RANK) {
-
             return requestedRankName.equals(that.requestedRankName);
         } else {
             return true;
@@ -203,10 +187,10 @@ public class OptionCacheKey {
 
     @Override
     public String toString() {
-        return "OptionCacheKey{" +
-                "hierarchy=" + hierarchy +
+        return "OptionCacheKey{" + "userId='" + userId +
+                "', hierarchy=" + hierarchy.persistenceName() +
                 ", requestedRankName='" + requestedRankName + '\'' +
-                ", optionKey=" + optionKey +
+                ", optionKey=" + optionKey.compositeKey() +
                 ", rankOption=" + rankOption +
                 '}';
     }

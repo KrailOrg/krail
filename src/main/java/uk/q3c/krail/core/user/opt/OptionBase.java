@@ -97,7 +97,7 @@ public abstract class OptionBase implements Option {
 
     private <T> T getRankedValue(@Nonnull OptionKey<T> optionKey, RankOption rank) {
         T defaultValue = optionKey.getDefaultValue();
-        Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy, rank, 0, optionKey));
+        Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey<>(hierarchy, rank, 0, optionKey));
         if (optionalValue == null) {
             return defaultValue;
         }

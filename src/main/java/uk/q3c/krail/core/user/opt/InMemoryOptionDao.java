@@ -48,16 +48,13 @@ public class InMemoryOptionDao implements OptionDao {
     /**
      * Note that the returned value is just the cacheKey - there is no "Entity" to return
      *
-     * @param cacheKey
-     *         specifies the hierarchy, rank and OptionKey to write to
-     * @param value
-     *         the value to write
+     * @param cacheKey specifies the hierarchy, rank and OptionKey to write to
+     * @param value    the value to write
      * @param <V>
-     *
      * @return
      */
     @Override
-    public <V> Object write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
+    public <V> Object write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull Optional<V> value) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         checkNotNull(value);
         String hierarchyName = cacheKey.getHierarchy()
@@ -69,9 +66,9 @@ public class InMemoryOptionDao implements OptionDao {
         return cacheKey;
     }
 
-
+    @Nonnull
     @Override
-    public Optional<?> deleteValue(@Nonnull OptionCacheKey cacheKey) {
+    public <V> Optional<?> deleteValue(@Nonnull OptionCacheKey<V> cacheKey) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         String hierarchyName = cacheKey.getHierarchy()
                                        .persistenceName();
@@ -84,7 +81,7 @@ public class InMemoryOptionDao implements OptionDao {
 
     @Nonnull
     @Override
-    public Optional<?> getValue(@Nonnull OptionCacheKey cacheKey) {
+    public <V> Optional<?> getValue(@Nonnull OptionCacheKey<V> cacheKey) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         String hierarchyName = cacheKey.getHierarchy()
                                        .persistenceName();
@@ -101,7 +98,7 @@ public class InMemoryOptionDao implements OptionDao {
      */
     @Nonnull
     @Override
-    public Optional<?> getHighestRankedValue(@Nonnull OptionCacheKey cacheKey) {
+    public <V> Optional<?> getHighestRankedValue(@Nonnull OptionCacheKey<V> cacheKey) {
         checkRankOption(cacheKey, RankOption.HIGHEST_RANK);
         ImmutableList<String> ranks = cacheKey.getHierarchy()
                                               .ranksForCurrentUser();
@@ -115,11 +112,11 @@ public class InMemoryOptionDao implements OptionDao {
     }
 
     @Nonnull
-    protected LinkedHashMap<String, Optional<?>> getValuesForRanks(@Nonnull OptionCacheKey cacheKey, List<String> rankNames) {
+    protected <V> LinkedHashMap<String, Optional<?>> getValuesForRanks(@Nonnull OptionCacheKey<V> cacheKey, List<String> rankNames) {
 
 
         Map<String, Optional<?>> valueMapForOptionKey = optionStore.valueMapForOptionKey(cacheKey.getHierarchy()
-                                                                                            .persistenceName(), rankNames, cacheKey.getOptionKey());
+                                                                                                 .persistenceName(), rankNames, cacheKey.getOptionKey());
 
 
         LinkedHashMap<String, Optional<?>> resultMap = new LinkedHashMap<>();
@@ -146,7 +143,7 @@ public class InMemoryOptionDao implements OptionDao {
      */
     @Nonnull
     @Override
-    public Optional<?> getLowestRankedValue(@Nonnull OptionCacheKey cacheKey) {
+    public <V> Optional<?> getLowestRankedValue(@Nonnull OptionCacheKey<V> cacheKey) {
         checkRankOption(cacheKey, RankOption.LOWEST_RANK);
         ImmutableList<String> ranks = cacheKey.getHierarchy()
                                               .ranksForCurrentUser();

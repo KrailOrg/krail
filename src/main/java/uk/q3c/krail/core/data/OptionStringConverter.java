@@ -30,34 +30,22 @@ public interface OptionStringConverter {
     /**
      * Returns a value converted from the String.  The value type is determined by the {@link OptionKey#getDefaultValue()}
      *
-     * @param cacheKey
-     *         the cacheKey to identify the element class
-     * @param valueString
-     *         the String representation of the value
-     *
+     * @param cacheKey    the cacheKey to identify the element class
+     * @param valueString the String representation of the value
      * @return null if no entry for cacheKey is found, otherwise a value converted from persistence
-     *
-     * @throws ConverterException
-     *         if no converter is available for the type of {@link OptionKey#getDefaultValue()}
-     * @throws Converter.ConversionException
-     *         if the conversion itself fails
+     * @throws ConverterException            if no converter is available for the type of {@link OptionKey#getDefaultValue()}
+     * @throws Converter.ConversionException if the conversion itself fails
      */
-    <V> V convertStringToValue(OptionCacheKey cacheKey, String valueString);
+    <V> V convertStringToValue(OptionCacheKey<V> cacheKey, String valueString);
 
     /**
      * Converts the supplied {@code value} to String
      *
-     * @param value
-     *         the value to be converted
-     * @param <V>
-     *         the value type
-     *
+     * @param value the value to be converted
+     * @param <V>   the value type
      * @return String for persistence, null if value is null
-     *
-     * @throws ConverterException
-     *         if no converter is available for the type of {@link OptionKey#getDefaultValue()}
-     * @throws Converter.ConversionException
-     *         if the conversion itself fails
+     * @throws ConverterException            if no converter is available for the type of {@link OptionKey#getDefaultValue()}
+     * @throws Converter.ConversionException if the conversion itself fails
      */
     <V> String convertValueToString(V value);
 
