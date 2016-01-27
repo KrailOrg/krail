@@ -48,7 +48,6 @@ class OptionCacheKeyTest extends Specification {
         then:
         cacheKey.getHierarchy().equals(userHierarchy)
         cacheKey.getRankOption() == RankOption.HIGHEST_RANK
-        cacheKey.getUserId().equals(userHierarchy.highestRankName())
         cacheKey.getRequestedRankName().equals("level 2")
         cacheKey.getOptionKey() == optionKey
     }
@@ -61,7 +60,6 @@ class OptionCacheKeyTest extends Specification {
         then:
         cacheKey.getHierarchy().equals(userHierarchy)
         cacheKey.getRankOption() == RankOption.HIGHEST_RANK
-        cacheKey.getUserId().equals(userHierarchy.highestRankName())
         cacheKey.getRequestedRankName().equals("top dog")
         cacheKey.getOptionKey() == optionKey
     }
@@ -73,7 +71,6 @@ class OptionCacheKeyTest extends Specification {
         then:
         cacheKey.getHierarchy().equals(userHierarchy)
         cacheKey.getRankOption() == RankOption.LOWEST_RANK
-        cacheKey.getUserId().equals(userHierarchy.highestRankName())
         cacheKey.getRequestedRankName().equals(userHierarchy.lowestRankName())
         cacheKey.getOptionKey() == optionKey
     }
@@ -88,10 +85,8 @@ class OptionCacheKeyTest extends Specification {
         then:
         cacheKey.getHierarchy().equals(userHierarchy)
         cacheKey.getRankOption() == RankOption.LOWEST_RANK
-        cacheKey.getUserId().equals(userHierarchy.highestRankName())
         cacheKey.getRequestedRankName().equals("top dog")
         cacheKey.getOptionKey() == optionKey
-        cacheKey.getUserId().equals("top dog")
     }
 
     def "copy construct, changing RankOption and rank "() {
@@ -104,10 +99,8 @@ class OptionCacheKeyTest extends Specification {
         then:
         cacheKey.getHierarchy().equals(userHierarchy)
         cacheKey.getRankOption() == RankOption.SPECIFIC_RANK
-        cacheKey.getUserId().equals(userHierarchy.highestRankName())
         cacheKey.getRequestedRankName().equals(userHierarchy.rankName(1))
         cacheKey.getOptionKey() == optionKey
-        cacheKey.getUserId().equals("top dog")
     }
 
     def "toString()"() {
@@ -116,7 +109,7 @@ class OptionCacheKeyTest extends Specification {
         OptionCacheKey<Integer> refKey = new OptionCacheKey<>(userHierarchy, RankOption.HIGHEST_RANK, optionKey)
 
         expect:
-        refKey.toString().equals("OptionCacheKey{userId='top dog', hierarchy=Simple, requestedRankName='top dog', optionKey=LocaleContainer-Yes-a-b, rankOption=HIGHEST_RANK}")
+        refKey.toString().equals("OptionCacheKey{hierarchy=Simple, requestedRankName='top dog', optionKey=LocaleContainer-Yes-a-b, rankOption=HIGHEST_RANK}")
     }
 
     def "equals & hashcode"() {
@@ -141,13 +134,10 @@ class OptionCacheKeyTest extends Specification {
 
 
         OptionCacheKey<Integer> refKey = new OptionCacheKey<>(userHierarchy1, RankOption.HIGHEST_RANK, 1, optionKey)
-        OptionCacheKey<Integer> differentUserId = new OptionCacheKey<>(userHierarchy1, RankOption.HIGHEST_RANK, 1, optionKey)
         OptionCacheKey<Integer> differentHierarchy = new OptionCacheKey<>(userHierarchy2, RankOption.HIGHEST_RANK, 1, optionKey)
         OptionCacheKey<Integer> differentRankButNotSpecific = new OptionCacheKey<>(userHierarchy1, RankOption.HIGHEST_RANK, 2, optionKey)
         OptionCacheKey<Integer> differentRankOption = new OptionCacheKey<>(userHierarchy1, RankOption.SPECIFIC_RANK, 1, optionKey)
         expect:
-        !refKey.equals(differentUserId)
-        refKey.hashCode() != differentUserId.hashCode()
 
         !refKey.equals(differentHierarchy)
         refKey.hashCode() != differentHierarchy.hashCode()

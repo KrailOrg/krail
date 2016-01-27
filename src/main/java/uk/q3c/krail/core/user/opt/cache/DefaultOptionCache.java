@@ -18,6 +18,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.persist.common.option.OptionSource;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionDao;
@@ -46,6 +47,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 
 @ThreadSafe
+@VaadinSessionScoped
 public class DefaultOptionCache implements OptionCache {
 
     private static Logger log = LoggerFactory.getLogger(DefaultOptionCache.class);

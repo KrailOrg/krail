@@ -78,14 +78,11 @@ public class OptionModule extends AbstractModule {
 
 
     /**
-     * Override this method to provide your own {@link OptionCache} implementation. The scope can be changed, but it
-     * seems likely that {@link VaadinSessionScoped} will be most effective, as options are based on a user, and {@link
-     * VaadinSessionScoped} is a user session.  However, for an application with a lot of options for anonymous users,
-     * Singleton may work better
+     * Override this method to provide your own {@link OptionCache} implementation. The scope is expected to be {@link VaadinSessionScoped}, as optons
+     * relate to individual users.
      */
     protected void bindOptionCache() {
-        bind(OptionCache.class).to(DefaultOptionCache.class)
-                               .in(VaadinSessionScoped.class);
+        bind(OptionCache.class).to(DefaultOptionCache.class);
     }
 
     protected void bindOptionCacheConfiguration() {
@@ -115,9 +112,7 @@ public class OptionModule extends AbstractModule {
     /**
      * Defines which source should be used to supply {@link Option} values - the source is identified by its binding annotation {@code annotationClass}
      *
-     * @param annotationClass
-     *         the binding annotation which identifies the source
-     *
+     * @param annotationClass the binding annotation which identifies the source
      * @return this for fluency
      */
     public OptionModule activeSource(Class<? extends Annotation> annotationClass) {

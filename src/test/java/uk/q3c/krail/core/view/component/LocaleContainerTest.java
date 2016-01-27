@@ -27,6 +27,7 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.testutil.TestOptionModule;
 import uk.q3c.krail.testutil.TestPersistenceModule;
+import uk.q3c.krail.testutil.TestVaadinSessionScopeModule;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.testutil.LogMonitor;
@@ -42,7 +43,7 @@ import static org.mockito.Mockito.when;
 
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class, TestPersistenceModule.class, UtilsModule.class})
+@GuiceContext({TestOptionModule.class, TestPersistenceModule.class, UtilsModule.class, TestVaadinSessionScopeModule.class})
 public class LocaleContainerTest {
 
 

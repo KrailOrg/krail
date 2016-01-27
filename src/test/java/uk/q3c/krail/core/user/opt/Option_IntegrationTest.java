@@ -14,7 +14,6 @@
 package uk.q3c.krail.core.user.opt;
 
 import com.google.common.cache.CacheStats;
-import com.google.common.cache.LoadingCache;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
@@ -181,7 +180,7 @@ public class Option_IntegrationTest {
 
 
     @Test
-    public void multiUser() {
+    public void cacheHits() {
         //given
         when(subjectProvider.get()).thenReturn(subject1);
         when(subject1.isAuthenticated()).thenReturn(true);
@@ -189,56 +188,19 @@ public class Option_IntegrationTest {
         DefaultOption option2 = new DefaultOption(optionCache, hierarchy, subjectProvider, subjectIdentifier);
         //when
         option2.set(3, key1);
-        when(subjectProvider.get()).thenReturn(subject2);
-        when(subject2.isAuthenticated()).thenReturn(true);
-        when(subjectIdentifier.userId()).thenReturn("equick");
-        hierarchy = new SimpleUserHierarchy(subjectProvider, subjectIdentifier, translate);
-        option2.set(9, key1);
-        //then
-        when(subjectProvider.get()).thenReturn(subject1);
-        when(subject1.isAuthenticated()).thenReturn(true);
-        when(subjectIdentifier.userId()).thenReturn("fbaton");
-
         Integer actual = option2.get(key1);
+        //then
         assertThat(actual).isEqualTo(3);
-        option2.get(key1);
-        option2.get(key1);
-        option2.get(key1);
-        option2.get(key1);
-        assertThat(optionCache.cacheSize()).isEqualTo(3);
+        option2.get(key1); //populate
+        option2.get(key1); //cache hit
+        option2.get(key1); //cache hit
+        option2.get(key1); //cache hit
+        option2.get(key1); //cache hit
+        assertThat(optionCache.cacheSize()).isEqualTo(2); // creates a highest and a specific cache entry
         assertThat(optionCache.stats()
-                              .hitCount()).isEqualTo(4);
-
-        when(subjectProvider.get()).thenReturn(subject2);
-        when(subject2.isAuthenticated()).thenReturn(true);
-        when(subjectIdentifier.userId()).thenReturn("equick");
-
-        optionCache.cleanup();
-        actual = option2.get(key1);
-        assertThat(actual).isEqualTo(9);
-        option2.get(key1);
-        option2.get(key1);
-        option2.get(key1);
-        option2.get(key1);
+                              .hitCount()).isEqualTo(5);
 
 
-        final LoadingCache<OptionCacheKey, Optional<?>> cache = optionCache.getCache();
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        cache.asMap()
-             .forEach((k, v) -> System.out.println(">>>>   " + k.toString() + "   :   " + v.toString()));
-
-
-        assertThat(optionCache.cacheSize()).isEqualTo(4);// TODO
-        assertThat(optionCache.stats()
-                              .hitCount()).isEqualTo(8);
-        option2.getLowestRanked(key1);
-        assertThat(optionCache.cacheSize()).isEqualTo(5);// TODO
-        assertThat(optionCache.stats()
-                              .hitCount()).isEqualTo(8);
-        option2.getLowestRanked(key3);
-        assertThat(optionCache.cacheSize()).isEqualTo(6);// TODO
-        assertThat(optionCache.stats()
-                              .hitCount()).isEqualTo(8);
     }
 
     /**

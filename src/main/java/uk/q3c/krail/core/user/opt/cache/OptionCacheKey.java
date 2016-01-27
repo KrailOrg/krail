@@ -33,7 +33,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class OptionCacheKey<T> {
 
 
-    private final String userId;
     private final UserHierarchy hierarchy;
     private final String requestedRankName;
     private final OptionKey<T> optionKey;
@@ -64,7 +63,6 @@ public class OptionCacheKey<T> {
         this.hierarchy = hierarchy;
         this.requestedRankName = hierarchy.rankName(requestedRank);
         this.optionKey = optionKey;
-        this.userId = hierarchy.highestRankName();
     }
 
     /**
@@ -92,7 +90,6 @@ public class OptionCacheKey<T> {
         this.hierarchy = cacheKey.getHierarchy();
         this.requestedRankName = cacheKey.getRequestedRankName();
         this.optionKey = cacheKey.getOptionKey();
-        this.userId = cacheKey.getUserId();
 
     }
 
@@ -113,7 +110,6 @@ public class OptionCacheKey<T> {
         this.optionKey = cacheKey.getOptionKey();
         this.hierarchy = cacheKey.getHierarchy();
         this.rankOption = rankOption;
-        this.userId = cacheKey.getUserId();
     }
 
 
@@ -129,9 +125,6 @@ public class OptionCacheKey<T> {
         return requestedRankName;
     }
 
-    public String getUserId() {
-        return userId;
-    }
 
     public RankOption getRankOption() {
         return rankOption;
@@ -157,9 +150,6 @@ public class OptionCacheKey<T> {
         if (rankOption != that.rankOption) {
             return false;
         }
-        if (!userId.equals(that.userId)) {
-            return false;
-        }
 
         //if a SPECIFIC, we need to compare the rank name as well
         if (rankOption == RankOption.SPECIFIC_RANK) {
@@ -176,7 +166,6 @@ public class OptionCacheKey<T> {
 
         result = 31 * result + optionKey.hashCode();
         result = 31 * result + rankOption.hashCode();
-        result = 31 * result + userId.hashCode();
 
         // if a SPECIFIC, include the rank name
         if (rankOption == RankOption.SPECIFIC_RANK) {
@@ -187,8 +176,7 @@ public class OptionCacheKey<T> {
 
     @Override
     public String toString() {
-        return "OptionCacheKey{" + "userId='" + userId +
-                "', hierarchy=" + hierarchy.persistenceName() +
+        return "OptionCacheKey{" + "hierarchy=" + hierarchy.persistenceName() +
                 ", requestedRankName='" + requestedRankName + '\'' +
                 ", optionKey=" + optionKey.compositeKey() +
                 ", rankOption=" + rankOption +
