@@ -328,6 +328,12 @@ We will come to [User Access Control](tutorial-uac.md) in detail later, but for 
 - Press "Reset to Default" for the CEO News Channel and the checkbox is cleared again.
  
 This is demonstrating that the "Override" principle mentioned earlier.  If a user has set an option, it is used.  If there is no user level value, the system level value is used.  Failing that, then the hard code default value is used.
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If a lower level (for example 'system') option value is changed while a user is logged in, the cache prevents the change from being visible to that user.  This can be remedied by either clearing the cache, <code>OptionCache.clear()</code>, or by logging out and back in again
+</div>
+
  
 #Using Hierarchies
 
