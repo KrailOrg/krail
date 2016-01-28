@@ -73,7 +73,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
     @Override
     public void setSortAscending(boolean ascending, boolean rebuild) {
         sorters.setOptionSortAscending(ascending);
-        option.set(ascending, optionSortAscending);
+        option.set(optionSortAscending, ascending);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -120,7 +120,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
     @Override
     public void setOptionSortType(SortType sortType, boolean rebuild) {
         sorters.setOptionKeySortType(sortType);
-        option.set(sortType, optionSortType);
+        option.set(optionSortType, sortType);
         rebuildRequired = true;
         if (rebuild) {
             build();

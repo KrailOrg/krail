@@ -85,7 +85,7 @@ public class DefaultOptionTest {
         when(defaultHierarchy.rankName(0)).thenReturn("specific");
         OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 0, optionKey1);
         //when
-        option.set(5, optionKey1);
+        option.set(optionKey1, 5);
         //then
     }
 
@@ -96,7 +96,7 @@ public class DefaultOptionTest {
         when(defaultHierarchy.rankName(0)).thenReturn("specific");
         OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 0, optionKey1);
         //when
-        option.set(5, optionKey1);
+        option.set(optionKey1, 5);
         //then
         verify(optionCache).write(cacheKey, Optional.of(5));
     }
@@ -110,7 +110,7 @@ public class DefaultOptionTest {
         OptionKey<Integer> optionKey2 = new OptionKey<>(999, context, TestLabelKey.key1, TestLabelKey.key1, "q");
         OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 2, optionKey2);
         //when
-        option.set(5, -1, optionKey2);
+        option.set(optionKey2, -1, 5);
         //then
     }
 
@@ -193,7 +193,7 @@ public class DefaultOptionTest {
         OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 1, optionKey2);
         when(optionCache.delete(any())).thenAnswer(answerOf(3));
         //when
-        Object actual = option.delete(1, optionKey2);
+        Object actual = option.delete(optionKey2, 1);
         //then
         assertThat(actual).isEqualTo(Optional.of(3));
         verify(optionCache).delete(cacheKey);
@@ -207,7 +207,7 @@ public class DefaultOptionTest {
         OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 1, optionKey2);
         when(optionCache.delete(cacheKey)).thenAnswer(answerOf(3));
         //when
-        Object actual = option.delete(1, optionKey2);
+        Object actual = option.delete(optionKey2, 1);
         //then
     }
 

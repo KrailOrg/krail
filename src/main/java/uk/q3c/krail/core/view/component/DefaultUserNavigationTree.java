@@ -106,7 +106,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     @Override
     public void setOptionSortAscending(boolean ascending, boolean rebuild) {
         sorters.setOptionSortAscending(ascending);
-        option.set(ascending, optionKeySortAscending);
+        option.set(optionKeySortAscending, ascending);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -157,7 +157,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     @Override
     public void setOptionSortType(SortType sortType, boolean rebuild) {
         sorters.setOptionKeySortType(sortType);
-        option.set(sortType, optionKeySortType);
+        option.set(optionKeySortType, sortType);
         rebuildRequired = true;
         if (rebuild) {
             build();
@@ -173,7 +173,6 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
      * be a leaf here, but not in the {@link #userSitemap}, depending on the setting of {@link #getOptionMaxDepth()}
      *
      * @param node
-     *
      * @return
      */
     public boolean isLeaf(UserSitemapNode node) {
@@ -199,7 +198,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     @Override
     public void setOptionMaxDepth(int maxDepth, boolean rebuild) {
         if (maxDepth > 0) {
-            option.set(maxDepth, optionKeyMaximumDepth);
+            option.set(optionKeyMaximumDepth, maxDepth);
             build();
         } else {
             log.warn("Attempt to set max depth value to {}, but has been ignored.  It must be greater than 0. ");
@@ -215,7 +214,6 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
             }
         }
     }
-
 
 
     /**

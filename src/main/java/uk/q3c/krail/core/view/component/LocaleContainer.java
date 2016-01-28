@@ -121,7 +121,7 @@ public class LocaleContainer extends IndexedContainer implements OptionContext {
     }
 
 
-    public OptionKey getOptionKeyFlagSize() {
+    public OptionKey<Integer> getOptionKeyFlagSize() {
         return optionKeyFlagSize;
     }
 }

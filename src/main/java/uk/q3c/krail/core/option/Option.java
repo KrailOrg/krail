@@ -96,9 +96,9 @@ public interface Option {
 
 
     /**
-     * Calls {@link #set(Object, int, OptionKey)}  with a hierarchy rank of 0 (the highest rank)
+     * Calls {@link #set(OptionKey, int, Object)}  with a hierarchy rank of 0 (the highest rank)
      */
-    <T> void set(T value, @Nonnull OptionKey<T> optionKey);
+    <T> void set(@Nonnull OptionKey<T> optionKey, T value);
 
 
 
@@ -116,7 +116,7 @@ public interface Option {
      *         identifier for the option, in its context
      */
 
-    <T> void set(@Nonnull T value, int hierarchyRank, @Nonnull OptionKey<T> optionKey);
+    <T> void set(@Nonnull OptionKey<T> optionKey, int hierarchyRank, @Nonnull T value);
 
 
     //--------------------------------------------- delete --------------------------------------------------------
@@ -132,7 +132,7 @@ public interface Option {
      * @return the previously assigned value of this option, or null if it had no assignment
      */
     @Nullable
-    <T> T delete(int hierarchyRank, @Nonnull OptionKey<T> optionKey);
+    <T> T delete(@Nonnull OptionKey<T> optionKey, int hierarchyRank);
 
 
 }

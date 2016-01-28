@@ -67,7 +67,7 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
     }
     @Override
     public void setOptionMaxDepth(int depth) {
-        option.set(depth, optionKeyMaximumDepth);
+        option.set(optionKeyMaximumDepth, depth);
         build();
     }
 

@@ -40,7 +40,7 @@ import static uk.q3c.krail.core.user.profile.RankOption.*;
  * <br>
  * To create a hierarchy specific implementation, simply sub-class with the alternative hierarchy injected into it.
  * <br>
- * Permission is required to execute {@link #set(Object, int, OptionKey)}, {@link #set(Object, OptionKey)} or {@link #delete(int, OptionKey)}.  Permission
+ * Permission is required to execute {@link #set(OptionKey, int, Object)}, {@link #set(OptionKey, Object)} or {@link #delete(OptionKey, int)}.  Permission
  * required is represented by an instance of {@link OptionPermission}.  If permissions are required to view, these would need to be applied at the user
  * interface.<br>
  * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
@@ -69,18 +69,18 @@ public abstract class OptionBase implements Option {
     }
 
     @Override
-    public <T> void set(T value, @Nonnull OptionKey<T> optionKey) {
-        set(value, 0, optionKey);
+    public <T> void set(@Nonnull OptionKey<T> optionKey, T value) {
+        set(optionKey, 0, value);
     }
 
     @Override
-    public synchronized <T> void set(@Nonnull T value, int hierarchyRank, @Nonnull OptionKey<T> optionKey) {
+    public synchronized <T> void set(@Nonnull OptionKey<T> optionKey, int hierarchyRank, @Nonnull T value) {
         checkArgument(hierarchyRank >= 0);
         checkNotNull(optionKey);
         OptionPermission permission = new OptionPermission(OptionPermission.Action.EDIT, hierarchy, hierarchyRank, optionKey, subjectIdentifier.userId());
         if (subjectProvider.get()
                            .isPermitted(permission)) {
-            optionCache.write(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey), Optional.of(value));
+            optionCache.write(new OptionCacheKey<>(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey), Optional.of(value));
         } else {
             throw new UnauthorizedException();
         }
@@ -135,7 +135,7 @@ public abstract class OptionBase implements Option {
 
     @Override
     @Nullable
-    public <T> T delete(int hierarchyRank, @Nonnull OptionKey<T> optionKey) {
+    public <T> T delete(@Nonnull OptionKey<T> optionKey, int hierarchyRank) {
         checkArgument(hierarchyRank >= 0);
         checkNotNull(optionKey);
         OptionPermission permission = new OptionPermission(OptionPermission.Action.EDIT, hierarchy, hierarchyRank, optionKey, subjectIdentifier.userId());

@@ -117,11 +117,11 @@ public class DefaultApplicationUITest {
     @Test
     public void turnedOff() {
         //given
-        option.set(false, DefaultApplicationUI.optionBreadcrumbVisible);
-        option.set(false, DefaultApplicationUI.optionMenuVisible);
-        option.set(false, DefaultApplicationUI.optionNavTreeVisible);
-        option.set(false, DefaultApplicationUI.optionMessageBarVisible);
-        option.set(false, DefaultApplicationUI.optionSubPagePanelVisible);
+        option.set(DefaultApplicationUI.optionBreadcrumbVisible, false);
+        option.set(DefaultApplicationUI.optionMenuVisible, false);
+        option.set(DefaultApplicationUI.optionNavTreeVisible, false);
+        option.set(DefaultApplicationUI.optionMessageBarVisible, false);
+        option.set(DefaultApplicationUI.optionSubPagePanelVisible, false);
         //when
 
         ui.doLayout();

@@ -123,7 +123,7 @@ public class Option_IntegrationTest {
         when(subject1.isAuthenticated()).thenReturn(true);
 
         //when
-        option.set(3, key1);
+        option.set(key1, 3);
         //then
         assertThat(option.get(key1)).isEqualTo(3);
     }
@@ -134,7 +134,7 @@ public class Option_IntegrationTest {
         when(subject1.isAuthenticated()).thenReturn(false);
 
         //when
-        option.set(3, key1);
+        option.set(key1, 3);
         //then
         assertThat(option.get(key1)).isEqualTo(3);
     }
@@ -144,8 +144,8 @@ public class Option_IntegrationTest {
         //given
         when(subject1.isAuthenticated()).thenReturn(true);
         //when
-        option.set(3, key1);
-        option.set(7, 1, key1);
+        option.set(key1, 3);
+        option.set(key1, 1, 7);
         //then
         assertThat(option.get(key1)).isEqualTo(3);
         assertThat(option.get(key1)).isEqualTo(3);
@@ -167,7 +167,7 @@ public class Option_IntegrationTest {
         //given
         when(subject1.isAuthenticated()).thenReturn(true);
         //when
-        option.set(3, key1);
+        option.set(key1, 3);
         //then
         assertThat(option.get(key1)).isEqualTo(3);
     }
@@ -192,7 +192,7 @@ public class Option_IntegrationTest {
         when(subjectIdentifier.userId()).thenReturn("fbaton");
         DefaultOption option2 = new DefaultOption(optionCache, hierarchy, subjectProvider, subjectIdentifier);
         //when
-        option2.set(3, key1);
+        option2.set(key1, 3);
         Integer actual = option2.get(key1);
         //then
         assertThat(actual).isEqualTo(3);

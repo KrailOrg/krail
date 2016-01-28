@@ -94,14 +94,14 @@ public class DefaultOptionPopup implements OptionPopup {
                 //noinspection unchecked
                 uiField.setValue(value);
                 uiField.addValueChangeListener(event -> {
-                    option.set(uiField.getValue(), key);
+                    option.set(key, uiField.getValue());
                     context.optionValueChanged(event);
                 });
 
                 Button defaultsButton = new Button(translate.from(LabelKey.Reset_to_Default));
                 defaultsButton.setId(ID.getId(optionKeyName, this, defaultsButton));
                 defaultsButton.addClickListener((event -> {
-                    option.delete(0, key);
+                    option.delete(key, 0);
                     //we create an event to represent the field which whose value will be affected by this change
                     AbstractField.ValueChangeEvent changeEvent = new AbstractField.ValueChangeEvent(uiField);
                     context.optionValueChanged(changeEvent);
