@@ -119,4 +119,5 @@ Thanks to:
 [Mycila](https://github.com/mycila)<br>
 [Mockito](https://github.com/mockito/mockito)<br>
 [spock](https://github.com/spockframework/spock)
+[FindBugs](http://findbugs.sourceforge.net/)
 
