@@ -14,8 +14,8 @@
 package uk.q3c.krail.core.data;
 
 import com.vaadin.data.util.converter.Converter;
-import uk.q3c.krail.core.user.opt.OptionKey;
-import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
+import uk.q3c.krail.core.option.OptionKey;
+import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 
 import javax.annotation.Nonnull;
 

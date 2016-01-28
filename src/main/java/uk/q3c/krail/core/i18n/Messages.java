@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.core.i18n;
 
+import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
+
 import static uk.q3c.krail.core.i18n.MessageKey.*;
 
 /**

@@ -22,11 +22,11 @@ import com.vaadin.data.Container;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.data.DataModule;
+import uk.q3c.krail.core.option.InMemory;
 import uk.q3c.krail.core.persist.common.common.ContainerType;
 import uk.q3c.krail.core.persist.common.common.VaadinContainerProvider;
+import uk.q3c.krail.core.persist.common.option.OptionEntity;
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule;
-import uk.q3c.krail.core.user.opt.InMemory;
-import uk.q3c.krail.core.user.opt.OptionEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

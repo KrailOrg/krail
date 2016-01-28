@@ -17,13 +17,13 @@ import com.google.inject.Module
 import com.google.inject.TypeLiteral
 import spock.guice.UseModules
 import uk.q3c.krail.core.i18n.I18NKey
+import uk.q3c.krail.core.option.InMemory
 import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnitHelper
 import uk.q3c.krail.core.persist.common.option.DefaultActiveOptionSource
 import uk.q3c.krail.core.persist.common.option.OptionContainerProvider
+import uk.q3c.krail.core.persist.common.option.OptionDao
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionContainerProvider
-import uk.q3c.krail.core.user.opt.InMemory
-import uk.q3c.krail.core.user.opt.InMemoryOptionDao
-import uk.q3c.krail.core.user.opt.OptionDao
+import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDao
 import uk.q3c.krail.core.validation.JavaxValidationSubstitutes
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.util.UtilsModule

@@ -16,7 +16,7 @@ package uk.q3c.krail.core.data;
 import com.google.common.base.Splitter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringEscapeUtils;
-import uk.q3c.krail.core.user.opt.AnnotationOptionList;
+import uk.q3c.krail.core.option.AnnotationOptionList;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;

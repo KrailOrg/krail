@@ -18,8 +18,9 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.data.Property;
-import uk.q3c.krail.core.user.opt.AnnotationOptionList;
-import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.option.AnnotationOptionList;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;

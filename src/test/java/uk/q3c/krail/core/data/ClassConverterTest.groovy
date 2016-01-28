@@ -15,7 +15,7 @@ package uk.q3c.krail.core.data
 
 import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
-import uk.q3c.krail.core.i18n.ClassPatternSource
+import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
 
 /**
  *

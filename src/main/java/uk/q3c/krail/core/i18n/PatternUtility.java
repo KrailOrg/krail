@@ -13,7 +13,8 @@
 
 package uk.q3c.krail.core.i18n;
 
-import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

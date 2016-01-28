@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.persist.common.option;
 
 import com.vaadin.data.Container;
-import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.option.Option;
 
 /**
  * Common interface for persistence sources to provide a Vaadin Container for the {@link Option} class

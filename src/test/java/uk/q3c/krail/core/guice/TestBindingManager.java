@@ -13,8 +13,8 @@
 package uk.q3c.krail.core.guice;
 
 import com.google.inject.Module;
-import uk.q3c.krail.core.user.opt.InMemory;
-import uk.q3c.krail.core.user.opt.OptionModule;
+import uk.q3c.krail.core.option.InMemory;
+import uk.q3c.krail.core.option.OptionModule;
 
 import java.util.List;
 

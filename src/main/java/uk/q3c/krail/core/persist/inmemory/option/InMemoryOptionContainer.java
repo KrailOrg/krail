@@ -15,8 +15,7 @@ package uk.q3c.krail.core.persist.inmemory.option;
 
 import com.google.inject.Inject;
 import com.vaadin.data.util.BeanItemContainer;
-import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
-import uk.q3c.krail.core.user.opt.OptionEntity;
+import uk.q3c.krail.core.persist.common.option.OptionEntity;
 
 /**
  * An extension of {@link BeanItemContainer} to handle in memory option entities only.

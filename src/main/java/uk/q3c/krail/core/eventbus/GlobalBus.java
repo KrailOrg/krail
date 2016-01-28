@@ -12,7 +12,7 @@
 package uk.q3c.krail.core.eventbus;
 
 import com.google.inject.BindingAnnotation;
-import uk.q3c.krail.core.user.opt.cache.OptionCache;
+import uk.q3c.krail.core.persist.cache.option.OptionCache;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

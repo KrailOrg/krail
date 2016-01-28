@@ -14,7 +14,6 @@
 package uk.q3c.krail.core.persist.common.i18n;
 
 import com.google.inject.BindingAnnotation;
-import uk.q3c.krail.core.i18n.PatternDao;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

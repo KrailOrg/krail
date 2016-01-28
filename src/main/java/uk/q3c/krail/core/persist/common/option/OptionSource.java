@@ -15,7 +15,6 @@ package uk.q3c.krail.core.persist.common.option;
 
 import com.vaadin.data.Container;
 import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
-import uk.q3c.krail.core.user.opt.OptionDao;
 
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;

@@ -27,9 +27,9 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
-import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionKey;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.option.OptionContext;
+import uk.q3c.krail.core.option.OptionKey;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;

@@ -19,9 +19,9 @@ import com.google.inject.Inject;
 import com.vaadin.data.util.converter.ConverterFactory;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.i18n.I18NKey;
-import uk.q3c.krail.core.user.opt.AnnotationOptionList;
-import uk.q3c.krail.core.user.opt.OptionList;
-import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
+import uk.q3c.krail.core.option.AnnotationOptionList;
+import uk.q3c.krail.core.option.OptionList;
+import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.util.MessageFormat;
 
 import javax.annotation.Nonnull;

@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.core.i18n;
 
+import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
+
 /**
  * The base for the resource bundle of {@link Labels}. The separation between them is arbitrary, but helps break down
  * what could other wise be long lists, and only one of them needs to look up parameter values:

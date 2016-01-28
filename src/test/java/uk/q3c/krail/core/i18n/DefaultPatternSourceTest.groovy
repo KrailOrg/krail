@@ -17,7 +17,11 @@ import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.i18n.i8nModule.TestPatternSource
-import uk.q3c.krail.core.user.opt.Option
+import uk.q3c.krail.core.option.Option
+import uk.q3c.krail.core.persist.cache.i18n.DefaultPatternCacheLoader
+import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey
+import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternDao
+import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
 
 /**
  * This test had to be changed to use a real DefaultPatternCacheLoader rather than a mock, although oddly the Mock did work originally

@@ -16,10 +16,10 @@ package uk.q3c.krail.core.sysadmin.option;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.option.OptionPopup;
 import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
 import uk.q3c.krail.core.persist.common.option.OptionSource;
-import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.OptionPopup;
 
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;

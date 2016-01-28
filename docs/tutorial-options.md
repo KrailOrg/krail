@@ -210,10 +210,10 @@ import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionKey;
-import uk.q3c.krail.core.user.opt.OptionPopup;
+import Option;
+import OptionContext;
+import OptionKey;
+import OptionPopup;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 

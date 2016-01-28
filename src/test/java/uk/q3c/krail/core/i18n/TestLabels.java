@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.core.i18n;
 
+import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
+
 /**
  * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely
  * defined as containing those value which are short, contain no parameters and are typically used for captions and

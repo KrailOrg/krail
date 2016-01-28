@@ -19,8 +19,10 @@ import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.i18n.i8nModule.TestPatternSource
 import uk.q3c.krail.core.i18n.i8nModule.TestPatternSource1
-import uk.q3c.krail.core.user.opt.AnnotationOptionList
-import uk.q3c.krail.core.user.opt.Option
+import uk.q3c.krail.core.option.AnnotationOptionList
+import uk.q3c.krail.core.option.Option
+import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
+import uk.q3c.krail.core.persist.common.i18n.PatternDao
 
 import java.lang.annotation.Annotation
 

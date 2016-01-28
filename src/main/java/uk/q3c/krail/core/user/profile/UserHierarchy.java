@@ -14,8 +14,8 @@
 package uk.q3c.krail.core.user.profile;
 
 import com.google.common.collect.ImmutableList;
-import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.cache.OptionPermission;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.option.OptionPermission;
 
 import javax.annotation.Nonnull;
 

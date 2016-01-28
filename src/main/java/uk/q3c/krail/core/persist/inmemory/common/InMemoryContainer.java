@@ -15,11 +15,11 @@ package uk.q3c.krail.core.persist.inmemory.common;
 
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.util.BeanItemContainer;
-import uk.q3c.krail.core.i18n.InMemoryPatternStore;
-import uk.q3c.krail.core.i18n.PatternCacheKey;
-import uk.q3c.krail.core.i18n.PatternEntity;
-import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
-import uk.q3c.krail.core.user.opt.OptionEntity;
+import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
+import uk.q3c.krail.core.persist.common.option.OptionEntity;
+import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternStore;
+import uk.q3c.krail.core.persist.inmemory.i18n.PatternEntity;
+import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 
 import java.util.List;
 

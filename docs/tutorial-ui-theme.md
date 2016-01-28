@@ -25,7 +25,7 @@ import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.ui.ApplicationTitle;
 import uk.q3c.krail.core.ui.DefaultApplicationUI;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
-import uk.q3c.krail.core.user.opt.Option;
+import Option;
 import uk.q3c.krail.core.view.component.*;
 import uk.q3c.krail.core.i18n.CurrentLocale;
 import uk.q3c.krail.core.i18n.I18NProcessor;

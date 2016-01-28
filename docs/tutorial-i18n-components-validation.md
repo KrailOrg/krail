@@ -49,7 +49,7 @@ put(LabelKey.Yes, "Ja");
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.i18n.EnumResourceBundle;
+import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
 
 import static com.example.tutorial.i18n.DescriptionKey.*;
 
@@ -424,7 +424,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import uk.q3c.krail.core.ui.form.BeanFieldGroupBase;
-import uk.q3c.krail.core.user.opt.Option;
+import Option;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.core.i18n.I18NProcessor;

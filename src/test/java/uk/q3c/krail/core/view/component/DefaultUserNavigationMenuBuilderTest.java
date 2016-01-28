@@ -32,8 +32,8 @@ import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
-import uk.q3c.krail.core.user.opt.DefaultInMemoryOptionStore;
-import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
+import uk.q3c.krail.core.persist.inmemory.option.DefaultInMemoryOptionStore;
+import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 import uk.q3c.krail.testutil.*;
 
 import static org.assertj.core.api.Assertions.assertThat;

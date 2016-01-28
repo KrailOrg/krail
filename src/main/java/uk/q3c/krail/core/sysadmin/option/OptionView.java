@@ -18,7 +18,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.util.Experimental;

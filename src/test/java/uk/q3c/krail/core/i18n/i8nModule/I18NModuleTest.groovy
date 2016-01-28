@@ -22,9 +22,13 @@ import uk.q3c.krail.core.guice.GuiceModuleTestBase
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.i18n.*
+import uk.q3c.krail.core.option.InMemory
+import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternDao
+import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
+import uk.q3c.krail.core.persist.common.i18n.PatternDao
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
+import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternDao
 import uk.q3c.krail.core.shiro.DefaultShiroModule
-import uk.q3c.krail.core.user.opt.InMemory
 import uk.q3c.krail.testutil.TestOptionModule
 
 import java.lang.annotation.Annotation

@@ -13,7 +13,7 @@ package uk.q3c.krail.core.data;
 
 import com.google.common.base.Splitter;
 import org.apache.commons.lang3.StringEscapeUtils;
-import uk.q3c.krail.core.user.opt.OptionList;
+import uk.q3c.krail.core.option.OptionList;
 
 import java.util.ArrayList;
 import java.util.List;

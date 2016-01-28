@@ -17,8 +17,8 @@ import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.eventbus.SessionBus
-import uk.q3c.krail.core.i18n.ClassPatternSource
-import uk.q3c.krail.core.user.opt.AnnotationOptionList
+import uk.q3c.krail.core.option.AnnotationOptionList
+import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
 
 /**
  *
@@ -59,7 +59,7 @@ class AnnotationOptionListConverterTest extends Specification {
 
         then:
 
-        string.equals("uk.q3c.krail.core.i18n.ClassPatternSource~~uk.q3c.krail.core.eventbus.SessionBus")
+        string.equals("uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource~~uk.q3c.krail.core.eventbus.SessionBus")
         ListUtils.isEqualList(testList.getList(), returnedList.getList())
     }
 }

@@ -21,8 +21,15 @@ import com.google.inject.multibindings.Multibinder;
 import org.apache.commons.lang3.LocaleUtils;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.persist.cache.i18n.DefaultPatternCacheLoader;
+import uk.q3c.krail.core.persist.cache.i18n.PatternCacheLoader;
+import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternDao;
+import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource;
+import uk.q3c.krail.core.persist.clazz.i18n.DefaultClassPatternDao;
+import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
 import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnitHelper;
-import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;

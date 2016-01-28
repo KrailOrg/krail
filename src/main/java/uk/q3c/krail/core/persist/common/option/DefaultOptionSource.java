@@ -20,7 +20,6 @@ import com.vaadin.data.Container;
 import uk.q3c.krail.core.config.ConfigurationException;
 import uk.q3c.krail.core.persist.common.common.OptionDaoProviders;
 import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
-import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.util.MessageFormat;
 
 import javax.annotation.Nonnull;

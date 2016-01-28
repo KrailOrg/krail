@@ -17,9 +17,9 @@ import com.google.inject.Binder;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
-import uk.q3c.krail.core.i18n.PatternDao;
+import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 import uk.q3c.krail.core.persist.common.i18n.PatternDaoProviders;
-import uk.q3c.krail.core.user.opt.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDao;
 
 import java.lang.annotation.Annotation;
 

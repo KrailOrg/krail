@@ -15,10 +15,10 @@ package uk.q3c.krail.core.persist.inmemory.common;
 
 import com.google.inject.Inject;
 import com.vaadin.data.Container;
-import uk.q3c.krail.core.i18n.InMemoryPatternStore;
 import uk.q3c.krail.core.persist.common.common.ContainerType;
 import uk.q3c.krail.core.persist.common.common.VaadinContainerProvider;
-import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
+import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternStore;
+import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 
 /**
  * Created by David Sowerby on 30/06/15.

@@ -22,12 +22,18 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.data.OptionStringConverter;
-import uk.q3c.krail.core.i18n.*;
-import uk.q3c.krail.core.user.opt.DefaultInMemoryOptionStore;
-import uk.q3c.krail.core.user.opt.InMemoryOptionDao;
-import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
-import uk.q3c.krail.core.user.opt.OptionEntity;
-import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
+import uk.q3c.krail.core.i18n.DefaultCurrentLocale;
+import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
+import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
+import uk.q3c.krail.core.persist.common.option.OptionEntity;
+import uk.q3c.krail.core.persist.inmemory.i18n.DefaultInMemoryPatternStore;
+import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternDao;
+import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternStore;
+import uk.q3c.krail.core.persist.inmemory.i18n.PatternEntity;
+import uk.q3c.krail.core.persist.inmemory.option.DefaultInMemoryOptionStore;
+import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDao;
+import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.view.component.LocaleContainer;
@@ -57,8 +63,8 @@ public class InMemoryContainerTest {
 
     @Before
     public void setup() {
-        optionStore = new DefaultInMemoryOptionStore(optionStringConverter);
-        optionDao = new InMemoryOptionDao(optionStore);
+        optionStore = new DefaultInMemoryOptionStore();
+        optionDao = new InMemoryOptionDao(optionStore,optionStringConverter);
         patternStore = new DefaultInMemoryPatternStore();
         patternDao = new InMemoryPatternDao(patternStore);
         when(userHierarchy.persistenceName()).thenReturn("SimpleUserHierarchy");

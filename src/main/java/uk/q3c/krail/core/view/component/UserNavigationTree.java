@@ -16,7 +16,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Tree;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
-import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.option.Option;
 
 public interface UserNavigationTree extends Component, UserSitemapSorters {
 

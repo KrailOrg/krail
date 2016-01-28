@@ -14,10 +14,11 @@
 package uk.q3c.krail.core.i18n;
 
 import com.google.common.collect.ImmutableSet;
-import uk.q3c.krail.core.user.opt.AnnotationOptionList;
-import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionKey;
+import uk.q3c.krail.core.option.AnnotationOptionList;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.option.OptionContext;
+import uk.q3c.krail.core.option.OptionKey;
+import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;

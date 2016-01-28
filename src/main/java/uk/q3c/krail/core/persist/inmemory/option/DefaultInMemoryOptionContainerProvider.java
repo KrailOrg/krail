@@ -15,7 +15,6 @@ package uk.q3c.krail.core.persist.inmemory.option;
 
 import com.google.inject.Inject;
 import com.vaadin.data.Container;
-import uk.q3c.krail.core.user.opt.InMemoryOptionStore;
 
 /**
  * Returns an {@link InMemoryOptionContainer}

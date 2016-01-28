@@ -36,10 +36,10 @@ import uk.q3c.krail.core.i18n.CurrentLocale;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.Navigator;
+import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.DefaultBroadcaster;
 import uk.q3c.krail.core.push.DefaultPushMessageRouter;
-import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.view.KrailView;
 
 import java.util.Locale;

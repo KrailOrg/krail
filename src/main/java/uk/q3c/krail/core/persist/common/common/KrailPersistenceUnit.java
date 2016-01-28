@@ -13,8 +13,8 @@
 
 package uk.q3c.krail.core.persist.common.common;
 
-import uk.q3c.krail.core.i18n.PatternDao;
-import uk.q3c.krail.core.user.opt.OptionDao;
+import uk.q3c.krail.core.persist.common.i18n.PatternDao;
+import uk.q3c.krail.core.persist.common.option.OptionDao;
 
 /**
  * Interface which may be applied to Guice modules or configuration objects, to provide persistence to the Krail core.

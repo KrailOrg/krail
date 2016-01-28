@@ -20,7 +20,7 @@ import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.validation.BeanValidator;
 
 public class TestBeanFieldGroup extends BeanFieldGroupBase<TestEntity> {

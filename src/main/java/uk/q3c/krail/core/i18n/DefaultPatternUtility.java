@@ -15,6 +15,8 @@ package uk.q3c.krail.core.i18n;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
+import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 import uk.q3c.krail.core.validation.ValidationKey;
 
 import javax.annotation.Nonnull;

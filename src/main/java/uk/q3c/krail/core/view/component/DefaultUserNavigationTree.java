@@ -30,9 +30,9 @@ import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
-import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionKey;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.option.OptionContext;
+import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.util.ID;
 

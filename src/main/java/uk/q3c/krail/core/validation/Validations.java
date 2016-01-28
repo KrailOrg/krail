@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.validation;
 
-import uk.q3c.krail.core.i18n.EnumResourceBundle;
+import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
 
 import static uk.q3c.krail.core.validation.ValidationKey.*;
 

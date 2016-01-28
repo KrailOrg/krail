@@ -23,11 +23,11 @@ import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.option.OptionContext;
+import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
-import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.OptionContext;
-import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 
 import javax.annotation.Nonnull;
