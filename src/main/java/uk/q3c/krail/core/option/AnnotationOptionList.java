@@ -14,7 +14,9 @@
 package uk.q3c.krail.core.option;
 
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.collections15.ListUtils;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
@@ -24,7 +26,7 @@ import java.util.List;
  * <p>
  * Created by David Sowerby on 07/08/15.
  */
-public class AnnotationOptionList {
+public class AnnotationOptionList implements Serializable {
 
     protected final ImmutableList<Class<? extends Annotation>> list;
 
@@ -65,5 +67,18 @@ public class AnnotationOptionList {
         return list.isEmpty();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        AnnotationOptionList that = (AnnotationOptionList) o;
+
+        return ListUtils.isEqualList(this.list, that.list);
+    }
+
+    @Override
+    public int hashCode() {
+        return list.hashCode();
+    }
 }

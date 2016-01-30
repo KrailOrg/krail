@@ -17,6 +17,7 @@ import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.eventbus.SessionBus
+import uk.q3c.krail.core.i18n.DefaultCurrentLocale
 import uk.q3c.krail.core.option.AnnotationOptionList
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
 
@@ -62,4 +63,21 @@ class AnnotationOptionListConverterTest extends Specification {
         string.equals("uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource~~uk.q3c.krail.core.eventbus.SessionBus")
         ListUtils.isEqualList(testList.getList(), returnedList.getList())
     }
+
+    def "Convert non-class value input throws ConversionException"() {
+        when:
+        converter.convertToModel("rubbish")
+
+        then:
+        thrown(ConversionException)
+    }
+
+    def "Convert non-annotation class value throws ConversionException"() {
+        when:
+        converter.convertToModel(DefaultCurrentLocale.class.getName())
+
+        then:
+        thrown(ConversionException)
+    }
+
 }

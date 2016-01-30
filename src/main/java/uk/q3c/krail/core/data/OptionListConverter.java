@@ -15,8 +15,11 @@ import com.google.common.base.Splitter;
 import org.apache.commons.lang3.StringEscapeUtils;
 import uk.q3c.krail.core.option.OptionList;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
@@ -28,10 +31,11 @@ import java.util.List;
 public class OptionListConverter<E> {
 
     public final static String separator = "~~";
-    private OptionStringConverter converter;
+    private OptionElementConverter converter;
 
 
-    public OptionListConverter(OptionStringConverter converter) {
+    public OptionListConverter(@Nonnull OptionElementConverter converter) {
+        checkNotNull(converter);
         this.converter = converter;
     }
 
@@ -40,7 +44,8 @@ public class OptionListConverter<E> {
      * {@inheritDoc}
      */
 
-    public String convertToString(OptionList<E> value) throws ConversionException {
+    public String convertToString(@Nonnull OptionList<E> value) {
+        checkNotNull(value);
         if (value.isEmpty()) {
             return "";
         }
@@ -60,17 +65,20 @@ public class OptionListConverter<E> {
     }
 
 
-    public <E> OptionList<E> convertToModel(OptionList<E> defaultValue, String value) throws ConversionException {
+    public <E> OptionList<E> convertToModel(@Nonnull OptionList<E> defaultValue, @Nonnull String value) {
+        checkNotNull(value);
+        checkNotNull(defaultValue);
+        Class<E> elementClass = defaultValue.getElementClass();
         if (value.isEmpty()) {
-            return new OptionList<>(defaultValue.getElementClass());
+            return new OptionList<>(elementClass);
         }
         final List<String> strings = Splitter.on(separator)
                                              .splitToList(value);
         List<E> elementList = new ArrayList<>();
         strings.forEach(s -> {
             String unescaped = StringEscapeUtils.unescapeCsv(s);
-            elementList.add(converter.convertStringToValue(defaultValue.getElementClass(), unescaped));
+            elementList.add(converter.convertStringToValue(elementClass, unescaped));
         });
-        return new OptionList<>(elementList, defaultValue.getElementClass());
+        return new OptionList<E>(elementList, elementClass);
     }
 }

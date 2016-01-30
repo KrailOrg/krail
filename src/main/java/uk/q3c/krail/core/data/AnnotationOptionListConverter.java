@@ -14,13 +14,16 @@
 package uk.q3c.krail.core.data;
 
 import com.google.common.base.Splitter;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringEscapeUtils;
 import uk.q3c.krail.core.option.AnnotationOptionList;
 
+import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
@@ -38,29 +41,40 @@ public class AnnotationOptionListConverter {
     }
 
     /**
-     * {@inheritDoc}
+     * Converts {@code model} to String
+     *
+     * @param model the model to convert
+     * @return Comma separated String representation of the list contents
      */
-
-    @SuppressFBWarnings("PCAIL_POSSIBLE_CONSTANT_ALLOCATION_IN_LOOP")
-    public String convertToString(AnnotationOptionList value) throws ConversionException {
-        if (value.isEmpty()) {
+    public String convertToString(@Nonnull AnnotationOptionList model) {
+        checkNotNull(model);
+        if (model.isEmpty()) {
             return "";
         }
         StringBuilder buf = new StringBuilder();
+        ImmutableList<Class<? extends Annotation>> modelList = model.getList();
+        ClassConverter classConverter = new ClassConverter();
         boolean first = true;
-        for (Class<? extends Annotation> e : value.getList()) {
+        for (Class<? extends Annotation> e : modelList) {
             if (!first) {
                 buf.append(separator);
             } else {
                 first = false;
             }
-            buf.append(StringEscapeUtils.escapeCsv(new ClassConverter().convertToString(e)));
+            buf.append(StringEscapeUtils.escapeCsv(classConverter.convertToString(e)));
         }
         return buf.toString();
     }
 
-
-    public AnnotationOptionList convertToModel(String value) throws ConversionException {
+    /**
+     * Converts String representation, {@code value}, to model
+     *
+     * @param value the String to convert
+     * @return Comma separated String representation of the list contents
+     * @throws ConversionException if conversion fails
+     */
+    public AnnotationOptionList convertToModel(@Nonnull String value) {
+        checkNotNull(value);
         if (value.isEmpty()) {
             return new AnnotationOptionList();
         }

@@ -26,7 +26,7 @@ class OptionListConverterTest extends Specification {
     OptionListConverter converter
 
     def setup() {
-        converter = new OptionListConverter(new DefaultOptionStringConverter())
+        converter = new OptionListConverter(new DefaultOptionElementConverter())
     }
 
 
@@ -38,22 +38,16 @@ class OptionListConverterTest extends Specification {
         converter.convertToString(optionList).equals("")
     }
 
-    def "convert empty String to List, should be empty list"() {
-        given:
-        OptionList<String> defaultValue = new OptionList<>(String.class, "a", "b")
-
-        expect:
-        converter.convertToModel(defaultValue, "").isEmpty()
-    }
 
     def "round trip convert list with comma, single quote and double quote inside original String list entries"() {
         given:
-        OptionList<String> testValue = new OptionList<>(String.class, "a,b", "d\"q")
         OptionList<String> defaultValue = new OptionList<>(String.class)
+        OptionList<String> testValue = new OptionList<>(String.class, "a,b", "d\"q")
 
         when:
         String s = converter.convertToString(testValue)
         OptionList<String> returnedValue = converter.convertToModel(defaultValue, s)
+
         then:
         ListUtils.isEqualList(testValue.getList(), returnedValue.getList())
         returnedValue.getElementClass().equals(String.class)
@@ -62,8 +56,8 @@ class OptionListConverterTest extends Specification {
 
     def "round trip a list of numeric values"() {
         given:
+        OptionList<Integer> defaultValue = new OptionList<>(Integer.class)
         OptionList<Integer> testValue = new OptionList<>(Integer.class, 1, 3)
-        OptionList<Integer> defaultValue = new OptionList<>(Integer.class, 12, 3)
 
         when:
         String s = converter.convertToString(testValue)
@@ -71,6 +65,65 @@ class OptionListConverterTest extends Specification {
         then:
         ListUtils.isEqualList(testValue.getList(), returnedValue.getList())
         returnedValue.getElementClass().equals(Integer.class)
+    }
+
+    def "round trip empty list"() {
+        given:
+        OptionList<Integer> defaultValue = new OptionList<>(Integer.class)
+        OptionList<Integer> testValue = new OptionList<>(Integer.class)
+
+        when:
+        String s = converter.convertToString(testValue)
+        OptionList<Integer> returnedValue = converter.convertToModel(defaultValue, s)
+
+        then:
+        ListUtils.isEqualList(testValue.getList(), returnedValue.getList())
+        returnedValue.getElementClass().equals(Integer.class)
+    }
+
+    def "convertToString NPE on null"() {
+        when:
+        converter.convertToString(null)
+
+        then:
+        thrown(NullPointerException)
+    }
+
+    def "construct with null NPE"() {
+        when:
+        converter = new OptionListConverter(null)
+
+        then:
+        thrown(NullPointerException)
+    }
+
+    def "convert to model, null element class, NPE"() {
+
+        when:
+        converter.convertToModel(null, "x")
+
+        then:
+        thrown(NullPointerException)
+    }
+
+    def "convert to model, null value, NPE"() {
+        given:
+        OptionList<Integer> defaultValue = new OptionList<>(Integer.class)
+
+        when:
+        converter.convertToModel(defaultValue, null)
+
+        then:
+        thrown(NullPointerException)
+    }
+
+    def "convert to String, null value NPE"() {
+        when:
+        converter.convertToString(null)
+
+        then:
+        thrown(NullPointerException)
+
     }
 
 

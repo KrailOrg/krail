@@ -15,6 +15,7 @@ package uk.q3c.krail.core.data
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication
 import spock.lang.Specification
+import uk.q3c.krail.core.config.DefaultApplicationConfiguration
 import uk.q3c.krail.core.i18n.I18NKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.option.AnnotationOptionList
@@ -23,16 +24,15 @@ import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
 import uk.q3c.krail.core.services.Service
 
 import java.time.LocalDateTime
-
 /**
  * Created by David Sowerby on 21 Jan 2016
  */
-class DefaultOptionStringConverterTest extends Specification {
+class DefaultOptionElementConverterTest extends Specification {
 
-    DefaultOptionStringConverter converter
+    DefaultOptionElementConverter converter
 
     def setup() {
-        converter = new DefaultOptionStringConverter()
+        converter = new DefaultOptionElementConverter()
     }
 
     def "from other to String"() {
@@ -61,6 +61,23 @@ class DefaultOptionStringConverterTest extends Specification {
         converter.convertStringToValue(I18NKey, 'uk.q3c.krail.core.i18n.LabelKey.Yes').equals(LabelKey.Yes)
         converter.convertStringToValue(Enum, 'uk.q3c.krail.core.services.Service$State.FAILED').equals(Service.State.FAILED)
         converter.convertStringToValue(BigDecimal, '433').equals(BigDecimal.valueOf(433))
+        converter.convertStringToValue(AnnotationOptionList, 'uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource~~org.apache.shiro.authz.annotation.RequiresAuthentication').equals(new AnnotationOptionList(ClassPatternSource, RequiresAuthentication))
+    }
+
+    def "convertToString, unknown converter type throws ConverterException "() {
+        when:
+        converter.convertValueToString(new DefaultApplicationConfiguration())
+
+        then:
+        thrown(ConverterException)
+    }
+
+    def "convertToModel, unknown converter type throws ConverterException "() {
+        when:
+        converter.convertStringToValue(DefaultApplicationConfiguration.class, "")
+
+        then:
+        thrown(ConverterException)
     }
 
 }

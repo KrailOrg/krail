@@ -14,6 +14,7 @@
 package uk.q3c.krail.core.option
 
 import com.google.common.collect.ImmutableList
+import com.google.inject.Inject
 import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
@@ -63,5 +64,25 @@ class AnnotationOptionListTest extends Specification {
         list.isEmpty()
     }
 
+    def "equals and hashcode"() {
+        given:
+        AnnotationOptionList ref = new AnnotationOptionList(InMemory, Inject)
+        AnnotationOptionList refEmpty = new AnnotationOptionList()
+        AnnotationOptionList different = new AnnotationOptionList(Inject)
+        AnnotationOptionList empty = new AnnotationOptionList()
+        AnnotationOptionList same = new AnnotationOptionList(InMemory, Inject)
 
+        expect:
+        ref.equals(same)
+        ref.hashCode() == same.hashCode()
+
+        refEmpty.equals(empty)
+        refEmpty.hashCode() == empty.hashCode()
+
+        !different.equals(ref)
+        different.hashCode() != ref.hashCode()
+
+        !empty.equals(ref)
+        empty.hashCode() != ref.hashCode()
+    }
 }

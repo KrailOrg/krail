@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.data.DataModule;
-import uk.q3c.krail.core.data.OptionStringConverter;
+import uk.q3c.krail.core.data.OptionElementConverter;
 import uk.q3c.krail.core.i18n.DefaultCurrentLocale;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
@@ -59,12 +59,12 @@ public class InMemoryContainerTest {
     @Mock
     UserHierarchy userHierarchy;
     @Inject
-    private OptionStringConverter optionStringConverter;
+    private OptionElementConverter optionElementConverter;
 
     @Before
     public void setup() {
         optionStore = new DefaultInMemoryOptionStore();
-        optionDao = new InMemoryOptionDao(optionStore,optionStringConverter);
+        optionDao = new InMemoryOptionDao(optionStore, optionElementConverter);
         patternStore = new DefaultInMemoryPatternStore();
         patternDao = new InMemoryPatternDao(patternStore);
         when(userHierarchy.persistenceName()).thenReturn("SimpleUserHierarchy");

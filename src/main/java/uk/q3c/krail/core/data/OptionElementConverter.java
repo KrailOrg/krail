@@ -15,7 +15,6 @@ package uk.q3c.krail.core.data;
 
 import com.vaadin.data.util.converter.Converter;
 import uk.q3c.krail.core.option.OptionKey;
-import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 
 import javax.annotation.Nonnull;
 
@@ -25,18 +24,9 @@ import javax.annotation.Nonnull;
  * <p>
  * Created by David Sowerby on 27/06/15.
  */
-public interface OptionStringConverter {
+public interface OptionElementConverter {
 
-    /**
-     * Returns a value converted from the String.  The value type is determined by the {@link OptionKey#getDefaultValue()}
-     *
-     * @param cacheKey    the cacheKey to identify the element class
-     * @param valueString the String representation of the value
-     * @return null if no entry for cacheKey is found, otherwise a value converted from persistence
-     * @throws ConverterException            if no converter is available for the type of {@link OptionKey#getDefaultValue()}
-     * @throws Converter.ConversionException if the conversion itself fails
-     */
-    <V> V convertStringToValue(OptionCacheKey<V> cacheKey, String valueString);
+
 
     /**
      * Converts the supplied {@code value} to String
@@ -49,5 +39,14 @@ public interface OptionStringConverter {
      */
     <V> String convertValueToString(V value);
 
-    <V> V convertStringToValue(@Nonnull Class<? extends V> valueClass, @Nonnull String valueString);
+    /**
+     * Returns a value converted from the String.
+     *
+     * @param elementClass the class of the element to be converted
+     * @param valueString  the String representation of the value
+     * @throws ConverterException            if no converter is available for the type of {@link OptionKey#getDefaultValue()}
+     * @throws Converter.ConversionException if the conversion itself fails
+     */
+    @Nonnull
+    <V> V convertStringToValue(@Nonnull Class<V> elementClass, @Nonnull String valueString);
 }

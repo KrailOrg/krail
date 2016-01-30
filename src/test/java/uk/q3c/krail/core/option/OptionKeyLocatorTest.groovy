@@ -45,7 +45,7 @@ class OptionKeyLocatorTest extends Specification {
         then:
 
 //        actual.containsAll(expected) not all key types are used
-        diff.isEmpty() // trap any new ones which get added but may not be in OptionStringConverter
+        diff.isEmpty() // trap any new ones which get added but may not be in OptionElementConverter
 
     }
 }

@@ -37,7 +37,7 @@ public class DataModule extends AbstractModule {
     }
 
     protected void bindStringPersistenceConverter() {
-        bind(OptionStringConverter.class).to(DefaultOptionStringConverter.class);
+        bind(OptionElementConverter.class).to(DefaultOptionElementConverter.class);
     }
 
     /**

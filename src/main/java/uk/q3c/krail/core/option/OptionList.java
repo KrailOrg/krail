@@ -14,8 +14,10 @@
 package uk.q3c.krail.core.option;
 
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.collections15.ListUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -25,12 +27,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>
  * Created by David Sowerby on 05/08/15.
  */
-public class OptionList<E> {
+@Immutable
+public class OptionList<E> implements OptionCollection<E> {
 
     private final Class<E> elementClass;
-    protected ImmutableList<E> list;
+    private final ImmutableList<E> list;
 
-    public OptionList(Class<E> elementClass) {
+    public OptionList(@Nonnull Class<E> elementClass) {
+        checkNotNull(elementClass);
         this.list = ImmutableList.of();
         this.elementClass = elementClass;
     }
@@ -42,44 +46,17 @@ public class OptionList<E> {
         this.elementClass = elementClass;
     }
 
-    /**
-     * The list cannot be empty for this constructor to work
-     *
-     * @param list
-     *         to set values of this list
-     */
-    public OptionList(List<E> list) {
-        if (list.isEmpty()) {
-            throw new OptionException("This constructor requires the list parameter to have at least one element");
-        }
-        this.list = ImmutableList.copyOf(list);
-        final E e = list.get(0);
-        this.elementClass = (Class<E>) e.getClass();
-    }
-
-    /**
-     * The list cannot be empty for this constructor to work
-     *
-     * @param elements
-     *         to set values of this list
-     *         @throws OptionException if elements is null or empt
-     *         y
-     */
     @SafeVarargs
-    public OptionList(E... elements) {
-        if (elements == null || elements.length == 0) {
-            throw new OptionException("This constructor requires the list parameter to have at least one element");
-        }
-        this.list = ImmutableList.copyOf(elements);
-        final E e = elements[0];
-        //noinspection unchecked
-        this.elementClass = (Class<E>) e.getClass();
-    }
-
-    @SafeVarargs
-    public OptionList(Class<E> elementClass, E... elements) {
+    public OptionList(@Nonnull Class<E> elementClass, E... elements) {
+        checkNotNull(elementClass);
         this.list = ImmutableList.copyOf(elements);
         this.elementClass = elementClass;
+    }
+
+    public OptionList(@Nonnull OptionList<E> source) {
+        checkNotNull(source);
+        this.list = source.list;
+        this.elementClass = source.elementClass;
     }
 
     public Class<E> getElementClass() {
@@ -99,5 +76,21 @@ public class OptionList<E> {
         return list.isEmpty();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        OptionList<?> that = (OptionList<?>) o;
+
+        if (!elementClass.equals(that.elementClass)) return false;
+        return ListUtils.isEqualList(list, that.list);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = elementClass.hashCode();
+        return 31 * result + list.hashCode();
+    }
 }

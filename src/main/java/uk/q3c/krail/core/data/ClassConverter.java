@@ -32,7 +32,7 @@ public class ClassConverter implements OptionConverter<Class<?>> {
      */
     @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS")
     @Override
-    public Class<?> convertToModel(@Nonnull String value) throws ConversionException {
+    public Class<?> convertToModel(@Nonnull String value) {
         checkNotNull(value);
         try {
             return ClassUtils.getClass(this.getClass()

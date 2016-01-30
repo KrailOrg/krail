@@ -14,12 +14,13 @@
 package uk.q3c.krail.core.persist.common.option
 
 import com.google.common.collect.ImmutableList
+import com.google.inject.Inject
+import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
-import uk.q3c.krail.core.data.DefaultOptionStringConverter
-import uk.q3c.krail.core.data.OptionStringConverter
+import uk.q3c.krail.core.data.DefaultOptionElementConverter
+import uk.q3c.krail.core.data.OptionElementConverter
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.option.OptionKey
-import uk.q3c.krail.core.option.OptionKeyException
+import uk.q3c.krail.core.option.*
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey
 import uk.q3c.krail.core.user.profile.UserHierarchy
 import uk.q3c.krail.core.view.component.LocaleContainer
@@ -29,9 +30,9 @@ import static uk.q3c.krail.core.user.profile.RankOption.*
 /**
  * Created by David Sowerby on 27 Jan 2016
  */
-class OptionDaoTestBase extends Specification {
+abstract class OptionDaoTestBase extends Specification {
 
-    OptionStringConverter optionStringConverter
+    OptionElementConverter optionStringConverter
     OptionDao dao
     String expectedConnectionUrl
     OptionKey<Integer> optionKey1 = Mock();
@@ -44,8 +45,9 @@ class OptionDaoTestBase extends Specification {
     OptionCacheKey cacheKeyLow1 = Mock()
     UserHierarchy hierarchy1 = Mock()
 
+
     def setup() {
-        optionStringConverter = new DefaultOptionStringConverter()
+        optionStringConverter = new DefaultOptionElementConverter()
         optionKey1.getContext() >> LocaleContainer.class
         optionKey1.getDefaultValue() >> 99
         optionKey1.getKey() >> LabelKey.Yes
@@ -262,5 +264,33 @@ class OptionDaoTestBase extends Specification {
 
         then:
         dao.getValue(cacheKeySpecific12).equals(Optional.of(353))
+    }
+
+    def "OptionList conversion round trip"() {
+        given:
+        OptionKey<OptionList<Integer>> listKey = new OptionKey(new OptionList<Integer>(Integer.class), LocaleContainer.class, LabelKey.Yes)
+        OptionCacheKey<OptionList<Integer>> cacheKey = new OptionCacheKey<>(hierarchy1, SPECIFIC_RANK, 0, listKey)
+        OptionList<Integer> list = new OptionList<>(Integer.class, 3, 5, 7)
+
+        when:
+        dao.write(cacheKey, Optional.of(list))
+        Optional<OptionList<Integer>> result = dao.getValue(cacheKey)
+
+        then:
+        ListUtils.isEqualList(list.getList(), result.get().getList())
+    }
+
+    def "AnnotationList conversion round trip"() {
+        given:
+        OptionKey<AnnotationOptionList> listKey = new OptionKey(new AnnotationOptionList(), LocaleContainer.class, LabelKey.Yes)
+        OptionCacheKey<AnnotationOptionList> cacheKey = new OptionCacheKey<>(hierarchy1, SPECIFIC_RANK, 0, listKey)
+        AnnotationOptionList list = new AnnotationOptionList(InMemory, Inject)
+
+        when:
+        dao.write(cacheKey, Optional.of(list))
+        Optional<AnnotationOptionList> result = dao.getValue(cacheKey)
+
+        then:
+        ListUtils.isEqualList(list.getList(), result.get().getList())
     }
 }

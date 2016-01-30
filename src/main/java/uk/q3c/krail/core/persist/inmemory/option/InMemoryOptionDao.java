@@ -15,9 +15,11 @@ package uk.q3c.krail.core.persist.inmemory.option;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import uk.q3c.krail.core.data.OptionStringConverter;
+import uk.q3c.krail.core.data.OptionElementConverter;
+import uk.q3c.krail.core.data.OptionListConverter;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionException;
+import uk.q3c.krail.core.option.OptionList;
 import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.persist.cache.option.OptionCache;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
@@ -41,12 +43,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class InMemoryOptionDao implements OptionDao {
 
     private InMemoryOptionStore optionStore;
-    private OptionStringConverter optionStringConverter;
+    private OptionElementConverter optionElementConverter;
 
     @Inject
-    public InMemoryOptionDao(InMemoryOptionStore optionStore, OptionStringConverter optionStringConverter) {
+    public InMemoryOptionDao(InMemoryOptionStore optionStore, OptionElementConverter optionElementConverter) {
         this.optionStore = optionStore;
-        this.optionStringConverter = optionStringConverter;
+        this.optionElementConverter = optionElementConverter;
     }
 
     /**
@@ -55,14 +57,13 @@ public class InMemoryOptionDao implements OptionDao {
      * @param cacheKey specifies the hierarchy, rank and OptionKey to write to
      * @param value    the value to write
      * @param <V>      the value type
-     * @return an OptionEntity containing the provided key and value
      */
     @Override
     public <V> void write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull Optional<V> value) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         checkArgument(value.isPresent(), "Value cannot be empty");
         checkNotNull(value);
-        String stringValue = optionStringConverter.convertValueToString(value.get());
+        String stringValue = optionElementConverter.convertValueToString(value.get());
         optionStore.add(new OptionId(cacheKey), stringValue);
     }
 
@@ -74,6 +75,7 @@ public class InMemoryOptionDao implements OptionDao {
     }
 
 
+    @SuppressWarnings("unchecked")
     @Nonnull
     @Override
     public <V> Optional<V> getValue(@Nonnull OptionCacheKey<V> cacheKey) {
@@ -92,9 +94,21 @@ public class InMemoryOptionDao implements OptionDao {
             default:
                 throw new OptionException("Unrecognised rankOption");
         }
-        return optionalStringValue.isPresent() ? Optional.of(optionStringConverter.convertStringToValue(cacheKey, optionalStringValue.get())) : Optional
-                .empty();
 
+        if (optionalStringValue.isPresent()) {
+            V defaultValue = cacheKey.getOptionKey()
+                                     .getDefaultValue();
+            if (defaultValue instanceof OptionList) {
+                OptionList convertedValue = new OptionListConverter(optionElementConverter).convertToModel((OptionList) defaultValue,
+                        optionalStringValue.get());
+                return Optional.of((V) convertedValue);
+            } else {
+                Class<V> elementClass = (Class<V>) defaultValue.getClass();
+                return Optional.of(optionElementConverter.convertStringToValue(elementClass, optionalStringValue.get()));
+            }
+        } else {
+            return Optional.empty();
+        }
     }
 
     protected Optional<String> getStringValue(@Nonnull OptionCacheKey<?> cacheKey) {

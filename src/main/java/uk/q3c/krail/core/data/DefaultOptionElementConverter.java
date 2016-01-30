@@ -17,11 +17,9 @@ import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.google.inject.Inject;
 import com.vaadin.data.util.converter.ConverterFactory;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.option.AnnotationOptionList;
 import uk.q3c.krail.core.option.OptionList;
-import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.util.MessageFormat;
 
 import javax.annotation.Nonnull;
@@ -31,15 +29,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
- * Default implementation for {@link OptionStringConverter}.  Uses {@link ConverterFactory} to supply the converters
+ * Default implementation for {@link OptionElementConverter}.  Uses {@link ConverterFactory} to supply the converters
  * <p>
  * Created by David Sowerby on 27/06/15.
  */
-public class DefaultOptionStringConverter implements OptionStringConverter {
+public class DefaultOptionElementConverter implements OptionElementConverter {
 
 
     @Inject
-    public DefaultOptionStringConverter() {
+    public DefaultOptionElementConverter() {
 
     }
 
@@ -81,51 +79,37 @@ public class DefaultOptionStringConverter implements OptionStringConverter {
         throw new ConverterException(msg);
     }
 
-    @SuppressFBWarnings("ITC_INHERITANCE_TYPE_CHECKING")
-    @SuppressWarnings("unchecked")
-    @Override
-    @Nonnull
-    public <V> V convertStringToValue(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull String valueString) {
-        V defaultValue = cacheKey.getOptionKey()
-                                 .getDefaultValue();
-        Class<? extends V> valueClass = (Class<? extends V>) defaultValue.getClass();
-        if (defaultValue instanceof OptionList) {
-            return (V) new OptionListConverter(this).convertToModel((OptionList) defaultValue, valueString);
-        }
-        if (defaultValue instanceof AnnotationOptionList) {
-            return (V) new AnnotationOptionListConverter().convertToModel(valueString);
-        }
-
-        return convertStringToValue(valueClass, valueString);
-    }
-
 
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     @Override
     @Nonnull
-    public <V> V convertStringToValue(@Nonnull Class<? extends V> valueClass, @Nonnull String valueString) {
-        if (valueClass == String.class) {
+    public <V> V convertStringToValue(@Nonnull Class<V> elementClass, @Nonnull String valueString) {
+        if (elementClass == String.class) {
             return ((V) valueString);
-        } else if (valueClass == Integer.class) {
+        } else if (elementClass == Integer.class) {
             return (V) Ints.stringConverter()
                            .convert(valueString);
-        } else if (valueClass == Long.class) {
+        } else if (elementClass == Long.class) {
             return (V) Longs.stringConverter()
                             .convert(valueString);
-        } else if (valueClass == Boolean.class) {
+        } else if (elementClass == Boolean.class) {
             return (V) Boolean.valueOf(valueString);
-        } else if (valueClass == Locale.class) {
+        } else if (elementClass == Locale.class) {
             return (V) Locale.forLanguageTag(valueString);
-        } else if (valueClass == LocalDateTime.class) {
+        } else if (elementClass == LocalDateTime.class) {
             return (V) LocalDateTime.parse(valueString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        } else if (valueClass == I18NKey.class) {
+        } else if (elementClass == I18NKey.class) {
             return (V) new I18NKeyConverter().convertToModel(valueString);
-        } else if (Enum.class.isAssignableFrom(valueClass)) {
+        } else if (Enum.class.isAssignableFrom(elementClass)) {
             return (V) new EnumConverter().convertToModel(valueString);
-        } else if (valueClass == BigDecimal.class) {
+        } else if (elementClass == BigDecimal.class) {
             return (V) new BigDecimal(valueString);
+        } else if (elementClass == AnnotationOptionList.class) {
+            return (V) new AnnotationOptionListConverter().convertToModel(valueString);
         }
-        String msg = MessageFormat.format("Data type of {0} is not supported in Option", valueClass);
+        String msg = MessageFormat.format("Data type of {0} is not supported in Option", elementClass);
         throw new ConverterException(msg);
     }
+
+
 }
