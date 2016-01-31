@@ -19,6 +19,7 @@ import uk.q3c.krail.core.i18n.I18NKey;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,15 +31,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>
  * Created by David Sowerby on 19/02/15.
  */
-public class OptionKey<T extends Object> {
+@Immutable
+public class OptionKey<T> {
 
 
-    private Class<? extends OptionContext> context;
-    private T defaultValue;
+    private final Class<? extends OptionContext> context;
+    private final T defaultValue;
     @Nullable
-    private I18NKey descriptionKey;
-    private I18NKey key;
-    private List<String> qualifiers = new ArrayList<>();
+    private final I18NKey descriptionKey;
+    private final I18NKey key;
+    private final List<String> qualifiers = new ArrayList<>();
 
     public OptionKey(@Nonnull T defaultValue, @Nonnull OptionContext context, @Nonnull I18NKey nameKey, @Nonnull I18NKey descriptionKey, @Nullable String...
             qualifiers) {
@@ -163,9 +165,6 @@ public class OptionKey<T extends Object> {
         return defaultValue;
     }
 
-    public void setDefaultValue(T defaultValue) {
-        this.defaultValue = defaultValue;
-    }
 
     @Nullable
     public I18NKey getDescriptionKey() {

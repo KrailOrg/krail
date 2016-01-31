@@ -29,6 +29,7 @@ import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.core.option.OptionPopup;
 import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
 import uk.q3c.krail.core.persist.common.option.OptionSource;
+import uk.q3c.krail.util.Experimental;
 
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
@@ -38,6 +39,7 @@ import java.lang.annotation.Annotation;
  * <p>
  * Created by David Sowerby on 30/06/15.
  */
+@Experimental
 @I18N
 @Listener
 @SubscribeTo(SessionBus.class)
@@ -136,7 +138,6 @@ public abstract class SourcePanel extends Panel implements OptionContext {
     }
 
     private void applyStyle(String defaultCaptionStyleName, AbstractComponent component, OptionKey<String> key) {
-        key.setDefaultValue(defaultCaptionStyleName);
         String componentStyleName = option.get(key);
         component.setStyleName(componentStyleName);
     }
