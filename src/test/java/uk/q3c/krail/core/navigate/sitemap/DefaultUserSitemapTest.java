@@ -39,8 +39,8 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestPersistenceModule.class, TestOptionModule.class, EventBusModule.class,
-        TestUIScopeModule.class})
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestPersistenceModule.class, EventBusModule.class,
+        TestUIScopeModule.class, TestOptionModule.class})
 @Listener
 public class DefaultUserSitemapTest {
 

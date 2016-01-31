@@ -21,7 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -49,7 +48,7 @@ import static uk.q3c.krail.core.shiro.PageAccessControl.AUTHENTICATION;
 import static uk.q3c.krail.core.shiro.PageAccessControl.PUBLIC;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestPersistenceModule.class, UIScopeModule.class, DataModule.class})
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, EventBusModule.class, TestPersistenceModule.class, UIScopeModule.class, })
 public class DefaultMasterSitemapTest {
 
     @Mock

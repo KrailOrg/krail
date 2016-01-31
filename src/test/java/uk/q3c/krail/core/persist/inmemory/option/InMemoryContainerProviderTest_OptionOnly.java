@@ -21,17 +21,18 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.data.Container;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.data.DataModule;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.option.InMemory;
 import uk.q3c.krail.core.persist.common.common.ContainerType;
 import uk.q3c.krail.core.persist.common.common.VaadinContainerProvider;
 import uk.q3c.krail.core.persist.common.option.OptionEntity;
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({DataModule.class})
+@GuiceContext({TestOptionModule.class, VaadinSessionScopeModule.class})
 public class InMemoryContainerProviderTest_OptionOnly {
 
     @Inject
@@ -39,7 +40,7 @@ public class InMemoryContainerProviderTest_OptionOnly {
     VaadinContainerProvider inMemoryContainerProvider;
 
     /**
-     * This will fail if the INMemoryModule is not set to provide either the OptionDao, PatternDao or both
+     * This will fail if the INMemoryModule is not set to provide either the OptionDaoDelegate, PatternDao or both
      */
     @Test
     public void name() {

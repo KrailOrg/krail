@@ -20,16 +20,16 @@ import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 
 /**
- * Interface for a provider which identifies and returns the correct source for {@link OptionDao} for Krail core, and returns an instance
+ * Interface for a provider which identifies and returns the correct source for {@link OptionDaoDelegate} for Krail core, and returns an instance
  * <p>
  * Created by David Sowerby on 26/06/15.
  */
 public interface OptionSource {
 
-    OptionDao getActiveDao();
+    OptionDaoDelegate getActiveDao();
 
     @Nonnull
-    OptionDao getDao(@Nonnull Class<? extends Annotation> annotationClass);
+    OptionDaoDelegate getDao(@Nonnull Class<? extends Annotation> annotationClass);
 
     PersistenceInfo getActivePersistenceInfo();
 

@@ -53,7 +53,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({AnnotationsModule1.class, AnnotationsModule2.class, TestPersistenceModule.class, TestI18NModule.class, VaadinSessionScopeModule.class,
-        TestOptionModule.class, EventBusModule.class, UIScopeModule.class, UtilsModule.class})
+        EventBusModule.class, UIScopeModule.class, UtilsModule.class, TestOptionModule.class})
 public class DefaultAnnotationSitemapLoaderTest {
 
     @Inject

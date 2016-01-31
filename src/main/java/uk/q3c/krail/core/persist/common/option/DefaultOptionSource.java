@@ -48,22 +48,23 @@ public class DefaultOptionSource implements OptionSource {
     }
 
     @Override
-    public OptionDao getActiveDao() {
+    public OptionDaoDelegate getActiveDao() {
         return getDao(activeSource);
     }
 
     @Override
     @Nonnull
-    public OptionDao getDao(@Nonnull Class<? extends Annotation> annotationClass) {
+    public OptionDaoDelegate getDao(@Nonnull Class<? extends Annotation> annotationClass) {
         checkAnnotationKey(annotationClass);
-        Key<OptionDao> activeDaoKey = Key.get(OptionDao.class, annotationClass);
+        Key<OptionDaoDelegate> activeDaoKey = Key.get(OptionDaoDelegate.class, annotationClass);
         return injector.getInstance(activeDaoKey);
     }
 
     protected void checkAnnotationKey(Class<? extends Annotation> annotationClass) {
         checkNotNull(annotationClass);
         if (!optionDaoProviders.containsKey(annotationClass)) {
-            String msg = MessageFormat.format("The OptionDao annotation of '{0}' does not match any of the providers.", annotationClass.getSimpleName());
+            String msg = MessageFormat.format("The OptionDaoDelegate annotation of '{0}' does not match any of the providers.", annotationClass.getSimpleName
+                    ());
             throw new ConfigurationException(msg);
         }
     }

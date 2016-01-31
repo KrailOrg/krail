@@ -21,7 +21,6 @@ import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -39,7 +38,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, DataModule.class, EventBusModule.class, UIScopeModule.class, TestOptionModule.class, TestPersistenceModule.class,
+@GuiceContext({TestI18NModule.class, EventBusModule.class, UIScopeModule.class, TestOptionModule.class, TestPersistenceModule.class,
         VaadinSessionScopeModule.class,
         TestByteEnhancementModule.class})
 public class DefaultI18NFieldScannerTest {

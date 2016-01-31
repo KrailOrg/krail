@@ -21,9 +21,9 @@ import uk.q3c.krail.core.option.InMemory
 import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnitHelper
 import uk.q3c.krail.core.persist.common.option.DefaultActiveOptionSource
 import uk.q3c.krail.core.persist.common.option.OptionContainerProvider
-import uk.q3c.krail.core.persist.common.option.OptionDao
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionContainerProvider
-import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDao
+import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDaoDelegate
 import uk.q3c.krail.core.validation.JavaxValidationSubstitutes
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.util.UtilsModule
@@ -78,7 +78,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
 
         then:
 
-        optionDao() instanceof InMemoryOptionDao
+        optionDao() instanceof InMemoryOptionDaoDelegate
     }
 
 
@@ -107,8 +107,8 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
     }
 
 
-    def OptionDao optionDao() {
-        getBinding OptionDao, InMemory.class
+    def OptionDaoDelegate optionDao() {
+        getBinding OptionDaoDelegate, InMemory.class
     }
 
     def Class<? extends Annotation> activeOptionSource() {

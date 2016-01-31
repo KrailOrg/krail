@@ -18,7 +18,6 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.persist.common.option.OptionDao;
-import uk.q3c.krail.core.persist.common.option.OptionSource;
 import uk.q3c.krail.core.persist.inmemory.option.DefaultInMemoryOptionStore;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
@@ -42,11 +41,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class DefaultOptionCacheLoader extends CacheLoader<OptionCacheKey, Optional<?>> {
     private static Logger log = LoggerFactory.getLogger(DefaultOptionCacheLoader.class);
-    private OptionSource daoProvider;
+    private final OptionDao daoWrapper;
 
     @Inject
-    public DefaultOptionCacheLoader(OptionSource daoProvider) {
-        this.daoProvider = daoProvider;
+    public DefaultOptionCacheLoader(OptionDao daoWrapper) {
+        this.daoWrapper = daoWrapper;
     }
 
     /**
@@ -66,8 +65,7 @@ public class DefaultOptionCacheLoader extends CacheLoader<OptionCacheKey, Option
     public Optional<?> load(@Nonnull final OptionCacheKey cacheKey) throws Exception {
         checkNotNull(cacheKey);
         log.debug("retrieving value for {}", cacheKey);
-        OptionDao dao = daoProvider.getActiveDao();
-        return dao.getValue(cacheKey);
+        return daoWrapper.getValue(cacheKey);
 
     }
 }

@@ -21,7 +21,6 @@ import fixture.testviews2.ViewA1;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
-import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -52,7 +51,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GuiceContext({ServicesModule.class, TestDirectSitemapModule_A.class, TestDirectSitemapModule_B.class, UIScopeModule.class, ViewModule.class,
         ShiroVaadinModule.class, I18NModule.class, SitemapModule.class, UserModule.class, TestPersistenceModule.class, TestOptionModule.class,
         ApplicationConfigurationModule.class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class,
-        EventBusModule.class, DefaultUIModule.class, DataTypeModule.class, DataModule.class, UtilsModule.class})
+        EventBusModule.class, DefaultUIModule.class, DataTypeModule.class, UtilsModule.class})
 public class DefaultDirectSitemapLoaderTest {
 
     static String page1 = "private/page1";

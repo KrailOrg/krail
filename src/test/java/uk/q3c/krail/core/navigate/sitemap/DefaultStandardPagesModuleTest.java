@@ -18,7 +18,6 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
-import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -45,8 +44,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ServicesModule.class, StandardPagesModule.class, UIScopeModule.class, EventBusModule.class, ViewModule.class, ShiroVaadinModule.class,
         TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, TestPersistenceModule.class, TestOptionModule
-        .class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, DataModule.class,
-        DefaultUIModule.class, DataTypeModule.class, UtilsModule.class})
+        .class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, DefaultUIModule.class,
+        DataTypeModule.class, UtilsModule.class})
 public class DefaultStandardPagesModuleTest {
 
     @Inject

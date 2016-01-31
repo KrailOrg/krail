@@ -17,7 +17,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import uk.q3c.krail.core.option.Option;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -59,7 +59,7 @@ public interface OptionCache {
     <T> Optional<T> get(@Nonnull Optional<T> defaultValue, @Nonnull OptionCacheKey<T> optionCacheKey);
 
     /**
-     * Pass the delete call to the underlying {@link OptionDao}, then removes the entry from the cache
+     * Pass the delete call to the underlying {@link OptionDaoDelegate}, then removes the entry from the cache
      *
      * @param optionCacheKey a unique identifier for the entry to be deleted
      * @return the previous value before being deleted

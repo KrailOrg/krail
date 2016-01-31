@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.persist.common.common;
 
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 
 /**
  * Interface which may be applied to Guice modules or configuration objects, to provide persistence to the Krail core.
@@ -27,14 +27,14 @@ import uk.q3c.krail.core.persist.common.option.OptionDao;
 public interface KrailPersistenceUnit<M> extends PersistenceInfo<M> {
 
     //    /**
-    //     * Binds {@link OptionDao} to an implementation, annotated with {@link CoreDao}.  This may occur only once per application
+    //     * Binds {@link OptionDaoDelegate} to an implementation, annotated with {@link CoreDao}.  This may occur only once per application
     //     *
     //     * @return this for fluency
     //     */
     //    M provideCoreOptionDao();
 
     /**
-     * Binds {@link OptionDao} to an implementation, uniquely annotated for that implementation
+     * Binds {@link OptionDaoDelegate} to an implementation, uniquely annotated for that implementation
      *
      * @return this for fluency
      */

@@ -24,7 +24,7 @@ import uk.q3c.krail.core.persist.common.common.*;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 import uk.q3c.krail.core.persist.common.i18n.PatternDaoProviders;
 import uk.q3c.krail.core.persist.common.option.OptionContainerProvider;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.core.persist.inmemory.i18n.DefaultInMemoryPatternStore;
 import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternDao;
 import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternStore;
@@ -104,14 +104,14 @@ public class InMemoryModule extends AbstractModule implements KrailPersistenceUn
     }
 
     /**
-     * binds {@link OptionDao} annotated with {@link InMemory} but only if {@link #provideOptionDao} has been set by a previous call to {@link
+     * binds {@link OptionDaoDelegate} annotated with {@link InMemory} but only if {@link #provideOptionDao} has been set by a previous call to {@link
      * #provideOptionDao()}
      */
     protected void bindOptionDao() {
 
         if (provideOptionDao) {
-            bind(OptionDao.class).annotatedWith(InMemory.class)
-                                 .to(InMemoryOptionDao.class);
+            bind(OptionDaoDelegate.class).annotatedWith(InMemory.class)
+                                         .to(InMemoryOptionDaoDelegate.class);
             optionDaoProviders.addBinding(InMemory.class)
                               .toInstance(new DefaultPersistenceInfo(this));
 

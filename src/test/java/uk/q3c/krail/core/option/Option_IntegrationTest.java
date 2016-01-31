@@ -25,20 +25,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.data.DataModule;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.persist.cache.common.GuavaCacheConfiguration;
-import uk.q3c.krail.core.persist.cache.option.*;
+import uk.q3c.krail.core.persist.cache.option.DefaultOptionCache;
+import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheLoader;
+import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheProvider;
+import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnitHelper;
 import uk.q3c.krail.core.persist.common.common.OptionDaoProviders;
 import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
-import uk.q3c.krail.core.persist.common.option.DefaultActiveOptionSource;
-import uk.q3c.krail.core.persist.common.option.DefaultOptionSource;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
-import uk.q3c.krail.core.persist.common.option.OptionSource;
+import uk.q3c.krail.core.persist.common.option.*;
 import uk.q3c.krail.core.persist.inmemory.option.DefaultInMemoryOptionStore;
-import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDao;
+import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDaoDelegate;
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
@@ -46,6 +46,7 @@ import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.view.component.LocaleContainer;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -60,7 +61,7 @@ import static org.mockito.Mockito.when;
  * Running this test through the debugger sometimes causes random failures - running normally doesn't
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({DataModule.class})
+@GuiceContext({TestOptionModule.class, VaadinSessionScopeModule.class})
 public class Option_IntegrationTest {
 
     Map<Class<? extends Annotation>, PersistenceInfo<?>> optionDaoProviders = new HashMap<>();
@@ -77,10 +78,7 @@ public class Option_IntegrationTest {
     DefaultInMemoryOptionStore optionStore;
 
     @Inject
-    OptionSource daoProvider;
-
-    @Inject
-    InMemoryOptionDao dao;
+    OptionDao optionDao;
 
     @Mock
     LocaleContainer localeContainer;
@@ -111,8 +109,8 @@ public class Option_IntegrationTest {
         when(subject2.isPermitted(any(OptionPermission.class))).thenReturn(true);
         hierarchy = new SimpleUserHierarchy(subjectProvider, subjectIdentifier, translate);
 
-        cacheLoader = new DefaultOptionCacheLoader(daoProvider);
-        optionCache = new DefaultOptionCache(daoProvider, cacheProvider);
+        cacheLoader = new DefaultOptionCacheLoader(optionDao);
+        optionCache = new DefaultOptionCache(optionDao, cacheProvider);
         option = new DefaultOption(optionCache, hierarchy, subjectProvider, subjectIdentifier);
     }
 
@@ -221,7 +219,7 @@ public class Option_IntegrationTest {
         OptionCacheKey<Integer> highestKey = new OptionCacheKey<>(hierarchy, RankOption.HIGHEST_RANK, key3);
         OptionCacheKey<Integer> lowestKey = new OptionCacheKey<>(hierarchy, RankOption.LOWEST_RANK, key3);
         OptionCacheKey<Integer> specificKey = new OptionCacheKey<>(hierarchy, RankOption.SPECIFIC_RANK, 1, key3);
-        dao.write(specificKey, Optional.of(236));
+        optionDao.write(specificKey, Optional.of(236));
         //when
         optionCache.get(Optional.of(highestKey.getOptionKey()
                                               .getDefaultValue()), highestKey);
@@ -256,10 +254,8 @@ public class Option_IntegrationTest {
             protected void configure() {
                 GuavaCacheConfiguration cacheConfig = new GuavaCacheConfiguration().recordStats();
 
-                bind(OptionDao.class).annotatedWith(CoreDao.class)
-                                     .to(InMemoryOptionDao.class);
-                bind(GuavaCacheConfiguration.class).annotatedWith(OptionCacheConfig.class)
-                                                   .toInstance(cacheConfig);
+                bind(OptionDaoDelegate.class).annotatedWith(InMemory.class)
+                                             .to(InMemoryOptionDaoDelegate.class);
                 bind(OptionSource.class).to(DefaultOptionSource.class);
 
                 bind(KrailPersistenceUnitHelper.annotationClassLiteral()).annotatedWith(DefaultActiveOptionSource.class)
@@ -272,8 +268,8 @@ public class Option_IntegrationTest {
                                               .toInstance(optionDaoProviders);
 
 
-                bind(OptionDao.class).annotatedWith(InMemory.class)
-                                     .to(InMemoryOptionDao.class);
+                bind(OptionDaoDelegate.class).annotatedWith(InMemory.class)
+                                             .to(InMemoryOptionDaoDelegate.class);
                 bind(InMemoryOptionStore.class).to(DefaultInMemoryOptionStore.class);
             }
 

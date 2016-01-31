@@ -30,8 +30,8 @@ import uk.q3c.krail.testutil.TestPersistenceModule;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestPersistenceModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule
-        .class})
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestPersistenceModule.class, TestOptionModule.class, EventBusModule
+        .class, UIScopeModule.class})
 public class MasterSitemapNodeTest {
 
     @Test

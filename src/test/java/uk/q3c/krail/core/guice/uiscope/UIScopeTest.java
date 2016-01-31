@@ -39,6 +39,7 @@ import uk.q3c.krail.core.navigate.sitemap.SitemapModule;
 import uk.q3c.krail.core.navigate.sitemap.SitemapService;
 import uk.q3c.krail.core.option.InMemory;
 import uk.q3c.krail.core.option.OptionModule;
+import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule;
 import uk.q3c.krail.core.push.PushModule;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.RelatedServicesExecutor;
@@ -117,10 +118,9 @@ public class UIScopeTest {
                 (), new
                         DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new
                         TestPersistenceModule(), new NavigationModule(), new EventBusModule(),
-                new DataModule(), new DataTypeModule(), new UtilsModule());
+                new DataModule(), new DataTypeModule(), new UtilsModule(), new InMemoryModule().provideOptionDao());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);
-        // navigator = injector.getInstance(Navigator.class);
         TestObject to1 = injector.getInstance(TestObject.class);
         createUI(BasicUI.class);
         TestObject to2 = injector.getInstance(TestObject.class);

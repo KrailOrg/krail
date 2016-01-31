@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.persist.cache.option.OptionCache;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.profile.DefaultUserHierarchy;
@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 /**
  * * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
- * {@link OptionDao} are wrapped in Optional.
+ * {@link OptionDaoDelegate} are wrapped in Optional.
  */
 
 public class DefaultOption extends OptionBase {

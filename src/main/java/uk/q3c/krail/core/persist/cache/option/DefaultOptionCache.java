@@ -22,7 +22,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionModule;
 import uk.q3c.krail.core.persist.common.option.OptionDao;
-import uk.q3c.krail.core.persist.common.option.OptionSource;
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
@@ -40,7 +40,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Scope is set in {@link OptionModule} but it is assumed that this class needs to be thread safe.
  * <p>
  * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
- * {@link OptionDao} are wrapped in Optional.
+ * {@link OptionDaoDelegate} are wrapped in Optional.
  * <p>
  * <p>
  * Created by David Sowerby on 19/02/15.
@@ -52,11 +52,11 @@ public class DefaultOptionCache implements OptionCache {
 
     private static Logger log = LoggerFactory.getLogger(DefaultOptionCache.class);
     private final LoadingCache<OptionCacheKey, Optional<?>> cache;
-    private final OptionSource daoProvider;
+    private OptionDao daoWrapper;
 
     @Inject
-    public DefaultOptionCache(OptionSource daoProvider, OptionCacheProvider cacheProvider) {
-        this.daoProvider = daoProvider;
+    public DefaultOptionCache(OptionDao daoWrapper, OptionCacheProvider cacheProvider) {
+        this.daoWrapper = daoWrapper;
         cache = cacheProvider.get();
     }
 
@@ -78,15 +78,15 @@ public class DefaultOptionCache implements OptionCache {
         checkNotNull(value);
         // write to store first just in case there's a problem
         log.debug("writing value {} for cacheKey {} via option dao ", value, cacheKey);
-        daoProvider.getActiveDao()
-                   .write(cacheKey, value);
+        daoWrapper.write(cacheKey, value);
 
         //invalidate highest / lowest first - cache does clean up as part of write
-        cache.invalidate(new OptionCacheKey(cacheKey, RankOption.HIGHEST_RANK));
-        cache.invalidate(new OptionCacheKey(cacheKey, RankOption.LOWEST_RANK));
+        cache.invalidate(new OptionCacheKey<>(cacheKey, RankOption.HIGHEST_RANK));
+        cache.invalidate(new OptionCacheKey<>(cacheKey, RankOption.LOWEST_RANK));
         cache.put(cacheKey, value);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     @Nonnull
     public synchronized <T> Optional<T> get(@Nonnull Optional<T> defaultValue, @Nonnull OptionCacheKey<T> optionCacheKey) {
@@ -122,8 +122,7 @@ public class DefaultOptionCache implements OptionCache {
     public synchronized Optional<?> delete(@Nonnull OptionCacheKey<?> optionCacheKey) {
         checkNotNull(optionCacheKey);
         // delete from store first just in case there's a problem
-        Optional<?> result = daoProvider.getActiveDao()
-                                        .deleteValue(optionCacheKey);
+        Optional<?> result = daoWrapper.deleteValue(optionCacheKey);
 
         //invalidate highest / lowest & specific as these are all now invalid
         cache.invalidate(new OptionCacheKey(optionCacheKey, RankOption.HIGHEST_RANK));

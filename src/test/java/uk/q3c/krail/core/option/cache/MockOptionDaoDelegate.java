@@ -15,7 +15,7 @@ package uk.q3c.krail.core.option.cache;
 
 import uk.q3c.krail.core.option.OptionException;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import java.util.Optional;
 /**
  * Created by David Sowerby on 27/06/15.
  */
-public class MockOptionDao implements OptionDao {
+public class MockOptionDaoDelegate implements OptionDaoDelegate {
 
 
     private int clearCount;
@@ -37,7 +37,7 @@ public class MockOptionDao implements OptionDao {
     private Map<OptionCacheKey, Optional<?>> lowestRanked = new HashMap<>();
 
     @Override
-    public <V> void write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull Optional<V> value) {
+    public <V> void write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull String value) {
     }
 
     @Nonnull
@@ -70,7 +70,7 @@ public class MockOptionDao implements OptionDao {
     }
 
     @Override
-    public int clear() {
+    public long clear() {
         connectionUrl = null;
         count = 0;
         deleteValue = null;

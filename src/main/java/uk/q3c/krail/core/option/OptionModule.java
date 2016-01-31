@@ -15,13 +15,13 @@ package uk.q3c.krail.core.option;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
+import uk.q3c.krail.core.data.DefaultOptionElementConverter;
+import uk.q3c.krail.core.data.OptionElementConverter;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.persist.cache.common.GuavaCacheConfiguration;
 import uk.q3c.krail.core.persist.cache.option.*;
 import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnitHelper;
-import uk.q3c.krail.core.persist.common.option.DefaultActiveOptionSource;
-import uk.q3c.krail.core.persist.common.option.DefaultOptionSource;
-import uk.q3c.krail.core.persist.common.option.OptionSource;
+import uk.q3c.krail.core.persist.common.option.*;
 
 import java.lang.annotation.Annotation;
 
@@ -41,12 +41,21 @@ public class OptionModule extends AbstractModule {
     @Override
     protected void configure() {
         bindOption();
+        bindOptionDaoWrapper();
         bindOptionCacheConfiguration();
         bindOptionCache();
         bindOptionCacheProvider();
         bindOptionPopup();
         bindDefaultActiveSource();
         bindCurrentOptionSource();
+        bindOptionElementConverter();
+    }
+
+    /**
+     * Override this method to provide your own {@link OptionElementConverter} implementation.
+     */
+    protected void bindOptionElementConverter() {
+        bind(OptionElementConverter.class).to(DefaultOptionElementConverter.class);
     }
 
     protected void bindDefaultActiveSource() {
@@ -109,6 +118,16 @@ public class OptionModule extends AbstractModule {
     protected void bindOption() {
         bind(Option.class).to(DefaultOption.class);
     }
+
+    /**
+     * Override this method to provide your own {@link OptionDao} implementation.
+     */
+    protected void bindOptionDaoWrapper() {
+        bind(OptionDao.class).to(DefaultOptionDao.class);
+    }
+
+
+
 
     /**
      * Defines which source should be used to supply {@link Option} values - the source is identified by its binding annotation {@code annotationClass}

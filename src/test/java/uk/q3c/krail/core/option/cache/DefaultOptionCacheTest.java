@@ -51,12 +51,15 @@ public class DefaultOptionCacheTest {
     @Mock
     MockCache cache;
 
+
     @Mock
     LoadingCache<OptionCacheKey, Optional<?>> cache2;
     @Mock
     OptionCacheKey cacheKey;
     @Mock
     OptionDao dao;
+
+
     DefaultOptionCache optionCache2;
     @Mock
     private DefaultOptionCacheLoader cacheLoader;
@@ -66,10 +69,9 @@ public class DefaultOptionCacheTest {
     @Before
     public void setup() {
         cache = new MockCache();
-        when(daoProvider.getActiveDao()).thenReturn(dao);
         logMonitor.addClassFilter(DefaultOptionCache.class);
         when(cacheProvider.get()).thenReturn(cache);
-        optionCache = new DefaultOptionCache(daoProvider, cacheProvider);
+        optionCache = new DefaultOptionCache(dao, cacheProvider);
     }
 
     @After
@@ -168,7 +170,7 @@ public class DefaultOptionCacheTest {
     public void delete() {
         //given
         when(cacheProvider.get()).thenReturn(cache2);
-        optionCache2 = new DefaultOptionCache(daoProvider, cacheProvider);
+        optionCache2 = new DefaultOptionCache(dao, cacheProvider);
         //when
         optionCache2.delete(cacheKey);
         //then
@@ -180,7 +182,7 @@ public class DefaultOptionCacheTest {
     public void flush() {
         //given
         when(cacheProvider.get()).thenReturn(cache2);
-        optionCache2 = new DefaultOptionCache(daoProvider, cacheProvider);
+        optionCache2 = new DefaultOptionCache(dao, cacheProvider);
         //when
         optionCache2.flush();
 

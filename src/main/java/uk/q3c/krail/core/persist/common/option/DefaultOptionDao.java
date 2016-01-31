@@ -11,19 +11,22 @@
  *
  */
 
-package uk.q3c.krail.core.persist.inmemory.option;
+package uk.q3c.krail.core.persist.common.option;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.data.OptionElementConverter;
 import uk.q3c.krail.core.data.OptionListConverter;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionException;
+import uk.q3c.krail.core.option.OptionKeyException;
 import uk.q3c.krail.core.option.OptionList;
 import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.persist.cache.option.OptionCache;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
+import uk.q3c.krail.core.persist.inmemory.option.DefaultInMemoryOptionStore;
+import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 import uk.q3c.krail.core.user.profile.RankOption;
 
 import javax.annotation.Nonnull;
@@ -40,15 +43,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <br>
  * Created by David Sowerby on 20/02/15.
  */
-public class InMemoryOptionDao implements OptionDao {
+@SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL") //injected
+public class DefaultOptionDao implements OptionDao {
 
     private InMemoryOptionStore optionStore;
     private OptionElementConverter optionElementConverter;
+    private OptionDaoDelegate delegate;
 
     @Inject
-    public InMemoryOptionDao(InMemoryOptionStore optionStore, OptionElementConverter optionElementConverter) {
-        this.optionStore = optionStore;
+    public DefaultOptionDao(OptionElementConverter optionElementConverter, OptionSource delegateSource) {
         this.optionElementConverter = optionElementConverter;
+        this.delegate = delegateSource.getActiveDao();
     }
 
     /**
@@ -64,14 +69,14 @@ public class InMemoryOptionDao implements OptionDao {
         checkArgument(value.isPresent(), "Value cannot be empty");
         checkNotNull(value);
         String stringValue = optionElementConverter.convertValueToString(value.get());
-        optionStore.add(new OptionId(cacheKey), stringValue);
+        delegate.write(cacheKey, stringValue);
     }
 
     @Nonnull
     @Override
     public <V> Optional<String> deleteValue(@Nonnull OptionCacheKey<V> cacheKey) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
-        return optionStore.delete(new OptionId(cacheKey));
+        return delegate.deleteValue(cacheKey);
     }
 
 
@@ -111,13 +116,10 @@ public class InMemoryOptionDao implements OptionDao {
         }
     }
 
-    protected Optional<String> getStringValue(@Nonnull OptionCacheKey<?> cacheKey) {
-        return optionStore.getValue(new OptionId(cacheKey));
+    protected Optional<String> getStringValue(@Nonnull OptionCacheKey cacheKey) {
+        return delegate.getValue(cacheKey);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Nonnull
     protected <V> Optional<String> getRankedValue(@Nonnull OptionCacheKey<V> cacheKey, boolean lowest) {
         ImmutableList<String> ranks = cacheKey.getHierarchy()
@@ -134,17 +136,17 @@ public class InMemoryOptionDao implements OptionDao {
 
     @Override
     public String connectionUrl() {
-        return "In Memory Store";
+        return delegate.connectionUrl();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int clear() {
-        int count = optionStore.size();
-        optionStore.clear();
-        return count - optionStore.size();
+    public long clear() {
+        long count = delegate.count();
+        delegate.clear();
+        return count;
     }
 
     /**
@@ -152,6 +154,13 @@ public class InMemoryOptionDao implements OptionDao {
      */
     @Override
     public long count() {
-        return optionStore.size();
+        return delegate.count();
+    }
+
+    @Override
+    public void checkRankOption(OptionCacheKey<?> cacheKey, RankOption expected) {
+        if (cacheKey.getRankOption() != expected) {
+            throw new OptionKeyException("OptionCacheKey should have RankOption of: " + expected);
+        }
     }
 }

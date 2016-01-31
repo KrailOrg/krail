@@ -14,25 +14,29 @@
 package uk.q3c.krail.core.persist.common.option
 
 import com.google.common.collect.ImmutableList
+import com.google.common.collect.Lists
 import com.google.inject.Inject
+import com.google.inject.Singleton
 import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
-import uk.q3c.krail.core.data.DefaultOptionElementConverter
 import uk.q3c.krail.core.data.OptionElementConverter
 import uk.q3c.krail.core.i18n.LabelKey
+import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters
 import uk.q3c.krail.core.option.*
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey
+import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
 import uk.q3c.krail.core.user.profile.UserHierarchy
 import uk.q3c.krail.core.view.component.LocaleContainer
 
 import static uk.q3c.krail.core.user.profile.RankOption.*
-
 /**
  * Created by David Sowerby on 27 Jan 2016
  */
 abstract class OptionDaoTestBase extends Specification {
 
-    OptionElementConverter optionStringConverter
+    @Inject
+    OptionElementConverter optionElementConverter;
+
     OptionDao dao
     String expectedConnectionUrl
     OptionKey<Integer> optionKey1 = Mock();
@@ -45,9 +49,23 @@ abstract class OptionDaoTestBase extends Specification {
     OptionCacheKey cacheKeyLow1 = Mock()
     UserHierarchy hierarchy1 = Mock()
 
+    OptionSource optionSource = Mock()
+
+    OptionKey<String> optionKeyString = new OptionKey<>("a", LocaleContainer.class, LabelKey.Yes, "a");
+    OptionKey<Integer> optionKeyInteger = new OptionKey<>(21, LocaleContainer.class, LabelKey.Yes, "b");
+    OptionKey<Boolean> optionKeyBoolean = new OptionKey<>(true, LocaleContainer.class, LabelKey.Yes, "c");
+    OptionKey<Long> optionKeyLong = new OptionKey<>(121L, LocaleContainer.class, LabelKey.Yes, "d");
+    OptionKey<BigDecimal> optionKeyBigDecimal = new OptionKey<>(new BigDecimal(23.3), LocaleContainer.class, LabelKey.Yes, "e");
+    OptionKey<DefaultUserSitemapSorters.SortType> optionKeyEnum = new OptionKey<>(DefaultUserSitemapSorters.SortType.INSERTION, LocaleContainer.class, LabelKey.Yes, "f");
+    OptionKey<Locale> optionKeyLocale = new OptionKey<>(Locale.CHINA, LocaleContainer.class, LabelKey.Yes, "g");
+
+    OptionKey<OptionList<String>> optionKeyStringImmutableSet = new OptionKey<>(new OptionList<String>(String.class), LocaleContainer.class, LabelKey.Yes, "h");
+    OptionKey<AnnotationOptionList> optionKeyAnnotationList = new OptionKey<>(new AnnotationOptionList(Inject.class, Singleton.class), LocaleContainer.class, LabelKey.Yes, "i")
+
 
     def setup() {
-        optionStringConverter = new DefaultOptionElementConverter()
+
+
         optionKey1.getContext() >> LocaleContainer.class
         optionKey1.getDefaultValue() >> 99
         optionKey1.getKey() >> LabelKey.Yes
@@ -292,5 +310,75 @@ abstract class OptionDaoTestBase extends Specification {
 
         then:
         ListUtils.isEqualList(list.getList(), result.get().getList())
+    }
+
+    def "round trip, single value data types"() {
+        given:
+        OptionCacheKey cacheKeyString = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, optionKeyString);
+        OptionCacheKey cacheKeyInteger = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, optionKeyInteger);
+        OptionCacheKey cacheKeyBoolean = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, optionKeyBoolean);
+        OptionCacheKey cacheKeyLong = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, optionKeyLong);
+        OptionCacheKey cacheKeyBigDecimal = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, optionKeyBigDecimal);
+        OptionCacheKey cacheKeyEnum = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, optionKeyEnum);
+        OptionCacheKey cacheKeyLocale = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, optionKeyLocale);
+        when:
+        dao.write(cacheKeyString, Optional.of("4"));
+        dao.write(cacheKeyInteger, Optional.of(41));
+        dao.write(cacheKeyBoolean, Optional.of(false));
+        dao.write(cacheKeyLong, Optional.of(200L));
+        dao.write(cacheKeyBigDecimal, Optional.of(new BigDecimal(341.44)));
+        dao.write(cacheKeyEnum, Optional.of(DefaultUserSitemapSorters.SortType.POSITION));
+        dao.write(cacheKeyLocale, Optional.of(Locale.CANADA_FRENCH));
+
+
+        then:
+        dao.getValue(cacheKeyString).get().equals("4")
+        dao.getValue(cacheKeyInteger).get().equals(41)
+        dao.getValue(cacheKeyBoolean).get().equals(false)
+        dao.getValue(cacheKeyLong).get().equals(200L)
+        dao.getValue(cacheKeyBigDecimal).get().equals(new BigDecimal(341.44))
+        dao.getValue(cacheKeyEnum).get().equals(DefaultUserSitemapSorters.SortType.POSITION)
+        dao.getValue(cacheKeyLocale).get().equals(Locale.CANADA_FRENCH)
+    }
+
+    def "round trip OptionList"() {
+
+        given:
+        OptionList<String> optionList = new OptionList<>(Lists.newArrayList("a", "b"), String.class)
+        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, optionKeyStringImmutableSet);
+
+        when:
+        dao.write(cacheKey, Optional.of(optionList));
+        Optional<OptionList<String>> result = dao.getValue(cacheKey);
+        then:
+        ListUtils.isEqualList(result.get().getList(), optionList.getList());
+
+    }
+
+
+    def "round trip OptionList with comma in entry"() {
+
+        given:
+        OptionList<String> optionList = new OptionList<>(Lists.newArrayList("a,c", "b"), String.class)
+        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, optionKeyStringImmutableSet);
+
+        when:
+        dao.write(cacheKey, Optional.of(optionList));
+        Optional<OptionList<String>> result = dao.getValue(cacheKey);
+        then:
+        ListUtils.isEqualList(result.get().getList(), optionList.getList());
+
+    }
+
+    def "round trip AnnotationOptionList"() {
+        given:
+        AnnotationOptionList optionList = new AnnotationOptionList(ClassPatternSource, Inject)
+        OptionCacheKey cacheKey = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, optionKeyAnnotationList);
+
+        when:
+        dao.write(cacheKey, Optional.of(optionList));
+        Optional<AnnotationOptionList> result = dao.getValue(cacheKey);
+        then:
+        ListUtils.isEqualList(result.get().getList(), optionList.getList());
     }
 }

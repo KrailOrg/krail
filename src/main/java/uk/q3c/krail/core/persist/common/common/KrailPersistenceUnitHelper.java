@@ -19,12 +19,12 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 import uk.q3c.krail.core.persist.common.i18n.PatternDaoProviders;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 
 import java.lang.annotation.Annotation;
 
 /**
- * Utility class to help with some of the binding mechanics for handling {@link PatternDao} and {@link OptionDao}
+ * Utility class to help with some of the binding mechanics for handling {@link PatternDao} and {@link OptionDaoDelegate}
  * <p>
  * Created by David Sowerby on 26/06/15.
  */
@@ -37,7 +37,7 @@ public class KrailPersistenceUnitHelper {
     };
     private static TypeLiteral<Provider<PatternDao>> patternTypeLiteral = new TypeLiteral<Provider<PatternDao>>() {
     };
-    private static TypeLiteral<Provider<OptionDao>> optionTypeLiteral = new TypeLiteral<Provider<OptionDao>>() {
+    private static TypeLiteral<Provider<OptionDaoDelegate>> optionTypeLiteral = new TypeLiteral<Provider<OptionDaoDelegate>>() {
     };
     private static TypeLiteral<PersistenceInfo<?>> persistenceInfoClassLiteral = new TypeLiteral<PersistenceInfo<?>>() {
     };

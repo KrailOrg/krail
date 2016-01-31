@@ -17,7 +17,7 @@ import org.apache.shiro.authz.UnauthorizedException;
 import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.persist.cache.option.OptionCache;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.profile.RankOption;
@@ -44,7 +44,7 @@ import static uk.q3c.krail.core.user.profile.RankOption.*;
  * required is represented by an instance of {@link OptionPermission}.  If permissions are required to view, these would need to be applied at the user
  * interface.<br>
  * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
- * {@link OptionDao} are wrapped in Optional.
+ * {@link OptionDaoDelegate} are wrapped in Optional.
  * </p>
  * Created by David Sowerby on 03/12/14.
  */

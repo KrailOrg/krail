@@ -16,6 +16,7 @@ package uk.q3c.krail.core.config
 import com.google.common.collect.Lists
 import com.google.inject.*
 import spock.lang.Specification
+import uk.q3c.krail.core.data.DataModule
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
 import uk.q3c.krail.core.services.ServicesModule
@@ -35,7 +36,7 @@ class ApplicationConfigurationModuleTest extends Specification {
     List<Module> modules;
 
     def setup() {
-        modules = Lists.newArrayList(new TestI18NModule(), new ServicesModule(), new UtilsModule(), new TestEventBusModule(), new TestOptionModule(), new TestVaadinSessionScopeModule(), new UIScopeModule(), new InMemoryModule())
+        modules = Lists.newArrayList(new TestI18NModule(), new ServicesModule(), new UtilsModule(), new TestOptionModule(), new TestEventBusModule(), new DataModule(), new TestVaadinSessionScopeModule(), new UIScopeModule(), new InMemoryModule())
 
 
     }

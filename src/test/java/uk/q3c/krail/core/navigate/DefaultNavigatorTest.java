@@ -64,7 +64,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class,
+@GuiceContext({VaadinSessionScopeModule.class, TestI18NModule.class, TestPersistenceModule.class, TestOptionModule.class, EventBusModule.class,
         TestUIScopeModule.class, SitemapModule.class, ServicesModule.class, UtilsModule.class, ApplicationConfigurationModule.class})
 public class DefaultNavigatorTest {
 

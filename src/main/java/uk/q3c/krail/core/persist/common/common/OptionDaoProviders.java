@@ -22,7 +22,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Binding annotation to a set of annotations which identify all the active Provider<OptionDao>s available
+ * Binding annotation to a set of annotations which identify all the active Provider<OptionDaoDelegate>s available
  * <p>
  * <p>
  * Created by David Sowerby on 06/02/15.

@@ -35,10 +35,9 @@ import uk.q3c.krail.testutil.TestPersistenceModule;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({VaadinSessionScopeModule.class, TestPersistenceModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule.class, UIScopeModule
-        .class})
+@GuiceContext({VaadinSessionScopeModule.class, TestPersistenceModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule
+        .class, UIScopeModule.class})
 public class DefaultSitemapFinisherTest {
-
 
 
     String uripublic_Node1 = "public/node1";
@@ -130,7 +129,6 @@ public class DefaultSitemapFinisherTest {
         assertThat(report).contains("node/nokey");
         assertThat(report).contains("node/n");
     }
-
 
 
     @Test(expected = SitemapException.class)

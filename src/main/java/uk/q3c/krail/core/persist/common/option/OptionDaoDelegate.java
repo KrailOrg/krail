@@ -32,7 +32,7 @@ import java.util.Optional;
  * <p>
  * Created by David Sowerby on 20/02/15.
  */
-public interface OptionDao {
+public interface OptionDaoDelegate {
 
     default void checkRankOption(OptionCacheKey<?> cacheKey, RankOption expected) {
         if (cacheKey.getRankOption() != expected) {
@@ -48,11 +48,10 @@ public interface OptionDao {
      * @param cacheKey specifies the hierarchy, rank and OptionKey to write to
      * @param value    the value to write
      * @param <V>      the value type
-     * @throws OptionKeyException if the cacheKey is not set to {@link RankOption#SPECIFIC_RANK}
+     * @throws OptionKeyException       if the cacheKey is not set to {@link RankOption#SPECIFIC_RANK}
      * @throws IllegalArgumentException if value is empty
-     *
      */
-    <V> void write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull Optional<V> value);
+    <V> void write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull String value);
 
 
     /**
@@ -74,11 +73,11 @@ public interface OptionDao {
      * specific rank as specified by {@code cacheKey}
      *
      * @param cacheKey specifies the hierarchy, rank and OptionKey for the entry to delete
-     * @return an Optional wrapped value if there is one or an Optional.empty() if not
+     * @return an Optional wrapped String value if there is one or an Optional.empty() if not
      * @throws OptionKeyException if the cacheKey is not valid for this action
      */
     @Nonnull
-    <V> Optional<V> getValue(@Nonnull OptionCacheKey<V> cacheKey);
+    <V> Optional<String> getValue(@Nonnull OptionCacheKey<V> cacheKey);
 
 
     /**

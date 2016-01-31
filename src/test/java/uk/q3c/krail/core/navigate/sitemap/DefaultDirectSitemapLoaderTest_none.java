@@ -37,7 +37,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule.class, UIScopeModule
+@GuiceContext({TestI18NModule.class, VaadinSessionScopeModule.class, TestOptionModule.class, TestPersistenceModule.class, EventBusModule
+        .class,
+        UIScopeModule
         .class})
 public class DefaultDirectSitemapLoaderTest_none {
 

@@ -13,30 +13,33 @@
 
 package uk.q3c.krail.core.persist.inmemory.common;
 
-import com.google.inject.Inject;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.data.OptionElementConverter;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.DefaultCurrentLocale;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
+import uk.q3c.krail.core.persist.common.option.DefaultOptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDao;
 import uk.q3c.krail.core.persist.common.option.OptionEntity;
-import uk.q3c.krail.core.persist.inmemory.i18n.DefaultInMemoryPatternStore;
+import uk.q3c.krail.core.persist.common.option.OptionSource;
 import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternDao;
 import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternStore;
 import uk.q3c.krail.core.persist.inmemory.i18n.PatternEntity;
-import uk.q3c.krail.core.persist.inmemory.option.DefaultInMemoryOptionStore;
-import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDao;
+import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDaoDelegate;
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.view.component.LocaleContainer;
+import uk.q3c.krail.testutil.TestOptionModule;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -45,7 +48,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({DataModule.class})
 public class InMemoryContainerTest {
 
 
@@ -53,19 +55,31 @@ public class InMemoryContainerTest {
 
     InMemoryPatternStore patternStore;
 
-    InMemoryOptionDao optionDao;
+    OptionDao optionDao;
 
     InMemoryPatternDao patternDao;
+
     @Mock
     UserHierarchy userHierarchy;
-    @Inject
-    private OptionElementConverter optionElementConverter;
+
+    @Mock
+    OptionSource optionSource;
+
+    InMemoryOptionDaoDelegate inMemoryOptionDaoDelegate;
+
+    OptionElementConverter optionElementConverter;
 
     @Before
     public void setup() {
-        optionStore = new DefaultInMemoryOptionStore();
-        optionDao = new InMemoryOptionDao(optionStore, optionElementConverter);
-        patternStore = new DefaultInMemoryPatternStore();
+        Injector injector = Guice.createInjector(new InMemoryModule().provideOptionDao(), new TestOptionModule(), new VaadinSessionScopeModule());
+        optionStore = injector.getInstance(InMemoryOptionStore.class);
+        patternStore = injector.getInstance(InMemoryPatternStore.class);
+
+        patternDao = injector.getInstance(InMemoryPatternDao.class);
+        inMemoryOptionDaoDelegate = injector.getInstance(InMemoryOptionDaoDelegate.class);
+        optionElementConverter = injector.getInstance(OptionElementConverter.class);
+        when(optionSource.getActiveDao()).thenReturn(inMemoryOptionDaoDelegate);
+        optionDao = new DefaultOptionDao(optionElementConverter, optionSource);
         patternDao = new InMemoryPatternDao(patternStore);
         when(userHierarchy.persistenceName()).thenReturn("SimpleUserHierarchy");
         when(userHierarchy.rankName(0)).thenReturn("system");

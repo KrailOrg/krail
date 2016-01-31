@@ -31,14 +31,8 @@ public class DataModule extends AbstractModule {
     protected void configure() {
         define();
         bindConverterFactory();
-        bindStringPersistenceConverter();
-
-
     }
 
-    protected void bindStringPersistenceConverter() {
-        bind(OptionElementConverter.class).to(DefaultOptionElementConverter.class);
-    }
 
     /**
      * Override this method to directly define configuration required
