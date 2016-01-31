@@ -15,8 +15,6 @@ package uk.q3c.krail.core.shiro.aop;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.aop.RoleAnnotationHandler;
@@ -35,19 +33,17 @@ public class RolesMethodInterceptor extends ShiroMethodInterceptor<RequiresRoles
     @Inject
     public RolesMethodInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver> annotationResolverProvider) {
 
-        super(RequiresRoles.class, UnauthorizedException.class, subjectProviderProvider, annotationResolverProvider);
+        super(RequiresRoles.class, subjectProviderProvider, annotationResolverProvider);
     }
 
 
     /**
-     * Ensures that the calling <code>Subject</code> has the Annotation's specified roles, and if not, calls {@link #exception()} indicating that access is
-     * denied.
+     * Ensures that the calling <code>Subject</code> has the Annotation's specified roles, and if not, throws AuthorizationException
      *
      * @param rrAnnotation
      *         the RequiresRoles annotation to use to check for one or more roles
      */
     public void assertAuthorized(RequiresRoles rrAnnotation) {
-        try {
             String[] roles = rrAnnotation.value();
 
             if (roles.length == 1) {
@@ -71,8 +67,6 @@ public class RolesMethodInterceptor extends ShiroMethodInterceptor<RequiresRoles
                     getSubject().checkRole(roles[0]);
                 }
             }
-        } catch (AuthorizationException ae) {
-            exception();
-        }
+
     }
 }

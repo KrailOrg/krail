@@ -15,7 +15,7 @@ package uk.q3c.krail.core.shiro.aop;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.aop.AuthenticatedAnnotationHandler;
 import org.apache.shiro.subject.Subject;
@@ -32,7 +32,7 @@ public class AuthenticatedMethodInterceptor extends ShiroMethodInterceptor<Requi
 
     @Inject
     public AuthenticatedMethodInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver> annotationResolverProvider) {
-        super(RequiresAuthentication.class, UnauthenticatedException.class, subjectProviderProvider, annotationResolverProvider);
+        super(RequiresAuthentication.class, subjectProviderProvider, annotationResolverProvider);
     }
 
 
@@ -45,7 +45,7 @@ public class AuthenticatedMethodInterceptor extends ShiroMethodInterceptor<Requi
      */
     public void assertAuthorized(RequiresAuthentication a) {
         if (!getSubject().isAuthenticated()) {
-            exception();
+            throw new AuthenticationException();
         }
     }
 }

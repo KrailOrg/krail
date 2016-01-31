@@ -15,7 +15,6 @@ package uk.q3c.krail.core.shiro.aop;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.aop.PermissionAnnotationHandler;
@@ -32,40 +31,40 @@ public class PermissionsMethodInterceptor extends ShiroMethodInterceptor<Require
 
     @Inject
     public PermissionsMethodInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver> annotationResolverProvider) {
-        super(RequiresPermissions.class, UnauthorizedException.class, subjectProviderProvider, annotationResolverProvider);
+        super(RequiresPermissions.class, subjectProviderProvider, annotationResolverProvider);
     }
 
-
+    /**
+     * The 'check' methods will throw an exception as necessary
+     *
+     * @param rpAnnotation the annotation to use for checking permissions
+     */
     @Override
     public void assertAuthorized(RequiresPermissions rpAnnotation) {
 
         String[] perms = rpAnnotation.value();
         Subject subject = getSubject();
-//        try {
-            if (perms.length == 1) {
-                subject.checkPermission(perms[0]);
-                return;
-            }
-            if (Logical.AND == (rpAnnotation.logical())) {
-                getSubject().checkPermissions(perms);
-                return;
-            }
-            if (Logical.OR == (rpAnnotation.logical())) {
-                // Avoid processing exceptions unnecessarily - "delay" throwing the exception by calling hasRole first
-                boolean hasAtLeastOnePermission = false;
-                for (String permission : perms) {
-                    if (getSubject().isPermitted(permission)) {
-                        hasAtLeastOnePermission = true;
-                    }
+        if (perms.length == 1) {
+            subject.checkPermission(perms[0]);
+            return;
+        }
+        if (Logical.AND == (rpAnnotation.logical())) {
+            getSubject().checkPermissions(perms);
+            return;
+        }
+        if (Logical.OR == (rpAnnotation.logical())) {
+            // Avoid processing exceptions unnecessarily - "delay" throwing the exception by calling hasRole first
+            boolean hasAtLeastOnePermission = false;
+            for (String permission : perms) {
+                if (getSubject().isPermitted(permission)) {
+                    hasAtLeastOnePermission = true;
                 }
-                // Cause the exception if none of the role match, note that the exception message will be a bit misleading
-                if (!hasAtLeastOnePermission) {
-                    getSubject().checkPermission(perms[0]);
-                }
+            }
+            // Cause the exception if none of the role match, note that the exception message will be a bit misleading
+            if (!hasAtLeastOnePermission) {
+                getSubject().checkPermission(perms[0]);
+            }
 
-            }
-//        } catch (AuthorizationException ae) {
-//            exception();
-//        }
+        }
     }
 }

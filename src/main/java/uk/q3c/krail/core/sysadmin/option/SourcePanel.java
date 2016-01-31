@@ -124,20 +124,20 @@ public abstract class SourcePanel extends Panel implements OptionContext {
     }
 
     private void styles() {
-        String defaultCaptionStyleName = option.get(defaultCaptionStyleOptionKey);
-        applyStyle(defaultCaptionStyleName, nameCaption, nameCaptionStyleOptionKey);
-        applyStyle(defaultCaptionStyleName, descriptionCaption, descriptionCaptionStyleOptionKey);
-        applyStyle(defaultCaptionStyleName, connectionUrlCaption, connectionUrlCaptionStyleOptionKey);
-        applyStyle(defaultCaptionStyleName, volatileCaption, is_volatileCaptionStyleOptionKey);
+//        String defaultCaptionStyleName = option.get(defaultCaptionStyleOptionKey);
+        applyStyle(nameCaption, nameCaptionStyleOptionKey);
+        applyStyle(descriptionCaption, descriptionCaptionStyleOptionKey);
+        applyStyle(connectionUrlCaption, connectionUrlCaptionStyleOptionKey);
+        applyStyle(volatileCaption, is_volatileCaptionStyleOptionKey);
 
-        String defaultValueStyleName = option.get(defaultValueStyleOptionKey);
-        applyStyle(defaultValueStyleName, nameLabel, nameValueStyleOptionKey);
-        applyStyle(defaultValueStyleName, descriptionLabel, descriptionValueStyleOptionKey);
-        applyStyle(defaultValueStyleName, connectionUrlLabel, connectionUrlValueStyleOptionKey);
-        applyStyle(defaultValueStyleName, volatileLabel, is_volatileValueStyleOptionKey);
+//        String defaultValueStyleName = option.get(defaultValueStyleOptionKey);
+        applyStyle(nameLabel, nameValueStyleOptionKey);
+        applyStyle(descriptionLabel, descriptionValueStyleOptionKey);
+        applyStyle(connectionUrlLabel, connectionUrlValueStyleOptionKey);
+        applyStyle(volatileLabel, is_volatileValueStyleOptionKey);
     }
 
-    private void applyStyle(String defaultCaptionStyleName, AbstractComponent component, OptionKey<String> key) {
+    private void applyStyle(AbstractComponent component, OptionKey<String> key) {
         String componentStyleName = option.get(key);
         component.setStyleName(componentStyleName);
     }

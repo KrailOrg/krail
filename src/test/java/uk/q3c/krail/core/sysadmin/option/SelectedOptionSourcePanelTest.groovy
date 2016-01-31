@@ -19,13 +19,11 @@ import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.option.InMemory
 import uk.q3c.krail.core.option.Option
-import uk.q3c.krail.core.option.OptionKey
 import uk.q3c.krail.core.option.OptionPopup
 import uk.q3c.krail.core.persist.common.common.PersistenceInfo
 import uk.q3c.krail.core.persist.common.option.OptionSource
 
 import java.lang.annotation.Annotation
-
 /**
  * Tests for {@link SelectedOptionSourcePanel} and its super class SourcePanel
  *
@@ -133,41 +131,41 @@ class SelectedOptionSourcePanelTest extends Specification {
         panel.getVolatileLabel().getValue() == "Yes"
     }
 
-    def "When styles() called, all components have default style except when overridden"() {
-
-        given:
-
-
-        optionSource.getActiveSource() >>> [InMemory.class, SessionBus.class]
-        optionSource.getPersistenceInfo(InMemory.class) >> persistenceInfo
-
-        // option.get() always returns default value
-        option.get(SourcePanel.connectionUrlValueStyleOptionKey) >> "large"
-        option.get(_) >> { OptionKey optionKey -> optionKey.getDefaultValue() }
-
-
-        when:
-
-        // to trigger style update
-        panel.optionValueChanged(null)
-
-        then:
-
-        def defaultValueStyleName = SourcePanel.defaultValueStyleOptionKey.getDefaultValue();
-
-        panel.getNameLabel().getStyleName() == defaultValueStyleName
-        panel.getDescriptionLabel().getStyleName() == defaultValueStyleName
-        panel.getConnectionUrlLabel().getStyleName() == "large"
-        panel.getVolatileLabel().getStyleName() == defaultValueStyleName
-
-        def defaultCaptionStyleName = SourcePanel.defaultCaptionStyleOptionKey.getDefaultValue();
-
-        panel.getNameCaption().getStyleName() == defaultCaptionStyleName
-        panel.getDescriptionCaption().getStyleName() == defaultCaptionStyleName
-        panel.getConnectionUrlCaption().getStyleName() == defaultCaptionStyleName
-        panel.getVolatileCaption().getStyleName() == defaultCaptionStyleName
-
-    }
+//    def "When styles() called, all components have default style except when overridden"() {
+//
+//        given:
+//
+//
+//        optionSource.getActiveSource() >>> [InMemory.class, SessionBus.class]
+//        optionSource.getPersistenceInfo(InMemory.class) >> persistenceInfo
+//
+//        // option.get() always returns default value
+//        option.get(SourcePanel.connectionUrlValueStyleOptionKey) >> "large"
+//        option.get(_) >> { OptionKey optionKey -> optionKey.getDefaultValue() }
+//
+//
+//        when:
+//
+//        // to trigger style update
+//        panel.optionValueChanged(null)
+//
+//        then:
+//
+//        def defaultValueStyleName = SourcePanel.defaultValueStyleOptionKey.getDefaultValue();
+//
+//        panel.getNameLabel().getStyleName() == defaultValueStyleName
+//        panel.getDescriptionLabel().getStyleName() == defaultValueStyleName
+//        panel.getConnectionUrlLabel().getStyleName() == "large"
+//        panel.getVolatileLabel().getStyleName() == defaultValueStyleName
+//
+//        def defaultCaptionStyleName = SourcePanel.defaultCaptionStyleOptionKey.getDefaultValue();
+//
+//        panel.getNameCaption().getStyleName() == defaultCaptionStyleName
+//        panel.getDescriptionCaption().getStyleName() == defaultCaptionStyleName
+//        panel.getConnectionUrlCaption().getStyleName() == defaultCaptionStyleName
+//        panel.getVolatileCaption().getStyleName() == defaultCaptionStyleName
+//
+//    }
 
 
 }

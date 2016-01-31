@@ -14,7 +14,6 @@
 package uk.q3c.krail.core.shiro.aop;
 
 import com.google.inject.Provider;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.shiro.subject.Subject;
@@ -30,14 +29,12 @@ import java.lang.annotation.Annotation;
 public abstract class ShiroMethodInterceptor<A extends Annotation> implements MethodInterceptor {
     private static Logger log = LoggerFactory.getLogger(ShiroMethodInterceptor.class);
     protected Class<A> annotationClass;
-    protected Class<? extends RuntimeException> exceptionToThrow;
     private Provider<AnnotationResolver> annotationResolverProvider;
     private Provider<SubjectProvider> subjectProviderProvider;
 
-    public ShiroMethodInterceptor(Class<A> annotationClass, Class<? extends RuntimeException> exceptionToThrow, Provider<SubjectProvider>
+    public ShiroMethodInterceptor(Class<A> annotationClass, Provider<SubjectProvider>
             subjectProviderProvider, Provider<AnnotationResolver> annotationResolverProvider) {
         this.annotationClass = annotationClass;
-        this.exceptionToThrow = exceptionToThrow;
         this.subjectProviderProvider = subjectProviderProvider;
         this.annotationResolverProvider = annotationResolverProvider;
     }
@@ -70,19 +67,5 @@ public abstract class ShiroMethodInterceptor<A extends Annotation> implements Me
                                       .get();
     }
 
-    @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS")
-    protected void exception() {
-        try {
-            throw exceptionToThrow.newInstance();
-        } catch (Exception e) {
-            String msg = "Attempted to throw a Shiro annotation exception but failed";
-            log.error(msg, e);
-            throw new RuntimeException(msg, e);
-        }
-    }
 
-    public ShiroMethodInterceptor<A> exceptionToThrow(Class<? extends RuntimeException> exceptionToThrow) {
-        this.exceptionToThrow = exceptionToThrow;
-        return this;
-    }
 }

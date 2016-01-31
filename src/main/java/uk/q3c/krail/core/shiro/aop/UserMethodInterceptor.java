@@ -33,21 +33,22 @@ public class UserMethodInterceptor extends ShiroMethodInterceptor<RequiresUser> 
 
     @Inject
     public UserMethodInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver> annotationResolverProvider) {
-        super(RequiresUser.class, NotAUserException.class, subjectProviderProvider, annotationResolverProvider);
+        super(RequiresUser.class, subjectProviderProvider, annotationResolverProvider);
     }
 
 
     /**
      * Ensures that the calling <code>Subject</code> is a <em>user</em>, that is, they are <em>either</code>
      * {@link org.apache.shiro.subject.Subject#isAuthenticated() authenticated} <b><em>or</em></b> remembered via remember
-     * me services before allowing access, and if not, {@link #exception()} is called
+     * me services before allowing access
      *
      * @param a
      *         the RequiresUser annotation to check
+     *         @throws NotAUserException if user is not logged in or remembered
      */
     public void assertAuthorized(RequiresUser a) {
         if (getSubject().getPrincipal() == null) {
-            exception();
+            throw new NotAUserException();
         }
     }
 }

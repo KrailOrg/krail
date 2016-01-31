@@ -32,7 +32,7 @@ public class GuestMethodInterceptor extends ShiroMethodInterceptor<RequiresGuest
 
     @Inject
     public GuestMethodInterceptor(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver> annotationResolverProvider) {
-        super(RequiresGuest.class, NotAGuestException.class, subjectProviderProvider, annotationResolverProvider);
+        super(RequiresGuest.class, subjectProviderProvider, annotationResolverProvider);
     }
 
 
@@ -48,8 +48,7 @@ public class GuestMethodInterceptor extends ShiroMethodInterceptor<RequiresGuest
     public void assertAuthorized(RequiresGuest a) throws AuthorizationException {
 
         if (getSubject().getPrincipal() != null) {
-            exception();
-            //            throw new UnauthenticatedException(");
+            throw new NotAGuestException();
         }
     }
 }
