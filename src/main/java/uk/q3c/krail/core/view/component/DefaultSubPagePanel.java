@@ -57,6 +57,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
         this.userSitemap = userSitemap;
         this.option = option;
         this.sorters = sorters;
+        this.addFilter(new NoNavFilter());
         sorters.setOptionSortAscending(getOptionSortAscending());
         sorters.setOptionKeySortType(getOptionSortType());
     }
@@ -84,7 +85,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
     protected void build() {
         if (rebuildRequired) {
             log.debug("building");
-            // premature calls can be made befoer the navigator has started up properly
+            // premature calls can be made before the navigator has started up properly
             if (getNavigator().getCurrentNavigationState() != null) {
                 UserSitemapNode currentNode = getNavigator().getCurrentNode();
                 if (currentNode == null) {

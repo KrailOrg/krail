@@ -26,8 +26,11 @@ import uk.q3c.krail.core.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 
+import javax.annotation.Nonnull;
 import java.text.Collator;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The {@link MasterSitemap} provides the overall structure of the site, and is Singleton scoped. This class refines
@@ -35,7 +38,7 @@ import java.util.List;
  * VaadinSessionScoped}.
  * It also maintains locale-aware labels and sort order, so that the navigation components are presented to the user in
  * the language and sort order of their choice.
- *
+ * <p>
  * The standard page nodes are sometimes not in the user sitemap (for example, the login node is not there after
  * login). Use the isxxxUri methods to test a uri for a match to a standard page
  *
@@ -65,7 +68,8 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
      * here}
      */
     @Handler
-    public synchronized void localeChanged(LocaleChangeBusMessage busMessage) {
+    public synchronized void localeChanged(@Nonnull LocaleChangeBusMessage busMessage) {
+        checkNotNull(busMessage);
         log.debug("responding to locale change to {}", busMessage.getNewLocale());
         List<UserSitemapNode> nodeList = getAllNodes();
         Collator collator = translate.collator();
@@ -85,11 +89,11 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
      * will have scanned the entire {@link UserSitemap}
      *
      * @param masterNode
-     *
      * @return
      */
     @Override
-    public synchronized UserSitemapNode userNodeFor(SitemapNode masterNode) {
+    public synchronized UserSitemapNode userNodeFor(@Nonnull SitemapNode masterNode) {
+        checkNotNull(masterNode);
         for (UserSitemapNode candidate : getAllNodes()) {
             if (candidate.getMasterNode() == masterNode) {
                 return candidate;
@@ -105,7 +109,6 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
     public UserSitemapNode createNode(String segment) {
         return null;
     }
-
 
 
     @Override
@@ -126,11 +129,25 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
 
     }
 
+    @Override
+    public boolean hasNoVisibleChildren(@Nonnull UserSitemapNode sourceNode) {
+        checkNotNull(sourceNode);
+        List<UserSitemapNode> children = this.getChildren(sourceNode);
+//        if (children == null) { //FindBugs reports this unnecessary
+//            return true;
+//        }
+        for (UserSitemapNode child : children) {
+            if (child.getPositionIndex() >= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public Translate getTranslate() {
         return translate;
     }
-
 
 
 }

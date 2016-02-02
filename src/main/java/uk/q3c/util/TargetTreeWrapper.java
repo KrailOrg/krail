@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 package uk.q3c.util;
 
@@ -49,19 +49,19 @@ public interface TargetTreeWrapper<S, T> {
      * @return the new child target node. Can be null, in which case {@link TreeCopy} will ignore it. However, if you
      * want to omit certain source nodes, it may be better to use a {@link NodeFilter}
      */
-    public T createNode(T parentNode, S sourceChildNode);
+    T createNode(T parentNode, S sourceChildNode);
 
     /**
      * Called by {@link TreeCopy} to offer the chance to mark this node as not having any children. Not used by all
      * implementations
      *
-     * @param isLeaf
+     * @param node the node to consider marking as a leaf, in an implementation dependent way
      */
-    public abstract void setLeaf(T node, boolean isLeaf);
+    void setLeaf(T node);
 
     CaptionReader<S> getCaptionReader();
 
-    public abstract void setCaptionReader(CaptionReader<S> captionReader);
+    void setCaptionReader(CaptionReader<S> captionReader);
 
     NodeModifier<S, T> getNodeModifier();
 
@@ -73,8 +73,9 @@ public interface TargetTreeWrapper<S, T> {
      *
      * @param parentNode
      */
-    public void sortChildren(T parentNode, Comparator<T> comparator);
+    void sortChildren(T parentNode, Comparator<T> comparator);
 
     void addChild(T parentNode, T childNode);
 
+    void forceSetLeaf(T childNode);
 }

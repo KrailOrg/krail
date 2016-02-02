@@ -49,11 +49,8 @@ import java.util.*;
  * {@link TargetTreeWrapper#setNodeModifier(NodeModifier)} with an implementation to make the conversion. The default
  * simply returns a reference to the source node;
  *
- * @param <S>
- *         source node type
- * @param <T>
- *         target node type
- *
+ * @param <S> source node type
+ * @param <T> target node type
  * @author David Sowerby
  * @date 27 May 2014
  */
@@ -62,6 +59,7 @@ public class TreeCopy<S, T> {
     public enum SortOption {
         SORT_SOURCE_NODES, SORT_TARGET_NODES_AFTER_ADD, SORT_TARGET_NODES_BEFORE_ADD
     }
+
     private static Logger log = LoggerFactory.getLogger(TreeCopy.class);
     private final SourceTreeWrapper<S> source;
     private final TargetTreeWrapper<S, T> target;
@@ -75,6 +73,7 @@ public class TreeCopy<S, T> {
     private boolean sorted = true;
     private Comparator<S> sourceSortComparator;
     private Comparator<T> targetSortComparator;
+
     public TreeCopy(SourceTreeWrapper<S> source, TargetTreeWrapper<S, T> target) {
         super();
         this.source = source;
@@ -194,9 +193,9 @@ public class TreeCopy<S, T> {
     }
 
     /**
-     * Now iterate over this level and drill down to next level If a node has no children call setLeaf (which the
-     * target
-     * will implement if used}
+     * Now iterate over this level and drill down to next level.  SetLeaf is always called, because some implementations require that a node in a navigation
+     * component may be displayed as a leaf, becuase its children are not to be displayed (for example, excluded pages (positionIndex <0), from
+     * UserNavigationTree).  This logic is determined  by the NodeModifier
      *
      * @param targetToSourceNodeMap
      */
@@ -209,12 +208,14 @@ public class TreeCopy<S, T> {
             if (subNodeList.size() > 0) {
                 if (!isLimitedDepth() || level < maxDepth) {
                     loadNodeList(childNode, subNodeList, level + 1);
+                    target.setLeaf(childNode);
                 } else {
-                    target.setLeaf(childNode, true);
+                    target.forceSetLeaf(childNode);
                 }
             } else {
-                target.setLeaf(childNode, true);
+                target.setLeaf(childNode);
             }
+
         }
     }
 
@@ -224,7 +225,6 @@ public class TreeCopy<S, T> {
      * will honour the sort requirements.
      *
      * @param sourceNodeList
-     *
      * @return
      */
     private Map<T, S> createTargetNodes(T parentNode, List<S> sourceNodeList, SortOption sortOption) {

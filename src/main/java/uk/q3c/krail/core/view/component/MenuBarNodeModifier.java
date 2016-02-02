@@ -17,6 +17,7 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import org.apache.commons.collections15.map.HashedMap;
 import uk.q3c.krail.core.navigate.Navigator;
+import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.util.CaptionReader;
 import uk.q3c.util.NodeModifier;
@@ -37,11 +38,13 @@ public class MenuBarNodeModifier implements NodeModifier<UserSitemapNode, MenuIt
     private final Map<MenuItem, UserSitemapNode> targetLookup = new HashedMap<>();
     private final Navigator navigator;
     private final CaptionReader<UserSitemapNode> captionReader;
+    private UserSitemap userSitemap;
 
-    public MenuBarNodeModifier(MenuBar menuBar, Navigator navigator, CaptionReader<UserSitemapNode> captionReader) {
+    public MenuBarNodeModifier(MenuBar menuBar, Navigator navigator, CaptionReader<UserSitemapNode> captionReader, UserSitemap userSitemap) {
         this.menuBar = menuBar;
         this.navigator = navigator;
         this.captionReader = captionReader;
+        this.userSitemap = userSitemap;
     }
 
     @Override
@@ -64,11 +67,24 @@ public class MenuBarNodeModifier implements NodeModifier<UserSitemapNode, MenuIt
     }
 
     @Override
-    public void setLeaf(@Nonnull MenuItem targetNode, boolean isLeaf) {
+    public void setLeaf(@Nonnull MenuItem targetNode) {
         checkNotNull(targetNode);
-        NavigationCommand command = new NavigationCommand(navigator, sourceNodeFor(targetNode));
+        UserSitemapNode sourceNode = sourceNodeFor(targetNode);
+        if (userSitemap.hasNoVisibleChildren(sourceNode)) {
+            doSetLeaf(sourceNode, targetNode);
+        }
+    }
+
+    @Override
+    public void forceSetLeaf(@Nonnull MenuItem targetNode) {
+        doSetLeaf(sourceNodeFor(targetNode), targetNode);
+    }
+
+    private void doSetLeaf(UserSitemapNode sourceNode, MenuItem targetNode) {
+        NavigationCommand command = new NavigationCommand(navigator, sourceNode);
         targetNode.setCommand(command);
     }
+
 
     @Override
     public UserSitemapNode sourceNodeFor(@Nonnull MenuItem targetNode) {

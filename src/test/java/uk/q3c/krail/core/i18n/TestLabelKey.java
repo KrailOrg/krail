@@ -17,7 +17,7 @@ public enum TestLabelKey implements I18NKey {
     Large, Home, My_Account, Transfers, Login, MoneyInOut, Private, Public, Opt, Yes, No, View1, View2, ViewA,
     ViewA1, ViewA11, ViewB, ViewB1, ViewB11, pattern_with_embedded_key, Blank, key1, Static, Private_Static, ServiceA, ServiceB, ServiceC, ServiceD,
     ServiceE, ServiceF, ServiceG, ServiceH,
-    key2
+    ViewA111, ViewB12, ViewB121, ViewB122, key2
 
 
 }

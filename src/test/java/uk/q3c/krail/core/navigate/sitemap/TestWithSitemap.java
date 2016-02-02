@@ -231,12 +231,21 @@ public abstract class TestWithSitemap {
         userSitemapBuilder.setMasterSitemap(masterSitemap);
         userSitemapBuilder.build();
 
-        userNode1 = userSitemap.userNodeFor(masterNode1);
-        userNode2 = userSitemap.userNodeFor(masterNode2);
-        userNode3 = userSitemap.userNodeFor(masterNode3);
-        userNode4 = userSitemap.userNodeFor(masterNode4);
-        userNode5 = userSitemap.userNodeFor(masterNode5);
-        userNode6 = userSitemap.userNodeFor(masterNode6);
+
+        userNode1 = createUserNode(masterNode1);
+        userNode2 = createUserNode(masterNode2);
+        userNode3 = createUserNode(masterNode3);
+        userNode5 = createUserNode(masterNode4);
+        userNode5 = createUserNode(masterNode5);
+        userNode6 = createUserNode(masterNode6);
+
+    }
+
+    private UserSitemapNode createUserNode(MasterSitemapNode masterNode) {
+        if (masterNode != null) {
+            return userSitemap.userNodeFor(masterNode);
+        }
+        return null;
     }
 
     @ModuleProvider

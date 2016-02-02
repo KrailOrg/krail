@@ -130,8 +130,13 @@ public class TargetTreeWrapper_BasicForestTest {
         }
 
         @Override
-        public void setLeaf(@Nonnull TargetTestNode targetNode, boolean isLeaf) {
+        public void setLeaf(@Nonnull TargetTestNode targetNode) {
             // do nothing
+
+        }
+
+        @Override
+        public void forceSetLeaf(@Nonnull TargetTestNode targetNode) {
 
         }
 

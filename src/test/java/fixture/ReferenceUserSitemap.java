@@ -39,9 +39,23 @@ import java.util.Map;
 /**
  * Provides a user sitemap with page layout:
  * <p>
- * -Public --Logout --ViewA ---ViewA1 ----ViewA11 --Login --Public Home
+ * -Public<br>
+ * --Logout<br>
+ * --ViewA<br>
+ * ---ViewA1<br>
+ * ----ViewA11<br>
+ * -----ViewA111<br> excluded
+ * --Login<br>
+ * --Public Home
  * <p>
- * -Private --Private Home --ViewB ---ViewB1 ----ViewB11 <br>
+ * -Private<br>
+ * --Private Home<br>
+ * --ViewB<br>
+ * ---ViewB1<br>
+ * ----ViewB11<br> excluded
+ * ----ViewB12<br>
+ * -----ViewB121<br>
+ * -----ViewB122<br> excluded
  * <br>
  * Insertion order ascending is set to be the same as UK alpha ascending <br>
  * <br>
@@ -49,6 +63,7 @@ import java.util.Map;
  *
  * @author dsowerby
  */
+@SuppressWarnings("ALL")
 public class ReferenceUserSitemap extends DefaultUserSitemap {
 
     public String aURI = "public/a";
@@ -57,12 +72,25 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
     public Class<? extends KrailView> a1ViewClass = ViewA1.class;
     public String a11URI = "public/a/a1/a11";
     public Class<? extends KrailView> a11ViewClass = ViewA11.class;
+    public String a111URI = "public/a/a1/a11/a111";
+    public Class<? extends KrailView> a111ViewClass = ViewA111.class; // excluded
+
     public String bURI = "private/b";
     public Class<? extends KrailView> bViewClass = ViewB.class;
     public String b1URI = "private/b/b1";
     public Class<? extends KrailView> b1ViewClass = ViewB1.class;
     public String b11URI = "private/b/b1/b11";
-    public Class<? extends KrailView> b11ViewClass = ViewB11.class;
+    public Class<? extends KrailView> b11ViewClass = ViewB11.class; // excluded
+    public String b12URI = "private/b/b1/b12";
+    public Class<? extends KrailView> b12ViewClass = ViewB12.class;
+
+
+    public String b121URI = "private/b/b1/b12/b121";
+    public Class<? extends KrailView> b121ViewClass = ViewB121.class;
+    public String b122URI = "private/b/b1/b12/b122";
+    public Class<? extends KrailView> b122ViewClass = ViewB122.class; // excluded
+
+
     public String loginURI = "public/login";
     public String logoutURI = "public/logout";
     public String privateURI = "private";
@@ -73,12 +101,17 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
     public Class<? extends KrailView> logoutViewClass = TestLogoutView.class;
     public Class<? extends KrailView> privateHomeViewClass = TestPrivateHomeView.class;
     public Class<? extends KrailView> publicHomeViewClass = TestPublicHomeView.class;
-    Map<String, Integer> insertionOrder;
+    LinkedList<String> insertionOrder;
     Map<String, Integer> positionIndexes;
     private UserSitemapNode a11Node;
+    private UserSitemapNode a111Node;
     private UserSitemapNode a1Node;
     private UserSitemapNode aNode;
     private UserSitemapNode b11Node;
+    private UserSitemapNode b12Node;
+    private UserSitemapNode b121Node;
+    private UserSitemapNode b122Node;
+
     private UserSitemapNode b1Node;
     private UserSitemapNode bNode;
     private UserSitemapNode loginNode;
@@ -96,48 +129,61 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
      */
 
     @Inject
-    public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler, SessionBusProvider  sessionBusProvider) {
+    public ReferenceUserSitemap(Translate translate, URIFragmentHandler uriHandler, SessionBusProvider sessionBusProvider) {
         super(translate, uriHandler, sessionBusProvider);
 
-        insertionOrder = new HashMap<>();
+        insertionOrder = new LinkedList<>();
         positionIndexes = new HashMap<>();
 
 
-        insertionOrder.put(privateURI, 1);
+        insertionOrder.add(privateURI);
         positionIndexes.put(privateURI, 4);
 
-        insertionOrder.put(publicURI, 2);
+        insertionOrder.add(publicURI);
         positionIndexes.put(publicURI, 2);
 
-        insertionOrder.put(loginURI, 6);
+        insertionOrder.add(loginURI);
         positionIndexes.put(loginURI, 8);
 
-        insertionOrder.put(logoutURI, 7);
+        insertionOrder.add(logoutURI);
         positionIndexes.put(logoutURI, 7);
 
-        insertionOrder.put(publicHomeURI, 8);
+        insertionOrder.add(publicHomeURI);
         positionIndexes.put(publicHomeURI, 6);
 
-        insertionOrder.put(bURI, 3);
+        insertionOrder.add(bURI);
         positionIndexes.put(bURI, 3);
 
 
-        insertionOrder.put(b1URI, 4);
+        insertionOrder.add(b1URI);
         positionIndexes.put(b1URI, 3);
 
-        insertionOrder.put(b11URI, 5);
+        insertionOrder.add(b11URI);
         positionIndexes.put(b11URI, -1); //This one should not be in nav components
 
-        insertionOrder.put(aURI, 9);
+        insertionOrder.add(b12URI);
+        positionIndexes.put(b12URI, 2);
+
+        insertionOrder.add(b121URI);
+        positionIndexes.put(b121URI, 1);
+
+        insertionOrder.add(b122URI);
+        positionIndexes.put(b122URI, -1);//This one should not be in nav components
+
+
+        insertionOrder.add(aURI);
         positionIndexes.put(aURI, 5);
 
-        insertionOrder.put(a1URI, 10);
+        insertionOrder.add(a1URI);
         positionIndexes.put(a1URI, 5);
 
-        insertionOrder.put(a11URI, 11);
+        insertionOrder.add(a11URI);
         positionIndexes.put(a11URI, 5);
 
-        insertionOrder.put(privateHomeURI, 12);
+        insertionOrder.add(a111URI);
+        positionIndexes.put(a111URI, -1);//This one should not be in nav components
+
+        insertionOrder.add(privateHomeURI);
         positionIndexes.put(privateHomeURI, 13);
 
 
@@ -180,7 +226,7 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         if (roles != null) {
             r = Lists.newArrayList(roles);
         }
-        Integer id = insertionOrder.get(fullURI);
+        Integer id = insertionOrder.indexOf(fullURI);
         final Integer positionIndex = positionIndexes.get(fullURI);
         MasterSitemapNode masterNode = new MasterSitemapNode(id, uriSegment, viewClass, labelKey, positionIndex, pageAccessControl, r);
 
@@ -196,25 +242,28 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         aNode = createNode(aURI, "a", aViewClass, TestLabelKey.ViewA, PageAccessControl.PUBLIC);
         a1Node = createNode(a1URI, "a1", a1ViewClass, TestLabelKey.ViewA1, PageAccessControl.PUBLIC);
         a11Node = createNode(a11URI, "a11", a11ViewClass, TestLabelKey.ViewA11, PageAccessControl.PUBLIC);
+        a111Node = createNode(a111URI, "a111", a11ViewClass, TestLabelKey.ViewA111, PageAccessControl.PUBLIC);
 
         addChild(publicNode, aNode);
         addChild(aNode, a1Node);
         addChild(a1Node, a11Node);
+        addChild(a11Node, a111Node);
 
         bNode = createNode(bURI, "b", bViewClass, TestLabelKey.ViewB, PageAccessControl.PERMISSION);
         b1Node = createNode(b1URI, "b1", b1ViewClass, TestLabelKey.ViewB1, PageAccessControl.PERMISSION);
         b11Node = createNode(b11URI, "b11", b1ViewClass, TestLabelKey.ViewB11, PageAccessControl.PERMISSION);
+        b12Node = createNode(b12URI, "b12", b12ViewClass, TestLabelKey.ViewB12, PageAccessControl.PERMISSION);
+        b121Node = createNode(b121URI, "b121", b121ViewClass, TestLabelKey.ViewB121, PageAccessControl.PERMISSION);
+        b122Node = createNode(b122URI, "b122", b122ViewClass, TestLabelKey.ViewB122, PageAccessControl.PERMISSION);
 
         addChild(privateNode, bNode);
         addChild(bNode, b1Node);
         addChild(b1Node, b11Node);
+        addChild(b1Node, b12Node);
+        addChild(b12Node, b121Node);
+        addChild(b12Node, b122Node);
     }
 
-    private MasterSitemapNode masterNode(UserSitemapNode userNode, int id, int positionIndex) {
-        MasterSitemapNode masterNode = new MasterSitemapNode(id, userNode.getUriSegment(), userNode.getViewClass(), userNode.getLabelKey(), positionIndex,
-                userNode.getPageAccessControl(), userNode.getRoles());
-        return masterNode;
-    }
 
     public List<UserSitemapNode> publicSortedAlphaAscending() {
         List<UserSitemapNode> list = new LinkedList<>();
@@ -312,7 +361,23 @@ public class ReferenceUserSitemap extends DefaultUserSitemap {
         return nodeFor(b11URI);
     }
 
+    public UserSitemapNode b121Node() {
+        return nodeFor(b121URI);
+    }
+
+    public UserSitemapNode b122Node() {
+        return nodeFor(b122URI);
+    }
+
+    public UserSitemapNode a111Node() {
+        return nodeFor(a111URI);
+    }
+
     public void setA1Node(UserSitemapNode a1Node) {
         this.a1Node = a1Node;
+    }
+
+    public UserSitemapNode b12Node() {
+        return nodeFor(b12URI);
     }
 }

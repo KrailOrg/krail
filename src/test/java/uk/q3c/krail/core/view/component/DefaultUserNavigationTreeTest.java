@@ -94,7 +94,7 @@ public class DefaultUserNavigationTreeTest {
     @Test
     public void build() {
         // given
-
+        System.out.println(userSitemap.toString());
         userNavigationTree = newTree();
         List<UserSitemapNode> expectedNodes = new ArrayList<>(userSitemap.getAllNodes());
 
@@ -103,6 +103,8 @@ public class DefaultUserNavigationTreeTest {
 
         //removed by using positionIndex <0
         expectedNodes.remove(userSitemap.b11Node());
+        expectedNodes.remove(userSitemap.b122Node());
+        expectedNodes.remove(userSitemap.a111Node());
 
         // when
         userNavigationTree.setOptionMaxDepth(1000);
@@ -117,6 +119,8 @@ public class DefaultUserNavigationTreeTest {
         assertThat(userNavigationTree.getItemCaption(userSitemap.publicHomeNode())).isEqualTo("Public Home");
         assertThat(userNavigationTree.areChildrenAllowed(userSitemap.a11Node())).isFalse();
         assertThat(userNavigationTree.areChildrenAllowed(userSitemap.a1Node())).isTrue();
+        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.b1Node())).isTrue();
+        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.b12Node())).isTrue();
     }
 
     private DefaultUserNavigationTree newTree() {
@@ -139,6 +143,11 @@ public class DefaultUserNavigationTreeTest {
         expectedNodes.remove(userSitemap.bNode());
         expectedNodes.remove(userSitemap.b1Node());
         expectedNodes.remove(userSitemap.b11Node());
+        expectedNodes.remove(userSitemap.b11Node());
+        expectedNodes.remove(userSitemap.b12Node());
+        expectedNodes.remove(userSitemap.b121Node());
+        expectedNodes.remove(userSitemap.b122Node());
+        expectedNodes.remove(userSitemap.a111Node());
 
         //re-instate as 'displayable'
         userSitemap.b11Node()
@@ -155,6 +164,7 @@ public class DefaultUserNavigationTreeTest {
         // ensure no extra ones, there isn't a containsOnly for a list
         assertThat(itemIds).hasSize(expectedNodes.size());
 
+
     }
 
     @Test
@@ -170,6 +180,11 @@ public class DefaultUserNavigationTreeTest {
         expectedNodes.remove(userSitemap.b11Node());
         expectedNodes.remove(userSitemap.a1Node());
         expectedNodes.remove(userSitemap.b1Node());
+        expectedNodes.remove(userSitemap.b12Node());
+        expectedNodes.remove(userSitemap.b121Node());
+        expectedNodes.remove(userSitemap.b122Node());
+        expectedNodes.remove(userSitemap.a11Node());
+        expectedNodes.remove(userSitemap.a111Node());
 
         // when
         userNavigationTree.setOptionMaxDepth(2); // will cause rebuild
@@ -179,6 +194,12 @@ public class DefaultUserNavigationTreeTest {
         assertThat(itemIds).containsAll(expectedNodes);
         // ensure no extra ones, there isn't a containsOnly for a list
         assertThat(itemIds).hasSize(expectedNodes.size());
+        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.aNode())).isFalse();
+        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.bNode())).isFalse();
+        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.privateHomeNode())).isFalse();
+        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.publicHomeNode())).isFalse();
+        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.publicNode())).isTrue();
+        assertThat(userNavigationTree.areChildrenAllowed(userSitemap.privateNode())).isTrue();
     }
 
     @Test

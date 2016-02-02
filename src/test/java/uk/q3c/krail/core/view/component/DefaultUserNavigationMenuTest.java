@@ -46,6 +46,7 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
+
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestUIScopeModule.class, VaadinSessionScopeModule.class, TestI18NModule.class, TestOptionModule.class, TestPersistenceModule.class,
         EventBusModule.class})
@@ -88,10 +89,11 @@ public class DefaultUserNavigationMenuTest {
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void build() {
         // given
-
+        System.out.println(userSitemap.toString());
         userNavigationMenu = newMenu();
 
         // when
@@ -148,14 +150,26 @@ public class DefaultUserNavigationMenuTest {
 
         MenuItem viewB1 = childWithText("ViewB1", viewB);
         captions = menuCaptions(viewB1);
-
-        //B11 removed by using positionIndex <0
-
-        assertThat(captions).isEmpty();
+        assertThat(captions).containsOnly("ViewB12"); //B11 excluded
         assertThat(viewB1.getCommand()).isNull();
 
+        //B11 removed by using positionIndex <0
+        MenuItem viewB11 = childWithText("ViewB11", viewB1);
+        assertThat(viewB11).isNull();
 
+        //A111 removed by using positionIndex <0, and its parent, A11 has the command
+        MenuItem viewA111 = childWithText("ViewA111", viewA11);
+        assertThat(viewA111).isNull();
+        assertThat(viewA11.getCommand()).isNotNull();
 
+        //B122 removed by using positionIndex <0, but its parent B12 does not have command as other child B121 is not excluded
+        MenuItem viewB12 = childWithText("ViewB12", viewB1);
+        MenuItem viewB121 = childWithText("ViewB121", viewB12);
+        MenuItem viewB122 = childWithText("ViewB122", viewB12);
+        assertThat(viewB121).isNotNull();
+        assertThat(viewB122).isNull();
+        assertThat(viewB12.getCommand()).isNull();
+        assertThat(viewB121.getCommand()).isNotNull();
     }
 
     private List<String> menuCaptions(MenuItem parentItem) {
@@ -170,18 +184,18 @@ public class DefaultUserNavigationMenuTest {
     }
 
     private List<MenuItem> childrenOf(MenuItem parentItem) {
-        List<MenuItem> items = null;
         if (parentItem == null) {
-            items = userNavigationMenu.getItems();
+            return userNavigationMenu.getItems();
         } else {
-            items = parentItem.getChildren();
+            return parentItem.getChildren();
         }
-        return items;
     }
 
     private MenuItem childWithText(String text, MenuItem parentItem) {
         List<MenuItem> items = childrenOf(parentItem);
-
+        if (items == null) {
+            return null;
+        }
         for (MenuItem item : items) {
             if (item.getText()
                     .equals(text)) {
@@ -191,6 +205,7 @@ public class DefaultUserNavigationMenuTest {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     private DefaultUserNavigationMenu newMenu() {
         DefaultUserNavigationMenu menu = new DefaultUserNavigationMenu(option, builder);
         //simulates Guice construction
@@ -199,6 +214,7 @@ public class DefaultUserNavigationMenuTest {
     }
 
     @Test
+    @SuppressWarnings("ConstantConditions")
     public void build_branch_hidden() {
         //given
         userNavigationMenu = newMenu();
@@ -213,9 +229,8 @@ public class DefaultUserNavigationMenuTest {
         userNavigationMenu.build();
 
         //then
-        List<String> captions = menuCaptions(null);
         MenuItem prvate = childWithText("Private", null);
-        captions = menuCaptions(prvate);
+        List<String> captions = menuCaptions(prvate);
         assertThat(captions).containsOnly("Private Home");
         assertThat(prvate.getCommand()).isNull();
 
@@ -230,9 +245,10 @@ public class DefaultUserNavigationMenuTest {
     }
 
     @Test
+    @SuppressWarnings("ConstantConditions")
     public void build_depthLimited() {
         // given
-
+        System.out.println(userSitemap.toString());
         userNavigationMenu = newMenu();
 
         // when
@@ -296,6 +312,7 @@ public class DefaultUserNavigationMenuTest {
     }
 
     @Test
+    @SuppressWarnings("ConstantConditions")
     public void localeChange() {
 
         // given
@@ -328,6 +345,7 @@ public class DefaultUserNavigationMenuTest {
     }
 
     @Test
+    @SuppressWarnings("ConstantConditions")
     public void userSelection() {
 
         // given

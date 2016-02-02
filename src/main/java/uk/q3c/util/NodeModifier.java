@@ -66,11 +66,22 @@ public interface NodeModifier<S, T> extends Serializable {
     S sourceNodeFor(@Nonnull T targetNode);
 
     /**
-     * Some implementations need to mark a node as a leaf. If not needed, implement as an empty method
+     * Some implementations need to mark a node as a leaf. If not needed, implement as an empty method.  This method delegates the decision whether to mark
+     * as leave to this {@link NodeModifier}.  {@link TreeCopy} may force a node to be marked as leaf (usually to limit the depth of the copy),
+     * {@link #forceSetLeaf} is called instead
      *
      * @param targetNode the target node to mark
      */
-    void setLeaf(@Nonnull T targetNode, boolean isLeaf);
+    void setLeaf(@Nonnull T targetNode);
+
+    /**
+     * Some implementations need to mark a node as a leaf. If not needed, implement as an empty method.  This method is called by {@link TreeCopy} to force a
+     * node to be marked as leaf (usually to limit the depth of the copy).  If the decision is being delegated to this {@link NodeModifier}, {@link #setLeaf}
+     * is called instead.
+     *
+     * @param targetNode the target node to mark
+     */
+    void forceSetLeaf(@Nonnull T targetNode);
 
     /**
      * Some implementations, usually in the user interface, require a caption or label. If not required, implement as an empty method

@@ -26,5 +26,5 @@ public interface UserSitemap extends Sitemap<UserSitemapNode> {
     void buildUriMap();
 
 
-
+    boolean hasNoVisibleChildren(UserSitemapNode sourceNode);
 }

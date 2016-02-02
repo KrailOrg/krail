@@ -13,6 +13,7 @@
 
 package uk.q3c.krail.core.view.component;
 
+import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.util.DefaultNodeModifier;
 
@@ -23,17 +24,28 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class UserNavigationTreeNodeModifier extends DefaultNodeModifier<UserSitemapNode, UserSitemapNode> {
 
     private final UserNavigationTree tree;
+    private UserSitemap userSitemap;
 
-    public UserNavigationTreeNodeModifier(UserNavigationTree tree) {
+    public UserNavigationTreeNodeModifier(UserNavigationTree tree, UserSitemap userSitemap) {
         super();
         this.tree = tree;
+        this.userSitemap = userSitemap;
     }
 
     @Override
-    public void setLeaf(@Nonnull UserSitemapNode targetNode, boolean isLeaf) {
+    public void setLeaf(@Nonnull UserSitemapNode targetNode) {
         checkNotNull(targetNode);
+        UserSitemapNode sourceNode = sourceNodeFor(targetNode);
+        doSetLeaf(targetNode, userSitemap.hasNoVisibleChildren(sourceNode));
+    }
+
+    @Override
+    public void forceSetLeaf(@Nonnull UserSitemapNode targetNode) {
+        doSetLeaf(targetNode, true);
+    }
+
+    private void doSetLeaf(UserSitemapNode targetNode, boolean isLeaf) {
         tree.getTree()
             .setChildrenAllowed(targetNode, !isLeaf);
     }
-
 }

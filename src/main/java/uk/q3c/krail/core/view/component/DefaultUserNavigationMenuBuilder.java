@@ -44,7 +44,7 @@ public class DefaultUserNavigationMenuBuilder implements UserNavigationMenuBuild
         UserSitemapNodeCaption nodeCaptionReader = new UserSitemapNodeCaption();
         target.setCaptionReader(nodeCaptionReader);
         MenuBarNodeModifier nodeModifier = new MenuBarNodeModifier(userNavigationMenu.getMenuBar(), navigator,
-                nodeCaptionReader);
+                nodeCaptionReader, userSitemap);
         target.setNodeModifier(nodeModifier);
 
         TreeCopy<UserSitemapNode, MenuItem> treeCopy = new TreeCopy<>(source, target);

@@ -48,7 +48,15 @@ public class DefaultNodeModifier<S, T> implements NodeModifier<S, T> {
      * Does nothing by default
      */
     @Override
-    public void setLeaf(@Nonnull T targetNode, boolean isLeaf) {
+    public void setLeaf(@Nonnull T targetNode) {
+
+    }
+
+    /**
+     * Does nothing by default
+     */
+    @Override
+    public void forceSetLeaf(@Nonnull T targetNode) {
 
     }
 

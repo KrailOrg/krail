@@ -103,7 +103,15 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
      * Not used in this implementation
      */
     @Override
-    public void setLeaf(@Nonnull UserSitemapNode targetNode, boolean isLeaf) {
+    public void setLeaf(@Nonnull UserSitemapNode targetNode) {
+
+    }
+
+    /**
+     * Not used in this implementation
+     */
+    @Override
+    public void forceSetLeaf(@Nonnull UserSitemapNode targetNode) {
 
     }
 
