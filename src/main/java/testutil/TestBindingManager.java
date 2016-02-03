@@ -10,9 +10,11 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.q3c.krail.core.guice;
+package testutil;
 
 import com.google.inject.Module;
+import testutil.dummy.DummyModule;
+import uk.q3c.krail.core.guice.DefaultBindingManager;
 import uk.q3c.krail.core.option.InMemory;
 import uk.q3c.krail.core.option.OptionModule;
 
@@ -20,15 +22,14 @@ import java.util.List;
 
 public class TestBindingManager extends DefaultBindingManager {
 
-    private boolean addAppModulesCalled;
+    private boolean addAppModulesCalled=false;
 
-    protected TestBindingManager() {
+    public TestBindingManager() {
         super();
     }
 
     @Override
     protected void addAppModules(List<Module> modules) {
-
         modules.add(new DummyModule());
         addAppModulesCalled = true;
     }

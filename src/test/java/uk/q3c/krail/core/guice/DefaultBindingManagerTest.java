@@ -24,6 +24,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import testutil.TestBindingManager;
+import testutil.dummy.Dummy;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.services.DefaultServicesModel;
 import uk.q3c.krail.core.services.Service;
@@ -49,7 +51,7 @@ public class DefaultBindingManagerTest {
     static VaadinService vaadinService;
     @Inject
     LogMonitor logMonitor;
-    TestBindingManager bindingManager;
+
     @Mock
     ServletContextEvent servletContextEvent;
     @Mock
@@ -69,7 +71,6 @@ public class DefaultBindingManagerTest {
 
     @Before
     public void setup() {
-        bindingManager = new TestBindingManager();
         logMonitor.addClassFilter(DefaultBindingManager.class);
 
     }
@@ -78,6 +79,7 @@ public class DefaultBindingManagerTest {
     public void startAndStop() throws Exception {
 
         // given
+        TestBindingManager bindingManager = new TestBindingManager();
         when(servletContextEvent.getServletContext()).thenReturn(servletContext);
         bindingManager.contextInitialized(servletContextEvent);
         when(service.getServiceKey()).thenReturn(new ServiceKey(LabelKey.Yes));
@@ -87,8 +89,8 @@ public class DefaultBindingManagerTest {
         Injector injector = bindingManager.getInjector();
         // then
         assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(KrailSecurityManager.class);
-        assertThat(bindingManager.isAddAppModulesCalled()).isEqualTo(true);
         assertThat(injector).isNotNull();
+        assertThat(injector.getInstance(Dummy.class)).isNotNull();
 
         // when
         bindingManager.contextDestroyed(servletContextEvent);
@@ -99,14 +101,7 @@ public class DefaultBindingManagerTest {
 
     }
 
-    @Test
-    public void destroyContextWithNullInjector() {
-        //given
-        //when
-        bindingManager.contextDestroyed(servletContextEvent);
-        //then
-        assertThat(logMonitor.debugLogs()).containsExactly("Injector has not been constructed, no call made to stop " + "services");
-    }
+
 
     @After
     public void teardown() {

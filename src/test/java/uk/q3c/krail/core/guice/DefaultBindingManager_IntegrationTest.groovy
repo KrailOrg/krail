@@ -16,6 +16,8 @@ package uk.q3c.krail.core.guice
 import com.google.inject.Module
 import com.google.inject.TypeLiteral
 import spock.guice.UseModules
+import testutil.dummy.Dummy
+import testutil.dummy.DummyModule
 import uk.q3c.krail.core.i18n.I18NKey
 import uk.q3c.krail.core.option.InMemory
 import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnitHelper
@@ -27,7 +29,9 @@ import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDaoDelegate
 import uk.q3c.krail.core.validation.JavaxValidationSubstitutes
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.util.UtilsModule
+import uk.q3c.util.testutil.LogMonitor
 
+import javax.servlet.ServletContextEvent
 import javax.validation.MessageInterpolator
 import java.lang.annotation.Annotation
 
@@ -44,7 +48,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
 
         @Override
         protected void addAppModules(List<Module> modules) {
-
+            modules.add(new DummyModule())
         }
     }
 
@@ -102,8 +106,30 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
         injector = bindingManager.getInjector()
 
         then:
-
         activeOptionSource().equals(InMemory.class)
+    }
+
+    def "app modules have been added"() {
+        when:
+        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
+        injector = bindingManager.getInjector()
+
+        then:
+        injector.getInstance(Dummy.class) != null
+    }
+
+    def "destroy context with null injector"() {
+        given:
+        LogMonitor logMonitor= new LogMonitor()
+        logMonitor.addClassFilter(DefaultBindingManager.class)
+        ServletContextEvent servletContextEvent=Mock(ServletContextEvent)
+        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
+
+        when:
+        bindingManager.contextDestroyed(servletContextEvent);
+
+        then:
+        logMonitor.debugLogs().contains("Injector has not been constructed, no call made to stop " + "services")
     }
 
 
@@ -132,7 +158,6 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
     }
     @Override
     List<Module> addSupportingModules(List<Module> modules) {
-
         return modules;
     }
 }

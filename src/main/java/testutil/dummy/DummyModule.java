@@ -11,7 +11,7 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.guice;
+package testutil.dummy;
 
 import com.google.inject.AbstractModule;
 
@@ -19,7 +19,7 @@ public class DummyModule extends AbstractModule {
 
     @Override
     protected void configure() {
-
+        bind(Dummy.class).to(DefaultDummy.class);
     }
 
 }
