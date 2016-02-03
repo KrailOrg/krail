@@ -105,7 +105,7 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
         String indent2 = indent + indent;
         StringBuilder buf = new StringBuilder(indent2);
         buf.append("put(")
-           .append(cacheKey.getKey()
+           .append(cacheKey.getKeyAsEnum()
                            .name())
            .append(", \"")
            .append(value)
@@ -146,11 +146,11 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
         // source is used to qualify the Option
         log.debug("getValue for cacheKey {}, source '{}', using control: {}", cacheKey, source, getControl().getClass()
                                                                                                             .getSimpleName());
-        I18NKey key = (I18NKey) cacheKey.getKey();
+        I18NKey key =  cacheKey.getKey();
         String expandedBaseName = expandFromKey(key);
         try {
             ResourceBundle bundle = ResourceBundle.getBundle(expandedBaseName, cacheKey.getActualLocale(), getControl());
-            return Optional.of(getValue(bundle, cacheKey.getKey()));
+            return Optional.of(getValue(bundle, cacheKey.getKeyAsEnum()));
         } catch (Exception e) {
             log.warn("returning empty value, as getValue() returned exception {} with message '{}'", e, e.getMessage());
             return Optional.empty();

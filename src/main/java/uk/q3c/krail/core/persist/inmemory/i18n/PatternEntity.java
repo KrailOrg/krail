@@ -30,7 +30,7 @@ public class PatternEntity {
 
 
     public PatternEntity(PatternCacheKey cacheKey, String value) {
-        final Enum<?> enumKey = cacheKey.getKey();
+        Enum enumKey = cacheKey.getKeyAsEnum();
         this.i18nkey = new EnumConverter().convertToString(enumKey);
         this.locale = cacheKey.getRequestedLocale()
                               .toLanguageTag();

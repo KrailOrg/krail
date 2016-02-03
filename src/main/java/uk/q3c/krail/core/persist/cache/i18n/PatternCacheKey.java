@@ -13,6 +13,7 @@
 
 package uk.q3c.krail.core.persist.cache.i18n;
 
+
 import uk.q3c.krail.core.i18n.I18NKey;
 
 import java.lang.annotation.Annotation;
@@ -61,8 +62,13 @@ public class PatternCacheKey {
         this.source = source;
     }
 
-    public <E extends Enum<E> & I18NKey> Enum<E> getKey() {
-        return (Enum<E>) key;
+    public I18NKey getKey() {
+        return key;
+    }
+
+    public Enum getKeyAsEnum() {
+        Enum e = (Enum) key;
+        return e;
     }
 
     public Locale getRequestedLocale() {

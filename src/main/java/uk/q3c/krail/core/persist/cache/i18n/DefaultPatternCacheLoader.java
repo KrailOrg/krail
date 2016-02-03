@@ -79,7 +79,7 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     public String load(@Nonnull PatternCacheKey cacheKey) throws Exception {
         checkNotNull(cacheKey);
 
-        I18NKey i18NKey = (I18NKey) cacheKey.getKey();
+        I18NKey i18NKey = cacheKey.getKey();
 
 
         //        Use standard Java call to get candidates
@@ -128,7 +128,7 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
             }
         }
         if (!value.isPresent()) {
-            value = Optional.of(cacheKey.getKey()
+            value = Optional.of(cacheKey.getKeyAsEnum()
                                         .name()
                                         .replace('_', ' '));
             cacheKey.setSource(null);
@@ -145,7 +145,7 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
      */
     protected String stubValue(Class<? extends Annotation> source, PatternCacheKey cacheKey) {
         Boolean stubWithKeyName = option.get(optionKeyStubWithKeyName.qualifiedWith(source.getSimpleName()));
-        return (stubWithKeyName) ? cacheKey.getKey()
+        return (stubWithKeyName) ? cacheKey.getKeyAsEnum()
                                            .name() : option.get(optionKeyStubValue.qualifiedWith(source.getSimpleName()));
     }
 
