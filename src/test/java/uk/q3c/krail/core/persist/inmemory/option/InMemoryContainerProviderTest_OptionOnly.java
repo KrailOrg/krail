@@ -21,13 +21,13 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.data.Container;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import testutil.TestOptionModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.option.InMemory;
 import uk.q3c.krail.core.persist.common.common.ContainerType;
 import uk.q3c.krail.core.persist.common.common.VaadinContainerProvider;
 import uk.q3c.krail.core.persist.common.option.OptionEntity;
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule;
-import uk.q3c.krail.testutil.TestOptionModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

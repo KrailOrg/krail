@@ -17,15 +17,15 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import testutil.TestI18NModule;
+import testutil.TestOptionModule;
+import testutil.TestPersistenceModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.TestLabelKey;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.LoginView;
-import uk.q3c.krail.testutil.TestI18NModule;
-import uk.q3c.krail.testutil.TestOptionModule;
-import uk.q3c.krail.testutil.TestPersistenceModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

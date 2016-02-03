@@ -16,14 +16,14 @@ package uk.q3c.krail.core.i18n
 import com.google.inject.Inject
 import spock.guice.UseModules
 import spock.lang.Specification
+import testutil.MockOption
+import testutil.TestI18NModule
+import testutil.TestOptionModule
+import testutil.TestPersistenceModule
 import uk.q3c.krail.core.data.DataModule
 import uk.q3c.krail.core.eventbus.EventBusModule
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
-import uk.q3c.krail.testutil.MockOption
-import uk.q3c.krail.testutil.TestI18NModule
-import uk.q3c.krail.testutil.TestOptionModule
-import uk.q3c.krail.testutil.TestPersistenceModule
 
 /**
  * Original replaced by Spock

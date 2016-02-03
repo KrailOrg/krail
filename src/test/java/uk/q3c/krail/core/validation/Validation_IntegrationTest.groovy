@@ -18,13 +18,13 @@ import com.google.inject.Injector
 import com.google.inject.util.Modules
 import org.apache.bval.guice.ValidationModule
 import spock.lang.Specification
+import testutil.TestEventBusModule
+import testutil.TestI18NModule
+import testutil.TestOptionModule
+import testutil.TestUIScopeModule
 import uk.q3c.krail.core.data.TestEntity2
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
-import uk.q3c.krail.testutil.TestEventBusModule
-import uk.q3c.krail.testutil.TestI18NModule
-import uk.q3c.krail.testutil.TestOptionModule
-import uk.q3c.krail.testutil.TestUIScopeModule
 
 import javax.validation.ConstraintViolation
 import javax.validation.ConstraintViolationException

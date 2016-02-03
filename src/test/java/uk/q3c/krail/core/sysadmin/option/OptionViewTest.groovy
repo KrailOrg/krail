@@ -15,8 +15,8 @@ package uk.q3c.krail.core.sysadmin.option
 
 import com.vaadin.ui.Panel
 import spock.lang.Specification
+import testutil.CaptionChecker
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
-import uk.q3c.krail.testutil.CaptionChecker
 
 /**
  * Created by David Sowerby on 19 Jan 2016

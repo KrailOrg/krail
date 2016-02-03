@@ -15,12 +15,12 @@ package uk.q3c.krail.core.services
 import com.google.inject.Inject
 import spock.guice.UseModules
 import spock.lang.Specification
+import testutil.TestI18NModule
+import testutil.TestOptionModule
+import testutil.TestUIScopeModule
+import testutil.TestVaadinSessionScopeModule
 import uk.q3c.krail.core.eventbus.EventBusModule
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
-import uk.q3c.krail.testutil.TestI18NModule
-import uk.q3c.krail.testutil.TestOptionModule
-import uk.q3c.krail.testutil.TestUIScopeModule
-import uk.q3c.krail.testutil.TestVaadinSessionScopeModule
 import uk.q3c.krail.util.UtilsModule
 
 /**

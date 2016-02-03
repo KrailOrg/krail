@@ -25,6 +25,7 @@ import org.apache.bval.guice.ValidationModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import testutil.*;
 import uk.q3c.krail.core.data.TestEntity;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
@@ -32,7 +33,6 @@ import uk.q3c.krail.core.i18n.CurrentLocale;
 import uk.q3c.krail.core.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.core.validation.KrailValidationModule;
-import uk.q3c.krail.testutil.*;
 
 import java.util.Locale;
 
@@ -62,9 +62,10 @@ public class BeanFieldGroupBaseTest {
     public void setup() {
         VaadinSession.setCurrent(null);
         injector = Guice.createInjector(new TestI18NModule(), new TestUIScopeModule(), new TestPersistenceModule(), new VaadinSessionScopeModule(), new EventBusModule(), new
+
                 TestOptionModule(), Modules.override(new
                 ValidationModule())
-                                                                                                 .with(new
+                                           .with(new
                                                                                                          KrailValidationModule()));
 
 

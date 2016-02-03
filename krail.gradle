@@ -59,11 +59,12 @@ dependencies {
 
     //testing
     testCompile project(':q3c-testUtil')
-    testCompile project(':krail-testUtil')
     testCompile 'org.eclipse.persistence:javax.persistence:2.1.0'
 //    testCompile "javax.servlet:javax.servlet-api:3.+"
 
-
+    //included in compile to enable the production of test utils
+    compile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
+    compile 'org.mockito:mockito-all:1.10.19'
 }
 
 bintray {
