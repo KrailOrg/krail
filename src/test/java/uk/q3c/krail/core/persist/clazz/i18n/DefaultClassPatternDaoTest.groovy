@@ -97,6 +97,7 @@ class DefaultClassPatternDaoTest extends Specification {
     def "write appends a correctly formatted line to specified file"() {
         given:
         patternCacheKey.key >> LabelKey.Yes
+        patternCacheKey.getKeyAsEnum() >> (Enum) patternCacheKey.key
         File targetFile = new File(temporaryFolder.getRoot(), "classPatternDao.txt")
         dao.setWriteFile(targetFile)
         FileUtils.write(targetFile, "this would be the class info\n\n")
@@ -164,6 +165,7 @@ class DefaultClassPatternDaoTest extends Specification {
     def "getValue() with no populated value should return Optional.empty()"() {
         given:
         patternCacheKey.key >> LabelKey.Yes
+        patternCacheKey.getKeyAsEnum() >> (Enum) patternCacheKey.key
         OptionKey optionKey = DefaultClassPatternDao.optionKeyUseKeyPath.qualifiedWith(dao.getSourceString())
         option.get(optionKey) >> true
 
@@ -175,6 +177,7 @@ class DefaultClassPatternDaoTest extends Specification {
     def "getValue() with populated value should return Optional.of(value)"() {
         given:
         patternCacheKey.key >> MessageKey.Invalid_URI
+        patternCacheKey.getKeyAsEnum() >> (Enum) patternCacheKey.key
         patternCacheKey.getActualLocale() >> Locale.forLanguageTag("")
         OptionKey optionKey = DefaultClassPatternDao.optionKeyUseKeyPath.qualifiedWith(dao.getSourceString())
         option.get(optionKey) >> true
@@ -186,6 +189,7 @@ class DefaultClassPatternDaoTest extends Specification {
     def "getValue() from alternative Locale should return correct pattern for the Locale"() {
         given:
         patternCacheKey.key >> MessageKey.Invalid_URI
+        patternCacheKey.getKeyAsEnum() >> (Enum) patternCacheKey.key
         patternCacheKey.getActualLocale() >> Locale.forLanguageTag("de")
         OptionKey optionKey = DefaultClassPatternDao.optionKeyUseKeyPath.qualifiedWith(dao.getSourceString())
         option.get(optionKey) >> true
@@ -224,6 +228,7 @@ class DefaultClassPatternDaoTest extends Specification {
         file.setReadOnly()
 
         patternCacheKey.key >> MessageKey.Invalid_URI
+        patternCacheKey.getKeyAsEnum() >> (Enum) patternCacheKey.key
         patternCacheKey.getActualLocale() >> Locale.forLanguageTag("de")
         dao.setWriteFile(file)
         when:
