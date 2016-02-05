@@ -65,7 +65,8 @@ import java.util.List;
  * different groupings of modules is for clarity only - they do not have to be separate for any other reason.
  */
 public abstract class DefaultBindingManager extends GuiceServletContextListener {
-    private static Injector injector;
+    //Visible for testing
+    static Injector injector;
     private static Logger log = LoggerFactory.getLogger(DefaultBindingManager.class);
 
     protected DefaultBindingManager() {

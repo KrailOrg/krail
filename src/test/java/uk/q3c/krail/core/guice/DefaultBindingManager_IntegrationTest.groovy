@@ -15,7 +15,6 @@ package uk.q3c.krail.core.guice
 
 import com.google.inject.Module
 import com.google.inject.TypeLiteral
-import spock.guice.UseModules
 import testutil.dummy.Dummy
 import testutil.dummy.DummyModule
 import uk.q3c.krail.core.i18n.I18NKey
@@ -28,19 +27,16 @@ import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionContainerProvider
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDaoDelegate
 import uk.q3c.krail.core.validation.JavaxValidationSubstitutes
 import uk.q3c.krail.core.validation.KrailInterpolator
-import uk.q3c.krail.util.UtilsModule
 import uk.q3c.util.testutil.LogMonitor
 
 import javax.servlet.ServletContextEvent
 import javax.validation.MessageInterpolator
 import java.lang.annotation.Annotation
-
 /**
  * Integration test for {@link DefaultBindingManager}
  *
  * Created by David Sowerby on 22/07/15.
  */
-@UseModules([UtilsModule])
 class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
 
 
@@ -50,6 +46,21 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
         protected void addAppModules(List<Module> modules) {
             modules.add(new DummyModule())
         }
+    }
+
+    def "destroy context with null injector"() {
+        given:
+        LogMonitor logMonitor = new LogMonitor()
+        logMonitor.addClassFilter(DefaultBindingManager.class)
+        ServletContextEvent servletContextEvent = Mock(ServletContextEvent)
+        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
+        DefaultBindingManager.injector = null
+
+        when:
+        bindingManager.contextDestroyed(servletContextEvent);
+
+        then:
+        logMonitor.debugLogs().contains("Injector has not been constructed, no call made to stop services")
     }
 
     def "InMemory option dao is active dao by default"() {
@@ -116,20 +127,6 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
 
         then:
         injector.getInstance(Dummy.class) != null
-    }
-
-    def "destroy context with null injector"() {
-        given:
-        LogMonitor logMonitor= new LogMonitor()
-        logMonitor.addClassFilter(DefaultBindingManager.class)
-        ServletContextEvent servletContextEvent=Mock(ServletContextEvent)
-        DefaultBindingManager bindingManager = new TestDefaultBindingManager()
-
-        when:
-        bindingManager.contextDestroyed(servletContextEvent);
-
-        then:
-        logMonitor.debugLogs().contains("Injector has not been constructed, no call made to stop " + "services")
     }
 
 
