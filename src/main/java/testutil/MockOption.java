@@ -13,15 +13,9 @@
 
 package testutil;
 
-import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionKey;
-import uk.q3c.krail.core.persist.cache.option.OptionCache;
-import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
 import javax.annotation.Nonnull;
@@ -32,21 +26,23 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
+ * Note that this wil lnto necessarily convert data types correctly
+ *
  * Created by David Sowerby on 27/02/15.
  */
 public class MockOption implements Option {
 
-    private static Logger log = LoggerFactory.getLogger(MockOption.class);
-    private UserHierarchy hierarchy = new TestUserHierarchy();
-    private OptionCache optionCache;
+    private UserHierarchy hierarchy = mock(UserHierarchy.class);
     private Map<OptionKey, Optional<Object>> optionMap;
 
     @Inject
     protected MockOption() {
         optionMap = new HashMap<>();
+        when(hierarchy.lowestRank()).thenReturn(5);
     }
 
     @Override
@@ -82,36 +78,14 @@ public class MockOption implements Option {
     @Nonnull
     @Override
     public synchronized <T> T getLowestRanked(@Nonnull OptionKey<T> optionKey) {
-        checkNotNull(hierarchy);
-        checkNotNull(optionKey);
-        T defaultValue = optionKey.getDefaultValue();
-        Optional<Object> optionalValue = optionMap.get(optionKey);
-        if (optionalValue == null) {
-            return defaultValue;
-        }
-        if (optionalValue.isPresent()) {
-            return (T) optionalValue.get();
-        } else {
-            return defaultValue;
-        }
+        return get(optionKey);
     }
 
 
     @Nonnull
     @Override
     public synchronized <T> T getSpecificRanked(int hierarchyRank, @Nonnull OptionKey<T> optionKey) {
-        checkNotNull(hierarchy);
-        checkNotNull(optionKey);
-        T defaultValue = optionKey.getDefaultValue();
-        Optional<Object> optionalValue = optionMap.get(optionKey);
-        if (optionalValue == null) {
-            return defaultValue;
-        }
-        if (optionalValue.isPresent()) {
-            return (T) optionalValue.get();
-        } else {
-            return defaultValue;
-        }
+        return get(optionKey);
     }
 
     @Override
@@ -121,52 +95,15 @@ public class MockOption implements Option {
 
     @Override
     @Nullable
-    public <T> T delete(OptionKey<T> optionKey, int hierarchyRank) {
+    public <T> T delete(@Nonnull OptionKey<T> optionKey, int hierarchyRank) {
         checkNotNull(hierarchy);
         checkArgument(hierarchyRank >= 0);
         checkNotNull(optionKey);
 
-        return (T) optionCache.delete(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey));
+        return (T) optionMap.remove(optionKey);
     }
 
 
-    private static class TestUserHierarchy implements UserHierarchy {
-
-
-        @SuppressFBWarnings("NP_NONNULL_RETURN_VIOLATION")
-        @Nonnull
-        @Override
-        public ImmutableList<String> ranksForCurrentUser() {
-            return null;
-        }
-
-
-        @Override
-        public String displayName() {
-            return null;
-        }
-
-
-        @Override
-        public String rankName(int hierarchyRank) {
-            return null;
-        }
-
-        @Override
-        public String highestRankName() {
-            return null;
-        }
-
-        @Override
-        public String lowestRankName() {
-            return null;
-        }
-
-        @Override
-        public int lowestRank() {
-            return 5;
-        }
-    }
 
 }
 

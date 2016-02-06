@@ -42,7 +42,8 @@ public class DefaultDataTypeToUI implements DataTypeToUI {
         return new TextField();
     }
 
-    @SuppressFBWarnings("URV_INHERITED_METHOD_WITH_RELATED_TYPES")
+    @SuppressFBWarnings("URV_INHERITED_METHOD_WITH_RELATED_TYPES") // cannot really change this
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T zeroValue(Class<T> dataType) {
         if (dataType.equals(Date.class)) {

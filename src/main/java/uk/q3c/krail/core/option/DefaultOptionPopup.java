@@ -14,10 +14,11 @@
 package uk.q3c.krail.core.option;
 
 import com.google.inject.Inject;
+import com.vaadin.data.util.converter.Converter;
+import com.vaadin.data.util.converter.DefaultConverterFactory;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.I18NKey;
@@ -27,63 +28,73 @@ import uk.q3c.krail.core.ui.DataTypeToUI;
 import uk.q3c.util.ID;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Default implementation for {@link OptionPopup}
  * <p>
  * Created by David Sowerby on 29/05/15.
  */
-@SuppressFBWarnings("URV_CHANGE_RETURN_TYPE")
+@SuppressFBWarnings("URV_CHANGE_RETURN_TYPE") // not clear what this is trying to indicate
 public class DefaultOptionPopup implements OptionPopup {
     private static Logger log = LoggerFactory.getLogger(DefaultOptionPopup.class);
     private OptionContext activeContext;
-    private Set<Field> contextFields;
+    private Map<OptionKey, Class<?>> contextKeys;
     private DataTypeToUI dataTypeToUI;
     private Translate translate;
     private OptionKeyLocator optionKeyLocator;
     private Window window;
+    private DefaultConverterFactory converterFactory;
 
     @Inject
     public DefaultOptionPopup(DataTypeToUI dataTypeToUI, Translate translate, OptionKeyLocator optionKeyLocator) {
         this.dataTypeToUI = dataTypeToUI;
         this.translate = translate;
         this.optionKeyLocator = optionKeyLocator;
+        converterFactory = new DefaultConverterFactory();
     }
 
+    /**
+     * The context is scanned for {@link OptionKey} instances.  If none are found a message is displayed saying there are no options.  A context is loaded
+     * only once - the {@link OptionKey} instances are cached. {@link #dataTypeToUI} is used to identify the user interface component to use for the option
+     * data type. The {@link #converterFactory} provides converters to enable conversion to and from the type needed for presentation (usually String).  <p>
+     * Options are displayed in a grid of 2 columns, the first column containing a Vaadin component to display the option value and the second a button to
+     * reset the value to default. The component and button are each wrapped in a FormLayout to position the caption to the left of the value<p>
+     * A value change listener is attached to the Vaadin component to change the option value in response to the user changing the value ion the component.
+     *
+     * @param context       the context to take the options from
+     * @param windowCaption the I18NKey to provide a window caption
+     */
     @Override
     public void popup(@Nonnull OptionContext context, I18NKey windowCaption) {
 
-        // changing context, so we need to clear the context fields
+        // changing context, so we need to re-read the context fields
         if (context != activeContext) {
-            contextFields = null;
-            if (window != null) {
-                window.close();
-            }
+            contextKeys = contextKeys(context);
         }
 
         Option option = context.getOption();
+        if (window != null) {
+            window.close();
+        }
         window = new Window();
 
         window.setCaption(windowCaption(windowCaption));
 
 
-        Map<OptionKey, Class<?>> keys = contextKeys(context);
-        GridLayout baseLayout = new GridLayout(2, keys.size());
+        int rows = contextKeys.size() > 0 ? contextKeys.size() : 1;
+        GridLayout baseLayout = new GridLayout(2, rows);
         baseLayout.setSizeUndefined();
 
 
-        if (keys.isEmpty()) {
-
+        if (contextKeys.isEmpty()) {
             Label label = new Label(translate.from(LabelKey.No_Options_to_Show));
             baseLayout.addComponent(label, 0, 0);
         } else {
             calculateWindowSize(window);
             int row = 0;
-            for (OptionKey key : keys.keySet()) {
+            for (OptionKey key : contextKeys.keySet()) {
                 Object value = option.get(key);
                 AbstractField uiField = dataTypeToUI.componentFor(value);
                 uiField.setCaption(translate.from(key.getKey()));
@@ -91,8 +102,7 @@ public class DefaultOptionPopup implements OptionPopup {
                 Optional<String> optionKeyName = Optional.of(((Enum) key.getKey()).name());
                 uiField.setId(ID.getId(optionKeyName, this, uiField));
                 log.debug("Component id for '{}' set to: '{}'", uiField.getCaption(), uiField.getId());
-                //noinspection unchecked
-                uiField.setValue(value);
+                setFieldValue(uiField, value);
                 uiField.addValueChangeListener(event -> {
                     option.set(key, uiField.getValue());
                     context.optionValueChanged(event);
@@ -106,7 +116,7 @@ public class DefaultOptionPopup implements OptionPopup {
                     AbstractField.ValueChangeEvent changeEvent = new AbstractField.ValueChangeEvent(uiField);
                     context.optionValueChanged(changeEvent);
                     //update the value of the field - it may have changed
-                    uiField.setValue(option.get(key));
+                    setFieldValue(uiField, option.get(key));
                 }));
                 baseLayout.addComponent(new FormLayout(uiField), 0, row);
                 baseLayout.addComponent(new FormLayout(defaultsButton), 1, row);
@@ -121,6 +131,27 @@ public class DefaultOptionPopup implements OptionPopup {
         UI.getCurrent()
           .addWindow(window);
         this.activeContext = context;
+    }
+
+    /**
+     * Checks to see whether data type conversion is needed - if so, converter is created and assigned to the field. If not, the value is assigned directly
+     * to the uiField
+     *
+     * @param uiField the field to display the value
+     * @param value   the value
+     */
+    @SuppressWarnings("unchecked")
+    protected void setFieldValue(AbstractField uiField, Object value) {
+        if (uiField.getType()
+                   .isAssignableFrom(value.getClass())) {
+            uiField.setValue(value);
+        } else {
+            //needs conversion
+            Converter<String, ?> converter = converterFactory.createConverter(String.class, value.getClass());
+            //noinspection unchecked
+            uiField.setConverter(converter);
+            uiField.setConvertedValue(value);
+        }
     }
 
     private void calculateWindowSize(Sizeable window) {
@@ -141,14 +172,8 @@ public class DefaultOptionPopup implements OptionPopup {
         return optionKeyLocator.contextKeyMap(context);
     }
 
-    private void captureContextFields(OptionContext context) {
-        //We should only do this once
-        if (contextFields == null) {
-            //noinspection unchecked
-            contextFields = ReflectionUtils.getAllFields(context.getClass(), p -> p.getType()
-                                                                                   .equals(OptionKey.class));
-        }
+
+    public Window getWindow() {
+        return window;
     }
-
-
 }
