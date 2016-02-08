@@ -10,27 +10,29 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.view;
 
-import com.google.inject.Inject;
-import com.vaadin.ui.Panel;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+package uk.q3c.krail.core.view
 
-public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
+import com.vaadin.ui.Panel
+import com.vaadin.ui.VerticalLayout
 
-    @Inject
-    protected DefaultLogoutView() {
-        super();
+/**
+ * Created by David Sowerby on 08 Feb 2016
+ */
+class DefaultLogoutViewTest extends ViewTest {
+
+    def setup() {
+        view = new DefaultLogoutView()
     }
 
+    def "doBuild"() {
+        given:
+        view.buildView(busMessage)
 
-
-    @Override
-    public void doBuild(ViewChangeBusMessage busMessage) {
-        Panel p = new Panel("Logged out");
-        p.setSizeFull();
-        getLayout().addComponent(p);
+        expect:
+        view.getRootComponent() instanceof VerticalLayout
+        Panel panel = ((VerticalLayout) view.getRootComponent()).getComponent(0)
+        panel != null
+        "Logged out".equals(panel.getCaption())
     }
-
-
 }

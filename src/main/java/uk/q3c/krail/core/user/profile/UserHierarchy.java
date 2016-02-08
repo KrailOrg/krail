@@ -102,8 +102,8 @@ public interface UserHierarchy {
      *
      * @return the layer, for the current user, at the rank specified by {@code hierarchyRank}.
      *
-     * @throws UserHierarchyException
-     *         if {@code hierarchy} is out of bounds
+     * @throws IllegalArgumentException
+     *         if {@code hierarchyRank} is out of bounds
      */
     String rankName(int hierarchyRank);
 

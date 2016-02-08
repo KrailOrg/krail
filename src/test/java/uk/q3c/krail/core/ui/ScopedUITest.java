@@ -19,8 +19,11 @@ import com.vaadin.server.ClientConnector;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.VerticalLayout;
 import net.engio.mbassy.bus.MBassador;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,18 +32,23 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import uk.q3c.krail.core.config.ConfigurationException;
 import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.i18n.CurrentLocale;
 import uk.q3c.krail.core.i18n.I18NProcessor;
+import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.DefaultBroadcaster;
 import uk.q3c.krail.core.push.DefaultPushMessageRouter;
+import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.util.testutil.LogMonitor;
 
 import java.util.Locale;
 
@@ -62,8 +70,9 @@ public class ScopedUITest {
     ConverterFactory converterFactory;
     @Mock
     Broadcaster broadcaster;
+    PushMessageRouter pushMessageRouter;
     @Mock
-    DefaultPushMessageRouter pushMessageRouter;
+    UIBusProvider uiBusProvider;
     @Mock
     ApplicationTitle applicationTitle;
     @Mock
@@ -88,15 +97,24 @@ public class ScopedUITest {
     Component viewContent;
     @Mock
     Option option;
-
+    LogMonitor logMonitor;
     @Mock
     private MBassador<BusMessage> eventBus;
 
     @Before
     public void setup() {
         Locale.setDefault(Locale.UK);
+        when(uiBusProvider.get()).thenReturn(eventBus);
+        pushMessageRouter = new DefaultPushMessageRouter(uiBusProvider);
+        logMonitor = new LogMonitor();
+        logMonitor.addClassFilter(ScopedUI.class);
         ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
                 option);
+    }
+
+    @After
+    public void teardown() {
+        logMonitor.close();
     }
 
     @Test
@@ -156,6 +174,16 @@ public class ScopedUITest {
     }
 
     @Test
+    public void pageTitle() throws Exception {
+        //given
+        when(applicationTitle.getTitleKey()).thenReturn(LabelKey.Yes);
+        when(translate.from(LabelKey.Yes)).thenReturn("Title");
+        //when
+        assertThat(ui.pageTitle()).isEqualTo("Title");
+
+    }
+
+    @Test
     public void init() {
         // given
         prepAttach();
@@ -174,6 +202,17 @@ public class ScopedUITest {
                .navigateTo("home");
     }
 
+    @Test(expected = ConfigurationException.class)
+    public void init_with_viewDisplayPanel_parent_null() {
+        // given
+        ui = new DuffUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+        prepAttach();
+        // when
+        ui.init(request);
+        // then
+
+    }
+
     @Test
     public void changeView() {
         // given
@@ -187,6 +226,52 @@ public class ScopedUITest {
         verify(viewContent).setSizeFull();
         assertThat(ui.getViewDisplayPanel()
                      .getContent()).isEqualTo(viewContent);
+    }
+
+    @Test(expected = ConfigurationException.class)
+    public void changeView_RootComponentNotSet() {
+        // given
+        when(toView.getRootComponent()).thenReturn(null);
+        when(toView.viewName()).thenReturn("toView");
+        // when
+        ui.changeView(toView);
+        // then
+    }
+
+    /**
+     * There is a much better functional test
+     */
+    @Test
+    public void receiveBroadcastMessage() throws Exception {
+        //given
+        prepAttach();
+        ui.attach();
+        ui.setScope(uiScope);
+        ui.setInstanceKey(instanceKey);
+
+        //when
+        ui.receiveBroadcast("group", "message");
+        //then
+        logMonitor.debugLogs()
+                  .contains("receiving message: message");
+    }
+
+    @Test(expected = MethodReconfigured.class)
+    public void getNavigator() throws Exception {
+        ui.getNavigator();
+    }
+
+    class DuffUI extends ScopedUI {
+        protected DuffUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, Broadcaster broadcaster, PushMessageRouter
+                pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator) {
+            super(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator);
+        }
+
+        @Override
+        protected AbstractOrderedLayout screenLayout() {
+            return new VerticalLayout();
+        }
+
     }
 
     public class ConnectorIdAnswer implements Answer<String> {

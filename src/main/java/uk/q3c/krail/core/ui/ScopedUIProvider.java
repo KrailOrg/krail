@@ -71,7 +71,7 @@ public class ScopedUIProvider extends UIProvider implements Provider<ScopedUI>, 
             throw new UIProviderException("At least one UI must be defined in the UIModule, uiBinder");
         }
         if (uiMapBinder.size() > 1) {
-            log.warn("More than one UI class has been defined, but there is o logic to determine which to use.");
+            log.warn("More than one UI class has been defined, but there is no logic to determine which to use.");
         }
         return uiMapBinder.get(uiMapBinder.keySet()
                                           .iterator()

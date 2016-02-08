@@ -43,14 +43,7 @@ public class BasicUI extends ScopedUI {
         return new VerticalLayout(getViewDisplayPanel());
     }
 
-    @Override
-    protected String pageTitle() {
-        return "Krail Basic";
-    }
 
-    @Override
-    protected void processBroadcastMessage(String group, String message) {
 
-    }
 
 }

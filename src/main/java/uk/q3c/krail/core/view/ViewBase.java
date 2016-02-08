@@ -49,11 +49,14 @@ public abstract class ViewBase implements KrailView, Serializable {
     private boolean dirty;
     private boolean idsAssigned;
     private Component rootComponent;
-
     @Inject
     protected ViewBase() {
         super();
 
+    }
+
+    public boolean isComponentsConstructed() {
+        return componentsConstructed;
     }
 
     public boolean isDirty() {

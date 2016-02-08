@@ -16,38 +16,42 @@ import com.google.inject.Inject;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.core.ui.ApplicationTitle;
+import uk.q3c.util.ID;
+
+import java.util.Optional;
 
 public class DefaultApplicationHeader extends Panel implements ApplicationHeader {
     private Label label;
-    private HorizontalLayout layout;
+    private ApplicationTitle applicationTitle;
+    private Translate translate;
 
-    // private ComboBox comboBox;
 
     @Inject
-    protected DefaultApplicationHeader() {
+    protected DefaultApplicationHeader(ApplicationTitle applicationTitle, Translate translate) {
         super();
+        this.applicationTitle = applicationTitle;
+        this.translate = translate;
         build();
         setIds();
     }
 
-    @SuppressFBWarnings({"FCBL_FIELD_COULD_BE_LOCAL", "FCBL_FIELD_COULD_BE_LOCAL"})
+
     private void build() {
-        layout = new HorizontalLayout();
-        label = new Label("Application Header");
+        HorizontalLayout layout = new HorizontalLayout();
+        label = new Label(translate.from(applicationTitle.getTitleKey()));
         layout.addComponent(label);
-
-        // comboBox = new ComboBox();
-        // comboBox.addItem("one");
-        // comboBox.addItem("two");
-        // layout.addComponent(comboBox);
-
         this.setContent(layout);
 
     }
 
     private void setIds() {
-        // comboBox.setId(ID.getId(this, comboBox));
+        this.setId(ID.getId(Optional.empty(), this));
+        label.setId(ID.getId(Optional.empty(), this, label));
     }
 
+    public Label getLabel() {
+        return label;
+    }
 }

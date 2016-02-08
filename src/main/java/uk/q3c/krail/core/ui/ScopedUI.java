@@ -121,7 +121,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     @Override
     @Deprecated
     public com.vaadin.navigator.Navigator getNavigator() {
-        return null;
+        throw new MethodReconfigured("UI.getNavigator() not available, use getKrailNavigator() instead");
     }
 
     @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
@@ -137,7 +137,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
 
         Component content = toView.getRootComponent();
         if (content == null) {
-            throw new ConfigurationException("The root component for " + view.viewName() + " cannot be null");
+            throw new ConfigurationException("The root component for " + toView.viewName() + " cannot be null");
         }
         translator.translate(toView);
         content.setSizeFull();
@@ -213,7 +213,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
             screenLayout = screenLayout();
         }
         screenLayout.setSizeFull();
-        if (viewDisplayPanel.getParent() == null) {
+        if (viewDisplayPanel == null || viewDisplayPanel.getParent() == null) {
             String msg = "Your implementation of ScopedUI.screenLayout() must include getViewDisplayPanel().  AS a "
                     + "minimum this could be 'return new VerticalLayout(getViewDisplayPanel())'";
             log.error(msg);

@@ -10,27 +10,25 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.view;
 
-import com.google.inject.Inject;
-import com.vaadin.ui.Panel;
-import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+package uk.q3c.krail.core.ui
 
-public class DefaultLogoutView extends VerticalViewBase implements LogoutView {
+import spock.lang.Specification
 
-    @Inject
-    protected DefaultLogoutView() {
-        super();
+/**
+ * Created by David Sowerby on 08 Feb 2016
+ */
+class BasicUIProviderTest extends Specification {
+
+    BasicUIProvider provider
+
+    def setup() {
+        provider = new BasicUIProvider()
     }
 
+    def "getUIClass"() {
 
-
-    @Override
-    public void doBuild(ViewChangeBusMessage busMessage) {
-        Panel p = new Panel("Logged out");
-        p.setSizeFull();
-        getLayout().addComponent(p);
+        expect:
+        provider.getUIClass(null) == BasicUI
     }
-
-
 }
