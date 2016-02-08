@@ -45,4 +45,8 @@ public class SystemAdminView extends Grid3x3ViewBase {
         buildReportBtn.addClickListener(c -> navigator.navigateTo("system-admin/sitemap-build-report"));
         setCentreCell(new VerticalLayout(buildReportBtn));
     }
+
+    public Button getBuildReportBtn() {
+        return buildReportBtn;
+    }
 }

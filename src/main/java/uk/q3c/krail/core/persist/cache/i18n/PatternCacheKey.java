@@ -67,8 +67,7 @@ public class PatternCacheKey {
     }
 
     public Enum getKeyAsEnum() {
-        Enum e = (Enum) key;
-        return e;
+        return (Enum) key;
     }
 
     public Locale getRequestedLocale() {

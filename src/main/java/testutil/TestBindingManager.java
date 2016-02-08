@@ -28,6 +28,10 @@ public class TestBindingManager extends DefaultBindingManager {
         super();
     }
 
+    public boolean isAddAppModulesCalled() {
+        return addAppModulesCalled;
+    }
+
     @Override
     protected void addAppModules(List<Module> modules) {
         modules.add(new DummyModule());
