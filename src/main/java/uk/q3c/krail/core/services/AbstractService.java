@@ -78,7 +78,7 @@ public abstract class AbstractService implements Service {
         return nameKey;
     }
 
-    protected void setNameKey(@Nonnull I18NKey nameKey) {
+    public void setNameKey(@Nonnull I18NKey nameKey) {
         this.nameKey = nameKey;
     }
 

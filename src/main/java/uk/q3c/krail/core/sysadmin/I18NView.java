@@ -52,6 +52,7 @@ public class I18NView extends Grid3x3ViewBase {
     private UserNotifier userNotifier;
     @Inject
     protected I18NView(UserNotifier userNotifier, Translate translate) {
+        super(translate);
         this.userNotifier = userNotifier;
         this.translate = translate;
     }

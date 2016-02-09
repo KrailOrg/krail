@@ -15,6 +15,7 @@ package uk.q3c.krail.core.view;
 
 import com.vaadin.ui.Component;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import uk.q3c.krail.core.i18n.NamedAndDescribed;
 import uk.q3c.krail.core.ui.ScopedUI;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
@@ -35,7 +36,7 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
  * <p>
  * The easiest way to implement this is to extend {@link ViewBase}
  */
-public interface KrailView {
+public interface KrailView extends NamedAndDescribed {
 
     /**
      * Called after the view itself has been constructed but before {@link #buildView(ViewChangeBusMessage)}} is called.  Typically checks
@@ -64,15 +65,6 @@ public interface KrailView {
      * @return
      */
     Component getRootComponent();
-
-    /**
-     * A name for the view, typically displayed in a title bar
-     *
-     * @return
-     */
-    default String viewName() {
-        return getClass().getSimpleName();
-    }
 
     /**
      * Called by the {@link ViewFactory} after the construction of a view, and intended for initialisation which does

@@ -13,9 +13,11 @@
 
 package uk.q3c.krail.core.view;
 
+import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -24,6 +26,11 @@ public class Grid3x3ViewBase extends ViewBase {
     private final float[] defaultColumnWidths = new float[]{1f, 1f, 1f};
     private final float[] defaultRowHeights = new float[]{1f, 1f, 1f};
     private GridLayout grid;
+
+    @Inject
+    protected Grid3x3ViewBase(Translate translate) {
+        super(translate);
+    }
 
     @Override
     protected void doBuild(ViewChangeBusMessage busMessage) {

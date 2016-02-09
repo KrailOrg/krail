@@ -14,33 +14,30 @@
 package uk.q3c.krail.core.sysadmin.option
 
 import com.vaadin.ui.Panel
-import spock.lang.Specification
-import testutil.CaptionChecker
+import uk.q3c.krail.core.view.ViewTest
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 
 /**
  * Created by David Sowerby on 19 Jan 2016
  */
-class OptionViewTest extends Specification {
+class OptionViewTest extends ViewTest {
 
     ActiveOptionSourcePanel activeOptionSourcePanel = Mock()
     SelectedOptionSourcePanel selectedOptionSourcePanel = Mock()
     SelectionPanel selectionPanel = Mock()
     ViewChangeBusMessage busMessage = Mock()
+    OptionView thisView
 
     def setup() {
-
+        thisView = new OptionView(activeOptionSourcePanel, selectedOptionSourcePanel, selectionPanel, translate)
+        view = thisView
     }
 
-    def "check captions"() {
 
-        expect:
-        new CaptionChecker().check(OptionView)
-    }
 
     def "doBuild"() {
         when:
-        OptionView view = new OptionView(activeOptionSourcePanel, selectedOptionSourcePanel, selectionPanel)
+        OptionView
         view.doBuild(busMessage)
         then:
         view.getRootComponent() != null

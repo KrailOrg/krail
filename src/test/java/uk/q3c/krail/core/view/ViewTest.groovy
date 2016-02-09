@@ -14,11 +14,13 @@
 package uk.q3c.krail.core.view
 
 import spock.lang.Specification
+import testutil.CaptionChecker
+import testutil.MockTranslate
+import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 
 import java.lang.annotation.Annotation
 import java.lang.reflect.Field
-
 /**
  * Created by David Sowerby on 07 Feb 2016
  */
@@ -26,11 +28,14 @@ abstract class ViewTest extends Specification {
 
     KrailView view
     ViewChangeBusMessage busMessage = Mock()
+    Translate translate = new MockTranslate()
+    String[] fieldsWithoutCaptions
 
     protected boolean fieldHasCaption(String fieldName, Class<? extends Annotation> annotation) {
         Field field = view.getClass().getDeclaredField(fieldName)
         return field.isAnnotationPresent(annotation)
     }
+
 
     def "root component set"() {
         given:
@@ -39,4 +44,12 @@ abstract class ViewTest extends Specification {
         expect:
         view.getRootComponent() != null
     }
+
+    def "check captions"() {
+
+        expect:
+        new CaptionChecker().check(view.getClass(), fieldsWithoutCaptions)
+    }
+
+
 }

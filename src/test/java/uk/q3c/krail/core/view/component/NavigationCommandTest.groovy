@@ -11,48 +11,37 @@
  *
  */
 
-package uk.q3c.krail.core.sysadmin
+package uk.q3c.krail.core.view.component
 
-import uk.q3c.krail.core.i18n.Caption
+import spock.lang.Specification
 import uk.q3c.krail.core.navigate.Navigator
-import uk.q3c.krail.core.view.ViewTest
+import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode
 
 /**
- * Created by David Sowerby on 07 Feb 2016
+ * Created by David Sowerby on 09 Feb 2016
  */
-class SystemAdminViewTest extends ViewTest {
+class NavigationCommandTest extends Specification {
 
+    NavigationCommand command
+    UserSitemapNode node = Mock()
     Navigator navigator = Mock()
-    SystemAdminView thisView
 
     def setup() {
-        thisView = new SystemAdminView(navigator, translate)
-        view = thisView
+        command = new NavigationCommand(navigator, node)
     }
 
-    def "button has caption"() {
+    def "getters"() {
+
         expect:
-        fieldHasCaption("buildReportBtn", Caption)
+        command.getNode() == node
+        command.getNavigator() == navigator
     }
 
-    def "doBuild"() {
+    def "menu selected navigates to node"() {
         when:
-        thisView.doBuild(busMessage)
+        command.menuSelected(null)
 
         then:
-        thisView.getBuildReportBtn() != null
+        1 * navigator.navigateTo(node)
     }
-
-    def "buildButton invokes navigator"() {
-        given:
-        view.buildView(busMessage)
-
-        when:
-        thisView.getBuildReportBtn().click()
-
-        then:
-        1 * navigator.navigateTo("system-admin/sitemap-build-report")
-    }
-
-
 }

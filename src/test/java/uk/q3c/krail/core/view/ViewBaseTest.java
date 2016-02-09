@@ -16,6 +16,10 @@ package uk.q3c.krail.core.view;
 import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Test;
+import testutil.MockTranslate;
+import uk.q3c.krail.core.i18n.DescriptionKey;
+import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,11 +28,12 @@ public class ViewBaseTest {
 
     private TestView view;
     private TestView2 view2;
+    private Translate translate = new MockTranslate();
 
     @Before
     public void setup() {
-        view = new TestView();
-        view2 = new TestView2();
+        view = new TestView(translate);
+        view2 = new TestView2(translate);
     }
 
     @Test(expected = ViewBuildException.class)
@@ -68,19 +73,28 @@ public class ViewBaseTest {
     }
 
     @Test
-    public void name() {
-        //given
+    public void nameAndDescriptionDefaultsAndSetters() throws Exception {
+        assertThat(view2.getName()).isEqualTo("Unnamed");
+        assertThat(view2.getNameKey()).isEqualTo(LabelKey.Unnamed);
+        assertThat(view2.getDescription()).isEqualTo("No description provided");
+        assertThat(view2.getDescriptionKey()).isEqualTo(DescriptionKey.No_description_provided);
 
         //when
+        view2.setNameKey(LabelKey.Yes);
+        view2.setDescriptionKey(DescriptionKey.Description_of_the_source);
 
         //then
-        assertThat(view.viewName()).isEqualTo("TestView");
+        assertThat(view2.getNameKey()).isEqualTo(LabelKey.Yes);
+        assertThat(view2.getDescriptionKey()).isEqualTo(DescriptionKey.Description_of_the_source);
     }
+
 
     class TestView extends ViewBase {
 
 
-
+        protected TestView(Translate translate) {
+            super(translate);
+        }
 
         @Override
         public void doBuild(ViewChangeBusMessage event) {
@@ -91,6 +105,9 @@ public class ViewBaseTest {
     class TestView2 extends ViewBase {
 
 
+        protected TestView2(Translate translate) {
+            super(translate);
+        }
 
         @Override
         public void doBuild(ViewChangeBusMessage event) {

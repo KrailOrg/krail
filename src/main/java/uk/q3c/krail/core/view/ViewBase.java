@@ -18,6 +18,10 @@ import com.vaadin.ui.UI;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.i18n.DescriptionKey;
+import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.util.ID;
@@ -45,14 +49,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class ViewBase implements KrailView, Serializable {
 
     private static Logger log = LoggerFactory.getLogger(ViewBase.class);
+    private final Translate translate;
+    protected I18NKey nameKey = LabelKey.Unnamed;
+    protected I18NKey descriptionKey = DescriptionKey.No_description_provided;
     private boolean componentsConstructed;
     private boolean dirty;
     private boolean idsAssigned;
     private Component rootComponent;
-    @Inject
-    protected ViewBase() {
-        super();
 
+    @Inject
+    protected ViewBase(Translate translate) {
+        super();
+        this.translate = translate;
     }
 
     public boolean isComponentsConstructed() {
@@ -120,11 +128,6 @@ public abstract class ViewBase implements KrailView, Serializable {
 
     }
 
-    @Override
-    public String viewName() {
-        return getClass().getSimpleName();
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -160,5 +163,29 @@ public abstract class ViewBase implements KrailView, Serializable {
     @Override
     public void rebuild() {
         componentsConstructed = false;
+    }
+
+    public I18NKey getNameKey() {
+        return nameKey;
+    }
+
+    public void setNameKey(I18NKey nameKey) {
+        this.nameKey = nameKey;
+    }
+
+    public I18NKey getDescriptionKey() {
+        return descriptionKey;
+    }
+
+    public void setDescriptionKey(I18NKey descriptionKey) {
+        this.descriptionKey = descriptionKey;
+    }
+
+    public String getName() {
+        return translate.from(nameKey);
+    }
+
+    public String getDescription() {
+        return translate.from(descriptionKey);
     }
 }

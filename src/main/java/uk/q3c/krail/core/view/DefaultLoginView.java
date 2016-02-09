@@ -64,11 +64,13 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     @Inject
     protected DefaultLoginView(LoginExceptionHandler loginExceptionHandler, SubjectProvider subjectProvider, Translate translate, SessionBusProvider
             eventBusProvider) {
-        super();
+        super(translate);
         this.loginExceptionHandler = loginExceptionHandler;
         this.subjectProvider = subjectProvider;
         this.translate = translate;
         this.eventBus = eventBusProvider.get();
+        nameKey = LabelKey.Log_In;
+        descriptionKey = DescriptionKey.Log_In;
     }
 
     @SuppressFBWarnings({"FCBL_FIELD_COULD_BE_LOCAL", "FCBL_FIELD_COULD_BE_LOCAL"})
@@ -178,13 +180,13 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     public TextField getUsernameBox() {
@@ -196,11 +198,6 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     }
 
 
-    @Override
-    public String viewName() {
-
-        return getClass().getSimpleName();
-    }
 
 
 }

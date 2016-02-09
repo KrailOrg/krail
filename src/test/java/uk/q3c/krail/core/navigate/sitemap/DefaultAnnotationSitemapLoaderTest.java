@@ -28,10 +28,7 @@ import testutil.TestPersistenceModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.i18n.DefaultI18NProcessor;
-import uk.q3c.krail.core.i18n.DescriptionKey;
-import uk.q3c.krail.core.i18n.I18NProcessor;
-import uk.q3c.krail.core.i18n.TestLabelKey;
+import uk.q3c.krail.core.i18n.*;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.DefaultAnnotationSitemapLoaderTest.AnnotationsModule1;
@@ -162,11 +159,6 @@ public class DefaultAnnotationSitemapLoaderTest {
             return null;
         }
 
-        @Override
-        public String viewName() {
-
-            return getClass().getSimpleName();
-        }
 
         @Override
         public void init() {
@@ -178,5 +170,34 @@ public class DefaultAnnotationSitemapLoaderTest {
         }
 
 
+        @Override
+        public I18NKey getNameKey() {
+            return null;
+        }
+
+        @Override
+        public void setNameKey(I18NKey nameKey) {
+
+        }
+
+        @Override
+        public I18NKey getDescriptionKey() {
+            return null;
+        }
+
+        @Override
+        public void setDescriptionKey(I18NKey descriptionKey) {
+
+        }
+
+        @Override
+        public String getName() {
+            return null;
+        }
+
+        @Override
+        public String getDescription() {
+            return null;
+        }
     }
 }

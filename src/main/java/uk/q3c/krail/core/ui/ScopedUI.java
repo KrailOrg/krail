@@ -31,7 +31,10 @@ import uk.q3c.krail.core.config.ConfigurationException;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
-import uk.q3c.krail.core.i18n.*;
+import uk.q3c.krail.core.i18n.CurrentLocale;
+import uk.q3c.krail.core.i18n.I18NProcessor;
+import uk.q3c.krail.core.i18n.LocaleChangeBusMessage;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.Broadcaster.BroadcastListener;
@@ -114,14 +117,15 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     }
 
     /**
-     * The Vaadin navigator has been replaced by the Navigator, use {@link #getKrailNavigator()} instead.
+     * The Vaadin navigator has been replaced by the Navigator, use {@link #getKrailNavigator()} instead.  Would prefer to throw an exception but this method
+     * still gets called by core Vaadin
      *
      * @see com.vaadin.ui.UI#getNavigator()
      */
     @Override
     @Deprecated
     public com.vaadin.navigator.Navigator getNavigator() {
-        throw new MethodReconfigured("UI.getNavigator() not available, use getKrailNavigator() instead");
+        return null;
     }
 
     @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
@@ -133,16 +137,19 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     @Override
     public void changeView(@Nonnull KrailView toView) {
         checkNotNull(toView);
-        log.debug("changing view to {}", toView.viewName());
+        log.debug("changing view to {}", toView.getName());
 
         Component content = toView.getRootComponent();
         if (content == null) {
-            throw new ConfigurationException("The root component for " + toView.viewName() + " cannot be null");
+            throw new ConfigurationException("The root component for " + toView.getName() + " cannot be null");
         }
         translator.translate(toView);
         content.setSizeFull();
         getViewDisplayPanel().setContent(content);
         this.view = toView;
+        String pageTitle = pageTitle();
+        getPage().setTitle(pageTitle);
+        log.debug("Page title set to '{}'", pageTitle);
     }
 
     public Panel getViewDisplayPanel() {
@@ -195,13 +202,13 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
 
     /**
      * Provides a locale sensitive title for your application (which appears in the browser tab). The title is defined
-     * by the {@link #applicationTitle}, which should be specified in your sub-class of {@link DefaultUIModule}
+     * by the {@link #applicationTitle}, which should be specified in your sub-class of {@link DefaultUIModule}.  If view is not null, the view name is
+     * appended to the application name
      *
      * @return locale sensitive page title
      */
     protected String pageTitle() {
-        I18NKey key = applicationTitle.getTitleKey();
-        return translate.from(key);
+        return view == null ? translate.from(applicationTitle.getTitleKey()) : translate.from(applicationTitle.getTitleKey()) + " " + view.getName();
     }
 
     /**

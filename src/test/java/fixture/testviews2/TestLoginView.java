@@ -58,18 +58,12 @@ public class TestLoginView implements LoginView {
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-    }
-
-    @Override
     public void setStatusMessage(String invalidLogin) {
 
     }
 
     @Override
-    public String viewName() {
-
-        return getClass().getSimpleName();
+    public void setStatusMessage(I18NKey messageKey) {
     }
 
     @Override
@@ -81,4 +75,33 @@ public class TestLoginView implements LoginView {
 
     }
 
+    @Override
+    public I18NKey getNameKey() {
+        return null;
+    }
+
+    @Override
+    public void setNameKey(I18NKey nameKey) {
+
+    }
+
+    @Override
+    public I18NKey getDescriptionKey() {
+        return null;
+    }
+
+    @Override
+    public void setDescriptionKey(I18NKey descriptionKey) {
+
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public String getDescription() {
+        return null;
+    }
 }

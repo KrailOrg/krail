@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.services;
 
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.core.i18n.NamedAndDescribed;
 
 /**
  * Implement this interface to provide a Service. A Service is typically something which is wired up using Guice
@@ -28,6 +28,9 @@ import uk.q3c.krail.core.i18n.I18NKey;
  * The easiest way is to create an implementation is to sub-class either {@link AbstractService}.<br>
  * Dependencies between services shold not be coded directly but use the features described in {@link ServicesGraph}
  * <p>
+ * Implementations (even sub-classes of {@link AbstractService} must define a key which when combined with {@link #getInstanceNumber()}, provides a unique
+ * identity for this Service.  It is an I18NKey because it is expected that this name will be presented to end users (even if only to application sys
+ * admins)
  * <p>
  * When an instance of a {@link Service} implementation is created through Guice, it is automatically registered with
  * the {@link DefaultServicesMonitor}. (This is done through a Guice listener in the {@link ServicesModule}).
@@ -47,7 +50,7 @@ import uk.q3c.krail.core.i18n.I18NKey;
  *
  * @author David Sowerby
  */
-public interface Service {
+public interface Service extends NamedAndDescribed {
 
     enum State {
         INITIAL, STARTING, RUNNING, STOPPING, STOPPED, RESETTING, FAILED
@@ -70,7 +73,7 @@ public interface Service {
 
     /**
      * Equivalent to calling
-     * {@link #stop(State)} with a value of {@link State#STOPPED}.  Implementations must handle all exceptions and set the state to {@link Cause#FAILED_TO_STOP}
+     * {@link #stop(Cause)} with a value of {@link State#STOPPED}.  Implementations must handle all exceptions and set the state to {@link Cause#FAILED_TO_STOP}
      */
     ServiceStatus stop();
 
@@ -84,7 +87,7 @@ public interface Service {
 
     /**
      * You will only need to implement this if you are not using a sub-class of {@link AbstractService}. When you do sub-class {@link AbstractService},
-     * override {@link AbstractService#doStop()}.  Implementations must handle all exceptions and set the state to {@link State#FAILED_TO_STOP}
+     * override {@link AbstractService#doStop()}.  Implementations must handle all exceptions and set the state to {@link State#STOPPED} and Cause appropriately
      *
      * @param cause the caller uses this to indicate the cause of the stop.
      *
@@ -94,17 +97,6 @@ public interface Service {
      *                      to run, has stopped</li><li>DEPENDENCY_FAILED: A dependency which this Service needs in order to run, has failed</li></ol>:
      */
     ServiceStatus stop(Cause cause);
-
-    /**
-     * Returns the translated name for this service. The implementation may wish to include an instance identifier if it is not of
-     * Singleton scope, but this is not essential; the name is not used for anything except as a label.
-     *
-     * @return The translated name for this service.
-     */
-    default String getName() {
-        return this.getClass()
-                   .getName();
-    }
 
     /**
      * Returns the translated description for this service, or an empty String if no description as been set
@@ -155,23 +147,9 @@ public interface Service {
      */
     ServiceStatus dependencyStop();
 
-    I18NKey getDescriptionKey();
-
-    void setDescriptionKey(I18NKey descriptionKey);
-
     default ServiceKey getServiceKey() {
         return new ServiceKey(getNameKey());
     }
-
-    /**
-     * Implementations (even sub-classes of {@link AbstractService} must define a key which when combined with {@link #getInstanceNumber()}, provides a unique
-     * identity for this Service.  It is an I18NKey because it is expected that this name will be presented to end users (even if only to application sys
-     * admins)
-     *
-     * @return a key which when combined with {@link #getInstanceNumber()}, provides a unique identity for this Service
-     */
-    I18NKey getNameKey();
-
 
     /**
      * Not used by default, but can be used to identify a specific instance of a {@link Service}

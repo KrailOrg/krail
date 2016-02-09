@@ -17,6 +17,7 @@ import com.vaadin.ui.Component;
 import uk.q3c.krail.core.i18n.Caption;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,8 +35,9 @@ public class CaptionChecker {
      * @return true only if all of the component fields of {@code out} have a @Caption annotation
      */
     public boolean check(Class<?> cut, String... excludeFieldNames) {
+        System.out.println("Checking " + cut + " for I18N annotated component fields");
         boolean allOk = true;
-        List<String> excludes = Arrays.asList(excludeFieldNames);
+        List<String> excludes = excludeFieldNames == null ? new ArrayList<>() : Arrays.asList(excludeFieldNames);
         Field[] declaredFields = cut.getDeclaredFields();
         for (int i = 0; i < declaredFields.length; i++) {
             Field field = declaredFields[i];

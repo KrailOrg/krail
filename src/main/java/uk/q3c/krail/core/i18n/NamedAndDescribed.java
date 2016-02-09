@@ -11,18 +11,34 @@
  *
  */
 
-package uk.q3c.krail.core.view;
+package uk.q3c.krail.core.i18n;
 
-import com.google.inject.Inject;
-import uk.q3c.krail.core.i18n.Translate;
+/**
+ * A common interface for items which need translated name and description
+ * <p>
+ * Created by David Sowerby on 08 Feb 2016
+ */
+public interface NamedAndDescribed {
 
-public class DefaultRequestSystemAccountEnableView extends StandardPageViewBase implements
-        RequestSystemAccountEnableView {
+    I18NKey getNameKey();
 
-    @Inject
-    protected DefaultRequestSystemAccountEnableView(Translate translate) {
-        super(translate);
-    }
+    void setNameKey(I18NKey nameKey);
 
+    I18NKey getDescriptionKey();
 
+    void setDescriptionKey(I18NKey descriptionKey);
+
+    /**
+     * Returns translated name key
+     *
+     * @return translated name key
+     */
+    String getName();
+
+    /**
+     * Returns translated description key
+     *
+     * @return translated description key
+     */
+    String getDescription();
 }

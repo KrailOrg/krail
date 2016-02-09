@@ -17,7 +17,9 @@ import com.google.inject.Inject;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import uk.q3c.krail.core.i18n.Caption;
+import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
@@ -41,10 +43,14 @@ public class OptionView extends ViewBase {
     private final SelectionPanel selectionPanel;
 
     @Inject
-    protected OptionView(ActiveOptionSourcePanel activeOptionSourcePanel, SelectedOptionSourcePanel selectedOptionSourcePanel, SelectionPanel selectionPanel) {
+    protected OptionView(ActiveOptionSourcePanel activeOptionSourcePanel, SelectedOptionSourcePanel selectedOptionSourcePanel, SelectionPanel selectionPanel,
+                         Translate translate) {
+        super(translate);
         this.activeOptionSourcePanel = activeOptionSourcePanel;
         this.selectedOptionSourcePanel = selectedOptionSourcePanel;
         this.selectionPanel = selectionPanel;
+        nameKey = LabelKey.Options;
+        descriptionKey = DescriptionKey.Options;
     }
 
     /**

@@ -108,6 +108,10 @@ class DefaultClassNameUtilsTest extends Specification {
             return null
         }
 
+        @Override
+        void setNameKey(I18NKey nameKey) {
+
+        }
 
         void setInstanceNumber(int instance) {
 

@@ -18,6 +18,9 @@ import com.vaadin.ui.TextArea;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.i18n.DescriptionKey;
+import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
 /**
@@ -30,8 +33,10 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
     private TextArea textArea;
 
     @Inject
-    protected DefaultErrorView() {
-        super();
+    protected DefaultErrorView(Translate translate) {
+        super(translate);
+        nameKey = LabelKey.Error;
+        descriptionKey = DescriptionKey.Error_Information;
     }
 
 
@@ -50,7 +55,6 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
     }
 
 
-
     @Override
     public void doBuild(ViewChangeBusMessage busMessage) {
         textArea = new TextArea();
@@ -58,7 +62,7 @@ public class DefaultErrorView extends ViewBase implements ErrorView {
         textArea.setReadOnly(false);
         textArea.setWordwrap(false);
         if (error != null) {
-            String s=ExceptionUtils.getStackTrace(error)+( "\n\n");
+            String s = ExceptionUtils.getStackTrace(error) + ("\n\n");
             //add a couple of blank lines at the bottom to ensure visibility of the last line
             textArea.setValue(s);
         } else {

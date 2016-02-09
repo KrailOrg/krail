@@ -14,6 +14,7 @@
 package uk.q3c.krail.core.view
 
 import com.vaadin.ui.Label
+import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 
 /**
@@ -23,6 +24,10 @@ class GridViewBaseTest extends ViewTest {
 
     class GridTest extends GridViewBase {
 
+        protected GridTest(Translate translate) {
+            super(translate)
+        }
+
         @Override
         protected void doBuild(ViewChangeBusMessage busMessage) {
             gridLayout.addComponent(new Label())
@@ -31,8 +36,9 @@ class GridViewBaseTest extends ViewTest {
 
     GridTest gridTest
 
+
     def setup() {
-        view = new GridTest()
+        view = new GridTest(translate)
         gridTest = view;
     }
 

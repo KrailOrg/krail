@@ -217,7 +217,7 @@ public class ScopedUITest {
     public void changeView() {
         // given
         when(toView.getRootComponent()).thenReturn(viewContent);
-        when(toView.viewName()).thenReturn("toView");
+        when(toView.getName()).thenReturn("toView");
         // when
         ui.changeView(toView);
         // then
@@ -232,7 +232,7 @@ public class ScopedUITest {
     public void changeView_RootComponentNotSet() {
         // given
         when(toView.getRootComponent()).thenReturn(null);
-        when(toView.viewName()).thenReturn("toView");
+        when(toView.getName()).thenReturn("toView");
         // when
         ui.changeView(toView);
         // then
@@ -256,10 +256,6 @@ public class ScopedUITest {
                   .contains("receiving message: message");
     }
 
-    @Test(expected = MethodReconfigured.class)
-    public void getNavigator() throws Exception {
-        ui.getNavigator();
-    }
 
     class DuffUI extends ScopedUI {
         protected DuffUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, Broadcaster broadcaster, PushMessageRouter

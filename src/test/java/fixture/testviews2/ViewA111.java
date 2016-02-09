@@ -13,6 +13,7 @@
 package fixture.testviews2;
 
 import com.vaadin.ui.Component;
+import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
@@ -36,11 +37,7 @@ public class ViewA111 implements KrailView {
         throw new RuntimeException("not yet implemented");
     }
 
-    @Override
-    public String viewName() {
 
-        return getClass().getSimpleName();
-    }
 
     @Override
     public void init() {
@@ -52,4 +49,33 @@ public class ViewA111 implements KrailView {
     }
 
 
+    @Override
+    public I18NKey getNameKey() {
+        return null;
+    }
+
+    @Override
+    public void setNameKey(I18NKey nameKey) {
+
+    }
+
+    @Override
+    public I18NKey getDescriptionKey() {
+        return null;
+    }
+
+    @Override
+    public void setDescriptionKey(I18NKey descriptionKey) {
+
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public String getDescription() {
+        return null;
+    }
 }

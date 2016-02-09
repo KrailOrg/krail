@@ -18,6 +18,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
 public abstract class VerticalViewBase extends ViewBase implements KrailView {
@@ -26,8 +27,8 @@ public abstract class VerticalViewBase extends ViewBase implements KrailView {
     private VerticalLayout layout;
 
     @Inject
-    protected VerticalViewBase() {
-        super();
+    protected VerticalViewBase(Translate translate) {
+        super(translate);
     }
 
     public VerticalLayout getLayout() {

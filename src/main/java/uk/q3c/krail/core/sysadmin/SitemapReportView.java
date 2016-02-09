@@ -18,6 +18,7 @@ import com.vaadin.ui.TextArea;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
@@ -35,7 +36,8 @@ public class SitemapReportView extends Grid3x3ViewBase {
     private TextArea reportArea;
 
     @Inject
-    protected SitemapReportView(MasterSitemap masterSitemap) {
+    protected SitemapReportView(MasterSitemap masterSitemap, Translate translate) {
+        super(translate);
         this.masterSitemap = masterSitemap;
     }
 
