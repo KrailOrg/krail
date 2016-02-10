@@ -38,6 +38,7 @@ import uk.q3c.krail.core.push.DefaultPushMessageRouter;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.view.component.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -131,5 +132,24 @@ public class DefaultApplicationUITest {
         verify(breadcrumb).setVisible(false);
         verify(messageBar).setVisible(false);
         verify(subpage).setVisible(false);
+    }
+
+    @Test
+    public void getters() throws Exception {
+        //given
+
+        //when
+        ui.doLayout();
+
+        //then
+        assertThat(ui.getNavTree()).isNotNull();
+        assertThat(ui.getMenu()).isNotNull();
+        assertThat(ui.getBreadcrumb()).isNotNull();
+        assertThat(ui.getMessageBar()).isNotNull();
+        assertThat(ui.getSubpage()).isNotNull();
+        assertThat(ui.getUserStatus()).isNotNull();
+        assertThat(ui.getLogo()).isNotNull();
+        assertThat(ui.getHeader()).isNotNull();
+        assertThat(ui.getOption()).isNotNull();
     }
 }

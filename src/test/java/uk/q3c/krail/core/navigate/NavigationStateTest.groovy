@@ -11,11 +11,29 @@
  *
  */
 
-package uk.q3c.krail.core.option;
+package uk.q3c.krail.core.navigate
 
-public class OptionKeyException extends RuntimeException {
-    public OptionKeyException(String message) {
-        super(message);
+import spock.lang.Specification
+
+/**
+ * Created by David Sowerby on 10 Feb 2016
+ */
+class NavigationStateTest extends Specification {
+
+
+    def "fluency"() {
+
+        when:
+        StrictURIFragmentHandler uriHandler = new StrictURIFragmentHandler();
+        //when
+        NavigationState navState = new NavigationState().virtualPage("session")
+                .parameter("a", "1")
+                .parameter("b", "3")
+        uriHandler.updateFragment(navState);
+
+        then:
+        navState.getFragment().equals("session/a=1/b=3")
     }
+
 
 }

@@ -14,13 +14,11 @@
 package uk.q3c.krail.core.sysadmin
 
 import spock.lang.Specification
-import testutil.CaptionChecker
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.MessageKey
 import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.user.notify.UserNotifier
 import uk.q3c.krail.util.Experimental
-
 /**
  * Created by David Sowerby on 19 Jan 2016
  */
@@ -33,14 +31,8 @@ class I18NViewTest extends Specification {
     def setup() {
     }
 
-    def "check captions"() {
 
-        expect:
-        new CaptionChecker().check(I18NView, "instructions1", "instructions2")
-
-    }
-
-    def "experimental"() {
+    def "marked as experimental"() {
         expect:
         I18NView.class.isAnnotationPresent(Experimental)
     }

@@ -281,24 +281,7 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
 
     }
 
-    class Loader implements Runnable {
 
-        @Override
-        public void run() {
-
-
-            // Wrap UI updates in access to properly deal with locking
-            access(new Runnable() {
-                @Override
-                public void run() {
-                    setContent(new Label("This is the real content"));
-
-                    // Stop polling once the update is done
-                    setPollInterval(-1);
-                }
-            });
-        }
-    }
 
 
 }

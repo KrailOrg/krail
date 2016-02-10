@@ -23,11 +23,9 @@ import org.slf4j.LoggerFactory;
 import java.util.UUID;
 
 /**
- * A {@link SessionManager} implementation that uses the {@link VaadinSession} for the current user to common and
- * locate the Shiro {@link Session}. This tightly ties the Shiro security Session lifecycle to that of the
- * VaadinSession
- * allowing expiration, persistence, and clustering to be handled only in the Vaadin configuration rather than be
- * duplicated in both the Vaadin and Shiro configuration.
+ * A {@link SessionManager} implementation that uses the {@link VaadinSession} for the current user to common and locate the Shiro {@link Session}. This
+ * tightly ties the Shiro security Session lifecycle to that of the VaadinSession allowing expiration, persistence, and clustering to be handled only in the
+ * Vaadin configuration rather than be duplicated in both the Vaadin and Shiro configuration.
  *
  * @author mpilone
  */
@@ -35,7 +33,7 @@ public class VaadinSessionManager implements SessionManager {
     /**
      * The session attribute name prefix used for storing the Shiro Session in the VaadinSession.
      */
-    private final static String SESSION_ATTRIBUTE_PREFIX = VaadinSessionManager.class.getName() + ".session.";
+    public final static String SESSION_ATTRIBUTE_PREFIX = VaadinSessionManager.class.getName() + ".session.";
     private static Logger log = LoggerFactory.getLogger(VaadinSessionManager.class);
     /**
      * The session factory used to create new sessions. In the future, it may make more sense to simply implement a

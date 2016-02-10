@@ -13,28 +13,23 @@
 
 package uk.q3c.krail.core.view
 
+import com.google.common.collect.ImmutableList
 import spock.lang.Specification
-import testutil.CaptionChecker
 import testutil.MockTranslate
+import testutil.ViewFieldChecker
 import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 
-import java.lang.annotation.Annotation
-import java.lang.reflect.Field
 /**
  * Created by David Sowerby on 07 Feb 2016
  */
 abstract class ViewTest extends Specification {
 
-    KrailView view
+    ViewBase view
     ViewChangeBusMessage busMessage = Mock()
     Translate translate = new MockTranslate()
-    String[] fieldsWithoutCaptions
-
-    protected boolean fieldHasCaption(String fieldName, Class<? extends Annotation> annotation) {
-        Field field = view.getClass().getDeclaredField(fieldName)
-        return field.isAnnotationPresent(annotation)
-    }
+    String[] fieldsWithoutCaptions = new String[0]
+    String[] fieldsWIthoutIds = new String[0]
 
 
     def "root component set"() {
@@ -45,10 +40,15 @@ abstract class ViewTest extends Specification {
         view.getRootComponent() != null
     }
 
-    def "check captions"() {
+    def "check captions and Ids"() {
+        given:
+        ViewFieldChecker checker = new ViewFieldChecker(view, ImmutableList.copyOf(fieldsWithoutCaptions), ImmutableList.copyOf(fieldsWIthoutIds))
+        view.buildView(busMessage)
+        view.setIds()
 
         expect:
-        new CaptionChecker().check(view.getClass(), fieldsWithoutCaptions)
+        checker.check()
+
     }
 
 

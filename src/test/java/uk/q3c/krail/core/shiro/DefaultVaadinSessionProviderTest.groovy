@@ -11,42 +11,40 @@
  *
  */
 
-package uk.q3c.krail.core.sysadmin
+package uk.q3c.krail.core.shiro
 
-import uk.q3c.krail.core.navigate.Navigator
-import uk.q3c.krail.core.view.ViewTest
+import com.vaadin.server.VaadinSession
+import spock.lang.Specification
+
 /**
- * Created by David Sowerby on 07 Feb 2016
+ * Created by David Sowerby on 09 Feb 2016
  */
-class SystemAdminViewTest extends ViewTest {
+class DefaultVaadinSessionProviderTest extends Specification {
 
-    Navigator navigator = Mock()
-    SystemAdminView thisView
+    DefaultVaadinSessionProvider provider
 
     def setup() {
-        thisView = new SystemAdminView(navigator, translate)
-        view = thisView
+        provider = new DefaultVaadinSessionProvider()
+        VaadinSession.setCurrent(null)
     }
 
-
-    def "doBuild"() {
+    def "no VaadinSession, throw exception"() {
         when:
-        thisView.doBuild(busMessage)
+        provider.get()
 
         then:
-        thisView.getBuildReportBtn() != null
+        thrown(IllegalStateException)
     }
 
-    def "buildButton invokes navigator"() {
+    def "VaadinSession available, returns it"() {
         given:
-        view.buildView(busMessage)
+        VaadinSession session = Mock()
+        VaadinSession.setCurrent(session)
 
         when:
-        thisView.getBuildReportBtn().click()
+        VaadinSession result = provider.get()
 
         then:
-        1 * navigator.navigateTo("system-admin/sitemap-build-report")
+        result == session
     }
-
-
 }

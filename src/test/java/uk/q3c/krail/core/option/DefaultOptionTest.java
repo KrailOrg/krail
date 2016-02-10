@@ -99,6 +99,7 @@ public class DefaultOptionTest {
         option.set(optionKey1, 5);
         //then
         verify(optionCache).write(cacheKey, Optional.of(5));
+        assertThat(option.getHierarchy()).isEqualTo(defaultHierarchy);
     }
 
 
@@ -115,7 +116,7 @@ public class DefaultOptionTest {
     }
 
     @Test
-    public void get_simplest() {
+    public void get_highest() {
         //given
         when(defaultHierarchy.highestRankName()).thenReturn("high");
         OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, HIGHEST_RANK, optionKey1);
@@ -126,42 +127,54 @@ public class DefaultOptionTest {
         assertThat(actual).isEqualTo(8);
     }
 
-    @Test
-    public void get_with_hierarchy() {
-        //given
-        when(defaultHierarchy.highestRankName()).thenReturn("high");
-        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, HIGHEST_RANK, optionKey1);
-        when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
-        //when
-        Integer actual = option.get(optionKey1);
-        //then
-        assertThat(actual).isEqualTo(8);
-    }
-
-
-
-    @Test
-    public void get_with_all_args() {
-        //given
-        when(defaultHierarchy.highestRankName()).thenReturn("high");
-        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, HIGHEST_RANK, optionKey1);
-        when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
-        //when
-        Integer actual = option.get(optionKey1);
-        //then
-        assertThat(actual).isEqualTo(8);
-    }
 
     @Test
     public void get_none_found() {
         //given
         when(defaultHierarchy.highestRankName()).thenReturn("high");
         OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, HIGHEST_RANK, optionKey2);
-        when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.empty());
+        when(optionCache.get(Optional.of(5), cacheKey)).thenReturn(Optional.empty());
         //when
         Integer actual = option.get(optionKey2);
         //then
         assertThat(actual).isEqualTo(5);
+    }
+
+    @Test
+    public void get_specific() throws Exception {
+        //given
+        when(defaultHierarchy.lowestRankName()).thenReturn("low");
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, optionKey2);
+        when(optionCache.get(any(), any())).thenAnswer(answerOf(20));
+        //when
+        Integer actual = option.getSpecificRanked(0, optionKey2);
+        //then
+        assertThat(actual).isEqualTo(20);
+    }
+
+    @Test
+    public void get_specific_not_found_return_default() throws Exception {
+        //given
+        when(defaultHierarchy.lowestRankName()).thenReturn("low");
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, optionKey2);
+        when(optionCache.get(any(), any())).thenReturn(Optional.empty());
+        //when
+        Integer actual = option.getSpecificRanked(0, optionKey2);
+        //then
+        assertThat(actual).isEqualTo(5);
+    }
+
+    @Test
+    public void get_specific_null_return_default() throws Exception {
+        //given
+        when(defaultHierarchy.lowestRankName()).thenReturn("low");
+        OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, optionKey2);
+        when(optionCache.get(any(), any())).thenReturn(null);
+        //when
+        Integer actual = option.getSpecificRanked(0, optionKey2);
+        //then
+        assertThat(actual).isEqualTo(5);
+
     }
 
     @Test

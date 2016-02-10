@@ -78,6 +78,8 @@ public class DefaultBindingManagerTest {
     @Test
     public void startAndStop() throws Exception {
 
+        //then
+        assertThat(DefaultBindingManager.injector()).isNull();
         // given
         TestBindingManager bindingManager = new TestBindingManager();
         when(servletContextEvent.getServletContext()).thenReturn(servletContext);
@@ -85,12 +87,14 @@ public class DefaultBindingManagerTest {
         when(service.getServiceKey()).thenReturn(new ServiceKey(LabelKey.Yes));
         logMonitor.addClassFilter(DefaultServicesModel.class);
 
+
         // when
         Injector injector = bindingManager.getInjector();
         // then
         assertThat(SecurityUtils.getSecurityManager()).isInstanceOf(KrailSecurityManager.class);
         assertThat(injector).isNotNull();
         assertThat(injector.getInstance(Dummy.class)).isNotNull();
+        assertThat(DefaultBindingManager.injector()).isEqualTo(injector);
 
         // when
         bindingManager.contextDestroyed(servletContextEvent);

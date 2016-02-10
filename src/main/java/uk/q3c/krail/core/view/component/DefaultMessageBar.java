@@ -38,7 +38,7 @@ import java.util.Optional;
 public class DefaultMessageBar extends Panel implements MessageBar {
     private static Logger log = LoggerFactory.getLogger(DefaultMessageBar.class);
     private final Translate translate;
-    private Label label;
+    private Label display;
 
     @Inject
     protected DefaultMessageBar(Translate translate) {
@@ -47,13 +47,17 @@ public class DefaultMessageBar extends Panel implements MessageBar {
         build();
     }
 
+    public Label getDisplay() {
+        return display;
+    }
+
     private void build() {
         HorizontalLayout layout = new HorizontalLayout();
-        label = new Label(translate.from(LabelKey.Message_Bar));
-        label.setImmediate(true);
-        layout.addComponent(label);
+        display = new Label(translate.from(LabelKey.Message_Bar));
+        display.setImmediate(true);
+        layout.addComponent(display);
         this.setContent(layout);
-        label.setId(ID.getId(Optional.empty(), this, label));
+        display.setId(ID.getId(Optional.empty(), this, display));
     }
 
     @Handler
@@ -62,7 +66,7 @@ public class DefaultMessageBar extends Panel implements MessageBar {
         log.debug("Received error message '{}'", message);
         String s = translate.from(LabelKey.Error)
                             .toUpperCase() + ": " + message.getTranslatedMessage();
-        label.setValue(s);
+        display.setValue(s);
     }
 
     @Handler
@@ -70,14 +74,14 @@ public class DefaultMessageBar extends Panel implements MessageBar {
     public void warningMessage(WarningNotificationMessage message) {
         log.debug("Received warning message '{}'", message);
         String s = translate.from(LabelKey.Warning) + ": " + message.getTranslatedMessage();
-        label.setValue(s);
+        display.setValue(s);
     }
 
     @Handler
     @Override
     public void informationMessage(InformationNotificationMessage message) {
         log.debug("Received information message '{}'", message);
-        label.setValue(message.getTranslatedMessage());
+        display.setValue(message.getTranslatedMessage());
     }
 
 

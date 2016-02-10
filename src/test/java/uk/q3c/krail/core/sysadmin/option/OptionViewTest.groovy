@@ -16,7 +16,6 @@ package uk.q3c.krail.core.sysadmin.option
 import com.vaadin.ui.Panel
 import uk.q3c.krail.core.view.ViewTest
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
-
 /**
  * Created by David Sowerby on 19 Jan 2016
  */
@@ -28,7 +27,9 @@ class OptionViewTest extends ViewTest {
     ViewChangeBusMessage busMessage = Mock()
     OptionView thisView
 
+
     def setup() {
+        fieldsWIthoutIds = ['activeOptionSourcePanel', 'selectedOptionSourcePanel', 'selectionPanel']
         thisView = new OptionView(activeOptionSourcePanel, selectedOptionSourcePanel, selectionPanel, translate)
         view = thisView
     }

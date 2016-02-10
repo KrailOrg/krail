@@ -21,7 +21,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ChameleonTheme;
 import com.vaadin.ui.themes.ValoTheme;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
@@ -49,8 +48,6 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     private final PubSubSupport<BusMessage> eventBus;
     @Caption(caption = LabelKey.Log_In, description = DescriptionKey.Please_log_in)
     private Panel centrePanel;
-    private Label demoInfoLabel;
-    private Label demoInfoLabel2;
     @Value(LabelKey.Authentication)
     private Label label;
     @Caption(caption = LabelKey.Password, description = DescriptionKey.Enter_Your_Password)
@@ -73,7 +70,6 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
         descriptionKey = DescriptionKey.Log_In;
     }
 
-    @SuppressFBWarnings({"FCBL_FIELD_COULD_BE_LOCAL", "FCBL_FIELD_COULD_BE_LOCAL"})
     @Override
     public void doBuild(ViewChangeBusMessage event) {
         super.doBuild(event);
@@ -88,8 +84,8 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
         usernameBox = new TextField();
         passwordBox = new PasswordField();
 
-        demoInfoLabel = new Label("for this demo, enter any user name, and a password of 'password'");
-        demoInfoLabel2 = new Label("In a real application your Shiro Realm implementation defines how to authenticate");
+        Label demoInfoLabel = new Label("for this demo, enter any user name, and a password of 'password'");
+        Label demoInfoLabel2 = new Label("In a real application your Shiro Realm implementation defines how to authenticate");
 
         submitButton = new Button();
         submitButton.addClickListener(this);
@@ -118,6 +114,7 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
         usernameBox.setId(ID.getId(Optional.of("username"), this, usernameBox));
         passwordBox.setId(ID.getId(Optional.of("password"), this, passwordBox));
         statusMsgLabel.setId(ID.getId(Optional.of("status"), this, statusMsgLabel));
+        label.setId(ID.getId(Optional.of("label"), this, label));
     }
 
 
@@ -180,13 +177,13 @@ public class DefaultLoginView extends Grid3x3ViewBase implements LoginView, Clic
     }
 
     @Override
-    public void setStatusMessage(String msg) {
-        statusMsgLabel.setValue(msg);
+    public void setStatusMessage(I18NKey messageKey) {
+        setStatusMessage(translate.from(messageKey));
     }
 
     @Override
-    public void setStatusMessage(I18NKey messageKey) {
-        setStatusMessage(translate.from(messageKey));
+    public void setStatusMessage(String msg) {
+        statusMsgLabel.setValue(msg);
     }
 
     public TextField getUsernameBox() {

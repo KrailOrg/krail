@@ -13,40 +13,28 @@
 
 package uk.q3c.krail.core.sysadmin
 
-import uk.q3c.krail.core.navigate.Navigator
+import uk.q3c.krail.core.navigate.sitemap.MasterSitemap
 import uk.q3c.krail.core.view.ViewTest
-/**
- * Created by David Sowerby on 07 Feb 2016
- */
-class SystemAdminViewTest extends ViewTest {
 
-    Navigator navigator = Mock()
-    SystemAdminView thisView
+/**
+ * Created by David Sowerby on 10 Feb 2016
+ */
+class SitemapReportViewTest extends ViewTest {
+
+    SitemapReportView thisView
+    MasterSitemap masterSitemap = Mock()
 
     def setup() {
-        thisView = new SystemAdminView(navigator, translate)
+        thisView = new SitemapReportView(masterSitemap, translate)
         view = thisView
     }
 
-
-    def "doBuild"() {
-        when:
-        thisView.doBuild(busMessage)
-
-        then:
-        thisView.getBuildReportBtn() != null
-    }
-
-    def "buildButton invokes navigator"() {
+    def "do build"() {
         given:
         view.buildView(busMessage)
 
-        when:
-        thisView.getBuildReportBtn().click()
-
-        then:
-        1 * navigator.navigateTo("system-admin/sitemap-build-report")
+        expect:
+        thisView.getReportArea() != null
+        thisView.getGridLayout().getComponent(1, 1) == thisView.getReportArea()
     }
-
-
 }
