@@ -1,14 +1,14 @@
 /*
- * Copyright (c) 2014 David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
- * the specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.core.navigate;
@@ -157,7 +157,8 @@ public class StrictURIFragmentHandlerTest {
         uriHandler.setUseBang(false);
         NavigationState navigationState = uriHandler.navigationState(home_p2);
         // when
-        navigationState.setVirtualPage("view2");
+        navigationState.virtualPage("view2")
+                       .update(uriHandler);
         String fragment = uriHandler.fragment(navigationState);
         // then
         assertThat(fragment).isEqualTo("view2/a=b/year=1970");
@@ -174,11 +175,12 @@ public class StrictURIFragmentHandlerTest {
         // then
         assertThat(navigationState.isDirty()).isFalse();
         // when
-        navigationState.setParameterValue("a", "23"); // update
+        navigationState.parameter("a", "23"); // update
         // then
         assertThat(navigationState.isDirty()).isTrue();
         // when
-        navigationState.setParameterValue("id", "111"); // new
+        navigationState.parameter("id", "111")
+                       .update(uriHandler); // new
         uriHandler.setUseBang(false);
         // then
         assertThat(navigationState.getParameterList()).containsExactly("a=23", "year=1970", "id=111");
@@ -192,7 +194,8 @@ public class StrictURIFragmentHandlerTest {
         // given
         NavigationState navigationState = uriHandler.navigationState(view_p2);
         // when
-        navigationState.removeParameter("a");
+        navigationState.removeParameter("a")
+                       .update(uriHandler);
         // then
         assertThat(uriHandler.fragment(navigationState)).isEqualTo("view1/year=1970");
 

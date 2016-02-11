@@ -208,7 +208,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
      * @return locale sensitive page title
      */
     protected String pageTitle() {
-        return view == null ? translate.from(applicationTitle.getTitleKey()) : translate.from(applicationTitle.getTitleKey()) + " " + view.getName();
+        return view == null ? translate.from(applicationTitle.getTitleKey()) : translate.from(applicationTitle.getTitleKey()) + ' ' + view.getName();
     }
 
     /**

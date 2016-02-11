@@ -190,15 +190,16 @@ public class DefaultNavigator implements Navigator {
         // https://sites.google.com/site/q3cjava/sitemap#emptyURI
         if (navigationState.getVirtualPage()
                            .isEmpty()) {
-            navigationState.setVirtualPage(userSitemap.standardPageURI(StandardPageKey.Public_Home));
+            navigationState.virtualPage(userSitemap.standardPageURI(StandardPageKey.Public_Home));
             uriHandler.updateFragment(navigationState);
         }
 
-        log.debug("obtaining view for '{}'", navigationState.getVirtualPage());
+        String virtualPage = navigationState.getVirtualPage();
+        log.debug("obtaining view for '{}'", virtualPage);
 
         UserSitemapNode node = userSitemap.nodeFor(navigationState);
         if (node == null) {
-            invalidURIHandler.invoke(this, navigationState.getVirtualPage());
+            invalidURIHandler.invoke(this, virtualPage);
             return;
         }
 
@@ -223,9 +224,10 @@ public class DefaultNavigator implements Navigator {
             // as we have already responded to the change
             ScopedUI ui = uiProvider.get();
             Page page = ui.getPage();
-            if (!navigationState.getFragment()
+            String fragment = navigationState.getFragment();
+            if (!fragment
                                 .equals(page.getUriFragment())) {
-                page.setUriFragment(navigationState.getFragment(), false);
+                page.setUriFragment(fragment, false);
             }
             // now change the view
             KrailView view = viewFactory.get(node.getViewClass());
@@ -252,8 +254,8 @@ public class DefaultNavigator implements Navigator {
         String redirection = userSitemap.getRedirectPageFor(page);
         // if no redirect found, do nothing
         if (!redirection.equals(page)) {
-            navigationState.setVirtualPage(redirection);
-            navigationState.setFragment(uriHandler.fragment(navigationState));
+            navigationState.virtualPage(redirection)
+                           .update(uriHandler);
         }
     }
 

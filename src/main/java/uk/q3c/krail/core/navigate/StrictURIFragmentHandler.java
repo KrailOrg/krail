@@ -16,7 +16,9 @@ package uk.q3c.krail.core.navigate;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -76,18 +78,20 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
      * the path, so for example something like <code>view//subview/a=b</code> will result in a virtual page of
      * <code>view//subview</code>. If <code>uri</code> is null or empty, the uri is consider to be an empty String. If
      * <code>navigationState</code> contains only paired parameters, the virtual page is set to an empty string.
-     *
-     * @see uk.q3c.krail.core.navigate.URIFragmentHandler#virtualPage(java.lang.String)
      */
     @Override
     public NavigationState navigationState(String uri) {
         NavigationState navigationState = new NavigationState();
-        if (uri == null) {
-            uri = "";
-        }
+        String fragment = StringUtils.isEmpty(uri) ? "" : stripBangAndTrailingSlash(uri);
+        navigationState.fragment(fragment);
+        updateParts(navigationState);
+        return navigationState;
+    }
 
-        String fragment = stripBangAndTrailingSlash(uri);
-        navigationState.setFragment(uri);
+    @Override
+    public void updateParts(NavigationState navigationState) {
+        navigationState.setUpdateInProgress(true);
+        String fragment = navigationState.getFragment();
 
         List<String> pathSegments = new ArrayList<>();
         // no parameters, everything is the virtual page path
@@ -114,15 +118,17 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
                 }
             }
         }
-
-        navigationState.setPathSegments(pathSegments);
-
+        navigationState.setUpdateInProgress(true);
         // join the virtual page path up again
-        String virtualPage = Joiner.on('/')
-                                   .join(pathSegments.toArray());
-        navigationState.setVirtualPage(virtualPage);
-        navigationState.setDirty(false);
-        return navigationState;
+        navigationState.pathSegments(pathSegments);
+        validateSegments(navigationState);
+        navigationState.updated();
+    }
+
+    private String virtualPageFromSegments(List<String> pathSegments) {
+        return
+                Joiner.on('/')
+                      .join(pathSegments.toArray());
     }
 
     private void addParameter(NavigationState navigationState, String s) {
@@ -170,7 +176,26 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
      */
     @Override
     public void updateFragment(NavigationState navigationState) {
-        navigationState.setFragment(fragment(navigationState));
+        navigationState.setUpdateInProgress(true);
+        navigationState.fragment(fragment(navigationState));
+        validateSegments(navigationState);
+        navigationState.updated();
+    }
+
+    private void validateSegments(NavigationState navigationState) {
+
+        if (navigationState.getVirtualPage() == null) {
+            String virtualPage = virtualPageFromSegments(navigationState.getPathSegments());
+            navigationState.virtualPage(virtualPage);
+        } else if (navigationState.getPathSegments()
+                                  .isEmpty()) {
+            navigationState.pathSegments(segmentsFromVirtualPage(navigationState.getVirtualPage()));
+        }
+    }
+
+    private List<String> segmentsFromVirtualPage(String virtualPage) {
+        return ImmutableList.copyOf(Splitter.on('/')
+                                            .split(virtualPage));
     }
 
     @Override
@@ -179,7 +204,8 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
         if (useBang) {
             buf.append('!');
         }
-        buf.append(navigationState.getVirtualPage());
+        String vp = navigationState.getVirtualPage() == null ? virtualPageFromSegments(navigationState.getPathSegments()) : navigationState.getVirtualPage();
+        buf.append(vp);
 
         // append the parameters
         for (Map.Entry<String, String> entry : navigationState.getParameters()
@@ -192,5 +218,6 @@ public class StrictURIFragmentHandler implements URIFragmentHandler, Serializabl
 
         return buf.toString();
     }
+
 
 }

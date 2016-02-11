@@ -37,7 +37,7 @@ public class MockTranslate implements Translate {
 
     @Override
     public String from(I18NKey key, Object... arguments) {
-        return (((Enum) key).name()).replace("_", " ");
+        return (((Enum) key).name()).replace('_', ' ');
     }
 
     @Override

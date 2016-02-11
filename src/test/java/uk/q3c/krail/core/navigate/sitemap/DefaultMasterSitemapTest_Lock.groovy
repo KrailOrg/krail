@@ -375,7 +375,7 @@ class DefaultMasterSitemapTest_Lock extends Specification {
     def "IsLoginUri"() {
         given:
         NavigationState ns = new NavigationState()
-        ns.setFragment('b')
+        ns.fragment('b').update(fragmentHandler)
 
         expect:
         !sitemap.isLoginUri(ns)
@@ -389,7 +389,7 @@ class DefaultMasterSitemapTest_Lock extends Specification {
     def "IsLogoutUri"() {
         given:
         NavigationState ns = new NavigationState()
-        ns.setFragment('b')
+        ns.fragment('b').update(fragmentHandler)
 
         expect:
         !sitemap.isLogoutUri(ns)
@@ -397,7 +397,7 @@ class DefaultMasterSitemapTest_Lock extends Specification {
 
     def "IsPrivateHomeUri"() {
         NavigationState ns = new NavigationState()
-        ns.setFragment('b')
+        ns.fragment('b').update(fragmentHandler)
 
         expect:
         !sitemap.isPrivateHomeUri(ns)
@@ -405,7 +405,7 @@ class DefaultMasterSitemapTest_Lock extends Specification {
 
     def "IsPublicHomeUri"() {
         NavigationState ns = new NavigationState()
-        ns.setFragment('b')
+        ns.fragment('b').update(fragmentHandler)
 
         expect:
         !sitemap.isPublicHomeUri(ns)

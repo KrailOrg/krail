@@ -13,13 +13,12 @@
 
 package uk.q3c.krail.core.view
 
-import com.google.common.collect.ImmutableList
+import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import testutil.MockTranslate
 import testutil.ViewFieldChecker
 import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
-
 /**
  * Created by David Sowerby on 07 Feb 2016
  */
@@ -42,7 +41,7 @@ abstract class ViewTest extends Specification {
 
     def "check captions and Ids"() {
         given:
-        ViewFieldChecker checker = new ViewFieldChecker(view, ImmutableList.copyOf(fieldsWithoutCaptions), ImmutableList.copyOf(fieldsWIthoutIds))
+        ViewFieldChecker checker = new ViewFieldChecker(view, ImmutableSet.copyOf(fieldsWithoutCaptions), ImmutableSet.copyOf(fieldsWIthoutIds))
         view.buildView(busMessage)
         view.setIds()
 

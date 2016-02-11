@@ -18,8 +18,8 @@ import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.view.ViewBase;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Checks a Vaadin component container (for example a KrailView) to ensure that all fields have a @Caption annotation
@@ -27,20 +27,20 @@ import java.util.List;
  * Created by David Sowerby on 19 Jan 2016
  */
 public class ViewFieldChecker {
-    private List<String> fieldsMissingAnnotation;
-    private List<String> fieldsMissingId;
-    private List<String> fieldsNotConstructed;
+    private Set<String> fieldsMissingAnnotation;
+    private Set<String> fieldsMissingId;
+    private Set<String> fieldsNotConstructed;
     private ViewBase view;
-    private List<String> fieldsWithoutI18N;
-    private List<String> fieldsWithoutId;
+    private Set<String> fieldsWithoutI18N;
+    private Set<String> fieldsWithoutId;
 
-    public ViewFieldChecker(ViewBase view, List<String> fieldsWithoutI18N, List<String> fieldsWithoutId) {
+    public ViewFieldChecker(ViewBase view, Set<String> fieldsWithoutI18N, Set<String> fieldsWithoutId) {
         this.view = view;
         this.fieldsWithoutI18N = fieldsWithoutI18N;
         this.fieldsWithoutId = fieldsWithoutId;
-        fieldsMissingAnnotation = new ArrayList<>();
-        fieldsMissingId = new ArrayList<>();
-        fieldsNotConstructed = new ArrayList<>();
+        fieldsMissingAnnotation = new HashSet<>();
+        fieldsMissingId = new HashSet<>();
+        fieldsNotConstructed = new HashSet<>();
     }
 
     /**
