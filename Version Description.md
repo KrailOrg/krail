@@ -1,2 +1,2 @@
-This version updates to Vaadin 7.5.10.  The Services model has been completely re-written, and introduces the ability to configure Service dependencies via Guice.
-The Tutorial is complete. The demo has been removed (the Tutorial is far more useful). A number of small fixes / enhancements applied.  All major functionality is complete, and the aim is now to concentrate on a quality review prior to publishing the first release candidate 
+This version updates to Vaadin 7.6.2.  Most of the change are about improving quality through static code analysis and increased testing code coverage.
+Packages have been re-organised and testUtil merged back into the core.  Thread safety has been addressed

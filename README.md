@@ -59,12 +59,11 @@ repositories {
 
 #Limitations
 
-Not fully thread-safe where it needs to be<br>
 Would not work in a [clustered environment](https://github.com/davidsowerby/krail/issues/425)
 
 # Status
 
-5th February 2016:
+11th February 2016:
 
 * Vaadin 7.6.2 is integrated with:
 * Guice 4.0
