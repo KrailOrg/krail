@@ -1,211 +1,339 @@
-### Release Notes for krail 0.9.7
+### Release Notes for krail 0.9.8
 
-This version updates to Vaadin 7.5.10.  The Services model has been completely re-written, and introduces the ability to configure Service dependencies via Guice.
-The Tutorial is complete. The demo has been removed (the Tutorial is far more useful). A number of small fixes / enhancements applied.  All major functionality is complete, and the aim is now to concentrate on a quality review prior to publishing the first release candidate 
+This version updates to Vaadin 7.6.2.  Most of the change are about improving quality through static code analysis and increased testing code coverage.
+Packages have been re-organised and testUtil merged back into the core.  Thread safety has been addressed
 
 #### Change log
 
--   [102](https://github.com/davidsowerby/krail/issues/102): i18N documentation
--   [111](https://github.com/davidsowerby/krail/issues/111): Document I18N in tables
--   [112](https://github.com/davidsowerby/krail/issues/112): Document I18N in Tutorial
--   [168](https://github.com/davidsowerby/krail/issues/168): Re-write tutorial
--   [240](https://github.com/davidsowerby/krail/issues/240): Loop detection for @Dependency
--   [262](https://github.com/davidsowerby/krail/issues/262): Complete Refining User Navigation
--   [320](https://github.com/davidsowerby/krail/issues/320): Example ValidationKeys
--   [331](https://github.com/davidsowerby/krail/issues/331): Update Option documentation
--   [332](https://github.com/davidsowerby/krail/issues/332): Document user hierarchies
--   [395](https://github.com/davidsowerby/krail/issues/395): elipse ide
--   [465](https://github.com/davidsowerby/krail/issues/465): MkDocs change format in mkdocs.yml file
--   [466](https://github.com/davidsowerby/krail/issues/466): ServicesMonitor to be active
--   [468](https://github.com/davidsowerby/krail/issues/468): Merge AbstractService & AbstractServiceI18N
--   [469](https://github.com/davidsowerby/krail/issues/469): Standardise composite Service.Status and make public
--   [473](https://github.com/davidsowerby/krail/issues/473): Remove need for start up logic in specific services
--   [474](https://github.com/davidsowerby/krail/issues/474): Vaadin 7.5.7
--   [477](https://github.com/davidsowerby/krail/issues/477): Vaadin 7.5.8
--   [478](https://github.com/davidsowerby/krail/issues/478): Vaadin 7.5.9
--   [480](https://github.com/davidsowerby/krail/issues/480): Use Guice to specify dependencies
--   [482](https://github.com/davidsowerby/krail/issues/482): Vaadin 7.5.10
--   [483](https://github.com/davidsowerby/krail/issues/483): Update README.md
--   [484](https://github.com/davidsowerby/krail/issues/484): Remove @Dependency from SitemapService
--   [485](https://github.com/davidsowerby/krail/issues/485): DefaultServicesMonitor to use GlobalBusProvider
--   [486](https://github.com/davidsowerby/krail/issues/486): Error 500 instead of Invalid URI
--   [488](https://github.com/davidsowerby/krail/issues/488): Service INITIAL to STOPPED
--   [489](https://github.com/davidsowerby/krail/issues/489): DefaultBroadcaster holds strong UI references
--   [490](https://github.com/davidsowerby/krail/issues/490): Push in build file not valid
--   [491](https://github.com/davidsowerby/krail/issues/491): @Dependency annotation params not consistent
+-   [85](https://github.com/davidsowerby/krail/issues/85): Enable Shiro caching
+-   [89](https://github.com/davidsowerby/krail/issues/89): login default button
+-   [236](https://github.com/davidsowerby/krail/issues/236): Should ResourceUtils be singleton?
+-   [244](https://github.com/davidsowerby/krail/issues/244): Check Singletons
+-   [342](https://github.com/davidsowerby/krail/issues/342): Scope differences incorrectly handled, Navigator and UserStatus
+-   [400](https://github.com/davidsowerby/krail/issues/400): Navigation components, confused when parent has all children hidden
+-   [415](https://github.com/davidsowerby/krail/issues/415): ApplicationConfiguration override opposite order to Option
+-   [416](https://github.com/davidsowerby/krail/issues/416): ApplicationConfiguration fluent interface to addConfig
+-   [417](https://github.com/davidsowerby/krail/issues/417): ApplicationConfiguration should be an interface
+-   [459](https://github.com/davidsowerby/krail/issues/459): DefaultOptionPopup not converting data types
+-   [460](https://github.com/davidsowerby/krail/issues/460): Field mapping for In Memory OptionEntity incorrect
+-   [492](https://github.com/davidsowerby/krail/issues/492): Vaadin 7.6.0
+-   [493](https://github.com/davidsowerby/krail/issues/493): org.reflections 0.9.10
+-   [494](https://github.com/davidsowerby/krail/issues/494): net.jodah:typetools 0.4.3
+-   [496](https://github.com/davidsowerby/krail/issues/496): Vaadin 7.6.1
+-   [497](https://github.com/davidsowerby/krail/issues/497): Acknowledge FindBugs
+-   [499](https://github.com/davidsowerby/krail/issues/499): benefit in separate testUtil module?
+-   [501](https://github.com/davidsowerby/krail/issues/501): ShiroMethodInterceptor using field injection
+-   [502](https://github.com/davidsowerby/krail/issues/502): Review use of exceptionToThrow in ShiroMethodInterceptor
+-   [503](https://github.com/davidsowerby/krail/issues/503): OptionList and AnnotationOptionList missing from DefaultOptionStringConverter.convertStringToValue
+-   [507](https://github.com/davidsowerby/krail/issues/507): Make OptionCacheKey generic
+-   [508](https://github.com/davidsowerby/krail/issues/508): Restructure packages
+-   [509](https://github.com/davidsowerby/krail/issues/509): Reduce duplication in Option handling
+-   [510](https://github.com/davidsowerby/krail/issues/510): Restrict OptionCache to VaadinSessionScoped?
+-   [511](https://github.com/davidsowerby/krail/issues/511): Option.set method parameters reversed
+-   [512](https://github.com/davidsowerby/krail/issues/512): OptionKey should be immutable
+-   [514](https://github.com/davidsowerby/krail/issues/514): Vaadin 7.6.2
+-   [515](https://github.com/davidsowerby/krail/issues/515): Cannot test "destroy context with null injector"
+-   [517](https://github.com/davidsowerby/krail/issues/517): DefaultClassPatternDao test fails
+-   [520](https://github.com/davidsowerby/krail/issues/520): Merge ViewBaseI18N into ViewBase
+-   [521](https://github.com/davidsowerby/krail/issues/521): Improve NavigationState
 
 
 #### Dependency changes
 
-   test compile dependency version changed to: krail-testUtil:1.0.16
-   test compile dependency version changed to: q3c-testUtil:0.7.11
 
 #### Detail
 
-*Updated version and version description*
+*Release notes and version.properties generated*
 
 
 ---
-*Demo removed from the build*
+*Version files updated*
 
 
 ---
-*Tutorial is now complete and Dev Guide material migrated*
+*Fix [521](https://github.com/davidsowerby/krail/issues/521) Improve NavigationState*
 
-Close [332](https://github.com/davidsowerby/krail/issues/332)
-Close [331](https://github.com/davidsowerby/krail/issues/331)
-Close [320](https://github.com/davidsowerby/krail/issues/320)
-Close [262](https://github.com/davidsowerby/krail/issues/262)
-Close [168](https://github.com/davidsowerby/krail/issues/168)
-Close [112](https://github.com/davidsowerby/krail/issues/112)
-Close [111](https://github.com/davidsowerby/krail/issues/111)
-Close [102](https://github.com/davidsowerby/krail/issues/102)
+Addressed consistency, exception thrown if content accessed and state is inconsistent
+Deprecated non-fluent setters
+Logic for correct interpretation of URI structure still resides in URIFragmentHandler, so that can be implemented differently if a developer so requires
 
 
 ---
-*Fix [491](https://github.com/davidsowerby/krail/issues/491) Dependency parameter 'required' changed to 'optional'*
-
-Devguide files changed to meaningful names and references corrected
+*See [500](https://github.com/davidsowerby/krail/issues/500) code coverage 90%*
 
 
 ---
-*Fix [395](https://github.com/davidsowerby/krail/issues/395) Manual merge of Eclipse chapter*
+*Fix [520](https://github.com/davidsowerby/krail/issues/520) Merged ViewBase18N into ViewBase*
+
+Added interface NamedAndDescribed with name and description I18NKeys.  KrailView and Service extend this interface and ViewBase / AbstractService provide the translation.
+This means that all views are now constructed with a Translate parameter
+ScopedUI makes use of this to add view name to the page title
+MockTranslate added to simplify testing with I18N
 
 
 ---
-*Fix [486](https://github.com/davidsowerby/krail/issues/486) Corrected navigation response to invalid URI*
-
-Handling of invalid URI moved from KrailErrorHandler to InvalidURIHandler injected directly into Navigator.  Binding for  InvalidURIHandler (formerly  InvalidURIExceptionHandler) moved to NavigationModule
+*See [500](https://github.com/davidsowerby/krail/issues/500), code coverage 88%*
 
 
 ---
-*Fix [488](https://github.com/davidsowerby/krail/issues/488) Service with state INITIAL cannot be stopped or failed*
-
-reset() added to Service (changes state from a stopped or failed state to INITIAL)
+*Code coverage 87%*
 
 
 ---
-*Fix [489](https://github.com/davidsowerby/krail/issues/489) ScopedUI unregisters from Broadcaster*
+*Code coverage 86%*
 
-Unregistered before it completes detach()
+Fix [459](https://github.com/davidsowerby/krail/issues/459) Data conversion for OptionPopup
 
-
----
-*Fix [490](https://github.com/davidsowerby/krail/issues/490) Push added as part of standard build*
-
-Plus minor corrections to tutorial.
+Data conversion had been omitted, so was only working when the option value type and field value type were the same.  Corrected using Vaadin's DefaultConverterFactory, but expect that to be changed again under [518](https://github.com/davidsowerby/krail/issues/518).
 
 
 ---
-*Fix [484](https://github.com/davidsowerby/krail/issues/484) @Dependency in SitemapService replaced*
-
-Replaced with Guice-specified dependency, ApplicationConfigurationService no longer injected
+*Fix [514](https://github.com/davidsowerby/krail/issues/514) Vaadin 7.6.2*
 
 
 ---
-*Fix [485](https://github.com/davidsowerby/krail/issues/485) Use event bus providers*
+*Fix [517](https://github.com/davidsowerby/krail/issues/517) Tests corrected*
 
-Replaced all cases of @UIBus, @SessionBus and @GlobalBus annotated constructor parameters with UOIBusProvider, SessionBusProvider and GlobalBusProvider
-
-
----
-*Corrected Tutorial index*
+Needed   patternCacheKey.getKeyAsEnum() resolving from mock
 
 
 ---
-*Tutorial for Vaadin Push completed*
-
-Corrected file names
+*[q3c-testUtil 15](https://github.com/davidsowerby/q3c-testUtil/issues/15) separated q3c-testUtil from master build*
 
 
 ---
-*Tutorial file names changed to names instead of numbers*
+*Fix [515](https://github.com/davidsowerby/krail/issues/515) injector made package visible*
+
+ Enables testing of null injector
+ Gradle wrapper files re-instated
 
 
 ---
-*Services tutorial complete*
+*[513](https://github.com/davidsowerby/krail/issues/513) backed out of separation from master*
+
+Deferring 513 until later, reverting to centralised build under 'master'
 
 
 ---
-*EventBus tutorial complete.*
-
-Plus minor Tutorial amends
+*[513](https://github.com/davidsowerby/krail/issues/513) adding coverage via coveralls*
 
 
 ---
-*Javadoc updates only*
+*[513](https://github.com/davidsowerby/krail/issues/513) handling I18NKey - Enum conversions*
+
+Only casues a problem with Travis build
 
 
 ---
-*Fix [482](https://github.com/davidsowerby/krail/issues/482) Vaadin 7.5.10*
+*[513](https://github.com/davidsowerby/krail/issues/513) specify java 8*
 
 
 ---
-*Fix [483](https://github.com/davidsowerby/krail/issues/483) Acknowledgements*
+*[513](https://github.com/davidsowerby/krail/issues/513) Build fails with gradlew*
 
-Manual merge and update
-
-
----
-*Tutorial 11 (Guice scopes) added*
+Despite being committed, Travis reports: "Could not find or load main class org.gradle.wrapper.GradleWrapperMain"
 
 
 ---
-*typos in tutorial01*
+*[513](https://github.com/davidsowerby/krail/issues/513) Separated krail core from master project*
 
 
 ---
-*Fix [480](https://github.com/davidsowerby/krail/issues/480) Using Guice to define Service dependencies*
-
-Design reworked again - design of [478](https://github.com/davidsowerby/krail/issues/478) did not work well with using Guice to define dependencies.  Now possible to define dependencies using annotations or Guice or any combination of them.  Service classes are represented using a ServiceKey to avoid problems with class names changing when enhanced by AOP (or any other enhancer).
-
-Global, Session and UI BusProviders remove risk of annotated constructor paramenters being overriden by an event bus of the wrong scope.
-
-ServiceController replaced by ServicesModel.  Although not implemented it would be perfectly possible to change dependencies or dependency types at run time by manipulating the ServiceModel
+*[513](https://github.com/davidsowerby/krail/issues/513) travis.yml missed the '.' prefix*
 
 
 ---
-*Fix [478](https://github.com/davidsowerby/krail/issues/478) Vaadin 7.5.9*
+*[513](https://github.com/davidsowerby/krail/issues/513) travis.yml added*
+
+Ticket cannot be closed until Travis build successful
 
 
 ---
-*Fix [240](https://github.com/davidsowerby/krail/issues/240) Services redesigned*
+*[krail-master 36](https://github.com/davidsowerby/krail-master/issues/36) rename build file*
 
-Major rework of Services and the management of dependencies between them.
-
-Fix [473](https://github.com/davidsowerby/krail/issues/473) ```AbstractService``` provides more robust handling of state changes, making sub-classing simpler.
-Fix [466](https://github.com/davidsowerby/krail/issues/466) ServicesController added for active intervention (starting / stopping services), while ```ServiceMonitor``` stays passive
-Fix [469](https://github.com/davidsowerby/krail/issues/469) Service.State defined in the Service interface, along with helper methods
-
-Configuration of dependencies can still be applied using @Dependency, but requires implementing ```ServiceUsingDependencyAnnotation```
-Dependencies can now also be configured through Guice.
-
-The lifecycle now includes transitional states of STARTING and STOPPING.
+reverted to 'build.gradle' to enable Travis
 
 
 ---
-*Fix [477](https://github.com/davidsowerby/krail/issues/477) Vaadin 7.5.8*
+*Fix [499](https://github.com/davidsowerby/krail/issues/499) krail-testUtil merged back into core*
 
 
 ---
-*Fix [468](https://github.com/davidsowerby/krail/issues/468) Merge AbstractService & AbstractServiceI18N*
+*Fix [400](https://github.com/davidsowerby/krail/issues/400) Navigation components aware of excluded nodes*
 
-AbstractService provides I18N name and description
-@Dependency requiredAtStart=false behaviour clarified, and tests amended.  This setting makes the dependency optional.
-ClassnameUtils renamed ClassNameUtils
-ServiceUtils removed- functionality is in ClassNameUtils
-
-
----
-*Fix [474](https://github.com/davidsowerby/krail/issues/474) Vaadin 7.5.7*
-
-Upgrade to Vaadin 7.5.7
+TreeCopy calls on NodeModifier for implementation specific responses for a node with no children (a 'leaf'), but also adds an 'override' so that TreeCopy can enforce a limited depth copy.
+Net result is that navigation components correctly display regardless of whether nodes are excluded or not
+Some unused classes deleted
 
 
 ---
-*Fix [465](https://github.com/davidsowerby/krail/issues/465) Change to MkDocs index file*
+*Fix [502](https://github.com/davidsowerby/krail/issues/502) exceptionToThrow removed from ShiroMethodInterceptor*
 
-MkDocs have updated their file format for mkdocs.yml
+There was no value to the previous arrangement
+Also corrected SourcePanel - missed from previous commit
+
+
+---
+*Fix [512](https://github.com/davidsowerby/krail/issues/512) OptionKey is immutable*
+
+Only effect is on an experimental page, which can be addressed later
+
+
+---
+*Fix [509](https://github.com/davidsowerby/krail/issues/509) Reduced duplication of Option handling*
+
+Restructured OptionDao to use a delegate for different persistence providers, currently just InMemory and JPA.  This removes duplicated logic in krail-jpa, and also enables Option tests to be inherited.
+OptionStringConverter renamed OptionElementConverter
+
+
+---
+*Fix [503](https://github.com/davidsowerby/krail/issues/503) AnnotationOptionList and OptionList inlcuded in conversion*
+
+OptionListConverter invoked directly from the OptionDao
+renamed OptionStringConverter OptionElementConverter
+AnnotationOptionList added to the OptionElementConverter
+
+
+---
+*Fix [511](https://github.com/davidsowerby/krail/issues/511) Option.set parameter order*
+
+Changed to be in key-value order
+
+
+---
+*Fix [497](https://github.com/davidsowerby/krail/issues/497) Acknowledge FindBugs*
+
+
+---
+*Fix [342](https://github.com/davidsowerby/krail/issues/342) Multi-user testing*
+
+Changes are actually in testApp
+
+
+---
+*Fix [460](https://github.com/davidsowerby/krail/issues/460) Incorrect InMemory mapping*
+
+Completely replaced the unnecessarily complex InMemory store with a much simpler version.
+
+Refactored classes that were missed under [508](https://github.com/davidsowerby/krail/issues/508) - a number of persistence related classes were in core i18n and option packages.
+
+
+---
+*Fix [510](https://github.com/davidsowerby/krail/issues/510) DefaultOptionCache is VaadinSessionScoped*
+
+ Using annotation instead of binding.  Removed userId from OptionCacheKey
+
+
+---
+*Fix [508](https://github.com/davidsowerby/krail/issues/508) restructured packages*
+
+
+---
+*Fix [507](https://github.com/davidsowerby/krail/issues/507) OptionCacheKey is generic*
+
+
+---
+*Javadoc and documentation*
+
+
+---
+*[500](https://github.com/davidsowerby/krail/issues/500) Code coverage 83%*
+
+DefaultOptionStringConverter corrected:  LocalDateTime format, recognition of I18NKey and Enum
+StackTraceUtil replaced by commons.lang.ExceptionUtil
+
+
+---
+*Fix [501](https://github.com/davidsowerby/krail/issues/501) Removed field injection from ShiroMethodInterceptor*
+
+Replaced by using providers to avoid the Guice Lifecycle conflict that the field injection was intended to avoid
+
+
+---
+*Pattern and Option Dao re-structure*
+
+Needed to accommodate restucutruin of Daos, see [krail-jpa 18](https://github.com/davidsowerby/krail-jpa/issues/18)
+
+
+---
+*See [340](https://github.com/davidsowerby/krail/issues/340)  FindBugs analysis complete*
+
+
+---
+*Fix [417](https://github.com/davidsowerby/krail/issues/417) ApplicationConfiguration as an interface*
+
+Also a few minor code changes from quality review, and improved test coverage
+
+
+---
+*Fix [416](https://github.com/davidsowerby/krail/issues/416) Fluent addConfig() added*
+
+
+---
+*Fix [415](https://github.com/davidsowerby/krail/issues/415) Config layers priority the same as Option*
+
+Previously the configuration layers in ApplicationConfiguration were the opposite way round to that used in Option.  Both now have the lowest number as the highest priority
+
+
+---
+*Fix [496](https://github.com/davidsowerby/krail/issues/496) Vaadin 7.6.1*
+
+Also Guava to 19.0
+
+
+---
+*Fix [244](https://github.com/davidsowerby/krail/issues/244) Singleton Thread safety*
+
+All Singletons checked for thread safety
+
+Further changes to Services design, partly to overcome deadlocks.  RelatedServicesExecutor is delegate to start/stop dependencies/dependants
+The lifecycle is abbreviated with a Cause  added, mainly  for STOPPED and FAILED states
+
+
+---
+*See [244](https://github.com/davidsowerby/krail/issues/244).  MasterSitemap thread safety*
+
+Introduced SitemapQueue, which is not yet necessary but will help with [254](https://github.com/davidsowerby/krail/issues/254), as it enables the switching of MasterSitemap versions.  A timeout has been added for loading of the MasterSitemap.
+
+MasterSitemap is now locked after initial load, which removes the need for managing concurrent thread access, as it is now read-only once loaded.
+
+A common BusProvider interface has been added
+
+ApplicationConfiguration considered for making Threadsafe.   See [495](https://github.com/davidsowerby/krail/issues/495) for explanation.  Tutorial and Javadoc updated
+
+A number of small changes made as part of quality review
+
+
+---
+*Fix [236](https://github.com/davidsowerby/krail/issues/236) Replaced static utilities*
+
+ClassNameUtils and ResourceUtils are interfaces with default implementations, enabling replacement by developers.  Bindings are in UtilsModule
+
+
+---
+*Fix [89](https://github.com/davidsowerby/krail/issues/89) LoginView Submit button is default*
+
+'Enter' submits credentials
+
+
+---
+*Fix [85](https://github.com/davidsowerby/krail/issues/85) Shiro cache added*
+
+Cache implementation can be changed by overriding DefaultShiroModule.bindCacheManager()
+
+
+---
+*Fix [492](https://github.com/davidsowerby/krail/issues/492) Vaadin 7.6.0*
+
+
+---
+*Fix [494](https://github.com/davidsowerby/krail/issues/494) net.jodah update*
+
+net.jodah:typetools:0.4.3
+
+
+---
+*Fix [493](https://github.com/davidsowerby/krail/issues/493) update org.reflections to 0.9.10*
 
 
 ---
