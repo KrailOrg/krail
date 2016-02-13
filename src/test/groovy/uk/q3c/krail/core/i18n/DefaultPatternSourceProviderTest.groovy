@@ -17,8 +17,8 @@ import com.google.inject.Provider
 import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
-import uk.q3c.krail.core.i18n.i8nModule.TestPatternSource
-import uk.q3c.krail.core.i18n.i8nModule.TestPatternSource1
+import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
+import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource1
 import uk.q3c.krail.core.option.AnnotationOptionList
 import uk.q3c.krail.core.option.Option
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource

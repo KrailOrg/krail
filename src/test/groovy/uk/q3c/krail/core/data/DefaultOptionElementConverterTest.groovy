@@ -24,6 +24,7 @@ import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
 import uk.q3c.krail.core.services.Service
 
 import java.time.LocalDateTime
+
 /**
  * Created by David Sowerby on 21 Jan 2016
  */

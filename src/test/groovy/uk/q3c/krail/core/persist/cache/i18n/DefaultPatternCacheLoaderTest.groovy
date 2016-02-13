@@ -18,7 +18,7 @@ import spock.lang.Specification
 import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.PatternSourceProvider
-import uk.q3c.krail.core.i18n.i8nModule.TestPatternSource
+import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
 import uk.q3c.krail.core.option.Option
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternDao
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource

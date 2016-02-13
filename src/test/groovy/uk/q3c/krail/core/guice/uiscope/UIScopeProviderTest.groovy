@@ -19,7 +19,6 @@ import com.vaadin.ui.UI
 import com.vaadin.util.CurrentInstance
 import spock.lang.Specification
 import uk.q3c.krail.core.ui.ScopedUI
-
 /**
  * Created by David Sowerby on 09 Feb 2016
  */

@@ -32,6 +32,7 @@ import uk.q3c.util.testutil.LogMonitor
 import javax.servlet.ServletContextEvent
 import javax.validation.MessageInterpolator
 import java.lang.annotation.Annotation
+
 /**
  * Integration test for {@link DefaultBindingManager}
  *

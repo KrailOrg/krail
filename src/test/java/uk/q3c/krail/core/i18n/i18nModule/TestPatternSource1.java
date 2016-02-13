@@ -11,7 +11,7 @@
  *
  */
 
-package uk.q3c.krail.core.i18n.i8nModule;/*
+package uk.q3c.krail.core.i18n.i18nModule;/*
  * Copyright (c) 2015. David Sowerby
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
