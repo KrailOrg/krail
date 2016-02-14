@@ -14,14 +14,11 @@
 package uk.q3c.krail.core.data
 
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
-
 /**
  *
  * Created by David Sowerby on 08/08/15.
  */
-@UnitTestFor(ClassConverter)
 class ClassConverterTest extends Specification {
 
     ClassConverter converter

@@ -15,17 +15,14 @@ package uk.q3c.krail.core.data
 
 import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.eventbus.SessionBus
 import uk.q3c.krail.core.i18n.DefaultCurrentLocale
 import uk.q3c.krail.core.option.AnnotationOptionList
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
-
 /**
  *
  * Created by David Sowerby on 08/08/15.
  */
-@UnitTestFor(AnnotationOptionListConverter)
 class AnnotationOptionListConverterTest extends Specification {
 
     AnnotationOptionListConverter converter

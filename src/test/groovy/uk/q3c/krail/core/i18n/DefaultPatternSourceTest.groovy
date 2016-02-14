@@ -15,14 +15,12 @@ package uk.q3c.krail.core.i18n
 
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
 import uk.q3c.krail.core.option.Option
 import uk.q3c.krail.core.persist.cache.i18n.DefaultPatternCacheLoader
 import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternDao
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
-
 /**
  * This test had to be changed to use a real DefaultPatternCacheLoader rather than a mock, although oddly the Mock did work originally
  * There are some issues with CGLib https://groups.google.com/forum/#!topic/spockframework/59WIHGgcSNE
@@ -32,7 +30,6 @@ import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
  * Created by David Sowerby on 29/07/15.
  */
 @SuppressWarnings("GroovyAssignabilityCheck")
-@UnitTestFor(DefaultPatternSource.class)
 class DefaultPatternSourceTest extends Specification {
 
 

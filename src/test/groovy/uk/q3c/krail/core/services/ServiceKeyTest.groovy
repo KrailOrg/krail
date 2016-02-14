@@ -14,10 +14,8 @@
 package uk.q3c.krail.core.services
 
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.i18n.LabelKey
 
-@UnitTestFor(ServiceKey)
 class ServiceKeyTest extends Specification {
 
     def "to String"() {

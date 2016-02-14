@@ -14,18 +14,15 @@
 package uk.q3c.krail.core.services
 
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.util.CycleDetectedException
 
 import static org.assertj.core.api.Assertions.assertThat
 import static uk.q3c.krail.core.services.Dependency.Type
-import static uk.q3c.krail.core.services.ServicesGraph.Selection;
-
+import static uk.q3c.krail.core.services.ServicesGraph.Selection
 /**
  *
  * Created by david on 27/10/15.
  */
-@UnitTestFor(AbstractServicesGraph)
 class AbstractServicesGraphTest extends Specification {
 
     AbstractServicesGraph<Class<? extends Service>> graph

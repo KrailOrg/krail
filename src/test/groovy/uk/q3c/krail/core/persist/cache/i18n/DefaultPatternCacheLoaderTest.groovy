@@ -15,7 +15,6 @@ package uk.q3c.krail.core.persist.cache.i18n
 
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.PatternSourceProvider
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
@@ -28,7 +27,6 @@ import uk.q3c.util.testutil.LogMonitor
  * Created by David Sowerby on 30/07/15.
  */
 //
-@UnitTestFor(DefaultPatternCacheLoader.class)
 class DefaultPatternCacheLoaderTest extends Specification {
 
     DefaultPatternCacheLoader loader

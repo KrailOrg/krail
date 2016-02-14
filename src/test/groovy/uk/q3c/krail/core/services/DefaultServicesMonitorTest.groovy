@@ -15,7 +15,6 @@ package uk.q3c.krail.core.services
 
 import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.eventbus.BusMessage
 import uk.q3c.krail.core.eventbus.GlobalBusProvider
 import uk.q3c.krail.core.i18n.I18NKey
@@ -26,7 +25,6 @@ import java.time.LocalDateTime
 
 import static uk.q3c.krail.core.services.Service.State.*
 
-@UnitTestFor(DefaultServicesMonitor)
 class DefaultServicesMonitorTest extends Specification {
 
     PubSubSupport<BusMessage> globalBus = Mock(PubSubSupport)

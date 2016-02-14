@@ -16,14 +16,11 @@ package uk.q3c.krail.core.option
 import com.google.common.collect.ImmutableList
 import com.google.inject.Inject
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
-
 /**
  *
  * Created by David Sowerby on 08/08/15.
  */
-@UnitTestFor(AnnotationOptionList)
 class AnnotationOptionListTest extends Specification {
 
     AnnotationOptionList list

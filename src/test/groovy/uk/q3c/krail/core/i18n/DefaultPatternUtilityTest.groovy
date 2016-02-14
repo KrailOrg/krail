@@ -15,18 +15,15 @@ package uk.q3c.krail.core.i18n
 
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternDao
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
 import uk.q3c.krail.core.validation.ValidationKey
-
 //((ValidationKey.getEnumConstants().length + LabelKey.getEnumConstants().length + DescriptionKey.getEnumConstants().length + MessageKey.getEnumConstants().length) * 2) * patternDao.write(_, 'anything')
 /**
  *
  *
  * Created by David Sowerby on 29/07/15.
  */
-@UnitTestFor(DefaultPatternUtility.class)
 class DefaultPatternUtilityTest extends Specification {
 
     DefaultPatternUtility utility

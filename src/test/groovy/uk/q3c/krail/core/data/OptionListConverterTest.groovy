@@ -15,14 +15,11 @@ package uk.q3c.krail.core.data
 
 import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.option.OptionList
-
 /**
  *
  * Created by David Sowerby on 06/08/15.
  */
-@UnitTestFor(OptionListConverter)
 class OptionListConverterTest extends Specification {
 
     OptionListConverter converter

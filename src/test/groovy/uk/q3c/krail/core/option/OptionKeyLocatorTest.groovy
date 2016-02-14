@@ -16,13 +16,10 @@ package uk.q3c.krail.core.option
 import com.google.common.collect.ImmutableList
 import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
-
 /**
  *
  * Created by David Sowerby on 07/08/15.
  */
-@UnitTestFor(OptionKeyLocator)
 class OptionKeyLocatorTest extends Specification {
 
     OptionKeyLocator locator

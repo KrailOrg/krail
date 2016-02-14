@@ -14,14 +14,12 @@
 package uk.q3c.krail.core.services
 
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 
 import java.time.LocalDateTime
 
 import static uk.q3c.krail.core.services.Service.State.STOPPED
 import static uk.q3c.krail.core.services.Service.State.STOPPING
 
-@UnitTestFor(ServiceStatusRecord)
 class ServiceStatusRecordTest extends Specification {
 
     Service serviceA = Mock(Service)

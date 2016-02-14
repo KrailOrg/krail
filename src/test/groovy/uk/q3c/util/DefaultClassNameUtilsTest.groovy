@@ -16,17 +16,14 @@ package uk.q3c.util
 import com.google.inject.Inject
 import spock.guice.UseModules
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.i18n.I18NKey
 import uk.q3c.krail.core.services.Service
 import uk.q3c.krail.core.services.ServiceKey
 import uk.q3c.krail.core.services.ServiceStatus
-
 /**
 
  * Created by David on 22/10/15.
  */
-@UnitTestFor(DefaultClassNameUtils)
 @UseModules([AOPTestModule])
 class DefaultClassNameUtilsTest extends Specification {
 

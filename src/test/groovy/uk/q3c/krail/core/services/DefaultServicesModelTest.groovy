@@ -12,10 +12,10 @@
  */
 
 package uk.q3c.krail.core.services
+
 import com.google.inject.Provider
 import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.eventbus.BusMessage
 import uk.q3c.krail.core.eventbus.GlobalBusProvider
 import uk.q3c.krail.core.i18n.Translate
@@ -27,7 +27,6 @@ import static uk.q3c.krail.core.i18n.TestLabelKey.*
  * Created by david on 27/10/15.
  */
 @SuppressWarnings("GroovyAssignabilityCheck")
-@UnitTestFor(DefaultServicesModel)
 class DefaultServicesModelTest extends Specification {
 
 

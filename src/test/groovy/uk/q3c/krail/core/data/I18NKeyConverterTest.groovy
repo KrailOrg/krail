@@ -14,17 +14,14 @@
 package uk.q3c.krail.core.data
 
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.i18n.I18NKey
 import uk.q3c.krail.core.i18n.LabelKey
-
 /**
  *
  * Converts an I18NKey to a full String representation (the package name, class name and constannt name concatenated), and back again
  *
  * Created by David Sowerby on 07/08/15.
  */
-@UnitTestFor(I18NKeyConverter)
 class I18NKeyConverterTest extends Specification {
 
     I18NKeyConverter converter

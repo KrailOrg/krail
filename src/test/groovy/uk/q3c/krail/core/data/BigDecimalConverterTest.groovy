@@ -14,13 +14,10 @@
 package uk.q3c.krail.core.data
 
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
-
 /**
  *
  * Created by David Sowerby on 04/08/15.
  */
-@UnitTestFor(BigDecimalConverter)
 class BigDecimalConverterTest extends Specification {
 
     BigDecimalConverter converter

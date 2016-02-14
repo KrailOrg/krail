@@ -16,7 +16,6 @@ package uk.q3c.krail.core.services
 import com.google.inject.Inject
 import spock.guice.UseModules
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.eventbus.GlobalBusProvider
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.Translate
@@ -27,7 +26,6 @@ import uk.q3c.util.testutil.LogMonitor
  *
  * Created by David Sowerby on 11/11/15.
  */
-@UnitTestFor(DefaultServiceDependencyScanner)
 @UseModules([UtilsModule])
 class DefaultServiceDependencyScannerTest extends Specification {
 

@@ -16,7 +16,6 @@ package uk.q3c.krail.core.i18n
 import com.google.inject.Provider
 import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource1
 import uk.q3c.krail.core.option.AnnotationOptionList
@@ -27,7 +26,6 @@ import uk.q3c.krail.core.persist.common.i18n.PatternDao
 import java.lang.annotation.Annotation
 
 @SuppressWarnings(["GroovyAssignabilityCheck", "GrEqualsBetweenInconvertibleTypes"])
-@UnitTestFor(DefaultPatternSourceProvider)
 class DefaultPatternSourceProviderTest extends Specification {
 
     DefaultPatternSourceProvider provider

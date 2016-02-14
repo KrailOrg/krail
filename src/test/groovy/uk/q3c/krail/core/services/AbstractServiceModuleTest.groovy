@@ -19,12 +19,10 @@ import testutil.TestI18NModule
 import testutil.TestOptionModule
 import testutil.TestUIScopeModule
 import testutil.TestVaadinSessionScopeModule
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.eventbus.EventBusModule
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
 import uk.q3c.krail.util.UtilsModule
 
-@UnitTestFor(AbstractServiceModule)
 class AbstractServiceModuleTest extends Specification {
 
     ServiceKey serviceKeyA = Mock(ServiceKey)

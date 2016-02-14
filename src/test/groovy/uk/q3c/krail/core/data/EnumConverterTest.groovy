@@ -14,16 +14,13 @@
 package uk.q3c.krail.core.data
 
 import spock.lang.Specification
-import uk.q3c.krail.UnitTestFor
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters
-
 /**
  *
  * Converts an Enum to a full String representation (the package name, class name and constannt name concatenated), and back again
  *
  * Created by David Sowerby on 07/08/15.
  */
-@UnitTestFor(EnumConverter)
 class EnumConverterTest extends Specification {
 
     EnumConverter converter
