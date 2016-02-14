@@ -68,7 +68,7 @@ Would not work in a [clustered environment](https://github.com/davidsowerby/krai
 
 # Status
 
-11th February 2016:
+14th February 2016:
 
 * Vaadin 7.6.2 is integrated with:
 * Guice 4.0
