@@ -11,10 +11,11 @@
  *
  */
 
-package testutil
+package uk.q3c.krail.testutil
 
 import net.engio.mbassy.bus.error.PublicationError
 import spock.lang.Specification
+import uk.q3c.krail.testutil.eventbus.TestEventBusErrorHandler
 import uk.q3c.util.testutil.LogMonitor
 
 /**

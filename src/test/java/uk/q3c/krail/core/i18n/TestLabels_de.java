@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.core.i18n;
 
+import uk.q3c.krail.testutil.i18n.TestLabelKey;
+
 /**
  * @author David Sowerby 9 Feb 2013
  */

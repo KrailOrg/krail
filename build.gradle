@@ -54,8 +54,9 @@ ext.versionDescription = 'No version description provided'
 
 ext.releaseDate = new Date()
 
-//version = '0.9.8'
-version = versionFromFile(project.projectDir)
+group = 'uk.q3c.krail'
+version = '0.9.9'
+//version = versionFromFile(project.projectDir)
 
 repositories {
     jcenter()
@@ -114,6 +115,7 @@ dependencies {
     //included in compile to enable the production of test utils
     compile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
     compile 'org.mockito:mockito-all:1.10.19'
+    compile 'org.spockframework:spock-core:1.0-groovy-2.4'
 
     //testing
 
@@ -126,7 +128,7 @@ dependencies {
     testCompile 'com.mycila:mycila-guice:2.10.ga'
     testCompile 'com.mycila.testing.plugins:mycila-testing-guice:2.8'
     testCompile 'org.mockito:mockito-all:1.10.19'
-    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+
     testCompile 'org.spockframework:spock-guice:1.0-groovy-2.4'
     testCompile 'cglib:cglib-nodep:3.2.0' // needed for Spock mocking
 //    testCompile "javax.servlet:javax.servlet-api:3.+"

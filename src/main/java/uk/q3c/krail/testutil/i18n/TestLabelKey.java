@@ -10,23 +10,16 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
+package uk.q3c.krail.testutil.i18n;
 
-package testutil;
+import uk.q3c.krail.core.i18n.I18NKey;
 
-import com.vaadin.server.VaadinSession;
-import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+public enum TestLabelKey implements I18NKey {
 
-import static org.mockito.Mockito.mock;
-
-/**
- * Created by David Sowerby on 14/03/15.
- */
-public class TestVaadinSessionScopeModule extends VaadinSessionScopeModule {
+    Large, Home, My_Account, Transfers, Login, MoneyInOut, Private, Public, Opt, Yes, No, View1, View2, ViewA,
+    ViewA1, ViewA11, ViewB, ViewB1, ViewB11, pattern_with_embedded_key, Blank, key1, Static, Private_Static, ServiceA, ServiceB, ServiceC, ServiceD,
+    ServiceE, ServiceF, ServiceG, ServiceH,
+    ViewA111, ViewB12, ViewB121, ViewB122, key2
 
 
-    public TestVaadinSessionScopeModule() {
-        getScope().flush();
-        VaadinSession mockSession = mock(VaadinSession.class);
-        VaadinSession.setCurrent(mockSession);
-    }
 }

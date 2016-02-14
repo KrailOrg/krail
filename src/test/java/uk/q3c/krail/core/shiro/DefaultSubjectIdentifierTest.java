@@ -22,15 +22,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import testutil.TestI18NModule;
-import testutil.TestOptionModule;
-import testutil.TestPersistenceModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
+import uk.q3c.krail.testutil.i18n.TestI18NModule;
+import uk.q3c.krail.testutil.option.TestOptionModule;
+import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 
 import java.util.Locale;
 

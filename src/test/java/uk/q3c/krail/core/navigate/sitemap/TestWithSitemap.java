@@ -31,6 +31,7 @@ import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.view.PublicHomeView;
+import uk.q3c.krail.testutil.i18n.TestLabelKey;
 
 import java.text.Collator;
 import java.util.Locale;

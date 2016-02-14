@@ -17,8 +17,6 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import testutil.TestOptionModule;
-import testutil.TestPersistenceModule;
 import uk.q3c.krail.core.config.ApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
@@ -40,6 +38,8 @@ import uk.q3c.krail.core.view.PrivateHomeView;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
+import uk.q3c.krail.testutil.option.TestOptionModule;
+import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 import uk.q3c.krail.util.UtilsModule;
 
 import java.util.Map;

@@ -11,7 +11,7 @@
  *
  */
 
-package testutil;
+package uk.q3c.krail.testutil.eventbus;
 
 import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import net.engio.mbassy.bus.error.PublicationError;

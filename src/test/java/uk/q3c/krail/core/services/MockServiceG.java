@@ -16,8 +16,8 @@ package uk.q3c.krail.core.services;
 
 import com.google.inject.Inject;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.core.i18n.TestLabelKey;
 import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.testutil.i18n.TestLabelKey;
 
 public class MockServiceG extends MockService {
 

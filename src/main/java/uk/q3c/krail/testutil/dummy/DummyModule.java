@@ -11,7 +11,7 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package testutil.dummy;
+package uk.q3c.krail.testutil.dummy;
 
 import com.google.inject.AbstractModule;
 

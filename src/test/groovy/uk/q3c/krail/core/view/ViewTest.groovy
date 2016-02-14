@@ -15,10 +15,11 @@ package uk.q3c.krail.core.view
 
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
-import testutil.MockTranslate
-import testutil.ViewFieldChecker
 import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
+import uk.q3c.krail.testutil.i18n.MockTranslate
+import uk.q3c.krail.testutil.view.ViewFieldChecker
+
 /**
  * Created by David Sowerby on 07 Feb 2016
  */

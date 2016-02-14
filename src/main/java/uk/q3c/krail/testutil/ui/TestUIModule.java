@@ -10,19 +10,26 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
+package uk.q3c.krail.testutil.ui;
 
-package testutil;
-
-import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule;
+import uk.q3c.krail.core.ui.BasicUI;
+import uk.q3c.krail.core.ui.DefaultUIModule;
 
 /**
- * Sets up the {@link InMemoryModule} to provide the core DAOs
- * <p>
- * Created by David Sowerby on 26/06/15.
+ * Extends the default UIModule to provide instances of TestUI
+ *
+ * @author David Sowerby 12 Jan 2013
  */
-public class TestPersistenceModule extends InMemoryModule {
+public class TestUIModule extends DefaultUIModule {
 
-    public TestPersistenceModule() {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void define() {
+        addUIBinding(BasicUI.class);
     }
+
 
 }

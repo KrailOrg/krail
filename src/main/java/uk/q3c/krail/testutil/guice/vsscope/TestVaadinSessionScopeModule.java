@@ -10,26 +10,23 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package testutil;
 
-import uk.q3c.krail.core.ui.BasicUI;
-import uk.q3c.krail.core.ui.DefaultUIModule;
+package uk.q3c.krail.testutil.guice.vsscope;
+
+import com.vaadin.server.VaadinSession;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+
+import static org.mockito.Mockito.mock;
 
 /**
- * Extends the default UIModule to provide instances of TestUI
- *
- * @author David Sowerby 12 Jan 2013
+ * Created by David Sowerby on 14/03/15.
  */
-public class TestUIModule extends DefaultUIModule {
+public class TestVaadinSessionScopeModule extends VaadinSessionScopeModule {
 
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void define() {
-        addUIBinding(BasicUI.class);
+    public TestVaadinSessionScopeModule() {
+        getScope().flush();
+        VaadinSession mockSession = mock(VaadinSession.class);
+        VaadinSession.setCurrent(mockSession);
     }
-
-
 }

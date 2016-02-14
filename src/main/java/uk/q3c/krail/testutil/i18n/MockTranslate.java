@@ -11,7 +11,7 @@
  *
  */
 
-package testutil;
+package uk.q3c.krail.testutil.i18n;
 
 import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.i18n.Translate;

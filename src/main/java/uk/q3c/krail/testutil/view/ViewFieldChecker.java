@@ -11,7 +11,7 @@
  *
  */
 
-package testutil;
+package uk.q3c.krail.testutil.view;
 
 import com.vaadin.ui.Component;
 import uk.q3c.krail.core.i18n.Caption;

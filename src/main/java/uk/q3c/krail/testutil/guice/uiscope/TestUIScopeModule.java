@@ -10,7 +10,7 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package testutil;
+package uk.q3c.krail.testutil.guice.uiscope;
 
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;

@@ -25,7 +25,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import testutil.TestOptionModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.Translate;
@@ -47,6 +46,7 @@ import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.view.component.LocaleContainer;
+import uk.q3c.krail.testutil.option.TestOptionModule;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;

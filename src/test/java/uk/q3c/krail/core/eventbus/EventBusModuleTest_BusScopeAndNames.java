@@ -25,8 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import testutil.TestUIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
 import uk.q3c.util.testutil.LogMonitor;
 
 import java.util.List;

@@ -17,8 +17,8 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.i18n.TestLabelKey;
 import uk.q3c.krail.core.view.component.LocaleContainer;
+import uk.q3c.krail.testutil.i18n.TestLabelKey;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

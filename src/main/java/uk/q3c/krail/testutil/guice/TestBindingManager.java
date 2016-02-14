@@ -10,13 +10,13 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package testutil;
+package uk.q3c.krail.testutil.guice;
 
 import com.google.inject.Module;
-import testutil.dummy.DummyModule;
 import uk.q3c.krail.core.guice.DefaultBindingManager;
 import uk.q3c.krail.core.option.InMemory;
 import uk.q3c.krail.core.option.OptionModule;
+import uk.q3c.krail.testutil.dummy.DummyModule;
 
 import java.util.List;
 

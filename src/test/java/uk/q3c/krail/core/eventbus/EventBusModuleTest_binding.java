@@ -28,12 +28,12 @@ import net.engio.mbassy.bus.common.PubSubSupport;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import testutil.TestVaadinSessionScopeModule;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScope;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScope;
 import uk.q3c.krail.core.ui.BasicUI;
+import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

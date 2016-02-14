@@ -20,9 +20,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.i18n.TestLabelKey;
 import uk.q3c.krail.core.navigate.sitemap.AnnotationSitemapModuleTest.TestAnnotationsModule;
 import uk.q3c.krail.core.navigate.sitemap.AnnotationSitemapModuleTest.TestAnnotationsModule1;
+import uk.q3c.krail.testutil.i18n.TestLabelKey;
 
 import java.util.Map;
 

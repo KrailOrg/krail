@@ -10,14 +10,19 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.i18n;
 
-public enum TestLabelKey implements I18NKey {
+package uk.q3c.krail.testutil.persist;
 
-    Large, Home, My_Account, Transfers, Login, MoneyInOut, Private, Public, Opt, Yes, No, View1, View2, ViewA,
-    ViewA1, ViewA11, ViewB, ViewB1, ViewB11, pattern_with_embedded_key, Blank, key1, Static, Private_Static, ServiceA, ServiceB, ServiceC, ServiceD,
-    ServiceE, ServiceF, ServiceG, ServiceH,
-    ViewA111, ViewB12, ViewB121, ViewB122, key2
+import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule;
 
+/**
+ * Sets up the {@link InMemoryModule} to provide the core DAOs
+ * <p>
+ * Created by David Sowerby on 26/06/15.
+ */
+public class TestPersistenceModule extends InMemoryModule {
+
+    public TestPersistenceModule() {
+    }
 
 }

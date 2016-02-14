@@ -24,16 +24,16 @@ import org.apache.shiro.authz.annotation.*
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import spock.lang.Specification
-import testutil.TestI18NModule
-import testutil.TestOptionModule
-import testutil.TestUIScopeModule
-import testutil.TestVaadinSessionScopeModule
 import uk.q3c.krail.core.eventbus.EventBusModule
 import uk.q3c.krail.core.i18n.Caption
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.shiro.KrailSecurityManager
 import uk.q3c.krail.core.shiro.SubjectProvider
+import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
+import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
+import uk.q3c.krail.testutil.i18n.TestI18NModule
+import uk.q3c.krail.testutil.option.TestOptionModule
 import uk.q3c.krail.util.UtilsModule
 
 /**

@@ -19,7 +19,6 @@ import fixture.testviews2.*;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.i18n.TestLabelKey;
 import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.navigate.sitemap.DefaultUserSitemap;
@@ -28,6 +27,7 @@ import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.testutil.i18n.TestLabelKey;
 
 import java.text.CollationKey;
 import java.text.Collator;

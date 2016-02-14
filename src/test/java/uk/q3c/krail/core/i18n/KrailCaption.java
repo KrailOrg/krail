@@ -13,6 +13,8 @@
 
 package uk.q3c.krail.core.i18n;
 
+import uk.q3c.krail.testutil.i18n.TestLabelKey;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

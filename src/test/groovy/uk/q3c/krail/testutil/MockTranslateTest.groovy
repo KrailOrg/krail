@@ -11,11 +11,12 @@
  *
  */
 
-package testutil
+package uk.q3c.krail.testutil
 
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.MessageKey
+import uk.q3c.krail.testutil.i18n.MockTranslate
 
 /**
  * Created by David Sowerby on 09 Feb 2016

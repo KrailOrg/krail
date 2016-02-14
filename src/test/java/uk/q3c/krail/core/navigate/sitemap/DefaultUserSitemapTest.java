@@ -24,15 +24,15 @@ import net.engio.mbassy.listener.Listener;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import testutil.TestI18NModule;
-import testutil.TestOptionModule;
-import testutil.TestPersistenceModule;
-import testutil.TestUIScopeModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.CurrentLocale;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
+import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
+import uk.q3c.krail.testutil.i18n.TestI18NModule;
+import uk.q3c.krail.testutil.option.TestOptionModule;
+import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 
 import java.util.Locale;
 

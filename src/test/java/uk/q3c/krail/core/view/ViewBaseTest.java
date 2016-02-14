@@ -16,11 +16,11 @@ package uk.q3c.krail.core.view;
 import com.vaadin.ui.Label;
 import org.junit.Before;
 import org.junit.Test;
-import testutil.MockTranslate;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.testutil.i18n.MockTranslate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

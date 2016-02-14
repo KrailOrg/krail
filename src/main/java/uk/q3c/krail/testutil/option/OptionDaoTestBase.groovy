@@ -11,7 +11,7 @@
  *
  */
 
-package uk.q3c.krail.core.persist.common.option
+package uk.q3c.krail.testutil.option
 
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.Lists
@@ -25,6 +25,8 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters
 import uk.q3c.krail.core.option.*
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
+import uk.q3c.krail.core.persist.common.option.OptionDao
+import uk.q3c.krail.core.persist.common.option.OptionSource
 import uk.q3c.krail.core.user.profile.UserHierarchy
 import uk.q3c.krail.core.view.component.LocaleContainer
 

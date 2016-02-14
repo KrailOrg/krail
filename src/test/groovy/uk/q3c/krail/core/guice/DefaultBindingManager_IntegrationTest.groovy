@@ -15,8 +15,6 @@ package uk.q3c.krail.core.guice
 
 import com.google.inject.Module
 import com.google.inject.TypeLiteral
-import testutil.dummy.Dummy
-import testutil.dummy.DummyModule
 import uk.q3c.krail.core.i18n.I18NKey
 import uk.q3c.krail.core.option.InMemory
 import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnitHelper
@@ -27,6 +25,8 @@ import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionContainerProvider
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDaoDelegate
 import uk.q3c.krail.core.validation.JavaxValidationSubstitutes
 import uk.q3c.krail.core.validation.KrailInterpolator
+import uk.q3c.krail.testutil.dummy.Dummy
+import uk.q3c.krail.testutil.dummy.DummyModule
 import uk.q3c.util.testutil.LogMonitor
 
 import javax.servlet.ServletContextEvent

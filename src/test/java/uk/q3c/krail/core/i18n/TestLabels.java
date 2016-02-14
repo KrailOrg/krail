@@ -13,6 +13,7 @@
 package uk.q3c.krail.core.i18n;
 
 import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
+import uk.q3c.krail.testutil.i18n.TestLabelKey;
 
 /**
  * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely

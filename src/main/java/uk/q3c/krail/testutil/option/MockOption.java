@@ -11,7 +11,7 @@
  *
  */
 
-package testutil;
+package uk.q3c.krail.testutil.option;
 
 import com.google.inject.Inject;
 import uk.q3c.krail.core.option.Option;
