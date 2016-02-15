@@ -63,6 +63,10 @@ public abstract class ViewBase implements KrailView, Serializable {
         this.translate = translate;
     }
 
+    public Translate getTranslate() {
+        return translate;
+    }
+
     public boolean isComponentsConstructed() {
         return componentsConstructed;
     }
