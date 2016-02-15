@@ -70,7 +70,7 @@ public abstract class ConfigurationModuleBase extends AbstractServiceModule {
      * @return this for fluency
      * @see InheritingConfiguration
      */
-    protected ConfigurationModuleBase addConfig(String filename, int priority, boolean optional) {
+    public ConfigurationModuleBase addConfig(String filename, int priority, boolean optional) {
         checkNotNull(filename);
         prepIniFileConfigs.put(priority, new IniFileConfig(filename, optional));
         return this;
