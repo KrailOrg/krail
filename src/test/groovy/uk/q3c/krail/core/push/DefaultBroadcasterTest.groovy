@@ -15,9 +15,10 @@ package uk.q3c.krail.core.push
 
 import spock.lang.Specification
 import uk.q3c.krail.core.config.ApplicationConfiguration
+import uk.q3c.krail.core.guice.uiscope.UIKey
+import uk.q3c.util.testutil.LogMonitor
 
 import static org.assertj.core.api.Assertions.assertThat
-
 /**
  * Created by David Sowerby on 19 Jan 2016
  */
@@ -27,9 +28,16 @@ class DefaultBroadcasterTest extends Specification {
     ApplicationConfiguration applicationConfiguration = Mock()
     Broadcaster.BroadcastListener listener1 = Mock()
     Broadcaster.BroadcastListener listener2 = Mock()
+    LogMonitor logMonitor
 
     def setup() {
         broadcaster = new DefaultBroadcaster(applicationConfiguration)
+        logMonitor = new LogMonitor()
+        logMonitor.addClassFilter(DefaultBroadcaster)
+    }
+
+    def cleanup() {
+        logMonitor.close()
     }
 
     def "register, unregister and getGroupListener return valid results for ALL_MESSAGES, used and unused groups"() {
@@ -75,29 +83,35 @@ class DefaultBroadcasterTest extends Specification {
 
     def "broadcast, push enabled, messages received"() {
         given:
+        UIKey uiKey = new UIKey(55)
         broadcaster.register("a", listener1)
         broadcaster.register(Broadcaster.ALL_MESSAGES, listener2)
 
         when:
-        broadcaster.broadcast("a", "msg")
+        broadcaster.broadcast("a", "msg", uiKey)
 
         then:
         1 * applicationConfiguration.getBoolean('server.pushEnabled', true) >> true
-        1 * listener1.receiveBroadcast("a", "msg")
-        1 * listener2.receiveBroadcast("a", "msg")
+        1 * listener1.receiveBroadcast("a", "msg", uiKey, 1)
+        1 * listener2.receiveBroadcast("a", "msg", uiKey, 1)
+        logMonitor.debugLogs().contains('broadcasting message: 1 from: UIKey:55')
+
     }
 
     def "broadcast, push not enabled, messages not received"() {
         given:
+        UIKey uiKey = new UIKey(55)
         broadcaster.register("a", listener1)
         broadcaster.register(Broadcaster.ALL_MESSAGES, listener2)
 
         when:
-        broadcaster.broadcast("a", "msg")
+        broadcaster.broadcast("a", "msg", uiKey)
 
         then:
         1 * applicationConfiguration.getBoolean('server.pushEnabled', true) >> false
-        0 * listener1.receiveBroadcast("a", "msg")
-        0 * listener2.receiveBroadcast("a", "msg")
+        0 * listener1.receiveBroadcast(_, _, _, _)
+        0 * listener2.receiveBroadcast(_, _, _, _)
+        !logMonitor.debugLogs().contains('broadcasting message: 1 from: UIKey:55')
+        logMonitor.debugLogs().contains('server push is disabled, message not broadcast')
     }
 }

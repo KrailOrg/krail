@@ -89,8 +89,7 @@ public class ScopedUITest {
     VaadinSession session;
     @Mock
     UIScope uiScope;
-    @Mock
-    UIKey instanceKey;
+
     @Mock
     KrailView toView;
     @Mock
@@ -98,6 +97,7 @@ public class ScopedUITest {
     @Mock
     Option option;
     LogMonitor logMonitor;
+    UIKey uiKey;
     @Mock
     private MBassador<BusMessage> eventBus;
 
@@ -108,8 +108,10 @@ public class ScopedUITest {
         pushMessageRouter = new DefaultPushMessageRouter(uiBusProvider);
         logMonitor = new LogMonitor();
         logMonitor.addClassFilter(ScopedUI.class);
+        uiKey = new UIKey(33);
         ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
                 option);
+        ui.setInstanceKey(uiKey);
     }
 
     @After
@@ -156,7 +158,7 @@ public class ScopedUITest {
         prepAttach();
         ui.attach();
         ui.setScope(uiScope);
-        ui.setInstanceKey(instanceKey);
+        ui.setInstanceKey(uiKey);
         // when
         ui.detach();
         // then
@@ -247,13 +249,12 @@ public class ScopedUITest {
         prepAttach();
         ui.attach();
         ui.setScope(uiScope);
-        ui.setInstanceKey(instanceKey);
+        ui.setInstanceKey(uiKey);
 
         //when
-        ui.receiveBroadcast("group", "message");
+        ui.receiveBroadcast("group", "message", uiKey, 55);
         //then
-        logMonitor.debugLogs()
-                  .contains("receiving message: message");
+        assertThat(logMonitor.debugLogs()).contains("receiving message id: 55 from: UIKey:33");
     }
 
 

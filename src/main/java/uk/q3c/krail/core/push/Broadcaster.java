@@ -14,6 +14,7 @@
 package uk.q3c.krail.core.push;
 
 import com.google.common.collect.ImmutableList;
+import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.ui.ScopedUI;
 
 import javax.annotation.Nonnull;
@@ -46,12 +47,14 @@ public interface Broadcaster {
      *
      * @param group   the message group
      * @param message the message
+     * @param sender  UIKey identifying the sender of the message
      */
-    Broadcaster broadcast(@Nonnull String group, @Nonnull String message);
+    Broadcaster broadcast(@Nonnull String group, @Nonnull String message, @Nonnull UIKey sender);
 
 
     /**
      * Returns the group of listeners for {@code groupId}.  If the group is not registered, an empty list is returned
+     *
      * @param groupId id for the group
      * @return the group of listeners for {@code groupId}.  If the group is not registered, an empty list is returned
      */
@@ -59,6 +62,6 @@ public interface Broadcaster {
     ImmutableList<BroadcastListener> getListenerGroup(@Nonnull String groupId);
 
     interface BroadcastListener {
-        void receiveBroadcast(@Nonnull String group, @Nonnull String message);
+        void receiveBroadcast(@Nonnull String group, @Nonnull String message, @Nonnull UIKey sender, int messageId);
     }
 }

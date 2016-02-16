@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.config.ApplicationConfiguration;
 import uk.q3c.krail.core.config.ConfigKeys;
+import uk.q3c.krail.core.guice.uiscope.UIKey;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -42,10 +44,12 @@ public class DefaultBroadcaster implements Broadcaster {
     private final Map<String, List<BroadcastListener>> groups = new HashMap<>();
     private final List<BroadcastListener> allGroup = new ArrayList<>();
     private final ApplicationConfiguration applicationConfiguration;
+    private final AtomicInteger messageCount;
 
     @Inject
     protected DefaultBroadcaster(ApplicationConfiguration applicationConfiguration) {
         this.applicationConfiguration = applicationConfiguration;
+        messageCount = new AtomicInteger(0);
     }
 
 
@@ -87,20 +91,21 @@ public class DefaultBroadcaster implements Broadcaster {
 
 
     @Override
-    public synchronized Broadcaster broadcast(@Nonnull final String group, @Nonnull final String message) {
+    public synchronized Broadcaster broadcast(@Nonnull final String group, @Nonnull final String message, @Nonnull UIKey sender) {
         checkNotNull(group);
         checkNotNull(message);
         checkArgument(!group.isEmpty(), "Group should not be an empty String");
+        int messageId = messageCount.incrementAndGet();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         if (applicationConfiguration.getBoolean(ConfigKeys.SERVER_PUSH_ENABLED, true)) {
-            log.debug("broadcasting message: {}", message);
+            log.debug("broadcasting message: {} from: {}", messageId, sender);
             List<BroadcastListener> listenerGroup = groups.get(group);
             if (listenerGroup != null) {
                 for (final BroadcastListener listener : listenerGroup)
-                    executorService.execute(() -> listener.receiveBroadcast(group, message));
+                    executorService.execute(() -> listener.receiveBroadcast(group, message, sender, messageId));
             }
             for (final BroadcastListener listener : allGroup)
-                executorService.execute(() -> listener.receiveBroadcast(group, message));
+                executorService.execute(() -> listener.receiveBroadcast(group, message, sender, messageId));
         } else {
             log.debug("server push is disabled, message not broadcast");
         }
