@@ -42,7 +42,7 @@ In this Tutorial we will use both for the purposes of demonstration, but in prac
 
 ##State changes
 
-Whenever the state of a ```Service``` changes, a```ServiceBusMessage``` is published via the GlobalBus (see the [EventBus section](tutorial-event-bus.md)).  This could easily be utilised to provide a service monitor (a simplistic version of one is provided by Krail, the ```DefaultServicesMonitor```), or to generate notifications of failures for example.
+Whenever the state of a ```Service``` changes, a```ServiceBusMessage``` is published via the GlobalBus (see the [EventBus section](tutorial-event-bus.md)).  This could easily be used to provide a service monitor (a simplistic version of one is provided by Krail, the ```DefaultServicesMonitor```) - or it could be used to automatically send failure notifications to your boss at 2 o'clock in the morning.
 
 #The Example
 
@@ -51,7 +51,7 @@ Our scenario is of 4 Services with dependencies between them.  We will configure
 ##Create the Services
 
 - create a new package *com.example.tutorial.service*
-- in that package, create the following 4 service classes.  This is the simplest way of creating a Service, by extending ```AbstractService```
+- in that package, create the following 4 service classes.  This is the simplest way of creating a Service, by extending ```AbstractService```.  (Note: if you want to copy these in the IDE, these 4 services are the same except for the class name and name key)
 
 ```
 package com.example.tutorial.service;
@@ -239,7 +239,15 @@ public class TutorialServicesModule extends AbstractServiceModule {
     }
 }
 ```
+- include the module in the ```BindingManager```:
 
+```
+@Override
+protected void addAppModules(List<Module> baseModules) {
+    baseModules.add(new TutorialServicesModule());
+}
+
+```
 
 ##Monitor the Service status
 
@@ -301,6 +309,7 @@ public class ServicesView extends Grid3x3ViewBase {
 
     @Inject
     protected ServicesView(Translate translate,ServiceA serviceA, ServiceB serviceB, ServiceC serviceC, ServiceD serviceD) {
+        super(translate);
         this.translate = translate;
         this.serviceA = serviceA;
         this.serviceB = serviceB;
@@ -320,7 +329,7 @@ public class ServicesView extends Grid3x3ViewBase {
         stateChangeLog = new TextArea();
         stateChangeLog.setSizeFull();
         stateChangeLog.setRows(8);
-        setMiddleCentre(stateChangeLog);
+        getGridLayout().addComponent(stateChangeLog,0,1,2,1);
         clearBtn = new Button();
         clearBtn.addClickListener(click->stateChangeLog.clear());
         setBottomCentre(clearBtn);
@@ -329,9 +338,10 @@ public class ServicesView extends Grid3x3ViewBase {
     @Handler
     protected void handleStateChange(ServiceBusMessage serviceBusMessage) {
         String serviceName = translate.from(serviceBusMessage.getService()
-                                                          .getNameKey());
+                                                             .getNameKey());
         String logEntry = serviceName + " changed from " + serviceBusMessage.getFromState()
-                                                                            .name() + " to " + serviceBusMessage.getToState().name();
+                                                                            .name() + " to " + serviceBusMessage.getToState().name()+", cause: " +
+                serviceBusMessage.getCause();
         String newline = stateChangeLog.getValue().isEmpty() ? "" : "\n";
         stateChangeLog.setValue(stateChangeLog.getValue()+newline+logEntry);
     }
@@ -407,7 +417,7 @@ This marks the dependency, ServiceD, as optional
 - press 'Start Service A' again - nothing happens.  Attempts to start/stop a service which is already started/stopped are ignored. 
 - press 'Stop ServiceD' - only ```ServiceD``` stops
 - press 'Stop ServiceC' - only ```ServiceC``` stops
-- press 'Stop ServiceB' - ```ServiceB``` and ```ServiceA``` stop.  ```ServiceA``` has a state of DEPENDENCY_STOPPED
+- press 'Stop ServiceB' - ```ServiceB``` and ```ServiceA``` stop.  ```ServiceA``` has cause of DEPENDENCY_STOPPED
 
 When ```ServiceD``` and ```ServiceC``` are stopped they do not affect ```ServiceA```, as they are declared as "optional" and "required only at start".
 When ```ServiceB``` is stopped, however, ```ServiceA``` also stops because that dependency was declared as "always required"

@@ -12,7 +12,7 @@ There is a logical correlation between an event bus and a Guice scope, and that 
 
 #The Tutorial task
 
-We will create 3 buttons to publish messages, and 3 receivers for events of each scope (UI, Session and Global).  By sending messages via the different buses we will be able to see how scope affects where the messages are received.  
+We will create 3 buttons to publish messages, and receivers for events of each scope (UI, Session and Global).  By sending messages via the different buses we will be able to see how scope affects where the messages are received.  
 
 
 #Create a page
@@ -26,7 +26,7 @@ addEntry("events", EventsView.class, LabelKey.Events, PageAccessControl.PERMISSI
 ```
 - create the enum constant for the page
 - create the view ```EventsView``` in *com.example.tutorial.pages* (code is provided later)
-- create a package `com.example.tutorial.eventbus`
+- create a package *com.example.tutorial.eventbus*
 - in this new package, create a ```TutorialMessage``` class
 
 <div class="admonition note">
@@ -151,7 +151,7 @@ The **@Listener** annotation marks the class as an ```MBassador``` bus subscribe
 You could achieve the same by injecting a bus and directly subscribing:
    
 ```java
-globalBusProvider.getGlobalBus().subscribe(this)
+globalBusProvider.get().subscribe(this)
 ```
  
 
@@ -171,6 +171,7 @@ import com.vaadin.ui.Button;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
@@ -192,8 +193,9 @@ public class EventsView extends Grid3x3ViewBase {
 
 
     @Inject
-    protected EventsView(UIBusProvider uiBusProvider, SessionBusProvider sessionBusProvider, GlobalBusProvider globalBusProvider,
-                                    GlobalMessageReceiver singletonMessageReceiver, SessionMessageReceiver sessionMessageReceiver, UIMessageReceiver uiMessageReceiver) {
+    protected EventsView(Translate translate,UIBusProvider uiBusProvider, SessionBusProvider sessionBusProvider, GlobalBusProvider globalBusProvider,
+                         GlobalMessageReceiver singletonMessageReceiver, SessionMessageReceiver sessionMessageReceiver, UIMessageReceiver uiMessageReceiver) {
+        super(translate);
         this.uiBusProvider = uiBusProvider;
         this.sessionBusProvider = sessionBusProvider;
         this.singletonMessageReceiver = singletonMessageReceiver;
@@ -223,18 +225,18 @@ public class EventsView extends Grid3x3ViewBase {
         uiSendBtn = new Button();
         singletonSendBtn.addClickListener(click -> {
             String m = "Singleton";
-            globalBusProvider.getGlobalBus()
+            globalBusProvider.get()
                              .publish(new TutorialMessage(m,this));
         });
         sessionSendBtn.addClickListener(click -> {
             String m = "Session";
-            sessionBusProvider.getSessionBus()
-                             .publish(new TutorialMessage(m,this));
+            sessionBusProvider.get()
+                              .publish(new TutorialMessage(m,this));
         });
         uiSendBtn.addClickListener(click -> {
             String m = "UI";
-            uiBusProvider.getUIBus()
-                             .publish(new TutorialMessage(m,this));
+            uiBusProvider.get()
+                         .publish(new TutorialMessage(m,this));
         });
         setTopLeft(singletonSendBtn);
         setMiddleLeft(sessionSendBtn);
@@ -243,7 +245,6 @@ public class EventsView extends Grid3x3ViewBase {
 
     }
 }
-
 
 ```
 
@@ -294,10 +295,10 @@ This is what we expect - a Vaadin session relates to a browser instance, so a se
 
 #Summary
 
-We have covered the 3 defined event buses provided by Krail, with Singleton, Session and UI scope
-We have seen how to subscribe to a bus
-We have seen how to publish to a bus
-We have identified a challenge with refreshing the Vaadin client
+- We have covered the 3 defined event buses provided by Krail, with Singleton, Session and UI scope
+- We have seen how to subscribe to a bus
+- We have seen how to publish to a bus
+- We have identified a challenge with refreshing the Vaadin client
 
 #Download from GitHub
 To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step10**
