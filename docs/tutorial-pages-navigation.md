@@ -108,12 +108,21 @@ We'll make it easier by extending the ```Grid3x3ViewBase```base class from the K
 <p class="last">Extending ViewBase or one of its sub-classes is usually the easiest way to create your views, but however you do it, you must implement <code>KrailView</code></p>
 </div>
 
-- create the 3 views we want ... AccountsView, FinanceView and PayrollView ... just by extending ```Grid3x3ViewBase``` (only FinanceView is shown here):
+- create the 3 views we want ... AccountsView, FinanceView and PayrollView ... just by extending ```Grid3x3ViewBase``` and injecting ```Translate``` (only FinanceView is shown here):
 
 ```
 package com.example.tutorial.pages;
 
+import com.google.inject.Inject;
+import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.core.view.Grid3x3ViewBase;
+
 public class FinanceView extends Grid3x3ViewBase {
+    
+    @Inject
+    protected FinanceView(Translate translate) {
+        super(translate);
+    }
 }
 ```
 
@@ -177,13 +186,19 @@ Now that this is done, any views in the 'pages' package, annotated with ```@View
 ```
 package com.example.tutorial.pages;
 
+import com.google.inject.Inject;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.sitemap.View;
 import uk.q3c.krail.core.shiro.PageAccessControl;
+import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
 @View(uri = "private/finance/purchasing",pageAccessControl = PageAccessControl.PERMISSION,labelKeyName = "Purchasing")
 public class PurchasingView extends Grid3x3ViewBase {
 
-
+    @Inject
+    protected PurchasingView(Translate translate) {
+        super(translate);
+    }
 }
 ```
 
@@ -219,7 +234,13 @@ Our direct pages module looks currently looks like this:
 ```
 There is a lot of repetition in the URIs, so there is an alternative, by setting a ```rootURI``` which is applied to all pages:
 ```
-public class MyPages extends DirectSitemapModule{
+package com.example.tutorial.pages;
+
+import com.example.tutorial.i18n.LabelKey;
+import uk.q3c.krail.core.navigate.sitemap.DirectSitemapModule;
+import uk.q3c.krail.core.shiro.PageAccessControl;
+
+public class MyPages extends DirectSitemapModule {
 
     public MyPages() {
         rootURI = "private/finance";
@@ -256,10 +277,21 @@ We can easily move all the pages of a Direct module by changing the ```rootUri``
 - modify the annotated view (otherwise the Sitemap will break because there is no longer a "private/finance" page
 
 ```java
+package com.example.tutorial.pages;
+
+import com.google.inject.Inject;
+import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.core.navigate.sitemap.View;
+import uk.q3c.krail.core.shiro.PageAccessControl;
+import uk.q3c.krail.core.view.Grid3x3ViewBase;
+
 @View(uri = "private/finance-department/purchasing",pageAccessControl = PageAccessControl.PERMISSION,labelKeyName = "Purchasing")
 public class PurchasingView extends Grid3x3ViewBase {
 
-
+    @Inject
+    protected PurchasingView(Translate translate) {
+        super(translate);
+    }
 }
 ```
 
@@ -278,20 +310,6 @@ public class PurchasingView extends Grid3x3ViewBase {
 <p class="last">This moving of blocks of pages is available only with Direct pages.  Although it might be possible to do something similar with annotated pages by mapping packages to URIs, there are currently no plans to do so</p>
 </div>
 
-##Debugging the Sitemap
-There is not much support for debugging errors in page specification.  There are some System Admin pages which may help - but this is very new, does very little just now and will probably change a lot - so it is up to you whether you include them.  For the sake of the Tutorial though, let's add them in:
-
-- modify the BindingManager again
-
-```
-protected void addSitemapModules(List<Module> baseModules) {
-   baseModules.add(new SystemAccountManagementPages());
-   baseModules.add(new MyPages().rootURI("private/finance-department"));
-   baseModules.add(new AnnotatedPagesModule());
-   baseModules.add(new SystemAdminPages());
-}
-```
-- Run the application and **log in**, and navigate to System Administration / Sitemap Build Report.
 
 #Navigation
 ## Add some public pages
@@ -323,17 +341,31 @@ public class MyPublicPages extends DirectSitemapModule {
 ```
 package com.example.tutorial.pages;
 
+import com.google.inject.Inject;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
 public class ContactUsView extends Grid3x3ViewBase {
+
+    @Inject
+    protected ContactUsView(Translate translate) {
+        super(translate);
+    }
 }
 ```
 ```
 package com.example.tutorial.pages;
 
+import com.google.inject.Inject;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
 public class NewsView extends Grid3x3ViewBase {
+
+    @Inject
+    protected NewsView(Translate translate) {
+        super(translate);
+    }
 }
 ```
 - And add the ```LabelKey``` constants
@@ -351,7 +383,6 @@ public enum LabelKey implements I18NKey {
         baseModules.add(new SystemAccountManagementPages());
         baseModules.add(new MyPages().rootURI("private/finance-department"));
         baseModules.add(new AnnotatedPagesModule());
-        baseModules.add(new SystemAdminPages());
         baseModules.add(new MyPublicPages());
     }
 ```
@@ -363,6 +394,7 @@ We will do just a little bit more with these views to help demonstrate navigatio
 package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
@@ -371,7 +403,8 @@ public class ContactUsView extends Grid3x3ViewBase {
     private Navigator navigator;
 
     @Inject
-    protected ContactUsView(Navigator navigator) {
+    protected ContactUsView(Translate translate, Navigator navigator) {
+        super(translate);
         this.navigator = navigator;
     }
 }
@@ -380,6 +413,7 @@ public class ContactUsView extends Grid3x3ViewBase {
 package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
@@ -388,7 +422,8 @@ public class NewsView extends Grid3x3ViewBase {
     private Navigator navigator;
 
     @Inject
-    protected NewsView(Navigator navigator) {
+    protected NewsView(Translate translate, Navigator navigator) {
+        super(translate);
         this.navigator = navigator;
     }
 }
@@ -439,16 +474,23 @@ public class MyPublicPages extends DirectSitemapModule {
     protected void define() {
         addEntry("news", NewsView.class, LabelKey.News, PageAccessControl.PUBLIC);
         addEntry("contact-us", ContactUsView.class, LabelKey.Contact_Us, PageAccessControl.PUBLIC);
-	addEntry("contact-us/contact-detail", ContactDetailView.class, LabelKey.Contact_Detail, PageAccessControl.PUBLIC);
+	    addEntry("contact-us/contact-detail", ContactDetailView.class, LabelKey.Contact_Detail, PageAccessControl.PUBLIC);
     }
 }
 ```
 ```
 package com.example.tutorial.pages;
 
+import com.google.inject.Inject;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
 public class ContactDetailView extends Grid3x3ViewBase {
+
+    @Inject
+    protected ContactDetailView(Translate translate) {
+        super(translate);
+    }
 }
 
 ```
@@ -524,31 +566,6 @@ If you think about the use of the "Contact Detail" page, it does not actually ma
     - Go to the "Contact Us" page
     - Press the "Navigate with Parameters" button
     - The "Contact Detail" page appears as before.
-    
-There is a [bug](https://github.com/davidsowerby/krail/issues/400) which causes navigation components to mis-behave when all the sub-pages of a page are excluded from navigation.  The issue offers two workarounds, but we will simply move the "Contact Detail" page to the Sitemap root.
-
-- Modify ```MyPublicPages``` again:
-```
-   @Override
-    protected void define() {
-        addEntry("news", NewsView.class, LabelKey.News, PageAccessControl.PUBLIC);
-        addEntry("contact-us", ContactUsView.class, LabelKey.Contact_Us, PageAccessControl.PUBLIC);
-        addEntry("contact-detail", ContactDetailView.class, LabelKey.Contact_Detail, PageAccessControl.PUBLIC,-1);
-    }
-```
-- Update the navigation button in ```ContactUsView```
-```
-   @Override
-    protected void doBuild(ViewChangeBusMessage busMessage) {
-        super.doBuild(busMessage);
-        Button navigateWithParametersBtn = new Button("Navigate with parameters");
-        NavigationState navState = new NavigationState().virtualPage("contact-detail")
-                                                        .parameter("id", "33")
-                                                        .parameter("name", "David");
-        navigateWithParametersBtn.addClickListener(c->navigator.navigateTo(navState));
-        setCentreCell(navigateWithParametersBtn);
-    }
-```
 
 #Summary
 

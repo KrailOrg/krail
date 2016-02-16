@@ -25,6 +25,7 @@ import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
@@ -36,7 +37,8 @@ public class NewsView extends Grid3x3ViewBase {
     private UserNotifier userNotifier;
 
     @Inject
-    protected NewsView(Navigator navigator, UserNotifier userNotifier) {
+    protected NewsView(Translate translate,Navigator navigator, UserNotifier userNotifier) {
+        super(translate);
         this.navigator = navigator;
         this.userNotifier = userNotifier;
     }

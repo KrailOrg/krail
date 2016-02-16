@@ -23,18 +23,7 @@ Let's replace the following literal with something more robust:
 ```java
 popupButton = new Button("options");
 ```
-- first, inject ```Translate``` into the constructor
 
-```
- @Inject
-    public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, UserNotifier userNotifier, Translate translate) {
-        this.option = option;
-        this.optionPopup = optionPopup;
-        this.subjectProvider = subjectProvider;
-        this.userNotifier = userNotifier;
-        this.translate = translate;
-    }
-```  
 - In ```doBuild()```, replace:
 ```java
 popupButton = new Button("options");
@@ -43,7 +32,7 @@ popupButton = new Button("options");
 with
 
 ```
-popupButton = new Button(translate.from(LabelKey.Options));
+popupButton = new Button(getTranslate().from(LabelKey.Options));
 
 ```
 - create the 'Options' enum constant in ```LabelKey```
@@ -158,10 +147,11 @@ Now let's display the banner
 - add two keys to ```LabelKey```, **is_selected** and **is_not_selected**
 - create a ```Label``` using the translated message with the two arguments (remember that 'temperature' is the second parameter, *{1}* in the pattern, even though it appears first).
 ```
-int temperature = (new Random().nextInt(40))-10;
-LabelKey selection = (option.get(ceoVisible).booleanValue()) ? LabelKey.is_selected : LabelKey.is_not_selected;
-Label bannerLabel = new Label(translate.from(MessageKey.Banner,  selection, temperature));
-getGridLayout().addComponent(bannerLabel,0,0,2,0);
+    int temperature = (new Random().nextInt(40))-10;
+    LabelKey selection = (option.get(ceoVisible)) ? LabelKey.is_selected : LabelKey.is_not_selected;
+    
+    Label bannerLabel = new Label(getTranslate().from(MessageKey.Banner,  selection, temperature));
+    getGridLayout().addComponent(bannerLabel,0,0,2,0);
 ```
 
 Parameters passed as ```I18NKey``` constants are also translated.  These are currently the only parameter types that are localised, see [open ticket](https://github.com/davidsowerby/krail/issues/428).
@@ -173,15 +163,18 @@ Parameters passed as ```I18NKey``` constants are also translated.  These are cur
     - make ```bannerLabel``` a field
     - move the code to set the bannerLabel value to ```optionValueChanged```
     
-in ```doBuild()``` we now have:
     
-```
-bannerLabel = new Label();
-getGridLayout().addComponent(bannerLabel,0,0,2,0);
-```
+The code for this in the ```doBuild()``` method is now:
 
+```
+    int temperature = (new Random().nextInt(40)) - 10;
+    LabelKey selection = (option.get(ceoVisible)) ? LabelKey.is_selected : LabelKey.is_not_selected;
+
+    bannerLabel = new Label();
+    getGridLayout().addComponent(bannerLabel,0,0,2,0);
+```
     
-while ```optionValueChanged()``` is now:
+```optionValueChanged()``` is now:
     
 ```
 @Override
@@ -189,9 +182,9 @@ public void optionValueChanged(Property.ValueChangeEvent event) {
     ceoNews.setVisible(option.get(ceoVisible));
     itemsForSale.setVisible(option.get(itemsForSaleVisible));
     vacancies.setVisible(option.get(vacanciesVisible));
-    int temperature = (new Random().nextInt(40))-10;
-    LabelKey selection = (option.get(ceoVisible).booleanValue()) ? LabelKey.is_selected : LabelKey.is_not_selected;
-    bannerLabel.setValue(translate.from(MessageKey.Banner,  selection, temperature));
+    int temperature = (new Random().nextInt(40)) - 10;
+    LabelKey selection = (option.get(ceoVisible)) ? LabelKey.is_selected : LabelKey.is_not_selected;
+    bannerLabel.setValue(getTranslate().from(MessageKey.Banner, selection, temperature));
 }
 ```
 
@@ -370,10 +363,9 @@ Why is this happening?  Well, currently there is nothing to tell this view that 
 - move the logic for populating the banner to its own method
 ```
 private void populateBanner() {
-    LabelKey selection = (option.get(ceoVisible)
-                                .booleanValue()) ? LabelKey.is_selected : LabelKey.is_not_selected;
     int temperature = (new Random().nextInt(40)) - 10;
-    bannerLabel.setValue(translate.from(MessageKey.Banner, selection, temperature));
+    LabelKey selection = (option.get(ceoVisible)) ? LabelKey.is_selected : LabelKey.is_not_selected;
+    bannerLabel.setValue(getTranslate().from(MessageKey.Banner, selection, temperature));
 }
 ```
 - ```optionValueChanged()``` should now look like this
@@ -416,7 +408,7 @@ protected void localeChanged(LocaleChangeBusMessage busMessage) {
 
 So far we have used the class-based method for defining I18N patterns.  Krail originally supported the traditional properties files, but that has now been withdrawn as we saw no benefit to using it.  
 
-You can, however, use any source which identified by an annotation - a database, REST service or any other service which can provide patterns via a pluggable DAO.  Krail provides an in-memory map as a source, annotated with **@InMemory**.  Being in memory, it is not very useful except for testing - later you will see a [JPA implementation](tutorial-persistence-jpa.md))
+You can, however, use any source - a database, REST service or any other service which can provide patterns via a pluggable DAO.  Through Guice configuration, each source is identified by an annotation.  Krail provides an in-memory map as a source, annotated with **@InMemory**.  Being in memory, it is not very useful except for testing - later you will see a [JPA implementation](tutorial-persistence-jpa.md))
 
 ##Selecting pattern sources
  
@@ -445,13 +437,13 @@ To prove this works, we need to put a value in to the in-memory store:
 We do not generally need to access the ```PatternDao``` directly, except putting values into store - the Krail core takes care of reading patterns from the sources you have defined in the ```I18NModule```
 ```
 @Inject
-public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, UserNotifier userNotifier, Translate translate,@InMemory Provider<PatternDao>
-        patternDaoProvider, PatternSource patternSource) {
+protected MyNews(Translate translate, Option option, OptionPopup optionPopup, SubjectProvider subjectProvider, UserNotifier userNotifier, @InMemory
+                 Provider<PatternDao> patternDaoProvider, PatternSource patternSource) {
+    super(translate);
     this.option = option;
     this.optionPopup = optionPopup;
     this.subjectProvider = subjectProvider;
     this.userNotifier = userNotifier;
-    this.translate = translate;
     this.patternDaoProvider = patternDaoProvider;
     this.patternSource = patternSource;
 }
@@ -488,7 +480,7 @@ public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectPro
 This provides a ```TextField``` to capture some input, and a submit button to submit the value to the in memory store and update the banner.  The ```PatternSource``` is only needed to clear the cache (to ensure we capture the new value).
   
 - Run the application, login and navigate to 'MyNews'
-- Make sure that the CEO New Channel is selected (we only created a value for that option setting)
+- Make sure that the CEO New Channel is selected (we defined an I18N value for this)
 - Enter some text, and press 'submit'
 - The banner will update immediately with the text you entered
 - change the Locale selector to "Deutsch" and note that the German translation is still used - we only set a value for Locale.UK
@@ -507,7 +499,7 @@ protected void define() {
 ```
 This means that the **@InMemory** source is checked first for a value - if there is one, it is used, and the **ClassPatternSource** is not queried.  We just created a value in the in-memory store, so that is the one that is used -this demonstrates is why the order of declaration is important.
  
-If you refer to the Javadoc for ```TutorialI18NModule``` you will see that there are methods which enable very specific settings for the order of sources.  We will not cover that in this Tutorial, but leave you to experiment.  
+If you refer to the Javadoc for ```I18NModule``` you will see that there are methods which enable very specific settings for the order of sources.  We will not cover that in this Tutorial, but leave you to experiment.  
 
 #Changing Krail Core values
 

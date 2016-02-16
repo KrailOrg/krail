@@ -21,12 +21,21 @@ addEntry("i18n", I18NDemoView.class, LabelKey.I18N, PageAccessControl.PUBLIC);
 ```
 package com.example.tutorial.pages;
 
+import com.google.inject.Inject;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
 public class I18NDemoView extends ViewBase {
+    
+    @Inject
+    protected I18NDemoView(Translate translate) {
+        super(translate);
+    }
+
     @Override
     protected void doBuild(ViewChangeBusMessage busMessage) {
+        
     }
 }
 ```
@@ -128,7 +137,9 @@ package com.example.tutorial.pages;
 import com.example.tutorial.i18n.Caption;
 import com.example.tutorial.i18n.DescriptionKey;
 import com.example.tutorial.i18n.LabelKey;
+import com.google.inject.Inject;
 import com.vaadin.ui.*;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
@@ -142,6 +153,11 @@ public class I18NDemoView extends ViewBase {
     @Caption(caption = LabelKey.News, description = DescriptionKey.Interesting_Things)
     private TextField textField;
 
+    @Inject
+    protected I18NDemoView(Translate translate) {
+        super(translate);
+    }
+
     @Override
     protected void doBuild(ViewChangeBusMessage busMessage) {
         textField = new TextField();
@@ -154,6 +170,7 @@ public class I18NDemoView extends ViewBase {
         setRootComponent(panel);
     }
 }
+
 ```
 
 
@@ -275,7 +292,7 @@ protected void doBuild(ViewChangeBusMessage busMessage) {
 
 #Drilldown and Override
 
-There is another scenario that Krail's I18N processing supports. Assume you have a class which contains components with I18N annotations and you want to make it re-usable it.  Let's see how that would work.
+There is another scenario that Krail's I18N processing supports. Assume you have a class which contains components with I18N annotations and you want to make it re-usable.  Let's see how that would work.
 
 - in the 'com.example.tutorial.i18n' package, create a new class 'ButtonBar', with **@Caption** on the buttons
 - annotate the class with **@I18N** - this tells the ```I18NProcessor``` to drill down into this class to look for more I18N annotations.  This annotation can be applied to a field or a class, but for a re-usable component it makes more sense to put it on the class.
@@ -403,7 +420,8 @@ public class Person implements KrailEntity<Long,Integer> {
 
 ```groovy
 dependencies {
-    compile 'uk.q3c.krail:krail:0.9.6'
+    // remember to update the Vaadin version below if this version is changed
+    compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.9')
     compile 'javax.persistence:persistence-api:1.0.2'
 }
 ```
@@ -423,15 +441,13 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import uk.q3c.krail.core.ui.form.BeanFieldGroupBase;
-import Option;
-import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.core.i18n.I18NProcessor;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.ui.form.BeanFieldGroupBase;
+import uk.q3c.krail.core.validation.BeanValidator;
 
-import static com.example.tutorial.i18n.DescriptionKey.*;
 import static com.example.tutorial.i18n.LabelKey.*;
-import static com.example.tutorial.i18n.LabelKey.Submit;
 
 
 @I18N
@@ -439,14 +455,14 @@ public class PersonForm extends BeanFieldGroupBase<Person> {
     @Caption(caption = Submit, description = DescriptionKey.Submit)
     private final Button submitButton;
     private final Person person;
-    @Caption(caption = First_Name, description = Enter_your_first_name)
+    @Caption(caption = First_Name, description = DescriptionKey.Enter_your_first_name)
     private TextField firstName;
 
-    @Caption(caption = Last_Name, description = Enter_your_last_name)
+    @Caption(caption = Last_Name, description = DescriptionKey.Enter_your_last_name)
     private TextField lastName;
-    @Caption(caption = Age, description = Age_of_the_Person)
+    @Caption(caption = Age, description = DescriptionKey.Age_of_the_Person)
     private TextField age;
-    @Caption(caption = Person_Form,description = Person_Details_Form)
+    @Caption(caption = Person_Form, description = DescriptionKey.Person_Details_Form)
     private Panel layout;
 
 
@@ -507,7 +523,8 @@ There is an [open ticket](https://github.com/davidsowerby/krail/issues/431) to p
 
 ```
 @Inject
-protected I18NDemoView(PersonForm  personForm) {
+protected I18NDemoView(Translate translate, PersonForm personForm) {
+    super(translate);
     this.personForm = personForm;
 }
 ```

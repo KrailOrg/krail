@@ -254,7 +254,7 @@ protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal
     TrivialUserAccount userAccount = credentialsStore.getAccount((String) principals.getPrimaryPrincipal());
     if (userAccount != null) {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.setStringPermissions(new HashSet(userAccount.getPermissions()));
+        info.setStringPermissions(new HashSet<>(userAccount.getPermissions()));
         return info;
     }
     return null;
@@ -338,7 +338,7 @@ if (subjectProvider.get().isPermitted("option:edit:SimpleUserHierarchy:*:1:*:*")
     systemOptionButton.setVisible(false);
 }
 ```        
-Here we have asked Shiro to confirm permission at the most specific level, as recommended by Shiro. This permission string is checking that the user has permission to edit any option at level 1 in the ```SimpleUserHierarchy```
+Here we have asked Shiro to confirm permission at the most specific level, as recommended by Shiro. This permission string is checking that the user has permission to edit any option at level 1 (the 'system' level) in the ```SimpleUserHierarchy```
 
 - run the application and log in as 'eq' or 'fb' and you will not be able to see the "system option" button.  Log in as 'admin', however, and the "system option" button is visible.
   
@@ -346,7 +346,7 @@ Here we have asked Shiro to confirm permission at the most specific level, as re
 
 Shiro provides a [set of annotations](https://shiro.apache.org/java-annotations-list.html) to cover most circumstances.  We will use **@RequiresPermissions** as an example
  
-- on the "MyNews" page add another button in ```doBuild()```
+- on the ```MyNews``` page add another button in ```doBuild()```
 
 ```
 payRiseButton = new Button("request a pay rise");
@@ -366,7 +366,7 @@ public MyNews(Option option, OptionPopup optionPopup, SubjectProvider subjectPro
 }
 ```
 - create the ```requestAPayRise``` method
-- user ```userNotifier``` to give feedback
+- use ```userNotifier``` to give feedback
 - create the enum constant **DescriptionKey.You_just_asked_for_a_pay_increase**
 
 ```

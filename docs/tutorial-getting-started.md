@@ -107,9 +107,12 @@ IDEA may prompt you to add the project VCS root - say yes if it does.
 ```
 bin
 build
+classes
+.gradle
+.idea
 ```
 
-- To keep things simple, right click on the project folder and select Git | Add to add all files to Git.
+- Right click on the project folder and select Git | Add to add all files to Git.
 
 ##Eclipse
 
@@ -168,46 +171,55 @@ public class TutorialServlet extends BaseServlet {
 ```
 
 and in the *build.gradle* file, add a vaadin closure to declare the widgetset.  (The plugin.logToConsole entry provides a little extra console output during a build.  It is useful, but not essential)
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Until issue #528 is resolved, the Vaadin version used by Krail has to be repeated here, and will need to be updated whenever the Krail version is updated, hence the comments</p>
+</div>
     
 ```groovy
-dependencies {  
-    compile 'uk.q3c.krail:krail:0.9.6'
-}
 vaadin {
     widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
     plugin.logToConsole = true
 }
 ```
+
+
+
 #### Complete Build file
 
 The full *build.gradle* file should look like this:
 
 ```
-    apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.10.1'  
-    apply plugin: 'eclipse-wtp'  
-    apply plugin: 'idea'  
+apply from: 'http://plugins.jasoft.fi/vaadin-groovy.plugin?version=0.10.6'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'idea'
 
-    sourceCompatibility = '1.8'  
+sourceCompatibility = '1.8'
 
-    repositories {  
-        jcenter()  
-    }  
+repositories {
+    jcenter()
+}
 
-    dependencies {  
-        compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.6')
+dependencies {
+    // remember to update the Vaadin version below if this version is changed
+    compile(group: 'uk.q3c.krail', name: 'krail', version: '0.9.9')
+
+}
+
+vaadin {
+    version = '7.6.2' // see issue https://github.com/davidsowerby/krail/issues/528
+    widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
+    plugin.logToConsole = true
+}
+
+configurations.all {
+    resolutionStrategy {
+        // GWT requires an old version of the validation API.  Changing to a newer version breaks widgetset compile but throws no errors
+        force 'javax.validation:validation-api:1.0.0.GA'
     }
+}
 
-    vaadin {
-        widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
-        plugin.logToConsole = true
-    }
-
-    configurations.all {
-        resolutionStrategy {
-            // GWT requires an old version of the validation API.  Changing to a newer version breaks widgetset compile but throws no errors
-            force 'javax.validation:validation-api:1.0.0.GA'
-        }
-    }
 ```
 
 

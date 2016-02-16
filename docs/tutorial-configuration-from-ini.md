@@ -50,7 +50,8 @@ All this does is set up a button to show the config, and a label to display it. 
 - inject ```ApplicationConfiguration``` (which, as a matter of interest, is a singleton, and therefore just one instance for the whole application)
 ```
     @Inject
-    protected IniConfigView(ApplicationConfiguration applicationConfiguration) {
+    protected IniConfigView(Translate translate, ApplicationConfiguration applicationConfiguration) {
+        super(translate);
         this.applicationConfiguration = applicationConfiguration;
     }
 ```
@@ -74,7 +75,7 @@ addEntry("ini-config", IniConfigView.class, LabelKey.Ini_Config, PageAccessContr
 
 #More layers
 
-When an application uses comprises multiple libraries, there may be occasions when multiple sets of configuration are required. You can add as many configuration files as you require.   
+When an application comprises multiple libraries, there may be a need for multiple sets of configuration. You can add as many configuration files as you require.   
 
 ##Adding another ini file
 
@@ -134,47 +135,38 @@ Be aware that the order that the files are processed is important if they contai
 #Fail early
 If an ini file is essential for the operation of your application, ```addConfig()``` allows you to specify that.  Both the examples have the 'optional' parameter set to 'false', but of course both files are present.
  
-- add another entry to ```TutorialIniConfigModule```, but do not create the corresponding file
+- add another config to the ```BindingManager entry```, but do not create the corresponding file
 ```
-addConfig("essential.ini",99,false);
+    @Override
+    protected Module applicationConfigurationModule() {
+        return new ApplicationConfigurationModule().addConfig("moreConfig.ini",98,false).addConfig("essential.ini",99,false);
+    }
 ```
-- run the application and it will fail early with a ```FileNotFoundException```
+- run the application and it will fail early with a ```FileNotFoundException``` (Note: there is currently a [bug](https://github.com/davidsowerby/krail/issues/531) which causes a timeout rather than an exception) 
 - change the 'optional' parameter to true and the application will run
 
 ```
-addConfig("essential.ini",99,true);
+    @Override
+    protected Module applicationConfigurationModule() {
+        return new ApplicationConfigurationModule().addConfig("moreConfig.ini",98,false).addConfig("essential.ini",99,true);
+    }
 ```
 
 The final versions of the files should be:
 
 ```
-package com.example.tutorial.ini;
-
-import uk.q3c.krail.core.config.ApplicationConfigurationModule;
-
-public class TutorialIniConfigModule extends ApplicationConfigurationModule {
-    @Override
-    protected void bindConfigs() {
-        super.bindConfigs();
-        addConfig("moreConfig.ini",98,false);
-        addConfig("essential.ini",99,true);
-    }
-}
-```
-```
 package com.example.tutorial.app;
 
-import com.example.tutorial.ini.TutorialIniConfigModule;
+import com.example.tutorial.i18n.LabelKey;
 import com.example.tutorial.pages.AnnotatedPagesModule;
 import com.example.tutorial.pages.MyOtherPages;
 import com.example.tutorial.pages.MyPages;
 import com.example.tutorial.pages.MyPublicPages;
 import com.google.inject.Module;
+import uk.q3c.krail.core.config.ApplicationConfigurationModule;
 import uk.q3c.krail.core.guice.DefaultBindingManager;
 import uk.q3c.krail.core.navigate.sitemap.SystemAccountManagementPages;
-import uk.q3c.krail.core.sysadmin.SystemAdminPages;
 import uk.q3c.krail.core.ui.DefaultUIModule;
-import com.example.tutorial.i18n.LabelKey;
 
 import java.util.List;
 
@@ -195,7 +187,6 @@ public class BindingManager extends DefaultBindingManager {
         baseModules.add(new SystemAccountManagementPages());
         baseModules.add(new MyPages().rootURI("private/finance-department"));
         baseModules.add(new AnnotatedPagesModule());
-        baseModules.add(new SystemAdminPages());
         baseModules.add(new MyPublicPages());
         baseModules.add(new MyOtherPages());
     }
@@ -206,10 +197,9 @@ public class BindingManager extends DefaultBindingManager {
                                     .applicationTitleKey(LabelKey.Krail_Tutorial);
     }
 
-
     @Override
     protected Module applicationConfigurationModule() {
-        return new TutorialIniConfigModule();
+        return new ApplicationConfigurationModule().addConfig("moreConfig.ini",98,false).addConfig("essential.ini",99,true);
     }
 }
 ```
@@ -221,19 +211,20 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import uk.q3c.krail.core.config.ApplicationConfiguration;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
 public class IniConfigView extends Grid3x3ViewBase {
 
     private ApplicationConfiguration applicationConfiguration;
-    private Label tutorialCompletedProperty;
     private Label tutorialQualityProperty;
     private Label connectionTimeoutProperty;
-
+    private Label tutorialCompletedProperty;
 
     @Inject
-    protected IniConfigView(ApplicationConfiguration applicationConfiguration) {
+    protected IniConfigView(Translate translate, ApplicationConfiguration applicationConfiguration) {
+        super(translate);
         this.applicationConfiguration = applicationConfiguration;
     }
 
@@ -242,24 +233,22 @@ public class IniConfigView extends Grid3x3ViewBase {
         super.doBuild(busMessage);
         Button showConfigButton = new Button("Show config");
         tutorialQualityProperty = new Label();
-        connectionTimeoutProperty = new Label();
-        tutorialCompletedProperty = new Label();
         showConfigButton.addClickListener(event -> showConfig());
         setTopCentre(tutorialQualityProperty);
         setMiddleCentre(showConfigButton);
+        getGridLayout().setComponentAlignment(tutorialQualityProperty, Alignment.MIDDLE_CENTER);
+
+        connectionTimeoutProperty = new Label();
+        tutorialCompletedProperty = new Label();
         setTopRight(tutorialCompletedProperty);
         setTopLeft(connectionTimeoutProperty);
-        getGridLayout().setComponentAlignment(tutorialQualityProperty, Alignment.MIDDLE_CENTER);
-        getGridLayout().setComponentAlignment(tutorialCompletedProperty, Alignment.MIDDLE_CENTER);
-        getGridLayout().setComponentAlignment(connectionTimeoutProperty, Alignment.MIDDLE_CENTER);
     }
 
     private void showConfig() {
         tutorialQualityProperty.setValue("Tutorial quality is: " + applicationConfiguration.getString("tutorial.quality"));
         tutorialCompletedProperty.setValue(applicationConfiguration.getString("tutorial.completed"));
-        connectionTimeoutProperty.setValue("The timeout is set to: " + applicationConfiguration.getInt("connection.timeout"));
+        connectionTimeoutProperty.setValue("The timeout is set to: " + applicationConfiguration.getString("connection.timeout"));
     }
-    
 }
 ```
 #Summary

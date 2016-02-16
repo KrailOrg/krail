@@ -19,20 +19,20 @@ package com.example.tutorial.app;
 import com.google.inject.Inject;
 import com.vaadin.data.util.converter.ConverterFactory;
 import com.vaadin.server.ErrorHandler;
+import uk.q3c.krail.core.i18n.CurrentLocale;
+import uk.q3c.krail.core.i18n.I18NProcessor;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.Navigator;
+import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.ui.ApplicationTitle;
 import uk.q3c.krail.core.ui.DefaultApplicationUI;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
-import Option;
 import uk.q3c.krail.core.view.component.*;
-import uk.q3c.krail.core.i18n.CurrentLocale;
-import uk.q3c.krail.core.i18n.I18NProcessor;
-import uk.q3c.krail.core.i18n.Translate;
 
 public class TutorialUI extends DefaultApplicationUI {
-    
+
     @Inject
     protected TutorialUI(Navigator navigator, ErrorHandler errorHandler, ConverterFactory converterFactory, ApplicationLogo logo, ApplicationHeader header, UserStatusPanel userStatusPanel, UserNavigationMenu menu, UserNavigationTree navTree, Breadcrumb breadcrumb, SubPagePanel subpage, MessageBar messageBar, Broadcaster broadcaster, PushMessageRouter pushMessageRouter, ApplicationTitle applicationTitle, Translate translate, CurrentLocale currentLocale, I18NProcessor translator, LocaleSelector localeSelector, VaadinNotification vaadinNotification, Option option) {
         super(navigator, errorHandler, converterFactory, logo, header, userStatusPanel, menu, navTree, breadcrumb, subpage, messageBar, broadcaster,
@@ -42,10 +42,10 @@ public class TutorialUI extends DefaultApplicationUI {
 ```
 - Configure the ```BindingManager``` to use this new UI.  In this case we override a specific ```BindingManager``` method, because we need to override the default:
 ```
- @Override
-    protected Module uiModule() {
-        return new DefaultUIModule().uiClass(TutorialUI.class).applicationTitleKey(LabelKey.Krail_Tutorial);
-    }
+@Override
+protected Module uiModule() {
+    return new DefaultUIModule().uiClass(TutorialUI.class).applicationTitleKey(LabelKey.Krail_Tutorial);
+}
 ```
 - Add the new key to ```LabelKey```, which your IDE will probably do for you.
 - Run the application and confirm that the application title has changed in the browser tab

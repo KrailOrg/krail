@@ -15,7 +15,7 @@ A reasonable understanding of JPA is assumed.
 *We will*
  
 - create a page, 
-- configure two database connections (one HSQLDB and One Apache Derby), 
+- configure two database connections (one HSQLDB and one Apache Derby), 
 - demonstrate some simple transactions
 - demonstrate the use of JPAContainer to provide Tables, with two databases, 
 - demonstrate integration with Krail I18N and ```Option```
@@ -27,11 +27,11 @@ A reasonable understanding of JPA is assumed.
 #Prepare build
 
 - include krail-jpa in the build, by adding it to *build.gradle* dependencies
-- remove the javax persistence dependency from the earlier Tutorial steps, as it is provided as part of krail-jpa 
+- replace both existing dependencies with *krail-jpa*.  (The existing dependencies are included in *krail-jpa*)
+
 ```groovy
 dependencies {
-    compile 'uk.q3c.krail:krail:0.9.6'
-    compile 'uk.q3c.krail:krail-jpa:0.9.0'
+    compile 'uk.q3c.krail:krail-jpa:0.9.3'
 }
 ```
  
@@ -49,23 +49,31 @@ addEntry("jpa", JpaView.class, LabelKey.JPA, PageAccessControl.PUBLIC);
 ```
 package com.example.tutorial.pages;
 
+import com.google.inject.Inject;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
 public class JpaView extends ViewBase {
-    
+
+    @Inject
+    protected JpaView(Translate translate) {
+        super(translate);
+    }
+
     @Override
     protected void doBuild(ViewChangeBusMessage busMessage) {
-        
+
     }
 }
+
 ```
 
 - add the constant 'JPA' to ```LabelKey```
 
 #Configure connections
 
-This is one occasion where it is more desirable to sub-class the relevant Guice module than use fluent methods. There is a lot that can be configured for a database instance, so configuration objects are used.
+This is one occasion where it may be more desirable to sub-class the relevant Guice module than use fluent methods. There is a lot that can be configured for a database instance, so configuration objects are used.
 
 - create a new package 'com.example.tutorial.jpa'
 - in this package create 'TutorialJpaModule' extended from JpaModule
@@ -73,7 +81,7 @@ This is one occasion where it is more desirable to sub-class the relevant Guice 
 ```
 package com.example.tutorial.jpa;
 
-import JpaModule;
+import uk.q3c.krail.persist.jpa.common.JpaModule;
 
 public class TutorialJpaModule extends JpaModule {
 
@@ -258,24 +266,28 @@ package com.example.tutorial.pages;
 import com.example.tutorial.jpa.DerbyJpa;
 import com.example.tutorial.jpa.HsqlJpa;
 import com.google.inject.Inject;
+import com.vaadin.ui.Panel;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import JpaContainerProvider;
+import uk.q3c.krail.persist.jpa.common.JpaContainerProvider;
 
 public class JpaView extends ViewBase {
 
-    private final JpaContainerProvider derbyContainerProvider;
-    private final JpaContainerProvider hsqlContainerProvider;
+    private JpaContainerProvider derbyContainerProvider;
+    private JpaContainerProvider hsqlContainerProvider;
 
     @Inject
-    protected JpaView(@DerbyJpa JpaContainerProvider derbyContainerProvider, @HsqlJpa JpaContainerProvider hsqlContainerProvider) {
+    protected JpaView(Translate translate, @DerbyJpa JpaContainerProvider derbyContainerProvider, @HsqlJpa JpaContainerProvider hsqlContainerProvider) {
+        super(translate);
         this.derbyContainerProvider = derbyContainerProvider;
         this.hsqlContainerProvider = hsqlContainerProvider;
     }
 
     @Override
     protected void doBuild(ViewChangeBusMessage busMessage) {
-
+        Panel panel = new Panel();
+        setRootComponent(panel);
     }
 }
 ```
@@ -315,7 +327,7 @@ private Table hsqlTable;
 
 #Data
 
-- in ```JPAView```, create a convenience method for creating new people
+- in ```JPAView```, create a convenience method for creating new people.  This is so much quicker than the conventional method for creating people, but nowhere near as much fun.
 ```
 private Person createPerson() {
     Person p = new Person();
@@ -336,13 +348,14 @@ This is the method recommended by the Apache Onami team:
 - inject an ```EntityManagerProvider``` (The Onami provider, not the Vaadin provider) for each persistence unit, using the binding annotations to identify them
 
 ```
-@Inject
-protected JpaView(@DerbyJpa JpaContainerProvider derbyContainerProvider, @HsqlJpa JpaContainerProvider hsqlContainerProvider, @DerbyJpa EntityManagerProvider derbyEntityManagerProvider, @HsqlJpa EntityManagerProvider hsqlEntityManagerProvider) {
-    this.derbyContainerProvider = derbyContainerProvider;
-    this.hsqlContainerProvider = hsqlContainerProvider;
-    this.derbyEntityManagerProvider = derbyEntityManagerProvider;
-    this.hsqlEntityManagerProvider = hsqlEntityManagerProvider;
-}
+    @Inject
+    protected JpaView(Translate translate, @DerbyJpa JpaContainerProvider derbyContainerProvider, @HsqlJpa JpaContainerProvider hsqlContainerProvider,@DerbyJpa EntityManagerProvider derbyEntityManagerProvider, @HsqlJpa EntityManagerProvider hsqlEntityManagerProvider) {
+        super(translate);
+        this.derbyContainerProvider = derbyContainerProvider;
+        this.hsqlContainerProvider = hsqlContainerProvider;
+        this.derbyEntityManagerProvider = derbyEntityManagerProvider;
+        this.hsqlEntityManagerProvider = hsqlEntityManagerProvider;
+    }
 ```
 - create a method to undertake the transaction
  
@@ -354,23 +367,35 @@ protected void addWithEntityMgr(EntityManagerProvider entityManagerProvider) {
 }
 ```
 - add two buttons to call the ```addWithEntityMgr``` method, and refresh the container (so that we can see the changes)
-- add the buttons to the vertical layouts
+- add the buttons to the vertical layouts.  The complete ```doBuild()``` method now looks like this:
 
 ```
-//add with EntityManager
-derbyEntityMgrButton = new Button();
-derbyEntityMgrButton.addClickListener(event -> {
-    addWithEntityMgr(derbyEntityManagerProvider);
-    derbyContainer.refresh();
-});
-hsqlEntityMgrButton = new Button();
-hsqlEntityMgrButton.addClickListener(event -> {
-    addWithEntityMgr(hsqlEntityManagerProvider);
-    hsqlContainer.refresh();
-});
+@Override
+protected void doBuild(ViewChangeBusMessage busMessage) {
+    derbyContainer=derbyContainerProvider.get(Person.class, ContainerType.CACHED);
+    hsqlContainer=hsqlContainerProvider.get( Person.class, ContainerType.CACHED);
+    derbyTable = new Table("",derbyContainer);
+    hsqlTable = new Table("",hsqlContainer);
 
-VerticalLayout derbyLayout = new VerticalLayout(derbyTable, derbyEntityMgrButton);
-VerticalLayout hsqlLayout = new VerticalLayout(hsqlTable, hsqlEntityMgrButton);
+    derbyEntityMgrButton = new Button();
+    derbyEntityMgrButton.addClickListener(event -> {
+        addWithEntityMgr(derbyEntityManagerProvider);
+        derbyContainer.refresh();
+    });
+    hsqlEntityMgrButton = new Button();
+    hsqlEntityMgrButton.addClickListener(event -> {
+        addWithEntityMgr(hsqlEntityManagerProvider);
+        hsqlContainer.refresh();
+    });
+
+    VerticalLayout derbyLayout = new VerticalLayout(derbyTable, derbyEntityMgrButton);
+    VerticalLayout hsqlLayout = new VerticalLayout(hsqlTable, hsqlEntityMgrButton);
+
+    HorizontalLayout horizontalLayout=new HorizontalLayout(derbyLayout,hsqlLayout);
+    Panel panel = new Panel();
+    panel.setContent(horizontalLayout);
+    setRootComponent(panel);
+}
 
 ```
 - give the buttons captions and descriptions
@@ -391,13 +416,17 @@ private Button hsqlEntityMgrButton;
 
 ##DAO
 
-Of course, it is not possible to annotate a lambda, so Krail provides a generic DAO for the simple JPA calls to avoid the need for creating annotated methods.
+There is a lot of debate about the value of using DAOs; we generally only use them where there is a particular value in doing so.  One such case, we believe, is where you are using a lot of Java 8 lambdas to respond, for example, to button clicks.  JPA would require a separate, annotated method for each type of response needed.
+   
+For this use case Krail provides a generic DAO for the simple JPA calls to avoid the need for creating those annotated methods.
 
 - inject the DAO for each persistence unit
 
 ```
 @Inject
-protected JpaView(@DerbyJpa JpaContainerProvider derbyContainerProvider, @HsqlJpa JpaContainerProvider hsqlContainerProvider, @DerbyJpa EntityManagerProvider derbyEntityManagerProvider, @HsqlJpa EntityManagerProvider hsqlEntityManagerProvider, @DerbyJpa JpaDao_LongInt derbyDao, @HsqlJpa JpaDao_LongInt hsqlDao) {
+protected JpaView(Translate translate, @DerbyJpa JpaContainerProvider derbyContainerProvider, @HsqlJpa JpaContainerProvider hsqlContainerProvider,
+                  @DerbyJpa EntityManagerProvider derbyEntityManagerProvider, @HsqlJpa EntityManagerProvider hsqlEntityManagerProvider, @DerbyJpa JpaDao_LongInt derbyDao, @HsqlJpa JpaDao_LongInt hsqlDao) {
+    super(translate);
     this.derbyContainerProvider = derbyContainerProvider;
     this.hsqlContainerProvider = hsqlContainerProvider;
     this.derbyEntityManagerProvider = derbyEntityManagerProvider;
@@ -411,7 +440,7 @@ protected JpaView(@DerbyJpa JpaContainerProvider derbyContainerProvider, @HsqlJp
 <p class="last">For type safety, Krail's Dao and Entity require parameters to identify the type of id and version used.  <code>JpaDao_LongInt</code> simply denotes that it is a JPA DAO using Long for the Id and Integer for the version - the correct types for our Person class</p>
 </div>
 
-- DAOs are not bound automatically, so we add them to the persistence unit configuration in ```TutorialJpaModule``` by calling ```useLongIntDao()``` on the ```JpaInstanceConfiguration``` (add to HSQL configuration as well, even though only Derby configuration is shown here)
+- DAOs are not bound automatically, so we add them to the persistence unit configuration in ```TutorialJpaModule``` by calling ```useLongIntDao()``` on the ```JpaInstanceConfiguration``` (on both configs) 
 
 ```
 private DefaultJpaInstanceConfiguration derbyConfig() {
@@ -422,21 +451,32 @@ private DefaultJpaInstanceConfiguration derbyConfig() {
           .db(JpaDb.DERBY_EMBEDDED)
           .autoCreate(true)
           .url(dbFolder.getAbsolutePath())
+          .useLongIntDao()
           .user("test")
           .password("test")
-          .useLongIntDao()
           .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE);
     return config;
 }
 
+private DefaultJpaInstanceConfiguration hsqlConfig() {
+    DefaultJpaInstanceConfiguration config = new DefaultJpaInstanceConfiguration();
+    config.db(JpaDb.HSQLDB)
+          .autoCreate(true)
+          .url("mem:test")
+          .useLongIntDao()
+          .user("sa")
+          .password("")
+          .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE);
+    return config;
+}
+```
+
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code>useLongIntDao()</code> is shorthand for calling:<br><code>    JpaInstanceConfiguration.bind(JpaDaoLongInt.class, DefaultJpaDaoLongInt.class)</code>.<br> You can use <code>bind()</code> to bind any persistence unit specific implementation so that you can identify them with binding annotations - for example, to inject your own Dao implementation:<br> <code>@DerbyJpa MyDao myDao</code></p>
+<p class="last"><code>useLongIntDao()</code> is shorthand for calling:<br><code>JpaInstanceConfiguration.bind(JpaDaoLongInt.class, DefaultJpaDaoLongInt.class)</code>.<br> You can use <code>bind()</code> to bind any persistence unit specific implementation so that you can identify them with binding annotations - for example, to inject your own Dao implementation:<br> <code>@DerbyJpa MyDao myDao</code></p>
 </div>
 
     
-    
-```
 - add buttons to ```JpaView.doBuild()```  
 
 ```
@@ -476,7 +516,7 @@ private Button hsqlDaoButton;
 
 ```Option``` values are saved to the **@InMemory** store by default, which is not very useful unless you have an "always on" system.
 
-First we will demonstrate that ```Option``` values are saved to the to the **@InMemory** store, and then we will change settings to demonstrate them being saved to a JPA PU instead.
+First we will demonstrate that ```Option``` values are saved to the  **@InMemory** store, and then we will change settings to demonstrate them being saved to a JPA Persistence Unit instead.
 
 We need a new page:
 
@@ -501,14 +541,16 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
+import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.core.option.*;
 import uk.q3c.krail.core.persist.common.common.ContainerType;
-import uk.q3c.krail.core.persist.inmemory.common.InMemoryContainer;
 import uk.q3c.krail.core.persist.common.common.VaadinContainerProvider;
-import uk.q3c.krail.core.user.opt.*;
+import uk.q3c.krail.core.persist.common.option.OptionEntity;
+import uk.q3c.krail.core.persist.inmemory.common.InMemoryContainer;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import JpaContainerProvider;
-import JpaOptionEntity;
+import uk.q3c.krail.persist.jpa.common.JpaContainerProvider;
+import uk.q3c.krail.persist.jpa.option.JpaOptionEntity;
 
 import javax.annotation.Nonnull;
 
@@ -518,7 +560,7 @@ public class JpaOptionView extends ViewBase implements OptionContext {
     public static final OptionKey<String> anyOldText = new OptionKey<>("default text", MyNews.class, LabelKey.Age, DescriptionKey.Age_of_the_Person);
     private final VaadinContainerProvider inMemoryContainerProvider;
     private final JpaContainerProvider derbyContainerProvider;
-    private JPAContainer<OptionEntity_LongInt> derbyContainer;
+    private JPAContainer<JpaOptionEntity> derbyContainer;
     private InMemoryContainer inMemoryContainer;
 
     @Caption(caption = LabelKey.In_Memory, description = DescriptionKey.Interesting_Things )
@@ -532,8 +574,10 @@ public class JpaOptionView extends ViewBase implements OptionContext {
     private Button optionPopupButton;
 
     @Inject
-    protected JpaOptionView(@InMemory VaadinContainerProvider inMemoryContainerProvider, @DerbyJpa JpaContainerProvider derbyContainerProvider, OptionPopup
+    protected JpaOptionView(Translate translate, @InMemory VaadinContainerProvider inMemoryContainerProvider, @DerbyJpa JpaContainerProvider
+            derbyContainerProvider, OptionPopup
             optionPopup, Option option) {
+        super(translate);
         this.inMemoryContainerProvider = inMemoryContainerProvider;
         this.derbyContainerProvider = derbyContainerProvider;
         this.optionPopup = optionPopup;
@@ -547,7 +591,7 @@ public class JpaOptionView extends ViewBase implements OptionContext {
         inMemoryTable = new Table();
         derbyTable = new Table();
         inMemoryContainer = (InMemoryContainer) inMemoryContainerProvider.get(OptionEntity.class, ContainerType.CACHED);
-        derbyContainer = derbyContainerProvider.get(OptionEntity_LongInt.class, ContainerType.CACHED);
+        derbyContainer = derbyContainerProvider.get(JpaOptionEntity.class, ContainerType.CACHED);
         inMemoryTable.setContainerDataSource(inMemoryContainer);
         derbyTable.setContainerDataSource(derbyContainer);
 
@@ -578,6 +622,32 @@ There is quite a lot in this class, but you have seen most of it already - these
 - A Vaadin ```Table``` is used for each persistence source to present the data
 - the ```OptionPopup``` is used so that we can change the value of an ```Option```
 - the ```optionValueChanged()``` method refreshes the both ```Container``` (and associated ```Table```) instances when an ```Option``` value is changed
+
+We also need to update *persistence.xml* to include ```JpaOptionEntity```:
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+    <persistence-unit name="derbyDb">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>uk.q3c.krail.persist.jpa.option.JpaOptionEntity</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+        </properties>
+
+    </persistence-unit>
+
+    <persistence-unit name="hsqlDb">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+        </properties>
+
+    </persistence-unit>
+</persistence>
+```
 
 Now to check what is happening:
 
@@ -616,18 +686,6 @@ protected Module optionModule() {
 }
 ```
 
-- add the JPA Option entity to *persistence.xml*
- 
-```xml
-<persistence-unit name="derbyDb">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>JpaOptionEntity</class>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-    </properties>
-
-</persistence-unit>
-```
 
 - Run the application and log in
 - navigate to "JPA | Options"
@@ -640,12 +698,19 @@ protected Module optionModule() {
 
 Persistence for I18N patterns is a little different to persistence for ```Option```.  For ```Option```, there is only ever one source in use, but as we have already seen, we can use multiple sources for I18N patterns, working in a hierarchy.
 
-To demonstrate this we will go back to the JPA page - and if you wish to check first, you will see that none of the Tutorial display for this page is translated.  We will add a translation to the Derby source, update the configuration and see the translation take effect.
+To demonstrate this we will go back to the JPA page - and if you wish to check first, you will see that none of the Tutorial display for this page is translated.  
+
+We will simulate a real world requirement to hold translations in a database by adding a translation to the Derby source, and then updating the configuration and see the translation take effect.
+  
+  This is also what you would do if you want to change or add translations to the Krail core - export the patterns to a mutable source and update / add the translations.
 
 - add the **@DerbyJpa** pattern dao to the constructor injections 
 ```
 @Inject
-protected JpaView(@DerbyJpa JpaContainerProvider derbyContainerProvider, @HsqlJpa JpaContainerProvider hsqlContainerProvider, @DerbyJpa EntityManagerProvider derbyEntityManagerProvider, @HsqlJpa EntityManagerProvider hsqlEntityManagerProvider, @DerbyJpa JpaDao_LongInt derbyDao, @HsqlJpa JpaDao_LongInt hsqlDao, @DerbyJpa PatternDao patternDao) {
+protected JpaView(Translate translate, @DerbyJpa JpaContainerProvider derbyContainerProvider, @HsqlJpa JpaContainerProvider hsqlContainerProvider,
+                  @DerbyJpa EntityManagerProvider derbyEntityManagerProvider, @HsqlJpa EntityManagerProvider hsqlEntityManagerProvider, @DerbyJpa 
+                      JpaDao_LongInt derbyDao, @HsqlJpa JpaDao_LongInt hsqlDao, @DerbyJpa PatternDao patternDao) {
+    super(translate);
     this.derbyContainerProvider = derbyContainerProvider;
     this.hsqlContainerProvider = hsqlContainerProvider;
     this.derbyEntityManagerProvider = derbyEntityManagerProvider;
@@ -681,10 +746,10 @@ private DefaultJpaInstanceConfiguration derbyConfig() {
           .db(JpaDb.DERBY_EMBEDDED)
           .autoCreate(true)
           .url(dbFolder.getAbsolutePath())
-          .user("test")
           .useLongIntDao()
           .provideOptionDao()
           .providePatternDao()
+          .user("test")
           .password("test")
           .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE);
     return config;
@@ -702,15 +767,28 @@ protected Module i18NModule() {
 - add the JPA pattern entity to *persistence.xml*
 
 ```xml
-<persistence-unit name="derbyDb">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>JpaOptionEntity</class>
-    <class>JpaPatternEntity</class>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-    </properties>
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+    <persistence-unit name="derbyDb">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>uk.q3c.krail.persist.jpa.option.JpaOptionEntity</class>
+        <class>uk.q3c.krail.persist.jpa.i18n.JpaPatternEntity</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+        </properties>
 
-</persistence-unit>
+    </persistence-unit>
+
+    <persistence-unit name="hsqlDb">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+        </properties>
+
+    </persistence-unit>
+</persistence>
 ```
 
 - run the application and navigate to "JPA"
@@ -730,6 +808,7 @@ We have :
 - used JPA containers, with sources identified by annotation
 - configured ```Option``` to use JPA persistence  
 - configured I18N to use JPA for pattern persistence
+- demonstrated the hierarchical nature of I18N pattern sources, so that there is always a translation
 
 #Download from GitHub
 To get to this point straight from GitHub, [clone](https://github.com/davidsowerby/krail-tutorial) using branch **step09**

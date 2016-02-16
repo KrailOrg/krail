@@ -19,25 +19,25 @@ This could be described as the user level value overriding the system level, whi
 We will demonstrate this with a page on which the user can select the news topics they wish to see. 
 
 - In the 'pages' package create a new view, 'MyNews', extended from ```Grid3x3View``` 
-- Override the ```doBuild()``` method
+- Add 3 Labels with some example text, for CEO News, Items for Sale and Vacancies
 
-```java
+```
 package com.example.tutorial.pages;
 
+import com.google.inject.Inject;
+import com.vaadin.ui.Label;
+import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
 public class MyNews extends Grid3x3ViewBase {
 
-    @Override
-    protected void doBuild(ViewChangeBusMessage busMessage) {
-        super.doBuild(busMessage);
+    @Inject
+    protected MyNews(Translate translate) {
+        super(translate);
     }
-}
-```
-- Add 3 Labels with some example text, for CEO News, Items for Sale and Vacancies
-```
- @Override
+
+    @Override
     protected void doBuild(ViewChangeBusMessage busMessage) {
         super.doBuild(busMessage);
         Label ceoNews = new Label("CEO News");
@@ -50,6 +50,7 @@ public class MyNews extends Grid3x3ViewBase {
         setCentreCell(ceoNews);
         setMiddleRight(vacancies);
     }
+}
 ```
 - In the 'pages' package create a new direct pages module, "MyOtherPages"
 ```
@@ -100,13 +101,26 @@ In order to use options a class must implement ```OptionContext```
 The result should look like this:
 
 ```java
+package com.example.tutorial.pages;
+
+import com.google.inject.Inject;
+import com.vaadin.data.Property;
+import com.vaadin.ui.Label;
+import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.option.OptionContext;
+import uk.q3c.krail.core.view.Grid3x3ViewBase;
+import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+
+import javax.annotation.Nonnull;
 
 public class MyNews extends Grid3x3ViewBase implements OptionContext {
 
-    private Option option;
+    private final Option option;
 
     @Inject
-    public MyNews( Option option) {
+    protected MyNews(Translate translate, Option option) {
+        super(translate);
         this.option = option;
     }
 
@@ -124,14 +138,12 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
         setMiddleRight(vacancies);
     }
 
-  
     @Nonnull
     @Override
     public Option getOption() {
         return option;
     }
 
-  
     @Override
     public void optionValueChanged(Property.ValueChangeEvent event) {
 
@@ -151,7 +163,7 @@ The real key - the one that is used in persistence - is made up of the context, 
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">An option value is just an object to Krail. Supported data types will be determined by your choice of persistence.  However, the core does provide an OptionStringConverter to help with the process of translating to String for persistence</p>
+<p class="last">An option value is just an object to Krail. Supported data types will be determined by your choice of persistence.  However, the core does provide <code>OptionElementConverter</code> to help with the process of translating to String for persistence</p>
 </div>
 
 We will make use of these keys in the ```optionValueChanged``` method, to hide or show the news channels:
@@ -210,10 +222,11 @@ import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
-import Option;
-import OptionContext;
-import OptionKey;
-import OptionPopup;
+import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.option.OptionContext;
+import uk.q3c.krail.core.option.OptionKey;
+import uk.q3c.krail.core.option.OptionPopup;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
@@ -224,16 +237,17 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
     public static final OptionKey<Boolean> ceoVisible = new OptionKey<>(true, MyNews.class, LabelKey.CEO_News_Channel);
     public static final OptionKey<Boolean> itemsForSaleVisible = new OptionKey<>(true, MyNews.class, LabelKey.Items_For_Sale_Channel);
     public static final OptionKey<Boolean> vacanciesVisible = new OptionKey<>(true, MyNews.class, LabelKey.Vacancies_Channel);
+
+    private final Option option;
+    private final OptionPopup optionPopup;
     private Label ceoNews;
     private Label itemsForSale;
-    private Option option;
-    private OptionPopup optionPopup;
-    private Button popupButton;
-    private Button systemOptionButton;
     private Label vacancies;
+    private Button popupButton;
 
     @Inject
-    public MyNews(Option option, OptionPopup optionPopup) {
+    protected MyNews(Translate translate, Option option, OptionPopup optionPopup) {
+        super(translate);
         this.option = option;
         this.optionPopup = optionPopup;
     }
@@ -248,18 +262,20 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
         itemsForSale.setSizeFull();
         vacancies.setSizeFull();
 
-        popupButton = new Button("options");
-        popupButton.addClickListener(event -> {
-            optionPopup.popup(this, LabelKey.News_Options);
-        });
-
+        popupButton=new Button("options");
+        popupButton.addClickListener(event->optionPopup.popup(this,LabelKey.News_Options));
+        setBottomCentre(popupButton);
+        
         setMiddleLeft(itemsForSale);
         setCentreCell(ceoNews);
         setMiddleRight(vacancies);
-        setBottomCentre(popupButton);
-      
-
         optionValueChanged(null);
+    }
+
+    @Nonnull
+    @Override
+    public Option getOption() {
+        return option;
     }
 
     @Override
@@ -268,14 +284,7 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
         itemsForSale.setVisible(option.get(itemsForSaleVisible));
         vacancies.setVisible(option.get(vacanciesVisible));
     }
-
-    @Nonnull
-    @Override
-    public Option getOption() {
-        return option;
-    }
 }
-
 
 ```
 
@@ -296,7 +305,7 @@ We have demonstrated here that options are associated with users.  What we haven
 
 In fact, at the moment there is no system level, so if there is no user level value, then the default coded value is used.
 
-- Still logged in as user "eq", open the options popup and click "restore to default" for the CEO channel.
+- Still logged in as user "eq", open the options popup and click "Reset to Default" for the CEO channel.
 - The "CEO News Channel" checkbox becomes checked, and CEO channel re-appears
 
 This is the expected behaviour - we coded a default value of "true" for the ```OptionKey```.  Now to demonstrate changing the system level value:
@@ -342,14 +351,14 @@ The structure of these may be available from other systems - HR, Identity Manage
 
 #Option Data Types
 
-When using the default in memory store, Krail can use any data type for an option.  However, most persistence providers will want to confine Option values to a single table, and ```OptionStringConverter``` provides support for that, by translating ```Option``` values to ```String``` and back again.   
+When using the default in memory store, Krail can use any data type for an option.  However, most persistence providers will want to confine Option values to a single table, and ```OptionElementConverter``` provides support for that, by translating ```Option``` values to ```String``` and back again.   
 
 This supports most primitive data types , ```Enum``` and ```I18NKey```.  Collections cannot be used directly, but are supported through ```OptionList```.
 
 ```AnnotationOptionList``` enables the use of a list of ```Annotation``` classes.
  
  
-See ```DefaultOptionStringConverter``` for the complete list of supported types.
+See ```DefaultOptionElementConverter``` for the complete list of supported types.
  
  
 #Summary
