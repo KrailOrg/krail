@@ -241,8 +241,6 @@ public class EventsView extends Grid3x3ViewBase {
         setTopLeft(singletonSendBtn);
         setMiddleLeft(sessionSendBtn);
         setBottomLeft(uiSendBtn);
-
-
     }
 }
 

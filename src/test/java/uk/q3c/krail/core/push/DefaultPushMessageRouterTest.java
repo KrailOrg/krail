@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
+import uk.q3c.krail.core.guice.uiscope.UIKey;
 
 import static org.mockito.Mockito.*;
 
@@ -45,6 +46,16 @@ public class DefaultPushMessageRouterTest {
         // given
         // when
         pmr.messageIn("a", "a1");
+        // then
+        verify(uiBus).publish(any(PushMessage.class));
+    }
+
+    @Test
+    public void messageIn_simple_with_identifiers() {
+        // given
+        UIKey uiKey = new UIKey(5);
+        // when
+        pmr.messageIn("a", "a1", uiKey, 5);
         // then
         verify(uiBus).publish(any(PushMessage.class));
     }

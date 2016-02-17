@@ -101,20 +101,20 @@ public class EventsView extends Grid3x3ViewBase {
             String m = "Singleton";
             globalBusProvider.get()
                              .publish(new TutorialMessage(m, this));
-            broadcaster.broadcast("refresh",m);
+            broadcaster.broadcast("refresh", m, this.getRootComponent());
 
         });
         sessionSendBtn.addClickListener(click -> {
             String m = "Session";
             sessionBusProvider.get()
                               .publish(new TutorialMessage(m, this));
-            broadcaster.broadcast("refresh",m);
+            broadcaster.broadcast("refresh", m, getRootComponent());
         });
         uiSendBtn.addClickListener(click -> {
             String m = "UI";
             uiBusProvider.get()
                          .publish(new TutorialMessage(m, this));
-            broadcaster.broadcast("refresh",m);
+            broadcaster.broadcast("refresh", m, getRootComponent());
         });
         setTopLeft(singletonSendBtn);
         setMiddleLeft(sessionSendBtn);

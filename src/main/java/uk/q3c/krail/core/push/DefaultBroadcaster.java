@@ -16,11 +16,13 @@ package uk.q3c.krail.core.push;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.config.ApplicationConfiguration;
 import uk.q3c.krail.core.config.ConfigKeys;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
+import uk.q3c.krail.core.ui.ScopedUI;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
@@ -89,6 +91,12 @@ public class DefaultBroadcaster implements Broadcaster {
         return this;
     }
 
+    @Override
+    public synchronized Broadcaster broadcast(@Nonnull final String group, @Nonnull final String message, @Nonnull Component sender) {
+        checkNotNull(sender);
+        ScopedUI scopedUI = (ScopedUI) sender.getUI();
+        return broadcast(group, message, scopedUI.getInstanceKey());
+    }
 
     @Override
     public synchronized Broadcaster broadcast(@Nonnull final String group, @Nonnull final String message, @Nonnull UIKey sender) {

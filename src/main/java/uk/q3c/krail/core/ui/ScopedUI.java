@@ -244,17 +244,17 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     public void receiveBroadcast(@Nonnull final String group, @Nonnull final String message, @Nonnull UIKey sender, int messageId) {
         checkNotNull(group);
         checkNotNull(message);
-        log.debug("receiving message id: {} from: {}", messageId, sender);
+        log.debug("UI instance {} receiving message id: {} from: {}", this.getInstanceKey(), messageId, sender);
         access(() -> {
-            processBroadcastMessage(group, message);
+            processBroadcastMessage(group, message, sender, messageId);
         });
     }
 
     /**
      * Distribute the message to listeners within this UIScope
      */
-    protected void processBroadcastMessage(String group, String message) {
-        pushMessageRouter.messageIn(group, message);
+    protected void processBroadcastMessage(String group, String message, UIKey sender, int messageId) {
+        pushMessageRouter.messageIn(group, message, sender, messageId);
     }
 
     /**

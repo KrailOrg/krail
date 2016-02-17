@@ -11,6 +11,8 @@
 
 package uk.q3c.krail.core.push;
 
+import uk.q3c.krail.core.guice.uiscope.UIKey;
+
 /**
  * Created by David Sowerby on 27/05/15.
  */
@@ -19,8 +21,20 @@ public interface PushMessageRouter {
     /**
      * Pass a message to the router for it then to pass it on to its listeners.  Constructs a {@link PushMessage} and publishes it to the UIBus
      *
-     * @param group the message group
+     * @param group   the message group
      * @param message the message
      */
+    @Deprecated
     void messageIn(String group, String message);
+
+    /**
+     * Pass a message to the router for it then to pass it on to its listeners.  Constructs a {@link PushMessage} and publishes it to the UIBus
+     *
+     * @param group     the message group
+     * @param message   the message
+     * @param sender    identifier of the sender
+     * @param messageId message id
+     */
+    void messageIn(String group, String message, UIKey sender, int messageId);
+
 }

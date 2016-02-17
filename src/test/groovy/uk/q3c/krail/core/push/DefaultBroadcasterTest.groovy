@@ -13,9 +13,11 @@
 
 package uk.q3c.krail.core.push
 
+import com.vaadin.ui.Component
 import spock.lang.Specification
 import uk.q3c.krail.core.config.ApplicationConfiguration
 import uk.q3c.krail.core.guice.uiscope.UIKey
+import uk.q3c.krail.core.ui.ScopedUI
 import uk.q3c.util.testutil.LogMonitor
 
 import static org.assertj.core.api.Assertions.assertThat
@@ -81,7 +83,7 @@ class DefaultBroadcasterTest extends Specification {
 
     }
 
-    def "broadcast, push enabled, messages received"() {
+    def "broadcast, push enabled, messages received, using UiKey for sender"() {
         given:
         UIKey uiKey = new UIKey(55)
         broadcaster.register("a", listener1)
@@ -98,7 +100,7 @@ class DefaultBroadcasterTest extends Specification {
 
     }
 
-    def "broadcast, push not enabled, messages not received"() {
+    def "broadcast, push not enabled, messages not received, using UiKey for sender"() {
         given:
         UIKey uiKey = new UIKey(55)
         broadcaster.register("a", listener1)
@@ -114,4 +116,47 @@ class DefaultBroadcasterTest extends Specification {
         !logMonitor.debugLogs().contains('broadcasting message: 1 from: UIKey:55')
         logMonitor.debugLogs().contains('server push is disabled, message not broadcast')
     }
+
+    def "broadcast, push enabled, messages received, using component for sender"() {
+        given:
+        UIKey uiKey = new UIKey(55)
+        ScopedUI ui = Mock()
+        ui.getInstanceKey() >> uiKey
+        Component component = Mock()
+        component.getUI() >> ui
+        broadcaster.register("a", listener1)
+        broadcaster.register(Broadcaster.ALL_MESSAGES, listener2)
+
+        when:
+        broadcaster.broadcast("a", "msg", component)
+
+        then:
+        1 * applicationConfiguration.getBoolean('server.pushEnabled', true) >> true
+        1 * listener1.receiveBroadcast("a", "msg", uiKey, 1)
+        1 * listener2.receiveBroadcast("a", "msg", uiKey, 1)
+        logMonitor.debugLogs().contains('broadcasting message: 1 from: UIKey:55')
+
+    }
+
+    def "broadcast, push not enabled, messages not received, using component for sender"() {
+        given:
+        UIKey uiKey = new UIKey(55)
+        ScopedUI ui = Mock()
+        ui.getInstanceKey() >> uiKey
+        Component component = Mock()
+        component.getUI() >> ui
+        broadcaster.register("a", listener1)
+        broadcaster.register(Broadcaster.ALL_MESSAGES, listener2)
+
+        when:
+        broadcaster.broadcast("a", "msg", uiKey)
+
+        then:
+        1 * applicationConfiguration.getBoolean('server.pushEnabled', true) >> false
+        0 * listener1.receiveBroadcast(_, _, _, _)
+        0 * listener2.receiveBroadcast(_, _, _, _)
+        !logMonitor.debugLogs().contains('broadcasting message: 1 from: UIKey:55')
+        logMonitor.debugLogs().contains('server push is disabled, message not broadcast')
+    }
+
 }

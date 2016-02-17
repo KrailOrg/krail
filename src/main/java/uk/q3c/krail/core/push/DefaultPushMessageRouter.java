@@ -17,6 +17,7 @@ import net.engio.mbassy.bus.common.PubSubSupport;
 import org.slf4j.Logger;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
+import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -35,6 +36,12 @@ public class DefaultPushMessageRouter implements PushMessageRouter {
     @Override
     public void messageIn(String group, String message) {
         log.debug("publishing message");
+        uiBus.publish(new PushMessage(group, message));
+    }
+
+    @Override
+    public void messageIn(String group, String message, UIKey sender, int messageId) {
+        log.debug("publishing message from {}, with message id: {}", sender, messageId);
         uiBus.publish(new PushMessage(group, message));
     }
 
