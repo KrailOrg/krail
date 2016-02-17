@@ -34,7 +34,7 @@ import static uk.q3c.krail.core.user.profile.RankOption.*
 /**
  * Created by David Sowerby on 27 Jan 2016
  */
-abstract class OptionDaoTestBase extends Specification {
+public abstract class OptionDaoTestBase extends Specification {
 
     @Inject
     OptionElementConverter optionElementConverter;
