@@ -10,9 +10,9 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.i18n;
+package uk.q3c.krail.testutil.i18n;
 
-import uk.q3c.krail.testutil.i18n.TestLabelKey;
+import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
 
 /**
  * The base for the resource bundle of Labels. This is an arbitrary division of i18N keys & values, but is loosely
@@ -21,10 +21,10 @@ import uk.q3c.krail.testutil.i18n.TestLabelKey;
  *
  * @author David Sowerby 9 Feb 2013
  */
-public class TestLabels_en extends TestLabels {
+public class TestLabels extends EnumResourceBundle<TestLabelKey> {
 
 
-    public TestLabels_en() {
+    public TestLabels() {
         super();
     }
 

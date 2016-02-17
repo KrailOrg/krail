@@ -10,22 +10,22 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.i18n;
-
-import uk.q3c.krail.testutil.i18n.TestLabelKey;
+package uk.q3c.krail.testutil.i18n;
 
 /**
  * @author David Sowerby 9 Feb 2013
  */
-public class TestLabels_de extends TestLabels {
+public class TestLabels_it extends TestLabels {
 
     @Override
     protected void loadMap() {
-        put(TestLabelKey.Home, "zu Hause");
-        put(TestLabelKey.Yes, "Ja");
-        put(TestLabelKey.No, "Nein");
-        put(TestLabelKey.ViewA, "DE_ViewA");
-        put(TestLabelKey.ViewB, "DE_ViewB");
+        put(TestLabelKey.Home, "it_Home");
+        put(TestLabelKey.Yes, "it_Yes");
+        put(TestLabelKey.No, "it_No");
+        put(TestLabelKey.ViewA, "it_ViewA");
+        put(TestLabelKey.ViewB, "it_ViewB");
+        put(TestLabelKey.MoneyInOut, "it_MoneyInOut");
+        put(TestLabelKey.Blank, "");
 
     }
 
