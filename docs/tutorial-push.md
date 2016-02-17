@@ -187,6 +187,10 @@ public class UIMessageReceiver extends MessageReceiver {
 - run the application
 - press any of the send message buttons, and an additional "push" message will appear in all the UI state log texts, of any UIs (browser tabs) you have open
 
+#Footnote
+
+Vaadin Push can be a little quirky.  This Tutorial was developed using Tomcat 8, and also checked on Tomcat 7 - but if you use something else and get problems, it is worth checking Vaadin's [notes on the subject](https://vaadin.com/wiki/-/wiki/Main/Working+around+push+issues) first.
+
 
 #Summary
 
