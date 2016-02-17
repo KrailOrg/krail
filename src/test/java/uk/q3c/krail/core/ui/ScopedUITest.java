@@ -254,7 +254,7 @@ public class ScopedUITest {
         //when
         ui.receiveBroadcast("group", "message", uiKey, 55);
         //then
-        assertThat(logMonitor.debugLogs()).contains("receiving message id: 55 from: UIKey:33");
+        assertThat(logMonitor.debugLogs()).contains("UI instance UIKey:33 receiving message id: 55 from: UIKey:33");
     }
 
 
