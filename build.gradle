@@ -49,7 +49,7 @@ ext.groovyVersion = '2.4.1'
 ext.guiceVersion = '4.0'
 ext.shiroVersion = '1.2.4'
 ext.slf4jVersion = '1.7.6'
-ext.vaadinVersion = '7.6.2'
+ext.vaadinVersion = '7.6.3'
 ext.versionDescription = 'No version description provided'
 
 ext.releaseDate = new Date()

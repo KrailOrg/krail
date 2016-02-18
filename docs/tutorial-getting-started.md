@@ -208,7 +208,7 @@ dependencies {
 }
 
 vaadin {
-    version = '7.6.2' // see issue https://github.com/davidsowerby/krail/issues/528
+    version = '7.6.3' // see issue https://github.com/davidsowerby/krail/issues/528
     widgetset 'com.example.tutorial.widgetset.tutorialWidgetset'
     plugin.logToConsole = true
 }

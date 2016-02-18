@@ -1,2 +1,1 @@
-This version updates to Vaadin 7.6.2.  Most of the change are about improving quality through static code analysis and increased testing code coverage.
-Packages have been re-organised and testUtil merged back into the core.  Thread safety has been addressed
+This version updates to Vaadin 7.6.3.  Changes concentrate on separating the build from the master project to prepare move to continuous delivery.  Some small fixes included, Tutorial updated
