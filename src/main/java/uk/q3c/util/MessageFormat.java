@@ -115,16 +115,17 @@ public class MessageFormat {
     }
 
     private static Object[] sortArguments(List<Integer> parameters, Object[] arguments, String pattern) {
-        if (parameters.size() != arguments.length) {
-            Object[] args = new Object[]{parameters.size(), arguments.length, pattern};
-            log.warn("Message pattern and arguments do not match, there are {} parameters in the pattern, " +
-                    "and {} arguments. The pattern is: '{}'", args);
+        try {
+            List<Object> sortedArguments = new ArrayList<>();
+            for (Integer i : parameters) {
+                sortedArguments.add(arguments[i]);
+            }
+            return sortedArguments.toArray();
+        } catch (IndexOutOfBoundsException e) {
+            Object[] args = new Object[] { parameters.size(), arguments.length, pattern };
+            log.warn("Message pattern and arguments do not match, there are {} parameters in the pattern, "
+                    + "and {} arguments. The pattern is: '{}'", args);
             throw new RuntimeException();
         }
-        List<Object> sortedArguments = new ArrayList<>();
-        for (Integer i : parameters) {
-            sortedArguments.add(arguments[i]);
-        }
-        return sortedArguments.toArray();
     }
 }
