@@ -16,9 +16,6 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MessageFormatTest {
     @Test
     public void formatValid() {
@@ -32,20 +29,7 @@ public class MessageFormatTest {
         assertThat(result).isEqualTo("This is a simple pattern where the parameters can be in any order");
 
     }
-    
-    @Test
-    public void formatValidRepeatedArgument() {
 
-        // given
-        String pattern = "This is a {0} pattern where the same argument is {0}";
-        Object[] arguments = new Object[]{"repeated"};
-        // when
-        String result = MessageFormat.format(pattern, arguments);
-        // then
-        assertThat(result).isEqualTo("This is a repeated pattern where the same argument is repeated");
-
-    }
-    
     @Test
     public void formatValidContiguous() {
 
