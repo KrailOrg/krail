@@ -31,11 +31,11 @@ public class TestEventBusModule extends EventBusModule {
      */
     @Override
     protected void bindPublicationErrorHandlers() {
-        bind((IPublicationErrorHandler.class)).annotatedWith(UIBus.class)
+        bind(IPublicationErrorHandler.class).annotatedWith(UIBus.class)
                                               .to(TestEventBusErrorHandler.class);
-        bind((IPublicationErrorHandler.class)).annotatedWith(SessionBus.class)
+        bind(IPublicationErrorHandler.class).annotatedWith(SessionBus.class)
                                               .to(TestEventBusErrorHandler.class);
-        bind((IPublicationErrorHandler.class)).annotatedWith(GlobalBus.class)
+        bind(IPublicationErrorHandler.class).annotatedWith(GlobalBus.class)
                                               .to(TestEventBusErrorHandler.class);
     }
 }

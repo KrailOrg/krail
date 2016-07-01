@@ -103,7 +103,7 @@ public class DefaultApplicationConfigurationService extends AbstractService impl
                 log.debug("adding configuration from {} at index {}", file.getAbsolutePath(), k);
             } catch (Exception ce) {
                 if (!iniConfig.isOptional()) {
-                    String msg = ("Configuration Service failed to start, unable to load required configuration file: {}");
+                    String msg = "Configuration Service failed to start, unable to load required configuration file: {}";
                     log.error(msg, file.getAbsolutePath());
                     throw new ConfigurationException(msg + file.getAbsolutePath(), ce);
                 } else {

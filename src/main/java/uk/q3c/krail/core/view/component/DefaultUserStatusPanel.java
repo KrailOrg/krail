@@ -93,7 +93,7 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         log.debug("building with Locale={}", currentLocale.getLocale());
         boolean authenticated = subjectProvider.get()
                                                .isAuthenticated();
-        String caption = (authenticated) ? translate.from(LabelKey.Log_Out) : translate.from(LabelKey.Log_In);
+        String caption = authenticated ? translate.from(LabelKey.Log_Out) : translate.from(LabelKey.Log_In);
         log.debug("Caption is '{}'", caption);
         login_logout_Button.setCaption(caption.toLowerCase());
         usernameLabel.setValue(subjectIdentifier.subjectName());

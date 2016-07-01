@@ -48,7 +48,7 @@ public class DefaultOptionElementConverter implements OptionElementConverter {
     public String convertValueToString(@Nonnull Object value) {
         Class<?> modelType = value.getClass();
         if (modelType == String.class) {
-            return ((String) value);
+            return (String) value;
         } else if (modelType == Integer.class) {
             return Ints.stringConverter()
                        .reverse()
@@ -85,7 +85,7 @@ public class DefaultOptionElementConverter implements OptionElementConverter {
     @Nonnull
     public <V> V convertStringToValue(@Nonnull Class<V> elementClass, @Nonnull String valueString) {
         if (elementClass == String.class) {
-            return ((V) valueString);
+            return (V) valueString;
         } else if (elementClass == Integer.class) {
             return (V) Ints.stringConverter()
                            .convert(valueString);

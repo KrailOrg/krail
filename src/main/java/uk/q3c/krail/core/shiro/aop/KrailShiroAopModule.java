@@ -92,20 +92,20 @@ public class KrailShiroAopModule extends AbstractModule {
 
     protected void bindInterceptors(Provider<SubjectProvider> subjectProviderProvider, Provider<AnnotationResolver> annotationResolverProvider) {
         if (selectedAnnotations.contains(RequiresPermissions.class)) {
-            bindMethodInterceptor((RequiresPermissions.class), permissionsInterceptor(subjectProviderProvider, annotationResolverProvider));
+            bindMethodInterceptor(RequiresPermissions.class, permissionsInterceptor(subjectProviderProvider, annotationResolverProvider));
         }
         if (selectedAnnotations.contains(RequiresUser.class)) {
-            bindMethodInterceptor((RequiresUser.class), userInterceptor(subjectProviderProvider, annotationResolverProvider));
+            bindMethodInterceptor(RequiresUser.class, userInterceptor(subjectProviderProvider, annotationResolverProvider));
         }
         if (selectedAnnotations.contains(RequiresGuest.class)) {
-            bindMethodInterceptor((RequiresGuest.class), guestInterceptor(subjectProviderProvider, annotationResolverProvider));
+            bindMethodInterceptor(RequiresGuest.class, guestInterceptor(subjectProviderProvider, annotationResolverProvider));
         }
         if (selectedAnnotations.contains(RequiresAuthentication.class)) {
-            bindMethodInterceptor((RequiresAuthentication.class), authenticatedInterceptor(subjectProviderProvider, annotationResolverProvider));
+            bindMethodInterceptor(RequiresAuthentication.class, authenticatedInterceptor(subjectProviderProvider, annotationResolverProvider));
         }
 
         if (selectedAnnotations.contains(RequiresRoles.class)) {
-            bindMethodInterceptor((RequiresRoles.class), rolesInterceptor(subjectProviderProvider, annotationResolverProvider));
+            bindMethodInterceptor(RequiresRoles.class, rolesInterceptor(subjectProviderProvider, annotationResolverProvider));
         }
 
     }

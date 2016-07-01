@@ -76,7 +76,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
             return;
         }
         log.debug("scanning class '{}' for I18N annotations", target.getClass());
-        List<Object> processedFields = new ArrayList<Object>();
+        List<Object> processedFields = new ArrayList<>();
         translate(processedFields, target);
     }
 

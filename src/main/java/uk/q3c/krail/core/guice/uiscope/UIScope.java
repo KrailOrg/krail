@@ -36,7 +36,7 @@ public class UIScope implements Scope {
 
     private static volatile UIScope current;
 
-    private final Map<UIKey, Map<Key<?>, Object>> cache = new TreeMap<UIKey, Map<Key<?>, Object>>();
+    private final Map<UIKey, Map<Key<?>, Object>> cache = new TreeMap<>();
 
     public UIScope() {
         super();
@@ -71,7 +71,7 @@ public class UIScope implements Scope {
     }
 
     private Map<Key<?>, Object> createCacheEntry(UIKey uiKey) {
-        Map<Key<?>, Object> uiEntry = new HashMap<Key<?>, Object>();
+        Map<Key<?>, Object> uiEntry = new HashMap<>();
         cache.put(uiKey, uiEntry);
         log.debug("created a scope cache for UIScope with key: {}", uiKey);
         return uiEntry;
@@ -104,7 +104,7 @@ public class UIScope implements Scope {
 
     @Override
     public <T> Provider<T> scope(Key<T> key, Provider<T> unscoped) {
-        return new UIScopeProvider<T>(this, key, unscoped);
+        return new UIScopeProvider<>(this, key, unscoped);
     }
 
     public ImmutableList<UIKey> scopeKeys() {

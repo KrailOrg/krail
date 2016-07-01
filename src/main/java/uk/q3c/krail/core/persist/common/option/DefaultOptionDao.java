@@ -124,7 +124,7 @@ public class DefaultOptionDao implements OptionDao {
     protected <V> Optional<String> getRankedValue(@Nonnull OptionCacheKey<V> cacheKey, boolean lowest) {
         ImmutableList<String> ranks = cacheKey.getHierarchy()
                                               .ranksForCurrentUser();
-        ImmutableList<String> ranksToUse = (lowest) ? ranks.reverse() : ranks;
+        ImmutableList<String> ranksToUse = lowest ? ranks.reverse() : ranks;
         for (String rank : ranksToUse) {
             OptionCacheKey<V> specificKey = new OptionCacheKey<>(cacheKey, rank, RankOption.SPECIFIC_RANK);
             Optional<String> stringValue = getStringValue(specificKey);

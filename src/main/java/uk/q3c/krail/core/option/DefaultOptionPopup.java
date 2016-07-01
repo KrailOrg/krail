@@ -110,14 +110,14 @@ public class DefaultOptionPopup implements OptionPopup {
 
                 Button defaultsButton = new Button(translate.from(LabelKey.Reset_to_Default));
                 defaultsButton.setId(ID.getId(optionKeyName, this, defaultsButton));
-                defaultsButton.addClickListener((event -> {
+                defaultsButton.addClickListener(event -> {
                     option.delete(key, 0);
                     //we create an event to represent the field which whose value will be affected by this change
                     AbstractField.ValueChangeEvent changeEvent = new AbstractField.ValueChangeEvent(uiField);
                     context.optionValueChanged(changeEvent);
                     //update the value of the field - it may have changed
                     setFieldValue(uiField, option.get(key));
-                }));
+                });
                 baseLayout.addComponent(new FormLayout(uiField), 0, row);
                 baseLayout.addComponent(new FormLayout(defaultsButton), 1, row);
                 row++;

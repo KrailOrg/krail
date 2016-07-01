@@ -62,7 +62,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public class NavigationState implements Serializable {
     private static Logger log = getLogger(NavigationState.class);
-    private final Map<String, String> parameters = new LinkedHashMap<String, String>();
+    private final Map<String, String> parameters = new LinkedHashMap<>();
     // fragment is out of date
     private boolean fragmentChanged;
     private boolean partsChanged;

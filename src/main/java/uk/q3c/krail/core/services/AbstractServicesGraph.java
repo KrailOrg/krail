@@ -88,13 +88,13 @@ public abstract class AbstractServicesGraph<T> implements ServicesGraph<T> {
 
     private Collection<ServiceEdge> getDependenciesEdges(@Nonnull T dependant) {
         Collection<ServiceEdge> edges = graph.getOutEdges(dependant);
-        return (edges == null) ? new ArrayList<ServiceEdge>() : edges;
+        return (edges == null) ? new ArrayList<>() : edges;
     }
 
 
     private Collection<ServiceEdge> getDependantsEdges(@Nonnull T dependency) {
         Collection<ServiceEdge> edges = graph.getInEdges(dependency);
-        return (edges == null) ? new ArrayList<ServiceEdge>() : edges;
+        return (edges == null) ? new ArrayList<>() : edges;
     }
 
     @Override

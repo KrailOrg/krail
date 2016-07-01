@@ -56,7 +56,7 @@ public class ThreadCache {
      * Cache class for type capture and minimizing ThreadLocal lookups.
      */
     public static class Cache {
-        private final Map<Key<?>, Object> map = new HashMap<Key<?>, Object>();
+        private final Map<Key<?>, Object> map = new HashMap<>();
 
         public Cache() {
         }

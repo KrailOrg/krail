@@ -55,9 +55,9 @@ public class DefaultSubjectIdentifier implements SubjectIdentifier {
         Subject subject = subjectProvider.get();
         boolean authenticated = subject.isAuthenticated();
         boolean remembered = subject.isRemembered();
-        String name = (authenticated) ? subject.getPrincipal()
+        String name = authenticated ? subject.getPrincipal()
                                                .toString() : translate.from(LabelKey.Guest);
-        return (remembered) ? subject.getPrincipal() + "?" : name;
+        return remembered ? subject.getPrincipal() + "?" : name;
 
     }
 

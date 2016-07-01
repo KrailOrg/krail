@@ -77,7 +77,7 @@ public class PageAccessController implements Serializable {
         checkNotNull(sitemap);
         checkNotNull(parentNode);
         List<MasterSitemapNode> subnodes = sitemap.getChildren(parentNode);
-        ArrayList<MasterSitemapNode> authorisedSubNodes = new ArrayList<MasterSitemapNode>();
+        ArrayList<MasterSitemapNode> authorisedSubNodes = new ArrayList<>();
         for (MasterSitemapNode node : subnodes) {
             if (isAuthorised(subject, sitemap, node)) {
                 authorisedSubNodes.add(node);
