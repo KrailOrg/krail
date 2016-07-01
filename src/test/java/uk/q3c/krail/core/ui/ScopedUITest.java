@@ -60,7 +60,7 @@ import static org.mockito.Mockito.*;
 public class ScopedUITest {
 
     static int connectCount;
-    protected final String baseUri = "http://example.com";
+    protected static final String baseUri = "http://example.com";
     ScopedUI ui;
     @Mock
     Navigator navigator;

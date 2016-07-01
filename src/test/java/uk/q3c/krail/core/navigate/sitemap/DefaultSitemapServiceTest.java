@@ -75,9 +75,9 @@ public class DefaultSitemapServiceTest {
 
     static VaadinService vaadinService;
     static ResourceUtils resourceUtils = new DefaultResourceUtils();
-    private final int FILE_NODE_COUNT = 4;
-    private final int DIRECT_NODE_COUNT = 2;
-    private final int STANDARD_NODE_COUNT = 5;
+    private static final int FILE_NODE_COUNT = 4;
+    private static final int DIRECT_NODE_COUNT = 2;
+    private static final int STANDARD_NODE_COUNT = 5;
     @Inject
     DefaultSitemapService service;
     @Inject

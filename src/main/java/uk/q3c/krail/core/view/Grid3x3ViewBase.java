@@ -23,8 +23,8 @@ import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import static com.google.common.base.Preconditions.checkArgument;
 
 public class Grid3x3ViewBase extends ViewBase {
-    private final float[] defaultColumnWidths = new float[]{1f, 1f, 1f};
-    private final float[] defaultRowHeights = new float[]{1f, 1f, 1f};
+    private static final float[] defaultColumnWidths = new float[]{1f, 1f, 1f};
+    private static final float[] defaultRowHeights = new float[]{1f, 1f, 1f};
     private GridLayout grid;
 
     @Inject

@@ -27,27 +27,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GuiceContext({})
 public class StrictURIFragmentHandlerTest {
 
-    final String view = "view1";
-    final String view_ = "view1/";
-    final String view_p = "view1/a=b";
-    final String view_p2 = "view1/a=b/year=1970";
-    final String view_p2m1 = "view1/a=b/year=";
-    final String view_p2m2 = "view1/a=b/=1970";
-    final String view_p2m3 = "view1/a=b/1970";
-    final String view_p2m5 = "view1/=b/year=1970";
-    final String view_p2m6 = "view1/a=/year=1970";
+    static final String view = "view1";
+    static final String view_ = "view1/";
+    static final String view_p = "view1/a=b";
+    static final String view_p2 = "view1/a=b/year=1970";
+    static final String view_p2m1 = "view1/a=b/year=";
+    static final String view_p2m2 = "view1/a=b/=1970";
+    static final String view_p2m3 = "view1/a=b/1970";
+    static final String view_p2m5 = "view1/=b/year=1970";
+    static final String view_p2m6 = "view1/a=/year=1970";
 
-    final String subView = "view1/subView";
-    final String subView_ = "view1/subView/";
-    final String subView_p = "view1/subView/a=b";
-    final String subView_p2 = "view1/subView/a=b/year=1970";
-    final String dbl = "view//subView";
+    static final String subView = "view1/subView";
+    static final String subView_ = "view1/subView/";
+    static final String subView_p = "view1/subView/a=b";
+    static final String subView_p2 = "view1/subView/a=b/year=1970";
+    static final String dbl = "view//subView";
 
-    final String home = "";
-    final String home_p = "a=b";
-    final String home_p2 = "a=b/year=1970";
+    static final String home = "";
+    static final String home_p = "a=b";
+    static final String home_p2 = "a=b/year=1970";
 
-    final String subView_p2_bang = "!view1/subView/a=b/year=1970";
+    static final String subView_p2_bang = "!view1/subView/a=b/year=1970";
 
     @Inject
     StrictURIFragmentHandler uriHandler;
