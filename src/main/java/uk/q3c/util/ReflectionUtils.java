@@ -17,6 +17,8 @@ import java.util.Set;
 
 public class ReflectionUtils {
 
+    private ReflectionUtils(){}
+
     public static Set<Class<?>> allInterfaces(Class<?> clazz) {
         Set<Class<?>> allInterfaces = new HashSet<>();
         Class<?> classToCheck = clazz;

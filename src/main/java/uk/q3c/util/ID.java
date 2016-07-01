@@ -34,6 +34,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class ID {
 
+    private ID(){}
 
     public static String getId(@Nonnull Optional<?> qualifier, Object... components) {
         checkNotNull(qualifier);

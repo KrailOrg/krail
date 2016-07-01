@@ -31,6 +31,9 @@ import java.util.List;
  * @author David Sowerby 10 Feb 2013
  */
 public class MessageFormat {
+
+    private MessageFormat(){}
+
     private static Logger log = LoggerFactory.getLogger(MessageFormat.class);
 
     /**
