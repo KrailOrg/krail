@@ -51,7 +51,7 @@ public class MenuBarNodeModifier implements NodeModifier<UserSitemapNode, MenuIt
     public MenuItem create(MenuItem parentNode, @Nonnull UserSitemapNode sourceNode) {
         checkNotNull(sourceNode);
         checkNotNull(captionReader, "This implementation requires a caption reader");
-        MenuItem newTargetNode = null;
+        MenuItem newTargetNode;
         if (parentNode == null) {
             newTargetNode = menuBar.addItem(captionReader.getCaption(sourceNode), null);
         } else {

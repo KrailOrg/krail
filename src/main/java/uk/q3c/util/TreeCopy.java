@@ -130,7 +130,7 @@ public class TreeCopy<S, T> {
 
     private void loadNodeList(T parentNode, List<S> sourceNodeList, int level) {
 
-        Map<T, S> targetToSourceNodeMap = null;
+        Map<T, S> targetToSourceNodeMap;
         switch (sortOption) {
             // some target nodes can only be created from their parent, and cannot be sorted after creation
             // so the sort order must be determined before constructing target nodes. This could be used as default

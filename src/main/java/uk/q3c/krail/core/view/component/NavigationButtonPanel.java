@@ -87,7 +87,7 @@ public abstract class NavigationButtonPanel extends HorizontalLayout implements
                 }
             } else {
                 // chain continues
-                NavigationButton button = null;
+                NavigationButton button;
                 // steps still exist, re-use
                 if (i < buttons.size()) {
                     button = buttons.get(i);
