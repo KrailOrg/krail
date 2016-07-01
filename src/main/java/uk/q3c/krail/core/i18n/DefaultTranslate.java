@@ -96,7 +96,6 @@ public class DefaultTranslate implements Translate {
         if (key == null) {
             return "key is null";
         }
-        //        E k = typeBridge(key);
         String pattern = patternSource.retrievePattern((Enum) key, locale);
 
 

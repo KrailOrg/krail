@@ -189,14 +189,4 @@ public class DefaultOptionCacheTest {
         //then
         verify(cache2).invalidateAll();
     }
-    //Moved to integration test, because cannot mock final class CacheStats
-    //    @Test
-    //    public void stats() {
-    //        //given
-    //        when(cache.stats()).thenReturn(stats);
-    //        //when
-    //
-    //        //then
-    //        verify(cache).stats();
-    //    }
 }

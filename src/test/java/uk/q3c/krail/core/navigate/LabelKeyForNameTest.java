@@ -22,18 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LabelKeyForNameTest {
 
-    // @Test
-    // public void test() {
-    // List<String> names = new ArrayList<>();
-    // Class<? extends Enum<?>> enumClass = LabelKeys.class;
-    // Enum<?>[] enums = enumClass.getEnumConstants();
-    // for (Enum<?> e : enums) {
-    // System.out.println(e.name());
-    // names.add(e.name());
-    // }
-    //
-    // }
-
     @Test
     public void keyForName_good() {
 

@@ -420,7 +420,6 @@ public class DefaultMasterSitemapTest {
         MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, Public_Home, -1, AUTHENTICATION, null);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
-        //        sitemap.addStandardPage(Public_Home, parent);
         //when
         sitemap.replaceNode(parent, newParent);
         //then
@@ -440,7 +439,6 @@ public class DefaultMasterSitemapTest {
         MasterSitemapNode newParent = new MasterSitemapNode(4, "home", PublicHomeView.class, TestLabelKey.Yes, -1, AUTHENTICATION, null);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
-        //        sitemap.addStandardPage(Public_Home, parent);
         //when
         sitemap.replaceNode(parent, newParent);
 
@@ -460,7 +458,6 @@ public class DefaultMasterSitemapTest {
         MasterSitemapNode newParent = new MasterSitemapNode(2, "home", PublicHomeView.class, Public_Home, -1, AUTHENTICATION, null);
         sitemap.addChild(grandparent, parent);
         sitemap.addChild(parent, child);
-        //        sitemap.addStandardPage(Public_Home, parent);
         //when
         sitemap.replaceNode(parent, newParent);
         //then

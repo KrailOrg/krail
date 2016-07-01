@@ -54,7 +54,6 @@ public class ScopeAndInjectTest {
         Set<Class<? extends KrailView>> concreteTypes = new HashSet<>();
 
         Set<Class<? extends KrailView>> noInject = new HashSet<>();
-        // Set<Class<? extends KrailView>> noScope = new HashSet<>();
 
         // when
         // remove interfaces, abstract classes and inner classes
@@ -99,7 +98,6 @@ public class ScopeAndInjectTest {
 
         // then
 
-        // assertThat(noScope).isEmpty();
         assertThat(noInject).isEmpty();
 
     }

@@ -211,7 +211,6 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
             } catch (CycleDetectedException cde) {
                 String msg = MessageFormat.format("Redirecting {0} to {1} would cause a loop", entry.getKey(), entry.getValue());
                 redirectLoops.add(msg);
-                // throw new CycleDetectedException(msg);
             }
 
         }

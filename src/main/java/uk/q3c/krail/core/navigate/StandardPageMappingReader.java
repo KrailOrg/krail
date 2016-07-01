@@ -39,10 +39,6 @@ public class StandardPageMappingReader {
             syntaxErrors.add(missingLabelKeyMsg + " at line " + lineNumber);
             return null;
         }
-        // if (!line.contains(":")) {
-        // syntaxErrors.add(missingViewMsg + " at line " + lineNumber);
-        // return null;
-        // }
         if (!line.contains("=")) {
             syntaxErrors.add(missingUriMsg + " at line " + lineNumber);
             return null;

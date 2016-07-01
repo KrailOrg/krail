@@ -29,10 +29,6 @@ import java.util.List;
  */
 public interface SourceTreeWrapper<N> {
 
-    // public abstract boolean hasChildren(N parentNode);
-
-    // public abstract int getChildCount(N parentNode);
-
     public abstract List<N> getRoots();
 
     /**
@@ -44,15 +40,10 @@ public interface SourceTreeWrapper<N> {
      */
     public abstract List<N> getChildren(N parentNode);
 
-    // public abstract void addNode(N parentNode, N childNode);
-
     /**
      * Called by {@link TreeCopy} to offer the chance to mark this node as not having any children. Not used by all
      * implementations
      *
      * @param isLeaf
      */
-    // public abstract void setLeaf(N parentNode, boolean isLeaf);
-
-    // public boolean hasParent(N childNode);
 }

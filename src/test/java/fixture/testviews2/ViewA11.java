@@ -33,7 +33,6 @@ public class ViewA11 implements KrailView {
 
     @Override
     public Component getRootComponent() {
-        // return null;
         throw new RuntimeException("not yet implemented");
     }
 

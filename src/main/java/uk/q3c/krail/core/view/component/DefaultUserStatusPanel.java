@@ -72,7 +72,6 @@ public class DefaultUserStatusPanel extends Panel implements UserStatusPanel, Cl
         this.subjectIdentifier = subjectIdentifier;
         this.eventBus = eventBusProvider.get();
         this.currentLocale = currentLocale;
-        //        eventBus.subscribe(this);
         setSizeFull();
         addStyleName(ChameleonTheme.PANEL_BORDERLESS);
         usernameLabel = new Label();

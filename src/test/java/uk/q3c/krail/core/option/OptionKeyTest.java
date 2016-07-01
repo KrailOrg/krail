@@ -54,17 +54,6 @@ public class OptionKeyTest {
         assertThat(true).isFalse();
     }
 
-    //@Ignore(value = "Constructor doesn't allow null name key without compile error")
-    //    @Test(expected = NullPointerException.class)
-    //    public void null_key() {
-    //        //given
-    //
-    //        //when
-    //        OptionKey<Integer>  noQualifiers = new OptionKey<>(22,LocaleContainer.class, LabelKey.Yes);
-    //        //then
-    //        assertThat(true).isFalse();
-    //    }
-
     @Test
     public void qualifiedWith() {
         //given

@@ -38,7 +38,6 @@ public class KrailErrorHandler extends DefaultErrorHandler {
     private final NotAGuestExceptionHandler notAGuestExceptionHandler;
     private final NotAUserExceptionHandler notAUserExceptionHandler;
     private final UnauthorizedExceptionHandler authorisationHandler;
-    //    private final InvalidURIHandler invalidUriHandler;
     private final Navigator navigator;
     private UserNotifier userNotifier;
 

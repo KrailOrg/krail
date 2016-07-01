@@ -92,7 +92,6 @@ public class DefaultI18NProcessorTest {
                              .getCaption()).isEqualTo("Ok");
         assertThat(testObject.getLabel()
                              .getDescription()).isEqualTo("Confirm this Value is Ok");
-        // assertThat(testObject.getLabel().getValue()).isEqualTo("Ok");
         assertThat(testObject.getLabel()
                              .getLocale()).isEqualTo(Locale.UK);
 
@@ -116,7 +115,6 @@ public class DefaultI18NProcessorTest {
         assertThat(ccs.getCaption()).isEqualTo("Field");
         assertThat(ccs.getLabelInsideTcc()).isNotNull();
         Label label = ccs.getLabelInsideTcc();
-        // assertThat(label.getValue()).isEqualTo("Ok");
         assertThat(label.getDescription()).isEqualTo("Confirm this Value is Ok"); //drill down needed
 
         // class annotation
@@ -124,12 +122,10 @@ public class DefaultI18NProcessorTest {
         assertThat(ccc.getCaption()).isEqualTo("Class");
         assertThat(ccc.getLabelInsideTcc()).isNotNull();
         label = ccc.getLabelInsideTcc();
-        // assertThat(label.getValue()).isEqualTo("Ok");
         assertThat(label.getDescription()).isEqualTo("Confirm this Value is Ok");
 
         // composite but not a component
         TestCompositeNonComponent cnc = testObject.getCnc();
-        // assertThat(cnc.getLabel().getValue()).isEqualTo("Cancel");
 
         // nested component
         TestCompositeComponentNested ccn = testObject.getCcn();
@@ -175,7 +171,6 @@ public class DefaultI18NProcessorTest {
                              .getCaption()).isEqualTo("OK");
         assertThat(testObject.getLabel()
                              .getDescription()).isEqualTo(confirmValueOk);
-        // assertThat(testObject.getLabel().getValue()).isEqualTo("Ok");
         assertThat(testObject.getButtonWithAnnotation()
                              .getLocale()).isEqualTo(Locale.GERMANY);
 

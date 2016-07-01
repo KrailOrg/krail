@@ -19,9 +19,6 @@ import uk.q3c.krail.core.view.*;
 
 public class StandardPagesModule extends DirectSitemapModule {
 
-    // private MapBinder<String, StandardPageSitemapEntry> mapBinder;
-    // private MapBinder<String, RedirectEntry> redirectBinder;
-
     /**
      * Override this method to define different {@link MasterSitemap} entries for Standard Pages. All of the views
      * specified

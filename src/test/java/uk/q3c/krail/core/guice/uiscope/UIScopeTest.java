@@ -103,7 +103,6 @@ public class UIScopeTest {
 
         // given
         KrailSecurityManager securityManager = new KrailSecurityManager(cacheManagerOpt);
-        //        securityManager.setVaadinSessionProvider(vaadinSessionProvider);
 
         SecurityUtils.setSecurityManager(securityManager);
 

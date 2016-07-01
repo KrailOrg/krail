@@ -195,7 +195,6 @@ public abstract class TestWithSitemap {
 
         }
         masterSitemap.lock();
-//        masterSitemapQueue.addModel(masterSitemap);
 
     }
 
