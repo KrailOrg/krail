@@ -5,8 +5,11 @@ bin
 build
 gradle
 logs
+out
 
-krail.iml
+*.iml
+*.ipr
+*.iws
 .classpath
 .project
 
