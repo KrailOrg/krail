@@ -14,13 +14,12 @@ package uk.q3c.krail.core.navigate.sitemap;
 
 import com.google.inject.Inject;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * If a Map<String, DirectSitemapEntry> binding has been created (using Guice modules sub-classed from
@@ -47,7 +46,7 @@ public class DefaultDirectSitemapLoader extends SitemapLoaderBase implements Dir
     }
 
     @Override
-    public boolean load(@Nonnull MasterSitemap sitemap) {
+    public boolean load(MasterSitemap sitemap) {
         checkNotNull(sitemap);
         sourceModules = new HashSet<>();
         if (pageMap != null) {

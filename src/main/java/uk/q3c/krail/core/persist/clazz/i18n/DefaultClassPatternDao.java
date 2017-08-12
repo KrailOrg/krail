@@ -29,7 +29,6 @@ import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 import uk.q3c.krail.core.persist.common.i18n.PatternWriteException;
 
-import javax.annotation.Nonnull;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,7 +40,7 @@ import java.nio.charset.CodingErrorAction;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * A {@link PatternDao} implementation used with {@link EnumResourceBundle} instances held within code.  Writing back to source code is clearly not an option,
@@ -82,7 +81,7 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
      * {@inheritDoc}
      */
     @Override
-    public void setWriteFile(@Nonnull File writeFile) {
+    public void setWriteFile(File writeFile) {
         checkNotNull(writeFile);
         this.writeFile = writeFile;
     }
@@ -92,7 +91,7 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
      */
     @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CHECKED")
     @Override
-    public Object write(@Nonnull PatternCacheKey cacheKey, @Nonnull String value) {
+    public Object write(PatternCacheKey cacheKey, String value) {
         checkNotNull(cacheKey);
         checkNotNull(value);
         if (writeFile == null) {
@@ -130,18 +129,18 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
+
     @Override
-    public Optional<String> deleteValue(@Nonnull PatternCacheKey cacheKey) {
+    public Optional<String> deleteValue(PatternCacheKey cacheKey) {
         throw new UnsupportedOperationException("Class based I18NPatterns cannot be deleted");
     }
 
     /**
      * {@inheritDoc}
      */
-    @Nonnull
+
     @Override
-    public Optional<String> getValue(@Nonnull PatternCacheKey cacheKey) {
+    public Optional<String> getValue(PatternCacheKey cacheKey) {
         checkNotNull(cacheKey);
         // source is used to qualify the Option
         log.debug("getValue for cacheKey {}, source '{}', using control: {}", cacheKey, source, getControl().getClass()
@@ -157,7 +156,7 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
         }
     }
 
-    protected String getValue(@Nonnull ResourceBundle bundle, @Nonnull Enum<?> key) {
+    protected String getValue(ResourceBundle bundle, Enum<?> key) {
         EnumResourceBundle enumBundle = (EnumResourceBundle) bundle;
         //noinspection unchecked
         enumBundle.setKeyClass(key.getClass());
@@ -178,7 +177,7 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
      * @param sampleKey any key from the I18NKey class, to give access to bundleName()
      * @return a path constructed from the {@code sampleKey} and {@link Option} values
      */
-    protected String expandFromKey(@Nonnull I18NKey sampleKey) {
+    protected String expandFromKey(I18NKey sampleKey) {
         checkNotNull(sampleKey);
         String baseName = sampleKey.bundleName();
         String packageName;
@@ -234,7 +233,7 @@ public class DefaultClassPatternDao implements ClassPatternDao, OptionContext {
      *
      * @return the {@link Option} instance being used by this context
      */
-    @Nonnull
+
     @Override
     public Option getOption() {
         return option;

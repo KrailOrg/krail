@@ -20,11 +20,10 @@ import org.apache.shiro.session.mgt.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public class KrailSecurityManager extends DefaultSecurityManager {
     private static Logger log = LoggerFactory.getLogger(KrailSecurityManager.class);
@@ -46,7 +45,7 @@ public class KrailSecurityManager extends DefaultSecurityManager {
      */
     @Inject
     @Override
-    public void setSessionManager(@Nonnull SessionManager sessionManager) {
+    public void setSessionManager(SessionManager sessionManager) {
         checkNotNull(sessionManager);
         super.setSessionManager(sessionManager);
     }

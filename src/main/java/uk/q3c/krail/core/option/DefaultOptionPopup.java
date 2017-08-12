@@ -27,7 +27,6 @@ import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.ui.DataTypeToUI;
 import uk.q3c.util.ID;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Optional;
 
@@ -67,7 +66,7 @@ public class DefaultOptionPopup implements OptionPopup {
      * @param windowCaption the I18NKey to provide a window caption
      */
     @Override
-    public void popup(@Nonnull OptionContext context, I18NKey windowCaption) {
+    public void popup(OptionContext context, I18NKey windowCaption) {
 
         // changing context, so we need to re-read the context fields
         if (context != activeContext) {
@@ -166,7 +165,7 @@ public class DefaultOptionPopup implements OptionPopup {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
+
     @Override
     public Map<OptionKey, Class<?>> contextKeys(OptionContext context) {
         return optionKeyLocator.contextKeyMap(context);

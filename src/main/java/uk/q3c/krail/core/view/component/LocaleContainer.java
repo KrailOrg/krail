@@ -28,7 +28,6 @@ import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.util.ResourceUtils;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.Locale;
 import java.util.Set;
@@ -108,7 +107,7 @@ public class LocaleContainer extends IndexedContainer implements OptionContext {
         return option.get(optionKeyFlagSize);
     }
 
-    @Nonnull
+
     @Override
     public Option getOption() {
         return option;

@@ -30,7 +30,6 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 
-import javax.annotation.Nonnull;
 import java.util.Locale;
 import java.util.Set;
 
@@ -199,7 +198,7 @@ public class DefaultCurrentLocale implements CurrentLocale, OptionContext {
         setLocale(locale, true);
     }
 
-    @Nonnull
+
     @Override
     public Option getOption() {
         return option;

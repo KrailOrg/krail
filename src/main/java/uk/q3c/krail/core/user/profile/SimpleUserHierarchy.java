@@ -21,10 +21,9 @@ import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * The most basic of {@link UserHierarchy} implementations, with just two ranks, the 'system' and the 'user'.  The
@@ -55,7 +54,7 @@ public class SimpleUserHierarchy implements UserHierarchy {
      * @return The descriptive name for this hierarchy
      */
     @Override
-    @Nonnull
+
     public synchronized String displayName() {
         return translate.from(LabelKey.Simple_User_Hierarchy);
     }
@@ -90,7 +89,7 @@ public class SimpleUserHierarchy implements UserHierarchy {
      * @return if the user is authenticated, the userId and 'system'.  If the user is not authenticated, 'system' only
      */
     @Override
-    @Nonnull
+
     public synchronized ImmutableList<String> ranksForCurrentUser() {
 
         if (subjectProvider.get()

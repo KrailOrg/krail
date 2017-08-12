@@ -22,11 +22,10 @@ import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.util.NodeModifier;
 
-import javax.annotation.Nonnull;
 import java.text.Collator;
 import java.util.Comparator;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, UserSitemapNode> {
     private static Logger log = LoggerFactory.getLogger(UserSitemapNodeModifier.class);
@@ -66,7 +65,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
      * @return created UserSitemapNode with reference to {@code masterNode}
      */
     @Override
-    public UserSitemapNode create(UserSitemapNode parentUserNode, @Nonnull MasterSitemapNode masterNode) {
+    public UserSitemapNode create(UserSitemapNode parentUserNode, MasterSitemapNode masterNode) {
         checkNotNull(masterNode);
         log.debug("creating a node for master node {}", masterNode);
         // if there is no labelKey (usually when page is redirected), cannot be shown
@@ -95,7 +94,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
     }
 
     @Override
-    public MasterSitemapNode sourceNodeFor(@Nonnull UserSitemapNode target) {
+    public MasterSitemapNode sourceNodeFor(UserSitemapNode target) {
         return target.getMasterNode();
     }
 
@@ -103,7 +102,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
      * Not used in this implementation
      */
     @Override
-    public void setLeaf(@Nonnull UserSitemapNode targetNode) {
+    public void setLeaf(UserSitemapNode targetNode) {
 
     }
 
@@ -111,7 +110,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
      * Not used in this implementation
      */
     @Override
-    public void forceSetLeaf(@Nonnull UserSitemapNode targetNode) {
+    public void forceSetLeaf(UserSitemapNode targetNode) {
 
     }
 
@@ -120,7 +119,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
      */
 
     @Override
-    public void setCaption(@Nonnull UserSitemapNode targetNode, String caption) {
+    public void setCaption(UserSitemapNode targetNode, String caption) {
 
     }
 
@@ -133,7 +132,7 @@ public class UserSitemapNodeModifier implements NodeModifier<MasterSitemapNode, 
      * Not used in this implementation
      */
     @Override
-    public void sortChildren(UserSitemapNode parentNode, @Nonnull Comparator<UserSitemapNode> comparator) {
+    public void sortChildren(UserSitemapNode parentNode, Comparator<UserSitemapNode> comparator) {
 
     }
 

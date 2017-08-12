@@ -22,7 +22,6 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
@@ -42,9 +41,7 @@ import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.KrailViewHolder;
 
-import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * The base class for all Krail UIs, it provides an essential part of the {@link UIScoped} mechanism. It also provides
@@ -97,12 +94,12 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         return instanceKey;
     }
 
-    protected void setInstanceKey(@Nonnull UIKey instanceKey) {
+    protected void setInstanceKey(UIKey instanceKey) {
         checkNotNull(instanceKey);
         this.instanceKey = instanceKey;
     }
 
-    protected void setScope(@Nonnull UIScope uiScope) {
+    protected void setScope(UIScope uiScope) {
         checkNotNull(uiScope);
         this.uiScope = uiScope;
     }
@@ -128,14 +125,13 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
         return null;
     }
 
-    @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
     @Override
     public void setNavigator(com.vaadin.navigator.Navigator navigator) {
         throw new MethodReconfigured("UI.setNavigator() not available, use injection instead");
     }
 
     @Override
-    public void changeView(@Nonnull KrailView toView) {
+    public void changeView(KrailView toView) {
         checkNotNull(toView);
         log.debug("changing view to {}", toView.getName());
 
@@ -241,7 +237,7 @@ public abstract class ScopedUI extends UI implements KrailViewHolder, BroadcastL
     protected abstract AbstractOrderedLayout screenLayout();
 
     @Override
-    public void receiveBroadcast(@Nonnull final String group, @Nonnull final String message, @Nonnull UIKey sender, int messageId) {
+    public void receiveBroadcast(final String group, final String message, UIKey sender, int messageId) {
         checkNotNull(group);
         checkNotNull(message);
         log.debug("UI instance {} receiving message id: {} from: {}", this.getInstanceKey(), messageId, sender);

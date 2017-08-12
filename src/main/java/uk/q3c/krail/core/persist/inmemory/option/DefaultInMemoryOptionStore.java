@@ -15,7 +15,6 @@ package uk.q3c.krail.core.persist.inmemory.option;
 import com.google.inject.Singleton;
 import uk.q3c.krail.core.persist.common.option.OptionEntity;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * A volatile, in-memory store for user options
@@ -35,17 +34,17 @@ public class DefaultInMemoryOptionStore implements InMemoryOptionStore {
     private ConcurrentMap<OptionId, String> map = new ConcurrentHashMap<>();
 
 
-    @Nonnull
+
     @Override
-    public synchronized Optional<OptionEntity> getEntity(@Nonnull OptionId id) {
+    public synchronized Optional<OptionEntity> getEntity(OptionId id) {
         checkNotNull(id);
         String result = map.get(id);
         return result == null ? Optional.empty() : Optional.of(new OptionEntity(id, result));
     }
 
-    @Nonnull
+
     @Override
-    public synchronized Optional<String> delete(@Nonnull OptionId id) {
+    public synchronized Optional<String> delete(OptionId id) {
         checkNotNull(id);
         String removed = map.remove(id);
         return removed == null ? Optional.empty() : Optional.of(removed);
@@ -65,7 +64,7 @@ public class DefaultInMemoryOptionStore implements InMemoryOptionStore {
     }
 
     @Override
-    @Nonnull
+
     public synchronized List<OptionEntity> asEntities() {
         return map.keySet()
                   .stream()
@@ -79,14 +78,14 @@ public class DefaultInMemoryOptionStore implements InMemoryOptionStore {
     }
 
     @Override
-    public void add(@Nonnull OptionId id, @Nonnull String value) {
+    public void add(OptionId id, String value) {
         checkNotNull(id);
         checkNotNull(value);
         map.put(id, value);
     }
 
     @Override
-    public Optional<String> getValue(@Nonnull OptionId optionId) {
+    public Optional<String> getValue(OptionId optionId) {
         checkNotNull(optionId);
         String result = map.get(optionId);
         return result == null ? Optional.empty() : Optional.of(result);

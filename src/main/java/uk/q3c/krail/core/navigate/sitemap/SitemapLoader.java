@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +30,7 @@ public interface SitemapLoader {
      *
      * @return true if the load is successful
      */
-    boolean load(@Nonnull MasterSitemap sitemap);
+    boolean load(MasterSitemap sitemap);
 
     Map<String, List<LogEntry>> getInfos();
 

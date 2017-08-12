@@ -22,11 +22,10 @@ import uk.q3c.krail.core.option.AnnotationOptionList;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 
-import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Default implementation for {@link PatternSourceProvider}
@@ -55,15 +54,15 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
     }
 
     @Override
-    @Nonnull
-    public Optional<PatternDao> sourceFor(@Nonnull Class<? extends Annotation> sourceAnnotation) {
+
+    public Optional<PatternDao> sourceFor(Class<? extends Annotation> sourceAnnotation) {
         Provider<PatternDao> provider = sources.get(sourceAnnotation);
         return (provider == null) ? Optional.empty() : Optional.of(provider.get());
     }
 
     @Override
-    @Nonnull
-    public Optional<PatternDao> targetFor(@Nonnull Class<? extends Annotation> targetAnnotation) {
+
+    public Optional<PatternDao> targetFor(Class<? extends Annotation> targetAnnotation) {
         Provider<PatternDao> provider = targets.get(targetAnnotation);
         return (provider == null) ? Optional.empty() : Optional.of(provider.get());
     }
@@ -72,7 +71,7 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
+
     @Override
     public Option getOption() {
         return option;
@@ -106,8 +105,8 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
      * @return a list containing the sources to be processed, in the order that they should be processed
      */
     @Override
-    @Nonnull
-    public ImmutableSet<Class<? extends Annotation>> orderedSources(@Nonnull I18NKey key) {
+
+    public ImmutableSet<Class<? extends Annotation>> orderedSources(I18NKey key) {
         checkNotNull(key);
         AnnotationOptionList sourceOrder = getSourceOrderFromOption(key.bundleName());
         if (!sourceOrder.isEmpty()) {
@@ -141,7 +140,7 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
      *
      * @return the finals source order, adjusted if necessary, as described in javadoc for {@link #orderedSources}
      */
-    private ImmutableSet<Class<? extends Annotation>> verifySourceOrder(@Nonnull Collection<Class<? extends Annotation>> sourceOrder) {
+    private ImmutableSet<Class<? extends Annotation>> verifySourceOrder(Collection<Class<? extends Annotation>> sourceOrder) {
         // if all and only sources contained, just return
         if (sourceOrder.size() == sources.size() && sourceOrder.containsAll(sources.keySet())) {
             return ImmutableSet.copyOf(sourceOrder);
@@ -170,13 +169,13 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
         return ImmutableSet.copyOf(newOrder);
     }
 
-    @Nonnull
-    private AnnotationOptionList getSourceOrderFromOption(@Nonnull String bundleName) {
+
+    private AnnotationOptionList getSourceOrderFromOption(String bundleName) {
         checkNotNull(bundleName);
         return option.get(optionKeySourceOrder.qualifiedWith(bundleName));
     }
 
-    @Nonnull
+
     private AnnotationOptionList getSourceOrderDefaultFromOption() {
         return option.get(optionKeySourceOrderDefault);
     }

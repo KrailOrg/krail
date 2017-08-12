@@ -27,14 +27,13 @@ import uk.q3c.util.ClassNameUtils;
 import uk.q3c.util.testutil.FileTestUtil;
 import uk.q3c.util.testutil.TestResource;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({UtilsModule.class})
@@ -97,7 +96,7 @@ public class LoaderReportBuilderTest {
     class MockAnnotationLoader extends SitemapLoaderBase {
 
         @Override
-        public boolean load(@Nonnull MasterSitemap sitemap) {
+        public boolean load(MasterSitemap sitemap) {
             addError("a", "Pattern with no params");
             addError("b", "Pattern with {0} params", 1);
             addError("b", "Pattern with {0} params, just as an {1}", 2, "example");

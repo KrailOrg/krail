@@ -2,7 +2,6 @@ package uk.q3c.krail.core.services;
 
 import com.google.common.collect.ImmutableList;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,16 +27,16 @@ public interface ServicesGraph<T> {
      * @param selection which {@link Dependency.Type}s to select
      * @return List of vertices on which {@code dependant} depends and meet the selection criteria given by meeting the selection
      */
-    List<T> findDependencies(@Nonnull T dependant, @Nonnull Selection selection);
+    List<T> findDependencies(T dependant, Selection selection);
 
-    List<T> findDependants(@Nonnull T dependency, @Nonnull Selection selection);
+    List<T> findDependants(T dependency, Selection selection);
 
     /**
      * Adds a service to this graph.  Returns true if {@code service} is added, false if not added (because {@code service} is already in the graph)
      *
      * @param service the service to be added
      */
-    boolean addService(@Nonnull T service);
+    boolean addService(T service);
 
 
     /**
@@ -45,9 +44,9 @@ public interface ServicesGraph<T> {
      *
      * @param service the service to be removed
      */
-    boolean removeService(@Nonnull T service);
+    boolean removeService(T service);
 
-    boolean contains(@Nonnull T service);
+    boolean contains(T service);
 
     /**
      * Returns the edge (and therefore the dependency type) between two services.  If you get the dependant
@@ -55,7 +54,7 @@ public interface ServicesGraph<T> {
      *
      * @return the edge if found, Optional.empty() if not
      */
-    Optional<ServiceEdge> getEdge(@Nonnull T dependant, @Nonnull T dependency);
+    Optional<ServiceEdge> getEdge(T dependant, T dependency);
 
     /**
      * Creates a dependency from {@code dependant} to {@code dependency} of type {@code type}
@@ -68,7 +67,7 @@ public interface ServicesGraph<T> {
      * @throws CycleDetectedException       if a loop is created by forming this dependency
      * @throws DuplicateDependencyException if a dependency is created twice between the same Services
      */
-    void createDependency(@Nonnull T dependant, @Nonnull T dependency, Dependency.Type type);
+    void createDependency(T dependant, T dependency, Dependency.Type type);
 
     /**
      * Returns a list of the services contained ion this graph
@@ -82,14 +81,14 @@ public interface ServicesGraph<T> {
      *
      * @return true if {@code dependant} has {@code dependency}
      */
-    boolean hasDependency(@Nonnull T dependant, @Nonnull T dependency);
+    boolean hasDependency(T dependant, T dependency);
 
     /**
      * Returns true if {@code dependency} has {@code dependant}
      *
      * @return true if {@code dependency} has {@code dependant}
      */
-    boolean hasDependant(@Nonnull T dependency, @Nonnull T dependant);
+    boolean hasDependant(T dependency, T dependant);
 
     /**
      * Returns the number of vertices in the graph
@@ -105,5 +104,5 @@ public interface ServicesGraph<T> {
      * @param dependant  the dependant which may have the dependency
      * @return true if {@code dependency} is an optional dependency of {@code dependant}, false otherwise
      */
-    boolean isOptionalDependency(@Nonnull T dependency, @Nonnull T dependant);
+    boolean isOptionalDependency(T dependency, T dependant);
 }

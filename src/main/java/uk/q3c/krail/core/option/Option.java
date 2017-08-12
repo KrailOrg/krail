@@ -18,9 +18,6 @@ import uk.q3c.krail.core.persist.cache.option.OptionCache;
 import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /**
  * Implementations represent an Option which can be at any rank in a {@link UserHierarchy}.  All calls reference an
  * implementation of {@link UserHierarchy} held by the implementation.
@@ -49,8 +46,7 @@ public interface Option {
      *
      * @return the highest rank value for the option or the default value from {@code optionKey}  if none found
      */
-    @Nonnull
-    <T> T get(@Nonnull OptionKey<T> optionKey);
+    <T> T get(OptionKey<T> optionKey);
 
     //------------------------------------------- get lowest--------------------------------------------------------
 
@@ -65,8 +61,7 @@ public interface Option {
      *
      * @return the lowest rank value for the option or the {@code defaultValue} if none found
      */
-    @Nonnull
-    <T> T getLowestRanked(@Nonnull OptionKey<T> optionKey);
+    <T> T getLowestRanked(OptionKey<T> optionKey);
 
 
     //------------------------------------------- get specific --------------------------------------------------------
@@ -85,8 +80,7 @@ public interface Option {
      *
      * @return the value for the option or the {@code defaultValue} if none found
      */
-    @Nonnull
-    <T> T getSpecificRanked(int hierarchyRank, @Nonnull OptionKey<T> optionKey);
+    <T> T getSpecificRanked(int hierarchyRank, OptionKey<T> optionKey);
 
 
     //---------------------------------------------- set ----------------------------------------------------------
@@ -98,7 +92,7 @@ public interface Option {
     /**
      * Calls {@link #set(OptionKey, int, Object)}  with a hierarchy rank of 0 (the highest rank)
      */
-    <T> void set(@Nonnull OptionKey<T> optionKey, T value);
+    <T> void set(OptionKey<T> optionKey, T value);
 
 
 
@@ -116,7 +110,7 @@ public interface Option {
      *         identifier for the option, in its context
      */
 
-    <T> void set(@Nonnull OptionKey<T> optionKey, int hierarchyRank, @Nonnull T value);
+    <T> void set(OptionKey<T> optionKey, int hierarchyRank, T value);
 
 
     //--------------------------------------------- delete --------------------------------------------------------
@@ -131,8 +125,7 @@ public interface Option {
      *
      * @return the previously assigned value of this option, or null if it had no assignment
      */
-    @Nullable
-    <T> T delete(@Nonnull OptionKey<T> optionKey, int hierarchyRank);
+    <T> T delete(OptionKey<T> optionKey, int hierarchyRank);
 
 
 }

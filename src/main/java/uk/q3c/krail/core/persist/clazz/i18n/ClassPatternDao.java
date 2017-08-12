@@ -16,8 +16,6 @@ package uk.q3c.krail.core.persist.clazz.i18n;
 import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 
 /**
@@ -32,7 +30,7 @@ public interface ClassPatternDao extends PatternDao {
     /**
      * Returns the text file being used to write out key-value entries.  May be null if not set
      */
-    @Nullable
+
     File getWriteFile();
 
     /**
@@ -41,5 +39,5 @@ public interface ClassPatternDao extends PatternDao {
      * @param writeFile
      *         the text file to which you want the {@link #write(PatternCacheKey, String)} method to append a key-value entry
      */
-    void setWriteFile(@Nonnull File writeFile);
+    void setWriteFile(File writeFile);
 }

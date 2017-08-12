@@ -31,12 +31,11 @@ import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.option.OptionKey;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 @I18N
 public class DefaultSubPagePanel extends NavigationButtonPanel implements OptionContext, SubPagePanel {
@@ -113,7 +112,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
     }
 
     @Override
-    public void setOptionKeySortType(@Nonnull SortType sortType) {
+    public void setOptionKeySortType(SortType sortType) {
         checkNotNull(sortType);
         setOptionSortType(sortType, true);
     }
@@ -141,7 +140,7 @@ public class DefaultSubPagePanel extends NavigationButtonPanel implements Option
         build();
     }
 
-    @Nonnull
+
     @Override
     public Option getOption() {
         return option;

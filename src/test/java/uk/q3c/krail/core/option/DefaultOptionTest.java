@@ -33,10 +33,9 @@ import uk.q3c.krail.core.ui.DataTypeToUI;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.testutil.i18n.TestLabelKey;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.q3c.krail.core.user.profile.RankOption.*;
 @RunWith(MycilaJunitRunner.class)
@@ -226,7 +225,7 @@ public class DefaultOptionTest {
 
     static class MockContext implements OptionContext {
 
-        @Nonnull
+
         @Override
         public Option getOption() {
             return null;
@@ -247,7 +246,7 @@ public class DefaultOptionTest {
         public final OptionKey<Integer> key2 = new OptionKey<>(124, this, TestLabelKey.key2, TestLabelKey.Blank);
         private final OptionKey<Integer> key1 = new OptionKey<>(123, this, TestLabelKey.key1);
 
-        @Nonnull
+
         @Override
         public Option getOption() {
             return null;

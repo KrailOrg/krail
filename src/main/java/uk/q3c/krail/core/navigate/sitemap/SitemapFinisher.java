@@ -15,7 +15,6 @@ package uk.q3c.krail.core.navigate.sitemap;
 import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.view.KrailView;
 
-import javax.annotation.Nonnull;
 import java.util.Set;
 
 /**
@@ -41,7 +40,7 @@ public interface SitemapFinisher {
      *
      * @param sitemap the sitemap to check
      */
-    void check(@Nonnull MasterSitemap sitemap);
+    void check(MasterSitemap sitemap);
 
     /**
      * If a node has no view class defined, it has its view class set to {@code defaultView}
@@ -50,7 +49,7 @@ public interface SitemapFinisher {
      *
      * @return this for fluency
      */
-    SitemapFinisher replaceMissingViewWith(@Nonnull Class<? extends KrailView> defaultView);
+    SitemapFinisher replaceMissingViewWith(Class<? extends KrailView> defaultView);
 
     /**
      * If a node has no label key defined, it has its label key set to {@code defaultKey}
@@ -59,21 +58,21 @@ public interface SitemapFinisher {
      *
      * @return this for fluency
      */
-    SitemapFinisher replaceMissingKeyWith(@Nonnull I18NKey defaultKey);
+    SitemapFinisher replaceMissingKeyWith(I18NKey defaultKey);
 
     /**
      * Module names for the report
      *
      * @param names Module names for the report
      */
-    void setSourceModuleNames(@Nonnull Set<String> names);
+    void setSourceModuleNames(Set<String> names);
 
     /**
      * Annotation sources for the report
      *
      * @param sources Annotation sources for the report
      */
-    void setAnnotationSources(@Nonnull Set<String> sources);
+    void setAnnotationSources(Set<String> sources);
 
 
 }

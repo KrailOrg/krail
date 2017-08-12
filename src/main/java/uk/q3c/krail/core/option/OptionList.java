@@ -16,11 +16,10 @@ package uk.q3c.krail.core.option;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.collections15.ListUtils;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Encapsulates a list for {@link Option} - the element class needs to be specified so that conversion to and from String can be performed
@@ -33,13 +32,13 @@ public class OptionList<E> implements OptionCollection<E> {
     private final Class<E> elementClass;
     private final ImmutableList<E> list;
 
-    public OptionList(@Nonnull Class<E> elementClass) {
+    public OptionList(Class<E> elementClass) {
         checkNotNull(elementClass);
         this.list = ImmutableList.of();
         this.elementClass = elementClass;
     }
 
-    public OptionList(@Nonnull List<E> list, @Nonnull Class<E> elementClass) {
+    public OptionList(List<E> list, Class<E> elementClass) {
         checkNotNull(list);
         checkNotNull(elementClass);
         this.list = ImmutableList.copyOf(list);
@@ -47,13 +46,13 @@ public class OptionList<E> implements OptionCollection<E> {
     }
 
     @SafeVarargs
-    public OptionList(@Nonnull Class<E> elementClass, E... elements) {
+    public OptionList(Class<E> elementClass, E... elements) {
         checkNotNull(elementClass);
         this.list = ImmutableList.copyOf(elements);
         this.elementClass = elementClass;
     }
 
-    public OptionList(@Nonnull OptionList<E> source) {
+    public OptionList(OptionList<E> source) {
         checkNotNull(source);
         this.list = source.list;
         this.elementClass = source.elementClass;

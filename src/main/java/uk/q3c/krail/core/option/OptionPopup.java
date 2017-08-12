@@ -15,7 +15,6 @@ package uk.q3c.krail.core.option;
 
 import uk.q3c.krail.core.i18n.I18NKey;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 
 /**
@@ -35,11 +34,11 @@ public interface OptionPopup {
      * @return a map of {@link OptionKey} to field type, which provide enough information for an option selection form to be displayed (name, description,
      * value)
      */
-    @Nonnull
+
     Map<OptionKey, Class<?>> contextKeys(OptionContext context);
 
     /**
      * Pops up a window containing fields for the user to view / set values for all the keys from {@link #contextKeys(OptionContext)}
      */
-    void popup(@Nonnull OptionContext context, I18NKey windowCaption);
+    void popup(OptionContext context, I18NKey windowCaption);
 }

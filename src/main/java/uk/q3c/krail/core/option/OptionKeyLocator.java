@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.I18NKey;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -74,7 +73,6 @@ public class OptionKeyLocator {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     public Map<OptionKey, Class<?>> contextKeyMap(OptionContext context) {
         Set<Field> contextFields = ReflectionUtils.getAllFields(context.getClass(), p -> p.getType()
                                                                                           .equals(OptionKey.class));

@@ -16,7 +16,6 @@ package uk.q3c.krail.core.navigate.sitemap.set;
 import uk.q3c.krail.core.navigate.sitemap.Sitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLockedException;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 
 /**
@@ -40,7 +39,7 @@ public interface SitemapQueue<T extends Sitemap> extends Serializable {
      * @return true of the model added , false if the queue is already full
      * @throws SitemapLockedException if the model is not locked before it is added
      */
-    boolean addModel(@Nonnull T newModel);
+    boolean addModel(T newModel);
 
     /**
      * Removes the current model and replaces it with the next in the queue, thus the next becomes current.  A message is published via the event bus when

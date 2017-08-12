@@ -11,8 +11,6 @@
 
 package uk.q3c.krail.core.data;
 
-import javax.annotation.Nonnull;
-
 /**
  * Implementations provide a configuration object for an instance of a particular data source (configured by an implementation of {@link
  * DataSourceConfiguration}) - where instance would be 'DEV', 'TEST', 'PROD' etc.  This is a logical instance - the source itself may be clustered or
@@ -63,7 +61,7 @@ public interface DataSourceInstanceConfiguration<C> {
      *
      * @return this
      */
-    C url(@Nonnull String url);
+    C url(String url);
 
     /**
      * Set the user name for this instance
@@ -73,7 +71,7 @@ public interface DataSourceInstanceConfiguration<C> {
      *
      * @return this
      */
-    C user(@Nonnull String user);
+    C user(String user);
 
     /**
      * Set the password for this instance
@@ -83,7 +81,7 @@ public interface DataSourceInstanceConfiguration<C> {
      *
      * @return this
      */
-    C password(@Nonnull String password);
+    C password(String password);
 
     /**
      * Auto create table(s) for this instance if they do not already exist.  Only relevant for implementations which use a schema.  Default is false;

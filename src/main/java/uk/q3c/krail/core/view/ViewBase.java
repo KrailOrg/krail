@@ -26,11 +26,10 @@ import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.util.ID;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Provides default View behaviour suitable for most view implementations.  Override methods as necessary for your needs.  This is the default sequence:
@@ -82,7 +81,6 @@ public abstract class ViewBase implements KrailView, Serializable {
     /**
      * {@inheritDoc}
      */
-    @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
     public void init() {
 
     }
@@ -117,7 +115,7 @@ public abstract class ViewBase implements KrailView, Serializable {
         return rootComponent;
     }
 
-    public void setRootComponent(@Nonnull Component rootComponent) {
+    public void setRootComponent(Component rootComponent) {
         checkNotNull(rootComponent);
         this.rootComponent = rootComponent;
     }

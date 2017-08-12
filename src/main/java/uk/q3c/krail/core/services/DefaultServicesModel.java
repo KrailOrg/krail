@@ -19,14 +19,13 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import org.slf4j.Logger;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.*;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.slf4j.LoggerFactory.getLogger;
-import static uk.q3c.krail.core.services.Dependency.Type.REQUIRED_ONLY_AT_START;
-import static uk.q3c.krail.core.services.ServicesGraph.Selection.ALL;
+import static com.google.common.base.Preconditions.*;
+import static org.slf4j.LoggerFactory.*;
+import static uk.q3c.krail.core.services.Dependency.Type.*;
+import static uk.q3c.krail.core.services.ServicesGraph.Selection.*;
 
 /**
  * Created by David Sowerby on 16 Dec 2015
@@ -60,7 +59,7 @@ public class DefaultServicesModel implements ServicesModel {
     }
 
     @Override
-    public void alwaysDependsOn(@Nonnull ServiceKey dependant, @Nonnull ServiceKey dependency) {
+    public void alwaysDependsOn(ServiceKey dependant, ServiceKey dependency) {
         checkNotNull(dependant);
         checkNotNull(dependency);
         classGraph.createDependency(dependant, dependency, Dependency.Type.ALWAYS_REQUIRED);
@@ -72,27 +71,27 @@ public class DefaultServicesModel implements ServicesModel {
     }
 
     @Override
-    public void requiresOnlyAtStart(@Nonnull ServiceKey dependant, @Nonnull ServiceKey dependency) {
+    public void requiresOnlyAtStart(ServiceKey dependant, ServiceKey dependency) {
         checkNotNull(dependant);
         checkNotNull(dependency);
         classGraph.createDependency(dependant, dependency, REQUIRED_ONLY_AT_START);
     }
 
     @Override
-    public void optionallyUses(@Nonnull ServiceKey dependant, @Nonnull ServiceKey dependency) {
+    public void optionallyUses(ServiceKey dependant, ServiceKey dependency) {
         checkNotNull(dependant);
         checkNotNull(dependency);
         classGraph.createDependency(dependant, dependency, Dependency.Type.OPTIONAL);
     }
 
     @Override
-    public boolean addService(@Nonnull ServiceKey serviceClass) {
+    public boolean addService(ServiceKey serviceClass) {
         checkNotNull(serviceClass);
         return classGraph.addService(serviceClass);
     }
 
     @Override
-    public synchronized boolean addService(@Nonnull Service service) {
+    public synchronized boolean addService(Service service) {
         checkNotNull(service);
 
         //don't try and add it twice
@@ -121,7 +120,7 @@ public class DefaultServicesModel implements ServicesModel {
     }
 
     @Override
-    public boolean contains(@Nonnull Service service) {
+    public boolean contains(Service service) {
         checkNotNull(service);
         return instanceGraph.contains(service);
     }
@@ -141,7 +140,7 @@ public class DefaultServicesModel implements ServicesModel {
 
 
     @Override
-    public synchronized List<DependencyInstanceDefinition> findInstanceDependencyDefinitions(@Nonnull Service service) {
+    public synchronized List<DependencyInstanceDefinition> findInstanceDependencyDefinitions(Service service) {
         checkNotNull(service);
         List<Service> instanceDependencies = instanceGraph.findDependencies(service, ALL);
         List<DependencyInstanceDefinition> definitions = new ArrayList<>();
@@ -167,7 +166,7 @@ public class DefaultServicesModel implements ServicesModel {
         return classGraph;
     }
 
-    private Service getInstanceOf(@Nonnull ServiceKey serviceKey) {
+    private Service getInstanceOf(ServiceKey serviceKey) {
         checkNotNull(serviceKey);
         Provider<? extends Service> provider = registeredServices.get(serviceKey);
         if (provider != null) {
@@ -189,12 +188,12 @@ public class DefaultServicesModel implements ServicesModel {
     }
 
     @Override
-    public List<Service> findInstanceDependencies(@Nonnull Service service) {
+    public List<Service> findInstanceDependencies(Service service) {
         return instanceGraph.findDependencies(service, ALL);
     }
 
     @Override
-    public List<Service> findInstanceDependencies(@Nonnull Service service, @Nonnull ServicesGraph.Selection selection) {
+    public List<Service> findInstanceDependencies(Service service, ServicesGraph.Selection selection) {
         return instanceGraph.findDependencies(service, selection);
     }
 

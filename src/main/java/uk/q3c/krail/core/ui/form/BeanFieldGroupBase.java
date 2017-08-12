@@ -26,7 +26,6 @@ import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.validation.BeanValidator;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -106,7 +105,7 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
 
 
     @Override
-    @Nonnull
+
     public Option getOption() {
         return option;
     }

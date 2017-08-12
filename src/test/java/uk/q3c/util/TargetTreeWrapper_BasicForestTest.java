@@ -16,12 +16,10 @@ package uk.q3c.util;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Comparator;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.google.common.base.Preconditions.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class TargetTreeWrapper_BasicForestTest {
     private TestCaptionReader captionReader;
@@ -111,7 +109,7 @@ public class TargetTreeWrapper_BasicForestTest {
     static class TestNodeModifier implements NodeModifier<SourceTestNode, TargetTestNode> {
 
         @Override
-        public TargetTestNode create(TargetTestNode parentNode, @Nonnull SourceTestNode sourceNode) {
+        public TargetTestNode create(TargetTestNode parentNode, SourceTestNode sourceNode) {
             checkNotNull(sourceNode);
             TargetTestNode newNode = new TargetTestNode(sourceNode.name);
             newNode.sourceNode = sourceNode;
@@ -124,29 +122,29 @@ public class TargetTreeWrapper_BasicForestTest {
         }
 
         @Override
-        public SourceTestNode sourceNodeFor(@Nonnull TargetTestNode targetNode) {
+        public SourceTestNode sourceNodeFor(TargetTestNode targetNode) {
             checkNotNull(targetNode);
             return targetNode.sourceNode;
         }
 
         @Override
-        public void setLeaf(@Nonnull TargetTestNode targetNode) {
+        public void setLeaf(TargetTestNode targetNode) {
             // do nothing
 
         }
 
         @Override
-        public void forceSetLeaf(@Nonnull TargetTestNode targetNode) {
+        public void forceSetLeaf(TargetTestNode targetNode) {
 
         }
 
         @Override
-        public void setCaption(@Nonnull TargetTestNode targetNode, String caption) {
+        public void setCaption(TargetTestNode targetNode, String caption) {
             targetNode.name = caption;
         }
 
         @Override
-        public void sortChildren(@Nullable TargetTestNode parentNode, @Nonnull Comparator<TargetTestNode> comparator) {
+        public void sortChildren(TargetTestNode parentNode, Comparator<TargetTestNode> comparator) {
 
         }
 

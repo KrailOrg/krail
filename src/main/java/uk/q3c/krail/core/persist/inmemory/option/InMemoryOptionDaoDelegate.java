@@ -21,10 +21,9 @@ import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.core.user.profile.RankOption;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Data Access Object for {@link DefaultInMemoryOptionStore}
@@ -51,29 +50,27 @@ public class InMemoryOptionDaoDelegate implements OptionDaoDelegate {
      * @param <V>      the value type
      */
     @Override
-    public <V> void write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull String value) {
+    public <V> void write(OptionCacheKey<V> cacheKey, String value) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         checkNotNull(value);
         optionStore.add(new OptionId(cacheKey), value);
     }
 
-    @Nonnull
+
     @Override
-    public <V> Optional<String> deleteValue(@Nonnull OptionCacheKey<V> cacheKey) {
+    public <V> Optional<String> deleteValue(OptionCacheKey<V> cacheKey) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         return optionStore.delete(new OptionId(cacheKey));
     }
 
-    @Nonnull
+
     @Override
-    public <V> Optional<String> getValue(@Nonnull OptionCacheKey<V> cacheKey) {
+    public <V> Optional<String> getValue(OptionCacheKey<V> cacheKey) {
         return optionStore.getValue(new OptionId(cacheKey));
     }
 
 
-
-
-    protected Optional<String> getStringValue(@Nonnull OptionCacheKey<?> cacheKey) {
+    protected Optional<String> getStringValue(OptionCacheKey<?> cacheKey) {
         return optionStore.getValue(new OptionId(cacheKey));
     }
 

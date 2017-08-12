@@ -30,7 +30,6 @@ import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.util.ID;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @Listener
@@ -106,7 +105,7 @@ public class DefaultUserNavigationMenu extends MenuBar implements OptionContext,
         build();
     }
 
-    @Nonnull
+
     @Override
     public Option getOption() {
         return option;

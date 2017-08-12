@@ -17,10 +17,7 @@ import org.apache.shiro.authz.permission.WildcardPermission;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
-import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Represents a Shiro permission for {@link Option}.  The permission is structured:
@@ -56,7 +53,7 @@ public class OptionPermission extends WildcardPermission {
      *
      * @param hierarchy
      */
-    public OptionPermission(@Nonnull Action action, @Nonnull UserHierarchy hierarchy, int index, @Nonnull OptionKey optionKey, @Nonnull String userId) {
+    public OptionPermission(Action action, UserHierarchy hierarchy, int index, OptionKey optionKey, String userId) {
         checkNotNull(action);
         checkNotNull(hierarchy);
         checkNotNull(optionKey);

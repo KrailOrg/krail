@@ -13,8 +13,6 @@
 
 package uk.q3c.util;
 
-import javax.annotation.Nonnull;
-
 /**
  * Created by David Sowerby on 03 Jan 2016
  */
@@ -27,14 +25,14 @@ public interface ClassNameUtils {
      *
      * @return a "pure" class name, ignoring any appended enhancement
      */
-    @Nonnull
-    String simpleClassNameEnhanceRemoved(@Nonnull Class<?> clazz);
+
+    String simpleClassNameEnhanceRemoved(Class<?> clazz);
 
     /**
      * Returns the underlying class (effectively removing enhancement by Guice), often needed to identify annotations
      *
      * @param clazz the original, possibly enhanced class
      */
-    @Nonnull
-    Class<?> classWithEnhanceRemoved(@Nonnull Class<?> clazz);
+
+    Class<?> classWithEnhanceRemoved(Class<?> clazz);
 }

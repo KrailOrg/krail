@@ -12,11 +12,10 @@
  */
 package uk.q3c.util;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public abstract class TargetTreeWrapperBase<S, T> implements TargetTreeWrapper<S, T>, Serializable {
     protected NodeModifier<S, T> nodeModifier;
@@ -39,7 +38,7 @@ public abstract class TargetTreeWrapperBase<S, T> implements TargetTreeWrapper<S
      * Delegates to the  {@link #nodeModifier} if there is one, otherwise does nothing
      */
     @Override
-    public void setLeaf(@Nonnull T node) {
+    public void setLeaf(T node) {
         checkNotNull(node);
         if (nodeModifier != null) {
             nodeModifier.setLeaf(node);
@@ -50,7 +49,7 @@ public abstract class TargetTreeWrapperBase<S, T> implements TargetTreeWrapper<S
      * Forces the {@link #nodeModifier} (if there is one)  to mark {@code as a leaf}, typically when limiting the depth of a copy
      */
     @Override
-    public void forceSetLeaf(@Nonnull T node) {
+    public void forceSetLeaf(T node) {
         checkNotNull(node);
         if (nodeModifier != null) {
             nodeModifier.forceSetLeaf(node);
@@ -76,7 +75,7 @@ public abstract class TargetTreeWrapperBase<S, T> implements TargetTreeWrapper<S
     }
 
     @Override
-    public void setNodeModifier(@Nonnull NodeModifier<S, T> nodeModifier) {
+    public void setNodeModifier(NodeModifier<S, T> nodeModifier) {
         checkNotNull(nodeModifier);
         this.nodeModifier = nodeModifier;
     }

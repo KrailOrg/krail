@@ -18,12 +18,11 @@ import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringEscapeUtils;
 import uk.q3c.krail.core.option.AnnotationOptionList;
 
-import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 
 /**
@@ -46,7 +45,7 @@ public class AnnotationOptionListConverter {
      * @param model the model to convert
      * @return Comma separated String representation of the list contents
      */
-    public String convertToString(@Nonnull AnnotationOptionList model) {
+    public String convertToString(AnnotationOptionList model) {
         checkNotNull(model);
         if (model.isEmpty()) {
             return "";
@@ -73,7 +72,7 @@ public class AnnotationOptionListConverter {
      * @return Comma separated String representation of the list contents
      * @throws ConversionException if conversion fails
      */
-    public AnnotationOptionList convertToModel(@Nonnull String value) {
+    public AnnotationOptionList convertToModel(String value) {
         checkNotNull(value);
         if (value.isEmpty()) {
             return new AnnotationOptionList();

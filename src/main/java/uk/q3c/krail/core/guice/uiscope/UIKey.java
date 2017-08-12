@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.core.guice.uiscope;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 /**
@@ -42,7 +41,7 @@ public class UIKey implements Comparable<UIKey> {
     }
 
     @Override
-    public int compareTo(@Nonnull UIKey other) {
+    public int compareTo(UIKey other) {
         return this.getCounter() - other.getCounter();
     }
 

@@ -17,7 +17,6 @@ import uk.q3c.krail.core.option.OptionException;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -37,18 +36,18 @@ public class MockOptionDaoDelegate implements OptionDaoDelegate {
     private Map<OptionCacheKey, Optional<?>> lowestRanked = new HashMap<>();
 
     @Override
-    public <V> void write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull String value) {
+    public <V> void write(OptionCacheKey<V> cacheKey, String value) {
     }
 
-    @Nonnull
+
     @Override
-    public Optional<?> deleteValue(@Nonnull OptionCacheKey cacheKey) {
+    public Optional<?> deleteValue(OptionCacheKey cacheKey) {
         return deleteValue;
     }
 
-    @Nonnull
+
     @Override
-    public Optional<?> getValue(@Nonnull OptionCacheKey cacheKey) {
+    public Optional<?> getValue(OptionCacheKey cacheKey) {
         switch (cacheKey.getRankOption()) {
             case HIGHEST_RANK:
                 return highestRanked.get(cacheKey);

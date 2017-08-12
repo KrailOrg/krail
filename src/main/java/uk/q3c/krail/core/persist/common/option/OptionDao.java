@@ -20,7 +20,6 @@ import uk.q3c.krail.core.persist.cache.option.OptionCache;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.RankOption;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
@@ -52,7 +51,7 @@ public interface OptionDao {
      * @throws IllegalArgumentException if value is empty
      *
      */
-    <V> void write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull Optional<V> value);
+    <V> void write(OptionCacheKey<V> cacheKey, Optional<V> value);
 
 
     /**
@@ -65,8 +64,8 @@ public interface OptionDao {
      * unnecessary conversion)
      * @throws OptionKeyException if the cacheKey is not valid for this action
      */
-    @Nonnull
-    <V> Optional<String> deleteValue(@Nonnull OptionCacheKey<V> cacheKey);
+
+    <V> Optional<String> deleteValue(OptionCacheKey<V> cacheKey);
 
 
     /**
@@ -77,8 +76,8 @@ public interface OptionDao {
      * @return an Optional wrapped value if there is one or an Optional.empty() if not
      * @throws OptionKeyException if the cacheKey is not valid for this action
      */
-    @Nonnull
-    <V> Optional<V> getValue(@Nonnull OptionCacheKey<V> cacheKey);
+
+    <V> Optional<V> getValue(OptionCacheKey<V> cacheKey);
 
 
     /**

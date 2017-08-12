@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 public class DefaultRealm extends AuthorizingRealmBase {
@@ -60,7 +59,7 @@ public class DefaultRealm extends AuthorizingRealmBase {
      */
 
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(@Nonnull AuthenticationToken token) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         String username = upToken.getUsername();
         String password = String.copyValueOf(upToken.getPassword());

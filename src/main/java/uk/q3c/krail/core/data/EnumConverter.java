@@ -13,13 +13,10 @@
 
 package uk.q3c.krail.core.data;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.ClassUtils;
 import uk.q3c.util.MessageFormat;
 
-import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Converts an Enum in full - that is, the class and constant as a single String.
@@ -30,9 +27,8 @@ public class EnumConverter implements OptionConverter<Enum> {
     /**
      * {@inheritDoc}
      */
-    @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS")
     @Override
-    public Enum convertToModel(@Nonnull String value) throws ConversionException {
+    public Enum convertToModel(String value) throws ConversionException {
         checkNotNull(value);
         //slight mis-use of ClassUtils - it is just about the structure of the String
         String constantName = ClassUtils.getShortClassName(value);
@@ -49,7 +45,7 @@ public class EnumConverter implements OptionConverter<Enum> {
 
 
     @Override
-    public String convertToString(@Nonnull Enum value) {
+    public String convertToString(Enum value) {
         checkNotNull(value);
         return value.getClass()
                     .getName() + '.' + value.name();

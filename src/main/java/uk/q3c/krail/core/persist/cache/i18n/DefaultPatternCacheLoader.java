@@ -22,13 +22,12 @@ import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 
-import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Loads the cache from potentially multiple sources by calling each of the DAOs in turn to provide a pattern.
@@ -76,7 +75,7 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
      *                              the thread's interrupt status is set
      */
     @Override
-    public String load(@Nonnull PatternCacheKey cacheKey) throws Exception {
+    public String load(PatternCacheKey cacheKey) throws Exception {
         checkNotNull(cacheKey);
 
         I18NKey i18NKey = cacheKey.getKey();
@@ -152,7 +151,7 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
     /**
      * {@inheritDoc}
      */
-    @Nonnull
+
     @Override
     public Option getOption() {
         return option;

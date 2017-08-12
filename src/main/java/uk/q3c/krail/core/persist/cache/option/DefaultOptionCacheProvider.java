@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.persist.cache.common.GuavaCacheConfiguration;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
@@ -40,7 +39,7 @@ public class DefaultOptionCacheProvider implements OptionCacheProvider {
     }
 
     @Override
-    @Nonnull
+
     public LoadingCache<OptionCacheKey, Optional<?>> get() {
         //noinspection unchecked
         log.debug("returning new instance of cache");

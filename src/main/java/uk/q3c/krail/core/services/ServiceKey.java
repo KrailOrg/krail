@@ -16,7 +16,6 @@ package uk.q3c.krail.core.services;
 import com.google.common.base.Preconditions;
 import uk.q3c.krail.core.i18n.I18NKey;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 /**
@@ -29,7 +28,7 @@ public class ServiceKey {
 
     private final I18NKey key;
 
-    public ServiceKey(@Nonnull I18NKey key) {
+    public ServiceKey(I18NKey key) {
         Preconditions.checkNotNull(key);
         this.key = key;
     }

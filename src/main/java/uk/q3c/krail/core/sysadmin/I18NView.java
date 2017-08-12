@@ -140,7 +140,7 @@ public class I18NView extends Grid3x3ViewBase {
     //        return Optional.empty();
     //    }
 
-//    @Nonnull
+//
 //    protected Set<Locale> retrieveLocales() {
 //        exportStatus.setValue(translate.from(LabelKey.Retrieving_Locales));
 //        String userInput = localeList.getValue();

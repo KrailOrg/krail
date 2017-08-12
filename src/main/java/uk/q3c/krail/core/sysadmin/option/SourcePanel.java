@@ -31,7 +31,6 @@ import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
 import uk.q3c.krail.core.persist.common.option.OptionSource;
 import uk.q3c.krail.util.Experimental;
 
-import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 
 /**
@@ -232,7 +231,6 @@ public abstract class SourcePanel extends Panel implements OptionContext {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     public Option getOption() {
         return option;

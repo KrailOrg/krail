@@ -24,8 +24,6 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.profile.DefaultUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
-import javax.annotation.Nonnull;
-
 /**
  * * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
  * {@link OptionDaoDelegate} are wrapped in Optional.
@@ -35,7 +33,7 @@ public class DefaultOption extends OptionBase {
     private static Logger log = LoggerFactory.getLogger(DefaultOption.class);
 
     @Inject
-    protected DefaultOption(@Nonnull OptionCache optionCache, @Nonnull @DefaultUserHierarchy UserHierarchy hierarchy, SubjectProvider subjectProvider,
+    protected DefaultOption(OptionCache optionCache, @DefaultUserHierarchy UserHierarchy hierarchy, SubjectProvider subjectProvider,
                             SubjectIdentifier subjectIdentifier) {
         super(optionCache, hierarchy, subjectProvider, subjectIdentifier);
     }

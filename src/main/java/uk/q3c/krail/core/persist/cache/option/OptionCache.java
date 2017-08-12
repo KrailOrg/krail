@@ -19,8 +19,6 @@ import com.google.common.cache.LoadingCache;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
@@ -40,7 +38,7 @@ public interface OptionCache {
      * @param value          the value to bw written
      * @param <T>            the type of the value
      */
-    <T> void write(@Nonnull OptionCacheKey<T> optionCacheKey, @Nonnull Optional<T> value);
+    <T> void write(OptionCacheKey<T> optionCacheKey, Optional<T> value);
 
     /**
      * If there is a value in the cache (which is actually held as an Optional<T>), then the Optional is returned.
@@ -56,7 +54,7 @@ public interface OptionCache {
      * @return the value for the key, if returns the {@code defaultValue} if none found, or an error or exception occurs
      * while trying to load the cache
      */
-    <T> Optional<T> get(@Nonnull Optional<T> defaultValue, @Nonnull OptionCacheKey<T> optionCacheKey);
+    <T> Optional<T> get(Optional<T> defaultValue, OptionCacheKey<T> optionCacheKey);
 
     /**
      * Pass the delete call to the underlying {@link OptionDaoDelegate}, then removes the entry from the cache
@@ -64,8 +62,7 @@ public interface OptionCache {
      * @param optionCacheKey a unique identifier for the entry to be deleted
      * @return the previous value before being deleted
      */
-    @Nullable
-    Optional<?> delete(@Nonnull OptionCacheKey<?> optionCacheKey);
+    Optional<?> delete(OptionCacheKey<?> optionCacheKey);
 
     /**
      * Returns a value from the cache only if it is present in the cache (that is, no attempt is made to load the cache
@@ -74,8 +71,7 @@ public interface OptionCache {
      * @param optionCacheKey unique identifier
      * @return Returns a value from the cache only if it is present in the cache, otherwise null
      */
-    @Nullable
-    Optional<?> getIfPresent(@Nonnull OptionCacheKey<?> optionCacheKey);
+    Optional<?> getIfPresent(OptionCacheKey<?> optionCacheKey);
 
     CacheStats stats();
 

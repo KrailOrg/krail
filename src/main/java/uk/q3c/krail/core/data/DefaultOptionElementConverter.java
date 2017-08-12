@@ -22,7 +22,6 @@ import uk.q3c.krail.core.option.AnnotationOptionList;
 import uk.q3c.krail.core.option.OptionList;
 import uk.q3c.util.MessageFormat;
 
-import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -44,8 +43,8 @@ public class DefaultOptionElementConverter implements OptionElementConverter {
 
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     @Override
-    @Nonnull
-    public String convertValueToString(@Nonnull Object value) {
+
+    public String convertValueToString(Object value) {
         Class<?> modelType = value.getClass();
         if (modelType == String.class) {
             return ((String) value);
@@ -82,8 +81,8 @@ public class DefaultOptionElementConverter implements OptionElementConverter {
 
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     @Override
-    @Nonnull
-    public <V> V convertStringToValue(@Nonnull Class<V> elementClass, @Nonnull String valueString) {
+
+    public <V> V convertStringToValue(Class<V> elementClass, String valueString) {
         if (elementClass == String.class) {
             return ((V) valueString);
         } else if (elementClass == Integer.class) {

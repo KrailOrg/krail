@@ -17,8 +17,6 @@ import com.google.common.collect.ImmutableList;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionPermission;
 
-import javax.annotation.Nonnull;
-
 /**
  * There are many reasons for having hierarchies which depend on some aspect of a user's profile.  For example, on
  * their home page, you may wish to present different company information dependent on their location, the job they
@@ -70,7 +68,7 @@ public interface UserHierarchy {
      * @return a list of String identifiers for this hierarchy, for the current user, ordered by rank, with the highest
      * rank at index 0.
      */
-    @Nonnull
+
     ImmutableList<String> ranksForCurrentUser();
 
     /**

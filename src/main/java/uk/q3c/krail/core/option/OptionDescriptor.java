@@ -15,10 +15,9 @@ package uk.q3c.krail.core.option;
 
 import uk.q3c.krail.core.i18n.I18NKey;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Describes an {@link Option} - used to support the presentation of  information about an option in the user interface, and provided by implementers of {@link
@@ -34,7 +33,7 @@ public class OptionDescriptor {
     private final OptionKey optionKey;
     private final boolean allQualifiers;
 
-    public OptionDescriptor(@Nonnull OptionKey optionKey, @Nonnull I18NKey descriptionKey) {
+    public OptionDescriptor(OptionKey optionKey, I18NKey descriptionKey) {
         this(optionKey, descriptionKey, false);
     }
 
@@ -46,7 +45,7 @@ public class OptionDescriptor {
      * @param allQualifiers
      *         if true the description applies to all optionKeys with the same context and key - in other words the qualifier element is ignored
      */
-    public OptionDescriptor(@Nonnull OptionKey optionKey, @Nonnull I18NKey descriptionKey, boolean allQualifiers) {
+    public OptionDescriptor(OptionKey optionKey, I18NKey descriptionKey, boolean allQualifiers) {
         this.allQualifiers = allQualifiers;
         checkNotNull(optionKey);
         checkNotNull(descriptionKey);
@@ -54,12 +53,12 @@ public class OptionDescriptor {
         this.descriptionKey = descriptionKey;
     }
 
-    @Nonnull
+
     public static OptionDescriptor descriptor(OptionKey optionKey, I18NKey descriptionKey, boolean allQualifiers) {
         return new OptionDescriptor(optionKey, descriptionKey, allQualifiers);
     }
 
-    @Nonnull
+
     public static OptionDescriptor descriptor(OptionKey optionKey, I18NKey descriptionKey) {
         return new OptionDescriptor(optionKey, descriptionKey, false);
     }
@@ -68,22 +67,22 @@ public class OptionDescriptor {
         return allQualifiers;
     }
 
-    @Nonnull
+
     public OptionKey getOptionKey() {
         return optionKey;
     }
 
-    @Nonnull
+
     public I18NKey getDescriptionKey() {
         return descriptionKey;
     }
 
-    @Nonnull
+
     public OptionDescriptor desc(OptionKey optionKey, I18NKey descriptionKey, boolean allQualifiers) {
         return new OptionDescriptor(optionKey, descriptionKey, allQualifiers);
     }
 
-    @Nonnull
+
     public OptionDescriptor desc(OptionKey optionKey, I18NKey descriptionKey) {
         return new OptionDescriptor(optionKey, descriptionKey, false);
     }

@@ -15,8 +15,6 @@ package uk.q3c.krail.core.i18n;
 import com.google.inject.Inject;
 import uk.q3c.util.MessageFormat;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.text.Collator;
 import java.util.*;
 
@@ -55,9 +53,8 @@ public class DefaultTranslate implements Translate {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
-    public String from(@Nullable I18NKey key, Object... arguments) {
+    public String from(I18NKey key, Object... arguments) {
         return from(key, currentLocale.getLocale(), arguments);
     }
 
@@ -85,9 +82,8 @@ public class DefaultTranslate implements Translate {
      * @throws UnsupportedLocaleException
      *         if locale is not in {@link #supportedLocales} and checkLocaleIsSupported is true
      */
-    @Nonnull
     @Override
-    public String from(boolean checkLocaleIsSupported, @Nullable I18NKey key, @Nonnull Locale locale, Object... arguments) {
+    public String from(boolean checkLocaleIsSupported, I18NKey key, Locale locale, Object... arguments) {
         if (checkLocaleIsSupported) {
             if (!supportedLocales.contains(locale)) {
                 throw new UnsupportedLocaleException(locale);
@@ -121,7 +117,7 @@ public class DefaultTranslate implements Translate {
      * {@inheritDoc}
      */
     @Override
-    public String from(@Nullable I18NKey key, @Nonnull Locale locale, Object... arguments) {
+    public String from(I18NKey key, Locale locale, Object... arguments) {
         return from(true, key, locale, arguments);
     }
 

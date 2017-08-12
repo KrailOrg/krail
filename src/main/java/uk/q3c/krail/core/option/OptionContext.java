@@ -15,7 +15,6 @@ package uk.q3c.krail.core.option;
 
 import com.vaadin.data.Property;
 
-import javax.annotation.Nonnull;
 
 /**
  * Any context using {@link Option} is required to implement this interface, it is used to identify the class which is
@@ -30,7 +29,7 @@ public interface OptionContext {
      *
      * @return the {@link Option} instance being used by this context
      */
-    @Nonnull
+
     Option getOption();
 
     /**

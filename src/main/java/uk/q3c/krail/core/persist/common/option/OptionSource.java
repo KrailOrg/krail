@@ -16,7 +16,6 @@ package uk.q3c.krail.core.persist.common.option;
 import com.vaadin.data.Container;
 import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
 
-import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 
 /**
@@ -28,13 +27,13 @@ public interface OptionSource {
 
     OptionDaoDelegate getActiveDao();
 
-    @Nonnull
-    OptionDaoDelegate getDao(@Nonnull Class<? extends Annotation> annotationClass);
+
+    OptionDaoDelegate getDao(Class<? extends Annotation> annotationClass);
 
     PersistenceInfo getActivePersistenceInfo();
 
-    @Nonnull
-    PersistenceInfo getPersistenceInfo(@Nonnull Class<? extends Annotation> annotationClass);
+
+    PersistenceInfo getPersistenceInfo(Class<? extends Annotation> annotationClass);
 
     Class<? extends Annotation> getActiveSource();
 

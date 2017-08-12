@@ -16,8 +16,6 @@ package uk.q3c.krail.core.data;
 import com.vaadin.data.util.converter.Converter;
 import uk.q3c.krail.core.option.OptionKey;
 
-import javax.annotation.Nonnull;
-
 /**
  * Utility to convert Option values to and from String - usually used in persisting Option values where the persistence provider needs a single data type (for
  * example a single column in an RDBMS)
@@ -47,6 +45,6 @@ public interface OptionElementConverter {
      * @throws ConverterException            if no converter is available for the type of {@link OptionKey#getDefaultValue()}
      * @throws Converter.ConversionException if the conversion itself fails
      */
-    @Nonnull
-    <V> V convertStringToValue(@Nonnull Class<V> elementClass, @Nonnull String valueString);
+
+    <V> V convertStringToValue(Class<V> elementClass, String valueString);
 }

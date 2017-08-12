@@ -23,12 +23,9 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 import static uk.q3c.krail.core.user.profile.RankOption.*;
 
 /**
@@ -69,12 +66,12 @@ public abstract class OptionBase implements Option {
     }
 
     @Override
-    public <T> void set(@Nonnull OptionKey<T> optionKey, T value) {
+    public <T> void set(OptionKey<T> optionKey, T value) {
         set(optionKey, 0, value);
     }
 
     @Override
-    public synchronized <T> void set(@Nonnull OptionKey<T> optionKey, int hierarchyRank, @Nonnull T value) {
+    public synchronized <T> void set(OptionKey<T> optionKey, int hierarchyRank, T value) {
         checkArgument(hierarchyRank >= 0);
         checkNotNull(optionKey);
         OptionPermission permission = new OptionPermission(OptionPermission.Action.EDIT, hierarchy, hierarchyRank, optionKey, subjectIdentifier.userId());
@@ -88,13 +85,13 @@ public abstract class OptionBase implements Option {
 
 
     @Override
-    @Nonnull
-    public synchronized <T> T get(@Nonnull OptionKey<T> optionKey) {
+
+    public synchronized <T> T get(OptionKey<T> optionKey) {
         checkNotNull(optionKey);
         return getRankedValue(optionKey, HIGHEST_RANK);
     }
 
-    private <T> T getRankedValue(@Nonnull OptionKey<T> optionKey, RankOption rank) {
+    private <T> T getRankedValue(OptionKey<T> optionKey, RankOption rank) {
         T defaultValue = optionKey.getDefaultValue();
         Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey<>(hierarchy, rank, 0, optionKey));
         if (optionalValue == null) {
@@ -107,17 +104,17 @@ public abstract class OptionBase implements Option {
         }
     }
 
-    @Nonnull
+
     @Override
-    public synchronized <T> T getLowestRanked(@Nonnull OptionKey<T> optionKey) {
+    public synchronized <T> T getLowestRanked(OptionKey<T> optionKey) {
         checkNotNull(optionKey);
         return getRankedValue(optionKey, LOWEST_RANK);
     }
 
 
-    @Nonnull
+
     @Override
-    public synchronized <T> T getSpecificRanked(int hierarchyRank, @Nonnull OptionKey<T> optionKey) {
+    public synchronized <T> T getSpecificRanked(int hierarchyRank, OptionKey<T> optionKey) {
         checkNotNull(optionKey);
         T defaultValue = optionKey.getDefaultValue();
         Optional<T> optionalValue = optionCache.get(Optional.of(defaultValue), new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey));
@@ -134,8 +131,8 @@ public abstract class OptionBase implements Option {
 
 
     @Override
-    @Nullable
-    public <T> T delete(@Nonnull OptionKey<T> optionKey, int hierarchyRank) {
+
+    public <T> T delete(OptionKey<T> optionKey, int hierarchyRank) {
         checkArgument(hierarchyRank >= 0);
         checkNotNull(optionKey);
         OptionPermission permission = new OptionPermission(OptionPermission.Action.EDIT, hierarchy, hierarchyRank, optionKey, subjectIdentifier.userId());

@@ -16,11 +16,10 @@ package uk.q3c.krail.core.view;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.*;
 
 public class Grid3x3ViewBase extends ViewBase {
     private final float[] defaultColumnWidths = new float[]{1f, 1f, 1f};
@@ -54,7 +53,6 @@ public class Grid3x3ViewBase extends ViewBase {
      * @throws IllegalArgumentException
      *         if {@code relativeWidths}  does not have exactly 3 columns
      */
-    @SuppressFBWarnings("CLI_CONSTANT_LIST_INDEX")
     protected void setColumnWidths(float... relativeWidths) {
         checkArgument(relativeWidths.length == 3);
         grid.setColumnExpandRatio(0, relativeWidths[0]);
@@ -71,7 +69,6 @@ public class Grid3x3ViewBase extends ViewBase {
      * @throws IllegalArgumentException
      *         if {@code relativeHeights}  does not have exactly 3 rows
      */
-    @SuppressFBWarnings("CLI_CONSTANT_LIST_INDEX")
     protected void setRowHeights(float... relativeHeights) {
         checkArgument(relativeHeights.length == 3);
         grid.setRowExpandRatio(0, relativeHeights[0]);

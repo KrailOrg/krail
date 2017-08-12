@@ -17,9 +17,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.ClassUtils;
 import uk.q3c.util.MessageFormat;
 
-import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Converts an Class to a String representation and back.
@@ -32,7 +30,7 @@ public class ClassConverter implements OptionConverter<Class<?>> {
      */
     @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS")
     @Override
-    public Class<?> convertToModel(@Nonnull String value) {
+    public Class<?> convertToModel(String value) {
         checkNotNull(value);
         try {
             return ClassUtils.getClass(this.getClass()
@@ -45,7 +43,7 @@ public class ClassConverter implements OptionConverter<Class<?>> {
 
 
     @Override
-    public String convertToString(@Nonnull Class<?> value) {
+    public String convertToString(Class<?> value) {
         checkNotNull(value);
         return value.getCanonicalName();
     }

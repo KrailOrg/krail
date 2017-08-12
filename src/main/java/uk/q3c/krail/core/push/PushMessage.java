@@ -15,9 +15,7 @@ package uk.q3c.krail.core.push;
 
 import uk.q3c.krail.core.eventbus.BusMessage;
 
-import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Created by David Sowerby on 26/05/15.
@@ -26,7 +24,7 @@ public class PushMessage implements BusMessage {
     private final String group;
     private final String message;
 
-    public PushMessage(@Nonnull String group,@Nonnull String message) {
+    public PushMessage(String group, String message) {
         checkNotNull(group);
         checkNotNull(message);
         this.group = group;

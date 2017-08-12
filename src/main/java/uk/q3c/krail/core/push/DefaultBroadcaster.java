@@ -24,7 +24,6 @@ import uk.q3c.krail.core.config.ConfigKeys;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.ui.ScopedUI;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,8 +34,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 @Singleton
 @ThreadSafe
@@ -56,7 +54,7 @@ public class DefaultBroadcaster implements Broadcaster {
 
 
     @Override
-    public synchronized Broadcaster register(@Nonnull String group, @Nonnull BroadcastListener listener) {
+    public synchronized Broadcaster register(String group, BroadcastListener listener) {
         checkNotNull(group);
         checkNotNull(listener);
         checkArgument(!group.isEmpty(), "Group should not be an empty String");
@@ -77,7 +75,7 @@ public class DefaultBroadcaster implements Broadcaster {
 
 
     @Override
-    public synchronized Broadcaster unregister(@Nonnull String group, @Nonnull BroadcastListener listener) {
+    public synchronized Broadcaster unregister(String group, BroadcastListener listener) {
         checkNotNull(group);
         checkNotNull(listener);
         if (ALL_MESSAGES.equals(group)) {
@@ -92,14 +90,14 @@ public class DefaultBroadcaster implements Broadcaster {
     }
 
     @Override
-    public synchronized Broadcaster broadcast(@Nonnull final String group, @Nonnull final String message, @Nonnull Component sender) {
+    public synchronized Broadcaster broadcast(final String group, final String message, Component sender) {
         checkNotNull(sender);
         ScopedUI scopedUI = (ScopedUI) sender.getUI();
         return broadcast(group, message, scopedUI.getInstanceKey());
     }
 
     @Override
-    public synchronized Broadcaster broadcast(@Nonnull final String group, @Nonnull final String message, @Nonnull UIKey sender) {
+    public synchronized Broadcaster broadcast(final String group, final String message, UIKey sender) {
         checkNotNull(group);
         checkNotNull(message);
         checkArgument(!group.isEmpty(), "Group should not be an empty String");
@@ -122,8 +120,8 @@ public class DefaultBroadcaster implements Broadcaster {
     }
 
     @Override
-    @Nonnull
-    public ImmutableList<BroadcastListener> getListenerGroup(@Nonnull String group) {
+
+    public ImmutableList<BroadcastListener> getListenerGroup(String group) {
         checkNotNull(group);
         checkArgument(!group.isEmpty(), "Group should not be an empty String");
         if (Broadcaster.ALL_MESSAGES.equals(group)) {

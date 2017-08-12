@@ -25,7 +25,6 @@ import uk.q3c.krail.core.eventbus.SubscribeTo;
 import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.i18n.Translate;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
 import static uk.q3c.krail.core.services.Service.State.*;
@@ -78,7 +77,7 @@ public abstract class AbstractService implements Service {
         return nameKey;
     }
 
-    public void setNameKey(@Nonnull I18NKey nameKey) {
+    public void setNameKey(I18NKey nameKey) {
         this.nameKey = nameKey;
     }
 
@@ -97,9 +96,9 @@ public abstract class AbstractService implements Service {
         return stop(Cause.STOPPED);
     }
 
-    @Nonnull
+
     @Override
-    public synchronized ServiceStatus stop(@Nonnull Cause cause) {
+    public synchronized ServiceStatus stop(Cause cause) {
         if (state == STOPPED || state == STOPPING || state == FAILED || state == RESETTING) {
             log.debug("Attempting to stop service {}, but it is already stopped or resetting. No action taken", getName());
             return new ServiceStatus(this, this.state, this.cause);

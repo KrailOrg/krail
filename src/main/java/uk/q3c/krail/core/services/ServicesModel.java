@@ -16,7 +16,6 @@ package uk.q3c.krail.core.services;
 import com.google.common.collect.ImmutableList;
 import uk.q3c.util.CycleDetectedException;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public interface ServicesModel {
      *                   added.
      * @throws CycleDetectedException if a loop is created by forming this dependency
      */
-    void alwaysDependsOn(@Nonnull ServiceKey dependant, @Nonnull ServiceKey dependency);
+    void alwaysDependsOn(ServiceKey dependant, ServiceKey dependency);
 
     /**
      * The {@code dependant} service depends on {@code dependency}, but only in order to start - for example, {@code
@@ -59,7 +58,7 @@ public interface ServicesModel {
      *                   added.
      * @throws CycleDetectedException if a loop is created by forming this dependency
      */
-    void requiresOnlyAtStart(@Nonnull ServiceKey dependant, @Nonnull ServiceKey dependency);
+    void requiresOnlyAtStart(ServiceKey dependant, ServiceKey dependency);
 
     /**
      * The {@code dependant} service will attempt to use {@code dependency} if it is available, but will start and
@@ -74,7 +73,7 @@ public interface ServicesModel {
      *                   added.
      * @throws CycleDetectedException if a loop is created by forming this dependency
      */
-    void optionallyUses(@Nonnull ServiceKey dependant, @Nonnull ServiceKey dependency);
+    void optionallyUses(ServiceKey dependant, ServiceKey dependency);
 
 
     /**
@@ -83,7 +82,7 @@ public interface ServicesModel {
      * @param serviceKey the ServiceKey to add
      */
 
-    boolean addService(@Nonnull ServiceKey serviceKey);
+    boolean addService(ServiceKey serviceKey);
 
 
     /**
@@ -92,7 +91,7 @@ public interface ServicesModel {
      *
      * @param service the Service to add
      */
-    boolean addService(@Nonnull Service service);
+    boolean addService(Service service);
 
     /**
      * Returns true if {@code Service} is contained in the model
@@ -130,7 +129,7 @@ public interface ServicesModel {
      * @param service the service for which to obtain dependencies
      * @return list of {@link DependencyInstanceDefinition}s describing the dependencies and their relationship with {@code service}
      */
-    List<DependencyInstanceDefinition> findInstanceDependencyDefinitions(@Nonnull Service service);
+    List<DependencyInstanceDefinition> findInstanceDependencyDefinitions(Service service);
 
     ServicesInstanceGraph getInstanceGraph();
 
@@ -154,6 +153,6 @@ public interface ServicesModel {
      * @param service the service for which the dependencies are required
      * @return a list of immediate dependencies for {@code service}
      */
-    List<Service> findInstanceDependencies(@Nonnull Service service, @Nonnull ServicesGraph.Selection selection);
+    List<Service> findInstanceDependencies(Service service, ServicesGraph.Selection selection);
 }
 

@@ -26,12 +26,10 @@ import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Provides a cache implementation for {@link Option}.  The {@code get()} methods use the value of the {@link OptionCacheKey} to determine which {@link
@@ -73,7 +71,7 @@ public class DefaultOptionCache implements OptionCache {
      * @param <T>      the type of the value
      */
     @Override
-    public synchronized <T> void write(@Nonnull OptionCacheKey<T> cacheKey, @Nonnull Optional<T> value) {
+    public synchronized <T> void write(OptionCacheKey<T> cacheKey, Optional<T> value) {
         checkNotNull(cacheKey);
         checkNotNull(value);
         // write to store first just in case there's a problem
@@ -88,8 +86,8 @@ public class DefaultOptionCache implements OptionCache {
 
     @SuppressWarnings("unchecked")
     @Override
-    @Nonnull
-    public synchronized <T> Optional<T> get(@Nonnull Optional<T> defaultValue, @Nonnull OptionCacheKey<T> optionCacheKey) {
+
+    public synchronized <T> Optional<T> get(Optional<T> defaultValue, OptionCacheKey<T> optionCacheKey) {
         checkNotNull(optionCacheKey);
         checkNotNull(defaultValue);
         //this will trigger the cacheLoader if not already in the cache
@@ -118,8 +116,8 @@ public class DefaultOptionCache implements OptionCache {
 
 
     @Override
-    @Nullable
-    public synchronized Optional<?> delete(@Nonnull OptionCacheKey<?> optionCacheKey) {
+
+    public synchronized Optional<?> delete(OptionCacheKey<?> optionCacheKey) {
         checkNotNull(optionCacheKey);
         // delete from store first just in case there's a problem
         Optional<?> result = daoWrapper.deleteValue(optionCacheKey);
@@ -136,9 +134,9 @@ public class DefaultOptionCache implements OptionCache {
     }
 
 
-    @Nullable
+
     @Override
-    public synchronized Optional<?> getIfPresent(@Nonnull OptionCacheKey<?> optionCacheKey) {
+    public synchronized Optional<?> getIfPresent(OptionCacheKey<?> optionCacheKey) {
         checkNotNull(optionCacheKey);
         return cache.getIfPresent(optionCacheKey);
     }

@@ -18,7 +18,6 @@ import com.vaadin.ui.Component;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.ui.ScopedUI;
 
-import javax.annotation.Nonnull;
 
 /**
  * Implementations 'broadcast' messages to registered {@link Broadcaster.BroadcastListener}s. using Vaadin Server Push.  {@link ScopedUI} implements {@link
@@ -36,12 +35,12 @@ public interface Broadcaster {
      * @param group    the group to listen to
      * @param listener the listener that wants to receive messages for this group
      */
-    Broadcaster register(@Nonnull String group, @Nonnull BroadcastListener listener);
+    Broadcaster register(String group, BroadcastListener listener);
 
     /**
      * Unregister a listener to receive messages for {@code group}.
      */
-    Broadcaster unregister(@Nonnull String group, @Nonnull BroadcastListener listener);
+    Broadcaster unregister(String group, BroadcastListener listener);
 
 
     /**
@@ -51,7 +50,7 @@ public interface Broadcaster {
      * @param message the message
      * @param sender  UIKey identifying the sender of the message
      */
-    Broadcaster broadcast(@Nonnull String group, @Nonnull String message, @Nonnull Component sender);
+    Broadcaster broadcast(String group, String message, Component sender);
 
     /**
      * Send a message to registered listeners
@@ -60,7 +59,7 @@ public interface Broadcaster {
      * @param message the message
      * @param sender  UIKey identifying the sender of the message
      */
-    Broadcaster broadcast(@Nonnull String group, @Nonnull String message, @Nonnull UIKey sender);
+    Broadcaster broadcast(String group, String message, UIKey sender);
 
 
     /**
@@ -69,10 +68,10 @@ public interface Broadcaster {
      * @param groupId id for the group
      * @return the group of listeners for {@code groupId}.  If the group is not registered, an empty list is returned
      */
-    @Nonnull
-    ImmutableList<BroadcastListener> getListenerGroup(@Nonnull String groupId);
+
+    ImmutableList<BroadcastListener> getListenerGroup(String groupId);
 
     interface BroadcastListener {
-        void receiveBroadcast(@Nonnull String group, @Nonnull String message, @Nonnull UIKey sender, int messageId);
+        void receiveBroadcast(String group, String message, UIKey sender, int messageId);
     }
 }

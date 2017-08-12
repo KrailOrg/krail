@@ -12,15 +12,13 @@
  */
 package uk.q3c.util;
 
-import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public class DefaultClassNameUtils implements ClassNameUtils {
 
     @Override
-    @Nonnull
-    public String simpleClassNameEnhanceRemoved(@Nonnull Class<?> clazz) {
+
+    public String simpleClassNameEnhanceRemoved(Class<?> clazz) {
         checkNotNull(clazz);
         String simpleName = clazz.getSimpleName();
         if (simpleName.contains("$$Enhancer")) {
@@ -39,8 +37,8 @@ public class DefaultClassNameUtils implements ClassNameUtils {
 
 
     @Override
-    @Nonnull
-    public Class<?> classWithEnhanceRemoved(@Nonnull Class<?> clazz) {
+
+    public Class<?> classWithEnhanceRemoved(Class<?> clazz) {
         checkNotNull(clazz);
         while (clazz.getName()
                     .contains("$$EnhancerByGuice")) {

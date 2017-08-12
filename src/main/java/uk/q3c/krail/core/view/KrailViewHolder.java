@@ -13,10 +13,8 @@
 
 package uk.q3c.krail.core.view;
 
-import javax.annotation.Nonnull;
-
 public interface KrailViewHolder {
 
-    void changeView(@Nonnull KrailView toView);
+    void changeView(KrailView toView);
 
 }

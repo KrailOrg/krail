@@ -11,8 +11,6 @@
 
 package uk.q3c.krail.core.data;
 
-import javax.annotation.Nonnull;
-
 /**
  * Created by David Sowerby on 06/08/15.
  */
@@ -20,5 +18,5 @@ public interface OptionConverter<V> {
 
     V convertToModel(String value) throws ConversionException;
 
-    String convertToString(@Nonnull V value);
+    String convertToString(V value);
 }

@@ -15,13 +15,12 @@ package uk.q3c.krail.core.persist.cache.option;
 
 import com.google.common.cache.LoadingCache;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
  * Created by David Sowerby on 22/02/15.
  */
 public interface OptionCacheProvider {
-    @Nonnull
+
     LoadingCache<OptionCacheKey, Optional<?>> get();
 }

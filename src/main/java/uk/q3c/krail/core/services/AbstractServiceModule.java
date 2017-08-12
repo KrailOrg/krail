@@ -20,10 +20,8 @@ import com.google.inject.multibindings.Multibinder;
 import uk.q3c.krail.core.config.ConfigurationException;
 import uk.q3c.krail.core.i18n.I18NKey;
 
-import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.inject.multibindings.Multibinder.newSetBinder;
+import static com.google.common.base.Preconditions.*;
+import static com.google.inject.multibindings.Multibinder.*;
 
 /**
  * A useful base class which can be used where the developer wishes to declare dependencies between Service classes using Guice.
@@ -62,7 +60,7 @@ public abstract class AbstractServiceModule extends AbstractModule {
      * Define a dependency.  Dependencies added here are injected into {@link ServicesModel}
      */
     @SuppressWarnings("Duplicates")
-    protected void addDependency(@Nonnull ServiceKey dependant, @Nonnull ServiceKey dependency, @Nonnull Dependency.Type type) {
+    protected void addDependency(ServiceKey dependant, ServiceKey dependency, Dependency.Type type) {
         checkNotNull(dependant);
         checkNotNull(dependency);
         checkNotNull(type);
@@ -80,7 +78,7 @@ public abstract class AbstractServiceModule extends AbstractModule {
     }
 
     @SuppressWarnings("Duplicates")
-    protected void addDependency(@Nonnull I18NKey dependant, @Nonnull I18NKey dependency, @Nonnull Dependency.Type type) {
+    protected void addDependency(I18NKey dependant, I18NKey dependency, Dependency.Type type) {
         checkNotNull(dependant);
         checkNotNull(dependency);
         checkNotNull(type);
@@ -95,7 +93,7 @@ public abstract class AbstractServiceModule extends AbstractModule {
      *
      * @param serviceKey the class of Service to be registered
      */
-    protected void registerService(@Nonnull ServiceKey serviceKey, @Nonnull Class<? extends Service> serviceClass) {
+    protected void registerService(ServiceKey serviceKey, Class<? extends Service> serviceClass) {
         checkNotNull(serviceKey);
         checkNotNull(serviceClass);
         configCheck();
@@ -105,7 +103,7 @@ public abstract class AbstractServiceModule extends AbstractModule {
                      .toInstance(serviceClass);
     }
 
-    protected void registerService(@Nonnull I18NKey key, @Nonnull Class<? extends Service> serviceClass) {
+    protected void registerService(I18NKey key, Class<? extends Service> serviceClass) {
         checkNotNull(key);
         checkNotNull(serviceClass);
         configCheck();

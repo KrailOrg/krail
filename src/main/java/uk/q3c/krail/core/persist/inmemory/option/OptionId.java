@@ -19,11 +19,9 @@ import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Uniquely identifies an  {@link Option} associated with a UserHierarchy entry - in other words, this is the key for a key-value pair, and is the key for a
@@ -56,7 +54,7 @@ public class OptionId implements Serializable {
      *
      * @param optionCacheKey the cahce key from which to draw the Id - must be set to {@link RankOption#SPECIFIC_RANK}
      */
-    public OptionId(@Nonnull OptionCacheKey optionCacheKey) {
+    public OptionId(OptionCacheKey optionCacheKey) {
         checkArgument(optionCacheKey.getRankOption() == RankOption.SPECIFIC_RANK, "RankOption must be SPECIFIC");
         OptionKey optKey = optionCacheKey.getOptionKey();
         UserHierarchy hierarchy = optionCacheKey.getHierarchy();
@@ -74,7 +72,7 @@ public class OptionId implements Serializable {
      * @param rank          index of the rank to identify - this is not checked, so must be within the range provided by the hierarchy
      * @param optionKey     the optionKey identifying the option
      */
-    public OptionId(@Nonnull UserHierarchy userHierarchy, int rank, @Nonnull OptionKey optionKey) {
+    public OptionId(UserHierarchy userHierarchy, int rank, OptionKey optionKey) {
         this(userHierarchy, userHierarchy.rankName(rank), optionKey);
     }
 
@@ -85,7 +83,7 @@ public class OptionId implements Serializable {
      * @param rankName      name of the rank to identify - this is not checked, so must be one provided by the hierarchy
      * @param optionKey     the optionKey identifying the option
      */
-    public OptionId(@Nonnull UserHierarchy userHierarchy, @Nonnull String rankName, @Nonnull OptionKey optionKey) {
+    public OptionId(UserHierarchy userHierarchy, String rankName, OptionKey optionKey) {
         checkNotNull(userHierarchy);
         checkNotNull(rankName);
         checkNotNull(optionKey);

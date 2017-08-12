@@ -31,13 +31,11 @@ import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
 import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnitHelper;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 
-import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.inject.multibindings.Multibinder.newSetBinder;
+import static com.google.common.base.Preconditions.*;
+import static com.google.inject.multibindings.Multibinder.*;
 
 /**
  * Configures I18N for an application.
@@ -283,7 +281,7 @@ public class I18NModule extends AbstractModule {
      * @throws IllegalArgumentException
      *         if the locale string is invalid (see {@link LocaleUtils#toLocale(String)} for format)
      */
-    public I18NModule defaultLocale(@Nonnull String localeString) {
+    public I18NModule defaultLocale(String localeString) {
         checkNotNull(localeString);
         checkArgument(!localeString.isEmpty());
         defaultLocale(localeFromString(localeString));
@@ -298,7 +296,7 @@ public class I18NModule extends AbstractModule {
      * @param locale
      *         Locale object for the default
      */
-    public I18NModule defaultLocale(@Nonnull Locale locale) {
+    public I18NModule defaultLocale(Locale locale) {
         checkNotNull(locale);
         defaultLocale = locale;
         prepSupportedLocales.add(defaultLocale);
@@ -329,7 +327,7 @@ public class I18NModule extends AbstractModule {
      *
      * @return this for fluency
      */
-    public I18NModule supportedLocales(@Nonnull Locale... locales) {
+    public I18NModule supportedLocales(Locale... locales) {
         Collections.addAll(prepSupportedLocales, locales);
         return this;
     }
@@ -346,7 +344,7 @@ public class I18NModule extends AbstractModule {
      * @throws IllegalArgumentException
      *         if a locale string is invalid (see {@link LocaleUtils#toLocale(String)} for format)
      */
-    public I18NModule supportedLocales(@Nonnull String... localeStrings) {
+    public I18NModule supportedLocales(String... localeStrings) {
         for (String localeString : localeStrings) {
             prepSupportedLocales.add(localeFromString(localeString));
         }
@@ -366,7 +364,7 @@ public class I18NModule extends AbstractModule {
      */
 
     @SafeVarargs
-    public final I18NModule sourcesDefaultOrder(@Nonnull Class<? extends Annotation>... sources) {
+    public final I18NModule sourcesDefaultOrder(Class<? extends Annotation>... sources) {
         checkNotNull(sources);
         Collections.addAll(prepSourcesDefaultOrder, sources);
         return this;
@@ -389,7 +387,7 @@ public class I18NModule extends AbstractModule {
      */
 
     @SafeVarargs
-    public final I18NModule sourcesOrderByBundle(@Nonnull Class<? extends I18NKey> keyClass, @Nonnull Class<? extends Annotation>... sources) {
+    public final I18NModule sourcesOrderByBundle(Class<? extends I18NKey> keyClass, Class<? extends Annotation>... sources) {
         checkNotNull(keyClass);
         checkNotNull(sources);
         LinkedHashSet<Class<? extends Annotation>> sourceSet = new LinkedHashSet<>(Arrays.asList(sources));
@@ -415,7 +413,7 @@ public class I18NModule extends AbstractModule {
      *
      * @return this for fluency
      */
-    public final I18NModule target(@Nonnull Class<? extends Annotation> target) {
+    public final I18NModule target(Class<? extends Annotation> target) {
         checkNotNull(target);
         prepTargets.add(target);
         return this;
@@ -431,7 +429,7 @@ public class I18NModule extends AbstractModule {
      *
      * @return this for fluency
      */
-    public I18NModule source(@Nonnull Class<? extends Annotation> source) {
+    public I18NModule source(Class<? extends Annotation> source) {
         checkNotNull(source);
         prepSources.add(source);
         return this;

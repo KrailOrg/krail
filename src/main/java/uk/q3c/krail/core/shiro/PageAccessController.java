@@ -20,12 +20,11 @@ import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Delegate for user access control when relating specifically to pages.
@@ -71,8 +70,8 @@ public class PageAccessController implements Serializable {
         return false;
     }
 
-    public List<MasterSitemapNode> authorisedChildNodes(@Nonnull Subject subject, @Nonnull MasterSitemap sitemap,
-                                                        @Nonnull MasterSitemapNode parentNode) {
+    public List<MasterSitemapNode> authorisedChildNodes(Subject subject, MasterSitemap sitemap,
+                                                        MasterSitemapNode parentNode) {
         checkNotNull(subject);
         checkNotNull(sitemap);
         checkNotNull(parentNode);

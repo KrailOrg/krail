@@ -18,15 +18,14 @@ import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.slf4j.LoggerFactory.getLogger;
+import static com.google.common.base.Preconditions.*;
+import static org.slf4j.LoggerFactory.*;
 
 /**
  * Represents a navigation state (basically a URI fragment, potentially with parameters) but with its component parts
@@ -92,11 +91,11 @@ public class NavigationState implements Serializable {
      * @param fragment
      */
     @Deprecated
-    public void setFragment(@Nonnull String fragment) {
+    public void setFragment(String fragment) {
         fragment(fragment);
     }
 
-    public NavigationState fragment(@Nonnull String fragment) {
+    public NavigationState fragment(String fragment) {
         checkNotNull(fragment);
         this.fragment = fragment;
         fragmentChanged = true;
@@ -112,7 +111,7 @@ public class NavigationState implements Serializable {
      * Use virtualPage(String) instead
      */
     @Deprecated
-    public void setVirtualPage(@Nonnull String virtualPage) {
+    public void setVirtualPage(String virtualPage) {
         virtualPage(virtualPage);
     }
 
@@ -144,13 +143,13 @@ public class NavigationState implements Serializable {
         }
     }
 
-    public String getParameterValue(@Nonnull String key) {
+    public String getParameterValue(String key) {
         validStateCheck();
         checkNotNull(key);
         return parameters.get(key);
     }
 
-    @Nonnull
+
     public List<String> getPathSegments() {
         validStateCheck();
         return pathSegments == null ? ImmutableList.of() : ImmutableList.copyOf(pathSegments);
@@ -160,11 +159,11 @@ public class NavigationState implements Serializable {
      * use {#virtualPage(String} instead
      */
     @Deprecated
-    public void setPathSegments(@Nonnull List<String> pathSegments) {
+    public void setPathSegments(List<String> pathSegments) {
         pathSegments(pathSegments);
     }
 
-    public NavigationState pathSegments(@Nonnull List<String> pathSegments) {
+    public NavigationState pathSegments(List<String> pathSegments) {
         checkNotNull(pathSegments);
         this.pathSegments = pathSegments;
         partsChanged = true;
@@ -179,7 +178,7 @@ public class NavigationState implements Serializable {
      * Use {@link #parameter(String, String)}
      */
     @Deprecated
-    public void setParameterValue(@Nonnull String key, @Nonnull String value) {
+    public void setParameterValue(String key, String value) {
         parameter(key, value);
     }
 
@@ -187,11 +186,11 @@ public class NavigationState implements Serializable {
      * Use {@link #parameter(String, String)}
      */
     @Deprecated
-    public void addParameter(@Nonnull String key, @Nonnull String value) {
+    public void addParameter(String key, String value) {
         parameter(key, value);
     }
 
-    public NavigationState removeParameter(@Nonnull String key) {
+    public NavigationState removeParameter(String key) {
         checkNotNull(key);
         String result = parameters.remove(key);
         if (result != null) {
@@ -228,13 +227,13 @@ public class NavigationState implements Serializable {
         return partsChanged;
     }
 
-    public boolean hasParameter(@Nonnull String parameterName) {
+    public boolean hasParameter(String parameterName) {
         validStateCheck();
         checkNotNull(parameterName);
         return parameters.containsKey(parameterName);
     }
 
-    public NavigationState virtualPage(@Nonnull final String virtualPage) {
+    public NavigationState virtualPage(final String virtualPage) {
         checkNotNull(virtualPage);
         checkNotNull(virtualPage);
         this.virtualPage = virtualPage;
@@ -245,7 +244,7 @@ public class NavigationState implements Serializable {
         return this;
     }
 
-    public NavigationState parameter(@Nonnull String key, @Nonnull String value) {
+    public NavigationState parameter(String key, String value) {
         checkNotNull(key);
         checkNotNull(value);
         parameters.put(key, value);

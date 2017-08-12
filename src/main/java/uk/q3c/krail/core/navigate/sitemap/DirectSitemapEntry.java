@@ -16,9 +16,6 @@ import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /**
  * A simple data class to hold an entry for the Sitemap for use with a {@link DirectSitemapModule}. Note that if {@link #pageAccessControl} is {@link
  * PageAccessControl#ROLES}, then roles must be set to a non-empty value, but there is no check for this until the SitemapChecker is invoked. This allows a
@@ -46,8 +43,8 @@ public class DirectSitemapEntry {
      *         the position of a page in relation to its siblings.  Used as a sort order, relative numbering does not need to be sequential. A positionIndex < 0
      *         indicates that the page should not be displayed in a navigation component
      */
-    public DirectSitemapEntry(@Nonnull String moduleName, @Nonnull Class<? extends KrailView> viewClass, @Nonnull I18NKey labelKey, @Nonnull
-    PageAccessControl pageAccessControl, int
+    public DirectSitemapEntry(String moduleName, Class<? extends KrailView> viewClass, I18NKey labelKey,
+                              PageAccessControl pageAccessControl, int
             positionIndex) {
         super();
         this.moduleName = moduleName;
@@ -73,9 +70,9 @@ public class DirectSitemapEntry {
      *         the position of a page in relation to its siblings.  Used as a sort order, relative numbering does not need to be sequential. A positionIndex < 0
      *         indicates that the page should not be displayed in a navigation component
      */
-    public DirectSitemapEntry(String moduleName, @Nonnull Class<? extends KrailView> viewClass, @Nonnull I18NKey labelKey, @Nonnull PageAccessControl
+    public DirectSitemapEntry(String moduleName, Class<? extends KrailView> viewClass, I18NKey labelKey, PageAccessControl
             pageAccessControl,
-                              @Nullable String roles, int positionIndex) {
+                              String roles, int positionIndex) {
         super();
         this.moduleName = moduleName;
         this.pageAccessControl = pageAccessControl;
@@ -101,7 +98,7 @@ public class DirectSitemapEntry {
         return viewClass;
     }
 
-    public void setViewClass(@Nonnull Class<? extends KrailView> viewClass) {
+    public void setViewClass(Class<? extends KrailView> viewClass) {
         this.viewClass = viewClass;
     }
 
@@ -109,7 +106,7 @@ public class DirectSitemapEntry {
         return labelKey;
     }
 
-    public void setLabelKey(@Nonnull I18NKey labelKey) {
+    public void setLabelKey(I18NKey labelKey) {
         this.labelKey = labelKey;
     }
 
@@ -117,7 +114,7 @@ public class DirectSitemapEntry {
         return roles;
     }
 
-    public void setRoles(@Nullable String roles) {
+    public void setRoles(String roles) {
         this.roles = roles;
     }
 
@@ -125,7 +122,7 @@ public class DirectSitemapEntry {
         return pageAccessControl;
     }
 
-    public void setPageAccessControl(@Nonnull PageAccessControl pageAccessControl) {
+    public void setPageAccessControl(PageAccessControl pageAccessControl) {
         this.pageAccessControl = pageAccessControl;
     }
 

@@ -13,11 +13,10 @@
 
 package uk.q3c.krail.core.data;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * an incredibly simple query builder - not to be confused with a real one, but it does do basic SELECT statements very simply compared to the JPA
@@ -48,7 +47,7 @@ public class Select {
         this("");
     }
 
-    public Select(@Nonnull String selection) {
+    public Select(String selection) {
         checkNotNull(selection);
         params = new HashMap<>();
         buf = new StringBuilder("SELECT t ");
@@ -66,7 +65,7 @@ public class Select {
      * @return
      * @see #from(String)
      */
-    public Select from(@Nonnull Class<?> entityClass) {
+    public Select from(Class<?> entityClass) {
         checkNotNull(entityClass);
         buf.append(entityClass.getSimpleName());
         buf.append(" t");
@@ -80,7 +79,7 @@ public class Select {
         return this;
     }
 
-    public Select where(@Nonnull String field, @Nonnull Object value) {
+    public Select where(String field, Object value) {
         checkNotNull(field);
         checkNotNull(value);
         buf.append(" WHERE ");
@@ -97,7 +96,7 @@ public class Select {
         return this;
     }
 
-    public Select where(@Nonnull String field, Compare compare, @Nonnull Object value) {
+    public Select where(String field, Compare compare, Object value) {
         checkNotNull(field);
         checkNotNull(value);
         buf.append(" WHERE ");
@@ -120,7 +119,7 @@ public class Select {
      * @param value
      * @return
      */
-    public Select and(@Nonnull String field, @Nonnull Object value) {
+    public Select and(String field, Object value) {
         checkNotNull(field);
         checkNotNull(value);
         buf.append(" AND ");
@@ -132,7 +131,7 @@ public class Select {
      * @param value
      * @return
      */
-    public Select and(@Nonnull String field, Compare compare, @Nonnull Object value) {
+    public Select and(String field, Compare compare, Object value) {
         checkNotNull(field);
         checkNotNull(value);
         buf.append(" AND ");

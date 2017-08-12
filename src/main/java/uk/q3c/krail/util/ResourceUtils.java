@@ -13,7 +13,6 @@
 
 package uk.q3c.krail.util;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 
 /**
@@ -69,5 +68,5 @@ public interface ResourceUtils {
      * @param fileName the name of the file
      * @return a File object for a file name resident within the resources directory
      */
-    File resourcePath(@Nonnull String fileName);
+    File resourcePath(String fileName);
 }

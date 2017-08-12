@@ -18,7 +18,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 
 public class DefaultResourceUtils implements ResourceUtils {
@@ -70,7 +69,7 @@ public class DefaultResourceUtils implements ResourceUtils {
     }
 
     @Override
-    public File resourcePath(@Nonnull String fileName) {
+    public File resourcePath(String fileName) {
         Preconditions.checkNotNull(fileName);
         File baseDir;
         if (VaadinService.getCurrent() != null) {

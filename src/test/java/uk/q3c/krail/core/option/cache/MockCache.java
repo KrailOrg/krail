@@ -18,7 +18,6 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -63,7 +62,6 @@ public class MockCache implements LoadingCache<OptionCacheKey, Optional<?>> {
     }
 
 
-    @Nullable
     @Override
     public Optional<?> getIfPresent(Object key) {
         return values.get(key);

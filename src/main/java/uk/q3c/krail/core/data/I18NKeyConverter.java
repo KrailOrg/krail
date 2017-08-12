@@ -15,8 +15,6 @@ package uk.q3c.krail.core.data;
 
 import uk.q3c.krail.core.i18n.I18NKey;
 
-import javax.annotation.Nonnull;
-
 /**
  * Converts an I18NKey in full - that is, the class and constant as a single String.
  * <p>
@@ -27,16 +25,14 @@ public class I18NKeyConverter implements OptionConverter<I18NKey> {
      * {@inheritDoc}
      */
     @Override
-    @Nonnull
-    public I18NKey convertToModel(@Nonnull String value) throws ConversionException {
+    public I18NKey convertToModel(String value) throws ConversionException {
         Enum e = new EnumConverter().convertToModel(value);
         return (I18NKey) e;
     }
 
 
     @Override
-    @Nonnull
-    public String convertToString(@Nonnull I18NKey value) {
+    public String convertToString(I18NKey value) {
         return new EnumConverter().convertToString((Enum) value);
 
     }

@@ -20,14 +20,13 @@ import uk.q3c.krail.core.persist.cache.i18n.DefaultPatternCacheLoader;
 import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
 import uk.q3c.krail.core.persist.cache.i18n.PatternCacheLoader;
 
-import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.cache.CacheBuilder.newBuilder;
+import static com.google.common.base.Preconditions.*;
+import static com.google.common.cache.CacheBuilder.*;
 
 /**
  * A cached, single access point for I18N patterns, which may ultimately come from multiple sources.  The patterns are actually loaded into the cache by a
@@ -73,7 +72,7 @@ public class DefaultPatternSource implements PatternSource<LoadingCache<PatternC
      * @return a pattern for the key and locale, or the name of the key if no value is found for the key
      */
     @Override
-    public <E extends Enum<E> & I18NKey> String retrievePattern(@Nonnull E key, @Nonnull Locale locale) {
+    public <E extends Enum<E> & I18NKey> String retrievePattern(E key, Locale locale) {
         checkNotNull(key);
         checkNotNull(locale);
         PatternCacheKey cacheKey = new PatternCacheKey(key, locale);
@@ -98,7 +97,7 @@ public class DefaultPatternSource implements PatternSource<LoadingCache<PatternC
      * @param source the PatternSource annotation associated with a cache entry
      */
     @Override
-    public void clearCache(@Nonnull Class<? extends Annotation> source) {
+    public void clearCache(Class<? extends Annotation> source) {
         checkNotNull(source);
         List<PatternCacheKey> keysToRemove = new ArrayList<>();
         for (PatternCacheKey key : cache.asMap()

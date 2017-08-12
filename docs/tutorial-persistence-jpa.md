@@ -600,7 +600,7 @@ public class JpaOptionView extends ViewBase implements OptionContext {
 
     }
 
-    @Nonnull
+    
     @Override
     public Option getOption() {
         return option;

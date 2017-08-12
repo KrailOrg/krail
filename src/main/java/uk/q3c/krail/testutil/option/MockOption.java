@@ -18,16 +18,12 @@ import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static com.google.common.base.Preconditions.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Note that this wil lnto necessarily convert data types correctly
@@ -46,20 +42,20 @@ public class MockOption implements Option {
     }
 
     @Override
-    public <T> void set(@Nonnull OptionKey<T> optionKey, T value) {
+    public <T> void set(OptionKey<T> optionKey, T value) {
         set(optionKey, 0, value);
     }
 
     @Override
-    public synchronized <T> void set(@Nonnull OptionKey<T> optionKey, int hierarchyRank, @Nonnull T value) {
+    public synchronized <T> void set(OptionKey<T> optionKey, int hierarchyRank, T value) {
         checkArgument(hierarchyRank >= 0);
         checkNotNull(optionKey);
         optionMap.put(optionKey, Optional.of(value));
     }
 
     @Override
-    @Nonnull
-    public synchronized <T> T get(@Nonnull OptionKey<T> optionKey) {
+
+    public synchronized <T> T get(OptionKey<T> optionKey) {
         checkNotNull(hierarchy);
         checkNotNull(optionKey);
         T defaultValue = optionKey.getDefaultValue();
@@ -75,16 +71,16 @@ public class MockOption implements Option {
     }
 
 
-    @Nonnull
+
     @Override
-    public synchronized <T> T getLowestRanked(@Nonnull OptionKey<T> optionKey) {
+    public synchronized <T> T getLowestRanked(OptionKey<T> optionKey) {
         return get(optionKey);
     }
 
 
-    @Nonnull
+
     @Override
-    public synchronized <T> T getSpecificRanked(int hierarchyRank, @Nonnull OptionKey<T> optionKey) {
+    public synchronized <T> T getSpecificRanked(int hierarchyRank, OptionKey<T> optionKey) {
         return get(optionKey);
     }
 
@@ -94,8 +90,8 @@ public class MockOption implements Option {
     }
 
     @Override
-    @Nullable
-    public <T> T delete(@Nonnull OptionKey<T> optionKey, int hierarchyRank) {
+
+    public <T> T delete(OptionKey<T> optionKey, int hierarchyRank) {
         checkNotNull(hierarchy);
         checkArgument(hierarchyRank >= 0);
         checkNotNull(optionKey);

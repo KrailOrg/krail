@@ -22,12 +22,9 @@ import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PagePermission;
 import uk.q3c.util.BasicForest;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitemap<T> {
     private static Logger log = LoggerFactory.getLogger(DefaultSitemapBase.class);
@@ -617,7 +614,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * @param parentNode
      * @param childNode
      */
-    public void addOrReplaceChild(@Nullable T parentNode, @Nonnull T childNode) {
+    public void addOrReplaceChild(T parentNode, T childNode) {
         checkLock();
         checkNotNull(childNode);
         checkArgument(childNode.getId() > 0);
@@ -641,7 +638,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * @param oldInstance the instance to be replaced
      * @param newInstance the instance to put in place
      */
-    public void replaceNode(@Nonnull T oldInstance, @Nonnull T newInstance) {
+    public void replaceNode(T oldInstance, T newInstance) {
         checkLock();
         checkNotNull(oldInstance);
         checkNotNull(newInstance);
@@ -665,7 +662,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * @return true if the navigation state represents the login uri
      */
     @Override
-    public boolean isLoginUri(@Nonnull NavigationState navigationState) {
+    public boolean isLoginUri(NavigationState navigationState) {
         checkNotNull(navigationState);
         return isStandardUri(StandardPageKey.Log_In, navigationState);
     }
@@ -687,7 +684,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * @return true if the navigation state represents the logout uri
      */
     @Override
-    public boolean isLogoutUri(@Nonnull NavigationState navigationState) {
+    public boolean isLogoutUri(NavigationState navigationState) {
         return isStandardUri(StandardPageKey.Log_Out, navigationState);
     }
 
@@ -699,7 +696,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * @return true if the navigation state represents the private home uri
      */
     @Override
-    public boolean isPrivateHomeUri(@Nonnull NavigationState navigationState) {
+    public boolean isPrivateHomeUri(NavigationState navigationState) {
         return isStandardUri(StandardPageKey.Private_Home, navigationState);
     }
 
@@ -711,7 +708,7 @@ public abstract class DefaultSitemapBase<T extends SitemapNode> implements Sitem
      * @return true if the navigation state represents the public home uri
      */
     @Override
-    public boolean isPublicHomeUri(@Nonnull NavigationState navigationState) {
+    public boolean isPublicHomeUri(NavigationState navigationState) {
         return isStandardUri(StandardPageKey.Public_Home, navigationState);
     }
 

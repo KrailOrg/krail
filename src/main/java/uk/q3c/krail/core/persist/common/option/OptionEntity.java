@@ -17,10 +17,9 @@ import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.krail.core.persist.inmemory.option.OptionId;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * An entity representing an {@link Option}
@@ -33,7 +32,7 @@ public class OptionEntity {
     private final OptionId optionId;
     private final String value;
 
-    public OptionEntity(@Nonnull OptionCacheKey optionCacheKey, @Nonnull String value) {
+    public OptionEntity(OptionCacheKey optionCacheKey, String value) {
         checkNotNull(optionCacheKey);
         checkNotNull(value);
         optionId = new OptionId(optionCacheKey);
@@ -41,7 +40,7 @@ public class OptionEntity {
 
     }
 
-    public OptionEntity(@Nonnull OptionId optionId, @Nonnull String value) {
+    public OptionEntity(OptionId optionId, String value) {
         checkNotNull(optionId);
         checkNotNull(value);
         this.optionId = optionId;
@@ -53,12 +52,12 @@ public class OptionEntity {
         return optionId;
     }
 
-    @Nonnull
+
     public String getContext() {
         return optionId.getContext();
     }
 
-    @Nonnull
+
     public String getUserHierarchyName() {
         return optionId.getUserHierarchyName();
     }
@@ -67,12 +66,12 @@ public class OptionEntity {
         return optionId.getRankName();
     }
 
-    @Nonnull
+
     public String getOptionKey() {
         return optionId.getOptionKey();
     }
 
-    @Nonnull
+
     public String getValue() {
         return value;
     }

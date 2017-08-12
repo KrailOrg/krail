@@ -19,7 +19,6 @@ import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.shiro.PagePermission;
 import uk.q3c.util.BasicForest;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -116,10 +115,10 @@ public interface Sitemap<T extends SitemapNode> extends Serializable {
 
     boolean isLoginUri(NavigationState navigationState);
 
-    boolean isLogoutUri(@Nonnull NavigationState navigationState);
+    boolean isLogoutUri(NavigationState navigationState);
 
-    boolean isPrivateHomeUri(@Nonnull NavigationState navigationState);
+    boolean isPrivateHomeUri(NavigationState navigationState);
 
-    boolean isPublicHomeUri(@Nonnull NavigationState navigationState);
+    boolean isPublicHomeUri(NavigationState navigationState);
 
 }

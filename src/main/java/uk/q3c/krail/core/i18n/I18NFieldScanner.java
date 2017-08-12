@@ -15,7 +15,6 @@ package uk.q3c.krail.core.i18n;
 
 import com.vaadin.ui.AbstractComponent;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +26,7 @@ public interface I18NFieldScanner {
     Map<AbstractComponent, AnnotationInfo> annotatedComponents();
 
 
-    void scan(@Nonnull Object target);
+    void scan(Object target);
 
     List<Object> processedDrillDowns();
 }

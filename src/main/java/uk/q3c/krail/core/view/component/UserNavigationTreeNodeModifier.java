@@ -17,9 +17,7 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 import uk.q3c.util.DefaultNodeModifier;
 
-import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public class UserNavigationTreeNodeModifier extends DefaultNodeModifier<UserSitemapNode, UserSitemapNode> {
 
@@ -33,14 +31,14 @@ public class UserNavigationTreeNodeModifier extends DefaultNodeModifier<UserSite
     }
 
     @Override
-    public void setLeaf(@Nonnull UserSitemapNode targetNode) {
+    public void setLeaf(UserSitemapNode targetNode) {
         checkNotNull(targetNode);
         UserSitemapNode sourceNode = sourceNodeFor(targetNode);
         doSetLeaf(targetNode, userSitemap.hasNoVisibleChildren(sourceNode));
     }
 
     @Override
-    public void forceSetLeaf(@Nonnull UserSitemapNode targetNode) {
+    public void forceSetLeaf(UserSitemapNode targetNode) {
         doSetLeaf(targetNode, true);
     }
 

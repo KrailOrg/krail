@@ -18,9 +18,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 
-import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Changes the standard behaviour of {@link CompositeConfiguration}, so that the configurations can be overridden by a
@@ -49,7 +47,7 @@ public class InheritingConfiguration extends CompositeConfiguration {
      * @return object associated with the given configuration key.
      */
     @Override
-    public Object getProperty(@Nonnull String key) {
+    public Object getProperty(String key) {
         checkNotNull(key);
         Configuration firstMatchingConfiguration = getSourceUsed(key);
 
@@ -68,7 +66,7 @@ public class InheritingConfiguration extends CompositeConfiguration {
      *
      * @return the Configuration object used to provide the value for the key, or null if the key is not found
      */
-    public Configuration getSourceUsed(@Nonnull String key) {
+    public Configuration getSourceUsed(String key) {
         checkNotNull(key);
         Configuration firstMatchingConfiguration = null;
         int c = getNumberOfConfigurations();
@@ -92,7 +90,7 @@ public class InheritingConfiguration extends CompositeConfiguration {
      *
      * @return the section if found, null if not
      */
-    public SubnodeConfiguration getSection(@Nonnull String sectionName) {
+    public SubnodeConfiguration getSection(String sectionName) {
         checkNotNull(sectionName);
         int c = getNumberOfConfigurations();
         for (int i = c - 1; i >= 0; i--) {

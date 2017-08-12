@@ -19,13 +19,12 @@ import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Tree;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * A very simple semantic wrapper for the <a href=http://jung.sourceforge.net/site/index.html> Jung</a> library, to
@@ -326,7 +325,7 @@ public class BasicForest<V> implements Serializable {
      * @param currentVertex the vertex to be replaced
      * @param newVertex     the vertex to replace it with
      */
-    public void replaceNode(@Nonnull V currentVertex, @Nonnull V newVertex) {
+    public void replaceNode(V currentVertex, V newVertex) {
         checkNotNull(currentVertex);
         checkNotNull(newVertex);
         V parentVertex = getParent(currentVertex);

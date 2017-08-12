@@ -16,11 +16,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Comparator which can be used to sort SitemapNode by insertion order, based on {@link MasterSitemapNode#getId()}
@@ -31,7 +30,7 @@ public class InsertionOrderDescending implements Comparator<UserSitemapNode>, Se
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     @Override
-    public int compare(@Nonnull UserSitemapNode o1, @Nonnull UserSitemapNode o2) {
+    public int compare(UserSitemapNode o1, UserSitemapNode o2) {
         checkNotNull(o1);
         checkNotNull(o2);
         return o2.getId() - o1.getId();

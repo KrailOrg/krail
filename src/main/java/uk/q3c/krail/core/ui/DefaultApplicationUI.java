@@ -29,8 +29,6 @@ import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.view.component.*;
 
-import javax.annotation.Nonnull;
-
 /**
  * A common layout for a business-type application. This is a good place to start even if you replace it eventually.
  *
@@ -267,7 +265,7 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
      *
      * @return the {@link Option} instance being used by this context
      */
-    @Nonnull
+
     @Override
     public Option getOption() {
         return option;

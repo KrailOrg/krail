@@ -16,7 +16,6 @@ package uk.q3c.krail.core.persist.inmemory.option;
 
 import uk.q3c.krail.core.persist.common.option.OptionEntity;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,8 +33,8 @@ public interface InMemoryOptionStore {
      * @param optionId the {@link OptionId} which identifies the Option
      * @return Optional wrapped {@link OptionEntity} if found, else Optional.empty()
      */
-    @Nonnull
-    Optional<OptionEntity> getEntity(@Nonnull OptionId optionId);
+
+    Optional<OptionEntity> getEntity(OptionId optionId);
 
     /**
      * Delete the entry for {@code cacheKey}
@@ -43,8 +42,8 @@ public interface InMemoryOptionStore {
      * @param optionId the {@link OptionId} which identifies the Option
      * @return the previous value associated with {@code cacheKey}, or Optional.empty() if there was no mapping for key.
      */
-    @Nonnull
-    Optional<String> delete(@Nonnull OptionId optionId);
+
+    Optional<String> delete(OptionId optionId);
 
 
     /**
@@ -62,7 +61,7 @@ public interface InMemoryOptionStore {
      *
      * @return the entire contents of the store as {@link OptionEntity} instances
      */
-    @Nonnull
+
     List<OptionEntity> asEntities();
 
     /**
@@ -71,7 +70,7 @@ public interface InMemoryOptionStore {
      * @param optionId the {@link OptionId} which identifies the Option
      * @param value    the value to store
      */
-    void add(@Nonnull OptionId optionId, @Nonnull String value);
+    void add(OptionId optionId, String value);
 
     /**
      * Gets the string value associated with optionId, or an empty Optional if none found
@@ -79,7 +78,7 @@ public interface InMemoryOptionStore {
      * @param optionId the {@link OptionId} which identifies the Option
      * @return the string value associated with optionId, or an empty Optional if none found
      */
-    Optional<String> getValue(@Nonnull OptionId optionId);
+    Optional<String> getValue(OptionId optionId);
 
 }
 

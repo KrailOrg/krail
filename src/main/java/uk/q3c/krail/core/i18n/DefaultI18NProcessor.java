@@ -18,18 +18,15 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Table;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ui.ScopedUI;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Utility class to manipulate Vaadin component settings to reflect locale changes. Class or field annotations can be used to specify the keys to use, and
@@ -71,7 +68,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
      *         the object to process for I18N annotation.  If null, is just ignored
      */
     @Override
-    public void translate(@Nullable Object target) {
+    public void translate(Object target) {
         if (target == null) {
             return;
         }
@@ -92,8 +89,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
      * @param target
      *         the field to be evaluated now
      */
-    @SuppressFBWarnings("EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS")
-    protected void translate(@Nonnull List<Object> processedFields, @Nullable Object target) {
+    protected void translate(List<Object> processedFields, Object target) {
         if (target == null) {
             return;
         }
@@ -169,7 +165,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
      *
      * @return an I18NKey value for the {@code annotationMethod} or Optional.empty() if none is found
      */
-    protected Optional<I18NKey> retrieveKey(@Nonnull Annotation i18NAnnotation, @Nonnull String annotationMethod) {
+    protected Optional<I18NKey> retrieveKey(Annotation i18NAnnotation, String annotationMethod) {
         checkNotNull(i18NAnnotation);
         checkNotNull(annotationMethod);
         Method[] methods = i18NAnnotation.annotationType()
@@ -202,7 +198,7 @@ public class DefaultI18NProcessor implements I18NProcessor {
      *
      * @return a locale from  {@code i18NAnnotation} if it has one, or Optional.empty() if it has not
      */
-    protected Optional<Locale> retrieveLocale(@Nonnull Annotation i18NAnnotation) {
+    protected Optional<Locale> retrieveLocale(Annotation i18NAnnotation) {
         checkNotNull(i18NAnnotation);
 
         //if there is not locale method, simply return empty()

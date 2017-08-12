@@ -13,10 +13,9 @@
 package uk.q3c.util;
 
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Utility class used to standardise id setting (setId methods in Components).
@@ -35,7 +34,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ID {
 
 
-    public static String getId(@Nonnull Optional<?> qualifier, Object... components) {
+    public static String getId(Optional<?> qualifier, Object... components) {
         checkNotNull(qualifier);
         Class<?>[] classes = new Class<?>[components.length];
         for (int i = 0; i < components.length; i++) {
@@ -45,7 +44,7 @@ public class ID {
     }
 
 
-    public static String getIdc(@Nonnull Optional<?> qualifier, Class<?>... componentClasses) {
+    public static String getIdc(Optional<?> qualifier, Class<?>... componentClasses) {
         checkNotNull(qualifier);
         StringBuilder buf = new StringBuilder();
         boolean first = true;

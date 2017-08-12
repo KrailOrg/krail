@@ -26,11 +26,10 @@ import uk.q3c.krail.core.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 
-import javax.annotation.Nonnull;
 import java.text.Collator;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * The {@link MasterSitemap} provides the overall structure of the site, and is Singleton scoped. This class refines
@@ -68,7 +67,7 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
      * here}
      */
     @Handler
-    public synchronized void localeChanged(@Nonnull LocaleChangeBusMessage busMessage) {
+    public synchronized void localeChanged(LocaleChangeBusMessage busMessage) {
         checkNotNull(busMessage);
         log.debug("responding to locale change to {}", busMessage.getNewLocale());
         List<UserSitemapNode> nodeList = getAllNodes();
@@ -92,7 +91,7 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
      * @return
      */
     @Override
-    public synchronized UserSitemapNode userNodeFor(@Nonnull SitemapNode masterNode) {
+    public synchronized UserSitemapNode userNodeFor(SitemapNode masterNode) {
         checkNotNull(masterNode);
         for (UserSitemapNode candidate : getAllNodes()) {
             if (candidate.getMasterNode() == masterNode) {
@@ -130,7 +129,7 @@ public class DefaultUserSitemap extends DefaultSitemapBase<UserSitemapNode> impl
     }
 
     @Override
-    public boolean hasNoVisibleChildren(@Nonnull UserSitemapNode sourceNode) {
+    public boolean hasNoVisibleChildren(UserSitemapNode sourceNode) {
         checkNotNull(sourceNode);
         List<UserSitemapNode> children = this.getChildren(sourceNode);
 //        if (children == null) { //FindBugs reports this unnecessary

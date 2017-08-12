@@ -18,10 +18,9 @@ import com.google.inject.Inject;
 import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public class InMemoryPatternDao implements PatternDao {
 
@@ -36,7 +35,7 @@ public class InMemoryPatternDao implements PatternDao {
      * {@inheritDoc}
      */
     @Override
-    public Object write(@Nonnull PatternCacheKey cacheKey, @Nonnull String value) {
+    public Object write(PatternCacheKey cacheKey, String value) {
         checkNotNull(cacheKey);
         checkNotNull(value);
         store.put(cacheKey, value);
@@ -46,9 +45,9 @@ public class InMemoryPatternDao implements PatternDao {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
+
     @Override
-    public Optional<String> deleteValue(@Nonnull PatternCacheKey cacheKey) {
+    public Optional<String> deleteValue(PatternCacheKey cacheKey) {
         checkNotNull(cacheKey);
         String result = store.remove(cacheKey);
         if (result == null) {
@@ -61,9 +60,9 @@ public class InMemoryPatternDao implements PatternDao {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
+
     @Override
-    public Optional<String> getValue(@Nonnull PatternCacheKey cacheKey) {
+    public Optional<String> getValue(PatternCacheKey cacheKey) {
         checkNotNull(cacheKey);
         String v = store.get(cacheKey);
         if (v == null) {

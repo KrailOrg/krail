@@ -138,7 +138,7 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
         setMiddleRight(vacancies);
     }
 
-    @Nonnull
+    
     @Override
     public Option getOption() {
         return option;
@@ -272,7 +272,7 @@ public class MyNews extends Grid3x3ViewBase implements OptionContext {
         optionValueChanged(null);
     }
 
-    @Nonnull
+    
     @Override
     public Option getOption() {
         return option;

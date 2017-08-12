@@ -12,17 +12,14 @@
  */
 package uk.q3c.krail.core.persist.clazz.i18n;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBundle {
 
@@ -40,16 +37,13 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
         return loaded;
     }
 
-    @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
-    @Nonnull
     @Override
     public Enumeration<String> getKeys() {
         throw new RuntimeException("getKeys() replaced in Krail, use getMap() instead");
     }
 
-    @SuppressFBWarnings("ACEM_ABSTRACT_CLASS_EMPTY_METHODS")
     @Override
-    protected Object handleGetObject(@Nonnull String arg0) {
+    protected Object handleGetObject(String arg0) {
         throw new RuntimeException("handleGetObject() replaced in Krail, use getValue() instead");
     }
 
@@ -61,8 +55,7 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
      *
      * @return the value for the key, or null if the key is not in the map for this instance
      */
-    @Nullable
-    public String getValue(@Nullable E key) {
+    public String getValue(E key) {
         if (key == null) {
             return null;
         }
@@ -80,7 +73,7 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
      *
      * @param value the value to assign to the key
      */
-    public void put(@Nonnull E key, @Nonnull String value) {
+    public void put(E key, String value) {
         checkNotNull(key);
         checkNotNull(value);
         map.put(key, value);
@@ -90,7 +83,7 @@ public abstract class EnumResourceBundle<E extends Enum<E>> extends ResourceBund
         return keyClass;
     }
 
-    public void setKeyClass(@Nonnull Class<E> keyClass) {
+    public void setKeyClass(Class<E> keyClass) {
         checkNotNull(keyClass);
         this.keyClass = keyClass;
     }

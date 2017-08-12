@@ -16,8 +16,6 @@ package uk.q3c.krail.core.i18n;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Locale;
 import java.util.Set;
 
@@ -49,8 +47,8 @@ public interface PatternUtility {
      *
      * @return a count of the keys exported
      */
-    long export(@Nonnull PatternDao source, @Nonnull PatternDao target, @Nonnull Set<Class<? extends I18NKey>> bundles, @Nonnull Set<Locale> locales, boolean
-            autoStub, boolean stubWithKeyName, @Nullable String stubValue);
+    long export(PatternDao source, PatternDao target, Set<Class<? extends I18NKey>> bundles, Set<Locale> locales, boolean
+            autoStub, boolean stubWithKeyName, String stubValue);
 
     /**
      * Export I18N Pattern key value pairs from {@link PatternSource} to {@code targetDao} for all bundles and locales specified.  Because this method employs
@@ -72,7 +70,7 @@ public interface PatternUtility {
      *
      * @return a count of the keys exported
      */
-    long export(@Nonnull PatternDao target, @Nonnull Set<Class<? extends I18NKey>> bundles, @Nonnull Set<Locale> locales);
+    long export(PatternDao target, Set<Class<? extends I18NKey>> bundles, Set<Locale> locales);
 
     /**
      * Exports all the core Krail I18NKeys for all supported Locales (as defined by the {@link I18NModule}
@@ -82,5 +80,5 @@ public interface PatternUtility {
      *
      * @return a count of all the keys exported
      */
-    long exportCoreKeys(@Nonnull PatternDao target);
+    long exportCoreKeys(PatternDao target);
 }

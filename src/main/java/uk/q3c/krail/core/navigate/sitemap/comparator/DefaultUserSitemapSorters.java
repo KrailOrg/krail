@@ -16,10 +16,9 @@ package uk.q3c.krail.core.navigate.sitemap.comparator;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
 
-import javax.annotation.Nonnull;
 import java.util.Comparator;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * A set of comparators which can be used to sort {@link UserSitemapNode}s, with a lookup key and name to support
@@ -86,7 +85,7 @@ public class DefaultUserSitemapSorters implements UserSitemapSorters {
     }
 
     @Override
-    public void setOptionKeySortType(@Nonnull SortType sortType) {
+    public void setOptionKeySortType(SortType sortType) {
         checkNotNull(sortType);
         this.sortType = sortType;
         select();

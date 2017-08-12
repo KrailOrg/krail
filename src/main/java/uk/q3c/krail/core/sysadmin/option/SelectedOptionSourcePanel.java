@@ -21,10 +21,9 @@ import uk.q3c.krail.core.option.OptionPopup;
 import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
 import uk.q3c.krail.core.persist.common.option.OptionSource;
 
-import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Displays the {@link PersistenceInfo} and stored data for the {@link Option} source selected by {@link #selectedSource}
@@ -53,7 +52,7 @@ public class SelectedOptionSourcePanel extends SourcePanel {
         return selectedSource;
     }
 
-    public void setSelectedSource(@Nonnull Class<? extends Annotation> selectedSource) {
+    public void setSelectedSource(Class<? extends Annotation> selectedSource) {
         checkNotNull(selectedSource);
         this.selectedSource = selectedSource;
         displayInfo();

@@ -29,11 +29,9 @@ import uk.q3c.krail.core.persist.inmemory.option.DefaultInMemoryOptionStore;
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 import uk.q3c.krail.core.user.profile.RankOption;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Data Access Object for {@link DefaultInMemoryOptionStore}
@@ -64,7 +62,7 @@ public class DefaultOptionDao implements OptionDao {
      * @param <V>      the value type
      */
     @Override
-    public <V> void write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull Optional<V> value) {
+    public <V> void write(OptionCacheKey<V> cacheKey, Optional<V> value) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         checkArgument(value.isPresent(), "Value cannot be empty");
         checkNotNull(value);
@@ -72,18 +70,18 @@ public class DefaultOptionDao implements OptionDao {
         delegate.write(cacheKey, stringValue);
     }
 
-    @Nonnull
+
     @Override
-    public <V> Optional<String> deleteValue(@Nonnull OptionCacheKey<V> cacheKey) {
+    public <V> Optional<String> deleteValue(OptionCacheKey<V> cacheKey) {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         return delegate.deleteValue(cacheKey);
     }
 
 
     @SuppressWarnings("unchecked")
-    @Nonnull
+
     @Override
-    public <V> Optional<V> getValue(@Nonnull OptionCacheKey<V> cacheKey) {
+    public <V> Optional<V> getValue(OptionCacheKey<V> cacheKey) {
         Optional<String> optionalStringValue;
 
         switch (cacheKey.getRankOption()) {
@@ -116,12 +114,12 @@ public class DefaultOptionDao implements OptionDao {
         }
     }
 
-    protected Optional<String> getStringValue(@Nonnull OptionCacheKey cacheKey) {
+    protected Optional<String> getStringValue(OptionCacheKey cacheKey) {
         return delegate.getValue(cacheKey);
     }
 
-    @Nonnull
-    protected <V> Optional<String> getRankedValue(@Nonnull OptionCacheKey<V> cacheKey, boolean lowest) {
+
+    protected <V> Optional<String> getRankedValue(OptionCacheKey<V> cacheKey, boolean lowest) {
         ImmutableList<String> ranks = cacheKey.getHierarchy()
                                               .ranksForCurrentUser();
         ImmutableList<String> ranksToUse = (lowest) ? ranks.reverse() : ranks;

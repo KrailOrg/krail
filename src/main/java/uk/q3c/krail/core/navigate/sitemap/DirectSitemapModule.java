@@ -20,9 +20,7 @@ import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
 
-import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * If you want to create Sitemap entries for your own code using a direct coding approach, you can either subclass this
@@ -190,7 +188,7 @@ public abstract class DirectSitemapModule extends AbstractModule {
     /**
      * Specifies where in the Sitemap tree this set of pages should occur.
      */
-    public DirectSitemapModule rootURI(@Nonnull String uri) {
+    public DirectSitemapModule rootURI(String uri) {
         checkNotNull(uri);
         this.rootURI = StringUtils.removeEnd(uri.trim(), "/");
         return this;

@@ -22,11 +22,10 @@ import uk.q3c.krail.core.persist.common.common.OptionDaoProviders;
 import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
 import uk.q3c.util.MessageFormat;
 
-import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Default implementation for {@link OptionSource}.
@@ -53,8 +52,8 @@ public class DefaultOptionSource implements OptionSource {
     }
 
     @Override
-    @Nonnull
-    public OptionDaoDelegate getDao(@Nonnull Class<? extends Annotation> annotationClass) {
+
+    public OptionDaoDelegate getDao(Class<? extends Annotation> annotationClass) {
         checkAnnotationKey(annotationClass);
         Key<OptionDaoDelegate> activeDaoKey = Key.get(OptionDaoDelegate.class, annotationClass);
         return injector.getInstance(activeDaoKey);
@@ -75,8 +74,8 @@ public class DefaultOptionSource implements OptionSource {
     }
 
     @Override
-    @Nonnull
-    public PersistenceInfo getPersistenceInfo(@Nonnull Class<? extends Annotation> annotationClass) {
+
+    public PersistenceInfo getPersistenceInfo(Class<? extends Annotation> annotationClass) {
         checkAnnotationKey(annotationClass);
         return optionDaoProviders.get(annotationClass);
     }
@@ -87,12 +86,12 @@ public class DefaultOptionSource implements OptionSource {
     }
 
     @Override
-    public void setActiveSource(@Nonnull Class<? extends Annotation> activeSource) {
+    public void setActiveSource(Class<? extends Annotation> activeSource) {
         this.activeSource = activeSource;
     }
 
     @Override
-    public Container getContainer(@Nonnull Class<? extends Annotation> annotationClass) {
+    public Container getContainer(Class<? extends Annotation> annotationClass) {
         checkAnnotationKey(annotationClass);
         Key<OptionContainerProvider> containerProviderKey = Key.get(OptionContainerProvider.class, annotationClass);
         OptionContainerProvider provider = injector.getInstance(containerProviderKey);

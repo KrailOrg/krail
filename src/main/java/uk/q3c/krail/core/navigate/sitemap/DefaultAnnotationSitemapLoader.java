@@ -21,12 +21,11 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.view.KrailView;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements AnnotationSitemapLoader {
 
@@ -56,7 +55,7 @@ public class DefaultAnnotationSitemapLoader extends SitemapLoaderBase implements
      */
     @SuppressWarnings("unchecked")
     @Override
-    public boolean load(@Nonnull MasterSitemap sitemap) {
+    public boolean load(MasterSitemap sitemap) {
         checkNotNull(sitemap);
         clearCounts();
         if (sources != null) {

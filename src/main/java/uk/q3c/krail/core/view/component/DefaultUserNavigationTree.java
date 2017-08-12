@@ -36,12 +36,11 @@ import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.util.ID;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * A navigation tree for users to find their way around the site. Uses {@link UserSitemap} to provide the structure
@@ -149,7 +148,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
     }
 
     @Override
-    public void setOptionKeySortType(@Nonnull SortType sortType) {
+    public void setOptionKeySortType(SortType sortType) {
         checkNotNull(sortType);
         setOptionSortType(sortType, true);
     }
@@ -277,7 +276,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
         this.rebuildRequired = rebuildRequired;
     }
 
-    @Nonnull
+
     @Override
     public Option getOption() {
         return option;

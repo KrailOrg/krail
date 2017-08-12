@@ -23,13 +23,12 @@ import uk.q3c.util.CycleDetectedException;
 import uk.q3c.util.DynamicDAG;
 import uk.q3c.util.MessageFormat;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Checks the Sitemap for inconsistencies after it has been loaded. The following are considered:
@@ -68,7 +67,7 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
 
 
     @Override
-    public void check(@Nonnull MasterSitemap sitemap) {
+    public void check(MasterSitemap sitemap) {
         checkNotNull(sitemap);
         // do this first, because a redirection loop will cause the main check to fail
         redirectCheck(sitemap);
@@ -219,27 +218,27 @@ public class DefaultSitemapFinisher implements SitemapFinisher {
     }
 
     @Override
-    public SitemapFinisher replaceMissingViewWith(@Nonnull Class<? extends KrailView> defaultView) {
+    public SitemapFinisher replaceMissingViewWith(Class<? extends KrailView> defaultView) {
         checkNotNull(defaultView);
         this.defaultView = defaultView;
         return this;
     }
 
     @Override
-    public SitemapFinisher replaceMissingKeyWith(@Nonnull I18NKey defaultKey) {
+    public SitemapFinisher replaceMissingKeyWith(I18NKey defaultKey) {
         checkNotNull(defaultKey);
         this.defaultKey = defaultKey;
         return this;
     }
 
     @Override
-    public void setSourceModuleNames(@Nonnull Set<String> names) {
+    public void setSourceModuleNames(Set<String> names) {
         checkNotNull(names);
         this.sourceModuleNames = names;
     }
 
     @Override
-    public void setAnnotationSources(@Nonnull Set<String> sources) {
+    public void setAnnotationSources(Set<String> sources) {
         checkNotNull(sources);
         this.annotationSources = sources;
     }

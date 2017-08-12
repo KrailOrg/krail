@@ -23,14 +23,13 @@ import uk.q3c.krail.core.eventbus.BusProvider;
 import uk.q3c.krail.core.navigate.sitemap.Sitemap;
 import uk.q3c.krail.core.navigate.sitemap.SitemapLockedException;
 
-import javax.annotation.Nonnull;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.slf4j.LoggerFactory.getLogger;
+import static com.google.common.base.Preconditions.*;
+import static org.slf4j.LoggerFactory.*;
 
 /**
  * Created by David Sowerby on 05 Jan 2016
@@ -80,7 +79,7 @@ public class DefaultSitemapQueue<T extends Sitemap> implements SitemapQueue<T> {
     }
 
     @Override
-    public synchronized boolean addModel(@Nonnull T newModel) {
+    public synchronized boolean addModel(T newModel) {
         checkNotNull(newModel);
         if (!newModel.isLocked()) {
             throw new SitemapLockedException("Sitemap must be locked before being added");

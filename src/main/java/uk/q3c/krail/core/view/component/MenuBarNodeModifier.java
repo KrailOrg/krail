@@ -23,14 +23,12 @@ import uk.q3c.util.CaptionReader;
 import uk.q3c.util.NodeModifier;
 import uk.q3c.util.TreeCopyException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public class MenuBarNodeModifier implements NodeModifier<UserSitemapNode, MenuItem> {
 
@@ -48,7 +46,7 @@ public class MenuBarNodeModifier implements NodeModifier<UserSitemapNode, MenuIt
     }
 
     @Override
-    public MenuItem create(MenuItem parentNode, @Nonnull UserSitemapNode sourceNode) {
+    public MenuItem create(MenuItem parentNode, UserSitemapNode sourceNode) {
         checkNotNull(sourceNode);
         checkNotNull(captionReader, "This implementation requires a caption reader");
         MenuItem newTargetNode = null;
@@ -67,7 +65,7 @@ public class MenuBarNodeModifier implements NodeModifier<UserSitemapNode, MenuIt
     }
 
     @Override
-    public void setLeaf(@Nonnull MenuItem targetNode) {
+    public void setLeaf(MenuItem targetNode) {
         checkNotNull(targetNode);
         UserSitemapNode sourceNode = sourceNodeFor(targetNode);
         if (userSitemap.hasNoVisibleChildren(sourceNode)) {
@@ -76,7 +74,7 @@ public class MenuBarNodeModifier implements NodeModifier<UserSitemapNode, MenuIt
     }
 
     @Override
-    public void forceSetLeaf(@Nonnull MenuItem targetNode) {
+    public void forceSetLeaf(MenuItem targetNode) {
         doSetLeaf(sourceNodeFor(targetNode), targetNode);
     }
 
@@ -87,19 +85,19 @@ public class MenuBarNodeModifier implements NodeModifier<UserSitemapNode, MenuIt
 
 
     @Override
-    public UserSitemapNode sourceNodeFor(@Nonnull MenuItem targetNode) {
+    public UserSitemapNode sourceNodeFor(MenuItem targetNode) {
         checkNotNull(targetNode);
         return targetLookup.get(targetNode);
     }
 
     @Override
-    public void setCaption(@Nonnull MenuItem targetNode, String caption) {
+    public void setCaption(MenuItem targetNode, String caption) {
         throw new TreeCopyException("Caption can only be set while MenuItem is being created");
 
     }
 
     @Override
-    public void sortChildren(@Nullable MenuItem parentNode, @Nonnull Comparator<MenuItem> comparator) {
+    public void sortChildren(MenuItem parentNode, Comparator<MenuItem> comparator) {
         List<MenuItem> children = (parentNode == null) ? menuBar.getItems() : parentNode.getChildren();
         if (children != null) {
             Collections.sort(children, comparator);

@@ -14,9 +14,7 @@ package uk.q3c.krail.core.user.status;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.view.LoginView;
 
-import javax.annotation.Nonnull;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * A bus message published when a user logs in or logs out.
@@ -37,7 +35,7 @@ public class UserStatusBusMessage implements BusMessage {
      * @param authenticated
      *         true of the user has just logged in, false if they have just logged out
      */
-    public UserStatusBusMessage(@Nonnull UserStatusChangeSource source, boolean authenticated) {
+    public UserStatusBusMessage(UserStatusChangeSource source, boolean authenticated) {
         this.authenticated = authenticated;
         checkNotNull(source);
         this.source = source;

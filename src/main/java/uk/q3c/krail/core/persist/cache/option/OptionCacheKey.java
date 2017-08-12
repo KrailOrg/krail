@@ -18,11 +18,9 @@ import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Provides a unique identifier for cached {@link Option}
@@ -42,7 +40,7 @@ public class OptionCacheKey<T> {
      * Calls {@link OptionCacheKey#OptionCacheKey(UserHierarchy, RankOption, int, OptionKey)} with the the lowest rank where rankOption is
      * {@link RankOption#LOWEST_RANK}, otherwie is called with rank of 0
      */
-    public OptionCacheKey(@Nonnull UserHierarchy hierarchy, @Nonnull RankOption rankOption, @Nonnull OptionKey<T> optionKey) {
+    public OptionCacheKey(UserHierarchy hierarchy, RankOption rankOption, OptionKey<T> optionKey) {
         this(hierarchy, rankOption, rankOption == RankOption.LOWEST_RANK ? hierarchy.lowestRank() : 0, optionKey);
     }
 
@@ -54,7 +52,7 @@ public class OptionCacheKey<T> {
      *                      {@link OptionCacheKey#OptionCacheKey(UserHierarchy, RankOption, OptionKey)}
      * @param optionKey     an object representing a unique key for the option within its context
      */
-    public OptionCacheKey(@Nonnull UserHierarchy hierarchy, @Nonnull RankOption rankOption, int requestedRank, @Nonnull OptionKey<T> optionKey) {
+    public OptionCacheKey(UserHierarchy hierarchy, RankOption rankOption, int requestedRank, OptionKey<T> optionKey) {
         checkNotNull(hierarchy);
         checkNotNull(rankOption);
         checkNotNull(optionKey);
@@ -72,7 +70,7 @@ public class OptionCacheKey<T> {
      * @param rank       the new rank
      * @param rankOption the #rankOption to set
      */
-    public OptionCacheKey(@Nonnull OptionCacheKey<T> cacheKey, int rank, @Nonnull RankOption rankOption) {
+    public OptionCacheKey(OptionCacheKey<T> cacheKey, int rank, RankOption rankOption) {
         this(cacheKey.getHierarchy(), rankOption, rank, cacheKey.getOptionKey());
     }
 
@@ -83,7 +81,7 @@ public class OptionCacheKey<T> {
      * @param cacheKey   the key to copy
      * @param rankOption the new rankOption to use
      */
-    public OptionCacheKey(@Nonnull OptionCacheKey<T> cacheKey, @Nonnull RankOption rankOption) {
+    public OptionCacheKey(OptionCacheKey<T> cacheKey, RankOption rankOption) {
         checkNotNull(cacheKey);
         checkNotNull(rankOption);
         this.rankOption = rankOption;
@@ -102,7 +100,7 @@ public class OptionCacheKey<T> {
      * @param rankName   the new rank name
      * @param rankOption the #rankOption to set
      */
-    public OptionCacheKey(@Nonnull OptionCacheKey<T> cacheKey, @Nonnull String rankName, @Nonnull RankOption rankOption) {
+    public OptionCacheKey(OptionCacheKey<T> cacheKey, String rankName, RankOption rankOption) {
         checkNotNull(cacheKey);
         checkNotNull(rankName);
         checkNotNull(rankOption);

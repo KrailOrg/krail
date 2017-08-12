@@ -19,13 +19,11 @@ import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 import uk.q3c.krail.core.validation.ValidationKey;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Utilities methods to manipulate I18N Patterns
@@ -60,8 +58,8 @@ public class DefaultPatternUtility implements PatternUtility {
      * @return a count of the keys processed
      */
     @Override
-    public long export(@Nonnull PatternDao source, @Nonnull PatternDao target, @Nonnull Set<Class<? extends I18NKey>> bundles, @Nonnull Set<Locale> locales,
-                       boolean autoStub, boolean stubWithKeyName, @Nullable String stubValue) {
+    public long export(PatternDao source, PatternDao target, Set<Class<? extends I18NKey>> bundles, Set<Locale> locales,
+                       boolean autoStub, boolean stubWithKeyName, String stubValue) {
         checkNotNull(source);
         checkNotNull(target);
         checkNotNull(bundles);
@@ -94,7 +92,7 @@ public class DefaultPatternUtility implements PatternUtility {
      * {@inheritDoc}
      */
     @Override
-    public long exportCoreKeys(@Nonnull PatternDao target) {
+    public long exportCoreKeys(PatternDao target) {
         ImmutableSet<Class<? extends I18NKey>> bundles = ImmutableSet.of(LabelKey.class, DescriptionKey.class, MessageKey.class, ValidationKey.class);
         return export(target, bundles, supportedLocales);
     }
@@ -103,7 +101,7 @@ public class DefaultPatternUtility implements PatternUtility {
      * {@inheritDoc}
      */
     @Override
-    public long export(@Nonnull PatternDao target, @Nonnull Set<Class<? extends I18NKey>> bundles, @Nonnull Set<Locale> locales) {
+    public long export(PatternDao target, Set<Class<? extends I18NKey>> bundles, Set<Locale> locales) {
         checkNotNull(target);
         checkNotNull(bundles);
         checkNotNull(locales);

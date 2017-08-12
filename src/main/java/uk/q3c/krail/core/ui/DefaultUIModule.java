@@ -20,8 +20,6 @@ import com.vaadin.server.WebBrowser;
 import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 
-import javax.annotation.Nonnull;
-
 public class DefaultUIModule extends AbstractModule {
 
     private I18NKey applicationTitleKey;
@@ -94,7 +92,7 @@ public class DefaultUIModule extends AbstractModule {
         return this;
     }
 
-    public DefaultUIModule applicationTitleKey(@Nonnull I18NKey applicationTitleKey) {
+    public DefaultUIModule applicationTitleKey(I18NKey applicationTitleKey) {
         this.applicationTitleKey = applicationTitleKey;
         return this;
     }

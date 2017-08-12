@@ -11,8 +11,6 @@
 
 package uk.q3c.krail.core.data;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +33,8 @@ public interface Dao<ID, VER> {
      *
      * @return the saved entity (which could have been merged with an existing entity)
      */
-    @Nonnull
-    <E extends KrailEntity<ID, VER>> E save(@Nonnull E entity);
+
+    <E extends KrailEntity<ID, VER>> E save(E entity);
 
     /**
      * Find an entity from its Id
@@ -50,8 +48,8 @@ public interface Dao<ID, VER> {
      *
      * @return Optional with entity found, or Optional.empty() if not found
      */
-    @Nonnull
-    <E extends KrailEntity<ID, VER>> Optional<E> findById(@Nonnull Class<E> entityClass, @Nonnull ID entityId);
+
+    <E extends KrailEntity<ID, VER>> Optional<E> findById(Class<E> entityClass, ID entityId);
 
     /**
      * Retrieves the table name for the {@code entityClass}.  The name is as defined by @Table, or defaults to the entityClass.getSimpleName()
@@ -65,8 +63,8 @@ public interface Dao<ID, VER> {
      *
      * @return the table name
      */
-    @Nonnull
-    <E extends KrailEntity<ID, VER>> String entityName(@Nonnull Class<E> entityClass);
+
+    <E extends KrailEntity<ID, VER>> String entityName(Class<E> entityClass);
 
     /**
      * Deletes {@code entity}, or fails silently if {@code entity} is not in the database.
@@ -78,7 +76,7 @@ public interface Dao<ID, VER> {
      * @param entity
      *         the entity to delete
      */
-    <E extends KrailEntity<ID, VER>> Optional<? extends KrailEntity> delete(@Nonnull E entity);
+    <E extends KrailEntity<ID, VER>> Optional<? extends KrailEntity> delete(E entity);
 
     /**
      * Deletes the entity identified by {@code entityId}, within class {@code entityClass}.  Returns the deleted entity or Optional.empty if none found to
@@ -96,8 +94,8 @@ public interface Dao<ID, VER> {
      * @return the deleted entity or Optional.empty if none found to
      * match the {@code entityId}
      */
-    @Nonnull
-    <E extends KrailEntity<ID, VER>> Optional<E> deleteById(@Nonnull Class<E> entityClass, @Nonnull ID entityId);
+
+    <E extends KrailEntity<ID, VER>> Optional<E> deleteById(Class<E> entityClass, ID entityId);
 
     /**
      * Merge the state of the given entity into the current persistence context.
@@ -111,8 +109,8 @@ public interface Dao<ID, VER> {
      *
      * @return the merged entity
      */
-    @Nonnull
-    <E extends KrailEntity<ID, VER>> E merge(@Nonnull E entity);
+
+    <E extends KrailEntity<ID, VER>> E merge(E entity);
 
     /**
 
@@ -124,8 +122,8 @@ public interface Dao<ID, VER> {
      *
      * @return a list of all entities for {@code entityClass} accessible to this {@code entityManager}, an empty list if none found
      */
-    @Nonnull
-    <E extends KrailEntity<ID, VER>> List<E> findAll(@Nonnull Class<E> entityClass);
+
+    <E extends KrailEntity<ID, VER>> List<E> findAll(Class<E> entityClass);
 
     /**
      * Returns the version for {@code entity}
@@ -139,8 +137,8 @@ public interface Dao<ID, VER> {
      *
      * @return the version of the entity
      */
-    @Nonnull
-    <E extends KrailEntity<ID, VER>> VER getVersion(@Nonnull E entity);
+
+    <E extends KrailEntity<ID, VER>> VER getVersion(E entity);
 
 
     /**
@@ -155,8 +153,8 @@ public interface Dao<ID, VER> {
      *
      * @return the identity of the entity, may be null if the ID is  a nullable type
      */
-    @Nullable
-    <E extends KrailEntity<ID, VER>> ID getIdentity(@Nonnull E entity);
+
+    <E extends KrailEntity<ID, VER>> ID getIdentity(E entity);
 
     /**
      * Count the entries for {@code entityClass}
@@ -169,7 +167,7 @@ public interface Dao<ID, VER> {
      *
      * @return a count of all the entries for {@code entityClass}
      */
-    <E extends KrailEntity<ID, VER>> long count(@Nonnull Class<E> entityClass);
+    <E extends KrailEntity<ID, VER>> long count(Class<E> entityClass);
 
     /**
      * Returns the url connection as specified by PersistenceUnitProperties.JDBC_URL

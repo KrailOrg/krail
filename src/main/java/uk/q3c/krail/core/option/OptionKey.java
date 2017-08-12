@@ -17,14 +17,12 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import uk.q3c.krail.core.i18n.I18NKey;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Represents the elements which go together to make up a unique {@link Option} key within its context
@@ -37,12 +35,11 @@ public class OptionKey<T> {
 
     private final Class<? extends OptionContext> context;
     private final T defaultValue;
-    @Nullable
     private final I18NKey descriptionKey;
     private final I18NKey key;
     private final List<String> qualifiers = new ArrayList<>();
 
-    public OptionKey(@Nonnull T defaultValue, @Nonnull OptionContext context, @Nonnull I18NKey nameKey, @Nonnull I18NKey descriptionKey, @Nullable String...
+    public OptionKey(T defaultValue, OptionContext context, I18NKey nameKey, I18NKey descriptionKey, String...
             qualifiers) {
         this(defaultValue, context.getClass(), nameKey, descriptionKey, qualifiers);
     }
@@ -60,8 +57,8 @@ public class OptionKey<T> {
      *                       <p>
      *                       where "2,3" is the grid position of the button
      */
-    public OptionKey(@Nonnull T defaultValue, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey nameKey, @Nullable I18NKey descriptionKey,
-                     @Nullable String... qualifiers) {
+    public OptionKey(T defaultValue, Class<? extends OptionContext> context, I18NKey nameKey, I18NKey descriptionKey,
+                     String... qualifiers) {
         this.defaultValue = defaultValue;
         checkNotNull(context);
         checkNotNull(nameKey);
@@ -85,7 +82,7 @@ public class OptionKey<T> {
      *                       <p>
      *                       where "2,3" is the grid position of the button
      */
-    public OptionKey(@Nonnull T defaultValue, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey nameKey, @Nullable I18NKey descriptionKey,
+    public OptionKey(T defaultValue, Class<? extends OptionContext> context, I18NKey nameKey, I18NKey descriptionKey,
                      List<String> qualifiers) {
         this.defaultValue = defaultValue;
         checkNotNull(context);
@@ -102,7 +99,7 @@ public class OptionKey<T> {
      * @param context the class which uses the option
      * @param nameKey used as part of the overall key, and also as an I18N label for displaying options values to users
      */
-    public OptionKey(@Nonnull T defaultValue, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey nameKey) {
+    public OptionKey(T defaultValue, Class<? extends OptionContext> context, I18NKey nameKey) {
         this.defaultValue = defaultValue;
         checkNotNull(context);
         checkNotNull(nameKey);
@@ -117,7 +114,7 @@ public class OptionKey<T> {
      * @param context the class which uses the option
      * @param nameKey used as part of the overall key, and also as an I18N label for displaying options values to users
      */
-    public OptionKey(@Nonnull T defaultValue, @Nonnull OptionContext context, @Nonnull I18NKey nameKey) {
+    public OptionKey(T defaultValue, OptionContext context, I18NKey nameKey) {
         this.defaultValue = defaultValue;
         checkNotNull(context);
         checkNotNull(nameKey);
@@ -132,7 +129,7 @@ public class OptionKey<T> {
      * @param context the class which uses the option
      * @param nameKey used as part of the overall key, and also as an I18N label for displaying options values to users
      */
-    public OptionKey(@Nonnull T defaultValue, @Nonnull Class<? extends OptionContext> context, @Nonnull I18NKey nameKey, @Nullable String... qualifiers) {
+    public OptionKey(T defaultValue, Class<? extends OptionContext> context, I18NKey nameKey, String... qualifiers) {
         checkNotNull(context);
         checkNotNull(nameKey);
         checkNotNull(defaultValue);
@@ -149,7 +146,7 @@ public class OptionKey<T> {
      * @param baseKey    the key on which to base the copy
      * @param qualifiers the qualifiers to append to the base key
      */
-    protected OptionKey(@Nonnull OptionKey<T> baseKey, String... qualifiers) {
+    protected OptionKey(OptionKey<T> baseKey, String... qualifiers) {
         this(baseKey.getDefaultValue(), baseKey.getContext(), baseKey.getKey(), baseKey.getDescriptionKey());
         this.qualifiers.addAll(baseKey.getQualifiers());
         this.qualifiers.addAll(Arrays.asList(qualifiers));
@@ -166,17 +163,14 @@ public class OptionKey<T> {
     }
 
 
-    @Nullable
     public I18NKey getDescriptionKey() {
         return descriptionKey;
     }
 
-    @Nonnull
     public Class<? extends OptionContext> getContext() {
         return context;
     }
 
-    @Nonnull
     public I18NKey getKey() {
         return key;
     }
@@ -200,7 +194,6 @@ public class OptionKey<T> {
      *
      * @return a concatenation of the supplied parameters to form a composite String key
      */
-    @Nonnull
     public String compositeKey() {
         Joiner joiner = Joiner.on("-")
                               .skipNulls();

@@ -12,15 +12,12 @@
  */
 package uk.q3c.krail.core.i18n;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 public interface I18NKey {
     /**
      * returns a full string representation of an I18NKey enum constant (for example  uk.q3c.krail.core.i18n.LabelKey.Yes)
      * @param key
      * @return
      */
-    @SuppressFBWarnings("PDP_POORLY_DEFINED_PARAMETER")
     static String fullName(I18NKey key) {
         Enum e = (Enum) key;
         return e.getClass()

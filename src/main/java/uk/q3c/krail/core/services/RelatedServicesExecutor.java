@@ -13,8 +13,6 @@
 
 package uk.q3c.krail.core.services;
 
-import javax.annotation.Nonnull;
-
 /**
  * Executes changes of state on the services related to a {@link Service} defined by {@link #setService}. Specifically this means calling:<ol>
  * <li>start() on the dependencies of the selected Service</li>
@@ -32,7 +30,7 @@ public interface RelatedServicesExecutor {
      *
      * @param service The service to act on
      */
-    void setService(@Nonnull Service service);
+    void setService(Service service);
 
     /**
      * Execute the required {@code action}.  {@link Action#START} always operates on dependencies, {@link Action#STOP} always operates
@@ -44,5 +42,5 @@ public interface RelatedServicesExecutor {
      * @return true if ALL the executed services return the expected result.  Returns false if any does not achieve the expected state.  For service
      * starts, the result of attempting to start an {@link Dependency.Type#OPTIONAL} dependency is ignored.
      */
-    boolean execute(@Nonnull Action action, @Nonnull Service.Cause cause);
+    boolean execute(Action action, Service.Cause cause);
 }
