@@ -1,11 +1,32 @@
-#krail
+# krail
 
 ![License](http://img.shields.io/:license-apache-blue.svg)
 [![Gitter](https://badges.gitter.im/davidsowerby/krail.svg)](https://gitter.im/davidsowerby/krail?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Build Status](https://travis-ci.org/davidsowerby/krailkrail.svg?branch=master)](https://travis-ci.org/davidsowerby/krail)
+[![Build Status](https://travis-ci.org/davidsowerby/krail.svg?branch=master)](https://travis-ci.org/davidsowerby/krail)
 [![Coverage Status](https://coveralls.io/repos/github/davidsowerby/krail/badge.svg?branch=master)](https://coveralls.io/github/davidsowerby/krail?branch=master)
 
 Krail provides a framework for rapid Java web development by combining Vaadin, Guice, Apache Shiro, Apache Commons Configuration and others.  For more information, see the comprehensive [Tutorial](http://krail.readthedocs.org/en/master/), which also makes a reasonable demo.  (You can clone directly from the [Tutorial repo](https://github.com/davidsowerby/krail-tutorial))
+
+
+---
+
+## Notice
+
+---
+
+ Development of Krail has been lacking for a good few months - but it has now reached the top of the TODO list again.
+
+It is currently undergoing a major refactoring, to split out some of the major parts from the core (the core being Vaadin, Shiro and Guice).  I18N, Option, Services are being factored out into their own projects, as they could actually be used outside of Krail.
+
+Work will then continue on other aspects.  This is the current plan:
+
+- Complete the refactoring
+- Update to latest Vaadin 7
+- Upgrade to Vaadin 8 - It is hoped that this can be completed by around mid September 2017
+- Attempt a migration to [Eclipse Vert.x](http://vertx.io/) - that may or may not work! 
+
+---
+
 
 This core library provides:
 
@@ -28,7 +49,7 @@ Additional libraries, integrated and configured through Guice, provide:
 The [issues tracker](https://github.com/davidsowerby/krail/issues?milestone=7&state=open), [blog](http://rndjava.blogspot.co.uk/) and [Tutorial](http://krail.readthedocs.org/en/master/) provide more information.
 
 
-#Download
+# Download
 <a href='https://bintray.com/dsowerby/maven/krail/view?source=watch' alt='Get automatic notifications about new "krail" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
 ##Gradle
 
@@ -58,7 +79,7 @@ repositories {
 	<version>0.9.9</version>
 </dependency>
 ```
-##Direct
+## Direct
 
 [ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail/images/download.svg) ](https://bintray.com/dsowerby/maven/krail/_latestVersion)
 
@@ -86,7 +107,7 @@ Krail is usable, though there is still work to ensure thread safety.  No major c
 There is a [functional test application](https://github.com/davidsowerby/krail-testApp) which can also be used to explore functionality - though the [Tutorial](http://krail.readthedocs.org/en/latest/) may be better for that
 
 
-#Project Build
+# Project Build
 
 Gradle is used (made a lot easier thanks to the [Gradle Vaadin plugin](https://github.com/johndevs/gradle-vaadin-plugin).
 
@@ -94,7 +115,7 @@ The build is a multi-project gradle build with a [master](https://github.com/dav
 
 If you want to build from source run 'gradle eclipse' or 'gradle idea' to generate the IDE files
 
-#Acknowledgements
+# Acknowledgements
 
 Thanks to:
  
