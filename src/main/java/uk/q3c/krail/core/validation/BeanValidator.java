@@ -12,7 +12,7 @@
 package uk.q3c.krail.core.validation;
 
 import com.vaadin.data.Validator;
-import uk.q3c.krail.core.data.KrailEntity;
+import uk.q3c.krail.persist.KrailEntity;
 
 /**
  * Created by David Sowerby on 04/02/15.

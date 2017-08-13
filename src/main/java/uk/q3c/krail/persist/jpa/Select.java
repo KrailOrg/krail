@@ -11,7 +11,7 @@
  *
  */
 
-package uk.q3c.krail.core.data;
+package uk.q3c.krail.persist.jpa;
 
 import java.util.HashMap;
 import java.util.Map;

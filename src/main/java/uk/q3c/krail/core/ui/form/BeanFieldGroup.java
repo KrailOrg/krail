@@ -11,7 +11,7 @@
 
 package uk.q3c.krail.core.ui.form;
 
-import uk.q3c.krail.core.data.KrailEntity;
+import uk.q3c.krail.persist.KrailEntity;
 
 /**
  * A BeanFieldGroup is a mapping between a data entity and a "form" (actually a group of UI fields) in which it is

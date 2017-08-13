@@ -37,7 +37,12 @@ These can be dealt with by the usual method of deleting failed import statements
 
 ### Option
 
+### Data
 
+- `uk.q3c.krail.core.data` moved to `uk.q3c.krail.persist` except:
+- `uk.q3c.krail.core.data.DataModule` moved to `uk.q3c.krail.core.vaadin.DataModule`
+- `uk.q3c.krail.core.data.I18NKeyConverter` moved to  `uk.q3c.krail.i18n.I18NKeyConverter`
+- `uk.q3c.krail.core.data.Select` moved to  `uk.q3c.krail.i18n.jpa.Select`
 
 ### uk.q3c.util
 

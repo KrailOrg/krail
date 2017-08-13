@@ -16,7 +16,6 @@ package uk.q3c.krail.core.i18n.i8nModule
 import com.google.inject.Module
 import com.google.inject.Provider
 import com.google.inject.TypeLiteral
-import uk.q3c.krail.core.data.DataModule
 import uk.q3c.krail.core.eventbus.EventBusModule
 import uk.q3c.krail.core.guice.GuiceModuleTestBase
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
@@ -30,6 +29,7 @@ import uk.q3c.krail.core.persist.common.i18n.PatternDao
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
 import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternDao
 import uk.q3c.krail.core.shiro.DefaultShiroModule
+import uk.q3c.krail.core.vaadin.DataModule
 import uk.q3c.krail.testutil.option.TestOptionModule
 import uk.q3c.util.UtilModule
 

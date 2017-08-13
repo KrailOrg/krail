@@ -11,16 +11,15 @@
  *
  */
 
-package uk.q3c.krail.core.data
+package uk.q3c.krail.i18n
 
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.I18NKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.util.data.ConversionException
-
 /**
  *
- * Converts an I18NKey to a full String representation (the package name, class name and constannt name concatenated), and back again
+ * Converts an I18NKey to a full String representation (the package name, class name and constant name concatenated), and back again
  *
  * Created by David Sowerby on 07/08/15.
  */

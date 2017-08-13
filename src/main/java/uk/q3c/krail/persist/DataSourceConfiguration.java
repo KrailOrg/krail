@@ -9,9 +9,10 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.data;
+package uk.q3c.krail.persist;
 
 import uk.q3c.krail.config.ApplicationConfiguration;
+import uk.q3c.krail.core.vaadin.DataModule;
 
 /**
  * A common interface to provide configuration for a logical data source.  There may be multiple sources in an application - perhaps a Graph database for

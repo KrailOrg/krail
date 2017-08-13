@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.data;
+package uk.q3c.krail.persist;
 
 import java.util.List;
 import java.util.Optional;

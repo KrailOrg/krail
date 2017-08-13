@@ -12,7 +12,7 @@
 package uk.q3c.krail.core.validation;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.data.KrailEntity;
+import uk.q3c.krail.persist.KrailEntity;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;

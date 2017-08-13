@@ -357,7 +357,7 @@ To demonstrate this we need to create an entity.
 ```
 package com.example.tutorial.form;
 
-import uk.q3c.krail.core.data.KrailEntity;
+import uk.q3c.krail.persist.KrailEntity;
 
 import javax.persistence.Id;
 import javax.persistence.Version;

@@ -17,6 +17,7 @@ import org.apache.bval.guice.Validate;
 import uk.q3c.krail.core.validation.Adult;
 import uk.q3c.krail.core.validation.MalformedAnnotation;
 import uk.q3c.krail.core.validation.TestValidationKey;
+import uk.q3c.krail.persist.KrailEntity;
 
 import javax.persistence.Id;
 import javax.persistence.Version;

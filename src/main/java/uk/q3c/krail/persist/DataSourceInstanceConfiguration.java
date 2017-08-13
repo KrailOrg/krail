@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.data;
+package uk.q3c.krail.persist;
 
 /**
  * Implementations provide a configuration object for an instance of a particular data source (configured by an implementation of {@link

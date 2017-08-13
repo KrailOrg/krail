@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.core.data;
 
+import uk.q3c.krail.persist.KrailEntity;
+
 import javax.persistence.Id;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
