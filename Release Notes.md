@@ -1,131 +1,83 @@
-### Release Notes for krail 0.9.9
+## Release Notes for krail 0.10.0.0
 
-This version updates to Vaadin 7.6.3.  Changes concentrate on separating the build from the master project to prepare move to continuous delivery.  Some small fixes included, Tutorial updated
+This release is a major refactor to extract some elements which can actually stand alone from Krail itself - notably this includes I18N and Options
 
-#### Change log
+Unfortunately there are a LOT of changes which will affect existing Krail apps. Many are limited to package changes, but there are some code changes
+were needed to achieve effective separation of concerns
 
--   [522](https://github.com/davidsowerby/krail/issues/522): Gitter tag on README
--   [524](https://github.com/davidsowerby/krail/issues/524): Check Tutorial
--   [525](https://github.com/davidsowerby/krail/issues/525): Travis build 13 fails
--   [526](https://github.com/davidsowerby/krail/issues/526): Move test base and helpers to enable JPA separation
--   [530](https://github.com/davidsowerby/krail/issues/530): ConfigurationModuleBase.addConfig() needs to be public
--   [532](https://github.com/davidsowerby/krail/issues/532): Translate must be visible in ViewBase sub-classes
--   [533](https://github.com/davidsowerby/krail/issues/533): Improve logging for push
--   [534](https://github.com/davidsowerby/krail/issues/534): Translation tests failing
--   [535](https://github.com/davidsowerby/krail/issues/535): Broadcaster.broadcast() needs to be easier to call
--   [536](https://github.com/davidsowerby/krail/issues/536): Tutorial should reference push config info in Vaadin documentation
--   [537](https://github.com/davidsowerby/krail/issues/537): Gradle (only) fails to find OptionDaoTestBase
--   [539](https://github.com/davidsowerby/krail/issues/539): Vaadin 7.6.3
+## Name changes
 
+- `uk.q3c.krail.i18n.I18NHostClassIdentifier` is now `uk.q3c.util.clazz.UnenhancedClassIdentifier`
+- `AnnotationOptionList` had nothing to do with `Option`.  Renamed `AnnotationList` and moved to `uk.q3c.util.collection`
+- `AnnotationOptionListConverter`, renamed `AnnotationListConverter` and moved to `uk.q3c.util.collection`
+- `OptionElementConverter` renamed `DataConverter` and moved to `uk.q3c.util.data`.  `DataConverter` supports custom data item converters through Guice MapBinder 
+- `DefaultOptionElementConverter` renamed `DefaultDataConverter` and moved to `uk.q3c.util.data`
+- `OptionConverter` renamed `DataItemConverter` and moved to `uk.q3c.util.data` - it is used by `Option` but not specific to it
 
-#### Dependency changes
+## Removals
 
-
-#### Detail
-
-*version info updated*
+- `BigDecimalConverter` deleted.  Conversion is already handled by `DataConverter` and is therefore redundant
+- `TestByteEnhancementModule` (in test folder) - use `uk.q3c.util.test.AOPTestModule` instead
+- `OptionList` removed, use `uk.q3c.util.data.collection.DataList` instead
 
 
----
-*Fix [539](https://github.com/davidsowerby/krail/issues/539) Vaadin 7.6.3*
+## Deprecated
+
+- `MessageFormat`. Its replacement is no longer a static utility, but an interface `uk.q3c.util.text.MessageFormat2` with implementation `uk.q3c.util.text.DefaultMessageFormat`.  It also has new "strictness" functionality
+- `ReflectionUtils`.  `org.reflections` should be used instead
+- `OptionList` & `OptionListConverter` - this is not practical for anything except in memory store
+
+## Package changes
+
+These can be dealt with by the usual method of deleting failed import statements and letting the IDE find the new location.
+
+### I18N
 
 
----
-*Fix [537](https://github.com/davidsowerby/krail/issues/537) Gradle needs groovy files in groovy folder*
+
+### Option
 
 
----
-*Fix [536](https://github.com/davidsowerby/krail/issues/536) Tutorial reference to Vaadin Push notes*
 
+### uk.q3c.util
 
----
-*See [535](https://github.com/davidsowerby/krail/issues/535) Test amendment*
+Project **q3c-util** contains all of the `uk.q3c.util` package
 
-Should have been with previous commit
+Moved from `uk.q3c.util` to `uk.q3c.krail.core.vaadin`
 
+- `ID`
+- `SourceTreeWrapper_VaadinTree`
+- `TargetTreeWrapper_MenuBar`
+- `TargetTreeWrapper_VaadinTree`
+- `UserSitemapNodeCaption`
 
----
-*Fix [535](https://github.com/davidsowerby/krail/issues/535) Call to Broadcaster.broadcast with component*
+ 
 
-A bit more logging added in PushMessageRouter
+These all moved from `uk.q3c.util` to `uk.q3c.util.forest` in **q3c-util**:
 
+- `BasicForest`
+- `CaptionReader`
+- `DefaultNodeModifier`
+- `NodeFilter`
+- `NodeModifier`
+- `SourceTreeWrapper`
+- `SourceTreeWrapper_BasicForest`
+- `TargetTreeWrapper`
+- `TargetTreeWrapper_BasicForest`
+- `TargetTreeWrapperBase`
+- `TreeCopy`
+- `TreeCopyException`
+- `TreeCopyExtension`
 
----
-*Fix [534](https://github.com/davidsowerby/krail/issues/534) Translation test failures*
+Others:
+- `GuavaCacheConfiguration` moved from `uk.q3c.krail.core.persist.cache.common` to `uk.q3c.util.guava`
+- `ReflectionUtils` moved from `uk.q3c.util` to `uk.q3c.util.reflect`
 
-TestLabelKey had been moved to testUtil, but its associated translations had not
+The following moved into a new package `uk.q3c.util.test`, to make test helper classes generally available
 
+- `AOPTestModule` from `uk.q3c.util`
+- new `EnhancedClass`
+- `NotOnWeekends`  from `uk.q3c.util`
+- `WeekendBlocker`  from `uk.q3c.util` - was in test folder, now in src
 
----
-*Fix [533](https://github.com/davidsowerby/krail/issues/533) Logging for push*
-
-Removed clear text messages from logging, replaced with UIKey (sender) identifier and message id
-
-
----
-*Fix [524](https://github.com/davidsowerby/krail/issues/524) Tutorial updates*
-
-Updates to krail 0.9.9, for sections 1-12 inclusive
-
-
----
-*See [524](https://github.com/davidsowerby/krail/issues/524) Tutorial updates*
-
-Updates to krail 0.9.9, for sections 1-9 inclusive
-
-
----
-*Fix [532](https://github.com/davidsowerby/krail/issues/532) ViewBase getTranslate() added*
-
-
----
-*Fix [530](https://github.com/davidsowerby/krail/issues/530) ConfigurationModuleBase addConfig() made public*
-
-
----
-*Fix [526](https://github.com/davidsowerby/krail/issues/526) Test base and helpers moved to testUtil*
-
-Also refactored packages to mirror the core structure
-
-
----
-*Fix [525](https://github.com/davidsowerby/krail/issues/525) Removed UnitTestFor annotation*
-
-Not used consistently, serves no real purpose
-
-
----
-*Readme date*
-
-
----
-*See [513](https://github.com/davidsowerby/krail/issues/513) Badges added*
-
-Travis and Coveralls badges added.  Item 8 complete
-
-
----
-*See [513](https://github.com/davidsowerby/krail/issues/513) Separation from master*
-
-Items 1, 2 & 3 completed
-
-
----
-*See [513](https://github.com/davidsowerby/krail/issues/513) .travis.yml*
-
-Items 4 & 5 done (should not actually copy coveralls.yml, the key is different)
-
-
----
-*See [513](https://github.com/davidsowerby/krail/issues/513) Move Spock tests*
-
-Item 6 complete, all Spock tests in the src/test/groovy folder
-
-
----
-*Fix [522](https://github.com/davidsowerby/krail/issues/522) Gitter badge added*
-
-Also added licence as badge
-
-
----
+- new `UtilModule` for Guice bindings

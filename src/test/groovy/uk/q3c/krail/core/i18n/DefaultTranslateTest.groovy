@@ -25,47 +25,48 @@ import uk.q3c.krail.testutil.i18n.TestLabelKey
 import uk.q3c.krail.testutil.option.MockOption
 import uk.q3c.krail.testutil.option.TestOptionModule
 import uk.q3c.krail.testutil.persist.TestPersistenceModule
+import uk.q3c.util.UtilModule
 
 /**
  * Original replaced by Spock
  *
  * Created by David Sowerby on 14/07/15.
  */
-@UseModules([TestI18NModule, TestOptionModule, TestPersistenceModule, EventBusModule, UIScopeModule, VaadinSessionScopeModule, DataModule])
+@UseModules([TestI18NModule, TestOptionModule, TestPersistenceModule, EventBusModule, UIScopeModule, VaadinSessionScopeModule, DataModule, UtilModule])
 class DefaultTranslateTest extends Specification {
 
     @Inject
-    Translate translate;
+    Translate translate
 
     @Inject
-    CurrentLocale currentLocale;
+    CurrentLocale currentLocale
 
     @Inject
-    MockOption option;
+    MockOption option
 
     Locale germanSwitzerland
 
     def setup() {
-        Locale.setDefault(Locale.UK);
-        currentLocale.setLocale(Locale.UK);
-        germanSwitzerland = new Locale("de", "CH");
+        Locale.setDefault(Locale.UK)
+        currentLocale.setLocale(Locale.UK)
+        germanSwitzerland = new Locale("de", "CH")
     }
 
 
     def "translate from"() {
 
         expect:
-        translate.from(LabelKey.Cancel).equals("Cancel");
+        translate.from(LabelKey.Cancel).equals("Cancel")
         translate.from(LabelKey.Ok).equals("Ok")
 
-        translate.from(LabelKey.Cancel, Locale.GERMANY).equals("Stornieren");
+        translate.from(LabelKey.Cancel, Locale.GERMANY).equals("Stornieren")
         // OK is not redefined in _de
-        translate.from(LabelKey.Ok, Locale.GERMANY).equals("OK");
+        translate.from(LabelKey.Ok, Locale.GERMANY).equals("OK")
 
         // this in inherited from Labels_de
-        translate.from(LabelKey.Cancel, germanSwitzerland).equals("Stornieren");
+        translate.from(LabelKey.Cancel, germanSwitzerland).equals("Stornieren")
         // this is inherited from Labels (2 levels of inheritance)
-        translate.from(LabelKey.Ok, germanSwitzerland).equals("OK");
+        translate.from(LabelKey.Ok, germanSwitzerland).equals("OK")
     }
 
 
@@ -81,17 +82,17 @@ class DefaultTranslateTest extends Specification {
 
         when:
 
-        String translation = translate.from(TestLabelKey.pattern_with_embedded_key, LabelKey.Log_In);
+        String translation = translate.from(TestLabelKey.pattern_with_embedded_key, LabelKey.Log_In)
         then:
 
         translation.equals("Your Log In request has been refused")
 
         when:
         currentLocale.setLocale(Locale.GERMANY)
-        translation = translate.from(TestLabelKey.pattern_with_embedded_key, LabelKey.Log_In);
+        translation = translate.from(TestLabelKey.pattern_with_embedded_key, LabelKey.Log_In)
 
         then:
-        translation.equals("Your Einloggen request has been refused");
+        translation.equals("Your Einloggen request has been refused")
 
     }
 

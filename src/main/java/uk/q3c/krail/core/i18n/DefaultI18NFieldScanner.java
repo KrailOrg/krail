@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import com.vaadin.ui.AbstractComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.util.clazz.UnenhancedClassIdentifier;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -33,11 +34,11 @@ public class DefaultI18NFieldScanner implements I18NFieldScanner {
     private static Logger log = LoggerFactory.getLogger(DefaultI18NFieldScanner.class);
     private Map<AbstractComponent, AnnotationInfo> components;
     private LinkedList<Object> drillDowns;
-    private I18NHostClassIdentifier i18NHostClassIdentifier;
+    private UnenhancedClassIdentifier i18NHostClassIdentifier;
     private List<Object> processedDrillDowns;
 
     @Inject
-    protected DefaultI18NFieldScanner(I18NHostClassIdentifier i18NHostClassIdentifier) {
+    protected DefaultI18NFieldScanner(UnenhancedClassIdentifier i18NHostClassIdentifier) {
         this.i18NHostClassIdentifier = i18NHostClassIdentifier;
         components = new HashMap<>();
         drillDowns = new LinkedList<>();

@@ -14,13 +14,16 @@
 package uk.q3c.krail.core.data;
 
 import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.util.data.ConversionException;
+import uk.q3c.util.data.DataItemConverter;
+import uk.q3c.util.data.EnumConverter;
 
 /**
  * Converts an I18NKey in full - that is, the class and constant as a single String.
  * <p>
  * Created by David Sowerby on 27/06/15.
  */
-public class I18NKeyConverter implements OptionConverter<I18NKey> {
+public class I18NKeyConverter implements DataItemConverter<I18NKey> {
     /**
      * {@inheritDoc}
      */

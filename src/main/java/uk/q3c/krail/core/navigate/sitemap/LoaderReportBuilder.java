@@ -12,8 +12,8 @@
  */
 package uk.q3c.krail.core.navigate.sitemap;
 
-import uk.q3c.util.ClassNameUtils;
 import uk.q3c.util.MessageFormat;
+import uk.q3c.util.clazz.ClassNameUtils;
 
 import java.util.List;
 import java.util.Map;

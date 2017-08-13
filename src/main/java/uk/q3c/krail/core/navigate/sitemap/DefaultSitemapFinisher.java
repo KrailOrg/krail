@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.CurrentLocale;
 import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.view.KrailView;
-import uk.q3c.util.CycleDetectedException;
-import uk.q3c.util.DynamicDAG;
 import uk.q3c.util.MessageFormat;
+import uk.q3c.util.dag.CycleDetectedException;
+import uk.q3c.util.dag.DynamicDAG;
 
 import java.util.HashSet;
 import java.util.List;

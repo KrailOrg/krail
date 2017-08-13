@@ -55,15 +55,15 @@ import uk.q3c.krail.testutil.ui.TestUIModule;
 import uk.q3c.krail.util.DefaultResourceUtils;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.krail.util.UtilsModule;
+import uk.q3c.util.UtilModule;
 
 import java.util.Locale;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class UIScopeTest {
     static Optional<CacheManager> cacheManagerOpt = Optional.empty();
@@ -117,7 +117,7 @@ public class UIScopeTest {
                         ServicesModule(), new OptionModule().activeSource(InMemory.class), new UserModule(), new DefaultComponentModule(), new TestI18NModule
                 (), new
                         DefaultShiroModule(), new ShiroVaadinModule(), new VaadinSessionScopeModule(), new SitemapModule(), new TestUIModule(), new
-                        TestPersistenceModule(), new NavigationModule(), new EventBusModule(),
+                        TestPersistenceModule(), new NavigationModule(), new EventBusModule(), new UtilModule(),
                 new DataModule(), new DataTypeModule(), new UtilsModule(), new InMemoryModule().provideOptionDao());
         provider = injector.getInstance(UIProvider.class);
         createUI(BasicUI.class);

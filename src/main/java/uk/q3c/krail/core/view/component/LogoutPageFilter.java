@@ -15,7 +15,7 @@ package uk.q3c.krail.core.view.component;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.util.NodeFilter;
+import uk.q3c.util.forest.NodeFilter;
 
 public class LogoutPageFilter implements NodeFilter<UserSitemapNode> {
 

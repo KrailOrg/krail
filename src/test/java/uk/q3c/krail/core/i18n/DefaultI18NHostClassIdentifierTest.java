@@ -19,15 +19,16 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.util.TestByteEnhancementModule;
+import uk.q3c.util.clazz.DefaultUnenhancedClassIdentifier;
+import uk.q3c.util.test.AOPTestModule;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestByteEnhancementModule.class})
+@GuiceContext({AOPTestModule.class})
 public class DefaultI18NHostClassIdentifierTest {
 
-    DefaultI18NHostClassIdentifier identifier;
+    DefaultUnenhancedClassIdentifier identifier;
 
 
     @Inject
@@ -38,7 +39,7 @@ public class DefaultI18NHostClassIdentifierTest {
 
     @Before
     public void setup() {
-        identifier = new DefaultI18NHostClassIdentifier();
+        identifier = new DefaultUnenhancedClassIdentifier();
     }
 
     @Test

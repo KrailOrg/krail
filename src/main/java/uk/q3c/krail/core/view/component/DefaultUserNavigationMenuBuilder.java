@@ -17,8 +17,12 @@ import com.vaadin.ui.MenuBar.MenuItem;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.util.*;
-import uk.q3c.util.TreeCopy.SortOption;
+import uk.q3c.krail.core.vaadin.TargetTreeWrapper_MenuBar;
+import uk.q3c.krail.core.vaadin.UserSitemapNodeCaption;
+import uk.q3c.util.forest.NodeFilter;
+import uk.q3c.util.forest.SourceTreeWrapper_BasicForest;
+import uk.q3c.util.forest.TreeCopy;
+import uk.q3c.util.forest.TreeCopy.SortOption;
 
 import java.util.ArrayList;
 import java.util.List;

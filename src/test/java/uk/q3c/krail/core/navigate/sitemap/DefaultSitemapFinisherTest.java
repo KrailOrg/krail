@@ -31,12 +31,13 @@ import uk.q3c.krail.testutil.i18n.TestI18NModule;
 import uk.q3c.krail.testutil.i18n.TestLabelKey;
 import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
+import uk.q3c.util.UtilModule;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({VaadinSessionScopeModule.class, TestPersistenceModule.class, TestI18NModule.class, TestOptionModule.class, EventBusModule
-        .class, UIScopeModule.class})
+        .class, UIScopeModule.class, UtilModule.class})
 public class DefaultSitemapFinisherTest {
 
 

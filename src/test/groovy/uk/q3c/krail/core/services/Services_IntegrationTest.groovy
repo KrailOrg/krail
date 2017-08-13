@@ -22,7 +22,7 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.testutil.i18n.TestI18NModule
 import uk.q3c.krail.testutil.option.TestOptionModule
 import uk.q3c.krail.testutil.persist.TestPersistenceModule
-import uk.q3c.krail.util.UtilsModule
+import uk.q3c.util.UtilModule
 
 import static uk.q3c.krail.testutil.i18n.TestLabelKey.*
 
@@ -113,20 +113,20 @@ class Services_IntegrationTest extends Specification {
 
         when:
 
-        serviceD.start();
+        serviceD.start()
 
         then:
 
-        serviceD.isStarted();
-        serviceC.isStarted();
+        serviceD.isStarted()
+        serviceC.isStarted()
 
         when:
 
         serviceC.stop()
 
         then:
-        serviceD.isStopped();
-        serviceC.isStopped();
+        serviceD.isStopped()
+        serviceC.isStopped()
 
     }
 
@@ -142,7 +142,7 @@ class Services_IntegrationTest extends Specification {
 
         when:
 
-        serviceD.start();
+        serviceD.start()
         List<DependencyInstanceDefinition> dependencies = model.findInstanceDependencyDefinitions(serviceD)
 
         then:
@@ -183,7 +183,7 @@ class Services_IntegrationTest extends Specification {
     }
 
     private Injector createInjector() {
-        return Guice.createInjector([new UtilsModule(), new TestServiceModule(), new ServicesModule(), new TestI18NModule(), new TestOptionModule(), new TestPersistenceModule(), new EventBusModule(), new VaadinSessionScopeModule(), new UIScopeModule()])
+        return Guice.createInjector([new UtilModule(), new TestServiceModule(), new ServicesModule(), new TestI18NModule(), new TestOptionModule(), new TestPersistenceModule(), new EventBusModule(), new VaadinSessionScopeModule(), new UIScopeModule()])
     }
 
 }

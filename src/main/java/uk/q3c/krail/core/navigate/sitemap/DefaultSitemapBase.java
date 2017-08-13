@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.shiro.PagePermission;
-import uk.q3c.util.BasicForest;
+import uk.q3c.util.forest.BasicForest;
 
 import java.util.*;
 

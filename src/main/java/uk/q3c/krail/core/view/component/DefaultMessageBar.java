@@ -28,7 +28,7 @@ import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.user.notify.ErrorNotificationMessage;
 import uk.q3c.krail.core.user.notify.InformationNotificationMessage;
 import uk.q3c.krail.core.user.notify.WarningNotificationMessage;
-import uk.q3c.util.ID;
+import uk.q3c.krail.core.vaadin.ID;
 
 import java.util.Optional;
 

@@ -16,18 +16,17 @@ package uk.q3c.krail.core.persist.common.option;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import uk.q3c.krail.core.data.OptionElementConverter;
-import uk.q3c.krail.core.data.OptionListConverter;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionException;
 import uk.q3c.krail.core.option.OptionKeyException;
-import uk.q3c.krail.core.option.OptionList;
 import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.persist.cache.option.OptionCache;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.krail.core.persist.inmemory.option.DefaultInMemoryOptionStore;
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 import uk.q3c.krail.core.user.profile.RankOption;
+import uk.q3c.util.data.DataConverter;
+import uk.q3c.util.data.collection.DataList;
 
 import java.util.Optional;
 
@@ -45,12 +44,12 @@ import static com.google.common.base.Preconditions.*;
 public class DefaultOptionDao implements OptionDao {
 
     private InMemoryOptionStore optionStore;
-    private OptionElementConverter optionElementConverter;
+    private DataConverter dataConverter;
     private OptionDaoDelegate delegate;
 
     @Inject
-    public DefaultOptionDao(OptionElementConverter optionElementConverter, OptionSource delegateSource) {
-        this.optionElementConverter = optionElementConverter;
+    public DefaultOptionDao(DataConverter dataConverter, OptionSource delegateSource) {
+        this.dataConverter = dataConverter;
         this.delegate = delegateSource.getActiveDao();
     }
 
@@ -66,7 +65,7 @@ public class DefaultOptionDao implements OptionDao {
         checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
         checkArgument(value.isPresent(), "Value cannot be empty");
         checkNotNull(value);
-        String stringValue = optionElementConverter.convertValueToString(value.get());
+        String stringValue = dataConverter.convertValueToString(value.get());
         delegate.write(cacheKey, stringValue);
     }
 
@@ -101,13 +100,14 @@ public class DefaultOptionDao implements OptionDao {
         if (optionalStringValue.isPresent()) {
             V defaultValue = cacheKey.getOptionKey()
                                      .getDefaultValue();
-            if (defaultValue instanceof OptionList) {
-                OptionList convertedValue = new OptionListConverter(optionElementConverter).convertToModel((OptionList) defaultValue,
-                        optionalStringValue.get());
+            if (defaultValue instanceof DataList) {
+                Class<?> collectionClass = DataList.class;
+                Class<?> elementClass = ((DataList) defaultValue).getEntryClass();
+                DataList convertedValue = dataConverter.convertStringToCollection(collectionClass, elementClass, optionalStringValue.get(), ",");
                 return Optional.of((V) convertedValue);
             } else {
                 Class<V> elementClass = (Class<V>) defaultValue.getClass();
-                return Optional.of(optionElementConverter.convertStringToValue(elementClass, optionalStringValue.get()));
+                return Optional.of(dataConverter.convertStringToValue(elementClass, optionalStringValue.get()));
             }
         } else {
             return Optional.empty();

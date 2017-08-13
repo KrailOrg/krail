@@ -14,7 +14,7 @@ package uk.q3c.krail.core.view.component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.util.NodeFilter;
+import uk.q3c.util.forest.NodeFilter;
 
 /**
  * Filters out nodes which have a position index of < 0 (this is used to indicate that the developer does not want this page to appear in a navigation

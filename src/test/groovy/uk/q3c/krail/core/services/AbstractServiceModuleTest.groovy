@@ -21,7 +21,7 @@ import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
 import uk.q3c.krail.testutil.i18n.TestI18NModule
 import uk.q3c.krail.testutil.option.TestOptionModule
-import uk.q3c.krail.util.UtilsModule
+import uk.q3c.util.UtilModule
 
 class AbstractServiceModuleTest extends Specification {
 
@@ -87,7 +87,7 @@ class AbstractServiceModuleTest extends Specification {
     }
 
     private Injector createInjector() {
-        Guice.createInjector(new TestServiceModule(), new EventBusModule(), new ServicesModule(), new TestI18NModule(), new UtilsModule(), new TestOptionModule(), new TestVaadinSessionScopeModule(), new TestUIScopeModule(), new InMemoryModule())
+        Guice.createInjector(new TestServiceModule(), new EventBusModule(), new ServicesModule(), new TestI18NModule(), new UtilModule(), new TestOptionModule(), new TestVaadinSessionScopeModule(), new TestUIScopeModule(), new InMemoryModule())
     }
 
 

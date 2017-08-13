@@ -15,7 +15,12 @@ package uk.q3c.krail.core.view.component;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.util.*;
+import uk.q3c.krail.core.vaadin.TargetTreeWrapper_VaadinTree;
+import uk.q3c.krail.core.vaadin.UserSitemapNodeCaption;
+import uk.q3c.util.forest.NodeFilter;
+import uk.q3c.util.forest.SourceTreeWrapper;
+import uk.q3c.util.forest.SourceTreeWrapper_BasicForest;
+import uk.q3c.util.forest.TreeCopy;
 
 import java.util.ArrayList;
 import java.util.List;

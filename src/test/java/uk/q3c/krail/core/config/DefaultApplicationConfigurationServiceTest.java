@@ -37,6 +37,7 @@ import uk.q3c.krail.core.services.ServicesModule;
 import uk.q3c.krail.testutil.i18n.MockCurrentLocale;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.krail.util.UtilsModule;
+import uk.q3c.util.UtilModule;
 import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
@@ -44,13 +45,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static com.google.common.base.Preconditions.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({EventBusModule.class, UIScopeModule.class, VaadinSessionScopeModule.class, UtilsModule.class, ApplicationConfigurationModule.class,
+@GuiceContext({EventBusModule.class, UtilModule.class, UIScopeModule.class, VaadinSessionScopeModule.class, UtilsModule.class, ApplicationConfigurationModule.class,
         ServicesModule.class})
 public class DefaultApplicationConfigurationServiceTest {
 

@@ -19,10 +19,10 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.CurrentLocale;
 import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.LoginNavigationRule;
-import uk.q3c.util.SourceTreeWrapper;
-import uk.q3c.util.TargetTreeWrapper;
-import uk.q3c.util.TreeCopy;
-import uk.q3c.util.TreeCopyExtension;
+import uk.q3c.util.forest.SourceTreeWrapper;
+import uk.q3c.util.forest.TargetTreeWrapper;
+import uk.q3c.util.forest.TreeCopy;
+import uk.q3c.util.forest.TreeCopyExtension;
 
 import java.text.Collator;
 import java.util.Map;

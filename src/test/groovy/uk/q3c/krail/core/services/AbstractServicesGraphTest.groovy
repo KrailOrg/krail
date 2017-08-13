@@ -14,11 +14,12 @@
 package uk.q3c.krail.core.services
 
 import spock.lang.Specification
-import uk.q3c.util.CycleDetectedException
+import uk.q3c.util.dag.CycleDetectedException
 
-import static org.assertj.core.api.Assertions.assertThat
-import static uk.q3c.krail.core.services.Dependency.Type
-import static uk.q3c.krail.core.services.ServicesGraph.Selection
+import static org.assertj.core.api.Assertions.*
+import static uk.q3c.krail.core.services.Dependency.*
+import static uk.q3c.krail.core.services.ServicesGraph.*
+
 /**
  *
  * Created by david on 27/10/15.

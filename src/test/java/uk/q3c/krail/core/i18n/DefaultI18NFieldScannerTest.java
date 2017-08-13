@@ -28,19 +28,21 @@ import uk.q3c.krail.testutil.i18n.TestI18NModule;
 import uk.q3c.krail.testutil.option.MockOption;
 import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
-import uk.q3c.util.TestByteEnhancementModule;
+import uk.q3c.util.UtilModule;
+import uk.q3c.util.clazz.UnenhancedClassIdentifier;
+import uk.q3c.util.test.AOPTestModule;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestI18NModule.class, EventBusModule.class, UIScopeModule.class, TestOptionModule.class, TestPersistenceModule.class,
         VaadinSessionScopeModule.class,
-        TestByteEnhancementModule.class})
+        AOPTestModule.class, UtilModule.class})
 public class DefaultI18NFieldScannerTest {
 
     @Inject
@@ -61,7 +63,7 @@ public class DefaultI18NFieldScannerTest {
     DefaultI18NFieldScanner scanner;
 
     @Inject
-    I18NHostClassIdentifier i18NHostClassIdentifier;
+    UnenhancedClassIdentifier i18NHostClassIdentifier;
 
     @Before
     public void setup() {

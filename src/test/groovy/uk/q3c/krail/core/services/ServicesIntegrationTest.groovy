@@ -22,12 +22,12 @@ import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
 import uk.q3c.krail.testutil.i18n.TestI18NModule
 import uk.q3c.krail.testutil.option.TestOptionModule
-import uk.q3c.krail.util.UtilsModule
+import uk.q3c.util.UtilModule
 
 /**
  * Created by David Sowerby on 16 Dec 2015
  */
-@UseModules([ServicesModule, TestI18NModule, EventBusModule, TestVaadinSessionScopeModule, TestUIScopeModule, TestOptionModule, InMemoryModule, UtilsModule])
+@UseModules([ServicesModule, TestI18NModule, EventBusModule, TestVaadinSessionScopeModule, TestUIScopeModule, TestOptionModule, InMemoryModule, UtilModule])
 class ServicesIntegrationTest extends Specification {
 
     @Inject

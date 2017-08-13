@@ -28,11 +28,12 @@ import uk.q3c.krail.core.persist.common.common.VaadinContainerProvider;
 import uk.q3c.krail.core.persist.common.option.OptionEntity;
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule;
 import uk.q3c.krail.testutil.option.TestOptionModule;
+import uk.q3c.util.UtilModule;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({TestOptionModule.class, VaadinSessionScopeModule.class, UtilModule.class})
 public class InMemoryContainerProviderTest_OptionOnly {
 
     @Inject

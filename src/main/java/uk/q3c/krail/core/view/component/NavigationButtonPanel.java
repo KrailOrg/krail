@@ -28,8 +28,8 @@ import uk.q3c.krail.core.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.util.ID;
-import uk.q3c.util.NodeFilter;
+import uk.q3c.krail.core.vaadin.ID;
+import uk.q3c.util.forest.NodeFilter;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

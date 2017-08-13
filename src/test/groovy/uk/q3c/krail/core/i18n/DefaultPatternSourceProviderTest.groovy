@@ -18,10 +18,10 @@ import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource1
-import uk.q3c.krail.core.option.AnnotationOptionList
 import uk.q3c.krail.core.option.Option
 import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
 import uk.q3c.krail.core.persist.common.i18n.PatternDao
+import uk.q3c.util.data.collection.AnnotationList
 
 import java.lang.annotation.Annotation
 
@@ -44,7 +44,7 @@ class DefaultPatternSourceProviderTest extends Specification {
     def setup() {
         sources = new LinkedHashMap<>()
         targets = new LinkedHashMap<>()
-        sourceOrderByBundle = new HashMap<>();
+        sourceOrderByBundle = new HashMap<>()
         sourceOrderDefault = new LinkedHashSet<>()
         classPatternDaoProvider.get() >> classPatternDao
         testPatternDaoProvider.get() >> testPatternDao
@@ -53,11 +53,11 @@ class DefaultPatternSourceProviderTest extends Specification {
 
     def "no source order is specified, order should be the as when sources added"() {
         given:
-        sources.put(TestPatternSource1.class, testPatternDaoProvider);
-        sources.put(ClassPatternSource.class, classPatternDaoProvider);
-        sources.put(TestPatternSource.class, testPatternDaoProvider);
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
+        sources.put(TestPatternSource1.class, testPatternDaoProvider)
+        sources.put(ClassPatternSource.class, classPatternDaoProvider)
+        sources.put(TestPatternSource.class, testPatternDaoProvider)
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationList()
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
         LinkedHashSet<Class<? extends Annotation>> expected = new LinkedHashSet<>()
         expected.addAll(TestPatternSource1, ClassPatternSource, TestPatternSource)
@@ -67,12 +67,12 @@ class DefaultPatternSourceProviderTest extends Specification {
     }
 
     def "source order by bundle specified"() {
-        sources.put(TestPatternSource1.class, testPatternDaoProvider);
-        sources.put(ClassPatternSource.class, classPatternDaoProvider);
-        sources.put(TestPatternSource.class, testPatternDaoProvider);
+        sources.put(TestPatternSource1.class, testPatternDaoProvider)
+        sources.put(ClassPatternSource.class, classPatternDaoProvider)
+        sources.put(TestPatternSource.class, testPatternDaoProvider)
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationList()
 
         LinkedHashSet<Class<? extends Annotation>> expected = new LinkedHashSet<>()
         expected.addAll(ClassPatternSource, TestPatternSource1, TestPatternSource)
@@ -87,16 +87,16 @@ class DefaultPatternSourceProviderTest extends Specification {
 
     def "default order is specified"() {
         given:
-        sources.put(TestPatternSource1.class, testPatternDaoProvider);
-        sources.put(ClassPatternSource.class, classPatternDaoProvider);
-        sources.put(TestPatternSource.class, testPatternDaoProvider);
+        sources.put(TestPatternSource1.class, testPatternDaoProvider)
+        sources.put(ClassPatternSource.class, classPatternDaoProvider)
+        sources.put(TestPatternSource.class, testPatternDaoProvider)
 
         sourceOrderDefault.add(ClassPatternSource)
         sourceOrderDefault.add(TestPatternSource)
         sourceOrderDefault.add(TestPatternSource1)
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationList()
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
@@ -110,14 +110,14 @@ class DefaultPatternSourceProviderTest extends Specification {
 
     def "order specified but not fully should have missing elements added at the end, in the order declared in sources"() {
         given:
-        sources.put(TestPatternSource1.class, testPatternDaoProvider);
-        sources.put(ClassPatternSource.class, classPatternDaoProvider);
-        sources.put(TestPatternSource.class, testPatternDaoProvider);
+        sources.put(TestPatternSource1.class, testPatternDaoProvider)
+        sources.put(ClassPatternSource.class, classPatternDaoProvider)
+        sources.put(TestPatternSource.class, testPatternDaoProvider)
 
         sourceOrderDefault.add(ClassPatternSource)
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationList()
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
@@ -131,14 +131,14 @@ class DefaultPatternSourceProviderTest extends Specification {
 
     def "order specified but too many elements, should have non-source elements removed "() {
         given:
-        sources.put(TestPatternSource1.class, testPatternDaoProvider);
+        sources.put(TestPatternSource1.class, testPatternDaoProvider)
 
         sourceOrderDefault.add(ClassPatternSource)
         sourceOrderDefault.add(TestPatternSource)
         sourceOrderDefault.add(TestPatternSource1)
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationList()
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
@@ -152,14 +152,14 @@ class DefaultPatternSourceProviderTest extends Specification {
 
     def "source order by bundle specified by option, but missing an element, has missing element added"() {
         given:
-        sources.put(TestPatternSource1.class, testPatternDaoProvider);
-        sources.put(ClassPatternSource.class, classPatternDaoProvider);
-        sources.put(TestPatternSource.class, testPatternDaoProvider);
+        sources.put(TestPatternSource1.class, testPatternDaoProvider)
+        sources.put(ClassPatternSource.class, classPatternDaoProvider)
+        sources.put(TestPatternSource.class, testPatternDaoProvider)
 
-        AnnotationOptionList fromOption = new AnnotationOptionList(ClassPatternSource.class, TestPatternSource1.class)
+        AnnotationList fromOption = new AnnotationList(ClassPatternSource.class, TestPatternSource1.class)
 
         option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> fromOption
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationList()
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
@@ -172,13 +172,13 @@ class DefaultPatternSourceProviderTest extends Specification {
 
     def "source order default specified by option, but missing an element, has missing element added"() {
         given:
-        sources.put(TestPatternSource1.class, testPatternDaoProvider);
-        sources.put(ClassPatternSource.class, classPatternDaoProvider);
-        sources.put(TestPatternSource.class, testPatternDaoProvider);
+        sources.put(TestPatternSource1.class, testPatternDaoProvider)
+        sources.put(ClassPatternSource.class, classPatternDaoProvider)
+        sources.put(TestPatternSource.class, testPatternDaoProvider)
 
-        AnnotationOptionList fromOption = new AnnotationOptionList(ClassPatternSource.class, TestPatternSource1.class)
+        AnnotationList fromOption = new AnnotationList(ClassPatternSource.class, TestPatternSource1.class)
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationList()
         option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> fromOption
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
@@ -192,14 +192,14 @@ class DefaultPatternSourceProviderTest extends Specification {
 
     def "source order by bundle specified by option, but has extra element, and missing element, extra element removed, missing element added"() {
         given:
-        sources.put(TestPatternSource.class, testPatternDaoProvider);
-        sources.put(TestPatternSource1.class, testPatternDaoProvider);
+        sources.put(TestPatternSource.class, testPatternDaoProvider)
+        sources.put(TestPatternSource1.class, testPatternDaoProvider)
 
 
-        AnnotationOptionList fromOption = new AnnotationOptionList(ClassPatternSource.class, TestPatternSource1.class)
+        AnnotationList fromOption = new AnnotationList(ClassPatternSource.class, TestPatternSource1.class)
 
         option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> fromOption
-        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> new AnnotationList()
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
@@ -212,13 +212,13 @@ class DefaultPatternSourceProviderTest extends Specification {
 
     def "source order by bundle specified by default, but has extra element, and missing element, extra element removed, missing element added"() {
         given:
-        sources.put(TestPatternSource.class, testPatternDaoProvider);
-        sources.put(TestPatternSource1.class, testPatternDaoProvider);
+        sources.put(TestPatternSource.class, testPatternDaoProvider)
+        sources.put(TestPatternSource1.class, testPatternDaoProvider)
 
 
-        AnnotationOptionList fromOption = new AnnotationOptionList(ClassPatternSource.class, TestPatternSource1.class)
+        AnnotationList fromOption = new AnnotationList(ClassPatternSource.class, TestPatternSource1.class)
 
-        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationOptionList()
+        option.get(PatternSourceProvider.optionKeySourceOrder.qualifiedWith(LabelKey.Yes.bundleName())) >> new AnnotationList()
         option.get(PatternSourceProvider.optionKeySourceOrderDefault) >> fromOption
 
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
@@ -264,7 +264,7 @@ class DefaultPatternSourceProviderTest extends Specification {
         targets.put(TestPatternSource, testPatternDaoProvider)
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
-        AnnotationOptionList fromOption = new AnnotationOptionList()
+        AnnotationList fromOption = new AnnotationList()
         option.get(PatternSourceProvider.optionKeySelectedTargets) >> fromOption
 
         LinkedHashSet<Class<? extends Annotation>> expected = new LinkedHashSet<>()
@@ -281,7 +281,7 @@ class DefaultPatternSourceProviderTest extends Specification {
         targets.put(TestPatternSource, testPatternDaoProvider)
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
-        AnnotationOptionList fromOption = new AnnotationOptionList(TestPatternSource, ClassPatternSource)
+        AnnotationList fromOption = new AnnotationList(TestPatternSource, ClassPatternSource)
         option.get(PatternSourceProvider.optionKeySelectedTargets) >> fromOption
 
 
@@ -297,7 +297,7 @@ class DefaultPatternSourceProviderTest extends Specification {
         targets.put(TestPatternSource, testPatternDaoProvider)
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
-        AnnotationOptionList fromOption = new AnnotationOptionList(TestPatternSource.class, TestPatternSource1.class, ClassPatternSource.class)
+        AnnotationList fromOption = new AnnotationList(TestPatternSource.class, TestPatternSource1.class, ClassPatternSource.class)
         option.get(PatternSourceProvider.optionKeySelectedTargets) >> fromOption
 
 

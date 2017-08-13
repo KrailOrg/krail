@@ -18,7 +18,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.ui.ApplicationTitle;
-import uk.q3c.util.ID;
+import uk.q3c.krail.core.vaadin.ID;
 
 import java.util.Optional;
 

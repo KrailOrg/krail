@@ -37,10 +37,11 @@ import uk.q3c.krail.testutil.i18n.TestI18NModule;
 import uk.q3c.krail.testutil.option.MockOption;
 import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
+import uk.q3c.util.UtilModule;
 
 import java.util.Locale;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext()
 public class BeanFieldGroupBaseTest {
@@ -65,7 +66,7 @@ public class BeanFieldGroupBaseTest {
     @Before
     public void setup() {
         VaadinSession.setCurrent(null);
-        injector = Guice.createInjector(new TestI18NModule(), new TestUIScopeModule(), new TestPersistenceModule(), new VaadinSessionScopeModule(), new EventBusModule(), new
+        injector = Guice.createInjector(new TestI18NModule(), new TestUIScopeModule(), new TestPersistenceModule(), new UtilModule(), new VaadinSessionScopeModule(), new EventBusModule(), new
 
                 TestOptionModule(), Modules.override(new
                 ValidationModule())

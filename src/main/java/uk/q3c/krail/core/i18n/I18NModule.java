@@ -30,6 +30,8 @@ import uk.q3c.krail.core.persist.clazz.i18n.DefaultClassPatternDao;
 import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
 import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnitHelper;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
+import uk.q3c.util.clazz.DefaultUnenhancedClassIdentifier;
+import uk.q3c.util.clazz.UnenhancedClassIdentifier;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -165,10 +167,10 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * See javadoc for {@link I18NHostClassIdentifier} for an explanation of what this is for.  Override this method if you provide your own implementation
+     * See javadoc for {@link UnenhancedClassIdentifier} for an explanation of what this is for.  Override this method if you provide your own implementation
      */
     protected void bindHostClassIdentifier() {
-        bind(I18NHostClassIdentifier.class).to(DefaultI18NHostClassIdentifier.class);
+        bind(UnenhancedClassIdentifier.class).to(DefaultUnenhancedClassIdentifier.class);
     }
 
     /**

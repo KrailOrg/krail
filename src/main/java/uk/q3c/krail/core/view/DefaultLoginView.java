@@ -33,9 +33,9 @@ import uk.q3c.krail.core.i18n.*;
 import uk.q3c.krail.core.shiro.LoginExceptionHandler;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
+import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.component.LoginFormException;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.util.ID;
 
 import java.util.Optional;
 

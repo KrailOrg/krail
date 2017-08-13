@@ -37,13 +37,13 @@ import uk.q3c.krail.core.view.component.*;
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
 import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
+import uk.q3c.util.UtilModule;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class, TestPersistenceModule.class, TestVaadinSessionScopeModule.class})
+@GuiceContext({TestOptionModule.class, TestPersistenceModule.class, TestVaadinSessionScopeModule.class, UtilModule.class})
 public class DefaultApplicationUITest {
 
 

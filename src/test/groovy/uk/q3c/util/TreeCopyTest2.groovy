@@ -15,35 +15,37 @@ package uk.q3c.util
 
 import com.vaadin.ui.Tree
 import spock.lang.Specification
+import uk.q3c.krail.core.vaadin.TargetTreeWrapper_VaadinTree
+import uk.q3c.util.forest.*
 
 /**
  * Created by David Sowerby on 18 Jan 2016
  */
 class TreeCopyTest2 extends Specification {
 
-    private TreeCopy<NodeTypeA, NodeTypeA> copy;
-    private BasicForest<NodeTypeA> forest;
-    private SourceTreeWrapper<NodeTypeA> source;
-    private TargetTreeWrapper<NodeTypeA, NodeTypeA> target;
-    private Tree vaadinTree;
-    private NodeTypeA nodeA;
-    private NodeTypeA nodeA1;
-    private NodeTypeA nodeA11;
-    private NodeTypeA nodeA2;
-    private NodeTypeA nodeA3;
-    private NodeTypeA nodeB;
-    private NodeTypeA nodeB1;
-    private NodeTypeA nodeB11;
+    private TreeCopy<NodeTypeA, NodeTypeA> copy
+    private BasicForest<NodeTypeA> forest
+    private SourceTreeWrapper<NodeTypeA> source
+    private TargetTreeWrapper<NodeTypeA, NodeTypeA> target
+    private Tree vaadinTree
+    private NodeTypeA nodeA
+    private NodeTypeA nodeA1
+    private NodeTypeA nodeA11
+    private NodeTypeA nodeA2
+    private NodeTypeA nodeA3
+    private NodeTypeA nodeB
+    private NodeTypeA nodeB1
+    private NodeTypeA nodeB11
 
     NodeFilter nf = Mock(NodeFilter)
 
     def setup() {
-        forest = new BasicForest<>();
-        source = new SourceTreeWrapper_BasicForest<>(forest);
+        forest = new BasicForest<>()
+        source = new SourceTreeWrapper_BasicForest<>(forest)
 
-        vaadinTree = new Tree();
-        target = new TargetTreeWrapper_VaadinTree<>(vaadinTree);
-        copy = new TreeCopy<>(source, target);
+        vaadinTree = new Tree()
+        target = new TargetTreeWrapper_VaadinTree<>(vaadinTree)
+        copy = new TreeCopy<>(source, target)
     }
 
     def "getMaxDepth"() {
@@ -74,7 +76,7 @@ class TreeCopyTest2 extends Specification {
 
     def "extension is invoked"() {
         given:
-        populateSource(source);
+        populateSource(source)
         CaptionReader captionReader = Mock(CaptionReader)
         TreeCopyExtension<NodeTypeA, NodeTypeA> extension = Mock()
         copy.setExtension(extension)
@@ -88,25 +90,25 @@ class TreeCopyTest2 extends Specification {
     }
 
     private void populateSource(SourceTreeWrapper<NodeTypeA> source) {
-        nodeA = new NodeTypeA("a");
-        nodeA1 = new NodeTypeA("a1");
-        nodeA11 = new NodeTypeA("a11");
-        nodeB = new NodeTypeA("b");
-        nodeB1 = new NodeTypeA("b1");
-        nodeB11 = new NodeTypeA("b11");
+        nodeA = new NodeTypeA("a")
+        nodeA1 = new NodeTypeA("a1")
+        nodeA11 = new NodeTypeA("a11")
+        nodeB = new NodeTypeA("b")
+        nodeB1 = new NodeTypeA("b1")
+        nodeB11 = new NodeTypeA("b11")
 
-        forest.addChild(nodeA, nodeA1);
-        forest.addChild(nodeA1, nodeA11);
-        forest.addChild(nodeB, nodeB1);
-        forest.addChild(nodeB1, nodeB11);
+        forest.addChild(nodeA, nodeA1)
+        forest.addChild(nodeA1, nodeA11)
+        forest.addChild(nodeB, nodeB1)
+        forest.addChild(nodeB1, nodeB11)
 
     }
 
     class NodeTypeAComparator implements Comparator<NodeTypeA> {
 
         @Override
-        public int compare(NodeTypeA o1, NodeTypeA o2) {
-            return o1.ref.compareTo(o2.ref);
+        int compare(NodeTypeA o1, NodeTypeA o2) {
+            return o1.ref.compareTo(o2.ref)
         }
 
     }
@@ -114,23 +116,23 @@ class TreeCopyTest2 extends Specification {
     class TestCaptionReader implements CaptionReader<NodeTypeA> {
 
         @Override
-        public String getCaption(NodeTypeA sourceNode) {
-            return sourceNode.ref;
+        String getCaption(NodeTypeA sourceNode) {
+            return sourceNode.ref
         }
 
     }
 
     class NodeTypeA implements Comparable {
-        String ref;
+        String ref
 
         protected NodeTypeA(String ref) {
-            super();
-            this.ref = ref;
+            super()
+            this.ref = ref
         }
 
         @Override
-        public String toString() {
-            return "NodeTypeA [ref=" + ref + "]";
+        String toString() {
+            return "NodeTypeA [ref=" + ref + "]"
         }
 
         @Override
@@ -146,8 +148,8 @@ class TreeCopyTest2 extends Specification {
     class Sorter implements Comparator<NodeTypeA> {
 
         @Override
-        public int compare(NodeTypeA o1, NodeTypeA o2) {
-            return o1.ref.compareTo(o2.ref);
+        int compare(NodeTypeA o1, NodeTypeA o2) {
+            return o1.ref.compareTo(o2.ref)
         }
 
     }
@@ -155,8 +157,8 @@ class TreeCopyTest2 extends Specification {
     class SourceFilter implements NodeFilter<NodeTypeA> {
 
         @Override
-        public boolean accept(NodeTypeA node) {
-            return !node.ref.equals("b11");
+        boolean accept(NodeTypeA node) {
+            return !node.ref.equals("b11")
         }
 
     }

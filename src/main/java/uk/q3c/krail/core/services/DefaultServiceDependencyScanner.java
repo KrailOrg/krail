@@ -16,7 +16,7 @@ package uk.q3c.krail.core.services;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.util.ClassNameUtils;
+import uk.q3c.util.clazz.ClassNameUtils;
 
 import java.lang.reflect.Field;
 

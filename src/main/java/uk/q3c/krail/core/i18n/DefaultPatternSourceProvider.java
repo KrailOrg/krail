@@ -18,9 +18,9 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.data.Property;
-import uk.q3c.krail.core.option.AnnotationOptionList;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
+import uk.q3c.util.data.collection.AnnotationList;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -108,7 +108,7 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
 
     public ImmutableSet<Class<? extends Annotation>> orderedSources(I18NKey key) {
         checkNotNull(key);
-        AnnotationOptionList sourceOrder = getSourceOrderFromOption(key.bundleName());
+        AnnotationList sourceOrder = getSourceOrderFromOption(key.bundleName());
         if (!sourceOrder.isEmpty()) {
             return verifySourceOrder(sourceOrder.getList());
         }
@@ -170,19 +170,19 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
     }
 
 
-    private AnnotationOptionList getSourceOrderFromOption(String bundleName) {
+    private AnnotationList getSourceOrderFromOption(String bundleName) {
         checkNotNull(bundleName);
         return option.get(optionKeySourceOrder.qualifiedWith(bundleName));
     }
 
 
-    private AnnotationOptionList getSourceOrderDefaultFromOption() {
+    private AnnotationList getSourceOrderDefaultFromOption() {
         return option.get(optionKeySourceOrderDefault);
     }
 
     @Override
-    public AnnotationOptionList selectedTargets() {
-        AnnotationOptionList optionTargets = option.get(optionKeySelectedTargets);
+    public AnnotationList selectedTargets() {
+        AnnotationList optionTargets = option.get(optionKeySelectedTargets);
         //use a copy to iterate over, otherwise removing from iterated set
         if (!optionTargets.isEmpty()) {
             List<Class<? extends Annotation>> copyTargets = new ArrayList<>(optionTargets.getList());
@@ -192,9 +192,9 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
                     copyTargets.remove(t);
                 }
                          });
-            return new AnnotationOptionList(copyTargets);
+            return new AnnotationList(copyTargets);
         }
-        return new AnnotationOptionList(Lists.newArrayList(targets.keySet()));
+        return new AnnotationList(Lists.newArrayList(targets.keySet()));
     }
 
 

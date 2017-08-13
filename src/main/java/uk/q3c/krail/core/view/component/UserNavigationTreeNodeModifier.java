@@ -15,7 +15,7 @@ package uk.q3c.krail.core.view.component;
 
 import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.UserSitemapNode;
-import uk.q3c.util.DefaultNodeModifier;
+import uk.q3c.util.forest.DefaultNodeModifier;
 
 import static com.google.common.base.Preconditions.*;
 

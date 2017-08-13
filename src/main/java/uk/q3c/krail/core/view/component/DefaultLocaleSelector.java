@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.*;
 import uk.q3c.krail.core.user.notify.UserNotifier;
-import uk.q3c.util.ID;
+import uk.q3c.krail.core.vaadin.ID;
 
 import java.util.Locale;
 import java.util.Optional;

@@ -25,6 +25,7 @@ import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
 import uk.q3c.krail.testutil.i18n.TestI18NModule
 import uk.q3c.krail.testutil.option.TestOptionModule
 import uk.q3c.krail.util.UtilsModule
+import uk.q3c.util.UtilModule
 
 /**
  * Created by David Sowerby on 15 Jan 2016
@@ -33,10 +34,10 @@ import uk.q3c.krail.util.UtilsModule
 class ApplicationConfigurationModuleTest extends Specification {
 
 
-    List<Module> modules;
+    List<Module> modules
 
     def setup() {
-        modules = Lists.newArrayList(new TestI18NModule(), new ServicesModule(), new UtilsModule(), new TestOptionModule(), new TestEventBusModule(), new DataModule(), new TestVaadinSessionScopeModule(), new UIScopeModule(), new InMemoryModule())
+        modules = Lists.newArrayList(new TestI18NModule(), new ServicesModule(), new UtilsModule(), new UtilModule(), new TestOptionModule(), new TestEventBusModule(), new DataModule(), new TestVaadinSessionScopeModule(), new UIScopeModule(), new InMemoryModule())
 
 
     }

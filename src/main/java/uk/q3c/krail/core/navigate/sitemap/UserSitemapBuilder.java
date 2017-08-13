@@ -20,9 +20,9 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
-import uk.q3c.util.SourceTreeWrapper_BasicForest;
-import uk.q3c.util.TargetTreeWrapper_BasicForest;
-import uk.q3c.util.TreeCopy;
+import uk.q3c.util.forest.SourceTreeWrapper_BasicForest;
+import uk.q3c.util.forest.TargetTreeWrapper_BasicForest;
+import uk.q3c.util.forest.TreeCopy;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.io.Serializable;

@@ -30,6 +30,7 @@ import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.krail.util.UtilsModule;
+import uk.q3c.util.UtilModule;
 import uk.q3c.util.testutil.LogMonitor;
 import uk.q3c.util.testutil.TestResource;
 
@@ -38,12 +39,12 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class, TestPersistenceModule.class, UtilsModule.class, TestVaadinSessionScopeModule.class})
+@GuiceContext({TestOptionModule.class, TestPersistenceModule.class, UtilsModule.class, UtilModule.class, TestVaadinSessionScopeModule.class})
 public class LocaleContainerTest {
 
 

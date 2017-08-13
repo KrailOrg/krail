@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.i18n;
 
 import com.vaadin.ui.Button;
-import uk.q3c.util.NotOnWeekends;
+import uk.q3c.util.test.NotOnWeekends;
 
 /**
  * Provides a byte-enhanced class using JPA @Transactional

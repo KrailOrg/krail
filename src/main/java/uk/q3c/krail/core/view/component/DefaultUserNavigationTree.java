@@ -33,8 +33,8 @@ import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.option.OptionKey;
+import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.KrailView;
-import uk.q3c.util.ID;
 
 import java.util.Collection;
 import java.util.Comparator;

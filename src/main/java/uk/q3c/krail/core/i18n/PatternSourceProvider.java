@@ -14,11 +14,11 @@
 package uk.q3c.krail.core.i18n;
 
 import com.google.common.collect.ImmutableSet;
-import uk.q3c.krail.core.option.AnnotationOptionList;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
+import uk.q3c.util.data.collection.AnnotationList;
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;
@@ -48,13 +48,13 @@ import java.util.Optional;
  */
 public interface PatternSourceProvider extends OptionContext {
 
-    OptionKey<AnnotationOptionList> optionKeySourceOrder = new OptionKey<>(new AnnotationOptionList(), PatternSourceProvider.class, LabelKey
+    OptionKey<AnnotationList> optionKeySourceOrder = new OptionKey<>(new AnnotationList(), PatternSourceProvider.class, LabelKey
             .Source_Order, DescriptionKey.Source_Order);
 
-    OptionKey<AnnotationOptionList> optionKeySourceOrderDefault = new OptionKey<>(new AnnotationOptionList(), PatternSourceProvider.class,
+    OptionKey<AnnotationList> optionKeySourceOrderDefault = new OptionKey<>(new AnnotationList(), PatternSourceProvider.class,
             LabelKey.Source_Order_Default, DescriptionKey.Source_Order_Default);
 
-    OptionKey<AnnotationOptionList> optionKeySelectedTargets = new OptionKey<>(new AnnotationOptionList(), PatternSourceProvider.class,
+    OptionKey<AnnotationList> optionKeySelectedTargets = new OptionKey<>(new AnnotationList(), PatternSourceProvider.class,
             LabelKey.Selected_Pattern_Targets, DescriptionKey.Selected_Pattern_Targets);
 
 
@@ -69,5 +69,5 @@ public interface PatternSourceProvider extends OptionContext {
      *
      * @return targets selected, but removes any which are not declared as targets in the {@link I18NModule}
      */
-    AnnotationOptionList selectedTargets();
+    AnnotationList selectedTargets();
 }

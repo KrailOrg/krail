@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.shiro.PagePermission;
-import uk.q3c.util.BasicForest;
+import uk.q3c.util.forest.BasicForest;
 
 import java.io.Serializable;
 import java.util.List;

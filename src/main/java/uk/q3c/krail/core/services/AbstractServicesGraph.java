@@ -18,7 +18,7 @@ import edu.uci.ics.jung.graph.DelegateForest;
 import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
 import edu.uci.ics.jung.graph.Forest;
 import org.slf4j.Logger;
-import uk.q3c.util.CycleDetectedException;
+import uk.q3c.util.dag.CycleDetectedException;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.*;

@@ -28,7 +28,7 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemapStructureChangeMessage;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.option.OptionKey;
-import uk.q3c.util.ID;
+import uk.q3c.krail.core.vaadin.ID;
 
 import java.util.Optional;
 

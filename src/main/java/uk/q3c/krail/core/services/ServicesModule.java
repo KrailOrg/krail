@@ -21,7 +21,7 @@ import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import uk.q3c.util.ReflectionUtils;
+import uk.q3c.util.reflect.ReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.Set;

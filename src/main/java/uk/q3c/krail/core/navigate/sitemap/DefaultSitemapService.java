@@ -31,7 +31,7 @@ import uk.q3c.krail.core.navigate.sitemap.set.MasterSitemapQueue;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.RelatedServicesExecutor;
 import uk.q3c.krail.util.ResourceUtils;
-import uk.q3c.util.ClassNameUtils;
+import uk.q3c.util.clazz.ClassNameUtils;
 
 import java.util.ArrayList;
 import java.util.List;

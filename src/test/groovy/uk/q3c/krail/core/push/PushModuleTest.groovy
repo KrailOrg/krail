@@ -16,7 +16,6 @@ package uk.q3c.krail.core.push
 import com.google.inject.Guice
 import com.google.inject.Injector
 import spock.lang.Specification
-import testutil.*
 import uk.q3c.krail.core.config.ApplicationConfigurationModule
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
 import uk.q3c.krail.core.services.ServicesModule
@@ -26,6 +25,7 @@ import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
 import uk.q3c.krail.testutil.i18n.TestI18NModule
 import uk.q3c.krail.testutil.option.TestOptionModule
 import uk.q3c.krail.util.UtilsModule
+import uk.q3c.util.UtilModule
 
 /**
  * Created by David Sowerby on 19 Jan 2016
@@ -35,7 +35,7 @@ class PushModuleTest extends Specification {
 
     def "bindings"() {
         when:
-        Injector injector = Guice.createInjector(new PushModule(), new ApplicationConfigurationModule(), new TestUIScopeModule(), new UtilsModule(), new TestI18NModule(), new TestEventBusModule(), new TestVaadinSessionScopeModule(), new TestOptionModule(), new ServicesModule(), new InMemoryModule())
+        Injector injector = Guice.createInjector(new PushModule(), new ApplicationConfigurationModule(), new TestUIScopeModule(), new UtilsModule(), new UtilModule(), new TestI18NModule(), new TestEventBusModule(), new TestVaadinSessionScopeModule(), new TestOptionModule(), new ServicesModule(), new InMemoryModule())
 
 
         then:

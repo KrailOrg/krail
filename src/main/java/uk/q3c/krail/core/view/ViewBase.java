@@ -22,9 +22,9 @@ import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.util.ID;
 
 import java.io.Serializable;
 import java.util.Optional;

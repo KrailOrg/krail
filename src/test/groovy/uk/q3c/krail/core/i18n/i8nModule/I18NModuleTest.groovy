@@ -31,6 +31,7 @@ import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
 import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternDao
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.testutil.option.TestOptionModule
+import uk.q3c.util.UtilModule
 
 import java.lang.annotation.Annotation
 
@@ -185,28 +186,28 @@ class I18NModuleTest extends GuiceModuleTestBase {
     }
 
 
-    def Set<Class<? extends Annotation>> sourcesDefaultOrder() {
+    Set<Class<? extends Annotation>> sourcesDefaultOrder() {
         getBinding new TypeLiteral<Set<Class<? extends Annotation>>>() {}, PatternSourceOrderDefault.class
     }
 
-    def Map<Class<? extends I18NKey>, Set<Class<? extends Annotation>>> sourcesOrderByBundle() {
+    Map<Class<? extends I18NKey>, Set<Class<? extends Annotation>>> sourcesOrderByBundle() {
         getBinding new TypeLiteral<Map<Class<? extends I18NKey>, LinkedHashSet<Class<? extends Annotation>>>>() {}, PatternSourceOrderByBundle.class
     }
 
-    def Map<Class<? extends Annotation>, Provider<PatternDao>> sources() {
+    Map<Class<? extends Annotation>, Provider<PatternDao>> sources() {
         getBinding new TypeLiteral<Map<Class<? extends Annotation>, Provider<PatternDao>>>() {}, PatternSources.class
     }
 
-    def Map<Class<? extends Annotation>, Provider<PatternDao>> targets() {
+    Map<Class<? extends Annotation>, Provider<PatternDao>> targets() {
         getBinding new TypeLiteral<Map<Class<? extends Annotation>, Provider<PatternDao>>>() {}, PatternTargets.class
     }
 
 
-    def Locale defaultLocale() {
+    Locale defaultLocale() {
         getBinding new TypeLiteral<Locale>() {}, DefaultLocale.class
     }
 
-    def Set<Locale> supportedLocales() {
+    Set<Locale> supportedLocales() {
         getBinding new TypeLiteral<Set<Locale>>() {}, SupportedLocales.class
     }
 
@@ -219,7 +220,9 @@ class I18NModuleTest extends GuiceModuleTestBase {
         modules.add(new DefaultShiroModule())
         modules.add(new InMemoryModule().providePatternDao())
         modules.add(new EventBusModule())
-        return modules;
+        modules.add(new UtilModule())
+
+        return modules
     }
 
 

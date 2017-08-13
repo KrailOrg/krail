@@ -28,7 +28,6 @@ import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.Translate;
-import uk.q3c.krail.core.persist.cache.common.GuavaCacheConfiguration;
 import uk.q3c.krail.core.persist.cache.option.DefaultOptionCache;
 import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheProvider;
@@ -47,21 +46,23 @@ import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.view.component.LocaleContainer;
 import uk.q3c.krail.testutil.option.TestOptionModule;
+import uk.q3c.util.UtilModule;
+import uk.q3c.util.guava.GuavaCacheConfiguration;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Running this test through the debugger sometimes causes random failures - running normally doesn't
  */
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestOptionModule.class, VaadinSessionScopeModule.class})
+@GuiceContext({TestOptionModule.class, VaadinSessionScopeModule.class, UtilModule.class})
 public class Option_IntegrationTest {
 
     Map<Class<? extends Annotation>, PersistenceInfo<?>> optionDaoProviders = new HashMap<>();

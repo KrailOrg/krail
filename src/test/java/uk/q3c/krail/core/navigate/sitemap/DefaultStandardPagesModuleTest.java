@@ -36,16 +36,17 @@ import uk.q3c.krail.testutil.i18n.TestI18NModule;
 import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 import uk.q3c.krail.util.UtilsModule;
+import uk.q3c.util.UtilModule;
 
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({ServicesModule.class, StandardPagesModule.class, UIScopeModule.class, EventBusModule.class, ViewModule.class, ShiroVaadinModule.class,
         TestI18NModule.class, SitemapModule.class, UserModule.class, ApplicationConfigurationModule.class, TestPersistenceModule.class, TestOptionModule
         .class, DefaultShiroModule.class, DefaultComponentModule.class, VaadinSessionScopeModule.class, NavigationModule.class, DefaultUIModule.class,
-        DataTypeModule.class, UtilsModule.class})
+        DataTypeModule.class, UtilsModule.class, UtilModule.class})
 public class DefaultStandardPagesModuleTest {
 
     @Inject
