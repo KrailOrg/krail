@@ -10,15 +10,17 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.config;
+package uk.q3c.krail.config;
 
 import com.google.inject.multibindings.MapBinder;
+import uk.q3c.krail.config.config.InheritingConfiguration;
+import uk.q3c.krail.config.config.IniFileConfig;
 import uk.q3c.krail.core.services.AbstractServiceModule;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * A base class to define configuration files to be loaded into a {@link InheritingConfiguration} (for example
@@ -29,7 +31,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>
  * You can use multiple modules based on this class (or create your own to populate an equivalent MapBinder) and Guice
  * will merge the map binders together. It is up to the developer to ensure that indexes are unique (but do not need to
- * bee contiguous).
+ * be contiguous).
  * <p>
  * Alternatively, it may be easier to use just one module and specify the files all in one place.
  *

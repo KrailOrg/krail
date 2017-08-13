@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import uk.q3c.krail.core.config.ApplicationConfigurationModule;
+import uk.q3c.krail.config.bind.ApplicationConfigurationModule;
 import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;

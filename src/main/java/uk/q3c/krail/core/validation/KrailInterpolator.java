@@ -20,7 +20,7 @@ import org.apache.bval.jsr303.ConstraintAnnotationAttributes;
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.config.ConfigurationException;
+import uk.q3c.krail.config.ConfigurationException;
 import uk.q3c.krail.core.i18n.CurrentLocale;
 import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.i18n.Translate;

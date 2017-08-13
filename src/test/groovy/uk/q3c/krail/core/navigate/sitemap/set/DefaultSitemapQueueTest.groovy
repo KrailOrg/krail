@@ -15,8 +15,8 @@ package uk.q3c.krail.core.navigate.sitemap.set
 
 import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
-import uk.q3c.krail.core.config.ApplicationConfiguration
-import uk.q3c.krail.core.config.ConfigKeys
+import uk.q3c.krail.config.ApplicationConfiguration
+import uk.q3c.krail.config.config.ConfigKeys
 import uk.q3c.krail.core.eventbus.BusMessage
 import uk.q3c.krail.core.eventbus.GlobalBusProvider
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap
@@ -43,7 +43,7 @@ class DefaultSitemapQueueTest extends Specification {
 
     ApplicationConfiguration applicationConfiguration = Mock(ApplicationConfiguration)
 
-    SitemapQueue<MasterSitemap> queue;
+    SitemapQueue<MasterSitemap> queue
 
     LogMonitor logMonitor
 
@@ -66,10 +66,10 @@ class DefaultSitemapQueueTest extends Specification {
 
         LocalDateTime start = LocalDateTime.now()
 
-        ExecutorService executor = Executors.newWorkStealingPool();
-        Future<Sitemap> futureSitemap1 = executor.submit(getCurrentModelTask());
-        Future<Sitemap> futureSitemap2 = executor.submit(getCurrentModelTask());
-        Future<Boolean> futureAdder = executor.submit(addModelTask(sitemap2, 200));
+        ExecutorService executor = Executors.newWorkStealingPool()
+        Future<Sitemap> futureSitemap1 = executor.submit(getCurrentModelTask())
+        Future<Sitemap> futureSitemap2 = executor.submit(getCurrentModelTask())
+        Future<Boolean> futureAdder = executor.submit(addModelTask(sitemap2, 200))
 
         Sitemap result1 = futureSitemap1.get()
         Sitemap result2 = futureSitemap2.get()
@@ -94,10 +94,10 @@ class DefaultSitemapQueueTest extends Specification {
 
         LocalDateTime start = LocalDateTime.now()
 
-        ExecutorService executor = Executors.newWorkStealingPool();
-        Future<Sitemap> futureSitemap1 = executor.submit(getCurrentModelTask());
-        Future<Sitemap> futureSitemap2 = executor.submit(getCurrentModelTask());
-        Future<Boolean> futureAdder = executor.submit(addModelTask(sitemap2, 200));
+        ExecutorService executor = Executors.newWorkStealingPool()
+        Future<Sitemap> futureSitemap1 = executor.submit(getCurrentModelTask())
+        Future<Sitemap> futureSitemap2 = executor.submit(getCurrentModelTask())
+        Future<Boolean> futureAdder = executor.submit(addModelTask(sitemap2, 200))
 
         futureSitemap1.get()
         futureSitemap2.get()
@@ -151,7 +151,7 @@ class DefaultSitemapQueueTest extends Specification {
 
         //add 10 models (max for queue)
         List<Future> futures = new ArrayList<>()
-        ExecutorService executor = Executors.newWorkStealingPool();
+        ExecutorService executor = Executors.newWorkStealingPool()
         for (int i = 1; i < 11; i++) {
             futures.add(executor.submit(addModelTask(Mock(Sitemap) as Sitemap<MasterSitemapNode>, 200)))
         }
@@ -186,7 +186,7 @@ class DefaultSitemapQueueTest extends Specification {
         return new Callable<Boolean>() {
             @Override
             Boolean call() throws Exception {
-                TimeUnit.MILLISECONDS.sleep(delay);
+                TimeUnit.MILLISECONDS.sleep(delay)
                 return queue.addModel(sitemap2)
             }
         }

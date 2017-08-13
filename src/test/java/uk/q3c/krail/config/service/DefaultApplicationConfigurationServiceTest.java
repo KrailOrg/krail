@@ -10,7 +10,7 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.config;
+package uk.q3c.krail.config.service;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -23,6 +23,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import uk.q3c.krail.config.ApplicationConfiguration;
+import uk.q3c.krail.config.bind.ApplicationConfigurationModule;
+import uk.q3c.krail.config.config.IniFileConfig;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;

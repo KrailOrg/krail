@@ -15,12 +15,13 @@ package uk.q3c.krail.core.push
 
 import com.vaadin.ui.Component
 import spock.lang.Specification
-import uk.q3c.krail.core.config.ApplicationConfiguration
+import uk.q3c.krail.config.ApplicationConfiguration
 import uk.q3c.krail.core.guice.uiscope.UIKey
 import uk.q3c.krail.core.ui.ScopedUI
 import uk.q3c.util.testutil.LogMonitor
 
-import static org.assertj.core.api.Assertions.assertThat
+import static org.assertj.core.api.Assertions.*
+
 /**
  * Created by David Sowerby on 19 Jan 2016
  */

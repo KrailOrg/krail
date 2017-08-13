@@ -10,7 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package uk.q3c.krail.core.config;
+package uk.q3c.krail.config.config;
+
+import uk.q3c.krail.util.ResourceUtils;
 
 /**
  * When an application is built on Krail, or a library is added, it is possible that a configuration value from another

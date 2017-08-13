@@ -10,21 +10,19 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
+package uk.q3c.krail.config.config;
 
-package uk.q3c.krail.core.config;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.SubnodeConfiguration;
+import org.apache.commons.configuration.HierarchicalINIConfiguration;
 
 /**
- * Created by David Sowerby on 15 Jan 2016
+ * Uses Strings rather than enum because we need the '.' for {@link HierarchicalINIConfiguration}
+ *
+ * @author David Sowerby @date 31 Mar 2014
  */
-public interface ApplicationConfiguration extends Configuration {
+public class ConfigKeys {
 
+    public static final String SITEMAP_SOURCES = "sitemap.sources";
+    public static final String SERVER_PUSH_ENABLED = "server.pushEnabled";
 
-    void addConfiguration(Configuration config);
-
-    int getNumberOfConfigurations();
-
-    SubnodeConfiguration getSection(String configSectionName);
+    public static final String SITEMAP_LOAD_TIMEOUT_PERIOD = "sitemap.load.timeoutPeriod";
 }

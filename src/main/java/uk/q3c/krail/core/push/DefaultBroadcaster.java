@@ -19,8 +19,8 @@ import com.google.inject.Singleton;
 import com.vaadin.ui.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.config.ApplicationConfiguration;
-import uk.q3c.krail.core.config.ConfigKeys;
+import uk.q3c.krail.config.ApplicationConfiguration;
+import uk.q3c.krail.config.config.ConfigKeys;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.ui.ScopedUI;
 

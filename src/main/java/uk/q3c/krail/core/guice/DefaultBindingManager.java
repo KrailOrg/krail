@@ -27,7 +27,7 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.config.ApplicationConfigurationModule;
+import uk.q3c.krail.config.bind.ApplicationConfigurationModule;
 import uk.q3c.krail.core.data.DataModule;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.threadscope.ThreadScopeModule;

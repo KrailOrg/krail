@@ -34,7 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import uk.q3c.krail.core.config.ApplicationConfigurationModule;
+import uk.q3c.krail.config.bind.ApplicationConfigurationModule;
 import uk.q3c.krail.core.eventbus.*;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.MessageKey;

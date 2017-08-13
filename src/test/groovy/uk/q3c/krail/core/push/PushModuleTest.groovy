@@ -16,7 +16,7 @@ package uk.q3c.krail.core.push
 import com.google.inject.Guice
 import com.google.inject.Injector
 import spock.lang.Specification
-import uk.q3c.krail.core.config.ApplicationConfigurationModule
+import uk.q3c.krail.config.bind.ApplicationConfigurationModule
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
 import uk.q3c.krail.core.services.ServicesModule
 import uk.q3c.krail.testutil.eventbus.TestEventBusModule

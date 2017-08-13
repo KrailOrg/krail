@@ -10,7 +10,7 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.config;
+package uk.q3c.krail.config.config;
 
 import com.google.inject.Inject;
 import com.mycila.testing.junit.MycilaJunitRunner;
@@ -25,7 +25,7 @@ import uk.q3c.util.testutil.TestResource;
 
 import java.io.File;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})

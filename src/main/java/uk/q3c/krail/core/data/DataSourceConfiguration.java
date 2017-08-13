@@ -11,7 +11,7 @@
 
 package uk.q3c.krail.core.data;
 
-import uk.q3c.krail.core.config.ApplicationConfiguration;
+import uk.q3c.krail.config.ApplicationConfiguration;
 
 /**
  * A common interface to provide configuration for a logical data source.  There may be multiple sources in an application - perhaps a Graph database for

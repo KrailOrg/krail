@@ -10,8 +10,13 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.config;
+package uk.q3c.krail.config.bind;
 
+import uk.q3c.krail.config.ApplicationConfiguration;
+import uk.q3c.krail.config.ApplicationConfigurationService;
+import uk.q3c.krail.config.ConfigurationModuleBase;
+import uk.q3c.krail.config.config.DefaultApplicationConfiguration;
+import uk.q3c.krail.config.service.DefaultApplicationConfigurationService;
 import uk.q3c.krail.core.i18n.LabelKey;
 
 /**

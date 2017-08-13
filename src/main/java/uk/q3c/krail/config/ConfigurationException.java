@@ -10,7 +10,7 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.config;
+package uk.q3c.krail.config;
 
 public class ConfigurationException extends RuntimeException {
 

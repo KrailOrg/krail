@@ -11,11 +11,12 @@
  *
  */
 
-package uk.q3c.krail.core.config
+package uk.q3c.krail.config.bind
 
 import com.google.common.collect.Lists
 import com.google.inject.*
 import spock.lang.Specification
+import uk.q3c.krail.config.config.IniFileConfig
 import uk.q3c.krail.core.data.DataModule
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
@@ -26,7 +27,6 @@ import uk.q3c.krail.testutil.i18n.TestI18NModule
 import uk.q3c.krail.testutil.option.TestOptionModule
 import uk.q3c.krail.util.UtilsModule
 import uk.q3c.util.UtilModule
-
 /**
  * Created by David Sowerby on 15 Jan 2016
  */

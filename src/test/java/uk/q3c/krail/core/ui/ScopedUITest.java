@@ -32,7 +32,7 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import uk.q3c.krail.core.config.ConfigurationException;
+import uk.q3c.krail.config.ConfigurationException;
 import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
@@ -52,7 +52,7 @@ import uk.q3c.util.testutil.LogMonitor;
 
 import java.util.Locale;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)

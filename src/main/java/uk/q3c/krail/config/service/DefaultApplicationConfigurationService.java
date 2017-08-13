@@ -10,7 +10,7 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.config;
+package uk.q3c.krail.config.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -20,6 +20,11 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.config.ApplicationConfiguration;
+import uk.q3c.krail.config.ApplicationConfigurationService;
+import uk.q3c.krail.config.ConfigurationException;
+import uk.q3c.krail.config.config.InheritingConfiguration;
+import uk.q3c.krail.config.config.IniFileConfig;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18NKey;

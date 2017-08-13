@@ -10,11 +10,12 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.core.config;
+package uk.q3c.krail.config.config;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import uk.q3c.krail.config.ApplicationConfiguration;
 
 import javax.annotation.concurrent.NotThreadSafe;
 

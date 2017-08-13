@@ -15,7 +15,7 @@ package uk.q3c.krail.core.navigate.sitemap.set;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import uk.q3c.krail.core.config.ApplicationConfiguration;
+import uk.q3c.krail.config.ApplicationConfiguration;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap;
 
