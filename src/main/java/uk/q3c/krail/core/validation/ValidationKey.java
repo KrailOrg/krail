@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.validation;
 
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 /**
  * {@link I18NKey} for Apache Bval validation messages.  The messages themselves have been transposed from BVal to {@link Validations}, with some

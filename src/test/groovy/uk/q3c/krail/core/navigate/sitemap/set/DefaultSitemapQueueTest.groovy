@@ -17,12 +17,12 @@ import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
 import uk.q3c.krail.config.ApplicationConfiguration
 import uk.q3c.krail.config.config.ConfigKeys
-import uk.q3c.krail.core.eventbus.BusMessage
 import uk.q3c.krail.core.eventbus.GlobalBusProvider
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemap
 import uk.q3c.krail.core.navigate.sitemap.MasterSitemapNode
 import uk.q3c.krail.core.navigate.sitemap.Sitemap
 import uk.q3c.krail.core.navigate.sitemap.SitemapLockedException
+import uk.q3c.krail.eventbus.BusMessage
 import uk.q3c.util.testutil.LogMonitor
 
 import java.time.Duration

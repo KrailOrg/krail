@@ -14,6 +14,7 @@
 package uk.q3c.krail.core.eventbus;
 
 import net.engio.mbassy.bus.common.PubSubSupport;
+import uk.q3c.krail.eventbus.BusMessage;
 
 /**
  * Equivalent to injecting PubSubSupport with @GlobalBus annotation.  Used to prevent accidental overloading with wrong

@@ -22,7 +22,7 @@ You may think that it is premature to be considering I18N at this stage - especi
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 public enum LabelKey implements I18NKey {
 }
@@ -32,7 +32,7 @@ public enum LabelKey implements I18NKey {
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 public enum DescriptionKey implements I18NKey {
 }
@@ -114,7 +114,7 @@ We'll make it easier by extending the ```Grid3x3ViewBase```base class from the K
 package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
 public class FinanceView extends Grid3x3ViewBase {
@@ -133,7 +133,7 @@ By default, if Krail's ```I18NProcessor``` cannot find the value of an ```I18NKe
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 public enum LabelKey implements I18NKey {
     Accounts, Payroll, Finance
@@ -187,7 +187,7 @@ Now that this is done, any views in the 'pages' package, annotated with ```@View
 package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.navigate.sitemap.View;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
@@ -280,7 +280,7 @@ We can easily move all the pages of a Direct module by changing the ```rootUri``
 package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.navigate.sitemap.View;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
@@ -342,7 +342,7 @@ public class MyPublicPages extends DirectSitemapModule {
 package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
 public class ContactUsView extends Grid3x3ViewBase {
@@ -357,7 +357,7 @@ public class ContactUsView extends Grid3x3ViewBase {
 package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
 public class NewsView extends Grid3x3ViewBase {
@@ -394,7 +394,7 @@ We will do just a little bit more with these views to help demonstrate navigatio
 package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
@@ -413,7 +413,7 @@ public class ContactUsView extends Grid3x3ViewBase {
 package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
@@ -482,7 +482,7 @@ public class MyPublicPages extends DirectSitemapModule {
 package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 
 public class ContactDetailView extends Grid3x3ViewBase {

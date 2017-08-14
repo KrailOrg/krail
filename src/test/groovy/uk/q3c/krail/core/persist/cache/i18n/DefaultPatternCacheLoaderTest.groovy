@@ -16,12 +16,15 @@ package uk.q3c.krail.core.persist.cache.i18n
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.i18n.PatternSourceProvider
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
 import uk.q3c.krail.core.option.Option
-import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternDao
-import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
+import uk.q3c.krail.i18n.ClassPatternDao
+import uk.q3c.krail.i18n.ClassPatternSource
+import uk.q3c.krail.i18n.PatternCacheKey
+import uk.q3c.krail.i18n.PatternSourceProvider
+import uk.q3c.krail.i18n.cache.DefaultPatternCacheLoader
 import uk.q3c.util.testutil.LogMonitor
+
 /**
  *
  * Created by David Sowerby on 30/07/15.
@@ -189,7 +192,7 @@ class DefaultPatternCacheLoaderTest extends Specification {
         String result = loader.load(cacheKey)
 
         then:
-        1 * sourceProvider.orderedSources(LabelKey.Yes) >> ImmutableSet.of(ClassPatternSource);
+        1 * sourceProvider.orderedSources(LabelKey.Yes) >> ImmutableSet.of(ClassPatternSource)
         1 * sourceProvider.sourceFor(ClassPatternSource) >> optionalClassPatternDao
         1 * classPatternDao.getValue(cacheKey) >> daoGetValueResult
         0 * option.get(DefaultPatternCacheLoader.optionKeyAutoStub.qualifiedWith(ClassPatternSource.class.simpleName)) >> true
@@ -212,7 +215,7 @@ class DefaultPatternCacheLoaderTest extends Specification {
         String result = loader.load(cacheKey)
 
         then:
-        2 * sourceProvider.orderedSources(LabelKey.Yes) >> ImmutableSet.of(ClassPatternSource);
+        2 * sourceProvider.orderedSources(LabelKey.Yes) >> ImmutableSet.of(ClassPatternSource)
         2 * sourceProvider.sourceFor(ClassPatternSource) >> optionalClassPatternDao
         1 * classPatternDao.getValue(cacheKey) >> Optional.empty()
         1 * classPatternDao.getValue(cacheKey) >> daoGetValueResult
@@ -235,7 +238,7 @@ class DefaultPatternCacheLoaderTest extends Specification {
         String result = loader.load(cacheKey)
 
         then:
-        3 * sourceProvider.orderedSources(LabelKey.Active_Source) >> ImmutableSet.of(ClassPatternSource);
+        3 * sourceProvider.orderedSources(LabelKey.Active_Source) >> ImmutableSet.of(ClassPatternSource)
         3 * sourceProvider.sourceFor(ClassPatternSource) >> optionalClassPatternDao
         3 * classPatternDao.getValue(cacheKey) >> Optional.empty()
         3 * option.get(DefaultPatternCacheLoader.optionKeyAutoStub.qualifiedWith(ClassPatternSource.class.simpleName)) >> false

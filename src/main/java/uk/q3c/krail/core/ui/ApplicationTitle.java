@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.ui;
 
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 /**
  * A wrapper to simplify binding to an interface applied to an enum (although a Guice binding can be made, the result

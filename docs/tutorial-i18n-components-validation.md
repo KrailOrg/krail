@@ -22,7 +22,7 @@ addEntry("i18n", I18NDemoView.class, LabelKey.I18N, PageAccessControl.PUBLIC);
 package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
@@ -58,7 +58,7 @@ put(LabelKey.Yes, "Ja");
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
+import uk.q3c.krail.i18n.EnumResourceBundle;
 
 import static com.example.tutorial.i18n.DescriptionKey.*;
 
@@ -139,7 +139,7 @@ import com.example.tutorial.i18n.DescriptionKey;
 import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
 import com.vaadin.ui.*;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
@@ -214,7 +214,7 @@ For the Tutorial, we will create a **@Value** annotation, which has only a ```va
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.i18n.I18NAnnotation;
+import uk.q3c.krail.i18n.I18NAnnotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -18,8 +18,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.vaadin.data.Container;
 import uk.q3c.krail.config.ConfigurationException;
-import uk.q3c.krail.core.persist.common.common.OptionDaoProviders;
-import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
+import uk.q3c.krail.persist.PersistenceInfo;
 import uk.q3c.util.MessageFormat;
 
 import java.lang.annotation.Annotation;

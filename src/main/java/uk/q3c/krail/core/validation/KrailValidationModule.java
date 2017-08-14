@@ -20,7 +20,7 @@ import com.google.inject.multibindings.MapBinder;
 import org.apache.bval.constraints.Email;
 import org.apache.bval.constraints.NotEmpty;
 import org.apache.bval.guice.ValidationModule;
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 import javax.validation.MessageInterpolator;
 import javax.validation.constraints.*;

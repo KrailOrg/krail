@@ -22,8 +22,8 @@ import uk.q3c.krail.core.eventbus.SubscribeTo;
 import uk.q3c.krail.core.eventbus.UIBus;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.push.PushMessage;
+import uk.q3c.krail.i18n.Translate;
 
 /**
  * Displays all the messages received by the Broadcaster

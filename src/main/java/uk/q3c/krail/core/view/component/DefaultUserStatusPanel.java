@@ -27,12 +27,8 @@ import net.engio.mbassy.listener.Listener;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
-import uk.q3c.krail.core.i18n.CurrentLocale;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.i18n.LocaleChangeBusMessage;
-import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.StandardPageKey;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
@@ -40,6 +36,10 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
 import uk.q3c.krail.core.vaadin.ID;
+import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.LocaleChangeBusMessage;
+import uk.q3c.krail.i18n.Translate;
 
 import java.util.Optional;
 

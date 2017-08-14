@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.core.i18n;
 
+import uk.q3c.krail.i18n.I18NKey;
+
 public enum MessageKey implements I18NKey {
     Invalid_URI, Locale_Change, Service_not_Started, Use_Key_Path, Bundle_Path, Option_Auto_Stub, Setup_I18NKey_export,
     Option_Stub_with_Key_Name, Option_Stub_Value, Option_Source_Order_Default, Button_is_Visible, I18NKey_export_failed, Needs_at_least_one_database_writer,

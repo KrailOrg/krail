@@ -85,7 +85,7 @@ Assuming you have followed this Tutorial from the start, you have already seen h
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 public enum MessageKey implements I18NKey {
     Banner
@@ -101,7 +101,7 @@ This is going to be a long message, and because it has parameters, the default t
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
+import uk.q3c.krail.i18n.EnumResourceBundle;
 
 public class Messages extends EnumResourceBundle<MessageKey> {
     
@@ -119,7 +119,7 @@ Here you will see that we are extending ```EnumResourceBundle``` but for type sa
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
+import uk.q3c.krail.i18n.EnumResourceBundle;
 
 import static com.example.tutorial.i18n.MessageKey.*;
 
@@ -202,7 +202,7 @@ To achieve this, we need an annotation that is specific to our ```I18NKey``` imp
 ```java
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.i18n.I18NAnnotation;
+import uk.q3c.krail.i18n.I18NAnnotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -271,7 +271,7 @@ It really does not matter which method you use.  We will use method 2 for this e
 ```java
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.i18n.I18NModule;
+import uk.q3c.krail.i18n.bind.I18NModule;
 
 public class TutorialI18NModule extends I18NModule {
 
@@ -324,7 +324,7 @@ To translate the keys used for parameter *{0}* we need to do the same for ```Lab
 ```
 package com.example.tutorial.i18n;
 
-import uk.q3c.krail.core.persist.clazz.i18n.EnumResourceBundle;
+import uk.q3c.krail.i18n.EnumResourceBundle;
 
 public class Labels extends EnumResourceBundle<LabelKey> {
     @Override

@@ -65,6 +65,10 @@ repositories {
 }
 
 dependencies {
+    compile 'uk.q3c.krail:eventbus-api:0.0.1.0'
+
+
+
     compile 'uk.q3c.util:q3c-util:0.12.0.0.6b76839'
 
     //Dependency Injection

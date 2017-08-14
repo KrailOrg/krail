@@ -1,6 +1,6 @@
 ## Release Notes for krail 0.10.0.0
 
-This release is a major refactor to extract some elements which can actually stand alone from Krail itself - notably this includes I18N and Options
+This release is a major refactor to extract some elements which can actually stand alone from Krail itself - notably this includes I18N and Options - and also to improve separation of concerns.
 
 Unfortunately there are a LOT of changes which will affect existing Krail apps. Many are limited to package changes, but there are some code changes
 were needed to achieve effective separation of concerns
@@ -33,6 +33,8 @@ These can be dealt with by the usual method of deleting failed import statements
 
 ### I18N
 
+projects: **krail-i18n**, **krail-i18n-api**
+Generic I18N classes moved from `uk.q3c.krail.core.i18n` to `uk.q3c.krail.i18n` and sub-packages.  Some (mostly Vaadin specific) classes remain in `uk.q3c.krail.core.i18n`
 
 
 ### Option

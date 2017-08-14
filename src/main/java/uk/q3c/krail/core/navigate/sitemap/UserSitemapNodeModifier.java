@@ -16,10 +16,10 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.core.i18n.CurrentLocale;
-import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.SubjectProvider;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.forest.NodeModifier;
 
 import java.text.Collator;

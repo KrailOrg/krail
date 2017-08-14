@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.services;
 
 import com.google.common.base.Preconditions;
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 import javax.annotation.concurrent.Immutable;
 

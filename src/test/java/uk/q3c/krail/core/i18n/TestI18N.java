@@ -13,6 +13,7 @@
 package uk.q3c.krail.core.i18n;
 
 import com.vaadin.data.Property;
+import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.testutil.i18n.TestLabelKey;
 
 import java.lang.annotation.ElementType;
@@ -27,7 +28,7 @@ import java.lang.annotation.Target;
  * which implement {@link Property}. Its value would be ignored otherwise
  *
  * @author David Sowerby 9 Feb 2013
- * @see https://sites.google.com/site/q3cjava/internationalisation-i18n
+ * @see https://sites.google.com/site/q3cjava/internationalisation-entity
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

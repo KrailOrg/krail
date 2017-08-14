@@ -12,7 +12,7 @@
  */
 package uk.q3c.krail.core.user.notify;
 
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 /**
  * Provides a common entry point for all notifications to users, at error, warning and information level.

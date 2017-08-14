@@ -25,7 +25,7 @@ import com.example.tutorial.i18n.LabelKey;
 import com.google.inject.Inject;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;

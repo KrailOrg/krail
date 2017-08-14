@@ -18,7 +18,7 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import uk.q3c.krail.config.ConfigurationException;
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 import static com.google.common.base.Preconditions.*;
 import static com.google.inject.multibindings.Multibinder.*;

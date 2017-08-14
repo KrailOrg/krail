@@ -17,6 +17,7 @@ import com.google.inject.spi.InjectionListener;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import net.engio.mbassy.listener.Listener;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
+import uk.q3c.krail.eventbus.BusMessage;
 
 import java.lang.annotation.Annotation;
 

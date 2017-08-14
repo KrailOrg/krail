@@ -17,7 +17,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.subject.Subject;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 
 /**
  * This default implementation assumes that the Subject's primary principal toString() method will return a username.

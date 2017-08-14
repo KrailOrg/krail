@@ -16,8 +16,8 @@ package uk.q3c.krail.core.view;
 import com.google.inject.Inject;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
-import uk.q3c.krail.core.i18n.Translate;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.Translate;
 
 import static com.google.common.base.Preconditions.*;
 

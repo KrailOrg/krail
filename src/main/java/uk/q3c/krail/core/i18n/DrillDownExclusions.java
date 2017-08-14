@@ -14,6 +14,7 @@
 package uk.q3c.krail.core.i18n;
 
 import com.google.inject.BindingAnnotation;
+import uk.q3c.krail.i18n.bind.I18NModule;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

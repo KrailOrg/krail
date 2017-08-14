@@ -24,16 +24,17 @@ import uk.q3c.krail.core.option.InMemory
 import uk.q3c.krail.core.option.OptionKey
 import uk.q3c.krail.core.option.OptionKeyException
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey
-import uk.q3c.krail.core.persist.clazz.i18n.ClassPatternSource
 import uk.q3c.krail.core.persist.common.option.OptionDao
 import uk.q3c.krail.core.persist.common.option.OptionSource
 import uk.q3c.krail.core.user.profile.UserHierarchy
 import uk.q3c.krail.core.view.component.LocaleContainer
+import uk.q3c.krail.i18n.ClassPatternSource
 import uk.q3c.util.data.DataConverter
 import uk.q3c.util.data.collection.AnnotationList
 import uk.q3c.util.data.collection.DataList
 
 import static uk.q3c.krail.core.user.profile.RankOption.*
+
 /**
  * Created by David Sowerby on 27 Jan 2016
  */

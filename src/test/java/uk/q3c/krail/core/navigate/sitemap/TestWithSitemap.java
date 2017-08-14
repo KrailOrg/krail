@@ -22,7 +22,9 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
-import uk.q3c.krail.core.i18n.*;
+import uk.q3c.krail.core.i18n.DefaultI18NProcessor;
+import uk.q3c.krail.core.i18n.I18NProcessor;
+import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
 import uk.q3c.krail.core.option.DefaultOption;
@@ -31,12 +33,15 @@ import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.shiro.PageAccessController;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.view.PublicHomeView;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.testutil.i18n.TestLabelKey;
 
 import java.text.Collator;
 import java.util.Locale;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})

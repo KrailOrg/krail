@@ -11,7 +11,7 @@
 
 package uk.q3c.krail.core.user.notify;
 
-import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.BusMessage;
 
 /**
  * Created by David Sowerby on 26/05/15.

@@ -16,10 +16,10 @@ package uk.q3c.krail.core.view.component
 import com.vaadin.ui.HorizontalLayout
 import net.engio.mbassy.listener.Handler
 import spock.lang.Specification
-import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.user.notify.ErrorNotificationMessage
 import uk.q3c.krail.core.user.notify.InformationNotificationMessage
 import uk.q3c.krail.core.user.notify.WarningNotificationMessage
+import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.testutil.i18n.MockTranslate
 
 /**

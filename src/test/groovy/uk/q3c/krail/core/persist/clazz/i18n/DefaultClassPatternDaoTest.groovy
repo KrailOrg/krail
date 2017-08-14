@@ -21,10 +21,13 @@ import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.MessageKey
 import uk.q3c.krail.core.option.Option
 import uk.q3c.krail.core.option.OptionKey
-import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey
-import uk.q3c.krail.core.persist.common.i18n.PatternWriteException
+import uk.q3c.krail.i18n.PatternCacheKey
+import uk.q3c.krail.i18n.clazz.ClassBundleControl
+import uk.q3c.krail.i18n.clazz.DefaultClassPatternDao
+import uk.q3c.krail.i18n.persist.PatternWriteException
+
 /**
- * Unit test for {@link DefaultClassPatternDao}
+ * Unit test for {@link uk.q3c.krail.i18n.clazz.DefaultClassPatternDao}
  *
  * Created by David Sowerby on 27/07/15.
  */
@@ -33,7 +36,7 @@ class DefaultClassPatternDaoTest extends Specification {
 
 
     @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+    public TemporaryFolder temporaryFolder = new TemporaryFolder()
 
     DefaultClassPatternDao dao
 
@@ -154,11 +157,11 @@ class DefaultClassPatternDaoTest extends Specification {
         OptionKey optionKey = DefaultClassPatternDao.optionKeyUseKeyPath.qualifiedWith(dao.getSourceString())
         OptionKey optionKey1 = DefaultClassPatternDao.optionPathToValues.qualifiedWith(dao.getSourceString())
         option.get(optionKey) >> false
-        option.get(optionKey1) >> "com.example.i18n"
+        option.get(optionKey1) >> "com.example.entity"
 
 
         expect:
-        dao.expandFromKey(LabelKey.Yes).equals("com.example.i18n.Labels")
+        dao.expandFromKey(LabelKey.Yes).equals("com.example.entity.Labels")
     }
 
 
@@ -224,7 +227,7 @@ class DefaultClassPatternDaoTest extends Specification {
     def "writeFile error"() {
         given:
         File file = new File(temporaryFolder.getRoot(), "rubbish")
-        file.createNewFile();
+        file.createNewFile()
         file.setReadOnly()
 
         patternCacheKey.key >> MessageKey.Invalid_URI

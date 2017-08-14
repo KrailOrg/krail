@@ -12,6 +12,8 @@
  */
 package uk.q3c.krail.core.i18n;
 
+import uk.q3c.krail.i18n.I18NKey;
+
 /**
  * @author David Sowerby 24 Mar 2013
  * @see Labels

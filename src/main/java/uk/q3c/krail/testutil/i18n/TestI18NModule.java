@@ -14,10 +14,10 @@
 package uk.q3c.krail.testutil.i18n;
 
 
-import uk.q3c.krail.core.i18n.CurrentLocale;
-import uk.q3c.krail.core.i18n.DefaultPatternSource;
-import uk.q3c.krail.core.i18n.I18NModule;
-import uk.q3c.krail.core.i18n.PatternSource;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.PatternSource;
+import uk.q3c.krail.i18n.bind.I18NModule;
+import uk.q3c.krail.i18n.source.DefaultPatternSource;
 
 import java.util.Locale;
 

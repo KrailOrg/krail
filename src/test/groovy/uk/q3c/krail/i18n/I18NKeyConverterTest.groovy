@@ -14,7 +14,6 @@
 package uk.q3c.krail.i18n
 
 import spock.lang.Specification
-import uk.q3c.krail.core.i18n.I18NKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.util.data.ConversionException
 /**

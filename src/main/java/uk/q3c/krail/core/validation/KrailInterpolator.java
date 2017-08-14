@@ -21,9 +21,9 @@ import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.config.ConfigurationException;
-import uk.q3c.krail.core.i18n.CurrentLocale;
-import uk.q3c.krail.core.i18n.I18NKey;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.util.MessageFormat;
 
 import javax.validation.MessageInterpolator;
@@ -38,7 +38,7 @@ import java.util.Optional;
  * parameter provided by Apache BVal.  (This includes the two additional, BVal specific annotations of @{@link Email} and @{@link NotEmpty}):<ol>
  * <li>no value (that is, uses the annotation default) - looks up the associated {@link ValidationKey}, and uses the Krail I18N translation method</li>
  * <li>a custom key, used for a single instance of an annotation, as a String representing the full qualified name of an I18NKey constant, enclosed in curly
- * brackets, for example '{com.example.i18n.LabelKey.Misty}' - this will find the appropriate key (assuming it exists of course) and use that with the Krail
+ * brackets, for example '{com.example.entity.LabelKey.Misty}' - this will find the appropriate key (assuming it exists of course) and use that with the Krail
  * I18N translation process</li>
  * <li>A custom pattern, a String without curly brackets, which is used as it is - arguments can be placed within it using the format defined by {@link
  * MessageFormat}, but no translation takes place</li>
@@ -197,7 +197,7 @@ public class KrailInterpolator implements MessageInterpolator {
     }
 
     /**
-     * Find a an I18NKey from its full string representation (for example uk.q3c.krail.core.i18n.LabelKey.Yes).  The full
+     * Find a an I18NKey from its full string representation (for example uk.q3c.krail.core.entity.LabelKey.Yes).  The full
      * string representation can be obtained using {@link I18NKey#fullName(I18NKey)}
      *
      * @param keyName

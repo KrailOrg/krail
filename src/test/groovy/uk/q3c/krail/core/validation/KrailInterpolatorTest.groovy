@@ -15,9 +15,9 @@ package uk.q3c.krail.core.validation
 
 import org.apache.bval.constraints.Email
 import spock.lang.Specification
-import uk.q3c.krail.core.i18n.CurrentLocale
-import uk.q3c.krail.core.i18n.I18NKey
-import uk.q3c.krail.core.i18n.Translate
+import uk.q3c.krail.i18n.CurrentLocale
+import uk.q3c.krail.i18n.I18NKey
+import uk.q3c.krail.i18n.Translate
 
 import javax.validation.constraints.Min
 import javax.validation.metadata.ConstraintDescriptor
@@ -31,14 +31,14 @@ class KrailInterpolatorTest extends Specification {
 
     SimpleContext context = Mock()
 
-    ConstraintDescriptor constraintDescriptor = Mock();
+    ConstraintDescriptor constraintDescriptor = Mock()
 
     Annotation annotation = Mock()
 
     Map<Class<? extends Annotation>, I18NKey> javaxValidationSubstitutes= Mock()
 //    Injector injector;
 
-    KrailInterpolator interpolator;
+    KrailInterpolator interpolator
     Translate translate = Mock()
     CurrentLocale currentLocale = Mock()
 

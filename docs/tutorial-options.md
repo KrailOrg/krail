@@ -26,7 +26,7 @@ package com.example.tutorial.pages;
 
 import com.google.inject.Inject;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 
@@ -106,7 +106,7 @@ package com.example.tutorial.pages;
 import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
@@ -222,7 +222,7 @@ import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.option.OptionKey;

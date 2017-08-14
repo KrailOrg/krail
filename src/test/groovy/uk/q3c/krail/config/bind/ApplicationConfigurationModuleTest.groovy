@@ -18,9 +18,9 @@ import com.google.inject.*
 import spock.lang.Specification
 import uk.q3c.krail.config.config.IniFileConfig
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
-import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
 import uk.q3c.krail.core.services.ServicesModule
 import uk.q3c.krail.core.vaadin.DataModule
+import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.testutil.eventbus.TestEventBusModule
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
 import uk.q3c.krail.testutil.i18n.TestI18NModule

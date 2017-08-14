@@ -40,7 +40,7 @@ addEntry("events", EventsView.class, LabelKey.Events, PageAccessControl.PERMISSI
 ```
 package com.example.tutorial.eventbus;
 
-import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.BusMessage;
 
 public class TutorialMessage implements BusMessage {
 
@@ -171,7 +171,7 @@ import com.vaadin.ui.Button;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 

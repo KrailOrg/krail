@@ -16,9 +16,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 import org.apache.commons.lang3.StringUtils;
 import uk.q3c.krail.core.guice.DefaultBindingManager;
-import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
+import uk.q3c.krail.i18n.I18NKey;
 
 import static com.google.common.base.Preconditions.*;
 

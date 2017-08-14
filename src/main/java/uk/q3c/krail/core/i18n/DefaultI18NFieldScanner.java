@@ -17,6 +17,9 @@ import com.google.inject.Inject;
 import com.vaadin.ui.AbstractComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.i18n.AnnotationInfo;
+import uk.q3c.krail.i18n.I18NAnnotation;
+import uk.q3c.krail.i18n.I18NException;
 import uk.q3c.util.clazz.UnenhancedClassIdentifier;
 
 import java.lang.annotation.Annotation;

@@ -18,7 +18,7 @@ import spock.guice.UseModules
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.GlobalBusProvider
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.i18n.Translate
+import uk.q3c.krail.i18n.Translate
 import uk.q3c.util.UtilModule
 import uk.q3c.util.clazz.ClassNameUtils
 import uk.q3c.util.testutil.LogMonitor

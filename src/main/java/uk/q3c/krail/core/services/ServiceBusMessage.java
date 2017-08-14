@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.services;
 
-import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.BusMessage;
 
 /**
  * A message sent via the event bus relating to a {@link Service}

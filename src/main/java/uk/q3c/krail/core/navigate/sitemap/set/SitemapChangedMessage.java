@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.navigate.sitemap.set;
 
-import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.BusMessage;
 
 /**
  * Created by David Sowerby on 06 Jan 2016

@@ -15,7 +15,7 @@ package uk.q3c.krail.core.option;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 import javax.annotation.concurrent.Immutable;
 import java.util.ArrayList;

@@ -40,7 +40,7 @@ class SystemAdminPagesTest extends Specification {
     def "configure"() {
         given:
         TypeLiteral<Map<String, DirectSitemapEntry>> mapTypeLiteral = new TypeLiteral<Map<String, DirectSitemapEntry>>() {
-        };
+        }
         Key<Map<String, DirectSitemapEntry>> mapKey = Key.get(mapTypeLiteral)
 
         when:
@@ -50,7 +50,7 @@ class SystemAdminPagesTest extends Specification {
         then:
         map != null
         map.size() == 4
-        map.keySet().containsAll("system-admin", "system-admin/sitemap-build-report", "system-admin/option", "system-admin/i18n")
+        map.keySet().containsAll("system-admin", "system-admin/sitemap-build-report", "system-admin/option", "system-admin/entity")
     }
 
 

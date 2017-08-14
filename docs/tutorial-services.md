@@ -62,8 +62,8 @@ import com.google.inject.Inject;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.ServicesModel;
-import uk.q3c.krail.core.i18n.I18NKey;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.Translate;
 
 @Singleton
 public class ServiceA extends AbstractService {
@@ -99,8 +99,8 @@ import com.google.inject.Inject;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.ServicesModel;
-import uk.q3c.krail.core.i18n.I18NKey;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.Translate;
 
 @Singleton
 public class ServiceB extends AbstractService {
@@ -137,8 +137,8 @@ import com.google.inject.Inject;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.ServicesModel;
-import uk.q3c.krail.core.i18n.I18NKey;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.Translate;
 
 @Singleton
 public class ServiceC extends AbstractService {
@@ -175,8 +175,8 @@ import com.google.inject.Inject;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.ServicesModel;
-import uk.q3c.krail.core.i18n.I18NKey;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.Translate;
 
 @Singleton
 public class ServiceD extends AbstractService {
@@ -282,7 +282,7 @@ import uk.q3c.krail.core.eventbus.SubscribeTo;
 import uk.q3c.krail.core.services.ServiceBusMessage;
 import uk.q3c.krail.core.view.Grid3x3ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 
 @Listener
 @SubscribeTo(GlobalBus.class)

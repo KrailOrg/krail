@@ -13,8 +13,8 @@
 package uk.q3c.krail.core.view;
 
 import com.vaadin.ui.Button;
-import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
+import uk.q3c.krail.i18n.I18NKey;
 
 /**
  * Bind this to your implementation in your ViewModule

@@ -12,6 +12,9 @@
  */
 package uk.q3c.krail.core.i18n;
 
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.I18NAnnotation;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -23,7 +26,7 @@ import java.util.Locale;
  * need translation), even when it is not a component itself - and will therefore not have a @Caption, @Description or
  * @value annotation
  * <p>
- * See https://sites.google .com/site/q3cjava/internationalisation-i18n
+ * See https://sites.google .com/site/q3cjava/internationalisation-entity
  *
  * @author David Sowerby 9 Feb 2013
  */

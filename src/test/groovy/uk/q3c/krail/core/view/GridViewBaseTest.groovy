@@ -14,8 +14,8 @@
 package uk.q3c.krail.core.view
 
 import com.vaadin.ui.Label
-import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
+import uk.q3c.krail.i18n.Translate
 
 /**
  * Created by David Sowerby on 08 Feb 2016
@@ -39,7 +39,7 @@ class GridViewBaseTest extends ViewTest {
 
     def setup() {
         view = new GridTest(translate)
-        gridTest = view;
+        gridTest = view
     }
 
     def "id not null"() {

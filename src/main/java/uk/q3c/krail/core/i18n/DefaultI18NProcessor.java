@@ -21,6 +21,7 @@ import com.vaadin.ui.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.ui.ScopedUI;
+import uk.q3c.krail.i18n.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

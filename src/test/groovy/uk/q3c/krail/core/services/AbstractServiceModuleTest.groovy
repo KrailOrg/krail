@@ -16,7 +16,7 @@ package uk.q3c.krail.core.services
 import com.google.inject.*
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.EventBusModule
-import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule
+import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule
 import uk.q3c.krail.testutil.i18n.TestI18NModule

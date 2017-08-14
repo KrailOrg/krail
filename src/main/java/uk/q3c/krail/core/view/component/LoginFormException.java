@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.core.view.component;
 
-import uk.q3c.krail.core.i18n.I18NKey;
+import uk.q3c.krail.i18n.I18NKey;
 
 /**
  * Created by David Sowerby on 02/06/15.

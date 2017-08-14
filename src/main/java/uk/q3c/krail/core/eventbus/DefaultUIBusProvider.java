@@ -15,6 +15,7 @@ package uk.q3c.krail.core.eventbus;
 
 import com.google.inject.Inject;
 import net.engio.mbassy.bus.common.PubSubSupport;
+import uk.q3c.krail.eventbus.BusMessage;
 
 
 public class DefaultUIBusProvider implements UIBusProvider {

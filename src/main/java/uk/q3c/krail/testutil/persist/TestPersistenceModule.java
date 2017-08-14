@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.testutil.persist;
 
-import uk.q3c.krail.core.persist.inmemory.common.InMemoryModule;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
 
 /**
  * Sets up the {@link InMemoryModule} to provide the core DAOs

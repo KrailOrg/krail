@@ -11,8 +11,8 @@
 
 package uk.q3c.krail.core.user.status;
 
-import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.view.LoginView;
+import uk.q3c.krail.eventbus.BusMessage;
 
 import static com.google.common.base.Preconditions.*;
 

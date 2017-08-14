@@ -13,12 +13,12 @@
 package fixture.testviews2;
 
 import com.vaadin.ui.Component;
-import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.navigate.sitemap.View;
 import uk.q3c.krail.core.shiro.PageAccessControl;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.I18NKey;
 
 /**
  * This is NOT UIScoped to avoid unnecessary complexity in setting up some of the tests - if you need a UIScoped test

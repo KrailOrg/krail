@@ -16,14 +16,15 @@ package uk.q3c.krail.core.sysadmin.option
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.SessionBus
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.option.InMemory
 import uk.q3c.krail.core.option.Option
 import uk.q3c.krail.core.option.OptionPopup
-import uk.q3c.krail.core.persist.common.common.PersistenceInfo
 import uk.q3c.krail.core.persist.common.option.OptionSource
+import uk.q3c.krail.i18n.Translate
+import uk.q3c.krail.persist.PersistenceInfo
 
 import java.lang.annotation.Annotation
+
 /**
  * Tests for {@link SelectedOptionSourcePanel} and its super class SourcePanel
  *
@@ -40,7 +41,7 @@ class SelectedOptionSourcePanelTest extends Specification {
     Option option = Mock()
     OptionPopup optionPopup = Mock()
 
-    def panel = new SelectedOptionSourcePanel(translate, optionSource, option, optionPopup);
+    def panel = new SelectedOptionSourcePanel(translate, optionSource, option, optionPopup)
 
 
     def setup() {

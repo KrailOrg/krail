@@ -21,23 +21,25 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.core.i18n.DefaultCurrentLocale;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
+import uk.q3c.krail.core.i18n.VaadinCurrentLocale;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.krail.core.persist.common.option.DefaultOptionDao;
 import uk.q3c.krail.core.persist.common.option.OptionDao;
 import uk.q3c.krail.core.persist.common.option.OptionEntity;
 import uk.q3c.krail.core.persist.common.option.OptionSource;
-import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternDao;
-import uk.q3c.krail.core.persist.inmemory.i18n.InMemoryPatternStore;
-import uk.q3c.krail.core.persist.inmemory.i18n.PatternEntity;
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDaoDelegate;
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.vaadin.DataModule;
 import uk.q3c.krail.core.view.component.LocaleContainer;
+import uk.q3c.krail.i18n.PatternCacheKey;
+import uk.q3c.krail.persist.inmemory.InMemoryContainer;
+import uk.q3c.krail.persist.inmemory.InMemoryModule;
+import uk.q3c.krail.persist.inmemory.InMemoryPatternDao;
+import uk.q3c.krail.persist.inmemory.InMemoryPatternStore;
+import uk.q3c.krail.persist.inmemory.entity.PatternEntity;
 import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.data.DataConverter;
@@ -122,7 +124,7 @@ public class InMemoryContainerTest {
         //given
 
         OptionCacheKey<Integer> optionCacheKey1 = new OptionCacheKey<>(userHierarchy, RankOption.SPECIFIC_RANK, 0, LocaleContainer.optionKeyFlagSize);
-        OptionCacheKey<Locale> optionCacheKey2 = new OptionCacheKey<>(userHierarchy, RankOption.SPECIFIC_RANK, 0, DefaultCurrentLocale.optionPreferredLocale);
+        OptionCacheKey<Locale> optionCacheKey2 = new OptionCacheKey<>(userHierarchy, RankOption.SPECIFIC_RANK, 0, VaadinCurrentLocale.optionPreferredLocale);
         optionDao.write(optionCacheKey1, Optional.of(23));
         optionDao.write(optionCacheKey2, Optional.of(Locale.CANADA_FRENCH));
         //when

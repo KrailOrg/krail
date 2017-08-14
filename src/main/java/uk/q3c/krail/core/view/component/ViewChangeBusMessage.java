@@ -11,8 +11,8 @@
 
 package uk.q3c.krail.core.view.component;
 
-import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.navigate.NavigationState;
+import uk.q3c.krail.eventbus.BusMessage;
 
 /**
  * Created by David Sowerby on 13/03/15.

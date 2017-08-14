@@ -43,6 +43,6 @@ public class SystemAdminPages extends DirectSitemapModule {
         addEntry("", SystemAdminView.class, LabelKey.System_Administration, PageAccessControl.PERMISSION);
         addEntry("sitemap-build-report", SitemapReportView.class, LabelKey.Sitemap_Build_Report, PageAccessControl.PERMISSION);
         addEntry("option", OptionView.class, LabelKey.Options, PageAccessControl.PERMISSION);
-        addEntry("i18n", I18NView.class, LabelKey.I18N, PageAccessControl.PERMISSION);
+        addEntry("entity", I18NView.class, LabelKey.I18N, PageAccessControl.PERMISSION);
     }
 }

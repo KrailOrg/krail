@@ -14,6 +14,7 @@
 package uk.q3c.krail.core.i18n;
 
 import com.vaadin.ui.AbstractComponent;
+import uk.q3c.krail.i18n.AnnotationInfo;
 
 import java.util.List;
 import java.util.Map;

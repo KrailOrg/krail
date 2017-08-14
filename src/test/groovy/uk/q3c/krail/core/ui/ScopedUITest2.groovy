@@ -16,15 +16,15 @@ package uk.q3c.krail.core.ui
 import com.vaadin.data.util.converter.ConverterFactory
 import com.vaadin.server.ErrorHandler
 import spock.lang.Specification
-import uk.q3c.krail.core.i18n.CurrentLocale
 import uk.q3c.krail.core.i18n.I18NProcessor
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.i18n.Translate
 import uk.q3c.krail.core.navigate.Navigator
 import uk.q3c.krail.core.option.Option
 import uk.q3c.krail.core.push.Broadcaster
 import uk.q3c.krail.core.push.PushMessageRouter
 import uk.q3c.krail.core.view.DefaultPublicHomeView
+import uk.q3c.krail.i18n.CurrentLocale
+import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.testutil.i18n.MockTranslate
 import uk.q3c.util.testutil.LogMonitor
 
@@ -44,14 +44,14 @@ class ScopedUITest2 extends Specification {
     CurrentLocale currentLocale = Mock()
     I18NProcessor translator = Mock()
     Option option = Mock()
-    LogMonitor logMonitor;
+    LogMonitor logMonitor
 
     def setup() {
-        logMonitor = new LogMonitor();
+        logMonitor = new LogMonitor()
         logMonitor.addClassFilter(ScopedUI)
         applicationTitle.getTitleKey() >> LabelKey.Krail
         ui = new BasicUI(navigator, errorHandler, converterFactory, broadcaster, pushMessageRouter, applicationTitle, translate, currentLocale, translator,
-                option);
+                option)
     }
 
     def cleanup() {

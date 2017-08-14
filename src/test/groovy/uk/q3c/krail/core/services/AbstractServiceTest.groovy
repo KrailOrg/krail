@@ -17,13 +17,12 @@ import com.google.inject.Inject
 import net.engio.mbassy.bus.common.PubSubSupport
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.GlobalBusProvider
-import uk.q3c.krail.core.i18n.I18NKey
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.i18n.Translate
+import uk.q3c.krail.i18n.I18NKey
+import uk.q3c.krail.i18n.Translate
 
-import static uk.q3c.krail.core.services.RelatedServicesExecutor.Action
-import static uk.q3c.krail.core.services.Service.Cause
-import static uk.q3c.krail.core.services.Service.State
+import static uk.q3c.krail.core.services.RelatedServicesExecutor.*
+import static uk.q3c.krail.core.services.Service.*
 
 /**
  * Created by David Sowerby on 08/11/15.
@@ -34,10 +33,10 @@ class AbstractServiceTest extends Specification {
 
     def translate = Mock(Translate)
 
-    TestService service;
+    TestService service
 
     def servicesModel = Mock(ServicesModel)
-    def GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
+    GlobalBusProvider globalBusProvider = Mock(GlobalBusProvider)
     def eventBus = Mock(PubSubSupport)
     RelatedServicesExecutor servicesExecutor = Mock(RelatedServicesExecutor)
 
@@ -398,31 +397,31 @@ class AbstractServiceTest extends Specification {
 
     static class TestService extends AbstractService implements Service {
 
-        boolean throwStartException = false;
-        boolean throwStopException = false;
-        boolean throwResetException = false;
+        boolean throwStartException = false
+        boolean throwStopException = false
+        boolean throwResetException = false
 
         @Inject
         protected TestService(Translate translate, GlobalBusProvider globalBusProvider, RelatedServicesExecutor servicesExecutor) {
-            super(translate, globalBusProvider, servicesExecutor);
+            super(translate, globalBusProvider, servicesExecutor)
         }
 
         @Override
-        public void doStart() {
+        void doStart() {
             if (throwStartException) {
                 throw new RuntimeException("Test Exception thrown")
             }
         }
 
         @Override
-        public void doStop() {
+        void doStop() {
             if (throwStopException) {
                 throw new RuntimeException("Test Exception thrown")
             }
         }
 
         @Override
-        public void doReset() {
+        void doReset() {
             if (throwResetException) {
                 throw new RuntimeException("Test Exception thrown")
             }
@@ -433,15 +432,15 @@ class AbstractServiceTest extends Specification {
             return LabelKey.Authorisation
         }
 
-        public void throwStartException(boolean throwStartException) {
-            this.throwStartException = throwStartException;
+        void throwStartException(boolean throwStartException) {
+            this.throwStartException = throwStartException
         }
 
-        public void throwStopException(boolean throwStopException) {
+        void throwStopException(boolean throwStopException) {
             this.throwStopException = throwStopException
         }
 
-        public void throwResetException(boolean throwResetException) {
+        void throwResetException(boolean throwResetException) {
             this.throwResetException = throwResetException
         }
     }

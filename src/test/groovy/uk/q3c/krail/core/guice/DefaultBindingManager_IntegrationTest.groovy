@@ -15,9 +15,7 @@ package uk.q3c.krail.core.guice
 
 import com.google.inject.Module
 import com.google.inject.TypeLiteral
-import uk.q3c.krail.core.i18n.I18NKey
 import uk.q3c.krail.core.option.InMemory
-import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnitHelper
 import uk.q3c.krail.core.persist.common.option.DefaultActiveOptionSource
 import uk.q3c.krail.core.persist.common.option.OptionContainerProvider
 import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate
@@ -25,6 +23,8 @@ import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionContainerProvider
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDaoDelegate
 import uk.q3c.krail.core.validation.JavaxValidationSubstitutes
 import uk.q3c.krail.core.validation.KrailInterpolator
+import uk.q3c.krail.i18n.I18NKey
+import uk.q3c.krail.persist.KrailPersistenceUnitHelper
 import uk.q3c.krail.testutil.dummy.Dummy
 import uk.q3c.krail.testutil.dummy.DummyModule
 import uk.q3c.util.testutil.LogMonitor
@@ -58,7 +58,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
         DefaultBindingManager.injector = null
 
         when:
-        bindingManager.contextDestroyed(servletContextEvent);
+        bindingManager.contextDestroyed(servletContextEvent)
 
         then:
         logMonitor.debugLogs().contains("Injector has not been constructed, no call made to stop services")
@@ -131,31 +131,31 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
     }
 
 
-    def OptionDaoDelegate optionDao() {
+    OptionDaoDelegate optionDao() {
         getBinding OptionDaoDelegate, InMemory.class
     }
 
-    def Class<? extends Annotation> activeOptionSource() {
+    Class<? extends Annotation> activeOptionSource() {
         getBinding new TypeLiteral<Class<? extends Annotation>>() {}, DefaultActiveOptionSource
     }
 
-    def MessageInterpolator interpolator() {
+    MessageInterpolator interpolator() {
         getBinding MessageInterpolator.class
     }
 
-    def Map<Class<? extends Annotation>, I18NKey> javaxSubstitutes() {
+    Map<Class<? extends Annotation>, I18NKey> javaxSubstitutes() {
         getBinding new TypeLiteral<Map<Class<? extends Annotation>, I18NKey>>() {}, JavaxValidationSubstitutes
     }
 
-    def Class<? extends Annotation> activeOptionDao() {
+    Class<? extends Annotation> activeOptionDao() {
         getBinding KrailPersistenceUnitHelper.annotationClassLiteral(), DefaultActiveOptionSource.class
     }
 
-    def OptionContainerProvider optionContainerProvider() {
+    OptionContainerProvider optionContainerProvider() {
         getBinding OptionContainerProvider, InMemory.class
     }
     @Override
     List<Module> addSupportingModules(List<Module> modules) {
-        return modules;
+        return modules
     }
 }

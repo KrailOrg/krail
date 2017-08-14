@@ -13,10 +13,10 @@
 package uk.q3c.krail.core.view.testviews.subview;
 
 import com.vaadin.ui.Component;
-import uk.q3c.krail.core.i18n.I18NKey;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.core.view.component.AfterViewChangeBusMessage;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
+import uk.q3c.krail.i18n.I18NKey;
 
 public class TransferView implements KrailView {
 

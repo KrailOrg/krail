@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.view;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.i18n.Translate;
+import uk.q3c.krail.i18n.Translate;
 
 public class DefaultPublicHomeView extends StandardPageViewBase implements PublicHomeView {
 

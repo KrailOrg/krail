@@ -15,12 +15,12 @@ package uk.q3c.krail.core.push;
 import com.google.inject.Inject;
 import net.engio.mbassy.bus.common.PubSubSupport;
 import org.slf4j.Logger;
-import uk.q3c.krail.core.eventbus.BusMessage;
 import uk.q3c.krail.core.eventbus.UIBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIKey;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
+import uk.q3c.krail.eventbus.BusMessage;
 
-import static org.slf4j.LoggerFactory.getLogger;
+import static org.slf4j.LoggerFactory.*;
 
 @UIScoped
 public class DefaultPushMessageRouter implements PushMessageRouter {

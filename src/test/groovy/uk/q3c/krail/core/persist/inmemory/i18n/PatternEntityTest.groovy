@@ -15,13 +15,15 @@ package uk.q3c.krail.core.persist.inmemory.i18n
 
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey
+import uk.q3c.krail.i18n.PatternCacheKey
+import uk.q3c.krail.persist.inmemory.entity.PatternEntity
+
 /**
  * Created by David Sowerby on 16 Jan 2016
  */
 class PatternEntityTest extends Specification {
 
-    PatternEntity entity;
+    PatternEntity entity
 
     def "create decodes the I18NKey"() {
         given:

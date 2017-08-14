@@ -11,7 +11,7 @@
 
 package uk.q3c.krail.core.navigate.sitemap;
 
-import uk.q3c.krail.core.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.BusMessage;
 
 /**
  * Published when only the labels have changed - this typically happens as a result of switching Locale.
