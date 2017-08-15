@@ -11,7 +11,7 @@
  *
  */
 
-package uk.q3c.krail.testutil.i18n;
+package uk.q3c.krail.i18n.test;
 
 
 import uk.q3c.krail.i18n.CurrentLocale;

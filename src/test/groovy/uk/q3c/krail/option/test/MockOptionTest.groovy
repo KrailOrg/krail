@@ -11,12 +11,10 @@
  *
  */
 
-package uk.q3c.krail.testutil
+package uk.q3c.krail.option.test
 
 import spock.lang.Specification
 import uk.q3c.krail.core.view.component.LocaleContainer
-import uk.q3c.krail.testutil.option.MockOption
-
 /**
  * Created by David Sowerby on 06 Feb 2016
  */

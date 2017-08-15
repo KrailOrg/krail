@@ -25,7 +25,7 @@ import uk.q3c.krail.core.push.PushMessageRouter
 import uk.q3c.krail.core.view.DefaultPublicHomeView
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
-import uk.q3c.krail.testutil.i18n.MockTranslate
+import uk.q3c.krail.i18n.test.MockTranslate
 import uk.q3c.util.testutil.LogMonitor
 
 /**

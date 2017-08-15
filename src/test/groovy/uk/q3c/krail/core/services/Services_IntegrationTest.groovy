@@ -19,12 +19,12 @@ import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.EventBusModule
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
-import uk.q3c.krail.testutil.i18n.TestI18NModule
-import uk.q3c.krail.testutil.option.TestOptionModule
+import uk.q3c.krail.i18n.test.TestI18NModule
+import uk.q3c.krail.option.test.TestOptionModule
 import uk.q3c.krail.testutil.persist.TestPersistenceModule
 import uk.q3c.util.UtilModule
 
-import static uk.q3c.krail.testutil.i18n.TestLabelKey.*
+import static uk.q3c.krail.i18n.test.TestLabelKey.*
 
 /**
  *

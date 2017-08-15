@@ -43,8 +43,8 @@ import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.view.component.LocaleContainer;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.persist.I18NPersistenceHelper;
+import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.persist.PersistenceInfo;
-import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.guava.GuavaCacheConfiguration;
 

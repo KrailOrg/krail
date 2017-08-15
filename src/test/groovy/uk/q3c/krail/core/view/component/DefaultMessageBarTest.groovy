@@ -20,7 +20,7 @@ import uk.q3c.krail.core.user.notify.ErrorNotificationMessage
 import uk.q3c.krail.core.user.notify.InformationNotificationMessage
 import uk.q3c.krail.core.user.notify.WarningNotificationMessage
 import uk.q3c.krail.i18n.Translate
-import uk.q3c.krail.testutil.i18n.MockTranslate
+import uk.q3c.krail.i18n.test.MockTranslate
 
 /**
  * Created by David Sowerby on 09 Feb 2016

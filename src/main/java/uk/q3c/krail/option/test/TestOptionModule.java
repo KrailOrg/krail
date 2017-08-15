@@ -11,7 +11,7 @@
  *
  */
 
-package uk.q3c.krail.testutil.option;
+package uk.q3c.krail.option.test;
 
 import uk.q3c.krail.core.option.InMemory;
 import uk.q3c.krail.core.option.Option;

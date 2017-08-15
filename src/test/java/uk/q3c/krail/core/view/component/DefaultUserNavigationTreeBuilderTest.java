@@ -33,10 +33,10 @@ import uk.q3c.krail.core.navigate.sitemap.UserSitemap;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.test.MockCurrentLocale;
+import uk.q3c.krail.i18n.test.TestI18NModule;
+import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
-import uk.q3c.krail.testutil.i18n.MockCurrentLocale;
-import uk.q3c.krail.testutil.i18n.TestI18NModule;
-import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 import uk.q3c.util.UtilModule;
 

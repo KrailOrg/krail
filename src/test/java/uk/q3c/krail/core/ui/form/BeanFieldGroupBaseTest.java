@@ -32,10 +32,10 @@ import uk.q3c.krail.core.i18n.DefaultI18NProcessor;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.core.validation.KrailValidationModule;
 import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.test.TestI18NModule;
+import uk.q3c.krail.option.test.MockOption;
+import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.guice.uiscope.TestUIScopeModule;
-import uk.q3c.krail.testutil.i18n.TestI18NModule;
-import uk.q3c.krail.testutil.option.MockOption;
-import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 import uk.q3c.util.UtilModule;
 

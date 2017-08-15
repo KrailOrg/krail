@@ -10,7 +10,7 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.testutil.i18n;
+package uk.q3c.krail.i18n.test;
 
 import com.google.inject.Inject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;

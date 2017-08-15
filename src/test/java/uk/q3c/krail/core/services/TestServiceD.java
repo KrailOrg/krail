@@ -18,7 +18,7 @@ import com.google.inject.Singleton;
 import uk.q3c.krail.core.eventbus.GlobalBusProvider;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.testutil.i18n.TestLabelKey;
+import uk.q3c.krail.i18n.test.TestLabelKey;
 
 @Singleton
 public class TestServiceD extends AbstractService {

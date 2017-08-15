@@ -10,22 +10,16 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.testutil.i18n;
+package uk.q3c.krail.i18n.test;
 
-/**
- * @author David Sowerby 9 Feb 2013
- */
-public class TestLabels_de extends TestLabels {
+import uk.q3c.krail.i18n.I18NKey;
 
-    @Override
-    protected void loadMap() {
-        put(TestLabelKey.Home, "zu Hause");
-        put(TestLabelKey.Yes, "Ja");
-        put(TestLabelKey.No, "Nein");
-        put(TestLabelKey.ViewA, "DE_ViewA");
-        put(TestLabelKey.ViewB, "DE_ViewB");
+public enum TestLabelKey implements I18NKey {
 
-    }
+    Large, Home, My_Account, Transfers, Login, MoneyInOut, Private, Public, Opt, Yes, No, View1, View2, ViewA,
+    ViewA1, ViewA11, ViewB, ViewB1, ViewB11, pattern_with_embedded_key, Blank, key1, Static, Private_Static, ServiceA, ServiceB, ServiceC, ServiceD,
+    ServiceE, ServiceF, ServiceG, ServiceH,
+    ViewA111, ViewB12, ViewB121, ViewB122, key2
 
 
 }

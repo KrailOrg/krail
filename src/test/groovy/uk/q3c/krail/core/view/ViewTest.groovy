@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage
 import uk.q3c.krail.i18n.Translate
-import uk.q3c.krail.testutil.i18n.MockTranslate
+import uk.q3c.krail.i18n.test.MockTranslate
 import uk.q3c.krail.testutil.view.ViewFieldChecker
 
 /**

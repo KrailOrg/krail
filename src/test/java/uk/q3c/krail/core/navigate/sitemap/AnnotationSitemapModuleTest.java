@@ -22,11 +22,11 @@ import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.sitemap.AnnotationSitemapModuleTest.TestAnnotationsModule;
 import uk.q3c.krail.core.navigate.sitemap.AnnotationSitemapModuleTest.TestAnnotationsModule1;
-import uk.q3c.krail.testutil.i18n.TestLabelKey;
+import uk.q3c.krail.i18n.test.TestLabelKey;
 
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestAnnotationsModule.class, TestAnnotationsModule1.class})

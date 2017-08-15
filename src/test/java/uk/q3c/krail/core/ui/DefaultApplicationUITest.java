@@ -34,8 +34,8 @@ import uk.q3c.krail.core.user.notify.VaadinNotification;
 import uk.q3c.krail.core.view.component.*;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.guice.vsscope.TestVaadinSessionScopeModule;
-import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 import uk.q3c.util.UtilModule;
 

@@ -36,7 +36,7 @@ import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.testutil.i18n.TestLabelKey;
+import uk.q3c.krail.i18n.test.TestLabelKey;
 
 import java.text.Collator;
 import java.util.Locale;

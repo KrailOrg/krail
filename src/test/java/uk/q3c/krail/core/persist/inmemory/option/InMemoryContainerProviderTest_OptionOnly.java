@@ -24,10 +24,10 @@ import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.option.InMemory;
 import uk.q3c.krail.core.persist.common.option.OptionEntity;
+import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.persist.ContainerType;
 import uk.q3c.krail.persist.VaadinContainerProvider;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
-import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.util.UtilModule;
 
 import static org.assertj.core.api.Assertions.*;

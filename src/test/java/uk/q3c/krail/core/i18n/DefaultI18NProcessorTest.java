@@ -28,9 +28,9 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.persist.inmemory.option.DefaultInMemoryOptionStore;
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 import uk.q3c.krail.i18n.CurrentLocale;
-import uk.q3c.krail.testutil.i18n.TestI18NModule;
-import uk.q3c.krail.testutil.option.MockOption;
-import uk.q3c.krail.testutil.option.TestOptionModule;
+import uk.q3c.krail.i18n.test.TestI18NModule;
+import uk.q3c.krail.option.test.MockOption;
+import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 import uk.q3c.util.UtilModule;
 

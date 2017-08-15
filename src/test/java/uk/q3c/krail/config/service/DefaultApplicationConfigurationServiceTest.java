@@ -41,7 +41,7 @@ import uk.q3c.krail.core.services.ServiceStatus;
 import uk.q3c.krail.core.services.ServicesModule;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.testutil.i18n.MockCurrentLocale;
+import uk.q3c.krail.i18n.test.MockCurrentLocale;
 import uk.q3c.krail.util.ResourceUtils;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;

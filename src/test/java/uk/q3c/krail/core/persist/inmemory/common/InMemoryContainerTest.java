@@ -35,12 +35,12 @@ import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.vaadin.DataModule;
 import uk.q3c.krail.core.view.component.LocaleContainer;
 import uk.q3c.krail.i18n.persist.PatternCacheKey;
+import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.persist.inmemory.InMemoryContainer;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.persist.inmemory.InMemoryPatternDao;
 import uk.q3c.krail.persist.inmemory.InMemoryPatternStore;
 import uk.q3c.krail.persist.inmemory.entity.PatternEntity;
-import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.util.UtilModule;
 import uk.q3c.util.data.DataConverter;
 

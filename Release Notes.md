@@ -21,6 +21,7 @@ were needed to achieve effective separation of concerns
 - `BigDecimalConverter` deleted.  Conversion is already handled by `DataConverter` and is therefore redundant
 - `TestByteEnhancementModule` (in test folder) - use `uk.q3c.util.test.AOPTestModule` instead
 - `OptionList` removed, use `uk.q3c.util.data.collection.DataList` instead
+- `CoreDao` - never used
 
 
 ## Deprecated
@@ -39,11 +40,14 @@ projects: **i18n**, **i18n-api**
 
 Generic I18N classes moved from `uk.q3c.krail.core.i18n` to `uk.q3c.krail.i18n` and sub-packages.  Some (mostly Vaadin specific) classes remain in `uk.q3c.krail.core.i18n`
 
+- `uk.q3c.krail.core.testutil.i18n` moved to `uk.q3c.krail.i18n.test`
+
 
 ### Option
 projects: **option**, **option-api**
 
 - Scope of `DefaultOptionCache` is set in `OptionModule` instead of by annotation
+- `uk.q3c.krail.core.testutil.option` moved to `uk.q3c.krail.option.test`
 
 ### Data
 

@@ -38,7 +38,7 @@ import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.core.view.ViewModule;
 import uk.q3c.krail.core.view.component.DefaultComponentModule;
 import uk.q3c.krail.i18n.bind.I18NModule;
-import uk.q3c.krail.testutil.option.TestOptionModule;
+import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 import uk.q3c.krail.util.UtilsModule;
 import uk.q3c.util.UtilModule;
