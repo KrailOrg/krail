@@ -24,9 +24,14 @@ import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.core.persist.common.option.OptionDaoProviders;
 import uk.q3c.krail.core.persist.inmemory.option.*;
 import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.persist.I18NPersistenceEnabler;
 import uk.q3c.krail.i18n.persist.PatternDao;
 import uk.q3c.krail.i18n.persist.PatternDaoProviders;
-import uk.q3c.krail.persist.*;
+import uk.q3c.krail.option.persist.OptionPersistenceEnabler;
+import uk.q3c.krail.persist.DefaultPersistenceInfo;
+import uk.q3c.krail.persist.KrailPersistenceUnitHelper;
+import uk.q3c.krail.persist.PersistenceInfo;
+import uk.q3c.krail.persist.VaadinContainerProvider;
 import uk.q3c.krail.persist.inmemory.entity.DefaultInMemoryPatternStore;
 
 import java.lang.annotation.Annotation;
@@ -36,7 +41,7 @@ import java.lang.annotation.Annotation;
  * <p>
  * Created by David Sowerby on 25/06/15.
  */
-public class InMemoryModule extends AbstractModule implements KrailPersistenceUnit<InMemoryModule> {
+public class InMemoryModule extends AbstractModule implements I18NPersistenceEnabler<InMemoryModule>, OptionPersistenceEnabler<InMemoryModule> {
 
     private String connectionUrl = "in memory";
     private I18NKey description = DescriptionKey.Data_is_held_in_memory;

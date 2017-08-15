@@ -13,6 +13,7 @@ were needed to achieve effective separation of concerns
 - `OptionElementConverter` renamed `DataConverter` and moved to `uk.q3c.util.data`.  `DataConverter` supports custom data item converters through Guice MapBinder 
 - `DefaultOptionElementConverter` renamed `DefaultDataConverter` and moved to `uk.q3c.util.data`
 - `OptionConverter` renamed `DataItemConverter` and moved to `uk.q3c.util.data` - it is used by `Option` but not specific to it
+- `KrailPersistenceUnit` split into `I18NPersistenceEnabler` and `OptionPersistenceEnabler`
 
 ## Removals
 
@@ -33,11 +34,13 @@ These can be dealt with by the usual method of deleting failed import statements
 
 ### I18N
 
-projects: **krail-i18n**, **krail-i18n-api**
+projects: **i18n**, **i18n-api**
+
 Generic I18N classes moved from `uk.q3c.krail.core.i18n` to `uk.q3c.krail.i18n` and sub-packages.  Some (mostly Vaadin specific) classes remain in `uk.q3c.krail.core.i18n`
 
 
 ### Option
+projects: **option**, **option-api**
 
 ### Data
 
