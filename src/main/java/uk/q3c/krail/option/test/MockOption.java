@@ -14,9 +14,9 @@
 package uk.q3c.krail.option.test;
 
 import com.google.inject.Inject;
-import uk.q3c.krail.core.option.Option;
-import uk.q3c.krail.core.option.OptionKey;
-import uk.q3c.krail.core.user.profile.UserHierarchy;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionKey;
+import uk.q3c.krail.option.UserHierarchy;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -545,7 +545,7 @@ import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.core.option.*;
 import uk.q3c.krail.persist.ContainerType;
 import uk.q3c.krail.persist.VaadinContainerProvider;
-import uk.q3c.krail.core.persist.common.option.OptionEntity;
+import uk.q3c.krail.option.persist.inmemory.OptionEntity;
 import uk.q3c.krail.persist.inmemory.InMemoryContainer;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;

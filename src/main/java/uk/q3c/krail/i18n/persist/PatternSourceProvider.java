@@ -16,11 +16,11 @@ package uk.q3c.krail.i18n.persist;
 import com.google.common.collect.ImmutableSet;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.option.Option;
-import uk.q3c.krail.core.option.OptionContext;
-import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.bind.I18NModule;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionContext;
+import uk.q3c.krail.option.OptionKey;
 import uk.q3c.util.data.collection.AnnotationList;
 
 import java.lang.annotation.Annotation;

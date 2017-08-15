@@ -16,7 +16,7 @@ package uk.q3c.krail.core.option.cache;
 import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
-import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
+import uk.q3c.krail.option.persist.OptionCacheKey;
 
 import java.util.HashMap;
 import java.util.Map;

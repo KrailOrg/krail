@@ -22,15 +22,15 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.eventbus.SessionBusProvider;
 import uk.q3c.krail.core.guice.uiscope.UIScoped;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-import uk.q3c.krail.core.option.Option;
-import uk.q3c.krail.core.option.OptionContext;
-import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.eventbus.BusMessage;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.krail.i18n.bind.I18NModule;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionContext;
+import uk.q3c.krail.option.OptionKey;
 
 import java.util.Locale;
 import java.util.Set;

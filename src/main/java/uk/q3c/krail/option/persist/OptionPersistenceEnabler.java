@@ -13,7 +13,6 @@
 
 package uk.q3c.krail.option.persist;
 
-import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.persist.PersistenceInfo;
 
 /**

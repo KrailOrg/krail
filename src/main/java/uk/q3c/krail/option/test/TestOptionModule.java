@@ -13,11 +13,11 @@
 
 package uk.q3c.krail.option.test;
 
-import uk.q3c.krail.core.option.InMemory;
-import uk.q3c.krail.core.option.Option;
-import uk.q3c.krail.core.option.OptionModule;
-import uk.q3c.krail.core.persist.cache.option.DefaultOptionCache;
-import uk.q3c.krail.core.persist.cache.option.OptionCache;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.bind.OptionModule;
+import uk.q3c.krail.option.persist.OptionCache;
+import uk.q3c.krail.option.persist.cache.DefaultOptionCache;
+import uk.q3c.krail.persist.inmemory.InMemory;
 
 /**
  * Created by David Sowerby on 05/12/14.

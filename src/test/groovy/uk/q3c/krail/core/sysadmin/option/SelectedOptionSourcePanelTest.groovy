@@ -16,12 +16,12 @@ package uk.q3c.krail.core.sysadmin.option
 import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.SessionBus
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.option.InMemory
-import uk.q3c.krail.core.option.Option
 import uk.q3c.krail.core.option.OptionPopup
-import uk.q3c.krail.core.persist.common.option.OptionSource
 import uk.q3c.krail.i18n.Translate
+import uk.q3c.krail.option.Option
+import uk.q3c.krail.option.persist.OptionSource
 import uk.q3c.krail.persist.PersistenceInfo
+import uk.q3c.krail.persist.inmemory.InMemory
 
 import java.lang.annotation.Annotation
 

@@ -15,7 +15,6 @@ package uk.q3c.krail.option.persist;
 
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 
 import java.lang.annotation.Annotation;
 

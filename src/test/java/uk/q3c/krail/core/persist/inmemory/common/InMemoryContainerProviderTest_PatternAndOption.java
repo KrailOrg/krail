@@ -21,10 +21,10 @@ import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.data.Container;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.q3c.krail.core.option.InMemory;
-import uk.q3c.krail.core.persist.common.option.OptionEntity;
+import uk.q3c.krail.option.persist.inmemory.OptionEntity;
 import uk.q3c.krail.persist.ContainerType;
 import uk.q3c.krail.persist.VaadinContainerProvider;
+import uk.q3c.krail.persist.inmemory.InMemory;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.persist.inmemory.entity.PatternEntity;
 

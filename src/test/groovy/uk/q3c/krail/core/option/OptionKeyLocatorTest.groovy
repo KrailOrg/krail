@@ -16,6 +16,7 @@ package uk.q3c.krail.core.option
 import com.google.common.collect.ImmutableList
 import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
+import uk.q3c.krail.option.option.OptionKeyLocator
 import uk.q3c.util.data.collection.AnnotationList
 import uk.q3c.util.data.collection.DataList
 

@@ -14,8 +14,8 @@ package uk.q3c.krail.testutil.guice;
 
 import com.google.inject.Module;
 import uk.q3c.krail.core.guice.DefaultBindingManager;
-import uk.q3c.krail.core.option.InMemory;
-import uk.q3c.krail.core.option.OptionModule;
+import uk.q3c.krail.option.bind.OptionModule;
+import uk.q3c.krail.persist.inmemory.InMemory;
 import uk.q3c.krail.testutil.dummy.DummyModule;
 
 import java.util.List;

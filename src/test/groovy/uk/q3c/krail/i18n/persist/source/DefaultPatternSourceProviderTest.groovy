@@ -19,11 +19,11 @@ import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource1
-import uk.q3c.krail.core.option.Option
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.persist.PatternDao
 import uk.q3c.krail.i18n.persist.PatternSourceProvider
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource
+import uk.q3c.krail.option.Option
 import uk.q3c.util.data.collection.AnnotationList
 
 import java.lang.annotation.Annotation

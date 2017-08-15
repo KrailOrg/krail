@@ -14,7 +14,9 @@
 package uk.q3c.krail.core.persist.cache.option
 
 import spock.lang.Specification
-import uk.q3c.krail.core.persist.common.option.OptionDao
+import uk.q3c.krail.option.persist.OptionCacheKey
+import uk.q3c.krail.option.persist.OptionDao
+import uk.q3c.krail.option.persist.cache.DefaultOptionCacheLoader
 
 /**
  * Created by David Sowerby on 30 Jan 2016

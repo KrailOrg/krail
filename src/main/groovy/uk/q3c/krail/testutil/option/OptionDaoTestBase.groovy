@@ -20,20 +20,20 @@ import org.apache.commons.collections15.ListUtils
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters
-import uk.q3c.krail.core.option.InMemory
-import uk.q3c.krail.core.option.OptionKey
-import uk.q3c.krail.core.option.OptionKeyException
-import uk.q3c.krail.core.persist.cache.option.OptionCacheKey
-import uk.q3c.krail.core.persist.common.option.OptionDao
-import uk.q3c.krail.core.persist.common.option.OptionSource
-import uk.q3c.krail.core.user.profile.UserHierarchy
 import uk.q3c.krail.core.view.component.LocaleContainer
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource
+import uk.q3c.krail.option.OptionKey
+import uk.q3c.krail.option.OptionKeyException
+import uk.q3c.krail.option.UserHierarchy
+import uk.q3c.krail.option.persist.OptionCacheKey
+import uk.q3c.krail.option.persist.OptionDao
+import uk.q3c.krail.option.persist.OptionSource
+import uk.q3c.krail.persist.inmemory.InMemory
 import uk.q3c.util.data.DataConverter
 import uk.q3c.util.data.collection.AnnotationList
 import uk.q3c.util.data.collection.DataList
 
-import static uk.q3c.krail.core.user.profile.RankOption.*
+import static uk.q3c.krail.option.RankOption.*
 
 /**
  * Created by David Sowerby on 27 Jan 2016

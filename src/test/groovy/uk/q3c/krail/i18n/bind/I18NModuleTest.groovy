@@ -23,7 +23,6 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
-import uk.q3c.krail.core.option.InMemory
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.vaadin.DataModule
 import uk.q3c.krail.i18n.DefaultLocale
@@ -33,6 +32,7 @@ import uk.q3c.krail.i18n.persist.*
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternDao
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource
 import uk.q3c.krail.option.test.TestOptionModule
+import uk.q3c.krail.persist.inmemory.InMemory
 import uk.q3c.krail.persist.inmemory.InMemoryModule
 import uk.q3c.krail.persist.inmemory.InMemoryPatternDao
 import uk.q3c.util.UtilModule

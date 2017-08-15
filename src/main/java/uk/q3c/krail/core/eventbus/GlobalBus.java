@@ -12,13 +12,13 @@
 package uk.q3c.krail.core.eventbus;
 
 import com.google.inject.BindingAnnotation;
-import uk.q3c.krail.core.persist.cache.option.OptionCache;
+import uk.q3c.krail.option.persist.OptionCache;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.RetentionPolicy.*;
 
 /**
  * Binding annotation to identify a Guava cache configuration for {@link OptionCache}

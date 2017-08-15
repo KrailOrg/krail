@@ -29,13 +29,13 @@ import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.navigate.NavigationState;
 import uk.q3c.krail.core.navigate.StrictURIFragmentHandler;
 import uk.q3c.krail.core.navigate.URIFragmentHandler;
-import uk.q3c.krail.core.option.Option;
-import uk.q3c.krail.core.persist.inmemory.option.DefaultInMemoryOptionStore;
-import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
 import uk.q3c.krail.core.view.LoginView;
 import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.persist.inmemory.InMemoryOptionStore;
+import uk.q3c.krail.option.persist.inmemory.store.DefaultInMemoryOptionStore;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 
 import java.util.ArrayList;

@@ -15,7 +15,9 @@ package uk.q3c.krail.core.option;
 
 import org.apache.shiro.authz.permission.WildcardPermission;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
-import uk.q3c.krail.core.user.profile.UserHierarchy;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionKey;
+import uk.q3c.krail.option.UserHierarchy;
 
 import static com.google.common.base.Preconditions.*;
 

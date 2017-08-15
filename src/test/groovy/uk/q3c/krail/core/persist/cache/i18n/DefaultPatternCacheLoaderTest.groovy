@@ -17,12 +17,12 @@ import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
-import uk.q3c.krail.core.option.Option
 import uk.q3c.krail.i18n.cache.DefaultPatternCacheLoader
 import uk.q3c.krail.i18n.persist.PatternCacheKey
 import uk.q3c.krail.i18n.persist.PatternSourceProvider
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternDao
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource
+import uk.q3c.krail.option.Option
 import uk.q3c.util.testutil.LogMonitor
 
 /**

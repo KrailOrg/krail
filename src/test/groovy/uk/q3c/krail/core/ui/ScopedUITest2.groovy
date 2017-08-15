@@ -19,13 +19,13 @@ import spock.lang.Specification
 import uk.q3c.krail.core.i18n.I18NProcessor
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.navigate.Navigator
-import uk.q3c.krail.core.option.Option
 import uk.q3c.krail.core.push.Broadcaster
 import uk.q3c.krail.core.push.PushMessageRouter
 import uk.q3c.krail.core.view.DefaultPublicHomeView
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.i18n.test.MockTranslate
+import uk.q3c.krail.option.Option
 import uk.q3c.util.testutil.LogMonitor
 
 /**

@@ -14,11 +14,13 @@
 package uk.q3c.krail.core.option
 
 import spock.lang.Specification
-import uk.q3c.krail.core.persist.cache.option.OptionCacheKey
-import uk.q3c.krail.core.persist.common.option.OptionEntity
-import uk.q3c.krail.core.user.profile.RankOption
-import uk.q3c.krail.core.user.profile.UserHierarchy
 import uk.q3c.krail.core.view.component.LocaleContainer
+import uk.q3c.krail.option.OptionContext
+import uk.q3c.krail.option.OptionKey
+import uk.q3c.krail.option.RankOption
+import uk.q3c.krail.option.UserHierarchy
+import uk.q3c.krail.option.persist.OptionCacheKey
+import uk.q3c.krail.option.persist.inmemory.OptionEntity
 
 /**
  * Created by David Sowerby on 21 Jan 2016

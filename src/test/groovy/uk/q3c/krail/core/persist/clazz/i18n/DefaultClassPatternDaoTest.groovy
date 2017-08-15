@@ -19,12 +19,12 @@ import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.MessageKey
-import uk.q3c.krail.core.option.Option
-import uk.q3c.krail.core.option.OptionKey
 import uk.q3c.krail.i18n.clazz.ClassBundleControl
 import uk.q3c.krail.i18n.clazz.DefaultClassPatternDao
 import uk.q3c.krail.i18n.persist.PatternCacheKey
 import uk.q3c.krail.i18n.persist.PatternWriteException
+import uk.q3c.krail.option.Option
+import uk.q3c.krail.option.OptionKey
 
 /**
  * Unit test for {@link uk.q3c.krail.i18n.clazz.DefaultClassPatternDao}

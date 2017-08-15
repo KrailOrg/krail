@@ -18,10 +18,10 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.vaadin.data.Property;
-import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.i18n.persist.*;
+import uk.q3c.krail.option.Option;
 import uk.q3c.util.data.collection.AnnotationList;
 
 import java.lang.annotation.Annotation;

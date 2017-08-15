@@ -21,9 +21,9 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Field;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.i18n.I18NProcessor;
-import uk.q3c.krail.core.option.Option;
-import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.validation.BeanValidator;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionContext;
 import uk.q3c.krail.persist.KrailEntity;
 
 import java.util.HashMap;

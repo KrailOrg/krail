@@ -19,10 +19,10 @@ import com.vaadin.ui.Panel;
 import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.option.Option;
 import uk.q3c.krail.util.Experimental;
 
 import static uk.q3c.krail.core.i18n.DescriptionKey.*;

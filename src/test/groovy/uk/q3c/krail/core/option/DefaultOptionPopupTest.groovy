@@ -21,6 +21,10 @@ import uk.q3c.krail.core.ui.DataTypeToUI
 import uk.q3c.krail.core.ui.DefaultDataTypeToUI
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.i18n.test.TestLabelKey
+import uk.q3c.krail.option.Option
+import uk.q3c.krail.option.OptionContext
+import uk.q3c.krail.option.OptionKey
+import uk.q3c.krail.option.option.OptionKeyLocator
 import uk.q3c.krail.option.test.MockOption
 
 /**

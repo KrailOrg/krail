@@ -17,9 +17,9 @@ import uk.q3c.krail.core.user.notify.DefaultUserNotifier;
 import uk.q3c.krail.core.user.notify.DefaultVaadinNotification;
 import uk.q3c.krail.core.user.notify.UserNotifier;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
-import uk.q3c.krail.core.user.profile.DefaultUserHierarchy;
-import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
-import uk.q3c.krail.core.user.profile.UserHierarchy;
+import uk.q3c.krail.option.DefaultUserHierarchy;
+import uk.q3c.krail.option.UserHierarchy;
+import uk.q3c.krail.option.hierarchy.SimpleUserHierarchy;
 
 public class UserModule extends AbstractModule {
     @SuppressWarnings("rawtypes")

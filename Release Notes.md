@@ -22,6 +22,7 @@ were needed to achieve effective separation of concerns
 - `TestByteEnhancementModule` (in test folder) - use `uk.q3c.util.test.AOPTestModule` instead
 - `OptionList` removed, use `uk.q3c.util.data.collection.DataList` instead
 - `CoreDao` - never used
+- `OptionCollection` removed, use `uk.q3c.util.data.collection.DataList` instead
 
 
 ## Deprecated

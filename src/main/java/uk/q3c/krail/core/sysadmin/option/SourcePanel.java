@@ -26,14 +26,14 @@ import uk.q3c.krail.core.i18n.Caption;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.option.Option;
-import uk.q3c.krail.core.option.OptionContext;
-import uk.q3c.krail.core.option.OptionKey;
 import uk.q3c.krail.core.option.OptionPopup;
-import uk.q3c.krail.core.persist.common.option.OptionSource;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionContext;
+import uk.q3c.krail.option.OptionKey;
+import uk.q3c.krail.option.persist.OptionSource;
 import uk.q3c.krail.persist.PersistenceInfo;
 import uk.q3c.krail.util.Experimental;
 

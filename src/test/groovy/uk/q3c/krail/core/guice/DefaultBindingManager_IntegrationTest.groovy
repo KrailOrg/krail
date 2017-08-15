@@ -15,16 +15,16 @@ package uk.q3c.krail.core.guice
 
 import com.google.inject.Module
 import com.google.inject.TypeLiteral
-import uk.q3c.krail.core.option.InMemory
-import uk.q3c.krail.core.persist.common.option.DefaultActiveOptionSource
-import uk.q3c.krail.core.persist.common.option.OptionContainerProvider
-import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate
-import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionContainerProvider
-import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionDaoDelegate
 import uk.q3c.krail.core.validation.JavaxValidationSubstitutes
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.persist.I18NPersistenceHelper
+import uk.q3c.krail.option.persist.DefaultActiveOptionSource
+import uk.q3c.krail.option.persist.OptionContainerProvider
+import uk.q3c.krail.option.persist.OptionDaoDelegate
+import uk.q3c.krail.option.persist.inmemory.InMemoryOptionContainerProvider
+import uk.q3c.krail.option.persist.inmemory.dao.InMemoryOptionDaoDelegate
+import uk.q3c.krail.persist.inmemory.InMemory
 import uk.q3c.krail.testutil.dummy.Dummy
 import uk.q3c.krail.testutil.dummy.DummyModule
 import uk.q3c.util.testutil.LogMonitor
