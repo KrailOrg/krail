@@ -25,7 +25,7 @@ were needed to achieve effective separation of concerns
 
 ## Deprecated
 
-- `MessageFormat`. Its replacement is no longer a static utility, but an interface `uk.q3c.util.text.MessageFormat2` with implementation `uk.q3c.util.text.DefaultMessageFormat`.  It also has new "strictness" functionality
+- `MessageFormat`. Its replacement is no longer a static utility, but an interface `uk.q3c.util.text.MessageFormat2` with implementation `uk.q3c.util.text.DefaultMessageFormat`.  - `Translate` (and `DefaultMessageFormat` if used directly) offers 3 levels of strictness when handling mis-matches between arguments and parameters, **STRICT**, **STRICT_EXCEPTION** and **LENIENT**. The default, **STRICT**, behaves the same way as the previous version.
 - `ReflectionUtils`.  `org.reflections` should be used instead
 - `OptionList` & `OptionListConverter` - this is not practical for anything except in memory store
 
@@ -42,6 +42,8 @@ Generic I18N classes moved from `uk.q3c.krail.core.i18n` to `uk.q3c.krail.i18n` 
 
 ### Option
 projects: **option**, **option-api**
+
+- Scope of `DefaultOptionCache` is set in `OptionModule` instead of by annotation
 
 ### Data
 

@@ -33,7 +33,6 @@ import uk.q3c.krail.i18n.persist.source.DefaultPatternSource;
 import uk.q3c.krail.i18n.persist.source.DefaultPatternSourceProvider;
 import uk.q3c.krail.i18n.translate.DefaultTranslate;
 import uk.q3c.krail.i18n.util.DefaultPatternUtility;
-import uk.q3c.krail.persist.I18NPersistenceHelper;
 import uk.q3c.util.clazz.DefaultUnenhancedClassIdentifier;
 import uk.q3c.util.clazz.UnenhancedClassIdentifier;
 

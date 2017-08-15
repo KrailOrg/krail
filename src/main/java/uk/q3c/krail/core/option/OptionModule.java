@@ -88,11 +88,11 @@ public class OptionModule extends AbstractModule {
 
 
     /**
-     * Override this method to provide your own {@link OptionCache} implementation. The scope is expected to be {@link VaadinSessionScoped}, as optons
+     * Override this method to provide your own {@link OptionCache} implementation. The scope is generally expected to be {@link VaadinSessionScoped}, as optons
      * relate to individual users.
      */
     protected void bindOptionCache() {
-        bind(OptionCache.class).to(DefaultOptionCache.class);
+        bind(OptionCache.class).to(DefaultOptionCache.class).in(VaadinSessionScoped.class);
     }
 
     protected void bindOptionCacheConfiguration() {

@@ -11,14 +11,13 @@
  *
  */
 
-package uk.q3c.krail.persist;
+package uk.q3c.krail.i18n.persist;
 
 import com.google.inject.Binder;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
-import uk.q3c.krail.i18n.persist.PatternDao;
-import uk.q3c.krail.i18n.persist.PatternDaoProviders;
+import uk.q3c.krail.persist.PersistenceInfo;
 
 import java.lang.annotation.Annotation;
 
