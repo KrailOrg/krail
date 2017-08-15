@@ -10,7 +10,7 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.i18n;
+package uk.q3c.krail.i18n.persist;
 
 import com.google.inject.BindingAnnotation;
 import uk.q3c.krail.i18n.bind.I18NModule;

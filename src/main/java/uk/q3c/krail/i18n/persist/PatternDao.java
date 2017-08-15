@@ -13,9 +13,6 @@
 
 package uk.q3c.krail.i18n.persist;
 
-import uk.q3c.krail.i18n.PatternCacheKey;
-import uk.q3c.krail.i18n.PatternSource;
-
 import java.util.Optional;
 
 /**

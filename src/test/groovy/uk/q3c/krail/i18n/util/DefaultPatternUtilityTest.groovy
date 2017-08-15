@@ -19,7 +19,11 @@ import uk.q3c.krail.core.i18n.DescriptionKey
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.MessageKey
 import uk.q3c.krail.core.validation.ValidationKey
-import uk.q3c.krail.i18n.*
+import uk.q3c.krail.i18n.I18NKey
+import uk.q3c.krail.i18n.persist.PatternSource
+import uk.q3c.krail.i18n.persist.PatternSourceProvider
+import uk.q3c.krail.i18n.persist.clazz.ClassPatternDao
+import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource
 
 //((ValidationKey.getEnumConstants().length + LabelKey.getEnumConstants().length + DescriptionKey.getEnumConstants().length + MessageKey.getEnumConstants().length) * 2) * patternDao.write(_, 'anything')
 /**

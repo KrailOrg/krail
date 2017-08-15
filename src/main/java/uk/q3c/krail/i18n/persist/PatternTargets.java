@@ -10,7 +10,7 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.i18n;
+package uk.q3c.krail.i18n.persist;
 
 import com.google.inject.BindingAnnotation;
 
@@ -23,6 +23,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 @BindingAnnotation
 @Target({FIELD, PARAMETER, METHOD})
 @Retention(RUNTIME)
-public @interface PatternSourceOrderDefault {
+public @interface PatternTargets {
 
 }

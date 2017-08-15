@@ -14,6 +14,7 @@ package uk.q3c.krail.i18n.translate;
 
 import com.google.inject.Inject;
 import uk.q3c.krail.i18n.*;
+import uk.q3c.krail.i18n.persist.PatternSource;
 import uk.q3c.util.MessageFormat;
 
 import java.text.Collator;

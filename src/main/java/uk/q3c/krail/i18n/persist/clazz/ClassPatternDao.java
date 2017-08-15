@@ -11,8 +11,10 @@
  *
  */
 
-package uk.q3c.krail.i18n;
+package uk.q3c.krail.i18n.persist.clazz;
 
+import uk.q3c.krail.i18n.EnumResourceBundle;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
 import uk.q3c.krail.i18n.persist.PatternDao;
 
 import java.io.File;

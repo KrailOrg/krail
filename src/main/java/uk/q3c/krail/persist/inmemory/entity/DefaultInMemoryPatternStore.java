@@ -15,7 +15,7 @@ package uk.q3c.krail.persist.inmemory.entity;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Singleton;
-import uk.q3c.krail.i18n.PatternCacheKey;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
 import uk.q3c.krail.persist.inmemory.InMemoryPatternStore;
 
 import java.util.HashMap;

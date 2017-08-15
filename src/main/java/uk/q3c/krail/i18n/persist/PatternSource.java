@@ -11,7 +11,9 @@
  *
  */
 
-package uk.q3c.krail.i18n;
+package uk.q3c.krail.i18n.persist;
+
+import uk.q3c.krail.i18n.I18NKey;
 
 import java.lang.annotation.Annotation;
 import java.util.Locale;

@@ -13,7 +13,7 @@
 
 package uk.q3c.krail.i18n;
 
-import uk.q3c.krail.i18n.source.DefaultPatternSource;
+import uk.q3c.krail.i18n.persist.source.DefaultPatternSource;
 
 import java.util.List;
 import java.util.Locale;

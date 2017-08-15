@@ -11,11 +11,11 @@
  *
  */
 
-package uk.q3c.krail.i18n;
+package uk.q3c.krail.i18n.persist;
 
 import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.bind.I18NModule;
-import uk.q3c.krail.i18n.persist.PatternDao;
 
 import java.util.Locale;
 import java.util.Set;

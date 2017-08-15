@@ -24,7 +24,6 @@ import org.junit.runner.RunWith;
 import uk.q3c.krail.core.eventbus.EventBusModule;
 import uk.q3c.krail.core.guice.uiscope.UIScopeModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.i18n.AnnotationInfo;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.testutil.i18n.TestI18NModule;
 import uk.q3c.krail.testutil.option.MockOption;

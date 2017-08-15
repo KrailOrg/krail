@@ -28,7 +28,7 @@ import uk.q3c.krail.core.persist.common.option.OptionDao
 import uk.q3c.krail.core.persist.common.option.OptionSource
 import uk.q3c.krail.core.user.profile.UserHierarchy
 import uk.q3c.krail.core.view.component.LocaleContainer
-import uk.q3c.krail.i18n.ClassPatternSource
+import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource
 import uk.q3c.util.data.DataConverter
 import uk.q3c.util.data.collection.AnnotationList
 import uk.q3c.util.data.collection.DataList

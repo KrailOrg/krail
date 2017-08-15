@@ -19,8 +19,12 @@ import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.i18n.MessageKey;
 import uk.q3c.krail.core.validation.ValidationKey;
-import uk.q3c.krail.i18n.*;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.SupportedLocales;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
 import uk.q3c.krail.i18n.persist.PatternDao;
+import uk.q3c.krail.i18n.persist.PatternSource;
+import uk.q3c.krail.i18n.persist.PatternUtility;
 
 import java.util.Locale;
 import java.util.Optional;

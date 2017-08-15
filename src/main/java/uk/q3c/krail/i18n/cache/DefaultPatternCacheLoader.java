@@ -21,10 +21,14 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.option.OptionKey;
-import uk.q3c.krail.i18n.*;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.KrailResourceBundleControl;
 import uk.q3c.krail.i18n.bind.I18NModule;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
+import uk.q3c.krail.i18n.persist.PatternCacheLoader;
 import uk.q3c.krail.i18n.persist.PatternDao;
-import uk.q3c.krail.i18n.source.DefaultPatternSourceProvider;
+import uk.q3c.krail.i18n.persist.PatternSourceProvider;
+import uk.q3c.krail.i18n.persist.source.DefaultPatternSourceProvider;
 
 import java.lang.annotation.Annotation;
 import java.util.List;

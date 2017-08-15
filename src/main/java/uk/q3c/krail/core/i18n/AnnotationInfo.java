@@ -10,19 +10,32 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.i18n;
 
-import com.google.inject.BindingAnnotation;
+package uk.q3c.krail.core.i18n;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
+/**
+ * Created by David Sowerby on 15/05/15.
+ */
+public class AnnotationInfo {
 
-@BindingAnnotation
-@Target({FIELD, PARAMETER, METHOD})
-@Retention(RUNTIME)
-public @interface PatternTargets {
+    private final Field field;
+    private final List<Annotation> annotations;
 
+    public AnnotationInfo(Field field) {
+        this.field = field;
+        this.annotations = new ArrayList<>();
+    }
+
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    public Field getField() {
+        return field;
+    }
 }

@@ -34,7 +34,7 @@ import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.vaadin.DataModule;
 import uk.q3c.krail.core.view.component.LocaleContainer;
-import uk.q3c.krail.i18n.PatternCacheKey;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
 import uk.q3c.krail.persist.inmemory.InMemoryContainer;
 import uk.q3c.krail.persist.inmemory.InMemoryModule;
 import uk.q3c.krail.persist.inmemory.InMemoryPatternDao;

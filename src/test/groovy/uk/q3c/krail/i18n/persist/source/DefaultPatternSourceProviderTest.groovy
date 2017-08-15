@@ -11,7 +11,7 @@
  *
  */
 
-package uk.q3c.krail.i18n.source
+package uk.q3c.krail.i18n.persist.source
 
 import com.google.inject.Provider
 import org.apache.commons.collections15.ListUtils
@@ -20,10 +20,10 @@ import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource1
 import uk.q3c.krail.core.option.Option
-import uk.q3c.krail.i18n.ClassPatternSource
 import uk.q3c.krail.i18n.I18NKey
-import uk.q3c.krail.i18n.PatternSourceProvider
 import uk.q3c.krail.i18n.persist.PatternDao
+import uk.q3c.krail.i18n.persist.PatternSourceProvider
+import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource
 import uk.q3c.util.data.collection.AnnotationList
 
 import java.lang.annotation.Annotation

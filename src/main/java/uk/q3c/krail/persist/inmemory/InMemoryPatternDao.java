@@ -15,7 +15,7 @@ package uk.q3c.krail.persist.inmemory;
 
 
 import com.google.inject.Inject;
-import uk.q3c.krail.i18n.PatternCacheKey;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
 import uk.q3c.krail.i18n.persist.PatternDao;
 
 import java.util.Optional;

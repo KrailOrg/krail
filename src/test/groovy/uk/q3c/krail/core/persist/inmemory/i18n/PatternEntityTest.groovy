@@ -15,7 +15,7 @@ package uk.q3c.krail.core.persist.inmemory.i18n
 
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.i18n.PatternCacheKey
+import uk.q3c.krail.i18n.persist.PatternCacheKey
 import uk.q3c.krail.persist.inmemory.entity.PatternEntity
 
 /**

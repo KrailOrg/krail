@@ -11,7 +11,7 @@
  *
  */
 
-package uk.q3c.krail.i18n;
+package uk.q3c.krail.i18n.persist;
 
 import uk.q3c.krail.i18n.bind.I18NModule;
 

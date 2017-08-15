@@ -11,14 +11,18 @@
  *
  */
 
-package uk.q3c.krail.i18n.source;
+package uk.q3c.krail.i18n.persist.source;
 
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
-import uk.q3c.krail.i18n.*;
+import uk.q3c.krail.i18n.CurrentLocale;
+import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.i18n.cache.DefaultPatternCacheLoader;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
+import uk.q3c.krail.i18n.persist.PatternCacheLoader;
+import uk.q3c.krail.i18n.persist.PatternSource;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;

@@ -24,9 +24,13 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionContext;
 import uk.q3c.krail.core.option.OptionKey;
-import uk.q3c.krail.i18n.*;
+import uk.q3c.krail.i18n.EnumResourceBundle;
+import uk.q3c.krail.i18n.I18NKey;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
 import uk.q3c.krail.i18n.persist.PatternDao;
 import uk.q3c.krail.i18n.persist.PatternWriteException;
+import uk.q3c.krail.i18n.persist.clazz.ClassPatternDao;
+import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource;
 
 import java.io.BufferedWriter;
 import java.io.File;

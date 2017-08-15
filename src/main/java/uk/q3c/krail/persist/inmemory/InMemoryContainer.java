@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.util.BeanItemContainer;
 import uk.q3c.krail.core.persist.common.option.OptionEntity;
 import uk.q3c.krail.core.persist.inmemory.option.InMemoryOptionStore;
-import uk.q3c.krail.i18n.PatternCacheKey;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
 import uk.q3c.krail.persist.inmemory.entity.PatternEntity;
 
 import java.util.List;
