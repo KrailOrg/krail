@@ -58,6 +58,10 @@ projects: **option**, **option-api**
 - `uk.q3c.krail.core.data.I18NKeyConverter` moved to  `uk.q3c.krail.i18n.I18NKeyConverter`
 - `uk.q3c.krail.core.data.Select` moved to  `uk.q3c.krail.i18n.jpa.Select`
 
+### persist
+
+- added `PersistenceConfigurationException`
+
 ### uk.q3c.util
 
 Project **q3c-util** contains all of the `uk.q3c.util` package
