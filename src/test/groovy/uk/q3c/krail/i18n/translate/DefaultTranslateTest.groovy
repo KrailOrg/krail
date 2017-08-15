@@ -13,51 +13,58 @@
 
 package uk.q3c.krail.i18n.translate
 
-import com.google.inject.Inject
-import spock.guice.UseModules
 import spock.lang.Specification
-import uk.q3c.krail.core.eventbus.EventBusModule
-import uk.q3c.krail.core.guice.uiscope.UIScopeModule
-import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.vaadin.DataModule
 import uk.q3c.krail.i18n.CurrentLocale
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.i18n.UnsupportedLocaleException
-import uk.q3c.krail.i18n.test.TestI18NModule
+import uk.q3c.krail.i18n.locale.DefaultCurrentLocale
+import uk.q3c.krail.i18n.persist.PatternSource
 import uk.q3c.krail.i18n.test.TestLabelKey
-import uk.q3c.krail.option.test.MockOption
-import uk.q3c.krail.option.test.TestOptionModule
-import uk.q3c.krail.testutil.persist.TestPersistenceModule
-import uk.q3c.util.UtilModule
+import uk.q3c.util.text.DefaultMessageFormat
+import uk.q3c.util.text.MessageFormat2
 
 /**
  * Original replaced by Spock
  *
  * Created by David Sowerby on 14/07/15.
  */
-@UseModules([TestI18NModule, TestOptionModule, TestPersistenceModule, EventBusModule, UIScopeModule, VaadinSessionScopeModule, DataModule, UtilModule])
 class DefaultTranslateTest extends Specification {
 
-    @Inject
     Translate translate
 
-    @Inject
     CurrentLocale currentLocale
 
-    @Inject
-    MockOption option
-
     Locale germanSwitzerland
+    PatternSource patternSource = Mock()
+    Set<Locale> supportedLocales = new HashSet<>()
+    MessageFormat2 messageFormat = new DefaultMessageFormat()
 
     def setup() {
         Locale.setDefault(Locale.UK)
+        currentLocale = new DefaultCurrentLocale()
+        translate = new DefaultTranslate(patternSource, currentLocale, messageFormat, supportedLocales)
         currentLocale.setLocale(Locale.UK)
         germanSwitzerland = new Locale("de", "CH")
+        patternSource.retrievePattern(LabelKey.Cancel, Locale.UK) >> "Cancel"
+        patternSource.retrievePattern(LabelKey.Ok, Locale.UK) >> "Ok"
+        patternSource.retrievePattern(LabelKey.Cancel, Locale.GERMANY) >> "Stornieren"
+        patternSource.retrievePattern(LabelKey.Ok, Locale.GERMANY) >> "OK"
+        patternSource.retrievePattern(LabelKey.Ok, Locale.FRANCE) >> "Ok"
+        patternSource.retrievePattern(LabelKey.Cancel, germanSwitzerland) >> "Stornieren"
+        patternSource.retrievePattern(LabelKey.Ok, germanSwitzerland) >> "OK"
+        patternSource.retrievePattern(TestLabelKey.pattern_with_embedded_key, Locale.UK) >> "Your {0} request has been refused"
+        patternSource.retrievePattern(TestLabelKey.pattern_with_embedded_key, Locale.GERMANY) >> "Your {0} request has been refused"
+        patternSource.retrievePattern(LabelKey.Log_In, Locale.UK) >> "Log In"
+        patternSource.retrievePattern(LabelKey.Log_In, Locale.GERMANY) >> "Einloggen"
     }
 
 
     def "translate from"() {
+        given:
+        supportedLocales.add(Locale.UK)
+        supportedLocales.add(Locale.GERMANY)
+        supportedLocales.add(germanSwitzerland)
 
         expect:
         translate.from(LabelKey.Cancel).equals("Cancel")
@@ -75,6 +82,11 @@ class DefaultTranslateTest extends Specification {
 
 
     def "attempt to translate an unsupported locale should throw exception"() {
+        given:
+        supportedLocales.add(Locale.UK)
+        supportedLocales.add(Locale.GERMANY)
+        supportedLocales.add(germanSwitzerland)
+
         when:
         translate.from(LabelKey.Ok, Locale.FRANCE)
 
@@ -83,6 +95,10 @@ class DefaultTranslateTest extends Specification {
     }
 
     def "when pattern contains an I18NKey, that key should also be translated"() {
+        given:
+        supportedLocales.add(Locale.UK)
+        supportedLocales.add(Locale.GERMANY)
+        supportedLocales.add(germanSwitzerland)
 
         when:
 
@@ -121,11 +137,15 @@ class DefaultTranslateTest extends Specification {
         thrown UnsupportedLocaleException
     }
 
-    def "null key should return 'key is null'"() {
+    def "null key key is null returns 'key is null'"() {
+        given:
+        supportedLocales.add(Locale.UK)
 
-        expect:
+        when:
+        def result = translate.from(null)
 
-        translate.from(null).equals("key is null")
+        then:
+        result == "key is null"
 
 
     }

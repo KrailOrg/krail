@@ -12,7 +12,6 @@
  */
 package uk.q3c.krail.i18n.bind;
 
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
@@ -35,6 +34,8 @@ import uk.q3c.krail.i18n.translate.DefaultTranslate;
 import uk.q3c.krail.i18n.util.DefaultPatternUtility;
 import uk.q3c.util.clazz.DefaultUnenhancedClassIdentifier;
 import uk.q3c.util.clazz.UnenhancedClassIdentifier;
+import uk.q3c.util.text.DefaultMessageFormat;
+import uk.q3c.util.text.MessageFormat2;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -97,7 +98,7 @@ public class I18NModule extends AbstractModule {
         bindPatternUtility();
         bindFieldScanner();
         bindHostClassIdentifier();
-        //        bindDatabaseBundleReader();
+        bindMessageFormat();
 
         bindSupportedLocales();
         bindSources();
@@ -107,6 +108,10 @@ public class I18NModule extends AbstractModule {
         bindClassPatternDao();
         bindPatternDao();
         bindI18NSourceProvider();
+    }
+
+    protected void bindMessageFormat() {
+        bind(MessageFormat2.class).to(DefaultMessageFormat.class);
     }
 
     /**

@@ -40,8 +40,10 @@ projects: **i18n**, **i18n-api**
 
 Generic I18N classes moved from `uk.q3c.krail.core.i18n` to `uk.q3c.krail.i18n` and sub-packages.  Some (mostly Vaadin specific) classes remain in `uk.q3c.krail.core.i18n`
 
-- `uk.q3c.krail.core.testutil.i18n` moved to `uk.q3c.krail.i18n.test`
-
+- `uk.q3c.krail.core.testutil.i18n` moved to `uk.q3c.krail.i18n.test` (in src folder)
+- `I18NModule` split, new `I18NModule` in **i18n**, `VaadinI18NModule` in core overriding selected methods
+- `DefaultTranslate` updated to use "strictness" provided by `MessageFormat2`.  Existing code will behave as before.
+- `MockTranslate` provided in `uk.q3c.krail.i18n.test` (in src folder) with more complete response (includes locale and arguments) and a bit more functionality as a Mock
 
 ### Option
 projects: **option**, **option-api**

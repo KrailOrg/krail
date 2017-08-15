@@ -13,7 +13,8 @@
 
 package uk.q3c.krail.i18n;
 
-import uk.q3c.krail.i18n.bind.I18NModule;
+import uk.q3c.util.text.MessageFormat2;
+import uk.q3c.util.text.MessageFormatMode;
 
 import java.io.Serializable;
 import java.text.Collator;
@@ -29,34 +30,33 @@ import java.util.Locale;
 public interface Translate extends Serializable {
 
     /**
-     * Returns a translated pattern, with parameters substituted by the provided arguments
+     * Returns a translated pattern, with parameters substituted by the provided arguments.  Strictness of matching for pattern parameters
+     * to arguments is determined by {@link MessageFormat2} - [strictness] is simply passed on.
      *
-     * @param checkLocaleIsSupported
-     *         if true, the locale is first checked to ensure that it is a supported locale, as defined by {@link I18NModule}
-     * @param key
-     *         the pattern key
-     * @param locale
-     *         the Locale to use for translation
-     * @param arguments
-     *         any arguments used for the pattern parameters
-
-     *
+     * @param strictness See {@link MessageFormat2}
+     * @param checkLocaleIsSupported if true, the locale is first checked to ensure that it is a supported locale, as defined by [I18NModule]
+     * @param key                    the pattern key
+     * @param locale                 the Locale to use for translation
+     * @param arguments              any arguments used for the pattern parameters
      * @return the translated pattern, with parameters substituted by the provided arguments
-     *
-     * @throws UnsupportedLocaleException
-     *         if #checkLocaleIsSupported is true, and locale has not been defined as a supported locale in {@link I18NModule}
+     * @throws UnsupportedLocaleException if #checkLocaleIsSupported is true, and locale has not been defined as a supported locale in [I18NModule]
+     */
+    String from(MessageFormatMode strictness, boolean checkLocaleIsSupported, I18NKey key, Locale locale, Object... arguments);
+
+    /**
+     * The same as calling [from] with strictness = [MessageFormatMode.STRICT]
      */
     String from(boolean checkLocaleIsSupported, I18NKey key, Locale locale, Object... arguments);
 
 
     /**
-     * The same as calling {@link #from(boolean, I18NKey, Locale, Object...)} } with checkLocaleIsSupported==true
+     * The same as calling [from] with strictness = [MessageFormatMode.STRICT] and checkLocaleIsSupported==true
      */
     String from(I18NKey key, Locale locale, Object... arguments);
 
 
     /**
-     * The same as {@link #from(I18NKey, Locale, Object...)}, but using {@link CurrentLocale} and checkLocaleIsSupported==true
+     * The same as calling [from] with strictness = [MessageFormatMode.STRICT], checkLocaleIsSupported==true, locale == CurrentLocale
      */
     String from(I18NKey key, Object... arguments);
 
@@ -68,3 +68,7 @@ public interface Translate extends Serializable {
      */
     Collator collator();
 }
+
+
+
+
