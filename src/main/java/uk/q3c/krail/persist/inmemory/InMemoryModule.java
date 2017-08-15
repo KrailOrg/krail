@@ -29,7 +29,7 @@ import uk.q3c.krail.i18n.persist.PatternDao;
 import uk.q3c.krail.i18n.persist.PatternDaoProviders;
 import uk.q3c.krail.option.persist.OptionPersistenceEnabler;
 import uk.q3c.krail.persist.DefaultPersistenceInfo;
-import uk.q3c.krail.persist.KrailPersistenceUnitHelper;
+import uk.q3c.krail.persist.I18NPersistenceHelper;
 import uk.q3c.krail.persist.PersistenceInfo;
 import uk.q3c.krail.persist.VaadinContainerProvider;
 import uk.q3c.krail.persist.inmemory.entity.DefaultInMemoryPatternStore;
@@ -63,7 +63,7 @@ public class InMemoryModule extends AbstractModule implements I18NPersistenceEna
         TypeLiteral<PersistenceInfo<?>> persistenceInfoClassLiteral = new TypeLiteral<PersistenceInfo<?>>() {
         };
 
-        patternDaoProviders = KrailPersistenceUnitHelper.patternDaoProviders(binder());
+        patternDaoProviders = I18NPersistenceHelper.patternDaoProviders(binder());
 
         patternDaoProviders = MapBinder.newMapBinder(binder(), annotationClassLiteral, persistenceInfoClassLiteral, PatternDaoProviders.class);
         optionDaoProviders = MapBinder.newMapBinder(binder(), annotationClassLiteral, persistenceInfoClassLiteral, OptionDaoProviders.class);

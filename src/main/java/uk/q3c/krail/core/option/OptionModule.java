@@ -18,7 +18,7 @@ import com.google.inject.Binder;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.persist.cache.option.*;
 import uk.q3c.krail.core.persist.common.option.*;
-import uk.q3c.krail.persist.KrailPersistenceUnitHelper;
+import uk.q3c.krail.option.persist.OptionPersistenceHelper;
 import uk.q3c.util.data.DataConverter;
 import uk.q3c.util.data.DefaultDataConverter;
 import uk.q3c.util.guava.GuavaCacheConfiguration;
@@ -59,7 +59,7 @@ public class OptionModule extends AbstractModule {
     }
 
     protected void bindDefaultActiveSource() {
-        bind(KrailPersistenceUnitHelper.annotationClassLiteral()).annotatedWith(DefaultActiveOptionSource.class)
+        bind(OptionPersistenceHelper.annotationClassLiteral()).annotatedWith(DefaultActiveOptionSource.class)
                                                                  .toInstance(activeSource);
     }
 

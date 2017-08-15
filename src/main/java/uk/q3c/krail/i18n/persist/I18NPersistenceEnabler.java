@@ -13,7 +13,10 @@
 
 package uk.q3c.krail.i18n.persist;
 
+import com.google.inject.TypeLiteral;
 import uk.q3c.krail.persist.PersistenceInfo;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Interface which may be applied to Guice modules or configuration objects, to provide facility for
@@ -25,6 +28,9 @@ import uk.q3c.krail.persist.PersistenceInfo;
  *         Created by David Sowerby on 25/06/15.
  */
 public interface I18NPersistenceEnabler<M> extends PersistenceInfo<M> {
+
+    TypeLiteral<Class<? extends Annotation>> annotationClassLiteral = new TypeLiteral<Class<? extends Annotation>>() {
+    };
 
     /**
      * Binds {@link PatternDao} to an implementation, uniquely annotated for that implementation

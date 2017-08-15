@@ -42,7 +42,7 @@ import uk.q3c.krail.core.user.profile.SimpleUserHierarchy;
 import uk.q3c.krail.core.user.profile.UserHierarchy;
 import uk.q3c.krail.core.view.component.LocaleContainer;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.persist.KrailPersistenceUnitHelper;
+import uk.q3c.krail.persist.I18NPersistenceHelper;
 import uk.q3c.krail.persist.PersistenceInfo;
 import uk.q3c.krail.testutil.option.TestOptionModule;
 import uk.q3c.util.UtilModule;
@@ -258,7 +258,7 @@ public class Option_IntegrationTest {
                                              .to(InMemoryOptionDaoDelegate.class);
                 bind(OptionSource.class).to(DefaultOptionSource.class);
 
-                bind(KrailPersistenceUnitHelper.annotationClassLiteral()).annotatedWith(DefaultActiveOptionSource.class)
+                bind(I18NPersistenceHelper.annotationClassLiteral()).annotatedWith(DefaultActiveOptionSource.class)
                                                                          .toInstance(InMemory.class);
                 TypeLiteral<Map<Class<? extends Annotation>, PersistenceInfo<?>>> setAnnotationTypeLiteral = new TypeLiteral<Map<Class<? extends Annotation>, PersistenceInfo<?>>>() {
                 };

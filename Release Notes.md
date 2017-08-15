@@ -14,6 +14,7 @@ were needed to achieve effective separation of concerns
 - `DefaultOptionElementConverter` renamed `DefaultDataConverter` and moved to `uk.q3c.util.data`
 - `OptionConverter` renamed `DataItemConverter` and moved to `uk.q3c.util.data` - it is used by `Option` but not specific to it
 - `KrailPersistenceUnit` split into `I18NPersistenceEnabler` and `OptionPersistenceEnabler`
+- `KrailPersistenceUnitHelper` split into `I18NPersistenceHelper` and `OptionPersistenceHelper`
 
 ## Removals
 
