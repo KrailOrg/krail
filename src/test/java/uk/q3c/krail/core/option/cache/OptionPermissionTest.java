@@ -27,6 +27,7 @@ import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.view.component.LocaleContainer;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.option.OptionEditAction;
 import uk.q3c.krail.option.OptionKey;
 import uk.q3c.krail.option.hierarchy.SimpleUserHierarchy;
 
@@ -60,7 +61,7 @@ public class OptionPermissionTest {
         //given
         OptionKey<Integer> optionKey = new OptionKey<>(33, LocaleContainer.class, LabelKey.Error);
         //when
-        String permissionString = new OptionPermission(OptionPermission.Action.EDIT, simpleHierarchy, 0, optionKey, "ds").getPermissionString();
+        String permissionString = new OptionPermission(OptionEditAction.EDIT, simpleHierarchy, 0, optionKey, "ds").getPermissionString();
         //then
         assertThat(permissionString).isEqualTo("option:edit:SimpleUserHierarchy:ds:0:LocaleContainer:Error");
     }
@@ -70,7 +71,7 @@ public class OptionPermissionTest {
         //given
         OptionKey<Integer> optionKey = new OptionKey<>(33, LocaleContainer.class, LabelKey.Error, "q1", "q2");
         //when
-        String permissionString = new OptionPermission(OptionPermission.Action.EDIT, simpleHierarchy, 0, optionKey, "ds").getPermissionString();
+        String permissionString = new OptionPermission(OptionEditAction.EDIT, simpleHierarchy, 0, optionKey, "ds").getPermissionString();
         //then
         assertThat(permissionString).isEqualTo("option:edit:SimpleUserHierarchy:ds:0:LocaleContainer:Error:q1:q2");
     }
@@ -80,8 +81,8 @@ public class OptionPermissionTest {
         //given
         OptionKey<Integer> optionKey = new OptionKey<>(33, LocaleContainer.class, LabelKey.Error);
         //when
-        OptionPermission permissionToVerifyDs = new OptionPermission(OptionPermission.Action.EDIT, simpleHierarchy, 0, optionKey, "ds");
-        OptionPermission permissionToVerifyDa = new OptionPermission(OptionPermission.Action.EDIT, simpleHierarchy, 0, optionKey, "da");
+        OptionPermission permissionToVerifyDs = new OptionPermission(OptionEditAction.EDIT, simpleHierarchy, 0, optionKey, "ds");
+        OptionPermission permissionToVerifyDa = new OptionPermission(OptionEditAction.EDIT, simpleHierarchy, 0, optionKey, "da");
         WildcardPermission editAllUserLevelOptions = new WildcardPermission("option:edit:SimpleUserHierarchy:ds:0:*:*");
         WildcardPermission editAllUserLevelOptions_differentUser = new WildcardPermission("option:edit:SimpleUserHierarchy:da:0:*:*");
         //then

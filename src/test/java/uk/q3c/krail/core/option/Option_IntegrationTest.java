@@ -11,7 +11,7 @@
  *
  */
 
-package uk.q3c.krail.option.option;
+package uk.q3c.krail.core.option;
 
 import com.google.common.cache.CacheStats;
 import com.google.inject.AbstractModule;
@@ -27,16 +27,17 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.option.OptionPermission;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.view.component.LocaleContainer;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.persist.I18NPersistenceHelper;
 import uk.q3c.krail.option.OptionKey;
+import uk.q3c.krail.option.OptionPermissionVerifier;
 import uk.q3c.krail.option.RankOption;
 import uk.q3c.krail.option.UserHierarchy;
 import uk.q3c.krail.option.hierarchy.SimpleUserHierarchy;
+import uk.q3c.krail.option.option.DefaultOption;
 import uk.q3c.krail.option.persist.*;
 import uk.q3c.krail.option.persist.cache.DefaultOptionCache;
 import uk.q3c.krail.option.persist.cache.DefaultOptionCacheLoader;
@@ -96,32 +97,33 @@ public class Option_IntegrationTest {
     OptionKey<Integer> key3 = new OptionKey<>(133, LocaleContainer.class, LabelKey.Alphabetic_Ascending);
     @Mock
     PersistenceInfo persistenceInfo;
+    OptionPermissionVerifier permissionVerifier;
     private UserHierarchy hierarchy;
-    @Mock
-    private SubjectIdentifier subjectIdentifier;
     @Mock
     private SubjectProvider subjectProvider;
 
+    @Mock
+    private SubjectIdentifier subjectIdentifier;
+
     @Before
     public void setup() {
-
-        optionStore.clear();
         when(subjectIdentifier.userId()).thenReturn("fbaton");
         when(subjectProvider.get()).thenReturn(subject1);
+        permissionVerifier = new KrailOptionPermissionVerifier(subjectProvider, subjectIdentifier);
+        optionStore.clear();
         when(subject1.isPermitted(any(OptionPermission.class))).thenReturn(true);
         when(subject2.isPermitted(any(OptionPermission.class))).thenReturn(true);
         hierarchy = new SimpleUserHierarchy(subjectProvider, subjectIdentifier, translate);
 
         cacheLoader = new DefaultOptionCacheLoader(optionDao);
         optionCache = new DefaultOptionCache(optionDao, cacheProvider);
-        option = new DefaultOption(optionCache, hierarchy, subjectProvider, subjectIdentifier);
+        option = new DefaultOption(optionCache, hierarchy, permissionVerifier);
     }
 
 
     @Test
     public void putAndGet_user_authenticated() {
         //given
-        when(subject1.isAuthenticated()).thenReturn(true);
 
         //when
         option.set(key1, 3);
@@ -191,7 +193,7 @@ public class Option_IntegrationTest {
         when(subjectProvider.get()).thenReturn(subject1);
         when(subject1.isAuthenticated()).thenReturn(true);
         when(subjectIdentifier.userId()).thenReturn("fbaton");
-        DefaultOption option2 = new DefaultOption(optionCache, hierarchy, subjectProvider, subjectIdentifier);
+        DefaultOption option2 = new DefaultOption(optionCache, hierarchy, permissionVerifier);
         //when
         option2.set(key1, 3);
         Integer actual = option2.get(key1);
@@ -204,7 +206,7 @@ public class Option_IntegrationTest {
         option2.get(key1); //cache hit
         assertThat(optionCache.cacheSize()).isEqualTo(2); // creates a highest and a specific cache entry
         assertThat(optionCache.stats()
-                              .hitCount()).isEqualTo(5);
+                .hitCount()).isEqualTo(5);
 
 
     }
@@ -225,9 +227,9 @@ public class Option_IntegrationTest {
         optionDao.write(specificKey, Optional.of(236));
         //when
         optionCache.get(Optional.of(highestKey.getOptionKey()
-                                              .getDefaultValue()), highestKey);
+                .getDefaultValue()), highestKey);
         optionCache.get(Optional.of(lowestKey.getOptionKey()
-                                             .getDefaultValue()), lowestKey);
+                .getDefaultValue()), lowestKey);
         Optional<Integer> actualHigh = (Optional<Integer>) optionCache.getIfPresent(highestKey);
         Optional<Integer> actualLow = (Optional<Integer>) optionCache.getIfPresent(lowestKey);
         //then
@@ -258,21 +260,21 @@ public class Option_IntegrationTest {
                 GuavaCacheConfiguration cacheConfig = new GuavaCacheConfiguration().recordStats();
 
                 bind(OptionDaoDelegate.class).annotatedWith(InMemory.class)
-                                             .to(InMemoryOptionDaoDelegate.class);
+                        .to(InMemoryOptionDaoDelegate.class);
                 bind(OptionSource.class).to(DefaultOptionSource.class);
 
                 bind(I18NPersistenceHelper.annotationClassLiteral()).annotatedWith(DefaultActiveOptionSource.class)
-                                                                         .toInstance(InMemory.class);
+                        .toInstance(InMemory.class);
                 TypeLiteral<Map<Class<? extends Annotation>, PersistenceInfo<?>>> setAnnotationTypeLiteral = new TypeLiteral<Map<Class<? extends Annotation>, PersistenceInfo<?>>>() {
                 };
                 optionDaoProviders.put(InMemory.class, persistenceInfo);
 
                 bind(setAnnotationTypeLiteral).annotatedWith(OptionDaoProviders.class)
-                                              .toInstance(optionDaoProviders);
+                        .toInstance(optionDaoProviders);
 
 
                 bind(OptionDaoDelegate.class).annotatedWith(InMemory.class)
-                                             .to(InMemoryOptionDaoDelegate.class);
+                        .to(InMemoryOptionDaoDelegate.class);
                 bind(InMemoryOptionStore.class).to(DefaultInMemoryOptionStore.class);
             }
 

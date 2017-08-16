@@ -19,6 +19,8 @@ import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.option.DefaultOptionPopup;
 import uk.q3c.krail.core.option.OptionPopup;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionPermissionVerifier;
+import uk.q3c.krail.option.hierarchy.DefaultOptionPermissionVerifier;
 import uk.q3c.krail.option.option.DefaultOption;
 import uk.q3c.krail.option.persist.*;
 import uk.q3c.krail.option.persist.cache.DefaultOptionCache;
@@ -55,6 +57,14 @@ public class OptionModule extends AbstractModule {
         bindDefaultActiveSource();
         bindCurrentOptionSource();
         bindOptionElementConverter();
+        bindPermissionVerifier();
+    }
+
+    /**
+     * Override this method to provide your own {@link OptionPermissionVerifier} implementation.
+     */
+    protected void bindPermissionVerifier() {
+        bind(OptionPermissionVerifier.class).to(DefaultOptionPermissionVerifier.class);
     }
 
     /**

@@ -23,7 +23,7 @@ were needed to achieve effective separation of concerns
 - `OptionList` removed, use `uk.q3c.util.data.collection.DataList` instead
 - `CoreDao` - never used
 - `OptionCollection` removed, use `uk.q3c.util.data.collection.DataList` instead
-
+- `OptionPermission.Action` removed, use `OptionEditAction` instead
 
 ## Deprecated
 
@@ -51,6 +51,10 @@ projects: **option**, **option-api**
 
 - Scope of `DefaultOptionCache` is set in `OptionModule` instead of by annotation
 - `uk.q3c.krail.core.testutil.option` moved to `uk.q3c.krail.option.test`
+- `uk.q3c.krail.option.OptionPermissionVerifier` added to separate Shiro from `Option`. `OptionPermission` is therefore only used with Shiro 
+- `uk.q3c.krail.option.test.MockOptionPermissionVerifier` added
+- `OptionBase` updated to use `OptionPermissionVerifier`
+- `OptionPermission` uses `OptionEditAction`.  `OptionPermission.Action is removed`
 
 ### Data
 

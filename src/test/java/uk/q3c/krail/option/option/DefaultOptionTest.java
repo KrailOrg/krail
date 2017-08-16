@@ -16,7 +16,6 @@ package uk.q3c.krail.option.option;
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.data.Property;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.Subject;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,18 +29,17 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.DataTypeToUI;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
-import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.OptionContext;
-import uk.q3c.krail.option.OptionKey;
-import uk.q3c.krail.option.UserHierarchy;
+import uk.q3c.krail.option.*;
 import uk.q3c.krail.option.persist.OptionCache;
 import uk.q3c.krail.option.persist.OptionCacheKey;
+import uk.q3c.krail.option.test.MockOptionPermissionVerifier;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static uk.q3c.krail.option.RankOption.*;
+
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
 public class DefaultOptionTest {
@@ -69,23 +67,25 @@ public class DefaultOptionTest {
     @Mock
     private Translate translate;
 
+    private MockOptionPermissionVerifier permissionVerifier;
+
     @Before
     public void setup() {
+        permissionVerifier = new MockOptionPermissionVerifier();
         when(subjectIdentifier.userId()).thenReturn("ds");
         when(subjectProvider.get()).thenReturn(subject);
         when(defaultHierarchy.highestRankName()).thenReturn("ds");
         contextObject = new MockContext();
-        option = new DefaultOption(optionCache, defaultHierarchy, subjectProvider, subjectIdentifier);
+        option = new DefaultOption(optionCache, defaultHierarchy, permissionVerifier);
         optionKey1 = new OptionKey<>(5, context, TestLabelKey.key1, "q");
         optionKey2 = new OptionKey<>(5, context2, TestLabelKey.key1, "q");
     }
 
 
-    @Test(expected = AuthorizationException.class)
+    @Test(expected = OptionPermissionFailedException.class)
     public void setNoPermissions() {
-        //given
-        when(subject.isPermitted(any(OptionPermission.class))).thenReturn(false);
-        when(defaultHierarchy.rankName(0)).thenReturn("specific");
+        // given
+        permissionVerifier.throwException(true);
         OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 0, optionKey1);
         //when
         option.set(optionKey1, 5);
@@ -123,7 +123,7 @@ public class DefaultOptionTest {
         //given
         when(defaultHierarchy.highestRankName()).thenReturn("high");
         OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, HIGHEST_RANK, optionKey1);
-        when(optionCache.get(Optional.of(5),cacheKey)).thenReturn(Optional.of(8));
+        when(optionCache.get(Optional.of(5), cacheKey)).thenReturn(Optional.of(8));
         //when
         Integer actual = option.get(optionKey1);
         //then
@@ -215,11 +215,10 @@ public class DefaultOptionTest {
         verify(optionCache).delete(cacheKey);
     }
 
-    @Test(expected = AuthorizationException.class)
+    @Test(expected = OptionPermissionFailedException.class)
     public void delete_no_permissions() {
         //given
-        when(subject.isPermitted(any(OptionPermission.class))).thenReturn(false);
-        when(defaultHierarchy.rankName(1)).thenReturn("specific");
+        permissionVerifier.throwException(true);
         OptionCacheKey<Integer> cacheKey = new OptionCacheKey<>(defaultHierarchy, SPECIFIC_RANK, 1, optionKey2);
         when(optionCache.delete(cacheKey)).thenAnswer(answerOf(3));
         //when

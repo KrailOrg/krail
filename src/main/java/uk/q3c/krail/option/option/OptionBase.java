@@ -13,14 +13,7 @@
 
 package uk.q3c.krail.option.option;
 
-import org.apache.shiro.authz.UnauthorizedException;
-import uk.q3c.krail.core.option.OptionPermission;
-import uk.q3c.krail.core.shiro.SubjectIdentifier;
-import uk.q3c.krail.core.shiro.SubjectProvider;
-import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.OptionKey;
-import uk.q3c.krail.option.RankOption;
-import uk.q3c.krail.option.UserHierarchy;
+import uk.q3c.krail.option.*;
 import uk.q3c.krail.option.persist.OptionCache;
 import uk.q3c.krail.option.persist.OptionCacheKey;
 import uk.q3c.krail.option.persist.OptionDaoDelegate;
@@ -40,9 +33,9 @@ import static uk.q3c.krail.option.RankOption.*;
  * <br>
  * To create a hierarchy specific implementation, simply sub-class with the alternative hierarchy injected into it.
  * <br>
- * Permission is required to execute {@link #set(OptionKey, int, Object)}, {@link #set(OptionKey, Object)} or {@link #delete(OptionKey, int)}.  Permission
- * required is represented by an instance of {@link OptionPermission}.  If permissions are required to view, these would need to be applied at the user
- * interface.<br>
+ * Permission is required to execute {@link #set(OptionKey, int, Object)}, {@link #set(OptionKey, Object)} or {@link #delete(OptionKey, int)}.  Permission is
+ * verified by {@link OptionPermissionVerifier}
+ * <p>
  * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
  * {@link OptionDaoDelegate} are wrapped in Optional.
  * </p>
@@ -53,14 +46,12 @@ public abstract class OptionBase implements Option {
 
     private UserHierarchy hierarchy;
     private OptionCache optionCache;
-    private SubjectIdentifier subjectIdentifier;
-    private SubjectProvider subjectProvider;
+    private OptionPermissionVerifier permissionVerifier;
 
-    protected OptionBase(OptionCache optionCache, UserHierarchy hierarchy, SubjectProvider subjectProvider, SubjectIdentifier subjectIdentifier) {
+    protected OptionBase(OptionCache optionCache, UserHierarchy hierarchy, OptionPermissionVerifier permissionVerifier) {
         this.hierarchy = hierarchy;
         this.optionCache = optionCache;
-        this.subjectProvider = subjectProvider;
-        this.subjectIdentifier = subjectIdentifier;
+        this.permissionVerifier = permissionVerifier;
     }
 
     @Override
@@ -77,12 +68,10 @@ public abstract class OptionBase implements Option {
     public synchronized <T> void set(OptionKey<T> optionKey, int hierarchyRank, T value) {
         checkArgument(hierarchyRank >= 0);
         checkNotNull(optionKey);
-        OptionPermission permission = new OptionPermission(OptionPermission.Action.EDIT, hierarchy, hierarchyRank, optionKey, subjectIdentifier.userId());
-        if (subjectProvider.get()
-                           .isPermitted(permission)) {
+        if (permissionVerifier.userHasPermission(OptionEditAction.EDIT, hierarchy, hierarchyRank, optionKey)) {
             optionCache.write(new OptionCacheKey<>(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey), Optional.of(value));
         } else {
-            throw new UnauthorizedException();
+            throw new OptionPermissionFailedException("Permission to edit option refused");
         }
     }
 
@@ -115,7 +104,6 @@ public abstract class OptionBase implements Option {
     }
 
 
-
     @Override
     public synchronized <T> T getSpecificRanked(int hierarchyRank, OptionKey<T> optionKey) {
         checkNotNull(optionKey);
@@ -138,13 +126,11 @@ public abstract class OptionBase implements Option {
     public <T> T delete(OptionKey<T> optionKey, int hierarchyRank) {
         checkArgument(hierarchyRank >= 0);
         checkNotNull(optionKey);
-        OptionPermission permission = new OptionPermission(OptionPermission.Action.EDIT, hierarchy, hierarchyRank, optionKey, subjectIdentifier.userId());
-        if (subjectProvider.get()
-                           .isPermitted(permission)) {
+        if (permissionVerifier.userHasPermission(OptionEditAction.EDIT, hierarchy, hierarchyRank, optionKey)) {
             //noinspection unchecked
             return (T) optionCache.delete(new OptionCacheKey(hierarchy, SPECIFIC_RANK, hierarchyRank, optionKey));
         } else {
-            throw new UnauthorizedException();
+            throw new OptionPermissionFailedException("Permission to edit option refused");
         }
     }
 
