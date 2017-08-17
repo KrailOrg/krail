@@ -55,18 +55,21 @@ ext.versionDescription = 'No version description provided'
 ext.releaseDate = new Date()
 
 group = 'uk.q3c.krail'
-version = '0.9.10.8'
+version = '0.9.10.9'
 //version = versionFromFile(project.projectDir)
 
 repositories {
+    mavenLocal()
     jcenter()
     mavenCentral()
-    mavenLocal()
+    maven {
+        url 'http://maven.vaadin.com/vaadin-addons'
+    }
 }
 
 dependencies {
     compile 'uk.q3c.krail:eventbus-api:0.0.1.0'
-
+    compile 'com.vaadin.addon:jpacontainer:3.1.1' //JPA container
 
 
     compile 'uk.q3c.util:q3c-util:0.12.0.0.6b76839'
