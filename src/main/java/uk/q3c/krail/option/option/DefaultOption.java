@@ -16,10 +16,10 @@ package uk.q3c.krail.option.option;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.option.DefaultUserHierarchy;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionPermissionVerifier;
 import uk.q3c.krail.option.UserHierarchy;
+import uk.q3c.krail.option.UserHierarchyDefault;
 import uk.q3c.krail.option.persist.OptionCache;
 import uk.q3c.krail.option.persist.OptionDaoDelegate;
 import uk.q3c.krail.option.persist.cache.DefaultOptionCacheLoader;
@@ -33,7 +33,7 @@ public class DefaultOption extends OptionBase {
     private static Logger log = LoggerFactory.getLogger(DefaultOption.class);
 
     @Inject
-    public DefaultOption(OptionCache optionCache, @DefaultUserHierarchy UserHierarchy hierarchy, OptionPermissionVerifier permissionVerifier) {
+    public DefaultOption(OptionCache optionCache, @UserHierarchyDefault UserHierarchy hierarchy, OptionPermissionVerifier permissionVerifier) {
         super(optionCache, hierarchy, permissionVerifier);
     }
 }

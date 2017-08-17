@@ -23,6 +23,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 @BindingAnnotation
 @Target({FIELD, PARAMETER, METHOD})
 @Retention(RUNTIME)
-public @interface DefaultLocale {
+public @interface LocaleDefault {
 
 }

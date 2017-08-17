@@ -19,7 +19,7 @@ import uk.q3c.krail.core.validation.JavaxValidationSubstitutes
 import uk.q3c.krail.core.validation.KrailInterpolator
 import uk.q3c.krail.i18n.I18NKey
 import uk.q3c.krail.i18n.persist.I18NPersistenceHelper
-import uk.q3c.krail.option.persist.DefaultActiveOptionSource
+import uk.q3c.krail.option.persist.ActiveOptionSourceDefault
 import uk.q3c.krail.option.persist.OptionContainerProvider
 import uk.q3c.krail.option.persist.OptionDaoDelegate
 import uk.q3c.krail.option.persist.inmemory.InMemoryOptionContainerProvider
@@ -136,7 +136,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
     }
 
     Class<? extends Annotation> activeOptionSource() {
-        getBinding new TypeLiteral<Class<? extends Annotation>>() {}, DefaultActiveOptionSource
+        getBinding new TypeLiteral<Class<? extends Annotation>>() {}, ActiveOptionSourceDefault
     }
 
     MessageInterpolator interpolator() {
@@ -148,7 +148,7 @@ class DefaultBindingManager_IntegrationTest extends GuiceModuleTestBase {
     }
 
     Class<? extends Annotation> activeOptionDao() {
-        getBinding I18NPersistenceHelper.annotationClassLiteral(), DefaultActiveOptionSource.class
+        getBinding I18NPersistenceHelper.annotationClassLiteral(), ActiveOptionSourceDefault.class
     }
 
     OptionContainerProvider optionContainerProvider() {

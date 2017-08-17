@@ -32,8 +32,8 @@ import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.BrowserProvider;
 import uk.q3c.krail.core.user.status.UserStatusBusMessage;
 import uk.q3c.krail.core.user.status.UserStatusChangeSource;
-import uk.q3c.krail.i18n.DefaultLocale;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
+import uk.q3c.krail.i18n.LocaleDefault;
 import uk.q3c.krail.i18n.UnsupportedLocaleException;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionKey;
@@ -293,7 +293,7 @@ public class VaadinCurrentLocaleTest {
 
             @Override
             protected void configure() {
-                bind(Locale.class).annotatedWith(DefaultLocale.class)
+                bind(Locale.class).annotatedWith(LocaleDefault.class)
                                   .toInstance(Locale.UK);
             }
 

@@ -7,8 +7,14 @@ were needed to achieve effective separation of concerns
 
 ## Name changes
 
+- There were some annotations with names beginning with '@Default', which can cause a name clash, as most implementations are 'Defaultxxx'.  The following annotations changed:
+    - `@DefaultUserHierarchy` renamed to  `@UserHierarchyDefault`
+    - `@DefaultActiveOptionSource` renamed to `@ActiveOptionSourceDefault`
+    - `@DefaultLocale` renamed to `@LocaleDefault`
+
+
 - `uk.q3c.krail.i18n.I18NHostClassIdentifier` is now `uk.q3c.util.clazz.UnenhancedClassIdentifier`
-- `AnnotationOptionList` had nothing to do with `Option`.  Renamed `AnnotationList` and moved to `uk.q3c.util.collection`
+- `AnnotationOptionList` had nothing to do with `Option`.  Renamed `AnnotationList` and moved to `uk.q3c.util.collection` in **q3c-util**
 - `AnnotationOptionListConverter`, renamed `AnnotationListConverter` and moved to `uk.q3c.util.collection`
 - `OptionElementConverter` renamed `DataConverter` and moved to `uk.q3c.util.data`.  `DataConverter` supports custom data item converters through Guice MapBinder 
 - `DefaultOptionElementConverter` renamed `DefaultDataConverter` and moved to `uk.q3c.util.data`

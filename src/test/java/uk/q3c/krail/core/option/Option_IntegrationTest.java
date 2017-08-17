@@ -263,7 +263,7 @@ public class Option_IntegrationTest {
                         .to(InMemoryOptionDaoDelegate.class);
                 bind(OptionSource.class).to(DefaultOptionSource.class);
 
-                bind(I18NPersistenceHelper.annotationClassLiteral()).annotatedWith(DefaultActiveOptionSource.class)
+                bind(I18NPersistenceHelper.annotationClassLiteral()).annotatedWith(ActiveOptionSourceDefault.class)
                         .toInstance(InMemory.class);
                 TypeLiteral<Map<Class<? extends Annotation>, PersistenceInfo<?>>> setAnnotationTypeLiteral = new TypeLiteral<Map<Class<? extends Annotation>, PersistenceInfo<?>>>() {
                 };

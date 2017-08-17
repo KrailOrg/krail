@@ -75,7 +75,7 @@ public class OptionModule extends AbstractModule {
     }
 
     protected void bindDefaultActiveSource() {
-        bind(OptionPersistenceHelper.annotationClassLiteral()).annotatedWith(DefaultActiveOptionSource.class)
+        bind(OptionPersistenceHelper.annotationClassLiteral()).annotatedWith(ActiveOptionSourceDefault.class)
                                                                  .toInstance(activeSource);
     }
 

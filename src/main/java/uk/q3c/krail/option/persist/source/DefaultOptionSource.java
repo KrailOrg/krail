@@ -40,7 +40,7 @@ public class DefaultOptionSource implements OptionSource {
 
     @Inject
     protected DefaultOptionSource(Injector injector, @OptionDaoProviders Map<Class<? extends Annotation>, PersistenceInfo<?>> optionDaoProviders,
-                                  @DefaultActiveOptionSource Class<? extends Annotation> activeSource) {
+                                  @ActiveOptionSourceDefault Class<? extends Annotation> activeSource) {
         this.injector = injector;
         this.optionDaoProviders = optionDaoProviders;
         this.activeSource = activeSource;

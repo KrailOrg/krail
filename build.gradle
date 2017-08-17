@@ -55,7 +55,7 @@ ext.versionDescription = 'No version description provided'
 ext.releaseDate = new Date()
 
 group = 'uk.q3c.krail'
-version = '0.9.10.3'
+version = '0.9.10.4'
 //version = versionFromFile(project.projectDir)
 
 repositories {

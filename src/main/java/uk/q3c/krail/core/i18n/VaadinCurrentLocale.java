@@ -79,7 +79,7 @@ public class VaadinCurrentLocale implements CurrentLocale, OptionContext {
     private Set<Locale> supportedLocales;
 
     @Inject
-    protected VaadinCurrentLocale(BrowserProvider browserProvider, @SupportedLocales Set<Locale> supportedLocales, @DefaultLocale Locale defaultLocale,
+    protected VaadinCurrentLocale(BrowserProvider browserProvider, @SupportedLocales Set<Locale> supportedLocales, @LocaleDefault Locale defaultLocale,
                                   SessionBusProvider eventBusProvider, SubjectProvider subjectProvider, Option option) {
         super();
         this.browserProvider = browserProvider;

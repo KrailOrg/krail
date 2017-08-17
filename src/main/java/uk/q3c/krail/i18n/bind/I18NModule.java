@@ -254,10 +254,10 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * Binds {{@link #defaultLocale} to annotation {@link DefaultLocale}
+     * Binds {{@link #defaultLocale} to annotation {@link LocaleDefault}
      */
     protected void bindDefaultLocale() {
-        bind(Locale.class).annotatedWith(DefaultLocale.class)
+        bind(Locale.class).annotatedWith(LocaleDefault.class)
                           .toInstance(defaultLocale);
     }
 

@@ -31,5 +31,5 @@ import static java.lang.annotation.RetentionPolicy.*;
 @BindingAnnotation
 @Target({FIELD, PARAMETER, METHOD})
 @Retention(RUNTIME)
-public @interface DefaultActiveOptionSource {
+public @interface ActiveOptionSourceDefault {
 }

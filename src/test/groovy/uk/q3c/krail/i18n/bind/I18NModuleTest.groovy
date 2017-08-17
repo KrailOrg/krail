@@ -25,8 +25,8 @@ import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.i18n.i18nModule.TestPatternSource
 import uk.q3c.krail.core.shiro.DefaultShiroModule
 import uk.q3c.krail.core.vaadin.DataModule
-import uk.q3c.krail.i18n.DefaultLocale
 import uk.q3c.krail.i18n.I18NKey
+import uk.q3c.krail.i18n.LocaleDefault
 import uk.q3c.krail.i18n.SupportedLocales
 import uk.q3c.krail.i18n.persist.*
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternDao
@@ -208,7 +208,7 @@ class I18NModuleTest extends GuiceModuleTestBase {
 
 
     Locale defaultLocale() {
-        getBinding new TypeLiteral<Locale>() {}, DefaultLocale.class
+        getBinding new TypeLiteral<Locale>() {}, LocaleDefault.class
     }
 
     Set<Locale> supportedLocales() {
