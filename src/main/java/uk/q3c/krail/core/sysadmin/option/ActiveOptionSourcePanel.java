@@ -16,9 +16,9 @@ package uk.q3c.krail.core.sysadmin.option;
 import com.google.inject.Inject;
 import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.core.option.OptionPopup;
+import uk.q3c.krail.core.option.VaadinOptionSource;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.persist.OptionSource;
 
 import java.lang.annotation.Annotation;
 
@@ -32,7 +32,7 @@ public class ActiveOptionSourcePanel extends SourcePanel {
 
 
     @Inject
-    protected ActiveOptionSourcePanel(Translate translate, OptionSource optionSource, Option option, OptionPopup optionPopup) {
+    protected ActiveOptionSourcePanel(Translate translate, VaadinOptionSource optionSource, Option option, OptionPopup optionPopup) {
         super(translate, optionSource, option, optionPopup);
 
     }

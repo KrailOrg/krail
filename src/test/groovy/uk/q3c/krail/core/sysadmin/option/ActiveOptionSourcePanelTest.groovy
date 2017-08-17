@@ -15,9 +15,9 @@ package uk.q3c.krail.core.sysadmin.option
 
 import spock.lang.Specification
 import uk.q3c.krail.core.option.OptionPopup
+import uk.q3c.krail.core.option.VaadinOptionSource
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.option.Option
-import uk.q3c.krail.option.persist.OptionSource
 import uk.q3c.krail.persist.PersistenceInfo
 
 /**
@@ -28,7 +28,7 @@ import uk.q3c.krail.persist.PersistenceInfo
 class ActiveOptionSourcePanelTest extends Specification {
 
     Translate translate = Mock()
-    OptionSource optionSource = Mock()
+    VaadinOptionSource optionSource = Mock()
     PersistenceInfo persistenceInfo = Mock()
     Option option = Mock()
     OptionPopup optionPopup = Mock()

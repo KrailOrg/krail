@@ -28,12 +28,12 @@ import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.option.OptionPopup;
 import uk.q3c.krail.core.option.VaadinOptionContext;
+import uk.q3c.krail.core.option.VaadinOptionSource;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionKey;
-import uk.q3c.krail.option.persist.OptionSource;
 import uk.q3c.krail.persist.PersistenceInfo;
 import uk.q3c.krail.util.Experimental;
 
@@ -78,7 +78,7 @@ public abstract class SourcePanel extends Panel implements VaadinOptionContext {
             .Display_style_for_the_is_volatile);
 
 
-    protected final OptionSource optionSource;
+    protected final VaadinOptionSource optionSource;
 
     private final Label descriptionLabel;
     private final Label connectionUrlLabel;
@@ -98,7 +98,7 @@ public abstract class SourcePanel extends Panel implements VaadinOptionContext {
     private Translate translate;
 
     @Inject
-    protected SourcePanel(Translate translate, OptionSource optionSource, Option option, OptionPopup optionPopup) {
+    protected SourcePanel(Translate translate, VaadinOptionSource optionSource, Option option, OptionPopup optionPopup) {
         this.translate = translate;
         this.optionSource = optionSource;
         this.option = option;

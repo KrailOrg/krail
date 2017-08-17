@@ -17,9 +17,9 @@ import spock.lang.Specification
 import uk.q3c.krail.core.eventbus.SessionBus
 import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.option.OptionPopup
+import uk.q3c.krail.core.option.VaadinOptionSource
 import uk.q3c.krail.i18n.Translate
 import uk.q3c.krail.option.Option
-import uk.q3c.krail.option.persist.OptionSource
 import uk.q3c.krail.persist.PersistenceInfo
 import uk.q3c.krail.persist.inmemory.InMemory
 
@@ -35,7 +35,7 @@ import java.lang.annotation.Annotation
 class SelectedOptionSourcePanelTest extends Specification {
 
     Translate translate = Mock()
-    OptionSource optionSource = Mock()
+    VaadinOptionSource optionSource = Mock()
     PersistenceInfo persistenceInfo = Mock()
     PersistenceInfo persistenceInfo2 = Mock()
     Option option = Mock()

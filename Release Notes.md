@@ -18,6 +18,7 @@ were needed to achieve effective separation of concerns
 - `OptionContext.getOption()` changed to `OptionContext.optionInstance()`
 - `OptionContext` is parameterised to enable response to different change event types.  
 - `VaadinOptionContext` extends `OptionContext` and replaces most existing uses of `OptionContext`
+- `OptionSource` and `DefaultOptionSource` have getContainer() method moved to `VaadinOptionSource` and `DefaultOptionSource`, to remove dependency on Vaadin
 
 ## Name changes
 

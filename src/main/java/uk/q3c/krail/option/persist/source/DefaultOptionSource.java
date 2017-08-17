@@ -16,9 +16,11 @@ package uk.q3c.krail.option.persist.source;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.vaadin.data.Container;
 import uk.q3c.krail.config.ConfigurationException;
-import uk.q3c.krail.option.persist.*;
+import uk.q3c.krail.option.persist.ActiveOptionSourceDefault;
+import uk.q3c.krail.option.persist.OptionDaoDelegate;
+import uk.q3c.krail.option.persist.OptionDaoProviders;
+import uk.q3c.krail.option.persist.OptionSource;
 import uk.q3c.krail.persist.PersistenceInfo;
 import uk.q3c.util.MessageFormat;
 
@@ -35,7 +37,7 @@ import static com.google.common.base.Preconditions.*;
 public class DefaultOptionSource implements OptionSource {
 
     private Class<? extends Annotation> activeSource;
-    private Injector injector;
+    protected Injector injector;
     private Map<Class<? extends Annotation>, PersistenceInfo<?>> optionDaoProviders;
 
     @Inject
@@ -88,14 +90,6 @@ public class DefaultOptionSource implements OptionSource {
     @Override
     public void setActiveSource(Class<? extends Annotation> activeSource) {
         this.activeSource = activeSource;
-    }
-
-    @Override
-    public Container getContainer(Class<? extends Annotation> annotationClass) {
-        checkAnnotationKey(annotationClass);
-        Key<OptionContainerProvider> containerProviderKey = Key.get(OptionContainerProvider.class, annotationClass);
-        OptionContainerProvider provider = injector.getInstance(containerProviderKey);
-        return provider.get();
     }
 
 

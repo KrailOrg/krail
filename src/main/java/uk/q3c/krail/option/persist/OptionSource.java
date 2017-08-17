@@ -13,7 +13,6 @@
 
 package uk.q3c.krail.option.persist;
 
-import com.vaadin.data.Container;
 import uk.q3c.krail.persist.PersistenceInfo;
 
 import java.lang.annotation.Annotation;
@@ -39,5 +38,4 @@ public interface OptionSource {
 
     void setActiveSource(Class<? extends Annotation> activeSource);
 
-    Container getContainer(Class<? extends Annotation> annotationClass);
 }
