@@ -273,9 +273,7 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * This locale is used when all else fails - that is, when the neither the browser locale or user option is valid. See {@link VaadinCurrentLocale} for
-     * more
-     * detail. This is also added to {@link #supportedLocales}, so if you only ant to support one Locale, just call this method.
+     * This locale is used when all else fails - this is also added to {@link #supportedLocales}, so if you only ant to support one Locale, just call this method.
      *
      * @param localeString
      *         valid locale string to be used as default
@@ -293,9 +291,7 @@ public class I18NModule extends AbstractModule {
     }
 
     /**
-     * This locale is used when all else fails - that is, when the neither the browser locale or user option is valid.  See {@link VaadinCurrentLocale} for
-     * more
-     * detail. This is also added to {@link #supportedLocales}, so if you only want to support one Locale, just call this method.
+     * This locale is used when all else fails. This is also added to {@link #supportedLocales}, so if you only want to support one Locale, just call this method.
      *
      * @param locale
      *         Locale object for the default
