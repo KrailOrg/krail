@@ -14,14 +14,12 @@
 package uk.q3c.krail.i18n.clazz;
 
 import com.google.inject.Inject;
-import com.vaadin.data.Property;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.i18n.EnumResourceBundle;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.persist.PatternCacheKey;
@@ -30,6 +28,7 @@ import uk.q3c.krail.i18n.persist.PatternWriteException;
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternDao;
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionContext;
 import uk.q3c.krail.option.OptionKey;
 
 import java.io.BufferedWriter;
@@ -51,7 +50,7 @@ import static com.google.common.base.Preconditions.*;
  * <p>
  * Created by David Sowerby on 27/07/15.
  */
-public class DefaultClassPatternDao implements ClassPatternDao, VaadinOptionContext {
+public class DefaultClassPatternDao implements ClassPatternDao, OptionContext<Object> {
     public static final String CONNECTION_URL = "Class based";
     public static final OptionKey<String> optionPathToValues = new OptionKey<>("", DefaultClassPatternDao.class, LabelKey.Path, DescriptionKey.Path);
     public static final OptionKey<Boolean> optionKeyUseKeyPath = new OptionKey<>(Boolean.TRUE, DefaultClassPatternDao.class, LabelKey.Use_Key_Path,
@@ -227,7 +226,7 @@ public class DefaultClassPatternDao implements ClassPatternDao, VaadinOptionCont
     }
 
     @Override
-    public void optionValueChanged(Property.ValueChangeEvent event) {
+    public void optionValueChanged(Object event) {
         //does nothing, option values are called as required
     }
 
