@@ -19,6 +19,7 @@ import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
 import com.mycila.testing.plugin.guice.ModuleProvider;
 import com.vaadin.data.Container;
+import com.vaadin.data.util.BeanItemContainer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.persist.ContainerType;
@@ -35,7 +36,7 @@ public class InMemoryContainerProviderTest_PatternOnly {
 
     @Inject
     @InMemory
-    VaadinContainerProvider inMemoryContainerProvider;
+    VaadinContainerProvider<BeanItemContainer> inMemoryContainerProvider;
 
     /**
      * This will fail if the INMemoryModule is not set to provide either the OptionDaoDelegate, PatternDao or both

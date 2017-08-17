@@ -546,7 +546,7 @@ import uk.q3c.krail.core.option.*;
 import uk.q3c.krail.persist.ContainerType;
 import uk.q3c.krail.persist.VaadinContainerProvider;
 import OptionEntity;
-import uk.q3c.krail.persist.inmemory.InMemoryContainer;
+import uk.q3c.krail.core.persist.inmemory.InMemoryContainer;
 import uk.q3c.krail.core.view.ViewBase;
 import uk.q3c.krail.core.view.component.ViewChangeBusMessage;
 import uk.q3c.krail.persist.jpa.common.JpaContainerProvider;

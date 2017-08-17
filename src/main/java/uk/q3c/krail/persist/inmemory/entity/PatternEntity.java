@@ -13,8 +13,8 @@
 
 package uk.q3c.krail.persist.inmemory.entity;
 
+import uk.q3c.krail.core.persist.inmemory.InMemoryContainer;
 import uk.q3c.krail.i18n.persist.PatternCacheKey;
-import uk.q3c.krail.persist.inmemory.InMemoryContainer;
 import uk.q3c.util.data.EnumConverter;
 
 /**

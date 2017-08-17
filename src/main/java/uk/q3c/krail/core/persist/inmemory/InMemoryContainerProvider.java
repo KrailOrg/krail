@@ -11,18 +11,19 @@
  *
  */
 
-package uk.q3c.krail.persist.inmemory;
+package uk.q3c.krail.core.persist.inmemory;
 
 import com.google.inject.Inject;
-import com.vaadin.data.Container;
+import com.vaadin.data.util.BeanItemContainer;
 import uk.q3c.krail.option.inmemory.InMemoryOptionStore;
 import uk.q3c.krail.persist.ContainerType;
 import uk.q3c.krail.persist.VaadinContainerProvider;
+import uk.q3c.krail.persist.inmemory.InMemoryPatternStore;
 
 /**
  * Created by David Sowerby on 30/06/15.
  */
-public class InMemoryContainerProvider implements VaadinContainerProvider {
+public class InMemoryContainerProvider implements VaadinContainerProvider<BeanItemContainer> {
 
     private InMemoryOptionStore optionStore;
     private InMemoryPatternStore patternStore;
@@ -34,7 +35,7 @@ public class InMemoryContainerProvider implements VaadinContainerProvider {
     }
 
     @Override
-    public <E> Container get(Class<E> entityClass, ContainerType containerType) {
+    public <E> BeanItemContainer get(Class<E> entityClass, ContainerType containerType) {
         return new InMemoryContainer<>(entityClass, optionStore, patternStore);
     }
 }

@@ -16,11 +16,13 @@ package uk.q3c.krail.persist.inmemory;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
+import com.vaadin.data.util.BeanItemContainer;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.option.OptionContainerProvider;
 import uk.q3c.krail.core.option.inmemory.InMemoryOptionContainerProvider;
 import uk.q3c.krail.core.option.inmemory.container.DefaultInMemoryOptionContainerProvider;
+import uk.q3c.krail.core.persist.inmemory.InMemoryContainerProvider;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.persist.I18NPersistenceEnabler;
 import uk.q3c.krail.i18n.persist.I18NPersistenceHelper;
@@ -83,7 +85,7 @@ public class InMemoryModule extends AbstractModule implements I18NPersistenceEna
         if (provideOptionDao || providePatternDao) {
             bind(InMemoryOptionContainerProvider.class).to(DefaultInMemoryOptionContainerProvider.class);
             bind(OptionContainerProvider.class).annotatedWith(InMemory.class)
-                                               .to(InMemoryOptionContainerProvider.class);
+                    .to(InMemoryOptionContainerProvider.class);
         }
     }
 
@@ -97,9 +99,10 @@ public class InMemoryModule extends AbstractModule implements I18NPersistenceEna
     }
 
     protected void bindContainerProvider() {
-
-        bind(VaadinContainerProvider.class).annotatedWith(InMemory.class)
-                                           .to(InMemoryContainerProvider.class);
+        TypeLiteral<VaadinContainerProvider<BeanItemContainer>> containerProviderLiteral = new TypeLiteral<VaadinContainerProvider<BeanItemContainer>>() {
+        };
+        bind(containerProviderLiteral).annotatedWith(InMemory.class)
+                .to(InMemoryContainerProvider.class);
     }
 
     protected void bindOptionStore() {
@@ -118,9 +121,9 @@ public class InMemoryModule extends AbstractModule implements I18NPersistenceEna
 
         if (provideOptionDao) {
             bind(OptionDaoDelegate.class).annotatedWith(InMemory.class)
-                                         .to(InMemoryOptionDaoDelegate.class);
+                    .to(InMemoryOptionDaoDelegate.class);
             optionDaoProviders.addBinding(InMemory.class)
-                              .toInstance(new DefaultPersistenceInfo(this));
+                    .toInstance(new DefaultPersistenceInfo(this));
 
 
         }
@@ -133,9 +136,9 @@ public class InMemoryModule extends AbstractModule implements I18NPersistenceEna
 
         if (providePatternDao) {
             bind(PatternDao.class).annotatedWith(InMemory.class)
-                                  .to(InMemoryPatternDao.class);
+                    .to(InMemoryPatternDao.class);
             patternDaoProviders.addBinding(InMemory.class)
-                               .toInstance(new DefaultPersistenceInfo(this));
+                    .toInstance(new DefaultPersistenceInfo(this));
 
         }
     }

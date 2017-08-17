@@ -13,17 +13,16 @@
 
 package uk.q3c.krail.persist;
 
-import com.vaadin.data.Container;
-
 /**
- * Common interface for all providers of Vaadin {@link Container} instances.  Although this is Vaadin specific, it resides in the
- * persist package to enable various persistence implementations to work with Krail.  There is no need to implement this interface
- * if there is no requirement for use with Vaadin.
+ * Common interface for all providers of Vaadin Container instances - note that param <C> is not typed - we want to avoid a dependency on Vaadin directly
+ *
+ * Although this is Vaadin specific, it resides in the persist package to enable various persistence implementations to work with Krail.  There is no need to implement this interface
+ * if there is no requirement for use with Vaadin, and the need for it will disappear when Krail is updated to Vaadin 8
  *
  * <p>
  * Created by David Sowerby on 29/06/15.
  */
-public interface VaadinContainerProvider {
+public interface VaadinContainerProvider<C> {
 
-    <E> Container get(Class<E> entityClass, ContainerType containerType);
+    <E> C get(Class<E> entityClass, ContainerType containerType);
 }
