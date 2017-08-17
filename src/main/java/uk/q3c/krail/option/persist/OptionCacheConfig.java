@@ -14,8 +14,7 @@
 package uk.q3c.krail.option.persist;
 
 import com.google.inject.BindingAnnotation;
-import uk.q3c.krail.core.eventbus.SessionBus;
-import uk.q3c.krail.core.guice.vsscope.VaadinSessionScope;
+import uk.q3c.util.guava.GuavaCacheConfiguration;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -24,8 +23,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 /**
- * Binding annotation to identify an Event Bus as being global to the application (to distinguish from event buses which have {@link VaadinSessionScope} -
- * the latter are annotated with {@link SessionBus}
+ * Binding annotation to identify the {@link GuavaCacheConfiguration} to use with the {@Link OptionCache}
  * <p>
  * Created by David Sowerby on 06/02/15.
  */
