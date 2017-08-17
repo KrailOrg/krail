@@ -208,7 +208,7 @@ class DefaultClassPatternDaoTest extends Specification {
 
     def "getOption()"() {
         expect:
-        dao.getOption() == option
+        dao.optionInstance() == option
     }
 
     def "set and get write file"() {

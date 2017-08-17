@@ -27,11 +27,11 @@ import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18N;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.option.OptionPopup;
+import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.LocaleChangeBusMessage;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.OptionContext;
 import uk.q3c.krail.option.OptionKey;
 import uk.q3c.krail.option.persist.OptionSource;
 import uk.q3c.krail.persist.PersistenceInfo;
@@ -48,7 +48,7 @@ import java.lang.annotation.Annotation;
 @I18N
 @Listener
 @SubscribeTo(SessionBus.class)
-public abstract class SourcePanel extends Panel implements OptionContext {
+public abstract class SourcePanel extends Panel implements VaadinOptionContext {
 
 
     public static final OptionKey<String> defaultCaptionStyleOptionKey = new OptionKey<>(ValoTheme.LABEL_SMALL, SourcePanel.class, LabelKey
@@ -238,7 +238,7 @@ public abstract class SourcePanel extends Panel implements OptionContext {
      * {@inheritDoc}
      */
     @Override
-    public Option getOption() {
+    public Option optionInstance() {
         return option;
     }
 }

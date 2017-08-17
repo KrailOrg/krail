@@ -213,7 +213,7 @@ public class DefaultUserNavigationTreeTest {
         // then
         assertThat(userNavigationTree.getOptionMaxDepth()).isEqualTo(3);
         // option has been set
-        int result = userNavigationTree.getOption()
+        int result = userNavigationTree.optionInstance()
                                        .get(DefaultUserNavigationTree.optionKeyMaximumDepth);
         assertThat(result).isEqualTo(3);
     }
@@ -229,7 +229,7 @@ public class DefaultUserNavigationTreeTest {
         // then
         assertThat(userNavigationTree.getOptionMaxDepth()).isEqualTo(2);
         // option has been set
-        int result = userNavigationTree.getOption()
+        int result = userNavigationTree.optionInstance()
                                        .get(DefaultUserNavigationTree.optionKeyMaximumDepth);
         assertThat(result).isEqualTo(2);
     }
@@ -407,9 +407,9 @@ public class DefaultUserNavigationTreeTest {
         userNavigationTree.setOptionSortAscending(true);
         userNavigationTree.setOptionKeySortType(SortType.INSERTION);
         // then
-        assertThat(userNavigationTree.getOption()
+        assertThat(userNavigationTree.optionInstance()
                                      .get(DefaultUserNavigationTree.optionKeySortAscending)).isTrue();
-        assertThat(userNavigationTree.getOption()
+        assertThat(userNavigationTree.optionInstance()
                                      .get(DefaultUserNavigationTree.optionKeySortType)).isEqualTo(SortType.INSERTION);
 
     }

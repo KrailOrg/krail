@@ -150,6 +150,6 @@ public class DefaultApplicationUITest {
         assertThat(ui.getUserStatus()).isNotNull();
         assertThat(ui.getLogo()).isNotNull();
         assertThat(ui.getHeader()).isNotNull();
-        assertThat(ui.getOption()).isNotNull();
+        assertThat(ui.optionInstance()).isNotNull();
     }
 }

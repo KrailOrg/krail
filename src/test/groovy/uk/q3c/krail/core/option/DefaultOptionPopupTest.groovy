@@ -182,13 +182,13 @@ class DefaultOptionPopupTest extends Specification {
         return (Button) formLayout.getComponent(0)
     }
 
-    static class MockContext implements OptionContext {
+    static class MockContext implements VaadinOptionContext {
 
         Option option = new MockOption()
 
 
         @Override
-        Option getOption() {
+        Option optionInstance() {
             return option
         }
 
@@ -198,7 +198,7 @@ class DefaultOptionPopupTest extends Specification {
         }
     }
 
-    static class MockContext2 implements OptionContext {
+    static class MockContext2 implements VaadinOptionContext {
         Option option = new MockOption()
 
         public static
@@ -210,7 +210,7 @@ class DefaultOptionPopupTest extends Specification {
 
 
         @Override
-        Option getOption() {
+        Option optionInstance() {
             return option
         }
 
@@ -220,13 +220,13 @@ class DefaultOptionPopupTest extends Specification {
         }
     }
 
-    static class MockContext0 implements OptionContext {
+    static class MockContext0 implements VaadinOptionContext {
         Option option = new MockOption()
 
 
 
         @Override
-        Option getOption() {
+        Option optionInstance() {
             return option
         }
 

@@ -18,6 +18,7 @@ import com.google.inject.Inject;
 import com.vaadin.data.Property;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
+import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.KrailResourceBundleControl;
 import uk.q3c.krail.i18n.bind.I18NModule;
@@ -27,7 +28,6 @@ import uk.q3c.krail.i18n.persist.PatternDao;
 import uk.q3c.krail.i18n.persist.PatternSourceProvider;
 import uk.q3c.krail.i18n.persist.source.DefaultPatternSourceProvider;
 import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.OptionContext;
 import uk.q3c.krail.option.OptionKey;
 
 import java.lang.annotation.Annotation;
@@ -43,7 +43,7 @@ import static com.google.common.base.Preconditions.*;
  * PatternSourceProvider}.  David Sowerby 26/07/15
  * Created by David Sowerby on 08/12/14.
  */
-public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, String> implements PatternCacheLoader, OptionContext {
+public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, String> implements PatternCacheLoader, VaadinOptionContext {
     public static final OptionKey<Boolean> optionKeyAutoStub = new OptionKey<>(Boolean.FALSE, DefaultPatternSourceProvider.class, LabelKey.Auto_Stub,
             DescriptionKey.Auto_Stub);
     public static final OptionKey<Boolean> optionKeyStubWithKeyName = new OptionKey<>(Boolean.TRUE, DefaultPatternSourceProvider.class, LabelKey
@@ -161,7 +161,7 @@ public class DefaultPatternCacheLoader extends CacheLoader<PatternCacheKey, Stri
      */
 
     @Override
-    public Option getOption() {
+    public Option optionInstance() {
         return option;
     }
 

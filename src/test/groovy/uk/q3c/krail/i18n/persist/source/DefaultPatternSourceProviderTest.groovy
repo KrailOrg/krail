@@ -250,7 +250,7 @@ class DefaultPatternSourceProviderTest extends Specification {
         provider = new DefaultPatternSourceProvider(sources, targets, option, sourceOrderByBundle, sourceOrderDefault)
 
         expect:
-        provider.getOption() == option
+        provider.optionInstance() == option
     }
 
     def "optionValueChanged does nothing but need to complete coverage"() {

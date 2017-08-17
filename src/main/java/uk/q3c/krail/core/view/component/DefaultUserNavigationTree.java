@@ -30,10 +30,10 @@ import uk.q3c.krail.core.navigate.Navigator;
 import uk.q3c.krail.core.navigate.sitemap.*;
 import uk.q3c.krail.core.navigate.sitemap.comparator.DefaultUserSitemapSorters.SortType;
 import uk.q3c.krail.core.navigate.sitemap.comparator.UserSitemapSorters;
+import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.vaadin.ID;
 import uk.q3c.krail.core.view.KrailView;
 import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.OptionContext;
 import uk.q3c.krail.option.OptionKey;
 
 import java.util.Collection;
@@ -54,7 +54,7 @@ import static com.google.common.base.Preconditions.*;
  */
 @Listener
 @SubscribeTo({UIBus.class, SessionBus.class})
-public class DefaultUserNavigationTree extends Tree implements OptionContext, UserNavigationTree {
+public class DefaultUserNavigationTree extends Tree implements VaadinOptionContext, UserNavigationTree {
 
     public static final OptionKey<SortType> optionKeySortType = new OptionKey<>(SortType.ALPHA, DefaultUserNavigationTree.class, LabelKey.Sort_Type,
             DescriptionKey.Sort_Type);
@@ -278,7 +278,7 @@ public class DefaultUserNavigationTree extends Tree implements OptionContext, Us
 
 
     @Override
-    public Option getOption() {
+    public Option optionInstance() {
         return option;
     }
 

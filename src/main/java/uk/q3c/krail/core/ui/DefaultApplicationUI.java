@@ -23,6 +23,7 @@ import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.I18NProcessor;
 import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.navigate.Navigator;
+import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.push.Broadcaster;
 import uk.q3c.krail.core.push.PushMessageRouter;
 import uk.q3c.krail.core.user.notify.VaadinNotification;
@@ -30,7 +31,6 @@ import uk.q3c.krail.core.view.component.*;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.OptionContext;
 import uk.q3c.krail.option.OptionKey;
 
 /**
@@ -39,7 +39,7 @@ import uk.q3c.krail.option.OptionKey;
  * @author David Sowerby
  */
 
-public class DefaultApplicationUI extends ScopedUI implements OptionContext {
+public class DefaultApplicationUI extends ScopedUI implements VaadinOptionContext {
 
     protected static final OptionKey<Boolean> optionBreadcrumbVisible = new OptionKey<>(Boolean.TRUE, DefaultApplicationUI.class, LabelKey
             .Breadcrumb_is_Visible,
@@ -271,7 +271,7 @@ public class DefaultApplicationUI extends ScopedUI implements OptionContext {
      */
 
     @Override
-    public Option getOption() {
+    public Option optionInstance() {
         return option;
     }
 

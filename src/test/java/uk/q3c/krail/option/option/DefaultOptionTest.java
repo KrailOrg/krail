@@ -24,12 +24,16 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import uk.q3c.krail.core.option.OptionPermission;
+import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.core.ui.DataTypeToUI;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.i18n.test.TestLabelKey;
-import uk.q3c.krail.option.*;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionKey;
+import uk.q3c.krail.option.OptionPermissionFailedException;
+import uk.q3c.krail.option.UserHierarchy;
 import uk.q3c.krail.option.persist.OptionCache;
 import uk.q3c.krail.option.persist.OptionCacheKey;
 import uk.q3c.krail.option.test.MockOptionPermissionVerifier;
@@ -226,11 +230,11 @@ public class DefaultOptionTest {
         //then
     }
 
-    static class MockContext implements OptionContext {
+    static class MockContext implements VaadinOptionContext {
 
 
         @Override
-        public Option getOption() {
+        public Option optionInstance() {
             return null;
         }
 
@@ -242,7 +246,7 @@ public class DefaultOptionTest {
 
     }
 
-    static class MockContext2 implements OptionContext {
+    static class MockContext2 implements VaadinOptionContext {
 
         public static final OptionKey<Integer> key3 = new OptionKey<>(125, MockContext2.class, TestLabelKey.Static, TestLabelKey.Large);
         private static final OptionKey<Integer> key4 = new OptionKey<>(126, MockContext2.class, TestLabelKey.Private_Static, TestLabelKey.Large);
@@ -251,7 +255,7 @@ public class DefaultOptionTest {
 
 
         @Override
-        public Option getOption() {
+        public Option optionInstance() {
             return null;
         }
 

@@ -21,9 +21,9 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Field;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import uk.q3c.krail.core.i18n.I18NProcessor;
+import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.core.validation.BeanValidator;
 import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.OptionContext;
 import uk.q3c.krail.persist.KrailEntity;
 
 import java.util.HashMap;
@@ -48,7 +48,7 @@ import java.util.Map;
  * <p>
  * Created by David Sowerby on 03/02/15.
  */
-public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGroup implements BeanFieldGroup<T>, OptionContext {
+public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGroup implements BeanFieldGroup<T>, VaadinOptionContext {
 
     private final I18NProcessor i18NProcessor;
     private final Map<Field<?>, BeanValidator<T>> defaultValidators;
@@ -106,7 +106,7 @@ public abstract class BeanFieldGroupBase<T extends KrailEntity> extends FieldGro
 
     @Override
 
-    public Option getOption() {
+    public Option optionInstance() {
         return option;
     }
 

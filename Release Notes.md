@@ -15,6 +15,9 @@ were needed to achieve effective separation of concerns
 - `uk.q3c.krail.option.OptionPermissionVerifier` used in `OptionBase` to separate Shiro from `Option`. `OptionPermission` is therefore only used with Shiro
 - `OptionPermission` uses `OptionEditAction`.  `OptionPermission.Action is removed` 
 - `OptionModule` binding of `OptionCache` scope removed to remove dependency on Vaadin
+- `OptionContext.getOption()` changed to `OptionContext.optionInstance()`
+- `OptionContext` is parameterised to enable response to different change event types.  
+- `VaadinOptionContext` extends `OptionContext` and replaces most existing uses of `OptionContext`
 
 ## Name changes
 

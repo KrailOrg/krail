@@ -171,7 +171,7 @@ class DefaultPatternCacheLoaderTest extends Specification {
 
     def "getOption"() {
         expect:
-        loader.getOption() == option
+        loader.optionInstance() == option
     }
 
     def "optionValueChanged does nothing, call for coverage"() {

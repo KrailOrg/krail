@@ -77,7 +77,7 @@ public class DefaultOptionPopup implements OptionPopup {
             contextKeys = contextKeys(context);
         }
 
-        Option option = context.getOption();
+        Option option = context.optionInstance();
         if (window != null) {
             window.close();
         }

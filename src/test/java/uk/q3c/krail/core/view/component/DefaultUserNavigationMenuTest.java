@@ -307,7 +307,7 @@ public class DefaultUserNavigationMenuTest {
         // then
         assertThat(userNavigationMenu.getOptionMaxDepth()).isEqualTo(3);
         // option has been set
-        int result = userNavigationMenu.getOption()
+        int result = userNavigationMenu.optionInstance()
                                        .get(DefaultUserNavigationMenu.optionKeyMaximumDepth);
         assertThat(result).isEqualTo(3);
     }

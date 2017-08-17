@@ -13,31 +13,29 @@
 
 package uk.q3c.krail.option;
 
-import com.vaadin.data.Property;
-
-
 /**
  * Any context using {@link Option} is required to implement this interface, it is used to identify the class which is
  * using an option, and forms part of a key to define that option
  * <p>
- * Created by David Sowerby on 01/12/14.
+ *
+ * @param <E> the type of event the will be passed when {@link #optionValueChanged} is called
+ *            Created by David Sowerby on 01/12/14.
  */
-public interface OptionContext {
+public interface OptionContext<E> {
 
     /**
      * Returns the {@link Option} instance being used by this context
      *
      * @return the {@link Option} instance being used by this context
      */
-
-    Option getOption();
+    Option optionInstance();
 
     /**
      * Called when an option value is changed in response to a property change - usually a Field which has been modified by the user
      *
      * @param event the event representing the change
      */
-    void optionValueChanged(Property.ValueChangeEvent event);
+    void optionValueChanged(E event);
 
 
 }
