@@ -55,7 +55,7 @@ ext.versionDescription = 'No version description provided'
 ext.releaseDate = new Date()
 
 group = 'uk.q3c.krail'
-version = '0.9.10.10'
+version = '0.9.10.11'
 //version = versionFromFile(project.projectDir)
 
 repositories {
@@ -66,6 +66,7 @@ repositories {
 
 dependencies {
     compile 'uk.q3c.krail:eventbus-api:0.0.1.0'
+    compile 'uk.q3c.krail:krail-i18n-api:0.9.0.0.429340b'
 
 
 
