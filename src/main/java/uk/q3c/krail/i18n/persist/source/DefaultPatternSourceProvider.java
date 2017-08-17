@@ -17,7 +17,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.vaadin.data.Property;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.i18n.persist.*;
@@ -83,7 +82,7 @@ public class DefaultPatternSourceProvider implements PatternSourceProvider {
      * {@inheritDoc}
      */
     @Override
-    public void optionValueChanged(Property.ValueChangeEvent event) {
+    public void optionValueChanged(Object event) {
         //do nothing options used as required
     }
 

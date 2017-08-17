@@ -16,10 +16,10 @@ package uk.q3c.krail.i18n.persist;
 import com.google.common.collect.ImmutableSet;
 import uk.q3c.krail.core.i18n.DescriptionKey;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.option.VaadinOptionContext;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.bind.I18NModule;
 import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.OptionContext;
 import uk.q3c.krail.option.OptionKey;
 import uk.q3c.util.data.collection.AnnotationList;
 
@@ -49,7 +49,7 @@ import java.util.Optional;
  * <p>
  * Created by David Sowerby on 01/08/15.
  */
-public interface PatternSourceProvider extends VaadinOptionContext {
+public interface PatternSourceProvider extends OptionContext<Object> {
 
     OptionKey<AnnotationList> optionKeySourceOrder = new OptionKey<>(new AnnotationList(), PatternSourceProvider.class, LabelKey
             .Source_Order, DescriptionKey.Source_Order);
