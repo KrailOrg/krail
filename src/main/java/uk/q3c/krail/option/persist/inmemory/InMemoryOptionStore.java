@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Stores and loads option values from a (usually) persistent store.  A simple, in memory, version is provided
+ * Stores and loads option values from a (usually) persistent store.  This simple, in memory, version is provided
  * primarily for testing.
  * <p>
  * Created by David Sowerby on 04/12/14.

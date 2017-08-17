@@ -15,7 +15,6 @@ package uk.q3c.krail.option.bind;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
-import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.option.DefaultOptionPopup;
 import uk.q3c.krail.core.option.OptionPopup;
 import uk.q3c.krail.option.Option;
@@ -117,11 +116,11 @@ public class OptionModule extends AbstractModule {
 
 
     /**
-     * Override this method to provide your own {@link OptionCache} implementation. The scope is generally expected to be {@link VaadinSessionScoped}, as options
-     * relate to individual users.
+     * Override this method to provide your own {@link OptionCache} implementation or change the scope - the scope is
+     * generally expected to be something which relates to individual users.
      */
     protected void bindOptionCache() {
-        bind(OptionCache.class).to(DefaultOptionCache.class).in(VaadinSessionScoped.class);
+        bind(OptionCache.class).to(DefaultOptionCache.class);
     }
 
     protected void bindOptionCacheConfiguration() {

@@ -14,6 +14,7 @@ were needed to achieve effective separation of concerns
 - Scope of `DefaultOptionCache` is set in `OptionModule` instead of by annotation
 - `uk.q3c.krail.option.OptionPermissionVerifier` used in `OptionBase` to separate Shiro from `Option`. `OptionPermission` is therefore only used with Shiro
 - `OptionPermission` uses `OptionEditAction`.  `OptionPermission.Action is removed` 
+- `OptionModule` binding of `OptionCache` scope removed to remove dependency on Vaadin
 
 ## Name changes
 
