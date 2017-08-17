@@ -11,18 +11,18 @@
  *
  */
 
-package uk.q3c.krail.option.persist.inmemory.dao;
+package uk.q3c.krail.option.inmemory.dao;
 
 import com.google.inject.Inject;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.RankOption;
+import uk.q3c.krail.option.inmemory.InMemoryOptionStore;
+import uk.q3c.krail.option.inmemory.store.DefaultInMemoryOptionStore;
 import uk.q3c.krail.option.persist.OptionCache;
 import uk.q3c.krail.option.persist.OptionCacheKey;
 import uk.q3c.krail.option.persist.OptionDaoDelegate;
 import uk.q3c.krail.option.persist.OptionId;
 import uk.q3c.krail.option.persist.cache.DefaultOptionCacheLoader;
-import uk.q3c.krail.option.persist.inmemory.InMemoryOptionStore;
-import uk.q3c.krail.option.persist.inmemory.store.DefaultInMemoryOptionStore;
 
 import java.util.Optional;
 

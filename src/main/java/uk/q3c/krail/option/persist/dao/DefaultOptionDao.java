@@ -20,10 +20,10 @@ import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionException;
 import uk.q3c.krail.option.OptionKeyException;
 import uk.q3c.krail.option.RankOption;
+import uk.q3c.krail.option.inmemory.InMemoryOptionStore;
+import uk.q3c.krail.option.inmemory.store.DefaultInMemoryOptionStore;
 import uk.q3c.krail.option.persist.*;
 import uk.q3c.krail.option.persist.cache.DefaultOptionCacheLoader;
-import uk.q3c.krail.option.persist.inmemory.InMemoryOptionStore;
-import uk.q3c.krail.option.persist.inmemory.store.DefaultInMemoryOptionStore;
 import uk.q3c.util.data.DataConverter;
 import uk.q3c.util.data.collection.DataList;
 

@@ -10,12 +10,12 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.option.persist.inmemory.store;
+package uk.q3c.krail.option.inmemory.store;
 
 import com.google.inject.Singleton;
+import uk.q3c.krail.option.inmemory.InMemoryOptionStore;
+import uk.q3c.krail.option.inmemory.OptionEntity;
 import uk.q3c.krail.option.persist.OptionId;
-import uk.q3c.krail.option.persist.inmemory.InMemoryOptionStore;
-import uk.q3c.krail.option.persist.inmemory.OptionEntity;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.List;

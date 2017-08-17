@@ -11,7 +11,7 @@
  *
  */
 
-package uk.q3c.krail.option.persist.inmemory;
+package uk.q3c.krail.option.inmemory;
 
 
 import uk.q3c.krail.option.persist.OptionId;

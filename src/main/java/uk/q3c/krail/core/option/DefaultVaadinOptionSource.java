@@ -3,7 +3,6 @@ package uk.q3c.krail.core.option;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.vaadin.data.Container;
-import uk.q3c.krail.option.persist.OptionContainerProvider;
 import uk.q3c.krail.option.persist.source.DefaultOptionSource;
 import uk.q3c.krail.persist.PersistenceInfo;
 

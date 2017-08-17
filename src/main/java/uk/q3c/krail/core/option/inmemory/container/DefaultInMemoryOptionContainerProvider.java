@@ -11,30 +11,30 @@
  *
  */
 
-package uk.q3c.krail.persist.inmemory;
+package uk.q3c.krail.core.option.inmemory.container;
 
 import com.google.inject.Inject;
 import com.vaadin.data.Container;
+import uk.q3c.krail.core.option.inmemory.InMemoryOptionContainerProvider;
 import uk.q3c.krail.option.inmemory.InMemoryOptionStore;
-import uk.q3c.krail.persist.ContainerType;
-import uk.q3c.krail.persist.VaadinContainerProvider;
 
 /**
- * Created by David Sowerby on 30/06/15.
+ * Returns an {@link InMemoryOptionContainer}
+ * <p>
+ * Created by David Sowerby on 09/07/15.
  */
-public class InMemoryContainerProvider implements VaadinContainerProvider {
+public class DefaultInMemoryOptionContainerProvider implements InMemoryOptionContainerProvider {
 
-    private InMemoryOptionStore optionStore;
-    private InMemoryPatternStore patternStore;
+
+    private final InMemoryOptionStore optionStore;
 
     @Inject
-    protected InMemoryContainerProvider(InMemoryOptionStore optionStore, InMemoryPatternStore patternStore) {
+    protected DefaultInMemoryOptionContainerProvider(InMemoryOptionStore optionStore) {
         this.optionStore = optionStore;
-        this.patternStore = patternStore;
     }
 
     @Override
-    public <E> Container get(Class<E> entityClass, ContainerType containerType) {
-        return new InMemoryContainer<>(entityClass, optionStore, patternStore);
+    public Container get() {
+        return new InMemoryOptionContainer(optionStore);
     }
 }

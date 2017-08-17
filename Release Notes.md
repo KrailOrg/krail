@@ -68,6 +68,8 @@ Generic I18N classes moved from `uk.q3c.krail.core.i18n` to `uk.q3c.krail.i18n` 
 ### Option
 projects: **option**, **option-api**
 
+All Container related classes remain in the core, as they relate only to Vaadin (though they will become redundant under Vaadin 8)
+All classes relating to the provision of In Memory "persistence", are within **option** and **option-api**, primarily for use in testing
 
 - `uk.q3c.krail.core.testutil.option` moved to `uk.q3c.krail.option.test`
 - `uk.q3c.krail.option.test.MockOptionPermissionVerifier` added

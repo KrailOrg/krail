@@ -34,8 +34,8 @@ import uk.q3c.krail.core.view.PublicHomeView;
 import uk.q3c.krail.i18n.test.TestI18NModule;
 import uk.q3c.krail.i18n.test.TestLabelKey;
 import uk.q3c.krail.option.Option;
-import uk.q3c.krail.option.persist.inmemory.InMemoryOptionStore;
-import uk.q3c.krail.option.persist.inmemory.store.DefaultInMemoryOptionStore;
+import uk.q3c.krail.option.inmemory.InMemoryOptionStore;
+import uk.q3c.krail.option.inmemory.store.DefaultInMemoryOptionStore;
 import uk.q3c.krail.testutil.persist.TestPersistenceModule;
 
 import java.util.ArrayList;

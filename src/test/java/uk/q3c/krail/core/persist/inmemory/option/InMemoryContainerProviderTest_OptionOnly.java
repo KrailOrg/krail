@@ -22,7 +22,7 @@ import com.vaadin.data.Container;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.option.persist.inmemory.OptionEntity;
+import uk.q3c.krail.option.inmemory.OptionEntity;
 import uk.q3c.krail.option.test.TestOptionModule;
 import uk.q3c.krail.persist.ContainerType;
 import uk.q3c.krail.persist.VaadinContainerProvider;

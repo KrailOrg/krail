@@ -18,9 +18,9 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.option.UserHierarchy;
+import uk.q3c.krail.option.inmemory.store.DefaultInMemoryOptionStore;
 import uk.q3c.krail.option.persist.OptionCacheKey;
 import uk.q3c.krail.option.persist.OptionDao;
-import uk.q3c.krail.option.persist.inmemory.store.DefaultInMemoryOptionStore;
 
 import java.util.Optional;
 

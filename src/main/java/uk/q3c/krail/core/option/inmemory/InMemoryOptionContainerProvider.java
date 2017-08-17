@@ -11,17 +11,14 @@
  *
  */
 
-package uk.q3c.krail.option.persist;
+package uk.q3c.krail.core.option.inmemory;
 
-import com.vaadin.data.Container;
-import uk.q3c.krail.option.Option;
+import uk.q3c.krail.core.option.OptionContainerProvider;
 
 /**
- * Common interface for persistence sources to provide a Vaadin Container for the {@link Option} class
+ * Used solely to enable a Krail developer to replace the default implementation if desired
  * <p>
  * Created by David Sowerby on 09/07/15.
  */
-public interface OptionContainerProvider {
-
-    Container get();
+public interface InMemoryOptionContainerProvider extends OptionContainerProvider {
 }

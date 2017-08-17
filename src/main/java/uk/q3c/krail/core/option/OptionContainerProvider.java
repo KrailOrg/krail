@@ -11,30 +11,17 @@
  *
  */
 
-package uk.q3c.krail.option.persist.inmemory.container;
+package uk.q3c.krail.core.option;
 
-import com.google.inject.Inject;
 import com.vaadin.data.Container;
-import uk.q3c.krail.option.persist.inmemory.InMemoryOptionContainerProvider;
-import uk.q3c.krail.option.persist.inmemory.InMemoryOptionStore;
+import uk.q3c.krail.option.Option;
 
 /**
- * Returns an {@link InMemoryOptionContainer}
+ * Common interface for persistence sources to provide a Vaadin Container for the {@link Option} class
  * <p>
  * Created by David Sowerby on 09/07/15.
  */
-public class DefaultInMemoryOptionContainerProvider implements InMemoryOptionContainerProvider {
+public interface OptionContainerProvider {
 
-
-    private final InMemoryOptionStore optionStore;
-
-    @Inject
-    protected DefaultInMemoryOptionContainerProvider(InMemoryOptionStore optionStore) {
-        this.optionStore = optionStore;
-    }
-
-    @Override
-    public Container get() {
-        return new InMemoryOptionContainer(optionStore);
-    }
+    Container get();
 }
