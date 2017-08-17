@@ -5,6 +5,16 @@ This release is a major refactor to extract some elements which can actually sta
 Unfortunately there are a LOT of changes which will affect existing Krail apps. Many are limited to package changes, but there are some code changes
 were needed to achieve effective separation of concerns
 
+## Functional Code Changes
+
+- `UserModule.bindUserHierarchies()` moved to `OptionModule` as a more relevant location 
+- binding of `SimpleHierarchy` moved to `KrailOptionModule`, overriding a binding to new `DefaultUserHierarchy`, which removes dependency on Shiro
+- `I18NModule` split, new `I18NModule` in **i18n**, `VaadinI18NModule` in core overriding selected methods
+- `DefaultTranslate` updated to use "strictness" provided by `MessageFormat2`.  Existing code will behave as before.
+- Scope of `DefaultOptionCache` is set in `OptionModule` instead of by annotation
+- `uk.q3c.krail.option.OptionPermissionVerifier` used in `OptionBase` to separate Shiro from `Option`. `OptionPermission` is therefore only used with Shiro
+- `OptionPermission` uses `OptionEditAction`.  `OptionPermission.Action is removed` 
+
 ## Name changes
 
 - There were some annotations with names beginning with '@Default', which can cause a name clash, as most implementations are 'Defaultxxx'.  The following annotations changed:
@@ -37,7 +47,7 @@ were needed to achieve effective separation of concerns
 - `ReflectionUtils`.  `org.reflections` should be used instead
 - `OptionList` & `OptionListConverter` - this is not practical for anything except in memory store
 
-## Package changes
+## Package changes, additional classes
 
 These can be dealt with by the usual method of deleting failed import statements and letting the IDE find the new location.
 
@@ -48,19 +58,16 @@ projects: **i18n**, **i18n-api**
 Generic I18N classes moved from `uk.q3c.krail.core.i18n` to `uk.q3c.krail.i18n` and sub-packages.  Some (mostly Vaadin specific) classes remain in `uk.q3c.krail.core.i18n`
 
 - `uk.q3c.krail.core.testutil.i18n` moved to `uk.q3c.krail.i18n.test` (in src folder)
-- `I18NModule` split, new `I18NModule` in **i18n**, `VaadinI18NModule` in core overriding selected methods
-- `DefaultTranslate` updated to use "strictness" provided by `MessageFormat2`.  Existing code will behave as before.
 - `MockTranslate` provided in `uk.q3c.krail.i18n.test` (in src folder) with more complete response (includes locale and arguments) and a bit more functionality as a Mock
 
 ### Option
 projects: **option**, **option-api**
 
-- Scope of `DefaultOptionCache` is set in `OptionModule` instead of by annotation
+
 - `uk.q3c.krail.core.testutil.option` moved to `uk.q3c.krail.option.test`
-- `uk.q3c.krail.option.OptionPermissionVerifier` added to separate Shiro from `Option`. `OptionPermission` is therefore only used with Shiro 
 - `uk.q3c.krail.option.test.MockOptionPermissionVerifier` added
-- `OptionBase` updated to use `OptionPermissionVerifier`
-- `OptionPermission` uses `OptionEditAction`.  `OptionPermission.Action is removed`
+- `SimpleUserHierarchy` moved to `uk.q3c.krail.core.option.hierarchy.SimpleUserHierarchy`
+- new `DefaultUserHierarchy`, removes dependency on Shiro
 
 ### Data
 

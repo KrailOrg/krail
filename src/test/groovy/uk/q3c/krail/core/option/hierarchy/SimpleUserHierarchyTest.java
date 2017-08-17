@@ -11,7 +11,7 @@
  *
  */
 
-package uk.q3c.krail.core.user.profile;
+package uk.q3c.krail.core.option.hierarchy;
 
 import com.mycila.testing.junit.MycilaJunitRunner;
 import com.mycila.testing.plugin.guice.GuiceContext;
@@ -24,7 +24,6 @@ import uk.q3c.krail.core.i18n.LabelKey;
 import uk.q3c.krail.core.shiro.SubjectIdentifier;
 import uk.q3c.krail.core.shiro.SubjectProvider;
 import uk.q3c.krail.i18n.Translate;
-import uk.q3c.krail.option.hierarchy.SimpleUserHierarchy;
 
 import java.util.List;
 

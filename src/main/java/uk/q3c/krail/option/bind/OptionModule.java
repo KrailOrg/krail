@@ -20,7 +20,10 @@ import uk.q3c.krail.core.option.DefaultOptionPopup;
 import uk.q3c.krail.core.option.OptionPopup;
 import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.OptionPermissionVerifier;
+import uk.q3c.krail.option.UserHierarchy;
+import uk.q3c.krail.option.UserHierarchyDefault;
 import uk.q3c.krail.option.hierarchy.DefaultOptionPermissionVerifier;
+import uk.q3c.krail.option.hierarchy.DefaultUserHierarchy;
 import uk.q3c.krail.option.option.DefaultOption;
 import uk.q3c.krail.option.persist.*;
 import uk.q3c.krail.option.persist.cache.DefaultOptionCache;
@@ -58,6 +61,16 @@ public class OptionModule extends AbstractModule {
         bindCurrentOptionSource();
         bindOptionElementConverter();
         bindPermissionVerifier();
+        bindUserHierarchies();
+    }
+
+    /**
+     * Bind you own {@link UserHierarchy} implementations, using binding annotations to identify them.  At least one
+     * must marked as default by using the {@link UserHierarchyDefault} annotation.
+     */
+    protected void bindUserHierarchies() {
+        bind(UserHierarchy.class).annotatedWith(UserHierarchyDefault.class)
+                .to(DefaultUserHierarchy.class);
     }
 
     /**
@@ -104,7 +117,7 @@ public class OptionModule extends AbstractModule {
 
 
     /**
-     * Override this method to provide your own {@link OptionCache} implementation. The scope is generally expected to be {@link VaadinSessionScoped}, as optons
+     * Override this method to provide your own {@link OptionCache} implementation. The scope is generally expected to be {@link VaadinSessionScoped}, as options
      * relate to individual users.
      */
     protected void bindOptionCache() {
