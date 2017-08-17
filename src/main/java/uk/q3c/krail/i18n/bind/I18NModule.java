@@ -22,6 +22,7 @@ import uk.q3c.krail.core.i18n.*;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.krail.i18n.cache.DefaultPatternCacheLoader;
 import uk.q3c.krail.i18n.clazz.DefaultClassPatternDao;
+import uk.q3c.krail.i18n.locale.DefaultCurrentLocale;
 import uk.q3c.krail.i18n.persist.*;
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternDao;
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource;
@@ -226,7 +227,7 @@ public class I18NModule extends AbstractModule {
      * Override this method to provide your own implementation of {@link CurrentLocale} or to change the scope used.
      */
     protected void bindCurrentLocale() {
-        bind(CurrentLocale.class).to(VaadinCurrentLocale.class);
+        bind(CurrentLocale.class).to(DefaultCurrentLocale.class);
     }
 
     /**
