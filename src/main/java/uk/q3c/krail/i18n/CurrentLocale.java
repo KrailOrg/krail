@@ -12,13 +12,13 @@
  */
 package uk.q3c.krail.i18n;
 
-import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
-
 import java.util.Locale;
 
 /**
- * Provides a reference to the currently selected Locale. Changes to Locale are published by the session scoped event bus. It is expected that implementations
- * will generally be {@link VaadinSessionScoped} as the selection of locale is a choice usually available to an individual user.
+ * Provides a reference to the currently selected Locale.  It is expected that implementations will generally be scoped appropriately
+ * to reflect that the selection of locale is a choice usually available to an individual user.
+ *
+ * Changes to Locale should be published to an event bus with a compatible scope.
  * <p>
  *
  * @author David Sowerby 3 Mar 2013

@@ -9,7 +9,7 @@ were needed to achieve effective separation of concerns
 
 - `UserModule.bindUserHierarchies()` moved to `OptionModule` as a more relevant location 
 - binding of `SimpleHierarchy` moved to `KrailOptionModule`, overriding a binding to new `DefaultUserHierarchy`, which removes dependency on Shiro
-- `I18NModule` split, new `I18NModule` in **i18n**, `VaadinI18NModule` in core overriding selected methods
+- `I18NModule` split into  new `I18NModule` in **i18n** and `VaadinI18NModule` in the core.  The latter overrides binding methods to use Vaadin related scopes
 - `DefaultTranslate` updated to use "strictness" provided by `MessageFormat2`.  Existing code will behave as before.
 - Scope of `DefaultOptionCache` is set in `OptionModule` instead of by annotation
 - `uk.q3c.krail.option.OptionPermissionVerifier` used in `OptionBase` to separate Shiro from `Option`. `OptionPermission` is therefore only used with Shiro

@@ -12,10 +12,14 @@
  */
 package uk.q3c.krail.core.i18n;
 
+import uk.q3c.krail.core.guice.uiscope.UIScoped;
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.i18n.CurrentLocale;
 import uk.q3c.krail.i18n.EnumResourceBundle;
 import uk.q3c.krail.i18n.bind.I18NModule;
+import uk.q3c.krail.i18n.persist.PatternSource;
 import uk.q3c.krail.i18n.persist.clazz.ClassPatternSource;
+import uk.q3c.krail.i18n.persist.source.DefaultPatternSource;
 
 /**
  * Configures I18N for an application.
@@ -32,8 +36,18 @@ public class VaadinI18NModule extends I18NModule {
 
 
     @Override
+    protected void bindPatternSource() {
+        bind(PatternSource.class).to(DefaultPatternSource.class).in(VaadinSessionScoped.class);
+    }
+
+    /**
+     * Override this method to provide your own implementation of {@link CurrentLocale} or to change the scope used.
+     * Choose between {@link UIScoped} or {@link VaadinSessionScoped}, depending on whether you want users to set the
+     * language for each browser tab or each browser instance, respectively.
+     */
+    @Override
     protected void bindCurrentLocale() {
-        bind(CurrentLocale.class).to(VaadinCurrentLocale.class);
+        bind(CurrentLocale.class).to(VaadinCurrentLocale.class).in(VaadinSessionScoped.class);
     }
 }
 

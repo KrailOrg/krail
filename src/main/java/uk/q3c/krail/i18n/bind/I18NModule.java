@@ -18,8 +18,6 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import org.apache.commons.lang3.LocaleUtils;
-import uk.q3c.krail.core.guice.uiscope.UIScoped;
-import uk.q3c.krail.core.guice.vsscope.VaadinSessionScoped;
 import uk.q3c.krail.core.i18n.*;
 import uk.q3c.krail.i18n.*;
 import uk.q3c.krail.i18n.cache.DefaultPatternCacheLoader;
@@ -214,8 +212,7 @@ public class I18NModule extends AbstractModule {
      * DefaultPatternSource} for an explanation of what this is for.  Override this method if you provide your own implementation
      */
     protected void bindPatternSource() {
-        bind(PatternSource.class).to(DefaultPatternSource.class)
-                                 .in(VaadinSessionScoped.class);
+        bind(PatternSource.class).to(DefaultPatternSource.class);
     }
 
     /**
@@ -227,12 +224,9 @@ public class I18NModule extends AbstractModule {
 
     /**
      * Override this method to provide your own implementation of {@link CurrentLocale} or to change the scope used.
-     * Choose between {@link UIScoped} or {@link VaadinSessionScoped}, depending on whether you want users to set the
-     * language for each browser tab or each browser instance, respectively.
      */
     protected void bindCurrentLocale() {
-        bind(CurrentLocale.class).to(VaadinCurrentLocale.class)
-                                 .in(VaadinSessionScoped.class);
+        bind(CurrentLocale.class).to(VaadinCurrentLocale.class);
     }
 
     /**
