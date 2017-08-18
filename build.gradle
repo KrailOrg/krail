@@ -65,7 +65,7 @@ repositories {
 }
 
 dependencies {
-    compile 'uk.q3c.krail:krail-option-api:0.9.0.0.9041b3d'
+    compile 'uk.q3c.krail:krail-option-persist-api:0.9.0.0.d5631b0'
     compile 'uk.q3c.krail:krail-i18n-persist-api:0.9.0.0.2c07f9b'
 
 
